@@ -8954,7 +8954,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Kar</translation>
+        <translation type="vanished">Kar</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -9015,6 +9015,14 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Avbryt</translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

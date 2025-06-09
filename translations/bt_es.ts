@@ -9005,7 +9005,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Cuba</translation>
+        <translation type="vanished">Cuba</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -9066,6 +9066,14 @@ El volumen final en el primario es %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

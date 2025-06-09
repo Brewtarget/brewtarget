@@ -9057,7 +9057,7 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Macerador</translation>
+        <translation type="vanished">Macerador</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -9118,6 +9118,14 @@ El volum final al primari és de %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Cancel·lar</translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

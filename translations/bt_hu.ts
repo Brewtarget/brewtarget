@@ -9023,7 +9023,11 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <translation type="unfinished">Mégsem</translation>
     </message>
     <message>
-        <source>Tun</source>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

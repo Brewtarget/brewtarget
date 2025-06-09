@@ -8614,7 +8614,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Tun</source>
-        <translation>桶Tun</translation>
+        <translation type="vanished">桶Tun</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -8675,6 +8675,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

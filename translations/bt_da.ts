@@ -4616,12 +4616,12 @@ Logfil indeholder evt. flere detaljer.</translation>
         <translation>% navn:</translation>
     </message>
     <message>
-        <location filename="../src/editors/EditorBaseField.h" line="181"/>
+        <location filename="../src/editors/EditorBaseField.h" line="183"/>
         <source>No</source>
         <translation>Nej</translation>
     </message>
     <message>
-        <location filename="../src/editors/EditorBaseField.h" line="182"/>
+        <location filename="../src/editors/EditorBaseField.h" line="184"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
@@ -4951,78 +4951,78 @@ The final volume in the primary is %1.</source>
         <translation>Efterkogning</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1823"/>
+        <location filename="../src/model/Recipe.cpp" line="1815"/>
         <source>Boil time</source>
         <translation>Varighed kogning</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1824"/>
+        <location filename="../src/model/Recipe.cpp" line="1816"/>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
         <translation>Du har ikke konfigureret et udstyr (hvilket du burde gøre); så oplys om kogningens varighed.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1828"/>
+        <location filename="../src/model/Recipe.cpp" line="1820"/>
         <source>Bring the wort to a boil and hold for %1.</source>
         <translation>Bring urten til kogning og hold konstant i %1.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1833"/>
+        <location filename="../src/model/Recipe.cpp" line="1825"/>
         <source>Start boil</source>
         <translation>Start kogning</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1861"/>
+        <location filename="../src/model/Recipe.cpp" line="1853"/>
         <source>Flameout</source>
         <translation>Slut på opvarmning</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1862"/>
+        <location filename="../src/model/Recipe.cpp" line="1854"/>
         <source>Stop boiling the wort.</source>
         <translation>Stop kogning af urten.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1881"/>
+        <location filename="../src/model/Recipe.cpp" line="1873"/>
         <source>Cool wort and pitch </source>
         <translation>Afkøl urten og tilsæt </translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1885"/>
+        <location filename="../src/model/Recipe.cpp" line="1877"/>
         <source>%1 %2 yeast, </source>
         <translation>%1 %2 gær, </translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1888"/>
+        <location filename="../src/model/Recipe.cpp" line="1880"/>
         <source>to the primary.</source>
         <translation>til den første.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1891"/>
+        <location filename="../src/model/Recipe.cpp" line="1883"/>
         <source>Pitch yeast</source>
         <translation>Tilsæt gær</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1899"/>
+        <location filename="../src/model/Recipe.cpp" line="1891"/>
         <source>Let ferment until FG is %1.</source>
         <translation>Fortsæt gæring til FG er %1.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1904"/>
+        <location filename="../src/model/Recipe.cpp" line="1896"/>
         <source>Ferment</source>
         <translation>Gæring</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1908"/>
+        <location filename="../src/model/Recipe.cpp" line="1900"/>
         <source>Transfer beer to secondary.</source>
         <translation>Overfør øl til den anden.</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1910"/>
+        <location filename="../src/model/Recipe.cpp" line="1902"/>
         <source>Transfer to secondary</source>
         <translation>Overfør til anden</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1948"/>
-        <location filename="../src/model/Recipe.cpp" line="1968"/>
+        <location filename="../src/model/Recipe.cpp" line="1940"/>
+        <location filename="../src/model/Recipe.cpp" line="1960"/>
         <source>Add %1 %2 to boil at %3.</source>
         <translation>Tilføj %1 %2 til kogning ved %3.</translation>
     </message>
@@ -6396,17 +6396,17 @@ The final volume in the primary is %1.</source>
 <context>
     <name>SmartDigitWidget</name>
     <message>
-        <location filename="../src/widgets/SmartDigitWidget.cpp" line="54"/>
+        <location filename="../src/widgets/SmartDigitWidget.cpp" line="53"/>
         <source>Too low for style.</source>
         <translation>For lav for stilarten.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/SmartDigitWidget.cpp" line="55"/>
+        <location filename="../src/widgets/SmartDigitWidget.cpp" line="54"/>
         <source>In range for style.</source>
         <translation>Passer til stilarten.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/SmartDigitWidget.cpp" line="56"/>
+        <location filename="../src/widgets/SmartDigitWidget.cpp" line="55"/>
         <source>Too high for style.</source>
         <translation>For høj til stilarten.</translation>
     </message>
@@ -10167,7 +10167,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashEditor.ui" line="38"/>
         <location filename="../ui/mashEditor.ui" line="45"/>
-        <location filename="../ui/mashEditor.ui" line="164"/>
+        <location filename="../ui/mashEditor.ui" line="80"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
@@ -10178,28 +10178,38 @@ The final volume in the primary is %1.</source>
         <translation>Starttemperatur af malt</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="74"/>
+        <location filename="../ui/mashEditor.ui" line="91"/>
         <source>Sparge temp</source>
         <translation>Temperatur eftergydningsvand</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="84"/>
+        <location filename="../ui/mashEditor.ui" line="101"/>
         <source>Sparge temp target</source>
         <translation>Tilsigtet temp. af eftergydningsvand</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="92"/>
-        <location filename="../ui/mashEditor.ui" line="102"/>
+        <location filename="../ui/mashEditor.ui" line="126"/>
+        <location filename="../ui/mashEditor.ui" line="136"/>
         <source>Sparge pH</source>
         <translation>pH af eftergydningsvand</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="118"/>
+        <location filename="../ui/mashEditor.ui" line="166"/>
+        <source>Total Mash Water</source>
+        <translation type="unfinished">Samlet volumen vand til mæskning</translation>
+    </message>
+    <message>
+        <location filename="../ui/mashEditor.ui" line="177"/>
+        <source>Total Time</source>
+        <translation type="unfinished">Samlet varighed</translation>
+    </message>
+    <message>
+        <location filename="../ui/mashEditor.ui" line="192"/>
         <source>ID in database</source>
         <translation type="unfinished">ID i database</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="138"/>
+        <location filename="../ui/mashEditor.ui" line="212"/>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished">Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
     </message>
@@ -10208,48 +10218,47 @@ The final volume in the primary is %1.</source>
         <translation type="obsolete">Anvend til</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="190"/>
+        <location filename="../ui/mashEditor.ui" line="143"/>
         <source>Tun specific heat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="210"/>
+        <location filename="../ui/mashEditor.ui" line="222"/>
         <source>Notes</source>
         <translation>Notater</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="243"/>
-        <location filename="../ui/mashEditor.ui" line="246"/>
+        <location filename="../ui/mashEditor.ui" line="255"/>
+        <location filename="../ui/mashEditor.ui" line="258"/>
         <source>New</source>
         <translation type="unfinished">Ny</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="257"/>
+        <location filename="../ui/mashEditor.ui" line="269"/>
         <source>Save and close</source>
         <translation type="unfinished">Gem og luk</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="260"/>
+        <location filename="../ui/mashEditor.ui" line="272"/>
         <source>Save</source>
         <translation type="unfinished">Gem</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="271"/>
+        <location filename="../ui/mashEditor.ui" line="283"/>
         <source>Discard and close</source>
         <translation type="unfinished">Annuller og luk</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="274"/>
+        <location filename="../ui/mashEditor.ui" line="286"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuller</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="148"/>
         <source>Tun</source>
-        <translation>Beholder</translation>
+        <translation type="vanished">Beholder</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="154"/>
+        <location filename="../ui/mashEditor.ui" line="70"/>
         <source>Initial tun temp</source>
         <translation>Starttemperatur af beholder</translation>
     </message>
@@ -10262,8 +10271,8 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Fra udstyr</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="172"/>
-        <location filename="../ui/mashEditor.ui" line="182"/>
+        <location filename="../ui/mashEditor.ui" line="108"/>
+        <location filename="../ui/mashEditor.ui" line="118"/>
         <source>Tun mass</source>
         <translation>Beholder masse</translation>
     </message>
@@ -10272,7 +10281,7 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Beholder specifik varmefylde</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="200"/>
+        <location filename="../ui/mashEditor.ui" line="153"/>
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>Beholder specifiik varmefylde (cal/(kg·K))</translation>
     </message>

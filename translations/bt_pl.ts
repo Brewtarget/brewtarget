@@ -8844,7 +8844,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Kadź zacierna</translation>
+        <translation type="vanished">Kadź zacierna</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -8905,6 +8905,14 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Anuluj</translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
