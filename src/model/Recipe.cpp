@@ -1664,11 +1664,11 @@ Recipe::Recipe(Recipe const & other) :
    m_notes                  {other.m_notes             },
    m_tasteNotes             {other.m_tasteNotes        },
    m_tasteRating            {other.m_tasteRating       },
-   m_styleId                {other.m_styleId           },  // But see additional logic in body
-   m_equipmentId            {other.m_equipmentId       },  // But see additional logic in body
-   m_mashId                 {other.m_mashId            },  // But see additional logic in body
-   m_boilId                 {other.m_boilId            },  // But see additional logic in body
-   m_fermentationId         {other.m_fermentationId    },  // But see additional logic in body
+   m_styleId                {other.m_styleId           },  // We _do_ want to refer to the same style as the Recipe we're copying
+   m_equipmentId            {other.m_equipmentId       },  // Ditto equipment
+   m_mashId                 {other.m_mashId            },  // Ditto mash
+   m_boilId                 {other.m_boilId            },  // Ditto boil
+   m_fermentationId         {other.m_fermentationId    },  // Ditto fermentation
    m_beerAcidity_pH         {other.m_beerAcidity_pH    },
    m_apparentAttenuation_pct{other.m_apparentAttenuation_pct},
    // Owned sets need the correct owner, but otherwise can handle whatever deep copying is needed.
@@ -1697,14 +1697,6 @@ Recipe::Recipe(Recipe const & other) :
    // We don't want to be versioning something while we're still constructing it
    //
    NamedEntityModifyingMarker modifyingMarker(*this);
-
-   //
-   // TBD: For the moment we make a copy of the Mash, Boil, Fermentation of the other recipe.  Once we have made changes
-   // to the UI to make it easier to see how these can be shared amongst different recipes, we will revisit this.
-   //
-   this->setMash        (std::make_shared<Mash        >(*other.mash        ()));
-   this->setBoil        (std::make_shared<Boil        >(*other.boil        ()));
-   this->setFermentation(std::make_shared<Fermentation>(*other.fermentation()));
 
    this->pimpl->connectSignals();
 

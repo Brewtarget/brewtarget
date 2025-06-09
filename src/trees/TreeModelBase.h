@@ -982,6 +982,16 @@ protected:
       }
 
       std::shared_ptr<NE> owner = element->owner();
+      if (!owner) {
+         //
+         // It is possible for a secondary element to get added to the DB before its "owner" is stored in the DB -- eg
+         // see OwnedSet copy constructor.  We'll receive ObjectStoreTyped::signalObjectInserted, but we won't be able
+         // to find the owner in the database.  This is OK: we just bail out here.  If and when the owner to gets added
+         // to the database, we'll get ObjectStoreTyped::signalObjectInserted for that and update the tree accordingly.
+         //
+         return;
+      }
+
       QModelIndex parentIndex = this->findElement(owner.get());
       if (!parentIndex.isValid()) {
          return;
