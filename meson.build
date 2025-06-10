@@ -1708,6 +1708,10 @@ endif
 #
 # Note however that you cannot put generatedFromQrc in the static_library as it doesn't work there.
 #
+# The `win_subsystem : 'windows'` option only affects Windows builds (and is ignored on other platforms).  It prevents a
+# console window opening (to display stdout) when you run the program.  We don't specify it for the unit test runner as
+# that is a console-only program!
+#
 commonCodeStaticLib = static_library('common_code',
                                      commonSourceFiles, generatedFromUi, generatedFromMoc, translations,
                                      include_directories : includeDirs,
@@ -1721,7 +1725,8 @@ mainExecutable = executable(mainExecutableTargetName,
                             dependencies : mainExeDependencies,
                             link_with : commonCodeStaticLib,
                             kwargs : platformSpecificArgs,
-                            install : true)
+                            install : true,
+                            win_subsystem : 'windows')
 
 testRunner = executable(testRunnerTargetName,
                         unitTestMainSourceFile,
