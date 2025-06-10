@@ -21,6 +21,7 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Crash when deleting a water profile [974](https://github.com/Brewtarget/brewtarget/issues/974)
+* Windows version opens a console in addition to the main window [976](https://github.com/Brewtarget/brewtarget/issues/976)
 
 ### Release Timestamp
 Mon, 2 Jun 2025 04:01:02 +0100
