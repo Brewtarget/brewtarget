@@ -9050,7 +9050,7 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Tino</translation>
+        <translation type="vanished">Tino</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -9110,6 +9110,14 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

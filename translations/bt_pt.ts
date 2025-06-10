@@ -8981,7 +8981,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Tina</translation>
+        <translation type="vanished">Tina</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -9042,6 +9042,14 @@ O volume final do fermentador primário é %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

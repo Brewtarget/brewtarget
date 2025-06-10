@@ -187,7 +187,12 @@ public:
 
    //! \return Index of the top of the tree
    QModelIndex getRootIndex() {
-      return this->derived().createIndex(0, 0, this->m_rootNode.get());
+      //
+      // The index for the root node must always be the default (invalid) QModelIndex.  If you try to use
+      // this->derived().createIndex to create a valid QModelIndex, then you'll get a crash inside Qt in certain
+      // circumstances when you try to insert a child of the root.
+      //
+      return QModelIndex();
    }
 
    QModelIndex doParent(QModelIndex const & index) const {

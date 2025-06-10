@@ -9079,7 +9079,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Cuve matière</translation>
+        <translation type="vanished">Cuve matière</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -9140,6 +9140,14 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -9043,7 +9043,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Vat</translation>
+        <translation type="vanished">Vat</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -9104,6 +9104,14 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Annuleren</translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

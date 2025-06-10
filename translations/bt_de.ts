@@ -8954,7 +8954,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Bottich</translation>
+        <translation type="vanished">Bottich</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -9015,6 +9015,14 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Abbruch</translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
