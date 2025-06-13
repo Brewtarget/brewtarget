@@ -24,6 +24,7 @@ Bug fixes and minor enhancements.
 * Windows version opens a console in addition to the main window [976](https://github.com/Brewtarget/brewtarget/issues/976)
 * Crash (in TreeModelBase::insertChild) on import of new ingredients to clean database [977](https://github.com/Brewtarget/brewtarget/issues/977)
 * Assert on copy recipe [980](https://github.com/Brewtarget/brewtarget/issues/980)
+* Brewtarget 4.1.1 crashes on opening [984](https://github.com/Brewtarget/brewtarget/issues/984)
 
 ### Release Timestamp
 Mon, 2 Jun 2025 04:01:02 +0100
