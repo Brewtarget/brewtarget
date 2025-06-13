@@ -184,8 +184,7 @@ public:
       if (!viewIndex.isValid()) {
          return nullptr;
       }
-      QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
-      TreeNode * treeNode = this->m_model.treeNode(modelIndex);
+      TreeNode * treeNode = this->doTreeNode(viewIndex);
       if (treeNode->classifier() == TreeNodeClassifier::Folder) {
          return nullptr;
       }
@@ -203,6 +202,11 @@ public:
          TreeItemNode<SNE> const & primaryTreeNode = static_cast<TreeItemNode<SNE> &>(*treeNode);
          return primaryTreeNode.underlyingItem();
       }
+   }
+
+
+   QModelIndex indexOfNode(TreeNode * node) const {
+      return this->m_treeSortFilterProxy.mapFromSource(this->m_model.indexOfNode(node));
    }
 
    QModelIndex parentIndex(QModelIndex const & viewIndex) {
@@ -262,10 +266,13 @@ public:
     *        from a base class pointer/reference.
     */
    void doSetSelected(QModelIndex const & viewIndex) {
+      if (!viewIndex.isValid()) {
+         return;
+      }
+      qDebug() << Q_FUNC_INFO << "New selected index:" << viewIndex;
+      this->derived().selectionModel()->select(viewIndex, QItemSelectionModel::Select);
+      TreeNode * treeNode = this->doTreeNode(viewIndex);
       QModelIndex parentIndex = this->parentIndex(viewIndex);
-      this->derived().setCurrentIndex(viewIndex);
-      QModelIndex modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
-      TreeNode * treeNode = this->m_model.treeNode(modelIndex);
       if (treeNode->classifier() == TreeNodeClassifier::Folder && !this->derived().isExpanded(parentIndex)) {
          this->derived().setExpanded(parentIndex, true);
       }
@@ -321,10 +328,27 @@ public:
     * \return \c std::nullopt if the user cancelled the deletion
     */
    std::optional<QModelIndex> doDeleteItems(QModelIndexList const & selectedViewIndexes) {
-      // QModelIndexList is a synonym for QList<QModelIndex>
-      // We have to grab this info here, as it won't necessarily be valid after we've modified the structure of the tree
-      int firstRowToDelete = selectedViewIndexes.at(0).row();
-      int firstColToDelete = selectedViewIndexes.at(0).column();
+      //
+      // Later on we're going to want to have the node just before or after the ones we deleted, so we can make it the
+      // selected one.  The QModelIndex objects won't be valid after we modify the tree structure, so we want to get the
+      // tree node in the loop below.
+      //
+      QModelIndex newSelectedViewIndex;
+      QModelIndex const & firstToDelete = selectedViewIndexes.constFirst();
+      if (firstToDelete.row() > 0) {
+         newSelectedViewIndex = this->m_treeSortFilterProxy.index(firstToDelete.row() - 1,
+                                                                  firstToDelete.column(),
+                                                                  firstToDelete.parent());
+      } else {
+         QModelIndex const & lastToDelete = selectedViewIndexes.constLast();
+         newSelectedViewIndex = this->m_treeSortFilterProxy.index(lastToDelete.row() + 1,
+                                                                  lastToDelete.column(),
+                                                                  lastToDelete.parent());
+      }
+      TreeNode * newSelectedTreeNode = nullptr;
+      if (newSelectedViewIndex.isValid()) {
+         newSelectedTreeNode = this->doTreeNode(newSelectedViewIndex);
+      }
 
       QModelIndexList modelIndexesToDelete;
 
@@ -339,12 +363,37 @@ public:
             continue;
          }
 
+         //
+         // When we ask the user for confirmation "Delete Hop such-and-such?", we want to flag up to them if that Hop
+         // (or Style, Equipment, Mash, etc) is used in any Recipes.
+         //
+         // But in the case of deleting a Recipe, this is not meaningful (because a Recipe is not used in another
+         // Recipe).  Similarly, there is no special additional text for a secondary item (eg BrewNote), because it is
+         // only used by its parent.
+         //
+         QString confirmationMessage = Derived::tr("Delete %1 #%2 \"%3\"?").arg(
+                                          treeNode->localisedClassName()
+                                       ).arg(
+                                          treeNode->underlyingItemKey()
+                                       ).arg(
+                                          treeNode->name()
+                                       );
+         if constexpr (!std::same_as<NE, Recipe>) {
+            if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+               TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
+               confirmationMessage.append(
+                  QString{" (%1)"}.arg(Recipe::usedInRecipes(*primaryTreeNode.underlyingItem()))
+               );
+            }
+            // TBD do we want to show any special message for a folder?
+         }
+
          // If we have already said "Yes To All", we skip asking for subsequent items
          if (confirmDelete != QMessageBox::YesToAll) {
             confirmDelete = QMessageBox::question(
                &this->derived(),
                Derived::tr("Delete %1").arg(treeNode->localisedClassName()),
-               Derived::tr("Delete %1 %2?").arg(treeNode->localisedClassName()).arg(treeNode->name()),
+               confirmationMessage,
                QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::Cancel,
                QMessageBox::No
             );
@@ -363,32 +412,16 @@ public:
          modelIndexesToDelete.append(modelIndex);
       }
 
+      if (modelIndexesToDelete.empty()) {
+         // User clicked No to all items
+         return std::nullopt;
+      }
+
       // If we get here, call the model to delete the victims
       this->m_model.deleteItems(modelIndexesToDelete);
 
-      //
-      // This is a stab at giving a new "currently selected" item after the previously selected items were deleted.
-      //
-      // TODO: There is a bit more logic to add here to cover folders and sub-types (via TreeNode::classifier()).  Original
-      //       comments from MainWindow::deleteSelected() below
-      //
-      // Now that we deleted the selected recipe, we don't want it to appear in the main window any more, so let's select
-      // another one.
-      //
-      // Most of the time, after deleting the nth recipe, the new nth item is also a recipe.  If there isn't an nth item
-      // (eg because the recipe(s) we deleted were at the end of the list) then let's go back to the 1st item.  But then
-      // we have to make sure to skip over folders.
-      //
-      // .:TBD:. This works if you have plenty of recipes outside folders.  If all your recipes are inside folders, then
-      // we should so a proper search through the tree to find the first recipe and then expand the folder that it's in.
-      // Doesn't feel like that logic belongs here.  Would be better to create TreeView::firstNonFolder() or similar.
-      //
-      //
-      QModelIndex newSelectediewIndex = this->m_treeSortFilterProxy.index(firstRowToDelete, firstColToDelete);
-      if (!newSelectediewIndex.isValid()) {
-         newSelectediewIndex = this->m_treeSortFilterProxy.index(0, 0);
-      }
-      return newSelectediewIndex;
+      // If newSelectedTreeNode is null, this will just return the index of the root node
+      return this->indexOfNode(newSelectedTreeNode);
    }
 
    void doCopySelected() {
@@ -406,7 +439,7 @@ public:
       if (newSelected && newSelected->isValid()) {
          TreeNode * node = this->doTreeNode(*newSelected);
          qDebug() << Q_FUNC_INFO << "Row" << newSelected->row() << "(" << *newSelected << ") is" << *node;
-         this->derived().setSelected(*newSelected);
+         this->doSetSelected(*newSelected);
       }
 
       return;
@@ -421,7 +454,7 @@ public:
 
       QModelIndex startIndex = indexes.at(0);
 
-      TreeNode * treeNode = this->m_model.treeNode(startIndex);
+      TreeNode * treeNode = this->doTreeNode(startIndex);
       if (!treeNode->rawParent()) {
          // You can't rename the root element
          return;
@@ -562,8 +595,7 @@ public:
    }
 
    std::pair<QMenu *, TreeNode *> getContextMenuPair(QModelIndex const & selectedViewIndex) {
-      QModelIndex const selectedModelIndex{this->m_treeSortFilterProxy.mapToSource(selectedViewIndex)};
-      TreeNode * selectedNode = this->m_model.treeNode(selectedModelIndex);
+      TreeNode * selectedNode = this->doTreeNode(selectedViewIndex);
       if constexpr (!IsVoid<SNE>) {
          if (selectedNode->classifier() == TreeNodeClassifier::SecondaryItem) {
             return std::make_pair(&this->m_secondaryContextMenu, selectedNode);

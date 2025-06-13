@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxNamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2024:
+ * widgets/BtComboBoxNamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -46,8 +46,13 @@ void BtComboBoxNamedEntity::setCurrentId(int value) {
    int const index {value < 0 ? -1 : this->findData(value)};
    qDebug() << Q_FUNC_INFO << this->m_name << "value:" << value << ", index:" << index;
 
-   // It's a coding error to set an ID we don't know about
-   Q_ASSERT(value < 0 || index >= 0);
+   // It's probably a coding error to set an ID we don't know about, but it could also be bad data.  In either case, we
+   // can recover.
+   if (value > 0 && index < 0) {
+      qWarning() << Q_FUNC_INFO << "Unable to find value" << value << "for BtComboBoxNamedEntity" << this->m_name;
+      qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
+      return;
+   }
 
    this->setCurrentIndex(index);
    return;

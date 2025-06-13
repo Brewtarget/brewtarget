@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Application.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * Application.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Dan Cavanagh <dan@dancavanagh.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
@@ -100,6 +100,9 @@ namespace Application {
    void setInteractive(bool val);
 
    void checkAgainstLatestRelease(QVersionNumber const latestRelease);
+
+   //! \brief Call this to quit after an error
+   void abort();
 }
 
 

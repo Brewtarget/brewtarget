@@ -51,6 +51,8 @@ TreeView::TreeView(QWidget * parent) :
    this->setDragEnabled(true);
    this->setAcceptDrops(true);
    this->setDropIndicatorShown(true);
+
+   this->setSelectionBehavior(QAbstractItemView::SelectRows);
    this->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
    return;
