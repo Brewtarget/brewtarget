@@ -396,11 +396,53 @@ public:
    // If err != 0, set it to true if an error occurs, false otherwise.
    bool updateSchema(Database & database, bool* err = nullptr) {
       auto connection = database.sqlDatabase();
-      int dbSchemaVersion = DatabaseSchemaHelper::schemaVersion(connection);
-      int latestSchemaVersion = DatabaseSchemaHelper::latestVersion;
+      int const dbSchemaVersion = DatabaseSchemaHelper::schemaVersion(connection);
+      int const latestSchemaVersion = DatabaseSchemaHelper::latestVersion;
       qInfo() <<
          Q_FUNC_INFO << "Schema version in DB:" << dbSchemaVersion << ", current schema version in code:" <<
          latestSchemaVersion;
+
+      //
+      // We need to warn the user if the schema version in the database is _newer_ than the one in the code.  This can
+      // happen if the user has two different versions of the software installed or if they revert from a newer one to
+      // an old one.  Whatever the reason, it's very possible they will hit somewhat catastrophic problems - eg if the
+      // old code tries to reference a table or column that no longer exists in the newer schema.  So we should flag a
+      // big warning and terminate the program.
+      //
+      // Although we could offer an extra "continue anyway" button, I'm not sure it's a good idea.  It would be easy for
+      // the user to press or click the wrong button by mistake -- especially as they probably are not expecting to see
+      // this error message.
+      //
+      // Any user that really knows what s/he is doing, and really wants to run some old code against new DB schema, is
+      // probably savvy enough either to manually edit the DB to change the schema number, or to build the software
+      // locally with this bit of the code commented out.
+      //
+      if (dbSchemaVersion > latestSchemaVersion) {
+         qCritical() <<
+            Q_FUNC_INFO << "Database schema version" << dbSchemaVersion <<
+            "is newer than that supported by the code:" << latestSchemaVersion << ".  Program will terminate.";
+         if (Application::isInteractive()) {
+            QMessageBox schemaInDbNewerThanCodeMessageBox{
+               QMessageBox::Icon::Critical,
+               tr("ERROR: Unsupported Database Schema"),
+               tr(
+                  "Attempting to read a v%1 database, but %2 %3 only supports databases up to v%4.\n\n"
+                  "Click 'OK' to terminate %2 so you can upgrade to a newer version.\n"
+               ).arg(
+                  dbSchemaVersion
+               ).arg(
+                  CONFIG_APPLICATION_NAME_UC
+               ).arg(
+                  CONFIG_VERSION_STRING
+               ).arg(
+                  latestSchemaVersion
+               ),
+               QMessageBox::Ok
+            };
+            schemaInDbNewerThanCodeMessageBox.exec();
+         }
+         Application::abort();
+      }
 
       bool doUpdate = dbSchemaVersion < latestSchemaVersion;
       if (doUpdate) {
@@ -444,7 +486,7 @@ public:
                   );
                   upgradeBackupFailedMessageBox.exec();
                }
-               exit(1);
+               Application::abort();
             }
          }
 
@@ -473,12 +515,7 @@ public:
             int ret = dbUpgradeMessageBox.exec();
             if (ret == QMessageBox::Abort) {
                qDebug() << Q_FUNC_INFO << "User clicked \"Abort\".  Exiting.";
-               // Ask the application nicely to quit
-               QCoreApplication::quit();
-               // If it didn't, we have to insist!
-               QCoreApplication::exit(1);
-               // If insisting doesn't work, there's one final option
-               exit(1);
+               Application::abort();
             }
          }
 

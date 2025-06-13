@@ -118,6 +118,8 @@ public:
 
    virtual TreeNode * rawChild(int number) const = 0;
 
+   virtual QList<TreeNode *> rawChildren() const = 0;
+
    virtual TreeNode * rawParent() const = 0;
 
    /**

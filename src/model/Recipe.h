@@ -428,6 +428,13 @@ public:
       return ObjectStoreWrapper::numMatching<Recipe>( [& var](Recipe const * rec) {return rec->uses(var);} );
    }
 
+   //! \brief Return a display text "Used in x recipes" based on \c numRecipesUsing for the supplied object
+   template<class T> static QString usedInRecipes(T const & var) {
+      int const numRecipes = Recipe::numRecipesUsing(var);
+//      qDebug() << Q_FUNC_INFO << var << "is used in" << numRecipes << "recipes";
+      return T::tr("Used in %n recipe(s)", "", numRecipes);
+   }
+
    //! \brief Automagically generate a list of instructions.
    void generateInstructions();
 

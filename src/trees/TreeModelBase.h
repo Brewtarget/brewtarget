@@ -380,10 +380,6 @@ public:
                return false;
             }
             auto folder = item->folderPath();
-            if (folder.isEmpty()) {
-               qDebug() << Q_FUNC_INFO << item << "has no folder";
-               return false;
-            }
             qDebug() <<
                Q_FUNC_INFO << "Moving" << item << "from folder" << folder << "to folder" << targetFolderPath;
             // Dropping an item in a folder just means setting the folder name on that item
@@ -429,14 +425,14 @@ public:
     * \brief Add an item to the tree
     */
    void insertPrimaryItem(std::shared_ptr<NE> item) {
-      //
-      // When we call insertChild below, it results in beginInsertRows() and endInsertRows() signals being emitted.
-      // However, for reasons I didn't get to the bottom of, this doesn't result in the display getting updated.
-      // Neither does emitting the dataChanged() signal for either the newly-inserted item or its parent.  What does
-      // work is the layoutAboutToBeChanged() and layoutChanged() signals.  It seems like a bit of a sledgehammer
-      // solution, but it works, and so is useful unless and until we find a better approach.
-      //
-      TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::ChangeLayout, this->derived());
+///      //
+///      // When we call insertChild below, it results in beginInsertRows() and endInsertRows() signals being emitted.
+///      // However, for reasons I didn't get to the bottom of, this doesn't result in the display getting updated.
+///      // Neither does emitting the dataChanged() signal for either the newly-inserted item or its parent.  What does
+///      // work is the layoutAboutToBeChanged() and layoutChanged() signals.  It seems like a bit of a sledgehammer
+///      // solution, but it works, and so is useful unless and until we find a better approach.
+///      //
+///      TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::ChangeLayout, this->derived());
 
       QModelIndex parentIndex;
       int childNumber;
@@ -562,18 +558,17 @@ public:
       while (!queue.isEmpty()) {
          auto nodeToSearchIn = queue.dequeue();
          qDebug() << Q_FUNC_INFO << "Find" << ne << "in" << *nodeToSearchIn;
-         //
-         // This is a compile-time check whether it's possible in this tree for primary items to have other primary
-         // items as children.  (If not, which is the case in most trees, we can skip over looking for children of
-         // primary items.)
-         //
-         if constexpr (std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
-                                               std::shared_ptr<TreeItemNode<NE>>>) {
+         if (nodeToSearchIn->classifier() == TreeNodeClassifier::PrimaryItem) {
             //
-            // This is the case, eg in the Recipe tree, where a primary item (eg a Recipe) can hold other primary
-            // items.
+            // This is a compile-time check whether it's possible in this tree for primary items to have other primary
+            // items as children.  (If not, which is the case in most trees, we can skip over looking for children of
+            // primary items.)
             //
-            if (nodeToSearchIn->classifier() == TreeNodeClassifier::PrimaryItem) {
+            if constexpr (std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
+                                                std::shared_ptr<TreeItemNode<NE>>>) {
+               //
+               // Primary items can be inside other primary items in this tree.  This is the case, eg in the Recipe
+               // tree.
                //
                // We assume that nodeToSearchIn doesn't itself match what we're looking for, otherwise we wouldn't have
                // put it on the queue.
@@ -597,11 +592,13 @@ public:
                   // Primary items can never contain folders, so if the child wasn't another primary item, we can ignore
                   // it
                }
-               //
-               // We processed this nodeToSearchIn item, so go to the next item in the queue.
-               //
-               continue;
             }
+
+            //
+            // We either processed this nodeToSearchIn item or skipped over it (because this tree does not support
+            // primary items inside other primary items), so go to the next item in the queue.
+            //
+            continue;
          }
 
          //
@@ -1240,13 +1237,28 @@ public:
     */
    void deleteItems(QModelIndexList const & selectedModelIndexes) {
       //
+      // As explained below, we're going to delete objects one by one.  After the first deletion, none of the indexes in
+      // selectedModelIndexes is guaranteed to still be valid.  So, before we do any deletion, we get a list of the
+      // nodes whose objects we are deleting.
+      //
+      QList<TreeNode *> nodesToDelete;
+      for (QModelIndex const & modelIndex : selectedModelIndexes) {
+         nodesToDelete.append(this->doTreeNode(modelIndex));
+      }
+      this->deleteItems(nodesToDelete);
+      return;
+   }
+
+
+   void deleteItems(QList<TreeNode *> const & nodesToDelete) {
+
+      //
       // In the loop below, the calls to ObjectStoreWrapper::softDelete will, via the
       // ObjectStoreTyped::signalObjectDeleted signal, result in implElementRemoved being called, so we don't need to
       // remove the object from the tree here, other than in the case that it is a folder (and thus does not have an
       // entity in the DB).
       //
-      for (QModelIndex const & modelIndex : selectedModelIndexes) {
-         TreeNode * treeNode = this->doTreeNode(modelIndex);
+      for (TreeNode * treeNode : nodesToDelete) {
          if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
             auto & neTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
             std::shared_ptr<NE> neItem = neTreeNode.underlyingItem();
@@ -1263,11 +1275,15 @@ public:
             }
          }
 
-         Q_ASSERT(treeNode->classifier() == TreeNodeClassifier::Folder);
          // We want to delete the contents of the folder (and remove it from from the model) before remove the folder
          // itself, otherwise the QModelIndex values for the contents will not be valid.
-         this->deleteItems(this->allChildren(modelIndex));
-         this->removeItemByIndex(modelIndex);
+         Q_ASSERT(treeNode->classifier() == TreeNodeClassifier::Folder);
+         this->deleteItems(treeNode->rawChildren());
+         //
+         // For the moment, folders don't exist in the database, so we just remove directly from the tree
+         //
+         QModelIndex folderIndex = this->indexOfNode(treeNode);
+         this->removeItemByIndex(folderIndex);
       }
       return;
    }
@@ -1419,12 +1435,11 @@ protected:
       auto elementNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(elementIndex));
 
       //
-      // Remove the sending item from its current parent folder (which will be the root node if it had no folder)
+      // Remove the sending item from its current parent folder, which will be the root node if it had no folder.  (In
+      // that case, where parent is root node, parentIndex will be default, ie invalid, QModelIndex.  This is what
+      // various bits of Qt code expect, so it's OK.)
       //
       QModelIndex parentIndex = this->derived().parent(elementIndex);
-      // It's a coding error if a PrimaryItem in the tree does not have a parent
-      Q_ASSERT(parentIndex.isValid());
-
 
       int const elementChildNumber = this->doTreeNode(elementIndex)->childNumber();
       // Remove it

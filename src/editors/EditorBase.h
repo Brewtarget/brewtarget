@@ -470,11 +470,7 @@ public:
 
    void showNumRecipesUsing() {
       if constexpr (HasNumRecipesUsing<editorBaseOptions>) {
-         int const numRecipes = Recipe::numRecipesUsing(*this->m_editItem);
-         qDebug() << Q_FUNC_INFO << this->m_editItem << "is used in" << numRecipes << "recipes";
-         this->derived().label_numRecipesUsing->setText(
-            Derived::tr("Used in %n recipe(s)", "", numRecipes)
-         );
+         this->derived().label_numRecipesUsing->setText(Recipe::usedInRecipes(*this->m_editItem));
       }
       return;
    }

@@ -328,6 +328,16 @@ public:
       }
    }
 
+   virtual QList<TreeNode *> rawChildren() const override {
+      QList<TreeNode *> rawChildren;
+      if constexpr (!IsNullVariant<ChildPtrTypes>) {
+         for (ChildPtrTypes const & childPtr : this->m_children) {
+            rawChildren.append(std::visit([](auto&& arg) { return static_cast<TreeNode *>(arg.get()); }, childPtr));
+         }
+      }
+      return rawChildren;
+   }
+
    /**
     * \brief Return a raw pointer to specified child, suitable for call to \c QAbstractItemModel::createIndex
     */

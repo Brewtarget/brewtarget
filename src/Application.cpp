@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Application.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * Application.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Chris Pavetto <chrispavetto@gmail.com>
@@ -547,4 +547,13 @@ void Application::checkAgainstLatestRelease(QVersionNumber const latestRelease) 
    //
    tellUserAboutNewRelease = true;
    return;
+}
+
+void Application::abort() {
+   // Ask the application nicely to quit
+   QCoreApplication::quit();
+   // If it didn't, we have to insist!
+   QCoreApplication::exit(1);
+   // If insisting doesn't work, there's one final option
+   exit(1);
 }
