@@ -13,6 +13,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * TODO: Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.1.3
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+* None
+
+### Release Timestamp
+Sat, 14 Jun 2025 04:01:02 +0100
+
 ## v4.1.2
 Bug fixes and minor enhancements.
 
@@ -25,9 +37,10 @@ Bug fixes and minor enhancements.
 * Crash (in TreeModelBase::insertChild) on import of new ingredients to clean database [977](https://github.com/Brewtarget/brewtarget/issues/977)
 * Assert on copy recipe [980](https://github.com/Brewtarget/brewtarget/issues/980)
 * Brewtarget 4.1.1 crashes on opening [984](https://github.com/Brewtarget/brewtarget/issues/984)
+* Brewtarget 4.1.1 crashing or not opening [985](https://github.com/Brewtarget/brewtarget/issues/985)
 
 ### Release Timestamp
-Mon, 2 Jun 2025 04:01:02 +0100
+Fri, 13 Jun 2025 04:01:02 +0100
 
 ## v4.1.1
 This release adds mash steps / boil steps / fermentation steps in the "tree" view, and fixes a number of bugs.
