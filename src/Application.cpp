@@ -438,11 +438,8 @@ void Application::readSystemOptions() {
 
    Measurement::loadDisplayScales();
 
-   //===================IBU===================
-   IbuMethods::loadIbuFormula();
-
-   //========================Color Formula======================
-   ColorMethods::loadColorFormulaSettings();
+     IbuMethods::loadFormula();
+   ColorMethods::loadFormula();
 
    //=======================Language & Date format===================
    Localization::loadSettings();
@@ -457,9 +454,8 @@ void Application::saveSystemOptions() {
 
    Localization::saveSettings();
 
-   IbuMethods::saveIbuFormula();
-
-   ColorMethods::saveColorFormulaSettings();
+     IbuMethods::saveFormula();
+   ColorMethods::saveFormula();
 
    Measurement::saveDisplayScales();
 

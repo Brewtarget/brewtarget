@@ -468,11 +468,11 @@ template<> QString TreeItemNode<Recipe>::getToolTip() const {
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td>")
            .arg(Recipe::tr("Color"))
            .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->color_srm(), Measurement::Units::srm}, 1))
-           .arg(ColorMethods::colorFormulaName());
+           .arg(ColorMethods::formulaName());
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td></tr>")
            .arg(Recipe::tr("IBU"))
            .arg(Measurement::displayQuantity(this->m_underlyingItem->IBU(), 1))
-           .arg(IbuMethods::ibuFormulaName() );
+           .arg(IbuMethods::formulaName() );
    // Third row: DB ID
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(Recipe::tr("ID in DB"))

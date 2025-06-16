@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/IbuMethods.h is part of Brewtarget, and is copyright the following authors 2009-2021:
+ * measurement/IbuMethods.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -19,9 +19,24 @@
 #define MEASUREMENT_IBUMETHODS_H
 #pragma once
 
+#include "utils/BtStringConst.h"
 #include "utils/EnumStringMapping.h"
 
 class QString;
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+//
+// Of course, since IbuMethods is a namespace rather than a class, it doesn't have properties in the same way that the
+// model classes (Hop, Recipe, etc) do.  However, it useful in certain places (eg combo box set-up) to treat it as a
+// sort of singleton class.  Hence the property names here.
+//
+#define AddPropertyName(property) namespace PropertyNames::IbuMethods { inline BtStringConst const property{#property}; }
+AddPropertyName(formula)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 /*!
  * \namespace IbuMethods
@@ -46,7 +61,7 @@ namespace IbuMethods {
       Rager  ,
       Noonan ,
       mIbu   ,
-      Smph   ,
+//      Smph   , // Not yet implemented
    };
    // Note that we can't use the Q_ENUM macro here to allow storing the above enum class in a QVariant, because Q_ENUM
    // is designed to be used inside a class that derives from QObject.
@@ -65,20 +80,22 @@ namespace IbuMethods {
     */
    extern EnumStringMapping const formulaDisplayNames;
 
-   extern IbuFormula ibuFormula;
+   extern IbuFormula formula;
+
+   extern TypeLookup const typeLookup;
 
    /**
     * \brief Read in from persistent settings
     */
-   void loadIbuFormula();
+   void loadFormula();
 
    /**
     * \brief Write out to persistent settings
     */
-   void saveIbuFormula();
+   void saveFormula();
 
    //! \brief return the bitterness formula's name
-   QString ibuFormulaName();
+   QString formulaName();
 
    /**
     * \brief Parameters for the various IBU calculation formulae

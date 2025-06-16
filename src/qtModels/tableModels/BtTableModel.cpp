@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/BtTableModel.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * qtModels/tableModels/BtTableModel.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -127,9 +127,10 @@ QVariant BtTableModel::headerData(int section, Qt::Orientation orientation, int 
          return this->getColumnLabel(section);
       }
 
-      qWarning().noquote() <<
+      qWarning() <<
          Q_FUNC_INFO << "Request for invalid column number " << section << ", this->m_columnInfos.size():" <<
-         this->m_columnInfos.size() << Logging::getStackTrace();
+         this->m_columnInfos.size();
+//      qWarning().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
       return QVariant();
    }
 

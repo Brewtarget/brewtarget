@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/IbuMethods.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * measurement/IbuMethods.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -192,9 +192,22 @@ namespace {
                                                                     parms.kettleOpeningDiameter_cm.value_or(45.0));
 
       double const totalUtilization = decimalAlphaAcidUtilization + postBoilUtilization;
-      double const IBU = (totalUtilization * parms.AArating * parms.hops_grams * 1000.0) / parms.postBoilVolume_liters;
-      return IBU;
+      double const ibu = (totalUtilization * parms.AArating * parms.hops_grams * 1000.0) / parms.postBoilVolume_liters;
+      return ibu;
    }
+
+//   /*!
+//    * \brief Calculates the IBU by the SMPH formula, developed by Tom Shellhammer, Mark Malowicki, Val Peacock and
+//    *        Paul-John Hosom, and described at
+//    *        https://alchemyoverlord.wordpress.com/2021/11/10/ibus-and-the-smph-model/
+//    */
+//   double smph(IbuMethods::IbuCalculationParms const & parms) {
+//      //
+//      // TODO: Need to implement this!
+//      //
+//      return 0.0;
+//   }
+
 }
 
 EnumStringMapping const IbuMethods::formulaStringMapping {
@@ -202,53 +215,51 @@ EnumStringMapping const IbuMethods::formulaStringMapping {
    {IbuMethods::IbuFormula::Rager  , "rager"  },
    {IbuMethods::IbuFormula::Noonan , "noonan" },
    {IbuMethods::IbuFormula::mIbu   , "mibu"   },
-   {IbuMethods::IbuFormula::Smph   , "smph"   },
+//   {IbuMethods::IbuFormula::Smph   , "smph"   },
 };
 
 EnumStringMapping const IbuMethods::formulaDisplayNames {
-   // Not sure how translatable these names are, but I guess it doesn't hurt to include them
-   {IbuMethods::IbuFormula::Tinseth, QObject::tr("Tinseth")},
-   {IbuMethods::IbuFormula::Rager  , QObject::tr("Rager"  )},
-   {IbuMethods::IbuFormula::Noonan , QObject::tr("Noonan" )},
+   {IbuMethods::IbuFormula::Tinseth, QObject::tr("Tinseth's approximation")},
+   {IbuMethods::IbuFormula::Rager  , QObject::tr("Rager's approximation"  )},
+   {IbuMethods::IbuFormula::Noonan , QObject::tr("Noonan's approximation" )},
    {IbuMethods::IbuFormula::mIbu   , QObject::tr("mIBU"   )},
-   {IbuMethods::IbuFormula::Smph   , QObject::tr("SMPH"   )},
+//   {IbuMethods::IbuFormula::Smph   , QObject::tr("Shellhammer, Malowicki, Peacock & Hosom (SMPH) approximation")},
 };
 
-
-IbuMethods::IbuFormula IbuMethods::ibuFormula = IbuMethods::IbuFormula::Tinseth;
-
-void IbuMethods::loadIbuFormula() {
-   QString text = PersistentSettings::value(PersistentSettings::Names::ibu_formula, "tinseth").toString();
-   if (text == "tinseth") {
-      IbuMethods::ibuFormula = IbuMethods::IbuFormula::Tinseth;
-   } else if (text == "rager") {
-      IbuMethods::ibuFormula = IbuMethods::IbuFormula::Rager;
-   } else if (text == "noonan") {
-       IbuMethods::ibuFormula = IbuMethods::IbuFormula::Noonan;
-   } else {
-      qCritical() << Q_FUNC_INFO << "Bad ibu_formula type:" << text;
+TypeLookup const IbuMethods::typeLookup {
+   "IbuMethods",
+   {
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::IbuMethods::formula, IbuMethods::formula, NonPhysicalQuantity::Enum),
    }
+};
+
+IbuMethods::IbuFormula IbuMethods::formula = IbuMethods::IbuFormula::Tinseth;
+
+void IbuMethods::loadFormula() {
+   IbuMethods::formula = IbuMethods::formulaStringMapping.stringToEnum<IbuMethods::IbuFormula>(
+      PersistentSettings::value(PersistentSettings::Names::ibu_formula,
+                                IbuMethods::formulaStringMapping[IbuMethods::IbuFormula::Tinseth]).toString()
+   );
    return;
 }
 
-void IbuMethods::saveIbuFormula() {
+void IbuMethods::saveFormula() {
    PersistentSettings::insert(PersistentSettings::Names::ibu_formula,
-                              IbuMethods::formulaStringMapping[IbuMethods::ibuFormula]);
+                              IbuMethods::formulaStringMapping[IbuMethods::formula]);
    return;
 }
 
-QString IbuMethods::ibuFormulaName() {
-   return IbuMethods::formulaDisplayNames[IbuMethods::ibuFormula];
+QString IbuMethods::formulaName() {
+   return IbuMethods::formulaDisplayNames[IbuMethods::formula];
 }
 
 double IbuMethods::getIbus(IbuMethods::IbuCalculationParms const & parms) {
-   switch(IbuMethods::ibuFormula) {
+   switch(IbuMethods::formula) {
       case IbuMethods::IbuFormula::Tinseth: return tinseth(parms);
       case IbuMethods::IbuFormula::Rager  : return rager  (parms);
       case IbuMethods::IbuFormula::Noonan : return noonan (parms);
+      case IbuMethods::IbuFormula::mIbu   : return mIbu   (parms);
+//      case IbuMethods::IbuFormula::Smph   : return smph   (parms);
    }
-   qCritical() <<
-      Q_FUNC_INFO << "Unrecognized IBU formula type:" << static_cast<int>(IbuMethods::ibuFormula) <<
-      ".  Defaulting to Tinseth.";
-   return tinseth(parms);
+//      std::unreachable();
 }

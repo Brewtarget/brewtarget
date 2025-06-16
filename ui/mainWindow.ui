@@ -587,26 +587,14 @@
                        <string>Tar&amp;get Boil Size</string>
                       </property>
                       <property name="buddy">
-                       <cstring>lineEdit_boilSize</cstring>
+                       <cstring>label_targetBoilSize_value</cstring>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="1">
-                     <widget class="SmartLineEdit" name="lineEdit_boilSize">
+                     <widget class="SmartValueDisplay" name="label_targetBoilSize_value">
                       <property name="toolTip">
                        <string>See Boil tab below</string>
-                      </property>
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="acceptDrops">
-                       <bool>false</bool>
-                      </property>
-                      <property name="frame">
-                       <bool>false</bool>
-                      </property>
-                      <property name="readOnly">
-                       <bool>true</bool>
                       </property>
                      </widget>
                     </item>
@@ -619,26 +607,14 @@
                        <string>Boil Time</string>
                       </property>
                       <property name="buddy">
-                       <cstring>lineEdit_boilTime</cstring>
+                       <cstring>label_boilTime_value</cstring>
                       </property>
                      </widget>
                     </item>
                     <item row="7" column="1">
-                     <widget class="SmartLineEdit" name="lineEdit_boilTime">
+                     <widget class="SmartValueDisplay" name="label_boilTime_value">
                       <property name="toolTip">
                        <string>See Boil tab below</string>
-                      </property>
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="acceptDrops">
-                       <bool>false</bool>
-                      </property>
-                      <property name="frame">
-                       <bool>false</bool>
-                      </property>
-                      <property name="readOnly">
-                       <bool>true</bool>
                       </property>
                      </widget>
                     </item>
@@ -651,24 +627,12 @@
                        <string>Boil SG</string>
                       </property>
                       <property name="buddy">
-                       <cstring>lineEdit_boilSg</cstring>
+                       <cstring>label_boilSg_value</cstring>
                       </property>
                      </widget>
                     </item>
                     <item row="8" column="1">
-                     <widget class="SmartLineEdit" name="lineEdit_boilSg">
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="acceptDrops">
-                       <bool>false</bool>
-                      </property>
-                      <property name="frame">
-                       <bool>false</bool>
-                      </property>
-                      <property name="readOnly">
-                       <bool>true</bool>
-                      </property>
+                     <widget class="SmartValueDisplay" name="label_boilSg_value">
                      </widget>
                     </item>
                     <item row="9" column="0">
@@ -2281,6 +2245,11 @@
    </slots>
   </customwidget>
   <customwidget>
+   <class>SmartValueDisplay</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartValueDisplay.h</header>
+  </customwidget>
+  <customwidget>
    <class>StyleRangeWidget</class>
    <extends>QWidget</extends>
    <header>StyleRangeWidget.h</header>
@@ -2449,9 +2418,9 @@
   <tabstop>equipmentButton</tabstop>
   <tabstop>equipmentComboBox</tabstop>
   <tabstop>lineEdit_batchSize</tabstop>
-  <tabstop>lineEdit_boilSize</tabstop>
+  <tabstop>label_targetBoilSize_value</tabstop>
   <tabstop>lineEdit_efficiency</tabstop>
-  <tabstop>lineEdit_boilTime</tabstop>
+  <tabstop>label_boilTime_value</tabstop>
   <tabstop>scrollArea_tables</tabstop>
   <tabstop>tabWidget_ingredients</tabstop>
   <tabstop>fermentableAdditionTable</tabstop>
