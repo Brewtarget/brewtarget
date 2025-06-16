@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/ColorMethods.h is part of Brewtarget, and is copyright the following authors 2009-2021:
+ * measurement/ColorMethods.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,7 +18,20 @@
 #define MEASUREMENT_COLORMETHODS_H
 #pragma once
 
+#include "utils/BtStringConst.h"
+#include "utils/EnumStringMapping.h"
+
 class QString;
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in measurement/IbuMethods.h
+//
+#define AddPropertyName(property) namespace PropertyNames::ColorMethods { inline BtStringConst const property{#property}; }
+AddPropertyName(formula)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 /*!
  * \namespace ColorMethods
@@ -27,15 +40,35 @@ class QString;
  */
 namespace ColorMethods {
    //! \brief The formula used to get beer color.
-   enum ColorType {MOSHER, DANIEL, MOREY};
+   enum class ColorFormula {
+      Mosher,
+      Daniel,
+      Morey ,
+   };
 
-   extern ColorType colorFormula;
+   /*!
+    * \brief Mapping between \c ColorMethods::ColorType and string values suitable for serialisation in
+    *        \c PersistentSettings, etc.
+    *
+    *        This can also be used to obtain the number of values of \c Type, albeit at run-time rather than
+    *        compile-time.  (One day, C++ will have reflection and we won't need to do things this way.)
+    */
+   extern EnumStringMapping const formulaStringMapping;
+
+   /*!
+    * \brief Localised names of \c ColorMethods::ColorType values suitable for displaying to the end user
+    */
+   extern EnumStringMapping const formulaDisplayNames;
+
+   extern ColorFormula formula;
+
+   extern TypeLookup const typeLookup;
 
    //! \brief return the color formula name
-   QString colorFormulaName();
+   QString formulaName();
 
-   void loadColorFormulaSettings();
-   void saveColorFormulaSettings();
+   void loadFormula();
+   void saveFormula();
 
    //! Depending on selected algorithm, convert malt color units to SRM.
    double mcuToSrm(double mcu);

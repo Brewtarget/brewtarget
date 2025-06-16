@@ -122,12 +122,6 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
-      </property>
       <attribute name="title">
        <string>Formulas</string>
       </attribute>
@@ -152,14 +146,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QComboBox" name="ibuFormulaComboBox">
-            <property name="minimumSize">
-             <size>
-              <width>230</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
+           <widget class="BtComboBoxEnum" name="ibuFormulaComboBox"/>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="colorFormulaLabel">
@@ -169,7 +156,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QComboBox" name="colorFormulaComboBox"/>
+           <widget class="BtComboBoxEnum" name="colorFormulaComboBox"/>
           </item>
          </layout>
         </widget>
@@ -531,6 +518,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtComboBoxEnum</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBoxEnum.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
   <tabstop>buttonBox</tabstop>

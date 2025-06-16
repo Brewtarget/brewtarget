@@ -349,7 +349,7 @@ public:
                      "<td class=\"value\">%2 (%3)</td></tr>")
             .arg(tr("IBU"))
             .arg(Measurement::displayQuantity(rec->IBU(), 1))
-            .arg(IbuMethods::ibuFormulaName() );
+            .arg(IbuMethods::formulaName() );
 
       // Fifth row: Color and calories.  Set up the color string first
       body += QString("<tr>"
@@ -357,7 +357,7 @@ public:
                      "<td class=\"value\">%2 (%3)</td>")
             .arg(tr("Color"))
             .arg(Measurement::displayAmount(Measurement::Amount{rec->color_srm(), Measurement::Units::srm}, 1))
-            .arg(ColorMethods::colorFormulaName());
+            .arg(ColorMethods::formulaName());
 
       bool displayMetricVolumes =
          Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Volume) ==
@@ -407,12 +407,12 @@ public:
       value.append(QString("%1%").arg(Measurement::displayQuantity(rec->ABV_pct(), 1)));
       entry.append(tr("Bitterness"));
       value.append(QString("%1 %2 (%3)").arg(Measurement::displayQuantity(rec->IBU(), 1))
-                                 .arg(tr("IBU"))
-                                 .arg(IbuMethods::ibuFormulaName()));
+                                        .arg(tr("IBU"))
+                                        .arg(IbuMethods::formulaName()));
       entry.append(tr("Color"));
       value.append(QString("%1 (%2)").arg(Measurement::displayAmount(Measurement::Amount{rec->color_srm(),
                                                                                          Measurement::Units::srm}, 1))
-                              .arg(ColorMethods::colorFormulaName()));
+                                     .arg(ColorMethods::formulaName()));
 
       padAllToMaxLength(entry);
       padAllToMaxLength(value);

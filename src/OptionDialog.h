@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * OptionDialog.h is part of Brewtarget, and is copyright the following authors 2009-2021:
+ * OptionDialog.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -83,10 +83,6 @@ private:
    class impl;
    std::unique_ptr<impl> pimpl;
 
-   void configure_unitCombos();
-   void configure_formulaCombos();
-   void configure_languages();
-   void configure_logging();
    void connect_signals();
 
    bool saveDatabaseConfig();

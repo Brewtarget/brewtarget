@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxEnum.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/BtComboBoxEnum.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -192,7 +192,7 @@ private:
  *                                        "HopEditor->comboBox_hopForm",
  *                                        Hop::formStringMapping,
  *                                        Hop::formDisplayNames,
- *                                        Hop::typeLookup.getType(PropertyNames::Hop::form)
+ *                                        Hop::typeLookup.getType(PropertyNames::Hop::form))
  *
  *        you write:
  *

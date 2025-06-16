@@ -677,10 +677,10 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
    //
    SMART_FIELD_INIT(MainWindow, label_name           , lineEdit_name      , Recipe, PropertyNames::NamedEntity::name        );
    SMART_FIELD_INIT(MainWindow, label_targetBatchSize, lineEdit_batchSize , Recipe, PropertyNames::Recipe::batchSize_l   , 2);
-   SMART_FIELD_INIT(MainWindow, label_targetBoilSize , lineEdit_boilSize  , Boil  , PropertyNames::Boil::preBoilSize_l   , 2);
+   SMART_FIELD_INIT(MainWindow, label_targetBoilSize , label_targetBoilSize_value  , Boil  , PropertyNames::Boil::preBoilSize_l   , 2);
    SMART_FIELD_INIT(MainWindow, label_efficiency     , lineEdit_efficiency, Recipe, PropertyNames::Recipe::efficiency_pct, 1);
-   SMART_FIELD_INIT(MainWindow, label_boilTime       , lineEdit_boilTime  , Boil  , PropertyNames::Boil::boilTime_mins   , 0);
-   SMART_FIELD_INIT(MainWindow, label_boilSg         , lineEdit_boilSg    , Recipe, PropertyNames::Recipe::boilGrav      , 3);
+   SMART_FIELD_INIT(MainWindow, label_boilTime       , label_boilTime_value  , Boil  , PropertyNames::Boil::boilTime_mins   , 0);
+   SMART_FIELD_INIT(MainWindow, label_boilSg         , label_boilSg_value    , Recipe, PropertyNames::Recipe::boilGrav      , 3);
 
    SMART_FIELD_INIT_NO_SF(MainWindow, oGLabel        , Recipe, PropertyNames::Recipe::og         );
    SMART_FIELD_INIT_NO_SF(MainWindow, fGLabel        , Recipe, PropertyNames::Recipe::fg         );
@@ -1454,15 +1454,12 @@ void MainWindow::showChanges(QMetaProperty* prop) {
    this->lineEdit_efficiency->setQuantity(this->pimpl->m_recipeObs->efficiency_pct());
    // TODO: One day we'll want to do some work to properly handle no-boil recipes....
    std::optional<double> const boilSize = this->pimpl->m_recipeObs->boil() ? this->pimpl->m_recipeObs->boil()->preBoilSize_l() : std::nullopt;
-   this->lineEdit_boilSize  ->setQuantity(boilSize);
-   this->lineEdit_boilTime  ->setQuantity(this->pimpl->m_recipeObs->boil() ? this->pimpl->m_recipeObs->boil()->boilTime_mins() : 0.0);
-   this->lineEdit_boilSg    ->setQuantity(this->pimpl->m_recipeObs->boilGrav());
+   this->label_targetBoilSize_value->setQuantity(boilSize);
+   this->label_boilTime_value->setQuantity(this->pimpl->m_recipeObs->boil() ? this->pimpl->m_recipeObs->boil()->boilTime_mins() : 0.0);
+   this->label_boilSg_value  ->setQuantity(this->pimpl->m_recipeObs->boilGrav());
    this->lineEdit_name      ->setCursorPosition(0);
    this->lineEdit_batchSize ->setCursorPosition(0);
-   this->lineEdit_boilSize  ->setCursorPosition(0);
    this->lineEdit_efficiency->setCursorPosition(0);
-   this->lineEdit_boilTime  ->setCursorPosition(0);
-   this->lineEdit_boilSg    ->setCursorPosition(0);
 /*
    lineEdit_calcBatchSize->setText(this->pimpl->m_recipeObs);
    lineEdit_calcBoilSize->setText(this->pimpl->m_recipeObs);

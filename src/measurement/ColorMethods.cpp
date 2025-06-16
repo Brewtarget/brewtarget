@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/ColorMethods.cpp is part of Brewtarget, and is copyright the following authors 2009-2014:
+ * measurement/ColorMethods.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -42,69 +42,53 @@ namespace {
    }
 }
 
-ColorMethods::ColorType ColorMethods::colorFormula = ColorMethods::MOREY;
+EnumStringMapping const ColorMethods::formulaStringMapping {
+   {ColorMethods::ColorFormula::Mosher, "mosher"},
+   {ColorMethods::ColorFormula::Daniel, "daniel"},
+   {ColorMethods::ColorFormula::Morey , "morey" },
+};
 
-QString ColorMethods::colorFormulaName() {
+EnumStringMapping const ColorMethods::formulaDisplayNames {
+   {ColorMethods::ColorFormula::Mosher, QObject::tr("Mosher's approximation")},
+   {ColorMethods::ColorFormula::Daniel, QObject::tr("Daniel's approximation")},
+   {ColorMethods::ColorFormula::Morey , QObject::tr("Morey's approximation" )},
+};
 
-   switch (ColorMethods::colorFormula) {
-      case ColorMethods::MOREY:
-         return "Morey";
-      case ColorMethods::DANIEL:
-         return "Daniels";
-      case ColorMethods::MOSHER:
-         return "Mosher";
-      default:
-         // It's a coding error if we did not cover all possible options above
-         Q_ASSERT(false);
-         break;
+TypeLookup const ColorMethods::typeLookup {
+   "ColorMethods",
+   {
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::ColorMethods::formula, ColorMethods::formula, NonPhysicalQuantity::Enum),
    }
-   return "Error!";
-}
+};
 
-void ColorMethods::loadColorFormulaSettings() {
-   QString text = PersistentSettings::value(PersistentSettings::Names::color_formula, "morey").toString();
-   if (text == "morey") {
-      ColorMethods::colorFormula = MOREY;
-   } else if (text == "daniel") {
-      ColorMethods::colorFormula = DANIEL;
-   } else if (text == "mosher") {
-      ColorMethods::colorFormula = MOSHER;
-   } else {
-      qCritical() << QString("Bad color_formula type: %1").arg(text);
-   }
+ColorMethods::ColorFormula ColorMethods::formula = ColorMethods::ColorFormula::Morey;
+
+void ColorMethods::loadFormula() {
+   ColorMethods::formula = ColorMethods::formulaStringMapping.stringToEnum<ColorMethods::ColorFormula>(
+      PersistentSettings::value(PersistentSettings::Names::color_formula,
+                                ColorMethods::formulaStringMapping[ColorMethods::ColorFormula::Morey]).toString()
+   );
    return;
 }
 
-void ColorMethods::saveColorFormulaSettings() {
-   switch (ColorMethods::colorFormula) {
-      case MOREY:
-         PersistentSettings::insert(PersistentSettings::Names::color_formula, "morey");
-         break;
-      case DANIEL:
-         PersistentSettings::insert(PersistentSettings::Names::color_formula, "daniel");
-         break;
-      case MOSHER:
-         PersistentSettings::insert(PersistentSettings::Names::color_formula, "mosher");
-         break;
-      default:
-         // It's a coding error if we did not cover all possible options above
-         Q_ASSERT(false);
-         break;
-   }
+void ColorMethods::saveFormula() {
+   PersistentSettings::insert(PersistentSettings::Names::ibu_formula,
+                              ColorMethods::formulaStringMapping[ColorMethods::formula]);
    return;
 }
 
+QString ColorMethods::formulaName() {
+   return ColorMethods::formulaDisplayNames[ColorMethods::formula];
+}
 
 double ColorMethods::mcuToSrm(double mcu) {
-   switch (ColorMethods::colorFormula) {
-      case ColorMethods::MOREY:
+   switch (ColorMethods::formula) {
+      case ColorMethods::ColorFormula::Morey:
          return morey(mcu);
-      case ColorMethods::DANIEL:
+      case ColorMethods::ColorFormula::Daniel:
          return daniel(mcu);
-      case ColorMethods::MOSHER:
+      case ColorMethods::ColorFormula::Mosher:
          return mosher(mcu);
-      default:
-         qCritical() << QObject::tr("Invalid color formula type: %1").arg(ColorMethods::colorFormula);
-         return morey(mcu);
    }
+//      std::unreachable();
 }

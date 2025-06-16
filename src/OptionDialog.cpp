@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * OptionDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * OptionDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
@@ -219,6 +219,50 @@ public:
     * Destructor
     */
    ~impl() = default;
+
+   void configure_unitCombos() {
+      // Populate combo boxes on the "Units" tab
+      this->m_self.weightComboBox->addItem(tr("Metric / SI units"     ), QVariant(Measurement::UnitSystems::mass_Metric.uniqueName));
+      this->m_self.weightComboBox->addItem(tr("US traditional units"  ), QVariant(Measurement::UnitSystems::mass_UsCustomary.uniqueName));
+      this->m_self.weightComboBox->addItem(tr("British imperial units"), QVariant(Measurement::UnitSystems::mass_Imperial.uniqueName));
+
+      this->m_self.temperatureComboBox->addItem(tr("Celsius"   ), QVariant(Measurement::UnitSystems::temperature_MetricIsCelsius.uniqueName));
+      this->m_self.temperatureComboBox->addItem(tr("Fahrenheit"), QVariant(Measurement::UnitSystems::temperature_UsCustomaryIsFahrenheit.uniqueName));
+
+      this->m_self.volumeComboBox->addItem(tr("Metric / SI units"     ), QVariant(Measurement::UnitSystems::volume_Metric.uniqueName));
+      this->m_self.volumeComboBox->addItem(tr("US traditional units"  ), QVariant(Measurement::UnitSystems::volume_UsCustomary.uniqueName));
+      this->m_self.volumeComboBox->addItem(tr("British imperial units"), QVariant(Measurement::UnitSystems::volume_Imperial.uniqueName));
+
+      this->m_self.gravityComboBox->addItem(tr("20C/20C Specific Gravity"), QVariant(Measurement::UnitSystems::density_SpecificGravity.uniqueName));
+      this->m_self.gravityComboBox->addItem(tr("Plato/Brix/Balling"      ), QVariant(Measurement::UnitSystems::density_Plato.uniqueName));
+
+      this->m_self.dateComboBox->addItem(tr("mm-dd-YYYY"), QVariant(Localization::NumericDateFormat::MonthDayYear));
+      this->m_self.dateComboBox->addItem(tr("dd-mm-YYYY"), QVariant(Localization::NumericDateFormat::DayMonthYear));
+      this->m_self.dateComboBox->addItem(tr("YYYY-mm-dd"), QVariant(Localization::NumericDateFormat::YearMonthDay));
+
+      this->m_self.colorComboBox->addItem(tr("SRM"), QVariant(Measurement::UnitSystems::color_StandardReferenceMethod.uniqueName));
+      this->m_self.colorComboBox->addItem(tr("EBC"), QVariant(Measurement::UnitSystems::color_EuropeanBreweryConvention.uniqueName));
+      return;
+   }
+
+   void configure_formulaCombos() {
+      this->m_self.diastaticPowerComboBox->addItem(tr("Lintner"), QVariant(Measurement::UnitSystems::diastaticPower_Lintner.uniqueName));
+      this->m_self.diastaticPowerComboBox->addItem(tr("WK"     ), QVariant(Measurement::UnitSystems::diastaticPower_WindischKolbach.uniqueName));
+
+      return;
+   }
+
+   void configure_logging() {
+      // Populate options on the "Logging" tab
+      for (auto ii : Logging::levelDetails) {
+         this->m_self.loggingLevelComboBox->addItem(ii.description, QVariant(ii.level));
+      }
+      this->m_self.loggingLevelComboBox->setCurrentIndex(Logging::getLogLevel());
+      this->m_self.checkBox_LogFileLocationUseDefault->setChecked(Logging::getLogInConfigDir());
+      this->m_self.lineEdit_LogFileLocation->setText(Logging::getDirectory().absolutePath());
+      this->m_self.setFileLocationState(Logging::getLogInConfigDir());
+      return;
+   }
 
    void postgresVisible(bool const canSee) {
       this->label_pgHostname.setVisible(canSee);
@@ -444,12 +488,8 @@ public:
          )
       );
 
-      this->m_self.colorFormulaComboBox->setCurrentIndex(
-         this->m_self.colorFormulaComboBox->findData(ColorMethods::colorFormula)
-      );
-      this->m_self.ibuFormulaComboBox->setCurrentIndex(
-         this->m_self.ibuFormulaComboBox->findData(static_cast<int>(IbuMethods::ibuFormula))
-      );
+      this->m_self.colorFormulaComboBox->setValue(ColorMethods::formula);
+      this->m_self.  ibuFormulaComboBox->setValue(  IbuMethods::formula);
 
       // User data directory
       this->input_userDataDir.setText(PersistentSettings::getUserDataDir().absolutePath());
@@ -574,13 +614,16 @@ OptionDialog::OptionDialog(QWidget * parent) : QDialog{},
    }
 
    // populate the combo boxes on the units tab
-   configure_unitCombos();
+   this->pimpl->configure_unitCombos();
 
    // populate the combo boxes on the formulas tab
-   configure_formulaCombos();
+   BT_COMBO_BOX_INIT(OptionDialog, colorFormulaComboBox, ColorMethods, formula);
+   BT_COMBO_BOX_INIT(OptionDialog,   ibuFormulaComboBox,   IbuMethods, formula);
+
+   this->pimpl->configure_formulaCombos();
 
    // populate the combo boxes on the logging tab
-   configure_logging();
+   this->pimpl->configure_logging();
 
    // database panel stuff
    comboBox_engine->addItem(tr("SQLite (default)"), QVariant(static_cast<int>(Database::DbType::SQLITE)));
@@ -595,65 +638,6 @@ OptionDialog::OptionDialog(QWidget * parent) : QDialog{},
    connect_signals();
 
    pushButton_testConnection->setEnabled(false);
-}
-
-void OptionDialog::configure_unitCombos() {
-   // Populate combo boxes on the "Units" tab
-   weightComboBox->addItem(tr("Metric / SI units"),
-                           QVariant(Measurement::UnitSystems::mass_Metric.uniqueName));
-   weightComboBox->addItem(tr("US traditional units"),
-                           QVariant(Measurement::UnitSystems::mass_UsCustomary.uniqueName));
-   weightComboBox->addItem(tr("British imperial units"),
-                           QVariant(Measurement::UnitSystems::mass_Imperial.uniqueName));
-
-   temperatureComboBox->addItem(tr("Celsius"),
-                                QVariant(Measurement::UnitSystems::temperature_MetricIsCelsius.uniqueName));
-   temperatureComboBox->addItem(tr("Fahrenheit"),
-                                QVariant(Measurement::UnitSystems::temperature_UsCustomaryIsFahrenheit.uniqueName));
-
-   volumeComboBox->addItem(tr("Metric / SI units"),      QVariant(Measurement::UnitSystems::volume_Metric.uniqueName));
-   volumeComboBox->addItem(tr("US traditional units"),   QVariant(Measurement::UnitSystems::volume_UsCustomary.uniqueName));
-   volumeComboBox->addItem(tr("British imperial units"), QVariant(Measurement::UnitSystems::volume_Imperial.uniqueName));
-
-   gravityComboBox->addItem(tr("20C/20C Specific Gravity"),
-                            QVariant(Measurement::UnitSystems::density_SpecificGravity.uniqueName));
-   gravityComboBox->addItem(tr("Plato/Brix/Balling"),
-                            QVariant(Measurement::UnitSystems::density_Plato.uniqueName));
-
-   dateComboBox->addItem(tr("mm-dd-YYYY"), QVariant(Localization::NumericDateFormat::MonthDayYear));
-   dateComboBox->addItem(tr("dd-mm-YYYY"), QVariant(Localization::NumericDateFormat::DayMonthYear));
-   dateComboBox->addItem(tr("YYYY-mm-dd"), QVariant(Localization::NumericDateFormat::YearMonthDay));
-
-   colorComboBox->addItem(tr("SRM"), QVariant(Measurement::UnitSystems::color_StandardReferenceMethod.uniqueName));
-   colorComboBox->addItem(tr("EBC"), QVariant(Measurement::UnitSystems::color_EuropeanBreweryConvention.uniqueName));
-}
-
-void OptionDialog::configure_formulaCombos() {
-   diastaticPowerComboBox->addItem(tr("Lintner"),
-                                   QVariant(Measurement::UnitSystems::diastaticPower_Lintner.uniqueName));
-   diastaticPowerComboBox->addItem(tr("WK"),
-                                   QVariant(Measurement::UnitSystems::diastaticPower_WindischKolbach.uniqueName));
-
-   // Populate combo boxes on the "Formulas" tab
-   ibuFormulaComboBox->addItem(tr("Tinseth's approximation"), QVariant(static_cast<int>(IbuMethods::IbuFormula::Tinseth)));
-   ibuFormulaComboBox->addItem(tr("Rager's approximation"  ), QVariant(static_cast<int>(IbuMethods::IbuFormula::Rager  )));
-   ibuFormulaComboBox->addItem(tr("Noonan's approximation" ), QVariant(static_cast<int>(IbuMethods::IbuFormula::Noonan )));
-
-   colorFormulaComboBox->addItem(tr("Mosher's approximation"), QVariant(ColorMethods::MOSHER));
-   colorFormulaComboBox->addItem(tr("Daniel's approximation"), QVariant(ColorMethods::DANIEL));
-   colorFormulaComboBox->addItem(tr("Morey's approximation" ), QVariant(ColorMethods::MOREY));
-}
-
-void OptionDialog::configure_logging() {
-   //Populate options on the "Logging" tab
-   for (auto ii : Logging::levelDetails) {
-      loggingLevelComboBox->addItem(ii.description, QVariant(ii.level));
-   }
-   loggingLevelComboBox->setCurrentIndex(Logging::getLogLevel());
-   checkBox_LogFileLocationUseDefault->setChecked(Logging::getLogInConfigDir());
-   lineEdit_LogFileLocation->setText(Logging::getDirectory().absolutePath());
-   this->setFileLocationState(Logging::getLogInConfigDir());
-   return;
 }
 
 void OptionDialog::connect_signals() {
@@ -882,12 +866,9 @@ bool OptionDialog::saveDefaultUnits() {
 }
 
 void OptionDialog::saveFormulae() {
-   bool okay = false;
 
-   int ndx = ibuFormulaComboBox->itemData(ibuFormulaComboBox->currentIndex()).toInt(&okay);
-   IbuMethods::ibuFormula = static_cast<IbuMethods::IbuFormula>(ndx);
-   ndx = colorFormulaComboBox->itemData(colorFormulaComboBox->currentIndex()).toInt(&okay);
-   ColorMethods::colorFormula = static_cast<ColorMethods::ColorType>(ndx);
+     IbuMethods::formula =   ibuFormulaComboBox->getNonOptValue<  IbuMethods::  IbuFormula>();
+   ColorMethods::formula = colorFormulaComboBox->getNonOptValue<ColorMethods::ColorFormula>();
 
    PersistentSettings::insert(PersistentSettings::Names::mashHopAdjustment, ibuAdjustmentMashHopDoubleSpinBox->value() / 100);
    PersistentSettings::insert(PersistentSettings::Names::firstWortHopAdjustment, ibuAdjustmentFirstWortDoubleSpinBox->value() / 100);

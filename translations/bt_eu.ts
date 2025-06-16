@@ -748,6 +748,17 @@ If you didn&apos;t yet do this, click Abort.</source>
 Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>ERROR: Unsupported Database Schema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attempting to read a v%1 database, but %2 %3 only supports databases up to v%4.
+
+Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Derived</name>
@@ -800,10 +811,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Delete %1 %2?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Folder name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -835,12 +842,9 @@ Log file may contain more details.</source>
         <source>Remove %1</source>
         <translation type="unfinished"></translation>
     </message>
-    <message numerus="yes">
-        <source>Used in %n recipe(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+    <message>
+        <source>Delete %1 #%2 &quot;%3&quot;?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2104,30 +2108,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tinseth&apos;s approximation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rager&apos;s approximation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Noonan&apos;s approximation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mosher&apos;s approximation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Daniel&apos;s approximation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Morey&apos;s approximation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>SQLite (default)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2244,10 +2224,6 @@ Error message:
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Invalid color formula type: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Directory Problem</source>
         <translation type="unfinished"></translation>
@@ -2855,23 +2831,7 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tinseth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rager</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Noonan</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>mIBU</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SMPH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3072,6 +3032,30 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Add step to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mosher&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Daniel&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Morey&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tinseth&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rager&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Noonan&apos;s approximation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3418,6 +3402,16 @@ The final volume in the primary is %1.</source>
     <message>
         <source>ID in DB</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Recipe::T</name>
+    <message numerus="yes">
+        <source>Used in %n recipe(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
