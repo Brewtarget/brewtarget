@@ -636,11 +636,20 @@ namespace Measurement::Units {
 
    // === Color ===
    // Not sure how many people use Lovibond scale these days, but BeerJSON supports it, so we need to be able to read
-   // it.  https://en.wikipedia.org/wiki/Beer_measurement#Colour= says "The Standard Reference Method (SRM) ... [gives]
-   // results approximately equal to the °L."
+   // it.  https://en.wikipedia.org/wiki/Beer_measurement#Colour says "The Standard Reference Method (SRM) ... [gives]
+   // results approximately equal to the °L."  However, https://en.wikipedia.org/wiki/Standard_Reference_Method
+   // explains:
+   //
+   //    Beer colors measured in SRM and degrees Lovibond were ... approximately equal at the time of adoption of the
+   //    SRM.  However, modern analytical methods show that SRM and Lovibond diverge for darker colors.  Comparison of
+   //    EBC and Lovibond data published by modern malsters shows that the relationship between SRM and Lovibond (°L)
+   //    is:
+   //       SRM = 1.3456 × °L - 0.76
+   //
    Unit const srm     {Measurement::UnitSystems::color_StandardReferenceMethod  , QObject::tr("srm"     )};
    Unit const ebc     {Measurement::UnitSystems::color_EuropeanBreweryConvention, QObject::tr("ebc"     ), 12.7/25.0, &srm};
-   Unit const lovibond{Measurement::UnitSystems::color_Lovibond                 , QObject::tr("lovibond"), 1.0      , &srm};
+   Unit const lovibond{Measurement::UnitSystems::color_Lovibond                 , QObject::tr("lovibond"), [](double lovibond){return (1.3456 * lovibond) - 0.76;},
+                                                                                                           [](double srm     ){return (srm + 0.76) / 1.3456;}, &srm};
 
    // == Density ===
    // Brix isn't much used in beer brewing, but BeerJSON supports it, so we have it here.

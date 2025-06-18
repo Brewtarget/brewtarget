@@ -129,6 +129,7 @@
 #include "qtModels/listModels/MashListModel.h"
 #include "qtModels/listModels/StyleListModel.h"
 #include "qtModels/listModels/WaterListModel.h"
+#include "measurement/ColorMethods.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Boil.h"
@@ -906,6 +907,18 @@ void MainWindow::setupCSS() {
 
 // Configures the range widgets for the bubbles
 void MainWindow::setupRanges() {
+   //
+   // The right-hand side of the Recipe pane shows the following:
+   //    OG
+   //    FG
+   //    ABV
+   //    Bitterness (IBU)
+   //    Color
+   //    IBU/GU
+   //    Batch Size
+   //    Boil Size
+   //
+
    styleRangeWidget_og->setRange(1.000, 1.120);
    styleRangeWidget_og->setPrecision(3);
    styleRangeWidget_og->setTickMarks(0.010, 2);
@@ -940,7 +953,7 @@ void MainWindow::setupRanges() {
    rangeWidget_boilsize->setPreferredRangeBrush(QColor(55,138,251));
    rangeWidget_boilsize->setMarkerBrush(QBrush(Qt::NoBrush));
 
-   const int srmMax = 50;
+   int const srmMax = 50;
    styleRangeWidget_srm->setRange(0.0, static_cast<double>(srmMax));
    styleRangeWidget_srm->setPrecision(1);
    styleRangeWidget_srm->setTickMarks(10, 2);
@@ -949,10 +962,9 @@ void MainWindow::setupRanges() {
       // The styleRangeWidget_srm should display beer color in the background
       QLinearGradient grad( 0,0, 1,0 );
       grad.setCoordinateMode(QGradient::ObjectBoundingMode);
-      for( int i=0; i <= srmMax; ++i )
-      {
-         double srm = i;
-         grad.setColorAt( srm/static_cast<double>(srmMax), Algorithms::srmToColor(srm));
+      for (int ii = 0; ii <= srmMax; ++ii) {
+         double const srm = ii;
+         grad.setColorAt( srm/static_cast<double>(srmMax), ColorMethods::srmToDisplayColor(srm));
       }
       styleRangeWidget_srm->setBackgroundBrush(grad);
 
@@ -969,6 +981,7 @@ void MainWindow::setupRanges() {
       grad.setColorAt( 1, QColor(255,255,255,0) );
       styleRangeWidget_srm->setMarkerBrush(grad);
    }
+   return;
 }
 
 // Anything resulting in a restoreState() should go in here
@@ -1508,7 +1521,7 @@ void MainWindow::showChanges(QMetaProperty* prop) {
                                                  this->label_boilSize->getAmountToDisplay(this->pimpl->m_recipeObs->boilVolume_l()));
    this->rangeWidget_boilsize->setValue         (this->label_boilSize->getAmountToDisplay(this->pimpl->m_recipeObs->boilVolume_l()));
 
-   /* Colors need the same basic treatment as gravity */
+   // Colors need the same basic treatment as gravity
    if (style) {
       updateColorSlider(*this->styleRangeWidget_srm,
                         *this->colorSRMLabel,
@@ -1524,7 +1537,7 @@ void MainWindow::showChanges(QMetaProperty* prop) {
    if (gravityUnits < 1) {
       gravityUnits = 1;
    }
-   ibuGuSlider->setValue(this->pimpl->m_recipeObs->IBU()/gravityUnits);
+   this->ibuGuSlider->setValue(this->pimpl->m_recipeObs->IBU()/gravityUnits);
 
    label_calories->setText(
       QString("%1").arg(
@@ -1578,7 +1591,7 @@ void MainWindow::displayRangesEtcForCurrentRecipeStyle() {
       return;
    }
 
-   auto style = this->pimpl->m_recipeObs->style();
+   auto const style = this->pimpl->m_recipeObs->style();
    if (style) {
       this->styleRangeWidget_og->setPreferredRange(this->oGLabel->getRangeToDisplay(style->ogMin(), style->ogMax()));
 

@@ -137,7 +137,7 @@ public:
    impl(Recipe & self) :
       m_self                 {self},
       m_ABV_pct              {0.0},
-      m_color_srm            {0.0},
+      m_color_mcu            {0.0},
       m_boilGrav             {0.0},
       m_IBU                  {0.0},
       m_ibus                 {}   ,
@@ -149,7 +149,6 @@ public:
       m_caloriesPerLiter     {0.0},
       m_grainsInMash_kg      {0.0},
       m_grains_kg            {0.0},
-      m_SRMColor             {},
       m_og_fermentable       {0.0},
       m_fg_fermentable       {0.0} {
       return;
@@ -165,7 +164,7 @@ public:
    impl(Recipe & self, Recipe const & other) :
       m_self                 {self},
       m_ABV_pct              {other.pimpl->m_ABV_pct              },
-      m_color_srm            {other.pimpl->m_color_srm            },
+      m_color_mcu            {other.pimpl->m_color_mcu            },
       m_boilGrav             {other.pimpl->m_boilGrav             },
       m_IBU                  {other.pimpl->m_IBU                  },
       m_ibus                 {other.pimpl->m_ibus                 },
@@ -177,7 +176,6 @@ public:
       m_caloriesPerLiter     {other.pimpl->m_caloriesPerLiter     },
       m_grainsInMash_kg      {other.pimpl->m_grainsInMash_kg      },
       m_grains_kg            {other.pimpl->m_grains_kg            },
-      m_SRMColor             {other.pimpl->m_SRMColor             },
       m_og_fermentable       {other.pimpl->m_og_fermentable       },
       m_fg_fermentable       {other.pimpl->m_fg_fermentable       } {
       return;
@@ -971,15 +969,19 @@ public:
    }
 
    /**
-    * Emits changed(color_srm). Depends on: m_finalVolume_l
+    * \brief We only use \c color_mcu as a starting point to calculate \c color_srm.  However, it is \c color_mcu rather
+    *        than \c color_srm that we cache because, if the user changes \c ColorMethods::formula, then it changes how
+    *        we derive SRM from MCU.
+    *
+    *        Emits changed(color_srm). Depends on: \c m_finalVolume_l
     */
-   void recalcColor_srm() {
-      double mcu = 0.0;
+   void recalcColor_mcu() {
+      double calculatedColor_mcu = 0.0;
 
       for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
          if (fermentableAddition->amountIsWeight()) {
             // Conversion factor for lb/gal to kg/l = 8.34538.
-            mcu += fermentableAddition->fermentable()->color_srm() * 8.34538 * fermentableAddition->amount().quantity / m_finalVolumeNoLosses_l;
+            calculatedColor_mcu += fermentableAddition->fermentable()->color_srm() * 8.34538 * fermentableAddition->amount().quantity / m_finalVolumeNoLosses_l;
          } else {
             // .:TBD:. What do do about liquids
             qWarning() <<
@@ -988,31 +990,18 @@ public:
          }
       }
 
-      double calculatedColor_srm = ColorMethods::mcuToSrm(mcu);
-      if (!qFuzzyCompare(this->m_color_srm, calculatedColor_srm)) {
-//         qDebug() <<
-//            Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
-//            "Calculated color: " << calculatedColor_srm << ", stored: " << this->m_color_srm;
-         this->m_color_srm = calculatedColor_srm;
+      if (!qFuzzyCompare(this->m_color_mcu, calculatedColor_mcu)) {
+         this->m_color_mcu = calculatedColor_mcu;
          if (!this->m_self.m_uninitializedCalcs) {
-            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::color_srm), this->m_color_srm);
+            //
+            // Because client code mostly cares about SRM rather than MCU color measurements, it is color_srm that we
+            // emit the signal for.
+            //
+            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::color_srm),
+                                      this->m_self.color_srm());
          }
       }
 
-      return;
-   }
-
-   /**
-    * Emits changed(SRMColor). Depends on: m_color_srm.
-    */
-   void recalcSRMColor() {
-      QColor calculatedSRMColor = Algorithms::srmToColor(this->m_color_srm);
-      if (calculatedSRMColor != this->m_SRMColor) {
-         this->m_SRMColor = calculatedSRMColor;
-         if (!this->m_self.m_uninitializedCalcs) {
-            emit this->m_self.changed(this->m_self.metaProperty(*PropertyNames::Recipe::SRMColor), this->m_SRMColor);
-         }
-      }
       return;
    }
 
@@ -1340,7 +1329,7 @@ public:
 
    // Calculated properties.
    double        m_ABV_pct              {0.0};
-   double        m_color_srm            {0.0};
+   double        m_color_mcu            {0.0};
    double        m_boilGrav             {0.0};
    double        m_IBU                  {0.0};
    QList<double> m_ibus                 {};
@@ -1353,7 +1342,6 @@ public:
    double        m_caloriesPerLiter     {0.0};
    double        m_grainsInMash_kg      {0.0};
    double        m_grains_kg            {0.0};
-   QColor        m_SRMColor             {};
    double        m_og_fermentable       {0.0};
    double        m_fg_fermentable       {0.0};
 
@@ -1505,7 +1493,6 @@ TypeLookup const Recipe::typeLookup {
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBUs              , Recipe::m_IBUs              ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::points            , Recipe::m_points            ),
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::postBoilVolume_l, Recipe::postBoilVolume_l  , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::SRMColor        , Recipe::SRMColor          ),  // Calculated, not in DB.  NB: This is an RGB display color
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::wortFromMash_l  , Recipe::wortFromMash_l    , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
 
       PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::style               , Recipe::style               ),
@@ -2341,7 +2328,8 @@ Recipe * Recipe::revertToPreviousVersion() {
 
 double        Recipe::og               () const { return this->pimpl->getCalculated(this->m_og); }
 double        Recipe::fg               () const { return this->pimpl->getCalculated(this->m_fg); }
-double        Recipe::color_srm        () const { return this->pimpl->getCalculated(this->pimpl->m_color_srm       ); }
+double        Recipe::color_mcu        () const { return this->pimpl->getCalculated(this->pimpl->m_color_mcu       ); }
+double        Recipe::color_srm        () const { return ColorMethods::mcuToSrm(this->color_mcu()); }
 double        Recipe::ABV_pct          () const { return this->pimpl->getCalculated(this->pimpl->m_ABV_pct         ); }
 double        Recipe::IBU              () const { return this->pimpl->getCalculated(this->pimpl->m_IBU             ); }
 QList<double> Recipe::IBUs             () const { return this->pimpl->getCalculated(this->pimpl->m_ibus            ); }
@@ -2360,7 +2348,6 @@ double        Recipe::wortFromMash_l  () const { return this->pimpl->getCalculat
 double        Recipe::boilVolume_l    () const { return this->pimpl->getCalculated(this->pimpl->m_boilVolume_l    );}
 double        Recipe::postBoilVolume_l() const { return this->pimpl->getCalculated(this->pimpl->m_postBoilVolume_l);}
 double        Recipe::finalVolume_l   () const { return this->pimpl->getCalculated(this->pimpl->m_finalVolume_l   );}
-QColor        Recipe::SRMColor        () const { return this->pimpl->getCalculated(this->pimpl->m_SRMColor        );}
 double        Recipe::grainsInMash_kg () const { return this->pimpl->getCalculated(this->pimpl->m_grainsInMash_kg );}
 double        Recipe::grains_kg       () const { return this->pimpl->getCalculated(this->pimpl->m_grains_kg       );}
 
@@ -2511,15 +2498,13 @@ void Recipe::recalcAll() {
       return;
    }
 
-   // Times are in seconds, and are cumulative.
-   this->pimpl->recalcGrains(); // 0.03
-   this->pimpl->recalcVolumeEstimates(); // 0.06
-   this->pimpl->recalcColor_srm(); // 0.08
-   this->pimpl->recalcSRMColor(); // 0.08
-   this->pimpl->recalcOgFg(); // 0.11
-   this->pimpl->recalcABV_pct(); // 0.12
-   this->pimpl->recalcBoilGrav(); // 0.14
-   this->pimpl->recalcIBU(); // 0.15
+   this->pimpl->recalcGrains();
+   this->pimpl->recalcVolumeEstimates();
+   this->pimpl->recalcColor_mcu();
+   this->pimpl->recalcOgFg();
+   this->pimpl->recalcABV_pct();
+   this->pimpl->recalcBoilGrav();
+   this->pimpl->recalcIBU();
    this->pimpl->recalcCalories();
 
    this->m_uninitializedCalcs = false;

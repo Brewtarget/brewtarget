@@ -883,6 +883,7 @@ void OptionDialog::saveLoggingSettings() {
    );
    // Make sure the main window updates.
    MainWindow::instance().showChanges();
+   return;
 }
 
 void OptionDialog::saveVersioningSettings() {

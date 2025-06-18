@@ -21,6 +21,7 @@
 #include "utils/BtStringConst.h"
 #include "utils/EnumStringMapping.h"
 
+class QColor;
 class QString;
 
 //======================================================================================================================
@@ -39,11 +40,11 @@ AddPropertyName(formula)
  * \brief Convert malt color units to SRM.
  */
 namespace ColorMethods {
-   //! \brief The formula used to get beer color.
+   //! \brief The formula used to estimate beer color from the total of malt color units (MCU).
    enum class ColorFormula {
-      Mosher,
-      Daniel,
-      Morey ,
+      Mosher, // Randy Mosher's model
+      Daniel, // Ray Daniels' model
+      Morey , // Daniel Morey's model
    };
 
    /*!
@@ -70,8 +71,14 @@ namespace ColorMethods {
    void loadFormula();
    void saveFormula();
 
-   //! Depending on selected algorithm, convert malt color units to SRM.
+   //! Depending on selected algorithm, convert malt color units (MCU) to SRM.
    double mcuToSrm(double mcu);
+
+   /*!
+    * \brief Return the approximate color for a given SRM value
+    */
+   QColor srmToDisplayColor(double srm);
+
 }
 
 #endif

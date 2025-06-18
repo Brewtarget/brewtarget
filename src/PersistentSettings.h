@@ -34,6 +34,7 @@
 #include <QVariant>
 
 #include "utils/BtStringConst.h"
+#include "utils/EnumStringMapping.h"
 
 //======================================================================================================================
 //========================================== Start of setting NAME constants ===========================================
@@ -107,7 +108,6 @@ AddSettingSection(yeastTableModel)
 #undef AddSettingName
 //========================================= End of setting SECTION constants ===========================================
 //======================================================================================================================
-
 
 /**
  * \brief Functions that manage remembering settings across sessions.
@@ -208,6 +208,26 @@ namespace PersistentSettings {
    void remove(QString const & key,             QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
    void remove(BtStringConst const & constName, QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
    void remove(BtStringConst const & constName, BtStringConst const & constSection, Extension extension = PersistentSettings::Extension::NONE);
+
+   /**
+    * \brief Read in an enum from persistent settings
+    */
+   template<typename E>
+   void readEnum(BtStringConst const & settingName,
+                 EnumStringMapping const & enumStringMapping,
+                 E & readInValue,
+                 E const defaultValue) {
+      auto savedSetting = PersistentSettings::value(settingName, enumStringMapping[defaultValue]).toString();
+      try {
+         readInValue = enumStringMapping.stringToEnum<E>(savedSetting);
+      } catch (std::out_of_range const & exception) {
+         qWarning() <<
+            Q_FUNC_INFO << "Could not understand" << settingName << "=" << savedSetting << ". Defaulting to" <<
+            enumStringMapping[defaultValue];
+         readInValue = defaultValue;
+      }
+      return;
+   }
 
 }
 #endif
