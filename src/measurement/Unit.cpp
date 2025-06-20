@@ -575,9 +575,9 @@ namespace Measurement::Units {
    Unit const kilograms      {Measurement::UnitSystems::mass_Metric     , QObject::tr("kg")};
    Unit const grams          {Measurement::UnitSystems::mass_Metric     , QObject::tr("g" ), 1.0/1000.0   , &kilograms};
    Unit const milligrams     {Measurement::UnitSystems::mass_Metric     , QObject::tr("mg"), 1.0/1000000.0, &kilograms};
-   Unit const pounds         {Measurement::UnitSystems::mass_UsCustomary, QObject::tr("lb"), 0.45359237   , &kilograms};
+   Unit const pounds         {Measurement::UnitSystems::mass_UsCustomary, QObject::tr("lb"), 0.45359237   , &kilograms}; // See https://en.wikipedia.org/wiki/Pound_(mass)
    Unit const ounces         {Measurement::UnitSystems::mass_UsCustomary, QObject::tr("oz"), 0.0283495231 , &kilograms};
-   Unit const imperial_pounds{Measurement::UnitSystems::mass_Imperial   , QObject::tr("lb"), 0.45359237   , &kilograms};
+   Unit const imperial_pounds{Measurement::UnitSystems::mass_Imperial   , QObject::tr("lb"), 0.45359237   , &kilograms}; // See https://en.wikipedia.org/wiki/Pound_(mass)
    Unit const imperial_ounces{Measurement::UnitSystems::mass_Imperial   , QObject::tr("oz"), 0.0283495231 , &kilograms};
 
    // === Volume ===
@@ -585,7 +585,7 @@ namespace Measurement::Units {
    Unit const liters              {Measurement::UnitSystems::volume_Metric     , QObject::tr("L"   )};
    Unit const milliliters         {Measurement::UnitSystems::volume_Metric     , QObject::tr("mL"  ), 1.0/1000.0          , &liters};
    Unit const us_barrels          {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("bbl" ), 117.34777           , &liters};
-   Unit const us_gallons          {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("gal" ),   3.7854117840007   , &liters};
+   Unit const us_gallons          {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("gal" ),   3.785411784       , &liters}; // See https://en.wikipedia.org/wiki/Gallon
    Unit const us_quarts           {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("qt"  ),   0.94635294599999  , &liters};
    Unit const us_pints            {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("pt"  ),   0.473176473       , &liters};
    Unit const us_cups             {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("cup" ),   0.23658823648491  , &liters, 0.25};
@@ -593,7 +593,7 @@ namespace Measurement::Units {
    Unit const us_tablespoons      {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("tbsp"),   0.014786764782056 , &liters};
    Unit const us_teaspoons        {Measurement::UnitSystems::volume_UsCustomary, QObject::tr("tsp" ),   0.0049289215940186, &liters};
    Unit const imperial_barrels    {Measurement::UnitSystems::volume_Imperial   , QObject::tr("bbl" ), 163.659             , &liters};
-   Unit const imperial_gallons    {Measurement::UnitSystems::volume_Imperial   , QObject::tr("gal" ),   4.5460899999997   , &liters};
+   Unit const imperial_gallons    {Measurement::UnitSystems::volume_Imperial   , QObject::tr("gal" ),   4.54609           , &liters}; // See https://en.wikipedia.org/wiki/Gallon
    Unit const imperial_quarts     {Measurement::UnitSystems::volume_Imperial   , QObject::tr("qt"  ),   1.1365225         , &liters};
    Unit const imperial_pints      {Measurement::UnitSystems::volume_Imperial   , QObject::tr("pt"  ),   0.56826125        , &liters};
    Unit const imperial_cups       {Measurement::UnitSystems::volume_Imperial   , QObject::tr("cup" ),   0.284130625       , &liters, 0.25};

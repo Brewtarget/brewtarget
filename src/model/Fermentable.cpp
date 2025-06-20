@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Fermentable.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Fermentable.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Blair Bonnett <blair.bonnett@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Kregg Kemper <gigatropolis@yahoo.com>
@@ -95,20 +95,18 @@ bool Fermentable::isEqualTo(NamedEntity const & other) const {
    bool const outlinesAreEqual{
       // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
 
-      AUTO_LOG_COMPARE(this, rhs, m_type      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_origin    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_color_srm ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_producer  ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_productId ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_grainGroup) &&
+      AUTO_LOG_COMPARE(this, rhs, m_type          ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_origin        ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_color_lovibond) &&
+      AUTO_LOG_COMPARE(this, rhs, m_producer      ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_productId     ) &&
+      AUTO_LOG_COMPARE(this, rhs, m_grainGroup    ) &&
 
       // Yield
       AUTO_LOG_COMPARE(this, rhs, m_fineGrindYield_pct  ) &&
       AUTO_LOG_COMPARE(this, rhs, m_coarseGrindYield_pct) &&
       AUTO_LOG_COMPARE(this, rhs, m_coarseFineDiff_pct  ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_potentialYield_sg   ) &&
-
-      AUTO_LOG_COMPARE(this, rhs, m_color_srm)
+      AUTO_LOG_COMPARE(this, rhs, m_potentialYield_sg   )
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -155,7 +153,15 @@ TypeLookup const Fermentable::typeLookup {
    "Fermentable",
    {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::type                     , Fermentable::m_type                     ,           NonPhysicalQuantity::Enum           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::color_srm                , Fermentable::m_color_srm                , Measurement::PhysicalQuantity::Color          ),
+
+      //
+      // Historically, we always stored fermentable color as degrees Lovibond, but we also incorrectly assumed this was
+      // the same as SRM.  Now that we've corrected the conversion, it's simpler to carry on storing fermentable color
+      // as °L, even though SRM is our canonical color unit.  Hence why we have two color properties on Fermentable.
+      //
+      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::color_lovibond           , Fermentable::m_color_lovibond           , Measurement::PhysicalQuantity::Color          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentable::color_srm          , Fermentable::color_srm                  , Measurement::PhysicalQuantity::Color          ),
+
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::origin                   , Fermentable::m_origin                   ,           NonPhysicalQuantity::String         ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::supplier                 , Fermentable::m_supplier                 ,           NonPhysicalQuantity::String         ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::notes                    , Fermentable::m_notes                    ),
@@ -197,7 +203,7 @@ static_assert(std::is_base_of<Ingredient, Fermentable>::value);
 Fermentable::Fermentable(QString name) :
    Ingredient                 {name},
    m_type                     {Fermentable::Type::Grain},
-   m_color_srm                {0.0                     },
+   m_color_lovibond           {0.0                     },
    m_origin                   {""                      },
    m_supplier                 {""                      },
    m_notes                    {""                      },
@@ -237,7 +243,7 @@ Fermentable::Fermentable(QString name) :
 Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
    Ingredient   {namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_type                               , namedParameterBundle, PropertyNames::Fermentable::type                             ),
-   SET_REGULAR_FROM_NPB (m_color_srm                          , namedParameterBundle, PropertyNames::Fermentable::color_srm                        ),
+   // See constructor body for initialisation of m_color_lovibond
    SET_REGULAR_FROM_NPB (m_origin                             , namedParameterBundle, PropertyNames::Fermentable::origin                , QString()),
    SET_REGULAR_FROM_NPB (m_supplier                           , namedParameterBundle, PropertyNames::Fermentable::supplier              , QString()),
    SET_REGULAR_FROM_NPB (m_notes                              , namedParameterBundle, PropertyNames::Fermentable::notes                 , QString()),
@@ -270,45 +276,55 @@ Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_fermentability_pct                 , namedParameterBundle, PropertyNames::Fermentable::fermentability_pct    , std::nullopt),
    SET_REGULAR_FROM_NPB (m_betaGlucan_ppm                     , namedParameterBundle, PropertyNames::Fermentable::betaGlucan_ppm        , std::nullopt) {
 
+   // The bundle should have either color_lovibond (BeerXML, DB) or color_srm (BeerJSON) set, but not both
+   if (!SET_IF_PRESENT_FROM_NPB_NO_MV(Fermentable::setColor_lovibond, namedParameterBundle, PropertyNames::Fermentable::color_lovibond) &&
+       !SET_IF_PRESENT_FROM_NPB_NO_MV(Fermentable::setColor_srm     , namedParameterBundle, PropertyNames::Fermentable::color_srm     )) {
+      //
+      // This is probably a coding error, but we can soldier on
+      //
+      qWarning() << Q_FUNC_INFO << "No color set on Fermentable" << *this;
+      this->m_color_lovibond = 0.0;
+   }
+
    CONSTRUCTOR_END
    return;
 }
 
 Fermentable::Fermentable(Fermentable const & other) :
-   Ingredient                 {other                         },
-   m_type                     {other.m_type                  },
-   m_color_srm                {other.m_color_srm             },
-   m_origin                   {other.m_origin                },
-   m_supplier                 {other.m_supplier              },
-   m_notes                    {other.m_notes                 },
-   m_coarseFineDiff_pct       {other.m_coarseFineDiff_pct    },
-   m_moisture_pct             {other.m_moisture_pct          },
-   m_diastaticPower_lintner   {other.m_diastaticPower_lintner},
-   m_protein_pct              {other.m_protein_pct           },
-   m_maxInBatch_pct           {other.m_maxInBatch_pct        },
-   m_recommendMash            {other.m_recommendMash         },
-   m_ibuGalPerLb              {other.m_ibuGalPerLb           },
+   Ingredient              {other                         },
+   m_type                  {other.m_type                  },
+   m_color_lovibond        {other.m_color_lovibond        },
+   m_origin                {other.m_origin                },
+   m_supplier              {other.m_supplier              },
+   m_notes                 {other.m_notes                 },
+   m_coarseFineDiff_pct    {other.m_coarseFineDiff_pct    },
+   m_moisture_pct          {other.m_moisture_pct          },
+   m_diastaticPower_lintner{other.m_diastaticPower_lintner},
+   m_protein_pct           {other.m_protein_pct           },
+   m_maxInBatch_pct        {other.m_maxInBatch_pct        },
+   m_recommendMash         {other.m_recommendMash         },
+   m_ibuGalPerLb           {other.m_ibuGalPerLb           },
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   m_grainGroup               {other.m_grainGroup            },
-   m_producer                 {other.m_producer              },
-   m_productId                {other.m_productId             },
-   m_fineGrindYield_pct       {other.m_fineGrindYield_pct    },
-   m_coarseGrindYield_pct     {other.m_coarseGrindYield_pct  },
-   m_potentialYield_sg        {other.m_potentialYield_sg     },
-   m_alphaAmylase_dextUnits   {other.m_alphaAmylase_dextUnits},
-   m_kolbachIndex_pct         {other.m_kolbachIndex_pct      },
-   m_hardnessPrpGlassy_pct    {other.m_hardnessPrpGlassy_pct },
-   m_hardnessPrpHalf_pct      {other.m_hardnessPrpHalf_pct   },
-   m_hardnessPrpMealy_pct     {other.m_hardnessPrpMealy_pct  },
-   m_kernelSizePrpPlump_pct   {other.m_kernelSizePrpPlump_pct},
-   m_kernelSizePrpThin_pct    {other.m_kernelSizePrpThin_pct },
-   m_friability_pct           {other.m_friability_pct        },
-   m_di_ph                    {other.m_di_ph                 },
-   m_viscosity_cP             {other.m_viscosity_cP          },
-   m_dmsP_ppm                 {other.m_dmsP_ppm              },
-   m_fan_ppm                  {other.m_fan_ppm               },
-   m_fermentability_pct       {other.m_fermentability_pct    },
-   m_betaGlucan_ppm           {other.m_betaGlucan_ppm        } {
+   m_grainGroup            {other.m_grainGroup            },
+   m_producer              {other.m_producer              },
+   m_productId             {other.m_productId             },
+   m_fineGrindYield_pct    {other.m_fineGrindYield_pct    },
+   m_coarseGrindYield_pct  {other.m_coarseGrindYield_pct  },
+   m_potentialYield_sg     {other.m_potentialYield_sg     },
+   m_alphaAmylase_dextUnits{other.m_alphaAmylase_dextUnits},
+   m_kolbachIndex_pct      {other.m_kolbachIndex_pct      },
+   m_hardnessPrpGlassy_pct {other.m_hardnessPrpGlassy_pct },
+   m_hardnessPrpHalf_pct   {other.m_hardnessPrpHalf_pct   },
+   m_hardnessPrpMealy_pct  {other.m_hardnessPrpMealy_pct  },
+   m_kernelSizePrpPlump_pct{other.m_kernelSizePrpPlump_pct},
+   m_kernelSizePrpThin_pct {other.m_kernelSizePrpThin_pct },
+   m_friability_pct        {other.m_friability_pct        },
+   m_di_ph                 {other.m_di_ph                 },
+   m_viscosity_cP          {other.m_viscosity_cP          },
+   m_dmsP_ppm              {other.m_dmsP_ppm              },
+   m_fan_ppm               {other.m_fan_ppm               },
+   m_fermentability_pct    {other.m_fermentability_pct    },
+   m_betaGlucan_ppm        {other.m_betaGlucan_ppm        } {
 
    CONSTRUCTOR_END
    return;
@@ -318,7 +334,11 @@ Fermentable::~Fermentable() = default;
 
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
 Fermentable::Type                      Fermentable::type                     () const { return                    this->m_type                     ; }
-double                                 Fermentable::color_srm                () const { return                    this->m_color_srm                ; }
+double                                 Fermentable::color_lovibond           () const { return                    this->m_color_lovibond           ; }
+double                                 Fermentable::color_srm                () const {
+   // SRM is canonical color unit
+   return Measurement::Units::lovibond.toCanonical(this->m_color_lovibond).quantity;
+}
 QString                                Fermentable::origin                   () const { return                    this->m_origin                   ; }
 QString                                Fermentable::supplier                 () const { return                    this->m_supplier                 ; }
 QString                                Fermentable::notes                    () const { return                    this->m_notes                    ; }
@@ -367,7 +387,13 @@ void Fermentable::setSupplier                 (QString                   const &
 void Fermentable::setNotes                    (QString                   const & val) { SET_AND_NOTIFY(PropertyNames::Fermentable::notes                    , this->m_notes                    , val); return; }
 void Fermentable::setRecommendMash            (std::optional<bool>       const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::recommendMash            , this->m_recommendMash            , val); return; }
 void Fermentable::setIbuGalPerLb              (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::ibuGalPerLb              , this->m_ibuGalPerLb              , val); return; }
-void Fermentable::setColor_srm                (double                    const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::color_srm                , this->m_color_srm                , this->enforceMin      (val, "color"));                      return; }
+void Fermentable::setColor_lovibond           (double                    const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::color_lovibond           , this->m_color_lovibond                , this->enforceMin      (val, "color"));                      return; }
+
+void Fermentable::setColor_srm                (double                    const   val) {
+   this->setColor_lovibond(Measurement::Units::lovibond.fromCanonical(val));
+   return;
+}
+
 void Fermentable::setCoarseFineDiff_pct       (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::coarseFineDiff_pct       , this->m_coarseFineDiff_pct       , this->enforceMinAndMax(val, "coarseFineDiff", 0.0, 100.0)); return; }
 void Fermentable::setMoisture_pct             (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::moisture_pct             , this->m_moisture_pct             , this->enforceMinAndMax(val, "moisture",       0.0, 100.0)); return; }
 void Fermentable::setDiastaticPower_lintner   (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::diastaticPower_lintner   , this->m_diastaticPower_lintner   , this->enforceMin      (val, "diastatic power"));            return; }

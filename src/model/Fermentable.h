@@ -54,38 +54,39 @@ class FermentableTableModel;
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Fermentable { inline BtStringConst const property{#property}; }
-AddPropertyName(alphaAmylase_dextUnits   )
-AddPropertyName(betaGlucan_ppm           )
-AddPropertyName(coarseFineDiff_pct       )
-AddPropertyName(coarseGrindYield_pct     )
-AddPropertyName(color_srm                )
-AddPropertyName(diastaticPower_lintner   )
-AddPropertyName(di_ph                    )
-AddPropertyName(dmsP_ppm                 )
-AddPropertyName(fan_ppm                  )
-AddPropertyName(fermentability_pct       )
-AddPropertyName(fineGrindYield_pct       )
-AddPropertyName(friability_pct           )
-AddPropertyName(grainGroup               )
-AddPropertyName(hardnessPrpGlassy_pct    )
-AddPropertyName(hardnessPrpHalf_pct      )
-AddPropertyName(hardnessPrpMealy_pct     )
-AddPropertyName(ibuGalPerLb              )
-AddPropertyName(kernelSizePrpPlump_pct   )
-AddPropertyName(kernelSizePrpThin_pct    )
-AddPropertyName(kolbachIndex_pct         )
-AddPropertyName(maxInBatch_pct           )
-AddPropertyName(moisture_pct             )
-AddPropertyName(notes                    )
-AddPropertyName(origin                   )
-AddPropertyName(potentialYield_sg        )
-AddPropertyName(producer                 )
-AddPropertyName(productId                )
-AddPropertyName(protein_pct              )
-AddPropertyName(recommendMash            )
-AddPropertyName(supplier                 )
-AddPropertyName(type                     )
-AddPropertyName(viscosity_cP             )
+AddPropertyName(alphaAmylase_dextUnits)
+AddPropertyName(betaGlucan_ppm        )
+AddPropertyName(coarseFineDiff_pct    )
+AddPropertyName(coarseGrindYield_pct  )
+AddPropertyName(color_lovibond        )
+AddPropertyName(color_srm             )
+AddPropertyName(diastaticPower_lintner)
+AddPropertyName(di_ph                 )
+AddPropertyName(dmsP_ppm              )
+AddPropertyName(fan_ppm               )
+AddPropertyName(fermentability_pct    )
+AddPropertyName(fineGrindYield_pct    )
+AddPropertyName(friability_pct        )
+AddPropertyName(grainGroup            )
+AddPropertyName(hardnessPrpGlassy_pct )
+AddPropertyName(hardnessPrpHalf_pct   )
+AddPropertyName(hardnessPrpMealy_pct  )
+AddPropertyName(ibuGalPerLb           )
+AddPropertyName(kernelSizePrpPlump_pct)
+AddPropertyName(kernelSizePrpThin_pct )
+AddPropertyName(kolbachIndex_pct      )
+AddPropertyName(maxInBatch_pct        )
+AddPropertyName(moisture_pct          )
+AddPropertyName(notes                 )
+AddPropertyName(origin                )
+AddPropertyName(potentialYield_sg     )
+AddPropertyName(producer              )
+AddPropertyName(productId             )
+AddPropertyName(protein_pct           )
+AddPropertyName(recommendMash         )
+AddPropertyName(supplier              )
+AddPropertyName(type                  )
+AddPropertyName(viscosity_cP          )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -205,7 +206,13 @@ public:
    //=================================================== PROPERTIES ====================================================
    //! \brief The \c Type.
    Q_PROPERTY(Type           type                   READ type                   WRITE setType                               )
-   //! \brief The color in SRM.
+   /**
+    * \brief The color in degrees Lovibond - the units used by maltsters and BeerXML, and, for historical reasons, what
+    *        we store in the database.  (It seems simpler to retain lovibond as the DB units than to try to switch to
+    *        SRM.  So this remains one of the few places where we use non-canonical units in the DB.)
+    */
+   Q_PROPERTY(double         color_lovibond         READ color_lovibond         WRITE setColor_lovibond                     )
+   //! \brief The color in SRM - our canonical color units
    Q_PROPERTY(double         color_srm              READ color_srm              WRITE setColor_srm                          )
    //! \brief The origin.
    Q_PROPERTY(QString        origin                 READ origin                 WRITE setOrigin                             )
@@ -466,6 +473,7 @@ public:
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    Type    type                                       () const;
+   double  color_lovibond                             () const;
    double  color_srm                                  () const;
    QString origin                                     () const;
    QString supplier                                   () const;
@@ -506,6 +514,7 @@ public:
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setType                     (Type                      const   val);
+   void setColor_lovibond           (double                    const   val);
    void setColor_srm                (double                    const   val);
    void setOrigin                   (QString                   const & val);
    void setSupplier                 (QString                   const & val);
@@ -546,7 +555,7 @@ protected:
 
 private:
    Type                      m_type                     ;
-   double                    m_color_srm                ;
+   double                    m_color_lovibond           ;
    QString                   m_origin                   ;
    QString                   m_supplier                 ;
    QString                   m_notes                    ;

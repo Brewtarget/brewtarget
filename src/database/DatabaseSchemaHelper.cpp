@@ -37,7 +37,7 @@
 #include "database/ObjectStoreTyped.h"
 #include "model/Salt.h"
 
-int constexpr DatabaseSchemaHelper::latestVersion = 17;
+int constexpr DatabaseSchemaHelper::latestVersion = 18;
 
 // Default namespace hides functions from everything outside this file.
 namespace {
@@ -2517,6 +2517,23 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
+   /**
+    * \brief Correct column name on fermentables table
+    */
+   bool migrate_to_18([[maybe_unused]] Database & db, BtSqlQuery & q) {
+      QVector<QueryAndParameters> const migrationQueries{
+         //
+         // Fermentable color in the DB has always been in degrees Lovibond (because that's how the field is stored in
+         // BeerXML, other than for liquid extracts).  However, various bits of the program have, in the past,
+         // incorrectly assumed that Lovibond and SRM are the same.  Now that we have corrected that, we update the
+         // column name to include the units.
+         //
+         {QString("ALTER TABLE fermentable RENAME COLUMN color TO color_lovibond")},
+      };
+
+      return executeSqlQueries(q, migrationQueries);
+   }
+
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
     */
@@ -2544,6 +2561,7 @@ namespace {
          case 14: ret &= migrate_to_15(database, sqlQuery); break;
          case 15: ret &= migrate_to_16(database, sqlQuery); break;
          case 16: ret &= migrate_to_17(database, sqlQuery); break;
+         case 17: ret &= migrate_to_18(database, sqlQuery); break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);
             return false;

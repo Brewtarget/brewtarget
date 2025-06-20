@@ -976,14 +976,31 @@ public:
     *        Emits changed(color_srm). Depends on: \c m_finalVolume_l
     */
    void recalcColor_mcu() {
+
+      //
+      // Per https://theamateurbrewer.com/beer-color-the-relationship-between-lovibond-srm-and-ebc/
+      //
+      //    MCU = (Weight of grain in lbs) * (Color of grain in degrees Lovibond) / (Volume of Batch in Gallons)
+      //
+      // Since each malt will likely have a different Lovibond value, we calculate each individually and then add them
+      // together.
+      //
+      double constexpr kilogramsToPounds = 1.0 / 0.45359237; // = 2.20462262185
+      double constexpr litersToUsGallons = 1.0 / 3.785411784; // = 0.264172052358
+      double constexpr kgPerLiterToPoundsPerGallon = kilogramsToPounds / litersToUsGallons; // = 8.34540445202
+      double const commonMultiplier = kgPerLiterToPoundsPerGallon / this->m_finalVolumeNoLosses_l;
+
       double calculatedColor_mcu = 0.0;
 
       for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
          if (fermentableAddition->amountIsWeight()) {
             // Conversion factor for lb/gal to kg/l = 8.34538.
-            calculatedColor_mcu += fermentableAddition->fermentable()->color_srm() * 8.34538 * fermentableAddition->amount().quantity / m_finalVolumeNoLosses_l;
+            calculatedColor_mcu +=
+               fermentableAddition->amount().quantity *
+               fermentableAddition->fermentable()->color_lovibond() *
+               commonMultiplier;
          } else {
-            // .:TBD:. What do do about liquids
+            // .:TBD:. What do do about liquids - eg liquid extracts
             qWarning() <<
                Q_FUNC_INFO << "Unimplemented branch for handling color of liquid fermentables - #" <<
                fermentableAddition->fermentable()->key() << ":" << fermentableAddition->name();

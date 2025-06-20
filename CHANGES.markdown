@@ -20,7 +20,7 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
-* None
+* Fermentables wrong colour unit in default database [366](https://github.com/Brewtarget/brewtarget/issues/366)
 
 ### Release Timestamp
 Sat, 14 Jun 2025 04:01:02 +0100

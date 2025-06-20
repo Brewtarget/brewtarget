@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/BeerXml.cpp is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/xml/BeerXml.cpp is part of Brewtarget, and is copyright the following authors 2020-2025:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -218,7 +218,12 @@ namespace {
       {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"                       , VERSION1                                             },
       {XmlRecordDefinition::FieldType::Enum            , "TYPE"                          , PropertyNames::Fermentable::type                     , &BEER_XML_FERMENTABLE_TYPE_MAPPER},
       {XmlRecordDefinition::FieldType::Double          , "YIELD"                         , PropertyNames::Fermentable::fineGrindYield_pct       , 0.0},
-      {XmlRecordDefinition::FieldType::Double          , "COLOR"                         , PropertyNames::Fermentable::color_srm                },
+      // NOTE The BeerXML standard says color for fermentables is "Lovibond Units [sic] (SRM for liquid extracts)".
+      //      We currently assume the color is Degrees Lovibond for all fermentables, which is technically wrong for
+      //      liquid extracts if other users of BeerXML switch units for them.  However, it seems better to be correct
+      //      for grains.  (Older versions of the software incorrectly assumed that degrees Lovibond and SRM are the
+      //      same, which is not true for darker malts, and just treated all values in this field as SRM.)
+      {XmlRecordDefinition::FieldType::Double          , "COLOR"                         , PropertyNames::Fermentable::color_lovibond           },
       {XmlRecordDefinition::FieldType::Bool            , "ADD_AFTER_BOIL"                , BtString::NULL_STR                                   }, // No longer supported
       {XmlRecordDefinition::FieldType::String          , "ORIGIN"                        , PropertyNames::Fermentable::origin                   },
       {XmlRecordDefinition::FieldType::String          , "SUPPLIER"                      , PropertyNames::Fermentable::supplier                 },
