@@ -27,7 +27,6 @@
 
 #include <memory> // For PImpl
 
-#include <QColor>
 #include <QDate>
 #include <QList>
 #include <QMutex>
@@ -95,7 +94,6 @@ AddPropertyName(postBoilVolume_l       )
 AddPropertyName(primingSugarEquiv      )
 AddPropertyName(primingSugarName       )
 AddPropertyName(saltAdjustments        )
-AddPropertyName(SRMColor               )
 AddPropertyName(style                  )
 AddPropertyName(styleId                )
 AddPropertyName(tasteNotes             )
@@ -312,7 +310,7 @@ public:
    Q_PROPERTY(double  points              READ points              STORED false)
    //! \brief The calculated ABV in percent.
    Q_PROPERTY(double  ABV_pct             READ ABV_pct             STORED false)
-   //! \brief The calculated color in SRM.
+  //! \brief The calculated color in SRM.  Derived from \c color_mcu via \c ColorMethods::mcuToSrm.
    Q_PROPERTY(double  color_srm           READ color_srm           STORED false)
    //! \brief The calculated boil gravity. .:TBD:. This should perhaps be renamed boilSg for consistency
    Q_PROPERTY(double  boilGrav            READ boilGrav            STORED false)
@@ -340,8 +338,6 @@ public:
    Q_PROPERTY(double  grainsInMash_kg     READ grainsInMash_kg     STORED false)
    //! \brief The total amount of grains in the recipe in kg.
    Q_PROPERTY(double  grains_kg           READ grains_kg           STORED false)
-   //! \brief The beer color as a displayable QColor.
-   Q_PROPERTY(QColor  SRMColor            READ SRMColor            STORED false)
 
    //============================================== RELATIONAL PROPERTIES ==============================================
    // NB: the setBlahId() calls are needed by ObjectStore and are not intended for more general use.
@@ -505,10 +501,10 @@ public:
    // Calculated getters.
    double        points                  () const;
    double        ABV_pct                 () const;
+   double        color_mcu               () const; // Calculated color in MCU (Malt Color Units) - used by color_srm().
    double        color_srm               () const;
    double        boilGrav                () const;
    double        IBU                     () const;
-   QColor        SRMColor                () const;
    double        targetCollectedWortVol_l() const;
    double        targetTotalMashVol_l    () const;
    double        wortFromMash_l          () const;

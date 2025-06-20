@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/BeerJson.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * serialization/json/BeerJson.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -343,6 +343,8 @@ namespace {
       {JsonRecordDefinition::FieldType::SingleUnitValue     , "yield/coarse_grind"          , PropertyNames::Fermentable::coarseGrindYield_pct, &BEER_JSON_PERCENT_UNIT              },
       {JsonRecordDefinition::FieldType::SingleUnitValue     , "yield/fine_coarse_difference", PropertyNames::Fermentable::coarseFineDiff_pct  , &BEER_JSON_PERCENT_UNIT              },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "yield/potential"             , PropertyNames::Fermentable::potentialYield_sg   , &BEER_JSON_DENSITY_UNIT_MAPPER       },
+      // Note that, when reading from BeerJSON, we always convert things to canonical units for storage, hence why we use
+      // Fermentable::color_srm here even though we use Fermentable::color_lovibond for BeerXML and for DB storage.
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "color"                       , PropertyNames::Fermentable::color_srm           , &BEER_JSON_COLOR_UNIT_MAPPER         },
    };
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_FermentableType_ExclBase {

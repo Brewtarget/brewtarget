@@ -123,11 +123,6 @@ namespace Algorithms {
    double hydrometer15CCorrection( double celsius );
 
    /*!
-    * \brief Return the approximate color for a given SRM value
-    */
-   QColor srmToColor(double srm);
-
-   /*!
     * \brief Given dissolved sugar and wort volume, get SG in Plato
     *
     * Estimates Plato from kg of dissolved sucrose (\c sugar_kg) and

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BeerColorWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * BeerColorWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -25,6 +25,7 @@
 #include <QSizePolicy>
 
 #include "config.h"
+#include "measurement/ColorMethods.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -50,7 +51,7 @@ void BeerColorWidget::setRecipe(Recipe* rec) {
    recObs = rec;
    if (recObs) {
       connect(recObs, &Recipe::changed, this, &BeerColorWidget::parseChanges);
-      setColor(recObs->SRMColor());
+      this->setColor(ColorMethods::srmToDisplayColor(recObs->color_srm()));
    }
    return;
 }
@@ -58,7 +59,7 @@ void BeerColorWidget::setRecipe(Recipe* rec) {
 void BeerColorWidget::parseChanges(QMetaProperty, QVariant) {
    // For now, don't check to see what QMetaProperty is, just get the color.
    if (recObs) {
-      setColor(recObs->SRMColor());
+      this->setColor(ColorMethods::srmToDisplayColor(recObs->color_srm()));
    }
    return;
 }

@@ -266,30 +266,6 @@ double Algorithms::hydrometer15CCorrection( double celsius )
    return hydroCorrection15CPoly.eval(celsius) * 1e-3;
 }
 
-QColor Algorithms::srmToColor(double srm) {
-   QColor ret;
-
-   //==========My approximation from a photo and spreadsheet===========
-   //double red = 232.9 * pow( (double)0.93, srm );
-   //double green = (double)-106.25 * log(srm) + 280.9;
-   //
-   //int r = (int)Algorithms::round(red);
-   //int g = (int)Algorithms::round(green);
-   //int b = 0;
-
-   // Philip Lee's approximation from a color swatch and curve fitting.
-   int r = 0.5 + (272.098 - 5.80255*srm); if( r > 253.0 ) r = 253.0;
-   int g = (srm > 35)? 0 : 0.5 + (2.41975e2 - 1.3314e1*srm + 1.881895e-1*srm*srm);
-   int b = 0.5 + (179.3 - 28.7*srm);
-
-   r = (r < 0) ? 0 : ((r > 255)? 255 : r);
-   g = (g < 0) ? 0 : ((g > 255)? 255 : g);
-   b = (b < 0) ? 0 : ((b > 255)? 255 : b);
-   ret.setRgb( r, g, b );
-
-   return ret;
-}
-
 double Algorithms::SG_20C20C_toPlato(double sg) {
    return platoFromSG_20C20C.eval(sg);
 }

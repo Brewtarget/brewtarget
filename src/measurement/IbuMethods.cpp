@@ -235,11 +235,12 @@ TypeLookup const IbuMethods::typeLookup {
 
 IbuMethods::IbuFormula IbuMethods::formula = IbuMethods::IbuFormula::Tinseth;
 
+
 void IbuMethods::loadFormula() {
-   IbuMethods::formula = IbuMethods::formulaStringMapping.stringToEnum<IbuMethods::IbuFormula>(
-      PersistentSettings::value(PersistentSettings::Names::ibu_formula,
-                                IbuMethods::formulaStringMapping[IbuMethods::IbuFormula::Tinseth]).toString()
-   );
+   PersistentSettings::readEnum(PersistentSettings::Names::ibu_formula,
+                                IbuMethods::formulaStringMapping,
+                                IbuMethods::formula,
+                                IbuMethods::IbuFormula::Tinseth);
    return;
 }
 
