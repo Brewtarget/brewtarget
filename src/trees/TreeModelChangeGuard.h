@@ -27,8 +27,13 @@ enum class TreeModelChangeType {
 };
 
 /**
- * \brief Any time we change the tree structure, we need to call beginInsertRows() and endInsertRows() to notify
- *        other components that the model has changed.  This RAII class handles that for us.
+ * \brief Any time we change the tree structure, we need to call such things as \c beginInsertRows() and
+ *        \c endInsertRows() to notify other components about the change to the model has changed.  This RAII class
+ *        handles that for us.
+ *
+ *        There are several different types of change that can be handled - per \c TreeModelChangeType.  NOTE that we
+ *        have to be careful only to make these calls when they are needed.  Eg, if you notify about layout change and
+ *        row insertion together, you can put Qt internals in a funny state that results in crashes.
  *
  * \param parent is not required for \c changeType of \c ChangeLayout
  * \param first  is not required for \c changeType of \c ChangeLayout

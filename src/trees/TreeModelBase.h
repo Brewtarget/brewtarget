@@ -179,6 +179,7 @@ public:
 
    QModelIndex indexOfNode(TreeNode * node) const {
       if (!node || node == this->m_rootNode.get()) {
+         // See comment in getRootIndex() for why we must return a default QModelIndex for the root node.
          return QModelIndex();
       }
 
@@ -425,15 +426,6 @@ public:
     * \brief Add an item to the tree
     */
    void insertPrimaryItem(std::shared_ptr<NE> item) {
-///      //
-///      // When we call insertChild below, it results in beginInsertRows() and endInsertRows() signals being emitted.
-///      // However, for reasons I didn't get to the bottom of, this doesn't result in the display getting updated.
-///      // Neither does emitting the dataChanged() signal for either the newly-inserted item or its parent.  What does
-///      // work is the layoutAboutToBeChanged() and layoutChanged() signals.  It seems like a bit of a sledgehammer
-///      // solution, but it works, and so is useful unless and until we find a better approach.
-///      //
-///      TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::ChangeLayout, this->derived());
-
       QModelIndex parentIndex;
       int childNumber;
       QString const folderPath = item->folderPath();
@@ -557,7 +549,7 @@ public:
 
       while (!queue.isEmpty()) {
          auto nodeToSearchIn = queue.dequeue();
-         qDebug() << Q_FUNC_INFO << "Find" << ne << "in" << *nodeToSearchIn;
+         qDebug() << Q_FUNC_INFO << "Find" << ne << "(at" << static_cast<void const *>(ne) << ") in" << *nodeToSearchIn;
          if (nodeToSearchIn->classifier() == TreeNodeClassifier::PrimaryItem) {
             //
             // This is a compile-time check whether it's possible in this tree for primary items to have other primary
@@ -565,7 +557,7 @@ public:
             // primary items.)
             //
             if constexpr (std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
-                                                std::shared_ptr<TreeItemNode<NE>>>) {
+                                                  std::shared_ptr<TreeItemNode<NE>>>) {
                //
                // Primary items can be inside other primary items in this tree.  This is the case, eg in the Recipe
                // tree.
@@ -578,6 +570,10 @@ public:
                   auto child = searchInItem.child(childNumInPrimaryItem);
                   if (std::holds_alternative<std::shared_ptr<TreeItemNode<NE>>>(child)) {
                      auto itemNode = std::get<std::shared_ptr<TreeItemNode<NE>>>(child);
+                     // Normally leave the next line commented out as it can generate quite a bit of logging
+//                     qDebug() <<
+//                        Q_FUNC_INFO << "itemNode:" << *itemNode << "(at " <<
+//                        static_cast<void *>(itemNode->underlyingItem().get()) << ")";
                      if (itemNode->underlyingItem().get() == const_cast<NE *>(ne)) {
                         // We found what we were looking for
                         qDebug() << Q_FUNC_INFO << "Found as child #" << childNumInPrimaryItem << "of" << searchInItem;
@@ -613,14 +609,16 @@ public:
             if (std::holds_alternative<std::shared_ptr<TreeItemNode<NE>>>(child)) {
                auto itemNode = std::get<std::shared_ptr<TreeItemNode<NE>>>(child);
                // Normally leave the next line commented out as it generates quite a bit of logging
-//               qDebug() << Q_FUNC_INFO << "itemNode:" << *itemNode;
+//               qDebug() <<
+//                  Q_FUNC_INFO << "itemNode:" << *itemNode << "(at " <<
+//                  static_cast<void *>(itemNode->underlyingItem().get()) << ")";
                if (itemNode->underlyingItem().get() == const_cast<NE *>(ne)) {
                   // We found what we were looking for
                   qDebug() << Q_FUNC_INFO << "Found as child #" << childNumInFolder << "of" << folderNodeToSearchIn;
                   return this->derived().createIndex(childNumInFolder, 0, itemNode.get());
                }
-               if constexpr (!std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
-                                                      std::shared_ptr<TreeItemNode<NE>>>) {
+               if constexpr (std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
+                                                     std::shared_ptr<TreeItemNode<NE>>>) {
                   // We're in a tree where primary items can contain other primary items, and the child primary item
                   // wasn't a match, so throw it on the queue.
                   queue.enqueue(itemNode.get());
@@ -1127,12 +1125,6 @@ public:
 
       // Note that parentIndex.isValid() being false just implies the parent is the root node
       QModelIndex parentIndex = this->derived().parent(index);
-
-      //
-      // Comment in insertPrimaryItem() about insertChild equally applies here to removeChildren, hence this guard to
-      // emit the layoutAboutToBeChanged() and layoutChanged() signals.
-      //
-      TreeModelChangeGuard treeModelChangeGuard(TreeModelChangeType::ChangeLayout, this->derived());
 
       TreeNode * treeNode = this->doTreeNode(index);
       if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {

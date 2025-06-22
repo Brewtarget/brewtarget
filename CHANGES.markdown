@@ -21,6 +21,7 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Fermentables wrong colour unit in default database [366](https://github.com/Brewtarget/brewtarget/issues/366)
+* Deleting a BrewNote does not remove it from the recipe tree [990](https://github.com/Brewtarget/brewtarget/issues/990)
 
 ### Release Timestamp
 Sat, 14 Jun 2025 04:01:02 +0100

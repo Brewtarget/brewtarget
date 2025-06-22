@@ -1756,7 +1756,7 @@
   <widget class="QToolBar" name="toolBar">
    <property name="font">
     <font>
-     <weight>75</weight>
+     <weight>100</weight>
      <bold>true</bold>
     </font>
    </property>
@@ -2220,7 +2220,7 @@
      <normaloff>:/images/grain2glass.svg</normaloff>:/images/grain2glass.svg</iconset>
    </property>
    <property name="text">
-    <string/>
+    <string>Brew It!</string>
    </property>
    <property name="toolTip">
     <string>Brew It!</string>
