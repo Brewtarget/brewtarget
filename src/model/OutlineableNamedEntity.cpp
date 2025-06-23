@@ -15,7 +15,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "model/OutlineableNamedEntity.h"
 
-#include "BtFieldType.h"
+#include "measurement/NonPhysicalQuantity.h"
 #include "model/NamedParameterBundle.h"
 
 #ifdef BUILDING_WITH_CMAKE

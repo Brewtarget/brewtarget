@@ -251,6 +251,7 @@ public:
     */
    Q_PROPERTY(QString               year         READ year         WRITE setYear                 )
 
+   SUPPORT_NUM_RECIPES_USED_IN
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    double                alpha_pct         () const;

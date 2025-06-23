@@ -47,6 +47,9 @@ bool HopSortFilterProxyModel::isLessThan(HopTableModel::ColumnIndex const column
          return Measurement::qStringToSI( leftItem.toString(), Measurement::PhysicalQuantity::Mass) <
                 Measurement::qStringToSI(rightItem.toString(), Measurement::PhysicalQuantity::Mass);
 
+      case HopTableModel::ColumnIndex::NumRecipesUsedIn:
+         return leftItem.toInt() < rightItem.toInt();
+
       // No default case as we want the compiler to warn us if we missed one
    }
 

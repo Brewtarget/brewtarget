@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Hop.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Hop.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Kregg Kemper <gigatropolis@yahoo.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -330,6 +330,8 @@ void Hop::setXanthohumol_pct      (std::optional<double>    const   val) { SET_A
 void Hop::setProducer             (QString                  const & val) { SET_AND_NOTIFY(PropertyNames::Hop::producer             , this->m_producer             , val                                                             ); return; }
 void Hop::setProductId           (QString                  const & val) { SET_AND_NOTIFY(PropertyNames::Hop::productId           , this->m_productId           , val                                                             ); return; }
 void Hop::setYear                 (QString                  const   val) { SET_AND_NOTIFY(PropertyNames::Hop::year                 , this->m_year                 , val                                                             ); return; }
+
+IMPLEMENT_NUM_RECIPES_USED_IN(Hop)
 
 // Insert the boiler-plate stuff for inventory
 INGREDIENT_BASE_COMMON_CODE(Hop)

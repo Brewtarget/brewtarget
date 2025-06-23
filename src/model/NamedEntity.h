@@ -62,10 +62,11 @@ class Recipe;
 //            careful about how we use them in look-ups.
 //
 #define AddPropertyName(property) namespace PropertyNames::NamedEntity { inline BtStringConst const property{#property}; }
-AddPropertyName(deleted   )
-AddPropertyName(key       )
-AddPropertyName(name      )
-AddPropertyName(subsidiary)
+AddPropertyName(deleted         )
+AddPropertyName(key             )
+AddPropertyName(name            )
+AddPropertyName(numRecipesUsedIn)
+AddPropertyName(subsidiary      )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -251,12 +252,21 @@ public:
     */
    Q_PROPERTY(bool    subsidiary   READ subsidiary   STORED false    )
 
+   /**
+    * \brief The number of \c Recipes this object is used in.
+    *
+    *        NOTE: This is not defined for all classes.  Child classes that support it, need to override the
+    *              \c numRecipesUsedIn member function by including the \c SUPPORT_NUM_RECIPES_USED_IN macro.
+    */
+   Q_PROPERTY(int     numRecipesUsedIn READ numRecipesUsedIn STORED false)
+
    QString name() const;
    //! \brief Returns name with any bracketed number stripped from the end (eg "Foobar" for "Foobar (2)")
    QString strippedName() const;
    bool deleted() const;
    int key() const;
    virtual bool subsidiary() const;
+   virtual int numRecipesUsedIn() const;
 
    /**
     * \brief Returns a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to
@@ -745,6 +755,19 @@ template<typename T> constexpr bool IsAbstract(T const *) { return std::is_abstr
   if (!IsAbstract(this)) { \
      this->NamedEntity::m_propagationAndSignalsEnabled = true; \
   }
+
+/**
+ * \brief Derived classes should include this macro in their class definition in their header file if they need to
+ *        support \c numRecipesUsedIn
+ */
+#define SUPPORT_NUM_RECIPES_USED_IN \
+   virtual int numRecipesUsedIn() const override;
+
+/**
+ * \brief Derived classes should include this macro in their cpp file if they need to support \c numRecipesUsedIn
+ */
+#define IMPLEMENT_NUM_RECIPES_USED_IN(className) \
+   int className::numRecipesUsedIn() const { return Recipe::numRecipesUsing(*this); }
 
 /**
  * \brief For some templated functions, it's useful at compile time to have one version for NE classes with folders and

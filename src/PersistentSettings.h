@@ -36,6 +36,9 @@
 #include "utils/BtStringConst.h"
 #include "utils/EnumStringMapping.h"
 
+// TBD: It would be neat to put default values for settings here rather than have them scattered about the code,
+//      especially for things such as defaultBatchSize_l where we currently need the same default value in two different
+//      bits of code.
 //======================================================================================================================
 //========================================== Start of setting NAME constants ===========================================
 //===== (Note that we only need to add here names that have no section or are used in multiple places in the code) =====

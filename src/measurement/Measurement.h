@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Measurement.h is part of Brewtarget, and is copyright the following authors 2010-2023:
+ * measurement/Measurement.h is part of Brewtarget, and is copyright the following authors 2010-2025:
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -28,7 +28,7 @@
 
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
-#include "BtFieldType.h"
+#include "measurement/NonPhysicalQuantity.h"
 
 class BtStringConst;
 class NamedEntity;

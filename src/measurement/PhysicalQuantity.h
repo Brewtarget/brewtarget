@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/PhysicalQuantity.h is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * measurement/PhysicalQuantity.h is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -93,7 +93,7 @@ namespace Measurement {
     *
     *       NOTE that there are other things that users can configure that do not belong with this group of classes
     *       because they do not relate to physical quantities, eg date & time format and language choice do not fit well
-    *       in here -- see \c NonPhysicalQuantity in \headerfile BtFieldType.h
+    *       in here -- see \c NonPhysicalQuantity in \headerfile measurement/NonPhysicalQuantity.h
     */
    enum class PhysicalQuantity {
       // Elsewhere we use weight instead of mass because it's more idiomatic (despite being, strictly speaking, not the
@@ -248,8 +248,8 @@ namespace Measurement {
     * \brief Of course, once we have \c Measurement::ChoiceOfPhysicalQuantity, we need a way to store either that or a
     *        \c Measurement::PhysicalQuantity.
     *
-    *        (Note that, \c BtFieldType is one place we \b don't use this as we need to add a third possibility there of
-    *        \c NonPhysicalQuantity.)
+    *        (Note that, \c QuantityFieldType is one place we \b don't use this as we need to add a third possibility
+    *        there of \c NonPhysicalQuantity.)
     */
    using PhysicalQuantities = std::variant<Measurement::PhysicalQuantity, Measurement::ChoiceOfPhysicalQuantity>;
 
