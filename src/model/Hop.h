@@ -81,6 +81,11 @@ AddPropertyName(year              )
  *
  * \brief Model class for a hop record in the database.
  *
+ *        TBD: Ideally we would find a way to model:
+ *           > A general type of Hop - eg "East Kent Goldings", which will have an alpha acid range
+ *           > A specific form and harvest - eg "Pellet 2020 harvest", which will have a single alpha acid value eg 6.0%
+ *        Probably we should do this via Inventory.
+ *
  * TODO TODO TODO TODO TODO TODO TODO TODO TODO Sort out inventory!
  */
 class Hop : public Ingredient, public IngredientBase<Hop> {

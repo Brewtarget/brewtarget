@@ -526,6 +526,10 @@
         <source>Brew Note</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Brew Note #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Brewtarget</name>
@@ -8323,6 +8327,13 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
 </context>
 <context>
+    <name>inventoryWindow</name>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
@@ -8995,6 +9006,10 @@ Primärens slutgiltiga volym är %1.</translation>
     <message>
         <source>Mash Wizard</source>
         <translation type="unfinished">Mäsk Guide</translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

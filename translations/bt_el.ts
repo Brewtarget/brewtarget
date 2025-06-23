@@ -522,6 +522,10 @@
         <source>Brew Note</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Brew Note #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Brewtarget</name>
@@ -8172,6 +8176,13 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>inventoryWindow</name>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Ευρετήριο ειδών</translation>
+    </message>
+</context>
+<context>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
@@ -8836,6 +8847,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Mash Wizard</source>
         <translation type="unfinished">Οδηγός Σακχαροποίησης</translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Ευρετήριο ειδών</translation>
     </message>
 </context>
 <context>

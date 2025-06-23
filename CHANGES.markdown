@@ -17,14 +17,14 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 Bug fixes and minor enhancements.
 
 ### New Features
-* None
+* Feature Request: Ability to set the default brewhouse efficiency [992](https://github.com/Brewtarget/brewtarget/issues/992)
 
 ### Bug Fixes
 * Fermentables wrong colour unit in default database [366](https://github.com/Brewtarget/brewtarget/issues/366)
 * Deleting a BrewNote does not remove it from the recipe tree [990](https://github.com/Brewtarget/brewtarget/issues/990)
 
 ### Release Timestamp
-Sat, 14 Jun 2025 04:01:02 +0100
+Mon, 23 Jun 2025 04:01:03 +0100
 
 ## v4.1.2
 Bug fixes and minor enhancements.

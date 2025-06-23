@@ -61,6 +61,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/HydrometerTool.cpp
     ${repoDir}/src/IbuGuSlider.cpp
     ${repoDir}/src/InventoryFormatter.cpp
+    ${repoDir}/src/InventoryWindow.cpp
     ${repoDir}/src/LatestReleaseFinder.cpp
     ${repoDir}/src/Localization.cpp
     ${repoDir}/src/Logging.cpp

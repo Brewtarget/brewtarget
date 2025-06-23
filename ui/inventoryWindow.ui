@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="6.0">
+ <class>inventoryWindow</class>
+ <widget class="QDialog" name="inventoryWindow">
+  <property name="windowTitle">
+   <string>Inventory</string>
+  </property>
+
+ </widget>
+</ui>

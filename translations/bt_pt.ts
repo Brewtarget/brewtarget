@@ -522,6 +522,10 @@
         <source>Brew Note</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Brew Note #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Brewtarget</name>
@@ -8214,6 +8218,13 @@ O volume final do fermentador primário é %1.</translation>
     </message>
 </context>
 <context>
+    <name>inventoryWindow</name>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Inventário</translation>
+    </message>
+</context>
+<context>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
@@ -8878,6 +8889,10 @@ O volume final do fermentador primário é %1.</translation>
     <message>
         <source>Mash Wizard</source>
         <translation type="unfinished">Assistente de mostura</translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Inventário</translation>
     </message>
 </context>
 <context>

@@ -59,6 +59,16 @@ namespace {
       }
       return "-";
    }
+
+   QString getHeader() {
+      //
+      // TODO: One day we should fix this so the string is constructed at compile-time rather than run-time.  Meanwhile,
+      // the Meyers singleton here means we at least only construct it once at runtime.
+      //
+      static QString const header =
+         QString("<html><head><style type=\"text/css\">%1</style></head>").arg(Html::getCss(":/css/tooltip.css"));
+      return header;
+   }
 }
 
 TreeNode::TreeNode(TreeModel & model) :
@@ -442,10 +452,7 @@ template<> bool TreeItemNode<Water>::columnIsLessThan(TreeItemNode<Water> const 
 template<> QString TreeItemNode<Recipe>::getToolTip() const {
    auto style = this->m_underlyingItem->style();
 
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
    //body += QString("<h1>%1</h1>").arg(this->m_underlyingItem->getName()());
@@ -485,14 +492,19 @@ template<> QString TreeItemNode<Recipe>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<BrewNote>::getToolTip() const {
-   return Localization::displayDate(this->m_underlyingItem->brewDate());
+   QString const header = getHeader();
+   QString body = "<body>";
+   body += BrewNote::tr("Brew Note #%1 for brew on %2").arg(
+      this->m_underlyingItem->key()
+   ).arg(
+      Localization::displayDate(this->m_underlyingItem->brewDate())
+   );
+   body += "</body></html>";
+   return header + body;
 }
 
 template<> QString TreeItemNode<Style>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body = "<body>";
    body += QString("<div id=\"headerdiv\">");
@@ -522,10 +534,7 @@ template<> QString TreeItemNode<Style>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<Equipment>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -548,10 +557,7 @@ template<> QString TreeItemNode<Equipment>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<Mash>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -570,10 +576,7 @@ template<> QString TreeItemNode<Mash>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<MashStep>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -592,10 +595,7 @@ template<> QString TreeItemNode<MashStep>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<Boil>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -615,10 +615,7 @@ template<> QString TreeItemNode<Boil>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<BoilStep>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -637,10 +634,7 @@ template<> QString TreeItemNode<BoilStep>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<Fermentation>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -659,10 +653,7 @@ template<> QString TreeItemNode<Fermentation>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<FermentationStep>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -682,10 +673,7 @@ template<> QString TreeItemNode<FermentationStep>::getToolTip() const {
 
 // Once we do inventory, this needs to be fixed to show amount on hand
 template<> QString TreeItemNode<Fermentable>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -717,10 +705,7 @@ template<> QString TreeItemNode<Fermentable>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<Hop>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -758,10 +743,7 @@ template<> QString TreeItemNode<Hop>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<Misc>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -780,10 +762,7 @@ template<> QString TreeItemNode<Misc>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<Salt>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -802,10 +781,7 @@ template<> QString TreeItemNode<Salt>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<Yeast>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
 
@@ -843,10 +819,7 @@ template<> QString TreeItemNode<Yeast>::getToolTip() const {
 }
 
 template<> QString TreeItemNode<Water>::getToolTip() const {
-   // Do the style sheet first
-   QString header = "<html><head><style type=\"text/css\">";
-   header += Html::getCss(":/css/tooltip.css");
-   header += "</style></head>";
+   QString const header = getHeader();
 
    QString body   = "<body>";
    body += QString("<div id=\"headerdiv\">");
