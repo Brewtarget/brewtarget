@@ -83,6 +83,7 @@
 #include "Html.h"
 #include "HydrometerTool.h"
 #include "InventoryFormatter.h"
+#include "InventoryWindow.h"
 #include "MashDesigner.h"
 #include "MashWizard.h"
 #include "OgAdjuster.h"
@@ -334,6 +335,7 @@ public:
       m_miscCatalog                = std::make_unique<MiscCatalog               >(&m_self);
       m_miscEditor                 = std::make_unique<MiscEditor                >(&m_self);
       m_saltCatalog                = std::make_unique<SaltCatalog               >(&m_self);
+      m_inventoryWindow            = std::make_unique<InventoryWindow           >(&m_self);
       m_saltEditor                 = std::make_unique<SaltEditor                >(&m_self);
       m_styleCatalog               = std::make_unique<StyleCatalog              >(&m_self);
       m_styleEditor                = std::make_unique<StyleEditor               >(&m_self);
@@ -650,6 +652,7 @@ public:
    std::unique_ptr<ScaleRecipeTool           > m_recipeScaler          ;
    std::unique_ptr<StrikeWaterDialog         > m_strikeWaterDialog     ;
    std::unique_ptr<SaltCatalog               > m_saltCatalog           ;
+   std::unique_ptr<InventoryWindow           > m_inventoryWindow       ;
    std::unique_ptr<SaltEditor                > m_saltEditor            ;
    std::unique_ptr<StyleCatalog              > m_styleCatalog          ;
    std::unique_ptr<StyleEditor               > m_styleEditor           ;
@@ -1114,6 +1117,7 @@ void MainWindow::setupTriggers() {
    connect(actionMiscs                     , &QAction::triggered, this->pimpl->m_miscCatalog.get()          , &QWidget::show                     ); // > View > Miscs
    connect(actionYeasts                    , &QAction::triggered, this->pimpl->m_yeastCatalog.get()         , &QWidget::show                     ); // > View > Yeasts
    connect(actionSalts                     , &QAction::triggered, this->pimpl->m_saltCatalog.get()          , &QWidget::show                     ); // > View > Salts
+   connect(actionInventory                 , &QAction::triggered, this->pimpl->m_inventoryWindow.get()      , &QWidget::show                     ); // > View > Inventory
    connect(actionOptions                   , &QAction::triggered, this->pimpl->m_optionDialog.get()         , &OptionDialog::show                ); // > Tools > Options
 //   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual);                                               // > About > Manual
    connect(actionScale_Recipe              , &QAction::triggered, this->pimpl->m_recipeScaler.get()         , &QWidget::show                     ); // > Tools > Scale Recipe
@@ -2081,9 +2085,9 @@ std::shared_ptr<Recipe>  MainWindow::newRecipe() {
 
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
-   newRec->setBatchSize_l(18.93); // 5 gallons
-   newBoil->setPreBoilSize_l(23.47);  // 6.2 gallons
-   newRec->setEfficiency_pct(70.0);
+   newRec ->setBatchSize_l   (PersistentSettings::value(PersistentSettings::Names::defaultBatchSize_l  , 18.93).toDouble());
+   newBoil->setPreBoilSize_l (PersistentSettings::value(PersistentSettings::Names::defaultPreBoilSize_l, 23.47).toDouble());
+   newRec ->setEfficiency_pct(PersistentSettings::value(PersistentSettings::Names::defaultEfficiency   , 70.0 ).toDouble());
 
    // We need a valid key, so insert the recipe before we add equipment
    QVariant const defEquipKey = PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1);
@@ -2212,6 +2216,8 @@ void MainWindow::newBrewNote() {
       QModelIndex brewNoteIndex = treeView_recipe->findElement(brewNote.get());
       if (brewNoteIndex.isValid()) {
          this->setTreeSelection(brewNoteIndex);
+      } else {
+         qWarning() << Q_FUNC_INFO << "Unable to find newly created BrewNote in Recipe tree";
       }
    }
    return;

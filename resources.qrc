@@ -83,6 +83,7 @@
       <file alias="images/hydrometer.svg"            >images/hydrometer.svg</file>
       <file alias="images/iconBoil.svg"              >images/iconBoil.svg</file>
       <file alias="images/iconFermentation.svg"      >images/iconFermentation.svg</file>
+      <file alias="images/iconInventory.svg"         >images/iconInventory.svg</file>
       <file alias="images/iconMash.svg"              >images/iconMash.svg</file>
       <file alias="images/iconSalt.svg"              >images/iconSalt.svg</file>
       <file alias="images/kbruch.png"                >images/kbruch.png</file>

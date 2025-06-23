@@ -522,6 +522,10 @@
         <source>Brew Note</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Brew Note #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Brewtarget</name>
@@ -8077,6 +8081,13 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
 </context>
 <context>
+    <name>inventoryWindow</name>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Magazyn</translation>
+    </message>
+</context>
+<context>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
@@ -8741,6 +8752,10 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <source>Mash Wizard</source>
         <translation type="unfinished">Pomocnik zacierania</translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished">Magazyn</translation>
     </message>
 </context>
 <context>

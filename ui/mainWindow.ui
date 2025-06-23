@@ -1714,6 +1714,8 @@
     <addaction name="actionYeasts"/>
     <addaction name="separator"/>
     <addaction name="actionSalts"/>
+    <addaction name="separator"/>
+    <addaction name="actionInventory"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -1782,6 +1784,9 @@
    <addaction name="actionHops"/>
    <addaction name="actionMiscs"/>
    <addaction name="actionYeasts"/>
+   <addaction name="actionSalts"/>
+   <addaction name="separator"/>
+   <addaction name="actionInventory"/>
    <addaction name="separator"/>
    <addaction name="actionTimers"/>
    <addaction name="action_recipeToTextClipboard"/>
@@ -2226,6 +2231,20 @@
     <string>Brew It!</string>
    </property>
   </action>
+
+  <action name="actionInventory">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/iconInventory.svg</normaloff>:/images/iconInventory.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Inventory</string>
+   </property>
+   <property name="toolTip">
+    <string>Inventory</string>
+   </property>
+  </action>
+
  </widget>
  <customwidgets>
   <customwidget>
