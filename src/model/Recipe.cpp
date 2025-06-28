@@ -27,6 +27,8 @@
 #include <cmath> // For pow/log
 #include <compare> //
 
+#include <boost/container/flat_set.hpp>
+
 #include <QDate>
 #include <QDebug>
 #include <QInputDialog>
@@ -2009,6 +2011,47 @@ template<> bool Recipe::uses<RecipeAdditionMisc       >(RecipeAdditionMisc      
 template<> bool Recipe::uses<RecipeAdditionYeast      >(RecipeAdditionYeast       const & val) const { return val.recipeId() == this->key(); }
 template<> bool Recipe::uses<RecipeAdjustmentSalt     >(RecipeAdjustmentSalt      const & val) const { return val.recipeId() == this->key(); }
 template<> bool Recipe::uses<RecipeUseOfWater         >(RecipeUseOfWater          const & val) const { return val.recipeId() == this->key(); }
+
+// Version for ingredients
+template<class IngredientType>
+int Recipe::numRecipesUsing(IngredientType const & ingredient) requires (std::is_base_of_v<Ingredient, IngredientType>) {
+   //
+   // Although it would work to just write the following, it is at least an order of magnitude slower:
+   //
+   //    return ObjectStoreWrapper::numMatching<Recipe>( [& var](Recipe const * rec) {return rec->uses(var);} );
+   //
+   boost::container::flat_set<int> matchingRecipeIds;
+   return ObjectStoreWrapper::numMatching<typename IngredientType::RecipeAdditionClass>(
+      [&](IngredientType::RecipeAdditionClass const * addition) {
+         if (addition->ingredientId() == ingredient.key()) {
+            // Emplace returns std::pair<iterator, bool>.  The bool component of this is true if and only if the
+            // insertion took place (ie the item wasn't already in the set).
+            return matchingRecipeIds.emplace(addition->recipeId()).second;
+         }
+         return false;
+      }
+   );
+}
+template int Recipe::numRecipesUsing(Fermentable const & ingredient);
+template int Recipe::numRecipesUsing(Hop         const & ingredient);
+template int Recipe::numRecipesUsing(Misc        const & ingredient);
+template int Recipe::numRecipesUsing(Yeast       const & ingredient);
+template int Recipe::numRecipesUsing(Salt        const & ingredient);
+template int Recipe::numRecipesUsing(Water       const & ingredient);
+
+// Version for other things used in recipe
+template<class T>
+int Recipe::numRecipesUsing(T const & var) requires (!std::is_base_of_v<Ingredient, T>) {
+   //
+   // This implementation is used for things that a Recipe only has at most one of, so this implementation is fine.
+   //
+   return ObjectStoreWrapper::numMatching<Recipe>( [& var](Recipe const * rec) {return rec->uses(var);} );
+}
+template int Recipe::numRecipesUsing(Equipment    const & var);
+template int Recipe::numRecipesUsing(Style        const & var);
+template int Recipe::numRecipesUsing(Mash         const & var);
+template int Recipe::numRecipesUsing(Boil         const & var);
+template int Recipe::numRecipesUsing(Fermentation const & var);
 
 
 template<class RA> std::shared_ptr<RA> Recipe::removeAddition(std::shared_ptr<RA> addition) {

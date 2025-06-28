@@ -26,6 +26,7 @@
 #pragma once
 
 #include <memory> // For PImpl
+#include <type_traits> // For std::is_base_of
 
 #include <QDate>
 #include <QList>
@@ -36,6 +37,7 @@
 #include <QVector>
 
 #include "database/ObjectStoreWrapper.h"
+#include "model/Ingredient.h"
 #include "model/FolderBase.h"
 #include "model/NamedEntity.h"
 #include "model/OwnedSet.h"
@@ -419,10 +421,18 @@ public:
       return ObjectStoreWrapper::findFirstMatching<Recipe>( [& var](Recipe * rec) {return rec->uses(var);} );
    }
 
-   //! \brief Return a count of how many recipes use the supplied object
-   template<class T> static int numRecipesUsing(T const & var) {
-      return ObjectStoreWrapper::numMatching<Recipe>( [& var](Recipe const * rec) {return rec->uses(var);} );
-   }
+   /**
+    * \brief Return a count of how many recipes use the supplied object
+    *
+    *        Implementations are done in the .cpp file to avoid having to pull in lots of other headers here.
+    *        There are different implementations for different types of things we're counting, hence the multiple
+    *        declarations here.  (I got compiler errors on GCC if I tried to have one declaration here but multiple
+    *        variants with different requires clauses in the .cpp file.)
+    */
+   template<class IngredientType>
+   static int numRecipesUsing(IngredientType const & ingredient) requires (std::is_base_of_v<Ingredient, IngredientType>);
+   template<class T>
+   static int numRecipesUsing(T const & var) requires (!std::is_base_of_v<Ingredient, T>);
 
    //! \brief Return a display text "Used in x recipes" based on \c numRecipesUsing for the supplied object
    template<class T> static QString usedInRecipes(T const & var) {

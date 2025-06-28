@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Ingredient.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/Ingredient.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -28,7 +28,8 @@ TypeLookup const Ingredient::typeLookup {
    "Ingredient",
    {
       // Empty list - for now at least.  (We can't do PropertyNames::Ingredient::totalInventory here because the
-      // BtFieldType value for it depends on the Ingredient subclass.  Hence, it is instead done in IngredientBase.
+      // QuantityFieldType value for it depends on the Ingredient subclass.  Hence, it is instead done in
+      // IngredientBase.
    },
    // Parent classes lookup
    {&OutlineableNamedEntity::typeLookup,

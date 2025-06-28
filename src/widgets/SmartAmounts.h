@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartAmounts.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/SmartAmounts.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -237,12 +237,12 @@ namespace SmartAmounts {
  * \param labelName   As for \c SMART_FIELD_INIT
  * \param fieldName   As for \c SMART_FIELD_INIT
  * \param nativeType  The native type in which this value is / would be stored, eg double
- * \param btFieldType The \c BtFieldType for this field.  Together with \c nativeType, this is used to construct a
+ * \param quantityFieldType The \c QuantityFieldType for this field.  Together with \c nativeType, this is used to construct a
  *                    static local \c TypeInfo struct to pass by reference to \c SmartField::init.
  * \param ...  Any remaining arguments are passed through to \c SmartField::init in fourth position and above
  */
-#define SMART_FIELD_INIT_FS(editorClass, labelName, fieldName, nativeType, btFieldType, ...) \
-   static auto const typeInfoFor_##fieldName = TypeInfo::construct<nativeType>(PropertyNames::None::none, nullptr, btFieldType); \
+#define SMART_FIELD_INIT_FS(editorClass, labelName, fieldName, nativeType, quantityFieldType, ...) \
+   static auto const typeInfoFor_##fieldName = TypeInfo::construct<nativeType>(PropertyNames::None::none, nullptr, quantityFieldType); \
    SmartAmounts::Init(#editorClass, \
                       #labelName, \
                       SFI_FQ_NAME(editorClass, labelName), \

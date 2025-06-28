@@ -22,6 +22,7 @@
 #include <QMenu>
 
 #include "measurement/Measurement.h"
+#include "measurement/QuantityFieldType.h"
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
 #include "utils/OptionalHelpers.h"
@@ -147,7 +148,7 @@ void BtTableModel::contextMenu(QPoint const & point) {
    // to have more of the code be shared.
 
    // Only makes sense to offer the pop-up "select scale" menu for physical quantities
-   BtFieldType const fieldType = *columnInfo.typeInfo.fieldType;
+   QuantityFieldType const fieldType = *columnInfo.typeInfo.fieldType;
    if (std::holds_alternative<NonPhysicalQuantity>(fieldType)) {
       return;
    }

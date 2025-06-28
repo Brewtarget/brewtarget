@@ -155,6 +155,7 @@ TypeLookup const NamedEntity::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::deleted  , NamedEntity::m_deleted                             ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::key      , NamedEntity::m_key                                 ),
       PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::name     , NamedEntity::m_name   , NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::NamedEntity::numRecipesUsedIn, NamedEntity::numRecipesUsedIn, NonPhysicalQuantity::CardinalNumber),
    },
    // Parent class lookup - none as we're top of the tree
    {}
@@ -283,6 +284,13 @@ bool NamedEntity::subsidiary() const {
    // Per comments in the header file, default implementation is that nothing is a subsidiary.  This behaviour is
    // overridden in Recipe.
    return false;
+}
+
+int NamedEntity::numRecipesUsedIn() const {
+   // It's a coding error to call this base class function
+   qCritical().noquote() << Q_FUNC_INFO << "Base class call not supported!  Call stack is:" << Logging::getStackTrace();
+   Q_ASSERT(false);
+   return 0;
 }
 
 void NamedEntity::setBeingModified(bool set) {

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartLabel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * widgets/SmartLabel.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -29,7 +29,6 @@
 #include <QMenu>
 #include <QPoint>
 
-#include "BtFieldType.h"
 #include "measurement/UnitSystem.h"
 #include "widgets/SmartAmounts.h"
 #include "widgets/SmartBase.h"
@@ -60,7 +59,7 @@ class SmartField;
  *        if there is more than one) will be Qt buddies, which mostly just means that the \c SmartField accepts the
  *        input focus on behalf of the \c SmartLabel when the user types the label's shortcut key combination.  (TBD: It
  *        also means we don't have to store a bunch of info in this object that we can just get from our buddy.  Eg
- *        \c BtFieldType is stored in \c SmartField, so we don't also need to store it here in \c SmartLabel.)
+ *        \c QuantityFieldType is stored in \c SmartField, so we don't also need to store it here in \c SmartLabel.)
  *
  *        When the \c SmartLabel needs to tell the \c SmartField and/or other widgets (eg a range slider) that the
  *        \c UnitSystem etc has changed, it sends a \c changedUnitSystemOrScale signal.   (Previously this signal was

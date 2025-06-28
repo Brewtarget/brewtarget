@@ -21,7 +21,6 @@
 
 #include <memory> // For PImpl
 
-#include "BtFieldType.h"
 #include "measurement/PhysicalQuantity.h"
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"

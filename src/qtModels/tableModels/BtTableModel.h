@@ -29,7 +29,6 @@
 #include <QPoint>
 #include <QTableView>
 
-#include "BtFieldType.h"
 #include "measurement/UnitSystem.h"
 #include "model/NamedEntity.h"
 #include "utils/BtStringConst.h"

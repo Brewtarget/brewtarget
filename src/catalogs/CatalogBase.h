@@ -83,7 +83,8 @@ template <CatalogBaseOptions cb> concept CONCEPT_FIX_UP IsOnePerRecipe = is_OneP
  *                        HopCatalog
  *
  *        Because the TableModel classes (\c HopTableModel, \c FermentableTableModel, etc) are doing most of the work,
- *        these Catalog classes are relatively simple.
+ *        these Catalog classes are relatively simple.  NOTE that the columns displayed in \c HopCatalog are defined in
+ *        \c HopTableModel (which is not to be confused with \c RecipeAdditionHopTableModel).
  *
  *        Classes inheriting from this one need to include the CATALOG_COMMON_DECL macro in their header file and
  *        the CATALOG_COMMON_CODE macro in their .cpp file.

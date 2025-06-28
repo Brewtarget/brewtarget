@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/TypeLookup.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * utils/TypeLookup.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "BtFieldType.h"
+#include "measurement/QuantityFieldType.h"
 #include "model/NamedEntityCasters.h"
 #include "utils/BtStringConst.h"
 #include "utils/OptionalHelpers.h"
@@ -137,7 +137,7 @@ struct TypeInfo {
     *           - Adding all the deduction logic here makes this code more complicated (and thus more liable to bugs)
     *             but only saves us a small amount in each 'static TypeLookup const typeLookup' definition.
     */
-   std::optional<BtFieldType> fieldType;
+   std::optional<QuantityFieldType> fieldType;
 
    /**
     * \brief Sometimes it's useful to be able to get the property name from the \c TypeInfo object.  NOTE that there are
@@ -164,7 +164,7 @@ struct TypeInfo {
     */
    template<typename T> const static TypeInfo construct(BtStringConst const & propertyName,
                                                         TypeLookup const * typeLookup,
-                                                        std::optional<BtFieldType> fieldType = std::nullopt) {
+                                                        std::optional<QuantityFieldType> fieldType = std::nullopt) {
       return TypeInfo{makeTypeIndex<T>(),
                       makeClassification<T>(),
                       makePointerType<T>(),
@@ -263,7 +263,7 @@ template<HasTypeLookup T> struct TypeLookupOf<std::unique_ptr<T>> : std::integra
  *
  *        For the purposes of calling the \c TypeLookup constructor, the caller doesn't have to worry about what we
  *        are storing or how.  For each property, you just provide the name of the property, the member variable in
- *        which it is stored, and, if appropriate, the BtFieldType for the property eg:
+ *        which it is stored, and, if appropriate, the QuantityFieldType for the property eg:
  *           PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::notes    , Hop::m_notes                                     ),
  *           PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::alpha_pct, Hop::m_alpha_pct, NonPhysicalQuantity::Percentage),
  *           PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::amount_kg, Hop::m_amount_kg, Measurement::Mass              ),

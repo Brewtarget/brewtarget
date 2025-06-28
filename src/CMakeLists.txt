@@ -49,7 +49,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/BrewNoteWidget.cpp
     ${repoDir}/src/BtColor.cpp
     ${repoDir}/src/BtDatePopup.cpp
-    ${repoDir}/src/BtFieldType.cpp
     ${repoDir}/src/BtHorizontalTabs.cpp
     ${repoDir}/src/BtSplashScreen.cpp
     ${repoDir}/src/BtTabWidget.cpp
@@ -129,7 +128,9 @@ set(filesToCompile_cpp
     ${repoDir}/src/measurement/ColorMethods.cpp
     ${repoDir}/src/measurement/IbuMethods.cpp
     ${repoDir}/src/measurement/Measurement.cpp
+    ${repoDir}/src/measurement/NonPhysicalQuantity.cpp
     ${repoDir}/src/measurement/PhysicalQuantity.cpp
+    ${repoDir}/src/measurement/QuantityFieldType.cpp
     ${repoDir}/src/measurement/SucroseConversion.cpp
     ${repoDir}/src/measurement/SystemOfMeasurement.cpp
     ${repoDir}/src/measurement/Unit.cpp
