@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/sortFilterProxyModels/FermentableSortFilterProxyModel.h is part of Brewtarget, and is copyright the following authors
- * 2009-2023:
+ * qtModels/sortFilterProxyModels/FermentableSortFilterProxyModel.h is part of Brewtarget, and is copyright the following
+ * authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -21,7 +21,6 @@
 #pragma once
 
 #include <QSortFilterProxyModel>
-
 
 #include "qtModels/sortFilterProxyModels/SortFilterProxyModelBase.h"
 #include "qtModels/tableModels/FermentableTableModel.h"

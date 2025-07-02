@@ -187,23 +187,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/qtModels/listModels/StyleListModel.cpp
     ${repoDir}/src/qtModels/listModels/WaterListModel.cpp
     ${repoDir}/src/qtModels/listModels/YeastListModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/BoilSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/EquipmentSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/FermentableSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/FermentationSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/HopSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/MashSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/MiscSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionFermentableSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/RecipeAdjustmentSaltSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.cpp
-    ${repoDir}/src/qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.cpp
+    ${repoDir}/src/qtModels/sortFilterProxyModels/NamedEntitySortFilterProxyModel.cpp
     ${repoDir}/src/qtModels/tableModels/BoilStepTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/BoilTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/BtTableModel.cpp

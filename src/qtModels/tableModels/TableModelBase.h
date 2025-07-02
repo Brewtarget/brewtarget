@@ -395,6 +395,10 @@ public:
 
                case NonPhysicalQuantity::Percentage:
                case NonPhysicalQuantity::Dimensionless:
+                  //
+                  // Measurement::extractRawFromString does pretty much what we want though TODO we should explicitly
+                  // tell it blanks are OK (for optional fields).
+                  //
                   return Measurement::extractRawFromString<double>( leftItem.toString()) <
                          Measurement::extractRawFromString<double>(rightItem.toString());
 
@@ -410,6 +414,10 @@ public:
                     Measurement::qStringToSI(rightItem.toString(), physicalQuantity));
          } else {
             Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(fieldType));
+            //
+            // It's not instantly obvious how to sort a mixture of, eg, masses and volumes.  So, for the moment, we just
+            // cop out and sort them as strings.
+            //
 //            auto const choiceOfPhysicalQuantity = std::get<Measurement::ChoiceOfPhysicalQuantity>(fieldType);
             return Measurement::extractRawFromString<double>( leftItem.toString()) <
                    Measurement::extractRawFromString<double>(rightItem.toString());
