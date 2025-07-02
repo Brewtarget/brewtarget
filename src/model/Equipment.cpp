@@ -466,5 +466,8 @@ double Equipment::wortEndOfBoil_l( double kettleWort_l ) const {
    return kettleWort_l - (boilTime_min().value_or(Equipment::default_boilTime_mins)/(double)60)*kettleEvaporationPerHour_l().value_or(Equipment::default_kettleEvaporationPerHour_l);
 }
 
+// This class supports NamedEntity::numRecipesUsedIn
+IMPLEMENT_NUM_RECIPES_USED_IN(Equipment)
+
 // Boilerplate code for FolderBase
 FOLDER_BASE_COMMON_CODE(Equipment)

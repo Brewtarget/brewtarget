@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/BoilTableModel.cpp is part of Brewtarget, and is copyright the following authors 2024:
+ * qtModels/tableModels/BoilTableModel.cpp is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -33,8 +33,9 @@ BoilTableModel::BoilTableModel(QTableView * parent, bool editable) :
       parent,
       editable,
       {
-         TABLE_MODEL_HEADER(Boil, Name        , tr("Name"         ), PropertyNames:: NamedEntity::name           ),
-         TABLE_MODEL_HEADER(Boil, PreBoilSize , tr("Pre-Boil Size"), PropertyNames::        Boil::preBoilSize_l  , PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(Boil, Name            , tr("Name"         ), PropertyNames:: NamedEntity::name           ),
+         TABLE_MODEL_HEADER(Boil, PreBoilSize     , tr("Pre-Boil Size"), PropertyNames::        Boil::preBoilSize_l  , PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(Boil, NumRecipesUsedIn, tr("N° Recipes"   ), PropertyNames::NamedEntity::numRecipesUsedIn),
       }
    },
    TableModelBase<BoilTableModel, Boil>{} {

@@ -49,6 +49,7 @@ class BtStringConst;
  * This class is a sort-of singleton, in that there is one instance for each type of DB.
  */
 class Database {
+   // This macro allows us to use QObject::tr() in a class that don't inherit from QObject.
    Q_DECLARE_TR_FUNCTIONS(Database)
 
 public:

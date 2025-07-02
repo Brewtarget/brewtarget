@@ -33,6 +33,7 @@
 #include "model/NamedEntity.h"
 #include "utils/BtStringConst.h"
 #include "utils/EnumStringMapping.h"
+#include "utils/NoCopy.h"
 #include "utils/PropertyPath.h"
 
 class Recipe;
@@ -260,12 +261,16 @@ public slots:
    // for changing units and scales
    void contextMenu(QPoint const & point);
 
+private:
+   // Insert all the usual boilerplate to prevent copy/assignment/move
+   NO_COPY_DECLARATIONS(BtTableModel)
+
 protected:
    QTableView * m_parentTableWidget;
    bool m_editable;
 private:
    /**
-    * \brief We're using a \c std::vector here because it's easier for constant lists.  (With \c QVector, at last in
+    * \brief We're using a \c std::vector here because it's easier for constant lists.  (With \c QVector, at least in
     *        Qt 5, the items stored even in a const instance still need to be default constructable and copyable.)
     */
    std::vector<ColumnInfo> const m_columnInfos;

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/MashTableModel.cpp is part of Brewtarget, and is copyright the following authors 2024:
+ * qtModels/tableModels/MashTableModel.cpp is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@ MashTableModel::MashTableModel(QTableView * parent, bool editable) :
          TABLE_MODEL_HEADER(Mash, InitialGrainTemp , tr("Initial Grain Temperature"), PropertyNames::        Mash::grainTemp_c     , PrecisionInfo{1}),
          TABLE_MODEL_HEADER(Mash, TotalMashWater   , tr("Total Mash Water"         ), PropertyNames::        Mash::totalMashWater_l, PrecisionInfo{1}),
          TABLE_MODEL_HEADER(Mash, TotalTime        , tr("Total Time"               ), PropertyNames::        Mash::totalTime_mins  , PrecisionInfo{0}),
+         TABLE_MODEL_HEADER(Mash, NumRecipesUsedIn , tr("N° Recipes"               ), PropertyNames::NamedEntity::numRecipesUsedIn),
       }
    },
    TableModelBase<MashTableModel, Mash>{} {

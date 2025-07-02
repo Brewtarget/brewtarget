@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/FermentationTableModel.h is part of Brewtarget, and is copyright the following authors 2024:
+ * qtModels/tableModels/FermentationTableModel.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -24,8 +24,10 @@
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
-TABLE_MODEL_TRAITS(Fermentation, Name,
-                                 NumSteps)
+// Define the columns on this table
+TABLE_MODEL_TRAITS(Fermentation, Name            ,
+                                 NumSteps        ,
+                                 NumRecipesUsedIn,)
 
 /*!
  * \class FermentationTableModel

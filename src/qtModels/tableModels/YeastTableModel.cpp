@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/YeastTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * qtModels/tableModels/YeastTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -40,13 +40,14 @@ YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
       {
          // NOTE: Need PropertyNames::Yeast::amountWithUnits not PropertyNames::Yeast::amount below so we
          //       can handle mass-or-volume generically in TableModelBase.  Same for inventoryWithUnits.
-         TABLE_MODEL_HEADER(Yeast, Name              , tr("Name"       ), PropertyNames::NamedEntity::name         ),
-         TABLE_MODEL_HEADER(Yeast, Laboratory        , tr("Laboratory" ), PropertyNames::Yeast::laboratory         ),
-         TABLE_MODEL_HEADER(Yeast, ProductId         , tr("Product ID" ), PropertyNames::Yeast::productId          ),
-         TABLE_MODEL_HEADER(Yeast, Type              , tr("Type"       ), PropertyNames::Yeast::type               , EnumInfo{Yeast::typeStringMapping, Yeast::typeDisplayNames}),
-         TABLE_MODEL_HEADER(Yeast, Form              , tr("Form"       ), PropertyNames::Yeast::form               , EnumInfo{Yeast::formStringMapping, Yeast::formDisplayNames}),
-         TABLE_MODEL_HEADER(Yeast, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory, PrecisionInfo{1}),
-         TABLE_MODEL_HEADER(Yeast, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory, Yeast::validMeasures),
+         TABLE_MODEL_HEADER(Yeast, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
+         TABLE_MODEL_HEADER(Yeast, Laboratory        , tr("Laboratory" ), PropertyNames::Yeast::laboratory            ),
+         TABLE_MODEL_HEADER(Yeast, ProductId         , tr("Product ID" ), PropertyNames::Yeast::productId             ),
+         TABLE_MODEL_HEADER(Yeast, Type              , tr("Type"       ), PropertyNames::Yeast::type                  , EnumInfo{Yeast::typeStringMapping, Yeast::typeDisplayNames}),
+         TABLE_MODEL_HEADER(Yeast, Form              , tr("Form"       ), PropertyNames::Yeast::form                  , EnumInfo{Yeast::formStringMapping, Yeast::formDisplayNames}),
+         TABLE_MODEL_HEADER(Yeast, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   , PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(Yeast, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Yeast::validMeasures),
+         TABLE_MODEL_HEADER(Yeast, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
       }
    },
    TableModelBase<YeastTableModel, Yeast>{} {

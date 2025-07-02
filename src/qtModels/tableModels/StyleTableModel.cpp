@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/StyleTableModel.cpp is part of Brewtarget, and is copyright the following authors 2023:
+ * qtModels/tableModels/StyleTableModel.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -30,12 +30,13 @@ StyleTableModel::StyleTableModel(QTableView* parent, bool editable) :
       parent,
       editable,
       {
-         TABLE_MODEL_HEADER(Style, Name          , tr("Name"           ), PropertyNames::NamedEntity::name    ),
-         TABLE_MODEL_HEADER(Style, Type          , tr("Type"           ), PropertyNames::Style::type          , EnumInfo{Style::typeStringMapping, Style::typeDisplayNames}),
-         TABLE_MODEL_HEADER(Style, Category      , tr("Category"       ), PropertyNames::Style::category      ),
-         TABLE_MODEL_HEADER(Style, CategoryNumber, tr("Category Number"), PropertyNames::Style::categoryNumber),
-         TABLE_MODEL_HEADER(Style, StyleLetter   , tr("Style Letter"   ), PropertyNames::Style::styleLetter   ),
-         TABLE_MODEL_HEADER(Style, StyleGuide    , tr("Style Guide"    ), PropertyNames::Style::styleGuide    ),
+         TABLE_MODEL_HEADER(Style, Name            , tr("Name"           ), PropertyNames::NamedEntity::name            ),
+         TABLE_MODEL_HEADER(Style, Type            , tr("Type"           ), PropertyNames::Style::type                  , EnumInfo{Style::typeStringMapping, Style::typeDisplayNames}),
+         TABLE_MODEL_HEADER(Style, Category        , tr("Category"       ), PropertyNames::Style::category              ),
+         TABLE_MODEL_HEADER(Style, CategoryNumber  , tr("Category Number"), PropertyNames::Style::categoryNumber        ),
+         TABLE_MODEL_HEADER(Style, StyleLetter     , tr("Style Letter"   ), PropertyNames::Style::styleLetter           ),
+         TABLE_MODEL_HEADER(Style, StyleGuide      , tr("Style Guide"    ), PropertyNames::Style::styleGuide            ),
+         TABLE_MODEL_HEADER(Style, NumRecipesUsedIn, tr("N° Recipes"     ), PropertyNames::NamedEntity::numRecipesUsedIn),
       }
    },
    TableModelBase<StyleTableModel, Style>{} {

@@ -19,20 +19,15 @@
 #define SCALE_RECIPE_TOOL_H
 #pragma once
 
-#include <QAbstractItemModel>
-//#include <QAbstractButton>
-//#include <QAbstractListModel>
 #include <QButtonGroup>
-#include <QComboBox>
-//#include <QDialog>
 #include <QEvent>
 #include <QFormLayout>
 #include <QLabel>
-//#include <QLayout>
 #include <QLineEdit>
-#include <QSortFilterProxyModel>
 #include <QWidget>
 #include <QWizardPage>
+
+#include "widgets/BtComboBoxNamedEntity.h"
 
 // Forward declarations
 class Equipment;
@@ -58,9 +53,6 @@ private:
    void scale(Equipment* equip, double newEff);
 
    Recipe * m_recObs;
-///   QButtonGroup m_scaleGroup;
-   EquipmentListModel    * m_equipListModel;
-   QSortFilterProxyModel * m_equipSortProxyModel;
 };
 
 //================================================ ScaleRecipeIntroPage ================================================
@@ -97,7 +89,7 @@ class ScaleRecipeEquipmentPage : public QWizardPage {
    Q_OBJECT
 
 public:
-   ScaleRecipeEquipmentPage(QAbstractItemModel* listModel, QWidget* parent = 0);
+   ScaleRecipeEquipmentPage(QWidget* parent = 0);
 
 public slots:
    void doLayout();
@@ -109,12 +101,11 @@ protected:
 
 private:
 
-   QFormLayout *        layout;
-   QLabel *             m_equipLabel;
-   QComboBox *          m_equipComboBox;
-   QAbstractItemModel * m_equipListModel;
-   QLabel *             m_efficiencyLabel;
-   QLineEdit *          m_efficiencyLineEdit;
+   QFormLayout *         layout;
+   QLabel *              m_equipLabel;
+   BtComboBoxEquipment * m_equipComboBox;
+   QLabel *              m_efficiencyLabel;
+   QLineEdit *           m_efficiencyLineEdit;
 };
 
 #endif

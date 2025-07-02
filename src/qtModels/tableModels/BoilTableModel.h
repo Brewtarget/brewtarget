@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/BoilTableModel.h is part of Brewtarget, and is copyright the following authors 2024:
+ * qtModels/tableModels/BoilTableModel.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -24,8 +24,10 @@
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
-TABLE_MODEL_TRAITS(Boil, Name,
-                         PreBoilSize)
+// Define the columns on this table
+TABLE_MODEL_TRAITS(Boil, Name            ,
+                         PreBoilSize     ,
+                         NumRecipesUsedIn,)
 
 /*!
  * \class BoilTableModel
@@ -40,7 +42,7 @@ class BoilTableModel : public BtTableModel, public TableModelBase<BoilTableModel
 /**
  * \class BoilItemDelegate
  *
- * \brief An item delegate for hop tables.
+ * \brief An item delegate for boil tables.
  * \sa BoilTableModel
  */
 class BoilItemDelegate : public QItemDelegate, public ItemDelegate<BoilItemDelegate, BoilTableModel> {

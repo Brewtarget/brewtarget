@@ -39,6 +39,7 @@
 #include "model/RecipeUseOfWater.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
+#include "PersistentSettings.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -46,28 +47,22 @@
 #endif
 
 ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) :
-   QWizard(parent),
-   m_equipListModel(new EquipmentListModel(this)),
-   m_equipSortProxyModel(new QSortFilterProxyModel(m_equipListModel)) {
+   QWizard(parent) {
 
-   // Sorts models dynamically based on their properties' default sort behavior.
-   m_equipSortProxyModel->setSourceModel(m_equipListModel);
-   m_equipSortProxyModel->setDynamicSortFilter(true);
-   m_equipSortProxyModel->sort(0);
-
-   addPage(new ScaleRecipeIntroPage);
-   addPage(new ScaleRecipeEquipmentPage(m_equipSortProxyModel));
+   addPage(new ScaleRecipeIntroPage());
+   addPage(new ScaleRecipeEquipmentPage());
    return;
 }
 
 void ScaleRecipeTool::accept() {
-   int row = field("m_equipComboBox").toInt();
-   QModelIndex equipProxyNdx( m_equipSortProxyModel->index(row, 0));
-   QModelIndex equipNdx = m_equipSortProxyModel->mapToSource(equipProxyNdx);
 
-   Equipment* selectedEquip = m_equipListModel->at(equipNdx.row());
-   double newEff = field("m_efficiencyLineEdit").toString().toDouble();
-   scale(selectedEquip, newEff);
+   int equipmentId = this->field("m_equipComboBox").toInt();
+   if (equipmentId < 0) {
+      return;
+   }
+   Equipment* selectedEquipment = ObjectStoreWrapper::getByIdRaw<Equipment>(equipmentId);
+   double newEfficiency = this->field("m_efficiencyLineEdit").toString().toDouble();
+   this->scale(selectedEquipment, newEfficiency);
 
    QWizard::accept();
    return;
@@ -185,19 +180,19 @@ void ScaleRecipeIntroPage::changeEvent(QEvent* event) {
 
 // ScaleRecipeEquipmentPage ===================================================
 
-ScaleRecipeEquipmentPage::ScaleRecipeEquipmentPage(QAbstractItemModel* listModel, QWidget* parent) :
+ScaleRecipeEquipmentPage::ScaleRecipeEquipmentPage(QWidget* parent) :
    QWizardPage(parent),
    layout(new QFormLayout),
    m_equipLabel(new QLabel),
-   m_equipComboBox(new QComboBox),
-   m_equipListModel(listModel),
+   m_equipComboBox(new BtComboBoxEquipment),
    m_efficiencyLabel(new QLabel),
    m_efficiencyLineEdit(new QLineEdit) {
 
    doLayout();
    retranslateUi();
+   this->m_equipComboBox->init();
 
-   registerField("m_equipComboBox", m_equipComboBox);
+   registerField("m_equipComboBox", m_equipComboBox, *PropertyNames::BtComboBoxNamedEntity::currentId, "currentIndexChanged");
    registerField("m_efficiencyLineEdit", m_efficiencyLineEdit);
    return;
 }
@@ -205,9 +200,8 @@ ScaleRecipeEquipmentPage::ScaleRecipeEquipmentPage(QAbstractItemModel* listModel
 void ScaleRecipeEquipmentPage::doLayout() {
 
    layout->addRow(m_equipLabel, m_equipComboBox);
-      m_equipComboBox->setModel(m_equipListModel);
    layout->addRow(m_efficiencyLabel, m_efficiencyLineEdit);
-      m_efficiencyLineEdit->setText("70.0");
+   m_efficiencyLineEdit->setText(PersistentSettings::value(PersistentSettings::Names::defaultEfficiency, 70.0).toString());
    setLayout(layout);
    return;
 }

@@ -140,9 +140,6 @@ public:
                                                           true,
                                                           m_neTableModel)} {
 
-///      this->enableEditableInventory();
-///      m_sortFilterProxy->setSourceModel(m_neTableModel);
-
       this->m_tableWidget->setModel(m_sortFilterProxy);
       this->m_tableWidget->setSortingEnabled(true);
       this->m_tableWidget->sortByColumn(static_cast<int>(NeTableModel::ColumnIndex::Name), Qt::AscendingOrder);
@@ -207,14 +204,6 @@ public:
    }
    virtual ~CatalogBase() = default;
 
-///   QPushButton * createAddToRecipeButton() requires IsTableModel<NeTableModel> && HasInventory<NeTableModel> {
-///      return new QPushButton(&this->derived());
-///   }
-///   QPushButton * createAddToRecipeButton() requires IsTableModel<NeTableModel> && HasNoInventory<NeTableModel> {
-///      // No-op version
-///      return nullptr;
-///   }
-
    QPushButton * createAddToRecipeButton() requires IsTableModel<NeTableModel> {
       return new QPushButton(&this->derived());
    }
@@ -260,7 +249,6 @@ public:
     *        If \b index is the default, will add the selected ingredient to list. Otherwise, will add the ingredient
     *        at the specified index.
     */
-//   void add(QModelIndex const & index = QModelIndex()) requires IsTableModel<NeTableModel> && ObservesRecipe<NeTableModel> {
    void add(QModelIndex const & index = QModelIndex()) requires IsIngredient<NE> {
       //
       // Substantive version - for FermentableCatalog, HopCatalog, MiscCatalog, YeastCatalog
@@ -330,8 +318,46 @@ public:
       }
 
       QModelIndex translated = m_sortFilterProxy->mapToSource(selected[0]);
-      auto ingredient = m_neTableModel->getRow(translated.row());
-      ObjectStoreWrapper::softDelete(*ingredient);
+      auto item = m_neTableModel->getRow(translated.row());
+
+      //
+      // If someone tries to delete something that's used in one or more Recipes then we just say it's not allowed.
+      // (The alternative would be to check that they are sure and then run through every Recipe removing the item
+      // about to be deleted, which could perhaps leave that Recipe in a weird state.)
+      //
+      // TODO: We have similar logic in TreeViewBase which we should ideally unify somewhere.
+      //
+      int const numRecipesUsedIn = item->numRecipesUsedIn();
+      if (numRecipesUsedIn > 0) {
+         QMessageBox::warning(&this->derived(),
+                              Derived::tr("%1 in use").arg(NE::localisedName()),
+                              Derived::tr("Cannot delete this %1, as it is used in %n recipe(s)", "", numRecipesUsedIn).arg(NE::localisedName()),
+                              QMessageBox::Ok);
+         return;
+      }
+
+      QString confirmationMessage = Derived::tr("Delete %1 #%2 \"%3\"? (%1)").arg(
+                                       NE::localisedName()
+                                    ).arg(
+                                       item->key()
+                                    ).arg(
+                                       item->name()
+                                    ).arg(
+                                       Recipe::usedInRecipes(*item)
+                                    );
+
+      auto confirmDelete = QMessageBox::question(
+         &this->derived(),
+         Derived::tr("Delete %1").arg(NE::localisedName()),
+         confirmationMessage,
+         QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+         QMessageBox::No
+      );
+
+      if (confirmDelete == QMessageBox::Yes) {
+         ObjectStoreWrapper::softDelete(*item);
+      }
+
       return;
    }
 

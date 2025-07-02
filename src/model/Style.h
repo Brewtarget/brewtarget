@@ -206,6 +206,8 @@ public:
    Q_PROPERTY(QString mouthfeel                      READ mouthfeel          WRITE setMouthfeel        )
    Q_PROPERTY(QString overallImpression              READ overallImpression  WRITE setOverallImpression)
 
+   SUPPORT_NUM_RECIPES_USED_IN
+
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    QString               category         () const;
    QString               categoryNumber   () const;

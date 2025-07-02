@@ -22,6 +22,17 @@
 #include <QString>
 #include <QTextStream>
 
+#include "utils/BtStringConst.h"
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::BtComboBoxNamedEntity { inline BtStringConst const property{#property}; }
+AddPropertyName(currentId)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 /**
  * \brief Extends \c QComboBox to show a list of a particular \c NamedEntity - eg \c Style for a \c Recipe.  Used in
  *        conjunction with \c BtComboBoxNamedEntityBase to make \c BtComboBoxNamedStyle etc, because classes inheriting
@@ -34,6 +45,13 @@ class BtComboBoxNamedEntity : public QComboBox {
 protected:
    BtComboBoxNamedEntity(char const * const name, QWidget * parent);
    virtual ~BtComboBoxNamedEntity();
+
+   //=================================================== PROPERTIES ====================================================
+   /**
+    * \brief The ID of the selected \c NamedEntity.
+    *        This read-only property is only used by \c ScaleRecipeTool so we can use \c QWizardPage::registerField
+    */
+   Q_PROPERTY(int currentId    READ getCurrentId)
 
    /**
     * \brief Set the ID of the selected \c NamedEntity.  This should only be called via

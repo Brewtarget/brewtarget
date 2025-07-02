@@ -351,5 +351,8 @@ double Water::ppm(Water::Ion const ion) const {
    return 0.0;
 }
 
+// This class supports NamedEntity::numRecipesUsedIn
+IMPLEMENT_NUM_RECIPES_USED_IN(Water)
+
 // Boilerplate code for FolderBase
 FOLDER_BASE_COMMON_CODE(Water)

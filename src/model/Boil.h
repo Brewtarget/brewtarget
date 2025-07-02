@@ -153,6 +153,8 @@ public:
     */
    Q_PROPERTY(double                boilTime_mins          READ boilTime_mins   WRITE setBoilTime_mins STORED false)
 
+   SUPPORT_NUM_RECIPES_USED_IN
+
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    QString               description  () const;
    QString               notes        () const;

@@ -1,5 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/RecipeAdditionFermentableTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * qtModels/tableModels/RecipeAdditionFermentableTableModel.h is part of Brewtarget, and is copyright the following authors
+ * 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Markus Mårtensson <mackan.90@gmail.com>
@@ -36,22 +37,16 @@
 class BtStringConst;
 class Recipe;
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// RecipeAdditionFermentableTableModel::ColumnIndex::Alpha etc.
-class RecipeAdditionFermentableTableModel;
-template <> struct TableModelTraits<RecipeAdditionFermentableTableModel> {
-   enum class ColumnIndex {
-      Name          ,
-      Type          ,
-      Yield         ,
-      Color         ,
-      Amount        ,
-      AmountType    ,
-      TotalInventory,
-      Stage         ,
-      Time          ,
-   };
-};
+// Define the columns on this table
+TABLE_MODEL_TRAITS(RecipeAdditionFermentable, Name          ,
+                                              Type          ,
+                                              Yield         ,
+                                              Color         ,
+                                              Amount        ,
+                                              AmountType    ,
+                                              TotalInventory,
+                                              Stage         ,
+                                              Time          ,)
 
 /*!
  * \class RecipeAdditionFermentableTableModel

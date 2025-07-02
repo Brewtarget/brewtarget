@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/sortFilterProxyModels/EquipmentSortFilterProxyModel.cpp is part of Brewtarget, and is copyright the following authors
- * 2023:
+ * qtModels/sortFilterProxyModels/EquipmentSortFilterProxyModel.cpp is part of Brewtarget, and is copyright the following
+ * authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ bool EquipmentSortFilterProxyModel::isLessThan(EquipmentTableModel::ColumnIndex 
                                                QVariant const & leftItem,
                                                QVariant const & rightItem) const {
    switch (columnIndex) {
-       case EquipmentTableModel::ColumnIndex::Name:
+      case EquipmentTableModel::ColumnIndex::Name:
          return leftItem.toString() < rightItem.toString();
 
       case EquipmentTableModel::ColumnIndex::MashTunVolume:
@@ -36,6 +36,8 @@ bool EquipmentSortFilterProxyModel::isLessThan(EquipmentTableModel::ColumnIndex 
       case EquipmentTableModel::ColumnIndex::FermenterVolume:
          return (Measurement::qStringToSI( leftItem.toString(), Measurement::PhysicalQuantity::Volume) <
                  Measurement::qStringToSI(rightItem.toString(), Measurement::PhysicalQuantity::Volume));
+      case EquipmentTableModel::ColumnIndex::NumRecipesUsedIn:
+         return leftItem.toInt() < rightItem.toInt();
 
       // No default case as we want the compiler to warn us if we missed one
    }

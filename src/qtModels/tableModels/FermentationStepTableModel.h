@@ -1,5 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/FermentationStepTableModel.h is part of Brewtarget, and is copyright the following authors 2024:
+ * qtModels/tableModels/FermentationStepTableModel.h is part of Brewtarget, and is copyright the following authors
+ * 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -33,24 +34,18 @@
 #include "qtModels/tableModels/StepTableModelBase.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// HopTableModel::ColumnIndex::Alpha etc.
-class FermentationStepTableModel;
-template <> struct TableModelTraits<FermentationStepTableModel> {
-   enum class ColumnIndex {
-      // NB: FermentationStep does not support rampTime_mins -- see comment in model/Step.h
-      Name        ,
-      StepTime    ,
-      StartTemp   ,
-      EndTemp     ,
-      StartAcidity,
-      EndAcidity  ,
-      StartGravity,
-      EndGravity  ,
-      FreeRise    ,
-      Vessel      ,
-   };
-};
+// Define the columns on this table
+// NB: FermentationStep does not support rampTime_mins -- see comment in model/Step.h
+TABLE_MODEL_TRAITS(FermentationStep, Name        ,
+                                     StepTime    ,
+                                     StartTemp   ,
+                                     EndTemp     ,
+                                     StartAcidity,
+                                     EndAcidity  ,
+                                     StartGravity,
+                                     EndGravity  ,
+                                     FreeRise    ,
+                                     Vessel      ,)
 
 /*!
  * \class FermentationStepTableModel

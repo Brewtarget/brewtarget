@@ -228,6 +228,9 @@ void Boil::ensureStandardProfile() {
    return;
 }
 
+// This class supports NamedEntity::numRecipesUsedIn
+IMPLEMENT_NUM_RECIPES_USED_IN(Boil)
+
 // Boilerplate code for FolderBase
 FOLDER_BASE_COMMON_CODE(Boil)
 

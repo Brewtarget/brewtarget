@@ -256,7 +256,11 @@ public:
     * \brief The number of \c Recipes this object is used in.
     *
     *        NOTE: This is not defined for all classes.  Child classes that support it, need to override the
-    *              \c numRecipesUsedIn member function by including the \c SUPPORT_NUM_RECIPES_USED_IN macro.
+    *              \c numRecipesUsedIn member function via the \c SUPPORT_NUM_RECIPES_USED_IN and
+    *              \c IMPLEMENT_NUM_RECIPES_USED_IN macros.  The functionality is provided by \c Recipe::numRecipesUsing
+    *              but it is useful to expose as a property of \c Fermentable, \c Hop, \c Style, \c Mash, etc because
+    *              then we can handle it in generic code in the same way as other properties for the UI.
+    *
     */
    Q_PROPERTY(int     numRecipesUsedIn READ numRecipesUsedIn STORED false)
 

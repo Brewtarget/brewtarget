@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/YeastTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * qtModels/tableModels/YeastTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -38,20 +38,15 @@
 class BtStringConst;
 class Recipe;
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// YeastTableModel::ColumnIndex::Lab etc.
-class YeastTableModel;
-template <> struct TableModelTraits<YeastTableModel> {
-   enum class ColumnIndex {
-      Name              ,
-      Laboratory        ,
-      ProductId         ,
-      Type              ,
-      Form              ,
-      TotalInventory    ,
-      TotalInventoryType,
-   };
-};
+// Define the columns on this table
+TABLE_MODEL_TRAITS(Yeast, Name              ,
+                          Laboratory        ,
+                          ProductId         ,
+                          Type              ,
+                          Form              ,
+                          TotalInventory    ,
+                          TotalInventoryType,
+                          NumRecipesUsedIn  ,)
 
 /*!
  * \class YeastTableModel

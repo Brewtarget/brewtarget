@@ -34,6 +34,9 @@ bool BoilSortFilterProxyModel::isLessThan(BoilTableModel::ColumnIndex const colu
          return Measurement::qStringToSI( leftItem.toString(), Measurement::PhysicalQuantity::Volume) <
                 Measurement::qStringToSI(rightItem.toString(), Measurement::PhysicalQuantity::Volume);
 
+      case BoilTableModel::ColumnIndex::NumRecipesUsedIn:
+         return leftItem.toInt() < rightItem.toInt();
+
       // No default case as we want the compiler to warn us if we missed one
    }
 

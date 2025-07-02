@@ -365,7 +365,8 @@ public:
 
          //
          // When we ask the user for confirmation "Delete Hop such-and-such?", we want to flag up to them if that Hop
-         // (or Style, Equipment, Mash, etc) is used in any Recipes.
+         // (or Style, Equipment, Mash, etc) is used in any Recipes.  If so, we want to prevent them from deleting it.
+         // TODO: This is similar logic to that in CatalogBase, and we should combine in one place at some point.
          //
          // But in the case of deleting a Recipe, this is not meaningful (because a Recipe is not used in another
          // Recipe).  Similarly, there is no special additional text for a secondary item (eg BrewNote), because it is
@@ -381,9 +382,23 @@ public:
          if constexpr (!std::same_as<NE, Recipe>) {
             if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
                TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
-               confirmationMessage.append(
-                  QString{" (%1)"}.arg(Recipe::usedInRecipes(*primaryTreeNode.underlyingItem()))
-               );
+               int const numRecipesUsedIn = primaryTreeNode.underlyingItem()->numRecipesUsedIn();
+               if (0 == numRecipesUsedIn) {
+                  //
+                  // When the item is not used in any recipes, we show that as reassurance
+                  //
+                  confirmationMessage.append(
+                     QString{" (%1)"}.arg(Recipe::usedInRecipes(*primaryTreeNode.underlyingItem()))
+                  );
+               } else {
+                  QMessageBox::warning(&this->derived(),
+                                       Derived::tr("%1 in use").arg(NE::localisedName()),
+                                       Derived::tr("Cannot delete this %1, as it is used in %n recipe(s)", "", numRecipesUsedIn).arg(NE::localisedName()),
+                                       QMessageBox::Ok);
+                  // Skip the current item
+                  continue;
+               }
+
             }
             // TBD do we want to show any special message for a folder?
          }

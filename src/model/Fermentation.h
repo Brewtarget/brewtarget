@@ -103,6 +103,8 @@ public:
    //! \brief Convenience property for accessing the third fermentation step
    Q_PROPERTY(std::shared_ptr<FermentationStep>   tertiary    READ tertiary    WRITE setTertiary    STORED false)
 
+   SUPPORT_NUM_RECIPES_USED_IN
+
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    QString description() const;
    QString notes      () const;

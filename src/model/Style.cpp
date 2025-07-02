@@ -238,7 +238,7 @@ QString               Style::flavor           () const { return m_flavor        
 QString               Style::mouthfeel        () const { return m_mouthfeel        ; }
 QString               Style::overallImpression() const { return m_overallImpression; }
 
-//==============================="SET" METHODS==================================
+//============================================= "SETTER" MEMBER FUNCTIONS ==============================================
 void Style::setCategory         (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Style::category         , this->m_category         , val); }
 void Style::setCategoryNumber   (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Style::categoryNumber   , this->m_categoryNumber   , val); }
 void Style::setStyleLetter      (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Style::styleLetter      , this->m_styleLetter      , val); }
@@ -266,6 +266,11 @@ void Style::setAppearance       (QString               const & val) { SET_AND_NO
 void Style::setFlavor           (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Style::flavor           , this->m_flavor           , val); }
 void Style::setMouthfeel        (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Style::mouthfeel        , this->m_mouthfeel        , val); }
 void Style::setOverallImpression(QString               const & val) { SET_AND_NOTIFY(PropertyNames::Style::overallImpression, this->m_overallImpression, val); }
+
+//=============================================== OTHER MEMBER FUNCTIONS ===============================================
+
+// This class supports NamedEntity::numRecipesUsedIn
+IMPLEMENT_NUM_RECIPES_USED_IN(Style)
 
 // Boilerplate code for FolderBase
 FOLDER_BASE_COMMON_CODE(Style)
