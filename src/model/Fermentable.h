@@ -471,6 +471,8 @@ public:
     */
    Q_PROPERTY(std::optional<double> betaGlucan_ppm                  READ betaGlucan_ppm                  WRITE setBetaGlucan_ppm               )
 
+   SUPPORT_NUM_RECIPES_USED_IN
+
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    Type    type                                       () const;
    double  color_lovibond                             () const;

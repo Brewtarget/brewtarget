@@ -145,6 +145,8 @@ public:
    Q_PROPERTY(bool      isAcid         READ isAcid)
    Q_PROPERTY(Measurement::PhysicalQuantity suggestedMeasure READ suggestedMeasure)
 
+   SUPPORT_NUM_RECIPES_USED_IN
+
    Salt::Type            type       () const;
    std::optional<double> percentAcid() const;
    bool                  isAcid     () const;

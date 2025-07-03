@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/FermentableTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * qtModels/tableModels/FermentableTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -63,7 +63,7 @@ FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable) 
          TABLE_MODEL_HEADER(Fermentable, Color             , tr("Color"         ), PropertyNames::Fermentable::color_srm         , PrecisionInfo{1}),
          TABLE_MODEL_HEADER(Fermentable, TotalInventory    , tr("Inventory"     ), PropertyNames::Ingredient::totalInventory     , PrecisionInfo{1}),
          TABLE_MODEL_HEADER(Fermentable, TotalInventoryType, tr("Amount Type"   ), PropertyNames::Ingredient::totalInventory     , Fermentable::validMeasures),
-
+         TABLE_MODEL_HEADER(Fermentable, NumRecipesUsedIn  , tr("N° Recipes"    ), PropertyNames::NamedEntity::numRecipesUsedIn  ),
       }
    },
    TableModelBase<FermentableTableModel, Fermentable>{} {

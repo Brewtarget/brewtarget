@@ -36,20 +36,14 @@
 class BtStringConst;
 class Recipe;
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// HopTableModel::ColumnIndex::Alpha etc.
-class HopTableModel;
-template <> struct TableModelTraits<HopTableModel> {
-   enum class ColumnIndex {
-      Name              ,
-      Form              ,
-      Year              ,
-      Alpha             ,
-      TotalInventory    ,
-      TotalInventoryType,
-      NumRecipesUsedIn  ,
-   };
-};
+// Define the columns on this table
+TABLE_MODEL_TRAITS(Hop, Name              ,
+                        Form              ,
+                        Year              ,
+                        Alpha             ,
+                        TotalInventory    ,
+                        TotalInventoryType,
+                        NumRecipesUsedIn  ,)
 
 /*!
  * \class HopTableModel
@@ -62,8 +56,8 @@ class HopTableModel : public BtTableModel, public TableModelBase<HopTableModel, 
    TABLE_MODEL_COMMON_DECL(Hop)
 
 public:
-   //! \brief Show ibus in the vertical header.
-   void setShowIBUs( bool var );
+   //! \brief Show IBUs in the vertical header.
+   void setShowIBUs(bool var);
 
 private:
    bool showIBUs; // True if you want to show the IBU contributions in the table rows.

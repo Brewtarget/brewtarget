@@ -371,6 +371,68 @@ public:
       return;
    }
 
+   /**
+    * \brief Called from SortFilterProxyModelBase::doLessThan
+    */
+   bool isLessThan(QModelIndex const & leftIndex, QModelIndex const & rightIndex) const {
+      QVariant  leftItem = this->derived().data( leftIndex);
+      QVariant rightItem = this->derived().data(rightIndex);
+
+      // As per more detailed comment in qtModels/tableModels/ItemDelegate.h, we need "typename" here only until Apple
+      // ship Clang 16 or later as their standard C++ compiler.
+      auto const columnIndex = static_cast<ColumnIndex>(leftIndex.column());
+      BtTableModel::ColumnInfo const & columnInfo = this->get_ColumnInfo(columnIndex);
+      if (columnInfo.typeInfo.fieldType) {
+         QuantityFieldType const fieldType = *columnInfo.typeInfo.fieldType;
+         if (std::holds_alternative<NonPhysicalQuantity>(fieldType)) {
+            auto const nonPhysicalQuantity = std::get<NonPhysicalQuantity>(fieldType);
+            switch (nonPhysicalQuantity) {
+               case NonPhysicalQuantity::Date:
+               case NonPhysicalQuantity::String:
+               case NonPhysicalQuantity::Enum:
+               case NonPhysicalQuantity::Bool:
+                  return leftItem.toString() < rightItem.toString();
+
+               case NonPhysicalQuantity::Percentage:
+               case NonPhysicalQuantity::Dimensionless:
+                  //
+                  // Measurement::extractRawFromString does pretty much what we want though TODO we should explicitly
+                  // tell it blanks are OK (for optional fields).
+                  //
+                  return Measurement::extractRawFromString<double>( leftItem.toString()) <
+                         Measurement::extractRawFromString<double>(rightItem.toString());
+
+               case NonPhysicalQuantity::OrdinalNumeral:
+               case NonPhysicalQuantity::CardinalNumber:
+                  return leftItem.toInt() < rightItem.toInt();
+
+               // No default case as we want compiler to warn us if we missed a case above
+            }
+         } else if (std::holds_alternative<Measurement::PhysicalQuantity>(fieldType)) {
+            auto const physicalQuantity = std::get<Measurement::PhysicalQuantity>(fieldType);
+            return (Measurement::qStringToSI( leftItem.toString(), physicalQuantity) <
+                    Measurement::qStringToSI(rightItem.toString(), physicalQuantity));
+         } else {
+            Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(fieldType));
+            //
+            // It's not instantly obvious how to sort a mixture of, eg, masses and volumes.  So, for the moment, we just
+            // cop out and sort them as strings.
+            //
+//            auto const choiceOfPhysicalQuantity = std::get<Measurement::ChoiceOfPhysicalQuantity>(fieldType);
+            return Measurement::extractRawFromString<double>( leftItem.toString()) <
+                   Measurement::extractRawFromString<double>(rightItem.toString());
+         }
+
+         //
+         // It's a coding error if we didn't handle every case above
+         //
+         qWarning() << Q_FUNC_INFO << "Unhandled field type:" << fieldType;
+      }
+
+      return true;
+
+   }
+
 protected:
 
    template<class Caller>

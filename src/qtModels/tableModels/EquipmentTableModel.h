@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/EquipmentTableModel.h is part of Brewtarget, and is copyright the following authors 2023:
+ * qtModels/tableModels/EquipmentTableModel.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -30,17 +30,12 @@
 class BtStringConst;
 class Recipe;
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// EquipmentTableModel::ColumnIndex::Type etc.
-class EquipmentTableModel;
-template <> struct TableModelTraits<EquipmentTableModel> {
-   enum class ColumnIndex {
-      Name           ,
-      MashTunVolume  ,
-      KettleVolume   ,
-      FermenterVolume,
-   };
-};
+// Define the columns on this table
+TABLE_MODEL_TRAITS(Equipment, Name            ,
+                              MashTunVolume   ,
+                              KettleVolume    ,
+                              FermenterVolume ,
+                              NumRecipesUsedIn,)
 
 /*!
  * \class EquipmentTableModel

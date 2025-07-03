@@ -376,5 +376,8 @@ double Salt::massConcPpm_SO4_perGramPerLiter() const {
    return 0.0; // Should be unreachable, but GCC gives a warning if we don't have this
 }
 
+// This class supports NamedEntity::numRecipesUsedIn
+IMPLEMENT_NUM_RECIPES_USED_IN(Salt)
+
 // Insert the boiler-plate stuff for inventory
 INGREDIENT_BASE_COMMON_CODE(Salt)

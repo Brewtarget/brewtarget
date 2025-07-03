@@ -1,5 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/sortFilterProxyModels/FermentationSortFilterProxyModel.h is part of Brewtarget, and is copyright the following authors 2024:
+ * qtModels/sortFilterProxyModels/FermentationSortFilterProxyModel.h is part of Brewtarget, and is copyright the following
+ * authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -29,9 +30,9 @@
  * \brief Proxy model for sorting/filtering Fermentations.
  */
 class FermentationSortFilterProxyModel : public QSortFilterProxyModel,
-                                 public SortFilterProxyModelBase<FermentationSortFilterProxyModel,
-                                                                 FermentationTableModel,
-                                                                 FermentationListModel> {
+                                         public SortFilterProxyModelBase<FermentationSortFilterProxyModel,
+                                                                         FermentationTableModel,
+                                                                         FermentationListModel> {
    Q_OBJECT
 
    SORT_FILTER_PROXY_MODEL_COMMON_DECL(Fermentation)

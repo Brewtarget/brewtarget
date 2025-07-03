@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Yeast.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Yeast.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -332,6 +332,9 @@ double Yeast::attenuationTypical_pct() const {
    }
    return Yeast::DefaultAttenuation_pct;
 }
+
+// This class supports NamedEntity::numRecipesUsedIn
+IMPLEMENT_NUM_RECIPES_USED_IN(Yeast)
 
 // Insert the boiler-plate stuff for inventory
 INGREDIENT_BASE_COMMON_CODE(Yeast)

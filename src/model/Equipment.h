@@ -303,7 +303,6 @@ public:
     */
    Q_PROPERTY(double boilingPoint_c        READ boilingPoint_c        WRITE setBoilingPoint_c        )
 
-
    /**
     * \brief The interior diameter of the kettle at the surface of the wort.  Used to calculate the surface area of wort
     *        exposed to air, eg for mIBU calculation.  NB: Not part of BeerXML or BeerJSON
@@ -365,6 +364,8 @@ public:
    Q_PROPERTY(QString               fermenterNotes                    READ fermenterNotes                    WRITE setFermenterNotes                   )
    Q_PROPERTY(QString               agingVesselNotes                  READ agingVesselNotes                  WRITE setAgingVesselNotes                 )
    Q_PROPERTY(QString               packagingVesselNotes              READ packagingVesselNotes              WRITE setPackagingVesselNotes             )
+
+   SUPPORT_NUM_RECIPES_USED_IN
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    double                kettleBoilSize_l           () const;

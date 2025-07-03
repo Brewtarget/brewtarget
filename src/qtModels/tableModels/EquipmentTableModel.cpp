@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/EquipmentTableModel.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * qtModels/tableModels/EquipmentTableModel.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -30,10 +30,11 @@ EquipmentTableModel::EquipmentTableModel(QTableView* parent, bool editable) :
       parent,
       editable,
       {
-         TABLE_MODEL_HEADER(Equipment, Name           , tr("Name"            ), PropertyNames::NamedEntity::name              ),
-         TABLE_MODEL_HEADER(Equipment, MashTunVolume  , tr("Mash Tun Volume" ), PropertyNames::Equipment::mashTunVolume_l     ),
-         TABLE_MODEL_HEADER(Equipment, KettleVolume   , tr("Kettle Volume"   ), PropertyNames::Equipment::kettleBoilSize_l    ),
-         TABLE_MODEL_HEADER(Equipment, FermenterVolume, tr("Fermenter Volume"), PropertyNames::Equipment::fermenterBatchSize_l),
+         TABLE_MODEL_HEADER(Equipment, Name            , tr("Name"            ), PropertyNames::NamedEntity::name              ),
+         TABLE_MODEL_HEADER(Equipment, MashTunVolume   , tr("Mash Tun Volume" ), PropertyNames::Equipment::mashTunVolume_l     ),
+         TABLE_MODEL_HEADER(Equipment, KettleVolume    , tr("Kettle Volume"   ), PropertyNames::Equipment::kettleBoilSize_l    ),
+         TABLE_MODEL_HEADER(Equipment, FermenterVolume , tr("Fermenter Volume"), PropertyNames::Equipment::fermenterBatchSize_l),
+         TABLE_MODEL_HEADER(Equipment, NumRecipesUsedIn, tr("N° Recipes"      ), PropertyNames::NamedEntity::numRecipesUsedIn  ),
       }
    },
    TableModelBase<EquipmentTableModel, Equipment>{} {

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Misc.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Misc.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -149,7 +149,7 @@ Misc::Misc(Misc const & other) :
 
 Misc::~Misc() = default;
 
-//============================"GET" METHODS=====================================
+//============================================= "GETTER" MEMBER FUNCTIONS ==============================================
 Misc::Type Misc::type          () const { return m_type     ; }
 QString    Misc::useFor        () const { return m_useFor   ; }
 QString    Misc::notes         () const { return m_notes    ; }
@@ -157,7 +157,7 @@ QString    Misc::notes         () const { return m_notes    ; }
 QString    Misc::producer      () const { return m_producer ; }
 QString    Misc::productId     () const { return m_productId; }
 
-//============================"SET" METHODS=====================================
+//============================================= "SETTER" MEMBER FUNCTIONS ==============================================
 void Misc::setType     (Type    const   val) { SET_AND_NOTIFY( PropertyNames::Misc::type    , this->m_type     , val); }
 void Misc::setUseFor   (QString const & val) { SET_AND_NOTIFY( PropertyNames::Misc::useFor  , this->m_useFor   , val); }
 void Misc::setNotes    (QString const & val) { SET_AND_NOTIFY( PropertyNames::Misc::notes   , this->m_notes    , val); }
@@ -165,7 +165,10 @@ void Misc::setNotes    (QString const & val) { SET_AND_NOTIFY( PropertyNames::Mi
 void Misc::setProducer (QString const & val) { SET_AND_NOTIFY(PropertyNames::Misc::producer , this->m_producer , val); }
 void Misc::setProductId(QString const & val) { SET_AND_NOTIFY(PropertyNames::Misc::productId, this->m_productId, val); }
 
-//========================OTHER METHODS=========================================
+//=============================================== OTHER MEMBER FUNCTIONS ===============================================
+
+// This class supports NamedEntity::numRecipesUsedIn
+IMPLEMENT_NUM_RECIPES_USED_IN(Misc)
 
 // Insert the boiler-plate stuff for inventory
 INGREDIENT_BASE_COMMON_CODE(Misc)

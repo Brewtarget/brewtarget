@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/StyleTableModel.h is part of Brewtarget, and is copyright the following authors 2023:
+ * qtModels/tableModels/StyleTableModel.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,19 +23,14 @@
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// StyleTableModel::ColumnIndex::Type etc.
-class StyleTableModel;
-template <> struct TableModelTraits<StyleTableModel> {
-   enum class ColumnIndex {
-      Name          ,
-      Type          ,
-      Category      ,
-      CategoryNumber,
-      StyleLetter   ,
-      StyleGuide    ,
-   };
-};
+// Define the columns on this table
+TABLE_MODEL_TRAITS(Style, Name            ,
+                          Type            ,
+                          Category        ,
+                          CategoryNumber  ,
+                          StyleLetter     ,
+                          StyleGuide      ,
+                          NumRecipesUsedIn,)
 
 /*!
  * \class StyleTableModel

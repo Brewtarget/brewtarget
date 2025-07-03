@@ -25,6 +25,7 @@
 #include "qtModels/tableModels/StepTableModelBase.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
+// Define the columns on this table
 TABLE_MODEL_TRAITS(BoilStep, Name        ,
                              StepTime    ,
                              StartTemp   ,

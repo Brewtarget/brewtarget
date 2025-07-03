@@ -23,14 +23,8 @@
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// RecipeTableModel::ColumnIndex::Name etc.
-class RecipeTableModel;
-template <> struct TableModelTraits<RecipeTableModel> {
-   enum class ColumnIndex {
-      Name,
-   };
-};
+// Define the columns on this table
+TABLE_MODEL_TRAITS(Recipe, Name)
 
 /*!
  * \class RecipeTableModel

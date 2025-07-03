@@ -33,6 +33,9 @@
  * \class WaterProfileAdjustmentTool
  *
  * \brief Helps you work out what salts etc to add to water of one profile to make it closer to another profile.
+ *
+ *        TODO: This class / tool still needs a bit more thinking through.  It's not currently as useful as it perhaps
+ *              might be.  But we also need to decide properly how we are going to use \c RecipeUseOfWater.
  */
 class WaterProfileAdjustmentTool : public QDialog, public Ui::waterProfileAdjustmentTool {
    Q_OBJECT

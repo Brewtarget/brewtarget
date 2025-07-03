@@ -130,14 +130,16 @@ public:
    virtual ~Misc();
 
    //! \brief The \c Type.
-   Q_PROPERTY(Type type   READ type   WRITE setType)
+   Q_PROPERTY(Type type           READ type        WRITE setType     )
    //! \brief What to use it for.
-   Q_PROPERTY(QString useFor READ useFor WRITE setUseFor)
+   Q_PROPERTY(QString useFor      READ useFor      WRITE setUseFor   )
    //! \brief The notes.
-   Q_PROPERTY(QString notes READ notes WRITE setNotes)
+   Q_PROPERTY(QString notes       READ notes       WRITE setNotes    )
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   Q_PROPERTY(QString            producer          READ producer          WRITE setProducer       )
-   Q_PROPERTY(QString            productId         READ productId         WRITE setProductId      )
+   Q_PROPERTY(QString producer    READ producer    WRITE setProducer )
+   Q_PROPERTY(QString productId   READ productId   WRITE setProductId)
+
+   SUPPORT_NUM_RECIPES_USED_IN
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    Type    type     () const;

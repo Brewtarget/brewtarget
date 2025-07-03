@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.h is part of Brewtarget, and is copyright the following
- * authors 2009-2023:
+ * qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.h is part of Brewtarget, and is copyright the
+ * following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License

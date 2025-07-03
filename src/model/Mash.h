@@ -132,6 +132,8 @@ public:
    //! \brief The total mash time in minutes. Calculated.
    Q_PROPERTY(double                totalTime_mins            READ totalTime_mins    STORED false )
 
+   SUPPORT_NUM_RECIPES_USED_IN
+
    // ⮜⮜⮜ BeerJSON support does not require any additional properties on this class! ⮞⮞⮞
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================

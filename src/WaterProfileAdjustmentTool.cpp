@@ -28,9 +28,11 @@
 #include <QInputDialog>
 #include <QVector>
 
+#include "MainWindow.h"
 #include "buttons/WaterButton.h"
 #include "catalogs/SaltCatalog.h"
 #include "database/ObjectStoreWrapper.h"
+#include "editors/WaterEditor.h"
 #include "measurement/ColorMethods.h"
 #include "measurement/Unit.h"
 #include "model/Fermentable.h"
@@ -41,15 +43,11 @@
 #include "model/RecipeUseOfWater.h"
 #include "model/Salt.h"
 #include "model/Water.h"
+#include "qtModels/sortFilterProxyModels/RecipeAdjustmentSaltSortFilterProxyModel.h"
 #include "qtModels/tableModels/RecipeAdjustmentSaltTableModel.h"
 #include "qtModels/tableModels/WaterTableModel.h"
-#include "editors/WaterEditor.h"
-#include "qtModels/listModels/WaterListModel.h"
-#include "qtModels/sortFilterProxyModels/RecipeAdjustmentSaltSortFilterProxyModel.h"
-#include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
 #include "utils/VeriTable.h"
 #include "widgets/SmartDigitWidget.h"
-#include "MainWindow.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -320,8 +318,6 @@ public:
    VeriTable<RecipeAdjustmentSalt>   m_saltAdditionsVeriTable;
    QVector<WaterIonDigitInfo> const  m_waterIonDisplays;
    QVector<    SaltDigitInfo> const  m_saltDisplays;
-   WaterListModel *                  m_base_combo_list   = nullptr;
-   WaterListModel *                  m_target_combo_list = nullptr;
    WaterEditor *                     m_base_editor       = nullptr;
    WaterEditor *                     m_target_editor     = nullptr;
    Recipe *                          m_rec               = nullptr;
@@ -335,8 +331,6 @@ public:
    double                            m_total_grains      = 0.0;
    double                            m_thickness         = 0.0;
    double                            m_weighted_colors   = 0.0;
-   WaterSortFilterProxyModel *       m_base_filter       = nullptr;
-   WaterSortFilterProxyModel *       m_target_filter     = nullptr;
 };
 
 WaterProfileAdjustmentTool::WaterProfileAdjustmentTool(QWidget* parent) :
@@ -344,22 +338,9 @@ WaterProfileAdjustmentTool::WaterProfileAdjustmentTool(QWidget* parent) :
    pimpl{std::make_unique<impl>(*this)}{
 
    setupUi(this);
-   // initialize the two buttons and lists (I think)
-   this->pimpl->m_base_combo_list = new WaterListModel(baseProfileCombo);
-   this->pimpl->m_base_filter    = new WaterSortFilterProxyModel(baseProfileCombo);
-   this->pimpl->m_base_filter->setDynamicSortFilter(true);
-   this->pimpl->m_base_filter->setSortLocaleAware(true);
-   this->pimpl->m_base_filter->setSourceModel(this->pimpl->m_base_combo_list);
-   this->pimpl->m_base_filter->sort(0);
-   baseProfileCombo->setModel(this->pimpl->m_base_filter);
 
-   this->pimpl->m_target_combo_list = new WaterListModel(targetProfileCombo);
-   this->pimpl->m_target_filter    = new WaterSortFilterProxyModel(targetProfileCombo);
-   this->pimpl->m_target_filter->setDynamicSortFilter(true);
-   this->pimpl->m_target_filter->setSortLocaleAware(true);
-   this->pimpl->m_target_filter->setSourceModel(this->pimpl->m_target_combo_list);
-   this->pimpl->m_target_filter->sort(0);
-   targetProfileCombo->setModel(this->pimpl->m_target_filter);
+   this->baseProfileCombo->init();
+   this->targetProfileCombo->init();
 
    SMART_FIELD_INIT_FS(WaterProfileAdjustmentTool, label_ca  , btDigit_ca  , double, Measurement::PhysicalQuantity::MassFractionOrConc, 2);
    SMART_FIELD_INIT_FS(WaterProfileAdjustmentTool, label_cl  , btDigit_cl  , double, Measurement::PhysicalQuantity::MassFractionOrConc, 2);
@@ -551,12 +532,9 @@ void WaterProfileAdjustmentTool::update_baseProfile(int selected) {
       return;
    }
 
-   QModelIndex proxyIdx(this->pimpl->m_base_filter->index(baseProfileCombo->currentIndex(),0));
-   QModelIndex sourceIdx(this->pimpl->m_base_filter->mapToSource(proxyIdx));
-   Water * profile = this->pimpl->m_base_combo_list->at(sourceIdx.row());
-
+   auto profile = this->baseProfileCombo->getItem();
    if (profile) {
-      this->pimpl->m_base = ObjectStoreWrapper::getSharedFromRaw<Water>(profile);
+      this->pimpl->m_base = profile;
       this->pimpl->m_base->setType(Water::Type::Base);
       qDebug() << Q_FUNC_INFO << "Set base to" << *this->pimpl->m_base;
       baseProfileButton->setWater(this->pimpl->m_base);
@@ -572,13 +550,9 @@ void WaterProfileAdjustmentTool::update_targetProfile(int selected) {
       return;
    }
 
-   QModelIndex proxyIdx(this->pimpl->m_target_filter->index(targetProfileCombo->currentIndex(),0));
-   QModelIndex sourceIdx(this->pimpl->m_target_filter->mapToSource(proxyIdx));
-   Water * profile = this->pimpl->m_target_combo_list->at(sourceIdx.row());
-
+   auto profile = this->targetProfileCombo->getItem();
    if (profile) {
-      // Comment above for copy of this->pimpl->m_base applies equally here
-      this->pimpl->m_target = ObjectStoreWrapper::getSharedFromRaw<Water>(profile);
+      this->pimpl->m_target = profile;
       this->pimpl->m_target->setType(Water::Type::Target);
       qDebug() << Q_FUNC_INFO << "Set target to" << *this->pimpl->m_target;
       targetProfileButton->setWater(this->pimpl->m_target);

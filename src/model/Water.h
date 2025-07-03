@@ -216,6 +216,8 @@ public:
    Q_PROPERTY(std::optional<double> nitrite_ppm    READ nitrite_ppm      WRITE setNitrite_ppm  )
    Q_PROPERTY(std::optional<double> fluoride_ppm   READ fluoride_ppm     WRITE setFluoride_ppm )
 
+   SUPPORT_NUM_RECIPES_USED_IN
+
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    double                calcium_ppm     () const;
    double                bicarbonate_ppm () const;

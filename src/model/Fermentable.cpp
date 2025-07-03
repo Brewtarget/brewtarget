@@ -422,5 +422,8 @@ void Fermentable::setFan_ppm                  (std::optional<double>     const  
 void Fermentable::setFermentability_pct       (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::fermentability_pct       , this->m_fermentability_pct       , val                                  ); return; }
 void Fermentable::setBetaGlucan_ppm           (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::betaGlucan_ppm           , this->m_betaGlucan_ppm               , val                                  ); return; }
 
+// This class supports NamedEntity::numRecipesUsedIn
+IMPLEMENT_NUM_RECIPES_USED_IN(Fermentable)
+
 // Insert the boiler-plate stuff for inventory
 INGREDIENT_BASE_COMMON_CODE(Fermentable)

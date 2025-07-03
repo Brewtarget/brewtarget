@@ -37,7 +37,9 @@
  *                            \          /
  *                           StyleListModel
  *
- *        Derived classes need to implement lessThan to provide the right per-column logic for this.
+ *        Note that, although Qt is sufficiently flexible to allow you to use \c QAbstractListModel to build tables, we
+ *        stick to \c QAbstractTableModel for that.  We only use \c QAbstractListModel for building lists of names of
+ *        things.  Currently this is for the benefit of \c BtComboBoxNamedEntity subclasses.
  */
 template<class Derived> class ListModelPhantom;
 template<class Derived, class NE>

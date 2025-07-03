@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/MiscTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * qtModels/tableModels/MiscTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -35,19 +35,12 @@
 class BtStringConst;
 class Recipe;
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// MiscTableModel::ColumnIndex::Type etc.
-class MiscTableModel;
-template <> struct TableModelTraits<MiscTableModel> {
-   enum class ColumnIndex {
-      Name              ,
-      Type              ,
-///      Use               ,
-///      Time              ,
-      TotalInventory    ,
-      TotalInventoryType,
-   };
-};
+// Define the columns on this table
+TABLE_MODEL_TRAITS(Misc, Name              ,
+                         Type              ,
+                         TotalInventory    ,
+                         TotalInventoryType,
+                         NumRecipesUsedIn  ,)
 
 /*!
  * \class MiscTableModel

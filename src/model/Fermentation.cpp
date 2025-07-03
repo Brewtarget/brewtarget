@@ -116,6 +116,9 @@ void Fermentation::acceptStepChange(QMetaProperty prop, QVariant val) {
    return;
 }
 
+// This class supports NamedEntity::numRecipesUsedIn
+IMPLEMENT_NUM_RECIPES_USED_IN(Fermentation)
+
 // Boilerplate code for FolderBase
 FOLDER_BASE_COMMON_CODE(Fermentation)
 

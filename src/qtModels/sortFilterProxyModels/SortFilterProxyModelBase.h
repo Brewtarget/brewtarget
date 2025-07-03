@@ -30,7 +30,12 @@
  *                            \          /
  *                          HopSortFilterProxyModel
  *
- *        Derived classes need to implement lessThan to provide the right per-column logic for this.
+ *        Derived classes need include \c SORT_FILTER_PROXY_MODEL_COMMON_DECL in their header file and
+ *        \c SORT_FILTER_PROXY_MODEL_COMMON_CODE in their \c .cpp file.  This will provide an appropriate override of
+ *        \c QSortFilterProxyModel::lessThan to do the per-column logic for sorting (via \c TableModelBase::isLessThan).
+ *
+ *        NOTE: In the past, we have used both \c QAbstractListModel and \c QAbstractTableModel in different places,
+ *              requiring this class to support both. ¥¥¥
  */
 template<class Derived> class SortFilterProxyModelPhantom;
 template<class Derived, class NeTableModel, class NeListModel>
@@ -111,18 +116,20 @@ protected:
       return true;
    }
 
-   bool doLessThan(QModelIndex const & left, QModelIndex const & right) const {
-      QAbstractItemModel * source = this->derived().sourceModel();
-      QVariant leftItem, rightItem;
-      if (source) {
-         leftItem = source->data(left);
-         rightItem = source->data(right);
+   bool doLessThan(QModelIndex const & leftIndex, QModelIndex const & rightIndex) const {
+      NeTableModel * tableModel = qobject_cast<NeTableModel *>(this->derived().sourceModel());
+      if (tableModel) {
+         return tableModel->isLessThan(leftIndex, rightIndex);
       }
-
-      // As per more detailed comment in qtModels/tableModels/ItemDelegate.h, we need "typename" here only until Apple ship Clang
-      // 16 or later as their standard C++ compiler.
-      auto const columnIndex = static_cast<typename NeTableModel::ColumnIndex>(left.column());
-      return this->derived().isLessThan(columnIndex, leftItem, rightItem);
+      NeListModel* listModel = qobject_cast<NeListModel*>(this->derived().sourceModel());
+      if (listModel) {
+         // List model is for a single column -- eg a combo box -- and we assume it's always a string
+         QVariant  leftItem = this->derived().data( leftIndex);
+         QVariant rightItem = this->derived().data(rightIndex);
+         return leftItem.toString() < rightItem.toString();
+      }
+      qWarning() << Q_FUNC_INFO << "Unrecognised source model";
+      return true;
    }
 
 private:

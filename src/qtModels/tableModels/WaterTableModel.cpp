@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/WaterTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * qtModels/tableModels/WaterTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -37,13 +37,14 @@ WaterTableModel::WaterTableModel(QTableView * parent, bool editable) :
       parent,
       editable,
       {
-         TABLE_MODEL_HEADER(Water, Name       , tr("Name"             ), PropertyNames::NamedEntity::name     ),
-         TABLE_MODEL_HEADER(Water, Calcium    , tr("Calcium (ppm)"    ), PropertyNames::Water::calcium_ppm    ),
-         TABLE_MODEL_HEADER(Water, Bicarbonate, tr("Bicarbonate (ppm)"), PropertyNames::Water::bicarbonate_ppm),
-         TABLE_MODEL_HEADER(Water, Sulfate    , tr("Sulfate (ppm)"    ), PropertyNames::Water::sulfate_ppm    ),
-         TABLE_MODEL_HEADER(Water, Chloride   , tr("Chloride (ppm)"   ), PropertyNames::Water::chloride_ppm   ),
-         TABLE_MODEL_HEADER(Water, Sodium     , tr("Sodium (ppm)"     ), PropertyNames::Water::sodium_ppm     ),
-         TABLE_MODEL_HEADER(Water, Magnesium  , tr("Magnesium (ppm)"  ), PropertyNames::Water::magnesium_ppm  ),
+         TABLE_MODEL_HEADER(Water, Name            , tr("Name"             ), PropertyNames::NamedEntity::name            ),
+         TABLE_MODEL_HEADER(Water, Calcium         , tr("Calcium (ppm)"    ), PropertyNames::Water::calcium_ppm           ),
+         TABLE_MODEL_HEADER(Water, Bicarbonate     , tr("Bicarbonate (ppm)"), PropertyNames::Water::bicarbonate_ppm       ),
+         TABLE_MODEL_HEADER(Water, Sulfate         , tr("Sulfate (ppm)"    ), PropertyNames::Water::sulfate_ppm           ),
+         TABLE_MODEL_HEADER(Water, Chloride        , tr("Chloride (ppm)"   ), PropertyNames::Water::chloride_ppm          ),
+         TABLE_MODEL_HEADER(Water, Sodium          , tr("Sodium (ppm)"     ), PropertyNames::Water::sodium_ppm            ),
+         TABLE_MODEL_HEADER(Water, Magnesium       , tr("Magnesium (ppm)"  ), PropertyNames::Water::magnesium_ppm         ),
+         TABLE_MODEL_HEADER(Water, NumRecipesUsedIn, tr("N° Recipes"       ), PropertyNames::NamedEntity::numRecipesUsedIn),
       }
    },
    TableModelBase<WaterTableModel, Water>{} {

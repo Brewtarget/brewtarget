@@ -2104,7 +2104,7 @@ void Recipe::setMashId        (int const id) { this->m_mashId         = id; retu
 void Recipe::setBoilId        (int const id) { this->m_boilId         = id; return; }
 void Recipe::setFermentationId(int const id) { this->m_fermentationId = id; return; }
 
-//==============================="SET" METHODS=================================
+//============================================= "SETTER" MEMBER FUNCTIONS ==============================================
 void Recipe::setType(Recipe::Type const val) {
    SET_AND_NOTIFY(PropertyNames::Recipe::type, this->m_type, val);
    return;

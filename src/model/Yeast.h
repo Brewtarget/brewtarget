@@ -275,6 +275,8 @@ public:
    Q_PROPERTY(std::optional<bool>    killerProducingKlusToxin  READ killerProducingKlusToxin   WRITE setKillerProducingKlusToxin)
    Q_PROPERTY(std::optional<bool>    killerNeutral             READ killerNeutral              WRITE setKillerNeutral           )
 
+   SUPPORT_NUM_RECIPES_USED_IN
+
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    Type                        type                     () const;
    Form                        form                     () const;

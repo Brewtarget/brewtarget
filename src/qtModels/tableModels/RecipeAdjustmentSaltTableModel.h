@@ -40,20 +40,14 @@
 class Mash;
 class Recipe;
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// RecipeAdjustmentSaltTableModel::ColumnIndex::AddTo etc.
-class RecipeAdjustmentSaltTableModel;
-template <> struct TableModelTraits<RecipeAdjustmentSaltTableModel> {
-   enum class ColumnIndex {
-      Name          ,
-      Type          ,
-      Amount        ,
-      AmountType    ,
-      TotalInventory,
-      AddTo         ,
-      PctAcid       ,
-   };
-};
+// Define the columns on this table
+TABLE_MODEL_TRAITS(RecipeAdjustmentSalt, Name          ,
+                                         Type          ,
+                                         Amount        ,
+                                         AmountType    ,
+                                         TotalInventory,
+                                         AddTo         ,
+                                         PctAcid       ,)
 
 /*!
  * \class RecipeAdjustmentSaltTableModel

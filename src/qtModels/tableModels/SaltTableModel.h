@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/SaltTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * qtModels/tableModels/SaltTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -40,18 +40,13 @@
 class Mash;
 class Recipe;
 
-// You have to get the order of everything right with traits classes, but the end result is that we can refer to
-// SaltTableModel::ColumnIndex::AddTo etc.
-class SaltTableModel;
-template <> struct TableModelTraits<SaltTableModel> {
-   enum class ColumnIndex {
-      Name   ,
-      Type   ,
-      PctAcid,
-      TotalInventory    ,
-      TotalInventoryType,
-   };
-};
+// Define the columns on this table
+TABLE_MODEL_TRAITS(Salt, Name              ,
+                         Type              ,
+                         PctAcid           ,
+                         TotalInventory    ,
+                         TotalInventoryType,
+                         NumRecipesUsedIn  ,)
 
 /*!
  * \class SaltTableModel

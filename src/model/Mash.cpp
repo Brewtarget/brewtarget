@@ -215,6 +215,9 @@ void Mash::acceptStepChange(QMetaProperty prop, QVariant val) {
    return;
 }
 
+// This class supports NamedEntity::numRecipesUsedIn
+IMPLEMENT_NUM_RECIPES_USED_IN(Mash)
+
 // Boilerplate code for FolderBase
 FOLDER_BASE_COMMON_CODE(Mash)
 
