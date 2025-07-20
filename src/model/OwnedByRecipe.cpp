@@ -24,7 +24,7 @@
 
 QString OwnedByRecipe::localisedName() { return tr("Owned By Recipe"); }
 
-bool OwnedByRecipe::isEqualTo(NamedEntity const & other) const {
+bool OwnedByRecipe::isEqualTo([[maybe_unused]] NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid
 //   OwnedByRecipe const & rhs = static_cast<OwnedByRecipe const &>(other);
    // Base class will already have ensured names are equal

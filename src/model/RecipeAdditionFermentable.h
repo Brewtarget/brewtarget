@@ -48,7 +48,7 @@ class RecipeAdditionFermentable : public RecipeAddition,
                                   public IngredientAmount<RecipeAdditionFermentable, Fermentable> {
    Q_OBJECT
 
-   RECIPE_ADDITION_DECL(RecipeAdditionFermentable, Fermentable)
+   RECIPE_ADDITION_DECL(RecipeAdditionFermentable, Fermentable, fermentable)
 
    INGREDIENT_AMOUNT_DECL(RecipeAdditionFermentable, Fermentable)
 
@@ -80,6 +80,7 @@ public:
    virtual ~RecipeAdditionFermentable();
 
    //=================================================== PROPERTIES ====================================================
+   //! See \c RecipeAdditionBase for getter and setter
    Q_PROPERTY(Fermentable * fermentable   READ fermentable   WRITE setFermentable             )
 
    // See model/IngredientAmount.h
@@ -90,10 +91,8 @@ public:
    Q_PROPERTY(bool                          isWeight  READ isWeight   WRITE setIsWeight)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   Fermentable * fermentable () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setFermentable(Fermentable * const val);
 
    //! If something is added at the end of the boil, this will return \c true
    bool addAfterBoil() const;

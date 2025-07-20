@@ -55,7 +55,7 @@ class RecipeAdjustmentSalt : public IngredientInRecipe,
                              public IngredientAmount<RecipeAdjustmentSalt, Salt> {
    Q_OBJECT
 
-   RECIPE_ADDITION_DECL(RecipeAdjustmentSalt, Salt)
+   RECIPE_ADDITION_DECL(RecipeAdjustmentSalt, Salt, salt)
 
    INGREDIENT_AMOUNT_DECL(RecipeAdjustmentSalt, Salt)
 
@@ -99,6 +99,7 @@ public:
    virtual ~RecipeAdjustmentSalt();
 
    //=================================================== PROPERTIES ====================================================
+   //! See \c RecipeAdditionBase for getter and setter
    Q_PROPERTY(Salt * salt   READ salt   WRITE setSalt             )
 
    // See model/IngredientAmount.h
@@ -112,11 +113,9 @@ public:
    Q_PROPERTY(WhenToAdd whenToAdd      READ whenToAdd      WRITE setWhenToAdd       )
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   Salt *               salt          () const;
    RecipeAdjustmentSalt::WhenToAdd whenToAdd()      const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setSalt          (Salt *               const val);
    void setWhenToAdd     (RecipeAdjustmentSalt::WhenToAdd val);
 
    virtual NamedEntity * ensureExists(BtStringConst const & property) override;

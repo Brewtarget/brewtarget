@@ -207,14 +207,10 @@ private:
    }
 
    /**
-    * \brief Connect DerivedStep changed signals to their parent Derived objects.
-    *
-    *        Needs to be called \b after all the calls to ObjectStoreTyped<FooBar>::getInstance().loadAll()
+    * \brief Called from \c ObjectStoreTyped::postLoadInit
     */
-   static void doConnectSignals() {
-      for (auto dd : ObjectStoreTyped<Derived>::getInstance().getAllRaw()) {
-         dd->m_stepSet.connectAllItemChangedSignals();
-      }
+   void connectSignals() {
+      this->m_stepSet.connectAllItemChangedSignals();
       return;
    }
 
@@ -289,11 +285,6 @@ TypeLookup const StepOwnerBase<Derived, DerivedStep>::typeLookup {
       QList<std::shared_ptr<NeName##Step>> LcNeName##Steps        () const;              \
       void set##NeName##Steps        (QList<std::shared_ptr<NeName##Step>> const & val); \
                                                                                          \
-      /** \brief Connect DerivedStep changed signals to their parent Mashes. */          \
-      /*         Needs to be called \b after all the calls to                */          \
-      /*         ObjectStoreTyped<FooBar>::getInstance().loadAll()           */          \
-      static void connectSignals();                                                      \
-                                                                                         \
       virtual void setKey(int key) override;                                             \
                                                                                          \
       /** \brief NeName owns its NeName##Steps so needs to delete them if it */          \
@@ -311,8 +302,6 @@ TypeLookup const StepOwnerBase<Derived, DerivedStep>::typeLookup {
    void NeName::set##NeName##Steps(QList<std::shared_ptr<NeName##Step>> const & val) {                \
       this->m_stepSet.setAll(val); return;                                                            \
    }                                                                                                  \
-                                                                                                      \
-   void NeName::connectSignals() { StepOwnerBase<NeName, NeName##Step>::doConnectSignals(); return; } \
                                                                                                       \
    void NeName::setKey(int key) { this->doSetKey(key); return; }                                      \
                                                                                                       \

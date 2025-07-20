@@ -48,7 +48,7 @@ class RecipeAdditionHop : public RecipeAddition,
                           public IngredientAmount<RecipeAdditionHop, Hop> {
    Q_OBJECT
 
-   RECIPE_ADDITION_DECL(RecipeAdditionHop, Hop)
+   RECIPE_ADDITION_DECL(RecipeAdditionHop, Hop, hop)
 
    INGREDIENT_AMOUNT_DECL(RecipeAdditionHop, Hop)
 
@@ -74,8 +74,8 @@ public:
    Q_ENUM(Use)
 
    /*!
-    * \brief Mapping between \c RecipeAdditionHop::Use and string values suitable for serialisation in DB, BeerXML, etc (but \b not
-    *        used in BeerJSON)
+    * \brief Mapping between \c RecipeAdditionHop::Use and string values suitable for serialisation in DB, BeerXML, etc
+    *        (but \b not used in BeerJSON)
     *
     *        This can also be used to obtain the number of values of \c Type, albeit at run-time rather than
     *        compile-time.  (One day, C++ will have reflection and we won't need to do things this way.)
@@ -114,6 +114,7 @@ public:
     *        \b deprecated for other use.
     */
    Q_PROPERTY(Use   use   READ use   WRITE setUse STORED false)
+   //! See \c RecipeAdditionBase for getter and setter
    Q_PROPERTY(Hop * hop   READ hop   WRITE setHop             )
 
    // See model/IngredientAmount.h
@@ -126,11 +127,9 @@ public:
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    // Ideally this too would be marked [[deprecated]], but we do need to refer to it in RecipeAdditionHop::typeLookup
    Use use() const;
-   Hop * hop () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    [[deprecated]] void setUse(Use const val);
-   void setHop(Hop * const val);
 
    /**
     * \brief With BeerJSON changes, there is no longer an explicit flag for a first wort hop addition.  You have to

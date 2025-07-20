@@ -289,13 +289,13 @@ public:
    /**
     * \brief Special case of \c findAllMatching that returns a list of all cached objects of a given type
     */
-   QList<std::shared_ptr<NE> > getAll() {
+   QList<std::shared_ptr<NE> > getAll() const {
       return this->convertShared(this->ObjectStore::getAll());
    }
    /**
     * \brief Raw pointer version of \c getAll
     */
-   QList<NE *> getAllRaw() {
+   QList<NE *> getAllRaw() const {
       return this->convertRaw(this->ObjectStore::getAll());
    }
 
@@ -413,6 +413,8 @@ private:
  *        NOTE: It doesn't matter if some or all of the \c ObjectStoreTyped instances were initialised before this
  *              function was called.  They will not be initialised twice.  If any failed initialisation then that WILL
  *              be picked up by this function and reported as an error.
+ *
+ *        NOTE: The other thing this function does is to ensure that, where it exists, \c NE::initialiseAll is called.
  *
  * \param errorMessage OUT - In the event of an error, will hold info suitable for showing to the user about which
  *                           stores could not be initialised.

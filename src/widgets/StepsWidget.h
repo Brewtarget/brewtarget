@@ -46,14 +46,14 @@ public:
    void restoreUiState(BtStringConst const & property, BtStringConst const & section);
 
    //! UI elements are public
-   QHBoxLayout * m_horizontalLayout_main;
-   QTableView  * m_tableView_steps;
-   QVBoxLayout * m_verticalLayout_buttons;
-   QPushButton * m_pushButton_addStep;
-   QPushButton * m_pushButton_removeStep;
-   QPushButton * m_pushButton_moveStepUp;
-   QPushButton * m_pushButton_moveStepDown;
-   QPushButton * m_pushButton_editStep;
+   std::unique_ptr<QHBoxLayout> m_horizontalLayout_main;
+   std::unique_ptr<QTableView > m_tableView_steps;
+   std::unique_ptr<QVBoxLayout> m_verticalLayout_buttons;
+   std::unique_ptr<QPushButton> m_pushButton_addStep;
+   std::unique_ptr<QPushButton> m_pushButton_removeStep;
+   std::unique_ptr<QPushButton> m_pushButton_moveStepUp;
+   std::unique_ptr<QPushButton> m_pushButton_moveStepDown;
+   std::unique_ptr<QPushButton> m_pushButton_editStep;
 
    QIcon m_icon_addStep;
    QIcon m_icon_removeStep;

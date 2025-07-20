@@ -103,12 +103,22 @@ public:
       // Note, also, that ListModelBase already handles updates from the object store (signalObjectInserted,
       // signalObjectDeleted), so we don't have to worry here about keeping the combo box contents in-sync with the DB.
       //
-      this->m_listModel            = std::make_unique<NeListModel           >(&this->derived());
-      this->m_sortFilterProxyModel = std::make_unique<NeSortFilterProxyModel>(&this->derived());
-      this->m_sortFilterProxyModel->setDynamicSortFilter(true);
+      // NB: Since we are managing object lifetime via unique_ptr, we don't pass in a parent pointer (as that would ask
+      //     Qt to manage the object destruction.
+      //
+      this->m_listModel            = std::make_unique<NeListModel           >();
+      this->m_sortFilterProxyModel = std::make_unique<NeSortFilterProxyModel>();
+
+      //
+      // Setting the dynamicSortFilter property to true means that the proxy model is dynamically sorted and filtered
+      // whenever the contents of the source model change.  Per the Qt docs, "you should not update the source model
+      // through the proxy model when dynamicSortFilter is true".
+      //
+      this->m_sortFilterProxyModel->setDynamicSortFilter(false);
       this->m_sortFilterProxyModel->setSortLocaleAware(true);
       this->m_sortFilterProxyModel->setSourceModel(this->m_listModel.get());
       this->m_sortFilterProxyModel->sort(0);
+
       this->derived().setModel(this->m_sortFilterProxyModel.get());
 
       //

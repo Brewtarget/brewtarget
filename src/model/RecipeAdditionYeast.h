@@ -51,7 +51,7 @@ class RecipeAdditionYeast : public RecipeAddition,
                             public IngredientAmount<RecipeAdditionYeast, Yeast> {
    Q_OBJECT
 
-   RECIPE_ADDITION_DECL(RecipeAdditionYeast, Yeast)
+   RECIPE_ADDITION_DECL(RecipeAdditionYeast, Yeast, yeast)
 
    INGREDIENT_AMOUNT_DECL(RecipeAdditionYeast, Yeast)
 
@@ -83,6 +83,7 @@ public:
    virtual ~RecipeAdditionYeast();
 
    //=================================================== PROPERTIES ====================================================
+   //! See \c RecipeAdditionBase for getter and setter
    Q_PROPERTY(Yeast * yeast   READ yeast   WRITE setYeast             )
 
    // See model/IngredientAmount.h
@@ -103,14 +104,12 @@ public:
    Q_PROPERTY(std::optional<bool>    addToSecondary            READ addToSecondary            WRITE setAddToSecondary   )
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   Yeast *               yeast            () const;
    std::optional<double> attenuation_pct  () const;
    std::optional<int   > timesCultured    () const;
    std::optional<int   > cellCountBillions() const;
    std::optional<bool  > addToSecondary   () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setYeast            (Yeast *               const val);
    void setAttenuation_pct  (std::optional<double> const val);
    void setTimesCultured    (std::optional<int   > const val);
    void setCellCountBillions(std::optional<int   > const val);

@@ -847,8 +847,38 @@ ObjectStoreTyped<NE> & ObjectStoreTyped<NE>::getInstance(Database * database) {
    return ostSingleton;
 }
 
+namespace {
+   //! Helper for \c postLoadInit
+   template<typename T>
+   concept HasConnectSignalsMemberFunction = requires(T t) {
+      // Need `std::same_as<void>` rather than `void` here, otherwise get error that "return-type-requirement is not a
+      // type-constraint".
+      { t.connectSignals() } -> std::same_as<void>;
+   };
+
+   /**
+    * Called from \c InitialiseAllObjectStores
+    */
+   template<class NE>
+   void postLoadInit(ObjectStoreTyped<NE> const & store) {
+      //
+      // For the moment, we are assuming that it's only connecting signals that has to happen after all objects are
+      // loaded.  So, if the class has a connectSignals() member function then we call it for each object of that class
+      // in the store.
+      //
+      if constexpr (HasConnectSignalsMemberFunction<NE>) {
+         qDebug() << Q_FUNC_INFO << "Connecting signals for" << store<< "objects";
+         for (NE * ne : store.getAllRaw()) {
+            ne->connectSignals();
+         }
+      }
+      return;
+   }
+}
+
+
 //
-// We have to make sure that each version of the above function gets instantiated.  NOTE: This is the 1st of 3 places we
+// We have to make sure that each version of the above function gets instantiated.  NOTE: This is the 1st of 4 places we
 // need to add any new ObjectStoreTyped
 //
 // You might think the use in InitialiseAllObjectStores below is sufficient for this, but the GCC linker says
@@ -887,7 +917,7 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    // It's deliberate that we don't stop after the first error.  If there is a problem, it's quite useful to know how
    // extensive it is.
    QStringList errors;
-   // NOTE: This is the 2nd of 3 places we need to add any new ObjectStoreTyped
+   // NOTE: This is the 2nd of 4 places we need to add any new ObjectStoreTyped
    if (ObjectStoreTyped<Boil                     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Boil"                     ; }
    if (ObjectStoreTyped<BoilStep                 >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "BoilStep"                 ; }
    if (ObjectStoreTyped<BrewNote                 >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "BrewNote"                 ; }
@@ -923,12 +953,52 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
       return false;
    }
 
+   //
+   // Now that we have loaded all objects into memory, we have, in some cases, some post-construction initialisation to
+   // do.  This is typically things such as connecting signals (eg between Recipes and their ingredients), which would
+   // be hard to do in the constructors (because it would then create an order dependency in loading in objects from the
+   // DB).
+   //
+   // We could omit from this list object stores that don't require any post-construction initialisation.  However, it's
+   // simpler to just include everything here, and rely on the compiler to optimise out the cases where there is no work
+   // to be done (see postLoadInit above).
+   //
+   // NOTE: This is the 3rd of 4 places we need to add any new ObjectStoreTyped
+   postLoadInit(ObjectStoreTyped<Boil                     >::getInstance());
+   postLoadInit(ObjectStoreTyped<BoilStep                 >::getInstance());
+   postLoadInit(ObjectStoreTyped<BrewNote                 >::getInstance());
+   postLoadInit(ObjectStoreTyped<Equipment                >::getInstance());
+   postLoadInit(ObjectStoreTyped<Fermentable              >::getInstance());
+   postLoadInit(ObjectStoreTyped<Fermentation             >::getInstance());
+   postLoadInit(ObjectStoreTyped<FermentationStep         >::getInstance());
+   postLoadInit(ObjectStoreTyped<Hop                      >::getInstance());
+   postLoadInit(ObjectStoreTyped<Instruction              >::getInstance());
+   postLoadInit(ObjectStoreTyped<InventoryFermentable     >::getInstance());
+   postLoadInit(ObjectStoreTyped<InventoryHop             >::getInstance());
+   postLoadInit(ObjectStoreTyped<InventoryMisc            >::getInstance());
+   postLoadInit(ObjectStoreTyped<InventorySalt            >::getInstance());
+   postLoadInit(ObjectStoreTyped<InventoryYeast           >::getInstance());
+   postLoadInit(ObjectStoreTyped<Mash                     >::getInstance());
+   postLoadInit(ObjectStoreTyped<MashStep                 >::getInstance());
+   postLoadInit(ObjectStoreTyped<Misc                     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Recipe                   >::getInstance());
+   postLoadInit(ObjectStoreTyped<RecipeAdditionFermentable>::getInstance());
+   postLoadInit(ObjectStoreTyped<RecipeAdditionHop        >::getInstance());
+   postLoadInit(ObjectStoreTyped<RecipeAdditionMisc       >::getInstance());
+   postLoadInit(ObjectStoreTyped<RecipeAdditionYeast      >::getInstance());
+   postLoadInit(ObjectStoreTyped<RecipeAdjustmentSalt     >::getInstance());
+   postLoadInit(ObjectStoreTyped<RecipeUseOfWater         >::getInstance());
+   postLoadInit(ObjectStoreTyped<Salt                     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Style                    >::getInstance());
+   postLoadInit(ObjectStoreTyped<Water                    >::getInstance());
+   postLoadInit(ObjectStoreTyped<Yeast                    >::getInstance());
+
    return true;
 }
 
 namespace {
    QVector<ObjectStore const *> getAllObjectStores(Database * database = nullptr) {
-      // NOTE: This is the 3rd of 3 places we need to add any new ObjectStoreTyped
+      // NOTE: This is the 4th of 4 places we need to add any new ObjectStoreTyped
       static QVector<ObjectStore const *> allObjectStores {
          &ObjectStoreTyped<Boil                     >::getInstance(database),
          &ObjectStoreTyped<BoilStep                 >::getInstance(database),

@@ -679,6 +679,26 @@ public:
       return;
    }
 
+   /**
+    * \brief Search the set with a lambda.
+    *
+    * \param matchFunction Takes a pointer to an object and returns \c true if the object is a match or \c false otherwise.
+    *
+    * \return Shared pointer to the first object that gives a \c true result to \c matchFunction, or \c nullptr if none
+    *         does.
+    */
+   std::shared_ptr<Item> findFirstMatching(
+      std::function<bool(std::shared_ptr<Item>)> const & matchFunction
+   ) {
+      auto items = this->items();
+
+      auto result = std::find_if(items.cbegin(), items.cend(), matchFunction);
+      if (result == items.cend()) {
+         return nullptr;
+      }
+      return *result;
+   }
+
    //! \brief Convenience function for logging
    template<class S>
    friend S & operator<<(S & stream, OwnedSet const & ownedSet) {

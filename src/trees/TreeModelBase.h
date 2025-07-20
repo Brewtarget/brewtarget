@@ -446,7 +446,8 @@ public:
       // insertChild.
       TreeNode * parentNode = this->doTreeNode(parentIndex);
 
-      qDebug() << Q_FUNC_INFO << "Inserting" << *item << "as child #" << childNumber << "of" << parentIndex;
+      // Normally leave this debug statement commented out as otherwise it generates too much logging
+//      qDebug() << Q_FUNC_INFO << "Inserting" << *item << "as child #" << childNumber << "of" << parentIndex;
       if (!this->insertChild(parentIndex, childNumber, item)) {
          qCritical() << Q_FUNC_INFO << "Insert failed";
          return;
@@ -480,7 +481,11 @@ public:
          Q_FUNC_INFO << NE::staticMetaObject.className() << "tree now has" <<
          numPrimaryItems << "primary items";
       qDebug().noquote() << Q_FUNC_INFO << "Tree:\n" << this->m_rootNode->subTreeToString();
-      if (numPrimaryItems != primaryItems.length()) {
+      //
+      // It's possible for the tree to have _more_ primary items than we inserted (because, eg in a Recipe tree, we add
+      // the ancestors of each recipe), but it should never have fewer.
+      //
+      if (numPrimaryItems < primaryItems.length()) {
          qCritical() <<
             Q_FUNC_INFO << "Inserting" << primaryItems.length() << NE::staticMetaObject.className() << "items in tree "
             "only resulted in" << numPrimaryItems << "primary items";
@@ -549,7 +554,8 @@ public:
 
       while (!queue.isEmpty()) {
          auto nodeToSearchIn = queue.dequeue();
-         qDebug() << Q_FUNC_INFO << "Find" << ne << "(at" << static_cast<void const *>(ne) << ") in" << *nodeToSearchIn;
+         // Normally leave the next line commented out as it generates quite a bit of logging
+//         qDebug() << Q_FUNC_INFO << "Find" << ne << "(at" << static_cast<void const *>(ne) << ") in" << *nodeToSearchIn;
          if (nodeToSearchIn->classifier() == TreeNodeClassifier::PrimaryItem) {
             //
             // This is a compile-time check whether it's possible in this tree for primary items to have other primary
@@ -576,7 +582,7 @@ public:
 //                        static_cast<void *>(itemNode->underlyingItem().get()) << ")";
                      if (itemNode->underlyingItem().get() == const_cast<NE *>(ne)) {
                         // We found what we were looking for
-                        qDebug() << Q_FUNC_INFO << "Found as child #" << childNumInPrimaryItem << "of" << searchInItem;
+//                        qDebug() << Q_FUNC_INFO << "Found as child #" << childNumInPrimaryItem << "of" << searchInItem;
                         return this->derived().createIndex(childNumInPrimaryItem, 0, itemNode.get());
                      }
                      //
@@ -614,7 +620,7 @@ public:
 //                  static_cast<void *>(itemNode->underlyingItem().get()) << ")";
                if (itemNode->underlyingItem().get() == const_cast<NE *>(ne)) {
                   // We found what we were looking for
-                  qDebug() << Q_FUNC_INFO << "Found as child #" << childNumInFolder << "of" << folderNodeToSearchIn;
+//                  qDebug() << Q_FUNC_INFO << "Found as child #" << childNumInFolder << "of" << folderNodeToSearchIn;
                   return this->derived().createIndex(childNumInFolder, 0, itemNode.get());
                }
                if constexpr (std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
@@ -626,7 +632,7 @@ public:
             } else if (std::holds_alternative<std::shared_ptr<TreeFolderNode<NE>>>(child)) {
                // We found another folder to look in.  Add it to the list.
                auto folderNode = std::get<std::shared_ptr<TreeFolderNode<NE>>>(child);
-               qDebug() << Q_FUNC_INFO << "folderNode:" << *folderNode;
+//               qDebug() << Q_FUNC_INFO << "folderNode:" << *folderNode;
                queue.enqueue(folderNode.get());
             } else {
                // It should be impossible to get here, as folders only contain either primary items or other folders
@@ -792,7 +798,8 @@ public:
                                                 row);
 
       auto childNode = std::make_shared<TreeItemNode<ElementType>>(this->derived(), &parentNode, element);
-      qDebug() << Q_FUNC_INFO << "Inserting new node " << *childNode << "as child #" << row << "of" << parentNode;
+      // Normally leave this debug statement commented out as otherwise it generates too much logging
+//      qDebug() << Q_FUNC_INFO << "Inserting new node " << *childNode << "as child #" << row << "of" << parentNode;
 
       // Parent node can only be one of two types. (It cannot be SecondaryItem because, although we allow Recipes to
       // contain Recipes -- for Recipe versioning -- we don't allow BrewNotes to contain BrewNotes etc.)
@@ -806,7 +813,8 @@ public:
          succeeded = parentItemNode.insertChild(row, childNode);
       }
 
-      qDebug() << Q_FUNC_INFO << "Insert" << (succeeded ? "succeeded" : "failed");
+      // Normally leave this debug statement commented out as otherwise it generates too much logging
+//      qDebug() << Q_FUNC_INFO << "Insert" << (succeeded ? "succeeded" : "failed");
 
       // It's a coding error if the parent node into which we just inserted a child doesn't now have one more child than
       // before!

@@ -116,20 +116,66 @@ protected:
       return true;
    }
 
-   bool doLessThan(QModelIndex const & leftIndex, QModelIndex const & rightIndex) const {
+   /**
+    *
+    * NOTE Per https://doc.qt.io/qt-6/qsortfilterproxymodel.html#lessThan that the indices passed in correspond to the
+    *      source model.
+    */
+   bool doLessThan(QModelIndex const & sourceLeft, QModelIndex const & sourceRight) const {
       NeTableModel * tableModel = qobject_cast<NeTableModel *>(this->derived().sourceModel());
       if (tableModel) {
-         return tableModel->isLessThan(leftIndex, rightIndex);
+         return tableModel->isLessThan(sourceLeft, sourceRight);
       }
       NeListModel* listModel = qobject_cast<NeListModel*>(this->derived().sourceModel());
       if (listModel) {
          // List model is for a single column -- eg a combo box -- and we assume it's always a string
-         QVariant  leftItem = this->derived().data( leftIndex);
-         QVariant rightItem = this->derived().data(rightIndex);
+         QVariant  leftItem = this->derived().data( sourceLeft);
+         QVariant rightItem = this->derived().data(sourceRight);
          return leftItem.toString() < rightItem.toString();
       }
       qWarning() << Q_FUNC_INFO << "Unrecognised source model";
       return true;
+   }
+
+   QModelIndex doMapToSource(QModelIndex const & proxyIndex) const {
+      //
+      // We _normally_ shouldn't need to do anything here other than call the base class member function...
+      //
+      if (proxyIndex.isValid() && proxyIndex.model() != &this->derived()) {
+         //
+         // This shouldn't happen, but it does.  I think there is a bug somewhere in ListModelBase,
+         // SortFilterProxyModelBase or BtComboBoxNamedEntity.  In BtComboBoxNamedEntityBase::init(), We create a
+         // NeListModel and a NeSortFilterProxyModel, and setting the former as source model for the latter.  When we
+         // call sort(0) on the NeSortFilterProxyModel, we get a lot of logs of
+         //
+         //    WARNING : QSortFilterProxyModel: index from wrong model passed to mapToSource
+         //
+         // See QSortFilterProxyModelPrivate::proxy_to_source() (eg at
+         // https://codebrowser.dev/qt5/qtbase/src/corelib/itemmodels/qsortfilterproxymodel.cpp.html) in the Qt source
+         // for where this message is logged.
+         //
+         // AFAICT we have a source model index being passed in as a proxy model index.  Until we work out how to fix
+         // the bug properly, this is a workaround.
+         //
+         if (this->derived().sourceModel() == proxyIndex.model()) {
+            //
+            // We want to avoid logging this error message more than once per instance of this class.  The logic here
+            // means we'll see the log a few times rather than have hundreds of repetitions of the same warning.
+            //
+            static bool alreadyLogged = false;
+            if (!alreadyLogged) {
+               qWarning() <<
+                  Q_FUNC_INFO << "Index refers to source-model instead of proxy-model in call to mapToSource().";
+               alreadyLogged = true;
+            }
+            return proxyIndex;
+         }
+         //
+         // Not expecting to ever get here, but might as well log something if we do!
+         //
+         qCritical() << Q_FUNC_INFO << "Index refers to unrecognised model in call to mapSource()";
+      }
+      return this->derived().QSortFilterProxyModel::mapToSource(proxyIndex);
    }
 
 private:
@@ -143,29 +189,27 @@ private:
  *        Note we have to be careful about comment formats in macro definitions
  */
 #define SORT_FILTER_PROXY_MODEL_COMMON_DECL(NeName) \
-   /* This allows SortFilterProxyModelBase to call protected and private members of Derived */  \
-   friend class SortFilterProxyModelBase<NeName##SortFilterProxyModel,                          \
-                                         NeName##TableModel,                                    \
-                                         NeName##ListModel>;                                    \
-                                                                                                \
-   public:                                                                                      \
-      NeName##SortFilterProxyModel(QObject *            parent      = nullptr,                  \
-                                   bool                 filter      = true   ,                  \
-                                   QAbstractItemModel * sourceModel = nullptr);                 \
-      virtual ~NeName##SortFilterProxyModel();                                                  \
-                                                                                                \
-   protected:                                                                                   \
-      /* Override QSortFilterProxyModel::filterAcceptsRow                          */           \
-      /* Returns true if the item in the row indicated by the given source_row and */           \
-      /* source_parent should be included in the model; otherwise returns false.   */           \
-      virtual bool filterAcceptsRow(int source_row, QModelIndex const & source_parent) const;   \
-      /* Override QSortFilterProxyModel::lessThan                                  */           \
-      virtual bool lessThan(QModelIndex const & left, QModelIndex const & right) const;         \
-   private:                                                                                     \
-      /* Called from lessThan to do the work specific to this class                */           \
-      bool isLessThan(NeName##TableModel::ColumnIndex const columnIndex,                        \
-                      QVariant const & leftItem,                                                \
-                      QVariant const & rightItem) const;                                        \
+   /* This allows SortFilterProxyModelBase to call protected and private members of Derived */        \
+   friend class SortFilterProxyModelBase<NeName##SortFilterProxyModel,                                \
+                                         NeName##TableModel,                                          \
+                                         NeName##ListModel>;                                          \
+                                                                                                      \
+   public:                                                                                            \
+      NeName##SortFilterProxyModel(QObject *            parent      = nullptr,                        \
+                                   bool                 filter      = true   ,                        \
+                                   QAbstractItemModel * sourceModel = nullptr);                       \
+      virtual ~NeName##SortFilterProxyModel();                                                        \
+                                                                                                      \
+      /* Override QSortFilterProxyModel::mapToSource for diagnostic purposes */                       \
+      virtual QModelIndex mapToSource(QModelIndex const & proxyIndex) const override;                 \
+                                                                                                      \
+   protected:                                                                                         \
+      /* Override QSortFilterProxyModel::filterAcceptsRow                          */                 \
+      /* Returns true if the item in the row indicated by the given source_row and */                 \
+      /* source_parent should be included in the model; otherwise returns false.   */                 \
+      virtual bool filterAcceptsRow(int source_row, QModelIndex const & source_parent) const;         \
+      /* Override QSortFilterProxyModel::lessThan                                  */                 \
+      virtual bool lessThan(QModelIndex const & source_left, QModelIndex const & source_right) const; \
 
 /**
  * \brief Derived classes should include this in their implementation file
@@ -186,13 +230,17 @@ private:
                                                              \
    NeName##SortFilterProxyModel::~NeName##SortFilterProxyModel() = default;                       \
                                                                                                   \
+   QModelIndex NeName##SortFilterProxyModel::mapToSource(QModelIndex const & proxyIndex) const {  \
+      return this->doMapToSource(proxyIndex);                                                     \
+   }                                                                                              \
+                                                                                                  \
    bool NeName##SortFilterProxyModel::filterAcceptsRow(int source_row,                            \
                                                        QModelIndex const & source_parent) const { \
       return this->doFilterAcceptsRow(source_row, source_parent);                                 \
    }                                                                                              \
-   bool NeName##SortFilterProxyModel::lessThan(QModelIndex const & left,                          \
-                                               QModelIndex const & right) const {                 \
-      return this->doLessThan(left, right);                                                       \
+   bool NeName##SortFilterProxyModel::lessThan(QModelIndex const & source_left,                   \
+                                               QModelIndex const & source_right) const {          \
+      return this->doLessThan(source_left, source_right);                                         \
    }                                                                                              \
 
 #endif

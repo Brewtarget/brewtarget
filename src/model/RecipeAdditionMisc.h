@@ -48,7 +48,7 @@ class RecipeAdditionMisc : public RecipeAddition,
                            public IngredientAmount<RecipeAdditionMisc, Misc> {
    Q_OBJECT
 
-   RECIPE_ADDITION_DECL(RecipeAdditionMisc, Misc)
+   RECIPE_ADDITION_DECL(RecipeAdditionMisc, Misc, misc)
 
    INGREDIENT_AMOUNT_DECL(RecipeAdditionMisc, Misc)
 
@@ -114,6 +114,7 @@ public:
     *        \b deprecated for other use.
     */
    Q_PROPERTY(Use   use   READ use   WRITE setUse STORED false)
+   //! See \c RecipeAdditionBase for getter and setter
    Q_PROPERTY(Misc * misc   READ misc   WRITE setMisc             )
 
    // See model/IngredientAmount.h
@@ -126,11 +127,9 @@ public:
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    // Ideally this too would be marked [[deprecated]], but we do need to refer to it in RecipeAdditionMisc::typeLookup
    Use use() const;
-   Misc * misc () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    [[deprecated]] void setUse(Use const val);
-   void setMisc(Misc * const val);
 
    virtual NamedEntity * ensureExists(BtStringConst const & property) override;
 
