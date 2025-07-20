@@ -385,14 +385,14 @@ public:
    virtual void setKey(int key) override;
 
    /**
-    * \brief Connect Fermentable, Hop changed signals etc to their parent Recipes.
+    * \brief Connect relevant \c Fermentable, \c Hop changed signals etc to this \c Recipe.
     *
     *        This is needed because each Recipe needs to know when one of its constituent parts has been modified, eg
     *        if the alpha acid on a hop is modified then that will affect the recipe's IBU.
     *
-    *        Needs to be called \b after all the calls to ObjectStoreTyped<FooBar>::getInstance().loadAll()
+    *        Called from \c ObjectStoreTyped::postLoadInit
     */
-   static void connectSignalsForAllRecipes();
+   void connectSignals();
 
    /**
     * \brief Use this for adding \c RecipeAdditionHop, etc.

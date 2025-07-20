@@ -53,7 +53,8 @@ void RecipeTreeModel::addBrewNoteSubTree(TreeNode & recipeNodeRaw,
    // ...so this cast should be safe.
    auto & recipeNode = static_cast<TreeItemNode<Recipe> &>(recipeNodeRaw);
 
-   qDebug() << Q_FUNC_INFO << "Adding" << brewNotes.size() << "BrewNotes for" << recipe;
+   // Normally leave the next line commented out as it generates quite a bit of logging
+//   qDebug() << Q_FUNC_INFO << "Adding" << brewNotes.size() << "BrewNotes for" << recipe;
    int childNum = recipeNode.childCount();
    for (auto brewNote : brewNotes) {
       //

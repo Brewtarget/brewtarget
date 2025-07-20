@@ -222,31 +222,8 @@ public:
    }
 
    /**
-    * \brief Connect signals for this Recipe.  See comment for \c Recipe::connectSignalsForAllRecipes for more
-    *        explanation.
-    */
-   void connectSignals() {
-      auto equipment = this->m_self.equipment();
-      if (equipment) {
-         // We used to have special signals for changes to Equipment's boilSize_l and boilTime_min properties, but these
-         // are now picked up in Recipe::acceptChangeToContainedObject from the generic `changed` signal
-         connect(equipment.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
-      }
-
-      this->m_self.m_fermentableAdditions.connectAllItemChangedSignals();
-      this->m_self.        m_hopAdditions.connectAllItemChangedSignals();
-      this->m_self.      m_yeastAdditions.connectAllItemChangedSignals();
-
-      auto mash = this->m_self.mash();
-      if (mash) {
-         connect(mash.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
-      }
-
-      return;
-   }
-
-   /**
-    * \brief Called to set Mash, Boil, Fermentation, Style, Equipment, etc
+    * \brief Called to set Mash, Boil, Fermentation, Style, Equipment, etc -- ie things that the Recipe has at most one
+    *        of.
     *
     * \param val   the Mash/Boil/Fermentation/Style/Equipment to set
     * \param ourId reference to the Recipe member variable storing the ID of Mash/Boil/Fermentation/Style/Equipment
@@ -1342,6 +1319,29 @@ public:
       return false;
    }
 
+   /**
+    * \brief
+    */
+   template<class RA> void connectSignalForAdditionIngredient(std::shared_ptr<RA> addition) {
+      typename RA::IngredientClass * ingredient = addition->ingredientRaw();
+      m_self.connect(ingredient, &NamedEntity::changed, &m_self, &Recipe::acceptChangeToContainedObject);
+      return;
+   }
+
+   /**
+    * \brief
+    */
+   template<class OS> void connectSignalsForAllAdditionIngredients(OS const & additionsSet) {
+      //
+      // It doesn't matter if we connect the same signal twice, so we don't bother checking whether we had the same
+      // ingredient already
+      //
+      for (auto addition : additionsSet.items()) {
+         this->connectSignalForAdditionIngredient(addition);
+      }
+      return;
+   }
+
 
    //================================================ Member variables =================================================
    Recipe & m_self;
@@ -1704,7 +1704,7 @@ Recipe::Recipe(Recipe const & other) :
    //
    NamedEntityModifyingMarker modifyingMarker(*this);
 
-   this->pimpl->connectSignals();
+   this->connectSignals();
 
    this->recalcAll();
 
@@ -1752,13 +1752,45 @@ void Recipe::setKey(int key) {
    return;
 }
 
-void Recipe::connectSignalsForAllRecipes() {
-   qDebug() << Q_FUNC_INFO << "Connecting signals for all Recipes";
-   // Connect fermentable, hop changed signals to their parent recipe
-   for (auto recipe : ObjectStoreTyped<Recipe>::getInstance().getAllRaw()) {
-//      qDebug() << Q_FUNC_INFO << "Connecting signals for Recipe #" << recipe->key();
-      recipe->pimpl->connectSignals();
+void Recipe::connectSignals() {
+   auto equipment = this->equipment();
+   if (equipment) {
+      // We used to have special signals for changes to Equipment's boilSize_l and boilTime_min properties, but these
+      // are now picked up in Recipe::acceptChangeToContainedObject from the generic `changed` signal
+      connect(equipment.get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
    }
+
+   auto mash = this->mash();
+   if (mash) {
+      connect(mash.get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
+   }
+
+   auto boil = this->boil();
+   if (boil) {
+      connect(boil.get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
+   }
+
+   auto fermentation = this->fermentation();
+   if (fermentation) {
+      connect(fermentation.get(), &NamedEntity::changed, this, &Recipe::acceptChangeToContainedObject);
+   }
+
+   this->m_fermentableAdditions.connectAllItemChangedSignals();
+   this->        m_hopAdditions.connectAllItemChangedSignals();
+   this->       m_miscAdditions.connectAllItemChangedSignals();
+   this->      m_yeastAdditions.connectAllItemChangedSignals();
+
+   //
+   // OwnedSet::connectAllItemChangedSignals handles connection of signals from the RecipeAdditionHops etc, but not from
+   // the Hops etc to which the RecipeAdditions refer, so we do that here.
+   //
+   // I think it's technically not necessary to connect to changes in Misc ingredients, as there are none that would
+   // affect Recipe calculations, but it doesn't hurt and it's neater to handle everything the same way.
+   //
+   this->pimpl->connectSignalsForAllAdditionIngredients(this->m_fermentableAdditions);
+   this->pimpl->connectSignalsForAllAdditionIngredients(this->        m_hopAdditions);
+   this->pimpl->connectSignalsForAllAdditionIngredients(this->       m_miscAdditions);
+   this->pimpl->connectSignalsForAllAdditionIngredients(this->      m_yeastAdditions);
 
    return;
 }
@@ -1983,6 +2015,12 @@ template<class RA> std::shared_ptr<RA> Recipe::addAddition(std::shared_ptr<RA> a
 
    this->ownedSetFor<RA>().add(addition);
 
+   //
+   // OwnedSet::add handles connection of signals from RecipeAdditionHop etc, but not from the Hop etc to which the
+   // RecipeAddition refers, so we do that here.
+   //
+   this->pimpl->connectSignalForAdditionIngredient(addition);
+
    this->recalcIfNeeded(addition->ingredient()->metaObject()->className());
    return addition;
 }
@@ -2059,6 +2097,22 @@ template<class RA> std::shared_ptr<RA> Recipe::removeAddition(std::shared_ptr<RA
    Q_ASSERT(addition);
 
    this->ownedSetFor<RA>().remove(addition);
+
+   //
+   // OwnedSet deals with signal connections for the RecipeAddition itself, but we have to handle the underlying
+   // ingredient here.  The logic is a bit more complicated than in addAddition, because we have to deal with the case
+   // of, eg, two RecipeAdditionHop objects referring to the same Hop.
+   //
+   // The object pointed to by the `addition` shared pointer is still valid at this stage, even though it will have been
+   // hard deleted from the DB.
+   //
+   typename RA::IngredientClass * ingredient = addition->ingredientRaw();
+   std::shared_ptr<RA> additionForSameIngredient = this->ownedSetFor<RA>().findFirstMatching(
+      [& ingredient](std::shared_ptr<RA> ra) { return ra->ingredientRaw()->key() == ingredient->key(); }
+   );
+   if (!additionForSameIngredient) {
+      disconnect(ingredient, nullptr, this, nullptr);
+   }
 
    this->recalcIfNeeded(addition->ingredient()->metaObject()->className());
 
@@ -2793,32 +2847,44 @@ QList<QString> Recipe::getReagents(QList< std::shared_ptr<MashStep> > msteps) {
 void Recipe::acceptChangeToContainedObject(QMetaProperty prop, QVariant val) {
    // This tells us which object sent us the signal
    QObject * signalSender = this->sender();
-   if (signalSender != nullptr) {
-      QString signalSenderClassName = signalSender->metaObject()->className();
-      QString propName = prop.name();
-      qDebug() <<
-         Q_FUNC_INFO << "Signal received from " << signalSenderClassName << ": changed" << propName << "to" << val;;
-      Equipment * equipment = qobject_cast<Equipment *>(signalSender);
-      if (equipment) {
-         qDebug() << Q_FUNC_INFO << "Equipment #" << equipment->key() << "(ours=" << this->m_equipmentId << ")";
-         Q_ASSERT(equipment->key() == this->m_equipmentId);
-         if (propName == *PropertyNames::Equipment::kettleBoilSize_l) {
-            Q_ASSERT(val.canConvert<double>());
-            qDebug() << Q_FUNC_INFO << "We" << (this->boil() ? "have" : "don't have") << "a boil";
-            if (this->boil()) {
-               this->boil()->setPreBoilSize_l(val.value<double>());
-            }
-         } else if (propName == PropertyNames::Equipment::boilTime_min) {
-            Q_ASSERT(val.canConvert<double>());
-            if (this->boil()) {
-               this->boil()->setBoilTime_mins(val.value<double>());
-            }
+   if (!signalSender) {
+      qDebug() << Q_FUNC_INFO << "No sender";
+      return;
+   }
+
+   QString signalSenderClassName = signalSender->metaObject()->className();
+   QString propName = prop.name();
+   qDebug() <<
+      Q_FUNC_INFO << "Signal received from " << signalSenderClassName << ": changed" << propName << "to" << val;;
+
+   //
+   // If it's the equipment that changed then we have some extra stuff to do...
+   //
+   Equipment * equipment = qobject_cast<Equipment *>(signalSender);
+   if (equipment) {
+      qDebug() << Q_FUNC_INFO << "Equipment #" << equipment->key() << "(ours=" << this->m_equipmentId << ")";
+      Q_ASSERT(equipment->key() == this->m_equipmentId);
+      if (propName == *PropertyNames::Equipment::kettleBoilSize_l) {
+         Q_ASSERT(val.canConvert<double>());
+         qDebug() << Q_FUNC_INFO << "We" << (this->boil() ? "have" : "don't have") << "a boil";
+         if (this->boil()) {
+            this->boil()->setPreBoilSize_l(val.value<double>());
+         }
+      } else if (propName == PropertyNames::Equipment::boilTime_min) {
+         Q_ASSERT(val.canConvert<double>());
+         if (this->boil()) {
+            this->boil()->setBoilTime_mins(val.value<double>());
          }
       }
-      this->recalcIfNeeded(signalSenderClassName);
-   } else {
-      qDebug() << Q_FUNC_INFO << "No sender";
    }
+
+   //
+   // ...but in general we just recalculate everything rather than try to work out whether the particular change to the
+   // Hop, RecipeAdditionHop, Fermentable, RecipeAdditionFermentable, Mash, Boil, etc would make a difference to our
+   // calculated fields.  This is marginally inefficient, but considerably simplifies the code here.
+   //
+   this->recalcIfNeeded(signalSenderClassName);
+
    return;
 }
 

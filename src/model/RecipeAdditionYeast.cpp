@@ -25,6 +25,7 @@
 #endif
 
 QString RecipeAdditionYeast::localisedName() { return tr("Yeast Addition"); }
+QString RecipeAdditionYeast::instanceNameTemplate() { return tr("Addition of %1 yeast"); }
 
 ObjectStore & RecipeAdditionYeast::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<RecipeAdditionYeast>::getInstance();
@@ -99,18 +100,6 @@ RecipeAdditionYeast::RecipeAdditionYeast(RecipeAdditionYeast const & other) :
 RecipeAdditionYeast::~RecipeAdditionYeast() = default;
 
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
-Yeast * RecipeAdditionYeast::yeast() const {
-   // Normally there should always be a valid Yeast in a RecipeAdditionYeast.  (The Recipe ID may be -1 if the addition is
-   // only just about to be added to the Recipe or has just been removed from it, but there's no great reason for the
-   // Yeast ID not to be valid).
-   if (this->m_ingredientId <= 0) {
-      qWarning() << Q_FUNC_INFO << "No Yeast set on RecipeAdditionYeast #" << this->key();
-      return nullptr;
-   }
-
-   return ObjectStoreWrapper::getByIdRaw<Yeast>(this->m_ingredientId);
-}
-
 std::optional<double> RecipeAdditionYeast::attenuation_pct  () const { return m_attenuation_pct; }
 std::optional<int>    RecipeAdditionYeast::timesCultured    () const { return m_timesCultured  ; }
 std::optional<int>    RecipeAdditionYeast::cellCountBillions() const { return m_cellCountBillions  ; }
@@ -141,19 +130,6 @@ NamedEntity * RecipeAdditionYeast::ensureExists(BtStringConst const & property) 
 }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
-void RecipeAdditionYeast::setYeast(Yeast * const val) {
-   if (val) {
-      this->setIngredientId(val->key());
-      this->setName(tr("Addition of %1").arg(val->name()));
-   } else {
-      // Normally we don't want to invalidate the Yeast on a RecipeAdditionYeast, because it doesn't buy us anything.
-      qWarning() << Q_FUNC_INFO << "Null Yeast set on RecipeAdditionYeast #" << this->key();
-      this->setIngredientId(-1);
-      this->setName(tr("Invalid!"));
-   }
-   return;
-}
-
 void RecipeAdditionYeast::setAttenuation_pct(std::optional<double> const val) {
    SET_AND_NOTIFY(PropertyNames::RecipeAdditionYeast::attenuation_pct,
                   m_attenuation_pct,
@@ -176,4 +152,4 @@ void RecipeAdditionYeast::setAddToSecondary (std::optional<bool  > const val) {
 
 // Boilerplate code for IngredientAmount and RecipeAddition
 INGREDIENT_AMOUNT_COMMON_CODE(RecipeAdditionYeast, Yeast)
-RECIPE_ADDITION_CODE(RecipeAdditionYeast, Yeast)
+RECIPE_ADDITION_CODE(RecipeAdditionYeast, Yeast, yeast)

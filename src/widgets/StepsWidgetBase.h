@@ -43,38 +43,38 @@ public:
       this->derived().m_pushButton_moveStepDown->setToolTip(NE::tr("Move selected %1 step down").arg(NE::localisedName()));
       this->derived().m_pushButton_editStep    ->setToolTip(NE::tr("Edit selected %1 step"     ).arg(NE::localisedName()));
 
-      this->m_stepTableModel = std::make_unique<NeTableModelClass>(this->derived().m_tableView_steps);
+      this->m_stepTableModel = std::make_unique<NeTableModelClass>(this->derived().m_tableView_steps.get());
       this->derived().m_tableView_steps->setItemDelegate(
-         new NeItemDelegateClass(this->derived().m_tableView_steps, *this->m_stepTableModel)
+         new NeItemDelegateClass(this->derived().m_tableView_steps.get(), *this->m_stepTableModel)
       );
       this->derived().m_tableView_steps->setModel(this->m_stepTableModel.get());
       //
       // Connect all the buttons
       //
-      this->derived().connect(this->derived().m_pushButton_addStep,
+      this->derived().connect(this->derived().m_pushButton_addStep.get(),
                               &QAbstractButton::clicked,
                               &this->derived(),
                               [&]([[maybe_unused]] bool checked) { this->newStep(); return; } );
-      this->derived().connect(this->derived().m_pushButton_removeStep,
+      this->derived().connect(this->derived().m_pushButton_removeStep.get(),
                               &QAbstractButton::clicked,
                               &this->derived(),
                               [&]([[maybe_unused]] bool checked) { this->removeSelectedStep(); return; } );
-      this->derived().connect(this->derived().m_pushButton_moveStepUp,
+      this->derived().connect(this->derived().m_pushButton_moveStepUp.get(),
                               &QAbstractButton::clicked,
                               &this->derived(),
                               [&]([[maybe_unused]] bool checked) { this->moveSelectedStepUp(); return; } );
-      this->derived().connect(this->derived().m_pushButton_moveStepDown,
+      this->derived().connect(this->derived().m_pushButton_moveStepDown.get(),
                               &QAbstractButton::clicked,
                               &this->derived(),
                               [&]([[maybe_unused]] bool checked) { this->moveSelectedStepDown(); return; } );
-      this->derived().connect(this->derived().m_pushButton_editStep,
+      this->derived().connect(this->derived().m_pushButton_editStep.get(),
                               &QAbstractButton::clicked,
                               &this->derived(),
                               [&]([[maybe_unused]] bool checked) { this->editSelectedStep(); return; } );
 
       // Double-clicking on the name of a step also edits it
       this->derived().connect(
-         this->derived().m_tableView_steps,
+         this->derived().m_tableView_steps.get(),
          &QTableView::doubleClicked,
          &this->derived(),
          [&](QModelIndex const & idx) {
@@ -199,7 +199,6 @@ public:
                                 &NeStepClass::StepOwnerClass::remove,
                                 step,
                                 &NeStepClass::StepOwnerClass::add,
-///                                &Undoable::removeFromCurrentRecipe<NeStepClass>,
                                 static_cast<void (*)(std::shared_ptr<NeStepClass>)>(nullptr),
                                 static_cast<void (*)(std::shared_ptr<NeStepClass>)>(nullptr),
                                 Derived::tr("Remove %1").arg(NeStepClass::localisedName()))

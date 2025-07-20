@@ -27,6 +27,7 @@
 #endif
 
 QString RecipeAdditionHop::localisedName() { return tr("Hop Addition"); }
+QString RecipeAdditionHop::instanceNameTemplate() { return tr("Addition of %1 hop"); }
 
 EnumStringMapping const RecipeAdditionHop::useStringMapping {
    {RecipeAdditionHop::Use::Mash      , "Mash"      },
@@ -129,19 +130,6 @@ RecipeAdditionHop::Use RecipeAdditionHop::use() const {
 
    // This should be unreachable, but putting a return statement here prevents compiler warnings
    return RecipeAdditionHop::Use::Boil;
-}
-
-Hop * RecipeAdditionHop::hop() const {
-   // Normally there should always be a valid Hop in a RecipeAdditionHop.  (The Recipe ID may be -1 if the addition is
-   // only just about to be added to the Recipe or has just been removed from it, but there's no great reason for the
-   // Hop ID not to be valid).
-   if (this->m_ingredientId <= 0) {
-      qWarning() << Q_FUNC_INFO << "No Hop set on RecipeAdditionHop #" << this->key();
-      return nullptr;
-   }
-
-///   qDebug() << Q_FUNC_INFO << "RecipeAdditionHop #" << this->key() << ": Recipe #" << this->m_recipeId << ", Hop #" << this->m_ingredientId << "@" << ObjectStoreWrapper::getByIdRaw<Hop>(this->m_ingredientId);
-   return ObjectStoreWrapper::getByIdRaw<Hop>(this->m_ingredientId);
 }
 
 bool RecipeAdditionHop::isFirstWort() const {
@@ -263,19 +251,6 @@ void RecipeAdditionHop::setUse(RecipeAdditionHop::Use const val) {
    return;
 }
 
-void RecipeAdditionHop::setHop(Hop * const val) {
-   if (val) {
-      this->setIngredientId(val->key());
-      this->setName(tr("Addition of %1").arg(val->name()));
-   } else {
-      // Normally we don't want to invalidate the Hop on a RecipeAdditionHop, because it doesn't buy us anything.
-      qWarning() << Q_FUNC_INFO << "Null Hop set on RecipeAdditionHop #" << this->key();
-      this->setIngredientId(-1);
-      this->setName(tr("Invalid!"));
-   }
-   return;
-}
-
 // Boilerplate code for IngredientAmount and RecipeAddition
 INGREDIENT_AMOUNT_COMMON_CODE(RecipeAdditionHop, Hop)
-RECIPE_ADDITION_CODE(RecipeAdditionHop, Hop)
+RECIPE_ADDITION_CODE(RecipeAdditionHop, Hop, hop)

@@ -139,11 +139,10 @@ public:
       m_sortFilterProxy       {new NeSortFilterProxyModel(m_tableWidget,
                                                           true,
                                                           m_neTableModel)} {
-
+      this->m_sortFilterProxy->setDynamicSortFilter(false);
       this->m_tableWidget->setModel(m_sortFilterProxy);
       this->m_tableWidget->setSortingEnabled(true);
       this->m_tableWidget->sortByColumn(static_cast<int>(NeTableModel::ColumnIndex::Name), Qt::AscendingOrder);
-      this->m_sortFilterProxy->setDynamicSortFilter(true);
       this->m_sortFilterProxy->setFilterKeyColumn(1);
 
       this->m_qLineEdit_searchBox->setMaxLength(30);

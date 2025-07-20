@@ -24,14 +24,14 @@
 
 StepsWidget::StepsWidget(QWidget * parent) :
    QWidget{parent},
-   m_horizontalLayout_main  {new QHBoxLayout{this}},
-   m_tableView_steps        {new QTableView{this}},
-   m_verticalLayout_buttons {new QVBoxLayout{this}},
-   m_pushButton_addStep     {new QPushButton{this}},
-   m_pushButton_removeStep  {new QPushButton{this}},
-   m_pushButton_moveStepUp  {new QPushButton{this}},
-   m_pushButton_moveStepDown{new QPushButton{this}},
-   m_pushButton_editStep    {new QPushButton{this}},
+   m_horizontalLayout_main  {std::make_unique<QHBoxLayout>()},
+   m_tableView_steps        {std::make_unique<QTableView >()},
+   m_verticalLayout_buttons {std::make_unique<QVBoxLayout>()},
+   m_pushButton_addStep     {std::make_unique<QPushButton>()},
+   m_pushButton_removeStep  {std::make_unique<QPushButton>()},
+   m_pushButton_moveStepUp  {std::make_unique<QPushButton>()},
+   m_pushButton_moveStepDown{std::make_unique<QPushButton>()},
+   m_pushButton_editStep    {std::make_unique<QPushButton>()},
    m_icon_addStep     {":/images/smallPlus.svg"     },
    m_icon_removeStep  {":/images/smallMinus.svg"    },
    m_icon_moveStepUp  {":/images/smallUpArrow.svg"  },
@@ -40,13 +40,24 @@ StepsWidget::StepsWidget(QWidget * parent) :
    //
    // Do the generic bits of layout.  Subclasses (via StepsWidgetBase) need to do text that refers to Mash/Boil/etc.
    //
-   m_horizontalLayout_main->addWidget(m_tableView_steps);
-   m_horizontalLayout_main->addLayout(m_verticalLayout_buttons);
-   m_verticalLayout_buttons->addWidget(m_pushButton_addStep     );
-   m_verticalLayout_buttons->addWidget(m_pushButton_removeStep  );
-   m_verticalLayout_buttons->addWidget(m_pushButton_moveStepUp  );
-   m_verticalLayout_buttons->addWidget(m_pushButton_moveStepDown);
-   m_verticalLayout_buttons->addWidget(m_pushButton_editStep    );
+   // Setting the object names helps with debugging if we get warnings or errors logged from Qt base classes
+   //
+   m_horizontalLayout_main  ->setObjectName("m_horizontalLayout_main"  );
+   m_tableView_steps        ->setObjectName("m_tableView_steps"        );
+   m_verticalLayout_buttons ->setObjectName("m_verticalLayout_buttons" );
+   m_pushButton_addStep     ->setObjectName("m_pushButton_addStep"     );
+   m_pushButton_removeStep  ->setObjectName("m_pushButton_removeStep"  );
+   m_pushButton_moveStepUp  ->setObjectName("m_pushButton_moveStepUp"  );
+   m_pushButton_moveStepDown->setObjectName("m_pushButton_moveStepDown");
+   m_pushButton_editStep    ->setObjectName("m_pushButton_editStep"    );
+   this->setLayout(m_horizontalLayout_main.get());
+   m_horizontalLayout_main->addWidget(m_tableView_steps.get());
+   m_horizontalLayout_main->addLayout(m_verticalLayout_buttons.get());
+   m_verticalLayout_buttons->addWidget(m_pushButton_addStep     .get());
+   m_verticalLayout_buttons->addWidget(m_pushButton_removeStep  .get());
+   m_verticalLayout_buttons->addWidget(m_pushButton_moveStepUp  .get());
+   m_verticalLayout_buttons->addWidget(m_pushButton_moveStepDown.get());
+   m_verticalLayout_buttons->addWidget(m_pushButton_editStep    .get());
    m_pushButton_addStep     ->setIcon(m_icon_addStep     );
    m_pushButton_removeStep  ->setIcon(m_icon_removeStep  );
    m_pushButton_moveStepUp  ->setIcon(m_icon_moveStepUp  );

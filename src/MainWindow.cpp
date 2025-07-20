@@ -800,17 +800,6 @@ void MainWindow::initialiseAndMakeVisible() {
    // set up the drag/drop parts
    this->setupDrops();
 
-   // Moved from Database class
-   Recipe::connectSignalsForAllRecipes();
-   qDebug() << Q_FUNC_INFO << "Recipe signals connected";
-   Mash::connectSignals();
-   qDebug() << Q_FUNC_INFO << "Mash signals connected";
-   Boil::connectSignals();
-   qDebug() << Q_FUNC_INFO << "Boil signals connected";
-   Fermentation::connectSignals();
-   qDebug() << Q_FUNC_INFO << "Fermentation signals connected";
-
-
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
    // .:TODO:. Change this so we use the newer deleted signal!
@@ -1439,7 +1428,9 @@ void MainWindow::lockRecipe(int state) {
 }
 
 void MainWindow::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) {
+   QObject * sender = this->sender();
    QString propName(prop.name());
+   qDebug() << Q_FUNC_INFO << "sender:" << sender << "; propName:" << propName;
 
    if (propName == PropertyNames::Recipe::equipment) {
       auto equipment = this->pimpl->m_recipeObs->equipment();

@@ -49,8 +49,7 @@ class RecipeUseOfWater : public IngredientInRecipe,
                          public RecipeAdditionBase<RecipeUseOfWater, Water> {
    Q_OBJECT
 
-   // This allows RecipeAdditionBase to call protected and private members of RecipeUseOfWater
-   friend class RecipeAdditionBase<RecipeUseOfWater, Water>;
+   RECIPE_ADDITION_DECL(RecipeUseOfWater, Water, water)
 
 public:
    /**
@@ -72,7 +71,7 @@ public:
    virtual ~RecipeUseOfWater();
 
    //=================================================== PROPERTIES ====================================================
-
+   //! See \c RecipeAdditionBase for getter and setter
    Q_PROPERTY(Water * water   READ water   WRITE setWater)
 
    /**
@@ -81,11 +80,9 @@ public:
    Q_PROPERTY(int volume_l READ volume_l WRITE setVolume_l)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   Water * water       () const;
    double  volume_l    () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setWater       (Water * const val);
    void setVolume_l    (double  const val);
 
 protected:
@@ -94,7 +91,6 @@ protected:
 
 protected:
    double m_volume_l;
-
 };
 
 BT_DECLARE_METATYPES(RecipeUseOfWater)
