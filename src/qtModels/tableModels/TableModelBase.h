@@ -154,6 +154,14 @@ public:
    }
 
    /**
+    * \brief Overload for \c get_ColumnInfo
+    */
+   BtTableModel::ColumnInfo const & get_ColumnInfo(QModelIndex const & index) const {
+      auto const columnIndex = static_cast<ColumnIndex>(index.column());
+      return this->get_ColumnInfo(columnIndex);
+   }
+
+   /**
     * \brief Observe a recipe's list of NE (hops, fermentables, etc).  Mostly called from Derived::observeRecipe.
     */
    template<class Caller>
@@ -375,13 +383,29 @@ public:
     * \brief Called from SortFilterProxyModelBase::doLessThan
     */
    bool isLessThan(QModelIndex const & leftIndex, QModelIndex const & rightIndex) const {
-      QVariant  leftItem = this->derived().data( leftIndex);
-      QVariant rightItem = this->derived().data(rightIndex);
+      //
+      // Strictly, we should call Derived::data() here, which mostly ends up calling readDataFromModel(), but with the
+      // possibility of class-specific logic (eg MashStepTableModel shows "---" for the temperature field when the mash
+      // step type is a decoction).  However, the extra class-specific logic is not needed for sorting, so it's simpler
+      // not to worry about adding subclass handling for Qt::UserRole, and just call readDataFromModel() direct.
+      //
+      QVariant  leftItem = this->readDataFromModel( leftIndex, Qt::UserRole);
+      QVariant rightItem = this->readDataFromModel(rightIndex, Qt::UserRole);
 
-      // As per more detailed comment in qtModels/tableModels/ItemDelegate.h, we need "typename" here only until Apple
-      // ship Clang 16 or later as their standard C++ compiler.
-      auto const columnIndex = static_cast<ColumnIndex>(leftIndex.column());
-      BtTableModel::ColumnInfo const & columnInfo = this->get_ColumnInfo(columnIndex);
+      // Normally leave this commented out as it generates far too much logging
+//      qDebug() << Q_FUNC_INFO << "leftItem:" << leftItem << "; rightItem:" << rightItem;
+
+      //
+      // It's not crazy to have null come before valid values
+      //
+      if (leftItem.isNull()) {
+         return true;
+      }
+      if (rightItem.isNull()) {
+         return false;
+      }
+
+      BtTableModel::ColumnInfo const & columnInfo = this->get_ColumnInfo(leftIndex);
       if (columnInfo.typeInfo.fieldType) {
          QuantityFieldType const fieldType = *columnInfo.typeInfo.fieldType;
          if (std::holds_alternative<NonPhysicalQuantity>(fieldType)) {
@@ -395,12 +419,7 @@ public:
 
                case NonPhysicalQuantity::Percentage:
                case NonPhysicalQuantity::Dimensionless:
-                  //
-                  // Measurement::extractRawFromString does pretty much what we want though TODO we should explicitly
-                  // tell it blanks are OK (for optional fields).
-                  //
-                  return Measurement::extractRawFromString<double>( leftItem.toString()) <
-                         Measurement::extractRawFromString<double>(rightItem.toString());
+                  return leftItem.toDouble() < rightItem.toDouble();
 
                case NonPhysicalQuantity::OrdinalNumeral:
                case NonPhysicalQuantity::CardinalNumber:
@@ -409,18 +428,30 @@ public:
                // No default case as we want compiler to warn us if we missed a case above
             }
          } else if (std::holds_alternative<Measurement::PhysicalQuantity>(fieldType)) {
-            auto const physicalQuantity = std::get<Measurement::PhysicalQuantity>(fieldType);
-            return (Measurement::qStringToSI( leftItem.toString(), physicalQuantity) <
-                    Measurement::qStringToSI(rightItem.toString(), physicalQuantity));
+            return  leftItem.value<Measurement::Amount>().toCanonical() <
+                   rightItem.value<Measurement::Amount>().toCanonical();
          } else {
             Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(fieldType));
             //
-            // It's not instantly obvious how to sort a mixture of, eg, masses and volumes.  So, for the moment, we just
-            // cop out and sort them as strings.
+            // Per comment in readDataFromModel(), this field could be either the amount itself or a drop-down for the
+            // PhysicalQuantity of the amount.  In the latter case, readDataFromModel() will have returned us a QString,
+            // otherwise we'll have an Amount.
             //
-//            auto const choiceOfPhysicalQuantity = std::get<Measurement::ChoiceOfPhysicalQuantity>(fieldType);
-            return Measurement::extractRawFromString<double>( leftItem.toString()) <
-                   Measurement::extractRawFromString<double>(rightItem.toString());
+            if (leftItem.typeId() == QMetaType::QString) {
+               //
+               // Field type should be determined only by column, not by row
+               //
+               Q_ASSERT(rightItem.typeId() == QMetaType::QString);
+               return leftItem.toString() < rightItem.toString();
+            }
+
+            //
+            // It's not instantly obvious how to sort a mixture of, eg, masses and volumes.  For the moment, we convert
+            // everything to canonical units (kilograms for mass, liters for volume, etc) and then sort by the
+            // quantities.
+            //
+            return  leftItem.value<Measurement::Amount>().toCanonical() <
+                   rightItem.value<Measurement::Amount>().toCanonical();
          }
 
          //
@@ -549,6 +580,18 @@ protected:
     *
     *        Caller is expected to have called \c indexAndRoleOk before calling this function.
     *
+    * \param index
+    * \param role  This will be a \c Qt::ItemDataRole value.  In practice, the main values are as follows:
+    *                 • \c Qt::DisplayRole means we return a \c QString suitable for display
+    *                 • \c Qt::EditRole means we return a \c QString suitable for editing
+    *                 • \c Qt::UserRole means we are being called from \c isLessThan, so we want to return whatever is
+    *                                   needed for a sort comparison.  In some cases (eg an enum or bool), this is the
+    *                                   the same QString as for \c Qt::DisplayRole, because an alphabetical sort of, eg
+    *                                   a \c Hop::Form field, will make a lot more sense to the user than sorting it by
+    *                                   the internal numerical value.  In other cases, eg where the underlying value is
+    *                                   a \c Measurement::Amount, we want the raw value not the display text, so we can
+    *                                   ensure 200g < 1kg etc.
+    *
     * NOTE: The debug logging in this function is commented out because the function gets called A LOT.  I tend to
     *       uncomment these lines only when working on a problem in this area of the code, otherwise the log file fills
     *       up too quickly!
@@ -565,8 +608,7 @@ protected:
       //    QAbstractItemView::edit()
       //
       auto row = this->m_rows[index.row()];
-      auto const columnIndex = static_cast<ColumnIndex>(index.column());
-      auto const & columnInfo = this->get_ColumnInfo(columnIndex);
+      BtTableModel::ColumnInfo const & columnInfo = this->get_ColumnInfo(index);
 
       QVariant modelData = columnInfo.propertyPath.getValue(*row);
       if (!modelData.isValid()) {
@@ -600,33 +642,38 @@ protected:
 //         typeInfo << ", modelData:" << modelData;
 
       // First handle the cases where ItemDelegate::readDataFromModel wants "raw" data
-      if (std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
+      if (role == Qt::EditRole && std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
          auto const nonPhysicalQuantity = std::get<NonPhysicalQuantity>(*typeInfo.fieldType);
          if (nonPhysicalQuantity == NonPhysicalQuantity::Enum ||
              nonPhysicalQuantity == NonPhysicalQuantity::Bool) {
-            if (role != Qt::DisplayRole) {
-               return modelData;
-            }
+            return modelData;
          }
       }
 
-      // Next handle unset optional values
       bool hasValue = false;
       if (typeInfo.isOptional()) {
          // This does the right thing even for enums - see comment in utils/OptionalHelpers.cpp
          Optional::removeOptionalWrapper(modelData, typeInfo, &hasValue);
-         if (!hasValue) {
-            return QString{""};
-         }
+      } else {
+         hasValue = true;
       }
 
-      // Now we know:
-      //    - the value is either not optional or is optional and set
-      //    - we need to return a string
       if (std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
          auto const nonPhysicalQuantity = std::get<NonPhysicalQuantity>(*typeInfo.fieldType);
+
+         if (!hasValue) {
+            if (role == Qt::UserRole &&
+                nonPhysicalQuantity != NonPhysicalQuantity::Enum &&
+                nonPhysicalQuantity != NonPhysicalQuantity::Bool) {
+               return modelData;
+            }
+            return QString{""};
+         }
+
          if (nonPhysicalQuantity == NonPhysicalQuantity::Enum) {
-            Q_ASSERT(role == Qt::DisplayRole);
+            // We assert that we cannot be editing this type of field (because it's a combo box, so user just selects
+            // one of the values in the list).
+            Q_ASSERT(role != Qt::EditRole);
 
             Q_ASSERT(columnInfo.extras);
             Q_ASSERT(std::holds_alternative<BtTableModel::EnumInfo>(*columnInfo.extras));
@@ -641,13 +688,19 @@ protected:
          }
 
          if (nonPhysicalQuantity == NonPhysicalQuantity::Bool) {
-            Q_ASSERT(role == Qt::DisplayRole);
+            // As with Enum, we cannot edit a Bool, just select one of the predetermined values for it.
+            Q_ASSERT(role != Qt::EditRole);
 
             Q_ASSERT(columnInfo.extras);
             Q_ASSERT(std::holds_alternative<BtTableModel::BoolInfo>(*columnInfo.extras));
             BtTableModel::BoolInfo const & info = std::get<BtTableModel::BoolInfo>(*columnInfo.extras);
             Q_ASSERT(modelData.canConvert<bool>());
             return modelData.toBool() ? info.setDisplay : info.unsetDisplay;
+         }
+
+         if (role == Qt::UserRole) {
+            // For sorting, we need the actual amount
+            return modelData;
          }
 
          if (nonPhysicalQuantity == NonPhysicalQuantity::Percentage) {
@@ -668,6 +721,13 @@ protected:
                   std::holds_alternative<BtTableModel::PrecisionInfo          >(*columnInfo.extras) ||
                   std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*columnInfo.extras) );
 
+         if (!hasValue) {
+            if (role == Qt::UserRole) {
+               return modelData;
+            }
+            return QString{""};
+         }
+
          unsigned int precision = 3;
          if (columnInfo.extras &&
              std::holds_alternative<BtTableModel::PrecisionInfo>(*columnInfo.extras)) {
@@ -687,6 +747,11 @@ protected:
                // Measurement::Amount, ie the units are always included.
                auto const physicalQuantity = std::get<Measurement::PhysicalQuantity>(*typeInfo.fieldType);
                Measurement::Amount amount{rawValue, Measurement::Unit::getCanonicalUnit(physicalQuantity)};
+               if (role == Qt::UserRole) {
+                  // For sorting, we need the actual amount
+                  return QVariant::fromValue(amount);
+               }
+               // For display or edit, we return the string representation
                return QVariant(
                   Measurement::displayAmount(amount,
                                              precision,
@@ -697,8 +762,8 @@ protected:
          } else if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) ||
                     typeInfo.typeIndex == typeid(Measurement::Amount)) {
             //
-            // Per the comments in qtModels/tableModels/ItemDelegate.h, depending on the value of extras, this is either the
-            // amount itself or a drop-down for the PhysicalQuantity of the amount.
+            // Per the comments in qtModels/tableModels/ItemDelegate.h, depending on the value of extras, this is either
+            // the amount itself or a drop-down for the PhysicalQuantity of the amount.
             //
             // In both cases, we start by getting the amount from the model.
             //
@@ -735,12 +800,12 @@ protected:
                 std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*columnInfo.extras)) {
                // This is the drop-down for the PhysicalQuantity of the Amount
                Measurement::PhysicalQuantity const physicalQuantity = amount.unit->getPhysicalQuantity();
-               if (role != Qt::DisplayRole) {
+               if (role == Qt::EditRole) {
                   // For edit, we just want the actual PhysicalQuantity
                   return QVariant::fromValue(static_cast<int>(physicalQuantity));
                }
 
-               // For display we want to map the PhysicalQuantity to its user-friendly name string
+               // For display or sort we want to map the PhysicalQuantity to its user-friendly name string
                std::optional<QString> displayText =
                   Measurement::physicalQuantityDisplayNames.enumToString(physicalQuantity);
                // It's a coding error if we couldn't find something to display!
@@ -749,6 +814,11 @@ protected:
             }
 
             // This is the Amount itself
+            if (role == Qt::UserRole) {
+               // For sorting, we need the actual amount
+               return QVariant::fromValue(amount);
+            }
+            // For display or edit, we return the string representation
             return QVariant(
                Measurement::displayAmount(amount,
                                           precision,
