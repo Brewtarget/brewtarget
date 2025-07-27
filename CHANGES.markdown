@@ -20,7 +20,7 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
-* None yet
+* Sort by Inventory seems to have broke in 4.1.3 (maybe 4.1.2?) [1003](https://github.com/Brewtarget/brewtarget/issues/1003)
 
 ### Release Timestamp
 Fri, 25 Jul 2025 04:01:04 +0100
