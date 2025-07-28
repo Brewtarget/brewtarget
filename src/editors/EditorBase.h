@@ -64,6 +64,10 @@ public:
       // It would be a coding error if, when showing MashStepEditor / BoilStepEditor / etc, the relevant
       // MashStep / BoilStep / etc were not set.
       Q_ASSERT(this->m_stepOwner);
+
+      // It's a coding error if the step already has an owner (ie it's not new)
+      Q_ASSERT(step->ownerId() < 0);
+
       // Going via Undoable::addStepToStepOwner makes the action undoable
       Undoable::addStepToStepOwner(*this->m_stepOwner, step);
       return;
@@ -406,13 +410,18 @@ public:
       return true;
    }
 
-   //! No-op version
-   void updateStepOwnerIfNeeded() requires (!std::is_base_of<StepEditorBase<Derived, NE>, Derived>::value) {
-      return;
-   }
-   //! Substantive version
-   void updateStepOwnerIfNeeded() requires (std::is_base_of<StepEditorBase<Derived, NE>, Derived>::value) {
-      this->derived().addStepToStepOwner(this->m_editItem);
+   void updateStepOwnerIfNeeded() {
+      if constexpr (std::is_base_of<StepEditorBase<Derived, NE>, Derived>::value) {
+         if (this->m_editItem->ownerId() > 0) {
+            // If the step already has an owner, then there is nothing to do here (and trying to re-add it to its
+            // existing owner would be harmful.
+            return;
+         }
+
+         // The member function we're calling is in StepEditorBase, so we have to access it via Derived (which inherits
+         // from that, whereas EditorBase does not).
+         this->derived().addStepToStepOwner(this->m_editItem);
+      }
       return;
    }
 
