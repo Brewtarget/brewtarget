@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>brewNote</string>
+   <string>Brew Note</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
@@ -95,24 +95,6 @@
              </item>
              <item row="0" column="1">
               <widget class="SmartLineEdit" name="lineEdit_Sg">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
                <property name="toolTip">
                 <string>Preboil gravity</string>
                </property>
@@ -139,24 +121,6 @@
              </item>
              <item row="1" column="1">
               <widget class="SmartLineEdit" name="lineEdit_volIntoBk">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
                <property name="toolTip">
                 <string>Volume of wort collected</string>
                </property>
@@ -180,24 +144,6 @@
              </item>
              <item row="2" column="1">
               <widget class="SmartLineEdit" name="lineEdit_strikeTemp">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
                <property name="toolTip">
                 <string>Temperature of strike water before dough in</string>
                </property>
@@ -221,24 +167,6 @@
              </item>
              <item row="3" column="1">
               <widget class="SmartLineEdit" name="lineEdit_mashFinTemp">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
                <property name="toolTip">
                 <string>Temperature of mash before mash out</string>
                </property>
@@ -277,24 +205,6 @@
              </item>
              <item row="0" column="1">
               <widget class="SmartLineEdit" name="lineEdit_Og">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
                <property name="toolTip">
                 <string>Post boil gravity</string>
                </property>
@@ -324,24 +234,6 @@
              </item>
              <item row="1" column="1">
               <widget class="SmartLineEdit" name="lineEdit_postBoilVol">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
                <property name="toolTip">
                 <string>Volume of wort in BK after boil</string>
                </property>
@@ -371,24 +263,6 @@
              </item>
              <item row="2" column="1">
               <widget class="SmartLineEdit" name="lineEdit_volIntoFerm">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
               </widget>
              </item>
              <item row="3" column="0">
@@ -412,24 +286,6 @@
              </item>
              <item row="3" column="1">
               <widget class="SmartLineEdit" name="lineEdit_pitchTemp">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
                <property name="toolTip">
                 <string>Temperature of wort when yeast is pitched</string>
                </property>
@@ -465,24 +321,6 @@
              </item>
              <item row="0" column="1">
               <widget class="SmartLineEdit" name="lineEdit_Fg">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
                <property name="toolTip">
                 <string>Final gravity</string>
                </property>
@@ -503,24 +341,6 @@
              </item>
              <item row="1" column="1">
               <widget class="SmartLineEdit" name="lineEdit_finalVolume">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
                <property name="toolTip">
                 <string>Volume of beer into serving keg/bottles</string>
                </property>
@@ -541,13 +361,6 @@
              </item>
              <item row="2" column="1">
               <widget class="QDateTimeEdit" name="lineEdit_fermentDate">
-               <property name="date">
-                <date>
-                 <year>2014</year>
-                 <month>10</month>
-                 <day>8</day>
-                </date>
-               </property>
                <property name="displayFormat">
                 <string>yyyy-dd-MM</string>
                </property>

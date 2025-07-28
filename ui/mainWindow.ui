@@ -996,6 +996,9 @@
              <attribute name="title">
               <string>Brewday</string>
              </attribute>
+             <property name="toolTip">
+              <string>Step-by-step instructions for brew day</string>
+             </property>
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
                <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>

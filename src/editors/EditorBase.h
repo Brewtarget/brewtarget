@@ -132,7 +132,12 @@ template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasNumRecipesUsing = has_
 /**
  * \class EditorBase
  *
- * \brief As in other places where we want to use class templating, we have to use multiple inheritance because we can't
+ * \brief CRTP class that provides the common functionality for free-standing editors - ie those for which we have a
+ *        separate window.  The main entities for which we do NOT have free-standing editors are \c Recipe (see
+ *        \c MainWindow), \c Instruction (see \c BrewDayScrollWidget, shown as a tab on \c MainWindow), \c BrewNote (see
+ *        \c BrewNoteWidget, shown as zero or more tabs on \c MainWindow).
+ *
+ *        As in other places where we want to use class templating, we have to use multiple inheritance because we can't
  *        template a class that ultimately inherits from \c QObject.  However, with the magic of the Curiously Recurring
  *        Template Pattern, we can get past some of the limitations and avoid too much copy-and-paste code duplication.
  *        Eg:

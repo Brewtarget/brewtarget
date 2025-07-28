@@ -198,6 +198,10 @@
         <source>Pre-Boil Size</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayFormatter</name>
@@ -1191,6 +1195,29 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Delete %1 #%2 &quot;%3&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>%1 in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>Cannot delete this %1, as it is used in %n recipe(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Delete %1 #%2 &quot;%3&quot;? (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Addition of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1468,6 +1495,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Fermenter Volume</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Fermentable</name>
@@ -1699,6 +1730,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Yield (DBFG) %</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Fermentation</name>
@@ -1793,6 +1828,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Number of Steps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>N° Recipes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2139,6 +2178,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <message>
         <source>Amount Type</source>
         <translation type="unfinished">Mengenangabe</translation>
+    </message>
+    <message>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2752,6 +2795,10 @@ If you need help, please open an issue at %1</source>
         <source>Total Time</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MashWizard</name>
@@ -3037,6 +3084,10 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Inventory</source>
         <translation>Lagerbestand</translation>
+    </message>
+    <message>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4344,13 +4395,6 @@ Log file may contain more details.</source>
     </message>
 </context>
 <context>
-    <name>RaIngrd</name>
-    <message>
-        <source>Add %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
@@ -4704,16 +4748,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
 </context>
 <context>
-    <name>Recipe::T</name>
-    <message numerus="yes">
-        <source>Used in %n recipe(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-</context>
-<context>
     <name>RecipeAddition</name>
     <message>
         <source>Recipe Addition</source>
@@ -4743,11 +4777,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Addition of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid!</source>
+        <source>Addition of %1 fermentable</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4817,11 +4847,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished">Stopfhopfen</translation>
     </message>
     <message>
-        <source>Addition of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid!</source>
+        <source>Addition of %1 hop</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4894,10 +4920,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Addition of %1</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Invalid!</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>RecipeAdditionMiscTableModel</name>
@@ -4937,11 +4959,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Addition of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid!</source>
+        <source>Addition of %1 yeast</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5020,10 +5038,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Addition of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5457,11 +5471,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Use of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid!</source>
+        <source>Use of %1 water</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5575,6 +5585,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <message>
         <source>Type</source>
         <translation type="unfinished">Typ</translation>
+    </message>
+    <message>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5739,6 +5753,20 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <message>
         <source>Style Guide</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>T</name>
+    <message numerus="yes">
+        <source>Used in %n recipe(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -6288,6 +6316,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Magnesium (ppm)</source>
         <translation>Magnesium (ppm)</translation>
     </message>
+    <message>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>XmlCoding</name>
@@ -6581,6 +6613,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <message>
         <source>Amount Type</source>
         <translation type="unfinished">Mengenangabe</translation>
+    </message>
+    <message>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9871,6 +9907,34 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>How many times %1 needs to be run to trigger another backup: 1 means always backup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Size</source>
+        <translation type="unfinished">Ausschlagmenge</translation>
+    </message>
+    <message>
+        <source>Default batch size to set on new recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default pre-boil size to set on new recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Efficiency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default efficiency to set on new recipes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -104,14 +104,14 @@ TypeLookup const BrewNote::typeLookup {
 
 // Initializers
 BrewNote::BrewNote(QString name) :
-   BrewNote(QDate(), name) {
+   BrewNote(QDate::currentDate(), name) {
 
    CONSTRUCTOR_END
    return;
 }
 
 BrewNote::BrewNote(Recipe const & recipe) :
-   BrewNote(QDate(), "") {
+   BrewNote(QDate::currentDate(), "") {
    this->m_recipeId = recipe.key();
 
    CONSTRUCTOR_END
@@ -122,7 +122,7 @@ BrewNote::BrewNote(QDate dateNow, QString const & name) :
    OwnedByRecipe      {name},
    loading            {false  },
    m_brewDate         {dateNow},
-   m_fermentDate      {       },
+   m_fermentDate      {dateNow},
    m_notes            {""     },
    m_sg               {0.0    },
    m_abv              {0.0    },
