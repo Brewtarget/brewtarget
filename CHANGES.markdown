@@ -21,6 +21,7 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Sort by Inventory seems to have broke in 4.1.3 (maybe 4.1.2?) [1003](https://github.com/Brewtarget/brewtarget/issues/1003)
+* Post ferment default date is 2014-10-08 [1006](https://github.com/Brewtarget/brewtarget/issues/1006)
 
 ### Release Timestamp
 Fri, 25 Jul 2025 04:01:04 +0100
@@ -33,6 +34,7 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Fermentables wrong colour unit in default database [366](https://github.com/Brewtarget/brewtarget/issues/366)
+* Modifying grain quantity doesn't cause any of the other fields to recalculate [443](https://github.com/Brewtarget/brewtarget/issues/443)
 * Deleting a BrewNote does not remove it from the recipe tree [990](https://github.com/Brewtarget/brewtarget/issues/990)
 * Bitterness value not updated after editing hops alpha [1001](https://github.com/Brewtarget/brewtarget/issues/1001)
 

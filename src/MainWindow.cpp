@@ -522,12 +522,13 @@ public:
       return;
    }
 
-   //! \brief Find an open brewnote tab, if it is open
-   BrewNoteWidget * findBrewNoteWidget(BrewNote * b) {
+   //! \brief Find an open brew note tab
+   BrewNoteWidget * findBrewNoteWidget(BrewNote const & brewNote) const {
       for (int ii = 0; ii < this->m_self.tabWidget_recipeView->count(); ++ii) {
-         if (this->m_self.tabWidget_recipeView->widget(ii)->objectName() == "BrewNoteWidget") {
+         if (this->m_self.tabWidget_recipeView->widget(ii)->objectName() ==
+             BrewNoteWidget::staticMetaObject.className()) {
             BrewNoteWidget* ni = qobject_cast<BrewNoteWidget*>(this->m_self.tabWidget_recipeView->widget(ii));
-            if (ni->isBrewNote(b)) {
+            if (&brewNote == ni->brewNote()) {
                return ni;
             }
          }
@@ -535,26 +536,93 @@ public:
       return nullptr;
    }
 
-   void setBrewNoteByIndex(QModelIndex const & index) {
+   void updateBrewNoteTabText(BrewNote const & brewNote, BrewNoteWidget const & widget) const {
+      auto const tabIndex = this->m_self.tabWidget_recipeView->indexOf(&widget);
+      this->m_self.tabWidget_recipeView->setTabText(tabIndex, brewNote.brewDate_short());
+      this->m_self.tabWidget_recipeView->setTabToolTip(
+         tabIndex,
+         tr("Brew Note #%1 for brew on %2").arg(brewNote.key()).arg(brewNote.brewDate_short())
+      );
+      this->m_self.tabWidget_recipeView->setTabWhatsThis(
+         tabIndex,
+         tr("Notes from brew day on %1").arg(brewNote.brewDate_short())
+      );
+      return;
+   }
+
+   void updateBrewNoteTabText(BrewNote const & brewNote) const {
+      // See if this BrewNote is open in a tab
+      BrewNoteWidget * widget = this->findBrewNoteWidget(brewNote);
+      if (widget) {
+         this->updateBrewNoteTabText(brewNote, *widget);
+      }
+      return;
+   }
+
+   void closeBrewNoteTab(BrewNote const & brewNote) const {
+      BrewNoteWidget* widget = this->findBrewNoteWidget(brewNote);
+      if (!widget) {
+         qDebug() << Q_FUNC_INFO << "Could not find tab for BrewNote" << brewNote;
+         return;
+      }
+
+      qDebug() << Q_FUNC_INFO << "Closing tab for BrewNote" << brewNote;
+      auto const tabIndex = this->m_self.tabWidget_recipeView->indexOf(widget);
+      this->m_self.tabWidget_recipeView->removeTab(tabIndex);
+
+      return;
+   }
+
+   //! Clean out any brew notes
+   void closeAllBrewNoteTabs() const {
+      qDebug() << Q_FUNC_INFO << "Closing all BrewNote tabs";
+      this->m_self.tabWidget_recipeView->setCurrentIndex(0);
+
+      // Start closing from the right (highest index) down. Anything else dumps
+      // core in the most unpleasant of fashions
+      int const maxTabNum = this->m_self.tabWidget_recipeView->count() - 1;
+      for (int ii = maxTabNum; ii > 0; --ii) {
+         if (this->m_self.tabWidget_recipeView->widget(ii)->objectName() ==
+            BrewNoteWidget::staticMetaObject.className()) {
+            this->m_self.tabWidget_recipeView->removeTab(ii);
+         }
+      }
+      return;
+   }
+
+   void setBrewNote(BrewNote & brewNote) const {
+      BrewNoteWidget* widget = this->findBrewNoteWidget(brewNote);
+      if (!widget) {
+         widget = new BrewNoteWidget(this->m_self.tabWidget_recipeView);
+         widget->setBrewNote(&brewNote);
+         this->m_self.tabWidget_recipeView->addTab(widget, brewNote.brewDate_short());
+      }
+
+      this->updateBrewNoteTabText(brewNote, widget);
+      this->m_self.tabWidget_recipeView->setCurrentWidget(widget);
+      return;
+   }
+
+   void setBrewNoteByIndex(QModelIndex const & index) const {
 
       auto bNote = this->m_self.treeView_recipe->getItem<BrewNote>(index);
       if (!bNote) {
          return;
       }
 
-      // HERE
-      // This is some clean up work. REMOVE FROM HERE TO THERE
-      if ( bNote->projPoints() < 15 )
-      {
-         double pnts = bNote->projPoints();
-         bNote->setProjPoints(pnts);
-      }
-      if ( bNote->effIntoBK_pct() < 10 )
-      {
-         bNote->calculateEffIntoBK_pct();
-         bNote->calculateBrewHouseEff_pct();
-      }
-      // THERE
+///      // HERE
+///      // This is some clean up work. REMOVE FROM HERE TO THERE
+///      if ( bNote->projPoints() < 15 )
+///      {
+///         double pnts = bNote->projPoints();
+///         bNote->setProjPoints(pnts);
+///      }
+///      if ( bNote->effIntoBK_pct() < 10 )
+///      {
+///         bNote->calculateEffIntoBK_pct();
+///         bNote->calculateBrewHouseEff_pct();
+///      }
+///      // THERE
 
       Recipe* parent  = ObjectStoreWrapper::getByIdRaw<Recipe>(bNote->recipeId());
       QModelIndex pNdx = this->m_self.treeView_recipe->parentIndex(index);
@@ -564,45 +632,43 @@ public:
          if (!this->m_recipeObs->isMyAncestor(*parent)) {
             this->m_self.setRecipe(parent);
          } else if (this->m_self.treeView_recipe->ancestorsAreShowing(pNdx)) {
-            this->m_self.tabWidget_recipeView->setCurrentIndex(0);
-            // Start closing from the right (highest index) down. Anything else dumps
-            // core in the most unpleasant of fashions
-            int tabs = this->m_self.tabWidget_recipeView->count() - 1;
-            for (int i = tabs; i >= 0; --i) {
-               if (this->m_self.tabWidget_recipeView->widget(i)->objectName() ==
-                   BrewNoteWidget::staticMetaObject.className()) {
-                  this->m_self.tabWidget_recipeView->removeTab(i);
-               }
-            }
+            this->closeAllBrewNoteTabs();
+
             this->m_self.setRecipe(parent);
          }
       }
 
-      BrewNoteWidget * ni = this->findBrewNoteWidget(bNote.get());
-      if (!ni) {
-         ni = new BrewNoteWidget(this->m_self.tabWidget_recipeView);
-         ni->setBrewNote(bNote.get());
-      }
-
-      this->m_self.tabWidget_recipeView->addTab(ni, bNote->brewDate_short());
-      this->m_self.tabWidget_recipeView->setCurrentWidget(ni);
+      this->setBrewNote(*bNote);
       return;
    }
 
-   void setBrewNote(BrewNote * bNote) {
-      BrewNoteWidget* ni = this->findBrewNoteWidget(bNote);
-      if (ni) {
-         this->m_self.tabWidget_recipeView->setCurrentWidget(ni);
-         return;
+   //! \brief copies an existing brewnote to a new brewday
+   void copySelectedBrewNote() {
+      QModelIndexList indexes = this->m_self.treeView_recipe->selectionModel()->selectedRows();
+      for (QModelIndex selected : indexes) {
+         auto selectedBrewNote = this->m_self.treeView_recipe->getItem<BrewNote>(selected);
+         auto recipe           = this->m_self.treeView_recipe->getItem<Recipe>(this->m_self.treeView_recipe->parentIndex(selected));
+
+         if (!selectedBrewNote || !recipe) {
+            return;
+         }
+
+         auto newBrewNote = std::make_shared<BrewNote>(*selectedBrewNote);
+         newBrewNote->setBrewDate();
+         ObjectStoreWrapper::insert(newBrewNote);
+
+         if (recipe.get() != this->m_recipeObs) {
+            this->m_self.setRecipe(recipe.get());
+         }
+
+         this->setBrewNote(*newBrewNote);
+
+         this->m_self.setTreeSelection(this->m_self.treeView_recipe->findElement(newBrewNote.get()));
       }
-
-      ni = new BrewNoteWidget(this->m_self.tabWidget_recipeView);
-      ni->setBrewNote(bNote);
-
-      this->m_self.tabWidget_recipeView->addTab(ni, bNote->brewDate_short());
-      this->m_self.tabWidget_recipeView->setCurrentWidget(ni);
       return;
    }
+
+
 
    //================================================ MEMBER VARIABLES =================================================
    MainWindow & m_self;
@@ -803,7 +869,7 @@ void MainWindow::initialiseAndMakeVisible() {
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
    // .:TODO:. Change this so we use the newer deleted signal!
-   connect(&ObjectStoreTyped<BrewNote>::getInstance(), &ObjectStoreTyped<BrewNote>::signalObjectDeleted, this, &MainWindow::closeBrewNote);
+   connect(&ObjectStoreTyped<BrewNote>::getInstance(), &ObjectStoreTyped<BrewNote>::signalObjectDeleted, this, &MainWindow::brewNoteDeleted);
 
    //
    // Read in any new ingredients, styles, example recipes etc
@@ -1256,7 +1322,6 @@ void MainWindow::setRecipe(Recipe * recipe) {
 
    qDebug() << Q_FUNC_INFO << "Recipe #" << recipe->key() << ":" << recipe->name();
 
-   int tabs = 0;
 
    // Make sure this MainWindow is paying attention...
    if (this->pimpl->m_recipeObs) {
@@ -1277,15 +1342,7 @@ void MainWindow::setRecipe(Recipe * recipe) {
    this->pimpl->      m_yeastAdditionsVeriTable.m_tableModel->observeRecipe(recipe);
    this->pimpl->       m_saltAdditionsVeriTable.m_tableModel->observeRecipe(recipe);
 
-   // Clean out any brew notes
-   tabWidget_recipeView->setCurrentIndex(0);
-   // Start closing from the right (highest index) down. Anything else dumps
-   // core in the most unpleasant of fashions
-   tabs = tabWidget_recipeView->count() - 1;
-   for (int i = tabs; i >= 0; --i) {
-      if (tabWidget_recipeView->widget(i)->objectName() == "BrewNoteWidget")
-         tabWidget_recipeView->removeTab(i);
-   }
+   this->pimpl->closeAllBrewNoteTabs();
 
    // Tell some of our other widgets to observe the new recipe.
    this->pimpl->m_mashWizard->setRecipe(recipe);
@@ -2202,7 +2259,7 @@ void MainWindow::newBrewNote() {
       brewNote->setBrewDate();
       ObjectStoreWrapper::insert(brewNote);
 
-      this->pimpl->setBrewNote(brewNote.get());
+      this->pimpl->setBrewNote(*brewNote);
 
       QModelIndex brewNoteIndex = treeView_recipe->findElement(brewNote.get());
       if (brewNoteIndex.isValid()) {
@@ -2214,31 +2271,6 @@ void MainWindow::newBrewNote() {
    return;
 }
 
-void MainWindow::reBrewNote() {
-   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
-   for (QModelIndex selected : indexes) {
-      auto selectedBrewNote = treeView_recipe->getItem<BrewNote>(selected);
-      auto recipe           = treeView_recipe->getItem<Recipe>(treeView_recipe->parentIndex(selected));
-
-      if (!selectedBrewNote || !recipe) {
-         return;
-      }
-
-      auto bNote = std::make_shared<BrewNote>(*selectedBrewNote);
-      bNote->setBrewDate();
-      ObjectStoreWrapper::insert(bNote);
-
-      if (recipe.get() != this->pimpl->m_recipeObs) {
-         this->setRecipe(recipe.get());
-      }
-
-      this->pimpl->setBrewNote(bNote.get());
-
-      this->setTreeSelection(treeView_recipe->findElement(bNote.get()));
-   }
-   return;
-}
-
 void MainWindow::brewItHelper() {
    this->newBrewNote();
    this->reduceInventory();
@@ -2246,7 +2278,7 @@ void MainWindow::brewItHelper() {
 }
 
 void MainWindow::brewAgainHelper() {
-   this->reBrewNote();
+   this->pimpl->copySelectedBrewNote();
    this->reduceInventory();
    return;
 }
@@ -2520,24 +2552,18 @@ void MainWindow::changeBrewDate() {
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
 
    for (QModelIndex selected : indexes) {
-      auto target = treeView_recipe->getItem<BrewNote>(selected);
+      auto brewNote = treeView_recipe->getItem<BrewNote>(selected);
 
       // No idea how this could happen, but I've seen stranger things
-      if ( ! target )
+      if ( ! brewNote ) {
          continue;
+      }
 
       // Pop the calendar, get the date.
-      if ( this->pimpl->m_btDatePopup->exec() == QDialog::Accepted )
-      {
+      if (this->pimpl->m_btDatePopup->exec() == QDialog::Accepted) {
          QDate newDate = this->pimpl->m_btDatePopup->selectedDate();
-         target->setBrewDate(newDate);
-
-         // If this note is open in a tab
-         BrewNoteWidget * ni = this->pimpl->findBrewNoteWidget(target.get());
-         if (ni) {
-            tabWidget_recipeView->setTabText(tabWidget_recipeView->indexOf(ni), target->brewDate_short());
-            return;
-         }
+         brewNote->setBrewDate(newDate);
+         this->pimpl->updateBrewNoteTabText(*brewNote);
       }
    }
    return;
@@ -2579,21 +2605,21 @@ void MainWindow::versionedRecipe(Recipe * descendant) {
    return;
 }
 
-// .:TBD:. Seems redundant to pass both the brewnote ID and a pointer to it; we only need one of these
-void MainWindow::closeBrewNote([[maybe_unused]] int brewNoteId, std::shared_ptr<QObject> object) {
-   BrewNote* b = std::static_pointer_cast<BrewNote>(object).get();
-   Recipe* parent = ObjectStoreWrapper::getByIdRaw<Recipe>(b->recipeId());
+void MainWindow::brewNoteDeleted([[maybe_unused]] int brewNoteId, std::shared_ptr<QObject> object) {
+   //
+   // This function receives the ObjectStore::signalObjectDeleted signal when a BrewNote is deleted
+   //
+   BrewNote * deletedBrewNote = std::static_pointer_cast<BrewNote>(object).get();
+   Recipe * recipe = ObjectStoreWrapper::getByIdRaw<Recipe>(deletedBrewNote->recipeId());
+   qDebug() << Q_FUNC_INFO << "BrewNote" << *deletedBrewNote << "deleted on Recipe" << *recipe;
 
    // If this isn't the focused recipe, do nothing because there are no tabs
    // to close.
-   if (parent != this->pimpl->m_recipeObs) {
+   if (recipe != this->pimpl->m_recipeObs) {
       return;
    }
 
-   BrewNoteWidget* ni = this->pimpl->findBrewNoteWidget(b);
-   if (ni) {
-      tabWidget_recipeView->removeTab( tabWidget_recipeView->indexOf(ni));
-   }
+   this->pimpl->closeBrewNoteTab(*deletedBrewNote);
 
    return;
 }

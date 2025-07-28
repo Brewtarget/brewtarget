@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BrewNoteWidget.h is part of Brewtarget, and is copyright the following authors 2009-2022:
+ * BrewNoteWidget.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -35,6 +35,8 @@ class BrewNote;
  * \class BrewNoteWidget
  *
  * \brief View/controller widget that edits BrewNotes.
+ *
+ *
  */
 class BrewNoteWidget : public QWidget, public Ui::brewNoteWidget {
     Q_OBJECT
@@ -43,8 +45,8 @@ public:
    BrewNoteWidget(QWidget *parent = nullptr);
    virtual ~BrewNoteWidget();
 
-   void setBrewNote(BrewNote* bNote);
-   bool isBrewNote(BrewNote* note);
+   void setBrewNote(BrewNote * bNote);
+   BrewNote * brewNote() const;
 
    void focusOutEvent(QFocusEvent *e);
 
@@ -81,7 +83,7 @@ public slots:
    void updateProjOg();
 
 private:
-   BrewNote* bNoteObs;
+   BrewNote * m_brewNote = nullptr;
 };
 
 #endif

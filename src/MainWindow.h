@@ -131,7 +131,7 @@ public slots:
    void updateStatus(QString const status);
 
    //! \brief Close a brewnote tab if we must (because of the BrewNote being deleted)
-   void closeBrewNote(int brewNoteId, std::shared_ptr<QObject> object);
+   void brewNoteDeleted(int brewNoteId, std::shared_ptr<QObject> object);
 
    void setBrewNoteByIndex(QModelIndex const & index);
 
@@ -208,8 +208,6 @@ public slots:
 
    //! \brief creates a new brewnote
    void newBrewNote();
-   //! \brief copies an existing brewnote to a new brewday
-   void reBrewNote();
    void brewItHelper();
    void brewAgainHelper();
    void reduceInventory();
