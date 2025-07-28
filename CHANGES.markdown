@@ -34,6 +34,7 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Fermentables wrong colour unit in default database [366](https://github.com/Brewtarget/brewtarget/issues/366)
+* Modifying grain quantity doesn't cause any of the other fields to recalculate [443](https://github.com/Brewtarget/brewtarget/issues/443)
 * Deleting a BrewNote does not remove it from the recipe tree [990](https://github.com/Brewtarget/brewtarget/issues/990)
 * Bitterness value not updated after editing hops alpha [1001](https://github.com/Brewtarget/brewtarget/issues/1001)
 
