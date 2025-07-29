@@ -52,6 +52,7 @@ void Undoable::addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<St
       qWarning() << Q_FUNC_INFO << step->metaObject()->className() << "unexpectedly not in DB, so inserting it now.";
       ObjectStoreWrapper::insert(step);
    }
+
    Undoable::doOrRedoUpdate(
       newUndoableAddOrRemove(stepOwner,
                              &StepOwnerClass::add,

@@ -382,6 +382,16 @@ private:
     *        outside the class for an enumerated set.
     */
    std::shared_ptr<Item> extend(std::shared_ptr<Item> item) {
+      //
+      // It's a coding error to add an item to a set if it is already in one
+      //
+      if (item->ownerId() > 0) {
+         qWarning() <<
+            Q_FUNC_INFO << "Trying to add" << Item::staticMetaObject.className() << "#" << item->key() << "to" <<
+            Owner::staticMetaObject.className() << "#" << this->m_owner.key() << "when already owned by #" <<
+            item->ownerId();
+      }
+
       if (this->m_owner.key() > 0) {
          qDebug() <<
             Q_FUNC_INFO << "Add" << Item::staticMetaObject.className() << "#" << item->key() << "to" <<
