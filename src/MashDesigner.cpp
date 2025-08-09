@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * MashDesigner.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * MashDesigner.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Dan Cavanagh <dan@dancavanagh.com>
  *   • Greg Meess <Daedalus12@gmail.com>
@@ -27,10 +27,10 @@
 #include <QMessageBox>
 
 #include "database/ObjectStoreWrapper.h"
-#include "HeatCalculations.h"
+
 #include "measurement/Measurement.h"
+#include "measurement/PhysicalConstants.h"
 #include "model/Fermentable.h"
-#include "PhysicalConstants.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -133,7 +133,7 @@ bool MashDesigner::nextStep(int step) {
    this->m_prevStep = this->m_mashStep;
    if (this->m_mashStep) {
       // NOTE: This needs to be changed. Assumes 1L of water is 1 kg.
-      this->m_MC += this->m_mashStep->amount_l() * HeatCalculations::Cw_calGC;
+      this->m_MC += this->m_mashStep->amount_l() * PhysicalConstants::waterSpecificHeat_calGC;
       this->m_addedWater_l += this->m_mashStep->amount_l();
 
       if (!this->m_prevStep) {
@@ -189,7 +189,7 @@ double MashDesigner::stepTemp_c() {
 
 bool MashDesigner::heating() {
    // Returns true if the current step is hotter than the previous step
-   return this->stepTemp_c() >= (this->m_prevStep ? this->m_prevStep->startTemp_c().value_or(0.0) : this->m_mash->grainTemp_c());
+   return this->stepTemp_c() >= (this->m_prevStep ? this->m_prevStep->startTemp_c() : this->m_mash->grainTemp_c());
 }
 
 double MashDesigner::boilingTemp_c() {
@@ -257,11 +257,11 @@ double MashDesigner::volFromTemp_l(double temp_c) {
    // Final temp is target temp.
    double tf = this->stepTemp_c();
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
-   double t1 = (!this->m_prevStep) ? m_mash->grainTemp_c() : this->m_prevStep->startTemp_c().value_or(0.0);
+   double t1 = (!this->m_prevStep) ? m_mash->grainTemp_c() : this->m_prevStep->startTemp_c();
    double mt = m_mash->mashTunSpecificHeat_calGC().value_or(0.0);
    double ct = m_mash->mashTunWeight_kg().value_or(0.0);
 
-   double mw = 1/(HeatCalculations::Cw_calGC * (tw - tf)) *
+   double mw = 1/(PhysicalConstants::waterSpecificHeat_calGC * (tw - tf)) *
       (m_MC * (tf - t1) + ((!this->m_prevStep) ? mt * ct * (tf - this->m_mash->tunTemp_c().value_or(0.0)) : 0));
 
    // Sanity check for unlikely edge cases
@@ -292,18 +292,18 @@ double MashDesigner::tempFromVolume_c(double vol_l) {
    if (mw <= 0) {
       return 0.0;
    }
-   double cw = HeatCalculations::Cw_calGC;
+   double cw = PhysicalConstants::waterSpecificHeat_calGC;
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
-   double t1 = (!this->m_prevStep) ? this->m_mash->grainTemp_c() : this->m_prevStep->startTemp_c().value_or(0.0);
+   double t1 = (!this->m_prevStep) ? this->m_mash->grainTemp_c() : this->m_prevStep->startTemp_c();
    // When batch sparging, you lose about 10C from previous step.
    if (isSparge()) {
-      t1 = (!this->m_prevStep) ? this->m_mash->grainTemp_c() : this->m_prevStep->startTemp_c().value_or(0.0) - 10;
+      t1 = (!this->m_prevStep) ? this->m_mash->grainTemp_c() : this->m_prevStep->startTemp_c() - 10;
    }
    double const mt = this->m_mash->mashTunSpecificHeat_calGC().value_or(0.0);
    double const ct = this->m_mash->mashTunWeight_kg().value_or(0.0);
 
-   double batchMC = m_grain_kg * HeatCalculations::Cgrain_calGC
-                    + absorption_LKg * m_grain_kg * HeatCalculations::Cw_calGC
+   double batchMC = m_grain_kg * PhysicalConstants::grainSpecificHeat_calGC
+                    + absorption_LKg * m_grain_kg * PhysicalConstants::waterSpecificHeat_calGC
                     + this->m_mash->mashTunWeight_kg().value_or(0.0) * this->m_mash->mashTunSpecificHeat_calGC().value_or(0.0);
 
    double tw = 1 / (mw * cw) * (
@@ -365,7 +365,9 @@ bool MashDesigner::initializeMash() {
    }
 
    // Order matters. Don't do this until every that could return false has
-   this->m_mash->setMashTunSpecificHeat_calGC(this->m_equipment->mashTunSpecificHeat_calGC().value_or(Equipment::default_mashTunSpecificHeat_calGC));
+   this->m_mash->setMashTunSpecificHeat_calGC(
+      this->m_equipment->mashTunSpecificHeat_calGC().value_or(Equipment::default_mashTunSpecificHeat_calGC)
+   );
    this->m_mash->setTunWeight_kg(this->m_equipment->mashTunWeight_kg().value_or(Equipment::default_mashTunWeight_kg)); // TBD: Maybe Mash::setTunWeight_kg should take an optional value
    this->m_mash->setTunTemp_c(Measurement::qStringToSI(dialogText, Measurement::PhysicalQuantity::Temperature).quantity);
 
@@ -374,11 +376,15 @@ bool MashDesigner::initializeMash() {
    this->m_mashStep.reset();
    this->m_prevStep.reset();
 
-   this->m_MC = m_recObs->grainsInMash_kg() * HeatCalculations::Cgrain_calGC;
+   this->m_MC = m_recObs->grainsInMash_kg() * PhysicalConstants::grainSpecificHeat_calGC;
    this->m_grain_kg = m_recObs->grainsInMash_kg();
 
-   this->label_tunVol->setText(Measurement::displayAmount(Measurement::Amount{m_equipment->mashTunVolume_l(), Measurement::Units::liters}));
-   this->label_wortMax->setText(Measurement::displayAmount(Measurement::Amount{m_recObs->targetCollectedWortVol_l(), Measurement::Units::liters}));
+   this->label_tunVol->setText(
+      Measurement::displayAmount(Measurement::Amount{m_equipment->mashTunVolume_l(), Measurement::Units::liters})
+   );
+   this->label_wortMax->setText(
+      Measurement::displayAmount(Measurement::Amount{m_recObs->targetCollectedWortVol_l(), Measurement::Units::liters})
+   );
 
    this->updateMinAmt();
    this->updateMaxAmt();
@@ -631,26 +637,22 @@ void MashDesigner::saveTargetTemp() {
 }
 
 double MashDesigner::getDecoctionAmount_l() {
-   double m_w, m_g, r;
-   double c_w, c_g;
-   double tf, t1;
-
    if (!this->m_prevStep) {
       QMessageBox::critical(this, tr("Decoction error"), tr("The first m_mash step cannot be a decoction."));
       qCritical() << "MashDesigner: First step not a decoction.";
       return 0;
    }
-   tf = this->stepTemp_c();
-   t1 = this->m_prevStep->startTemp_c().value_or(0.0);
+   double const tf = this->stepTemp_c();
+   double const t1 = this->m_prevStep->startTemp_c();
 
-   m_w = m_addedWater_l; // NOTE: this is bad. Assumes 1L = 1 kg.
-   m_g = m_grain_kg;
+   double const m_w = m_addedWater_l; // NOTE: this is bad. Assumes 1L = 1 kg.
+   double const m_g = m_grain_kg;
 
-   c_w = HeatCalculations::Cw_calGC;
-   c_g = HeatCalculations::Cgrain_calGC;
+   double const c_w = PhysicalConstants::waterSpecificHeat_calGC;
+   double const c_g = PhysicalConstants::grainSpecificHeat_calGC;
 
    // r is the ratio of water and grain to take out for decoction.
-   r = ((m_MC)*(tf-t1)) / ((m_w*c_w + m_g*c_g)*(maxTemp_c()-tf) + (m_w*c_w + m_g*c_g)*(tf-t1));
+   double const r = ((m_MC)*(tf-t1)) / ((m_w*c_w + m_g*c_g)*(maxTemp_c()-tf) + (m_w*c_w + m_g*c_g)*(tf-t1));
    if (r < 0 || r > 1) {
       //QMessageBox::critical(this, tr("Decoction error"), tr("Something went wrong in decoction calculation."));
       //Application::log(Application::ERROR, QString("MashDesigner Decoction: r=%1").arg(r));

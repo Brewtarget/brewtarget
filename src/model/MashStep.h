@@ -53,6 +53,7 @@ class Mash;
 
 /**
  * On \c MashStep, \c stepTime_mins is required, \c startTemp_c is required
+ * (See comment in model/Step.h for summary of fields on different step types.)
  */
 #define MashStepOptions StepBaseOptions{.stepTimeRequired = true, .startTempRequired = true, .rampTimeSupported = true}
 /*!
@@ -68,9 +69,9 @@ class MashStep : public Step, public StepBase<MashStep, Mash, MashStepOptions> {
    Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
    Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
    // See model/StepBase.h for info, getters and setters for these properties
-   Q_PROPERTY(std::optional<double> stepTime_mins   READ stepTime_mins   WRITE setStepTime_mins)
-   Q_PROPERTY(std::optional<double> stepTime_days   READ stepTime_days   WRITE setStepTime_days)
-   Q_PROPERTY(std::optional<double> startTemp_c     READ startTemp_c     WRITE setStartTemp_c  )
+   Q_PROPERTY(              double  stepTime_mins   READ stepTime_mins   WRITE setStepTime_mins)
+   Q_PROPERTY(              double  stepTime_days   READ stepTime_days   WRITE setStepTime_days)
+   Q_PROPERTY(              double  startTemp_c     READ startTemp_c     WRITE setStartTemp_c  )
    Q_PROPERTY(std::optional<double> rampTime_mins   READ rampTime_mins   WRITE setRampTime_mins)
 
 //   Q_PROPERTY(std::optional<double> startTemp_c     READ startTemp_c     WRITE setStartTemp_c  )
@@ -82,7 +83,16 @@ public:
     */
    static QString localisedName();
 
-   //! \brief The type of step.
+   /**
+    * \brief The type of step:
+    *           \c Infusion denotes adding hot water
+    *           \c Temperature denotes heating with an outside heat source
+    *           \c Decoction denotes drawing off some mash for boiling
+    *           \c FlySparge
+    *           \c BatchSparge
+    *           \c SouringMash
+    *           \c SouringWort
+    */
    enum class Type {Infusion   ,
                     Temperature,
                     Decoction  ,

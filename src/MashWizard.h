@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * MashWizard.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * MashWizard.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -34,7 +34,7 @@
 class MashWizard : public QDialog, public Ui::mashWizard {
    Q_OBJECT
 public:
-   MashWizard(QWidget* parent=nullptr);
+   MashWizard(QWidget * parent = nullptr);
    //! Set the recipe to do mash wizardry on.
    void setRecipe(Recipe* rec);
 
@@ -44,20 +44,12 @@ public slots:
    void toggleSpinBox(QAbstractButton* button);
 
 private:
-   Recipe* m_recObs;
-   Measurement::Unit const * m_weightUnit;
-   Measurement::Unit const * m_volumeUnit;
+   Recipe * m_recObs = nullptr;
+   Measurement::Unit const * m_weightUnit = nullptr;
+   Measurement::Unit const * m_volumeUnit = nullptr;
 
-   //!brief just need a holder for the three buttons
+   //! \brief just need a holder for the three buttons
    QButtonGroup* m_bGroup;
-
-   //!brief helper method to calculate the volume of a decocation step
-   double calcDecoctionAmount(MashStep * step,
-                              Mash * mash,
-                              double waterMass,
-                              double grainMass,
-                              double lastTemp,
-                              double boiling);
 
 };
 

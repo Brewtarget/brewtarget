@@ -23,7 +23,7 @@
 #include <QDebug>
 #include <QVector>
 
-#include "PhysicalConstants.h"
+#include "measurement/PhysicalConstants.h"
 #include "measurement/SucroseConversion.h"
 #include "measurement/Unit.h"
 

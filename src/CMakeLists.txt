@@ -54,7 +54,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/BtTabWidget.cpp
     ${repoDir}/src/BtTextEdit.cpp
     ${repoDir}/src/ConverterTool.cpp
-    ${repoDir}/src/HeatCalculations.cpp
     ${repoDir}/src/HelpDialog.cpp
     ${repoDir}/src/Html.cpp
     ${repoDir}/src/HydrometerTool.cpp

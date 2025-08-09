@@ -351,6 +351,32 @@ public:
       );
    }
 
+   /**
+    * \brief Returns the number of items matching \c matchFunction
+    */
+   int numMatching(std::function<bool(Item const &)> const & matchFunction) const {
+      //
+      // We could use std::accumulate here, but it doesn't buy us anything.  Firstly, because this->items() returns a
+      // _copy_ of the list of items, we can't , eg, write:
+      //    int const numItems = std::accumulate(
+      //       this->items().cbegin(),
+      //       this->items().cend(),
+      //       ...
+      // because the begin and end iterators would be in different lists!
+      //
+      // Secondly, we'd have to have the lambda for std::accumulate invoke the lambda passed into this function, which
+      // all starts to get a but cumbersome.
+      //
+      int count = 0;
+      for (std::shared_ptr<Item> item : this->items()) {
+         if (matchFunction(*item)) {
+            ++count;
+         }
+      }
+      return count;
+   }
+
+
 private:
    /**
     * \brief If we changed the set in any way, we call this function to have the owner emit a signal

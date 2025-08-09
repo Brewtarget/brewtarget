@@ -38,7 +38,8 @@ AddPropertyName(vessel  )
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
 /**
- * On \c FermentationStep, \c stepTime_mins and \c startTemp_c are optional, and \c rampTime_mins is not to be used
+ * On \c FermentationStep, \c stepTime_mins and \c startTemp_c are optional, and \c rampTime_mins is not supported
+ * (See comment in model/Step.h for summary of fields on different step types.)
  */
 #define FermentationStepOptions StepBaseOptions{.stepTimeRequired = false, .startTempRequired = false, .rampTimeSupported = false}
 /**
@@ -58,7 +59,6 @@ class FermentationStep : public StepExtended, public StepBase<FermentationStep, 
    Q_PROPERTY(std::optional<double> stepTime_mins   READ stepTime_mins   WRITE setStepTime_mins)
    Q_PROPERTY(std::optional<double> stepTime_days   READ stepTime_days   WRITE setStepTime_days)
    Q_PROPERTY(std::optional<double> startTemp_c     READ startTemp_c     WRITE setStartTemp_c  )
-   Q_PROPERTY(std::optional<double> rampTime_mins   READ rampTime_mins   WRITE setRampTime_mins)
 
 public:
    /**

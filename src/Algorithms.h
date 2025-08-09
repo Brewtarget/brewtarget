@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Algorithms.h is part of Brewtarget, and is copyright the following authors 2009-2022:
+ * Algorithms.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Eric Tamme <etamme@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
@@ -148,6 +148,7 @@ namespace Algorithms {
    double abvFromOgAndFg(double og, double fg);
    //! \brief Correct specific gravity reading for the temperature at which it was taken
    double correctSgForTemperature(double measuredSg, double readingTempInC, double calibrationTempInC);
+
 }
 
 #endif

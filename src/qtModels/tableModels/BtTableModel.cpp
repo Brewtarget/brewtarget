@@ -124,7 +124,7 @@ QVariant BtTableModel::headerData(int section, Qt::Orientation orientation, int 
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
       // For reasons I didn't get to the bottom of, we sometimes get calls from the Qt framework requesting header data
       // for a column number that's one beyond the maximum, so we have to validate that here.
-      if (section < this->m_columnInfos.size()) {
+      if (section < static_cast<int>(this->m_columnInfos.size())) {
          return this->getColumnLabel(section);
       }
 

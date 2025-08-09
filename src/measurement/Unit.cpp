@@ -707,6 +707,11 @@ namespace Measurement::Units {
    Unit const joulesPerKelvinPerKg     {Measurement::UnitSystems::specificHeatCapacity_Joules  , QObject::tr("J/kg·K"  ), 1.0/4184.0, &caloriesPerCelsiusPerGram};
    Unit const btuPerFahrenheitPerPound {Measurement::UnitSystems::specificHeatCapacity_Btus    , QObject::tr("BTU/lb·F"), 1.0       , &caloriesPerCelsiusPerGram};
 
+   // == Heat Capacity ==
+   Unit const kilocaloriesPerCelsius{Measurement::UnitSystems::heatCapacity_Kilocalories, QObject::tr("kc/C" )};
+   Unit const joulesPerKelvin       {Measurement::UnitSystems::heatCapacity_Joules      , QObject::tr("J/K"  ), 1.0/4184.0, &kilocaloriesPerCelsius};
+   Unit const btuPerFahrenheit      {Measurement::UnitSystems::heatCapacity_Btus        , QObject::tr("BTU/F"), 0.45359237, &kilocaloriesPerCelsius};
+
    // == Specific Volume ==
    Unit const litresPerKilogram     {Measurement::UnitSystems::specificVolume_Metric     , QObject::tr("L/kg"   )};
    Unit const litresPerGram         {Measurement::UnitSystems::specificVolume_Metric     , QObject::tr("L/g"    ), 1000.0             , &litresPerKilogram};

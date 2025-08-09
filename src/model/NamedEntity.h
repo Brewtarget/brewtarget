@@ -405,6 +405,12 @@ public:
    virtual NamedEntity * ensureExists(BtStringConst const & property);
 
    /**
+    * \brief Subclasses can override this to include extra info in the logging of a class instance.  (This saves them
+    *        having to re-implement all the operator<< stuff below.
+    */
+   virtual QString extraLogInfo() const;
+
+   /**
     * \brief Given a name that is a duplicate of an existing one, modify it to a potential alternative.
     *        Callers should call this function as many times as necessary to find a non-clashing name.
     *
@@ -690,7 +696,9 @@ private:
  */
 template<class S>
 S & operator<<(S & stream, NamedEntity const & namedEntity) {
-   stream << namedEntity.metaObject()->className() << " #" << namedEntity.key() << " (" << namedEntity.name() << ")";
+   stream <<
+      namedEntity.metaObject()->className() << " #" << namedEntity.key() << " (" << namedEntity.name() << ")" <<
+      namedEntity.extraLogInfo();
    return stream;
 }
 

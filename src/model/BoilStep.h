@@ -38,6 +38,7 @@ AddPropertyName(chillingType)
 //======================================================================================================================
 /**
  * On \c BoilStep, \c stepTime_mins and \c startTemp_c are optional
+ * (See comment in model/Step.h for summary of fields on different step types.)
  */
 #define BoilStepOptions StepBaseOptions{.stepTimeRequired = false, .startTempRequired = false, .rampTimeSupported = true}
 /**

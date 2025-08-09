@@ -2577,6 +2577,14 @@ If you need help, please open an issue at %1</source>
         <source>Change recipe&apos;s fermentation profile</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Brew Note #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes from brew day on %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -2789,7 +2797,7 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Your mash is too thick for desired temp. at first step.</source>
-        <translation>Η Σακχαροποίηση είναι πολύ πηχτή για την επιθυμητή θερμοκρασία κατά το πρώτο βήμα.</translation>
+        <translation type="vanished">Η Σακχαροποίηση είναι πολύ πηχτή για την επιθυμητή θερμοκρασία κατά το πρώτο βήμα.</translation>
     </message>
     <message>
         <source>Decoction error</source>
@@ -2805,7 +2813,7 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water.</source>
-        <translation>Για να επιτύχετε την επιθυμητή θερμοκρασία ψεκάσματος, το νερό θα πρέπει να είναι πάνω από τα επίπεδα βρασμού. Μειώστε την θερμοκρασία του νερού ή αυξήστε τον όγκο του νερού με το οποίο θα ψεκάσετε</translation>
+        <translation type="vanished">Για να επιτύχετε την επιθυμητή θερμοκρασία ψεκάσματος, το νερό θα πρέπει να είναι πάνω από τα επίπεδα βρασμού. Μειώστε την θερμοκρασία του νερού ή αυξήστε τον όγκο του νερού με το οποίο θα ψεκάσετε</translation>
     </message>
     <message>
         <source>Too much wort</source>
@@ -2813,7 +2821,7 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
-        <translation>Έχετε παραπάνω γλεύκος από τον όγκο που θέλετε να βράσετε. Σας προτείνουμε να αυξήσετε τον όγκο βρασμού με το να αυξήσετε το χρόνο βρασμού, ή να μειώσετε την πυκνότητα σακχαροποίησης</translation>
+        <translation type="vanished">Έχετε παραπάνω γλεύκος από τον όγκο που θέλετε να βράσετε. Σας προτείνουμε να αυξήσετε τον όγκο βρασμού με το να αυξήσετε το χρόνο βρασμού, ή να μειώσετε την πυκνότητα σακχαροποίησης</translation>
     </message>
     <message>
         <source>Batch Sparge %1</source>
@@ -2828,7 +2836,43 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>In order to hit your target temp on the final step, the infusion water must be above boiling. Lower your initial infusion volume.</source>
+        <source>No grains in the mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check the &apos;Fermentables&apos; tab.  You need some mash-stage grain additions before you can run the wizard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No mash steps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to have mash steps before you can run the wizard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your mash is too thick for desired temperature at first step.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too much water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot adjust volume of last step to meet target runoff volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In order to hit your target temp on the final step, the infusion water would need to be above boiling.  Lower your initial infusion volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In order to hit your sparge temp, the sparge water must be above boiling.  Lower your sparge temp, or allow for more sparge water.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have too much wort from the mash for your boil size.  Try increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4340,6 +4384,34 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Noonan&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heat Capacity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heat Capacity Kilocalories per</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heat Capacity Joules per</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heat Capacity Btus per</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kc/C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>J/K</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BTU/F</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6998,10 +7070,6 @@ The final volume in the primary is %1.</source>
         <translation>Σημειώσεις</translation>
     </message>
     <message>
-        <source>brewNote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>yyyy-dd-MM</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7043,6 +7111,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Measured yeast attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Note</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8887,6 +8959,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Inventory</source>
         <translation type="unfinished">Ευρετήριο ειδών</translation>
+    </message>
+    <message>
+        <source>Step-by-step instructions for brew day</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

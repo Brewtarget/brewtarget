@@ -194,7 +194,7 @@ double Mash::totalSpargeAmount_l() const {
 double Mash::totalTime_mins() const {
    double totalTime = 0.0;
    for (auto step : this->mashSteps()) {
-      totalTime += step->stepTime_mins().value_or(0.0);
+      totalTime += step->stepTime_mins();
    }
    return totalTime;
 }

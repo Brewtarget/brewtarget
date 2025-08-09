@@ -457,6 +457,11 @@ NamedEntity * NamedEntity::ensureExists(BtStringConst const & property) {
    return nullptr;
 }
 
+QString NamedEntity::extraLogInfo() const {
+   // Default implementation returns nothing
+   return "";
+}
+
 void NamedEntity::modifyClashingName(QString & candidateName) {
    //
    // First, see whether there's already a (n) (ie "(1)", "(2)" etc) at the end of the name (with or without

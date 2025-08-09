@@ -508,15 +508,31 @@ public:
    std::optional<double> beerAcidity_pH()          const;
    std::optional<double> apparentAttenuation_pct() const;
 
-   // Calculated getters.
+   // === Calculated getters ===
    double        points                  () const;
    double        ABV_pct                 () const;
    double        color_mcu               () const; // Calculated color in MCU (Malt Color Units) - used by color_srm().
    double        color_srm               () const;
    double        boilGrav                () const;
    double        IBU                     () const;
+   /**
+    * \brief For a grain-based recipe, returns the part of the boil water that comes from post-mash top-up.
+    *
+    *        If a grain-based recipe also uses some malt extracts and/or sugars, then they need to be diluted to working
+    *        strength by adding water.  We assume this is done at the end of the mash.
+    *
+    *        This is used by \c targetCollectedWortVol_l and \c targetTotalMashVol_l
+    */
+   double        postMashAdditionVolume_l() const;
+   /**
+    * \brief
+    */
    double        targetCollectedWortVol_l() const;
+   /**
+    * \brief
+    */
    double        targetTotalMashVol_l    () const;
+
    double        wortFromMash_l          () const;
    double        boilVolume_l            () const;
    double        postBoilVolume_l        () const;

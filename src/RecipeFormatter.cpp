@@ -831,7 +831,7 @@ public:
          if (step->isInfusion()) {
             tmp = tmp.arg(Measurement::displayAmount(Measurement::Amount{step->amount_l(),
                                                                          Measurement::Units::liters}))
-                     .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c().value_or(step->startTemp_c().value_or(0.0)),
+                     .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c().value_or(step->startTemp_c()),
                                                                          Measurement::Units::celsius}));
          } else if (step->isDecoction()) {
             tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->amount_l(),
@@ -841,9 +841,9 @@ public:
             tmp = tmp.arg( "---" ).arg("---");
          }
 
-         tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->startTemp_c().value_or(0.0),
+         tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->startTemp_c(),
                                                                        Measurement::Units::celsius}));
-         tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->stepTime_mins().value_or(0.0),
+         tmp = tmp.arg( Measurement::displayAmount(Measurement::Amount{step->stepTime_mins(),
                                                                        Measurement::Units::minutes}, 0));
 
          mtable += tmp + "</tr>";
@@ -880,7 +880,7 @@ public:
             if ( step->isInfusion() ) {
                amounts.append(Measurement::displayAmount(Measurement::Amount{step->amount_l(),
                                                                              Measurement::Units::liters}));
-               temps.append(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c().value_or(step->startTemp_c().value_or(0.0)),
+               temps.append(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c().value_or(step->startTemp_c()),
                                                                            Measurement::Units::celsius}));
             } else if( step->isDecoction() ) {
                amounts.append(Measurement::displayAmount(Measurement::Amount{step->amount_l(),
@@ -890,9 +890,9 @@ public:
                amounts.append( "---" );
                temps.append("---");
             }
-            targets.append(Measurement::displayAmount(Measurement::Amount{step->startTemp_c().value_or(0.0),
+            targets.append(Measurement::displayAmount(Measurement::Amount{step->startTemp_c(),
                                                                           Measurement::Units::celsius}));
-            times.append(Measurement::displayAmount(Measurement::Amount{step->stepTime_mins().value_or(0.0),
+            times.append(Measurement::displayAmount(Measurement::Amount{step->stepTime_mins(),
                                                                         Measurement::Units::minutes}, 0));
          }
 

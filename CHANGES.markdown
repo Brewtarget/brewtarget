@@ -20,9 +20,11 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
+* Bug in recipe tab when changing mash [728](https://github.com/Brewtarget/brewtarget/issues/728)
 * Sort by Inventory seems to have broke in 4.1.3 (maybe 4.1.2?) [1003](https://github.com/Brewtarget/brewtarget/issues/1003)
 * Post ferment default date is 2014-10-08 [1006](https://github.com/Brewtarget/brewtarget/issues/1006)
 * Editing a Mash step moves it to the end of the list [1008](https://github.com/Brewtarget/brewtarget/issues/1008)
+* Mash Wizard seems a bit broken [1012](https://github.com/Brewtarget/brewtarget/issues/1012)
 
 ### Release Timestamp
 Fri, 25 Jul 2025 04:01:04 +0100

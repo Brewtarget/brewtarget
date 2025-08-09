@@ -272,39 +272,46 @@ TypeLookup const StepOwnerBase<Derived, DerivedStep>::typeLookup {
  *        Note we have to be careful about comment formats in macro definitions
  */
 #define STEP_OWNER_COMMON_DECL(NeName, LcNeName) \
-   /* This allows StepOwnerBase to call protected and private members of Derived */      \
-   friend class StepOwnerBase<NeName,                                                    \
-                              NeName##Step>;                                             \
-                                                                                         \
-   public:                                                                               \
-      /* This alias makes it easier to template a number of functions that are */        \
-      /* essentially the same for all "Step Owner" classes.                    */        \
-      using StepClass = NeName##Step;                                                    \
-                                                                                         \
-      /* Relational getters and setters */                                               \
-      QList<std::shared_ptr<NeName##Step>> LcNeName##Steps        () const;              \
-      void set##NeName##Steps        (QList<std::shared_ptr<NeName##Step>> const & val); \
-                                                                                         \
-      virtual void setKey(int key) override;                                             \
-                                                                                         \
-      /** \brief NeName owns its NeName##Steps so needs to delete them if it */          \
-      /*         itself is being deleted                                     */          \
-      virtual void hardDeleteOwnedEntities() override;                                   \
+   /* This allows StepOwnerBase to call protected and private members of Derived */           \
+   friend class StepOwnerBase<NeName,                                                         \
+                              NeName##Step>;                                                  \
+                                                                                              \
+   public:                                                                                    \
+      /* This alias makes it easier to template a number of functions that are */             \
+      /* essentially the same for all "Step Owner" classes.                    */             \
+      using StepClass = NeName##Step;                                                         \
+                                                                                              \
+      /* Relational getters and setters */                                                    \
+      QList<std::shared_ptr<NeName##Step>> LcNeName##Steps        () const;                   \
+      void set##NeName##Steps        (QList<std::shared_ptr<NeName##Step>> const & val);      \
+                                                                                              \
+      /* Return number of steps matching the supplied lambda */                               \
+      int num##NeName##StepsMatching(std::function<bool(NeName##Step const &)> const & matchFunction) const; \
+                                                                                              \
+      virtual void setKey(int key) override;                                                  \
+                                                                                              \
+      /** \brief NeName owns its NeName##Steps so needs to delete them if it */               \
+      /*         itself is being deleted                                     */               \
+      virtual void hardDeleteOwnedEntities() override;                                        \
 
 
 /**
  * \brief Derived classes should include this in their implementation file
  */
 #define STEP_OWNER_COMMON_CODE(NeName, LcNeName) \
-   QList<std::shared_ptr<NeName##Step>> NeName::LcNeName##Steps() const {                             \
-      return this->m_stepSet.items();                                                                 \
-   }                                                                                                  \
-   void NeName::set##NeName##Steps(QList<std::shared_ptr<NeName##Step>> const & val) {                \
-      this->m_stepSet.setAll(val); return;                                                            \
-   }                                                                                                  \
-                                                                                                      \
-   void NeName::setKey(int key) { this->doSetKey(key); return; }                                      \
-                                                                                                      \
-   void NeName::hardDeleteOwnedEntities() { this->m_stepSet.doHardDeleteOwnedEntities(); return; }    \
+   QList<std::shared_ptr<NeName##Step>> NeName::LcNeName##Steps() const {                           \
+      return this->m_stepSet.items();                                                               \
+   }                                                                                                \
+   void NeName::set##NeName##Steps(QList<std::shared_ptr<NeName##Step>> const & val) {              \
+      this->m_stepSet.setAll(val); return;                                                          \
+   }                                                                                                \
+                                                                                                    \
+   int NeName::num##NeName##StepsMatching(std::function<bool(NeName##Step const &)> const & matchFunction) const { \
+      return this->m_stepSet.numMatching(matchFunction);                                            \
+   }                                                                                                \
+                                                                                                    \
+   void NeName::setKey(int key) { this->doSetKey(key); return; }                                    \
+                                                                                                    \
+   void NeName::hardDeleteOwnedEntities() { this->m_stepSet.doHardDeleteOwnedEntities(); return; }  \
 
 #endif

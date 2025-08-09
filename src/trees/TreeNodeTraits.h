@@ -284,9 +284,7 @@ template<> struct TreeNodeTraits<MashStep, Mash> {
    static QVariant data(MashStep const & mashStep, ColumnIndex const column) {
       switch (column) {
          case ColumnIndex::Name        : return QVariant(mashStep.name         ());
-         case ColumnIndex::Time        : return qVariantFromOptional(MashStep::tr("%1 mins"),
-                                                                     mashStep.stepTime_mins(),
-                                                                     Measurement::Units::minutes);
+         case ColumnIndex::Time        : return MashStep::tr("%1 mins").arg(mashStep.stepTime_mins());
 //         case ColumnIndex::Type        : return QVariant(mashStep.type         ());
 //         case ColumnIndex::Amount      : return QVariant(mashStep.amount_l     ());
 //         case ColumnIndex::InfusionTemp: return QVariant(mashStep.infuseTemp_c ());

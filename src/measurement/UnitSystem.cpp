@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/UnitSystem.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * measurement/UnitSystem.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -578,6 +578,21 @@ namespace Measurement::UnitSystems {
                                               &Measurement::Units::btuPerFahrenheitPerPound,
                                               "specificHeatCapacity_Btus",
                                               Measurement::SystemOfMeasurement::SpecificHeatCapacityBtus};
+
+   UnitSystem const heatCapacity_Kilocalories{PhysicalQuantity::HeatCapacity,
+                                              &Measurement::Units::kilocaloriesPerCelsius,
+                                              "heatCapacity_Kilocalories",
+                                              Measurement::SystemOfMeasurement::HeatCapacityKilocalories};
+
+   UnitSystem const heatCapacity_Joules{PhysicalQuantity::HeatCapacity,
+                                        &Measurement::Units::joulesPerKelvin,
+                                        "heatCapacity_Joules",
+                                        Measurement::SystemOfMeasurement::HeatCapacityJoules};
+
+   UnitSystem const heatCapacity_Btus{PhysicalQuantity::HeatCapacity,
+                                      &Measurement::Units::btuPerFahrenheit,
+                                      "heatCapacity_Btus",
+                                      Measurement::SystemOfMeasurement::HeatCapacityBtus};
 
    UnitSystem const specificVolume_Metric{PhysicalQuantity::SpecificVolume,
                                           &Measurement::Units::litresPerKilogram,

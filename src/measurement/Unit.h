@@ -390,7 +390,8 @@ namespace Measurement {
       //
       //   - "Heat Capacity" (see https://en.wikipedia.org/wiki/Heat_capacity) is different from Specific Heat Capacity.
       //     For a given object (eg a brewing vessel), its Heat Capacity is obtained by multiplying its Mass by its
-      //     Specific Heat Capacity.
+      //     Specific Heat Capacity.  Obviously we have to be careful about units when we do this.
+      //     (Note that some parts of the code refer to "heat capacity" as "thermal mass", but it's the same thing.)
       //
       //   - "Specific Heat" is just an abbreviation for "Specific Heat Capacity".  We use it for variable names etc in
       //     the interests of brevity, but we try always to use full "Specific Heat Capacity" for display strings to
@@ -399,6 +400,20 @@ namespace Measurement {
       extern Unit const caloriesPerCelsiusPerGram;
       extern Unit const joulesPerKelvinPerKg     ;
       extern Unit const btuPerFahrenheitPerPound ;
+      // == Heat Capacity ==
+      //
+      // Per the comment above, although "calories per degree Celsius per gram" is the same as "kilocalories per degree
+      // Celsius per kilogram", once we multiply by kilograms (our canonical unit of mass), we're in "kilocalories per
+      // degree Celsius".
+      //
+      // You'll sometimes see the last of these written as BTU per ° Rankine.  (Rankine is to Fahrenheit as Kelvin is to
+      // Celsius.)  We stick to BTU per ° Fahrenheit to align with our specific heat capacity units.
+      //
+      //
+      extern Unit const kilocaloriesPerCelsius;
+      extern Unit const joulesPerKelvin       ;
+      extern Unit const btuPerFahrenheit      ;
+
       // == Specific Volume ==
       // Per https://en.wikipedia.org/wiki/Specific_volume, specific volume is the reciprocal of density; in other words
       // it is "an intrinsic property of a substance, defined as the ratio of the substance's volume to its mass.  In
