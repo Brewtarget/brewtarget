@@ -240,8 +240,10 @@ public:
       this->m_self.dateComboBox->addItem(tr("dd-mm-YYYY"), QVariant(Localization::NumericDateFormat::DayMonthYear));
       this->m_self.dateComboBox->addItem(tr("YYYY-mm-dd"), QVariant(Localization::NumericDateFormat::YearMonthDay));
 
-      this->m_self.colorComboBox->addItem(tr("SRM"), QVariant(Measurement::UnitSystems::color_StandardReferenceMethod.uniqueName));
-      this->m_self.colorComboBox->addItem(tr("EBC"), QVariant(Measurement::UnitSystems::color_EuropeanBreweryConvention.uniqueName));
+      this->m_self.colorComboBox->addItem(tr("SRM"     ), QVariant(Measurement::UnitSystems::color_StandardReferenceMethod.uniqueName));
+      this->m_self.colorComboBox->addItem(tr("EBC"     ), QVariant(Measurement::UnitSystems::color_EuropeanBreweryConvention.uniqueName));
+      this->m_self.colorComboBox->addItem(tr("Lovibond"), QVariant(Measurement::UnitSystems::color_Lovibond.uniqueName));
+
       return;
    }
 
