@@ -1107,7 +1107,7 @@ def installDependencies():
 #                            'pandoc',
                             'tree',
                             'dylibbundler',
-#                            'qt@6',
+                            'qt@6',
                             'openssl@3', # OpenSSL headers and library
 #                            'xalan-c',
                             'xerces-c'
@@ -1174,8 +1174,12 @@ def installDependencies():
          # Just because we have MacPorts installed, doesn't mean its list of software etc will be up-to-date.  So fix
          # that first.
          #
-         log.debug('First run of MacPorts selfupdate')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
+         # If there is an error, MacPorts tells you to run again with the -v option to find out why, so we just run with
+         # that from the outset, and live with the fact that it generates a lot of logging.
+         #
+# Commented pending fix for https://trac.macports.org/ticket/72802
+#         log.debug('First run of MacPorts selfupdate')
+#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'selfupdate']))
 
          #
          # Sometimes you need to run selfupdate twice, because MacPorts itself was too out of date to update the ports
@@ -1185,12 +1189,13 @@ def installDependencies():
          # Rather than try to detect this, we just always run selfupdate twice.  If the second time is a no-op then no
          # harm is done.
          #
-         log.debug('Second run of MacPorts selfupdate')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
+# Commented pending fix for https://trac.macports.org/ticket/72802
+#         log.debug('Second run of MacPorts selfupdate')
+#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
 
          # Per https://guide.macports.org/#using.port.diagnose this will tell us about "common issues in the user's
          # environment".
-# 2025-02-26 TODO Commented out pending fix for https://trac.macports.org/ticket/72087
+# Commented pending fix for https://trac.macports.org/ticket/72802
 #         log.debug('Check environment is OK')
 #         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'diagnose', '--quiet']))
 
@@ -1218,8 +1223,8 @@ def installDependencies():
                             'pandoc',
                             'xercesc3',
                             'xalanc',
-                            'qt6',
-                            'qt6-qttranslations'
+#                            'qt6',
+#                            'qt6-qttranslations'
                             ]
          for packageToInstall in installListPort:
             log.debug('Installing ' + packageToInstall + ' via MacPorts')
@@ -1254,7 +1259,7 @@ def installDependencies():
          if ([] == qtInstalledBy):
             log.error('Did not understand how Qt was installed!')
 
-         if (len(qtInstalledBy)):
+         if (len(qtInstalledBy) > 1):
             log.error('Qt installed twice!')
 
          qtBaseDir = ''
@@ -1272,9 +1277,18 @@ def installDependencies():
             # /usr/local/lib directories".
             #
             btUtils.abortOnRunFail(subprocess.run(['brew', 'link', '--force', 'qt6']))
+
             qtBaseDir = btUtils.abortOnRunFail(
                subprocess.run(['brew', '--prefix', 'qt@6'], capture_output=True)
             ).stdout.decode('UTF-8').rstrip()
+
+            qmakePath = findFirstMatchingFile('qmake', qtBaseDir)
+            if ('' == qmakePath):
+               log.error('Unable to write to find qmake under ' + qtBaseDir)
+            else:
+               log.debug('Found qmake at ' + qmakePath)
+
+            qtBinDir = os.path.dirname(qmakePath)
 
             #
             # Further notes from when we did this for Qt5:
