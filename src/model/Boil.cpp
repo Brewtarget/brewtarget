@@ -190,7 +190,7 @@ void Boil::ensureStandardProfile() {
          auto mashSteps = recipe->mash()->steps();
          if (!mashSteps.isEmpty()) {
             auto lastMashStep = mashSteps.last();
-            startingTemp = std::min(lastMashStep->startTemp_c().value_or(startingTemp),
+            startingTemp = std::min(lastMashStep->startTemp_c(),
                                     lastMashStep->  endTemp_c().value_or(startingTemp));
          }
       }

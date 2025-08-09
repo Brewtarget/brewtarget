@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/PhysicalQuantity.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * measurement/PhysicalQuantity.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@ AddSettingName(unitSystem_color               )
 AddSettingName(unitSystem_count               )
 AddSettingName(unitSystem_density             )
 AddSettingName(unitSystem_diastaticPower      )
+AddSettingName(unitSystem_heatCapacity        )
 AddSettingName(unitSystem_length              )
 AddSettingName(unitSystem_massFractionOrConc  )
 AddSettingName(unitSystem_specificHeatCapacity)
@@ -87,6 +88,7 @@ EnumStringMapping const Measurement::physicalQuantityStringMapping {
    {Measurement::PhysicalQuantity::MassFractionOrConc  , "MassFractionOrConc"  },
    {Measurement::PhysicalQuantity::Viscosity           , "Viscosity"           },
    {Measurement::PhysicalQuantity::SpecificHeatCapacity, "SpecificHeatCapacity"},
+   {Measurement::PhysicalQuantity::HeatCapacity        , "HeatCapacity"        },
    {Measurement::PhysicalQuantity::SpecificVolume      , "SpecificVolume"      },
 };
 
@@ -106,6 +108,7 @@ EnumStringMapping const Measurement::physicalQuantityDisplayNames {
    {Measurement::PhysicalQuantity::MassFractionOrConc  , QObject::tr("Mass Fraction or Concentration")},
    {Measurement::PhysicalQuantity::Viscosity           , QObject::tr("Viscosity"                     )},
    {Measurement::PhysicalQuantity::SpecificHeatCapacity, QObject::tr("Specific Heat Capacity"        )},
+   {Measurement::PhysicalQuantity::HeatCapacity        , QObject::tr("Heat Capacity"                 )},
    {Measurement::PhysicalQuantity::SpecificVolume      , QObject::tr("Specific Volume"               )},
 };
 
@@ -131,6 +134,7 @@ BtStringConst const & Measurement::getSettingsName(PhysicalQuantity const physic
       case Measurement::PhysicalQuantity::MassFractionOrConc  : return unitSystem_massFractionOrConc  ;
       case Measurement::PhysicalQuantity::Viscosity           : return unitSystem_viscosity           ;
       case Measurement::PhysicalQuantity::SpecificHeatCapacity: return unitSystem_specificHeatCapacity;
+      case Measurement::PhysicalQuantity::HeatCapacity        : return unitSystem_heatCapacity        ;
       case Measurement::PhysicalQuantity::SpecificVolume      : return unitSystem_specificVolume      ;
       // In C++23, we'd add:
       // default: std::unreachable();

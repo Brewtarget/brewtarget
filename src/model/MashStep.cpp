@@ -25,7 +25,6 @@
 #include "database/ObjectStoreWrapper.h"
 #include "MainWindow.h"
 #include "model/NamedParameterBundle.h"
-#include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
 
 #ifdef BUILDING_WITH_CMAKE

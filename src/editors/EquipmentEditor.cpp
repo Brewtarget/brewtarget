@@ -33,12 +33,11 @@
 #include "config.h"
 #include "BtHorizontalTabs.h"
 #include "database/ObjectStoreWrapper.h"
-#include "HeatCalculations.h"
 #include "Localization.h"
 #include "measurement/Measurement.h"
+#include "measurement/PhysicalConstants.h"
 #include "measurement/Unit.h"
 #include "PersistentSettings.h"
-#include "PhysicalConstants.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake

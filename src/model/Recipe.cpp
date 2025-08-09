@@ -38,12 +38,12 @@
 #include "Algorithms.h"
 #include "config.h"
 #include "database/ObjectStoreWrapper.h"
-#include "HeatCalculations.h"
 #include "Localization.h"
 #include "measurement/Amount.h"
 #include "measurement/ColorMethods.h"
 #include "measurement/IbuMethods.h"
 #include "measurement/Measurement.h"
+#include "measurement/PhysicalConstants.h"
 #include "measurement/Unit.h"
 #include "model/Boil.h"
 #include "model/BoilStep.h"
@@ -69,7 +69,6 @@
 #include "model/Water.h"
 #include "model/Yeast.h"
 #include "PersistentSettings.h"
-#include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
 
 #ifdef BUILDING_WITH_CMAKE
@@ -313,25 +312,26 @@ public:
          if (step->isInfusion()) {
             str = tr("Add %1 water at %2 to mash to bring it to %3.")
                   .arg(Measurement::displayAmount(Measurement::Amount{step->amount_l(), Measurement::Units::liters}))
-                  .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c().value_or(step->startTemp_c().value_or(0.0)), Measurement::Units::celsius}))
-                  .arg(Measurement::displayAmount(Measurement::Amount{step->startTemp_c().value_or(0.0), Measurement::Units::celsius}));
+                  .arg(Measurement::displayAmount(Measurement::Amount{step->infuseTemp_c().value_or(step->startTemp_c()), Measurement::Units::celsius}))
+                  .arg(Measurement::displayAmount(Measurement::Amount{step->startTemp_c(), Measurement::Units::celsius}));
             totalWaterAdded_l += step->amount_l();
          } else if (step->isTemperature()) {
-            str = tr("Heat mash to %1.").arg(Measurement::displayAmount(Measurement::Amount{step->startTemp_c().value_or(0.0),
-                                                                                          Measurement::Units::celsius}));
+            str = tr("Heat mash to %1.").arg(Measurement::displayAmount(Measurement::Amount{step->startTemp_c(),
+                                                                                            Measurement::Units::celsius}));
          } else if (step->isDecoction()) {
             str = tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
                   .arg(Measurement::displayAmount(Measurement::Amount{step->amount_l(),
-                                                                     Measurement::Units::liters}))
-                  .arg(Measurement::displayAmount(Measurement::Amount{step->startTemp_c().value_or(0.0), Measurement::Units::celsius}));
+                                                                      Measurement::Units::liters}))
+                  .arg(Measurement::displayAmount(Measurement::Amount{step->startTemp_c(),
+                                                                      Measurement::Units::celsius}));
          }
 
-         str += tr(" Hold for %1.").arg(Measurement::displayAmount(Measurement::Amount{step->stepTime_mins().value_or(0.0),
+         str += tr(" Hold for %1.").arg(Measurement::displayAmount(Measurement::Amount{step->stepTime_mins(),
                                                                                        Measurement::Units::minutes}));
 
          preins.push_back(PreInstruction(str, QString("%1 - %2").arg(MashStep::typeDisplayNames[step->type()]).arg(step->name()),
                                        timeRemaining));
-         timeRemaining -= step->stepTime_mins().value_or(0.0);
+         timeRemaining -= step->stepTime_mins();
       }
       return preins;
    }
@@ -758,6 +758,7 @@ public:
       double calculatedGrainsInMash_kg = 0.0;
 
       for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
+         qDebug() << Q_FUNC_INFO << "fermentableAddition:" << *fermentableAddition;
          if (fermentableAddition->fermentable() &&
              fermentableAddition->fermentable()->type() == Fermentable::Type::Grain) {
             // I wouldn't have thought you would want to measure grain by volume, but best to check
@@ -836,34 +837,8 @@ public:
          tmp = calculatedWortFromMash_l;
       }
 
-      // .:TODO:. Assumptions below about liquids are almost certainly wrong, also TBD what other cases we have to cover
       // Need to account for extract/sugar volume also.
-      for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
-         auto const & fermentable = fermentableAddition->fermentable();
-         switch (fermentable->type()) {
-            case Fermentable::Type::Extract:
-               if (fermentableAddition->amountIsWeight()) {
-                  tmp += fermentableAddition->amount().quantity / PhysicalConstants::liquidExtractDensity_kgL;
-               } else {
-                  tmp += fermentableAddition->amount().quantity;
-               }
-               break;
-            case Fermentable::Type::Sugar:
-               if (fermentableAddition->amountIsWeight()) {
-                  tmp += fermentableAddition->amount().quantity / PhysicalConstants::sucroseDensity_kgL;
-               } else {
-                  tmp += fermentableAddition->amount().quantity;
-               }
-               break;
-            case Fermentable::Type::Dry_Extract:
-               if (fermentableAddition->amountIsWeight()) {
-                  tmp += fermentableAddition->amount().quantity / PhysicalConstants::dryExtractDensity_kgL;
-               } else {
-                  tmp += fermentableAddition->amount().quantity;
-               }
-               break;
-         }
-      }
+      tmp += this->m_self.postMashAdditionVolume_l();
 
       if (tmp <= 0.0) {
          // Give up.
@@ -2596,8 +2571,8 @@ void Recipe::recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged) {
 }
 
 void Recipe::recalcAll() {
+   qDebug() << Q_FUNC_INFO << "Calculations " << (this->m_calcsEnabled ? "enabled" : "disabled") << "for" << *this;
    if (!this->m_calcsEnabled) {
-      qDebug() << Q_FUNC_INFO << "Calculations disabled";
       return;
    }
 
@@ -2625,6 +2600,8 @@ void Recipe::recalcAll() {
    this->m_uninitializedCalcs = false;
 
    this->m_recalcMutex.unlock();
+
+   qDebug() << Q_FUNC_INFO << "After calculations:" << *this;
    return;
 }
 
@@ -2834,9 +2811,11 @@ QList<QString> Recipe::getReagents(QList< std::shared_ptr<MashStep> > msteps) {
 
       bool const commaNeeded {ii + 1 < msteps.size()};
       reagents.append(
-         tr(commaNeeded ? "%1 water to %2, " : "%1 water to %2 ")
-            .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->amount_l(), Measurement::Units::liters}))
-            .arg(Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseTemp_c().value_or(msteps[ii]->startTemp_c().value_or(0.0)), Measurement::Units::celsius}, 1))
+         tr(commaNeeded ? "%1 water to %2, " : "%1 water to %2 ").arg(
+            Measurement::displayAmount(Measurement::Amount{msteps[ii]->amount_l(), Measurement::Units::liters})
+         ).arg(
+            Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseTemp_c().value_or(msteps[ii]->startTemp_c()), Measurement::Units::celsius}, 1)
+         )
       );
    }
    return reagents;
@@ -2908,12 +2887,17 @@ void Recipe::acceptChangeToRecipeUseOfWater         (QMetaProperty prop, QVarian
 void Recipe::acceptChangeToBrewNote                 (QMetaProperty prop, QVariant val) { this->acceptChange<BrewNote                 >(prop, val); return; }
 void Recipe::acceptChangeToInstruction              (QMetaProperty prop, QVariant val) { this->acceptChange<Instruction              >(prop, val); return; }
 
-double Recipe::targetCollectedWortVol_l() const {
-
-   // Need to account for extract/sugar volume also.
-   double postMashAdditionVolume_l = 0;
-
+double Recipe::postMashAdditionVolume_l() const {
+   double postMashAdditionVolume_l = 0.0;
    for (auto const & fermentableAddition : this->fermentableAdditions()) {
+      //
+      // We only care about fermentables added to the Mash
+      //
+      if (fermentableAddition->stage() != RecipeAddition::Stage::Mash) {
+         continue;
+      }
+
+      // .:TODO:. Assumptions below about liquids are almost certainly wrong, also TBD what other cases we have to cover
       auto const & fermentable = fermentableAddition->fermentable();
       switch (fermentable->type()) {
          case Fermentable::Type::Extract:
@@ -2940,34 +2924,70 @@ double Recipe::targetCollectedWortVol_l() const {
                postMashAdditionVolume_l += fermentableAddition->amount().quantity;
             }
             break;
-         // .:TODO:. Need to handle other types of Fermentable here, even if it's just to add a NO-OP to show the
-         // compiler we didn't forget about them.  For now the compiler warning will help us remember this to-do!
+
+         // .:TBD:. For other types of Fermentable, we assume there is nothing to do, but maybe we should look again at
+         // high sugar content items such as juice and honey.
+         case Fermentable::Type::Grain:
+         case Fermentable::Type::Other_Adjunct:
+         case Fermentable::Type::Fruit:
+         case Fermentable::Type::Juice:
+         case Fermentable::Type::Honey:
+            break;
+
+         // NB: No default case as all should be explicitly covered above, and we want compiler to warn us if we missed
+         // something.
       }
    }
 
-   double boilSize_liters = this->pimpl->boilSizeInLitersOr(0.0);
-   qDebug() << Q_FUNC_INFO << "Boil size:" << boilSize_liters;
+   return postMashAdditionVolume_l;
+}
 
-   if (this->equipment()) {
-      return boilSize_liters - this->equipment()->getLauteringDeadspaceLoss_l()
-                             - this->equipment()->topUpKettle_l().value_or(Equipment::default_topUpKettle_l)
-                             - postMashAdditionVolume_l;
-   } else {
-      return boilSize_liters - postMashAdditionVolume_l;
+double Recipe::targetCollectedWortVol_l() const {
+
+   double const boilSize_liters = this->pimpl->boilSizeInLitersOr(0.0);
+
+   // Need to account for extract/sugar volume also.
+   double const postMashAdditionVolume_l = this->postMashAdditionVolume_l();
+
+   bool const hasEquipment = this->equipment() ? true : false;
+   double const lauteringDeadspaceLoss_l = hasEquipment ? this->equipment()->getLauteringDeadspaceLoss_l() : 0.0;
+   double const topUpKettle_l =
+      hasEquipment ? this->equipment()->topUpKettle_l().value_or(Equipment::default_topUpKettle_l) : 0.0;
+
+   double const returnValue = boilSize_liters - lauteringDeadspaceLoss_l - topUpKettle_l - postMashAdditionVolume_l;
+
+   qDebug() <<
+      Q_FUNC_INFO << "boilSize_liters:" << boilSize_liters << ", postMashAdditionVolume_l:" <<
+      postMashAdditionVolume_l << ", lauteringDeadspaceLoss_l:" << lauteringDeadspaceLoss_l << ", topUpKettle_l:" <<
+      topUpKettle_l << ", returnValue:" << returnValue;
+
+   if (returnValue < 0.0) {
+      //
+      // This probably means we couldn't determine boil size, but, in any case, it doesn't make sense to return a
+      // negative value.
+      //
+      return 0.0;
    }
+
+   return returnValue;
 }
 
 double Recipe::targetTotalMashVol_l() const {
+   double const targetCollectedWortVol_l = this->targetCollectedWortVol_l();
 
-   double absorption_lKg;
+   bool const hasEquipment = this->equipment() ? true : false;
+   double const absorption_lKg =
+      hasEquipment ?
+         equipment()->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) :
+         PhysicalConstants::grainAbsorption_Lkg;
 
-   if (equipment()) {
-      absorption_lKg = equipment()->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg);
-   } else {
-      absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
-   }
+   double const grainsInMash_kg = this->grainsInMash_kg();
 
-   return this->targetCollectedWortVol_l() + absorption_lKg * this->grainsInMash_kg();
+   double const returnValue = targetCollectedWortVol_l + absorption_lKg * grainsInMash_kg;
+   qDebug() <<
+      Q_FUNC_INFO << "targetCollectedWortVol_l:" << targetCollectedWortVol_l << ", absorption_lKg:" <<
+      absorption_lKg << ", grainsInMash_kg:" << grainsInMash_kg << ", returnValue:" << returnValue;
+   return returnValue;
 }
 
 void Recipe::hardDeleteOwnedEntities() {

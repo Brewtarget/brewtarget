@@ -419,7 +419,7 @@ public:
    QVector<int> idsOfAllMatching(std::function<bool(QObject const *)> const & matchFunction) const;
 
    /**
-    * \brief Similary to \c findAllMatching and \c idsOfAllMatching but just returns how many objects match
+    * \brief Similar to \c findAllMatching and \c idsOfAllMatching but just returns how many objects match
     */
    int numMatching(std::function<bool(QObject const *)> const & matchFunction) const;
 

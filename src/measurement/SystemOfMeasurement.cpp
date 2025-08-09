@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/SystemOfMeasurement.cpp is part of Brewtarget, and is copyright the following authors 2022-2024:
+ * measurement/SystemOfMeasurement.cpp is part of Brewtarget, and is copyright the following authors 2022-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -40,6 +40,9 @@ namespace {
       {Measurement::SystemOfMeasurement::SpecificHeatCapacityCalories, "SpecificHeatCapacityCalories"},
       {Measurement::SystemOfMeasurement::SpecificHeatCapacityJoules  , "SpecificHeatCapacityJoules"  },
       {Measurement::SystemOfMeasurement::SpecificHeatCapacityBtus    , "SpecificHeatCapacityBtus"    },
+      {Measurement::SystemOfMeasurement::HeatCapacityKilocalories    , "HeatCapacityKilocalories"    },
+      {Measurement::SystemOfMeasurement::HeatCapacityJoules          , "HeatCapacityJoules"          },
+      {Measurement::SystemOfMeasurement::HeatCapacityBtus            , "HeatCapacityBtus"            },
    };
 }
 
@@ -66,6 +69,9 @@ QString Measurement::getDisplayName(Measurement::SystemOfMeasurement const syste
       case Measurement::SystemOfMeasurement::SpecificHeatCapacityCalories: return QObject::tr("Specific Heat Capacity Calories per");
       case Measurement::SystemOfMeasurement::SpecificHeatCapacityJoules  : return QObject::tr("Specific Heat Capacity Joules per"  );
       case Measurement::SystemOfMeasurement::SpecificHeatCapacityBtus    : return QObject::tr("Specific Heat Capacity Btus per"    );
+      case Measurement::SystemOfMeasurement::HeatCapacityKilocalories    : return QObject::tr("Heat Capacity Kilocalories per"     );
+      case Measurement::SystemOfMeasurement::HeatCapacityJoules          : return QObject::tr("Heat Capacity Joules per"           );
+      case Measurement::SystemOfMeasurement::HeatCapacityBtus            : return QObject::tr("Heat Capacity Btus per"             );
       // In C++23, we'd add:
       // default: std::unreachable();
    }

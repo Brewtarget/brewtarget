@@ -187,6 +187,9 @@ namespace Measurement {
       // Specific heat capacity -- see https://en.wikipedia.org/wiki/Specific_heat_capacity
       SpecificHeatCapacity,
 
+      // Heat capacity -- see https://en.wikipedia.org/wiki/Heat_capacity -- equals Mass × Specific Heat Capacity
+      HeatCapacity,
+
       // Specific volume (= the reciprocal of density) -- see https://en.wikipedia.org/wiki/Specific_volume
       SpecificVolume,
 

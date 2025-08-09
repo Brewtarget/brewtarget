@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/StepBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/StepBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -19,10 +19,10 @@
 
 #include <optional>
 
+#include "measurement/PhysicalConstants.h"
 #include "model/Recipe.h"
 #include "model/Step.h"
 #include "model/EnumeratedBase.h"
-#include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
 #include "utils/OptionalHelpers.h"
 #include "utils/TypeTraits.h"
@@ -40,10 +40,6 @@ AddPropertyName(stepTime_mins)
 //======================================================================================================================
 
 namespace {
-   // Where step time is required to have a value, this is the default
-   constexpr double defaultStepTime_mins {0.0};
-   // Where start temperature is required to have a value, this is the default
-   constexpr double defaultStartTemp_c {22.2};
 
    // Everything has to be double because our underlying measure (minutes) is allowed to be measured in fractions.
    constexpr double minutesInADay = 24.0 * 60.0;
@@ -53,6 +49,16 @@ namespace {
       }
       return std::nullopt;
    }
+   inline double daysToMinutes(double const val) {
+      return val * minutesInADay;
+   }
+
+   //
+   // It's useful to be able to treat optional and non-optional values the same (where it can vary according to template
+   // parameters such as StepBaseOptions::stepTimeRequired).
+   //
+   inline double  toDouble(               double const val) { return  val; }
+   inline double  toDouble(std::optional<double> const val) { return *val; }
 }
 
 /**
@@ -92,6 +98,17 @@ template <StepBaseOptions ebo> concept CONCEPT_FIX_UP RampTimeSupported = has_ra
 template<class Derived> class StepPhantom;
 template<class Derived, class Owner, StepBaseOptions stepBaseOptions>
 class StepBase : public EnumeratedBase<Derived, Owner> {
+
+   //
+   // It's easy to control whether a member variable (or parameter or return type) is optional via a template parameter.
+   // And it's similarly to control whether a member function exists.  But controlling whether a member variable exists
+   // is a bit tricky pre C++26.  So, for now, we use the same trick as TreeNodeBase.
+   //
+   struct Empty { };
+   using  StepTimeType = std::conditional_t<StepTimeRequired <stepBaseOptions>, double, std::optional<double>>;
+   using StartTempType = std::conditional_t<StartTempRequired<stepBaseOptions>, double, std::optional<double>>;
+   using  RampTimeType = std::conditional_t<RampTimeSupported<stepBaseOptions>, std::optional<double>, Empty >;
+
 protected:
    // Note that, because this is static, it cannot be initialised inside the class definition
    static TypeLookup const typeLookup;
@@ -117,8 +134,8 @@ private:
    StepBase(NamedParameterBundle const & namedParameterBundle) :
       EnumeratedBase<Derived, Owner>{namedParameterBundle},
       // See below for m_stepTime_mins
-      SET_REGULAR_FROM_NPB (m_startTemp_c  , namedParameterBundle, PropertyNames::StepBase::startTemp_c  , std::nullopt),
-      SET_REGULAR_FROM_NPB (m_rampTime_mins, namedParameterBundle, PropertyNames::StepBase::rampTime_mins, std::nullopt) {
+      SET_REGULAR_FROM_NPB (m_startTemp_c  , namedParameterBundle, PropertyNames::StepBase::startTemp_c  /*, std::nullopt*/),
+      SET_REGULAR_FROM_NPB (m_rampTime_mins, namedParameterBundle, PropertyNames::StepBase::rampTime_mins, RampTimeType{}/*, std::nullopt*/) {
       // We intend that Derived should always inherit from Step before it inherits from StepBase.  So, at this point,
       // the Step bits of Derived() will be constructed and initialised from namedParameterBundle.
 
@@ -130,16 +147,9 @@ private:
       //
       if (!SET_IF_PRESENT_FROM_NPB_NO_MV(StepBase::setStepTime_mins, namedParameterBundle, PropertyNames::StepBase::stepTime_mins) &&
           !SET_IF_PRESENT_FROM_NPB_NO_MV(StepBase::setStepTime_days, namedParameterBundle, PropertyNames::StepBase::stepTime_days)) {
-         this->m_stepTime_mins = std::nullopt;
+         this->m_stepTime_mins = StepTimeType{};
       }
 
-      // Override the std::nullopt default for step time and/or start temp if subclass so requires
-      this->m_stepTime_mins = this->correctStepTime_mins(this->m_stepTime_mins);
-      this->m_startTemp_c   = this->correctStartTemp_c  (this->m_startTemp_c  );
-
-      if (this->m_rampTime_mins) {
-         this->checkRampTimeSupported();
-      }
       return;
    }
 
@@ -151,110 +161,76 @@ private:
       return;
    }
 
-private:
-   //! No-op version
-   std::optional<double> correctStepTime_mins(std::optional<double> const val) const
-   requires (!StepTimeRequired<stepBaseOptions>) {
-      return val;
-   }
-   //! Substantive version
-   std::optional<double> correctStepTime_mins(std::optional<double> const val) const
-   requires (StepTimeRequired<stepBaseOptions>) {
-      // You might think we could assert here that either step time is optional or val is not std::nullopt.  But it's
-      // not that simple, as generic code will have read that stepTime_mins is an optional field.  So, the best we can
-      // do here is force std::nullopt to some default value;
-      return val.value_or(defaultStepTime_mins);
-   }
-
 public:
-   std::optional<double> stepTime_mins() const {
-      // If subclass needs step time to be non-optional then we ensure std::nullopt cannot be returned
-      return this->correctStepTime_mins(this->m_stepTime_mins);
+   StepTimeType stepTime_mins() const {
+      return this->m_stepTime_mins;
    }
-   void setStepTime_mins(std::optional<double> const val) {
+   void setStepTime_mins(StepTimeType const val) {
       // Can't use SET_AND_NOTIFY macro here, but fortunately it's trivial
       this->derived().setAndNotify(PropertyNames::StepBase::stepTime_mins,
                                    this->m_stepTime_mins,
-                                   this->correctStepTime_mins(val));
+                                   val);
       return;
    }
-   std::optional<double> stepTime_days() const {
+   StepTimeType stepTime_days() const {
       auto const val = this->stepTime_mins();
-      // Convert minutes to days
-      if (val) {
-         return *val / minutesInADay;
+      if constexpr (!StepTimeRequired <stepBaseOptions>) {
+         if (!val) {
+            return std::nullopt;
+         }
       }
-      return std::nullopt;
+
+      // Convert minutes to days
+      return toDouble(val) / minutesInADay;
    }
-   void setStepTime_days(std::optional<double> const val) {
+   void setStepTime_days(StepTimeType const val) {
       this->setStepTime_mins(daysToMinutes(val));
       return;
    }
 
-private:
-   //! No-op version
-   std::optional<double> correctStartTemp_c(std::optional<double> const val) const
-   requires (!StartTempRequired<stepBaseOptions>) {
-      return val;
-   }
-   //! Substantive version
-   std::optional<double> correctStartTemp_c(std::optional<double> const val) const
-   requires (StartTempRequired<stepBaseOptions>) {
-      return val.value_or(defaultStartTemp_c);
-   }
-
 public:
-   std::optional<double> startTemp_c  () const {
-      return this->correctStartTemp_c(this->m_startTemp_c);
+   StartTempType startTemp_c  () const {
+      return this->m_startTemp_c;
    }
-   void setStartTemp_c(std::optional<double> const val) {
+   void setStartTemp_c(StartTempType const val) {
       // Can't use SET_AND_NOTIFY macro here, but fortunately it's trivial
       this->derived().setAndNotify(PropertyNames::StepBase::startTemp_c,
                                    this->m_startTemp_c,
-                                   this->derived().enforceMin(this->correctStartTemp_c(val),
+                                   this->derived().enforceMin(val,
                                                               "start temp",
                                                               PhysicalConstants::absoluteZero));
       return;
    }
 
-private:
-   //! No-op version
-   void checkRampTimeSupported() const requires (RampTimeSupported<stepBaseOptions>) {
-      return;
-   }
-   //! Substantive version
-   void checkRampTimeSupported() const requires (!RampTimeSupported<stepBaseOptions>) {
-      // It would probably be a coding error if we got here, but I _think_ it would also be harmless to carry on rather
-      // than assert.
-      qCritical().noquote() <<
-         Q_FUNC_INFO << "Ramp time not supported for" << this->derived().metaObject()->className() << ":" <<
-         Logging::getStackTrace();
-      return;
-   }
-
-public:
-   std::optional<double> rampTime_mins() const {
-      this->checkRampTimeSupported();
+   std::optional<double> rampTime_mins() const requires (RampTimeSupported<stepBaseOptions>) {
       return this->derived().m_rampTime_mins;
    }
 
-   void setRampTime_mins(std::optional<double> const val) {
-      this->checkRampTimeSupported();
+   void setRampTime_mins(std::optional<double> const val) requires (RampTimeSupported<stepBaseOptions>) {
       // Can't use SET_AND_NOTIFY macro here, but fortunately it's trivial
       this->derived().setAndNotify(PropertyNames::StepBase::rampTime_mins, this->m_rampTime_mins, val);
       return;
    }
+private:
 
+   // Called from StepBase::toString.  Only a member function to allow us to use StepBase::Empty.  (Alternative was
+   // templated non-member function, but then compiler complains about unused specialisations when StepTimeRequired ==
+   // StartTempRequired.)
+   QString toString([[maybe_unused]] Empty const val) const { return "N/A"; }
+   QString toString(               double  const val) const { return QString{"%1"}.arg(val); }
+   QString toString(std::optional<double>  const val) const { return Optional::toString(val); }
+
+public:
    //! \brief Convenience function for logging
    virtual QString toString() const {
       return QString{
          "StepBase (m_stepTime_mins: %1; m_startTemp_c: %2; m_rampTime_mins: %3) %4"
       }.arg(
-         Optional::toString(this->m_stepTime_mins)
+         this->toString(this->m_stepTime_mins)
       ).arg(
-         Optional::toString(this->m_startTemp_c)
+         this->toString(this->m_startTemp_c)
       ).arg(
-         Optional::toString(this->m_rampTime_mins)
+         this->toString(this->m_rampTime_mins)
       ).arg(
          this->EnumeratedBase<Derived, Owner>::toString()
       );
@@ -262,9 +238,11 @@ public:
 
 protected:
    //================================================ MEMBER VARIABLES =================================================
-   std::optional<double> m_stepTime_mins = std::nullopt;
-   std::optional<double> m_startTemp_c   = std::nullopt;
-   std::optional<double> m_rampTime_mins = std::nullopt;
+    StepTimeType m_stepTime_mins{};
+   StartTempType m_startTemp_c  {};
+
+   // See comment in TreeNodeBase for why we use [[no_unique_address]]  here
+   [[no_unique_address]] RampTimeType m_rampTime_mins{};
 
 };
 

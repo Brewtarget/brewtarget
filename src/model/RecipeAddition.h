@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAddition.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/RecipeAddition.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -209,6 +209,8 @@ public:
    void setAddAtGravity_sg(std::optional<double> const val);
    void setAddAtAcidity_pH(std::optional<double> const val);
    void setDuration_mins  (std::optional<double> const val);
+
+   virtual QString extraLogInfo() const override;
 
 protected:
    virtual bool isEqualTo(NamedEntity const & other) const override;

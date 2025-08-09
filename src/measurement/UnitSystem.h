@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/UnitSystem.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * measurement/UnitSystem.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -317,6 +317,10 @@ namespace Measurement {
       extern UnitSystem const specificHeatCapacity_Calories;
       extern UnitSystem const specificHeatCapacity_Joules  ;
       extern UnitSystem const specificHeatCapacity_Btus    ;
+
+      extern UnitSystem const heatCapacity_Kilocalories;
+      extern UnitSystem const heatCapacity_Joules      ;
+      extern UnitSystem const heatCapacity_Btus        ;
 
       extern UnitSystem const specificVolume_Metric     ;
       extern UnitSystem const specificVolume_UsCustomary;

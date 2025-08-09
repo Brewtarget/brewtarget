@@ -273,11 +273,11 @@ void BrewNote::populateNote(Recipe * parent) {
          auto mStep = steps.at(0);
 
          if (mStep) {
-            double const strikeTemp = mStep->infuseTemp_c().value_or(mStep->startTemp_c().value_or(0.0));
+            double const strikeTemp = mStep->infuseTemp_c().value_or(mStep->startTemp_c());
             this->setStrikeTemp_c(strikeTemp);
             this->setProjStrikeTemp_c(strikeTemp);
 
-            double const endTemp = mStep->endTemp_c().value_or(mStep->startTemp_c().value_or(0.0));
+            double const endTemp = mStep->endTemp_c().value_or(mStep->startTemp_c());
             this->setMashFinTemp_c(endTemp);
             this->setProjMashFinTemp_c(endTemp);
          }
@@ -286,15 +286,15 @@ void BrewNote::populateNote(Recipe * parent) {
             // NOTE: Qt will complain that steps.size()-2 is always positive,
             // and therefore the internal assert that the index is positive is
             // bunk. This is OK, as we just checked that we will not underflow.
-            mStep = steps.at( steps.size() - 2 );
-            double const endTemp = mStep->endTemp_c().value_or(mStep->startTemp_c().value_or(0.0));
+            mStep = steps.at(steps.size() - 2);
+            double const endTemp = mStep->endTemp_c().value_or(mStep->startTemp_c());
             this->setMashFinTemp_c(endTemp);
             this->setProjMashFinTemp_c(endTemp);
          }
       }
    }
 
-   this->setOg( parent->og());
+   this->setOg(parent->og());
    this->setProjOg(parent->og());
 
    auto fermentation = parent->fermentation();

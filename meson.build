@@ -623,7 +623,6 @@ commonSourceFiles = files([
    'src/BtTabWidget.cpp',
    'src/BtTextEdit.cpp',
    'src/ConverterTool.cpp',
-   'src/HeatCalculations.cpp',
    'src/HelpDialog.cpp',
    'src/Html.cpp',
    'src/HydrometerTool.cpp',

@@ -23,10 +23,10 @@
 #include <QDebug>
 
 #include "database/ObjectStoreWrapper.h"
+#include "measurement/PhysicalConstants.h"
 #include "model/InventoryYeast.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
-#include "PhysicalConstants.h"
 #include "utils/AutoCompare.h"
 
 #ifdef BUILDING_WITH_CMAKE
