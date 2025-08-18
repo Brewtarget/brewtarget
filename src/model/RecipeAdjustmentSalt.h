@@ -64,6 +64,8 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_salt     ();
+   static QString localisedName_whenToAdd();
 
    enum class WhenToAdd {
       Mash  ,
@@ -121,7 +123,7 @@ public:
    virtual NamedEntity * ensureExists(BtStringConst const & property) override;
 
 protected:
-   // Note that we don't override isEqualTo, as we don't have any non-inherited member variables
+   // Note that we don't override compareWith, as we don't have any non-inherited member variables
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

@@ -41,11 +41,11 @@ MashStepTableModel::MashStepTableModel(QTableView * parent, bool editable) :
       editable,
       {
          TABLE_MODEL_HEADER(MashStep, Name      , tr("Name"         ), PropertyNames::NamedEntity::name      ),
-         TABLE_MODEL_HEADER(MashStep, Type      , tr("Type"         ), PropertyNames::MashStep::type         , EnumInfo{MashStep::typeStringMapping, MashStep::typeDisplayNames}),
-         TABLE_MODEL_HEADER(MashStep, Amount    , tr("Amount"       ), PropertyNames::MashStep::amount_l     , PrecisionInfo{2}),
-         TABLE_MODEL_HEADER(MashStep, Temp      , tr("Infusion Temp"), PropertyNames::MashStep::infuseTemp_c , PrecisionInfo{1}),
-         TABLE_MODEL_HEADER(MashStep, TargetTemp, tr("Target Temp"  ), PropertyNames::StepBase::startTemp_c  , PrecisionInfo{1}),
-         TABLE_MODEL_HEADER(MashStep, Time      , tr("Time"         ), PropertyNames::StepBase::stepTime_mins, PrecisionInfo{0}),
+         TABLE_MODEL_HEADER(MashStep, Type      , tr("Type"         ), PropertyNames::MashStep::type         /*, EnumInfo{MashStep::typeStringMapping, MashStep::typeDisplayNames}*/),
+         TABLE_MODEL_HEADER(MashStep, Amount    , tr("Amount"       ), PropertyNames::MashStep::amount_l     /*, PrecisionInfo{2}*/),
+         TABLE_MODEL_HEADER(MashStep, Temp      , tr("Infusion Temp"), PropertyNames::MashStep::infuseTemp_c /*, PrecisionInfo{1}*/),
+         TABLE_MODEL_HEADER(MashStep, TargetTemp, tr("Target Temp"  ), PropertyNames::StepBase::startTemp_c  /*, PrecisionInfo{1}*/),
+         TABLE_MODEL_HEADER(MashStep, Time      , tr("Time"         ), PropertyNames::StepBase::stepTime_mins/*, PrecisionInfo{0}*/),
       }
    },
    TableModelBase<MashStepTableModel, MashStep>{},

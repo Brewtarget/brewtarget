@@ -78,9 +78,48 @@ namespace {
     *        for the erroneous extra bracket etc here so that we may at least partially correct things.
     */
    QRegularExpression const duplicateNameNumberMatcher{" *\\([( ]*([0-9]+)\\)$"};
+
+   /**
+    * \brief Compares whether two names match, ignoring "trivial" differences.  Eg, if you have one Hop called
+    *        "Tettnang" and another called "Tettnang (1)" we wouldn't say they are different just because of the names.
+    */
+   bool namesMatch(QString const & lhsName, QString const & rhsName) {
+      if (lhsName != rhsName) {
+         // Normally leave the next line commented out as it generates a lot of logging
+//         qDebug() << Q_FUNC_INFO << "No name match (" << this->m_name << "/" << other.m_name << ")";
+         //
+         // Strip off any number in brackets at the ends of the names and then compare again.
+         //
+         QString names[2] {lhsName, rhsName};
+         for (auto ii = 0; ii < 2; ++ii) {
+            QRegularExpressionMatch match = duplicateNameNumberMatcher.match(names[ii]);
+            if (match.hasMatch()) {
+               // Regular expression capturing groups are traditionally numbered from 1, with number 0 being reserved for
+               // "the implicit capturing group ... capturing the substring matched by the entire pattern".
+               auto const positionOfMatch = match.capturedStart(0);
+               // Normally leave the next line commented out as it generates a lot of logging
+//               qDebug() << Q_FUNC_INFO << names[ii] << "has match" << match << "at" << positionOfMatch;
+               // There's some integer in brackets at the end of the name.  Chop it off.
+               names[ii].truncate(positionOfMatch);
+            }
+         }
+         // Normally leave the next line commented out as it generates a lot of logging
+//         qDebug() << Q_FUNC_INFO << "Adjusted names to " << names[0] << " & " << names[1];
+         if (names[0] != names[1]) {
+            return false;
+         }
+      }
+
+      return true;
+   }
 }
 
 QString NamedEntity::localisedName() { return tr("Named Entity"); }
+QString NamedEntity::localisedName_deleted         () { return tr("Deleted"   ); }
+QString NamedEntity::localisedName_key             () { return tr("Key"       ); }
+QString NamedEntity::localisedName_name            () { return tr("Name"      ); }
+QString NamedEntity::localisedName_numRecipesUsedIn() { return tr("No Recipes"); }
+QString NamedEntity::localisedName_subsidiary      () { return tr("Subsidiary"); }
 
 NamedEntity::NamedEntity(QString t_name) :
    QObject        {nullptr  },
@@ -152,10 +191,10 @@ TypeLookup const NamedEntity::typeLookup {
       // everything else out.  The only exception is that, for enums, we have to pretend they are stored as int, because
       // that's what's going to come out of the Qt property system (and it would significantly complicate other bits of
       // the code to separately register every different enum that we use.)
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::deleted  , NamedEntity::m_deleted                             ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::key      , NamedEntity::m_key                                 ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::NamedEntity::name     , NamedEntity::m_name   , NonPhysicalQuantity::String),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::NamedEntity::numRecipesUsedIn, NamedEntity::numRecipesUsedIn, NonPhysicalQuantity::CardinalNumber),
+      PROPERTY_TYPE_LOOKUP_ENTRY(NamedEntity, deleted         , m_deleted       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(NamedEntity, key             , m_key           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(NamedEntity, name            , m_name          , NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_NO_MV(NamedEntity, numRecipesUsedIn, numRecipesUsedIn, NonPhysicalQuantity::CardinalNumber),
    },
    // Parent class lookup - none as we're top of the tree
    {}
@@ -166,7 +205,7 @@ NamedEntity::~NamedEntity() = default;
 // See https://zpz.github.io/blog/overloading-equality-operator-in-cpp-class-hierarchy/ (and cross-references to
 // http://www.gotw.ca/publications/mill18.htm) for good discussion on implementation of operator== in a class
 // hierarchy.  Our implementation differs slightly for a couple of reasons:
-//   - This class is already abstract so it's good to force subclasses to implement isEqualTo() by making it pure
+//   - This class is already abstract so it's good to force subclasses to implement compareWith() by making it pure
 //     virtual here.  (Of course that doesn't help us for sub-sub-classes etc, but it's better than nothing)
 //   - We want to do the type comparison first, as this saves us repeating this test in each subclass
 //
@@ -184,35 +223,11 @@ bool NamedEntity::operator==(NamedEntity const & other) const {
    // classification are not a helpful part of that comparison.  Similarly, we do not compare m_display and m_deleted as
    // they are more related to the UI than whether, in essence, two objects are the same.
    //
-   if (this->m_name != other.m_name) {
-      // Normally leave the next line commented out as it generates a lot of logging
-//      qDebug() << Q_FUNC_INFO << "No name match (" << this->m_name << "/" << other.m_name << ")";
-      //
-      // If the names don't match, let's check it's not for a trivial reason.  Eg, if you have one Hop called
-      // "Tettnang" and another called "Tettnang (1)" we wouldn't say they are different just because of the names.
-      // So we want to strip off any number in brackets at the ends of the names and then compare again.
-      //
-      QString names[2] {this->m_name, other.m_name};
-      for (auto ii = 0; ii < 2; ++ii) {
-         QRegularExpressionMatch match = duplicateNameNumberMatcher.match(names[ii]);
-         if (match.hasMatch()) {
-            // Regular expression capturing groups are traditionally numbered from 1, with number 0 being reserved for
-            // "the implicit capturing group ... capturing the substring matched by the entire pattern".
-            auto const positionOfMatch = match.capturedStart(0);
-            // Normally leave the next line commented out as it generates a lot of logging
-//            qDebug() << Q_FUNC_INFO << names[ii] << "has match" << match << "at" << positionOfMatch;
-            // There's some integer in brackets at the end of the name.  Chop it off.
-            names[ii].truncate(positionOfMatch);
-         }
-      }
-      // Normally leave the next line commented out as it generates a lot of logging
-//      qDebug() << Q_FUNC_INFO << "Adjusted names to " << names[0] << " & " << names[1];
-      if (names[0] != names[1]) {
-         return false;
-      }
+   if (!namesMatch(this->m_name, other.m_name)) {
+      return false;
    }
 
-   return this->isEqualTo(other);
+   return this->compareWith(other, nullptr);
 }
 
 bool NamedEntity::operator!=(NamedEntity const & other) const {
@@ -231,6 +246,24 @@ std::strong_ordering NamedEntity::operator<=>(NamedEntity const & other) const {
    return this->m_name.toStdU16String() <=> other.m_name.toStdU16String();
 #endif
 }
+
+QList<BtStringConst const *> NamedEntity::getPropertiesThatDiffer(NamedEntity const & other) const {
+   QList<BtStringConst const *> propertiesThatDiffer;
+   if (!namesMatch(this->m_name, other.m_name)) {
+      propertiesThatDiffer.append(&PropertyNames::NamedEntity::name);
+   }
+
+   //
+   // We don't care about the return value from compareWith
+   //
+   // NOTE that the rationale for having compareWith perform two slightly different functions is avoiding copy-and-paste
+   // code in subclasses.
+   //
+   this->compareWith(other, &propertiesThatDiffer);
+
+   return propertiesThatDiffer;
+}
+
 
 bool NamedEntity::deleted() const {
    return this->m_deleted;

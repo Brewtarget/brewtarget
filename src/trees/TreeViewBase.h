@@ -93,6 +93,9 @@ private:
 public:
    ~TreeViewBase() = default;
 
+   /**
+    * \brief Initialise all the things that TBD cannot be done in the constructor
+    */
    void init(NeEditor & editor) {
       this->m_editor = &editor;
 
@@ -175,7 +178,6 @@ protected:
          tempMenu->exec(this->derived().mapToGlobal(point));
       }
       return;
-
    }
 
 public:
@@ -633,7 +635,7 @@ public:
    NeTreeModel            m_model;
    NeTreeSortFilterProxyModel m_treeSortFilterProxy;
    NeEditor             * m_editor = nullptr;
-   // These are the common parts of the right-click menu, initialised in doInit()
+   // These are the common parts of the right-click menu, initialised in init()
    QMenu   m_contextMenu     = QMenu{};
    QMenu   m_contextMenu_new = QMenu{};
    QMenu   m_exportMenu      = QMenu{};

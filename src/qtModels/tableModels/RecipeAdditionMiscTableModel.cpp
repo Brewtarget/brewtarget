@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/RecipeAdditionMiscTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * qtModels/tableModels/RecipeAdditionMiscTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Luke Vincent <luke.r.vincent@gmail.com>
@@ -54,14 +54,14 @@ RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, 
          TABLE_MODEL_HEADER(RecipeAdditionMisc, Name          , tr("Name"       ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
                                                                                                  PropertyNames::NamedEntity::name         }}),
          TABLE_MODEL_HEADER(RecipeAdditionMisc, Type          , tr("Type"       ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
-                                                                                                 PropertyNames::Misc::type                 }}, EnumInfo{Misc::typeStringMapping, Misc::typeDisplayNames}),
-         TABLE_MODEL_HEADER(RecipeAdditionMisc, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  , PrecisionInfo{1}),
+                                                                                                 PropertyNames::Misc::type                 }}/*, EnumInfo{Misc::typeStringMapping, Misc::typeDisplayNames}*/),
+         TABLE_MODEL_HEADER(RecipeAdditionMisc, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  /*, PrecisionInfo{1}*/),
          TABLE_MODEL_HEADER(RecipeAdditionMisc, AmountType    , tr("Amount Type"), PropertyNames::IngredientAmount::amount                  , Misc::validMeasures),
          // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
          TABLE_MODEL_HEADER(RecipeAdditionMisc, TotalInventory, tr("Inventory"  ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
                                                                                                  PropertyNames::Ingredient::totalInventory}}),
-         TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     , EnumInfo{RecipeAddition::stageStringMapping, RecipeAddition::stageDisplayNames}),
-         TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            , PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     /*, EnumInfo{RecipeAddition::stageStringMapping, RecipeAddition::stageDisplayNames}*/),
+         TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            /*, PrecisionInfo{1}*/),
       }
    },
    TableModelBase<RecipeAdditionMiscTableModel, RecipeAdditionMisc>{},

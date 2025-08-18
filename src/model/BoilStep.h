@@ -65,6 +65,7 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_chillingType();
 
    /*!
     * \brief Chilling type separates batch chilling, eg immersion chillers, where the entire volume of wort is brought
@@ -141,7 +142,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 
 private:
    std::optional<ChillingType> m_chillingType;

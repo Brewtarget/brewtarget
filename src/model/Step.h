@@ -86,6 +86,10 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_description    ();
+   static QString localisedName_endAcidity_pH  ();
+   static QString localisedName_endTemp_c      ();
+   static QString localisedName_startAcidity_pH();
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -130,7 +134,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 
 protected:
    std::optional<double> m_endTemp_c      ;

@@ -25,27 +25,31 @@
 #endif
 
 QString Step::localisedName() { return tr("Step"); }
+QString Step::localisedName_description    () { return tr("Description"    ); }
+QString Step::localisedName_endAcidity_pH  () { return tr("End Acidity"    ); }
+QString Step::localisedName_endTemp_c      () { return tr("End Temperature"); }
+QString Step::localisedName_startAcidity_pH() { return tr("Start Acidity"  ); }
 
-bool Step::isEqualTo(NamedEntity const & other) const {
+bool Step::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Step const & rhs = static_cast<Step const &>(other);
    // Base class will already have ensured names are equal
    return (
-      AUTO_LOG_COMPARE(this, rhs, m_endTemp_c      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_description    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_startAcidity_pH) &&
-      AUTO_LOG_COMPARE(this, rhs, m_endAcidity_pH  )
+      AUTO_PROPERTY_COMPARE(this, rhs, m_endTemp_c      , PropertyNames::Step::endTemp_c      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_description    , PropertyNames::Step::description    , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_startAcidity_pH, PropertyNames::Step::startAcidity_pH, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_endAcidity_pH  , PropertyNames::Step::endAcidity_pH  , propertiesThatDiffer)
    );
 }
 
 TypeLookup const Step::typeLookup {
    "Step",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Step::  endTemp_c    , Step::m_endTemp_c      , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Step,   endTemp_c    , m_endTemp_c      , Measurement::PhysicalQuantity::Temperature, DisplayInfo::Precision{1}),
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Step::description    , Step::m_description    ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Step::startAcidity_pH, Step::m_startAcidity_pH, Measurement::PhysicalQuantity::Acidity       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Step::  endAcidity_pH, Step::m_endAcidity_pH  , Measurement::PhysicalQuantity::Acidity       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Step, description    , m_description    ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Step, startAcidity_pH, m_startAcidity_pH, Measurement::PhysicalQuantity::Acidity    , DisplayInfo::Precision{1}),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Step,   endAcidity_pH, m_endAcidity_pH  , Measurement::PhysicalQuantity::Acidity    , DisplayInfo::Precision{1}),
 
    },
    // Parent class lookup

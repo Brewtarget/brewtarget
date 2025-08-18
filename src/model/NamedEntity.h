@@ -158,6 +158,11 @@ public:
     *        We shouldn't ever need to use the name for \c NamedEntity itself, but it's here for completeness.
     */
    static QString localisedName();
+   static QString localisedName_deleted         ();
+   static QString localisedName_key             ();
+   static QString localisedName_name            ();
+   static QString localisedName_numRecipesUsedIn();
+   static QString localisedName_subsidiary      ();
 
    /**
     * \brief Type lookup info for this class.  Note this is intentionally static, public and const.  Subclasses need to
@@ -220,13 +225,13 @@ public:
 
    /**
     * \brief This generic version of operator== should work for subclasses provided they correctly _override_ (NB not
-    *        overload) the protected virtual isEqualTo() function.
+    *        overload) the protected virtual compareWith() function.
     */
    bool operator==(NamedEntity const & other) const;
 
    /**
     * \brief This generic version of operator!= should work for subclasses provided they correctly _override_ (NB not
-    *        overload) the protected virtual isEqualTo() function.
+    *        overload) the protected virtual compareWith() function.
     */
    bool operator!=(NamedEntity const & other) const;
 
@@ -238,6 +243,11 @@ public:
     *        that we can then easily compare two such lists for equality.
     */
    std::strong_ordering operator<=>(NamedEntity const & other) const;
+
+   /**
+    * \brief Returns a list of names of properties that differ between \c this and \c other
+    */
+   QList<BtStringConst const *> getPropertiesThatDiffer(NamedEntity const & other) const;
 
    // Everything that inherits from NamedEntity has these properties
    Q_PROPERTY(QString name         READ name         WRITE setName   )
@@ -464,9 +474,13 @@ protected:
     *
     *        A sub-sub-class of \c NamedEntity (eg \c RecipeAdditionHop) should call its parent's implementation of this
     *        function before doing its own class-specific tests.
+    *
+    * \param propertiesThatDiffer If this is set then \b all the properties that differ will be appended to this list
+    *
     * \return \b true if this object is, in all the ways that matter, equal to \b other
     */
-   virtual bool isEqualTo(NamedEntity const & other) const = 0;
+   virtual bool compareWith(NamedEntity const & other,
+                            QList<BtStringConst const *> * propertiesThatDiffer) const = 0;
 
    /**
     * \brief Concrete subclasses need to override this functionto return the appropriate instance of

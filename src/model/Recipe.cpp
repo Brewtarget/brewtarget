@@ -469,7 +469,7 @@ public:
          auto ins = std::make_shared<Instruction>();
          ins->setName(pi.title);
          ins->setDirections(pi.text);
-         ins->setInterval(pi.time);
+         ins->setInterval_mins(pi.time);
 
          this->m_self.m_instructions.add(ins);
       }
@@ -1365,6 +1365,64 @@ template<> auto & Recipe::ownedSetFor<Instruction              >() { return this
 
 
 QString Recipe::localisedName() { return tr("Recipe"); }
+QString Recipe::localisedName_ABV_pct                () { return tr("ABV"                    ); }
+QString Recipe::localisedName_age_days               () { return tr("Age"                    ); }
+QString Recipe::localisedName_ageTemp_c              () { return tr("Age Temp"               ); }
+QString Recipe::localisedName_ancestorId             () { return tr("Ancestor ID"            ); }
+QString Recipe::localisedName_apparentAttenuation_pct() { return tr("Apparent Attenuation"   ); }
+QString Recipe::localisedName_asstBrewer             () { return tr("Assistant Brewer"       ); }
+QString Recipe::localisedName_batchSize_l            () { return tr("BatchSize"              ); }
+QString Recipe::localisedName_beerAcidity_pH         () { return tr("Beer Acidity"           ); }
+QString Recipe::localisedName_boil                   () { return tr("Boil"                   ); }
+QString Recipe::localisedName_boilGrav               () { return tr("Boil Gravity"           ); }
+QString Recipe::localisedName_boilId                 () { return tr("Boil ID"                ); }
+QString Recipe::localisedName_boilVolume_l           () { return tr("Boil Volume"            ); }
+QString Recipe::localisedName_brewer                 () { return tr("Brewer"                 ); }
+QString Recipe::localisedName_brewNotes              () { return tr("Brew Notes"             ); }
+QString Recipe::localisedName_calcsEnabled           () { return tr("Calculations Enabled"   ); }
+QString Recipe::localisedName_caloriesPer33cl        () { return tr("Calories Per 33cl"      ); }
+QString Recipe::localisedName_caloriesPerLiter       () { return tr("Calories Per Liter"     ); }
+QString Recipe::localisedName_caloriesPerUs12oz      () { return tr("Calories Per US 12oz"   ); }
+QString Recipe::localisedName_caloriesPerUsPint      () { return tr("Calories Per US Pint"   ); }
+QString Recipe::localisedName_carbonationTemp_c      () { return tr("Carbonation Temperature"); }
+QString Recipe::localisedName_carbonation_vols       () { return tr("Carbonation"            ); }
+QString Recipe::localisedName_color_srm              () { return tr("Color"                  ); }
+QString Recipe::localisedName_date                   () { return tr("Date"                   ); }
+QString Recipe::localisedName_efficiency_pct         () { return tr("Efficiency"             ); }
+QString Recipe::localisedName_equipment              () { return tr("Equipment"              ); }
+QString Recipe::localisedName_equipmentId            () { return tr("Equipment ID"           ); }
+QString Recipe::localisedName_fermentableAdditions   () { return tr("Fermentable Additions"  ); }
+QString Recipe::localisedName_fermentation           () { return tr("Fermentation"           ); }
+QString Recipe::localisedName_fermentationId         () { return tr("Fermentation ID"        ); }
+QString Recipe::localisedName_fg                     () { return tr("FG"                     ); }
+QString Recipe::localisedName_finalVolume_l          () { return tr("Final Volume"           ); }
+QString Recipe::localisedName_forcedCarbonation      () { return tr("Forced Carbonation"     ); }
+QString Recipe::localisedName_grainsInMash_kg        () { return tr("Grains In Mash"         ); }
+QString Recipe::localisedName_grains_kg              () { return tr("Grains"                 ); }
+QString Recipe::localisedName_hopAdditions           () { return tr("Hop Additions"          ); }
+QString Recipe::localisedName_IBU                    () { return tr("IBU"                    ); }
+QString Recipe::localisedName_IBUs                   () { return tr("IBUs"                   ); }
+QString Recipe::localisedName_instructions           () { return tr("Instructions"           ); }
+QString Recipe::localisedName_kegPrimingFactor       () { return tr("Keg Priming Factor"     ); }
+QString Recipe::localisedName_locked                 () { return tr("Locked"                 ); }
+QString Recipe::localisedName_mash                   () { return tr("Mash"                   ); }
+QString Recipe::localisedName_mashId                 () { return tr("Mash ID"                ); }
+QString Recipe::localisedName_miscAdditions          () { return tr("Misc Additions"         ); }
+QString Recipe::localisedName_notes                  () { return tr("Notes"                  ); }
+QString Recipe::localisedName_og                     () { return tr("OG"                     ); }
+QString Recipe::localisedName_points                 () { return tr("Points"                 ); }
+QString Recipe::localisedName_postBoilVolume_l       () { return tr("Post Boil Volume"       ); }
+QString Recipe::localisedName_primingSugarEquiv      () { return tr("Priming Sugar Equiv"    ); }
+QString Recipe::localisedName_primingSugarName       () { return tr("Priming Sugar Name"     ); }
+QString Recipe::localisedName_saltAdjustments        () { return tr("Salt Adjustments"       ); }
+QString Recipe::localisedName_style                  () { return tr("Style"                  ); }
+QString Recipe::localisedName_styleId                () { return tr("Style ID"               ); }
+QString Recipe::localisedName_tasteNotes             () { return tr("Taste Notes"            ); }
+QString Recipe::localisedName_tasteRating            () { return tr("Taste Rating"           ); }
+QString Recipe::localisedName_type                   () { return tr("Type"                   ); }
+QString Recipe::localisedName_waterUses              () { return tr("Water Uses"             ); }
+QString Recipe::localisedName_wortFromMash_l         () { return tr("Wort From Mash"         ); }
+QString Recipe::localisedName_yeastAdditions         () { return tr("Yeast Additions"        ); }
 
 // Note that Recipe::typeStringMapping and Recipe::FormMapping are as defined by BeerJSON, but we also use them for the DB and
 // for the UI.  We can't use them for BeerXML as it only supports subsets of these types.
@@ -1394,21 +1452,20 @@ EnumStringMapping const Recipe::typeDisplayNames {
    {Recipe::Type::Wine       , tr("Wine"        )},
 };
 
-
-bool Recipe::isEqualTo(NamedEntity const & other) const {
+bool Recipe::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Recipe const & rhs = static_cast<Recipe const &>(other);
 
    // Base class will already have ensured names are equal
    return (
-      AUTO_LOG_COMPARE(this, rhs, m_type          ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_batchSize_l   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_efficiency_pct) &&
-      AUTO_LOG_COMPARE(this, rhs, m_age_days      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_ageTemp_c     ) &&
-      AUTO_LOG_COMPARE_ID(this, rhs, Style, m_styleId) &&
-      AUTO_LOG_COMPARE_ID(this, rhs, Mash , m_mashId ) &&
-      AUTO_LOG_COMPARE_ID(this, rhs, Boil , m_boilId ) &&
+      AUTO_PROPERTY_COMPARE   (this, rhs, m_type          , PropertyNames::Recipe::type          , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE   (this, rhs, m_batchSize_l   , PropertyNames::Recipe::batchSize_l   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE   (this, rhs, m_efficiency_pct, PropertyNames::Recipe::efficiency_pct, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE   (this, rhs, m_age_days      , PropertyNames::Recipe::age_days      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE   (this, rhs, m_ageTemp_c     , PropertyNames::Recipe::ageTemp_c     , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE_ID(this, rhs, Style, m_styleId, PropertyNames::Recipe::styleId       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE_ID(this, rhs, Mash , m_mashId , PropertyNames::Recipe::mashId        , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE_ID(this, rhs, Boil , m_boilId , PropertyNames::Recipe::boilId        , propertiesThatDiffer) &&
       //
       // We don't include any of the following in the equality test:
       //    - Calculated values such as m_og and m_fg, since, if everything else is the same, they should match
@@ -1421,16 +1478,15 @@ bool Recipe::isEqualTo(NamedEntity const & other) const {
       // The comparisons for each type of addition depend on them being in some canonical ordering that does not depend
       // on their database IDs.  However, we don't have to worry about this here.  The AutoCompare does the sorting for
       // us (on copies of the lists) using the operator<=> defined in RecipeAdditionBase.
-      AUTO_LOG_COMPARE_FN(this, rhs, fermentableAdditions) &&
-      AUTO_LOG_COMPARE_FN(this, rhs,         hopAdditions) &&
-      AUTO_LOG_COMPARE_FN(this, rhs,        miscAdditions) &&
-      AUTO_LOG_COMPARE_FN(this, rhs,       yeastAdditions) &&
-      AUTO_LOG_COMPARE_FN(this, rhs, waterUses           ) &&
+      AUTO_PROPERTY_COMPARE_FN(this, rhs, fermentableAdditions, PropertyNames::Recipe::fermentableAdditions, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE_FN(this, rhs,         hopAdditions, PropertyNames::Recipe::        hopAdditions, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE_FN(this, rhs,        miscAdditions, PropertyNames::Recipe::       miscAdditions, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE_FN(this, rhs,       yeastAdditions, PropertyNames::Recipe::      yeastAdditions, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE_FN(this, rhs, waterUses           , PropertyNames::Recipe::waterUses           , propertiesThatDiffer) &&
       //
       // Parent classes have to match too.
       //
-      this->FolderBase<Recipe>::doIsEqualTo(rhs)
-
+      this->FolderBase<Recipe>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
 
@@ -1446,64 +1502,61 @@ TypeLookup const Recipe::typeLookup {
       //    - The canonical unit for Measurement::PhysicalQuantity::Time is Measurement::Units::minutes, so we'd have to
       //      either store as minutes or do some special-case handling to say we're not storing in canonical units.
       //      Both would be ugly -- but doable, as we have done elsewhere
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::type              , Recipe::m_type              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::brewer            , Recipe::m_brewer            ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::asstBrewer        , Recipe::m_asstBrewer        ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::batchSize_l       , Recipe::m_batchSize_l       , Measurement::PhysicalQuantity::Volume        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::efficiency_pct    , Recipe::m_efficiency_pct    ,           NonPhysicalQuantity::Percentage    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::age_days          , Recipe::m_age_days          ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ageTemp_c         , Recipe::m_ageTemp_c         , Measurement::PhysicalQuantity::Temperature   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::date              , Recipe::m_date              ,           NonPhysicalQuantity::Date          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::carbonation_vols  , Recipe::m_carbonation_vols  , Measurement::PhysicalQuantity::Carbonation   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::forcedCarbonation , Recipe::m_forcedCarbonation ,           NonPhysicalQuantity::Bool          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primingSugarName  , Recipe::m_primingSugarName  ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::carbonationTemp_c , Recipe::m_carbonationTemp_c , Measurement::PhysicalQuantity::Temperature   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::primingSugarEquiv , Recipe::m_primingSugarEquiv ,           NonPhysicalQuantity::Dimensionless ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::kegPrimingFactor  , Recipe::m_kegPrimingFactor  ,           NonPhysicalQuantity::Dimensionless ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::notes             , Recipe::m_notes             ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tasteNotes        , Recipe::m_tasteNotes        ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::tasteRating       , Recipe::m_tasteRating       ,           NonPhysicalQuantity::Dimensionless ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::styleId           , Recipe::m_styleId           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::mashId            , Recipe::m_mashId            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::boilId            , Recipe::m_boilId            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fermentationId    , Recipe::m_fermentationId    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::equipmentId       , Recipe::m_equipmentId       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::og                , Recipe::m_og                , Measurement::PhysicalQuantity::Density       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::fg                , Recipe::m_fg                , Measurement::PhysicalQuantity::Density       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::locked            , Recipe::m_locked            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::calcsEnabled      , Recipe::m_calcsEnabled      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::ancestorId        , Recipe::m_ancestor_id       ),
-
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::ABV_pct          , Recipe::ABV_pct         ,           NonPhysicalQuantity::Percentage   ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::boilGrav         , Recipe::boilGrav        , Measurement::PhysicalQuantity::Density      ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::boilVolume_l     , Recipe::boilVolume_l    , Measurement::PhysicalQuantity::Volume       ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::caloriesPerLiter , Recipe::caloriesPerLiter,           NonPhysicalQuantity::Dimensionless), // Calculated, not in DB .:TBD:. One day this should perhaps become Measurement::PhysicalQuantity::Energy
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::caloriesPerUs12oz, Recipe::caloriesPerUs12oz,         NonPhysicalQuantity::Dimensionless),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::caloriesPerUsPint, Recipe::caloriesPerUsPint,         NonPhysicalQuantity::Dimensionless),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::color_srm        , Recipe::color_srm         , Measurement::PhysicalQuantity::Color     ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::finalVolume_l    , Recipe::finalVolume_l     , Measurement::PhysicalQuantity::Volume    ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::grainsInMash_kg  , Recipe::grainsInMash_kg   , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::grains_kg        , Recipe::grains_kg         , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::IBU              , Recipe::IBU               , Measurement::PhysicalQuantity::Bitterness), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, type             , m_type              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, brewer           , m_brewer            ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, asstBrewer       , m_asstBrewer        ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, batchSize_l      , m_batchSize_l       , Measurement::PhysicalQuantity::Volume        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, efficiency_pct   , m_efficiency_pct    ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, age_days         , m_age_days          ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, ageTemp_c        , m_ageTemp_c         , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, date             , m_date              ,           NonPhysicalQuantity::Date          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, carbonation_vols , m_carbonation_vols  , Measurement::PhysicalQuantity::Carbonation   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, forcedCarbonation, m_forcedCarbonation , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, primingSugarName , m_primingSugarName  ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, carbonationTemp_c, m_carbonationTemp_c , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, primingSugarEquiv, m_primingSugarEquiv ,           NonPhysicalQuantity::Dimensionless ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, kegPrimingFactor , m_kegPrimingFactor  ,           NonPhysicalQuantity::Dimensionless ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, notes            , m_notes             ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, tasteNotes       , m_tasteNotes        ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, tasteRating      , m_tasteRating       ,           NonPhysicalQuantity::Dimensionless ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, styleId          , m_styleId           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, mashId           , m_mashId            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, boilId           , m_boilId            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, fermentationId   , m_fermentationId    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, equipmentId      , m_equipmentId       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, og               , m_og                , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, fg               , m_fg                , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, locked           , m_locked            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, calcsEnabled     , m_calcsEnabled      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, ancestorId       , m_ancestor_id       ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, ABV_pct          , ABV_pct         ,           NonPhysicalQuantity::Percentage   ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, boilGrav         , boilGrav        , Measurement::PhysicalQuantity::Density      ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, boilVolume_l     , boilVolume_l    , Measurement::PhysicalQuantity::Volume       ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, caloriesPerLiter , caloriesPerLiter,           NonPhysicalQuantity::Dimensionless), // Calculated, not in DB .:TBD:. One day this should perhaps become Measurement::PhysicalQuantity::Energy
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, caloriesPerUs12oz, caloriesPerUs12oz,         NonPhysicalQuantity::Dimensionless),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, caloriesPerUsPint, caloriesPerUsPint,         NonPhysicalQuantity::Dimensionless),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, color_srm        , color_srm         , Measurement::PhysicalQuantity::Color     ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, finalVolume_l    , finalVolume_l     , Measurement::PhysicalQuantity::Volume    ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, grainsInMash_kg  , grainsInMash_kg   , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, grains_kg        , grains_kg         , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, IBU              , IBU               , Measurement::PhysicalQuantity::Bitterness), // Calculated, not in DB
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBUs              , Recipe::m_IBUs              ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::points            , Recipe::m_points            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::postBoilVolume_l, Recipe::postBoilVolume_l  , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::wortFromMash_l  , Recipe::wortFromMash_l    , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
-
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::style               , Recipe::style               ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::mash                , Recipe::mash                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::boil                , Recipe::boil                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::fermentation        , Recipe::fermentation        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::equipment           , Recipe::equipment           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::brewNotes           , Recipe::brewNotes           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::fermentableAdditions, Recipe::fermentableAdditions),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::hopAdditions        , Recipe::hopAdditions        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::miscAdditions       , Recipe::miscAdditions       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::waterUses           , Recipe::waterUses           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Recipe::yeastAdditions      , Recipe::yeastAdditions      ),
-
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::beerAcidity_pH         , Recipe::m_beerAcidity_pH         , Measurement::PhysicalQuantity::Acidity   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::apparentAttenuation_pct, Recipe::m_apparentAttenuation_pct,           NonPhysicalQuantity::Percentage),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, postBoilVolume_l , postBoilVolume_l  , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, wortFromMash_l   , wortFromMash_l    , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, style            , style               ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, mash             , mash                ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, boil             , boil                ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, fermentation     , fermentation        ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, equipment        , equipment           ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, brewNotes        , brewNotes           ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, fermentableAdditions, fermentableAdditions),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, hopAdditions        , hopAdditions        ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, miscAdditions       , miscAdditions       ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, waterUses           , waterUses           ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, yeastAdditions      , yeastAdditions      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, beerAcidity_pH         , m_beerAcidity_pH         , Measurement::PhysicalQuantity::Acidity   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, apparentAttenuation_pct, m_apparentAttenuation_pct,           NonPhysicalQuantity::Percentage),
 
    },
    // Parent classes lookup
@@ -1772,7 +1825,6 @@ void Recipe::connectSignals() {
 }
 
 void Recipe::generateInstructions() {
-   double timeRemaining;
    double totalWaterAdded_l = 0.0;
 
    if (this->m_instructions.size() > 0) {
@@ -1795,10 +1847,8 @@ void Recipe::generateInstructions() {
       /*** Prepare water additions ***/
       this->pimpl->mashWaterIns();
 
-      timeRemaining = mash()->totalTime_mins();
-
       /*** Generate the mash instructions ***/
-      preinstructions = this->pimpl->mashInstructions(timeRemaining, totalWaterAdded_l, size);
+      preinstructions = this->pimpl->mashInstructions(mash()->totalTime_mins(), totalWaterAdded_l, size);
 
       /*** Hops mash additions ***/
       preinstructions += this->pimpl->hopSteps(RecipeAddition::Stage::Mash);
@@ -1821,34 +1871,34 @@ void Recipe::generateInstructions() {
    preinstructions.clear();
 
    // Find boil time.
-   if (equipment() != nullptr) {
-      timeRemaining = equipment()->boilTime_min().value_or(Equipment::default_boilTime_mins);
-   } else {
-      timeRemaining =
+   double const timeRemaining_mins {
+      this->equipment() ?
+         this->equipment()->boilTime_min().value_or(Equipment::default_boilTime_mins) :
          Measurement::qStringToSI(QInputDialog::getText(nullptr,
                                                         tr("Boil time"),
-                                                        tr("You did not configure an equipment (which you really should), so tell me the boil time.")),
-                                  Measurement::PhysicalQuantity::Time).quantity;
-   }
+                                                        tr("You did not configure an equipment (which you really "
+                                                           "should), so tell me the boil time.")),
+                                  Measurement::PhysicalQuantity::Time).quantity
+   };
 
    QString str = tr("Bring the wort to a boil and hold for %1.").arg(
-      Measurement::displayAmount(Measurement::Amount{timeRemaining, Measurement::Units::minutes})
+      Measurement::displayAmount(Measurement::Amount{timeRemaining_mins, Measurement::Units::minutes})
    );
 
    auto startBoilIns = std::make_shared<Instruction>();
    startBoilIns->setName(tr("Start boil"));
-   startBoilIns->setInterval(timeRemaining);
+   startBoilIns->setInterval_mins(timeRemaining_mins);
    startBoilIns->setDirections(str);
    this->m_instructions.add(startBoilIns);
 
    /*** Get fermentables unless we haven't added yet ***/
    if (this->pimpl->hasBoilFermentable()) {
-      preinstructions.push_back(this->pimpl->boilFermentablesPre(timeRemaining));
+      preinstructions.push_back(this->pimpl->boilFermentablesPre(timeRemaining_mins));
    }
 
    // add the intructions for including Extracts to wort
    if (this->pimpl->hasBoilExtract()) {
-      preinstructions.push_back(this->pimpl->addExtracts(timeRemaining - 1));
+      preinstructions.push_back(this->pimpl->addExtracts(timeRemaining_mins - 1));
    }
 
    /*** Boiled hops ***/
@@ -2110,6 +2160,17 @@ void Recipe::setBoil        (std::shared_ptr<Boil        > val) { this->pimpl->s
 void Recipe::setFermentation(std::shared_ptr<Fermentation> val) { this->pimpl->set<Fermentation>(val, this->m_fermentationId); return; }
 void Recipe::setStyle       (std::shared_ptr<Style       > val) { this->pimpl->set<Style       >(val, this->m_styleId       ); return; }
 void Recipe::setEquipment   (std::shared_ptr<Equipment   > val) { this->pimpl->set<Equipment   >(val, this->m_equipmentId   ); return; }
+
+template<> void Recipe::set(std::shared_ptr<Mash        > val) { this->setMash        (val); return; }
+template<> void Recipe::set(std::shared_ptr<Boil        > val) { this->setBoil        (val); return; }
+template<> void Recipe::set(std::shared_ptr<Fermentation> val) { this->setFermentation(val); return; }
+template<> void Recipe::set(std::shared_ptr<Style       > val) { this->setStyle       (val); return; }
+template<> void Recipe::set(std::shared_ptr<Equipment   > val) { this->setEquipment   (val); return; }
+template<> void Recipe::set(std::shared_ptr<Water       > val) {
+   // We didn't yet figure out what setWater on Recipe should mean!
+   qDebug() << Q_FUNC_INFO << "Operation not supported";
+   return;
+}
 
 template<typename RA> void Recipe::setAdditions(QList<std::shared_ptr<RA>> val) {
    this->ownedSetFor<RA>().setAll(val);

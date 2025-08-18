@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Water.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Water.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -29,6 +29,25 @@
 #endif
 
 QString Water::localisedName() { return tr("Water"); }
+QString Water::localisedName_alkalinity_ppm  () { return tr("Alkalinity"                  ); }
+QString Water::localisedName_alkalinityAsHCO3() { return tr("Alkalinity As HCO3"          ); }
+QString Water::localisedName_bicarbonate_ppm () { return tr("Bicarbonate"                 ); }
+QString Water::localisedName_calcium_ppm     () { return tr("Calcium"                     ); }
+QString Water::localisedName_carbonate_ppm   () { return tr("Carbonate"                   ); }
+QString Water::localisedName_chloride_ppm    () { return tr("Chloride"                    ); }
+QString Water::localisedName_fluoride_ppm    () { return tr("Fluoride"                    ); }
+QString Water::localisedName_iron_ppm        () { return tr("Iron"                        ); }
+QString Water::localisedName_magnesium_ppm   () { return tr("Magnesium"                   ); }
+QString Water::localisedName_mashRo_pct      () { return tr("RO (reverse osmosis) in Mash"); }
+QString Water::localisedName_nitrate_ppm     () { return tr("Nitrate"                     ); }
+QString Water::localisedName_nitrite_ppm     () { return tr("Nitrite"                     ); }
+QString Water::localisedName_notes           () { return tr("Notes"                       ); }
+QString Water::localisedName_ph              () { return tr("pH"                          ); }
+QString Water::localisedName_potassium_ppm   () { return tr("Potassium"                   ); }
+QString Water::localisedName_sodium_ppm      () { return tr("Sodium"                      ); }
+QString Water::localisedName_spargeRo_pct    () { return tr("SpargeRo"                    ); }
+QString Water::localisedName_sulfate_ppm     () { return tr("Sulfate"                     ); }
+QString Water::localisedName_type            () { return tr("Type"                        ); }
 
 EnumStringMapping const Water::typeStringMapping {
    {Water::Type::Base  , "base"  },
@@ -61,24 +80,24 @@ EnumStringMapping const Water::ionDisplayNames {
    {Water::Ion::SO4 , tr("SO4 ")},
 };
 
-bool Water::isEqualTo(NamedEntity const & other) const {
+bool Water::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Water const & rhs = static_cast<Water const &>(other);
    // Base class will already have ensured names are equal
    bool const outlinesAreEqual{
-      // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
-      AUTO_LOG_COMPARE(this, rhs, m_calcium_ppm    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_bicarbonate_ppm) &&
-      AUTO_LOG_COMPARE(this, rhs, m_carbonate_ppm  ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_potassium_ppm  ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_iron_ppm       ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_nitrate_ppm    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_nitrite_ppm    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_fluoride_ppm   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_sulfate_ppm    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_chloride_ppm   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_sodium_ppm     ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_magnesium_ppm  )
+      // "Outline" fields: In BeerJSON, all these fields are in the WaterBase type
+      AUTO_PROPERTY_COMPARE(this, rhs, m_calcium_ppm    , PropertyNames::Water::calcium_ppm    , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_bicarbonate_ppm, PropertyNames::Water::bicarbonate_ppm, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_carbonate_ppm  , PropertyNames::Water::carbonate_ppm  , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_potassium_ppm  , PropertyNames::Water::potassium_ppm  , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_iron_ppm       , PropertyNames::Water::iron_ppm       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_nitrate_ppm    , PropertyNames::Water::nitrate_ppm    , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_nitrite_ppm    , PropertyNames::Water::nitrite_ppm    , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_fluoride_ppm   , PropertyNames::Water::fluoride_ppm   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_sulfate_ppm    , PropertyNames::Water::sulfate_ppm    , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_chloride_ppm   , PropertyNames::Water::chloride_ppm   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_sodium_ppm     , PropertyNames::Water::sodium_ppm     , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_magnesium_ppm  , PropertyNames::Water::magnesium_ppm  , propertiesThatDiffer)
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -90,8 +109,8 @@ bool Water::isEqualTo(NamedEntity const & other) const {
    return (
       outlinesAreEqual &&
       // Remaining BeerJSON fields
-      AUTO_LOG_COMPARE(this, rhs, m_ph   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_notes)
+      AUTO_PROPERTY_COMPARE(this, rhs, m_ph   , PropertyNames::Water::ph   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_notes, PropertyNames::Water::notes, propertiesThatDiffer)
    );
 }
 
@@ -102,27 +121,26 @@ ObjectStore & Water::getObjectStoreTypedInstance() const {
 TypeLookup const Water::typeLookup {
    "Water",
    {
-///      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::amount          , Water::m_amount            , Measurement::PhysicalQuantity::Volume             ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::calcium_ppm     , Water::m_calcium_ppm       , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::bicarbonate_ppm , Water::m_bicarbonate_ppm   , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::sulfate_ppm     , Water::m_sulfate_ppm       , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::chloride_ppm    , Water::m_chloride_ppm      , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::sodium_ppm      , Water::m_sodium_ppm        , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::magnesium_ppm   , Water::m_magnesium_ppm     , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::ph              , Water::m_ph                , Measurement::PhysicalQuantity::Acidity           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::alkalinity_ppm  , Water::m_alkalinity_ppm    , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::notes           , Water::m_notes             ,           NonPhysicalQuantity::String            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::type            , Water::m_type              ,           NonPhysicalQuantity::Enum              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::mashRo_pct      , Water::m_mashRo_pct        ,           NonPhysicalQuantity::Percentage        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::spargeRo_pct    , Water::m_spargeRo_pct      ,           NonPhysicalQuantity::Percentage        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::alkalinityAsHCO3, Water::m_alkalinity_as_hco3,           NonPhysicalQuantity::Bool              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, calcium_ppm     , m_calcium_ppm       , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, bicarbonate_ppm , m_bicarbonate_ppm   , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, sulfate_ppm     , m_sulfate_ppm       , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, chloride_ppm    , m_chloride_ppm      , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, sodium_ppm      , m_sodium_ppm        , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, magnesium_ppm   , m_magnesium_ppm     , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, ph              , m_ph                , Measurement::PhysicalQuantity::Acidity           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, alkalinity_ppm  , m_alkalinity_ppm    , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, notes           , m_notes             ,           NonPhysicalQuantity::String            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, type            , m_type              , ENUM_INFO(Water::type)                           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, mashRo_pct      , m_mashRo_pct        ,           NonPhysicalQuantity::Percentage        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, spargeRo_pct    , m_spargeRo_pct      ,           NonPhysicalQuantity::Percentage        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, alkalinityAsHCO3, m_alkalinity_as_hco3, BOOL_INFO(tr("No"), tr("Yes"))                   ),
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::carbonate_ppm   , Water::m_carbonate_ppm     , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::potassium_ppm   , Water::m_potassium_ppm     , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::iron_ppm        , Water::m_iron_ppm          , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::nitrate_ppm     , Water::m_nitrate_ppm       , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::nitrite_ppm     , Water::m_nitrite_ppm       , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Water::fluoride_ppm    , Water::m_fluoride_ppm      , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, carbonate_ppm   , m_carbonate_ppm     , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, potassium_ppm   , m_potassium_ppm     , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, iron_ppm        , m_iron_ppm          , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, nitrate_ppm     , m_nitrate_ppm       , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, nitrite_ppm     , m_nitrite_ppm       , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, fluoride_ppm    , m_fluoride_ppm      , Measurement::PhysicalQuantity::MassFractionOrConc),
    },
    // Parent classes lookup
    {&OutlineableNamedEntity::typeLookup,

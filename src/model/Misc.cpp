@@ -39,6 +39,11 @@
 #endif
 
 QString Misc::localisedName() { return tr("Miscellaneous"); }
+QString Misc::localisedName_notes    (){ return tr("Notes"     ); }
+QString Misc::localisedName_producer (){ return tr("Producer"  ); }
+QString Misc::localisedName_productId(){ return tr("Product ID"); }
+QString Misc::localisedName_type     (){ return tr("Type"      ); }
+QString Misc::localisedName_useFor   (){ return tr("Use For"   ); }
 
 EnumStringMapping const Misc::typeStringMapping {
    {Misc::Type::Spice      , "spice"      },
@@ -60,15 +65,15 @@ EnumStringMapping const Misc::typeDisplayNames {
    {Misc::Type::Wood       , tr("Wood"       )},
 };
 
-bool Misc::isEqualTo(NamedEntity const & other) const {
+bool Misc::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Misc const & rhs = static_cast<Misc const &>(other);
    // Base class will already have ensured names are equal
    bool const outlinesAreEqual{
-      // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
-      AUTO_LOG_COMPARE(this, rhs, m_producer ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_productId) &&
-      AUTO_LOG_COMPARE(this, rhs, m_type     )
+      // "Outline" fields: In BeerJSON, all these fields are in the MiscellaneousBase type
+      AUTO_PROPERTY_COMPARE(this, rhs, m_producer , PropertyNames::Misc::producer , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_productId, PropertyNames::Misc::productId, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_type     , PropertyNames::Misc::type     , propertiesThatDiffer)
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -79,10 +84,9 @@ bool Misc::isEqualTo(NamedEntity const & other) const {
 
    return (
       outlinesAreEqual &&
-
       // Remaining BeerJSON fields -- excluding inventories
-      AUTO_LOG_COMPARE(this, rhs, m_useFor) &&
-      AUTO_LOG_COMPARE(this, rhs, m_notes )
+      AUTO_PROPERTY_COMPARE(this, rhs, m_useFor, PropertyNames::Misc::useFor, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_notes , PropertyNames::Misc::notes , propertiesThatDiffer)
    );
 }
 
@@ -93,12 +97,12 @@ ObjectStore & Misc::getObjectStoreTypedInstance() const {
 TypeLookup const Misc::typeLookup {
    "Misc",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::notes    , Misc::m_notes    , NonPhysicalQuantity::String),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::type     , Misc::m_type     , NonPhysicalQuantity::Enum  ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::useFor   , Misc::m_useFor   , NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Misc, notes    , m_notes    , NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Misc, type     , m_type     , ENUM_INFO(Misc::type)),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Misc, useFor   , m_useFor   , NonPhysicalQuantity::String),
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::producer , Misc::m_producer , NonPhysicalQuantity::String),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Misc::productId, Misc::m_productId, NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Misc, producer , m_producer , NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Misc, productId, m_productId, NonPhysicalQuantity::String),
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,

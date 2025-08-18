@@ -29,32 +29,80 @@
    #include "moc_Equipment.cpp"
 #endif
 
-QString Equipment::localisedName() { return tr("Equipment"); }
+QString Equipment::localisedName                            () { return tr("Equipment"); }
+QString Equipment::localisedName_agingVesselLoss_l          () { return tr("Aging Vessel Loss"          ); }
+QString Equipment::localisedName_agingVesselNotes           () { return tr("Aging Vessel Notes"         ); }
+QString Equipment::localisedName_agingVesselType            () { return tr("Aging Vessel Type"          ); }
+QString Equipment::localisedName_agingVesselVolume_l        () { return tr("Aging Vessel Volume"        ); }
+QString Equipment::localisedName_boilTime_min               () { return tr("Boil Time"                  ); }
+QString Equipment::localisedName_boilingPoint_c             () { return tr("Boiling Point"              ); }
+QString Equipment::localisedName_calcBoilVolume             () { return tr("Calculate Boil Volume"      ); }
+QString Equipment::localisedName_evapRate_pctHr             () { return tr("Evaporation Rate"           ); }
+QString Equipment::localisedName_fermenterBatchSize_l       () { return tr("Fermenter Batch Size"       ); }
+QString Equipment::localisedName_fermenterLoss_l            () { return tr("Fermenter Loss"             ); }
+QString Equipment::localisedName_fermenterNotes             () { return tr("Fermenter Notes"            ); }
+QString Equipment::localisedName_fermenterType              () { return tr("Fermenter Type"             ); }
+QString Equipment::localisedName_hltLoss_l                  () { return tr("HLT Loss"                   ); }
+QString Equipment::localisedName_hltNotes                   () { return tr("HLT Notes"                  ); }
+QString Equipment::localisedName_hltSpecificHeat_calGC      () { return tr("HLT Specific Heat"          ); }
+QString Equipment::localisedName_hltType                    () { return tr("HLT Type"                   ); }
+QString Equipment::localisedName_hltVolume_l                () { return tr("HLT Volume"                 ); }
+QString Equipment::localisedName_hltWeight_kg               () { return tr("HLT Weight"                 ); }
+QString Equipment::localisedName_hopUtilization_pct         () { return tr("Hop Utilization"            ); }
+QString Equipment::localisedName_kettleBoilSize_l           () { return tr("Kettle Boil Size"           ); }
+QString Equipment::localisedName_kettleEvaporationPerHour_l () { return tr("Kettle Evaporation Per Hour"); }
+QString Equipment::localisedName_kettleInternalDiameter_cm  () { return tr("Kettle Internal Diameter"   ); }
+QString Equipment::localisedName_kettleNotes                () { return tr("Kettle Notes"               ); }
+QString Equipment::localisedName_kettleOpeningDiameter_cm   () { return tr("Kettle Opening Diameter"    ); }
+QString Equipment::localisedName_kettleOutflowPerMinute_l   () { return tr("Kettle Outflow Per Minute"  ); }
+QString Equipment::localisedName_kettleSpecificHeat_calGC   () { return tr("Kettle Specific Heat"       ); }
+QString Equipment::localisedName_kettleTrubChillerLoss_l    () { return tr("Kettle Trub Chiller Loss"   ); }
+QString Equipment::localisedName_kettleType                 () { return tr("Kettle Type"                ); }
+QString Equipment::localisedName_kettleWeight_kg            () { return tr("Kettle Weight"              ); }
+QString Equipment::localisedName_lauterTunDeadspaceLoss_l   () { return tr("Lauter Tun Deadspace Loss"  ); }
+QString Equipment::localisedName_lauterTunNotes             () { return tr("Lauter Tun Notes"           ); }
+QString Equipment::localisedName_lauterTunSpecificHeat_calGC() { return tr("Lauter Tun Specific Heat"   ); }
+QString Equipment::localisedName_lauterTunType              () { return tr("Lauter Tun Type"            ); }
+QString Equipment::localisedName_lauterTunVolume_l          () { return tr("Lauter Tun Volume"          ); }
+QString Equipment::localisedName_lauterTunWeight_kg         () { return tr("Lauter Tun Weight"          ); }
+QString Equipment::localisedName_mashTunGrainAbsorption_LKg () { return tr("Mash Tun Grain Absorption"  ); }
+QString Equipment::localisedName_mashTunLoss_l              () { return tr("Mash Tun Loss"              ); }
+QString Equipment::localisedName_mashTunNotes               () { return tr("Mash Tun Notes"             ); }
+QString Equipment::localisedName_mashTunSpecificHeat_calGC  () { return tr("Mash Tun Specific Heat"     ); }
+QString Equipment::localisedName_mashTunType                () { return tr("Mash Tun Type"              ); }
+QString Equipment::localisedName_mashTunVolume_l            () { return tr("Mash Tun Volume"            ); }
+QString Equipment::localisedName_mashTunWeight_kg           () { return tr("Mash Tun Weight"            ); }
+QString Equipment::localisedName_packagingVesselLoss_l      () { return tr("Packaging Vessel Loss"      ); }
+QString Equipment::localisedName_packagingVesselNotes       () { return tr("Packaging Vessel Notes"     ); }
+QString Equipment::localisedName_packagingVesselType        () { return tr("Packaging Vessel Type"      ); }
+QString Equipment::localisedName_packagingVesselVolume_l    () { return tr("Packaging Vessel Volume"    ); }
+QString Equipment::localisedName_topUpKettle_l              () { return tr("Top Up Kettle"              ); }
+QString Equipment::localisedName_topUpWater_l               () { return tr("Top Up Water"               ); }
 
-bool Equipment::isEqualTo(NamedEntity const & other) const {
+bool Equipment::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Equipment const & rhs = static_cast<Equipment const &>(other);
    // Base class will already have ensured names are equal
    return (
-      AUTO_LOG_COMPARE(this, rhs, m_kettleBoilSize_l          ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_fermenterBatchSize_l      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_mashTunVolume_l           ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_mashTunWeight_kg          ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_mashTunSpecificHeat_calGC ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_topUpWater_l              ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_kettleTrubChillerLoss_l   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_evapRate_pctHr            ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_kettleEvaporationPerHour_l) &&
-      AUTO_LOG_COMPARE(this, rhs, m_boilTime_min              ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_calcBoilVolume            ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_lauterTunDeadspaceLoss_l  ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_topUpKettle_l             ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_hopUtilization_pct        ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_kettleNotes               ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_mashTunGrainAbsorption_LKg) &&
-      AUTO_LOG_COMPARE(this, rhs, m_boilingPoint_c            ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_kettleInternalDiameter_cm ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_kettleOpeningDiameter_cm  )
+      AUTO_PROPERTY_COMPARE(this, rhs, m_kettleBoilSize_l          , PropertyNames::Equipment::kettleBoilSize_l          , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_fermenterBatchSize_l      , PropertyNames::Equipment::fermenterBatchSize_l      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunVolume_l           , PropertyNames::Equipment::mashTunVolume_l           , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunWeight_kg          , PropertyNames::Equipment::mashTunWeight_kg          , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunSpecificHeat_calGC , PropertyNames::Equipment::mashTunSpecificHeat_calGC , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_topUpWater_l              , PropertyNames::Equipment::topUpWater_l              , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_kettleTrubChillerLoss_l   , PropertyNames::Equipment::kettleTrubChillerLoss_l   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_evapRate_pctHr            , PropertyNames::Equipment::evapRate_pctHr            , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_kettleEvaporationPerHour_l, PropertyNames::Equipment::kettleEvaporationPerHour_l, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_boilTime_min              , PropertyNames::Equipment::boilTime_min              , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_calcBoilVolume            , PropertyNames::Equipment::calcBoilVolume            , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_lauterTunDeadspaceLoss_l  , PropertyNames::Equipment::lauterTunDeadspaceLoss_l  , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_topUpKettle_l             , PropertyNames::Equipment::topUpKettle_l             , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_hopUtilization_pct        , PropertyNames::Equipment::hopUtilization_pct        , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_kettleNotes               , PropertyNames::Equipment::kettleNotes               , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunGrainAbsorption_LKg, PropertyNames::Equipment::mashTunGrainAbsorption_LKg, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_boilingPoint_c            , PropertyNames::Equipment::boilingPoint_c            , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_kettleInternalDiameter_cm , PropertyNames::Equipment::kettleInternalDiameter_cm , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_kettleOpeningDiameter_cm  , PropertyNames::Equipment::kettleOpeningDiameter_cm  , propertiesThatDiffer)
    );
 }
 
@@ -65,55 +113,55 @@ ObjectStore & Equipment::getObjectStoreTypedInstance() const {
 TypeLookup const Equipment::typeLookup {
    "Equipment",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::kettleBoilSize_l           , Equipment::m_kettleBoilSize_l           , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::fermenterBatchSize_l       , Equipment::m_fermenterBatchSize_l       , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::mashTunVolume_l            , Equipment::m_mashTunVolume_l            , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::mashTunWeight_kg           , Equipment::m_mashTunWeight_kg           , Measurement::PhysicalQuantity::Mass                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::mashTunSpecificHeat_calGC  , Equipment::m_mashTunSpecificHeat_calGC  , Measurement::PhysicalQuantity::SpecificHeatCapacity),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::topUpWater_l               , Equipment::m_topUpWater_l               , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::kettleTrubChillerLoss_l    , Equipment::m_kettleTrubChillerLoss_l    , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::evapRate_pctHr             , Equipment::m_evapRate_pctHr             ,           NonPhysicalQuantity::Percentage          ), // The "per hour" bit is fixed, so we simplify
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::kettleEvaporationPerHour_l , Equipment::m_kettleEvaporationPerHour_l , Measurement::PhysicalQuantity::Volume              ), // The "per hour" bit is fixed, so we simplify
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::boilTime_min               , Equipment::m_boilTime_min               , Measurement::PhysicalQuantity::Time                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::calcBoilVolume             , Equipment::m_calcBoilVolume             ,           NonPhysicalQuantity::Bool                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::lauterTunDeadspaceLoss_l   , Equipment::m_lauterTunDeadspaceLoss_l   , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::topUpKettle_l              , Equipment::m_topUpKettle_l              , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::hopUtilization_pct         , Equipment::m_hopUtilization_pct         ,           NonPhysicalQuantity::Percentage          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::kettleNotes                , Equipment::m_kettleNotes                ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::mashTunGrainAbsorption_LKg , Equipment::m_mashTunGrainAbsorption_LKg , Measurement::PhysicalQuantity::SpecificVolume      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::boilingPoint_c             , Equipment::m_boilingPoint_c             , Measurement::PhysicalQuantity::Temperature         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::kettleInternalDiameter_cm  , Equipment::m_kettleInternalDiameter_cm  , Measurement::PhysicalQuantity::Length              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::kettleOpeningDiameter_cm   , Equipment::m_kettleOpeningDiameter_cm   , Measurement::PhysicalQuantity::Length              ),
-      // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::hltType                    , Equipment::m_hltType                    ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::mashTunType                , Equipment::m_mashTunType                ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::lauterTunType              , Equipment::m_lauterTunType              ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::kettleType                 , Equipment::m_kettleType                 ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::fermenterType              , Equipment::m_fermenterType              ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::agingVesselType            , Equipment::m_agingVesselType            ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::packagingVesselType        , Equipment::m_packagingVesselType        ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::hltVolume_l                , Equipment::m_hltVolume_l                , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::lauterTunVolume_l          , Equipment::m_lauterTunVolume_l          , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::agingVesselVolume_l        , Equipment::m_agingVesselVolume_l        , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::packagingVesselVolume_l    , Equipment::m_packagingVesselVolume_l    , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::hltLoss_l                  , Equipment::m_hltLoss_l                  , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::mashTunLoss_l              , Equipment::m_mashTunLoss_l              , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::fermenterLoss_l            , Equipment::m_fermenterLoss_l            , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::agingVesselLoss_l          , Equipment::m_agingVesselLoss_l          , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::packagingVesselLoss_l      , Equipment::m_packagingVesselLoss_l      , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::kettleOutflowPerMinute_l   , Equipment::m_kettleOutflowPerMinute_l   , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::hltWeight_kg               , Equipment::m_hltWeight_kg               , Measurement::PhysicalQuantity::Mass                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::lauterTunWeight_kg         , Equipment::m_lauterTunWeight_kg         , Measurement::PhysicalQuantity::Mass                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::kettleWeight_kg            , Equipment::m_kettleWeight_kg            , Measurement::PhysicalQuantity::Mass                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::hltSpecificHeat_calGC      , Equipment::m_hltSpecificHeat_calGC      , Measurement::PhysicalQuantity::SpecificHeatCapacity),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::lauterTunSpecificHeat_calGC, Equipment::m_lauterTunSpecificHeat_calGC, Measurement::PhysicalQuantity::SpecificHeatCapacity),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::kettleSpecificHeat_calGC   , Equipment::m_kettleSpecificHeat_calGC   , Measurement::PhysicalQuantity::SpecificHeatCapacity),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::hltNotes                   , Equipment::m_hltNotes                   ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::mashTunNotes               , Equipment::m_mashTunNotes               ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::lauterTunNotes             , Equipment::m_lauterTunNotes             ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::fermenterNotes             , Equipment::m_fermenterNotes             ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::agingVesselNotes           , Equipment::m_agingVesselNotes           ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Equipment::packagingVesselNotes       , Equipment::m_packagingVesselNotes       ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleBoilSize_l           , m_kettleBoilSize_l           , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fermenterBatchSize_l       , m_fermenterBatchSize_l       , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunVolume_l            , m_mashTunVolume_l            , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunWeight_kg           , m_mashTunWeight_kg           , Measurement::PhysicalQuantity::Mass                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunSpecificHeat_calGC  , m_mashTunSpecificHeat_calGC  , Measurement::PhysicalQuantity::SpecificHeatCapacity),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, topUpWater_l               , m_topUpWater_l               , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleTrubChillerLoss_l    , m_kettleTrubChillerLoss_l    , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, evapRate_pctHr             , m_evapRate_pctHr             ,           NonPhysicalQuantity::Percentage          ), // The "per hour" bit is fixed, so we simplify
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleEvaporationPerHour_l , m_kettleEvaporationPerHour_l , Measurement::PhysicalQuantity::Volume              ), // The "per hour" bit is fixed, so we simplify
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, boilTime_min               , m_boilTime_min               , Measurement::PhysicalQuantity::Time                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, calcBoilVolume             , m_calcBoilVolume             ,           NonPhysicalQuantity::Bool                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, lauterTunDeadspaceLoss_l   , m_lauterTunDeadspaceLoss_l   , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, topUpKettle_l              , m_topUpKettle_l              , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hopUtilization_pct         , m_hopUtilization_pct         ,           NonPhysicalQuantity::Percentage          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleNotes                , m_kettleNotes                ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunGrainAbsorption_LKg , m_mashTunGrainAbsorption_LKg , Measurement::PhysicalQuantity::SpecificVolume      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, boilingPoint_c             , m_boilingPoint_c             , Measurement::PhysicalQuantity::Temperature         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleInternalDiameter_cm  , m_kettleInternalDiameter_cm  , Measurement::PhysicalQuantity::Length              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleOpeningDiameter_cm   , m_kettleOpeningDiameter_cm   , Measurement::PhysicalQuantity::Length              ),
+      // ⮜⮜⮜ All below added for t ⮞⮞⮞
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hltType                    , m_hltType                    ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunType                , m_mashTunType                ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, lauterTunType              , m_lauterTunType              ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleType                 , m_kettleType                 ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fermenterType              , m_fermenterType              ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, agingVesselType            , m_agingVesselType            ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, packagingVesselType        , m_packagingVesselType        ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hltVolume_l                , m_hltVolume_l                , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, lauterTunVolume_l          , m_lauterTunVolume_l          , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, agingVesselVolume_l        , m_agingVesselVolume_l        , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, packagingVesselVolume_l    , m_packagingVesselVolume_l    , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hltLoss_l                  , m_hltLoss_l                  , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunLoss_l              , m_mashTunLoss_l              , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fermenterLoss_l            , m_fermenterLoss_l            , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, agingVesselLoss_l          , m_agingVesselLoss_l          , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, packagingVesselLoss_l      , m_packagingVesselLoss_l      , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleOutflowPerMinute_l   , m_kettleOutflowPerMinute_l   , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hltWeight_kg               , m_hltWeight_kg               , Measurement::PhysicalQuantity::Mass                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, lauterTunWeight_kg         , m_lauterTunWeight_kg         , Measurement::PhysicalQuantity::Mass                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleWeight_kg            , m_kettleWeight_kg            , Measurement::PhysicalQuantity::Mass                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hltSpecificHeat_calGC      , m_hltSpecificHeat_calGC      , Measurement::PhysicalQuantity::SpecificHeatCapacity),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, lauterTunSpecificHeat_calGC, m_lauterTunSpecificHeat_calGC, Measurement::PhysicalQuantity::SpecificHeatCapacity),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleSpecificHeat_calGC   , m_kettleSpecificHeat_calGC   , Measurement::PhysicalQuantity::SpecificHeatCapacity),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hltNotes                   , m_hltNotes                   ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunNotes               , m_mashTunNotes               ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, lauterTunNotes             , m_lauterTunNotes             ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fermenterNotes             , m_fermenterNotes             ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, agingVesselNotes           , m_agingVesselNotes           ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, packagingVesselNotes       , m_packagingVesselNotes       ,           NonPhysicalQuantity::String              ),
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,

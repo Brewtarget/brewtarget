@@ -41,8 +41,8 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
          // NOTE: Need PropertyNames::Fermentable::amountWithUnits not PropertyNames::Fermentable::amount below so we
          //       can handle mass-or-volume generically in TableModelBase.  Same for inventoryWithUnits.
          TABLE_MODEL_HEADER(Misc, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
-         TABLE_MODEL_HEADER(Misc, Type              , tr("Type"       ), PropertyNames::Misc::type                   , EnumInfo{Misc::typeStringMapping, Misc::typeDisplayNames}),
-         TABLE_MODEL_HEADER(Misc, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   , PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(Misc, Type              , tr("Type"       ), PropertyNames::Misc::type                   /*, EnumInfo{Misc::typeStringMapping, Misc::typeDisplayNames}*/),
+         TABLE_MODEL_HEADER(Misc, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   /*, PrecisionInfo{1}*/),
          TABLE_MODEL_HEADER(Misc, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Misc::validMeasures),
          TABLE_MODEL_HEADER(Misc, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
       }

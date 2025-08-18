@@ -210,6 +210,8 @@ namespace {
 
 }
 
+QString IbuMethods::localisedName_formula() { return QObject::tr("Formula"); }
+
 EnumStringMapping const IbuMethods::formulaStringMapping {
    {IbuMethods::IbuFormula::Tinseth, "tinseth"},
    {IbuMethods::IbuFormula::Rager  , "rager"  },
@@ -229,7 +231,7 @@ EnumStringMapping const IbuMethods::formulaDisplayNames {
 TypeLookup const IbuMethods::typeLookup {
    "IbuMethods",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::IbuMethods::formula, IbuMethods::formula, NonPhysicalQuantity::Enum),
+      PROPERTY_TYPE_LOOKUP_ENTRY(IbuMethods, formula, formula, ENUM_INFO(IbuMethods::formula)),
    }
 };
 

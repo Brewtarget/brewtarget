@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * qtModels/tableModels/RecipeAdditionYeastTableModel.cpp is part of Brewtarget, and is copyright the following authors
- * 2009-2024:
+ * 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Luke Vincent <luke.r.vincent@gmail.com>
@@ -59,17 +59,17 @@ RecipeAdditionYeastTableModel::RecipeAdditionYeastTableModel(QTableView * parent
          TABLE_MODEL_HEADER(RecipeAdditionYeast, ProductId     , tr("Product ID"    ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
                                                                                                      PropertyNames::Yeast::productId       }}),
          TABLE_MODEL_HEADER(RecipeAdditionYeast, Type          , tr("Type"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                     PropertyNames::Yeast::type             }}, EnumInfo{Yeast::typeStringMapping, Yeast::typeDisplayNames}),
+                                                                                                     PropertyNames::Yeast::type             }}/*, EnumInfo{Yeast::typeStringMapping, Yeast::typeDisplayNames}*/),
          TABLE_MODEL_HEADER(RecipeAdditionYeast, Form          , tr("Form"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                     PropertyNames::Yeast::form             }}, EnumInfo{Yeast::formStringMapping, Yeast::formDisplayNames}),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Amount        , tr("Amount"        ), PropertyNames::IngredientAmount::amount                , PrecisionInfo{1}),
+                                                                                                     PropertyNames::Yeast::form             }}/*, EnumInfo{Yeast::formStringMapping, Yeast::formDisplayNames}*/),
+         TABLE_MODEL_HEADER(RecipeAdditionYeast, Amount        , tr("Amount"        ), PropertyNames::IngredientAmount::amount                /*, PrecisionInfo{1}*/),
          TABLE_MODEL_HEADER(RecipeAdditionYeast, AmountType    , tr("Amount Type"   ), PropertyNames::IngredientAmount::amount                , Yeast::validMeasures),
          // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
          TABLE_MODEL_HEADER(RecipeAdditionYeast, TotalInventory, tr("Inventory"     ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
                                                                                                    PropertyNames::Ingredient::totalInventory}}),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Stage         , tr("Stage"         ), PropertyNames::RecipeAddition::stage                     , EnumInfo{RecipeAddition::stageStringMapping, RecipeAddition::stageDisplayNames}),
+         TABLE_MODEL_HEADER(RecipeAdditionYeast, Stage         , tr("Stage"         ), PropertyNames::RecipeAddition::stage                    /* , EnumInfo{RecipeAddition::stageStringMapping, RecipeAddition::stageDisplayNames}*/),
          TABLE_MODEL_HEADER(RecipeAdditionYeast, Step          , tr("Step"          ), PropertyNames::RecipeAddition::step                    ),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Attenuation   , tr("Attenuation"   ), PropertyNames::RecipeAdditionYeast::attenuation_pct    , PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(RecipeAdditionYeast, Attenuation   , tr("Attenuation"   ), PropertyNames::RecipeAdditionYeast::attenuation_pct    /*, PrecisionInfo{1}*/),
          TABLE_MODEL_HEADER(RecipeAdditionYeast, TimesCultured , tr("Times Cultured"), PropertyNames::RecipeAdditionYeast::timesCultured      ),
       }
    },

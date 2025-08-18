@@ -26,6 +26,7 @@
 
 #include "editors/MiscEditor.h"
 #include "model/Misc.h"
+#include "model/RecipeAdditionMisc.h"
 #include "qtModels/sortFilterProxyModels/MiscSortFilterProxyModel.h"
 #include "qtModels/tableModels/MiscTableModel.h"
 

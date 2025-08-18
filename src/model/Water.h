@@ -42,7 +42,6 @@ class WaterTableModel;
 #define AddPropertyName(property) namespace PropertyNames::Water { inline BtStringConst const property{#property}; }
 AddPropertyName(alkalinity_ppm  )
 AddPropertyName(alkalinityAsHCO3)
-///AddPropertyName(amount          )
 AddPropertyName(bicarbonate_ppm )
 AddPropertyName(calcium_ppm     )
 AddPropertyName(carbonate_ppm   )
@@ -85,6 +84,25 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_alkalinity_ppm  ();
+   static QString localisedName_alkalinityAsHCO3();
+   static QString localisedName_bicarbonate_ppm ();
+   static QString localisedName_calcium_ppm     ();
+   static QString localisedName_carbonate_ppm   ();
+   static QString localisedName_chloride_ppm    ();
+   static QString localisedName_fluoride_ppm    ();
+   static QString localisedName_iron_ppm        ();
+   static QString localisedName_magnesium_ppm   ();
+   static QString localisedName_mashRo_pct      ();
+   static QString localisedName_nitrate_ppm     ();
+   static QString localisedName_nitrite_ppm     ();
+   static QString localisedName_notes           ();
+   static QString localisedName_ph              ();
+   static QString localisedName_potassium_ppm   ();
+   static QString localisedName_sodium_ppm      ();
+   static QString localisedName_spargeRo_pct    ();
+   static QString localisedName_sulfate_ppm     ();
+   static QString localisedName_type            ();
 
    /**
     * \brief
@@ -270,7 +288,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

@@ -40,6 +40,8 @@ AddPropertyName(formula)
  * \brief Convert malt color units to SRM.
  */
 namespace ColorMethods {
+   QString localisedName_formula();
+
    //! \brief The formula used to estimate beer color from the total of malt color units (MCU).
    enum class ColorFormula {
       Mosher, // Randy Mosher's model

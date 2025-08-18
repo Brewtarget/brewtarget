@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/IngredientBase.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/IngredientBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -73,8 +73,10 @@ TypeLookup const IngredientBase<Derived>::typeLookup {
       {&PropertyNames::Ingredient::totalInventory,
        TypeInfo::construct<MemberFunctionReturnType_t<&IngredientBase::getTotalInventory>>(
           PropertyNames::Ingredient::totalInventory,
+          Ingredient::localisedName_totalInventory,
           TypeLookupOf<MemberFunctionReturnType_t<&IngredientBase::getTotalInventory>>::value,
-          Derived::validMeasures
+          Derived::validMeasures,
+          DisplayInfo::Precision{1}
        )}
    },
    // Parent class lookup: none as we are at the top of this arm of the inheritance tree

@@ -23,17 +23,22 @@
 #endif
 
 QString Fermentation::localisedName() { return tr("Fermentation"); }
+QString Fermentation::localisedName_description() { return tr("Description"); }
+QString Fermentation::localisedName_notes      () { return tr("Notes"      ); }
+QString Fermentation::localisedName_primary    () { return tr("Primary"    ); }
+QString Fermentation::localisedName_secondary  () { return tr("Secondary"  ); }
+QString Fermentation::localisedName_tertiary   () { return tr("Tertiary"   ); }
 
-bool Fermentation::isEqualTo(NamedEntity const & other) const {
+bool Fermentation::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Fermentation const & rhs = static_cast<Fermentation const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_description == rhs.m_description &&
-      this->m_notes       == rhs.m_notes       &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_description, PropertyNames::Fermentation::description, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_notes      , PropertyNames::Fermentation::notes      , propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->FolderBase<Fermentation>::doIsEqualTo(rhs) &&
-      this->StepOwnerBase<Fermentation, FermentationStep>::doIsEqualTo(rhs)
+      this->FolderBase<Fermentation>                     ::doCompareWith(rhs, propertiesThatDiffer) &&
+      this->StepOwnerBase<Fermentation, FermentationStep>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
 
@@ -44,12 +49,11 @@ ObjectStore & Fermentation::getObjectStoreTypedInstance() const {
 TypeLookup const Fermentation::typeLookup {
    "Fermentation",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentation::description, Fermentation::m_description, NonPhysicalQuantity::String),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentation::notes      , Fermentation::m_notes      , NonPhysicalQuantity::String),
-
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::primary          , Fermentation::primary          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::secondary        , Fermentation::secondary        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentation::tertiary         , Fermentation::tertiary         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentation, description, m_description, NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentation, notes      , m_notes      , NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Fermentation, primary    , primary      ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Fermentation, secondary  , secondary    ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Fermentation, tertiary   , tertiary     ),
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,

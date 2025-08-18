@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Inventory.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * model/Inventory.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -41,19 +41,20 @@
 #endif
 
 QString Inventory::localisedName() { return tr("Inventory"); }
+QString Inventory::localisedName_ingredientId() { return tr("Ingredient ID"); }
 
-bool Inventory::isEqualTo(NamedEntity const & other) const {
+bool Inventory::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Inventory const & rhs = static_cast<Inventory const &>(other);
    return (
-      this->m_ingredientId == rhs.m_ingredientId
+      AUTO_PROPERTY_COMPARE(this, rhs, m_ingredientId, PropertyNames::Inventory::ingredientId, propertiesThatDiffer)
    );
 }
 
 TypeLookup const Inventory::typeLookup {
    "Inventory",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Inventory::ingredientId, Inventory::m_ingredientId),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, ingredientId, m_ingredientId),
    },
    {&NamedEntity::typeLookup}
 };

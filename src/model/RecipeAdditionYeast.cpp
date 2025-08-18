@@ -25,6 +25,12 @@
 #endif
 
 QString RecipeAdditionYeast::localisedName() { return tr("Yeast Addition"); }
+QString RecipeAdditionYeast::localisedName_addToSecondary   () { return tr("Add To Secondary"); }
+QString RecipeAdditionYeast::localisedName_attenuation_pct  () { return tr("Attenuation"     ); }
+QString RecipeAdditionYeast::localisedName_yeast            () { return tr("Yeast"           ); }
+QString RecipeAdditionYeast::localisedName_timesCultured    () { return tr("Times Cultured"  ); }
+QString RecipeAdditionYeast::localisedName_cellCountBillions() { return tr("Cell Count"      ); }
+
 QString RecipeAdditionYeast::instanceNameTemplate() { return tr("Addition of %1 yeast"); }
 
 ObjectStore & RecipeAdditionYeast::getObjectStoreTypedInstance() const {
@@ -34,11 +40,11 @@ ObjectStore & RecipeAdditionYeast::getObjectStoreTypedInstance() const {
 TypeLookup const RecipeAdditionYeast::typeLookup {
    "RecipeAdditionYeast",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::RecipeAdditionYeast::yeast            , RecipeAdditionYeast::yeast              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY      (PropertyNames::RecipeAdditionYeast::attenuation_pct  , RecipeAdditionYeast::m_attenuation_pct  , NonPhysicalQuantity::Percentage),
-      PROPERTY_TYPE_LOOKUP_ENTRY      (PropertyNames::RecipeAdditionYeast::timesCultured    , RecipeAdditionYeast::m_timesCultured    , NonPhysicalQuantity::OrdinalNumeral),
-      PROPERTY_TYPE_LOOKUP_ENTRY      (PropertyNames::RecipeAdditionYeast::cellCountBillions, RecipeAdditionYeast::m_cellCountBillions, NonPhysicalQuantity::OrdinalNumeral),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::RecipeAdditionYeast::addToSecondary   , RecipeAdditionYeast::addToSecondary     ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionYeast, yeast            , yeast              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, attenuation_pct  , m_attenuation_pct  , NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, timesCultured    , m_timesCultured    , NonPhysicalQuantity::OrdinalNumeral),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, cellCountBillions, m_cellCountBillions, NonPhysicalQuantity::OrdinalNumeral),
+      PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionYeast, addToSecondary   , addToSecondary     , BOOL_INFO(tr("No"), tr("Yes"))     ),
    },
    // Parent classes lookup.  NB: RecipeAddition not NamedEntity!
    {&RecipeAddition::typeLookup,

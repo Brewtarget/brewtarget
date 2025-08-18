@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Inventory.h is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * model/Inventory.h is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@
 #include "model/Ingredient.h"
 #include "model/NamedEntity.h"
 #include "utils/MetaTypes.h"
+#include "utils/AutoCompare.h"
 
 class ObjectStore;
 class TypeLookup;
@@ -75,6 +76,7 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_ingredientId();
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -117,7 +119,7 @@ public:
    virtual void hardDeleteOwnedEntities() override;
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 
    int m_ingredientId;
 };
@@ -210,7 +212,8 @@ public:                                                                         
    IngredientName * LcIngredientName() const ;                                     \
                                                                                    \
 protected:                                                                         \
-   virtual bool isEqualTo(NamedEntity const & other) const override;               \
+   virtual bool compareWith(NamedEntity const & other,                             \
+                            QList<BtStringConst const *> * propertiesThatDiffer) const override; \
    virtual ObjectStore & getObjectStoreTypedInstance() const override;             \
 
 /**
@@ -229,9 +232,11 @@ QString Inventory##IngredientName::localisedName() { return tr(#IngredientName "
 ObjectStore & Inventory##IngredientName::getObjectStoreTypedInstance() const {                                       \
    return ObjectStoreTyped<Inventory##IngredientName>::getInstance();                                                \
 }                                                                                                                    \
-bool Inventory##IngredientName::isEqualTo(NamedEntity const & other) const {                                         \
+bool Inventory##IngredientName::compareWith(NamedEntity const & other,                                               \
+                                            QList<BtStringConst const *> * propertiesThatDiffer) const {             \
    Inventory##IngredientName const & rhs = static_cast<Inventory##IngredientName const &>(other);                    \
-   return (this->m_amount == rhs.m_amount && this->Inventory::isEqualTo(other));                                     \
+   return (AUTO_PROPERTY_COMPARE(this, rhs, m_amount, PropertyNames::IngredientAmount::amount, propertiesThatDiffer) &&     \
+           this->Inventory::compareWith(other, propertiesThatDiffer));                                               \
 }                                                                                                                    \
 /* All properties are defined in base classes */                                                                     \
 TypeLookup const Inventory##IngredientName::typeLookup {                                                             \

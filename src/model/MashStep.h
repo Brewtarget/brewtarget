@@ -82,6 +82,12 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_amount_l              ();
+   static QString localisedName_decoctionAmount_l     ();
+   static QString localisedName_infuseAmount_l        ();
+   static QString localisedName_infuseTemp_c          ();
+   static QString localisedName_liquorToGristRatio_lKg();
+   static QString localisedName_type                  ();
 
    /**
     * \brief The type of step:
@@ -222,7 +228,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 
    /**
     * \brief Because \c MashStep inherits from multiple bases, more than one of which has a match for \c operator<<, we

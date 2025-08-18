@@ -34,7 +34,7 @@ BoilTableModel::BoilTableModel(QTableView * parent, bool editable) :
       editable,
       {
          TABLE_MODEL_HEADER(Boil, Name            , tr("Name"         ), PropertyNames:: NamedEntity::name           ),
-         TABLE_MODEL_HEADER(Boil, PreBoilSize     , tr("Pre-Boil Size"), PropertyNames::        Boil::preBoilSize_l  , PrecisionInfo{1}),
+         TABLE_MODEL_HEADER(Boil, PreBoilSize     , tr("Pre-Boil Size"), PropertyNames::        Boil::preBoilSize_l  /*, PrecisionInfo{1}*/),
          TABLE_MODEL_HEADER(Boil, NumRecipesUsedIn, tr("N° Recipes"   ), PropertyNames::NamedEntity::numRecipesUsedIn),
       }
    },

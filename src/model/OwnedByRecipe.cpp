@@ -23,8 +23,10 @@
 #endif
 
 QString OwnedByRecipe::localisedName() { return tr("Owned By Recipe"); }
+QString OwnedByRecipe::localisedName_recipeId() { return tr("Recipe ID"); }
 
-bool OwnedByRecipe::isEqualTo([[maybe_unused]] NamedEntity const & other) const {
+bool OwnedByRecipe::compareWith([[maybe_unused]] NamedEntity const & other,
+                                [[maybe_unused]] QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
 //   OwnedByRecipe const & rhs = static_cast<OwnedByRecipe const &>(other);
    // Base class will already have ensured names are equal
@@ -41,7 +43,7 @@ bool OwnedByRecipe::isEqualTo([[maybe_unused]] NamedEntity const & other) const 
 TypeLookup const OwnedByRecipe::typeLookup {
    "OwnedByRecipe",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::OwnedByRecipe::recipeId, OwnedByRecipe::m_recipeId),
+      PROPERTY_TYPE_LOOKUP_ENTRY(OwnedByRecipe, recipeId, m_recipeId),
    },
    // Parent class lookup
    {&NamedEntity::typeLookup}

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/BrewNote.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/BrewNote.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Jonatan Pålsson <jonatan.p@gmail.com>
@@ -88,6 +88,36 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_abv              ();
+   static QString localisedName_attenuation      ();
+   static QString localisedName_boilOff_l        ();
+   static QString localisedName_brewDate         ();
+   static QString localisedName_brewhouseEff_pct ();
+   static QString localisedName_effIntoBK_pct    ();
+   static QString localisedName_fermentDate      ();
+   static QString localisedName_fg               ();
+   static QString localisedName_finalVolume_l    ();
+   static QString localisedName_mashFinTemp_c    ();
+   static QString localisedName_notes            ();
+   static QString localisedName_og               ();
+   static QString localisedName_pitchTemp_c      ();
+   static QString localisedName_postBoilVolume_l ();
+   static QString localisedName_projABV_pct      ();
+   static QString localisedName_projAtten        ();
+   static QString localisedName_projBoilGrav     ();
+   static QString localisedName_projEff_pct      ();
+   static QString localisedName_projFermPoints   ();
+   static QString localisedName_projFg           ();
+   static QString localisedName_projMashFinTemp_c();
+   static QString localisedName_projOg           ();
+   static QString localisedName_projPoints       ();
+   static QString localisedName_projStrikeTemp_c ();
+   static QString localisedName_projVolIntoBK_l  ();
+   static QString localisedName_projVolIntoFerm_l();
+   static QString localisedName_sg               ();
+   static QString localisedName_strikeTemp_c     ();
+   static QString localisedName_volumeIntoBK_l   ();
+   static QString localisedName_volumeIntoFerm_l ();
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -230,7 +260,7 @@ signals:
    void brewDateChanged(QDate const &);
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

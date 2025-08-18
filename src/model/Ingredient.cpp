@@ -23,6 +23,7 @@
 #endif
 
 QString Ingredient::localisedName() { return tr("Ingredient"); }
+QString Ingredient::localisedName_totalInventory(){ return tr("Total Inventory"); }
 
 TypeLookup const Ingredient::typeLookup {
    "Ingredient",

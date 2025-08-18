@@ -35,6 +35,27 @@
 #endif
 
 QString Yeast::localisedName() { return tr("Yeast"); }
+QString Yeast::localisedName_alcoholTolerance_pct     () { return tr("Alcohol Tolerance"           ); }
+QString Yeast::localisedName_attenuationTypical_pct   () { return tr("Typical Attenuation"         ); }
+QString Yeast::localisedName_attenuationMax_pct       () { return tr("Max Attenuation"             ); }
+QString Yeast::localisedName_attenuationMin_pct       () { return tr("Min Attenuation"             ); }
+QString Yeast::localisedName_bestFor                  () { return tr("Best For"                    ); }
+QString Yeast::localisedName_flocculation             () { return tr("Flocculation"                ); }
+QString Yeast::localisedName_form                     () { return tr("Form"                        ); }
+QString Yeast::localisedName_glucoamylasePositive     () { return tr("Glucoamylase Positive"       ); }
+QString Yeast::localisedName_killerNeutral            () { return tr("Killer Neutral"              ); }
+QString Yeast::localisedName_killerProducingK1Toxin   () { return tr("Killer Producing K1 Toxin"   ); }
+QString Yeast::localisedName_killerProducingK28Toxin  () { return tr("Killer Producing K28 Toxin"  ); }
+QString Yeast::localisedName_killerProducingK2Toxin   () { return tr("Killer Producing K2 Toxin"   ); }
+QString Yeast::localisedName_killerProducingKlusToxin () { return tr("Killer Producing Klus Toxin" ); }
+QString Yeast::localisedName_laboratory               () { return tr("Laboratory"                  ); }
+QString Yeast::localisedName_maxReuse                 () { return tr("Max Reuse"                   ); }
+QString Yeast::localisedName_maxTemperature_c         () { return tr("Max Temperature"             ); }
+QString Yeast::localisedName_minTemperature_c         () { return tr("Min Temperature"             ); }
+QString Yeast::localisedName_notes                    () { return tr("Notes"                       ); }
+QString Yeast::localisedName_phenolicOffFlavorPositive() { return tr("Phenolic Off Flavor Positive"); }
+QString Yeast::localisedName_productId                () { return tr("Product ID"                  ); }
+QString Yeast::localisedName_type                     () { return tr("Type"                        ); }
 
 EnumStringMapping const Yeast::typeStringMapping {
    {Yeast::Type::Ale         , "ale"          },
@@ -105,16 +126,16 @@ EnumStringMapping const Yeast::flocculationDisplayNames {
 };
 
 
-bool Yeast::isEqualTo(NamedEntity const & other) const {
+bool Yeast::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Yeast const & rhs = static_cast<Yeast const &>(other);
    // Base class will already have ensured names are equal
     bool const outlinesAreEqual{
-      // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
-      AUTO_LOG_COMPARE(this, rhs, m_type      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_form      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_laboratory) && // = producer in BeerJSON
-      AUTO_LOG_COMPARE(this, rhs, m_productId )
+      // "Outline" fields: In BeerJSON, all these fields are in the YeastBase type
+      AUTO_PROPERTY_COMPARE(this, rhs, m_type      , PropertyNames::Yeast::type      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_form      , PropertyNames::Yeast::form      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_laboratory, PropertyNames::Yeast::laboratory, propertiesThatDiffer) && // = producer in BeerJSON
+      AUTO_PROPERTY_COMPARE(this, rhs, m_productId , PropertyNames::Yeast::productId , propertiesThatDiffer)
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -125,24 +146,23 @@ bool Yeast::isEqualTo(NamedEntity const & other) const {
 
    return (
       outlinesAreEqual &&
-
       // Remaining BeerJSON fields -- excluding inventories
-      AUTO_LOG_COMPARE(this, rhs, m_minTemperature_c         ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_maxTemperature_c         ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_alcoholTolerance_pct     ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_flocculation             ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_attenuationMin_pct       ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_attenuationMax_pct       ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_notes                    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_bestFor                  ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_maxReuse                 ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_phenolicOffFlavorPositive) &&
-      AUTO_LOG_COMPARE(this, rhs, m_glucoamylasePositive     ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_killerProducingK1Toxin   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_killerProducingK2Toxin   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_killerProducingK28Toxin  ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_killerProducingKlusToxin ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_killerNeutral            )
+      AUTO_PROPERTY_COMPARE(this, rhs, m_minTemperature_c         , PropertyNames::Yeast::minTemperature_c         , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_maxTemperature_c         , PropertyNames::Yeast::maxTemperature_c         , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_alcoholTolerance_pct     , PropertyNames::Yeast::alcoholTolerance_pct     , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_flocculation             , PropertyNames::Yeast::flocculation             , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_attenuationMin_pct       , PropertyNames::Yeast::attenuationMin_pct       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_attenuationMax_pct       , PropertyNames::Yeast::attenuationMax_pct       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_notes                    , PropertyNames::Yeast::notes                    , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_bestFor                  , PropertyNames::Yeast::bestFor                  , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_maxReuse                 , PropertyNames::Yeast::maxReuse                 , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_phenolicOffFlavorPositive, PropertyNames::Yeast::phenolicOffFlavorPositive, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_glucoamylasePositive     , PropertyNames::Yeast::glucoamylasePositive     , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_killerProducingK1Toxin   , PropertyNames::Yeast::killerProducingK1Toxin   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_killerProducingK2Toxin   , PropertyNames::Yeast::killerProducingK2Toxin   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_killerProducingK28Toxin  , PropertyNames::Yeast::killerProducingK28Toxin  , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_killerProducingKlusToxin , PropertyNames::Yeast::killerProducingKlusToxin , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_killerNeutral            , PropertyNames::Yeast::killerNeutral            , propertiesThatDiffer)
    );
 }
 
@@ -153,29 +173,29 @@ ObjectStore & Yeast::getObjectStoreTypedInstance() const {
 TypeLookup const Yeast::typeLookup {
    "Yeast",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::type                     , Yeast::m_type                     ,           NonPhysicalQuantity::Enum          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::form                     , Yeast::m_form                     ,           NonPhysicalQuantity::Enum          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::laboratory               , Yeast::m_laboratory               ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::productId                , Yeast::m_productId                ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::minTemperature_c         , Yeast::m_minTemperature_c         , Measurement::PhysicalQuantity::Temperature   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::maxTemperature_c         , Yeast::m_maxTemperature_c         , Measurement::PhysicalQuantity::Temperature   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::flocculation             , Yeast::m_flocculation             ,           NonPhysicalQuantity::Enum          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::notes                    , Yeast::m_notes                    ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::bestFor                  , Yeast::m_bestFor                  ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::maxReuse                 , Yeast::m_maxReuse                 ,           NonPhysicalQuantity::OrdinalNumeral),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, type                     , m_type                     , ENUM_INFO(Yeast::type)                       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, form                     , m_form                     , ENUM_INFO(Yeast::form)                       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, laboratory               , m_laboratory               ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, productId                , m_productId                ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, minTemperature_c         , m_minTemperature_c         , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, maxTemperature_c         , m_maxTemperature_c         , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, flocculation             , m_flocculation             , ENUM_INFO(Yeast::flocculation)               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, notes                    , m_notes                    ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, bestFor                  , m_bestFor                  ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, maxReuse                 , m_maxReuse                 ,           NonPhysicalQuantity::OrdinalNumeral),
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::alcoholTolerance_pct     , Yeast::m_alcoholTolerance_pct     ,           NonPhysicalQuantity::Percentage    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::attenuationMin_pct       , Yeast::m_attenuationMin_pct       ,           NonPhysicalQuantity::Percentage    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::attenuationMax_pct       , Yeast::m_attenuationMax_pct       ,           NonPhysicalQuantity::Percentage    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::phenolicOffFlavorPositive, Yeast::m_phenolicOffFlavorPositive,           NonPhysicalQuantity::Bool          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::glucoamylasePositive     , Yeast::m_glucoamylasePositive     ,           NonPhysicalQuantity::Bool          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::killerProducingK1Toxin   , Yeast::m_killerProducingK1Toxin   ,           NonPhysicalQuantity::Bool          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::killerProducingK2Toxin   , Yeast::m_killerProducingK2Toxin   ,           NonPhysicalQuantity::Bool          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::killerProducingK28Toxin  , Yeast::m_killerProducingK28Toxin  ,           NonPhysicalQuantity::Bool          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::killerProducingKlusToxin , Yeast::m_killerProducingKlusToxin ,           NonPhysicalQuantity::Bool          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Yeast::killerNeutral            , Yeast::m_killerNeutral            ,           NonPhysicalQuantity::Bool          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, alcoholTolerance_pct     , m_alcoholTolerance_pct     ,           NonPhysicalQuantity::Percentage    , DisplayInfo::Precision{1}),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, attenuationMin_pct       , m_attenuationMin_pct       ,           NonPhysicalQuantity::Percentage    , DisplayInfo::Precision{1}),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, attenuationMax_pct       , m_attenuationMax_pct       ,           NonPhysicalQuantity::Percentage    , DisplayInfo::Precision{1}),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, phenolicOffFlavorPositive, m_phenolicOffFlavorPositive, BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, glucoamylasePositive     , m_glucoamylasePositive     , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingK1Toxin   , m_killerProducingK1Toxin   , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingK2Toxin   , m_killerProducingK2Toxin   , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingK28Toxin  , m_killerProducingK28Toxin  , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingKlusToxin , m_killerProducingKlusToxin , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerNeutral            , m_killerNeutral            , BOOL_INFO(tr("No"), tr("Yes"))               ),
       // Legacy property for BeerXML
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Yeast::attenuationTypical_pct, Yeast::attenuationTypical_pct  ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Yeast, attenuationTypical_pct   , attenuationTypical_pct     ,           NonPhysicalQuantity::Percentage    ),
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,

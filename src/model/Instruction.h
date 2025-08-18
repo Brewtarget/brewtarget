@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Instruction.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Instruction.h is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
@@ -32,11 +32,11 @@
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Instruction { inline BtStringConst const property{#property}; }
-AddPropertyName(completed )
-AddPropertyName(directions)
-AddPropertyName(hasTimer  )
-AddPropertyName(interval  )
-AddPropertyName(timerValue)
+AddPropertyName(completed    )
+AddPropertyName(directions   )
+AddPropertyName(hasTimer     )
+AddPropertyName(interval_mins)
+AddPropertyName(timerValue   )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -69,6 +69,11 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_completed    ();
+   static QString localisedName_directions   ();
+   static QString localisedName_hasTimer     ();
+   static QString localisedName_interval_mins();
+   static QString localisedName_timerValue   ();
 
    using OwnerClass = Recipe;
 
@@ -86,43 +91,43 @@ public:
    virtual ~Instruction();
 
    //=================================================== PROPERTIES ====================================================
-   Q_PROPERTY(QString        directions        READ directions         WRITE setDirections)
-   Q_PROPERTY(bool           hasTimer          READ hasTimer           WRITE setHasTimer  )
-   Q_PROPERTY(QString        timerValue        READ timerValue         WRITE setTimerValue)
-   Q_PROPERTY(bool           completed         READ completed          WRITE setCompleted )
-   Q_PROPERTY(double         interval          READ interval           WRITE setInterval  )
-   Q_PROPERTY(QList<QString> reagents          READ reagents           STORED false       )
+   Q_PROPERTY(QString        directions        READ directions         WRITE setDirections   )
+   Q_PROPERTY(bool           hasTimer          READ hasTimer           WRITE setHasTimer     )
+   Q_PROPERTY(QString        timerValue        READ timerValue         WRITE setTimerValue   )
+   Q_PROPERTY(bool           completed         READ completed          WRITE setCompleted    )
+   Q_PROPERTY(double         interval_mins     READ interval_mins      WRITE setInterval_mins)
+   Q_PROPERTY(QList<QString> reagents          READ reagents           STORED false          )
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   QString directions();
-   bool    hasTimer();
-   QString timerValue();
-   bool    completed();
+   QString directions   () const;
+   bool    hasTimer     () const;
+   QString timerValue   () const;
+   bool    completed    () const;
+   double  interval_mins() const;
    //! This is a non-stored temporary in-memory set.
-   QList<QString> reagents();
-   double interval();
+   QList<QString> reagents() const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setDirections(const QString& dir);
-   void setHasTimer  (bool has);
-   void setTimerValue(const QString& timerVal);
-   void setCompleted (bool comp);
-   void setInterval  (double interval);
-   void addReagent   (const QString& reagent);
+   void setDirections   (QString const & val);
+   void setHasTimer     (bool    const   val);
+   void setTimerValue   (QString const & val);
+   void setCompleted    (bool    const   val);
+   void setInterval_mins(double  const   val);
+   void addReagent      (QString const & val);
 
 ///   virtual std::shared_ptr<Recipe> owningRecipe() const override;
 
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 
 private:
    QString m_directions;
    bool    m_hasTimer;
    QString m_timerValue;
    bool    m_completed;
-   double  m_interval;
+   double  m_interval_mins;
 
    QList<QString> m_reagents;
 };

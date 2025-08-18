@@ -26,7 +26,8 @@
    #include "moc_BoilStep.cpp"
 #endif
 
-QString BoilStep::localisedName() { return tr("Boil Step"); }
+QString BoilStep::localisedName             () { return tr("Boil Step"    ); }
+QString BoilStep::localisedName_chillingType() { return tr("Chilling Type"); };
 
 EnumStringMapping const BoilStep::chillingTypeStringMapping {
    {BoilStep::ChillingType::Batch , "batch"  },
@@ -38,14 +39,14 @@ EnumStringMapping const BoilStep::chillingTypeDisplayNames {
    {BoilStep::ChillingType::Inline, tr("Inline")},
 };
 
-bool BoilStep::isEqualTo(NamedEntity const & other) const {
+bool BoilStep::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    BoilStep const & rhs = static_cast<BoilStep const &>(other);
    // Base class will already have ensured names are equal
    return (
-      AUTO_LOG_COMPARE(this, rhs, m_chillingType) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_chillingType, PropertyNames::BoilStep::chillingType, propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->StepExtended::isEqualTo(other)
+      this->StepExtended::compareWith(other, propertiesThatDiffer)
    );
 }
 
@@ -56,7 +57,7 @@ BoilStepEditor & BoilStep::getEditor() {
 TypeLookup const BoilStep::typeLookup {
    "BoilStep",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BoilStep::chillingType, BoilStep::m_chillingType, NonPhysicalQuantity::Enum),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BoilStep, chillingType, m_chillingType, ENUM_INFO(BoilStep::chillingType)),
    },
    // Parent class lookup.  NB: StepExtended not NamedEntity!
    {&StepExtended::typeLookup,

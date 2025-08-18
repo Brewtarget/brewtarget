@@ -69,6 +69,11 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_notes    ();
+   static QString localisedName_producer ();
+   static QString localisedName_productId();
+   static QString localisedName_type     ();
+   static QString localisedName_useFor   ();
 
    /**
     * \brief The type of ingredient.
@@ -160,7 +165,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

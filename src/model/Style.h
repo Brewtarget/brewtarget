@@ -88,6 +88,32 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_abvMax_pct       ();
+   static QString localisedName_abvMin_pct       ();
+   static QString localisedName_appearance       ();
+   static QString localisedName_aroma            ();
+   static QString localisedName_carbMax_vol      ();
+   static QString localisedName_carbMin_vol      ();
+   static QString localisedName_category         ();
+   static QString localisedName_categoryNumber   ();
+   static QString localisedName_colorMax_srm     ();
+   static QString localisedName_colorMin_srm     ();
+   static QString localisedName_examples         ();
+   static QString localisedName_fgMax            ();
+   static QString localisedName_fgMin            ();
+   static QString localisedName_flavor           ();
+   static QString localisedName_ibuMax           ();
+   static QString localisedName_ibuMin           ();
+   static QString localisedName_ingredients      ();
+   static QString localisedName_mouthfeel        ();
+   static QString localisedName_notes            ();
+   static QString localisedName_ogMax            ();
+   static QString localisedName_ogMin            ();
+   static QString localisedName_overallImpression();
+   static QString localisedName_styleGuide       ();
+   static QString localisedName_styleLetter      ();
+   static QString localisedName_type             ();
+   static QString localisedName_typeString       ();
 
    /**
     * \brief The type of beverage.
@@ -267,7 +293,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

@@ -42,9 +42,9 @@ class SaltTableModel;
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Salt { inline BtStringConst const property{#property}; }
-AddPropertyName(isAcid         )
-AddPropertyName(percentAcid    )
-AddPropertyName(type           )
+AddPropertyName(isAcid     )
+AddPropertyName(percentAcid)
+AddPropertyName(type       )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -71,6 +71,9 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_isAcid     ();
+   static QString localisedName_percentAcid();
+   static QString localisedName_type       ();
 
    enum class Type {
       CaCl2         , // Calcium chloride
@@ -196,12 +199,12 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
    Salt::Type            m_type;
-   std::optional<double> m_percent_acid;
+   std::optional<double> m_percentAcid;
 };
 
 BT_DECLARE_METATYPES(Salt)

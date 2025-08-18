@@ -41,6 +41,39 @@
 #endif
 
 QString Fermentable::localisedName() { return tr("Fermentable"); }
+QString Fermentable::localisedName_alphaAmylase_dextUnits() { return tr("Alpha Amylase"               ); }
+QString Fermentable::localisedName_betaGlucan_ppm        () { return tr("Beta Glucan"                 ); }
+QString Fermentable::localisedName_coarseFineDiff_pct    () { return tr("Coarse Fine Diff"            ); }
+QString Fermentable::localisedName_coarseGrindYield_pct  () { return tr("Coarse Grind Yield"          ); }
+QString Fermentable::localisedName_color_lovibond        () { return tr("Color"                       ); } // See header file comment
+QString Fermentable::localisedName_color_srm             () { return tr("Color"                       ); }
+QString Fermentable::localisedName_diastaticPower_lintner() { return tr("Diastatic Power"             ); }
+QString Fermentable::localisedName_di_ph                 () { return tr("DI pH"                       ); }
+QString Fermentable::localisedName_dmsP_ppm              () { return tr("DMS precursors"              ); }
+QString Fermentable::localisedName_fan_ppm               () { return tr("Free Amino Nitrogen (FAN)"   ); }
+QString Fermentable::localisedName_fermentability_pct    () { return tr("Fermentability"              ); }
+QString Fermentable::localisedName_fineGrindYield_pct    () { return tr("FineGrindYield"              ); }
+QString Fermentable::localisedName_friability_pct        () { return tr("Friability"                  ); }
+QString Fermentable::localisedName_grainGroup            () { return tr("Grain Group"                 ); }
+QString Fermentable::localisedName_hardnessPrpGlassy_pct () { return tr("Hardness Proportion Glassy"  ); }
+QString Fermentable::localisedName_hardnessPrpHalf_pct   () { return tr("Hardness Proportion Half"    ); }
+QString Fermentable::localisedName_hardnessPrpMealy_pct  () { return tr("Hardness Proportion Mealy"   ); }
+QString Fermentable::localisedName_ibuGalPerLb           () { return tr("Ibu Gal Per Lb"              ); }
+QString Fermentable::localisedName_kernelSizePrpPlump_pct() { return tr("Kernel Size Proportion Plump"); }
+QString Fermentable::localisedName_kernelSizePrpThin_pct () { return tr("Kernel Size Proportion Thin" ); }
+QString Fermentable::localisedName_kolbachIndex_pct      () { return tr("Kolbach Index"               ); }
+QString Fermentable::localisedName_maxInBatch_pct        () { return tr("Max In Batch"                ); }
+QString Fermentable::localisedName_moisture_pct          () { return tr("Moisture"                    ); }
+QString Fermentable::localisedName_notes                 () { return tr("Notes"                       ); }
+QString Fermentable::localisedName_origin                () { return tr("Origin"                      ); }
+QString Fermentable::localisedName_potentialYield_sg     () { return tr("Potential Yield"             ); }
+QString Fermentable::localisedName_producer              () { return tr("Producer"                    ); }
+QString Fermentable::localisedName_productId             () { return tr("Product ID"                  ); }
+QString Fermentable::localisedName_protein_pct           () { return tr("Protein"                     ); }
+QString Fermentable::localisedName_recommendMash         () { return tr("Recommend Mash"              ); }
+QString Fermentable::localisedName_supplier              () { return tr("Supplier"                    ); }
+QString Fermentable::localisedName_type                  () { return tr("Type"                        ); }
+QString Fermentable::localisedName_viscosity_cP          () { return tr("Viscosity"                   ); }
 
 // Note that Fermentable::typeStringMapping and Fermentable::grainGroupStringMapping are as defined by BeerJSON, but we
 // also use them for the DB and for the UI.  We can't use them for BeerXML as it only supports subsets of these types.
@@ -87,7 +120,7 @@ EnumStringMapping const Fermentable::grainGroupDisplayNames {
    {Fermentable::GrainGroup::Adjunct  , tr("Adjunct"  )},
 };
 
-bool Fermentable::isEqualTo(NamedEntity const & other) const {
+bool Fermentable::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Fermentable const & rhs = static_cast<Fermentable const &>(other);
 
@@ -95,18 +128,16 @@ bool Fermentable::isEqualTo(NamedEntity const & other) const {
    bool const outlinesAreEqual{
       // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
 
-      AUTO_LOG_COMPARE(this, rhs, m_type          ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_origin        ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_color_lovibond) &&
-      AUTO_LOG_COMPARE(this, rhs, m_producer      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_productId     ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_grainGroup    ) &&
-
-      // Yield
-      AUTO_LOG_COMPARE(this, rhs, m_fineGrindYield_pct  ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_coarseGrindYield_pct) &&
-      AUTO_LOG_COMPARE(this, rhs, m_coarseFineDiff_pct  ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_potentialYield_sg   )
+      AUTO_PROPERTY_COMPARE(this, rhs, m_type                , PropertyNames::Fermentable::type                , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_origin              , PropertyNames::Fermentable::origin              , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_color_lovibond      , PropertyNames::Fermentable::color_lovibond      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_producer            , PropertyNames::Fermentable::producer            , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_productId           , PropertyNames::Fermentable::productId           , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_grainGroup          , PropertyNames::Fermentable::grainGroup          , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_fineGrindYield_pct  , PropertyNames::Fermentable::fineGrindYield_pct  , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_coarseGrindYield_pct, PropertyNames::Fermentable::coarseGrindYield_pct, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_coarseFineDiff_pct  , PropertyNames::Fermentable::coarseFineDiff_pct  , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_potentialYield_sg   , PropertyNames::Fermentable::potentialYield_sg   , propertiesThatDiffer)
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -119,29 +150,28 @@ bool Fermentable::isEqualTo(NamedEntity const & other) const {
       outlinesAreEqual &&
 
       // Remaining BeerJSON fields -- excluding inventories
-      AUTO_LOG_COMPARE(this, rhs, m_notes                 ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_moisture_pct          ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_alphaAmylase_dextUnits) &&
-      AUTO_LOG_COMPARE(this, rhs, m_diastaticPower_lintner) &&
-      AUTO_LOG_COMPARE(this, rhs, m_protein_pct           ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_kolbachIndex_pct      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_maxInBatch_pct        ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_recommendMash         ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_hardnessPrpGlassy_pct ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_kernelSizePrpPlump_pct) &&
-      AUTO_LOG_COMPARE(this, rhs, m_hardnessPrpHalf_pct   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_hardnessPrpMealy_pct  ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_kernelSizePrpThin_pct ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_friability_pct        ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_di_ph                 ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_viscosity_cP          ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_dmsP_ppm              ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_fan_ppm               ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_fermentability_pct    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_betaGlucan_ppm        ) &&
-
+      AUTO_PROPERTY_COMPARE(this, rhs, m_notes                 , PropertyNames::Fermentable::notes                 , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_moisture_pct          , PropertyNames::Fermentable::moisture_pct          , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_alphaAmylase_dextUnits, PropertyNames::Fermentable::alphaAmylase_dextUnits, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_diastaticPower_lintner, PropertyNames::Fermentable::diastaticPower_lintner, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_protein_pct           , PropertyNames::Fermentable::protein_pct           , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_kolbachIndex_pct      , PropertyNames::Fermentable::kolbachIndex_pct      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_maxInBatch_pct        , PropertyNames::Fermentable::maxInBatch_pct        , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_recommendMash         , PropertyNames::Fermentable::recommendMash         , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_hardnessPrpGlassy_pct , PropertyNames::Fermentable::hardnessPrpGlassy_pct , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_kernelSizePrpPlump_pct, PropertyNames::Fermentable::kernelSizePrpPlump_pct, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_hardnessPrpHalf_pct   , PropertyNames::Fermentable::hardnessPrpHalf_pct   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_hardnessPrpMealy_pct  , PropertyNames::Fermentable::hardnessPrpMealy_pct  , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_kernelSizePrpThin_pct , PropertyNames::Fermentable::kernelSizePrpThin_pct , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_friability_pct        , PropertyNames::Fermentable::friability_pct        , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_di_ph                 , PropertyNames::Fermentable::di_ph                 , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_viscosity_cP          , PropertyNames::Fermentable::viscosity_cP          , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_dmsP_ppm              , PropertyNames::Fermentable::dmsP_ppm              , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_fan_ppm               , PropertyNames::Fermentable::fan_ppm               , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_fermentability_pct    , PropertyNames::Fermentable::fermentability_pct    , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_betaGlucan_ppm        , PropertyNames::Fermentable::betaGlucan_ppm        , propertiesThatDiffer) &&
       // Non-BeerJSON fields
-      AUTO_LOG_COMPARE(this, rhs, m_supplier)
+      AUTO_PROPERTY_COMPARE(this, rhs, m_supplier              , PropertyNames::Fermentable::supplier              , propertiesThatDiffer)
    );
 }
 
@@ -152,47 +182,46 @@ ObjectStore & Fermentable::getObjectStoreTypedInstance() const {
 TypeLookup const Fermentable::typeLookup {
    "Fermentable",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::type                     , Fermentable::m_type                     ,           NonPhysicalQuantity::Enum           ),
-
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, type                   , m_type                 , ENUM_INFO(Fermentable::type) ),
       //
       // Historically, we always stored fermentable color as degrees Lovibond, but we also incorrectly assumed this was
       // the same as SRM.  Now that we've corrected the conversion, it's simpler to carry on storing fermentable color
       // as °L, even though SRM is our canonical color unit.  Hence why we have two color properties on Fermentable.
       //
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::color_lovibond           , Fermentable::m_color_lovibond           , Measurement::PhysicalQuantity::Color          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Fermentable::color_srm          , Fermentable::color_srm                  , Measurement::PhysicalQuantity::Color          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, color_lovibond        , m_color_lovibond        , Measurement::PhysicalQuantity::Color ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Fermentable, color_srm             , color_srm               , Measurement::PhysicalQuantity::Color , DisplayInfo::Precision{1}),
 
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::origin                   , Fermentable::m_origin                   ,           NonPhysicalQuantity::String         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::supplier                 , Fermentable::m_supplier                 ,           NonPhysicalQuantity::String         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::notes                    , Fermentable::m_notes                    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::coarseFineDiff_pct       , Fermentable::m_coarseFineDiff_pct       ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::moisture_pct             , Fermentable::m_moisture_pct             ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::diastaticPower_lintner   , Fermentable::m_diastaticPower_lintner   , Measurement::PhysicalQuantity::DiastaticPower ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::protein_pct              , Fermentable::m_protein_pct              ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::maxInBatch_pct           , Fermentable::m_maxInBatch_pct           ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::recommendMash            , Fermentable::m_recommendMash            ,           NonPhysicalQuantity::Bool           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::ibuGalPerLb              , Fermentable::m_ibuGalPerLb              ,           NonPhysicalQuantity::Dimensionless  ), // Not really dimensionless...
-      // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::grainGroup               , Fermentable::m_grainGroup               ,           NonPhysicalQuantity::Enum           ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::producer                 , Fermentable::m_producer                 ,           NonPhysicalQuantity::String         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::productId                , Fermentable::m_productId                ,           NonPhysicalQuantity::String         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::fineGrindYield_pct       , Fermentable::m_fineGrindYield_pct       ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::coarseGrindYield_pct     , Fermentable::m_coarseGrindYield_pct     ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::potentialYield_sg        , Fermentable::m_potentialYield_sg        , Measurement::PhysicalQuantity::Density        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::alphaAmylase_dextUnits   , Fermentable::m_alphaAmylase_dextUnits   ,           NonPhysicalQuantity::Dimensionless  ), // Not really dimensionless...
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::kolbachIndex_pct         , Fermentable::m_kolbachIndex_pct         ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::hardnessPrpGlassy_pct    , Fermentable::m_hardnessPrpGlassy_pct    ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::hardnessPrpHalf_pct      , Fermentable::m_hardnessPrpHalf_pct      ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::hardnessPrpMealy_pct     , Fermentable::m_hardnessPrpMealy_pct     ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::kernelSizePrpPlump_pct   , Fermentable::m_kernelSizePrpPlump_pct   ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::kernelSizePrpThin_pct    , Fermentable::m_kernelSizePrpThin_pct    ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::friability_pct           , Fermentable::m_friability_pct           ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::di_ph                    , Fermentable::m_di_ph                    , Measurement::PhysicalQuantity::Acidity        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::viscosity_cP             , Fermentable::m_viscosity_cP             , Measurement::PhysicalQuantity::Viscosity      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::dmsP_ppm                 , Fermentable::m_dmsP_ppm                 , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::fan_ppm                  , Fermentable::m_fan_ppm                  , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::fermentability_pct       , Fermentable::m_fermentability_pct       ,           NonPhysicalQuantity::Percentage     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Fermentable::betaGlucan_ppm           , Fermentable::m_betaGlucan_ppm           , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, origin                , m_origin                ,           NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, supplier              , m_supplier              ,           NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, notes                 , m_notes                 ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, coarseFineDiff_pct    , m_coarseFineDiff_pct    ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, moisture_pct          , m_moisture_pct          ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, diastaticPower_lintner, m_diastaticPower_lintner, Measurement::PhysicalQuantity::DiastaticPower),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, protein_pct           , m_protein_pct           ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, maxInBatch_pct        , m_maxInBatch_pct        ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, recommendMash         , m_recommendMash         ,           NonPhysicalQuantity::Bool          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, ibuGalPerLb           , m_ibuGalPerLb           ,           NonPhysicalQuantity::Dimensionless ), // Not really dimensionless...
+      // ⮜⮜⮜ All below_ENTRYd for BeerJSON support ⮞⮞⮞
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, grainGroup            , m_grainGroup            , ENUM_INFO(Fermentable::grainGroup)           ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, producer              , m_producer              ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, productId             , m_productId             ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, fineGrindYield_pct    , m_fineGrindYield_pct    ,           NonPhysicalQuantity::Percentage    , DisplayInfo::Precision{1}),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, coarseGrindYield_pct  , m_coarseGrindYield_pct  ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, potentialYield_sg     , m_potentialYield_sg     , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, alphaAmylase_dextUnits, m_alphaAmylase_dextUnits,           NonPhysicalQuantity::Dimensionless ), // Not really dimensionless...
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, kolbachIndex_pct      , m_kolbachIndex_pct      ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, hardnessPrpGlassy_pct , m_hardnessPrpGlassy_pct ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, hardnessPrpHalf_pct   , m_hardnessPrpHalf_pct   ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, hardnessPrpMealy_pct  , m_hardnessPrpMealy_pct  ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, kernelSizePrpPlump_pct, m_kernelSizePrpPlump_pct,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, kernelSizePrpThin_pct , m_kernelSizePrpThin_pct ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, friability_pct        , m_friability_pct        ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, di_ph                 , m_di_ph                 , Measurement::PhysicalQuantity::Acidity       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, viscosity_cP          , m_viscosity_cP          , Measurement::PhysicalQuantity::Viscosity     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, dmsP_ppm              , m_dmsP_ppm              , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, fan_ppm               , m_fan_ppm               , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, fermentability_pct    , m_fermentability_pct    ,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, betaGlucan_ppm        , m_betaGlucan_ppm        , Measurement::PhysicalQuantity::MassFractionOrConc),
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,

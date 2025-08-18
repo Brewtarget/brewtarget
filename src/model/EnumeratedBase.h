@@ -70,15 +70,15 @@ protected:
    // Note that, because this is static, it cannot be initialised inside the class definition
    static TypeLookup const typeLookup;
 
-   //! Non-virtual equivalent of isEqualTo
-   bool doIsEqualTo(EnumeratedBase const & other) const {
+   //! Non-virtual equivalent of compareWith
+   bool doCompareWith(EnumeratedBase const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
       return (
          //
          // Note that we do _not_ compare m_ownerId.  We need to be able to compare classes with different owners.  Eg,
          // to know whether two different Mash objects are equal, we need, amongst other things, to check whether their
          // owned MashStep objects are equal.
          //
-         AUTO_LOG_COMPARE(this, other, m_stepNumber)
+         AUTO_PROPERTY_COMPARE(this, other, m_stepNumber, PropertyNames::EnumeratedBase::stepNumber, propertiesThatDiffer)
       );
    }
 
@@ -109,6 +109,9 @@ protected:
    ~EnumeratedBase() = default;
 
 public:
+   static QString localisedName_ownerId   () { return Derived::tr("Owner ID"   ); }
+   static QString localisedName_stepNumber() { return Derived::tr("Step Number"); }
+
    int ownerId   () const { return this->m_ownerId   ; }
    // TODO: Merge these two functions
    int stepNumber() const { return this->m_stepNumber; }
@@ -194,11 +197,13 @@ TypeLookup const EnumeratedBase<Derived, Owner>::typeLookup {
       {&PropertyNames::EnumeratedBase::ownerId,
        TypeInfo::construct<decltype(EnumeratedBase<Derived, Owner>::m_ownerId)>(
           PropertyNames::EnumeratedBase::ownerId,
+          EnumeratedBase::localisedName_ownerId,
           TypeLookupOf<decltype(EnumeratedBase<Derived, Owner>::m_ownerId)>::value
        )},
       {&PropertyNames::EnumeratedBase::stepNumber,
        TypeInfo::construct<decltype(EnumeratedBase<Derived, Owner>::m_stepNumber)>(
           PropertyNames::EnumeratedBase::stepNumber,
+          EnumeratedBase::localisedName_stepNumber,
           TypeLookupOf<decltype(EnumeratedBase<Derived, Owner>::m_stepNumber)>::value,
           NonPhysicalQuantity::OrdinalNumeral
        )}

@@ -100,40 +100,6 @@ class BtTableModel : public QAbstractTableModel {
    template<class Derived, class NE> friend class TableModelBase;
 
 public:
-   /**
-    * \brief Extra info stored in \c ColumnInfo (see below) for enum types
-    */
-   struct EnumInfo {
-      /**
-       * \brief Values to store in combo box
-       */
-      EnumStringMapping const & stringMapping;
-
-      /**
-       * \brief Localised display names to show on combo box
-       */
-      EnumStringMapping const & displayNames;
-   };
-
-   /**
-    * \brief Extra info stored in \c ColumnInfo (see below) for boolean types
-    *
-    *        For most boolean types, we show a combo box (eg "Not mashed" / "Mashed"; "Weight" / "Volume")
-    *
-    *        These are QString rather than reference to QString as typically initialised with an rvalue (the result of
-    *        calling \c QObject::tr).
-    */
-   struct BoolInfo {
-      QString const unsetDisplay;
-      QString const setDisplay;
-   };
-
-   /**
-    * \brief I know we don't need a struct for this, but it's more consistent to use one
-    */
-   struct PrecisionInfo {
-      unsigned int const precision;
-   };
 
    /**
     * \brief This per-column struct / mini-class holds basic info about each column in the table.  It also plays a
@@ -191,10 +157,7 @@ public:
        *        Note that we use a \c Measurement::ChoiceOfPhysicalQuantity value for an "amount type" column for
        *        selecting a physical quantity for a paired column (with the same property path).
        */
-      using Extras = std::optional<std::variant<EnumInfo,
-                                                BoolInfo,
-                                                PrecisionInfo,
-                                                Measurement::ChoiceOfPhysicalQuantity>>;
+      using Extras = std::optional<Measurement::ChoiceOfPhysicalQuantity>;
       Extras extras;
 
       ColumnInfo(char const * const   tableModelName,

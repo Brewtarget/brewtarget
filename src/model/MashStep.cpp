@@ -33,6 +33,12 @@
 #endif
 
 QString MashStep::localisedName() { return tr("Mash Step"); }
+QString MashStep::localisedName_amount_l              () { return tr("Amount"               ); }
+QString MashStep::localisedName_decoctionAmount_l     () { return tr("Decoction Amount"     ); }
+QString MashStep::localisedName_infuseAmount_l        () { return tr("Infuse Amount"        ); }
+QString MashStep::localisedName_infuseTemp_c          () { return tr("Infuse Temperature"   ); }
+QString MashStep::localisedName_liquorToGristRatio_lKg() { return tr("Liquor To Grist Ratio"); }
+QString MashStep::localisedName_type                  () { return tr("Type"                 ); }
 
 EnumStringMapping const MashStep::typeStringMapping {
    {MashStep::Type::Infusion   , "infusion"      },
@@ -55,19 +61,19 @@ EnumStringMapping const MashStep::typeDisplayNames {
 };
 
 
-bool MashStep::isEqualTo(NamedEntity const & other) const {
+bool MashStep::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // NamedEntity::operator==() will have ensured this cast is valid
    MashStep const & rhs = static_cast<MashStep const &>(other);
    // Base class will already have ensured names are equal
    return (
-      AUTO_LOG_COMPARE(this, rhs, m_type        ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_amount_l    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_infuseTemp_c) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_type        , PropertyNames::MashStep::type        , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_amount_l    , PropertyNames::MashStep::amount_l    , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_infuseTemp_c, PropertyNames::MashStep::infuseTemp_c, propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->Step::isEqualTo(rhs) &&
+      this->Step::compareWith(other, propertiesThatDiffer) &&
       this->StepBase<MashStep,
                      Mash,
-                     MashStepOptions>::doIsEqualTo(rhs)
+                     MashStepOptions>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
 
@@ -78,13 +84,13 @@ MashStepEditor & MashStep::getEditor() {
 TypeLookup const MashStep::typeLookup {
    "MashStep",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::type                  , MashStep::m_type                  ,           NonPhysicalQuantity::Enum          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::amount_l              , MashStep::m_amount_l              , Measurement::PhysicalQuantity::Volume        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::infuseAmount_l        , MashStep::m_amount_l              , Measurement::PhysicalQuantity::Volume        ), // Type Lookup retained for BeerXML
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::decoctionAmount_l     , MashStep::m_amount_l              , Measurement::PhysicalQuantity::Volume        ), // Type Lookup retained for BeerXML
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::infuseTemp_c          , MashStep::m_infuseTemp_c          , Measurement::PhysicalQuantity::Temperature   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, type                  , m_type                  , ENUM_INFO(MashStep::type)          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, amount_l              , m_amount_l              , Measurement::PhysicalQuantity::Volume        , DisplayInfo::Precision{2}),
+      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, infuseAmount_l        , m_amount_l              , Measurement::PhysicalQuantity::Volume        ), // Type Lookup retained for BeerXML
+      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, decoctionAmount_l     , m_amount_l              , Measurement::PhysicalQuantity::Volume        ), // Type Lookup retained for BeerXML
+      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, infuseTemp_c          , m_infuseTemp_c          , Measurement::PhysicalQuantity::Temperature   , DisplayInfo::Precision{1}),
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::MashStep::liquorToGristRatio_lKg, MashStep::m_liquorToGristRatio_lKg, Measurement::PhysicalQuantity::SpecificVolume),
+      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, liquorToGristRatio_lKg, m_liquorToGristRatio_lKg, Measurement::PhysicalQuantity::SpecificVolume),
    },
    // Parent class lookup.  NB: Step not NamedEntity!
    {&Step::typeLookup,

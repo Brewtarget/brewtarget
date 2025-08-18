@@ -36,6 +36,31 @@
 #endif
 
 QString Hop::localisedName() { return tr("Hop"); }
+QString Hop::localisedName_alpha_pct         () { return tr("Alpha Acid"         ); }
+QString Hop::localisedName_beta_pct          () { return tr("Beta Acids"         ); }
+QString Hop::localisedName_bPinene_pct       () { return tr("β-Pinene"           ); }
+QString Hop::localisedName_caryophyllene_pct () { return tr("Caryophyllene"      ); }
+QString Hop::localisedName_cohumulone_pct    () { return tr("Cohumulone"         ); }
+QString Hop::localisedName_farnesene_pct     () { return tr("Farnesene"          ); }
+QString Hop::localisedName_form              () { return tr("Form"               ); }
+QString Hop::localisedName_geraniol_pct      () { return tr("Geraniol"           ); }
+QString Hop::localisedName_hsi_pct           () { return tr("Hop Stability Index"); }
+QString Hop::localisedName_humulene_pct      () { return tr("Humulene"           ); }
+QString Hop::localisedName_limonene_pct      () { return tr("Limonene"           ); }
+QString Hop::localisedName_linalool_pct      () { return tr("Linalool"           ); }
+QString Hop::localisedName_myrcene_pct       () { return tr("Myrcene"            ); }
+QString Hop::localisedName_nerol_pct         () { return tr("Nerol"              ); }
+QString Hop::localisedName_notes             () { return tr("Notes"              ); }
+QString Hop::localisedName_origin            () { return tr("Origin"             ); }
+QString Hop::localisedName_pinene_pct        () { return tr("Pinene"             ); }
+QString Hop::localisedName_polyphenols_pct   () { return tr("Polyphenols"        ); }
+QString Hop::localisedName_producer          () { return tr("Producer"           ); }
+QString Hop::localisedName_productId         () { return tr("Product ID"         ); }
+QString Hop::localisedName_substitutes       () { return tr("Substitutes"        ); }
+QString Hop::localisedName_totalOil_mlPer100g() { return tr("Total Oil"          ); }
+QString Hop::localisedName_type              () { return tr("Type"               ); }
+QString Hop::localisedName_xanthohumol_pct   () { return tr("Xanthohumol"        ); }
+QString Hop::localisedName_year              () { return tr("Year"               ); }
 
 // Note that Hop::typeStringMapping and Hop::formStringMapping are as defined by BeerJSON, but we also use them for the
 // DB and for the UI.  We can't use them for BeerXML as it only supports subsets of these types.
@@ -77,19 +102,19 @@ EnumStringMapping const Hop::typeDisplayNames {
    {Hop::Type::AromaBitteringAndFlavor, tr("Aroma, Bittering & Flavor")},
 };
 
-bool Hop::isEqualTo(NamedEntity const & other) const {
+bool Hop::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Hop const & rhs = static_cast<Hop const &>(other);
    // Base class will already have ensured names are equal
    bool const outlinesAreEqual{
-      // "Outline" fields: In BeerJSON, all these fields are in the FermentableBase type
-      AUTO_LOG_COMPARE(this, rhs, m_producer ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_productId) &&
-      AUTO_LOG_COMPARE(this, rhs, m_origin   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_year     ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_form     ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_alpha_pct) &&
-      AUTO_LOG_COMPARE(this, rhs, m_beta_pct )
+      // "Outline" fields: In BeerJSON, all these fields are in the HopBase type
+      AUTO_PROPERTY_COMPARE(this, rhs, m_producer , PropertyNames::Hop::producer , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_productId, PropertyNames::Hop::productId, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_origin   , PropertyNames::Hop::origin   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_year     , PropertyNames::Hop::year     , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_form     , PropertyNames::Hop::form     , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_alpha_pct, PropertyNames::Hop::alpha_pct, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_beta_pct , PropertyNames::Hop::beta_pct , propertiesThatDiffer)
    };
 
    // If either object is an outline (see comment in model/OutlineableNamedEntity.h) then there is no point comparing
@@ -102,27 +127,25 @@ bool Hop::isEqualTo(NamedEntity const & other) const {
       outlinesAreEqual &&
 
       // Remaining BeerJSON fields -- excluding inventories
-
-      AUTO_LOG_COMPARE(this, rhs, m_type              ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_notes             ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_hsi_pct           ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_substitutes       ) &&
-
+      AUTO_PROPERTY_COMPARE(this, rhs, m_type              , PropertyNames::Hop::type              , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_notes             , PropertyNames::Hop::notes             , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_hsi_pct           , PropertyNames::Hop::hsi_pct           , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_substitutes       , PropertyNames::Hop::substitutes       , propertiesThatDiffer) &&
       // Oil content
-      AUTO_LOG_COMPARE(this, rhs, m_totalOil_mlPer100g) &&
-      AUTO_LOG_COMPARE(this, rhs, m_humulene_pct      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_caryophyllene_pct ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_cohumulone_pct    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_myrcene_pct       ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_farnesene_pct     ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_geraniol_pct      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_bPinene_pct       ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_linalool_pct      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_limonene_pct      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_nerol_pct         ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_pinene_pct        ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_polyphenols_pct   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_xanthohumol_pct   )
+      AUTO_PROPERTY_COMPARE(this, rhs, m_totalOil_mlPer100g, PropertyNames::Hop::totalOil_mlPer100g, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_humulene_pct      , PropertyNames::Hop::humulene_pct      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_caryophyllene_pct , PropertyNames::Hop::caryophyllene_pct , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_cohumulone_pct    , PropertyNames::Hop::cohumulone_pct    , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_myrcene_pct       , PropertyNames::Hop::myrcene_pct       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_farnesene_pct     , PropertyNames::Hop::farnesene_pct     , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_geraniol_pct      , PropertyNames::Hop::geraniol_pct      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_bPinene_pct       , PropertyNames::Hop::bPinene_pct       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_linalool_pct      , PropertyNames::Hop::linalool_pct      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_limonene_pct      , PropertyNames::Hop::limonene_pct      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_nerol_pct         , PropertyNames::Hop::nerol_pct         , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_pinene_pct        , PropertyNames::Hop::pinene_pct        , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_polyphenols_pct   , PropertyNames::Hop::polyphenols_pct   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_xanthohumol_pct   , PropertyNames::Hop::xanthohumol_pct   , propertiesThatDiffer)
    );
 }
 
@@ -133,32 +156,32 @@ ObjectStore & Hop::getObjectStoreTypedInstance() const {
 TypeLookup const Hop::typeLookup {
    "Hop",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::alpha_pct         , Hop::m_alpha_pct         , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::form              , Hop::m_form              , NonPhysicalQuantity::Enum         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::beta_pct          , Hop::m_beta_pct          , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::origin            , Hop::m_origin            , NonPhysicalQuantity::String       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::type              , Hop::m_type              , NonPhysicalQuantity::Enum         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::notes             , Hop::m_notes             , NonPhysicalQuantity::String       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::hsi_pct           , Hop::m_hsi_pct           , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::substitutes       , Hop::m_substitutes       , NonPhysicalQuantity::String       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::humulene_pct      , Hop::m_humulene_pct      , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::caryophyllene_pct , Hop::m_caryophyllene_pct , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::cohumulone_pct    , Hop::m_cohumulone_pct    , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::myrcene_pct       , Hop::m_myrcene_pct       , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, alpha_pct         , m_alpha_pct         , NonPhysicalQuantity::Percentage   , DisplayInfo::Precision{1}),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, form              , m_form              , ENUM_INFO(Hop::form)              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, beta_pct          , m_beta_pct          , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, origin            , m_origin            , NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, type              , m_type              , ENUM_INFO(Hop::type)              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, notes             , m_notes             , NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, hsi_pct           , m_hsi_pct           , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, substitutes       , m_substitutes       , NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, humulene_pct      , m_humulene_pct      , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, caryophyllene_pct , m_caryophyllene_pct , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, cohumulone_pct    , m_cohumulone_pct    , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, myrcene_pct       , m_myrcene_pct       , NonPhysicalQuantity::Percentage   ),
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::totalOil_mlPer100g, Hop::m_totalOil_mlPer100g, NonPhysicalQuantity::Dimensionless), // Not really dimensionless...
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::farnesene_pct     , Hop::m_farnesene_pct     , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::geraniol_pct      , Hop::m_geraniol_pct      , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::bPinene_pct       , Hop::m_bPinene_pct       , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::linalool_pct      , Hop::m_linalool_pct      , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::limonene_pct      , Hop::m_limonene_pct      , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::nerol_pct         , Hop::m_nerol_pct         , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::pinene_pct        , Hop::m_pinene_pct        , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::polyphenols_pct   , Hop::m_polyphenols_pct   , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::xanthohumol_pct   , Hop::m_xanthohumol_pct   , NonPhysicalQuantity::Percentage   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::producer          , Hop::m_producer          , NonPhysicalQuantity::String       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::productId         , Hop::m_productId         , NonPhysicalQuantity::String       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Hop::year              , Hop::m_year              , NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, totalOil_mlPer100g, m_totalOil_mlPer100g, NonPhysicalQuantity::Dimensionless), // Not really dimensionless...
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, farnesene_pct     , m_farnesene_pct     , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, geraniol_pct      , m_geraniol_pct      , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, bPinene_pct       , m_bPinene_pct       , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, linalool_pct      , m_linalool_pct      , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, limonene_pct      , m_limonene_pct      , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, nerol_pct         , m_nerol_pct         , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, pinene_pct        , m_pinene_pct        , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, polyphenols_pct   , m_polyphenols_pct   , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, xanthohumol_pct   , m_xanthohumol_pct   , NonPhysicalQuantity::Percentage   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, producer          , m_producer          , NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, productId         , m_productId         , NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Hop, year              , m_year              , NonPhysicalQuantity::String       ),
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,

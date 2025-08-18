@@ -109,18 +109,23 @@ class StepBase : public EnumeratedBase<Derived, Owner> {
    using StartTempType = std::conditional_t<StartTempRequired<stepBaseOptions>, double, std::optional<double>>;
    using  RampTimeType = std::conditional_t<RampTimeSupported<stepBaseOptions>, std::optional<double>, Empty >;
 
+   static QString localisedName_rampTime_mins() { return Derived::tr("Ramp Time"        ); }
+   static QString localisedName_startTemp_c  () { return Derived::tr("Start Temperature"); }
+   static QString localisedName_stepTime_days() { return Derived::tr("Step Time"        ); }
+   static QString localisedName_stepTime_mins() { return Derived::tr("Step Time"        ); }
+
 protected:
    // Note that, because this is static, it cannot be initialised inside the class definition
    static TypeLookup const typeLookup;
 
-   //! Non-virtual equivalent of isEqualTo
-   bool doIsEqualTo(StepBase const & other) const {
+   //! Non-virtual equivalent of \c compareWith
+   bool doCompareWith(StepBase const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
       return (
-         AUTO_LOG_COMPARE(this, other, m_stepTime_mins) &&
-         AUTO_LOG_COMPARE(this, other, m_startTemp_c  ) &&
-         AUTO_LOG_COMPARE(this, other, m_rampTime_mins) &&
+         AUTO_PROPERTY_COMPARE(this, other, m_stepTime_mins, PropertyNames::StepBase::stepTime_mins, propertiesThatDiffer) &&
+         AUTO_PROPERTY_COMPARE(this, other, m_startTemp_c  , PropertyNames::StepBase::startTemp_c  , propertiesThatDiffer) &&
+         AUTO_PROPERTY_COMPARE(this, other, m_rampTime_mins, PropertyNames::StepBase::rampTime_mins, propertiesThatDiffer) &&
          // Parent classes have to be equal too
-         this->EnumeratedBase<Derived, Owner>::doIsEqualTo(other)
+         this->EnumeratedBase<Derived, Owner>::doCompareWith(other, propertiesThatDiffer)
       );
    }
 
@@ -257,28 +262,36 @@ TypeLookup const StepBase<Derived, Owner, stepBaseOptions>::typeLookup {
       {&PropertyNames::StepBase::stepTime_mins,
        TypeInfo::construct<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_stepTime_mins)>(
           PropertyNames::StepBase::stepTime_mins,
+          StepBase::localisedName_stepTime_mins,
           TypeLookupOf<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_stepTime_mins)>::value,
-          Measurement::PhysicalQuantity::Time
+          Measurement::PhysicalQuantity::Time,
+          DisplayInfo::Precision{0}
        )},
       {&PropertyNames::StepBase::stepTime_days,
        TypeInfo::construct<MemberFunctionReturnType_t<&StepBase<Derived, Owner, stepBaseOptions>::stepTime_days>>(
           PropertyNames::StepBase::stepTime_days,
+          StepBase::localisedName_stepTime_days,
           TypeLookupOf<MemberFunctionReturnType_t<&StepBase<Derived, Owner, stepBaseOptions>::stepTime_days>>::value,
           // Note that, because days is not our canonical unit of measurement for time, this has to be a
           // NonPhysicalQuantity, not Measurement::PhysicalQuantity::Time.
-          NonPhysicalQuantity::OrdinalNumeral
+          NonPhysicalQuantity::OrdinalNumeral,
+          DisplayInfo::Precision{0}
        )},
       {&PropertyNames::StepBase::startTemp_c,
        TypeInfo::construct<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_startTemp_c)>(
           PropertyNames::StepBase::startTemp_c,
+          StepBase::localisedName_startTemp_c,
           TypeLookupOf<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_startTemp_c)>::value,
-          Measurement::PhysicalQuantity::Temperature
+          Measurement::PhysicalQuantity::Temperature,
+          DisplayInfo::Precision{1}
        )},
       {&PropertyNames::StepBase::rampTime_mins,
        TypeInfo::construct<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_rampTime_mins)>(
           PropertyNames::StepBase::rampTime_mins,
+          StepBase::localisedName_rampTime_mins,
           TypeLookupOf<decltype(StepBase<Derived, Owner, stepBaseOptions>::m_rampTime_mins)>::value,
-          Measurement::PhysicalQuantity::Time
+          Measurement::PhysicalQuantity::Time,
+          DisplayInfo::Precision{0}
        )},
    },
    // Parent class lookup

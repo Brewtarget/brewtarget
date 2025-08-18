@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/TypeLookup.cpp is part of Brewtarget, and is copyright the following authors 2023:
+ * utils/TypeLookup.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -26,25 +26,6 @@
 #include "measurement/Amount.h"
 #include "utils/BtStringConst.h"
 
-namespace PropertyNames::None {
-   BtStringConst const none{"none"};
-}
-
-bool TypeInfo::isEnum() const {
-   if (this->classification == TypeInfo::Classification::RequiredEnum ||
-       this->classification == TypeInfo::Classification::OptionalEnum) {
-      return true;
-   }
-   return false;
-}
-
-bool TypeInfo::isOptional() const {
-   if (this->classification == TypeInfo::Classification::OptionalEnum ||
-       this->classification == TypeInfo::Classification::OptionalOther) {
-      return true;
-   }
-   return false;
-}
 
 TypeLookup::TypeLookup(char       const * const                                 className,
                        std::initializer_list<TypeLookup::LookupMap::value_type> initializerList,

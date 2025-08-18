@@ -17,25 +17,35 @@
 #define CATALOGS_CATALOGBASE_H
 #pragma once
 
+#include <utility>
+
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QInputDialog>
+#include <QLabel>
 #include <QLineEdit>
+#include <QList>
 #include <QMetaObject>
+#include <QPixmap>
 #include <QPushButton>
 #include <QSize>
 #include <QSpacerItem>
 #include <QStringLiteral>
 #include <QTableView>
+#include <QTextStream>
 #include <QVBoxLayout>
+
+#include <QToolButton>
 
 #include "database/ObjectStoreWrapper.h"
 #include "MainWindow.h"
 #include "model/Ingredient.h"
+#include "utils/BtStringStream.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
+#include "utils/PropertyHelper.h"
 
-// TBD: Double-click does different things depending on whether you're looking at list of things in a recipe or
-// list of all things.  Propose it should become consistent!
+// TBD: Double-click allows in-place edit in a recipe, but not in a catalog.  Maybe we should also allow that in the
+//      latter?
 
 /**
  * \brief This is used as a template parameter to turn on and off various \b small features in \c CatalogBase (in
@@ -87,28 +97,11 @@ template <CatalogBaseOptions cb> concept CONCEPT_FIX_UP IsOnePerRecipe = is_OneP
  *        \c HopTableModel (which is not to be confused with \c RecipeAdditionHopTableModel).
  *
  *        Classes inheriting from this one need to include the CATALOG_COMMON_DECL macro in their header file and
- *        the CATALOG_COMMON_CODE macro in their .cpp file.
- *
- *        Besides inheriting from \c QDialog, the derived class (eg \c HopCatalog in the example above) needs to
- *        implement the following trivial public slots:
- *
- *           void addItem(QModelIndex const &)          -- should call CatalogBase::add
- *           void removeItem()                          -- should call CatalogBase::remove
- *           void editSelected()                        -- should call CatalogBase::edit
- *           void newItem()                             -- should call CatalogBase::makeNew †
- *           void filterItems(QString searchExpression) -- should call CatalogBase::filter
- *
- *        The following protected function overload is also needed:
- *           virtual void changeEvent(QEvent* event)
- *
- *        the code for the definitions of all these functions is "the same" for all editors, and should be inserted in
- *        the implementation file using the CATALOG_COMMON_CODE macro.  Eg, in HopDialog, we need:
+ *        the CATALOG_COMMON_CODE macro in their .cpp file.  Eg, in HopDialog.cpp, we need:
  *
  *          CATALOG_COMMON_CODE(Hop)
  *
  *        There is not much to the rest of the derived class (eg HopDialog).
- *
- *        † Not the greatest name, but `new` is a reserved word and `create` is already taken by QWidget
  */
 template<class Derived> class CatalogPhantom;
 template<class Derived,
@@ -126,15 +119,23 @@ public:
       m_verticalLayout        {new QVBoxLayout(&this->derived())        },
       m_tableWidget           {new QTableView (&this->derived())        },
       m_horizontalLayout      {new QHBoxLayout()                        },
-      m_qLineEdit_searchBox   {new QLineEdit()                          },
+      m_searchIcon            {new QToolButton(&this->derived())        },
+
+      m_lineEdit_searchBox   {new QLineEdit()                          },
       m_horizontalSpacer      {new QSpacerItem(40,
                                                20,
                                                QSizePolicy::Expanding,
                                                QSizePolicy::Minimum)    },
-      m_pushButton_addToRecipe{this->createAddToRecipeButton()          },
+      m_pushButton_addToRecipe{new QPushButton(&this->derived())        },
       m_pushButton_new        {new QPushButton(&this->derived())        },
       m_pushButton_edit       {new QPushButton(&this->derived())        },
-      m_pushButton_remove     {new QPushButton(&this->derived())        },
+      m_pushButton_delete     {new QPushButton(&this->derived())        },
+      m_contextMenu           {new QMenu      (&this->derived())        },
+      m_action_addToRecipe    {new QAction    (&this->derived())        },
+      m_action_edit           {new QAction    (&this->derived())        },
+      m_action_delete         {new QAction    (&this->derived())        },
+      m_action_new            {new QAction    (&this->derived())        },
+      m_action_merge          {new QAction    (&this->derived())        },
       m_neTableModel          {new NeTableModel(m_tableWidget, false)   },
       m_sortFilterProxy       {new NeSortFilterProxyModel(m_tableWidget,
                                                           true,
@@ -145,71 +146,104 @@ public:
       this->m_tableWidget->sortByColumn(static_cast<int>(NeTableModel::ColumnIndex::Name), Qt::AscendingOrder);
       this->m_sortFilterProxy->setFilterKeyColumn(1);
 
-      this->m_qLineEdit_searchBox->setMaxLength(30);
-      this->m_qLineEdit_searchBox->setPlaceholderText("Enter filter");
-      if (this->m_pushButton_addToRecipe) {
-         this->m_pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
-         this->m_pushButton_addToRecipe->setAutoDefault(false);
-         this->m_pushButton_addToRecipe->setDefault(true);
-      }
-      this->m_pushButton_new->setObjectName(QStringLiteral("pushButton_new"));
-      this->m_pushButton_new->setAutoDefault(false);
-      this->m_pushButton_edit->setObjectName(QStringLiteral("pushButton_edit"));
-      QIcon icon;
-      icon.addFile(QStringLiteral(":/images/edit.svg"), QSize(), QIcon::Normal, QIcon::Off);
-      this->m_pushButton_edit->setIcon(icon);
-      this->m_pushButton_edit->setAutoDefault(false);
-      this->m_pushButton_remove->setObjectName(QStringLiteral("pushButton_remove"));
-      QIcon icon1;
-      icon1.addFile(QStringLiteral(":/images/smallMinus.svg"), QSize(), QIcon::Normal, QIcon::Off);
-      this->m_pushButton_remove->setIcon(icon1);
-      this->m_pushButton_remove->setAutoDefault(false);
+      this->m_lineEdit_searchBox->setMaxLength(30);
+      this->m_lineEdit_searchBox->setPlaceholderText("Enter filter");
+
+      this->m_pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
+      this->m_pushButton_new        ->setObjectName(QStringLiteral("pushButton_new"        ));
+      this->m_pushButton_edit       ->setObjectName(QStringLiteral("pushButton_edit"       ));
+      this->m_pushButton_delete     ->setObjectName(QStringLiteral("pushButton_delete"     ));
+
+      this->m_pushButton_addToRecipe->setAutoDefault(false);
+      this->m_pushButton_new        ->setAutoDefault(false);
+      this->m_pushButton_edit       ->setAutoDefault(false);
+      this->m_pushButton_delete     ->setAutoDefault(false);
+
+      this->m_pushButton_addToRecipe->setDefault(true);
+
+      //
+      // Although it would be logical to have m_searchIcon as a QLabel, and put the image on it via setPixmap, this
+      // results in the image being too small.  (It's the same story if we use setTextFormat(Qt::RichText) to allow the
+      // QLabel text to be rich text pointing to the image.)
+      //
+      // TBD: Probably we need to create our own subclass of QLabel that takes a QIcon and generates a correctly scaled
+      // QPixmap before calling setPixmap.  However, in the meantime, we do a hack where we use a QToolButton instead of
+      // QLabel and just remove the button styling.  The button doesn't look like a button, and doesn't do anything,
+      // other than display the image at the size we want.
+      //
+      this->m_searchIcon->setStyleSheet("QToolButton {border-style: outset; border-width: 0px;}");
+      this->m_searchIcon       ->setIcon(QIcon{QStringLiteral(":/images/iconSearch.svg")});
+      this->m_pushButton_edit  ->setIcon(QIcon{QStringLiteral(":/images/edit.svg"      )});
+      this->m_pushButton_delete->setIcon(QIcon{QStringLiteral(":/images/smallMinus.svg")});
 
       // The order we add things to m_horizontalLayout determines their left-to-right order in that layout
-      this->m_horizontalLayout->addWidget(this->m_qLineEdit_searchBox);
-      this->m_horizontalLayout->addItem  (this->m_horizontalSpacer);
-      if (this->m_pushButton_addToRecipe) {
-         this->m_horizontalLayout->addWidget(this->m_pushButton_addToRecipe);
-      }
-      this->m_horizontalLayout->addWidget(this->m_pushButton_new   );
-      this->m_horizontalLayout->addWidget(this->m_pushButton_edit  );
-      this->m_horizontalLayout->addWidget(this->m_pushButton_remove);
-      this->m_verticalLayout  ->addWidget(this->m_tableWidget      );
-      this->m_verticalLayout  ->addLayout(this->m_horizontalLayout );
+      this->m_horizontalLayout->addWidget(this->m_searchIcon            );
+      this->m_horizontalLayout->addWidget(this->m_lineEdit_searchBox    );
+      this->m_horizontalLayout->addItem  (this->m_horizontalSpacer      );
+      this->m_horizontalLayout->addWidget(this->m_pushButton_addToRecipe);
+      this->m_horizontalLayout->addWidget(this->m_pushButton_new        );
+      this->m_horizontalLayout->addWidget(this->m_pushButton_edit       );
+      this->m_horizontalLayout->addWidget(this->m_pushButton_delete     );
+      this->m_verticalLayout  ->addWidget(this->m_tableWidget           );
+      this->m_verticalLayout  ->addLayout(this->m_horizontalLayout      );
 
-      this->derived().resize(800, 300);
+      this->derived().setMinimumSize(800, 300);
+      this->derived().setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
       this->retranslateUi();
       QMetaObject::connectSlotsByName(&this->derived());
 
-      // Note, per https://doc.qt.io/qt-6/signalsandslots-syntaxes.html and
-      // https://wiki.qt.io/New_Signal_Slot_Syntax#Default_arguments_in_slot, use of a trivial lambda function to allow
-      // a signal with no arguments to connect to a "slot" function with default arguments.
-      //
-      // We could probably use the same or similar trick to avoid having to declare "public slots" at all in HopCatalog,
-      // FermentableCatalog, etc, but I'm not sure it buys us much.
-      if (this->m_pushButton_addToRecipe) {
-         this->derived().connect(m_pushButton_addToRecipe, &QAbstractButton::clicked,         &this->derived(), [this]() { this->add(); return; } );
-      }
-      this->derived().connect(m_pushButton_edit       , &QAbstractButton::clicked,         &this->derived(), &Derived::editSelected     );
-      this->derived().connect(m_pushButton_remove     , &QAbstractButton::clicked,         &this->derived(), &Derived::removeItem );
-      this->derived().connect(m_pushButton_new        , &QAbstractButton::clicked,         &this->derived(), &Derived::newItem    );
-      this->derived().connect(m_tableWidget           , &QAbstractItemView::doubleClicked, &this->derived(), &Derived::addItem    );
-      this->derived().connect(m_qLineEdit_searchBox   , &QLineEdit::textEdited,            &this->derived(), &Derived::filterItems);
+      this->derived().connect(m_lineEdit_searchBox    , &QLineEdit::textEdited   , &this->derived(), &Derived::filterItems   );
+      this->derived().connect(m_pushButton_addToRecipe, &QAbstractButton::clicked, &this->derived(), &Derived::addSelectedToRecipe);
+      this->derived().connect(m_pushButton_edit       , &QAbstractButton::clicked, &this->derived(), &Derived::editSelected  );
+      this->derived().connect(m_pushButton_delete     , &QAbstractButton::clicked, &this->derived(), &Derived::deleteSelected);
+      this->derived().connect(m_pushButton_new        , &QAbstractButton::clicked, &this->derived(), &Derived::newItem       );
 
-      m_neTableModel->observeDatabase(true);
+      //
+      // === Context Menu ===
+      //
+      // Although we could add all actions directly, having separate QAction objects allows us to disable them, eg if
+      // nothing is selected.  Some things (eg new) don't need to be disabled, but it seems neater to me to do all the
+      // actions the same way.
+      //
+      this->m_action_addToRecipe->setText(Derived::tr("Add %1 to recipe"         ).arg(NE::localisedName()));
+      this->m_action_edit       ->setText(Derived::tr("Edit selected %1"         ).arg(NE::localisedName()));
+      this->m_action_delete     ->setText(Derived::tr("Delete selected %1"       ).arg(NE::localisedName()));
+      this->m_action_new        ->setText(Derived::tr("New %1"                   ).arg(NE::localisedName()));
+      this->m_action_merge      ->setText(Derived::tr("*EXPERIMENTAL* "
+                                                      "Merge selected %1 records").arg(NE::localisedName()));
+
+      this->derived().connect(this->m_action_addToRecipe, &QAction::triggered, &this->derived(), &Derived::addSelectedToRecipe);
+      this->derived().connect(this->m_action_edit       , &QAction::triggered, &this->derived(), &Derived::editSelected       );
+      this->derived().connect(this->m_action_delete     , &QAction::triggered, &this->derived(), &Derived::deleteSelected     );
+      this->derived().connect(this->m_action_new        , &QAction::triggered, &this->derived(), &Derived::newItem            );
+      this->derived().connect(this->m_action_merge      , &QAction::triggered, &this->derived(), &Derived::mergeSelected      );
+
+      this->m_contextMenu->addAction(this->m_action_addToRecipe);
+      this->m_contextMenu->addAction(this->m_action_edit       );
+      this->m_contextMenu->addAction(this->m_action_delete     );
+      this->m_contextMenu->addAction(this->m_action_new        );
+      this->m_contextMenu->addAction(this->m_action_merge      );
+
+///      this->m_contextMenu->addAction(Derived::tr("Add %1 to recipe").arg(NE::localisedName()), &this->derived(), &Derived::addSelectedToRecipe);
+///      this->m_contextMenu->addAction(Derived::tr("Edit"                                     ), &this->derived(), &Derived::editSelected);
+///      this->m_contextMenu->addAction(Derived::tr("Delete"                                   ), &this->derived(), &Derived::deleteSelected);
+///      this->m_contextMenu->addAction(Derived::tr("New %1"          ).arg(NE::localisedName()), &this->derived(), &Derived::newItem);
+
+      // Setting Qt::CustomContextMenu here causes the signal customContextMenuRequested() to be emitted when the user
+      // requests the context menu (by right-clicking).
+      this->derived().setContextMenuPolicy(Qt::CustomContextMenu);
+      this->derived().connect(&this->derived(), &QWidget::customContextMenuRequested, &this->derived(), &Derived::contextMenu);
+
+      this->m_neTableModel->observeDatabase(true);
 
       return;
    }
    virtual ~CatalogBase() = default;
 
-   QPushButton * createAddToRecipeButton() requires IsTableModel<NeTableModel> {
-      return new QPushButton(&this->derived());
-   }
-
    void retranslateUi() {
       this->derived().setWindowTitle(QString(QObject::tr("%1 Catalog / Database")).arg(NE::localisedName()));
-      if (this->m_pushButton_addToRecipe) {
+      if constexpr (IsTableModel<NeTableModel>) {
          //
          // We say "add to recipe" for things like hops, fermentables, etc, where there can be more than one in a
          // recipe.  We say "use in recipe" for things like equipment, style, mash, etc where there is only one per
@@ -223,101 +257,116 @@ public:
       }
       this->m_pushButton_new   ->setText(QString(QObject::tr("New")));
       this->m_pushButton_edit  ->setText(QString());
-      this->m_pushButton_remove->setText(QString());
+      this->m_pushButton_delete->setText(QString());
 #ifndef QT_NO_TOOLTIP
-      if (this->m_pushButton_addToRecipe) {
-         this->m_pushButton_addToRecipe->setToolTip(QString(QObject::tr("Add selected %1 to recipe")).arg(NE::localisedName()));
+      this->m_searchIcon       ->setToolTip(QString(QObject::tr("Filter search"     )));
+      if constexpr (IsTableModel<NeTableModel>) {
+         if constexpr (IsOnePerRecipe<catalogBaseOptions>) {
+            this->m_pushButton_addToRecipe->setToolTip(QString(QObject::tr("Set selected %1 for current recipe")).arg(NE::localisedName()));
+         } else {
+            this->m_pushButton_addToRecipe->setToolTip(QString(QObject::tr("Add selected %1 to current recipe")).arg(NE::localisedName()));
+         }
       }
       this->m_pushButton_new   ->setToolTip(QString(QObject::tr("Create new %1"     )).arg(NE::localisedName()));
       this->m_pushButton_edit  ->setToolTip(QString(QObject::tr("Edit selected %1"  )).arg(NE::localisedName()));
-      this->m_pushButton_remove->setToolTip(QString(QObject::tr("Remove selected %1")).arg(NE::localisedName()));
+      this->m_pushButton_delete->setToolTip(QString(QObject::tr("Delete selected %1")).arg(NE::localisedName()));
 #endif
       return;
    }
 
    void setEnableAddToRecipe(bool enabled) {
-      if (this->m_pushButton_addToRecipe) {
+      if constexpr (IsTableModel<NeTableModel>) {
          this->m_pushButton_addToRecipe->setEnabled(enabled);
       }
       return;
    }
 
    /**
-    * \brief Subclass should call this from its \c addItem slot
+    * \brief Because \c QItemSelectionModel::selectedIndexes can contain entries for multiple columns as well as
+    *        multiple rows, we need a function to just give us the unique rows selected.
     *
-    *        If \b index is the default, will add the selected ingredient to list. Otherwise, will add the ingredient
-    *        at the specified index.
     */
-   void add(QModelIndex const & index = QModelIndex()) requires IsIngredient<NE> {
-      //
-      // Substantive version - for FermentableCatalog, HopCatalog, MiscCatalog, YeastCatalog
-      //
-      qDebug() << Q_FUNC_INFO << "Index: " << index;
-      QModelIndex translated;
-
-      // If there is no provided index, get the selected index.
-      if (!index.isValid()) {
-         QModelIndexList selected = m_tableWidget->selectionModel()->selectedIndexes();
-
-         int size = selected.size();
-         if (size == 0) {
-            return;
+   QList<int> getSelectedSourceRowNumbers() const {
+      // QList is pretty much std::vector.  It's not the greatest data structure for checking whether it already
+      // contains an item (as we do in the loop below), but we're typically dealing with such small data sets that it's
+      // not worth trying to optimise further.
+      QList<int> selectedSourceRowNumbers;
+      for (QModelIndex viewIndex : this->m_tableWidget->selectionModel()->selectedIndexes()) {
+         QModelIndex const sourceIndex = this->m_sortFilterProxy->mapToSource(viewIndex);
+         int const rowNumber = sourceIndex.row();
+         if (!selectedSourceRowNumbers.contains(rowNumber)) {
+            selectedSourceRowNumbers.append(rowNumber);
          }
+      }
+      return selectedSourceRowNumbers;
+   }
 
-         // Make sure only one row is selected.
-         int row = selected[0].row();
-         for (int i = 1; i < size; ++i) {
-            if (selected[i].row() != row) {
-               return;
-            }
-         }
+   /**
+    * \brief Returns a (possibly empty) list of all the selected items
+    */
+   QList<std::shared_ptr<NE>> getMultipleSelected() const {
+      QList<std::shared_ptr<NE>> selectedItems;
+      for (int rowNumber : this->getSelectedSourceRowNumbers()) {
+         selectedItems.append(this->m_neTableModel->getRow(rowNumber));
+      }
+      return selectedItems;
+   }
 
-         translated = m_sortFilterProxy->mapToSource(selected[0]);
-      } else {
-         // Only respond if the name is selected.  Since we connect to double-click signal, this keeps us from adding
-         // something to the recipe when we just want to edit one of the other fields.
-         if (index.column() == static_cast<int>(NeTableModel::ColumnIndex::Name)) {
-            translated = m_sortFilterProxy->mapToSource(index);
+   /**
+    * \brief If a single item is selected, returns a pointer to it
+    *
+    * \return \c nullptr if nothing is selected or if more than one item is selected
+    */
+   std::shared_ptr<NE> getSingleSelected() const {
+      QList<std::shared_ptr<NE>> selectedItems = this->getMultipleSelected();
+
+      if (selectedItems.size() != 1) {
+         return nullptr;
+      }
+
+      return selectedItems[0];
+   }
+
+   /**
+    * \brief Returns how many items are selected.  This is used when we display the context menu to decide which actions
+    *        should be enabld.
+    */
+   int getNumSelected() const {
+      return this->getSelectedSourceRowNumbers().size();
+   }
+
+   /**
+    * \brief Subclass should call this from its \c addSelectedToRecipe slot
+    */
+   void doAddSelectedToRecipe() const {
+      std::shared_ptr<NE> selected = this->getSingleSelected();
+      if (selected) {
+         //
+         // In both cases, MainWindow does the heavy lifting here, including ensuring that the action is undoable
+         //
+         if constexpr (IsIngredient<NE>) {
+            //
+            // Version for FermentableCatalog, HopCatalog, MiscCatalog, YeastCatalog, etc
+            this->m_parent->addIngredientToRecipe(*selected);
          } else {
-            return;
+            //
+            // Version for EquipmentCatalog, StyleCatalog, MashCatalog, BoilCatalog, FermentationCatalog
+            //
+            this->m_parent->setForRecipe(selected);
          }
       }
 
-      qDebug() << Q_FUNC_INFO << "translated.row(): " << translated.row();
-      m_parent->addIngredientToRecipe(*m_neTableModel->getRow(translated.row()));
-
-      return;
-   }
-   void add([[maybe_unused]] QModelIndex const & index = QModelIndex()) requires IsTableModel<NeTableModel> && IsNotIngredient<NE> {
-      //
-      // No-op version - for EquipmentCatalog, StyleCatalog
-      //
-      qDebug() << Q_FUNC_INFO << "No-op";
-      // No-op version
       return;
    }
 
    /**
-    * \brief Subclass should call this from its \c removeItem slot
+    * \brief Subclass should call this from its \c deleteSelected slot
     */
-   void remove() {
-      QModelIndexList selected = m_tableWidget->selectionModel()->selectedIndexes();
-
-      int size = selected.size();
-      if (size == 0) {
+   void doDeleteSelected() {
+      std::shared_ptr<NE> item = this->getSingleSelected();
+      if (!item) {
          return;
       }
-
-      // Make sure only one row is selected.
-      int row = selected[0].row();
-      for (int i = 1; i < size; ++i) {
-         if (selected[i].row() != row) {
-            return;
-         }
-      }
-
-      QModelIndex translated = m_sortFilterProxy->mapToSource(selected[0]);
-      auto item = m_neTableModel->getRow(translated.row());
 
       //
       // If someone tries to delete something that's used in one or more Recipes then we just say it's not allowed.
@@ -330,7 +379,9 @@ public:
       if (numRecipesUsedIn > 0) {
          QMessageBox::warning(&this->derived(),
                               Derived::tr("%1 in use").arg(NE::localisedName()),
-                              Derived::tr("Cannot delete this %1, as it is used in %n recipe(s)", "", numRecipesUsedIn).arg(NE::localisedName()),
+                              Derived::tr("Cannot delete this %1, as it is used in %n recipe(s)",
+                                          "",
+                                          numRecipesUsedIn).arg(NE::localisedName()),
                               QMessageBox::Ok);
          return;
       }
@@ -361,28 +412,15 @@ public:
    }
 
    /**
-    * \brief Subclass should call this from its \c editItem slot
+    * \brief Subclass should call this from its \c editSelected slot
     */
-   void edit() {
-      QModelIndexList selected = m_tableWidget->selectionModel()->selectedIndexes();
-
-      int size = selected.size();
-      if (size == 0) {
-         return;
+   void doEditSelected() {
+      std::shared_ptr<NE> item = this->getSingleSelected();
+      if (item) {
+         m_neEditor->setEditItem(item);
+         m_neEditor->show();
       }
 
-      // Make sure only one row is selected.
-      int row = selected[0].row();
-      for (int i = 1; i < size; ++i) {
-         if (selected[i].row() != row) {
-            return;
-         }
-      }
-
-      QModelIndex translated = m_sortFilterProxy->mapToSource(selected[0]);
-      auto ingredient = m_neTableModel->getRow(translated.row());
-      m_neEditor->setEditItem(ingredient);
-      m_neEditor->show();
       return;
    }
 
@@ -392,25 +430,192 @@ public:
     *        Note that the \c newItem slot doesn't take a parameter and always relies on the default folder
     *        parameter here, whereas direct callers can specify a folder.
     *
-    * TODO: This duplicates EditorBase::newEditItem.  We should just call that instead.
+    *        \c makeNew is not the greatest name, but `new` is a reserved word and `create` is already taken by QWidget
     *
     * \param folderPath
     */
    void makeNew(QString folderPath = "") {
-      QString name = QInputDialog::getText(&this->derived(),
-                                           QString(QObject::tr("%1 name")).arg(NE::staticMetaObject.className()),
-                                           QString(QObject::tr("%1 name:")).arg(NE::staticMetaObject.className()));
-      if (name.isEmpty()) {
+      this->m_neEditor->newEditItem(folderPath);
+      return;
+   }
+
+   /**
+    * \brief Subclass should call this from its \c mergeSelected slot
+    */
+   void doMergeSelected() {
+      QList<std::shared_ptr<NE>> selectedItems = this->getMultipleSelected();
+      if (selectedItems.size() < 2) {
          return;
       }
 
-      auto ingredient = std::make_shared<NE>(name);
-      if (!folderPath.isEmpty()) {
-         ingredient->setFolderPath(folderPath);
+      auto const confirmMerge = QMessageBox::question(
+         &this->derived(),
+         // It's a bit of a cheat here to use "records" to avoid having to pluralise NE::localisedName()...
+         Derived::tr("Merge %1 records").arg(NE::localisedName()),
+         Derived::tr("Attempt to merge %1 %2 records? (NOTE: <b>This action cannot be undone!</b>  It is intended for "
+                     "use where the records are identical or as near as makes no difference.  "
+                     "Use on non-identical records risks data loss.)"
+                     "<br><br><b>Please make sure you have a backup of your database file before using this "
+                     "function!</b>").arg(
+            selectedItems.size()
+         ).arg(
+            NE::localisedName()
+         ),
+         QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+         QMessageBox::No
+      );
+
+      if (confirmMerge != QMessageBox::Yes) {
+         return;
       }
 
-      m_neEditor->setEditItem(ingredient);
-      m_neEditor->show();
+      //
+      // We're not doing anything clever here, just repeatedly merging the first and last items on the list until either
+      // we hit an error or the list only has one item.
+      //
+      for (; selectedItems.size() >= 2; selectedItems.pop_back()) {
+         //
+         // The "merge" of two records is simply the replacement of one by the other.  Specifically we will delete one
+         // of the items and replace all references to it with the other one.
+         //
+         // To decide which direction to do the merge, look at which is used in more recipes (and prefer to retain that
+         // one).
+         //
+         // Note that we deliberately want references to shared pointers here, so we can swap the actual elements of the
+         // list if needed.
+         //
+         std::shared_ptr<NE> & firstItem = selectedItems.first();
+         std::shared_ptr<NE> & lastItem  = selectedItems.last ();
+         if (lastItem->numRecipesUsedIn() > firstItem->numRecipesUsedIn()) {
+            //
+            // The items being swapped are shared pointers, so this should be relatively efficient
+            //
+            std::swap(firstItem, lastItem);
+         }
+         qInfo() <<
+            Q_FUNC_INFO << "Attempting to merge" << *lastItem << "(used in" << lastItem->numRecipesUsedIn() <<
+            "recipes) into" << *firstItem << "(used in" << firstItem->numRecipesUsedIn() << "recipes)";
+
+         //
+         // We are going to delete lastItem and replace all references to it with references to firstItem.
+         //
+         // Before we do that, check whether the items are identical and, if not, give the user a chance to bail.
+         //
+         QList<BtStringConst const *> propertiesThatDiffer = firstItem->getPropertiesThatDiffer(*lastItem);
+         int const numDifferences = propertiesThatDiffer.size();
+         if (numDifferences > 0) {
+            //
+            // Show the user the list of properties that differ, and their values, and ask them if they really really
+            // want to force the merge.  We'll show them how many fields differ in the main message, and then we'll list
+            // each of the differences in the "detailed text" that can be shown by clicking "Show details..."
+            //
+            // Normally this is exactly what we'd use QMessageBox::setDetailedText for.  However, we really want to show
+            // the data in tabular format using HTML, and QMessageBox does not support this for its detailed text field.
+            // So we have to use BtMessageBox instead. TODO Create that class and replace QMessageBox below!
+            //
+            QMessageBox diffsFoundMessageBox;
+            diffsFoundMessageBox.setWindowTitle(Derived::tr("%1 records differ").arg(NE::localisedName()));
+            diffsFoundMessageBox.setText(
+               Derived::tr("WARNING: %1 records to be merged have %n difference(s).  "
+                           "Do you want to merge anyway?", "0", numDifferences).arg(NE::localisedName())
+            );
+            BtStringStream detailedText;
+            detailedText << "<table>"
+                            "<tr>"
+                               "<th>Field</th>"
+                               "<th>" << firstItem->name() << " (#" << firstItem->key() << ")" << "</th>"
+                               "<th>" <<  lastItem->name() << " (#" <<  lastItem->key() << ")" << "</th>"
+                            "</tr>"
+                               "<td>№ Recipes</td>"
+                               "<td>" << firstItem->numRecipesUsedIn() << "</td>"
+                               "<td>" <<  lastItem->numRecipesUsedIn() << "</td>"
+                            "<tr>"
+                            "</tr>";
+            for (BtStringConst const * propertyName : propertiesThatDiffer) {
+               TypeInfo const & typeInfo = NE::typeLookup.getType(*propertyName);
+
+               detailedText << "<tr>"
+                               "<td>" << typeInfo.localisedName() << "</td>"
+                               "<td>" << PropertyHelper::readDataFromPropertyValue(
+                                            firstItem->property(**propertyName),
+                                            typeInfo,
+                                            Qt::DisplayRole
+                                         ).toString().toHtmlEscaped() << "</td>"
+                               "<td>" << PropertyHelper::readDataFromPropertyValue(
+                                            lastItem->property(**propertyName),
+                                            typeInfo,
+                                            Qt::DisplayRole
+                                         ).toString().toHtmlEscaped() << "</td>"
+                               "</tr>";
+            }
+            detailedText << "</table>";
+
+            diffsFoundMessageBox.setInformativeText(
+               Derived::tr(
+                  "%n field(s) differ between %1 #%2 and %1 #%3.  If you continue, %1 #%3 will be deleted "
+                  "and all uses of it will be replaced by %1 #%2.  This <b>cannot</b> be undone.<br><br>%4",
+                  "0",
+                  numDifferences
+               ).arg(NE::localisedName()).arg(firstItem->key()).arg(lastItem->key()).arg(detailedText.asString())
+            );
+
+///            diffsFoundMessageBox.setDetailedText(detailedText.asString());
+            diffsFoundMessageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No |QMessageBox::Cancel);
+            diffsFoundMessageBox.setDefaultButton(QMessageBox::No);
+
+            int ret = diffsFoundMessageBox.exec();
+            if (ret == QMessageBox::Cancel) {
+               //
+               // Cancel means stop trying to merge further records, so the user will investigate further and then
+               // reselect the records s/he wants.
+               //
+               return;
+            }
+            if (ret == QMessageBox::No) {
+               //
+               // No means skip this record pair
+               //
+               continue;
+            }
+         }
+
+         //
+         // Find all the uses of the last item on the list and replace it with the first one
+         //
+         int const lastItemKey = lastItem->key();
+         if constexpr (IsIngredient<NE>) {
+            QList<std::shared_ptr<typename NE::RecipeAdditionClass>> recipeAdditions =
+               ObjectStoreWrapper::findAllMatching<typename NE::RecipeAdditionClass>(
+                  [lastItemKey](std::shared_ptr<typename NE::RecipeAdditionClass> ra) {
+                     return ra->ingredientId() == lastItemKey;
+                  }
+               );
+            qInfo() <<
+               Q_FUNC_INFO << "Replacing" << recipeAdditions.size() << "uses of" << lastItem << "with" << firstItem;
+            for (auto const & recipeAddition : recipeAdditions) {
+               recipeAddition->setIngredientId(firstItem->key());
+            }
+
+         } else {
+            QList<std::shared_ptr<Recipe>> recipes = ObjectStoreWrapper::findAllMatching<Recipe>(
+               [&lastItem](std::shared_ptr<Recipe> rec) { return rec->uses(*lastItem); }
+            );
+            qInfo() <<
+               Q_FUNC_INFO << "Replacing" << recipes.size() << "uses of" << lastItem << "with" << firstItem;
+            for (auto const & recipe : recipes) {
+               recipe->set(firstItem);
+            }
+         }
+
+         //
+         // Item we are about to delete should no longer be used in any recipes
+         //
+         Q_ASSERT(0 == lastItem->numRecipesUsedIn());
+
+         qInfo() << Q_FUNC_INFO << "Deleting" << lastItem;
+         ObjectStoreWrapper::softDelete(*lastItem);
+      }
+
       return;
    }
 
@@ -420,6 +625,26 @@ public:
    void filter(QString searchExpression) {
       m_sortFilterProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
       m_sortFilterProxy->setFilterFixedString(searchExpression);
+      return;
+   }
+
+   void doContextMenu(QPoint const & point) {
+      QModelIndex selectedViewIndex = this->m_tableWidget->indexAt(point);
+      if (!selectedViewIndex.isValid()) {
+         return;
+      }
+
+      //
+      // TBD: For the moment, we don't allow multiple selections either to be deleted or to be added to the recipe.  But
+      //      it would not be huge work to fix that if there is user demand for it.
+      //
+      int const numSelected = this->getNumSelected();
+      this->m_action_addToRecipe->setEnabled(numSelected == 1);
+      this->m_action_edit       ->setEnabled(numSelected == 1);
+      this->m_action_delete     ->setEnabled(numSelected == 1);
+      this->m_action_merge      ->setEnabled(numSelected  > 1);
+
+      this->m_contextMenu->exec(this->derived().mapToGlobal(point));
       return;
    }
 
@@ -434,14 +659,23 @@ public:
    //! \name Public UI Variables
    //! @{
    QVBoxLayout * m_verticalLayout;
-   QTableView *  m_tableWidget;
+   QTableView  * m_tableWidget;
    QHBoxLayout * m_horizontalLayout;
-   QLineEdit *   m_qLineEdit_searchBox;
+   QToolButton * m_searchIcon;
+   QLineEdit   * m_lineEdit_searchBox;
    QSpacerItem * m_horizontalSpacer;
    QPushButton * m_pushButton_addToRecipe;
    QPushButton * m_pushButton_new;
    QPushButton * m_pushButton_edit;
-   QPushButton * m_pushButton_remove;
+   QPushButton * m_pushButton_delete;
+
+   QMenu       * m_contextMenu;
+   QAction     * m_action_addToRecipe;
+   QAction     * m_action_edit       ;
+   QAction     * m_action_delete     ;
+   QAction     * m_action_new        ;
+   QAction     * m_action_merge      ;
+
    //! @}
 
    NeTableModel *           m_neTableModel;
@@ -467,11 +701,13 @@ public:
       virtual ~NeName##Catalog();                                                  \
                                                                                    \
    public slots:                                                                   \
-      void addItem(QModelIndex const & index);                                     \
-      void removeItem();                                                           \
+      void addSelectedToRecipe() const;                                            \
+      void deleteSelected();                                                       \
       void editSelected();                                                         \
       void newItem();                                                              \
+      void mergeSelected();                                                        \
       void filterItems(QString searchExpression);                                  \
+      void contextMenu(QPoint const & point);                                      \
                                                                                    \
    protected:                                                                      \
       virtual void changeEvent(QEvent* event);                                     \
@@ -497,17 +733,22 @@ public:
                                                           \
    NeName##Catalog::~NeName##Catalog() = default;         \
                                                           \
-   void NeName##Catalog::addItem(QModelIndex const & index)    { this->add(index);               return; } \
-   void NeName##Catalog::removeItem()                          { this->remove();                 return; } \
-   void NeName##Catalog::editSelected()                        { this->edit  ();                 return; } \
+   void NeName##Catalog::addSelectedToRecipe() const           { this->doAddSelectedToRecipe();  return; } \
+   void NeName##Catalog::deleteSelected()                      { this->doDeleteSelected();       return; } \
+   void NeName##Catalog::editSelected()                        { this->doEditSelected();         return; } \
    void NeName##Catalog::newItem()                             { this->makeNew();                return; } \
+   void NeName##Catalog::mergeSelected()                       { this->doMergeSelected();        return; } \
    void NeName##Catalog::filterItems(QString searchExpression) { this->filter(searchExpression); return; } \
+   void NeName##Catalog::contextMenu(QPoint const & point) { \
+      this->doContextMenu(point);                            \
+      return;                                                \
+   }                                                         \
    void NeName##Catalog::changeEvent(QEvent* event) { \
       if (event->type() == QEvent::LanguageChange) {  \
          this->retranslateUi();                       \
       }                                               \
       this->QDialog::changeEvent(event);              \
       return;                                         \
-   }
+   }                                                  \
 
 #endif

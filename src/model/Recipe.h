@@ -158,6 +158,64 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_ABV_pct                ();
+   static QString localisedName_age_days               ();
+   static QString localisedName_ageTemp_c              ();
+   static QString localisedName_ancestorId             ();
+   static QString localisedName_apparentAttenuation_pct();
+   static QString localisedName_asstBrewer             ();
+   static QString localisedName_batchSize_l            ();
+   static QString localisedName_beerAcidity_pH         ();
+   static QString localisedName_boil                   ();
+   static QString localisedName_boilGrav               ();
+   static QString localisedName_boilId                 ();
+   static QString localisedName_boilVolume_l           ();
+   static QString localisedName_brewer                 ();
+   static QString localisedName_brewNotes              ();
+   static QString localisedName_calcsEnabled           ();
+   static QString localisedName_caloriesPer33cl        ();
+   static QString localisedName_caloriesPerLiter       ();
+   static QString localisedName_caloriesPerUs12oz      ();
+   static QString localisedName_caloriesPerUsPint      ();
+   static QString localisedName_carbonationTemp_c      ();
+   static QString localisedName_carbonation_vols       ();
+   static QString localisedName_color_srm              ();
+   static QString localisedName_date                   ();
+   static QString localisedName_efficiency_pct         ();
+   static QString localisedName_equipment              ();
+   static QString localisedName_equipmentId            ();
+   static QString localisedName_fermentableAdditions   ();
+   static QString localisedName_fermentation           ();
+   static QString localisedName_fermentationId         ();
+   static QString localisedName_fg                     ();
+   static QString localisedName_finalVolume_l          ();
+   static QString localisedName_forcedCarbonation      ();
+   static QString localisedName_grainsInMash_kg        ();
+   static QString localisedName_grains_kg              ();
+   static QString localisedName_hopAdditions           ();
+   static QString localisedName_IBU                    ();
+   static QString localisedName_IBUs                   ();
+   static QString localisedName_instructions           ();
+   static QString localisedName_kegPrimingFactor       ();
+   static QString localisedName_locked                 ();
+   static QString localisedName_mash                   ();
+   static QString localisedName_mashId                 ();
+   static QString localisedName_miscAdditions          ();
+   static QString localisedName_notes                  ();
+   static QString localisedName_og                     ();
+   static QString localisedName_points                 ();
+   static QString localisedName_postBoilVolume_l       ();
+   static QString localisedName_primingSugarEquiv      ();
+   static QString localisedName_primingSugarName       ();
+   static QString localisedName_saltAdjustments        ();
+   static QString localisedName_style                  ();
+   static QString localisedName_styleId                ();
+   static QString localisedName_tasteNotes             ();
+   static QString localisedName_tasteRating            ();
+   static QString localisedName_type                   ();
+   static QString localisedName_waterUses              ();
+   static QString localisedName_wortFromMash_l         ();
+   static QString localisedName_yeastAdditions         ();
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -605,6 +663,12 @@ public:
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    void setBoil        (std::shared_ptr<Boil        > val);
    void setFermentation(std::shared_ptr<Fermentation> val);
+
+   /**
+    * \brief Similar to \c get
+    */
+   template<class NE> void set(std::shared_ptr<NE> val);
+
    template<typename RA> void setAdditions(QList<std::shared_ptr<RA>> val);
    void setFermentableAdditions(QList<std::shared_ptr<RecipeAdditionFermentable>> val);
    void setHopAdditions        (QList<std::shared_ptr<RecipeAdditionHop        >> val);
@@ -717,7 +781,7 @@ public slots:
    void acceptChangeToInstruction              (QMetaProperty prop, QVariant val);
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

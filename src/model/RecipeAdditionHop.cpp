@@ -27,6 +27,9 @@
 #endif
 
 QString RecipeAdditionHop::localisedName() { return tr("Hop Addition"); }
+QString RecipeAdditionHop::localisedName_hop() { return tr("Hop"); }
+QString RecipeAdditionHop::localisedName_use() { return tr("Use"); }
+
 QString RecipeAdditionHop::instanceNameTemplate() { return tr("Addition of %1 hop"); }
 
 EnumStringMapping const RecipeAdditionHop::useStringMapping {
@@ -52,8 +55,8 @@ ObjectStore & RecipeAdditionHop::getObjectStoreTypedInstance() const {
 TypeLookup const RecipeAdditionHop::typeLookup {
    "RecipeAdditionHop",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::RecipeAdditionHop::hop, RecipeAdditionHop::hop),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::RecipeAdditionHop::use, RecipeAdditionHop::use),
+      PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionHop, hop, hop),
+      PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionHop, use, use),
    },
    // Parent classes lookup.  NB: RecipeAddition not NamedEntity!
    {&RecipeAddition::typeLookup,

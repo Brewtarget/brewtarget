@@ -51,6 +51,8 @@ namespace {
    }
 }
 
+QString ColorMethods::localisedName_formula() { return QObject::tr("Formula"); }
+
 EnumStringMapping const ColorMethods::formulaStringMapping {
    {ColorMethods::ColorFormula::Mosher, "mosher"},
    {ColorMethods::ColorFormula::Daniel, "daniel"},
@@ -66,7 +68,7 @@ EnumStringMapping const ColorMethods::formulaDisplayNames {
 TypeLookup const ColorMethods::typeLookup {
    "ColorMethods",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::ColorMethods::formula, ColorMethods::formula, NonPhysicalQuantity::Enum),
+      PROPERTY_TYPE_LOOKUP_ENTRY(ColorMethods, formula, formula, ENUM_INFO(ColorMethods::formula)),
    }
 };
 

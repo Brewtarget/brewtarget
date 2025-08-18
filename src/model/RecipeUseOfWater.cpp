@@ -24,27 +24,32 @@
 #endif
 
 QString RecipeUseOfWater::localisedName() { return tr("Recipe Use Of Water"); }
+QString RecipeUseOfWater::localisedName_recipeId() { return tr("Recipe ID"); }
+QString RecipeUseOfWater::localisedName_water   () { return tr("Water"    ); }
+QString RecipeUseOfWater::localisedName_volume_l() { return tr("Volume"   ); }
+
 QString RecipeUseOfWater::instanceNameTemplate() { return tr("Use of %1 water"); }
 
 ObjectStore & RecipeUseOfWater::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<RecipeUseOfWater>::getInstance();
 }
 
-bool RecipeUseOfWater::isEqualTo(NamedEntity const & other) const {
+bool RecipeUseOfWater::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    RecipeUseOfWater const & rhs = static_cast<RecipeUseOfWater const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_volume_l == rhs.m_volume_l &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_volume_l, PropertyNames::RecipeUseOfWater::volume_l, propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->IngredientInRecipe::isEqualTo(other)
+      this->IngredientInRecipe::compareWith(other, propertiesThatDiffer)
    );
 }
 
 TypeLookup const RecipeUseOfWater::typeLookup {
    "RecipeUseOfWater",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::RecipeUseOfWater::volume_l, RecipeUseOfWater::m_volume_l, Measurement::PhysicalQuantity::Volume),
+      PROPERTY_TYPE_LOOKUP_NO_MV(RecipeUseOfWater, water   , water     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeUseOfWater, volume_l, m_volume_l, Measurement::PhysicalQuantity::Volume),
    },
    // Parent classes lookup.
    {&IngredientInRecipe::typeLookup}

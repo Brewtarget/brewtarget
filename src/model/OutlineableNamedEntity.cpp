@@ -24,11 +24,12 @@
 #endif
 
 QString OutlineableNamedEntity::localisedName() { return tr("Outlineable Named Entity"); }
+QString OutlineableNamedEntity::localisedName_outline() { return tr("Is Outline"); }
 
 TypeLookup const OutlineableNamedEntity::typeLookup {
    "OutlineableNamedEntity",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::OutlineableNamedEntity::outline, OutlineableNamedEntity::m_outline, NonPhysicalQuantity::Bool),
+      PROPERTY_TYPE_LOOKUP_ENTRY(OutlineableNamedEntity, outline, m_outline, BOOL_INFO(tr("No"), tr("Yes"))),
    },
    // Parent class lookup.  NB: RecipeAddition not NamedEntity!
    {&NamedEntity::typeLookup}

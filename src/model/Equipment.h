@@ -44,12 +44,11 @@ AddPropertyName(agingVesselLoss_l          )
 AddPropertyName(agingVesselNotes           )
 AddPropertyName(agingVesselType            )
 AddPropertyName(agingVesselVolume_l        )
-AddPropertyName(fermenterBatchSize_l       )
-AddPropertyName(boilingPoint_c             )
-AddPropertyName(kettleBoilSize_l           )
 AddPropertyName(boilTime_min               )
+AddPropertyName(boilingPoint_c             )
 AddPropertyName(calcBoilVolume             )
 AddPropertyName(evapRate_pctHr             )
+AddPropertyName(fermenterBatchSize_l       )
 AddPropertyName(fermenterLoss_l            )
 AddPropertyName(fermenterNotes             )
 AddPropertyName(fermenterType              )
@@ -60,12 +59,14 @@ AddPropertyName(hltType                    )
 AddPropertyName(hltVolume_l                )
 AddPropertyName(hltWeight_kg               )
 AddPropertyName(hopUtilization_pct         )
-AddPropertyName(kettleInternalDiameter_cm  )
+AddPropertyName(kettleBoilSize_l           )
 AddPropertyName(kettleEvaporationPerHour_l )
+AddPropertyName(kettleInternalDiameter_cm  )
 AddPropertyName(kettleNotes                )
 AddPropertyName(kettleOpeningDiameter_cm   )
 AddPropertyName(kettleOutflowPerMinute_l   )
 AddPropertyName(kettleSpecificHeat_calGC   )
+AddPropertyName(kettleTrubChillerLoss_l    )
 AddPropertyName(kettleType                 )
 AddPropertyName(kettleWeight_kg            )
 AddPropertyName(lauterTunDeadspaceLoss_l   )
@@ -87,7 +88,6 @@ AddPropertyName(packagingVesselType        )
 AddPropertyName(packagingVesselVolume_l    )
 AddPropertyName(topUpKettle_l              )
 AddPropertyName(topUpWater_l               )
-AddPropertyName(kettleTrubChillerLoss_l    )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -139,7 +139,54 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
-
+   static QString localisedName_agingVesselLoss_l          ();
+   static QString localisedName_agingVesselNotes           ();
+   static QString localisedName_agingVesselType            ();
+   static QString localisedName_agingVesselVolume_l        ();
+   static QString localisedName_boilTime_min               ();
+   static QString localisedName_boilingPoint_c             ();
+   static QString localisedName_calcBoilVolume             ();
+   static QString localisedName_evapRate_pctHr             ();
+   static QString localisedName_fermenterBatchSize_l       ();
+   static QString localisedName_fermenterLoss_l            ();
+   static QString localisedName_fermenterNotes             ();
+   static QString localisedName_fermenterType              ();
+   static QString localisedName_hltLoss_l                  ();
+   static QString localisedName_hltNotes                   ();
+   static QString localisedName_hltSpecificHeat_calGC      ();
+   static QString localisedName_hltType                    ();
+   static QString localisedName_hltVolume_l                ();
+   static QString localisedName_hltWeight_kg               ();
+   static QString localisedName_hopUtilization_pct         ();
+   static QString localisedName_kettleBoilSize_l           ();
+   static QString localisedName_kettleEvaporationPerHour_l ();
+   static QString localisedName_kettleInternalDiameter_cm  ();
+   static QString localisedName_kettleNotes                ();
+   static QString localisedName_kettleOpeningDiameter_cm   ();
+   static QString localisedName_kettleOutflowPerMinute_l   ();
+   static QString localisedName_kettleSpecificHeat_calGC   ();
+   static QString localisedName_kettleTrubChillerLoss_l    ();
+   static QString localisedName_kettleType                 ();
+   static QString localisedName_kettleWeight_kg            ();
+   static QString localisedName_lauterTunDeadspaceLoss_l   ();
+   static QString localisedName_lauterTunNotes             ();
+   static QString localisedName_lauterTunSpecificHeat_calGC();
+   static QString localisedName_lauterTunType              ();
+   static QString localisedName_lauterTunVolume_l          ();
+   static QString localisedName_lauterTunWeight_kg         ();
+   static QString localisedName_mashTunGrainAbsorption_LKg ();
+   static QString localisedName_mashTunLoss_l              ();
+   static QString localisedName_mashTunNotes               ();
+   static QString localisedName_mashTunSpecificHeat_calGC  ();
+   static QString localisedName_mashTunType                ();
+   static QString localisedName_mashTunVolume_l            ();
+   static QString localisedName_mashTunWeight_kg           ();
+   static QString localisedName_packagingVesselLoss_l      ();
+   static QString localisedName_packagingVesselNotes       ();
+   static QString localisedName_packagingVesselType        ();
+   static QString localisedName_packagingVesselVolume_l    ();
+   static QString localisedName_topUpKettle_l              ();
+   static QString localisedName_topUpWater_l               ();
    //
    // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
    // subclasses.
@@ -481,7 +528,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

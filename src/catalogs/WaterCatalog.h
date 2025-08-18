@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * catalogs/SaltCatalog.h is part of Brewtarget, and is copyright the following authors 2025:
+ * catalogs/WaterCatalog.h is part of Brewtarget, and is copyright the following authors 2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -13,38 +13,38 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  =====================================================================================================================*/
-#ifndef CATALOGS_SALTCATALOG_H
-#define CATALOGS_SALTCATALOG_H
+#ifndef CATALOGS_WATERCATALOG_H
+#define CATALOGS_WATERCATALOG_H
 #pragma once
 
 #include <QDialog>
 #include <QEvent>
 
-#include "editors/SaltEditor.h"
-#include "model/Salt.h"
-#include "model/RecipeAdjustmentSalt.h"
-#include "qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.h"
-#include "qtModels/tableModels/SaltTableModel.h"
+#include "editors/WaterEditor.h"
+#include "model/Water.h"
+#include "model/RecipeUseOfWater.h"
+#include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
+#include "qtModels/tableModels/WaterTableModel.h"
 
 // This needs to be the last include.  (I know, I know...)
 #include "catalogs/CatalogBase.h"
 
-#define SaltCatalogOptions CatalogBaseOptions{ }
+#define WaterCatalogOptions CatalogBaseOptions{ }
 
 /*!
- * \class SaltCatalog
+ * \class WaterCatalog
  *
  * \brief View/controller class for showing/editing the list of salts in the database.
  */
-class SaltCatalog : public QDialog, public CatalogBase<SaltCatalog,
-                                                       Salt,
-                                                       SaltTableModel,
-                                                       SaltSortFilterProxyModel,
-                                                       SaltEditor,
-                                                       SaltCatalogOptions> {
+class WaterCatalog : public QDialog, public CatalogBase<WaterCatalog,
+                                                        Water,
+                                                        WaterTableModel,
+                                                        WaterSortFilterProxyModel,
+                                                        WaterEditor,
+                                                        WaterCatalogOptions> {
    Q_OBJECT
 
-   CATALOG_COMMON_DECL(Salt)
+   CATALOG_COMMON_DECL(Water)
 
 };
 

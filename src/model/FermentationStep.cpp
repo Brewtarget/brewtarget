@@ -26,16 +26,18 @@
 #endif
 
 QString FermentationStep::localisedName() { return tr("Fermentation Step"); }
+QString FermentationStep::localisedName_freeRise() { return tr("Free Rise"); }
+QString FermentationStep::localisedName_vessel  () { return tr("Vessel"   ); }
 
-bool FermentationStep::isEqualTo(NamedEntity const & other) const {
+bool FermentationStep::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    FermentationStep const & rhs = static_cast<FermentationStep const &>(other);
    // Base class will already have ensured names are equal
    return (
-      AUTO_LOG_COMPARE(this, rhs, m_freeRise) &&
-      AUTO_LOG_COMPARE(this, rhs, m_vessel  ) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_freeRise, PropertyNames::FermentationStep::freeRise, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_vessel  , PropertyNames::FermentationStep::vessel  , propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->StepExtended::isEqualTo(other)
+      this->StepExtended::compareWith(other, propertiesThatDiffer)
    );
 }
 
@@ -46,8 +48,8 @@ FermentationStepEditor & FermentationStep::getEditor() {
 TypeLookup const FermentationStep::typeLookup {
    "FermentationStep",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::FermentationStep::freeRise, FermentationStep::m_freeRise, NonPhysicalQuantity::Bool  ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::FermentationStep::vessel  , FermentationStep::m_vessel  , NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(FermentationStep, freeRise, m_freeRise, BOOL_INFO(tr("No"), tr("Yes"))),
+      PROPERTY_TYPE_LOOKUP_ENTRY(FermentationStep, vessel  , m_vessel  , NonPhysicalQuantity::String),
    },
    // Parent class lookup.  NB: StepExtended not NamedEntity!
    {&StepExtended::typeLookup,

@@ -87,6 +87,27 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_alcoholTolerance_pct     ();
+   static QString localisedName_attenuationTypical_pct   ();
+   static QString localisedName_attenuationMax_pct       ();
+   static QString localisedName_attenuationMin_pct       ();
+   static QString localisedName_bestFor                  ();
+   static QString localisedName_flocculation             ();
+   static QString localisedName_form                     ();
+   static QString localisedName_glucoamylasePositive     ();
+   static QString localisedName_killerNeutral            ();
+   static QString localisedName_killerProducingK1Toxin   ();
+   static QString localisedName_killerProducingK28Toxin  ();
+   static QString localisedName_killerProducingK2Toxin   ();
+   static QString localisedName_killerProducingKlusToxin ();
+   static QString localisedName_laboratory               ();
+   static QString localisedName_maxReuse                 ();
+   static QString localisedName_maxTemperature_c         ();
+   static QString localisedName_minTemperature_c         ();
+   static QString localisedName_notes                    ();
+   static QString localisedName_phenolicOffFlavorPositive();
+   static QString localisedName_productId                ();
+   static QString localisedName_type                     ();
 
    /**
     * \brief Attenuation figure we use in several places where we wouldn't otherwise have a figure
@@ -336,7 +357,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
