@@ -1149,26 +1149,75 @@ def installDependencies():
          # The instructions at https://guide.macports.org/#installing say that we probably don't need to install Xcode
          # as only a few ports need it.  So, for now, we haven't tried to install that.
          #
-         # Instructions for source install are at https://guide.macports.org/#installing.macports.source.  I tried the
-         # following but the configure script complained about the lack of /usr/local/.//mkspecs/macx-clang
+         # Code to install both from binary and from source is below, as we have hit various problems in the past.
+         # *** Obviously only one block needs to be uncommented at a time. ***
          #
-         #    log.debug('Installing MacPorts')
-         #    btUtils.abortOnRunFail(subprocess.run(['curl', '-O', 'https://distfiles.macports.org/MacPorts/MacPorts-2.10.2.tar.bz2']))
-         #    btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', 'MacPorts-2.10.2.tar.bz2']))
-         #    btUtils.abortOnRunFail(subprocess.run(['cd', 'MacPorts-2.10.2/']))
-         #    btUtils.abortOnRunFail(subprocess.run(['./configure']))
-         #    btUtils.abortOnRunFail(subprocess.run(['make']))
-         #    btUtils.abortOnRunFail(subprocess.run(['sudo', 'make', 'install']))
-         #    btUtils.abortOnRunFail(subprocess.run(['export', 'PATH=/opt/local/bin:/opt/local/sbin:$PATH']))
-         #
-         # For a binary install we need the version of MacPorts we're downloading and both the version and release name
-         # of MacOS.
+         # In both cases, curl options are:
+         #    -L = If the server reports that the requested page has moved to a different location (indicated with a
+         #         Location: header and a 3XX  response  code),  this option makes curl redo the request on the new
+         #         place.
+         #    -O = Write output to a local file named like the remote file we get. (Only the file part of the remote
+         #         file is used, the path is cut off.)  The file is saved in the current working directory.
          #
          # TBD: For the moment we hard-code the version of MacPorts, but we should probably find it out from GitHub in
          #      a similar way that we check our own latest releases in the C++ code.
          #
-         downloadUrl = 'https://github.com/macports/macports-base/releases/download/' + 'v2.10.4/MacPorts-2.10.4-' + macOsVersion + '-' + macOsReleaseName + '.pkg'
-         # TODO: Need to finish this.  For now, we  install MacPorts for GitHub actions via the mac.yml script.
+         macPortsVersion = '2.11.5'
+         macPortsName = 'MacPorts-' + macPortsVersion
+         #
+         # The instructions for binary install at https://guide.macports.org/#installing.macports.binary require user
+         # interaction ("Double-click the downloaded package installer"), but, with a little research, the steps can be
+         # scripted.
+         #
+         log.debug('Installing MacPorts from binary')
+         btUtils.abortOnRunFail(subprocess.run(['pwd']))
+         btUtils.abortOnRunFail(subprocess.run(['ls', '-l']))
+         macPortsPackage = macPortsName + '-' + macOsVersion + '-' + macOsReleaseName + '.pkg'
+         downloadUrl = 'https://github.com/macports/macports-base/releases/download/v' + macPortsVersion + '/' + macPortsPackage
+         btUtils.abortOnRunFail(subprocess.run(['curl', '-L', '-O', downloadUrl]))
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'installer', '-package', macPortsPackage, '-target', '/']))
+         btUtils.abortOnRunFail(subprocess.run(['ls', '-l']))
+
+         #
+         # Instructions for source install are at https://guide.macports.org/#installing.macports.source.
+         #
+#         log.debug('Installing MacPorts from source')
+#         btUtils.abortOnRunFail(subprocess.run(['curl', '-L', '-O', 'https://distfiles.macports.org/MacPorts/' + macPortsName + '.tar.bz2']))
+#         btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', macPortsName + '.tar.bz2']))
+#         btUtils.abortOnRunFail(subprocess.run(['cd', macPortsName]))
+#         btUtils.abortOnRunFail(subprocess.run(['./configure']))
+#         btUtils.abortOnRunFail(subprocess.run(['make']))
+#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'make', 'install']))
+#         btUtils.abortOnRunFail(subprocess.run(['cd', '..']))
+#         btUtils.abortOnRunFail(subprocess.run(['pwd']))
+#         btUtils.abortOnRunFail(subprocess.run(['ls', '-l']))
+
+         #
+         # Neither binary nor source install automatically adds the port command to the path, so we do it here.
+         # As below, we want these additional paths to show up permanently.  Using a file in /etc/paths.d/ should work
+         # for someone doing this set-up locally...
+         #
+         macPortsPrefix = '/opt/local'
+         log.debug('Before fix-up, PATH=' + os.environ["PATH"])
+         os.environ["PATH"] = macPortsPrefix + '/bin' + os.pathsep + macPortsPrefix + '/sbin' + os.pathsep + os.environ["PATH"]
+         log.debug('After fix-up, PATH=' + os.environ["PATH"])
+         macPortsDirFile = '/etc/paths.d/90-macPortsPaths'
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'touch'              , macPortsDirFile]))
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'chown', 'root:wheel', macPortsDirFile]))
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'a+rw'      , macPortsDirFile]))
+         with open(macPortsDirFile, 'a+') as macPortsDirPaths:
+            macPortsDirPaths.write(macPortsPrefix + '/bin' + '\n')
+            macPortsDirPaths.write(macPortsPrefix + '/sbin'+ '\n')
+         #
+         # ...but, for GitHub actions, writing to the file in the GITHUB_PATH environment variable is the supported way
+         # to add something to the path for subsequent steps.
+         #
+         githubPathFile = os.environ["GITHUB_PATH"]
+         log.debug('GITHUB_PATH=' + githubPathFile)
+         if githubPathFile:
+            with open(githubPathFile, 'a+') as githubPaths:
+               githubPaths.write(macPortsPrefix + '/bin' + '\n')
+               githubPaths.write(macPortsPrefix + '/sbin'+ '\n')
 
          #
          # Just because we have MacPorts installed, doesn't mean its list of software etc will be up-to-date.  So fix
@@ -1177,9 +1226,8 @@ def installDependencies():
          # If there is an error, MacPorts tells you to run again with the -v option to find out why, so we just run with
          # that from the outset, and live with the fact that it generates a lot of logging.
          #
-# Commented pending fix for https://trac.macports.org/ticket/72802
-#         log.debug('First run of MacPorts selfupdate')
-#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'selfupdate']))
+         log.debug('First run of MacPorts selfupdate')
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'selfupdate']))
 
          #
          # Sometimes you need to run selfupdate twice, because MacPorts itself was too out of date to update the ports
@@ -1189,15 +1237,13 @@ def installDependencies():
          # Rather than try to detect this, we just always run selfupdate twice.  If the second time is a no-op then no
          # harm is done.
          #
-# Commented pending fix for https://trac.macports.org/ticket/72802
-#         log.debug('Second run of MacPorts selfupdate')
-#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
+         log.debug('Second run of MacPorts selfupdate')
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
 
          # Per https://guide.macports.org/#using.port.diagnose this will tell us about "common issues in the user's
          # environment".
-# Commented pending fix for https://trac.macports.org/ticket/72802
-#         log.debug('Check environment is OK')
-#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'diagnose', '--quiet']))
+         log.debug('Check environment is OK')
+         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'diagnose', '--quiet']))
 
          # Per https://guide.macports.org/#using.port.installed, this tells us what ports are already installed
          log.debug('List ports already installed')
@@ -1426,12 +1472,8 @@ def installDependencies():
 #         btUtils.abortOnRunFail(subprocess.run(['pip3', 'install', 'dmgbuild[badge_icons]']))
 
          #
-         # TBD: For the moment, it seems that we are somehow getting Xerces and Xalan ports "for free" (when we list
-         #      what ports are already installed before we install the ones in 'installListPort').  Commented code here
-         #      is a first stab at Plan C -- building from source ourselves.
-         #
-         # Since we can't install Xalan-C++ via Homebrew (no longer available) or MacPorts (broken), we must build it
-         # from source ourselves, per the instructions at https://apache.github.io/xalan-c/build.html
+         # TBD: If, in future, we have further problems installing Xerces and/or Xalan-C++ from ports, the commented
+         #      code here is a first stab at Plan C -- building from source ourselves.
          #
 #         xalanCSourceUrl = 'https://github.com/apache/xalan-c/releases/download/Xalan-C_1_12_0/xalan_c-1.12.tar.gz'
 #         log.debug('Downloading Xalan-C++ source from ' + xalanCSourceUrl)
@@ -1580,6 +1622,7 @@ def doSetup(setupOption):
    if (warnAboutCurrentDirectory):
       print("❗❗❗ Your current directory has been deleted!  You need to run 'cd ../mbuild' ❗❗❗")
    log.debug('Setup done')
+   log.debug('PATH=' + os.environ["PATH"])
    print()
    print('You can now build, test, install and run ' + capitalisedProjectName + ' with the following commands:')
    print('   cd ' + os.path.relpath(dir_build))
