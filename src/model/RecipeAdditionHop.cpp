@@ -78,6 +78,12 @@ RecipeAdditionHop::RecipeAdditionHop(QString name, int const recipeId, int const
    RecipeAdditionBase<RecipeAdditionHop, Hop>{},
    IngredientAmount<RecipeAdditionHop, Hop>{} {
 
+   //
+   // RecipeAddition constructor will have set default stage to RecipeAddition::Stage::Mash, but, per comment below, for
+   // Hop additions, it makes more sense to default it to RecipeAddition::Stage::Boil
+   //
+   this->m_stage = RecipeAddition::Stage::Boil;
+
    CONSTRUCTOR_END
    return;
 }

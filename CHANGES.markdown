@@ -29,7 +29,7 @@ Bug fixes and minor enhancements.
 * Inconsistent meaning of double-click [1016](https://github.com/Brewtarget/brewtarget/issues/1016)
 
 ### Release Timestamp
-Fri, 25 Jul 2025 04:01:04 +0100
+Fri, 23 Aug 2025 04:01:04 +0100
 
 ## v4.1.3
 Bug fixes and minor enhancements.
