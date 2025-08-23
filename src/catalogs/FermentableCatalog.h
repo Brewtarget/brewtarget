@@ -26,6 +26,7 @@
 
 #include "editors/FermentableEditor.h"
 #include "model/Fermentable.h"
+#include "model/RecipeAdditionFermentable.h"
 #include "qtModels/tableModels/FermentableTableModel.h"
 #include "qtModels/sortFilterProxyModels/FermentableSortFilterProxyModel.h"
 

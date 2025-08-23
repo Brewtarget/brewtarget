@@ -27,6 +27,8 @@
 #endif
 
 QString RecipeAdditionFermentable::localisedName() { return tr("Fermentable Addition"); }
+QString RecipeAdditionFermentable::localisedName_fermentable() { return tr("Fermentable"); }
+
 QString RecipeAdditionFermentable::instanceNameTemplate() { return tr("Addition of %1 fermentable"); }
 
 ObjectStore & RecipeAdditionFermentable::getObjectStoreTypedInstance() const {
@@ -36,7 +38,7 @@ ObjectStore & RecipeAdditionFermentable::getObjectStoreTypedInstance() const {
 TypeLookup const RecipeAdditionFermentable::typeLookup {
    "RecipeAdditionFermentable",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::RecipeAdditionFermentable::fermentable, RecipeAdditionFermentable::fermentable),
+      PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionFermentable, fermentable, fermentable),
    },
    // Parent classes lookup.  NB: RecipeAddition not NamedEntity!
    {&RecipeAddition::typeLookup,

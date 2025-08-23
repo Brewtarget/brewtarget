@@ -7,17 +7,17 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 release timestamp to be a date in the future, and I'm guessing nobody cares about the exact time of day a release
 happens, so I'm now setting it to a slightly arbitrary time early in the morning.
 
-## Forthcoming in v4.2.0
+## Forthcoming in v4.3.0
 
 ### New Features
 * TODO: Additional methods for calculating IBU
 * We'll list other new features here...
 
-## v4.1.4
+## v4.2.0
 Bug fixes and minor enhancements.
 
 ### New Features
-* None
+* Add ability to merge identical items [1013](https://github.com/Brewtarget/brewtarget/issues/1013)
 
 ### Bug Fixes
 * Bug in recipe tab when changing mash [728](https://github.com/Brewtarget/brewtarget/issues/728)
@@ -26,6 +26,7 @@ Bug fixes and minor enhancements.
 * Editing a Mash step moves it to the end of the list [1008](https://github.com/Brewtarget/brewtarget/issues/1008)
 * Lovibond not showing in Options>Units>Color [1010](https://github.com/Brewtarget/brewtarget/issues/1010)
 * Mash Wizard seems a bit broken [1012](https://github.com/Brewtarget/brewtarget/issues/1012)
+* Inconsistent meaning of double-click [1016](https://github.com/Brewtarget/brewtarget/issues/1016)
 
 ### Release Timestamp
 Fri, 25 Jul 2025 04:01:04 +0100

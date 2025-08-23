@@ -98,6 +98,31 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_alpha_pct         ();
+   static QString localisedName_beta_pct          ();
+   static QString localisedName_bPinene_pct       ();
+   static QString localisedName_caryophyllene_pct ();
+   static QString localisedName_cohumulone_pct    ();
+   static QString localisedName_farnesene_pct     ();
+   static QString localisedName_form              ();
+   static QString localisedName_geraniol_pct      ();
+   static QString localisedName_hsi_pct           ();
+   static QString localisedName_humulene_pct      ();
+   static QString localisedName_limonene_pct      ();
+   static QString localisedName_linalool_pct      ();
+   static QString localisedName_myrcene_pct       ();
+   static QString localisedName_nerol_pct         ();
+   static QString localisedName_notes             ();
+   static QString localisedName_origin            ();
+   static QString localisedName_pinene_pct        ();
+   static QString localisedName_polyphenols_pct   ();
+   static QString localisedName_producer          ();
+   static QString localisedName_productId         ();
+   static QString localisedName_substitutes       ();
+   static QString localisedName_totalOil_mlPer100g();
+   static QString localisedName_type              ();
+   static QString localisedName_xanthohumol_pct   ();
+   static QString localisedName_year              ();
 
    /*!
     * \brief The form of the hop.
@@ -317,7 +342,7 @@ public:
    void setYear              (QString               const   val);
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

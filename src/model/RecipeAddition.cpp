@@ -29,6 +29,12 @@
 #endif
 
 QString RecipeAddition::localisedName() { return tr("Recipe Addition"); }
+QString RecipeAddition::localisedName_stage          () { return tr("Stage"         ); }
+QString RecipeAddition::localisedName_step           () { return tr("Step"          ); }
+QString RecipeAddition::localisedName_addAtTime_mins () { return tr("Add At Time"   ); }
+QString RecipeAddition::localisedName_addAtGravity_sg() { return tr("Add At Gravity"); }
+QString RecipeAddition::localisedName_addAtAcidity_pH() { return tr("Add At Acidity"); }
+QString RecipeAddition::localisedName_duration_mins  () { return tr("Duration"      ); }
 
 // Note that RecipeAddition::stageStringMapping is as defined by BeerJSON, but we also use them for the DB and for
 // the UI.  We can't use them for BeerXML as it doesn't really support any similar field.
@@ -46,7 +52,7 @@ EnumStringMapping const RecipeAddition::stageDisplayNames {
    {RecipeAddition::Stage::Packaging   , tr("Add to Package"     ) },
 };
 
-bool RecipeAddition::isEqualTo(NamedEntity const & other) const {
+bool RecipeAddition::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    RecipeAddition const & rhs = static_cast<RecipeAddition const &>(other);
    // Base class will already have ensured names are equal
@@ -56,27 +62,26 @@ bool RecipeAddition::isEqualTo(NamedEntity const & other) const {
       // as part of comparing whether two Recipe objects objects are equal, we need, amongst other things, to check
       // whether their owned RecipeAddition objects are equal.
       //
-      AUTO_LOG_COMPARE(this, rhs, m_ingredientId   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_stage          ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_step           ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_addAtTime_mins ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_addAtGravity_sg) &&
-      AUTO_LOG_COMPARE(this, rhs, m_addAtAcidity_pH) &&
-      AUTO_LOG_COMPARE(this, rhs, m_duration_mins  ) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_stage          , PropertyNames::RecipeAddition::stage          , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_step           , PropertyNames::RecipeAddition::step           , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_addAtTime_mins , PropertyNames::RecipeAddition::addAtTime_mins , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_addAtGravity_sg, PropertyNames::RecipeAddition::addAtGravity_sg, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_addAtAcidity_pH, PropertyNames::RecipeAddition::addAtAcidity_pH, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_duration_mins  , PropertyNames::RecipeAddition::duration_mins  , propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->IngredientInRecipe::isEqualTo(other)
+      this->IngredientInRecipe::compareWith(other, propertiesThatDiffer)
    );
 }
 
 TypeLookup const RecipeAddition::typeLookup {
    "RecipeAddition",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::RecipeAddition::stage          , RecipeAddition::m_stage          ,           NonPhysicalQuantity::Enum          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::RecipeAddition::step           , RecipeAddition::m_step           ,           NonPhysicalQuantity::OrdinalNumeral),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::RecipeAddition::addAtTime_mins , RecipeAddition::m_addAtTime_mins , Measurement::PhysicalQuantity::Time          ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::RecipeAddition::addAtGravity_sg, RecipeAddition::m_addAtGravity_sg, Measurement::PhysicalQuantity::Density       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::RecipeAddition::addAtAcidity_pH, RecipeAddition::m_addAtAcidity_pH, Measurement::PhysicalQuantity::Acidity       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::RecipeAddition::duration_mins  , RecipeAddition::m_duration_mins  , Measurement::PhysicalQuantity::Time          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, stage          , m_stage          , ENUM_INFO(RecipeAddition::stage)      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, step           , m_step           , NonPhysicalQuantity::OrdinalNumeral   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, addAtTime_mins , m_addAtTime_mins , Measurement::PhysicalQuantity::Time   , DisplayInfo::Precision{0}),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, addAtGravity_sg, m_addAtGravity_sg, Measurement::PhysicalQuantity::Density),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, addAtAcidity_pH, m_addAtAcidity_pH, Measurement::PhysicalQuantity::Acidity, DisplayInfo::Precision{1}),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, duration_mins  , m_duration_mins  , Measurement::PhysicalQuantity::Time   ),
    },
    // Parent class lookup.
    {&IngredientInRecipe::typeLookup}

@@ -704,14 +704,14 @@ namespace {
       "INSTRUCTION",            // XML record name
       XmlRecordDefinition::create<XmlNamedEntityRecord<Instruction>>,
       {
-         // Type                                            XPath         Q_PROPERTY                              Value Decoder
-         {XmlRecordDefinition::FieldType::String          , "NAME"      , PropertyNames::NamedEntity::name      },
-         {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"   , VERSION1                              },
-         {XmlRecordDefinition::FieldType::String          , "directions", PropertyNames::Instruction::directions},
-         {XmlRecordDefinition::FieldType::Bool            , "hasTimer"  , PropertyNames::Instruction::hasTimer  },
-         {XmlRecordDefinition::FieldType::String          , "timervalue", PropertyNames::Instruction::timerValue}, // NB XPath is lowercase and property is camelCase
-         {XmlRecordDefinition::FieldType::Bool            , "completed" , PropertyNames::Instruction::completed },
-         {XmlRecordDefinition::FieldType::Double          , "interval"  , PropertyNames::Instruction::interval  },
+         // Type                                            XPath         Q_PROPERTY                               Value Decoder
+         {XmlRecordDefinition::FieldType::String          , "NAME"      , PropertyNames::NamedEntity::name         },
+         {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"   , VERSION1                                 },
+         {XmlRecordDefinition::FieldType::String          , "directions", PropertyNames::Instruction::directions   },
+         {XmlRecordDefinition::FieldType::Bool            , "hasTimer"  , PropertyNames::Instruction::hasTimer     },
+         {XmlRecordDefinition::FieldType::String          , "timervalue", PropertyNames::Instruction::timerValue   }, // NB XPath is lowercase and property is camelCase
+         {XmlRecordDefinition::FieldType::Bool            , "completed" , PropertyNames::Instruction::completed    },
+         {XmlRecordDefinition::FieldType::Double          , "interval"  , PropertyNames::Instruction::interval_mins},
       }
    };
 

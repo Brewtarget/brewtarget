@@ -31,6 +31,32 @@
 #endif
 
 QString Style::localisedName() { return tr("Style"); }
+QString Style::localisedName_abvMax_pct       () { return tr("Max ABV"           ); }
+QString Style::localisedName_abvMin_pct       () { return tr("Min ABV"           ); }
+QString Style::localisedName_appearance       () { return tr("Appearance"        ); }
+QString Style::localisedName_aroma            () { return tr("Aroma"             ); }
+QString Style::localisedName_carbMax_vol      () { return tr("Max Carb"          ); }
+QString Style::localisedName_carbMin_vol      () { return tr("Min Carb"          ); }
+QString Style::localisedName_category         () { return tr("Category"          ); }
+QString Style::localisedName_categoryNumber   () { return tr("Category Number"   ); }
+QString Style::localisedName_colorMax_srm     () { return tr("Max Color"         ); }
+QString Style::localisedName_colorMin_srm     () { return tr("Min Color"         ); }
+QString Style::localisedName_examples         () { return tr("Examples"          ); }
+QString Style::localisedName_fgMax            () { return tr("Max FG"            ); }
+QString Style::localisedName_fgMin            () { return tr("Min FG"            ); }
+QString Style::localisedName_flavor           () { return tr("Flavor"            ); }
+QString Style::localisedName_ibuMax           () { return tr("Max IBU"           ); }
+QString Style::localisedName_ibuMin           () { return tr("Min IBU"           ); }
+QString Style::localisedName_ingredients      () { return tr("Ingredients"       ); }
+QString Style::localisedName_mouthfeel        () { return tr("Mouthfeel"         ); }
+QString Style::localisedName_notes            () { return tr("Notes"             ); }
+QString Style::localisedName_ogMax            () { return tr("Max OG"            ); }
+QString Style::localisedName_ogMin            () { return tr("Min OG"            ); }
+QString Style::localisedName_overallImpression() { return tr("Overall Impression"); }
+QString Style::localisedName_styleGuide       () { return tr("Style Guide"       ); }
+QString Style::localisedName_styleLetter      () { return tr("Style Letter"      ); }
+QString Style::localisedName_type             () { return tr("Type"              ); }
+QString Style::localisedName_typeString       () { return tr("Type String"       ); }
 
 EnumStringMapping const Style::typeStringMapping {
    {Style::Type::Beer    , "beer"    },
@@ -51,16 +77,37 @@ EnumStringMapping const Style::typeDisplayNames{
    {Style::Type::Other   , tr("Other"   )},
 };
 
-bool Style::isEqualTo(NamedEntity const & other) const {
+bool Style::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Style const & rhs = static_cast<Style const &>(other);
    // Base class will already have ensured names are equal
    return (
-      AUTO_LOG_COMPARE(this, rhs, m_category      ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_categoryNumber) &&
-      AUTO_LOG_COMPARE(this, rhs, m_styleLetter   ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_styleGuide    ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_type          )
+      AUTO_PROPERTY_COMPARE(this, rhs, m_category         , PropertyNames::Style::category         , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_categoryNumber   , PropertyNames::Style::categoryNumber   , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_styleLetter      , PropertyNames::Style::styleLetter      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_styleGuide       , PropertyNames::Style::styleGuide       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_type             , PropertyNames::Style::type             , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_ogMin            , PropertyNames::Style::ogMin            , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_ogMax            , PropertyNames::Style::ogMax            , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_fgMin            , PropertyNames::Style::fgMin            , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_fgMax            , PropertyNames::Style::fgMax            , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_ibuMin           , PropertyNames::Style::ibuMin           , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_ibuMax           , PropertyNames::Style::ibuMax           , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_colorMin_srm     , PropertyNames::Style::colorMin_srm     , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_colorMax_srm     , PropertyNames::Style::colorMax_srm     , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_carbMin_vol      , PropertyNames::Style::carbMin_vol      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_carbMax_vol      , PropertyNames::Style::carbMax_vol      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_abvMin_pct       , PropertyNames::Style::abvMin_pct       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_abvMax_pct       , PropertyNames::Style::abvMax_pct       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_notes            , PropertyNames::Style::notes            , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_ingredients      , PropertyNames::Style::ingredients      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_examples         , PropertyNames::Style::examples         , propertiesThatDiffer) &&
+      // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
+      AUTO_PROPERTY_COMPARE(this, rhs, m_aroma            , PropertyNames::Style::aroma            , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_appearance       , PropertyNames::Style::appearance       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_flavor           , PropertyNames::Style::flavor           , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_mouthfeel        , PropertyNames::Style::mouthfeel        , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_overallImpression, PropertyNames::Style::overallImpression, propertiesThatDiffer)
    );
 }
 
@@ -71,32 +118,32 @@ ObjectStore & Style::getObjectStoreTypedInstance() const {
 TypeLookup const Style::typeLookup {
    "Style",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::category         , Style::m_category         ,           NonPhysicalQuantity::String     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::categoryNumber   , Style::m_categoryNumber   ,           NonPhysicalQuantity::String     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::styleLetter      , Style::m_styleLetter      ,           NonPhysicalQuantity::String     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::styleGuide       , Style::m_styleGuide       ,           NonPhysicalQuantity::String     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::type             , Style::m_type             ,           NonPhysicalQuantity::Enum       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ogMin            , Style::m_ogMin            , Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ogMax            , Style::m_ogMax            , Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::fgMin            , Style::m_fgMin            , Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::fgMax            , Style::m_fgMax            , Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ibuMin           , Style::m_ibuMin           , Measurement::PhysicalQuantity::Bitterness ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ibuMax           , Style::m_ibuMax           , Measurement::PhysicalQuantity::Bitterness ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::colorMin_srm     , Style::m_colorMin_srm     , Measurement::PhysicalQuantity::Color      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::colorMax_srm     , Style::m_colorMax_srm     , Measurement::PhysicalQuantity::Color      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::carbMin_vol      , Style::m_carbMin_vol      , Measurement::PhysicalQuantity::Carbonation),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::carbMax_vol      , Style::m_carbMax_vol      , Measurement::PhysicalQuantity::Carbonation),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::abvMin_pct       , Style::m_abvMin_pct       ,           NonPhysicalQuantity::Percentage ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::abvMax_pct       , Style::m_abvMax_pct       ,           NonPhysicalQuantity::Percentage ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::notes            , Style::m_notes            ,           NonPhysicalQuantity::String     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::ingredients      , Style::m_ingredients      ,           NonPhysicalQuantity::String     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::examples         , Style::m_examples         ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, category         , m_category         ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, categoryNumber   , m_categoryNumber   ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, styleLetter      , m_styleLetter      ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, styleGuide       , m_styleGuide       ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, type             , m_type             , ENUM_INFO(Style::type)                    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, ogMin            , m_ogMin            , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, ogMax            , m_ogMax            , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, fgMin            , m_fgMin            , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, fgMax            , m_fgMax            , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, ibuMin           , m_ibuMin           , Measurement::PhysicalQuantity::Bitterness ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, ibuMax           , m_ibuMax           , Measurement::PhysicalQuantity::Bitterness ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, colorMin_srm     , m_colorMin_srm     , Measurement::PhysicalQuantity::Color      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, colorMax_srm     , m_colorMax_srm     , Measurement::PhysicalQuantity::Color      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, carbMin_vol      , m_carbMin_vol      , Measurement::PhysicalQuantity::Carbonation),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, carbMax_vol      , m_carbMax_vol      , Measurement::PhysicalQuantity::Carbonation),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, abvMin_pct       , m_abvMin_pct       ,           NonPhysicalQuantity::Percentage ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, abvMax_pct       , m_abvMax_pct       ,           NonPhysicalQuantity::Percentage ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, notes            , m_notes            ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, ingredients      , m_ingredients      ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, examples         , m_examples         ,           NonPhysicalQuantity::String     ),
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::aroma            , Style::m_aroma            ,           NonPhysicalQuantity::String     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::appearance       , Style::m_appearance       ,           NonPhysicalQuantity::String     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::flavor           , Style::m_flavor           ,           NonPhysicalQuantity::String     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::mouthfeel        , Style::m_mouthfeel        ,           NonPhysicalQuantity::String     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Style::overallImpression, Style::m_overallImpression,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, aroma            , m_aroma            ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, appearance       , m_appearance       ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, flavor           , m_flavor           ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, mouthfeel        , m_mouthfeel        ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Style, overallImpression, m_overallImpression,           NonPhysicalQuantity::String     ),
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,

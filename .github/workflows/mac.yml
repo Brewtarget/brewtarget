@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------------------------------------------------
-# .github/workflows/mac.yml is part of Brewtarget, and is copyright the following authors 2021-2024:
+# .github/workflows/mac.yml is part of Brewtarget, and is copyright the following authors 2021-2025:
 #   • Artem Martynov <martynov-a@polyplastic.by>
 #   • Mattias Måhl <mattias@kejsarsten.com>
 #   • Matt Young <mfsy@yahoo.com>
@@ -39,11 +39,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      #
-      # Tried to install MacPorts from the bt script, but get errors running its configure script, so trying from GitHub
-      # actions.
-      #
-      - uses: melusina-org/setup-macports@v1
 
       #
       # The `brew doctor` command just checks that Homebrew (https://brew.sh/) is installed OK (expected output is "Your
@@ -68,6 +63,7 @@ jobs:
         run: |
            cd mbuild
            pwd
+           echo $PATH
            meson compile
 
       #

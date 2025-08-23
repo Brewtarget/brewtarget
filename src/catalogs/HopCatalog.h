@@ -26,6 +26,7 @@
 
 #include "editors/HopEditor.h"
 #include "model/Hop.h"
+#include "model/RecipeAdditionHop.h"
 #include "qtModels/sortFilterProxyModels/HopSortFilterProxyModel.h"
 #include "qtModels/tableModels/HopTableModel.h"
 

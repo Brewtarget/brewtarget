@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BrewDayFormatter.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * BrewDayFormatter.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -207,8 +207,8 @@ QString BrewDayFormatter::buildInstructionHtml() {
       QString stepTime, tmp;
       QList<QString> reagents;
 
-      if (instruction->interval() > 0.0) {
-         stepTime = Measurement::displayAmount(Measurement::Amount{instruction->interval(), Measurement::Units::minutes}, 0);
+      if (instruction->interval_mins() > 0.0) {
+         stepTime = Measurement::displayAmount(Measurement::Amount{instruction->interval_mins(), Measurement::Units::minutes}, 0);
       } else {
          stepTime = "--";
       }
@@ -268,8 +268,8 @@ QList<QStringList> BrewDayFormatter::buildInstructionList() {
       QString stepTime, tmp;
       QList<QString> reagents;
 
-      if (instruction->interval() > 0.0) {
-         stepTime = Measurement::displayAmount(Measurement::Amount{instruction->interval(), Measurement::Units::minutes}, 0);
+      if (instruction->interval_mins() > 0.0) {
+         stepTime = Measurement::displayAmount(Measurement::Amount{instruction->interval_mins(), Measurement::Units::minutes}, 0);
       } else {
          stepTime = "--";
       }

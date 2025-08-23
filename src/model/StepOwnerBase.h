@@ -90,10 +90,13 @@ class StepOwnerBase : public CuriouslyRecurringTemplateBase<StepOwnerPhantom, De
    // This allows Derived to call our protected and private members
    friend Derived;
 
+   static QString localisedName_numSteps() { return Derived::tr("№ Steps"); }
+   static QString localisedName_steps   () { return Derived::tr("Steps"  ); }
+
 private:
-   //! Non-virtual equivalent of isEqualTo
-   bool doIsEqualTo(StepOwnerBase const & other) const {
-      return this->m_stepSet.doIsEqualTo(other.m_stepSet);
+   //! Non-virtual equivalent of compareWith
+   bool doCompareWith(StepOwnerBase const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
+      return this->m_stepSet.doCompareWith(other.m_stepSet, propertiesThatDiffer);
    }
 
    StepOwnerBase() :
@@ -255,6 +258,7 @@ TypeLookup const StepOwnerBase<Derived, DerivedStep>::typeLookup {
       {&PropertyNames::StepOwnerBase::numSteps,
        TypeInfo::construct<MemberFunctionReturnType_t<&StepOwnerBase::numSteps>>(
           PropertyNames::StepOwnerBase::numSteps,
+          StepOwnerBase::localisedName_numSteps,
           TypeLookupOf<MemberFunctionReturnType_t<&StepOwnerBase::numSteps>>::value,
           NonPhysicalQuantity::OrdinalNumeral
        )},

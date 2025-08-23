@@ -22,6 +22,7 @@
 
 #include "editors/SaltEditor.h"
 #include "model/Salt.h"
+#include "model/RecipeAdjustmentSalt.h"
 #include "qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.h"
 #include "qtModels/tableModels/SaltTableModel.h"
 

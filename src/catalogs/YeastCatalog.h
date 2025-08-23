@@ -26,6 +26,7 @@
 
 #include "editors/YeastEditor.h"
 #include "model/Yeast.h"
+#include "model/RecipeAdditionYeast.h"
 #include "qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.h"
 #include "qtModels/tableModels/YeastTableModel.h"
 

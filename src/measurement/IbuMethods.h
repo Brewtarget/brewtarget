@@ -44,6 +44,8 @@ AddPropertyName(formula)
  * \brief Make IBU calculations.
  */
 namespace IbuMethods {
+   QString localisedName_formula();
+
    /**
     * \brief The formula used to get IBUs.
     *

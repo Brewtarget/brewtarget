@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeUseOfWater.h is part of Brewtarget, and is copyright the following authors 2024:
+ * model/RecipeUseOfWater.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -27,9 +27,9 @@
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::RecipeUseOfWater { inline BtStringConst const property{#property}; }
-AddPropertyName(recipeId    )
-AddPropertyName(water       )
-AddPropertyName(volume_l    )
+AddPropertyName(recipeId)
+AddPropertyName(water   )
+AddPropertyName(volume_l)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -56,6 +56,9 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_recipeId();
+   static QString localisedName_water   ();
+   static QString localisedName_volume_l();
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -86,7 +89,7 @@ public:
    void setVolume_l    (double  const val);
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 protected:

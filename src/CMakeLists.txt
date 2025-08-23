@@ -101,6 +101,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/catalogs/MiscCatalog.cpp
     ${repoDir}/src/catalogs/SaltCatalog.cpp
     ${repoDir}/src/catalogs/StyleCatalog.cpp
+    ${repoDir}/src/catalogs/WaterCatalog.cpp
     ${repoDir}/src/catalogs/YeastCatalog.cpp
     ${repoDir}/src/database/BtSqlQuery.cpp
     ${repoDir}/src/database/Database.cpp
@@ -247,8 +248,10 @@ set(filesToCompile_cpp
     ${repoDir}/src/utils/MetaTypes.cpp
     ${repoDir}/src/utils/OStreamWriterForQFile.cpp
     ${repoDir}/src/utils/OptionalHelpers.cpp
+    ${repoDir}/src/utils/PropertyHelper.cpp
     ${repoDir}/src/utils/PropertyPath.cpp
     ${repoDir}/src/utils/TimerUtils.cpp
+    ${repoDir}/src/utils/TypeInfo.cpp
     ${repoDir}/src/utils/TypeLookup.cpp
     ${repoDir}/src/widgets/Animator.cpp
     ${repoDir}/src/widgets/BtComboBoxBool.cpp

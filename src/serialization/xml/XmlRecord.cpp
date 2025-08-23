@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlRecord.cpp is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/xml/XmlRecord.cpp is part of Brewtarget, and is copyright the following authors 2020-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -296,22 +296,29 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                         if (!parsedValueOk) {
                            //
                            // Although it is not explicitly stated in the BeerXML 1.0 standard, it is clear from the
-                           // sample files downloadable from www.beerxml.com that some "ignorable" percentage and decimal
-                           // values can be specified as "-".  I haven't found a straightforward way to filter or
-                           // transform these during XSD validation.  Nor, as yet, do I know whether it's possible from a
-                           // xalanc::XalanNode to get back to the Post-Schema-Validation Infoset (PSVI) information in
-                           // Xerces that might allow us to examine the XSD rules applied to the current node.
+                           // sample files downloadable from www.beerxml.com that some "ignorable" percentage and
+                           // decimal values can be specified as "-".  I haven't found a straightforward way to filter
+                           // or transform these during XSD validation.  Nor, as yet, do I know whether it's possible
+                           // from a xalanc::XalanNode to get back to the Post-Schema-Validation Infoset (PSVI)
+                           // information in Xerces that might allow us to examine the XSD rules applied to the current
+                           // node.
                            //
                            // For the moment, we assume that, if a "-" didn't get filtered out by XSD then it's allowed
-                           // and should be interpreted as NULL, which therefore means we store 0.0.
+                           // and should be interpreted as NULL (or 0.0 if the property is not optional in our model).
                            //
                            qInfo() <<
-                              Q_FUNC_INFO << "Treating " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
-                              fieldDefinition.xPath << "=" << value << " as 0.0";
+                              Q_FUNC_INFO << "Treating " << this->m_recordDefinition.m_namedEntityClassName <<
+                              " node " << fieldDefinition.xPath << "=" << value << " as" <<
+                              (propertyIsOptional ? "NULL" : "0.0");
                            parsedValueOk = true;
-                           rawValue = 0.0;
+                           if (propertyIsOptional) {
+                              parsedValue = QVariant::fromValue<std::optional<double>>(std::nullopt);
+                           } else {
+                              parsedValue = QVariant::fromValue<double>(0.0);
+                           }
+                        } else {
+                           parsedValue = Optional::variantFromRaw(rawValue, propertyIsOptional);
                         }
-                        parsedValue = Optional::variantFromRaw(rawValue, propertyIsOptional);
                      }
                      break;
 

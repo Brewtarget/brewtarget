@@ -27,6 +27,9 @@
 #endif
 
 QString RecipeAdjustmentSalt::localisedName() { return tr("Salt Addition"); }
+QString RecipeAdjustmentSalt::localisedName_salt     () { return tr("Salt"       ); }
+QString RecipeAdjustmentSalt::localisedName_whenToAdd() { return tr("When To Add"); }
+
 // Similar to RecipeAdditionMisc, I think it's not helpful to include the word "salt" in the instance-specific name.
 // Eg if the addition were lactic acid, it would be a bit of a confusing name.
 QString RecipeAdjustmentSalt::instanceNameTemplate() { return tr("Addition of %1"); }
@@ -54,8 +57,8 @@ ObjectStore & RecipeAdjustmentSalt::getObjectStoreTypedInstance() const {
 TypeLookup const RecipeAdjustmentSalt::typeLookup {
    "RecipeAdjustmentSalt",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::RecipeAdjustmentSalt::salt     , RecipeAdjustmentSalt::salt                                  ),
-      PROPERTY_TYPE_LOOKUP_ENTRY      (PropertyNames::RecipeAdjustmentSalt::whenToAdd, RecipeAdjustmentSalt::m_whenToAdd, NonPhysicalQuantity::Enum),
+      PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdjustmentSalt, salt     , salt       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdjustmentSalt, whenToAdd, m_whenToAdd, ENUM_INFO(RecipeAdjustmentSalt::whenToAdd)),
    },
    // Parent classes lookup.  NB: IngredientInRecipe not NamedEntity!
    {&IngredientInRecipe::typeLookup,

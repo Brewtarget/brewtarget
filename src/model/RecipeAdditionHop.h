@@ -57,6 +57,8 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_hop();
+   static QString localisedName_use();
 
    /*!
     * \brief This is the old (BeerXML) way of specifying the stage at which the hop addition happens.  It is retained
@@ -146,7 +148,7 @@ public:
    virtual NamedEntity * ensureExists(BtStringConst const & property) override;
 
 protected:
-   // Note that we don't override isEqualTo, as we don't have any non-inherited member variables
+   // Note that we don't override compareWith, as we don't have any non-inherited member variables
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 };

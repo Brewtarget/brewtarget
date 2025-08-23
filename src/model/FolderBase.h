@@ -44,8 +44,9 @@ protected:
    // Note that, because this is static, it cannot be initialised inside the class definition
    static TypeLookup const typeLookup;
 
-   //! Non-virtual equivalent of isEqualTo
-   bool doIsEqualTo([[maybe_unused]] FolderBase const & other) const {
+   //! Non-virtual equivalent of compareWith
+   bool doCompareWith([[maybe_unused]] FolderBase const & other,
+                      [[maybe_unused]] QList<BtStringConst const *> * propertiesThatDiffer) const {
       // For the moment at least, we do not consider the fact that things are in different folders prevents them from
       // being equal.
       return true;
@@ -66,6 +67,10 @@ private:
    }
 
    ~FolderBase() = default;
+
+public:
+   static QString localisedName_folderPath() { return Derived::tr("Folder Path"); }
+
 
 protected:
    QString const & getFolderPath() const {
@@ -92,6 +97,7 @@ TypeLookup const FolderBase<Derived>::typeLookup {
       {&PropertyNames::FolderBase::folderPath,
        TypeInfo::construct<decltype(FolderBase<Derived>::m_folderPath)>(
           PropertyNames::FolderBase::folderPath,
+          FolderBase::localisedName_folderPath,
           TypeLookupOf<decltype(FolderBase<Derived>::m_folderPath)>::value
        )}
    },

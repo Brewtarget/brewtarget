@@ -28,6 +28,15 @@
 #include "utils/TypeTraits.h"
 
 
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::OwnedSet { inline BtStringConst const property{#property}; }
+AddPropertyName(items)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 struct OwnedSetOptions {
    /**
     * \brief In an enumerated set, items are in a strict order and are accordingly numbered (starting from 1) with a
@@ -108,9 +117,9 @@ template<class Owner,
 class OwnedSet {
 public:
 
-   //! Non-virtual equivalent of isEqualTo
-   bool doIsEqualTo(OwnedSet const & other) const {
-      return AUTO_LOG_COMPARE_FN(this, other, items);
+   //! Non-virtual equivalent of compareWith
+   bool doCompareWith(OwnedSet const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
+      return AUTO_PROPERTY_COMPARE_FN(this, other, items, PropertyNames::OwnedSet::items, propertiesThatDiffer);
    }
 
    /**

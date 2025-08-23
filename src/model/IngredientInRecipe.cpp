@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/IngredientInRecipe.cpp is part of Brewtarget, and is copyright the following authors 2024:
+ * model/IngredientInRecipe.cpp is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,20 +23,21 @@
 #endif
 
 QString IngredientInRecipe::localisedName() { return tr("Ingredient In Recipe"); }
+QString IngredientInRecipe::localisedName_ingredientId() { return tr("Ingredient ID"); }
 
-bool IngredientInRecipe::isEqualTo(NamedEntity const & other) const {
+bool IngredientInRecipe::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    IngredientInRecipe const & rhs = static_cast<IngredientInRecipe const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_ingredientId == rhs.m_ingredientId
+      AUTO_PROPERTY_COMPARE(this, rhs, m_ingredientId , PropertyNames::IngredientInRecipe::ingredientId , propertiesThatDiffer)
    );
 }
 
 TypeLookup const IngredientInRecipe::typeLookup {
    "IngredientInRecipe",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::IngredientInRecipe::ingredientId, IngredientInRecipe::m_ingredientId),
+      PROPERTY_TYPE_LOOKUP_ENTRY(IngredientInRecipe, ingredientId, m_ingredientId),
    },
    // Parent class lookup
    {&OwnedByRecipe::typeLookup}

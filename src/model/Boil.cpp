@@ -30,19 +30,23 @@
    #include "moc_Boil.cpp"
 #endif
 
-QString Boil::localisedName() { return tr("Boil"); }
+QString Boil::localisedName              () { return tr("Boil"         ); }
+QString Boil::localisedName_description  () { return tr("Description"  ); };
+QString Boil::localisedName_notes        () { return tr("Notes"        ); };
+QString Boil::localisedName_preBoilSize_l() { return tr("Pre-Boil Size"); };
+QString Boil::localisedName_boilTime_mins() { return tr("Boil Time"    ); };
 
-bool Boil::isEqualTo(NamedEntity const & other) const {
+bool Boil::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Boil const & rhs = static_cast<Boil const &>(other);
    // Base class will already have ensured names are equal
    return (
-      Utils::AutoCompare(this->m_description  , rhs.m_description  ) &&
-      Utils::AutoCompare(this->m_notes        , rhs.m_notes        ) &&
-      Utils::AutoCompare(this->m_preBoilSize_l, rhs.m_preBoilSize_l) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_description  , PropertyNames::Boil::description  , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_notes        , PropertyNames::Boil::notes        , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_preBoilSize_l, PropertyNames::Boil::preBoilSize_l, propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->FolderBase<Boil>::doIsEqualTo(rhs) &&
-      this->StepOwnerBase<Boil, BoilStep>::doIsEqualTo(rhs)
+      this->FolderBase<Boil>             ::doCompareWith(rhs, propertiesThatDiffer) &&
+      this->StepOwnerBase<Boil, BoilStep>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
 
@@ -53,11 +57,10 @@ ObjectStore & Boil::getObjectStoreTypedInstance() const {
 TypeLookup const Boil::typeLookup {
    "Boil",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Boil::description  , Boil::m_description  ,           NonPhysicalQuantity::String),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Boil::notes        , Boil::m_notes        ,           NonPhysicalQuantity::String),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Boil::preBoilSize_l, Boil::m_preBoilSize_l, Measurement::PhysicalQuantity::Volume),
-
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Boil::boilTime_mins, Boil::boilTime_mins, Measurement::PhysicalQuantity::Time),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Boil, description  , m_description  ,           NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Boil, notes        , m_notes        ,           NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Boil, preBoilSize_l, m_preBoilSize_l, Measurement::PhysicalQuantity::Volume, DisplayInfo::Precision{1}),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Boil, boilTime_mins, boilTime_mins  , Measurement::PhysicalQuantity::Time  , DisplayInfo::Precision{0}),
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,

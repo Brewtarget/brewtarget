@@ -30,7 +30,7 @@
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::RecipeAdditionMisc { inline BtStringConst const property{#property}; }
 AddPropertyName(misc)
-AddPropertyName(use) // Deprecated - retained only for BeerXML
+AddPropertyName(use ) // Deprecated - retained only for BeerXML
 
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -57,6 +57,8 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_misc();
+   static QString localisedName_use ();
 
    /*!
     * \brief This is the old (BeerXML) way of specifying the stage at which the misc addition happens.  It is retained
@@ -134,7 +136,7 @@ public:
    virtual NamedEntity * ensureExists(BtStringConst const & property) override;
 
 protected:
-   // Note that we don't override isEqualTo, as we don't have any non-inherited member variables
+   // Note that we don't override compareWith, as we don't have any non-inherited member variables
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 };

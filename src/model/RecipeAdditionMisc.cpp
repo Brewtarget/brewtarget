@@ -27,6 +27,9 @@
 #endif
 
 QString RecipeAdditionMisc::localisedName() { return tr("Misc Addition"); }
+QString RecipeAdditionMisc::localisedName_misc() { return tr("Misc"); }
+QString RecipeAdditionMisc::localisedName_use () { return tr("Use "); }
+
 // Unlike with hop, fermentable, yeast, etc, I don't think including the word "misc" or "miscellaneous" in the instance
 // name is helpful.
 QString RecipeAdditionMisc::instanceNameTemplate() { return tr("Addition of %1"); }
@@ -54,8 +57,8 @@ ObjectStore & RecipeAdditionMisc::getObjectStoreTypedInstance() const {
 TypeLookup const RecipeAdditionMisc::typeLookup {
    "RecipeAdditionMisc",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::RecipeAdditionMisc::misc, RecipeAdditionMisc::misc),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::RecipeAdditionMisc::use , RecipeAdditionMisc::use),
+      PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionMisc, misc, misc),
+      PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionMisc, use , use ),
    },
    // Parent classes lookup.  NB: RecipeAddition not NamedEntity!
    {&RecipeAddition::typeLookup,

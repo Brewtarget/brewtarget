@@ -64,7 +64,7 @@ protected:
    int getCurrentId() const;
 
 private:
-      QString const m_name;
+   QString const m_name;
 };
 
 

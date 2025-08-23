@@ -43,6 +43,8 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_startGravity_sg();
+   static QString localisedName_endGravity_sg  ();
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -74,7 +76,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 
 protected:
    // ⮜⮜⮜ All below added for BeerJSON support(!) ⮞⮞⮞

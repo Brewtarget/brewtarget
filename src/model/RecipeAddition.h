@@ -92,6 +92,12 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_stage          ();
+   static QString localisedName_step           ();
+   static QString localisedName_addAtTime_mins ();
+   static QString localisedName_addAtGravity_sg();
+   static QString localisedName_addAtAcidity_pH();
+   static QString localisedName_duration_mins  ();
 
    /**
     * Note that we rely on these values being in "chronological" order for \c lessThanByTime
@@ -213,7 +219,7 @@ public:
    virtual QString extraLogInfo() const override;
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 
 protected:
    Stage                 m_stage          ;

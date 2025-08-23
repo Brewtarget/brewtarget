@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BrewDayScrollWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * BrewDayScrollWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Carles Muñoz Gorriz <carlesmu@internautas.org>
  *   • Daniel Pettersson <pettson81@gmail.com>
@@ -450,8 +450,8 @@ QString BrewDayScrollWidget::buildInstructionTable() {
       auto ins = instructions[i];
 
       QString stepTime;
-      if (ins->interval() > 0.0 ) {
-         stepTime = Measurement::displayAmount(Measurement::Amount{ins->interval(), Measurement::Units::minutes}, 0);
+      if (ins->interval_mins() > 0.0 ) {
+         stepTime = Measurement::displayAmount(Measurement::Amount{ins->interval_mins(), Measurement::Units::minutes}, 0);
       } else {
          stepTime = "--";
       }

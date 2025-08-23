@@ -142,6 +142,12 @@ protected:
 
 public:
 
+   static QString localisedName_amount  () { return Derived::tr("Amount"   ); }
+   static QString localisedName_isWeight() { return Derived::tr("Is Weight"); }
+   static QString localisedName_measure () { return Derived::tr("Measure"  ); }
+   static QString localisedName_quantity() { return Derived::tr("Quantity" ); }
+   static QString localisedName_unit    () { return Derived::tr("Unit"     ); }
+
    using ValidMeasuresType = std::remove_const_t<decltype(IngredientClass::validMeasures)>;
    using AmountType = Measurement::ConstrainedAmount<ValidMeasuresType, IngredientClass::validMeasures>;
 
@@ -260,29 +266,35 @@ TypeLookup const IngredientAmount<Derived, IngredientClass>::typeLookup {
       {&PropertyNames::IngredientAmount::amount,
        TypeInfo::construct<decltype(IngredientAmount<Derived, IngredientClass>::m_amount)>(
           PropertyNames::IngredientAmount::amount,
+          IngredientAmount::localisedName_amount,
           TypeLookupOf<decltype(IngredientAmount<Derived, IngredientClass>::m_amount)>::value,
-          IngredientClass::validMeasures
+          IngredientClass::validMeasures,
+          DisplayInfo::Precision{1}
        )},
       {&PropertyNames::IngredientAmount::quantity,
        TypeInfo::construct<decltype(IngredientAmount<Derived, IngredientClass>::m_amount.quantity)>(
           PropertyNames::IngredientAmount::quantity,
+          IngredientAmount::localisedName_quantity,
           TypeLookupOf<decltype(IngredientAmount<Derived, IngredientClass>::m_amount.quantity)>::value,
           IngredientClass::validMeasures
        )},
       {&PropertyNames::IngredientAmount::unit,
        TypeInfo::construct<decltype(IngredientAmount<Derived, IngredientClass>::m_amount.unit)>(
           PropertyNames::IngredientAmount::unit,
+          IngredientAmount::localisedName_unit,
           TypeLookupOf<decltype(IngredientAmount<Derived, IngredientClass>::m_amount.unit)>::value
        )},
       {&PropertyNames::IngredientAmount::measure,
        TypeInfo::construct<MemberFunctionReturnType_t<&IngredientAmount::getMeasure>>(
           PropertyNames::IngredientAmount::measure,
+          IngredientAmount::localisedName_measure,
           TypeLookupOf<MemberFunctionReturnType_t<&IngredientAmount::getMeasure>>::value,
           NonPhysicalQuantity::Enum
        )},
       {&PropertyNames::IngredientAmount::isWeight,
        TypeInfo::construct<MemberFunctionReturnType_t<&IngredientAmount::amountIsWeight>>(
           PropertyNames::IngredientAmount::isWeight,
+          IngredientAmount::localisedName_isWeight,
           TypeLookupOf<MemberFunctionReturnType_t<&IngredientAmount::amountIsWeight>>::value,
           NonPhysicalQuantity::Bool
        )},

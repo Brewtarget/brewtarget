@@ -1718,6 +1718,8 @@
     <addaction name="separator"/>
     <addaction name="actionSalts"/>
     <addaction name="separator"/>
+    <addaction name="actionWaters"/>
+    <addaction name="separator"/>
     <addaction name="actionInventory"/>
    </widget>
    <widget class="QMenu" name="menuTools">
@@ -1787,7 +1789,10 @@
    <addaction name="actionHops"/>
    <addaction name="actionMiscs"/>
    <addaction name="actionYeasts"/>
+   <addaction name="separator"/>
    <addaction name="actionSalts"/>
+   <addaction name="separator"/>
+   <addaction name="actionWaters"/>
    <addaction name="separator"/>
    <addaction name="actionInventory"/>
    <addaction name="separator"/>
@@ -1916,6 +1921,16 @@
    </property>
    <property name="text">
     <string>S&amp;alts</string>
+   </property>
+  </action>
+
+  <action name="actionWaters">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/smallWater.svg</normaloff>:/images/smallWater.svg</iconset>
+   </property>
+   <property name="text">
+    <string>W&amp;aters</string>
    </property>
   </action>
 

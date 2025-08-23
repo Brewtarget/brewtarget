@@ -65,6 +65,8 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_freeRise();
+   static QString localisedName_vessel  ();
 
    //
    // This alias makees it easier to template a number of functions that are essentially the same for all subclasses of
@@ -119,7 +121,7 @@ public:
 signals:
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 
 private:
    std::optional<bool> m_freeRise;

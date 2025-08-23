@@ -66,7 +66,7 @@ AddPropertyName(tunTemp_c                )
  *
  * \brief Model class for a mash record in the database.
  *
- *        .:TBD:. Mashes have a freestanding existence and can, in principle, be shared between Recipes but the UI does
+ *        .:TBD:. Mashes have a freestanding existence and can be shared between Recipes but the UI does
  *        not currently enforce them having non-empty names.
  */
 class Mash : public NamedEntity,
@@ -86,6 +86,16 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_equipAdjust              ();
+   static QString localisedName_grainTemp_c              ();
+   static QString localisedName_mashTunSpecificHeat_calGC();
+   static QString localisedName_mashTunWeight_kg         ();
+   static QString localisedName_notes                    ();
+   static QString localisedName_ph                       ();
+   static QString localisedName_spargeTemp_c             ();
+   static QString localisedName_totalMashWater_l         ();
+   static QString localisedName_totalTime_mins           ();
+   static QString localisedName_tunTemp_c                ();
 
    //
    // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
@@ -157,7 +167,6 @@ public:
    void setEquipAdjust              (bool                  const   val);
 
    // Calculated getters
-///   unsigned int numMashSteps() const;
    double totalMashWater_l() const;
    //! \brief all the infusion water, excluding sparge
    double totalInfusionAmount_l() const;
@@ -175,7 +184,7 @@ signals:
    void stepsChanged();
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

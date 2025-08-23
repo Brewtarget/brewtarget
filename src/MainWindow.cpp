@@ -108,6 +108,7 @@
 #include "catalogs/MiscCatalog.h"
 #include "catalogs/SaltCatalog.h"
 #include "catalogs/StyleCatalog.h"
+#include "catalogs/WaterCatalog.h"
 #include "catalogs/YeastCatalog.h"
 #include "config.h"
 #include "database/Database.h"
@@ -126,10 +127,6 @@
 #include "editors/StyleEditor.h"
 #include "editors/WaterEditor.h"
 #include "editors/YeastEditor.h"
-///#include "qtModels/listModels/EquipmentListModel.h"
-///#include "qtModels/listModels/MashListModel.h"
-///#include "qtModels/listModels/StyleListModel.h"
-///#include "qtModels/listModels/WaterListModel.h"
 #include "measurement/ColorMethods.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
@@ -175,6 +172,15 @@
 #endif
 
 namespace {
+   using VoidFunctionNoParams = void (MainWindow::*)(void);
+
+   template<class NE> constexpr VoidFunctionNoParams callbackFunctionFor();
+   template<> constexpr VoidFunctionNoParams callbackFunctionFor<Style       >() { return &MainWindow::updateStyleInUi;        }
+   template<> constexpr VoidFunctionNoParams callbackFunctionFor<Equipment   >() { return &MainWindow::updateEquipmentInUi;    }
+   template<> constexpr VoidFunctionNoParams callbackFunctionFor<Mash        >() { return &MainWindow::updateMashInUi;         }
+   template<> constexpr VoidFunctionNoParams callbackFunctionFor<Boil        >() { return &MainWindow::updateBoilInUi;         }
+   template<> constexpr VoidFunctionNoParams callbackFunctionFor<Fermentation>() { return &MainWindow::updateFermentationInUi; }
+   template<> constexpr VoidFunctionNoParams callbackFunctionFor<Water       >() { return nullptr; }
 
    /**
     * \brief Generates the pop-up you see when you hover over the application logo image above the trees, which is
@@ -335,6 +341,7 @@ public:
       m_miscCatalog                = std::make_unique<MiscCatalog               >(&m_self);
       m_miscEditor                 = std::make_unique<MiscEditor                >(&m_self);
       m_saltCatalog                = std::make_unique<SaltCatalog               >(&m_self);
+      m_waterCatalog               = std::make_unique<WaterCatalog              >(&m_self);
       m_inventoryWindow            = std::make_unique<InventoryWindow           >(&m_self);
       m_saltEditor                 = std::make_unique<SaltEditor                >(&m_self);
       m_styleCatalog               = std::make_unique<StyleCatalog              >(&m_self);
@@ -610,20 +617,6 @@ public:
          return;
       }
 
-///      // HERE
-///      // This is some clean up work. REMOVE FROM HERE TO THERE
-///      if ( bNote->projPoints() < 15 )
-///      {
-///         double pnts = bNote->projPoints();
-///         bNote->setProjPoints(pnts);
-///      }
-///      if ( bNote->effIntoBK_pct() < 10 )
-///      {
-///         bNote->calculateEffIntoBK_pct();
-///         bNote->calculateBrewHouseEff_pct();
-///      }
-///      // THERE
-
       Recipe* parent  = ObjectStoreWrapper::getByIdRaw<Recipe>(bNote->recipeId());
       QModelIndex pNdx = this->m_self.treeView_recipe->parentIndex(index);
 
@@ -718,6 +711,7 @@ public:
    std::unique_ptr<ScaleRecipeTool           > m_recipeScaler          ;
    std::unique_ptr<StrikeWaterDialog         > m_strikeWaterDialog     ;
    std::unique_ptr<SaltCatalog               > m_saltCatalog           ;
+   std::unique_ptr<WaterCatalog              > m_waterCatalog          ;
    std::unique_ptr<InventoryWindow           > m_inventoryWindow       ;
    std::unique_ptr<SaltEditor                > m_saltEditor            ;
    std::unique_ptr<StyleCatalog              > m_styleCatalog          ;
@@ -1172,6 +1166,7 @@ void MainWindow::setupTriggers() {
    connect(actionMiscs                     , &QAction::triggered, this->pimpl->m_miscCatalog.get()          , &QWidget::show                     ); // > View > Miscs
    connect(actionYeasts                    , &QAction::triggered, this->pimpl->m_yeastCatalog.get()         , &QWidget::show                     ); // > View > Yeasts
    connect(actionSalts                     , &QAction::triggered, this->pimpl->m_saltCatalog.get()          , &QWidget::show                     ); // > View > Salts
+   connect(actionWaters                    , &QAction::triggered, this->pimpl->m_waterCatalog.get()         , &QWidget::show                     ); // > View > Waters
    connect(actionInventory                 , &QAction::triggered, this->pimpl->m_inventoryWindow.get()      , &QWidget::show                     ); // > View > Inventory
    connect(actionOptions                   , &QAction::triggered, this->pimpl->m_optionDialog.get()         , &OptionDialog::show                ); // > Tools > Options
 //   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual);                                               // > About > Manual
@@ -1227,6 +1222,7 @@ void MainWindow::setupClicks() {
    connect(this->pushButton_addMisc       , &QAbstractButton::clicked, this->pimpl->        m_miscCatalog.get(), &QWidget::show);
    connect(this->pushButton_addYeast      , &QAbstractButton::clicked, this->pimpl->       m_yeastCatalog.get(), &QWidget::show);
    connect(this->pushButton_addSalt       , &QAbstractButton::clicked, this->pimpl->        m_saltCatalog.get(), &QWidget::show);
+   // NB: We don't currently have pushButton_addWater
 
    connect(this->pushButton_removeFerm    , &QAbstractButton::clicked, this, &MainWindow::removeSelectedFermentableAddition);
    connect(this->pushButton_removeHop     , &QAbstractButton::clicked, this, &MainWindow::removeSelectedHopAddition        );
@@ -1479,6 +1475,8 @@ void MainWindow::lockRecipe(int state) {
    this->pimpl-> m_miscCatalog->setEnableAddToRecipe(enabled);
    this->pimpl->m_yeastCatalog->setEnableAddToRecipe(enabled);
    this->pimpl-> m_saltCatalog->setEnableAddToRecipe(enabled);
+   // NB: Don't yet support add to recipe from water catalog
+
    // TODO: mashes still need dealing with
    //
    return;
@@ -1663,108 +1661,81 @@ void MainWindow::displayRangesEtcForCurrentRecipeStyle() {
 // TODO: Would be good to harmonise how these updateRecipeFoo and dropRecipeFoo functions work
 //
 
-void MainWindow::updateRecipeStyle() {
-   if (!this->pimpl->m_recipeObs) {
-      return;
-   }
-
-   auto selected = this->styleComboBox->getItem();
-   if (selected) {
+template<class NE> void MainWindow::setForRecipe(std::shared_ptr<NE> val) {
+   if (val) {
       Undoable::doOrRedoUpdate(
-         newRelationalUndoableUpdate(*this->pimpl->m_recipeObs,
-                                     &Recipe::setStyle,
-                                     this->pimpl->m_recipeObs->style(),
-                                     selected,
-                                     &MainWindow::displayRangesEtcForCurrentRecipeStyle,
-                                     tr("Change Recipe Style"))
+         newRelationalUndoableUpdate(
+            *this->pimpl->m_recipeObs,
+            &Recipe::set<NE>,
+            this->pimpl->m_recipeObs->get<NE>(),
+            val,
+            callbackFunctionFor<NE>(),
+            tr("Change %1 on %2 Recipe").arg(NE::localisedName()).arg(this->pimpl->m_recipeObs->name())
+         )
       );
    }
    return;
 }
 
-void MainWindow::updateRecipeMash() {
+template<> std::shared_ptr<Style       > MainWindow::getSelected() { return this->       styleComboBox->getItem(); }
+template<> std::shared_ptr<Equipment   > MainWindow::getSelected() { return this->   equipmentComboBox->getItem(); }
+template<> std::shared_ptr<Mash        > MainWindow::getSelected() { return this->        mashComboBox->getItem(); }
+template<> std::shared_ptr<Boil        > MainWindow::getSelected() { return this->        boilComboBox->getItem(); }
+template<> std::shared_ptr<Fermentation> MainWindow::getSelected() { return this->fermentationComboBox->getItem(); }
+template<> std::shared_ptr<Water       > MainWindow::getSelected() { return nullptr; }
+
+template<class NE> void MainWindow::updateRecipeFromSelected() {
    if (!this->pimpl->m_recipeObs) {
       return;
    }
+   std::shared_ptr<NE> selected = this->getSelected<NE>();
+   this->setForRecipe(selected);
+   return;
+}
+//
+// Instantiate the above template function for the types that are going to use it
+// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header.)
+//
+// The specialisation for Water below is not currently hugely meaningful, but it's simpler to have it as a no-op than
+// add a bunch of special case code in the CatalogBase class.
+//
+template void MainWindow::updateRecipeFromSelected<Style       >();
+template void MainWindow::updateRecipeFromSelected<Equipment   >();
+template void MainWindow::updateRecipeFromSelected<Mash        >();
+template void MainWindow::updateRecipeFromSelected<Boil        >();
+template void MainWindow::updateRecipeFromSelected<Fermentation>();
+template void MainWindow::updateRecipeFromSelected<Water       >();
 
-   auto selected = this->mashComboBox->getItem();
-   if (selected) {
-      Undoable::doOrRedoUpdate(
-         newRelationalUndoableUpdate(*this->pimpl->m_recipeObs,
-                                     &Recipe::setMash,
-                                     this->pimpl->m_recipeObs->mash(),
-                                     selected,
-                                     nullptr,
-                                     tr("Change recipe's mash profile"))
-      );
+void MainWindow::updateRecipeStyle       () { this->updateRecipeFromSelected<Style       >(); return; }
+void MainWindow::updateRecipeEquipment   () { this->updateRecipeFromSelected<Equipment   >(); return; }
+void MainWindow::updateRecipeMash        () { this->updateRecipeFromSelected<Mash        >(); return; }
+void MainWindow::updateRecipeBoil        () { this->updateRecipeFromSelected<Boil        >(); return; }
+void MainWindow::updateRecipeFermentation() { this->updateRecipeFromSelected<Fermentation>(); return; }
+
+void MainWindow::updateStyleInUi() {
+   if (this->pimpl->m_recipeObs) {
+      auto style = this->pimpl->m_recipeObs->style();
+      this->styleComboBox->setItem(style);
+      this->displayRangesEtcForCurrentRecipeStyle();
    }
    return;
 }
 
-void MainWindow::updateRecipeBoil() {
-   if (!this->pimpl->m_recipeObs) {
-      return;
-   }
-
-   auto selected = this->boilComboBox->getItem();
-   if (selected) {
-      Undoable::doOrRedoUpdate(
-         newRelationalUndoableUpdate(*this->pimpl->m_recipeObs,
-                                     &Recipe::setBoil,
-                                     this->pimpl->m_recipeObs->boil(),
-                                     selected,
-                                     nullptr,
-                                     tr("Change recipe's boil profile"))
-      );
-   }
-   return;
-}
-
-void MainWindow::updateRecipeFermentation() {
-   if (!this->pimpl->m_recipeObs) {
-      return;
-   }
-
-   auto selected = this->fermentationComboBox->getItem();
-   if (selected) {
-      Undoable::doOrRedoUpdate(
-         newRelationalUndoableUpdate(*this->pimpl->m_recipeObs,
-                                     &Recipe::setFermentation,
-                                     this->pimpl->m_recipeObs->fermentation(),
-                                     selected,
-                                     nullptr,
-                                     tr("Change recipe's fermentation profile"))
-      );
-   }
-   return;
-}
-
-void MainWindow::updateRecipeEquipment() {
-   if (!this->pimpl->m_recipeObs) {
-      return;
-   }
-
-   auto selected = this->equipmentComboBox->getItem();
-   if (selected) {
-      Undoable::doOrRedoUpdate(
-         newRelationalUndoableUpdate(*this->pimpl->m_recipeObs,
-                                     &Recipe::setEquipment,
-                                     this->pimpl->m_recipeObs->equipment(),
-                                     selected,
-                                     &MainWindow::updateEquipmentSelector,
-                                     tr("Change Recipe Equipment"))
-      );
-   }
-   return;
-}
-
-void MainWindow::updateEquipmentSelector() {
-   if (this->pimpl->m_recipeObs != nullptr) {
+void MainWindow::updateEquipmentInUi() {
+   if (this->pimpl->m_recipeObs) {
       auto equipment = this->pimpl->m_recipeObs->equipment();
       this->equipmentComboBox->setItem(equipment);
    }
    return;
 }
+
+//
+// Note that mashButton, boilButton, fermentationButton do the right thing and update themselves based on signals.  So
+// we just have to do the combo boxes here.
+//
+void MainWindow::updateMashInUi        () { if (this->pimpl->m_recipeObs) { this->        mashComboBox->setItem(this->pimpl->m_recipeObs->        mash()); } return; }
+void MainWindow::updateBoilInUi        () { if (this->pimpl->m_recipeObs) { this->        boilComboBox->setItem(this->pimpl->m_recipeObs->        boil()); } return; }
+void MainWindow::updateFermentationInUi() { if (this->pimpl->m_recipeObs) { this->fermentationComboBox->setItem(this->pimpl->m_recipeObs->fermentation()); } return; }
 
 void MainWindow::droppedRecipeEquipment(Equipment * kitRaw) {
    if (this->pimpl->m_recipeObs == nullptr) {
@@ -1783,7 +1754,7 @@ void MainWindow::droppedRecipeEquipment(Equipment * kitRaw) {
                                                       &Recipe::setEquipment,
                                                       this->pimpl->m_recipeObs->equipment(),
                                                       kit,
-                                                      &MainWindow::updateEquipmentSelector,
+                                                      &MainWindow::updateEquipmentInUi,
                                                       tr("Change Recipe Kit"));
 
    // Keep the mash tun weight and specific heat up to date.
@@ -2023,6 +1994,7 @@ template<>         Hop::CatalogClass & MainWindow::getCatalog<        Hop>() con
 template<>        Misc::CatalogClass & MainWindow::getCatalog<       Misc>() const { return *this->pimpl->       m_miscCatalog; }
 template<>        Salt::CatalogClass & MainWindow::getCatalog<       Salt>() const { return *this->pimpl->       m_saltCatalog; }
 template<>       Style::CatalogClass & MainWindow::getCatalog<      Style>() const { return *this->pimpl->      m_styleCatalog; }
+template<>       Water::CatalogClass & MainWindow::getCatalog<      Water>() const { return *this->pimpl->      m_waterCatalog; }
 template<>       Yeast::CatalogClass & MainWindow::getCatalog<      Yeast>() const { return *this->pimpl->      m_yeastCatalog; }
 
 /**
@@ -2085,11 +2057,11 @@ void MainWindow::editRedo() {
    return;
 }
 
-template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionHop        > itemToRemove) { this->pimpl->        m_hopAdditionsVeriTable.remove(itemToRemove); return; }
-template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionFermentable> itemToRemove) { this->pimpl->m_fermentableAdditionsVeriTable.remove(itemToRemove); return; }
-template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionMisc       > itemToRemove) { this->pimpl->       m_miscAdditionsVeriTable.remove(itemToRemove); return; }
-template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionYeast      > itemToRemove) { this->pimpl->      m_yeastAdditionsVeriTable.remove(itemToRemove); return; }
-template<> void MainWindow::remove(std::shared_ptr<RecipeAdjustmentSalt     > itemToRemove) { this->pimpl->       m_saltAdditionsVeriTable.remove(itemToRemove); return; }
+template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionHop        > item) { this->pimpl->        m_hopAdditionsVeriTable.remove(item); return; }
+template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionFermentable> item) { this->pimpl->m_fermentableAdditionsVeriTable.remove(item); return; }
+template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionMisc       > item) { this->pimpl->       m_miscAdditionsVeriTable.remove(item); return; }
+template<> void MainWindow::remove(std::shared_ptr<RecipeAdditionYeast      > item) { this->pimpl->      m_yeastAdditionsVeriTable.remove(item); return; }
+template<> void MainWindow::remove(std::shared_ptr<RecipeAdjustmentSalt     > item) { this->pimpl->       m_saltAdditionsVeriTable.remove(item); return; }
 
 void MainWindow::editFermentableOfSelectedFermentableAddition() { this->pimpl->m_fermentableAdditionsVeriTable.editSelected(); return; }
 void MainWindow::editMiscOfSelectedMiscAddition              () { this->pimpl->       m_miscAdditionsVeriTable.editSelected(); return; }

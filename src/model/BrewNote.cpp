@@ -43,19 +43,49 @@
    #include "moc_BrewNote.cpp"
 #endif
 
-QString BrewNote::localisedName() { return tr("Brew Note"); }
+QString BrewNote::localisedName                  () { return tr("Brew Note"                        ); }
+QString BrewNote::localisedName_abv              () { return tr("ABV"                              ); }
+QString BrewNote::localisedName_attenuation      () { return tr("Attenuation"                      ); }
+QString BrewNote::localisedName_boilOff_l        () { return tr("Boil-Off"                         ); }
+QString BrewNote::localisedName_brewDate         () { return tr("Brew Date"                        ); }
+QString BrewNote::localisedName_brewhouseEff_pct () { return tr("Brewhouse Efficiency"             ); }
+QString BrewNote::localisedName_effIntoBK_pct    () { return tr("Efficiency Into Boil Kettle"      ); }
+QString BrewNote::localisedName_fermentDate      () { return tr("Ferment Date"                     ); }
+QString BrewNote::localisedName_fg               () { return tr("FG"                               ); }
+QString BrewNote::localisedName_finalVolume_l    () { return tr("Final Volume"                     ); }
+QString BrewNote::localisedName_mashFinTemp_c    () { return tr("Mash Final Temperature"           ); }
+QString BrewNote::localisedName_notes            () { return tr("Notes"                            ); }
+QString BrewNote::localisedName_og               () { return tr("OG"                               ); }
+QString BrewNote::localisedName_pitchTemp_c      () { return tr("Pitch Temp"                       ); }
+QString BrewNote::localisedName_postBoilVolume_l () { return tr("Post-Boil Volume"                 ); }
+QString BrewNote::localisedName_projABV_pct      () { return tr("Projected ABV"                    ); }
+QString BrewNote::localisedName_projAtten        () { return tr("Projected Attenuation"            ); }
+QString BrewNote::localisedName_projBoilGrav     () { return tr("Projected Boil Gravity"           ); }
+QString BrewNote::localisedName_projEff_pct      () { return tr("Projected Efficiency"             ); }
+QString BrewNote::localisedName_projFermPoints   () { return tr("Projected Fermentation Points"    ); }
+QString BrewNote::localisedName_projFg           () { return tr("Projected FG"                     ); }
+QString BrewNote::localisedName_projMashFinTemp_c() { return tr("Projected Mash Final Temperature" ); }
+QString BrewNote::localisedName_projOg           () { return tr("Projected OG"                     ); }
+QString BrewNote::localisedName_projPoints       () { return tr("Projected Points"                 ); }
+QString BrewNote::localisedName_projStrikeTemp_c () { return tr("Projected Strike Temperature"     ); }
+QString BrewNote::localisedName_projVolIntoBK_l  () { return tr("Projected Volume Into Boil Kettle"); }
+QString BrewNote::localisedName_projVolIntoFerm_l() { return tr("Projected Volume Into Fermentor"  ); }
+QString BrewNote::localisedName_sg               () { return tr("SG"                               ); }
+QString BrewNote::localisedName_strikeTemp_c     () { return tr("Strike Temperature"               ); }
+QString BrewNote::localisedName_volumeIntoBK_l   () { return tr("Volume Into Boil Kettle"          ); }
+QString BrewNote::localisedName_volumeIntoFerm_l () { return tr("Volume Into Fermentor"            ); }
 
 // BrewNote doesn't use its name field, so we sort by brew date
 // TBD: Could consider copying date into name field and leaving the default ordering
 bool BrewNote::operator<(BrewNote const & other) const { return this->m_brewDate < other.m_brewDate; }
 bool BrewNote::operator>(BrewNote const & other) const { return this->m_brewDate > other.m_brewDate; }
 
-bool BrewNote::isEqualTo(NamedEntity const & other) const {
+bool BrewNote::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    BrewNote const & rhs = static_cast<BrewNote const &>(other);
    // Base class will already have ensured names are equal
    return (
-      this->m_brewDate == rhs.m_brewDate
+      AUTO_PROPERTY_COMPARE(this, rhs, m_brewDate, PropertyNames::BrewNote::brewDate, propertiesThatDiffer)
    );
 }
 
@@ -67,36 +97,36 @@ TypeLookup const BrewNote::typeLookup {
    "BrewNote",
    {
       // Note that we need Enums to be treated as ints for the purposes of type lookup
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::abv              , BrewNote::m_abv              ,           NonPhysicalQuantity::Percentage ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::attenuation      , BrewNote::m_attenuation      ,           NonPhysicalQuantity::Percentage ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::boilOff_l        , BrewNote::m_boilOff_l        , Measurement::PhysicalQuantity::Volume     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::brewDate         , BrewNote::m_brewDate         ,           NonPhysicalQuantity::Date       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::brewhouseEff_pct , BrewNote::m_brewhouseEff_pct ,           NonPhysicalQuantity::Percentage ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::effIntoBK_pct    , BrewNote::m_effIntoBK_pct    ,           NonPhysicalQuantity::Percentage ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::fermentDate      , BrewNote::m_fermentDate      ,           NonPhysicalQuantity::Date       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::fg               , BrewNote::m_fg               , Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::finalVolume_l    , BrewNote::m_finalVolume_l    , Measurement::PhysicalQuantity::Volume     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::mashFinTemp_c    , BrewNote::m_mashFinTemp_c    , Measurement::PhysicalQuantity::Temperature),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::notes            , BrewNote::m_notes                                                        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::og               , BrewNote::m_og               , Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::pitchTemp_c      , BrewNote::m_pitchTemp_c      , Measurement::PhysicalQuantity::Temperature),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::postBoilVolume_l , BrewNote::m_postBoilVolume_l , Measurement::PhysicalQuantity::Volume     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projABV_pct      , BrewNote::m_projABV_pct      ,           NonPhysicalQuantity::Percentage ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projAtten        , BrewNote::m_projAtten        ,           NonPhysicalQuantity::Percentage ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projBoilGrav     , BrewNote::m_projBoilGrav     , Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projEff_pct      , BrewNote::m_projEff_pct      ,           NonPhysicalQuantity::Percentage ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projFermPoints   , BrewNote::m_projFermPoints                                               ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projFg           , BrewNote::m_projFg           , Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projMashFinTemp_c, BrewNote::m_projMashFinTemp_c, Measurement::PhysicalQuantity::Temperature),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projOg           , BrewNote::m_projOg           , Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projPoints       , BrewNote::m_projPoints                                                   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projStrikeTemp_c , BrewNote::m_projStrikeTemp_c , Measurement::PhysicalQuantity::Temperature),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projVolIntoBK_l  , BrewNote::m_projVolIntoBK_l  , Measurement::PhysicalQuantity::Volume     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::projVolIntoFerm_l, BrewNote::m_projVolIntoFerm_l, Measurement::PhysicalQuantity::Volume     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::sg               , BrewNote::m_sg               , Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::strikeTemp_c     , BrewNote::m_strikeTemp_c     , Measurement::PhysicalQuantity::Temperature),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::volumeIntoBK_l   , BrewNote::m_volumeIntoBK_l   , Measurement::PhysicalQuantity::Volume     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::BrewNote::volumeIntoFerm_l , BrewNote::m_volumeIntoFerm_l , Measurement::PhysicalQuantity::Volume     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, abv              , m_abv              ,           NonPhysicalQuantity::Percentage ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, attenuation      , m_attenuation      ,           NonPhysicalQuantity::Percentage ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, boilOff_l        , m_boilOff_l        , Measurement::PhysicalQuantity::Volume     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, brewDate         , m_brewDate         ,           NonPhysicalQuantity::Date       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, brewhouseEff_pct , m_brewhouseEff_pct ,           NonPhysicalQuantity::Percentage ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, effIntoBK_pct    , m_effIntoBK_pct    ,           NonPhysicalQuantity::Percentage ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, fermentDate      , m_fermentDate      ,           NonPhysicalQuantity::Date       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, fg               , m_fg               , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, finalVolume_l    , m_finalVolume_l    , Measurement::PhysicalQuantity::Volume     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, mashFinTemp_c    , m_mashFinTemp_c    , Measurement::PhysicalQuantity::Temperature),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, notes            , m_notes                                                        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, og               , m_og               , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, pitchTemp_c      , m_pitchTemp_c      , Measurement::PhysicalQuantity::Temperature),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, postBoilVolume_l , m_postBoilVolume_l , Measurement::PhysicalQuantity::Volume     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projABV_pct      , m_projABV_pct      ,           NonPhysicalQuantity::Percentage ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projAtten        , m_projAtten        ,           NonPhysicalQuantity::Percentage ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projBoilGrav     , m_projBoilGrav     , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projEff_pct      , m_projEff_pct      ,           NonPhysicalQuantity::Percentage ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projFermPoints   , m_projFermPoints                                               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projFg           , m_projFg           , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projMashFinTemp_c, m_projMashFinTemp_c, Measurement::PhysicalQuantity::Temperature),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projOg           , m_projOg           , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projPoints       , m_projPoints                                                   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projStrikeTemp_c , m_projStrikeTemp_c , Measurement::PhysicalQuantity::Temperature),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projVolIntoBK_l  , m_projVolIntoBK_l  , Measurement::PhysicalQuantity::Volume     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, projVolIntoFerm_l, m_projVolIntoFerm_l, Measurement::PhysicalQuantity::Volume     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, sg               , m_sg               , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, strikeTemp_c     , m_strikeTemp_c     , Measurement::PhysicalQuantity::Temperature),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, volumeIntoBK_l   , m_volumeIntoBK_l   , Measurement::PhysicalQuantity::Volume     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, volumeIntoFerm_l , m_volumeIntoFerm_l , Measurement::PhysicalQuantity::Volume     ),
    },
    // Parent class lookup
    {&OwnedByRecipe::typeLookup}

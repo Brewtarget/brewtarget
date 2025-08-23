@@ -48,6 +48,9 @@ namespace {
 }
 
 QString Salt::localisedName() { return tr("Salt"); }
+QString Salt::localisedName_isAcid     () { return tr("Is Acid"     ); }
+QString Salt::localisedName_percentAcid() { return tr("Percent Acid"); }
+QString Salt::localisedName_type       () { return tr("Type"        ); }
 
 EnumStringMapping const Salt::typeStringMapping {
    {Salt::Type::CaCl2         , "CaCl2"         },
@@ -79,12 +82,13 @@ EnumStringMapping const Salt::typeDisplayNames {
    {Salt::Type::AcidulatedMalt         , tr("Acidulated Malt"                        )},
 };
 
-bool Salt::isEqualTo(NamedEntity const & other) const {
+bool Salt::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Salt const & rhs = static_cast<Salt const &>(other);
    // Base class will already have ensured names are equal
    return (
-      AUTO_LOG_COMPARE(this, rhs, m_type)
+      AUTO_PROPERTY_COMPARE(this, rhs, m_type       , PropertyNames::Salt::type       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_percentAcid, PropertyNames::Salt::percentAcid, propertiesThatDiffer)
    );
 }
 
@@ -95,8 +99,9 @@ ObjectStore & Salt::getObjectStoreTypedInstance() const {
 TypeLookup const Salt::typeLookup {
    "Salt",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Salt::type       , Salt::m_type        , NonPhysicalQuantity::Enum      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Salt::percentAcid, Salt::m_percent_acid, NonPhysicalQuantity::Percentage),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Salt, type       , m_type       , ENUM_INFO(Salt::type)          ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Salt, isAcid     , isAcid       , BOOL_INFO(tr("No"), tr("Yes")) ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Salt, percentAcid, m_percentAcid, NonPhysicalQuantity::Percentage),
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,
@@ -107,7 +112,7 @@ static_assert(std::is_base_of<Ingredient, Salt>::value);
 Salt::Salt(QString name) :
    Ingredient    {name},
    m_type        {Salt::Type::CaCl2},
-   m_percent_acid{std::nullopt} {
+   m_percentAcid{std::nullopt} {
 
    CONSTRUCTOR_END
    return;
@@ -116,7 +121,7 @@ Salt::Salt(QString name) :
 Salt::Salt(NamedParameterBundle const & namedParameterBundle) :
    Ingredient       {namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_type        , namedParameterBundle, PropertyNames::Salt::type       ),
-   SET_REGULAR_FROM_NPB (m_percent_acid, namedParameterBundle, PropertyNames::Salt::percentAcid) {
+   SET_REGULAR_FROM_NPB (m_percentAcid, namedParameterBundle, PropertyNames::Salt::percentAcid) {
 
    CONSTRUCTOR_END
    return;
@@ -125,7 +130,7 @@ Salt::Salt(NamedParameterBundle const & namedParameterBundle) :
 Salt::Salt(Salt const & other) :
    Ingredient    {other               },
    m_type        {other.m_type        },
-   m_percent_acid{other.m_percent_acid} {
+   m_percentAcid{other.m_percentAcid} {
 
    CONSTRUCTOR_END
    return;
@@ -153,7 +158,7 @@ Measurement::PhysicalQuantity Salt::suggestedMeasureFor(Salt::Type const type) {
 
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
 Salt::Type            Salt::type       () const { return this->m_type        ; }
-std::optional<double> Salt::percentAcid() const { return this->m_percent_acid; }
+std::optional<double> Salt::percentAcid() const { return this->m_percentAcid; }
 
 bool Salt::typeIsAcid(Salt::Type const type) {
    switch (type) {
@@ -186,7 +191,7 @@ Measurement::PhysicalQuantity Salt::suggestedMeasure() const {
 // 2023-06-02: MY: I've moved the logic that "automatically" works out the acidity from SaltTableModel to here.  But TBD
 // I think we want to take another look at this at some point.
 void Salt::setType(Salt::Type type) {
-   std::optional<double> newPercentAcid = m_percent_acid;
+   std::optional<double> newPercentAcid = m_percentAcid;
    SET_AND_NOTIFY(PropertyNames::Salt::type, this->m_type, type);
    if (!this->isAcid()) {
       newPercentAcid = std::nullopt;
@@ -211,7 +216,7 @@ void Salt::setType(Salt::Type type) {
 
 void Salt::setPercentAcid(std::optional<double> val) {
    // .:TBD:. Maybe we should check here that we are an acid...
-   SET_AND_NOTIFY(PropertyNames::Salt::percentAcid, this->m_percent_acid, val);
+   SET_AND_NOTIFY(PropertyNames::Salt::percentAcid, this->m_percentAcid, val);
 }
 
 //====== maths ===========

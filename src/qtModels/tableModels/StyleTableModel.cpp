@@ -31,7 +31,7 @@ StyleTableModel::StyleTableModel(QTableView* parent, bool editable) :
       editable,
       {
          TABLE_MODEL_HEADER(Style, Name            , tr("Name"           ), PropertyNames::NamedEntity::name            ),
-         TABLE_MODEL_HEADER(Style, Type            , tr("Type"           ), PropertyNames::Style::type                  , EnumInfo{Style::typeStringMapping, Style::typeDisplayNames}),
+         TABLE_MODEL_HEADER(Style, Type            , tr("Type"           ), PropertyNames::Style::type                  /*, EnumInfo{Style::typeStringMapping, Style::typeDisplayNames}*/),
          TABLE_MODEL_HEADER(Style, Category        , tr("Category"       ), PropertyNames::Style::category              ),
          TABLE_MODEL_HEADER(Style, CategoryNumber  , tr("Category Number"), PropertyNames::Style::categoryNumber        ),
          TABLE_MODEL_HEADER(Style, StyleLetter     , tr("Style Letter"   ), PropertyNames::Style::styleLetter           ),

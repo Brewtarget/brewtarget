@@ -812,11 +812,11 @@ namespace {
          {ObjectStore::FieldType::Bool  , "deleted"      , PropertyNames::NamedEntity::deleted   },
          {ObjectStore::FieldType::Int   , "recipe_id"    , PropertyNames::EnumeratedBase::ownerId   , &PRIMARY_TABLE<Recipe>},
          {ObjectStore::FieldType::Int   , "step_number"  , PropertyNames::EnumeratedBase::stepNumber},
-         {ObjectStore::FieldType::String, "directions"   , PropertyNames::Instruction::directions},
-         {ObjectStore::FieldType::Bool  , "has_timer"    , PropertyNames::Instruction::hasTimer  },
-         {ObjectStore::FieldType::String, "timer_value"  , PropertyNames::Instruction::timerValue},
-         {ObjectStore::FieldType::Bool  , "completed"    , PropertyNames::Instruction::completed },
-         {ObjectStore::FieldType::Double, "interval_mins", PropertyNames::Instruction::interval  },
+         {ObjectStore::FieldType::String, "directions"   , PropertyNames::Instruction::directions   },
+         {ObjectStore::FieldType::Bool  , "has_timer"    , PropertyNames::Instruction::hasTimer     },
+         {ObjectStore::FieldType::String, "timer_value"  , PropertyNames::Instruction::timerValue   },
+         {ObjectStore::FieldType::Bool  , "completed"    , PropertyNames::Instruction::completed    },
+         {ObjectStore::FieldType::Double, "interval_mins", PropertyNames::Instruction::interval_mins},
       }
    };
    // Instructions don't have children

@@ -100,6 +100,22 @@ public:
     */
    template<class NE> NE::CatalogClass & getCatalog() const;
 
+   /**
+    * \brief Set the \c Style / \c Equipment / \c Mash / \c Boil / \c Fermentation for the current \c Recipe.
+    */
+   template<class NE> void setForRecipe(std::shared_ptr<NE> val);
+
+   /**
+    * \brief Get the \c Style / \c Equipment / \c Mash / \c Boil / \c Fermentation indicated by the relevant combo box.
+    */
+   template<class NE> std::shared_ptr<NE> getSelected();
+
+   /**
+    * \brief Update the \c Style / \c Equipment / \c Mash / \c Boil / \c Fermentation for the current \c Recipe to that
+    *        given by the relevant combo box.
+    */
+   template<class NE> void updateRecipeFromSelected();
+
 public slots:
 
    //! \brief Accepts Recipe changes, and takes appropriate action to show the changes.
@@ -216,8 +232,6 @@ public slots:
 
    void redisplayLabel();
 
-   void updateEquipmentSelector();
-
    //! \brief Set all the things based on a drop event
    void droppedRecipeEquipment(Equipment * kit  );
    void droppedRecipeStyle    (Style     * style);
@@ -246,6 +260,16 @@ public slots:
    void checkAgainstLatestRelease(QVersionNumber const latestRelease);
 
 public:
+   //
+   // TBD: This is all a bit clunky, as ideally the UI should update itself when things change on the Recipe.
+   //      We should fix BtComboBoxNamedEntityBase to allow it to observe a Recipe.
+   //
+   void updateStyleInUi();
+   void updateEquipmentInUi();
+   void updateMashInUi();
+   void updateBoilInUi();
+   void updateFermentationInUi();
+
    /*!
     * \brief Make the widgets in the window update changes.
     *

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/BtStringConst.h is part of Brewtarget, and is copyright the following authors 2021-2023:
+ * utils/BtStringConst.h is part of Brewtarget, and is copyright the following authors 2021-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -30,9 +30,9 @@ class QTextStream;
  *        just pointers to the same memory location) but not always (because one particular compiler will have done its
  *        optimisation differently and there are actually two different locations in memory holding identical strings).
  *
- *        In a Qt application such as ours, you might thing we could use QString const instead of char const * const.
- *        This has two disadvantages.  Firstly, we sometimes need the constant as a char const * -- eg to pass to Qt
- *        property functions such as QObject::property() and QObject::setProperty().  Although char const * into a
+ *        In a Qt application such as ours, you might think we could use QString const instead of char const * const.
+ *        However, this has two disadvantages.  Firstly, we sometimes need the constant as a char const * -- eg to pass
+ *        to Qt property functions such as QObject::property() and QObject::setProperty().  Although char const * into a
  *        QString is trivial, doing the reverse, ie getting getting char const * out of a QString, is a bit painful
  *        (because QString is inherently UTF-16 so you end up creating implicit or explicit temporaries to hold char *
  *        data etc).

@@ -24,24 +24,26 @@
 #endif
 
 QString StepExtended::localisedName() { return tr("Extended Step"); }
+QString StepExtended::localisedName_startGravity_sg() { return tr("Start Gravity"); }
+QString StepExtended::localisedName_endGravity_sg  () { return tr("End Gravity"  ); }
 
-bool StepExtended::isEqualTo(NamedEntity const & other) const {
+bool StepExtended::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    StepExtended const & rhs = static_cast<StepExtended const &>(other);
    // Base class will already have ensured names are equal
    return (
-      AUTO_LOG_COMPARE(this, rhs, m_startGravity_sg) &&
-      AUTO_LOG_COMPARE(this, rhs, m_endGravity_sg  ) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_startGravity_sg, PropertyNames::StepExtended::startGravity_sg, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_endGravity_sg  , PropertyNames::StepExtended::endGravity_sg  , propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->Step::isEqualTo(other)
+      this->Step::compareWith(other, propertiesThatDiffer)
    );
 }
 
 TypeLookup const StepExtended::typeLookup {
    "StepExtended",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::StepExtended::startGravity_sg, StepExtended::m_startGravity_sg, Measurement::PhysicalQuantity::Density    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::StepExtended::endGravity_sg  , StepExtended::m_endGravity_sg  , Measurement::PhysicalQuantity::Density    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(StepExtended, startGravity_sg, m_startGravity_sg, Measurement::PhysicalQuantity::Density),
+      PROPERTY_TYPE_LOOKUP_ENTRY(StepExtended, endGravity_sg  , m_endGravity_sg  , Measurement::PhysicalQuantity::Density),
    },
    // Parent class lookup
    {&Step::typeLookup}

@@ -69,6 +69,11 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_description();
+   static QString localisedName_notes      ();
+   static QString localisedName_primary    ();
+   static QString localisedName_secondary  ();
+   static QString localisedName_tertiary   ();
 
    //
    // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
@@ -136,7 +141,7 @@ signals:
    void stepsChanged();
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

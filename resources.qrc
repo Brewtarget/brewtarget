@@ -86,6 +86,7 @@
       <file alias="images/iconInventory.svg"         >images/iconInventory.svg</file>
       <file alias="images/iconMash.svg"              >images/iconMash.svg</file>
       <file alias="images/iconSalt.svg"              >images/iconSalt.svg</file>
+      <file alias="images/iconSearch.svg"            >images/iconSearch.svg</file>
       <file alias="images/kbruch.png"                >images/kbruch.png</file>
       <file alias="images/merge.png"                 >images/merge.png</file>
       <file alias="images/play.png"                  >images/play.png</file>

@@ -36,6 +36,7 @@
 #include "undoRedo/UndoableAddOrRemove.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/MetaTypes.h"
+#include "utils/PropertyHelper.h"
 
 // TODO: We would like to change "Add to Recipe" to "Set for Recipe" for things where the recipe only has one of them, eg Style or Equipment
 
@@ -581,16 +582,7 @@ protected:
     *        Caller is expected to have called \c indexAndRoleOk before calling this function.
     *
     * \param index
-    * \param role  This will be a \c Qt::ItemDataRole value.  In practice, the main values are as follows:
-    *                 • \c Qt::DisplayRole means we return a \c QString suitable for display
-    *                 • \c Qt::EditRole means we return a \c QString suitable for editing
-    *                 • \c Qt::UserRole means we are being called from \c isLessThan, so we want to return whatever is
-    *                                   needed for a sort comparison.  In some cases (eg an enum or bool), this is the
-    *                                   the same QString as for \c Qt::DisplayRole, because an alphabetical sort of, eg
-    *                                   a \c Hop::Form field, will make a lot more sense to the user than sorting it by
-    *                                   the internal numerical value.  In other cases, eg where the underlying value is
-    *                                   a \c Measurement::Amount, we want the raw value not the display text, so we can
-    *                                   ensure 200g < 1kg etc.
+    * \param role  This will be a \c Qt::ItemDataRole value.  See \c PropertyHelper::readDataFromPropertyValue.
     *
     * NOTE: The debug logging in this function is commented out because the function gets called A LOT.  I tend to
     *       uncomment these lines only when working on a problem in this area of the code, otherwise the log file fills
@@ -619,218 +611,21 @@ protected:
          Q_ASSERT(false); // Stop here on debug builds
       }
 
-      //
-      // Unlike in an editor, in the table model, the edit control is only shown when you are actually editing a field.
-      // Normally there's a separate control flow for just displaying the modelData otherwise.  We'll get called in both
-      // cases, but the modelData of `role` will be different.
-      //
-      // For Qt::EditRole, we're being called from ItemDelegate::readDataFromModel (see qtModels/tableModels/ItemDelegate.h),
-      // which will handle any special display requirements for enums and bools (where, in both cases, we show combo
-      // boxes), because it is feeding directly into the appropriate editor widget.  For other types, we want to hand
-      // back something that can be converted to QString.
-      //
-      // For Qt::DisplayRole, we're typically being called from QSortFilterProxyModel::data which is, in turn, called by
-      // QItemDelegate::paint.  We don't want to override QItemDelegate::paint in ItemDelegate, because it would be
-      // overkill.  So, here, we just need to make sure we're returning something that can sensibly be converted to
-      // QString.
-      //
       TypeInfo const & typeInfo = columnInfo.typeInfo;
+
 
       // Uncomment this log statement if asserts below are firing
 //      qDebug() <<
 //         Q_FUNC_INFO << columnInfo.columnFqName << ", propertyPath:" << columnInfo.propertyPath << "TypeInfo:" <<
 //         typeInfo << ", modelData:" << modelData;
 
-      // First handle the cases where ItemDelegate::readDataFromModel wants "raw" data
-      if (role == Qt::EditRole && std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
-         auto const nonPhysicalQuantity = std::get<NonPhysicalQuantity>(*typeInfo.fieldType);
-         if (nonPhysicalQuantity == NonPhysicalQuantity::Enum ||
-             nonPhysicalQuantity == NonPhysicalQuantity::Bool) {
-            return modelData;
-         }
-      }
+      return PropertyHelper::readDataFromPropertyValue(modelData,
+                                                       typeInfo,
+                                                       role,
+                                                       columnInfo.extras.has_value(),
+                                                       columnInfo.getForcedSystemOfMeasurement(),
+                                                       columnInfo.getForcedRelativeScale());
 
-      bool hasValue = false;
-      if (typeInfo.isOptional()) {
-         // This does the right thing even for enums - see comment in utils/OptionalHelpers.cpp
-         Optional::removeOptionalWrapper(modelData, typeInfo, &hasValue);
-      } else {
-         hasValue = true;
-      }
-
-      if (std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
-         auto const nonPhysicalQuantity = std::get<NonPhysicalQuantity>(*typeInfo.fieldType);
-
-         if (!hasValue) {
-            if (role == Qt::UserRole &&
-                nonPhysicalQuantity != NonPhysicalQuantity::Enum &&
-                nonPhysicalQuantity != NonPhysicalQuantity::Bool) {
-               return modelData;
-            }
-            return QString{""};
-         }
-
-         if (nonPhysicalQuantity == NonPhysicalQuantity::Enum) {
-            // We assert that we cannot be editing this type of field (because it's a combo box, so user just selects
-            // one of the values in the list).
-            Q_ASSERT(role != Qt::EditRole);
-
-            Q_ASSERT(columnInfo.extras);
-            Q_ASSERT(std::holds_alternative<BtTableModel::EnumInfo>(*columnInfo.extras));
-            BtTableModel::EnumInfo const & enumInfo = std::get<BtTableModel::EnumInfo>(*columnInfo.extras);
-            Q_ASSERT(modelData.canConvert<int>());
-            int const enumValue = modelData.toInt();
-//            qDebug() << Q_FUNC_INFO << "Enum value:" << enumValue;
-            std::optional<QString> displayText = enumInfo.displayNames.enumAsIntToString(enumValue);
-            // It's a coding error if we couldn't find something to display!
-            Q_ASSERT(displayText);
-            return *displayText;
-         }
-
-         if (nonPhysicalQuantity == NonPhysicalQuantity::Bool) {
-            // As with Enum, we cannot edit a Bool, just select one of the predetermined values for it.
-            Q_ASSERT(role != Qt::EditRole);
-
-            Q_ASSERT(columnInfo.extras);
-            Q_ASSERT(std::holds_alternative<BtTableModel::BoolInfo>(*columnInfo.extras));
-            BtTableModel::BoolInfo const & info = std::get<BtTableModel::BoolInfo>(*columnInfo.extras);
-            Q_ASSERT(modelData.canConvert<bool>());
-            return modelData.toBool() ? info.setDisplay : info.unsetDisplay;
-         }
-
-         if (role == Qt::UserRole) {
-            // For sorting, we need the actual amount
-            return modelData;
-         }
-
-         if (nonPhysicalQuantity == NonPhysicalQuantity::Percentage) {
-            unsigned int precision = 3;
-            if (columnInfo.extras) {
-               Q_ASSERT(std::holds_alternative<BtTableModel::PrecisionInfo>(*columnInfo.extras));
-               BtTableModel::PrecisionInfo const & precisionInfo =
-                  std::get<BtTableModel::PrecisionInfo>(*columnInfo.extras);
-               precision = precisionInfo.precision;
-            }
-            // We assert that percentages are numbers and therefore either are double or convertible to double
-            Q_ASSERT(modelData.canConvert<double>());
-            return QVariant(Measurement::displayQuantity(modelData.toDouble(), precision, nonPhysicalQuantity));
-         }
-      } else {
-         // Most of the handling for Measurement::ChoiceOfPhysicalQuantity and Measurement::PhysicalQuantity is the same.
-         Q_ASSERT(!columnInfo.extras ||
-                  std::holds_alternative<BtTableModel::PrecisionInfo          >(*columnInfo.extras) ||
-                  std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*columnInfo.extras) );
-
-         if (!hasValue) {
-            if (role == Qt::UserRole) {
-               return modelData;
-            }
-            return QString{""};
-         }
-
-         unsigned int precision = 3;
-         if (columnInfo.extras &&
-             std::holds_alternative<BtTableModel::PrecisionInfo>(*columnInfo.extras)) {
-            BtTableModel::PrecisionInfo const & info = std::get<BtTableModel::PrecisionInfo>(*columnInfo.extras);
-            precision = info.precision;
-         }
-
-         // A field marked Measurement::ChoiceOfPhysicalQuantity can, for now, be a double or Measurement::Amount (or
-         // a subclass thereof).  If it's a double, we can't return a Measurement::Amount without consulting another
-         // field, so we don't.  If it's a Measurement::Amount, it's handled properly in the `else` below.
-         if (typeInfo.typeIndex == typeid(double)) {
-            Q_ASSERT(modelData.canConvert<double>());
-            double rawValue = modelData.value<double>();
-            if (std::holds_alternative<Measurement::PhysicalQuantity>(*typeInfo.fieldType)) {
-               // This is one of the points where it's important that NamedEntity classes always store data in canonical
-               // units.  For any properties where that's _not_ the case, we need to ensure we're passing
-               // Measurement::Amount, ie the units are always included.
-               auto const physicalQuantity = std::get<Measurement::PhysicalQuantity>(*typeInfo.fieldType);
-               Measurement::Amount amount{rawValue, Measurement::Unit::getCanonicalUnit(physicalQuantity)};
-               if (role == Qt::UserRole) {
-                  // For sorting, we need the actual amount
-                  return QVariant::fromValue(amount);
-               }
-               // For display or edit, we return the string representation
-               return QVariant(
-                  Measurement::displayAmount(amount,
-                                             precision,
-                                             columnInfo.getForcedSystemOfMeasurement(),
-                                             columnInfo.getForcedRelativeScale())
-               );
-            }
-         } else if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) ||
-                    typeInfo.typeIndex == typeid(Measurement::Amount)) {
-            //
-            // Per the comments in qtModels/tableModels/ItemDelegate.h, depending on the value of extras, this is either
-            // the amount itself or a drop-down for the PhysicalQuantity of the amount.
-            //
-            // In both cases, we start by getting the amount from the model.
-            //
-            // Note that, although we can downcast MassOrVolumeAmt to Measurement::Amount, QVariant doesn't know about
-            // this.  So a QVariant holding MassOrVolumeAmt will return false from canConvert<Measurement::Amount>().
-            //
-            // Similarly, since QVariant doesn't understand type aliases, it will treat two aliases to the same type as
-            // though they were different types.
-            //
-            // On the whole therefore, it's simpler to pass Measurement::Amount through the property system, even when
-            // the underlying type is an instance of the Measurement::ConstrainedAmount template such as type alias
-            // MassOrVolumeAmt or type alias MassVolumeOrCountAmt.
-            //
-            // TBD: In the long run, we might get rid of the MassOrVolumeAmt etc type aliases
-            //
-            Measurement::Amount amount;
-            if (modelData.canConvert<Measurement::Amount>()) {
-               amount = modelData.value<Measurement::Amount>();
-            } else {
-               // It's a coding error if we get here
-               qCritical() <<
-                  Q_FUNC_INFO << columnInfo.columnFqName << "Don't know how to parse" << columnInfo.propertyPath <<
-                  "TypeInfo:" << typeInfo << ", modelData:" << modelData;
-               Q_ASSERT(false);
-            }
-            if (!amount.isValid()) {
-               qCritical() <<
-                  Q_FUNC_INFO << columnInfo.columnFqName << "Invalid amount for" << columnInfo.propertyPath <<
-                  "TypeInfo:" << typeInfo << ", modelData:" << modelData;
-               Q_ASSERT(false);
-            }
-
-            if (columnInfo.extras &&
-                std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*columnInfo.extras)) {
-               // This is the drop-down for the PhysicalQuantity of the Amount
-               Measurement::PhysicalQuantity const physicalQuantity = amount.unit->getPhysicalQuantity();
-               if (role == Qt::EditRole) {
-                  // For edit, we just want the actual PhysicalQuantity
-                  return QVariant::fromValue(static_cast<int>(physicalQuantity));
-               }
-
-               // For display or sort we want to map the PhysicalQuantity to its user-friendly name string
-               std::optional<QString> displayText =
-                  Measurement::physicalQuantityDisplayNames.enumToString(physicalQuantity);
-               // It's a coding error if we couldn't find something to display!
-               Q_ASSERT(displayText);
-               return *displayText;
-            }
-
-            // This is the Amount itself
-            if (role == Qt::UserRole) {
-               // For sorting, we need the actual amount
-               return QVariant::fromValue(amount);
-            }
-            // For display or edit, we return the string representation
-            return QVariant(
-               Measurement::displayAmount(amount,
-                                          precision,
-                                          columnInfo.getForcedSystemOfMeasurement(),
-                                          columnInfo.getForcedRelativeScale())
-            );
-         }
-      }
-
-      // If we got here, there's no special handling required - ie the data has no units or special formatting
-      // requirements, so we can just return as-is.
-      return modelData;
    }
 
    /**
@@ -867,122 +662,14 @@ protected:
 
       TypeInfo const & typeInfo = columnInfo.typeInfo;
 
-      // Uncomment this if one of the physicalQuantity-related asserts below is firing
-//      qDebug().noquote() << Q_FUNC_INFO << "physicalQuantity: " << physicalQuantity << Logging::getStackTrace();
-      // For all non physical quantities, including enums and bools, ItemDelegate::writeDataToModel will already have
-      // created the right type of QVariant for us, including handling whether or not it is optional.
-      QVariant processedValue;
-      if (std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
-         // It's a coding error if physicalQuantity was supplied for a field that is not a PhysicalQuantity
-         Q_ASSERT(!physicalQuantity);
-         processedValue = value;
-      } else  {
-         // For physical quantities, we need to handle any conversions to and from canonical amounts, as well as deal
-         // with optional values.
-         //
-         // ItemDelegate::writeDataToModel should have just given us a raw string
-         Q_ASSERT(value.canConvert<QString>());
-
-         //
-         // For cases where we have an Amount and a drop-down chooser to select PhysicalQuantity (eg between Mass and
-         // Volume), we have two columns with the same type.  The one that actually holds the amount is relatively
-         // straightforward because that's what we're already holding in `value`.  The one that holds the drop-down
-         // chooser also needs access to the amount, so it needs to get it from the model (which happens below).
-         //
-         bool const isPhysicalQuantityChooser =
-           std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) &&
-           columnInfo.extras &&
-           std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*columnInfo.extras);
-
-         if (std::holds_alternative<Measurement::PhysicalQuantity>(*typeInfo.fieldType)) {
-            // It's a coding error if physicalQuantity was supplied - because it's known in advance from the field type
-            Q_ASSERT(!physicalQuantity);
-            // Might seem a bit odd to overwrite the parameter here, but it allows us to share most of the code for
-            // PhysicalQuantity and ChoiceOfPhysicalQuantity
-            physicalQuantity = std::get<Measurement::PhysicalQuantity>(*typeInfo.fieldType);
-         } else {
-            // This should be the only possibility left
-            Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType));
-            // It's a coding error if physicalQuantity was not supplied for a non-Amount quantity column.  Equally it's
-            // a coding error to supply it for the drop-down chooser column or for an Amount column.
-            if (typeInfo.typeIndex == typeid(double)) {
-               // For a double representing a ChoiceOfPhysicalQuantity, we need to be passed in the current
-               // PhysicalQuantity because we don't know how to obtain it generically.
-               Q_ASSERT(physicalQuantity);
-            } else {
-               Q_ASSERT(!physicalQuantity);
-               if (!isPhysicalQuantityChooser) {
-                  // If this is an Amount field, we just ask the model for the current amount and look at what
-                  // PhysicalQuantity that is.
-                  // As above, overwriting the physicalQuantity parameter here simplifies the code below
-                  physicalQuantity =
-                     QVariant(columnInfo.propertyPath.getValue(*row)).value<Measurement::Amount>().unit->getPhysicalQuantity();
-               }
-            }
-         }
-
-         // For the moment, I'm assuming any ChoiceOfPhysicalQuantity amount is never optional.  If we change our minds
-         // about that in future then we'd need some additional logic here and in several other places.
-         Q_ASSERT(isPhysicalQuantityChooser || physicalQuantity);
-         Measurement::Amount amount{
-            isPhysicalQuantityChooser ?
-            // Drop-down
-            QVariant(columnInfo.propertyPath.getValue(*row)).value<Measurement::Amount>() :
-            // Amount itself
-            Measurement::qStringToSI(value.toString(),
-                                     *physicalQuantity,
-                                     columnInfo.getForcedSystemOfMeasurement(),
-                                     columnInfo.getForcedRelativeScale())
-         };
-         if (typeInfo.typeIndex == typeid(double)) {
-            processedValue = Optional::variantFromRaw(amount.quantity, typeInfo.isOptional());
-         } else {
-            // Comments above in readDataFromModel apply equally here.  You can cast between MassOrVolumeAmt and
-            // Measurement::Amount, but not between QVariant<MassOrVolumeAmt> and QVariant<Measurement::Amount>, so
-            // we have to do the casting before we wrap.
-            if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) ||
-                typeInfo.typeIndex == typeid(Measurement::Amount)) {
-
-               // If this is the drop-down for the PhysicalQuantity of the amount, then changing it is just another way
-               // of changing the amount itself.
-               if (isPhysicalQuantityChooser) {
-                  //
-                  // There isn't an ideal way to convert an Amount from one PhysicalQuantity to another.  There is no
-                  // generic way, eg, to convert from mass to volume because it depends on the density of the thing
-                  // being measured, which we don't know.  The best we can do is convert from one canonical unit to
-                  // another, eg from kilograms to liters in the case of mass to volume.
-                  //
-                  // This is easy to do because whatever amount we get back from the model will already be in canonical
-                  // units because, by convention, we only store things in canonical units in the model and the DB.
-                  //
-                  Q_ASSERT(value.canConvert<int>());
-                  Measurement::Unit const & newUnit = Measurement::Unit::getCanonicalUnit(
-                     static_cast<Measurement::PhysicalQuantity>(value.value<int>())
-                  );
-                  amount.unit = &newUnit;
-               }
-
-               processedValue = Optional::variantFromRaw(static_cast<Measurement::Amount>(amount),
-                                                         typeInfo.isOptional());
-            } else {
-               // It's a coding error if we get here
-               qCritical() <<
-                  Q_FUNC_INFO << columnInfo.columnFqName << "Don't know how to parse" << columnInfo.propertyPath <<
-                  "TypeInfo:" << typeInfo << ", value:" << value << ", amount:" << amount;
-               Q_ASSERT(false);
-            }
-         }
-      }
-
-      Undoable::doOrRedoUpdate(
-         *row,
-         columnInfo.propertyPath,
-         typeInfo,
-         processedValue,
-         NE::tr("Change %1 %2").arg(NE::staticMetaObject.className()).arg(columnInfo.columnName)
-      );
-
-      return true;
+      return PropertyHelper::writeDataToProperty(*row,
+                                                 columnInfo.propertyPath,
+                                                 typeInfo,
+                                                 value,
+                                                 columnInfo.extras,
+                                                 columnInfo.getForcedSystemOfMeasurement(),
+                                                 columnInfo.getForcedRelativeScale(),
+                                                 physicalQuantity);
    }
 
    template<class TM>

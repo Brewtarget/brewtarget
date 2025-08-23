@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/ItemDelegate.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * qtModels/tableModels/ItemDelegate.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -121,9 +121,9 @@ public:
          auto const fieldType = std::get<NonPhysicalQuantity>(*typeInfo.fieldType);
 
          if (fieldType == NonPhysicalQuantity::Enum) {
-            Q_ASSERT(columnInfo.extras);
-            Q_ASSERT(std::holds_alternative<BtTableModel::EnumInfo>(*columnInfo.extras));
-            BtTableModel::EnumInfo const & enumInfo = std::get<BtTableModel::EnumInfo>(*columnInfo.extras);
+            Q_ASSERT(typeInfo.displayAs);
+            Q_ASSERT(std::holds_alternative<DisplayInfo::Enum>(*typeInfo.displayAs));
+            DisplayInfo::Enum const & enumInfo = std::get<DisplayInfo::Enum>(*typeInfo.displayAs);
 
             BtComboBoxEnum * comboBox = new BtComboBoxEnum(parent);
             comboBox->init(columnInfo.tableModelName,
@@ -141,9 +141,9 @@ public:
 
          if (fieldType == NonPhysicalQuantity::Bool) {
             // It's a coding error if there isn't a BoolInfo structure for a bool field
-            Q_ASSERT(columnInfo.extras);
-            Q_ASSERT(std::holds_alternative<BtTableModel::BoolInfo>(*columnInfo.extras));
-            BtTableModel::BoolInfo const & boolInfo = std::get<BtTableModel::BoolInfo>(*columnInfo.extras);
+            Q_ASSERT(typeInfo.displayAs);
+            Q_ASSERT(std::holds_alternative<DisplayInfo::Bool>(*typeInfo.displayAs));
+            DisplayInfo::Bool const & boolInfo = std::get<DisplayInfo::Bool>(*typeInfo.displayAs);
 
             BtComboBoxBool * boolComboBox = new BtComboBoxBool(parent);
             boolComboBox->init(columnInfo.tableModelName,
@@ -159,8 +159,7 @@ public:
             return boolComboBox;
          }
       } else if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) &&
-                 columnInfo.extras &&
-                 std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*columnInfo.extras)) {
+                 columnInfo.extras) {
          //
          // Where we have an editable amount that can be more than one physical quantity -- eg mass or volume -- we want
          // a combo box to allow the user to select the physical quantity.  This is a bit tricky as such a selector does
@@ -169,7 +168,7 @@ public:
          // the amount column, but has the Measurement::ChoiceOfPhysicalQuantity value (instead of, typically, a
          // PrecisionInfo) in the extras field.
          //
-         auto const validMeasures = std::get<Measurement::ChoiceOfPhysicalQuantity>(*columnInfo.extras);
+         auto const validMeasures = *columnInfo.extras;
          BtComboBoxEnum * comboBox = new BtComboBoxEnum(parent);
          comboBox->init(columnInfo.tableModelName,
                         columnInfo.columnName,
@@ -220,8 +219,7 @@ public:
             return;
          }
       } else if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) &&
-                 columnInfo.extras &&
-                 std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*columnInfo.extras)) {
+                 columnInfo.extras) {
          // Selector for editable amount that can be more than one physical quantity.  (See comment above in
          // getEditWidget() for more details.)
          BtComboBoxEnum * comboBox = qobject_cast<BtComboBoxEnum *>(editor);
@@ -290,8 +288,7 @@ public:
          }
          return;
       } else if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) &&
-                 columnInfo.extras &&
-                 std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*columnInfo.extras)) {
+                 columnInfo.extras) {
          // Selector for editable amount that can be more than one physical quantity.  (See comment above in
          // getEditWidget() for more details.)
          BtComboBoxEnum * comboBox = qobject_cast<BtComboBoxEnum *>(editor);

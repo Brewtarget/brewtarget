@@ -36,21 +36,31 @@
 #endif
 
 QString Mash::localisedName() { return tr("Mash"); }
+QString Mash::localisedName_equipAdjust              () { return tr("Adjust For Equipment"  ); }
+QString Mash::localisedName_grainTemp_c              () { return tr("Grain Temperature"     ); }
+QString Mash::localisedName_mashTunSpecificHeat_calGC() { return tr("Mash Tun Specific Heat"); }
+QString Mash::localisedName_mashTunWeight_kg         () { return tr("Mash Tun Weight"       ); }
+QString Mash::localisedName_notes                    () { return tr("Notes"                 ); }
+QString Mash::localisedName_ph                       () { return tr("pH"                    ); }
+QString Mash::localisedName_spargeTemp_c             () { return tr("Sparge Temperature"    ); }
+QString Mash::localisedName_totalMashWater_l         () { return tr("Total Mash Water"      ); }
+QString Mash::localisedName_totalTime_mins           () { return tr("Total Time"            ); }
+QString Mash::localisedName_tunTemp_c                () { return tr("Tun Temperature"       ); }
 
-bool Mash::isEqualTo(NamedEntity const & other) const {
+bool Mash::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Mash const & rhs = static_cast<Mash const &>(other);
    // Base class will already have ensured names are equal
    return (
-      AUTO_LOG_COMPARE(this, rhs, m_grainTemp_c              ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_tunTemp_c                ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_spargeTemp_c             ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_ph                       ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_mashTunWeight_kg         ) &&
-      AUTO_LOG_COMPARE(this, rhs, m_mashTunSpecificHeat_calGC) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_grainTemp_c              , PropertyNames::Mash::grainTemp_c              , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_tunTemp_c                , PropertyNames::Mash::tunTemp_c                , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_spargeTemp_c             , PropertyNames::Mash::spargeTemp_c             , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_ph                       , PropertyNames::Mash::ph                       , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunWeight_kg         , PropertyNames::Mash::mashTunWeight_kg         , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunSpecificHeat_calGC, PropertyNames::Mash::mashTunSpecificHeat_calGC, propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->FolderBase<Mash>::doIsEqualTo(rhs) &&
-      this->StepOwnerBase<Mash, MashStep>::doIsEqualTo(rhs)
+      this->FolderBase<Mash>             ::doCompareWith(rhs, propertiesThatDiffer) &&
+      this->StepOwnerBase<Mash, MashStep>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
 
@@ -61,16 +71,16 @@ ObjectStore & Mash::getObjectStoreTypedInstance() const {
 TypeLookup const Mash::typeLookup {
    "Mash",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::equipAdjust              , Mash::m_equipAdjust     ,           NonPhysicalQuantity::Bool                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::grainTemp_c              , Mash::m_grainTemp_c     , Measurement::PhysicalQuantity::Temperature         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::notes                    , Mash::m_notes           ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::ph                       , Mash::m_ph              , Measurement::PhysicalQuantity::Acidity             ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::spargeTemp_c             , Mash::m_spargeTemp_c    , Measurement::PhysicalQuantity::Temperature         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::mashTunSpecificHeat_calGC, Mash::m_mashTunSpecificHeat_calGC, Measurement::PhysicalQuantity::SpecificHeatCapacity),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::tunTemp_c                , Mash::m_tunTemp_c       , Measurement::PhysicalQuantity::Temperature         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Mash::mashTunWeight_kg         , Mash::m_mashTunWeight_kg, Measurement::PhysicalQuantity::Mass                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Mash::totalMashWater_l   , Mash::totalMashWater_l  , Measurement::PhysicalQuantity::Volume), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV(PropertyNames::Mash::totalTime_mins     , Mash::totalTime_mins    , Measurement::PhysicalQuantity::Time  ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, equipAdjust     , m_equipAdjust     , BOOL_INFO(tr("No"), tr("Yes"))            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, grainTemp_c     , m_grainTemp_c     , Measurement::PhysicalQuantity::Temperature, DisplayInfo::Precision{1}),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, notes           , m_notes           ,           NonPhysicalQuantity::String     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, ph              , m_ph              , Measurement::PhysicalQuantity::Acidity    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, spargeTemp_c    , m_spargeTemp_c    , Measurement::PhysicalQuantity::Temperature),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, mashTunSpecificHeat_calGC, m_mashTunSpecificHeat_calGC, Measurement::PhysicalQuantity::SpecificHeatCapacity),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, tunTemp_c       , m_tunTemp_c       , Measurement::PhysicalQuantity::Temperature),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, mashTunWeight_kg, m_mashTunWeight_kg, Measurement::PhysicalQuantity::Mass       ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Mash, totalMashWater_l, totalMashWater_l  , Measurement::PhysicalQuantity::Volume     , DisplayInfo::Precision{1}), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Mash, totalTime_mins  , totalTime_mins    , Measurement::PhysicalQuantity::Time       , DisplayInfo::Precision{0}), // Calculated, not in DB
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,

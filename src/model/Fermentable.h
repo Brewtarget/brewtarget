@@ -106,6 +106,39 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_alphaAmylase_dextUnits();
+   static QString localisedName_betaGlucan_ppm        ();
+   static QString localisedName_coarseFineDiff_pct    ();
+   static QString localisedName_coarseGrindYield_pct  ();
+   static QString localisedName_color_lovibond        ();
+   static QString localisedName_color_srm             ();
+   static QString localisedName_diastaticPower_lintner();
+   static QString localisedName_di_ph                 ();
+   static QString localisedName_dmsP_ppm              ();
+   static QString localisedName_fan_ppm               ();
+   static QString localisedName_fermentability_pct    ();
+   static QString localisedName_fineGrindYield_pct    ();
+   static QString localisedName_friability_pct        ();
+   static QString localisedName_grainGroup            ();
+   static QString localisedName_hardnessPrpGlassy_pct ();
+   static QString localisedName_hardnessPrpHalf_pct   ();
+   static QString localisedName_hardnessPrpMealy_pct  ();
+   static QString localisedName_ibuGalPerLb           ();
+   static QString localisedName_kernelSizePrpPlump_pct();
+   static QString localisedName_kernelSizePrpThin_pct ();
+   static QString localisedName_kolbachIndex_pct      ();
+   static QString localisedName_maxInBatch_pct        ();
+   static QString localisedName_moisture_pct          ();
+   static QString localisedName_notes                 ();
+   static QString localisedName_origin                ();
+   static QString localisedName_potentialYield_sg     ();
+   static QString localisedName_producer              ();
+   static QString localisedName_productId             ();
+   static QString localisedName_protein_pct           ();
+   static QString localisedName_recommendMash         ();
+   static QString localisedName_supplier              ();
+   static QString localisedName_type                  ();
+   static QString localisedName_viscosity_cP          ();
 
    /**
     * \brief The type of Fermentable.
@@ -552,7 +585,7 @@ public:
    void setBetaGlucan_ppm           (std::optional<double>     const   val);
 
 protected:
-   virtual bool isEqualTo(NamedEntity const & other) const override;
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

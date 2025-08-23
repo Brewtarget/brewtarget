@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/AutoCompare.h is part of Brewtarget, and is copyright the following authors 2024:
+ * utils/AutoCompare.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -19,6 +19,9 @@
 
 #include <compare>
 #include <source_location>
+
+#include <QDate>
+#include <QString>
 
 #include "measurement/Amount.h"
 #include "measurement/ConstrainedAmount.h"
@@ -45,6 +48,7 @@ namespace Utils {
    inline bool AutoCompare(double  const   lhs, double  const   rhs) { return FuzzyCompare(lhs, rhs); }
    inline bool AutoCompare(int     const   lhs, int     const   rhs) { return lhs == rhs; }
    inline bool AutoCompare(bool    const   lhs, bool    const   rhs) { return lhs == rhs; }
+   inline bool AutoCompare(QDate   const & lhs, QDate   const & rhs) { return lhs == rhs; }
    // Amount already implements operator== using fuzzy comparison
    inline bool AutoCompare(Measurement::Amount const & lhs, Measurement::Amount const & rhs) { return lhs == rhs; }
    template<typename PQT, PQT const pqt>
@@ -151,6 +155,47 @@ namespace Utils {
    }
 
    /**
+    * \brief Wrapper around \c AutoCompare.  If \c propertiesThatDiffer is \c nullptr, then behaviour is the same.  But,
+    *        if \c propertiesThatDiffer is, set, then will always return \c true but will append \c propertyName to the
+    *        supplied list if \c lhs does not equal \c rhs.
+    *
+    *        The rationale for this irregular behaviour is that, if we are just testing for equality, we want to use
+    *        short-circuit evaluation (ie stop testing field pairs for equality as soon as we discover a pair that does
+    *        not match), whereas if we are compiling a list of all fields that do not match, we want to disable
+    *        short-circuit evaluation.  Strictly these are two different functions, but the advantage of combining them
+    *        becomes clear at the call sites, where we have a single list of fields used to determine whether one object
+    *        is equal to another.
+    *
+    * \param equal result of a suitable equality test -- eg calling \c AutoCompare
+    * \param propertyName
+    * \param propertiesThatDiffer If this is set and \c lhs does not equal \c rhs then \c propertyName will be appended
+    *                             to this list
+    *
+    * \return \c true in all cases if \c propertiesThatDiffer is supplied; otherwise \c true if and only if \c lhs
+    *         equals \c rhs according to \c AutoCompare.
+    */
+   inline bool AutoPropertyCompare(bool const equal,
+                                   BtStringConst const & propertyName,
+                                   QList<BtStringConst const *> * propertiesThatDiffer) {
+
+      if (propertiesThatDiffer) {
+         if (!equal) {
+            propertiesThatDiffer->append(&propertyName);
+         }
+         //
+         // Disable short-circuit evaluation.  Caller supplied propertiesThatDiffer, so must rely on the contents of
+         // that for determining equality.
+         //
+         return true;
+      }
+      //
+      // Normal behaviour.  Caller supplied nullptr for propertiesThatDiffer and so wants return value that can be used
+      // in short-circuit evaluation when testing multiple fields for equality.
+      //
+      return equal;
+   }
+
+   /**
     * \brief When comparing two objects with a lot of fields, it can be useful to log the first field that differs.
     *        This wrapper helps do that.  Eg usage is
     *           return (
@@ -201,30 +246,50 @@ namespace Utils {
 }
 
 /**
- * \brief This macro combines \c Utils::LogIfFalse and \c Utils::AutoCompare
+ * \brief This macro combines \c Utils::LogIfFalse and \c Utils::AutoPropertyCompare
  *
  *        Example usage:
  *           return (
- *              AUTO_LOG_COMPARE(this, rhs, m_foo) &&
- *              AUTO_LOG_COMPARE(this, rhs, m_bar) &&
+ *              AUTO_PROP_LOG_COMPARE(this, rhs, m_bar, PropertyNames::Foo::bar, propertiesThatDiffer) &&
+ *              AUTO_PROP_LOG_COMPARE(this, rhs, m_hum, PropertyNames::Foo::hum, propertiesThatDiffer) &&
+ *              AUTO_PROP_LOG_COMPARE(this, rhs, m_bug, PropertyNames::Foo::bug, propertiesThatDiffer) &&
  *              ...
  *           )
+ *
+ *        Note this means that we'll only log a difference if the caller did not supply a propertiesThatDiffer list
  */
-#define AUTO_LOG_COMPARE(lhs, rhs, field) \
-   Utils::LogIfFalse(*lhs, rhs, #field, Utils::AutoCompare(lhs->field, rhs.field))
+#define AUTO_PROPERTY_COMPARE(lhs, rhs, field, propertyName, propertiesThatDiffer) \
+   Utils::LogIfFalse(*lhs,   \
+                     rhs,    \
+                     #field, \
+                     Utils::AutoPropertyCompare(Utils::AutoCompare(lhs->field, rhs.field), \
+                                                propertyName,                              \
+                                                propertiesThatDiffer))
 
 /**
- * \brief As \c AUTO_LOG_COMPARE but when we need to compare the return values of getter functions rather than compare
+ * \brief As \c AUTO_PROPERTY_COMPARE but when we need to compare the return values of getter functions rather than compare
  *        member fields directly.
  */
-#define AUTO_LOG_COMPARE_FN(lhs, rhs, getter) \
-   Utils::LogIfFalse(*lhs, rhs, #getter, Utils::AutoCompare(lhs->getter(), rhs.getter()))
+#define AUTO_PROPERTY_COMPARE_FN(lhs, rhs, getter, propertyName, propertiesThatDiffer) \
+   Utils::LogIfFalse(*lhs,    \
+                     rhs,     \
+                     #getter, \
+                     Utils::AutoPropertyCompare(Utils::AutoCompare(lhs->getter(), rhs.getter()), \
+                                                propertyName,                                    \
+                                                propertiesThatDiffer))
 
 /**
- * \brief As \c AUTO_LOG_COMPARE but for fields where we hold the ID of something (eg styleId, equipmentId) and we need
+ * \brief As \c AUTO_PROPERTY_COMPARE but for fields where we hold the ID of something (eg styleId, equipmentId) and we need
  *        to compare the objects to which the IDs relate.
  */
-#define AUTO_LOG_COMPARE_ID(lhs, rhs, idFieldClass, idField) \
-   Utils::LogIfFalse(*lhs, rhs, #idField, ObjectStoreWrapper::compareById<idFieldClass>(lhs->idField, rhs.idField))
+#define AUTO_PROPERTY_COMPARE_ID(lhs, rhs, idFieldClass, idField, propertyName, propertiesThatDiffer) \
+   Utils::LogIfFalse(*lhs, \
+                     rhs, \
+                     #idField, \
+                     Utils::AutoPropertyCompare(ObjectStoreWrapper::compareById<idFieldClass>(lhs->idField, \
+                                                                                              rhs.idField), \
+                                                propertyName,                                               \
+                                                propertiesThatDiffer))
+
 
 #endif
