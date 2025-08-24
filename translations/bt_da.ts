@@ -3926,8 +3926,33 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
         <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="48"/>
+        <source>End Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="49"/>
+        <source>Ramp Time</source>
+        <translation type="unfinished">Varighed niveau</translation>
+    </message>
+    <message>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="50"/>
         <source>Time</source>
         <translation>Varighed</translation>
+    </message>
+    <message>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="51"/>
+        <source>Start pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="52"/>
+        <source>End pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtModels/tableModels/MashStepTableModel.cpp" line="53"/>
+        <source>Water:Grain</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4343,7 +4368,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
 <context>
     <name>NE</name>
     <message>
-        <location filename="../src/utils/PropertyHelper.h" line="191"/>
+        <location filename="../src/utils/PropertyHelper.h" line="193"/>
         <source>Change %1 %2</source>
         <translation>Skift %1 %2</translation>
     </message>
@@ -12253,7 +12278,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashEditor.ui" line="38"/>
         <location filename="../ui/mashEditor.ui" line="45"/>
-        <location filename="../ui/mashEditor.ui" line="80"/>
+        <location filename="../ui/mashEditor.ui" line="159"/>
         <source>Name</source>
         <translation>Navn</translation>
     </message>
@@ -12264,38 +12289,69 @@ The final volume in the primary is %1.</source>
         <translation>Starttemperatur af malt</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="91"/>
+        <location filename="../ui/mashEditor.ui" line="132"/>
+        <source>Legacy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mashEditor.ui" line="138"/>
+        <source>These are old settings that still work but might be retired in a future version of the software as there are now other ways to achieve the same same result.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mashEditor.ui" line="169"/>
+        <source>Initial temperature of the mash tun.  Used in the Mash Wizard and the Mash Designer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mashEditor.ui" line="183"/>
         <source>Sparge temp</source>
         <translation>Temperatur eftergydningsvand</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="101"/>
+        <location filename="../ui/mashEditor.ui" line="193"/>
         <source>Sparge temp target</source>
         <translation>Tilsigtet temp. af eftergydningsvand</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="126"/>
-        <location filename="../ui/mashEditor.ui" line="136"/>
+        <location filename="../ui/mashEditor.ui" line="203"/>
+        <source>Used in the Mash Wizard.  It is better to set this on the sparge step itself.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mashEditor.ui" line="214"/>
+        <location filename="../ui/mashEditor.ui" line="224"/>
         <source>Sparge pH</source>
         <translation>pH af eftergydningsvand</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="166"/>
+        <location filename="../ui/mashEditor.ui" line="234"/>
+        <source>It is better to set this on the sparge step itself.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mashEditor.ui" line="265"/>
+        <location filename="../ui/mashEditor.ui" line="296"/>
+        <source>It is better to set this directly on the Equipment.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mashEditor.ui" line="76"/>
         <source>Total Mash Water</source>
         <translation type="unfinished">Samlet volumen vand til mæskning</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="177"/>
+        <location filename="../ui/mashEditor.ui" line="87"/>
         <source>Total Time</source>
         <translation type="unfinished">Samlet varighed</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="192"/>
+        <location filename="../ui/mashEditor.ui" line="102"/>
         <source>ID in database</source>
         <translation type="unfinished">ID i database</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="212"/>
+        <location filename="../ui/mashEditor.ui" line="122"/>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished">Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
     </message>
@@ -12304,38 +12360,38 @@ The final volume in the primary is %1.</source>
         <translation type="obsolete">Anvend til</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="143"/>
+        <location filename="../ui/mashEditor.ui" line="276"/>
         <source>Tun specific heat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="222"/>
+        <location filename="../ui/mashEditor.ui" line="307"/>
         <source>Notes</source>
         <translation>Notater</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="255"/>
-        <location filename="../ui/mashEditor.ui" line="258"/>
+        <location filename="../ui/mashEditor.ui" line="340"/>
+        <location filename="../ui/mashEditor.ui" line="343"/>
         <source>New</source>
         <translation type="unfinished">Ny</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="269"/>
+        <location filename="../ui/mashEditor.ui" line="354"/>
         <source>Save and close</source>
         <translation type="unfinished">Gem og luk</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="272"/>
+        <location filename="../ui/mashEditor.ui" line="357"/>
         <source>Save</source>
         <translation type="unfinished">Gem</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="283"/>
+        <location filename="../ui/mashEditor.ui" line="368"/>
         <source>Discard and close</source>
         <translation type="unfinished">Annuller og luk</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="286"/>
+        <location filename="../ui/mashEditor.ui" line="371"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuller</translation>
     </message>
@@ -12344,7 +12400,7 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Beholder</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="70"/>
+        <location filename="../ui/mashEditor.ui" line="149"/>
         <source>Initial tun temp</source>
         <translation>Starttemperatur af beholder</translation>
     </message>
@@ -12357,8 +12413,8 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Fra udstyr</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="108"/>
-        <location filename="../ui/mashEditor.ui" line="118"/>
+        <location filename="../ui/mashEditor.ui" line="245"/>
+        <location filename="../ui/mashEditor.ui" line="255"/>
         <source>Tun mass</source>
         <translation>Beholder masse</translation>
     </message>
@@ -12367,7 +12423,7 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Beholder specifik varmefylde</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="153"/>
+        <location filename="../ui/mashEditor.ui" line="286"/>
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>Beholder specifiik varmefylde (cal/(kg·K))</translation>
     </message>

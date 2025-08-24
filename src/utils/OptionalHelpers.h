@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/OptionalHelpers.h is part of Brewtarget, and is copyright the following authors 2022-2023:
+ * utils/OptionalHelpers.h is part of Brewtarget, and is copyright the following authors 2022-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -92,6 +92,25 @@ namespace Optional {
    template<typename T>
    QVariant variantFromRaw(T const & rawValue, bool const propertyIsOptional) {
       if (propertyIsOptional) {
+         return QVariant::fromValue< std::optional<T> >(rawValue);
+      }
+      return QVariant::fromValue<T>(rawValue);
+   }
+
+   /**
+    * \brief Create a possily null \c QVariant from a raw value, including the \c std::optional wrapper if needed
+    *
+    *        This overload also takes the string input from which the raw value was obtained.
+    *        How we deal with empty string input depends on the field type.  If the field is optional then we need to
+    *        unset it in the model.  If it is not optional then we'll set \c rawValue, which will typically be 0.0 or
+    *        similar.
+    */
+   template<typename T>
+   QVariant variantFromRaw(QString const & inputString, T const & rawValue, bool const propertyIsOptional) {
+      if (propertyIsOptional) {
+         if (inputString.trimmed().isEmpty()) {
+            return QVariant::fromValue<std::optional<T>>(std::nullopt);
+         }
          return QVariant::fromValue< std::optional<T> >(rawValue);
       }
       return QVariant::fromValue<T>(rawValue);

@@ -613,8 +613,7 @@ protected:
 
       TypeInfo const & typeInfo = columnInfo.typeInfo;
 
-
-      // Uncomment this log statement if asserts below are firing
+      // Uncomment this log statement if asserts in PropertyHelper::readDataFromPropertyValue are firing
 //      qDebug() <<
 //         Q_FUNC_INFO << columnInfo.columnFqName << ", propertyPath:" << columnInfo.propertyPath << "TypeInfo:" <<
 //         typeInfo << ", modelData:" << modelData;

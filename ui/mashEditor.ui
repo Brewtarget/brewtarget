@@ -64,96 +64,6 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="4">
-        <widget class="SmartLabel" name="label_tunTemp">
-         <property name="text">
-          <string>Initial tun temp</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_tunTemp</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="5">
-        <widget class="SmartLineEdit" name="lineEdit_tunTemp">
-         <property name="text">
-          <string>Name</string>
-         </property>
-        </widget>
-       </item>
-
-       <item row="4" column="1">
-        <widget class="SmartLabel" name="label_spargeTemp">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Sparge temp</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_spargeTemp</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_spargeTemp">
-         <property name="toolTip">
-          <string>Sparge temp target</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="4">
-        <widget class="SmartLabel" name="label_tunMass">
-         <property name="text">
-          <string>Tun mass</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_tunMass</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="5">
-        <widget class="SmartLineEdit" name="lineEdit_tunMass">
-         <property name="toolTip">
-          <string>Tun mass</string>
-         </property>
-        </widget>
-       </item>
-
-       <item row="6" column="1">
-        <widget class="SmartLabel" name="label_spargePh">
-         <property name="text">
-          <string>Sparge pH</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_spargePh</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_spargePh">
-         <property name="toolTip">
-          <string>Sparge pH</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="4">
-        <widget class="SmartLabel" name="label_tunSpHeat">
-         <property name="text">
-          <string>Tun specific heat</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_tunSpHeat</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="5">
-        <widget class="SmartLineEdit" name="lineEdit_tunSpHeat">
-         <property name="toolTip">
-          <string>Tun specific heat (cal/(g*K))</string>
-         </property>
-        </widget>
-       </item>
 
        <item row="8" column="1" colspan="5">
          <widget class="MashStepsWidget" name="stepsWidget">
@@ -215,6 +125,181 @@
        </item>
 
       </layout>
+     </widget>
+
+     <widget class="QWidget" name="tab_legacy">
+      <attribute name="title">
+       <string>Legacy</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayoutLegacy">
+       <item row="0" column="1" colspan="5">
+        <widget class="QLabel" name="label_legacyTabInfo">
+         <property name="text">
+          <string>These are old settings that still work but might be retired in a future version of the software as there are now other ways to achieve the same same result.</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="2" column="0">
+        <widget class="InfoButton" name="infoButton_tunTemp"></widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="SmartLabel" name="label_tunTemp">
+         <property name="text">
+          <string>Initial tun temp</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_tunTemp</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_tunTemp">
+         <property name="text">
+          <string>Name</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_tunTemp">
+         <property name="buddy">
+          <cstring>infoButton_tunTemp</cstring>
+         </property>
+         <property name="text">
+          <string>Initial temperature of the mash tun.  Used in the Mash Wizard and the Mash Designer.</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="4" column="0">
+        <widget class="InfoButton" name="infoButton_spargeTemp"></widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="SmartLabel" name="label_spargeTemp">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Sparge temp</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_spargeTemp</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_spargeTemp">
+         <property name="toolTip">
+          <string>Sparge temp target</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_spargeTemp">
+         <property name="buddy">
+          <cstring>infoButton_spargeTemp</cstring>
+         </property>
+         <property name="text">
+          <string>Used in the Mash Wizard.  It is better to set this on the sparge step itself.</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="6" column="0">
+        <widget class="InfoButton" name="infoButton_spargePh"></widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="SmartLabel" name="label_spargePh">
+         <property name="text">
+          <string>Sparge pH</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_spargePh</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_spargePh">
+         <property name="toolTip">
+          <string>Sparge pH</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_spargePh">
+         <property name="buddy">
+          <cstring>infoButton_spargePh</cstring>
+         </property>
+         <property name="text">
+          <string>It is better to set this on the sparge step itself.</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="8" column="0">
+        <widget class="InfoButton" name="infoButton_tunMass"></widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="SmartLabel" name="label_tunMass">
+         <property name="text">
+          <string>Tun mass</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_tunMass</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_tunMass">
+         <property name="toolTip">
+          <string>Tun mass</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_tunMass">
+         <property name="buddy">
+          <cstring>infoButton_tunMass</cstring>
+         </property>
+         <property name="text">
+          <string>It is better to set this directly on the Equipment.</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="10" column="0">
+        <widget class="InfoButton" name="infoButton_tunSpHeat"></widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="SmartLabel" name="label_tunSpHeat">
+         <property name="text">
+          <string>Tun specific heat</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_tunSpHeat</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_tunSpHeat">
+         <property name="toolTip">
+          <string>Tun specific heat (cal/(g*K))</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_tunSpHeat">
+         <property name="buddy">
+          <cstring>infoButton_tunSpHeat</cstring>
+         </property>
+         <property name="text">
+          <string>It is better to set this directly on the Equipment.</string>
+         </property>
+        </widget>
+       </item>
+
+      </layout>
+
      </widget>
 
      <widget class="QWidget" name="tab_notes">

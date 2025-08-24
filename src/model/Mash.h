@@ -125,6 +125,7 @@ public:
    Q_PROPERTY(double                grainTemp_c               READ grainTemp_c               WRITE setGrainTemp_c  )
    //! \brief The notes.
    Q_PROPERTY(QString               notes                     READ notes                     WRITE setNotes  )
+
    //! \brief The initial tun temp in Celsius.  ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
    Q_PROPERTY(std::optional<double> tunTemp_c                 READ tunTemp_c                 WRITE setTunTemp_c  )
    //! \brief The sparge temp in C.             ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
@@ -137,10 +138,11 @@ public:
    Q_PROPERTY(std::optional<double> mashTunSpecificHeat_calGC READ mashTunSpecificHeat_calGC WRITE setMashTunSpecificHeat_calGC  )
    //! \brief Whether to adjust strike temperatures to account for the tun.   ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
    Q_PROPERTY(bool                  equipAdjust               READ equipAdjust               WRITE setEquipAdjust  )
+
    //! \brief The total water that went into the mash (ie all the mash water, sparge and strike) in liters. Calculated.
-   Q_PROPERTY(double                totalMashWater_l          READ totalMashWater_l  STORED false )
+   Q_PROPERTY(double totalMashWater_l   READ totalMashWater_l  STORED false )
    //! \brief The total mash time in minutes. Calculated.
-   Q_PROPERTY(double                totalTime_mins            READ totalTime_mins    STORED false )
+   Q_PROPERTY(double totalTime_mins     READ totalTime_mins    STORED false )
 
    SUPPORT_NUM_RECIPES_USED_IN
 

@@ -76,6 +76,8 @@ namespace PropertyHelper {
                             std::optional<Measurement::SystemOfMeasurement>       const forcedSystemOfMeasurement = std::nullopt,
                             std::optional<Measurement::UnitSystem::RelativeScale> const forcedRelativeScale       = std::nullopt,
                             std::optional<Measurement::PhysicalQuantity> physicalQuantity = std::nullopt) {
+      // Generally leave this commented out as it generates too much logging
+//      qDebug() << Q_FUNC_INFO << propertyPath << ":" << value;
       // Uncomment this if one of the physicalQuantity-related asserts below is firing
 //      qDebug().noquote() << Q_FUNC_INFO << "physicalQuantity: " << physicalQuantity << Logging::getStackTrace();
       // For all non physical quantities, including enums and bools, ItemDelegate::writeDataToModel will already have
@@ -85,7 +87,7 @@ namespace PropertyHelper {
          // It's a coding error if physicalQuantity was supplied for a field that is not a PhysicalQuantity
          Q_ASSERT(!physicalQuantity);
          processedValue = value;
-      } else  {
+      } else {
          // For physical quantities, we need to handle any conversions to and from canonical amounts, as well as deal
          // with optional values.
          //
@@ -100,8 +102,7 @@ namespace PropertyHelper {
          //
          bool const isPhysicalQuantityChooser =
            std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) &&
-           extras /* &&
-           std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*columnInfo.extras)*/;
+           extras;
 
          if (std::holds_alternative<Measurement::PhysicalQuantity>(*typeInfo.fieldType)) {
             // It's a coding error if physicalQuantity was supplied - because it's known in advance from the field type
@@ -144,7 +145,7 @@ namespace PropertyHelper {
                                      forcedRelativeScale)
          };
          if (typeInfo.typeIndex == typeid(double)) {
-            processedValue = Optional::variantFromRaw(amount.quantity, typeInfo.isOptional());
+            processedValue = Optional::variantFromRaw(value.toString(), amount.quantity, typeInfo.isOptional());
          } else {
             // Comments above in readDataFromModel apply equally here.  You can cast between MassOrVolumeAmt and
             // Measurement::Amount, but not between QVariant<MassOrVolumeAmt> and QVariant<Measurement::Amount>, so
@@ -171,7 +172,8 @@ namespace PropertyHelper {
                   amount.unit = &newUnit;
                }
 
-               processedValue = Optional::variantFromRaw(static_cast<Measurement::Amount>(amount),
+               processedValue = Optional::variantFromRaw(value.toString(),
+                                                         static_cast<Measurement::Amount>(amount),
                                                          typeInfo.isOptional());
             } else {
                // It's a coding error if we get here
@@ -192,9 +194,7 @@ namespace PropertyHelper {
       );
 
       return true;
-
    }
-
 
 }
 
