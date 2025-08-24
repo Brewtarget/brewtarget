@@ -3354,6 +3354,26 @@ If you need help, please open an issue at %1</source>
         <source>Time</source>
         <translation>时间Time</translation>
     </message>
+    <message>
+        <source>End Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ramp Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>End pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water:Grain</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MashTableModel</name>
@@ -10252,6 +10272,30 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Total Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Legacy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>These are old settings that still work but might be retired in a future version of the software as there are now other ways to achieve the same same result.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Initial temperature of the mash tun.  Used in the Mash Wizard and the Mash Designer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Used in the Mash Wizard.  It is better to set this on the sparge step itself.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>It is better to set this on the sparge step itself.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>It is better to set this directly on the Equipment.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

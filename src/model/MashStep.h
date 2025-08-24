@@ -74,9 +74,6 @@ class MashStep : public Step, public StepBase<MashStep, Mash, MashStepOptions> {
    Q_PROPERTY(              double  startTemp_c     READ startTemp_c     WRITE setStartTemp_c  )
    Q_PROPERTY(std::optional<double> rampTime_mins   READ rampTime_mins   WRITE setRampTime_mins)
 
-//   Q_PROPERTY(std::optional<double> startTemp_c     READ startTemp_c     WRITE setStartTemp_c  )
-//   Q_PROPERTY(std::optional<double> stepTime_mins   READ stepTime_mins   WRITE setStepTime_mins)
-
 public:
    /**
     * \brief See comment in model/NamedEntity.h
@@ -184,9 +181,9 @@ public:
     */
    Q_PROPERTY(double                amount_l               READ amount_l              WRITE setAmount_l                         )
    //! \brief The infusion amount in liters - NB: Retained only for BeerXML; DO NOT USE.
-   Q_PROPERTY(double                infuseAmount_l         READ infuseAmount_l       /*WRITE setInfuseAmount_l*/    STORED false)
+   Q_PROPERTY(double                infuseAmount_l         READ infuseAmount_l       STORED false)
    //! \brief The decoction amount in liters - NB: Retained only for BeerXML; DO NOT USE.
-   Q_PROPERTY(double                decoctionAmount_l      READ decoctionAmount_l    /*WRITE setDecoctionAmount_l*/ STORED false)
+   Q_PROPERTY(double                decoctionAmount_l      READ decoctionAmount_l    STORED false)
    /**
     * \brief The infusion temp in C.                                        ⮜⮜⮜ Not part of BeerXML; optional in BeerJSON ⮞⮞⮞
     *

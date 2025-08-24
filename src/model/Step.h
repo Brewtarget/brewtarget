@@ -48,9 +48,9 @@ AddPropertyName(startAcidity_pH)
  *           ------------         ------------        --------------------  |  --------
  *         ‡ name               ‡ name              ‡ name                  |       NamedEntity::name
  *           description          description         description           |              Step::description
- *           ramp_time            ramp_time                                 |              Step::rampTime_mins
- *         ‡ step_time            step_time           step_time             |              Step::stepTime_mins
- *         ‡ step_temperature     start_temperature   start_temperature     |              Step::startTemp_c
+ *           ramp_time            ramp_time                                 |          StepBase::rampTime_mins
+ *         ‡ step_time            step_time           step_time             |          StepBase::stepTime_mins
+ *         ‡ step_temperature     start_temperature   start_temperature     |          StepBase::startTemp_c
  *           end_temperature      end_temperature     end_temperature       |              Step::  endTemp_c
  *           start_ph             start_ph            start_ph              |              Step::startAcidity_pH
  *           end_ph               end_ph              end_ph                |              Step::  endAcidity_pH
