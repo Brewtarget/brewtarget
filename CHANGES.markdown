@@ -23,6 +23,7 @@ Bug fixes and minor enhancements.
 ### Bug Fixes
 * Mash editor needs some tidy-up [963](https://github.com/Brewtarget/brewtarget/issues/963)
 * Better Hop Stage default for hop additions [1018](https://github.com/Brewtarget/brewtarget/issues/1018)
+* Qt Libs missing in 4.2.0 on MacOS [1022](https://github.com/Brewtarget/brewtarget/issues/1022)
 
 ### Release Timestamp
 Sun, 24 Aug 2025 04:02:01 +0100
