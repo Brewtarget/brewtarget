@@ -2776,20 +2776,6 @@ def doPackage():
          #    - libqsqlpsql.dylib -- which would be needed for any user that wants to use PostgreSQL instead of SQLite
          #
 
-         #
-         # Since moving to Qt6, we also have to do some extra things to avoid the following errors:
-         #    - Library not loaded: @rpath/QtDBus.framework/Versions/A/QtDBus
-         #    - Library not loaded: @rpath/QtNetwork.framework/Versions/A/QtNetwork
-         # I _think_ the problem with these is that they are not direct dependencies of our application (eg, as shown
-         # below, they do not appear in the output from otool), but rather dependencies of other Qt libraries.  The
-         # detailed error messages imply it is QtGui that needs QtDBus and QtMultimedia that needs QtNetwork.
-         #
-         #    - libdbus-1 library -- as explained at https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos
-         #
-         # TODO: Still working this bit out!
-         #
-         # See https://github.com/orgs/Homebrew/discussions/2823 for problems using macdeployqt with homebrew installation of Qt
-         #
          previousWorkingDirectory = pathlib.Path.cwd().as_posix()
          log.debug('Running otool before macdeployqt')
          os.chdir(dir_packages_mac_bin)
@@ -2904,6 +2890,46 @@ def doPackage():
             xalanMsgLibName = 'libxalanMsg.112.dylib'
          log.debug('Copying ' + xalanDir + xalanMsgLibName + ' to ' + dir_packages_mac_frm.as_posix())
          shutil.copy2(xalanDir + xalanMsgLibName, dir_packages_mac_frm)
+
+         #
+         # Since moving to Qt6, we also have to do some extra things to avoid the following errors:
+         #    - Library not loaded: @rpath/QtDBus.framework/Versions/A/QtDBus
+         #    - Library not loaded: @rpath/QtNetwork.framework/Versions/A/QtNetwork
+         # I _think_ the problem with these is that they are not direct dependencies of our application (eg, as shown
+         # below, they do not appear in the output from otool), but rather dependencies of other Qt libraries.  The
+         # detailed error messages imply it is QtGui that needs QtDBus and QtMultimedia that needs QtNetwork.
+         #
+         # Ideally we need to ship:
+         #
+         #    - libdbus-1 library -- as explained at https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos
+         #
+         # TODO: Still working this bit out!
+         #
+         # See https://github.com/orgs/Homebrew/discussions/2823 for problems using macdeployqt with homebrew
+         # installation of Qt
+         #
+         # QtGui
+         #
+         qtguiFramework = ''
+         qtguiMatch = re.search(r'^\s*(\S+/QtGui) ', otoolOutputExe, re.MULTILINE)
+         if (qtguiMatch):
+            qtguiFramework = qtguiMatch[1]
+         else:
+            #
+            # Not sure we can guess where to look for QtGui if we can't find it in the obvious places
+            #
+            log.critical(
+               'Could not find QtGui dependency in ' + capitalisedProjectName +
+            )
+            exit(1)
+         log.debug('Running otool -L on ' + qtguiFramework)
+         otoolOutputQtgui = btUtils.abortOnRunFail(
+            subprocess.run(['otool',
+                            '-L',
+                            qtguiFramework],
+                           capture_output=True)
+         ).stdout.decode('UTF-8')
+         log.debug('Output of `otool -L' + capitalisedProjectName + '`: ' + otoolOutputQtgui)
 
          #
          # The dylibbundler tool (https://github.com/auriamg/macdylibbundler/) proposes a ready-made solution to make
