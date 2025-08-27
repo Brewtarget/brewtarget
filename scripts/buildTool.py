@@ -2919,7 +2919,7 @@ def doPackage():
             # Not sure we can guess where to look for QtGui if we can't find it in the obvious places
             #
             log.critical(
-               'Could not find QtGui dependency in ' + capitalisedProjectName +
+               'Could not find QtGui dependency in ' + capitalisedProjectName
             )
             exit(1)
          log.debug('Running otool -L on ' + qtguiFramework)
