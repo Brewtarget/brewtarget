@@ -299,6 +299,51 @@ def downloadFile(url):
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
+# Helper function for finding and copying extra libraries
+#
+# This is used in both the Windows and Mac packaging
+#
+#    pathsToSearch   = array of paths to search
+#    extraLibs       = array of base names of libraries to search for
+#    libExtension    = 'dll' on Windows, 'dylib' on MacOS
+#    targetDirectory = where to copy found libraries to
+#-----------------------------------------------------------------------------------------------------------------------
+def findAndCopyLibs(pathsToSearch, extraLibs, extension, targetDirectory)
+   for extraLib in extraLibs:
+      found = False
+      for searchDir in pathsToSearch:
+         # We do a glob match to get approximate matches and then filter it with a regular expression for exact
+         # ones
+         matches = []
+         globMatches = glob.glob(extraLib + '*.' + libExtension, root_dir=searchDir, recursive=False)
+         for globMatch in globMatches:
+            # We need to remove the first part of the glob match before doing a regexp match because we don't want
+            # the first part of the filename to be treated as a regular expression.  In particular, this would be
+            # a problem for 'libstdc++'!
+            suffixOfGlobMatch = globMatch.removeprefix(extraLib)
+            # On Python 3.11 or later, we would write flags=re.NOFLAG instead of flags=0
+            if re.fullmatch(re.compile('-?[0-9]*.' + libExtension), suffixOfGlobMatch, flags=0):
+               matches.append(globMatch)
+         numMatches = len(matches)
+         if (numMatches > 0):
+            log.debug('Found ' + str(numMatches) + ' match(es) for ' + extraLib + ' in ' + searchDir)
+            if (numMatches > 1):
+               log.warning('Found more matches than expected (' + str(numMatches) + ' ' +
+                           'instead of 1) when searching for library "' + extraLib + '".  This is not an ' +
+                           'error, but means we are possibly shipping additional shared libraries that we '+
+                           'don\'t need to.')
+            for match in matches:
+               fullPathOfMatch = pathlib.Path(searchDir).joinpath(match)
+               log.debug('Copying ' + fullPathOfMatch.as_posix() + ' to ' + targetDirectory.as_posix())
+               shutil.copy2(fullPathOfMatch, targetDirectory)
+            found = True
+            break;
+      if (not found):
+         log.critical('Could not find '+ extraLib + ' library in any of the following directories: ' + ', '.join(pathsToSearch))
+         exit(1)
+   return
+
+#-----------------------------------------------------------------------------------------------------------------------
 # Set global variables exe_git and exe_meson with the locations of the git and meson executables plus mesonVersion with
 # the version of meson installed
 #
@@ -1433,7 +1478,7 @@ def installDependencies():
          #
          # Another way to "permanently" add something to PATH on MacOS, is by either appending to the /etc/paths file or
          # creating a file in the /etc/paths.d directory.  We do the latter, as (a) it's best practice and (b) it allows
-         # us to explicitly read it in again later (eg on a subsequent invocation of this script).
+         # us to explicitly read it in again later (eg on a subsequent invocation of this script to do packaging).
          #
          # The contents of the files in the /etc/paths.d directory get added to PATH by /usr/libexec/path_helper, which
          # gets run from /etc/profile.  We have some belt-and-braces code below in the Mac packaging section to read
@@ -2438,7 +2483,7 @@ def doPackage():
          # project.
          #
          pathsToSearch = os.environ['PATH'].split(os.pathsep)
-         for extraLib in [
+         extraLibs = [
             #
             # Following should have been handled automatically by windeployqt
             #
@@ -2494,38 +2539,8 @@ def doPackage():
             'libxerces-c-3',
             'libzstd'      , # ZStandard (aka zstd) = fast lossless compression algorithm
             'zlib'         , # ZLib compression library
-         ]:
-            found = False
-            for searchDir in pathsToSearch:
-               # We do a glob match to get approximate matches and then filter it with a regular expression for exact
-               # ones
-               matches = []
-               globMatches = glob.glob(extraLib + '*.dll', root_dir=searchDir, recursive=False)
-               for globMatch in globMatches:
-                  # We need to remove the first part of the glob match before doing a regexp match because we don't want
-                  # the first part of the filename to be treated as a regular expression.  In particular, this would be
-                  # a problem for 'libstdc++'!
-                  suffixOfGlobMatch = globMatch.removeprefix(extraLib)
-                  # On Python 3.11 or later, we would write flags=re.NOFLAG instead of flags=0
-                  if re.fullmatch(re.compile('-?[0-9]*.dll'), suffixOfGlobMatch, flags=0):
-                     matches.append(globMatch)
-               numMatches = len(matches)
-               if (numMatches > 0):
-                  log.debug('Found ' + str(numMatches) + ' match(es) for ' + extraLib + ' in ' + searchDir)
-                  if (numMatches > 1):
-                     log.warning('Found more matches than expected (' + str(numMatches) + ' ' +
-                                 'instead of 1) when searching for library "' + extraLib + '".  This is not an ' +
-                                 'error, but means we are possibly shipping additional shared libraries that we '+
-                                 'don\'t need to.')
-                  for match in matches:
-                     fullPathOfMatch = pathlib.Path(searchDir).joinpath(match)
-                     log.debug('Copying ' + fullPathOfMatch.as_posix() + ' to ' + dir_packages_win_bin.as_posix())
-                     shutil.copy2(fullPathOfMatch, dir_packages_win_bin)
-                  found = True
-                  break;
-            if (not found):
-               log.critical('Could not find '+ extraLib + ' library in PATH ' + os.environ['PATH'])
-               exit(1)
+         ]
+         findAndCopyLibs(pathsToSearch, extraLibs, 'dll', dir_packages_win_bin)
 
          # Copy the NSIS installer script to where it belongs
          shutil.copy2(dir_build.joinpath('NsisInstallerScript.nsi'), dir_packages_platform)
@@ -2785,7 +2800,7 @@ def doPackage():
                             capitalisedProjectName],
                            capture_output=True)
          ).stdout.decode('UTF-8')
-         log.debug('Output of `otool -L' + capitalisedProjectName + '`: ' + otoolOutputExe)
+         log.debug('Output of `otool -L ' + capitalisedProjectName + '`: ' + otoolOutputExe)
          #
          # The output from otool at this stage will be along the following lines:
          #
@@ -2877,7 +2892,7 @@ def doPackage():
                             xalanDir + xalanLibName],
                            capture_output=True)
          ).stdout.decode('UTF-8')
-         log.debug('Output of `otool -L' + xalanDir + xalanLibName + '`: ' + otoolOutputXalan)
+         log.debug('Output of `otool -L ' + xalanDir + xalanLibName + '`: ' + otoolOutputXalan)
          xalanMsgLibName = ''
          xalanMsgMatch =  re.search(r'^\s*(\S+/)(libxalanMsg\S*.dylib)', otoolOutputXalan, re.MULTILINE)
          if (xalanMsgMatch):
@@ -2891,45 +2906,26 @@ def doPackage():
          log.debug('Copying ' + xalanDir + xalanMsgLibName + ' to ' + dir_packages_mac_frm.as_posix())
          shutil.copy2(xalanDir + xalanMsgLibName, dir_packages_mac_frm)
 
-         #
-         # Since moving to Qt6, we also have to do some extra things to avoid the following errors:
-         #    - Library not loaded: @rpath/QtDBus.framework/Versions/A/QtDBus
-         #    - Library not loaded: @rpath/QtNetwork.framework/Versions/A/QtNetwork
-         # I _think_ the problem with these is that they are not direct dependencies of our application (eg, as shown
-         # below, they do not appear in the output from otool), but rather dependencies of other Qt libraries.  The
-         # detailed error messages imply it is QtGui that needs QtDBus and QtMultimedia that needs QtNetwork.
-         #
-         # Ideally we need to ship:
-         #
-         #    - libdbus-1 library -- as explained at https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos
-         #
-         # TODO: Still working this bit out!
-         #
-         # See https://github.com/orgs/Homebrew/discussions/2823 for problems using macdeployqt with homebrew
-         # installation of Qt
-         #
-         # QtGui
-         #
-         qtguiFramework = ''
-         qtguiMatch = re.search(r'^\s*(\S+/QtGui) ', otoolOutputExe, re.MULTILINE)
-         if (qtguiMatch):
-            qtguiFramework = qtguiMatch[1]
-         else:
-            #
-            # Not sure we can guess where to look for QtGui if we can't find it in the obvious places
-            #
-            log.critical(
-               'Could not find QtGui dependency in ' + capitalisedProjectName
-            )
-            exit(1)
-         log.debug('Running otool -L on ' + qtguiFramework)
-         otoolOutputQtgui = btUtils.abortOnRunFail(
-            subprocess.run(['otool',
-                            '-L',
-                            qtguiFramework],
-                           capture_output=True)
-         ).stdout.decode('UTF-8')
-         log.debug('Output of `otool -L' + capitalisedProjectName + '`: ' + otoolOutputQtgui)
+###         qtguiFramework = ''
+###         qtguiMatch = re.search(r'^\s*(\S+/QtGui) ', otoolOutputExe, re.MULTILINE)
+###         if (qtguiMatch):
+###            qtguiFramework = qtguiMatch[1]
+###         else:
+###            #
+###            # Not sure we can guess where to look for QtGui if we can't find it in the obvious places
+###            #
+###            log.critical(
+###               'Could not find QtGui dependency in ' + capitalisedProjectName
+###            )
+###            exit(1)
+###         log.debug('Running otool -L on ' + qtguiFramework)
+###         otoolOutputQtgui = btUtils.abortOnRunFail(
+###            subprocess.run(['otool',
+###                            '-L',
+###                            qtguiFramework],
+###                           capture_output=True)
+###         ).stdout.decode('UTF-8')
+###         log.debug('Output of `otool -L ' + qtguiFramework + '`: ' + otoolOutputQtgui)
 
          #
          # The dylibbundler tool (https://github.com/auriamg/macdylibbundler/) proposes a ready-made solution to make
@@ -2955,6 +2951,33 @@ def doPackage():
                capture_output=False
             )
          )
+
+         #
+         # Since moving to Qt6, we also have to do some extra things to avoid the following errors:
+         #    - Library not loaded: @rpath/QtDBus.framework/Versions/A/QtDBus
+         #    - Library not loaded: @rpath/QtNetwork.framework/Versions/A/QtNetwork
+         #
+         # I _think_ the problem with these is that they are not direct dependencies of our application (eg, as shown
+         # below, they do not appear in the output from otool), but rather dependencies of other Qt libraries.  The
+         # detailed error messages imply it is QtGui that needs QtDBus and QtMultimedia that needs QtNetwork.  However,
+         # running `otool -L` on /opt/homebrew/opt/qt/lib/QtGui.framework/Versions/A/QtGui does not yield any dbus
+         # dependency.
+         #
+         # From https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos, we know we need to ship:
+         #
+         #    - libdbus-1 library
+         #
+         #
+         # TODO: Still working this bit out!
+         #
+         # See https://github.com/orgs/Homebrew/discussions/2823 for problems using macdeployqt with homebrew
+         # installation of Qt
+         #
+         pathsToSearch = os.environ['DYLD_LIBRARY_PATH'].split(os.pathsep)
+         extraLibs = [
+            'libdbus'  ,
+         ]
+         findAndCopyLibs(pathsToSearch, extraLibs, 'dylib', dir_packages_mac_bin)
 
          #
          # Before we try to run macdeployqt, we need to make sure its directory is in the PATH.  (Depending on how Qt
