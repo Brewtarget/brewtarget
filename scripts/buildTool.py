@@ -1252,18 +1252,21 @@ def installDependencies():
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'chown', 'root:wheel', macPortsDirFile]))
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'a+rw'      , macPortsDirFile]))
          with open(macPortsDirFile, 'a+') as macPortsDirPaths:
-            macPortsDirPaths.write(macPortsPrefix + '/bin' + '\n')
-            macPortsDirPaths.write(macPortsPrefix + '/sbin'+ '\n')
+            macPortsDirPaths.write(macPortsPrefix + '/bin'  + '\n')
+            macPortsDirPaths.write(macPortsPrefix + '/sbin' + '\n')
+            macPortsDirPaths.write(macPortsPrefix + '/lib'  + '\n')
          #
          # ...but, for GitHub actions, writing to the file in the GITHUB_PATH environment variable is the supported way
          # to add something to the path for subsequent steps.
          #
-         githubPathFile = os.environ["GITHUB_PATH"]
-         log.debug('GITHUB_PATH=' + githubPathFile)
-         if githubPathFile:
-            with open(githubPathFile, 'a+') as githubPaths:
-               githubPaths.write(macPortsPrefix + '/bin' + '\n')
-               githubPaths.write(macPortsPrefix + '/sbin'+ '\n')
+         if 'GITHUB_PATH' in os.environ:
+            githubPathFile = os.environ['GITHUB_PATH']
+            log.debug('GITHUB_PATH=' + githubPathFile)
+            if githubPathFile:
+               with open(githubPathFile, 'a+') as githubPaths:
+                  githubPaths.write(macPortsPrefix + '/bin'  + '\n')
+                  githubPaths.write(macPortsPrefix + '/sbin' + '\n')
+                  githubPaths.write(macPortsPrefix + '/lib'  + '\n')
 
          #
          # Just because we have MacPorts installed, doesn't mean its list of software etc will be up-to-date.  So fix
@@ -2954,12 +2957,13 @@ def doPackage():
          # See https://github.com/orgs/Homebrew/discussions/2823 for problems using macdeployqt with homebrew
          # installation of Qt
          #
+         # Various links online talk about LD_LIBRARY_PATH and DYLD_LIBRARY_PATH, but neither of these environment
+         # variables seems to be set in GitHub MacOS actions.
+         #
          log.debug('PATH=' + os.environ['PATH'])
-         log.debug('LD_LIBRARY_PATH=' + os.environ['LD_LIBRARY_PATH'])
-         log.debug('DYLD_LIBRARY_PATH=' + os.environ['DYLD_LIBRARY_PATH'])
 
 #         pathsToSearch = os.environ['DYLD_LIBRARY_PATH'].split(os.pathsep)
-         pathsToSearch = os.environ['PATH'].split(os.pathsep) + os.environ['LD_LIBRARY_PATH'].split(os.pathsep) + os.environ['DYLD_LIBRARY_PATH'].split(os.pathsep)
+         pathsToSearch = os.environ['PATH'].split(os.pathsep)
          extraLibs = [
             'libdbus'  , # Eg libdbus-1.3.dylib
          ]
