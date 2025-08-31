@@ -2973,7 +2973,8 @@ def doPackage():
          # See https://github.com/orgs/Homebrew/discussions/2823 for problems using macdeployqt with homebrew
          # installation of Qt
          #
-         pathsToSearch = os.environ['DYLD_LIBRARY_PATH'].split(os.pathsep)
+#         pathsToSearch = os.environ['DYLD_LIBRARY_PATH'].split(os.pathsep)
+         pathsToSearch = os.environ['PATH'].split(os.pathsep)
          extraLibs = [
             'libdbus'  ,
          ]
