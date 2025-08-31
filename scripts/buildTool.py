@@ -306,7 +306,7 @@ def downloadFile(url):
 #    pathsToSearch    = array of paths to search
 #    extraLibs        = array of base names of libraries to search for
 #    libExtension     = 'dll' on Windows, 'dylib' on MacOS
-#    libRegex         = '-?[0-9]*.dll' on Windows, 'dylib' on MacOS
+#    libRegex         = '-?[0-9]*.dll' on Windows, '.*.dylib' on MacOS
 #    targetDirectory  = where to copy found libraries to
 #-----------------------------------------------------------------------------------------------------------------------
 def findAndCopyLibs(pathsToSearch, extraLibs, libExtension, libRegex, targetDirectory):
@@ -2957,9 +2957,9 @@ def doPackage():
 #         pathsToSearch = os.environ['DYLD_LIBRARY_PATH'].split(os.pathsep)
          pathsToSearch = os.environ['PATH'].split(os.pathsep)
          extraLibs = [
-            'libdbus'  ,
+            'libdbus'  , # Eg libdbus-1.3.dylib
          ]
-         findAndCopyLibs(pathsToSearch, extraLibs, 'dylib', '\S*.dylib', dir_packages_mac_bin)
+         findAndCopyLibs(pathsToSearch, extraLibs, 'dylib', '.*.dylib', dir_packages_mac_bin)
 
          #
          # Before we try to run macdeployqt, we need to make sure its directory is in the PATH.  (Depending on how Qt
