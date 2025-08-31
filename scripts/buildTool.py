@@ -308,7 +308,7 @@ def downloadFile(url):
 #    libExtension    = 'dll' on Windows, 'dylib' on MacOS
 #    targetDirectory = where to copy found libraries to
 #-----------------------------------------------------------------------------------------------------------------------
-def findAndCopyLibs(pathsToSearch, extraLibs, extension, targetDirectory):
+def findAndCopyLibs(pathsToSearch, extraLibs, libExtension, targetDirectory):
    for extraLib in extraLibs:
       found = False
       for searchDir in pathsToSearch:
