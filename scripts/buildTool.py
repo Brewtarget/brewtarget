@@ -303,12 +303,13 @@ def downloadFile(url):
 #
 # This is used in both the Windows and Mac packaging
 #
-#    pathsToSearch   = array of paths to search
-#    extraLibs       = array of base names of libraries to search for
-#    libExtension    = 'dll' on Windows, 'dylib' on MacOS
-#    targetDirectory = where to copy found libraries to
+#    pathsToSearch    = array of paths to search
+#    extraLibs        = array of base names of libraries to search for
+#    libExtension     = 'dll' on Windows, 'dylib' on MacOS
+#    libRegex         = '-?[0-9]*.dll' on Windows, 'dylib' on MacOS
+#    targetDirectory  = where to copy found libraries to
 #-----------------------------------------------------------------------------------------------------------------------
-def findAndCopyLibs(pathsToSearch, extraLibs, libExtension, targetDirectory):
+def findAndCopyLibs(pathsToSearch, extraLibs, libExtension, libRegex, targetDirectory):
    for extraLib in extraLibs:
       found = False
       for searchDir in pathsToSearch:
@@ -322,7 +323,7 @@ def findAndCopyLibs(pathsToSearch, extraLibs, libExtension, targetDirectory):
             # a problem for 'libstdc++'!
             suffixOfGlobMatch = globMatch.removeprefix(extraLib)
             # On Python 3.11 or later, we would write flags=re.NOFLAG instead of flags=0
-            if re.fullmatch(re.compile('-?[0-9]*.' + libExtension), suffixOfGlobMatch, flags=0):
+            if re.fullmatch(re.compile(libRegex), suffixOfGlobMatch, flags=0):
                matches.append(globMatch)
          numMatches = len(matches)
          if (numMatches > 0):
@@ -2540,7 +2541,7 @@ def doPackage():
             'libzstd'      , # ZStandard (aka zstd) = fast lossless compression algorithm
             'zlib'         , # ZLib compression library
          ]
-         findAndCopyLibs(pathsToSearch, extraLibs, 'dll', dir_packages_win_bin)
+         findAndCopyLibs(pathsToSearch, extraLibs, 'dll', '-?[0-9]*.dll', dir_packages_win_bin)
 
          # Copy the NSIS installer script to where it belongs
          shutil.copy2(dir_build.joinpath('NsisInstallerScript.nsi'), dir_packages_platform)
@@ -2906,27 +2907,6 @@ def doPackage():
          log.debug('Copying ' + xalanDir + xalanMsgLibName + ' to ' + dir_packages_mac_frm.as_posix())
          shutil.copy2(xalanDir + xalanMsgLibName, dir_packages_mac_frm)
 
-###         qtguiFramework = ''
-###         qtguiMatch = re.search(r'^\s*(\S+/QtGui) ', otoolOutputExe, re.MULTILINE)
-###         if (qtguiMatch):
-###            qtguiFramework = qtguiMatch[1]
-###         else:
-###            #
-###            # Not sure we can guess where to look for QtGui if we can't find it in the obvious places
-###            #
-###            log.critical(
-###               'Could not find QtGui dependency in ' + capitalisedProjectName
-###            )
-###            exit(1)
-###         log.debug('Running otool -L on ' + qtguiFramework)
-###         otoolOutputQtgui = btUtils.abortOnRunFail(
-###            subprocess.run(['otool',
-###                            '-L',
-###                            qtguiFramework],
-###                           capture_output=True)
-###         ).stdout.decode('UTF-8')
-###         log.debug('Output of `otool -L ' + qtguiFramework + '`: ' + otoolOutputQtgui)
-
          #
          # The dylibbundler tool (https://github.com/auriamg/macdylibbundler/) proposes a ready-made solution to make
          # incorporating shared libraries into app bundles simple.  We try it here.
@@ -2978,7 +2958,7 @@ def doPackage():
          extraLibs = [
             'libdbus'  ,
          ]
-         findAndCopyLibs(pathsToSearch, extraLibs, 'dylib', dir_packages_mac_bin)
+         findAndCopyLibs(pathsToSearch, extraLibs, 'dylib', '\S*.dylib', dir_packages_mac_bin)
 
          #
          # Before we try to run macdeployqt, we need to make sure its directory is in the PATH.  (Depending on how Qt
