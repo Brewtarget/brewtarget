@@ -2959,9 +2959,7 @@ def doPackage():
          log.debug('DYLD_LIBRARY_PATH=' + os.environ['DYLD_LIBRARY_PATH'])
 
 #         pathsToSearch = os.environ['DYLD_LIBRARY_PATH'].split(os.pathsep)
-         pathsToSearch = os.environ['PATH'].split(os.pathsep) +
-                         os.environ['LD_LIBRARY_PATH'].split(os.pathsep) +
-                         os.environ['DYLD_LIBRARY_PATH'].split(os.pathsep)
+         pathsToSearch = os.environ['PATH'].split(os.pathsep) + os.environ['LD_LIBRARY_PATH'].split(os.pathsep) + os.environ['DYLD_LIBRARY_PATH'].split(os.pathsep)
          extraLibs = [
             'libdbus'  , # Eg libdbus-1.3.dylib
          ]
