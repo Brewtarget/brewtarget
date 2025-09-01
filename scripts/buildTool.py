@@ -2947,6 +2947,37 @@ def doPackage():
          # running `otool -L` on /opt/homebrew/opt/qt/lib/QtGui.framework/Versions/A/QtGui does not yield any dbus
          # dependency.
          #
+         # The first thing is to manually add in any missing frameworks.  Eg, since we know QtMultimedia requires
+         # QtNetwork, we look to see if QtMultimedia is one of our dependencies and, if it is, we copy the QtNetwork
+         # framework into our package.  (In this example, the QtMultimedia itself will get copied in by macdeployqt.)
+         #
+         extraFrameworkDependencies = {
+            "QtMultimedia": ["QtNetwork", ],
+            "QtGui"       : ["QtDBus"   , ],
+         }
+         for framework, dependencies in extraFrameworkDependencies.items():
+            #
+            # Eg to see if we depend on QtMultimedia, we are looking for something along the following lines in the
+            # otool output from earlier:
+            #    /opt/homebrew/opt/qt/lib/QtMultimedia.framework/Versions/A/QtMultimedia
+            #
+            frameworkMatch = re.search(r'^\s*(/\S+/' + framework + '.framework/\S+/' + framework + ')', otoolOutputExe, re.MULTILINE)
+            if (frameworkMatch):
+               frameworkPath = frameworkMatch[1]
+               log.debug('Doing extra dependencies for ' + frameworkPath)
+               for dependency in dependencies:
+                  #
+                  # We assume the dependency path takes the same form as the framework that requires it.  Eg
+                  # QtMultimedia -> QtNetwork means we transform
+                  #    /opt/homebrew/opt/qt/lib/QtMultimedia.framework/Versions/A/QtMultimedia
+                  # to:
+                  #    /opt/homebrew/opt/qt/lib/QtNetwork.framework/Versions/A/QtNetwork
+                  #
+                  dependencyPath = frameworkPath.replace(framework, dependency)
+                  log.debug('Copying ' + dependencyPath)
+                  shutil.copy2(dependencyPath, dir_packages_mac_frm)
+
+         #
          # From https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos, we know we need to ship:
          #
          #    - libdbus-1 library
@@ -2962,7 +2993,6 @@ def doPackage():
          #
          log.debug('PATH=' + os.environ['PATH'])
 
-#         pathsToSearch = os.environ['DYLD_LIBRARY_PATH'].split(os.pathsep)
          pathsToSearch = os.environ['PATH'].split(os.pathsep)
          extraLibs = [
             'libdbus'  , # Eg libdbus-1.3.dylib
