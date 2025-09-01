@@ -2977,8 +2977,9 @@ def doPackage():
                   #    /opt/homebrew/opt/qt/lib/QtNetwork.framework/Versions/A/QtNetwork
                   #
                   dependencyPath = frameworkPath.replace(framework, dependency)
-                  log.debug('Copying ' + dependencyPath)
-                  shutil.copytree(dependencyPath, dir_packages_mac_frm)
+                  dependencyTarget = dir_packages_mac_frm.joinpath(framework + '.framework').as_posix()
+                  log.debug('Copying ' + dependencyPath + ' to ' + dependencyTarget)
+                  shutil.copytree(dependencyPath, dependencyTarget)
 
          #
          # From https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos, we know we need to ship:
