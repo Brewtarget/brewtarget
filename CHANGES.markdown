@@ -21,10 +21,12 @@ Bug fixes and minor enhancements.
 * None
 
 ### Bug Fixes
-Mash editor needs some tidy-up [963](https://github.com/Brewtarget/brewtarget/issues/963)
+* Mash editor needs some tidy-up [963](https://github.com/Brewtarget/brewtarget/issues/963)
+* Better Hop Stage default for hop additions [1018](https://github.com/Brewtarget/brewtarget/issues/1018)
+* Qt Libs missing in 4.2.0 on MacOS [1022](https://github.com/Brewtarget/brewtarget/issues/1022)
 
 ### Release Timestamp
-Sun, 24 Aug 2025 04:01:04 +0100
+Sun, 24 Aug 2025 04:02:01 +0100
 
 ## v4.2.0
 Bug fixes and minor enhancements.
@@ -42,7 +44,7 @@ Bug fixes and minor enhancements.
 * Inconsistent meaning of double-click [1016](https://github.com/Brewtarget/brewtarget/issues/1016)
 
 ### Release Timestamp
-Sat, 23 Aug 2025 04:01:04 +0100
+Sat, 23 Aug 2025 04:02:00 +0100
 
 ## v4.1.3
 Bug fixes and minor enhancements.
