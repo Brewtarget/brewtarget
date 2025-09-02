@@ -2961,7 +2961,10 @@ def doPackage():
             # otool output from earlier:
             #    /opt/homebrew/opt/qt/lib/QtMultimedia.framework/Versions/A/QtMultimedia
             #
-            frameworkMatch = re.search(r'^\s*(/\S+/' + framework + '.framework/\S+/' + framework + ')', otoolOutputExe, re.MULTILINE)
+            # We want to change QtMultimedia to QtNetwork and then copy the whole of the .framework directory:
+            #    /opt/homebrew/opt/qt/lib/QtNetwork.framework
+            #
+            frameworkMatch = re.search(r'^\s*(/\S+/' + framework + '.framework)', otoolOutputExe, re.MULTILINE)
             if (frameworkMatch):
                frameworkPath = frameworkMatch[1]
                log.debug('Doing extra dependencies for ' + frameworkPath)
@@ -2974,8 +2977,9 @@ def doPackage():
                   #    /opt/homebrew/opt/qt/lib/QtNetwork.framework/Versions/A/QtNetwork
                   #
                   dependencyPath = frameworkPath.replace(framework, dependency)
-                  log.debug('Copying ' + dependencyPath)
-                  shutil.copy2(dependencyPath, dir_packages_mac_frm)
+                  dependencyTarget = dir_packages_mac_frm.joinpath(framework + '.framework').as_posix()
+                  log.debug('Copying ' + dependencyPath + ' to ' + dependencyTarget)
+                  shutil.copytree(dependencyPath, dependencyTarget)
 
          #
          # From https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos, we know we need to ship:
