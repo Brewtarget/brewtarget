@@ -44,6 +44,22 @@ namespace {
       IMPORT
    };
 
+   //
+   // Note that we cannot guarantee the file extension is at the end of the input string -- eg we might be matching
+   // against "BeerJSON format (*.json)".
+   //
+   // In the regex below, we assume:
+   //   - File extension starts with dot -- "[.]" (Saves trying to work out how many backslashes to use to escape dot!)
+   //   - File extensions are only latin letters but may be upper or lower case or both -- "[a-zA-Z]"
+   //   - File extensions are any non-zero length -- "+"
+   //   - File extension is either at end of string or followed by something that is not a letter or a
+   //     digit -- "[^a-zA-Z0-9]|$"
+   //
+   // This is a bit overkill for what we need for now, but not hugely, and is potentially useful for future expansion
+   // (eg if we want to generalise file extension handling).
+   //
+   static QRegularExpression const fileExtensionRegexp {"[.]([a-zA-Z]+)[^a-zA-Z0-9]|$"};
+
    /**
     * \brief Display a file dialog for selecting file(s) for reading / writing
     */
@@ -95,13 +111,24 @@ namespace {
             &fileChooser,
             &QFileDialog::filterSelected,
             [&fileChooser](QString const & filter) {
-               // The Qt docs are a bit silent about what the parameter is for the QFileDialog::filterSelected signal.
-               // By adding a logging statement here, we discover that we get either "*.json" or "*.xml".  So we just
-               // need to chop off the first two characters to get default suffix.
                //
-               // In Qt 6, we can replace `mid` with `sliced` which is faster apparently.
-               qDebug() << Q_FUNC_INFO << "Export filter is:" << filter;
-               fileChooser.setDefaultSuffix(filter.mid(2));
+               // The Qt docs are a bit silent about what the parameter is for the QFileDialog::filterSelected signal.
+               // By adding a logging statement here, we discovered in Qt5 that we got either "*.json" or "*.xml".
+               // However, in Qt6, we got "BeerJSON format (*.json)" or "BeerXML format (*.xml)".
+               //
+               QRegularExpressionMatch match = fileExtensionRegexp.match(filter);
+               if (!match.hasMatch()) {
+                  //
+                  // This shouldn't happen because we should be parsing one of the options we gave in the fileChooser
+                  // constructor above.
+                  //
+                  qCritical() << Q_FUNC_INFO << "Unable to parse" << filter;
+                  return;
+               }
+
+               QString const suffix = match.captured(1).toLower();
+               qDebug() << Q_FUNC_INFO << "Export filter is:" << filter << ".  From this, suffix is:" << suffix;
+               fileChooser.setDefaultSuffix(suffix);
                return;
             }
          );
@@ -112,14 +139,33 @@ namespace {
          return std::nullopt;
       }
 
+      //
+      // QFileDialog::defaultSuffix() excludes the leading dot on the suffix, but things are easier for us below if we
+      // include it.
+      //
+      QString const defaultSuffix = QString{".%1"}.arg(fileChooser.defaultSuffix());
+      QList<QString> selectedFiles = fileChooser.selectedFiles();
+
       qDebug() <<
-         Q_FUNC_INFO << "Selected" << fileChooser.selectedFiles().length() << "file(s) (from directory" <<
-         fileChooser.directory() << "):" << fileChooser.selectedFiles();
+         Q_FUNC_INFO << "Selected" << selectedFiles.length() << "file(s) (from directory" << fileChooser.directory() <<
+         "):" << fileChooser.selectedFiles() << ". Default suffix:" << defaultSuffix;
 
       // Remember the directory for next time
       fileChooserDirectory = fileChooser.directory().canonicalPath();
 
-      return fileChooser.selectedFiles();
+      //
+      // If we are writing, then, for any files that do not have a suffix, add the default one
+      //
+      if (!importing) {
+         for (QString & file : selectedFiles) {
+            if (!file.endsWith(".json", Qt::CaseInsensitive) &&
+                !file.endsWith(".xml" , Qt::CaseInsensitive)) {
+               file.append(defaultSuffix);
+            }
+         }
+      }
+
+      return selectedFiles;
    }
 
    /**
@@ -233,6 +279,8 @@ bool ImportExport::importFromFiles(std::optional<QStringList> inputFiles) {
          succeeded = BeerXML::getInstance().importFromXML(filename, userMessageAsStream);
       } else {
          qInfo() << Q_FUNC_INFO << "Don't understand file extension on" << filename << "so ignoring!";
+         userMessageAsStream <<
+            QObject::tr("Did not recognise file extension on \"%1\" so nothing written.").arg(filename);
       }
       qDebug() << Q_FUNC_INFO << "Import " << (succeeded ? "succeeded" : "failed");
       importExportMsg(ImportOrExport::IMPORT, filename, succeeded, userMessage);
@@ -244,7 +292,6 @@ bool ImportExport::importFromFiles(std::optional<QStringList> inputFiles) {
 
    return allSucceeded;
 }
-
 
 bool ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
                                 QList<Equipment   const *> const * equipments,
@@ -278,12 +325,13 @@ bool ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
    QFile outFile;
    outFile.setFileName(filename);
 
+   bool succeeded = false;
+
    if (!outFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
       qWarning() << Q_FUNC_INFO << "Could not open" << filename << "for writing.";
-      return false;
-   }
+      userMessageAsStream << QObject::tr("Could not open \"%1\" for writing").arg(filename);
 
-   if (filename.endsWith("json", Qt::CaseInsensitive)) {
+   } else if (filename.endsWith(".json", Qt::CaseInsensitive)) {
       //
       // It's not strictly required by the BeerJSON standard, but we'll get a better export of Recipe if we also
       // explicitly export all the ingredients.  This is because, in BeerJSON (unlike BeerXML), the Recipe specification
@@ -319,10 +367,8 @@ bool ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
       if (recipes && recipes->size() > 0) { exporter.add(*recipes                 ); }
 
       exporter.close();
-      return true;
-   }
-
-   if (filename.endsWith("xml", Qt::CaseInsensitive)) {
+      succeeded = true;
+   } else if (filename.endsWith(".xml", Qt::CaseInsensitive)) {
       BeerXML & bxml = BeerXML::getInstance();
       // The slightly non-standard-XML format of BeerXML means the common bit (which gets written by createXmlFile) is
       // just at the start and there is no "closing" bit to write after we write all the data.
@@ -350,10 +396,16 @@ bool ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
       if (recipes      && recipes     ->size() > 0) { bxml.toXml(*recipes,      outFile); }
       if (equipments   && equipments  ->size() > 0) { bxml.toXml(*equipments,   outFile); }
 
-      return true;
+      succeeded = true;
+   } else {
+      qInfo() << Q_FUNC_INFO << "Don't understand file extension on" << filename << "so ignoring!";
+      userMessageAsStream <<
+         QObject::tr("Did not recognise file extension on \"%1\" so nothing read.").arg(filename);
    }
 
-   qInfo() << Q_FUNC_INFO << "Don't understand file extension on" << filename << "so ignoring!";
+
+   qDebug() << Q_FUNC_INFO << "Export" << (succeeded ? "succeeded" : "failed");
+   importExportMsg(ImportOrExport::EXPORT, filename, succeeded, userMessage);
 
    return false;
 }
