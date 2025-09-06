@@ -2968,6 +2968,19 @@ def doPackage():
             if (frameworkMatch):
                frameworkPath = frameworkMatch[1]
                log.debug('Doing extra dependencies for ' + frameworkPath)
+               #
+               # It seems there are problems when we copy the framework trees.  Users trying to install the app who
+               # run `codesign` get an error "bundle format is ambiguous (could be app or framework)".  We suspect this
+               # may be related to the way we handle symlinks when we copy the tree, so this diagnostic is to list in
+               # detail all the files in the tree before we copy it.
+               #
+               btUtils.abortOnRunFail(
+                  subprocess.run(
+                     ['find', frameworkPath, '-exec', 'ls', '-ld', '{}', '+'],
+                     capture_output=False
+                  )
+               )
+
                for dependency in dependencies:
                   #
                   # We assume the dependency path takes the same form as the framework that requires it.  Eg

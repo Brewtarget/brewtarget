@@ -13,6 +13,17 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * TODO: Additional methods for calculating IBU
 * We'll list other new features here...
 
+## v4.2.2
+Bug fixes and minor enhancements.
+
+### New Features
+* None
+
+### Bug Fixes
+* Qt Libs missing in 4.2.0 on MacOS [1022](https://github.com/Brewtarget/brewtarget/issues/1022)
+
+### Release Timestamp
+Sat, 6 Sep 2025 04:02:02 +0100
 
 ## v4.2.1
 Bug fixes and minor enhancements.
@@ -27,7 +38,7 @@ Bug fixes and minor enhancements.
 * XML recipe export doesn't work when no file extension supplied [1025](https://github.com/Brewtarget/brewtarget/issues/1025)
 
 ### Release Timestamp
-Sun, 24 Aug 2025 04:02:01 +0100
+Sat, 6 Sep 2025 04:02:01 +0100
 
 ## v4.2.0
 Bug fixes and minor enhancements.
