@@ -2974,6 +2974,9 @@ def doPackage():
                # may be related to the way we handle symlinks when we copy the tree, so this diagnostic is to list in
                # detail all the files in the tree before we copy it.
                #
+               # Looks like symlinks are all relative and point inside the tree we are copying, so it's safe to copy
+               # them _as_ symlinks below.
+               #
                btUtils.abortOnRunFail(
                   subprocess.run(
                      ['find', frameworkPath, '-exec', 'ls', '-ld', '{}', '+'],
@@ -2991,8 +2994,12 @@ def doPackage():
                   #
                   dependencyPath = frameworkPath.replace(framework, dependency)
                   dependencyTarget = dir_packages_mac_frm.joinpath(framework + '.framework').as_posix()
+                  #
+                  # Per comment above, we want to copy symlinks as symlinks (rather than copy them as the files they
+                  # point to).
+                  #
                   log.debug('Copying ' + dependencyPath + ' to ' + dependencyTarget)
-                  shutil.copytree(dependencyPath, dependencyTarget)
+                  shutil.copytree(dependencyPath, dependencyTarget, symlinks=True)
 
          #
          # From https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos, we know we need to ship:
