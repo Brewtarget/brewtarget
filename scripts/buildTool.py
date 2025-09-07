@@ -1459,6 +1459,12 @@ def installDependencies():
          log.debug('Qt Base Dir: ' + qtBaseDir + ', Bin Dir: ' + qtBinDir)
          os.environ["PATH"] = qtBinDir + os.pathsep + os.environ["PATH"]
          #
+         # Equally, the Qt lib directory is something we need in the path for packaging
+         #
+         qtLibDir = os.path.normpath(os.path.join(qtBaseDir, "lib"))
+         log.debug('Qt Lib Dir: ' + qtLibDir)
+
+         #
          # See
          # https://stackoverflow.com/questions/1466000/difference-between-modes-a-a-w-w-and-r-in-built-in-open-function
          # for a good summary (clearer than the Python official docs) of the mode flag on open.
@@ -1472,14 +1478,14 @@ def installDependencies():
          # So we force the ownership back to what it should be before attempting to open the file for writing.
          #
          bashProfilePath = os.path.expanduser('~/.bash_profile')
-         log.debug('Adding Qt Bin Dir ' + qtBinDir + ' to PATH in ' + bashProfilePath)
+         log.debug('Adding Qt Bin and Lib Dirs ' + qtBinDir + '; ' + qtLibDir + ' to PATH in ' + bashProfilePath)
          btUtils.abortOnRunFail(subprocess.run(['ls', '-l', bashProfilePath], capture_output=False))
          currentUser = getpass.getuser()
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'chown', currentUser, bashProfilePath], capture_output=False))
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'u+w', bashProfilePath], capture_output=False))
          btUtils.abortOnRunFail(subprocess.run(['ls', '-l', bashProfilePath], capture_output=False))
          with open(bashProfilePath, 'a+') as bashProfile:
-            bashProfile.write('export PATH="' + qtBinDir + os.pathsep + ':$PATH"')
+            bashProfile.write('export PATH="' + qtBinDir + os.pathsep + qtLibDir + os.pathsep + '$PATH"')
          #
          # Another way to "permanently" add something to PATH on MacOS, is by either appending to the /etc/paths file or
          # creating a file in the /etc/paths.d directory.  We do the latter, as (a) it's best practice and (b) it allows
@@ -1495,7 +1501,19 @@ def installDependencies():
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'touch', '/etc/paths.d/01-qtToolPaths']))
          btUtils.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'a+rw', '/etc/paths.d/01-qtToolPaths']))
          with open('/etc/paths.d/01-qtToolPaths', 'a+') as qtToolPaths:
-            qtToolPaths.write(qtBinDir)
+            qtToolPaths.write(qtBinDir + '\n')
+            qtToolPaths.write(qtLibDir + '\n')
+         #
+         # ...but, for GitHub actions, writing to the file in the GITHUB_PATH environment variable is the supported way
+         # to add something to the path for subsequent steps.
+         #
+         if 'GITHUB_PATH' in os.environ:
+            githubPathFile = os.environ['GITHUB_PATH']
+            log.debug('GITHUB_PATH=' + githubPathFile)
+            if githubPathFile:
+               with open(githubPathFile, 'a+') as githubPaths:
+                  githubPaths.write(qtBinDir + '\n')
+                  githubPaths.write(qtLibDir + '\n')
 
          os.environ['LDFLAGS'] = '-L' + qtBaseDir + '/lib'
          os.environ['CPPFLAGS'] = '-I' + qtBaseDir + '/include'
@@ -2968,22 +2986,6 @@ def doPackage():
             if (frameworkMatch):
                frameworkPath = frameworkMatch[1]
                log.debug('Doing extra dependencies for ' + frameworkPath)
-               #
-               # It seems there are problems when we copy the framework trees.  Users trying to install the app who
-               # run `codesign` get an error "bundle format is ambiguous (could be app or framework)".  We suspect this
-               # may be related to the way we handle symlinks when we copy the tree, so this diagnostic is to list in
-               # detail all the files in the tree before we copy it.
-               #
-               # Looks like symlinks are all relative and point inside the tree we are copying, so it's safe to copy
-               # them _as_ symlinks below.
-               #
-               btUtils.abortOnRunFail(
-                  subprocess.run(
-                     ['find', frameworkPath, '-exec', 'ls', '-ld', '{}', '+'],
-                     capture_output=False
-                  )
-               )
-
                for dependency in dependencies:
                   #
                   # We assume the dependency path takes the same form as the framework that requires it.  Eg
@@ -2995,10 +2997,21 @@ def doPackage():
                   dependencyPath = frameworkPath.replace(framework, dependency)
                   dependencyTarget = dir_packages_mac_frm.joinpath(framework + '.framework').as_posix()
                   #
-                  # Per comment above, we want to copy symlinks as symlinks (rather than copy them as the files they
-                  # point to).
+                  # It seems there are problems when we copy the framework trees.  Users trying to install the app who
+                  # run `codesign` get an error "bundle format is ambiguous (could be app or framework)".  We suspect this
+                  # may be related to the way we handle symlinks when we copy the tree, so this diagnostic is to list in
+                  # detail all the files in the tree before we copy it.
                   #
-                  log.debug('Copying ' + dependencyPath + ' to ' + dependencyTarget)
+                  # Looks like symlinks are all relative and point inside the tree we are copying, so it's safe to copy
+                  # them _as_ symlinks below.
+                  #
+                  btUtils.abortOnRunFail(
+                     subprocess.run(
+                        ['find', dependencyPath, '-exec', 'ls', '-ld', '{}', '+'],
+                        capture_output=False
+                     )
+                  )
+                  log.debug('Copying tree ' + dependencyPath + ' to ' + dependencyTarget)
                   shutil.copytree(dependencyPath, dependencyTarget, symlinks=True)
 
          #
