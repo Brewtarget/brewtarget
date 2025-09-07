@@ -2969,6 +2969,7 @@ def doPackage():
          # QtNetwork, we look to see if QtMultimedia is one of our dependencies and, if it is, we copy the QtNetwork
          # framework into our package.  (In this example, the QtMultimedia itself will get copied in by macdeployqt.)
          #
+         qtFrameworksDir = ''
          extraFrameworkDependencies = {
             "QtMultimedia": ["QtNetwork", ],
             "QtGui"       : ["QtDBus"   , ],
@@ -2986,6 +2987,11 @@ def doPackage():
             if (frameworkMatch):
                frameworkPath = frameworkMatch[1]
                log.debug('Doing extra dependencies for ' + frameworkPath)
+
+               # Capture where the frameworks live, so we can tell macdeployqt below
+               if (not qtFrameworksDir):
+                  qtFrameworksDir = os.path.dirname(frameworkPath)
+
                for dependency in dependencies:
                   #
                   # We assume the dependency path takes the same form as the framework that requires it.  Eg
@@ -3018,9 +3024,6 @@ def doPackage():
          # From https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos, we know we need to ship:
          #
          #    - libdbus-1 library
-         #
-         #
-         # TODO: Still working this bit out!
          #
          # See https://github.com/orgs/Homebrew/discussions/2823 for problems using macdeployqt with homebrew
          # installation of Qt
@@ -3103,6 +3106,7 @@ def doPackage():
          #         ❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄
          #
          log.debug('Running macdeployqt (PATH=' + os.environ['PATH'] + ')')
+         log.debug('qtFrameworksDir=' + qtFrameworksDir)
          os.chdir(dir_packages_platform)
          btUtils.abortOnRunFail(
             #
@@ -3116,6 +3120,7 @@ def doPackage():
             #
             subprocess.run(['macdeployqt',
                             macBundleDirName,
+                            '-libpath=' + qtFrameworksDir,
                             '-verbose=2',        # 0 = no output, 1 = error/warning (default), 2 = normal, 3 = debug
                             '-executable=' + macBundleDirName + '/Contents/MacOS/' + capitalisedProjectName,
                             '-dmg'],
