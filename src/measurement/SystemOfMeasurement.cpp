@@ -16,6 +16,7 @@
 #include "measurement/SystemOfMeasurement.h"
 
 #include <QDebug>
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 #include "utils/EnumStringMapping.h"
 
@@ -72,13 +73,9 @@ QString Measurement::getDisplayName(Measurement::SystemOfMeasurement const syste
       case Measurement::SystemOfMeasurement::HeatCapacityKilocalories    : return QObject::tr("Heat Capacity Kilocalories per"     );
       case Measurement::SystemOfMeasurement::HeatCapacityJoules          : return QObject::tr("Heat Capacity Joules per"           );
       case Measurement::SystemOfMeasurement::HeatCapacityBtus            : return QObject::tr("Heat Capacity Btus per"             );
-      // In C++23, we'd add:
-      // default: std::unreachable();
    }
-   // In C++23, we'd add:
-   // std::unreachable()
    // It's a coding error if we get here
-   Q_ASSERT(false);
+   Q_UNREACHABLE();
 }
 
 QString Measurement::getUniqueName(SystemOfMeasurement systemOfMeasurement) {

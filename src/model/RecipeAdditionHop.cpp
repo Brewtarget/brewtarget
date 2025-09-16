@@ -21,6 +21,8 @@
 #include "model/Boil.h"
 #include "model/BoilStep.h"
 
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
+
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_RecipeAdditionHop.cpp"
@@ -136,9 +138,7 @@ RecipeAdditionHop::Use RecipeAdditionHop::use() const {
 
       // No default case as we want the compiler to warn us if we missed a case above
    }
-
-   // This should be unreachable, but putting a return statement here prevents compiler warnings
-   return RecipeAdditionHop::Use::Boil;
+   Q_UNREACHABLE(); // We should never get here
 }
 
 bool RecipeAdditionHop::isFirstWort() const {

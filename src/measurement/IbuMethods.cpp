@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <QObject>
 #include <QString>
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 #include "Algorithms.h"
 #include "measurement/Unit.h"
@@ -264,5 +265,5 @@ double IbuMethods::getIbus(IbuMethods::IbuCalculationParms const & parms) {
       case IbuMethods::IbuFormula::mIbu   : return mIbu   (parms);
 //      case IbuMethods::IbuFormula::Smph   : return smph   (parms);
    }
-//      std::unreachable();
+   Q_UNREACHABLE();
 }
