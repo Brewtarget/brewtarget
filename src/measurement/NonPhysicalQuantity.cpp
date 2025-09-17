@@ -16,6 +16,7 @@
 #include "measurement/NonPhysicalQuantity.h"
 
 #include <QDebug>
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 QString GetLoggableName(NonPhysicalQuantity nonPhysicalQuantity) {
    // See comment in measurement/PhysicalQuantity.cpp for why we use a switch and not an EnumStringMapping here
@@ -28,11 +29,7 @@ QString GetLoggableName(NonPhysicalQuantity nonPhysicalQuantity) {
       case NonPhysicalQuantity::OrdinalNumeral : return "OrdinalNumeral";
       case NonPhysicalQuantity::CardinalNumber : return "CardinalNumber";
       case NonPhysicalQuantity::Dimensionless  : return "Dimensionless" ;
-      // In C++23, we'd add:
-      // default: std::unreachable();
    }
-   // In C++23, we'd add:
-   // std::unreachable()
    // It's a coding error if we get here!
-   Q_ASSERT(false);
+   Q_UNREACHABLE();
 }

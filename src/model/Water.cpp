@@ -23,6 +23,8 @@
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
 
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
+
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_Water.cpp"
@@ -364,9 +366,7 @@ double Water::ppm(Water::Ion const ion) const {
       case Water::Ion::SO4:  return this->m_sulfate_ppm;
       // No default case as we want the compiler to warn us if we missed one of the enum values above
    }
-
-   // Should be unreachable
-   return 0.0;
+   Q_UNREACHABLE(); // We should never get here
 }
 
 // This class supports NamedEntity::numRecipesUsedIn

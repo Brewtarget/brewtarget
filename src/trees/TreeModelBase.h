@@ -34,6 +34,7 @@
 #include <QString>
 #include <QStringBuilder> // Needed for efficient QString concatenation operator (%)
 #include <QVariant>
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 #include "database/ObjectStoreWrapper.h"
 #include "trees/TreeNode.h"
@@ -875,7 +876,7 @@ public:
          return this->insertChild(static_cast<TreeFolderNode<NE> &>(*parentNode), parentIndex, row, element);
       }
 
-//      std::unreachable();
+      Q_UNREACHABLE(); // We should never get here
    }
 
    template<std::derived_from<TreeNode> TreeNodeType>
