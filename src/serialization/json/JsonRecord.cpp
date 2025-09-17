@@ -22,6 +22,7 @@
 #include <QDate>
 #include <QDebug>
 #include <QMetaType>
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 #include "serialization/json/JsonCoding.h"
 #include "serialization/json/JsonRecordDefinition.h"
@@ -525,7 +526,7 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                   // This should be unreachable as we dealt with these cases separately above, but having case
                   // statements for them eliminates a compiler warning whilst still retaining the useful warning if we
                   // have ever omitted processing for another field type.
-                  Q_ASSERT(false);
+                  Q_UNREACHABLE();
                   break;
 
                case JsonRecordDefinition::FieldType::MeasurementWithUnits:
@@ -831,7 +832,7 @@ void JsonRecord::insertValue(JsonRecordDefinition::FieldDefinition const & field
          // This should be unreachable as JsonRecord::toJson dealt with these cases separately before calling this
          // function, but having an case statement for it eliminates a compiler warning whilst still retaining the
          // useful warning if we have ever omitted processing for another field type.
-         Q_ASSERT(false);
+         Q_UNREACHABLE();
          break;
 
       case JsonRecordDefinition::FieldType::MeasurementWithUnits:

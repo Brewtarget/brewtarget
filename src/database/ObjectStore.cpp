@@ -27,6 +27,7 @@
 #include <QSqlField>
 #include <QSqlRecord>
 #include <QVector>
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 #include "database/BtSqlQuery.h"
 #include "database/Database.h"
@@ -60,8 +61,7 @@ namespace {
          // No default case needed as compiler should warn us if any options covered above
       }
       // It's a coding error if we get here!
-      Q_ASSERT(false);
-      return nullptr; // Should never get here
+      Q_UNREACHABLE();
    }
 
    /**
@@ -554,7 +554,7 @@ namespace {
          // No default case needed as compiler should warn us if any options covered above
       }
       // It's a coding error if we get here
-      Q_ASSERT(false);
+      Q_UNREACHABLE();
    }
 
    using TableColumnAndType = std::tuple<QString, QString, ObjectStore::FieldType>;
@@ -730,7 +730,7 @@ public:
             case ObjectStore::FieldType::Unit: {
                // Since Unit is stored as a pointer, it is never wrapped in std::optional, so it's a coding error if we
                // get here
-               Q_ASSERT(false);
+               Q_UNREACHABLE();
                propertyValue = QVariant();
                return;
 
@@ -738,7 +738,7 @@ public:
             // No default case needed as compiler should warn us if any options covered above
          }
          // It's a coding error if we get here!
-         Q_ASSERT(false);
+         Q_UNREACHABLE();
       }
 
       //
@@ -785,7 +785,7 @@ public:
       }
 
       // It's a coding error if we get here
-      Q_ASSERT(false);
+      Q_UNREACHABLE();
    }
 
    /**
@@ -918,7 +918,7 @@ public:
             // No default case needed as compiler should warn us if any options covered above
          }
          // It's a coding error if we get here!
-         Q_ASSERT(false);
+         Q_UNREACHABLE();
       }
 
       //
@@ -977,7 +977,7 @@ public:
       }
 
       // It's a coding error if we get here!
-      Q_ASSERT(false);
+      Q_UNREACHABLE();
    }
 
    /**
@@ -1338,13 +1338,8 @@ QString ObjectStore::getDisplayName(ObjectStore::FieldType const fieldType) {
       case ObjectStore::FieldType::Date  : return "ObjectStore::FieldType::Date"  ;
       case ObjectStore::FieldType::Enum  : return "ObjectStore::FieldType::Enum"  ;
       case ObjectStore::FieldType::Unit  : return "ObjectStore::FieldType::Unit"  ;
-      // In C++23, we'd add:
-      // default: std::unreachable();
    }
-   // In C++23, we'd add:
-   // std::unreachable()
-   // It's a coding error if we get here
-   Q_ASSERT(false);
+   Q_UNREACHABLE();
 }
 
 ObjectStore::ObjectStore(char const *             const   className,

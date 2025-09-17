@@ -24,6 +24,7 @@
 #include <QDebug>
 #include <QString>
 #include <QTextStream>
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 NamedParameterBundle::NamedParameterBundle(NamedParameterBundle::OperationMode mode) :
    m_parameters{},
@@ -81,8 +82,7 @@ bool NamedParameterBundle::contains(PropertyPath const & propertyPath) const {
       }
       bundle = &bundle->m_containedBundles.at(**property);
    }
-   // This should actually be unreachable
-   return false;
+   Q_UNREACHABLE(); // We should never get here
 }
 
 template<typename P>

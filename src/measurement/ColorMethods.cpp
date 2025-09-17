@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QString>
 #include <QObject>
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 #include "PersistentSettings.h"
 
@@ -98,7 +99,7 @@ double ColorMethods::mcuToSrm(double mcu) {
       case ColorMethods::ColorFormula::Daniel: return daniel(mcu);
       case ColorMethods::ColorFormula::Mosher: return mosher(mcu);
    }
-//      std::unreachable();
+   Q_UNREACHABLE();
 }
 
 QColor ColorMethods::srmToDisplayColor(double srm) {

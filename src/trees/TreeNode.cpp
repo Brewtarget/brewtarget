@@ -27,6 +27,7 @@
 #include <Qt>
 #include <QVariant>
 #include <QVector>
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 #include "Html.h"
 #include "Localization.h"
@@ -285,7 +286,7 @@ template<> bool TreeItemNode<Recipe>::columnIsLessThan(TreeItemNode<Recipe> cons
          return lhs.ancestors().length() < rhs.ancestors().length();
    }
 
-//   std::unreachable();
+   Q_UNREACHABLE();
    return lhs.name() < rhs.name();
 }
 
@@ -298,7 +299,7 @@ template<> bool TreeItemNode<BrewNote>::columnIsLessThan(TreeItemNode<BrewNote> 
          return lhs.brewDate() < rhs.brewDate();
    }
 
-//   std::unreachable();
+   Q_UNREACHABLE();
    return lhs.name() < rhs.name();
 }
 
@@ -315,7 +316,7 @@ template<> bool TreeItemNode<Equipment>::columnIsLessThan(TreeItemNode<Equipment
                 rhs.boilTime_min().value_or(Equipment::default_boilTime_mins);
    }
 
-//   std::unreachable();
+   Q_UNREACHABLE();
    return lhs.name() < rhs.name();
 }
 
@@ -328,7 +329,7 @@ template<> bool TreeItemNode<Mash>::columnIsLessThan(TreeItemNode<Mash> const & 
       case TreeItemNode<Mash>::ColumnIndex::TotalWater: return lhs.totalMashWater_l() < rhs.totalMashWater_l();
       case TreeItemNode<Mash>::ColumnIndex::TotalTime : return lhs.totalTime_mins()   < rhs.totalTime_mins();
    }
-//   std::unreachable();
+   Q_UNREACHABLE();
    return lhs.name() < rhs.name();
 }
 
