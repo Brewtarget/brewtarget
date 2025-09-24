@@ -3001,7 +3001,7 @@ def doPackage():
                   #    /opt/homebrew/opt/qt/lib/QtNetwork.framework/Versions/A/QtNetwork
                   #
                   dependencyPath = frameworkPath.replace(framework, dependency)
-                  dependencyTarget = dir_packages_mac_frm.joinpath(framework + '.framework').as_posix()
+                  dependencyTarget = dir_packages_mac_frm.joinpath(dependency + '.framework').as_posix()
                   #
                   # It seems there are problems when we copy the framework trees.  Users trying to install the app who
                   # run `codesign` get an error "bundle format is ambiguous (could be app or framework)".  We suspect this
