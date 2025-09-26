@@ -3083,7 +3083,7 @@ def doPackage():
                                     copiedLibrary],
                                     capture_output=True)
                   ).stdout.decode('UTF-8')
-                  log.debug('Output of `otool -L ' + copiedLibrary + '`: ' + otoolOutputCopiedLibrary)
+                  log.debug('Output of `otool -L ' + copiedLibrary.as_posix() + '`: ' + otoolOutputCopiedLibrary)
 
          #
          # From https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos, we know we need to ship:
