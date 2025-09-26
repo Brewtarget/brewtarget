@@ -3001,7 +3001,7 @@ def doPackage():
                   #    /opt/homebrew/opt/qt/lib/QtNetwork.framework/Versions/A/QtNetwork
                   #
                   dependencyPath = frameworkPath.replace(framework, dependency)
-                  dependencyTarget = dir_packages_mac_frm.joinpath(dependency + '.framework').as_posix()
+                  dependencyTarget = dir_packages_mac_frm.joinpath(dependency + '.framework')
                   #
                   # It seems there are problems when we copy the framework trees.  Users trying to install the app who
                   # run `codesign` get an error "bundle format is ambiguous (could be app or framework)".  We suspect
@@ -3017,8 +3017,8 @@ def doPackage():
                         capture_output=False
                      )
                   )
-                  log.debug('Copying tree ' + dependencyPath + ' to ' + dependencyTarget)
-                  shutil.copytree(dependencyPath, dependencyTarget, symlinks=True)
+                  log.debug('Copying tree ' + dependencyPath + ' to ' + dependencyTarget.as_posix())
+                  shutil.copytree(dependencyPath, dependencyTarget.as_posix(), symlinks=True)
                   #
                   # It is not enough to just copy, eg, QtDBus framework into the app bundle.  We need to fix its
                   # dependencies to point inside the bundle.  Eg after we copy
@@ -3037,10 +3037,10 @@ def doPackage():
                   otoolOutputCopiedLibrary = btUtils.abortOnRunFail(
                      subprocess.run(['otool',
                                     '-L',
-                                    copiedLibrary],
+                                    copiedLibrary.as_posix()],
                                     capture_output=True)
                   ).stdout.decode('UTF-8')
-                  log.debug('Output of `otool -L ' + copiedLibrary + '`: ' + otoolOutputCopiedLibrary)
+                  log.debug('Output of `otool -L ' + copiedLibrary.as_posix() + '`: ' + otoolOutputCopiedLibrary)
 
                   for outputLine in otoolOutputCopiedLibrary.splitlines():
                      #
@@ -3063,7 +3063,7 @@ def doPackage():
                         #
                         log.debug(
                            'Running install_name_tool -change ' + qtDepAbsPath + ' ' + qtDepRelPath + ' ' +
-                           copiedLibrary
+                           copiedLibrary.as_posix()
                         )
 
                         btUtils.abortOnRunFail(
@@ -3072,7 +3072,7 @@ def doPackage():
                               '-change',
                               qtDepAbsPath,
                               qtDepRelPath,
-                              copiedLibrary],
+                              copiedLibrary.as_posix()],
                               capture_output=False
                            )
                         )
