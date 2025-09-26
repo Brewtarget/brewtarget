@@ -3004,9 +3004,9 @@ def doPackage():
                   dependencyTarget = dir_packages_mac_frm.joinpath(dependency + '.framework').as_posix()
                   #
                   # It seems there are problems when we copy the framework trees.  Users trying to install the app who
-                  # run `codesign` get an error "bundle format is ambiguous (could be app or framework)".  We suspect this
-                  # may be related to the way we handle symlinks when we copy the tree, so this diagnostic is to list in
-                  # detail all the files in the tree before we copy it.
+                  # run `codesign` get an error "bundle format is ambiguous (could be app or framework)".  We suspect
+                  # this may be related to the way we handle symlinks when we copy the tree, so this diagnostic is to
+                  # list in detail all the files in the tree before we copy it.
                   #
                   # Looks like symlinks are all relative and point inside the tree we are copying, so it's safe to copy
                   # them _as_ symlinks below.
@@ -3019,6 +3019,71 @@ def doPackage():
                   )
                   log.debug('Copying tree ' + dependencyPath + ' to ' + dependencyTarget)
                   shutil.copytree(dependencyPath, dependencyTarget, symlinks=True)
+                  #
+                  # It is not enough to just copy, eg, QtDBus framework into the app bundle.  We need to fix its
+                  # dependencies to point inside the bundle.  Eg after we copy
+                  # /opt/homebrew/opt/qt/lib/QtDBus.framework/ to
+                  # [projectName]_[versionNumber]_MacOS.app/Contents/Frameworks/QtDBus.framework/, the other Qt
+                  # dependencies of the library inside that framework directory will still be on the "system" paths (eg
+                  # /opt/homebrew/opt/qt/lib/QtCore.framework/ etc).  We need to change them to point inside the app
+                  # bundle (eg [projectName]_[versionNumber]_MacOS.app/Contents/Frameworks/QtCore.framework/ etc).
+                  #
+                  # The variable names risk getting a bit confusing here because we are talking about dependencies of
+                  # dependency.  Hence why we start referring to dependency as copiedLibrary.
+                  #
+                  copiedLibrary = dependencyTarget.joinpath('Versions', 'Current', dependency)
+                  log.debug('Fixing absolute dependencies for ' + dependency)
+
+                  otoolOutputCopiedLibrary = btUtils.abortOnRunFail(
+                     subprocess.run(['otool',
+                                    '-L',
+                                    copiedLibrary],
+                                    capture_output=True)
+                  ).stdout.decode('UTF-8')
+                  log.debug('Output of `otool -L ' + copiedLibrary + '`: ' + otoolOutputCopiedLibrary)
+
+                  for outputLine in otoolOutputCopiedLibrary.splitlines():
+                     #
+                     # If we find a dependency of the form:
+                     #    /opt/local/libexec/qt6/lib/QtCore.framework/Versions/A/QtCore
+                     # we want to change it to the form:
+                     #    @loader_path/../Frameworks/QtCore.framework/Versions/A/QtCore
+                     #
+                     qtAbsoluteDependencyMatch = re.search(r'^\s*(/\S+/qt\S+/lib/)(Qt\S+) ', outputLine, re.MULTILINE)
+                     if (qtAbsoluteDependencyMatch):
+                        qtDepAbsPrefix = qtAbsoluteDependencyMatch[1]
+                        qtDepFramework = qtAbsoluteDependencyMatch[2]
+                        qtDepRelPrefix = '@loader_path/../Frameworks/'
+                        qtDepAbsPath = '' + qtDepAbsPrefix + qtDepFramework
+                        qtDepRelPath = '' + qtDepRelPrefix + qtDepFramework
+                        #
+                        # Per https://www.unix.com/man_page/osx/1/install_name_tool/, "install_name_tool changes the
+                        # dynamic shared library install names and or adds, changes or deletes the rpaths recorded in a
+                        # Mach-O binary".
+                        #
+                        log.debug(
+                           'Running install_name_tool -change ' + qtDepAbsPath + ' ' + qtDepRelPath + ' ' +
+                           copiedLibrary
+                        )
+
+                        btUtils.abortOnRunFail(
+                           subprocess.run(
+                              ['install_name_tool',
+                              '-change',
+                              qtDepAbsPath,
+                              qtDepRelPath,
+                              copiedLibrary],
+                              capture_output=False
+                           )
+                        )
+
+                  otoolOutputCopiedLibrary = btUtils.abortOnRunFail(
+                     subprocess.run(['otool',
+                                    '-L',
+                                    copiedLibrary],
+                                    capture_output=True)
+                  ).stdout.decode('UTF-8')
+                  log.debug('Output of `otool -L ' + copiedLibrary + '`: ' + otoolOutputCopiedLibrary)
 
          #
          # From https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos, we know we need to ship:
@@ -3134,6 +3199,10 @@ def doPackage():
          btUtils.abortOnRunFail(subprocess.run(['tree', '-sh'], capture_output=False))
          dmgFileName = macBundleDirName.replace('.app', '.dmg')
 
+         #
+         # otool -l = Display the load commands
+         # otool -L = Display the names and version numbers of the shared libraries that the object file uses
+         #
          log.debug('Running otool on ' + capitalisedProjectName + ' executable after macdeployqt')
          os.chdir(dir_packages_mac_bin)
          btUtils.abortOnRunFail(subprocess.run(['otool', '-L', capitalisedProjectName], capture_output=False))
