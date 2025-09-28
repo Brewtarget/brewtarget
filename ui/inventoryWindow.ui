@@ -5,6 +5,161 @@
   <property name="windowTitle">
    <string>Inventory</string>
   </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>900</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <!-- Top level widget needs a layout, otherwise its contents will not expand to fill the available space -->
+  <layout class="QVBoxLayout" name="verticalLayout_0">
+   <item>
+    <widget class="QTabWidget" name="tabWidget_InventoryTrees">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      </sizepolicy>
+     </property>
+     <property name="tabPosition">
+      <enum>QTabWidget::North</enum>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
 
+     <widget class="QWidget" name="tabInvTree_fermentables">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+
+      <attribute name="icon">
+       <iconset resource="../resources.qrc">
+        <normaloff>:/images/smallBarley.svg</normaloff>:/images/smallBarley.svg</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Fermentables</string>
+      </attribute>
+      <property name="toolTip">
+       <string>Fermentables</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_fermentableInvTree">
+       <item>
+        <widget class="InventoryFermentableTreeView" name="treeInvView_fermentable"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_fermentableInvTree">
+         <item>
+          <!-- See comments in catalogs/CatalogBase.h for why we use QToolButton rather than QLabel here -->
+          <widget class="QToolButton" name="searchIcon_fermentableInvTree">
+           <property name="styleSheet">
+            <string notr="true">QToolButton {border-style: outset; border-width: 0px;}</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/iconSearch.svg</normaloff>:/images/iconSearch.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="searchBox_fermentableInvTree">
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+
+     <widget class="QWidget" name="tabInvTree_hops">
+      <attribute name="icon">
+       <iconset resource="../resources.qrc">
+        <normaloff>:/images/smallHop.svg</normaloff>:/images/smallHop.svg</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Hops</string>
+      </attribute>
+      <property name="toolTip">
+       <string>Hops</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_hopInvTree">
+       <item>
+        <widget class="QWidget" name="treeInvView_hop"/>
+       </item>
+      </layout>
+     </widget>
+
+     <widget class="QWidget" name="tabInvTree_misc">
+      <attribute name="icon">
+       <iconset resource="../resources.qrc">
+        <normaloff>:/images/smallQuestion.svg</normaloff>:/images/smallQuestion.svg</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Miscellaneous</string>
+      </attribute>
+      <property name="toolTip">
+       <string>Miscellaneous</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_miscInvTree">
+       <item>
+        <widget class="QWidget" name="treeInvView_misc"/>
+       </item>
+      </layout>
+     </widget>
+
+     <widget class="QWidget" name="tabInvTree_yeasts">
+      <attribute name="icon">
+       <iconset resource="../resources.qrc">
+        <normaloff>:/images/smallYeast.svg</normaloff>:/images/smallYeast.svg</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Yeasts</string>
+      </attribute>
+      <property name="toolTip">
+       <string>Yeasts</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_yeastInvTree">
+       <item>
+        <widget class="QWidget" name="treeInvView_yeast"/>
+       </item>
+      </layout>
+     </widget>
+
+     <widget class="QWidget" name="tabInvTree_salts">
+      <attribute name="icon">
+       <iconset resource="../resources.qrc">
+        <normaloff>:/images/iconSalt.svg</normaloff>:/images/iconSalt.svg</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Salts</string>
+      </attribute>
+      <property name="toolTip">
+       <string>Salts</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_saltInvTree">
+       <item>
+        <widget class="QWidget" name="treeInvView_salt"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+
+   </item>
+  </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>InventoryFermentableTreeView</class>
+   <extends>QTreeView</extends>
+   <header>trees/NamedEntityTreeView.h</header>
+  </customwidget>
+ </customwidgets>
 </ui>

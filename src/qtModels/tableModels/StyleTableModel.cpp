@@ -25,20 +25,18 @@
    #include "moc_StyleTableModel.cpp"
 #endif
 
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<StyleTableModel>::columnInfos {
+   TABLE_MODEL_HEADER(Style, Name            , tr("Name"           ), PropertyNames::NamedEntity::name            ),
+   TABLE_MODEL_HEADER(Style, Type            , tr("Type"           ), PropertyNames::Style::type                  ),
+   TABLE_MODEL_HEADER(Style, Category        , tr("Category"       ), PropertyNames::Style::category              ),
+   TABLE_MODEL_HEADER(Style, CategoryNumber  , tr("Category Number"), PropertyNames::Style::categoryNumber        ),
+   TABLE_MODEL_HEADER(Style, StyleLetter     , tr("Style Letter"   ), PropertyNames::Style::styleLetter           ),
+   TABLE_MODEL_HEADER(Style, StyleGuide      , tr("Style Guide"    ), PropertyNames::Style::styleGuide            ),
+   TABLE_MODEL_HEADER(Style, NumRecipesUsedIn, tr("N° Recipes"     ), PropertyNames::NamedEntity::numRecipesUsedIn),
+};
+
 StyleTableModel::StyleTableModel(QTableView* parent, bool editable) :
-   BtTableModel{
-      parent,
-      editable,
-      {
-         TABLE_MODEL_HEADER(Style, Name            , tr("Name"           ), PropertyNames::NamedEntity::name            ),
-         TABLE_MODEL_HEADER(Style, Type            , tr("Type"           ), PropertyNames::Style::type                  /*, EnumInfo{Style::typeStringMapping, Style::typeDisplayNames}*/),
-         TABLE_MODEL_HEADER(Style, Category        , tr("Category"       ), PropertyNames::Style::category              ),
-         TABLE_MODEL_HEADER(Style, CategoryNumber  , tr("Category Number"), PropertyNames::Style::categoryNumber        ),
-         TABLE_MODEL_HEADER(Style, StyleLetter     , tr("Style Letter"   ), PropertyNames::Style::styleLetter           ),
-         TABLE_MODEL_HEADER(Style, StyleGuide      , tr("Style Guide"    ), PropertyNames::Style::styleGuide            ),
-         TABLE_MODEL_HEADER(Style, NumRecipesUsedIn, tr("N° Recipes"     ), PropertyNames::NamedEntity::numRecipesUsedIn),
-      }
-   },
+   BtTableModel{parent, editable},
    TableModelBase<StyleTableModel, Style>{} {
    this->m_rows.clear();
 

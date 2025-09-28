@@ -316,22 +316,8 @@ std::pair<double, QString> Measurement::Unit::splitAmountString(QString const & 
 
    QString const unitName = match.captured(2);
 
-   double quantity = 0.0;
    QString numericPartOfInput{match.captured(1)};
-   try {
-      quantity = Localization::toDouble(numericPartOfInput, Q_FUNC_INFO);
-      // If we didn't throw an exception then all must finally be OK!
-      if (ok) {
-         *ok = true;
-      }
-   } catch (std::invalid_argument const & ex) {
-      // If we get this error it's most probably either a bug in our regular expression or a problem with
-      // Localization::getLocale().
-      qWarning() << Q_FUNC_INFO << "Could not parse" << numericPartOfInput << "as number:" << ex.what();
-   } catch(std::out_of_range const & ex) {
-      // This one is more likely user error!
-      qWarning() << Q_FUNC_INFO << "Out of range parsing" << numericPartOfInput << "as number:" << ex.what();
-   }
+   double const quantity = Localization::toDouble(numericPartOfInput, Q_FUNC_INFO, ok);
 
    return std::pair<double, QString>{quantity, unitName};
 }

@@ -2166,7 +2166,7 @@ template<> void Recipe::set(std::shared_ptr<Boil        > val) { this->setBoil  
 template<> void Recipe::set(std::shared_ptr<Fermentation> val) { this->setFermentation(val); return; }
 template<> void Recipe::set(std::shared_ptr<Style       > val) { this->setStyle       (val); return; }
 template<> void Recipe::set(std::shared_ptr<Equipment   > val) { this->setEquipment   (val); return; }
-template<> void Recipe::set(std::shared_ptr<Water       > val) {
+template<> void Recipe::set([[maybe_unused]] std::shared_ptr<Water       > val) {
    // We didn't yet figure out what setWater on Recipe should mean!
    qDebug() << Q_FUNC_INFO << "Operation not supported";
    return;

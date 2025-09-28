@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtOptionalDateEdit.h is part of Brewtarget, and is copyright the following authors 2024:
+ * widgets/BtOptionalDateEdit.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -44,7 +44,14 @@ public:
    ~BtOptionalDateEdit();
 
    std::optional<QDate> optionalDate() const;
+   [[nodiscard]] QVariant getAsVariant() const;
+
    void setOptionalDate(std::optional<QDate> const val);
+
+   /**
+    * \brief Similar to \c SmartField::setFromVariant
+    */
+   void setFromVariant(QVariant const & value);
 
    QSize sizeHint() const;
    QSize minimumSizeHint() const;

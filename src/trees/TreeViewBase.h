@@ -329,7 +329,7 @@ public:
     *
     * \return \c std::nullopt if the user cancelled the deletion
     */
-   std::optional<QModelIndex> doDeleteItems(QModelIndexList const & selectedViewIndexes) {
+   std::optional<QModelIndex> doDeleteItems(QModelIndexList const & selectedViewIndexes) requires (!IsInventory<NE>) {
       //
       // Later on we're going to want to have the node just before or after the ones we deleted, so we can make it the
       // selected one.  The QModelIndex objects won't be valid after we modify the tree structure, so we want to get the
@@ -439,6 +439,14 @@ public:
 
       // If newSelectedTreeNode is null, this will just return the index of the root node
       return this->indexOfNode(newSelectedTreeNode);
+   }
+
+   /**
+    *
+    */
+   std::optional<QModelIndex> doDeleteItems(QModelIndexList const & selectedViewIndexes) requires (IsInventory<NE>) {
+      // TODO Placeholder
+      return std::nullopt;
    }
 
    void doCopySelected() {

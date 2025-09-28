@@ -20,6 +20,7 @@
 #include <QLineEdit>
 
 #include "measurement/Measurement.h"
+#include "utils/ColumnInfo.h"
 #include "utils/NoCopy.h"
 #include "widgets/BtComboBoxBool.h"
 #include "widgets/BtComboBoxEnum.h"
@@ -84,7 +85,7 @@ public:
    ~ItemDelegate() = default;
 
 private:
-   BtTableModel::ColumnInfo const & getColumnInfo(QModelIndex const & index) const {
+   ColumnInfo const & getColumnInfo(QModelIndex const & index) const {
       // In theory, in C++20, we don't need the `typename` here, but as of 2023-05-26, Apple C++ compiler is Clang
       // 14.0.0, and we need Clang 16 before support for
       // https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0634r3.html is implemented.
@@ -99,7 +100,7 @@ private:
       //
       // So, for the purposes of getting column info, we need to grab a pointer to the NeTableModel in the constructor.
       //
-      BtTableModel::ColumnInfo const & columnInfo = m_tableModel.get_ColumnInfo(columnIndex);
+      ColumnInfo const & columnInfo = m_tableModel.get_ColumnInfo(columnIndex);
       Q_ASSERT(index.column() >= 0);
       Q_ASSERT(columnInfo.index == static_cast<size_t>(index.column()));
       return columnInfo;
@@ -114,7 +115,7 @@ public:
    QWidget * getEditWidget(QWidget * parent,
                            [[maybe_unused]] QStyleOptionViewItem const & option,
                            QModelIndex const & index) const {
-      BtTableModel::ColumnInfo const & columnInfo = this->getColumnInfo(index);
+      ColumnInfo const & columnInfo = this->getColumnInfo(index);
       TypeInfo const & typeInfo = columnInfo.typeInfo;
 
       if (std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
@@ -126,7 +127,7 @@ public:
             DisplayInfo::Enum const & enumInfo = std::get<DisplayInfo::Enum>(*typeInfo.displayAs);
 
             BtComboBoxEnum * comboBox = new BtComboBoxEnum(parent);
-            comboBox->init(columnInfo.tableModelName,
+            comboBox->init(columnInfo.modelName,
                            columnInfo.columnName,
                            columnInfo.columnFqName,
                            enumInfo.stringMapping,
@@ -146,7 +147,7 @@ public:
             DisplayInfo::Bool const & boolInfo = std::get<DisplayInfo::Bool>(*typeInfo.displayAs);
 
             BtComboBoxBool * boolComboBox = new BtComboBoxBool(parent);
-            boolComboBox->init(columnInfo.tableModelName,
+            boolComboBox->init(columnInfo.modelName,
                                columnInfo.columnName,
                                columnInfo.columnFqName,
                                boolInfo.unsetDisplay,
@@ -163,14 +164,14 @@ public:
          //
          // Where we have an editable amount that can be more than one physical quantity -- eg mass or volume -- we want
          // a combo box to allow the user to select the physical quantity.  This is a bit tricky as such a selector does
-         // not have its own property.  Rather than over-generalise the BtTableModel::ColumnInfo structure to
+         // not have its own property.  Rather than over-generalise the ColumnInfo structure to
          // accommodate a new type of column, we adopt a convention that the selector column shares the same property as
          // the amount column, but has the Measurement::ChoiceOfPhysicalQuantity value (instead of, typically, a
          // PrecisionInfo) in the extras field.
          //
          auto const validMeasures = *columnInfo.extras;
          BtComboBoxEnum * comboBox = new BtComboBoxEnum(parent);
-         comboBox->init(columnInfo.tableModelName,
+         comboBox->init(columnInfo.modelName,
                         columnInfo.columnName,
                         columnInfo.columnFqName,
                         Measurement::physicalQuantityStringMapping,
@@ -194,7 +195,7 @@ public:
     */
    void readDataFromModel(QWidget * editor,
                           QModelIndex const & index) const {
-      BtTableModel::ColumnInfo const & columnInfo = this->getColumnInfo(index);
+      ColumnInfo const & columnInfo = this->getColumnInfo(index);
       TypeInfo const & typeInfo = columnInfo.typeInfo;
 
       // Note that we need index.model(), not m_tableModel, as the former (eg a an HopSortFilterProxyModel) adds sorting
@@ -250,7 +251,7 @@ public:
    void writeDataToModel(QWidget * editor,
                          QAbstractItemModel * model,
                          QModelIndex const & index) const {
-      BtTableModel::ColumnInfo const & columnInfo = this->getColumnInfo(index);
+      ColumnInfo const & columnInfo = this->getColumnInfo(index);
       TypeInfo const & typeInfo = columnInfo.typeInfo;
 
       // .:TBD:. For the moment, for enums and bools we don't check whether the combo box was changed before calling

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Localization.cpp is part of Brewtarget, and is copyright the following authors 2011-2024:
+ * Localization.cpp is part of Brewtarget, and is copyright the following authors 2011-2025:
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -374,15 +374,23 @@ bool Localization::hasUnits(QString qstr) {
    return result;
 }
 
-double Localization::toDouble(QString text, bool* ok) {
+double Localization::toDouble(QString text, bool * ok) {
    // Try system locale first
    bool success = false;
-   QLocale sysDefault = QLocale();
-   double ret = sysDefault.toDouble(text, &success);
+   double ret = 0.0;
 
-   // If we failed, try C locale (ie what QString now does by default)
-   if (!success) {
-      ret = text.toDouble(&success);
+   try {
+      QLocale sysDefault = QLocale();
+      ret = sysDefault.toDouble(text, &success);
+
+      // If we failed, try C locale (ie what QString now does by default)
+      if (!success) {
+         ret = text.toDouble(&success);
+      }
+   } catch (std::invalid_argument const & ex) {
+      qWarning() << Q_FUNC_INFO << "Could not parse" << text << "as number:" << ex.what();
+   } catch(std::out_of_range const & ex) {
+      qWarning() << Q_FUNC_INFO << "Out of range parsing" << text << "as number:" << ex.what();
    }
 
    // If we were asked to return the success, return it here.
@@ -413,12 +421,16 @@ double Localization::toDouble(NamedEntity const & element,
    return 0.0;
 }
 
-double Localization::toDouble(QString text, char const * const caller) {
+double Localization::toDouble(QString text, char const * const caller, bool * ok) {
    bool success = false;
    double ret = Localization::toDouble(text, &success);
 
    if (!success) {
       qWarning() << Q_FUNC_INFO << "(Called from" << caller << "): could not convert" << text << "to double";
+   }
+
+   if (ok) {
+      *ok = success;
    }
 
    return ret;

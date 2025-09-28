@@ -19,63 +19,63 @@
 
 #include "model/OwnedByRecipe.h"
 
-//======================================================================================================================
-//========================================== Start of property name constants ==========================================
-// See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::IngredientInRecipe { inline BtStringConst const property{#property}; }
-AddPropertyName(ingredientId)
-#undef AddPropertyName
-//=========================================== End of property name constants ===========================================
-//======================================================================================================================
+/////======================================================================================================================
+/////========================================== Start of property name constants ==========================================
+///// See comment in model/NamedEntity.h
+///#define AddPropertyName(property) namespace PropertyNames::IngredientInRecipe { inline BtStringConst const property{#property}; }
+///AddPropertyName(ingredientId)
+///#undef AddPropertyName
+/////=========================================== End of property name constants ===========================================
+/////======================================================================================================================
 
-/**
- * \brief This is a "lite" version of \c RecipeAddition that serves as a common base to \c RecipeAddition,
- *        \c RecipeAdjustmentSalt and \c RecipeUseOfWater
- */
-class IngredientInRecipe : public OwnedByRecipe {
-   Q_OBJECT
-
-public:
-   /**
-    * \brief See comment in model/NamedEntity.h
-    */
-   static QString localisedName();
-   static QString localisedName_ingredientId();
-
-   /**
-    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
-    *        info.
-    */
-   static TypeLookup const typeLookup;
-
-   IngredientInRecipe(QString name = "", int const recipeId = -1, int const ingredientId = -1);
-   IngredientInRecipe(NamedParameterBundle const & namedParameterBundle);
-   IngredientInRecipe(IngredientInRecipe const & other);
-
-   virtual ~IngredientInRecipe();
-
-   //=================================================== PROPERTIES ====================================================
-   /**
-    * \brief The ID of the ingredient (ie \c Hop, \c Fermentable, \c Misc or \c Yeast) or \c Salt or \c Water being
-    *        added.
-    *
-    *        Strictly, water isn't quite the same as other ingredients, but calling it an ingredient here allows us to
-    *        minimise code duplication in \c Recipe
-    */
-   Q_PROPERTY(int ingredientId READ ingredientId WRITE setIngredientId)
-
-   //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   int ingredientId() const;
-
-   //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setIngredientId(int const val);
-
-protected:
-   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
-
-protected:
-   int m_ingredientId;
-
-};
+////**
+/// * \brief This is a "lite" version of \c RecipeAddition that serves as a common base to \c RecipeAddition,
+/// *        \c RecipeAdjustmentSalt and \c RecipeUseOfWater
+/// */
+///class IngredientInRecipe : public OwnedByRecipe {
+///   Q_OBJECT
+///
+///public:
+///   /**
+///    * \brief See comment in model/NamedEntity.h
+///    */
+///   static QString localisedName();
+///   static QString localisedName_ingredientId();
+///
+///   /**
+///    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+///    *        info.
+///    */
+///   static TypeLookup const typeLookup;
+///
+///   IngredientInRecipe(QString name = "", int const recipeId = -1, int const ingredientId = -1);
+///   IngredientInRecipe(NamedParameterBundle const & namedParameterBundle);
+///   IngredientInRecipe(IngredientInRecipe const & other);
+///
+///   virtual ~IngredientInRecipe();
+///
+///   //=================================================== PROPERTIES ====================================================
+///   /**
+///    * \brief The ID of the ingredient (ie \c Hop, \c Fermentable, \c Misc or \c Yeast) or \c Salt or \c Water being
+///    *        added.
+///    *
+///    *        Strictly, water isn't quite the same as other ingredients, but calling it an ingredient here allows us to
+///    *        minimise code duplication in \c Recipe
+///    */
+///   Q_PROPERTY(int ingredientId READ ingredientId WRITE setIngredientId)
+///
+///   //============================================ "GETTER" MEMBER FUNCTIONS ============================================
+///   int ingredientId() const;
+///
+///   //============================================ "SETTER" MEMBER FUNCTIONS ============================================
+///   void setIngredientId(int const val);
+///
+///protected:
+///   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
+///
+///protected:
+//////   int m_ingredientId;
+///
+///};
 
 #endif

@@ -29,24 +29,21 @@
    #include "moc_BoilStepTableModel.cpp"
 #endif
 
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<BoilStepTableModel>::columnInfos {
+   TABLE_MODEL_HEADER(BoilStep, Name        , tr("Name"         ), PropertyNames:: NamedEntity::name           ),
+   TABLE_MODEL_HEADER(BoilStep, StepTime    , tr("Step Time"    ), PropertyNames::    StepBase::stepTime_mins  ),
+   TABLE_MODEL_HEADER(BoilStep, StartTemp   , tr("Start Temp"   ), PropertyNames::    StepBase::startTemp_c    ),
+   TABLE_MODEL_HEADER(BoilStep, RampTime    , tr("Ramp Time"    ), PropertyNames::    StepBase::rampTime_mins  ),
+   TABLE_MODEL_HEADER(BoilStep, EndTemp     , tr("End Temp"     ), PropertyNames::        Step::endTemp_c      ),
+   TABLE_MODEL_HEADER(BoilStep, StartAcidity, tr("Start Acidity"), PropertyNames::        Step::startAcidity_pH),
+   TABLE_MODEL_HEADER(BoilStep, EndAcidity  , tr("End Acidity"  ), PropertyNames::        Step::endAcidity_pH  ),
+   TABLE_MODEL_HEADER(BoilStep, StartGravity, tr("Start Gravity"), PropertyNames::StepExtended::startGravity_sg),
+   TABLE_MODEL_HEADER(BoilStep, EndGravity  , tr("End Gravity"  ), PropertyNames::StepExtended::  endGravity_sg),
+   TABLE_MODEL_HEADER(BoilStep, ChillingType, tr("Chilling Type"), PropertyNames::    BoilStep::chillingType   ),
+};
+
 BoilStepTableModel::BoilStepTableModel(QTableView * parent, bool editable) :
-   BtTableModel{
-      parent,
-      editable,
-      {
-         TABLE_MODEL_HEADER(BoilStep, Name        , tr("Name"         ), PropertyNames:: NamedEntity::name           ),
-         TABLE_MODEL_HEADER(BoilStep, StepTime    , tr("Step Time"    ), PropertyNames::    StepBase::stepTime_mins  /*, PrecisionInfo{0}*/),
-         TABLE_MODEL_HEADER(BoilStep, StartTemp   , tr("Start Temp"   ), PropertyNames::    StepBase::startTemp_c    /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(BoilStep, RampTime    , tr("Ramp Time"    ), PropertyNames::    StepBase::rampTime_mins  /*, PrecisionInfo{0}*/),
-         TABLE_MODEL_HEADER(BoilStep, EndTemp     , tr("End Temp"     ), PropertyNames::        Step::endTemp_c      /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(BoilStep, StartAcidity, tr("Start Acidity"), PropertyNames::        Step::startAcidity_pH/*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(BoilStep, EndAcidity  , tr("End Acidity"  ), PropertyNames::        Step::endAcidity_pH  /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(BoilStep, StartGravity, tr("Start Gravity"), PropertyNames::StepExtended::startGravity_sg),
-         TABLE_MODEL_HEADER(BoilStep, EndGravity  , tr("End Gravity"  ), PropertyNames::StepExtended::  endGravity_sg),
-         TABLE_MODEL_HEADER(BoilStep, ChillingType, tr("Chilling Type"), PropertyNames::    BoilStep::chillingType   /*, EnumInfo{BoilStep::chillingTypeStringMapping,
-                                                                                                                                BoilStep::chillingTypeDisplayNames}*/),
-      }
-   },
+   BtTableModel{parent, editable},
    TableModelBase<BoilStepTableModel, BoilStep>{},
    StepTableModelBase<BoilStepTableModel, BoilStep, Boil>{} {
 

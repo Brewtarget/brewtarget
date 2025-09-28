@@ -31,11 +31,11 @@ class BtStringConst;
 class Recipe;
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(Equipment, Name            ,
-                              MashTunVolume   ,
-                              KettleVolume    ,
-                              FermenterVolume ,
-                              NumRecipesUsedIn,)
+COLUMN_NAMES(EquipmentTableModel, Name            ,
+                                  MashTunVolume   ,
+                                  KettleVolume    ,
+                                  FermenterVolume ,
+                                  NumRecipesUsedIn,)
 
 /*!
  * \class EquipmentTableModel

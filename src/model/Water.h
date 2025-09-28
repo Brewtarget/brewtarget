@@ -149,6 +149,12 @@ public:
    static EnumStringMapping const ionStringMapping;
    static EnumStringMapping const ionDisplayNames;
 
+   /**
+    * \brief This is where we centrally define how \c Water objects can be measured.
+    */
+   static constexpr auto validMeasures  = Measurement::PhysicalQuantity::Volume;
+   static constexpr auto defaultMeasure = Measurement::PhysicalQuantity::Volume;
+
    //
    // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
    // subclasses.

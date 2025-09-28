@@ -69,7 +69,7 @@ bool RecipeAddition::compareWith(NamedEntity const & other, QList<BtStringConst 
       AUTO_PROPERTY_COMPARE(this, rhs, m_addAtAcidity_pH, PropertyNames::RecipeAddition::addAtAcidity_pH, propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_duration_mins  , PropertyNames::RecipeAddition::duration_mins  , propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->IngredientInRecipe::compareWith(other, propertiesThatDiffer)
+      this->OwnedByRecipe::compareWith(other, propertiesThatDiffer)
    );
 }
 
@@ -84,11 +84,11 @@ TypeLookup const RecipeAddition::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, duration_mins  , m_duration_mins  , Measurement::PhysicalQuantity::Time   ),
    },
    // Parent class lookup.
-   {&IngredientInRecipe::typeLookup}
+   {&OwnedByRecipe::typeLookup}
 };
 
-RecipeAddition::RecipeAddition(QString name, int const recipeId, int const ingredientId) :
-   IngredientInRecipe{name, recipeId, ingredientId},
+RecipeAddition::RecipeAddition(QString name, int const recipeId) :
+   OwnedByRecipe{name, recipeId},
    m_stage          {RecipeAddition::Stage::Mash},
    m_step           {std::nullopt},
    m_addAtTime_mins {std::nullopt},
@@ -101,7 +101,7 @@ RecipeAddition::RecipeAddition(QString name, int const recipeId, int const ingre
 }
 
 RecipeAddition::RecipeAddition(NamedParameterBundle const & namedParameterBundle) :
-   IngredientInRecipe{namedParameterBundle},
+   OwnedByRecipe{namedParameterBundle},
    // Note that we do not set m_stage here as it is for subclasses to determine how that should be defaulted if it is
    // not present.
    SET_REGULAR_FROM_NPB (m_step           , namedParameterBundle, PropertyNames::RecipeAddition::step           , std::nullopt),
@@ -115,7 +115,7 @@ RecipeAddition::RecipeAddition(NamedParameterBundle const & namedParameterBundle
 }
 
 RecipeAddition::RecipeAddition(RecipeAddition const & other) :
-   IngredientInRecipe{other                 },
+   OwnedByRecipe{other                 },
    m_stage          {other.m_stage          },
    m_step           {other.m_step           },
    m_addAtTime_mins {other.m_addAtTime_mins },

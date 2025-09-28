@@ -79,9 +79,9 @@ QString Measurement::getDisplayName(Measurement::SystemOfMeasurement const syste
 }
 
 QString Measurement::getUniqueName(SystemOfMeasurement systemOfMeasurement) {
-   // It's a coding error if we don't find a result (in which case EnumStringMapping::enumToString will log an error and
+   // It's a coding error if we don't find a result (in which case EnumStringMapping::enumToValue will log an error and
    // throw an exception).
-   return systemOfMeasurementToUniqueName.enumToString(systemOfMeasurement);
+   return systemOfMeasurementToUniqueName[systemOfMeasurement];
 }
 
 std::optional<Measurement::SystemOfMeasurement> Measurement::getFromUniqueName(QString const & uniqueName) {

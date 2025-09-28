@@ -25,11 +25,11 @@
 #include "qtModels/tableModels/TableModelBase.h"
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(Mash, Name,
-                         InitialGrainTemp,
-                         TotalMashWater  ,
-                         TotalTime       ,
-                         NumRecipesUsedIn,)
+COLUMN_NAMES(MashTableModel, Name,
+                             InitialGrainTemp,
+                             TotalMashWater  ,
+                             TotalTime       ,
+                             NumRecipesUsedIn,)
 
 /*!
  * \class MashTableModel

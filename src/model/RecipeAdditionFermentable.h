@@ -84,11 +84,12 @@ public:
    Q_PROPERTY(Fermentable * fermentable   READ fermentable   WRITE setFermentable             )
 
    // See model/IngredientAmount.h
-   Q_PROPERTY(Measurement::Amount           amount    READ amount     WRITE setAmount  )
-   Q_PROPERTY(double                        quantity  READ quantity   WRITE setQuantity)
-   Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )
-   Q_PROPERTY(Measurement::PhysicalQuantity measure   READ measure    WRITE setMeasure )
-   Q_PROPERTY(bool                          isWeight  READ isWeight   WRITE setIsWeight)
+   Q_PROPERTY(int                           ingredientId READ ingredientId WRITE setIngredientId)
+   Q_PROPERTY(Measurement::Amount           amount       READ amount       WRITE setAmount      )
+   Q_PROPERTY(double                        quantity     READ quantity     WRITE setQuantity    )
+   Q_PROPERTY(Measurement::Unit const *     unit         READ unit         WRITE setUnit        )
+   Q_PROPERTY(Measurement::PhysicalQuantity measure      READ measure      WRITE setMeasure     )
+   Q_PROPERTY(bool                          isWeight     READ isWeight     WRITE setIsWeight    )
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
 
@@ -105,9 +106,8 @@ public:
    virtual NamedEntity * ensureExists(BtStringConst const & property) override;
 
 protected:
-   // Note that we don't override compareWith, as we don't have any non-inherited member variables
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
-
 };
 
 BT_DECLARE_METATYPES(RecipeAdditionFermentable)

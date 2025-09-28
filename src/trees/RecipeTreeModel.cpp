@@ -114,8 +114,8 @@ void RecipeTreeModel::addAncestoralTree(TreeNode & recipeNodeRaw,
 }
 
 void RecipeTreeModel::addSubTree(Recipe const & recipe,
-                                 TreeItemNode<Recipe> & recipeNode,
-                                 bool const recurse) {
+                                 TreeItemNode<Recipe> & recipeNode/*,
+                                 bool const recurse*/) {
 
    bool const showSnapshots = PersistentSettings::value(PersistentSettings::Names::showsnapshots, false).toBool();
 
@@ -308,7 +308,7 @@ void RecipeTreeModel::revertRecipeToPreviousVersion(QModelIndex index) {
 // This is detaching a Recipe from its previous versions
 void RecipeTreeModel::orphanRecipe(QModelIndex index) {
    TreeNode* node = this->treeNode(index);
-   //TreeNode* parentNode = node->rawParent();
+///   TreeNode* parentNode = node->rawParent();
    QModelIndex pIndex = this->parent(index);
 
    // It's a coding error if the index supplied doesn't point to a Recipe node...

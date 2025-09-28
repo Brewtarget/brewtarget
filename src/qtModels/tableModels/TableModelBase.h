@@ -29,11 +29,11 @@
 #include "undoRedo/Undoable.h"
 #include "measurement/Measurement.h"
 #include "model/IngredientAmount.h"
-#include "model/IngredientInRecipe.h"
 #include "model/Inventory.h"
 #include "model/Recipe.h"
 #include "qtModels/tableModels/BtTableModel.h"
 #include "undoRedo/UndoableAddOrRemove.h"
+#include "utils/ColumnOwnerTraits.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/MetaTypes.h"
 #include "utils/PropertyHelper.h"
@@ -43,21 +43,18 @@
 class Style;
 
 //
-// Using concepts allows us to tailor the templated TableModelTraits class without having the same inheritance
+// Using concepts allows us to tailor the templated TableModelBase class without having the same inheritance
 // structure as BtTableModel / BtTableModelRecipeObserver.
 //
 // Note that concepts have some limitations:
 //    - Concepts cannot recursively refer to themselves and cannot be constrained, is you cannot define one concept in
 //      terms of another
 //    - You cannot have explicit instantiations, explicit specializations, or partial specializations of concepts
-// An alternative would be to use a traits struct, which has fewer limitations, but is somewhat more clunky.
 //
 // See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it)
 template <typename T> concept CONCEPT_FIX_UP IsTableModel         = std::is_base_of_v<BtTableModel, T>;
 template <typename T> concept CONCEPT_FIX_UP ObservesRecipe       = std::is_base_of_v<BtTableModelRecipeObserver, T>;
 template <typename T> concept CONCEPT_FIX_UP DoesNotObserveRecipe = std::negation_v<std::is_base_of<BtTableModelRecipeObserver, T>>;
-
-template <typename T> concept CONCEPT_FIX_UP IsIngredientInRecipe = std::is_base_of_v<IngredientInRecipe, T>;
 
 //
 // NOTE: At several places below in TableModelBase, we would like to have two versions of a member function depending on
@@ -73,7 +70,7 @@ template <typename T> concept CONCEPT_FIX_UP IsIngredientInRecipe = std::is_base
 //       version via:
 //          this->updateInventory<HopTableModel>(...);
 //
-//       (I did also try `this->updateInventory<decltype(*this)>(...)`, but I couldn't get it to work.
+//       (I did also try `this->updateInventory<decltype(*this)>(...)`, but I couldn't get it to work.)
 //
 //       But what if we want to call one of these templated functions from inside TableModelBase?  Well, then we have to
 //       call down to a wrapper function in Derived that knows which version of the TableModelBase function to call.  Eg
@@ -96,17 +93,17 @@ template <typename T> concept CONCEPT_FIX_UP IsIngredientInRecipe = std::is_base
 //
 
 
-/**
- * \brief We want, eg, \c HopTableModel to inherit from \c TableModelBase<HopTableModel, Hop> and to have its own enum
- *        \c HopTableModel::ColumnIndex.  But we'd also like \c HopTableModel::ColumnIndex to be accessible from within
- *        \c TableModelBase, which normally isn't possible, eg as explained at
- *        https://stackoverflow.com/questions/5534759/c-with-crtp-class-defined-in-the-derived-class-is-not-accessible-in-the-base
- *        However, per the same link, the way around this is to use a traits class.  This is another "trick" where we
- *        declare a template for the "traits" class before the base class of the curiously recurring template pattern
- *        (CRTP), but then specialise that "traits" class in the derived class.
- */
-template<class Derived>
-struct TableModelTraits;
+////**
+/// * \brief We want, eg, \c HopTableModel to inherit from \c TableModelBase<HopTableModel, Hop> and to have its own enum
+/// *        \c HopTableModel::ColumnIndex.  But we'd also like \c HopTableModel::ColumnIndex to be accessible from within
+/// *        \c TableModelBase, which normally isn't possible, eg as explained at
+/// *        https://stackoverflow.com/questions/5534759/c-with-crtp-class-defined-in-the-derived-class-is-not-accessible-in-the-base
+/// *        However, per the same link, the way around this is to use a traits class.  This is another "trick" where we
+/// *        declare a template for the "traits" class before the base class of the curiously recurring template pattern
+/// *        (CRTP), but then specialise that "traits" class in the derived class.
+/// */
+///template<class Derived>
+///struct TableModelTraits;
 
 /**
  * \brief See comment in qtModels/tableModels/BtTableModel.h for more info on inheritance structure
@@ -122,17 +119,28 @@ struct TableModelTraits;
  *                                                    // calls to removed() because avoids rounding errors on running
  *                                                    // totals.)
  *
- *        Note that we use TableModelTraits as the phantom class for CuriouslyRecurringTemplateBase since it fits the
+ *        Note that we use ColumnOwnerTraits as the phantom class for CuriouslyRecurringTemplateBase since it fits the
  *        bill.
  */
 template<class Derived, class NE>
-class TableModelBase : public CuriouslyRecurringTemplateBase<TableModelTraits, Derived> {
+class TableModelBase : public CuriouslyRecurringTemplateBase<ColumnOwnerTraits, Derived> {
 public:
+   //
+   // We want, eg, \c HopTableModel to inherit from \c TableModelBase<HopTableModel, Hop> and to have its own enum
+   // \c HopTableModel::ColumnIndex.  But we'd also like \c HopTableModel::ColumnIndex to be accessible from within
+   // \c TableModelBase, which normally isn't possible, eg as explained at
+   // https://stackoverflow.com/questions/5534759/c-with-crtp-class-defined-in-the-derived-class-is-not-accessible-in-the-base
+   // However, per the same link, the way around this is to use a traits class.  This is another "trick" where we
+   // declare a template for the "traits" class before the base class of the curiously recurring template pattern
+   // (CRTP), but then specialise that "traits" class in the derived class.
+   //
    // This gets round the fact that we would not be able to access Derived::ColumnIndex directly
    //
-   // In theory, in C++20, we don't need the `typename` here, but, per comment in BtTableModel::ColumnInfo, we need to
+   // In theory, in C++20, we don't need the `typename` here, but, per comment in ColumnInfo, we need to
    // retain it until our Mac build environment is using a more recent version of Clang.
-   using ColumnIndex = typename TableModelTraits<Derived>::ColumnIndex;
+   //
+///   using ColumnIndex = typename TableModelTraits<Derived>::ColumnIndex;
+   using ColumnIndex = typename ColumnIndexHolder<Derived>::ColumnIndex;
 
 protected:
    TableModelBase() : m_rows{} {
@@ -150,14 +158,14 @@ public:
     *        resolution (as explained at
     *        https://stackoverflow.com/questions/51690394/overloading-member-function-among-multiple-base-classes).
     */
-   BtTableModel::ColumnInfo const & get_ColumnInfo(ColumnIndex const columnIndex) const {
-      return this->derived().BtTableModel::getColumnInfo(static_cast<size_t>(columnIndex));
+   ColumnInfo const & get_ColumnInfo(ColumnIndex const columnIndex) const {
+      return ColumnOwnerTraits<Derived>::getColumnInfo(static_cast<size_t>(columnIndex));
    }
 
    /**
     * \brief Overload for \c get_ColumnInfo
     */
-   BtTableModel::ColumnInfo const & get_ColumnInfo(QModelIndex const & index) const {
+   ColumnInfo const & get_ColumnInfo(QModelIndex const & index) const {
       auto const columnIndex = static_cast<ColumnIndex>(index.column());
       return this->get_ColumnInfo(columnIndex);
    }
@@ -352,7 +360,7 @@ public:
     * \brief Use this for removing \c RecipeAdditionHop etc
     */
    template<class Proxy>
-   void removeSelectedIngredients(QTableView & tableView, Proxy & proxy) /*requires IsIngredientInRecipe<Derived>*/ {
+   void removeSelectedIngredients(QTableView & tableView, Proxy & proxy) {
       QModelIndexList selected = tableView.selectionModel()->selectedIndexes();
       QList<std::shared_ptr<NE>> itemsToRemove;
 
@@ -406,7 +414,7 @@ public:
          return false;
       }
 
-      BtTableModel::ColumnInfo const & columnInfo = this->get_ColumnInfo(leftIndex);
+      ColumnInfo const & columnInfo = this->get_ColumnInfo(leftIndex);
       if (columnInfo.typeInfo.fieldType) {
          QuantityFieldType const fieldType = *columnInfo.typeInfo.fieldType;
          if (std::holds_alternative<NonPhysicalQuantity>(fieldType)) {
@@ -425,6 +433,10 @@ public:
                case NonPhysicalQuantity::OrdinalNumeral:
                case NonPhysicalQuantity::CardinalNumber:
                   return leftItem.toInt() < rightItem.toInt();
+
+               case NonPhysicalQuantity::Currency:
+                  return  leftItem.value<CurrencyAmount>() <
+                         rightItem.value<CurrencyAmount>();
 
                // No default case as we want compiler to warn us if we missed a case above
             }
@@ -600,7 +612,7 @@ protected:
       //    QAbstractItemView::edit()
       //
       auto row = this->m_rows[index.row()];
-      BtTableModel::ColumnInfo const & columnInfo = this->get_ColumnInfo(index);
+      ColumnInfo const & columnInfo = this->get_ColumnInfo(index);
 
       QVariant modelData = columnInfo.propertyPath.getValue(*row);
       if (!modelData.isValid()) {
@@ -834,21 +846,6 @@ namespace TableModelHelper {
 
 }
 
-/**
- * \brief Derived classes should include this in their header file, right before their class declaration
- *
- *        Note we have to be careful about comment formats in macro definitions
- */
-#define TABLE_MODEL_TRAITS(NeName, ...) \
-   /* You have to get the order of everything right with traits classes, but the */ \
-   /* end result is that we can refer to BoilTableModel::ColumnIndex::Name etc.  */ \
-   class NeName##TableModel;                                                        \
-   template <> struct TableModelTraits<NeName##TableModel> {                        \
-      enum class ColumnIndex {                                                      \
-         __VA_ARGS__                                                                \
-      };                                                                            \
-   };                                                                               \
-
 
 /**
  * \brief Derived classes should include this in their header file, right after Q_OBJECT
@@ -875,6 +872,12 @@ namespace TableModelHelper {
       void updateTotals();                                                                                       \
                                                                                                                  \
    public:                                                                                                       \
+      /** \brief Reimplemented from \c QAbstractTableModel */                                                    \
+      virtual int columnCount(QModelIndex const & parent = QModelIndex()) const override;                        \
+      /** \brief From \c BtTableModel */                                                                         \
+      virtual ColumnInfo columnInfo(int section) const override;                                                 \
+      /** \brief From \c BtTableModel */                                                                         \
+      virtual QVariant columnLabel(int section) const override;                                                  \
       /** \brief Reimplemented from QAbstractTableModel. */                                                      \
       virtual int rowCount(QModelIndex const & parent = QModelIndex()) const override;                           \
       /** \brief Reimplemented from QAbstractTableModel. */                                                      \
@@ -914,6 +917,15 @@ namespace TableModelHelper {
    }                                                                                                    \
    Recipe * NeName##TableModel::getObservedRecipe() const {                                             \
       return this->doGetObservedRecipe<NeName##TableModel>();                                           \
+   }                                                                                                    \
+   int NeName##TableModel::columnCount([[maybe_unused]] QModelIndex const & parent) const {             \
+      return ColumnOwnerTraits<NeName##TableModel>::numColumns();                                       \
+   }                                                                                                    \
+   ColumnInfo NeName##TableModel::columnInfo(int section) const {                                       \
+      return ColumnOwnerTraits<NeName##TableModel>::getColumnInfo(section);                             \
+   }                                                                                                    \
+   QVariant NeName##TableModel::columnLabel(int section) const {                                        \
+      return ColumnOwnerTraits<NeName##TableModel>::getColumnLabel(section);                            \
    }                                                                                                    \
    int NeName##TableModel::rowCount([[maybe_unused]] QModelIndex const & parent) const {                \
       return this->m_rows.size();                                                                       \

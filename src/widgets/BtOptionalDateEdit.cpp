@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtOptionalDateEdit.cpp is part of Brewtarget, and is copyright the following authors 2024:
+ * widgets/BtOptionalDateEdit.cpp is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -142,12 +142,23 @@ std::optional<QDate> BtOptionalDateEdit::optionalDate() const {
    return this->QDateEdit::date();
 }
 
+[[nodiscard]] QVariant BtOptionalDateEdit::getAsVariant() const {
+   return QVariant::fromValue(this->optionalDate());
+}
+
 void BtOptionalDateEdit::setOptionalDate(std::optional<QDate> const val) {
    this->pimpl->setDateIsNull(!val);
    if (val) {
       this->QDateEdit::setDate(*val);
    }
    emit this->optionalDateChanged(this->optionalDate());
+   return;
+}
+
+
+void BtOptionalDateEdit::setFromVariant(QVariant const & value) {
+   auto vv {value.value<std::optional<QDate>>()};
+   this->setOptionalDate(vv);
    return;
 }
 

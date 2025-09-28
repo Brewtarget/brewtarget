@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/MetaTypes.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * utils/MetaTypes.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -49,6 +49,9 @@ void registerMetaTypes() {
    qRegisterMetaType<Measurement::PhysicalQuantity        >();
    qRegisterMetaType<Measurement::ChoiceOfPhysicalQuantity>();
    qRegisterMetaType<Measurement::Unit const *            >();
+
+   qRegisterMetaType<CurrencyAmount                       >();
+   qRegisterMetaType<std::optional<CurrencyAmount>        >();
 
    //
    // In theory we don't need these, as the Q_DECLARE_METATYPE declarations in model/*.h should suffice.  In practice,

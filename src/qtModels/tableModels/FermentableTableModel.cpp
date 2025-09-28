@@ -48,24 +48,21 @@
    #include "moc_FermentableTableModel.cpp"
 #endif
 
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<FermentableTableModel>::columnInfos {
+   // NOTE: Need PropertyNames::Fermentable::amountWithUnits not PropertyNames::Fermentable::amount below so we
+   //       can handle mass-or-volume generically in TableModelBase.  Same for inventoryWithUnits.
+   TABLE_MODEL_HEADER(Fermentable, Name              , tr("Name"          ), PropertyNames::NamedEntity::name              ),
+   TABLE_MODEL_HEADER(Fermentable, Type              , tr("Type"          ), PropertyNames::Fermentable::type              ),
+   TABLE_MODEL_HEADER(Fermentable, Yield             , tr("Yield (DBFG) %"), PropertyNames::Fermentable::fineGrindYield_pct),
+   TABLE_MODEL_HEADER(Fermentable, Color             , tr("Color"         ), PropertyNames::Fermentable::color_srm         ),
+   TABLE_MODEL_HEADER(Fermentable, TotalInventory    , tr("Inventory"     ), PropertyNames::Ingredient::totalInventory     ),
+   TABLE_MODEL_HEADER(Fermentable, TotalInventoryType, tr("Amount Type"   ), PropertyNames::Ingredient::totalInventory     , Fermentable::validMeasures),
+   TABLE_MODEL_HEADER(Fermentable, NumRecipesUsedIn  , tr("N° Recipes"    ), PropertyNames::NamedEntity::numRecipesUsedIn  ),
+};
+
 //=====================CLASS FermentableTableModel==============================
 FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable) :
-   BtTableModel{
-      parent,
-      editable,
-      {
-         // NOTE: Need PropertyNames::Fermentable::amountWithUnits not PropertyNames::Fermentable::amount below so we
-         //       can handle mass-or-volume generically in TableModelBase.  Same for inventoryWithUnits.
-         TABLE_MODEL_HEADER(Fermentable, Name              , tr("Name"          ), PropertyNames::NamedEntity::name              ),
-         TABLE_MODEL_HEADER(Fermentable, Type              , tr("Type"          ), PropertyNames::Fermentable::type              /*,
-                            EnumInfo{Fermentable::typeStringMapping, Fermentable::typeDisplayNames}*/),
-         TABLE_MODEL_HEADER(Fermentable, Yield             , tr("Yield (DBFG) %"), PropertyNames::Fermentable::fineGrindYield_pct/*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(Fermentable, Color             , tr("Color"         ), PropertyNames::Fermentable::color_srm         /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(Fermentable, TotalInventory    , tr("Inventory"     ), PropertyNames::Ingredient::totalInventory     /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(Fermentable, TotalInventoryType, tr("Amount Type"   ), PropertyNames::Ingredient::totalInventory     , Fermentable::validMeasures),
-         TABLE_MODEL_HEADER(Fermentable, NumRecipesUsedIn  , tr("N° Recipes"    ), PropertyNames::NamedEntity::numRecipesUsedIn  ),
-      }
-   },
+   BtTableModel{parent, editable},
    TableModelBase<FermentableTableModel, Fermentable>{} {
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();

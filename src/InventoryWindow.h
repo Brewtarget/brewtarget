@@ -17,6 +17,8 @@
 #define INVENTORYWINDOW_H
 #pragma once
 
+#include <memory> // For PImpl
+
 #include <QDialog>
 
 #include "ui_inventoryWindow.h"
@@ -45,7 +47,7 @@
  *           Date
  *           Quantity used
  *           Use Type (Used in recipe, Other use, correction)
- *           BrewNode ID (for used in recipe)
+ *           BrewNote ID (for used in recipe)
  *
  */
 class InventoryWindow : public QDialog, public Ui::inventoryWindow {
@@ -53,9 +55,13 @@ class InventoryWindow : public QDialog, public Ui::inventoryWindow {
 
 public:
    //! \brief Default constructor.
-   InventoryWindow(QWidget * parent = 0);
+   InventoryWindow(QWidget * parent = nullptr);
    ~InventoryWindow();
 
+private:
+   // Private implementation details - see https://herbsutter.com/gotw/_100/
+   class impl;
+   std::unique_ptr<impl> pimpl;
 };
 
 #endif

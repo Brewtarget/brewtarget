@@ -23,6 +23,7 @@
 
 #include "widgets/BtComboBoxBool.h"
 #include "widgets/BtComboBoxEnum.h"
+#include "widgets/BtOptionalDateEdit.h"
 #include "widgets/SmartValueDisplay.h"
 
 //
@@ -286,6 +287,14 @@ struct EditorBaseField {
       return;
    }
 
+   //! \c BtOptionalDateEdit emits \c optionalDateChanged (whereas \c QDateEdit emits \c dateChanged)
+   template <typename Derived, typename Functor>
+   void connectFieldChanged(Derived * context, Functor functor) const
+   requires (std::same_as<EditFieldType, BtOptionalDateEdit>) {
+      context->connect(this->editField, &EditFieldType::optionalDateChanged, context, functor, Qt::AutoConnection);
+      return;
+   }
+
    //! \c SmartLineEdit uses \c editingFinished itself, and subsequently emits \c textModified after text corrections
    template <typename Derived, typename Functor>
    void connectFieldChanged(Derived * context, Functor functor) const
@@ -335,11 +344,12 @@ struct EditorBaseField {
       return this->editField->isChecked();
    }
 
-   QVariant getFieldValue() const requires (std::same_as<EditFieldType, SmartLineEdit > ||
-                                            std::same_as<EditFieldType, BtComboBoxEnum> ||
-                                            std::same_as<EditFieldType, BtComboBoxBool> ||
-                                            std::same_as<EditFieldType, SmartValueDisplay>) {
-      // Through the magic of templates, and naming conventions, one line suffices for all three types
+   QVariant getFieldValue() const requires (std::same_as<EditFieldType, SmartLineEdit     > ||
+                                            std::same_as<EditFieldType, BtComboBoxEnum    > ||
+                                            std::same_as<EditFieldType, BtComboBoxBool    > ||
+                                            std::same_as<EditFieldType, BtOptionalDateEdit> ||
+                                            std::same_as<EditFieldType, SmartValueDisplay >) {
+      // Through the magic of templates, and naming conventions, one line suffices for all the types
       return this->editField->getAsVariant();
    }
 
@@ -390,10 +400,11 @@ struct EditorBaseField {
       return;
    }
 
-   void setEditField(QVariant const & val) const requires (std::same_as<EditFieldType, SmartLineEdit    > ||
-                                                           std::same_as<EditFieldType, BtComboBoxEnum   > ||
-                                                           std::same_as<EditFieldType, BtComboBoxBool   > ||
-                                                           std::same_as<EditFieldType, SmartValueDisplay>) {
+   void setEditField(QVariant const & val) const requires (std::same_as<EditFieldType, SmartLineEdit     > ||
+                                                           std::same_as<EditFieldType, BtComboBoxEnum    > ||
+                                                           std::same_as<EditFieldType, BtComboBoxBool    > ||
+                                                           std::same_as<EditFieldType, BtOptionalDateEdit> ||
+                                                           std::same_as<EditFieldType, SmartValueDisplay >) {
       this->editField->setFromVariant(val);
       return;
    }
@@ -416,6 +427,11 @@ struct EditorBaseField {
                                          std::same_as<EditFieldType, BtComboBoxBool   > ||
                                          std::same_as<EditFieldType, SmartValueDisplay>) {
       this->editField->setDefault();
+      return;
+   }
+   void clearEditField() const requires (std::same_as<EditFieldType, BtOptionalDateEdit>) {
+      // For now, we'll have blank as the best default value
+      this->editField->setOptionalDate(std::nullopt);
       return;
    }
 
@@ -457,20 +473,21 @@ S & operator<<(S & stream, WhenToWriteField const & val) {
 
 using EditorBaseFieldVariant = std::variant<
    // NB: Not all conceivable permutations are valid
-   EditorBaseField<QLabel    , QLineEdit        >,
-   EditorBaseField<QLabel    , QTextEdit        >,
-   EditorBaseField<QLabel    , QPlainTextEdit   >,
-   EditorBaseField<QLabel    , SmartLineEdit    >,
-   EditorBaseField<QLabel    , BtComboBoxEnum   >,
-   EditorBaseField<QLabel    , BtComboBoxBool   >,
-   EditorBaseField<QLabel    , QCheckBox        >,
-   EditorBaseField<QLabel    , QLabel           >, // For read-only fields where "edit" field is actually a QLabel
-   EditorBaseField<SmartLabel, SmartValueDisplay>, // Read-only fields where user can control units
-   EditorBaseField<QWidget   , QTextEdit        >, // This is for tabs such as tab_notes containing a single QTextEdit with no separate QLabel
-   EditorBaseField<SmartLabel, QLineEdit        >,
-   EditorBaseField<SmartLabel, SmartLineEdit    >,
-   EditorBaseField<SmartLabel, BtComboBoxEnum   >,
-   EditorBaseField<SmartLabel, BtComboBoxBool   >
+   EditorBaseField<QLabel    , BtComboBoxBool    >,
+   EditorBaseField<QLabel    , BtComboBoxEnum    >,
+   EditorBaseField<QLabel    , BtOptionalDateEdit>,
+   EditorBaseField<QLabel    , QCheckBox         >,
+   EditorBaseField<QLabel    , QLabel            >, // For read-only fields where "edit" field is actually a QLabel
+   EditorBaseField<QLabel    , QLineEdit         >,
+   EditorBaseField<QLabel    , QPlainTextEdit    >,
+   EditorBaseField<QLabel    , QTextEdit         >,
+   EditorBaseField<QLabel    , SmartLineEdit     >,
+   EditorBaseField<QWidget   , QTextEdit         >, // This is for tabs such as tab_notes containing a single QTextEdit with no separate QLabel
+   EditorBaseField<SmartLabel, BtComboBoxBool    >,
+   EditorBaseField<SmartLabel, BtComboBoxEnum    >,
+   EditorBaseField<SmartLabel, QLineEdit         >,
+   EditorBaseField<SmartLabel, SmartLineEdit     >,
+   EditorBaseField<SmartLabel, SmartValueDisplay >  // Read-only fields where user can control units
 >;
 
 /**

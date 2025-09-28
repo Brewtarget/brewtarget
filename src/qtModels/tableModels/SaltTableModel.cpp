@@ -29,22 +29,20 @@
    #include "moc_SaltTableModel.cpp"
 #endif
 
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<SaltTableModel>::columnInfos {
+   // NOTE: Need PropertyNames::Salt::amountWithUnits not PropertyNames::Salt::amount below so we
+   //       can handle mass-or-volume generically in TableModelBase.
+   //
+   TABLE_MODEL_HEADER(Salt, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
+   TABLE_MODEL_HEADER(Salt, Type              , tr("Type"       ), PropertyNames::Salt::type                   ),
+   TABLE_MODEL_HEADER(Salt, PctAcid           , tr("% Acid"     ), PropertyNames::Salt::percentAcid            ),
+   TABLE_MODEL_HEADER(Salt, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   ),
+   TABLE_MODEL_HEADER(Salt, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Salt::validMeasures),
+   TABLE_MODEL_HEADER(Salt, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
+};
+
 SaltTableModel::SaltTableModel(QTableView* parent, bool editable) :
-   BtTableModel{
-      parent,
-      editable,
-      {
-         // NOTE: Need PropertyNames::Salt::amountWithUnits not PropertyNames::Salt::amount below so we
-         //       can handle mass-or-volume generically in TableModelBase.
-         //
-         TABLE_MODEL_HEADER(Salt, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
-         TABLE_MODEL_HEADER(Salt, Type              , tr("Type"       ), PropertyNames::Salt::type                   /*, EnumInfo{Salt::typeStringMapping, Salt::typeDisplayNames}*/),
-         TABLE_MODEL_HEADER(Salt, PctAcid           , tr("% Acid"     ), PropertyNames::Salt::percentAcid            ),
-         TABLE_MODEL_HEADER(Salt, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(Salt, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Salt::validMeasures),
-         TABLE_MODEL_HEADER(Salt, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
-      }
-   },
+   BtTableModel{parent, editable},
    TableModelBase<SaltTableModel, Salt>{} {
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();

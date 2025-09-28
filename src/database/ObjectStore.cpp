@@ -721,7 +721,7 @@ public:
                auto const enumMapping = std::get<EnumStringMapping const *>(fieldDefn.valueDecoder);
                auto val = propertyValue.value<std::optional<int> >();
                if (val.has_value()) {
-                  propertyValue = QVariant(enumMapping->enumToString(val.value()));
+                  propertyValue = QVariant(enumMapping->enumToValue(val.value()));
                   return;
                }
                propertyValue = QVariant();
@@ -771,7 +771,7 @@ public:
          case ObjectStore::FieldType::Enum:   {
             // This is a non-optional enum, so we need to map it to a QString
             auto const enumMapping = std::get<EnumStringMapping const *>(fieldDefn.valueDecoder);
-            propertyValue = QVariant(enumMapping->enumToString(propertyValue.toInt()));
+            propertyValue = QVariant(enumMapping->enumToValue(propertyValue.toInt()));
             return;
          }
          case ObjectStore::FieldType::Unit:   {

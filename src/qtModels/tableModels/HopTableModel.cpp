@@ -35,21 +35,18 @@
    #include "moc_HopTableModel.cpp"
 #endif
 
-HopTableModel::HopTableModel(QTableView * parent, bool editable) :
-   BtTableModel{
-      parent,
-      editable,
-      {
-         TABLE_MODEL_HEADER(Hop, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
-         TABLE_MODEL_HEADER(Hop, Form              , tr("Form"       ), PropertyNames::Hop::form                    /*, EnumInfo{Hop::formStringMapping, Hop::formDisplayNames}*/),
-         TABLE_MODEL_HEADER(Hop, Year              , tr("Year"       ), PropertyNames::Hop::year                    ),
-         TABLE_MODEL_HEADER(Hop, Alpha             , tr("Alpha %"    ), PropertyNames::Hop::alpha_pct               /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(Hop, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(Hop, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Hop::validMeasures),
-         TABLE_MODEL_HEADER(Hop, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<HopTableModel>::columnInfos {
+   TABLE_MODEL_HEADER(Hop, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
+   TABLE_MODEL_HEADER(Hop, Form              , tr("Form"       ), PropertyNames::Hop::form                    ),
+   TABLE_MODEL_HEADER(Hop, Year              , tr("Year"       ), PropertyNames::Hop::year                    ),
+   TABLE_MODEL_HEADER(Hop, Alpha             , tr("Alpha %"    ), PropertyNames::Hop::alpha_pct               ),
+   TABLE_MODEL_HEADER(Hop, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   ),
+   TABLE_MODEL_HEADER(Hop, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Hop::validMeasures),
+   TABLE_MODEL_HEADER(Hop, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
+};
 
-      }
-   },
+HopTableModel::HopTableModel(QTableView * parent, bool editable) :
+   BtTableModel{parent, editable},
    TableModelBase<HopTableModel, Hop>{},
    showIBUs(false) {
    this->m_rows.clear();

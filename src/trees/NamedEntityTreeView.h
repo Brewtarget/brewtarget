@@ -22,6 +22,7 @@
 #include "editors/FermentableEditor.h"
 #include "editors/FermentationEditor.h"
 #include "editors/HopEditor.h"
+#include "editors/InventoryFermentableEditor.h"
 #include "editors/MashEditor.h"
 #include "editors/MiscEditor.h"
 #include "editors/SaltEditor.h"
@@ -31,6 +32,7 @@
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Hop.h"
+#include "model/InventoryFermentable.h"
 #include "model/Mash.h"
 #include "model/Misc.h"
 #include "model/Salt.h"
@@ -108,6 +110,16 @@ class HopTreeView : public TreeView,
                                         Hop> {
    Q_OBJECT
    TREE_VIEW_COMMON_DECL(Hop)
+};
+
+class InventoryFermentableTreeView : public TreeView,
+                                     public TreeViewBase<InventoryFermentableTreeView,
+                                                         InventoryFermentableTreeModel,
+                                                         InventoryFermentableTreeSortFilterProxyModel,
+                                                         InventoryFermentableEditor,
+                                                         InventoryFermentable> {
+   Q_OBJECT
+   TREE_VIEW_COMMON_DECL(InventoryFermentable)
 };
 
 class MiscTreeView : public TreeView,

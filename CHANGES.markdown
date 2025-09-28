@@ -14,7 +14,7 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * We'll list other new features here...
 
 ## v4.2.2
-Bug fixes and minor enhancements.
+Bug fixes and minor enhancements.  Mac packaging should be fixed in this release.
 
 ### New Features
 * None
@@ -26,7 +26,7 @@ Bug fixes and minor enhancements.
 Sat, 6 Sep 2025 04:02:02 +0100
 
 ## v4.2.1
-Bug fixes and minor enhancements.
+Bug fixes and minor enhancements.  Mac packaging is still broken in this release.
 
 ### New Features
 * None

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Measurement.cpp is part of Brewtarget, and is copyright the following authors 2010-2023:
+ * measurement/Measurement.cpp is part of Brewtarget, and is copyright the following authors 2010-2025:
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -122,7 +122,7 @@ template<> [[nodiscard]] double       Measurement::extractRawFromString<double> 
 
 void Measurement::loadDisplayScales() {
    for (auto const & ii : Measurement::physicalQuantityStringMapping) {
-      auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.native);
+      auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.key);
       loadDisplayScale(physicalQuantity,
                        Measurement::getSettingsName(physicalQuantity),
                        Measurement::Unit::getCanonicalUnit(physicalQuantity).getUnitSystem());
@@ -132,7 +132,7 @@ void Measurement::loadDisplayScales() {
 
 void Measurement::saveDisplayScales() {
    for (auto const & ii : Measurement::physicalQuantityStringMapping) {
-      auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.native);
+      auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.key);
       PersistentSettings::insert(Measurement::getSettingsName(physicalQuantity),
                                  Measurement::getDisplayUnitSystem(physicalQuantity).uniqueName);
    }

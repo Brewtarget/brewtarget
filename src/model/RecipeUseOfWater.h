@@ -19,7 +19,8 @@
 
 #include <QString>
 
-#include "model/IngredientInRecipe.h"
+#include "model/IngredientAmount.h"
+#include "model/OwnedByRecipe.h"
 #include "model/RecipeAdditionBase.h"
 #include "model/Water.h"
 
@@ -45,11 +46,14 @@ AddPropertyName(volume_l)
  *        However, \b technically, both BeerJSON and BeerXML allow for multiple different waters to be added to a
  *        recipe, so we align with that.
  */
-class RecipeUseOfWater : public IngredientInRecipe,
-                         public RecipeAdditionBase<RecipeUseOfWater, Water> {
+class RecipeUseOfWater : public OwnedByRecipe,
+                         public RecipeAdditionBase<RecipeUseOfWater, Water>,
+                         public IngredientAmount<RecipeUseOfWater, Water> {
    Q_OBJECT
 
    RECIPE_ADDITION_DECL(RecipeUseOfWater, Water, water)
+
+   INGREDIENT_AMOUNT_DECL(RecipeUseOfWater, Water)
 
 public:
    /**
@@ -77,6 +81,16 @@ public:
    //! See \c RecipeAdditionBase for getter and setter
    Q_PROPERTY(Water * water   READ water   WRITE setWater)
 
+   // See model/IngredientAmount.h
+   // Yes, it's a bit overkill to use IngredientAmount when we know water will always be volume, but it makes other
+   // things easier to align with the other subclasses of RecipeAdditionBase
+   Q_PROPERTY(int                           ingredientId READ ingredientId WRITE setIngredientId)
+   Q_PROPERTY(Measurement::Amount           amount       READ amount       WRITE setAmount      )
+   Q_PROPERTY(double                        quantity     READ quantity     WRITE setQuantity    )
+   Q_PROPERTY(Measurement::Unit const *     unit         READ unit         WRITE setUnit        )
+   Q_PROPERTY(Measurement::PhysicalQuantity measure      READ measure      WRITE setMeasure     )
+   Q_PROPERTY(bool                          isWeight     READ isWeight     WRITE setIsWeight    )
+
    /**
     * \brief The volume of water being used, in liters.
     */
@@ -93,7 +107,7 @@ protected:
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 protected:
-   double m_volume_l;
+///   double m_volume_l;
 };
 
 BT_DECLARE_METATYPES(RecipeUseOfWater)

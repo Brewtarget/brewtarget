@@ -85,9 +85,9 @@ class SmartField;
  *              being used in a conversion tool where we want the GUI to accept/show only one type of units, but we
  *              still want to leverage all the magical conversion that \c SmartField knows how to do.
  *
- *        NOTE: Finally (I hope!) there is the case of \c BtTableModel subclasses.  In such table models, some of the
- *              columns will have user-selectable \c SystemOfMeasurement and/or \c RelativeScale.  In this case, the
- *              \c BtTableModel::ColumnInfo mini-class "owns" the settings.
+ *        NOTE: Finally (I hope!) there is the case of \c BtTableModel and \c TreeModel subclasses.  In such table or
+ *              tree models, some of the columns will have user-selectable \c SystemOfMeasurement and/or
+ *              \c RelativeScale.  In this case, the \c ColumnInfo mini-class "owns" the settings.
  *
  *        ‡ Previously, we stored the settings not "per \c SmartLabel" but "per \c SmartField".  This is logical for
  *          the mainline case of (the \c SmartLabel has one \c SmartField).  However, it makes things a bit

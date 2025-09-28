@@ -37,11 +37,13 @@ ObjectStore & RecipeUseOfWater::getObjectStoreTypedInstance() const {
 bool RecipeUseOfWater::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    RecipeUseOfWater const & rhs = static_cast<RecipeUseOfWater const &>(other);
-   // Base class will already have ensured names are equal
+///   // Base class will already have ensured names are equal
    return (
-      AUTO_PROPERTY_COMPARE(this, rhs, m_volume_l, PropertyNames::RecipeUseOfWater::volume_l, propertiesThatDiffer) &&
-      // Parent classes have to be equal too
-      this->IngredientInRecipe::compareWith(other, propertiesThatDiffer)
+///      AUTO_PROPERTY_COMPARE(this, rhs, m_volume_l, PropertyNames::RecipeUseOfWater::volume_l, propertiesThatDiffer) &&
+      // Parent classes have to be equal
+      this->OwnedByRecipe     ::compareWith  (rhs, propertiesThatDiffer) &&
+      this->RecipeAdditionBase::compareWith  (rhs, propertiesThatDiffer) &&
+      this->IngredientAmount  ::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
 
@@ -49,32 +51,33 @@ TypeLookup const RecipeUseOfWater::typeLookup {
    "RecipeUseOfWater",
    {
       PROPERTY_TYPE_LOOKUP_NO_MV(RecipeUseOfWater, water   , water     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeUseOfWater, volume_l, m_volume_l, Measurement::PhysicalQuantity::Volume),
+///      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeUseOfWater, volume_l, m_volume_l, Measurement::PhysicalQuantity::Volume),
    },
-   // Parent classes lookup.
-   {&IngredientInRecipe::typeLookup}
+   // Parent classes lookup.  NB: OwnedByRecipe not NamedEntity!
+   {&OwnedByRecipe::typeLookup,
+    std::addressof(IngredientAmount<RecipeUseOfWater, Water>::typeLookup)}
 };
-static_assert(std::is_base_of<IngredientInRecipe, RecipeUseOfWater>::value);
+static_assert(std::is_base_of<OwnedByRecipe, RecipeUseOfWater>::value);
 
 RecipeUseOfWater::RecipeUseOfWater(QString name, int const recipeId, int const ingredientId) :
-   IngredientInRecipe{name, recipeId, ingredientId},
-   m_volume_l       {0.0} {
+   OwnedByRecipe{name, recipeId},
+   IngredientAmount<RecipeUseOfWater, Water>{ingredientId} {
 
    CONSTRUCTOR_END
    return;
 }
 
 RecipeUseOfWater::RecipeUseOfWater(NamedParameterBundle const & namedParameterBundle) :
-   IngredientInRecipe{namedParameterBundle},
-   SET_REGULAR_FROM_NPB (m_volume_l    , namedParameterBundle, PropertyNames::RecipeUseOfWater::volume_l    ) {
+   OwnedByRecipe{namedParameterBundle},
+   IngredientAmount<RecipeUseOfWater, Water>{namedParameterBundle} {
 
    CONSTRUCTOR_END
    return;
 }
 
 RecipeUseOfWater::RecipeUseOfWater(RecipeUseOfWater const & other) :
-   IngredientInRecipe{other               },
-   m_volume_l        {other.m_volume_l    } {
+   OwnedByRecipe{other               },
+   IngredientAmount<RecipeUseOfWater, Water>{other} {
 
    CONSTRUCTOR_END
    return;
@@ -83,10 +86,13 @@ RecipeUseOfWater::RecipeUseOfWater(RecipeUseOfWater const & other) :
 RecipeUseOfWater::~RecipeUseOfWater() = default;
 
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
-double  RecipeUseOfWater::volume_l    () const { return this->m_volume_l; }
+///double  RecipeUseOfWater::volume_l    () const { return this->m_volume_l; }
+double  RecipeUseOfWater::volume_l    () const { return this->amount().quantity; }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
-void RecipeUseOfWater::setVolume_l    (double const val) { this->m_volume_l = val; return; }
+///void RecipeUseOfWater::setVolume_l    (double const val) { this->m_volume_l = val; return; }
+void RecipeUseOfWater::setVolume_l    (double const val) { this->setAmount(Measurement::Amount{val, Measurement::Units::liters}); return; }
 
-// Boilerplate code for RecipeAddition
+// Boilerplate code for IngredientAmount and RecipeAddition
+INGREDIENT_AMOUNT_COMMON_CODE(RecipeUseOfWater, Water)
 RECIPE_ADDITION_CODE(RecipeUseOfWater, Water, water)

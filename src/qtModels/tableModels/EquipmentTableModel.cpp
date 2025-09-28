@@ -25,18 +25,16 @@
    #include "moc_EquipmentTableModel.cpp"
 #endif
 
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<EquipmentTableModel>::columnInfos {
+   TABLE_MODEL_HEADER(Equipment, Name            , tr("Name"            ), PropertyNames::NamedEntity::name              ),
+   TABLE_MODEL_HEADER(Equipment, MashTunVolume   , tr("Mash Tun Volume" ), PropertyNames::Equipment::mashTunVolume_l     ),
+   TABLE_MODEL_HEADER(Equipment, KettleVolume    , tr("Kettle Volume"   ), PropertyNames::Equipment::kettleBoilSize_l    ),
+   TABLE_MODEL_HEADER(Equipment, FermenterVolume , tr("Fermenter Volume"), PropertyNames::Equipment::fermenterBatchSize_l),
+   TABLE_MODEL_HEADER(Equipment, NumRecipesUsedIn, tr("N° Recipes"      ), PropertyNames::NamedEntity::numRecipesUsedIn  ),
+};
+
 EquipmentTableModel::EquipmentTableModel(QTableView* parent, bool editable) :
-   BtTableModel{
-      parent,
-      editable,
-      {
-         TABLE_MODEL_HEADER(Equipment, Name            , tr("Name"            ), PropertyNames::NamedEntity::name              ),
-         TABLE_MODEL_HEADER(Equipment, MashTunVolume   , tr("Mash Tun Volume" ), PropertyNames::Equipment::mashTunVolume_l     ),
-         TABLE_MODEL_HEADER(Equipment, KettleVolume    , tr("Kettle Volume"   ), PropertyNames::Equipment::kettleBoilSize_l    ),
-         TABLE_MODEL_HEADER(Equipment, FermenterVolume , tr("Fermenter Volume"), PropertyNames::Equipment::fermenterBatchSize_l),
-         TABLE_MODEL_HEADER(Equipment, NumRecipesUsedIn, tr("N° Recipes"      ), PropertyNames::NamedEntity::numRecipesUsedIn  ),
-      }
-   },
+   BtTableModel{parent, editable},
    TableModelBase<EquipmentTableModel, Equipment>{} {
    this->m_rows.clear();
 

@@ -29,6 +29,9 @@ QString GetLoggableName(NonPhysicalQuantity nonPhysicalQuantity) {
       case NonPhysicalQuantity::OrdinalNumeral : return "OrdinalNumeral";
       case NonPhysicalQuantity::CardinalNumber : return "CardinalNumber";
       case NonPhysicalQuantity::Dimensionless  : return "Dimensionless" ;
+      case NonPhysicalQuantity::Currency       : return "Currency"      ;
+      // In C++23, we'd add:
+      // default: std::unreachable();
    }
    // It's a coding error if we get here!
    Q_UNREACHABLE();

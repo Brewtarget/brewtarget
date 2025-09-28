@@ -35,9 +35,9 @@
 #endif
 
 BtTableModelRecipeObserver::BtTableModelRecipeObserver(QTableView * parent,
-                                                       bool editable,
-                                                       std::initializer_list<ColumnInfo> columnInfos) :
-   BtTableModel{parent, editable, columnInfos},
+                                                       bool editable/*,
+                                                       std::initializer_list<ColumnInfo> columnInfos*/) :
+   BtTableModel{parent, editable/*, columnInfos*/},
    recObs{nullptr} {
    return;
 }
@@ -46,33 +46,33 @@ BtTableModelRecipeObserver::~BtTableModelRecipeObserver() = default;
 
 //======================================================================================================================
 
-void BtTableModel::ColumnInfo::setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement) const {
-   SmartAmounts::setForcedSystemOfMeasurement(this->tableModelName, this->columnName, forcedSystemOfMeasurement);
-   return;
-}
-
-void BtTableModel::ColumnInfo::setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) const {
-   SmartAmounts::setForcedRelativeScale(this->tableModelName, this->columnName, forcedScale);
-   return;
-}
-
-std::optional<Measurement::SystemOfMeasurement> BtTableModel::ColumnInfo::getForcedSystemOfMeasurement() const {
-   return SmartAmounts::getForcedSystemOfMeasurement(this->tableModelName, this->columnName);
-}
-
-std::optional<Measurement::UnitSystem::RelativeScale> BtTableModel::ColumnInfo::getForcedRelativeScale() const {
-   return SmartAmounts::getForcedRelativeScale(this->tableModelName, this->columnName);
-}
+///void ColumnInfo::setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement) const {
+///   SmartAmounts::setForcedSystemOfMeasurement(this->modelName, this->columnName, forcedSystemOfMeasurement);
+///   return;
+///}
+///
+///void ColumnInfo::setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) const {
+///   SmartAmounts::setForcedRelativeScale(this->modelName, this->columnName, forcedScale);
+///   return;
+///}
+///
+///std::optional<Measurement::SystemOfMeasurement> ColumnInfo::getForcedSystemOfMeasurement() const {
+///   return SmartAmounts::getForcedSystemOfMeasurement(this->modelName, this->columnName);
+///}
+///
+///std::optional<Measurement::UnitSystem::RelativeScale> ColumnInfo::getForcedRelativeScale() const {
+///   return SmartAmounts::getForcedRelativeScale(this->modelName, this->columnName);
+///}
 
 //======================================================================================================================
 
 BtTableModel::BtTableModel(QTableView * parent,
-                           bool editable,
-                           std::initializer_list<BtTableModel::ColumnInfo> columnInfos) :
+                           bool editable/*,
+                           std::initializer_list<ColumnInfo> columnInfos*/) :
    QAbstractTableModel{parent},
+///   ColumnOwner{columnInfos},
    m_parentTableWidget{parent},
-   m_editable{editable},
-   m_columnInfos{columnInfos} {
+   m_editable{editable} {
 
    QHeaderView * rowHeaderView = this->m_parentTableWidget->verticalHeader();
    rowHeaderView->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -90,31 +90,9 @@ BtTableModel::BtTableModel(QTableView * parent,
 
 BtTableModel::~BtTableModel() = default;
 
-BtTableModel::ColumnInfo const & BtTableModel::getColumnInfo(size_t const columnIndex) const {
-   // It's a coding error to call this for a non-existent column
-   Q_ASSERT(columnIndex < this->m_columnInfos.size());
-
-   BtTableModel::ColumnInfo const & columnInfo = this->m_columnInfos[columnIndex];
-
-   // Normally the following log statement should be left commented, as it generates a _lot_ of logging.  Uncomment it
-   // temporarily if the assert below is firing.
-//   qDebug().noquote() <<
-//      Q_FUNC_INFO << "columnInfo.index:" << columnInfo.index << ", columnIndex:" << columnIndex <<
-//      Logging::getStackTrace();
-
-   // It's a coding error if the info for column N isn't at position N in the vector (in both cases counting from 0)
-   Q_ASSERT(columnInfo.index == columnIndex);
-
-   return columnInfo;
-}
-
-QVariant BtTableModel::getColumnLabel(size_t const columnIndex) const {
-   return this->getColumnInfo(columnIndex).label;
-}
-
-int BtTableModel::columnCount(QModelIndex const & /*parent*/) const {
-   return this->m_columnInfos.size();
-}
+///int BtTableModel::columnCount(QModelIndex const & /*parent*/) const {
+///   return this->numColumns();
+///}
 
 QVariant BtTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
    //
@@ -124,13 +102,13 @@ QVariant BtTableModel::headerData(int section, Qt::Orientation orientation, int 
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
       // For reasons I didn't get to the bottom of, we sometimes get calls from the Qt framework requesting header data
       // for a column number that's one beyond the maximum, so we have to validate that here.
-      if (section < static_cast<int>(this->m_columnInfos.size())) {
-         return this->getColumnLabel(section);
+      if (section < this->columnCount()) {
+         return this->columnLabel(section);
       }
 
       qWarning() <<
-         Q_FUNC_INFO << "Request for invalid column number " << section << ", this->m_columnInfos.size():" <<
-         this->m_columnInfos.size();
+         Q_FUNC_INFO << "Request for invalid column number " << section << ", this->columnCount():" <<
+         this->columnCount();
 //      qWarning().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
       return QVariant();
    }
@@ -140,9 +118,9 @@ QVariant BtTableModel::headerData(int section, Qt::Orientation orientation, int 
 
 void BtTableModel::contextMenu(QPoint const & point) {
    qDebug() << Q_FUNC_INFO;
-   QHeaderView* hView = qobject_cast<QHeaderView*>(this->sender());
+   QHeaderView * hView = qobject_cast<QHeaderView *>(this->sender());
    int selected = hView->logicalIndexAt(point);
-   BtTableModel::ColumnInfo const & columnInfo = this->getColumnInfo(selected);
+   ColumnInfo const & columnInfo = this->columnInfo(selected);
 
    // .:TBD:. The logic from here on is similar to that in SmartLabel::popContextMenu, but I didn't yet figure out how
    // to have more of the code be shared.
@@ -177,7 +155,7 @@ void BtTableModel::contextMenu(QPoint const & point) {
 
    // User will either have selected a SystemOfMeasurement or a UnitSystem::RelativeScale.  We can know which based
    // on whether it's the menu or the sub-menu that it came from.
-   bool isTopMenu{invoked->parent() == menu.get()};
+   bool const isTopMenu{invoked->parent() == menu.get()};
    if (isTopMenu) {
       // It's the menu, so SystemOfMeasurement
       std::optional<Measurement::SystemOfMeasurement> const whatSelected =

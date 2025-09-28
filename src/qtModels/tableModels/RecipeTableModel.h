@@ -24,7 +24,7 @@
 #include "qtModels/tableModels/TableModelBase.h"
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(Recipe, Name)
+COLUMN_NAMES(RecipeTableModel, Name)
 
 /*!
  * \class RecipeTableModel

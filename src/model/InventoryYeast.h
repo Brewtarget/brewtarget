@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/InventoryYeast.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/InventoryYeast.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ class InventoryYeast : public Inventory, public IngredientAmount<InventoryYeast,
    INVENTORY_DECL(Yeast, yeast)
 
    // See model/IngredientAmount.h for info, getters and setters for these properties
+   Q_PROPERTY(int                           ingredientId READ ingredientId WRITE setIngredientId)
    Q_PROPERTY(Measurement::Amount           amount    READ amount     WRITE setAmount  )
    Q_PROPERTY(double                        quantity  READ quantity   WRITE setQuantity)
    Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )

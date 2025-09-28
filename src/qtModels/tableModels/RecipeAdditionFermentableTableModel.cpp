@@ -42,33 +42,31 @@
    #include "moc_RecipeAdditionFermentableTableModel.cpp"
 #endif
 
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdditionFermentableTableModel>::columnInfos {
+   //
+   // Note that for Name, we want the name of the contained Fermentable, not the name of the RecipeAdditionFermentable
+   //
+   // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
+   // PropertyNames::NamedEntityWithInventory::inventory is not implemented
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Name          , tr("Name"       ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
+                                                                                                   PropertyNames::NamedEntity::name                 }}),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Type          , tr("Type"       ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
+                                                                                                   PropertyNames::Fermentable::type                 }}),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Yield         , tr("Yield"      ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
+                                                                                                   PropertyNames::Fermentable::fineGrindYield_pct   }}),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Color         , tr("Color"      ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
+                                                                                                   PropertyNames::Fermentable::color_srm            }}),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  ),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, AmountType    , tr("Amount Type"), PropertyNames::IngredientAmount::amount                  , Fermentable::validMeasures),
+   // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, TotalInventory, tr("Inventory"  ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
+                                                                                                   PropertyNames::Ingredient::totalInventory}}),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     ),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            ),
+};
+
 RecipeAdditionFermentableTableModel::RecipeAdditionFermentableTableModel(QTableView * parent, bool editable) :
-   BtTableModelRecipeObserver{
-      parent,
-      editable,
-      {
-         //
-         // Note that for Name, we want the name of the contained Fermentable, not the name of the RecipeAdditionFermentable
-         //
-         // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
-         // PropertyNames::NamedEntityWithInventory::inventory is not implemented
-         TABLE_MODEL_HEADER(RecipeAdditionFermentable, Name          , tr("Name"       ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
-                                                                                                        PropertyNames::NamedEntity::name                 }}),
-         TABLE_MODEL_HEADER(RecipeAdditionFermentable, Type          , tr("Type"       ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
-                                                                                                        PropertyNames::Fermentable::type                 }}/*, EnumInfo{Fermentable::typeStringMapping, Fermentable::typeDisplayNames}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionFermentable, Yield         , tr("Yield"      ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
-                                                                                                        PropertyNames::Fermentable::fineGrindYield_pct   }}/*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionFermentable, Color         , tr("Color"      ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
-                                                                                                        PropertyNames::Fermentable::color_srm            }}),
-         TABLE_MODEL_HEADER(RecipeAdditionFermentable, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionFermentable, AmountType    , tr("Amount Type"), PropertyNames::IngredientAmount::amount                  , Fermentable::validMeasures),
-         // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
-         TABLE_MODEL_HEADER(RecipeAdditionFermentable, TotalInventory, tr("Inventory"  ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
-                                                                                                        PropertyNames::Ingredient::totalInventory}}),
-         TABLE_MODEL_HEADER(RecipeAdditionFermentable, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     /*, EnumInfo{RecipeAddition::stageStringMapping, RecipeAddition::stageDisplayNames}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionFermentable, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            /*, PrecisionInfo{1}*/),
-      }
-   },
+   BtTableModelRecipeObserver{parent, editable},
    TableModelBase<RecipeAdditionFermentableTableModel, RecipeAdditionFermentable>{},
    displayPercentages(false),
    totalFermMass_kg(0) {
@@ -110,7 +108,7 @@ QVariant RecipeAdditionFermentableTableModel::data(QModelIndex const & index, in
 
 QVariant RecipeAdditionFermentableTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
+      return ColumnOwnerTraits<RecipeAdditionFermentableTableModel>::getColumnLabel(section);
    }
    if (displayPercentages && orientation == Qt::Vertical && role == Qt::DisplayRole) {
       double perMass = 0.0;

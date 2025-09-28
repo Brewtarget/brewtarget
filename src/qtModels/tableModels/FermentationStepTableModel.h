@@ -36,16 +36,16 @@
 
 // Define the columns on this table
 // NB: FermentationStep does not support rampTime_mins -- see comment in model/Step.h
-TABLE_MODEL_TRAITS(FermentationStep, Name        ,
-                                     StepTime    ,
-                                     StartTemp   ,
-                                     EndTemp     ,
-                                     StartAcidity,
-                                     EndAcidity  ,
-                                     StartGravity,
-                                     EndGravity  ,
-                                     FreeRise    ,
-                                     Vessel      ,)
+COLUMN_NAMES(FermentationStepTableModel, Name        ,
+                                         StepTime    ,
+                                         StartTemp   ,
+                                         EndTemp     ,
+                                         StartAcidity,
+                                         EndAcidity  ,
+                                         StartGravity,
+                                         EndGravity  ,
+                                         FreeRise    ,
+                                         Vessel      ,)
 
 /*!
  * \class FermentationStepTableModel

@@ -820,7 +820,7 @@ void JsonRecord::insertValue(JsonRecordDefinition::FieldDefinition const & field
          // returned as std::optional<int> when accessed via the Qt property system.
          if (Optional::removeOptionalWrapperIfPresent<int>(value, propertyIsOptional)) {
             auto match =
-               std::get<EnumStringMapping const *>(fieldDefinition.valueDecoder)->enumAsIntToString(value.toInt());
+               std::get<EnumStringMapping const *>(fieldDefinition.valueDecoder)->enumAsIntToValue(value.toInt());
             // It's a coding error if we couldn't find a string representation for the enum
             Q_ASSERT(match);
             recordDataAsObject.emplace(key, match->toStdString());

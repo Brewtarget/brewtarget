@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Localization.h is part of Brewtarget, and is copyright the following authors 2011-2024:
+ * Localization.h is part of Brewtarget, and is copyright the following authors 2011-2025:
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -132,7 +132,7 @@ namespace Localization {
     * \param text
     * \param ok
     */
-   double toDouble(QString text, bool* ok = nullptr);
+   double toDouble(QString text, bool * ok = nullptr);
 
    /**
     * \brief Convenience wrapper around \c toDouble()
@@ -149,7 +149,7 @@ namespace Localization {
     * \param text
     * \param caller Callers should use the \c Q_FUNC_INFO macro to supply this parameter
     */
-   double toDouble(QString text, char const * const caller);
+   double toDouble(QString text, char const * const caller, bool * ok = nullptr);
 
    /**
     * \brief For a given string, determines whether it is just a number or a number plus units.

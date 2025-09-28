@@ -18,7 +18,6 @@
 #pragma once
 
 #include "database/ObjectStoreWrapper.h"
-#include "utils/AutoCompare.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/TypeTraits.h"
 
@@ -32,7 +31,7 @@ class RecipeUseOfWater;
 template <typename T> concept CONCEPT_FIX_UP IsRegularAddition = std::is_base_of_v<RecipeAddition, T>;
 
 /**
- * \brief Small template base class to provide templated code for recipe addition classes: \c RecipeAdditionHop,
+ * \brief Small CRTP base class to provide templated code for recipe addition classes: \c RecipeAdditionHop,
  *        \c RecipeAdditionFermentable, \c RecipeAdditionMisc, \c RecipeAdditionYeast.
  *
  * \param Derived = the derived class, eg \c RecipeAdditionHop
@@ -49,6 +48,13 @@ template<class Derived, class Ingr>
 class RecipeAdditionBase : public CuriouslyRecurringTemplateBase<RecipeAdditionPhantom, Derived> {
 
 protected:
+
+   bool compareWith([[maybe_unused]] NamedEntity const & other,
+                    [[maybe_unused]] QList<BtStringConst const *> * propertiesThatDiffer) const {
+      // No member variables, so this is a no-op
+      return true;
+   }
+
    RecipeAdditionBase() {
       return;
    }
@@ -123,58 +129,16 @@ public:
          if (ll.m_amount != rr.m_amount) {
             return ll.m_amount < rr.m_amount ? std::strong_ordering::less : std::strong_ordering::greater;
          }
-      } else {
-         if (ll.m_volume_l != rr.m_volume_l) {
-            return ll.m_volume_l < rr.m_volume_l ? std::strong_ordering::less : std::strong_ordering::greater;
-         }
+///      } else {
+///         if (ll.m_volume_l != rr.m_volume_l) {
+///            return ll.m_volume_l < rr.m_volume_l ? std::strong_ordering::less : std::strong_ordering::greater;
+///         }
       }
       int nameComparison {ll.name().compare(rr.name(), Qt::CaseInsensitive)};
       if (0 != nameComparison) {
          return nameComparison < 0 ? std::strong_ordering::less : std::strong_ordering::greater;
       }
       return std::strong_ordering::equal;
-   }
-
-   std::shared_ptr<Ingr> ingredient() const {
-      return ObjectStoreWrapper::getById<Ingr>(this->derived().m_ingredientId);
-   }
-
-   /**
-    * \brief Derived classes also return same info via functions with more friendly names (eg
-    *        \c RecipeAdditionHop::hop(), \c RecipeUseOfWater::water()).  It would be neat to be able to just alias
-    *        those names, but I'm not sure it's possible (because the CRTP base class is an incomplete type inside the
-    *        derived class declaration).  So we use macros instead (see below).
-    */
-   Ingr * ingredientRaw() const {
-      // Normally there should always be a valid Hop/Salt/etc in a RecipeAdjustmentHop/RecipeAdjustmentSalt/etc.  (The
-      // Recipe ID may be -1 if the addition is only just about to be added to the Recipe or has just been removed from
-      // it, but there's no great reason for the Hop/Salt/etc ID not to be valid).
-      if (this->derived().m_ingredientId <= 0) {
-         qWarning() <<
-            Q_FUNC_INFO << "No" << Ingr::staticMetaObject.className() << "set on " <<
-            Derived::staticMetaObject.className() << " #" << this->derived().key();
-         return nullptr;
-      }
-
-      return ObjectStoreWrapper::getByIdRaw<Ingr>(this->derived().m_ingredientId);
-   }
-
-   /**
-    * \brief As with \c ingredientRaw, it's the same deal for setters
-    */
-   void setIngredientRaw(Ingr * const val) {
-      if (val) {
-         this->derived().setIngredientId(val->key());
-         this->derived().setName(Derived::tr("Addition of %1").arg(val->name()));
-      } else {
-         // Normally we don't want to invalidate the Ingredient on a RecipeAddition, because it doesn't buy us anything.
-         qWarning() <<
-            Q_FUNC_INFO << "Null" << Ingr::staticMetaObject.className() << "set on " <<
-            Derived::staticMetaObject.className() << " #" << this->derived().key();
-         this->derived().setIngredientId(-1);
-         this->derived().setName(Derived::tr("Invalid!"));
-      }
-      return;
    }
 
 

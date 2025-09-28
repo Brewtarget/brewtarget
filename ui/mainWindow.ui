@@ -88,9 +88,6 @@
            <property name="acceptDrops">
             <bool>true</bool>
            </property>
-           <property name="toolTip">
-            <string>Recipes</string>
-           </property>
            <attribute name="icon">
             <iconset resource="../resources.qrc">
              <normaloff>:/images/brewtarget.svg</normaloff>:/images/brewtarget.svg</iconset>
@@ -2481,7 +2478,9 @@
   <tabstop>pushButton_removeSalt</tabstop>
   <tabstop>pushButton_editSalt</tabstop>
   <tabstop>mashStepsWidget</tabstop>
-  <tabstop>pushButton_editMash</tabstop>
+  <tabstop>mashButton</tabstop>
+  <tabstop>boilButton</tabstop>
+  <tabstop>fermentationButton</tabstop>
   <tabstop>pushButton_mashDesigner</tabstop>
   <tabstop>pushButton_mashWizard</tabstop>
   <tabstop>mashButton</tabstop>

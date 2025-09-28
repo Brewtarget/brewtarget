@@ -24,6 +24,7 @@
 #include "model/Fermentation.h"
 #include "model/FermentationStep.h"
 #include "model/Hop.h"
+#include "model/InventoryFermentable.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
@@ -44,6 +45,11 @@ class EquipmentTreeModel : public TreeModel, public TreeModelBase<EquipmentTreeM
 class FermentableTreeModel : public TreeModel, public TreeModelBase<FermentableTreeModel, Fermentable> {
    Q_OBJECT
    TREE_MODEL_COMMON_DECL(Fermentable)
+};
+
+class InventoryFermentableTreeModel : public TreeModel, public TreeModelBase<InventoryFermentableTreeModel, InventoryFermentable> {
+   Q_OBJECT
+   TREE_MODEL_COMMON_DECL(InventoryFermentable)
 };
 
 class MashTreeModel : public TreeModel, public TreeModelBase<MashTreeModel, Mash, MashStep> {

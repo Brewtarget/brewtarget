@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/MetaTypes.h is part of Brewtarget, and is copyright the following authors 2023:
+ * utils/MetaTypes.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 #include <QString>
 
 #include "measurement/Amount.h"
+#include "measurement/CurrencyAmount.h"
 #include "measurement/PhysicalQuantity.h"
 #include "measurement/Unit.h"
 
@@ -84,6 +85,9 @@ Q_DECLARE_METATYPE(Measurement::ChoiceOfPhysicalQuantity)
 // Measurement::Unit does not inherit from QObject, so we need this for Measurement::Units::unitStringMapping to work
 Q_DECLARE_OPAQUE_POINTER(Measurement::Unit *)
 //Q_DECLARE_METATYPE(Measurement::Unit const *)
+
+Q_DECLARE_METATYPE(CurrencyAmount               )
+Q_DECLARE_METATYPE(std::optional<CurrencyAmount>)
 
 /**
  * \brief Just to keep us on our toes, there is an additional requirement that certain new types be registered at

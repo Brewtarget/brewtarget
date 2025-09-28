@@ -79,8 +79,8 @@ private:
     * \param recurse
     */
    void addSubTree(Recipe const & recipe,
-                   TreeItemNode<Recipe> & recipeNode,
-                   bool const recurse = true);
+                   TreeItemNode<Recipe> & recipeNode/*,
+                   bool const recurse = true*/);
 
 };
 

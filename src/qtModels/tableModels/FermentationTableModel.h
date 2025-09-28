@@ -25,9 +25,9 @@
 #include "qtModels/tableModels/TableModelBase.h"
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(Fermentation, Name            ,
-                                 NumSteps        ,
-                                 NumRecipesUsedIn,)
+COLUMN_NAMES(FermentationTableModel, Name            ,
+                                     NumSteps        ,
+                                     NumRecipesUsedIn,)
 
 /*!
  * \class FermentationTableModel
