@@ -15,6 +15,11 @@
  =====================================================================================================================*/
 #include "model/InventoryYeast.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_InventoryYeast.cpp"
+#endif
+
 bool InventoryYeast::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    InventoryYeast const & rhs = static_cast<InventoryYeast const &>(other);

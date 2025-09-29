@@ -15,6 +15,11 @@
  =====================================================================================================================*/
 #include "model/InventoryMisc.h"
 
+#ifdef BUILDING_WITH_CMAKE
+   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
+   #include "moc_InventoryMisc.cpp"
+#endif
+
 bool InventoryMisc::compareWith(NamedEntity const & other,
                                 QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
