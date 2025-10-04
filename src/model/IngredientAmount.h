@@ -388,7 +388,7 @@ TypeLookup const IngredientAmount<Derived, IngredientClass>::typeLookup {
           NonPhysicalQuantity::Bool
        )},
    },
-   // Parent class lookup: none as we are at the top of this arm of the inheritance tree
+   // Parent class lookup: none as we are at the top of this branch of the inheritance tree
    {}
 };
 

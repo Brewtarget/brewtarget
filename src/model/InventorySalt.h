@@ -23,6 +23,7 @@
 #include "model/Salt.h"
 #include "model/Inventory.h"
 #include "model/IngredientAmount.h"
+#include "model/InventoryBase.h"
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -36,7 +37,9 @@ AddPropertyName(salt)
 /**
  * \brief Inventory of \c Salt
  */
-class InventorySalt : public Inventory, public IngredientAmount<InventorySalt, Salt> {
+class InventorySalt : public Inventory,
+                      public IngredientAmount<InventorySalt, Salt>,
+                      public InventoryBase   <InventorySalt, Salt> {
    Q_OBJECT
 
    INGREDIENT_AMOUNT_DECL(InventorySalt, Salt)

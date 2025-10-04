@@ -134,6 +134,7 @@ public:
     */
    Q_PROPERTY(std::optional<double> quantityOrdered      READ quantityOrdered      WRITE setQuantityOrdered)
 
+
    /**
     * \brief Normally this will be in the same currency as \c QLocale::currencySymbol, but we allow the user to override
     *        currency, eg for cross-border purchases.
@@ -150,16 +151,16 @@ public:
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
 ///   int                           ingredientId   () const;
-   std::optional<QDate>          dateOrdered    () const;
-   std::optional<QDate>          dateReceived   () const;
-   std::optional<QDate>          dateBestBefore () const;
-   QString                       supplier       () const;
-   std::optional<double>         quantityOrdered() const;
-   std::optional<CurrencyAmount> purchasePrice  () const;
-   std::optional<CurrencyAmount> purchaseTax    () const;
-   std::optional<CurrencyAmount> shippingCost   () const;
+   std::optional<QDate>               dateOrdered    () const;
+   std::optional<QDate>               dateReceived   () const;
+   std::optional<QDate>               dateBestBefore () const;
+   QString                            supplier       () const;
+   std::optional<double>              quantityOrdered() const;
+   std::optional<CurrencyAmount>      purchasePrice  () const;
+   std::optional<CurrencyAmount>      purchaseTax    () const;
+   std::optional<CurrencyAmount>      shippingCost   () const;
    // Getters for calculated values
-   double quantityRemaining() const;
+   double              quantityRemaining() const;
 ///   virtual std::shared_ptr<Ingredient> ingredient() const = 0;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
@@ -268,79 +269,5 @@ namespace InventoryTools {
    }
 }
 
-/**
- * \brief Subclasses of \c Inventory should include this in their header file, right after Q_OBJECT
- *
- *        Note we have to be careful about comment formats in macro definitions
- */
-#define INVENTORY_DECL(IngredientName, LcIngredientName) \
-public:                                                                            \
-   /** \brief See comment in model/NamedEntity.h */                                \
-   static QString localisedName();                                                 \
-                                                                                   \
-   /** \brief See \c NamedEntity::typeLookup. */                                   \
-   static TypeLookup const typeLookup;                                             \
-   TYPE_LOOKUP_GETTER                                                              \
-                                                                                   \
-   using IngredientClass = IngredientName;                                         \
-                                                                                   \
-   Inventory##IngredientName(QString const & name = "");                           \
-   Inventory##IngredientName(NamedParameterBundle const & namedParameterBundle);   \
-   Inventory##IngredientName(Inventory##IngredientName const & other);             \
-                                                                                   \
-   virtual ~Inventory##IngredientName();                                           \
-                                                                                   \
-public:                                                                            \
-   IngredientName * LcIngredientName() const ;                                     \
-                                                                                   \
-protected:                                                                         \
-   virtual bool compareWith(NamedEntity const & other,                             \
-                            QList<BtStringConst const *> * propertiesThatDiffer) const override; \
-   virtual ObjectStore & getObjectStoreTypedInstance() const override;             \
-
-/**
- * \brief Subclasses of \c Inventory should include this in their implementation file.
- *        (Currently, that's Inventory.cpp for everything.)
- *
- *        Note that #IngredientName will expand to "Fermentable"/"Hop"/etc and that
- *           "Fermentable" " Inventory"
- *        is treated by the compiler exactly the same as
- *           "Fermentable Inventory"
- *
- *        Note we have to be careful about comment formats in macro definitions
- */
-#define INVENTORY_COMMON_CODE(IngredientName, LcIngredientName) \
-QString Inventory##IngredientName::localisedName() { return tr(#IngredientName " Inventory"); }                      \
-ObjectStore & Inventory##IngredientName::getObjectStoreTypedInstance() const {                                       \
-   return ObjectStoreTyped<Inventory##IngredientName>::getInstance();                                                \
-}                                                                                                                    \
-/* All properties are defined in base classes */                                                                     \
-TypeLookup const Inventory##IngredientName::typeLookup {                                                             \
-   "Inventory"#IngredientName, { },                                                                                  \
-   {&Inventory::typeLookup, std::addressof(IngredientAmount<Inventory##IngredientName, IngredientName>::typeLookup)} \
-};                                                                                                                   \
-static_assert(std::is_base_of<Inventory, Inventory##IngredientName>::value);                                         \
-Inventory##IngredientName::Inventory##IngredientName(QString const & name) :                                         \
-   Inventory{name},                                                                                                  \
-   IngredientAmount<Inventory##IngredientName, IngredientName>{} {                                                   \
-   CONSTRUCTOR_END                                                                                                   \
-   return;                                                                                                           \
-}                                                                                                                    \
-Inventory##IngredientName::Inventory##IngredientName(NamedParameterBundle const & npb) :                             \
-   Inventory {npb},                                                                                                  \
-   IngredientAmount<Inventory##IngredientName, IngredientName>{npb} {                                                \
-   CONSTRUCTOR_END                                                                                                   \
-   return;                                                                                                           \
-}                                                                                                                    \
-Inventory##IngredientName::Inventory##IngredientName(Inventory##IngredientName const & other) :                      \
-   Inventory {other},                                                                                                \
-   IngredientAmount<Inventory##IngredientName, IngredientName>{other} {                                              \
-   CONSTRUCTOR_END                                                                                                   \
-   return;                                                                                                           \
-}                                                                                                                    \
-Inventory##IngredientName::~Inventory##IngredientName() = default;                                                   \
-IngredientName * Inventory##IngredientName::LcIngredientName() const {                                               \
-   return ObjectStoreWrapper::getByIdRaw<IngredientName>(this->ingredientId());                                      \
-}                                                                                                                    \
 
 #endif

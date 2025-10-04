@@ -25,16 +25,32 @@
 #include "model/IngredientAmount.h"
 #include "model/InventoryBase.h"
 
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::InventoryFermentable { inline BtStringConst const property{#property}; }
+AddPropertyName(fermentable)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
+
 /**
  * \brief Inventory of \c Fermentable
  */
 class InventoryFermentable : public Inventory,
                              public IngredientAmount<InventoryFermentable, Fermentable>,
-                             public InventoryBase<InventoryFermentable, Fermentable> {
+                             public InventoryBase   <InventoryFermentable, Fermentable> {
    Q_OBJECT
 
    INGREDIENT_AMOUNT_DECL(InventoryFermentable, Fermentable)
    INVENTORY_DECL(Fermentable, fermentable)
+
+   //=================================================== PROPERTIES ====================================================
+   //! See \c InventoryBase for getters and setters
+   Q_PROPERTY(Fermentable *                        fermentable       READ fermentable    )
+   Q_PROPERTY(std::optional<Measurement::Amount>   amountOrdered     READ amountOrdered  )
+   Q_PROPERTY(Measurement::Amount                  amountReceived    READ amountReceived )
+   Q_PROPERTY(Measurement::Amount                  amountRemaining   READ amountRemaining   STORED false)
 
    // See model/IngredientAmount.h for info, getters and setters for these properties
    Q_PROPERTY(int                           ingredientId READ ingredientId WRITE setIngredientId)

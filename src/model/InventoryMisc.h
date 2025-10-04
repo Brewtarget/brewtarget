@@ -23,11 +23,23 @@
 #include "model/Misc.h"
 #include "model/Inventory.h"
 #include "model/IngredientAmount.h"
+#include "model/InventoryBase.h"
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::InventoryMisc { inline BtStringConst const property{#property}; }
+AddPropertyName(misc)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 /**
  * \brief Inventory of \c Misc
  */
-class InventoryMisc : public Inventory, public IngredientAmount<InventoryMisc, Misc> {
+class InventoryMisc : public Inventory,
+                      public IngredientAmount<InventoryMisc, Misc>,
+                      public InventoryBase   <InventoryMisc, Misc> {
    Q_OBJECT
 
    INGREDIENT_AMOUNT_DECL(InventoryMisc, Misc)

@@ -48,6 +48,8 @@
 #include "model/Yeast.h"
 #include "trees/RecipeTreeModel.h"
 #include "trees/TreeModel.h"
+#include "utils/ColumnInfo.h"
+#include "utils/ColumnOwnerTraits.h"
 
 namespace {
    /**
@@ -159,6 +161,60 @@ bool TreeNode::showMe() const {
    return this->m_showMe;
 }
 
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<TreeItemNode<Recipe>>::columnInfos {
+   TREE_NODE_HEADER(TreeItemNode, Recipe, Name             , tr("Name"     ), PropertyNames::NamedEntity::name        ),
+   TREE_NODE_HEADER(TreeItemNode, Recipe, NumberOfAncestors, tr("Snapshots"), PropertyNames::Recipe     ::numAncestors),
+   TREE_NODE_HEADER(TreeItemNode, Recipe, BrewDate         , tr("Date"     ), PropertyNames::Recipe     ::date        ),
+   TREE_NODE_HEADER(TreeItemNode, Recipe, Style            , tr("Style"    ), {PropertyNames::Recipe::style,
+                                                                               PropertyNames::NamedEntity::name}      ),
+};
+
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<TreeItemNode<Equipment>>::columnInfos {
+   TREE_NODE_HEADER(TreeItemNode, Equipment, Name        , tr("Name"      ), PropertyNames::NamedEntity::name              ),
+   TREE_NODE_HEADER(TreeItemNode, Equipment, BoilSize    , tr("Boil Size" ), PropertyNames::Equipment::kettleBoilSize_l    ),
+   TREE_NODE_HEADER(TreeItemNode, Equipment, BatchSize   , tr("Batch Size"), PropertyNames::Equipment::fermenterBatchSize_l),
+};
+
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<TreeItemNode<Mash>>::columnInfos {
+   TREE_NODE_HEADER(TreeItemNode, Mash, Name      , tr("Name"       ), PropertyNames::NamedEntity::name     ),
+   TREE_NODE_HEADER(TreeItemNode, Mash, TotalWater, tr("Total Water"), PropertyNames::Mash::totalMashWater_l),
+   TREE_NODE_HEADER(TreeItemNode, Mash, TotalTime , tr("Total Time" ), PropertyNames::Mash::totalTime_mins  ),
+};
+
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<TreeItemNode<Boil>>::columnInfos {
+   TREE_NODE_HEADER(TreeItemNode, Boil, Name              , tr("Name"           ), PropertyNames::NamedEntity::name  ),
+   TREE_NODE_HEADER(TreeItemNode, Boil, PreBoilSize       , tr("Pre-Boil Size"  ), PropertyNames::Boil::preBoilSize_l),
+   TREE_NODE_HEADER(TreeItemNode, Boil, LengthOfBoilProper, tr("Time At Boiling"), PropertyNames::Boil::boilTime_mins),
+};
+
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<TreeItemNode<Fermentation>>::columnInfos {
+   TREE_NODE_HEADER(TreeItemNode, Fermentation, Name       , tr("Name"       ), PropertyNames::NamedEntity::name       ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentation, Description, tr("Description"), PropertyNames::Fermentation::description),
+};
+
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<TreeItemNode<Fermentable>>::columnInfos {
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Name , tr("Name" ), PropertyNames::NamedEntity::name       ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Type , tr("Type" ), PropertyNames::Fermentable::type       ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Color, tr("Color"), PropertyNames::Fermentable::color_srm  ),
+};
+
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<TreeItemNode<Hop>>::columnInfos {
+   TREE_NODE_HEADER(TreeItemNode, Hop, Name    , tr("Name"   ), PropertyNames::NamedEntity::name       ),
+   TREE_NODE_HEADER(TreeItemNode, Hop, Form    , tr("Type"   ), PropertyNames::Hop::form     ),
+   TREE_NODE_HEADER(TreeItemNode, Hop, AlphaPct, tr("% Alpha"), PropertyNames::Hop::alpha_pct),
+   TREE_NODE_HEADER(TreeItemNode, Hop, Origin  , tr("Origin" ), PropertyNames::Hop::origin   ),
+};
+
+template<> std::vector<ColumnInfo> const ColumnOwnerTraits<TreeItemNode<InventoryFermentable>>::columnInfos {
+   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, Name    , tr("Name"   ), {PropertyNames::InventoryFermentable::fermentable,
+                                                                                  PropertyNames::NamedEntity::name}       ),
+   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, DateOrdered    , tr("Date Ordered"    ), PropertyNames::Inventory::dateOrdered),
+   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, Type           , tr("Type"            ), {PropertyNames::InventoryFermentable::fermentable,
+                                                                                                  PropertyNames::Fermentable::type}),
+   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, AmountReceived , tr("Amount Received" ), PropertyNames::InventoryBase::amountReceived ),
+   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, AmountRemaining, tr("Amount Remaining"), PropertyNames::InventoryBase::amountRemaining),
+};
+
 // NOTE: Each TreeItemNode<XYZ>::columnDisplayNames definition below should correspond with the columns defined in
 //       TreeNodeTraits<XYZ, PQR>::ColumnIndex in trees/TreeNodeTraits.h.
 
@@ -171,7 +227,8 @@ template<> EnumStringMapping const TreeItemNode<Recipe>::columnDisplayNames {
 
 template<> EnumStringMapping const TreeItemNode<Equipment>::columnDisplayNames {
    {TreeItemNode<Equipment>::ColumnIndex::Name    , Equipment::tr("Name"     )},
-   {TreeItemNode<Equipment>::ColumnIndex::BoilTime, Equipment::tr("Boil Time")},
+   {TreeItemNode<Equipment>::ColumnIndex::BoilSize , Equipment::tr("Boil Size" )},
+   {TreeItemNode<Equipment>::ColumnIndex::BatchSize, Equipment::tr("Batch Size")},
 };
 
 template<> EnumStringMapping const TreeItemNode<Mash>::columnDisplayNames {
@@ -320,12 +377,12 @@ template<> bool TreeItemNode<Equipment>::columnIsLessThan(TreeItemNode<Equipment
       case TreeItemNode<Equipment>::ColumnIndex::Name:
          return lhs.name() < rhs.name();
 
-      case TreeItemNode<Equipment>::ColumnIndex::BoilTime:
-         return lhs.boilTime_min().value_or(Equipment::default_boilTime_mins) <
-                rhs.boilTime_min().value_or(Equipment::default_boilTime_mins);
+///      case TreeItemNode<Equipment>::ColumnIndex::BoilTime:
+///         return lhs.boilTime_min().value_or(Equipment::default_boilTime_mins) <
+///                rhs.boilTime_min().value_or(Equipment::default_boilTime_mins);
    }
 
-   Q_UNREACHABLE();
+///   Q_UNREACHABLE();
    return lhs.name() < rhs.name();
 }
 

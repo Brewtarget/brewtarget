@@ -177,8 +177,9 @@ template<> struct TreeNodeTraits<Recipe, Recipe> {
 
 template<> struct TreeNodeTraits<Equipment, Equipment> {
    enum class ColumnIndex {
-      Name    ,
-      BoilTime,
+      Name     ,
+      BoilSize ,
+      BatchSize,
    };
    static constexpr size_t NumberOfColumns = 2;
    static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
@@ -197,8 +198,11 @@ template<> struct TreeNodeTraits<Equipment, Equipment> {
       switch (column) {
          case ColumnIndex::Name:
             return QVariant(equipment.name());
-         case ColumnIndex::BoilTime:
-            return QVariant::fromValue(equipment.boilTime_min());
+         case ColumnIndex::BoilSize :
+         case ColumnIndex::BatchSize:
+            return QVariant();
+///         case ColumnIndex::BoilTime:
+///            return QVariant::fromValue(equipment.boilTime_min());
       }
       Q_UNREACHABLE();
    }

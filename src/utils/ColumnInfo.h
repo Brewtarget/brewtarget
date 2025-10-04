@@ -37,7 +37,7 @@
  *        column header.  We then act on the pop-up menu selections directly, rather than \c SmartLabel sending a
  *        signal that \c SmartLineEdit (and sometimes others) pick up.
  *
- *        NOTE that you usually want to use the \c TABLE_MODEL_HEADER or \c TREE_MODEL_HEADER macro when constructing
+ *        NOTE that you usually want to use the \c TABLE_MODEL_HEADER or \c TREE_NODE_HEADER macro when constructing
  */
 struct ColumnInfo {
    /**
@@ -63,6 +63,10 @@ struct ColumnInfo {
 
    /**
     * \brief The localised text to display in this column header
+    *
+    *        TBD: We probably ought to be able to get this from \c typeInfo, but need to check how we're going to handle
+    *             property paths such as {PropertyNames::Recipe::style, PropertyNames::NamedEntity::name} (which we
+    *             would want to show as "Style" rather than "Name").
     */
    QString const label;
 
@@ -147,14 +151,14 @@ struct ColumnInfo {
               __VA_ARGS__}
 
 /**
- * \brief Same as TABLE_MODEL_HEADER but for use with \c TreeModel subclasses rather than \c BtTableModel subclasses
+ * \brief Same as TABLE_MODEL_HEADER but for use with \c TreeNode subclasses rather than \c BtTableModel subclasses
  */
-#define TREE_MODEL_HEADER(modelClass, columnName, labelText, ...) \
-   ColumnInfo{#modelClass "TreeModel", \
+#define TREE_NODE_HEADER(nodeType, modelClass, columnName, labelText, ...) \
+   ColumnInfo{#nodeType "<" #modelClass ">", \
               #columnName, \
-              #modelClass "TreeModel::ColumnIndex::" #columnName, \
-              static_cast<size_t>(modelClass##TreeModel::ColumnIndex::columnName), \
-              labelText, \
+              #nodeType "<" #modelClass ">::ColumnIndex::" #columnName, \
+              static_cast<size_t>(nodeType<modelClass>::ColumnIndex::columnName), \
+              modelClass::labelText, \
               modelClass::typeLookup, \
               __VA_ARGS__}
 

@@ -23,11 +23,23 @@
 #include "model/Hop.h"
 #include "model/Inventory.h"
 #include "model/IngredientAmount.h"
+#include "model/InventoryBase.h"
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::InventoryHop { inline BtStringConst const property{#property}; }
+AddPropertyName(hop)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 /**
  * \brief Inventory of \c Hop
  */
-class InventoryHop : public Inventory, public IngredientAmount<InventoryHop, Hop> {
+class InventoryHop : public Inventory,
+                     public IngredientAmount<InventoryHop, Hop>,
+                     public InventoryBase   <InventoryHop, Hop> {
    Q_OBJECT
 
    INGREDIENT_AMOUNT_DECL(InventoryHop, Hop)

@@ -90,6 +90,7 @@ AddPropertyName(mash                   )
 AddPropertyName(mashId                 )
 AddPropertyName(miscAdditions          )
 AddPropertyName(notes                  )
+AddPropertyName(numAncestors           )
 AddPropertyName(og                     )
 AddPropertyName(points                 )
 AddPropertyName(postBoilVolume_l       )
@@ -202,6 +203,7 @@ public:
    static QString localisedName_mashId                 ();
    static QString localisedName_miscAdditions          ();
    static QString localisedName_notes                  ();
+   static QString localisedName_numAncestors           ();
    static QString localisedName_og                     ();
    static QString localisedName_points                 ();
    static QString localisedName_postBoilVolume_l       ();
@@ -437,6 +439,9 @@ public:
    //! \brief The immediate ancestor
    Q_PROPERTY(int    ancestorId READ getAncestorId WRITE setAncestorId)
 
+   //! \brief The total number of ancestors
+   Q_PROPERTY(int numAncestors READ numAncestors STORED false)
+
    /**
     * \brief We need to override \c NamedEntity::setKey to do some extra ancestor stuff
     */
@@ -654,7 +659,8 @@ public:
     */
    template<class NE> std::shared_ptr<NE> get() const;
 
-   int getAncestorId () const;
+   int getAncestorId() const;
+   int numAncestors () const;
 
    // Relational setters
    void setEquipment   (std::shared_ptr<Equipment   > val);
