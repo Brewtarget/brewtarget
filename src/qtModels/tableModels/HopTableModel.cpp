@@ -35,7 +35,8 @@
    #include "moc_HopTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<HopTableModel>::columnInfos {
+COLUMN_INFOS(
+   HopTableModel,
    TABLE_MODEL_HEADER(Hop, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
    TABLE_MODEL_HEADER(Hop, Form              , tr("Form"       ), PropertyNames::Hop::form                    ),
    TABLE_MODEL_HEADER(Hop, Year              , tr("Year"       ), PropertyNames::Hop::year                    ),
@@ -43,7 +44,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<HopTableModel>::colum
    TABLE_MODEL_HEADER(Hop, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   ),
    TABLE_MODEL_HEADER(Hop, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Hop::validMeasures),
    TABLE_MODEL_HEADER(Hop, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
-};
+)
 
 HopTableModel::HopTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},

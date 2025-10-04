@@ -48,7 +48,8 @@
    #include "moc_FermentableTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<FermentableTableModel>::columnInfos {
+COLUMN_INFOS(
+   FermentableTableModel,
    // NOTE: Need PropertyNames::Fermentable::amountWithUnits not PropertyNames::Fermentable::amount below so we
    //       can handle mass-or-volume generically in TableModelBase.  Same for inventoryWithUnits.
    TABLE_MODEL_HEADER(Fermentable, Name              , tr("Name"          ), PropertyNames::NamedEntity::name              ),
@@ -58,7 +59,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<FermentableTableModel
    TABLE_MODEL_HEADER(Fermentable, TotalInventory    , tr("Inventory"     ), PropertyNames::Ingredient::totalInventory     ),
    TABLE_MODEL_HEADER(Fermentable, TotalInventoryType, tr("Amount Type"   ), PropertyNames::Ingredient::totalInventory     , Fermentable::validMeasures),
    TABLE_MODEL_HEADER(Fermentable, NumRecipesUsedIn  , tr("N° Recipes"    ), PropertyNames::NamedEntity::numRecipesUsedIn  ),
-};
+)
 
 //=====================CLASS FermentableTableModel==============================
 FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable) :

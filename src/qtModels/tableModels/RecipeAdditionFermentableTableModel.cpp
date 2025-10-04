@@ -42,7 +42,8 @@
    #include "moc_RecipeAdditionFermentableTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdditionFermentableTableModel>::columnInfos {
+COLUMN_INFOS(
+   RecipeAdditionFermentableTableModel,
    //
    // Note that for Name, we want the name of the contained Fermentable, not the name of the RecipeAdditionFermentable
    //
@@ -63,7 +64,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdditionFerment
                                                                                                    PropertyNames::Ingredient::totalInventory}}),
    TABLE_MODEL_HEADER(RecipeAdditionFermentable, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     ),
    TABLE_MODEL_HEADER(RecipeAdditionFermentable, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            ),
-};
+)
 
 RecipeAdditionFermentableTableModel::RecipeAdditionFermentableTableModel(QTableView * parent, bool editable) :
    BtTableModelRecipeObserver{parent, editable},

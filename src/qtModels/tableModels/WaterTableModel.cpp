@@ -32,7 +32,8 @@
    #include "moc_WaterTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<WaterTableModel>::columnInfos {
+COLUMN_INFOS(
+   WaterTableModel,
    TABLE_MODEL_HEADER(Water, Name            , tr("Name"             ), PropertyNames::NamedEntity::name            ),
    TABLE_MODEL_HEADER(Water, Calcium         , tr("Calcium (ppm)"    ), PropertyNames::Water::calcium_ppm           ),
    TABLE_MODEL_HEADER(Water, Bicarbonate     , tr("Bicarbonate (ppm)"), PropertyNames::Water::bicarbonate_ppm       ),
@@ -41,7 +42,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<WaterTableModel>::col
    TABLE_MODEL_HEADER(Water, Sodium          , tr("Sodium (ppm)"     ), PropertyNames::Water::sodium_ppm            ),
    TABLE_MODEL_HEADER(Water, Magnesium       , tr("Magnesium (ppm)"  ), PropertyNames::Water::magnesium_ppm         ),
    TABLE_MODEL_HEADER(Water, NumRecipesUsedIn, tr("N° Recipes"       ), PropertyNames::NamedEntity::numRecipesUsedIn),
-};
+)
 
 WaterTableModel::WaterTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},

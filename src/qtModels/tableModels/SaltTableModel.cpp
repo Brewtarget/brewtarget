@@ -29,7 +29,8 @@
    #include "moc_SaltTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<SaltTableModel>::columnInfos {
+COLUMN_INFOS(
+   SaltTableModel,
    // NOTE: Need PropertyNames::Salt::amountWithUnits not PropertyNames::Salt::amount below so we
    //       can handle mass-or-volume generically in TableModelBase.
    //
@@ -39,7 +40,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<SaltTableModel>::colu
    TABLE_MODEL_HEADER(Salt, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   ),
    TABLE_MODEL_HEADER(Salt, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Salt::validMeasures),
    TABLE_MODEL_HEADER(Salt, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
-};
+)
 
 SaltTableModel::SaltTableModel(QTableView* parent, bool editable) :
    BtTableModel{parent, editable},

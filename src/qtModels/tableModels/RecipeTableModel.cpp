@@ -25,9 +25,10 @@
    #include "moc_RecipeTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeTableModel>::columnInfos {
+COLUMN_INFOS(
+   RecipeTableModel,
    TABLE_MODEL_HEADER(Recipe, Name          , tr("Name"           ), PropertyNames::NamedEntity::name    ),
-};
+)
 
 RecipeTableModel::RecipeTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},

@@ -35,7 +35,8 @@
    #include "moc_MashStepTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<MashStepTableModel>::columnInfos {
+COLUMN_INFOS(
+   MashStepTableModel,
    TABLE_MODEL_HEADER(MashStep, Name        , tr("Name"         ), PropertyNames::NamedEntity::name               ),
    TABLE_MODEL_HEADER(MashStep, Type        , tr("Type"         ), PropertyNames::MashStep::type                  ),
    TABLE_MODEL_HEADER(MashStep, Amount      , tr("Amount"       ), PropertyNames::MashStep::amount_l              ),
@@ -47,7 +48,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<MashStepTableModel>::
    TABLE_MODEL_HEADER(MashStep, StartAcidity, tr("Start pH"     ), PropertyNames::Step::startAcidity_pH           ),
    TABLE_MODEL_HEADER(MashStep,   EndAcidity, tr("End pH"       ), PropertyNames::Step::  endAcidity_pH           ),
    TABLE_MODEL_HEADER(MashStep, WaterToGrain, tr("Water:Grain"  ), PropertyNames::MashStep::liquorToGristRatio_lKg),
-};
+)
 
 MashStepTableModel::MashStepTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},

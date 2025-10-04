@@ -122,6 +122,11 @@ public:
       return AUTO_PROPERTY_COMPARE_FN(this, other, items, PropertyNames::OwnedSet::items, propertiesThatDiffer);
    }
 
+   // Note that, because this is static, it cannot be initialised inside the class definition
+   static TypeLookup const typeLookup;
+
+   static QString localisedName_items() { return Owner::tr("Items"); }
+
    /**
     * \brief Minimal constructor.  Note that the reason we do not just initialise everything here is that the object
     *        stores on which we depend might not yet themselves be initialised when this constructor is called.
@@ -775,6 +780,30 @@ private:
    //! Note that this list is not in any particular order (see comments in \c items member function)
    QVector<int> m_itemIds = {};
 };
+
+template<class Owner,
+         class Item,
+         BtStringConst const & propertyName,
+         void (Owner::*itemChangedSlot)(QMetaProperty, QVariant),
+         OwnedSetOptions ownedSetOptions>
+TypeLookup const OwnedSet<Owner, Item, propertyName, itemChangedSlot, ownedSetOptions>::typeLookup {
+   "OwnedSet",
+   {
+      //
+      // See comment in model/IngredientAmount.h for why we can't use the PROPERTY_TYPE_LOOKUP_ENTRY or
+      // PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV macros here.
+      //
+      {&PropertyNames::OwnedSet::items,
+       TypeInfo::construct<MemberFunctionReturnType_t<&OwnedSet::items>>(
+          PropertyNames::OwnedSet::items,
+          OwnedSet::localisedName_items,
+          TypeLookupOf<MemberFunctionReturnType_t<&OwnedSet::items>>::value
+       )},
+   },
+   // Parent class lookup: none as we are at the top of this arm of the inheritance tree
+   {}
+};
+
 
 
 #endif

@@ -28,11 +28,12 @@
    #include "moc_BoilTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<BoilTableModel>::columnInfos {
+COLUMN_INFOS(
+   BoilTableModel,
    TABLE_MODEL_HEADER(Boil, Name            , tr("Name"         ), PropertyNames:: NamedEntity::name           ),
    TABLE_MODEL_HEADER(Boil, PreBoilSize     , tr("Pre-Boil Size"), PropertyNames::        Boil::preBoilSize_l  ),
    TABLE_MODEL_HEADER(Boil, NumRecipesUsedIn, tr("N° Recipes"   ), PropertyNames::NamedEntity::numRecipesUsedIn),
-};
+)
 
 BoilTableModel::BoilTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},

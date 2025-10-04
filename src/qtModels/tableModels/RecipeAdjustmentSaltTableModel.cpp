@@ -37,7 +37,8 @@
    #include "moc_RecipeAdjustmentSaltTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdjustmentSaltTableModel>::columnInfos {
+COLUMN_INFOS(
+   RecipeAdjustmentSaltTableModel,
    // NOTE: Need PropertyNames::RecipeAdjustmentSalt::amountWithUnits not PropertyNames::RecipeAdjustmentSalt::amount below so we
    //       can handle mass-or-volume generically in TableModelBase.
    //
@@ -54,7 +55,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdjustmentSaltT
    TABLE_MODEL_HEADER(RecipeAdjustmentSalt, AddTo         , tr("Added To"   ), PropertyNames::RecipeAdjustmentSalt::whenToAdd         ),
    TABLE_MODEL_HEADER(RecipeAdjustmentSalt, PctAcid       , tr("% Acid"     ), PropertyPath{{PropertyNames::RecipeAdjustmentSalt::salt,
                                                                                              PropertyNames::Salt::percentAcid         }}),
-};
+)
 
 RecipeAdjustmentSaltTableModel::RecipeAdjustmentSaltTableModel(QTableView* parent, bool editable) :
    BtTableModelRecipeObserver{parent, editable},

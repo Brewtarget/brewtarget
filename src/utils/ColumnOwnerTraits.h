@@ -42,13 +42,22 @@ struct ColumnOwnerTraits {
    /**
     * \brief We're using a \c std::vector here because it's easier for constant lists.  (With \c QVector, at least in
     *        Qt 5, the items stored even in a const instance still need to be default constructable and copyable.)
+    *
+    *        Ideally we'd have a \c constexpr static member variable here that is instantiated in the template
+    *        specialisations.
+    *        However, AFAICT, that's not possible.  Instead, to avoid static initialisation order fiasco, we use a
+    *        Meyers singleton.
+    *
+    *        Derived classes should use the COLUMN_INFOS macro below to define this function.
     */
-   static std::vector<ColumnInfo> const columnInfos;
+   static std::vector<ColumnInfo> const & getColumnInfos();
 
    //
    // This is a traits class, so it only has static members and does not need any constructor or destructor
    //
    [[nodiscard]] static ColumnInfo const & getColumnInfo(size_t const columnIndex) {
+      std::vector<ColumnInfo> const & columnInfos = getColumnInfos();
+
       // It's a coding error to call this for a non-existent column
       Q_ASSERT(columnIndex < columnInfos.size());
 
@@ -72,7 +81,7 @@ struct ColumnOwnerTraits {
    }
 
    [[nodiscard]] static int numColumns() {
-      return columnInfos.size();
+      return getColumnInfos().size();
    }
 
 };
@@ -92,6 +101,19 @@ struct ColumnOwnerTraits {
          __VA_ARGS__                                                                \
       };                                                                            \
    };                                                                               \
+
+/**
+ * \brief ColumnOwner classes (eg subclasses of \c BtTableModel) should use this to define the \c getColumnInfos member
+ *        function.
+ */
+#define COLUMN_INFOS(Derived, ...)                                                        \
+template<> std::vector<ColumnInfo> const & ColumnOwnerTraits<Derived>::getColumnInfos() { \
+   /* Meyers singleton */                                                                 \
+   static std::vector<ColumnInfo> const columnInfos {                                     \
+      __VA_ARGS__                                                                         \
+   };                                                                                     \
+   return columnInfos;                                                                    \
+}                                                                                         \
 
 
 #endif

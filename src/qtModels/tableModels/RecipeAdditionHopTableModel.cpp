@@ -41,7 +41,8 @@
    #include "moc_RecipeAdditionHopTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdditionHopTableModel>::columnInfos {
+COLUMN_INFOS(
+   RecipeAdditionHopTableModel,
    //
    // Note that for Name, we want the name of the contained Hop, not the name of the RecipeAdditionHop
    //
@@ -62,7 +63,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdditionHopTabl
                                                                                           PropertyNames::Ingredient::totalInventory}}),
    TABLE_MODEL_HEADER(RecipeAdditionHop, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     ),
    TABLE_MODEL_HEADER(RecipeAdditionHop, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            ),
-};
+)
 
 RecipeAdditionHopTableModel::RecipeAdditionHopTableModel(QTableView * parent, bool editable) :
    BtTableModelRecipeObserver{parent, editable},

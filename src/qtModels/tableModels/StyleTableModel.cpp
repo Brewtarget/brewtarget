@@ -25,7 +25,8 @@
    #include "moc_StyleTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<StyleTableModel>::columnInfos {
+COLUMN_INFOS(
+   StyleTableModel,
    TABLE_MODEL_HEADER(Style, Name            , tr("Name"           ), PropertyNames::NamedEntity::name            ),
    TABLE_MODEL_HEADER(Style, Type            , tr("Type"           ), PropertyNames::Style::type                  ),
    TABLE_MODEL_HEADER(Style, Category        , tr("Category"       ), PropertyNames::Style::category              ),
@@ -33,7 +34,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<StyleTableModel>::col
    TABLE_MODEL_HEADER(Style, StyleLetter     , tr("Style Letter"   ), PropertyNames::Style::styleLetter           ),
    TABLE_MODEL_HEADER(Style, StyleGuide      , tr("Style Guide"    ), PropertyNames::Style::styleGuide            ),
    TABLE_MODEL_HEADER(Style, NumRecipesUsedIn, tr("N° Recipes"     ), PropertyNames::NamedEntity::numRecipesUsedIn),
-};
+)
 
 StyleTableModel::StyleTableModel(QTableView* parent, bool editable) :
    BtTableModel{parent, editable},

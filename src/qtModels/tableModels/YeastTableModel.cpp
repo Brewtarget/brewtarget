@@ -33,7 +33,8 @@
    #include "moc_YeastTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<YeastTableModel>::columnInfos {
+COLUMN_INFOS(
+   YeastTableModel,
    // NOTE: Need PropertyNames::Yeast::amountWithUnits not PropertyNames::Yeast::amount below so we
    //       can handle mass-or-volume generically in TableModelBase.  Same for inventoryWithUnits.
    TABLE_MODEL_HEADER(Yeast, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
@@ -44,7 +45,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<YeastTableModel>::col
    TABLE_MODEL_HEADER(Yeast, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   ),
    TABLE_MODEL_HEADER(Yeast, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Yeast::validMeasures),
    TABLE_MODEL_HEADER(Yeast, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
-};
+)
 
 YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},

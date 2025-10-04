@@ -28,11 +28,12 @@
    #include "moc_FermentationTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<FermentationTableModel>::columnInfos {
+COLUMN_INFOS(
+   FermentationTableModel,
    TABLE_MODEL_HEADER(Fermentation, Name            , tr("Name"           ), PropertyNames::  NamedEntity::name          ),
    TABLE_MODEL_HEADER(Fermentation, NumSteps        , tr("Number of Steps"), PropertyNames::StepOwnerBase::numSteps      ),
    TABLE_MODEL_HEADER(Fermentation, NumRecipesUsedIn, tr("N° Recipes"     ), PropertyNames::NamedEntity::numRecipesUsedIn),
-};
+)
 
 FermentationTableModel::FermentationTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},

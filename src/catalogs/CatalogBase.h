@@ -526,10 +526,10 @@ public:
                                "<th>" << firstItem->name() << " (#" << firstItem->key() << ")" << "</th>"
                                "<th>" <<  lastItem->name() << " (#" <<  lastItem->key() << ")" << "</th>"
                             "</tr>"
+                            "<tr>"
                                "<td>№ Recipes</td>"
                                "<td>" << firstItem->numRecipesUsedIn() << "</td>"
                                "<td>" <<  lastItem->numRecipesUsedIn() << "</td>"
-                            "<tr>"
                             "</tr>";
             for (BtStringConst const * propertyName : propertiesThatDiffer) {
                TypeInfo const & typeInfo = NE::typeLookup.getType(*propertyName);

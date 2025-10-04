@@ -41,7 +41,8 @@
    #include "moc_RecipeAdditionMiscTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdditionMiscTableModel>::columnInfos {
+COLUMN_INFOS(
+   RecipeAdditionMiscTableModel,
    //
    // Note that for Name, we want the name of the contained Misc, not the name of the RecipeAdditionMisc
    //
@@ -58,7 +59,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdditionMiscTab
                                                                                              PropertyNames::Ingredient::totalInventory}}),
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     ),
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            ),
-};
+)
 
 RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, bool editable) :
    BtTableModelRecipeObserver{parent, editable},

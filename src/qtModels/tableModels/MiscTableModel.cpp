@@ -33,7 +33,8 @@
    #include "moc_MiscTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<MiscTableModel>::columnInfos {
+COLUMN_INFOS(
+   MiscTableModel,
    // NOTE: Need PropertyNames::Fermentable::amountWithUnits not PropertyNames::Fermentable::amount below so we
    //       can handle mass-or-volume generically in TableModelBase.  Same for inventoryWithUnits.
    TABLE_MODEL_HEADER(Misc, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
@@ -41,7 +42,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<MiscTableModel>::colu
    TABLE_MODEL_HEADER(Misc, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   ),
    TABLE_MODEL_HEADER(Misc, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Misc::validMeasures),
    TABLE_MODEL_HEADER(Misc, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
-};
+)
 
 MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
    BtTableModel{parent, editable},

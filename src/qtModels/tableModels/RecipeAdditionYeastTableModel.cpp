@@ -42,7 +42,8 @@
    #include "moc_RecipeAdditionYeastTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdditionYeastTableModel>::columnInfos {
+COLUMN_INFOS(
+   RecipeAdditionYeastTableModel,
    //
    // Note that for Name, we want the name of the contained Yeast, not the name of the RecipeAdditionYeast
    //
@@ -67,7 +68,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<RecipeAdditionYeastTa
    TABLE_MODEL_HEADER(RecipeAdditionYeast, Step          , tr("Step"          ), PropertyNames::RecipeAddition::step                    ),
    TABLE_MODEL_HEADER(RecipeAdditionYeast, Attenuation   , tr("Attenuation"   ), PropertyNames::RecipeAdditionYeast::attenuation_pct    ),
    TABLE_MODEL_HEADER(RecipeAdditionYeast, TimesCultured , tr("Times Cultured"), PropertyNames::RecipeAdditionYeast::timesCultured      ),
-};
+)
 
 RecipeAdditionYeastTableModel::RecipeAdditionYeastTableModel(QTableView * parent, bool editable) :
    BtTableModelRecipeObserver{parent, editable},

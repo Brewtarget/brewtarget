@@ -39,7 +39,8 @@
    #include "moc_FermentationStepTableModel.cpp"
 #endif
 
-template<> std::vector<ColumnInfo> const ColumnOwnerTraits<FermentationStepTableModel>::columnInfos {
+COLUMN_INFOS(
+   FermentationStepTableModel,
    //
    // As noted elsewhere, we store the step time for fermentation times in minutes, so we can reuse code with
    // mash steps, boil steps etc, but the Measurement system will automatically show them in days (because
@@ -59,7 +60,7 @@ template<> std::vector<ColumnInfo> const ColumnOwnerTraits<FermentationStepTable
    TABLE_MODEL_HEADER(FermentationStep, EndGravity  , tr("End Gravity"  ), PropertyNames::    StepExtended::  endGravity_sg),
    TABLE_MODEL_HEADER(FermentationStep, FreeRise    , tr("Free Rise"    ), PropertyNames::FermentationStep::freeRise       ),
    TABLE_MODEL_HEADER(FermentationStep, Vessel      , tr("Vessel"       ), PropertyNames::FermentationStep::vessel         ),
-};
+)
 
 FermentationStepTableModel::FermentationStepTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},
