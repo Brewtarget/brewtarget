@@ -1409,6 +1409,7 @@ QString Recipe::localisedName_mash                   () { return tr("Mash"      
 QString Recipe::localisedName_mashId                 () { return tr("Mash ID"                ); }
 QString Recipe::localisedName_miscAdditions          () { return tr("Misc Additions"         ); }
 QString Recipe::localisedName_notes                  () { return tr("Notes"                  ); }
+QString Recipe::localisedName_numAncestors           () { return tr("Number of Snapshots"    ); }
 QString Recipe::localisedName_og                     () { return tr("OG"                     ); }
 QString Recipe::localisedName_points                 () { return tr("Points"                 ); }
 QString Recipe::localisedName_postBoilVolume_l       () { return tr("Post Boil Volume"       ); }
@@ -1529,6 +1530,7 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, locked           , m_locked            ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, calcsEnabled     , m_calcsEnabled      ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, ancestorId       , m_ancestor_id       ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, numAncestors     , numAncestors       ,        NonPhysicalQuantity::CardinalNumber),
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, ABV_pct          , ABV_pct         ,           NonPhysicalQuantity::Percentage   ), // Calculated, not in DB
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, boilGrav         , boilGrav        , Measurement::PhysicalQuantity::Density      ), // Calculated, not in DB
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, boilVolume_l     , boilVolume_l    , Measurement::PhysicalQuantity::Volume       ), // Calculated, not in DB
@@ -2166,7 +2168,7 @@ template<> void Recipe::set(std::shared_ptr<Boil        > val) { this->setBoil  
 template<> void Recipe::set(std::shared_ptr<Fermentation> val) { this->setFermentation(val); return; }
 template<> void Recipe::set(std::shared_ptr<Style       > val) { this->setStyle       (val); return; }
 template<> void Recipe::set(std::shared_ptr<Equipment   > val) { this->setEquipment   (val); return; }
-template<> void Recipe::set(std::shared_ptr<Water       > val) {
+template<> void Recipe::set([[maybe_unused]] std::shared_ptr<Water       > val) {
    // We didn't yet figure out what setWater on Recipe should mean!
    qDebug() << Q_FUNC_INFO << "Operation not supported";
    return;
@@ -2574,6 +2576,7 @@ QList<std::shared_ptr<BrewNote                 >> Recipe::           brewNotes()
 QList<std::shared_ptr<Instruction              >> Recipe::        instructions() const { return this->allOwned<Instruction              >(); }
 
 int Recipe::getAncestorId() const { return this->m_ancestor_id; }
+int Recipe::numAncestors () const { return this->ancestors().size(); }
 
 //==============================Getters===================================
 Recipe::Type           Recipe::type             () const { return m_type             ; }

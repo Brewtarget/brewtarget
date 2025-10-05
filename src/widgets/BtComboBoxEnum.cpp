@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxEnum.cpp is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/BtComboBoxEnum.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -108,8 +108,8 @@ void BtComboBoxEnum::init(char const * const        editorName        ,
    for (auto ii = 0; ii < numEnumVals; ++ii) {
       if (!restrictTo ||
           std::find(restrictTo->cbegin(), restrictTo->cend(), ii) != restrictTo->cend()) {
-         this->addItem(*this->pimpl->m_displayNameMapping->enumAsIntToString(ii),
-                       *this->pimpl->m_nameMapping       ->enumAsIntToString(ii));
+         this->addItem(*this->pimpl->m_displayNameMapping->enumAsIntToValue(ii),
+                       *this->pimpl->m_nameMapping       ->enumAsIntToValue(ii));
       }
    }
 
@@ -167,7 +167,7 @@ void BtComboBoxEnum::setNull() {
 
 void BtComboBoxEnum::setValue(int value) {
    Q_ASSERT(this->pimpl->m_initialised);
-   this->setCurrentIndex(this->findData(this->pimpl->m_nameMapping->enumToString(value)));
+   this->setCurrentIndex(this->findData(this->pimpl->m_nameMapping->enumToValue(value)));
    // It's a coding error if we have an empty string here
    Q_ASSERT(!this->currentData().toString().isEmpty());
    return;

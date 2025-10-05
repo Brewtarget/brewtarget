@@ -41,29 +41,28 @@
    #include "moc_RecipeAdditionMiscTableModel.cpp"
 #endif
 
+COLUMN_INFOS(
+   RecipeAdditionMiscTableModel,
+   //
+   // Note that for Name, we want the name of the contained Misc, not the name of the RecipeAdditionMisc
+   //
+   // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
+   // PropertyNames::NamedEntityWithInventory::inventory is not implemented
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Name          , tr("Name"       ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
+                                                                                             PropertyNames::NamedEntity::name         }}),
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Type          , tr("Type"       ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
+                                                                                             PropertyNames::Misc::type                 }}),
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  ),
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, AmountType    , tr("Amount Type"), PropertyNames::IngredientAmount::amount                  , Misc::validMeasures),
+   // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, TotalInventory, tr("Inventory"  ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
+                                                                                             PropertyNames::Ingredient::totalInventory}}),
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     ),
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            ),
+)
+
 RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, bool editable) :
-   BtTableModelRecipeObserver{
-      parent,
-      editable,
-      {
-         //
-         // Note that for Name, we want the name of the contained Misc, not the name of the RecipeAdditionMisc
-         //
-         // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
-         // PropertyNames::NamedEntityWithInventory::inventory is not implemented
-         TABLE_MODEL_HEADER(RecipeAdditionMisc, Name          , tr("Name"       ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
-                                                                                                 PropertyNames::NamedEntity::name         }}),
-         TABLE_MODEL_HEADER(RecipeAdditionMisc, Type          , tr("Type"       ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
-                                                                                                 PropertyNames::Misc::type                 }}/*, EnumInfo{Misc::typeStringMapping, Misc::typeDisplayNames}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionMisc, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionMisc, AmountType    , tr("Amount Type"), PropertyNames::IngredientAmount::amount                  , Misc::validMeasures),
-         // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
-         TABLE_MODEL_HEADER(RecipeAdditionMisc, TotalInventory, tr("Inventory"  ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
-                                                                                                 PropertyNames::Ingredient::totalInventory}}),
-         TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     /*, EnumInfo{RecipeAddition::stageStringMapping, RecipeAddition::stageDisplayNames}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            /*, PrecisionInfo{1}*/),
-      }
-   },
+   BtTableModelRecipeObserver{parent, editable},
    TableModelBase<RecipeAdditionMiscTableModel, RecipeAdditionMisc>{},
    showIBUs(false) {
    this->m_rows.clear();
@@ -92,7 +91,7 @@ QVariant RecipeAdditionMiscTableModel::data(QModelIndex const & index, int role)
 
 QVariant RecipeAdditionMiscTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
+      return ColumnOwnerTraits<RecipeAdditionMiscTableModel>::getColumnLabel(section);
    }
    if (showIBUs && recObs && orientation == Qt::Vertical && role == Qt::DisplayRole) {
       QList<double> ibus = recObs->IBUs();

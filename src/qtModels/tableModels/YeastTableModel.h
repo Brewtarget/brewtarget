@@ -39,14 +39,14 @@ class BtStringConst;
 class Recipe;
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(Yeast, Name              ,
-                          Laboratory        ,
-                          ProductId         ,
-                          Type              ,
-                          Form              ,
-                          TotalInventory    ,
-                          TotalInventoryType,
-                          NumRecipesUsedIn  ,)
+COLUMN_NAMES(YeastTableModel, Name              ,
+                              Laboratory        ,
+                              ProductId         ,
+                              Type              ,
+                              Form              ,
+                              TotalInventory    ,
+                              TotalInventoryType,
+                              NumRecipesUsedIn  ,)
 
 /*!
  * \class YeastTableModel

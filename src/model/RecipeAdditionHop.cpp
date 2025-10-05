@@ -54,6 +54,18 @@ ObjectStore & RecipeAdditionHop::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<RecipeAdditionHop>::getInstance();
 }
 
+bool RecipeAdditionHop::compareWith(NamedEntity const & other,
+                                    QList<BtStringConst const *> * propertiesThatDiffer) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   RecipeAdditionHop const & rhs = static_cast<RecipeAdditionHop const &>(other);
+   return (
+      // Parent classes have to be equal
+      this->RecipeAddition    ::compareWith  (rhs, propertiesThatDiffer) &&
+      this->RecipeAdditionBase::compareWith  (rhs, propertiesThatDiffer) &&
+      this->IngredientAmount  ::doCompareWith(rhs, propertiesThatDiffer)
+   );
+}
+
 TypeLookup const RecipeAdditionHop::typeLookup {
    "RecipeAdditionHop",
    {
@@ -76,9 +88,9 @@ static_assert(!HasTypeLookup<QString>);
 
 
 RecipeAdditionHop::RecipeAdditionHop(QString name, int const recipeId, int const ingredientId) :
-   RecipeAddition{name, recipeId, ingredientId},
+   RecipeAddition{name, recipeId},
    RecipeAdditionBase<RecipeAdditionHop, Hop>{},
-   IngredientAmount<RecipeAdditionHop, Hop>{} {
+   IngredientAmount<RecipeAdditionHop, Hop>{ingredientId} {
 
    //
    // RecipeAddition constructor will have set default stage to RecipeAddition::Stage::Mash, but, per comment below, for

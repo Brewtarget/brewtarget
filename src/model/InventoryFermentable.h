@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/InventoryFermentable.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/InventoryFermentable.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,22 +23,42 @@
 #include "model/Fermentable.h"
 #include "model/Inventory.h"
 #include "model/IngredientAmount.h"
+#include "model/InventoryBase.h"
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::InventoryFermentable { inline BtStringConst const property{#property}; }
+AddPropertyName(fermentable)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 /**
  * \brief Inventory of \c Fermentable
  */
-class InventoryFermentable : public Inventory, public IngredientAmount<InventoryFermentable, Fermentable> {
+class InventoryFermentable : public Inventory,
+                             public IngredientAmount<InventoryFermentable, Fermentable>,
+                             public InventoryBase   <InventoryFermentable, Fermentable> {
    Q_OBJECT
 
    INGREDIENT_AMOUNT_DECL(InventoryFermentable, Fermentable)
    INVENTORY_DECL(Fermentable, fermentable)
 
+   //=================================================== PROPERTIES ====================================================
+   //! See \c InventoryBase for getters and setters
+   Q_PROPERTY(Fermentable *                        fermentable       READ fermentable    )
+   Q_PROPERTY(std::optional<Measurement::Amount>   amountOrdered     READ amountOrdered  )
+   Q_PROPERTY(Measurement::Amount                  amountReceived    READ amountReceived )
+   Q_PROPERTY(Measurement::Amount                  amountRemaining   READ amountRemaining   STORED false)
+
    // See model/IngredientAmount.h for info, getters and setters for these properties
-   Q_PROPERTY(Measurement::Amount           amount    READ amount     WRITE setAmount  )
-   Q_PROPERTY(double                        quantity  READ quantity   WRITE setQuantity)
-   Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )
-   Q_PROPERTY(Measurement::PhysicalQuantity measure   READ measure    WRITE setMeasure )
-   Q_PROPERTY(bool                          isWeight  READ isWeight   WRITE setIsWeight)
+   Q_PROPERTY(int                           ingredientId READ ingredientId WRITE setIngredientId)
+   Q_PROPERTY(Measurement::Amount           amount       READ amount       WRITE setAmount      )
+   Q_PROPERTY(double                        quantity     READ quantity     WRITE setQuantity    )
+   Q_PROPERTY(Measurement::Unit const *     unit         READ unit         WRITE setUnit        )
+   Q_PROPERTY(Measurement::PhysicalQuantity measure      READ measure      WRITE setMeasure     )
+   Q_PROPERTY(bool                          isWeight     READ isWeight     WRITE setIsWeight    )
 };
 
 #endif

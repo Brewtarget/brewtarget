@@ -100,10 +100,9 @@ std::unique_ptr<JsonRecord> JsonRecordDefinition::makeRecord(JsonCoding const & 
 
 template<class S>
 S & operator<<(S & stream, JsonRecordDefinition::FieldType const fieldType) {
-   std::optional<QString> fieldTypeAsString = fieldTypeToName.enumToString(fieldType);
-   if (fieldTypeAsString) {
-      stream << *fieldTypeAsString;
-   } else {
+   try {
+      stream << fieldTypeToName[fieldType];
+   } catch (std::out_of_range & e) {
       // This is a coding error, so stop (after logging) on a debug build
       stream << "Unrecognised field type: " << static_cast<int>(fieldType);
       Q_ASSERT(false);

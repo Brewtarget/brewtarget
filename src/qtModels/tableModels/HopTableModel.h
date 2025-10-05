@@ -37,13 +37,13 @@ class BtStringConst;
 class Recipe;
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(Hop, Name              ,
-                        Form              ,
-                        Year              ,
-                        Alpha             ,
-                        TotalInventory    ,
-                        TotalInventoryType,
-                        NumRecipesUsedIn  ,)
+COLUMN_NAMES(HopTableModel, Name              ,
+                            Form              ,
+                            Year              ,
+                            Alpha             ,
+                            TotalInventory    ,
+                            TotalInventoryType,
+                            NumRecipesUsedIn  ,)
 
 /*!
  * \class HopTableModel

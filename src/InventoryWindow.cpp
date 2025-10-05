@@ -15,12 +15,34 @@
  =====================================================================================================================*/
 #include "InventoryWindow.h"
 
+#include "editors/InventoryFermentableEditor.h"
+
+// This private implementation class holds all private non-virtual members of InventoryWindow
+class InventoryWindow::impl {
+public:
+   impl(InventoryWindow & self) :
+      m_self{self},
+      m_inventoryFermentableEditor{std::make_unique<InventoryFermentableEditor>(&m_self)} {
+      return;
+   }
+
+   ~impl() = default;
+
+   //================================================ MEMBER VARIABLES =================================================
+   InventoryWindow & m_self;
+   std::unique_ptr<InventoryFermentableEditor> m_inventoryFermentableEditor;
+};
+
 InventoryWindow::InventoryWindow(QWidget * parent) :
-   QDialog{},
-   Ui::inventoryWindow{} {
+   QDialog{parent},
+   Ui::inventoryWindow{},
+   pimpl{std::make_unique<impl>(*this)} {
 
    // This sets various things from the inventoryWindow.ui file, including window title
    this->setupUi(this);
+
+   this->treeInvView_fermentable->init(*this->pimpl->m_inventoryFermentableEditor);
+
    return;
 }
 

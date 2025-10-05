@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/IngredientAmount.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/IngredientAmount.h is part of Brewtarget, and is copyright the following authors 2023-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -19,8 +19,10 @@
 
 #include <type_traits>
 
+#include "database/ObjectStoreWrapper.h"
 #include "measurement/Unit.h"
 #include "model/NamedParameterBundle.h"
+#include "utils/AutoCompare.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/EnumStringMapping.h"
 #include "utils/TypeLookup.h"
@@ -30,6 +32,8 @@
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::IngredientAmount { inline BtStringConst const property{#property}; }
 AddPropertyName(amount  )
+AddPropertyName(ingredient  )
+AddPropertyName(ingredientId)
 AddPropertyName(isWeight) // Deprecated.  Used only for BeerXML support
 AddPropertyName(measure )
 AddPropertyName(quantity) // Only quantity and unit should be used in database mappings
@@ -64,6 +68,7 @@ AddPropertyName(unit    ) // Only quantity and unit should be used in database m
  *        \c INGREDIENT_AMOUNT_COMMON_CODE macro in their .cpp file.  They also need the following lines in their class
  *        declaration:
  *
+ *              Q_PROPERTY(int                           ingredientId READ ingredientId WRITE setIngredientId)
  *              Q_PROPERTY(Measurement::Amount           amount    READ amount     WRITE setAmount  )
  *              Q_PROPERTY(double                        quantity  READ quantity   WRITE setQuantity)
  *              Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )
@@ -111,15 +116,38 @@ class IngredientAmount : public CuriouslyRecurringTemplateBase<IngredientAmountP
 
 protected:
 
+   /**
+    * \brief Non-virtual equivalent of \c compareWith
+    *
+    *        This gets called from Derived, not directly from NamedEntity, hence the type of the first parameter
+    *
+    *        NOTE that we must keep the type we pass to \c AUTO_PROPERTY_COMPARE as \c Derived rather than
+    *             \c IngredientAmount, otherwise there will be no match for \c operator<< in the log statement in
+    *             \c Utils::LogIfFalse.  (We cannot define \c operator<< directly for \c IngredientAmount as this would
+    *             create an ambiguous overload in other contexts where \c Derived is passed to an output stream, as the
+    *             \c NamedEntity overload would also be valid.)
+    */
+   bool doCompareWith(Derived const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
+      return (
+         // NB: Extra brackets around &this->derived() are needed because AUTO_PROPERTY_COMPARE is a macro and appends
+         // `->field` to its first parameter.
+         AUTO_PROPERTY_COMPARE((&this->derived()), other, m_ingredientId, PropertyNames::IngredientAmount::ingredientId, propertiesThatDiffer) &&
+         AUTO_PROPERTY_COMPARE((&this->derived()), other, m_amount      , PropertyNames::IngredientAmount::amount      , propertiesThatDiffer)
+      );
+   }
+
    // Note that, because this is static, it cannot be initialised inside the class definition
    static TypeLookup const typeLookup;
 
-   IngredientAmount() :
+   explicit IngredientAmount(int ingredientId = -1) :
+      m_ingredientId{ingredientId},
       m_amount{0.0, Measurement::Unit::getCanonicalUnit(IngredientClass::defaultMeasure)} {
       return;
    }
 
-   IngredientAmount(NamedParameterBundle const & namedParameterBundle) {
+   IngredientAmount(NamedParameterBundle const & namedParameterBundle) :
+      // Although ingredientId is required, we have to supply a default value for when we are reading from BeerXML or BeerJSON
+      SET_REGULAR_FROM_NPB(m_ingredientId, namedParameterBundle, PropertyNames::IngredientAmount::ingredientId, -1) {
       if (namedParameterBundle.contains(PropertyNames::IngredientAmount::quantity)) {
          this->m_amount.quantity = namedParameterBundle.val<double>(PropertyNames::IngredientAmount::quantity);
          this->m_amount.unit     = namedParameterBundle.val<Measurement::Unit const *>(
@@ -134,7 +162,8 @@ protected:
    }
 
    IngredientAmount(IngredientAmount const & other) :
-      m_amount{other.m_amount} {
+      m_ingredientId{other.m_ingredientId},
+      m_amount      {other.m_amount      } {
       return;
    }
 
@@ -142,14 +171,44 @@ protected:
 
 public:
 
-   static QString localisedName_amount  () { return Derived::tr("Amount"   ); }
-   static QString localisedName_isWeight() { return Derived::tr("Is Weight"); }
-   static QString localisedName_measure () { return Derived::tr("Measure"  ); }
-   static QString localisedName_quantity() { return Derived::tr("Quantity" ); }
-   static QString localisedName_unit    () { return Derived::tr("Unit"     ); }
+   static QString localisedName_ingredientId() { return Derived::tr("Ingredient ID"); }
+   static QString localisedName_amount      () { return Derived::tr("Amount"       ); }
+   static QString localisedName_isWeight    () { return Derived::tr("Is Weight"    ); }
+   static QString localisedName_measure     () { return Derived::tr("Measure"      ); }
+   static QString localisedName_quantity    () { return Derived::tr("Quantity"     ); }
+   static QString localisedName_unit        () { return Derived::tr("Unit"         ); }
 
    using ValidMeasuresType = std::remove_const_t<decltype(IngredientClass::validMeasures)>;
    using AmountType = Measurement::ConstrainedAmount<ValidMeasuresType, IngredientClass::validMeasures>;
+
+   //============================================ "GETTER" MEMBER FUNCTIONS ============================================
+   int getIngredientId() const {
+      return this->m_ingredientId;
+   }
+
+   std::shared_ptr<IngredientClass> ingredient() const {
+      return ObjectStoreWrapper::getById<IngredientClass>(this->m_ingredientId);
+   }
+
+   /**
+    * \brief Derived classes also return same info via functions with more friendly names (eg
+    *        \c RecipeAdditionHop::hop(), \c RecipeUseOfWater::water()).  It would be neat to be able to just alias
+    *        those names, but I'm not sure it's possible (because the CRTP base class is an incomplete type inside the
+    *        derived class declaration).  So we use macros instead (see below).
+    */
+   IngredientClass * ingredientRaw() const {
+      // Normally there should always be a valid Hop/Salt/etc in a RecipeAdjustmentHop/RecipeAdjustmentSalt/etc.  (The
+      // Recipe ID may be -1 if the addition is only just about to be added to the Recipe or has just been removed from
+      // it, but there's no great reason for the Hop/Salt/etc ID not to be valid).
+      if (this->m_ingredientId <= 0) {
+         qWarning() <<
+            Q_FUNC_INFO << "No" << IngredientClass::staticMetaObject.className() << "set on " <<
+            Derived::staticMetaObject.className() << " #" << this->derived().key();
+         return nullptr;
+      }
+
+      return ObjectStoreWrapper::getByIdRaw<IngredientClass>(this->m_ingredientId);
+   }
 
    AmountType getAmount() const {
       return this->m_amount;
@@ -202,6 +261,30 @@ public:
       return (this->getMeasure() == Measurement::PhysicalQuantity::Mass);
    }
 
+   //============================================ "SETTER" MEMBER FUNCTIONS ============================================
+   void doSetIngredientId(int const val) {
+      this->derived().setAndNotify(PropertyNames::IngredientAmount::ingredientId, this->m_ingredientId, val);
+      return;
+   }
+
+   /**
+    * \brief As with \c ingredientRaw, it's the same deal for setters
+    */
+   void setIngredientRaw(IngredientClass * const val) {
+      if (val) {
+         this->derived().setIngredientId(val->key());
+         this->derived().setName(Derived::tr("Addition of %1").arg(val->name()));
+      } else {
+         // Normally we don't want to invalidate the Ingredient on a RecipeAddition, because it doesn't buy us anything.
+         qWarning() <<
+            Q_FUNC_INFO << "Null" << IngredientClass::staticMetaObject.className() << "set on " <<
+            Derived::staticMetaObject.className() << " #" << this->derived().key();
+         this->derived().setIngredientId(-1);
+         this->derived().setName(Derived::tr("Invalid!"));
+      }
+      return;
+   }
+
    void doSetAmount(AmountType const & val) {
       //
       // For the moment, we keep the database layer and update one column from one property, hence the split into two
@@ -215,16 +298,14 @@ public:
    }
 
    void doSetQuantity(double const val) {
-      this->derived().setAndNotify(PropertyNames::IngredientAmount::quantity,
-                                   this->m_amount.quantity, val);
+      this->derived().setAndNotify(PropertyNames::IngredientAmount::quantity, this->m_amount.quantity, val);
       return;
    }
 
    void doSetUnit(Measurement::Unit const * val) {
       // It's a coding error to provide an amount that is not in canonical units
       Q_ASSERT(val->isCanonical());
-      this->derived().setAndNotify(PropertyNames::IngredientAmount::unit,
-                                   this->m_amount.unit, val);
+      this->derived().setAndNotify(PropertyNames::IngredientAmount::unit, this->m_amount.unit, val);
       return;
    }
 
@@ -246,6 +327,8 @@ public:
    }
 
 protected:
+   //================================================ Member variables =================================================
+   int m_ingredientId;
    AmountType m_amount;
 };
 
@@ -263,6 +346,12 @@ TypeLookup const IngredientAmount<Derived, IngredientClass>::typeLookup {
       //
       // This does show the advantage of being able to use the macros elsewhere! :)
       //
+      {&PropertyNames::IngredientAmount::ingredientId,
+       TypeInfo::construct<decltype(IngredientAmount<Derived, IngredientClass>::m_ingredientId)>(
+          PropertyNames::IngredientAmount::ingredientId,
+          IngredientAmount::localisedName_ingredientId,
+          TypeLookupOf<decltype(IngredientAmount<Derived, IngredientClass>::m_ingredientId)>::value
+       )},
       {&PropertyNames::IngredientAmount::amount,
        TypeInfo::construct<decltype(IngredientAmount<Derived, IngredientClass>::m_amount)>(
           PropertyNames::IngredientAmount::amount,
@@ -299,10 +388,9 @@ TypeLookup const IngredientAmount<Derived, IngredientClass>::typeLookup {
           NonPhysicalQuantity::Bool
        )},
    },
-   // Parent class lookup: none as we are at the top of this arm of the inheritance tree
+   // Parent class lookup: none as we are at the top of this branch of the inheritance tree
    {}
 };
-
 
 /**
  * \brief Concrete derived classes should (either directly or via inclusion in an intermediate class's equivalent macro)
@@ -310,11 +398,12 @@ TypeLookup const IngredientAmount<Derived, IngredientClass>::typeLookup {
  *        following block (see comment in model/StepBase.h for why):
  *
  *           // See model/IngredientAmount.h for info, getters and setters for these properties
- *           Q_PROPERTY(Measurement::Amount           amount    READ amount     WRITE setAmount  )
- *           Q_PROPERTY(double                        quantity  READ quantity   WRITE setQuantity)
- *           Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )
- *           Q_PROPERTY(Measurement::PhysicalQuantity measure   READ measure    WRITE setMeasure )
- *           Q_PROPERTY(bool                          isWeight  READ isWeight   WRITE setIsWeight)
+ *           Q_PROPERTY(int                           ingredientId READ ingredientId WRITE setIngredientId)
+ *           Q_PROPERTY(Measurement::Amount           amount       READ amount       WRITE setAmount      )
+ *           Q_PROPERTY(double                        quantity     READ quantity     WRITE setQuantity    )
+ *           Q_PROPERTY(Measurement::Unit const *     unit         READ unit         WRITE setUnit        )
+ *           Q_PROPERTY(Measurement::PhysicalQuantity measure      READ measure      WRITE setMeasure     )
+ *           Q_PROPERTY(bool                          isWeight     READ isWeight     WRITE setIsWeight    )
  *
  *        Comments for these properties:
  *
@@ -338,18 +427,22 @@ TypeLookup const IngredientAmount<Derived, IngredientClass>::typeLookup {
    friend class IngredientAmount<Derived, IngredientClass>;                             \
                                                                                             \
    public:                                                                                  \
+   /* Inherit constructors */                                                               \
+   using IngredientAmount<Derived, IngredientClass>::IngredientAmount; \
    /*=========================== IA "GETTER" MEMBER FUNCTIONS ===========================*/ \
+   int                           ingredientId() const;                                      \
    Measurement::Amount           amount  () const;                                          \
    double                        quantity() const;                                          \
    Measurement::Unit const *     unit    () const;                                          \
    Measurement::PhysicalQuantity measure () const;                                          \
    bool                          isWeight() const;                                          \
    /*=========================== IA "SETTER" MEMBER FUNCTIONS ===========================*/ \
-   void setAmount  (Measurement::Amount           const & val);                             \
-   void setQuantity(double                        const   val);                             \
-   void setUnit    (Measurement::Unit const *     const   val);                             \
-   void setMeasure (Measurement::PhysicalQuantity const   val);                             \
-   void setIsWeight(bool                          const   val);                             \
+   void setIngredientId(int                           const   val);                         \
+   void setAmount      (Measurement::Amount           const & val);                         \
+   void setQuantity    (double                        const   val);                         \
+   void setUnit        (Measurement::Unit const *     const   val);                         \
+   void setMeasure     (Measurement::PhysicalQuantity const   val);                         \
+   void setIsWeight    (bool                          const   val);                         \
 
 /**
  * \brief Derived classes should include this in their .cpp file
@@ -358,16 +451,18 @@ TypeLookup const IngredientAmount<Derived, IngredientClass>::typeLookup {
  */
 #define INGREDIENT_AMOUNT_COMMON_CODE(Derived, IngredientClass) \
    /*============================ "GETTER" MEMBER FUNCTIONS ============================*/ \
-   Measurement::Amount           Derived::amount  () const { return this->getAmount  (); } \
-   double                        Derived::quantity() const { return this->getQuantity(); } \
-   Measurement::Unit const *     Derived::unit    () const { return this->getUnit    (); } \
-   Measurement::PhysicalQuantity Derived::measure () const { return this->getMeasure (); } \
-   bool                          Derived::isWeight() const { return this->getIsWeight(); } \
+   int                           Derived::ingredientId() const { return this->getIngredientId(); } \
+   Measurement::Amount           Derived::amount      () const { return this->getAmount      (); } \
+   double                        Derived::quantity    () const { return this->getQuantity    (); } \
+   Measurement::Unit const *     Derived::unit        () const { return this->getUnit        (); } \
+   Measurement::PhysicalQuantity Derived::measure     () const { return this->getMeasure     (); } \
+   bool                          Derived::isWeight    () const { return this->getIsWeight    (); } \
    /*============================ "SETTER" MEMBER FUNCTIONS ============================*/ \
-   void Derived::setAmount  (Measurement::Amount           const & val) { this->doSetAmount  (val); return; } \
-   void Derived::setQuantity(double                        const   val) { this->doSetQuantity(val); return; } \
-   void Derived::setUnit    (Measurement::Unit const *     const   val) { this->doSetUnit    (val); return; } \
-   void Derived::setMeasure (Measurement::PhysicalQuantity const   val) { this->doSetMeasure (val); return; } \
-   void Derived::setIsWeight(bool                          const   val) { this->doSetIsWeight(val); return; } \
+   void Derived::setIngredientId(int                           const   val) { this->doSetIngredientId(val); return; } \
+   void Derived::setAmount      (Measurement::Amount           const & val) { this->doSetAmount      (val); return; } \
+   void Derived::setQuantity    (double                        const   val) { this->doSetQuantity    (val); return; } \
+   void Derived::setUnit        (Measurement::Unit const *     const   val) { this->doSetUnit        (val); return; } \
+   void Derived::setMeasure     (Measurement::PhysicalQuantity const   val) { this->doSetMeasure     (val); return; } \
+   void Derived::setIsWeight    (bool                          const   val) { this->doSetIsWeight    (val); return; } \
 
 #endif

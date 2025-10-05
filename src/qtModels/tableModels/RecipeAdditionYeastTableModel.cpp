@@ -42,37 +42,36 @@
    #include "moc_RecipeAdditionYeastTableModel.cpp"
 #endif
 
+COLUMN_INFOS(
+   RecipeAdditionYeastTableModel,
+   //
+   // Note that for Name, we want the name of the contained Yeast, not the name of the RecipeAdditionYeast
+   //
+   // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
+   // PropertyNames::NamedEntityWithInventory::inventory is not implemented
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Name          , tr("Name"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
+                                                                                                PropertyNames::NamedEntity::name      }}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Laboratory    , tr("Laboratory"    ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
+                                                                                                PropertyNames::Yeast::laboratory      }}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, ProductId     , tr("Product ID"    ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
+                                                                                                PropertyNames::Yeast::productId       }}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Type          , tr("Type"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
+                                                                                                PropertyNames::Yeast::type             }}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Form          , tr("Form"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
+                                                                                                PropertyNames::Yeast::form             }}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Amount        , tr("Amount"        ), PropertyNames::IngredientAmount::amount                ),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, AmountType    , tr("Amount Type"   ), PropertyNames::IngredientAmount::amount                , Yeast::validMeasures),
+   // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, TotalInventory, tr("Inventory"     ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
+                                                                                             PropertyNames::Ingredient::totalInventory}}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Stage         , tr("Stage"         ), PropertyNames::RecipeAddition::stage                   ),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Step          , tr("Step"          ), PropertyNames::RecipeAddition::step                    ),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Attenuation   , tr("Attenuation"   ), PropertyNames::RecipeAdditionYeast::attenuation_pct    ),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, TimesCultured , tr("Times Cultured"), PropertyNames::RecipeAdditionYeast::timesCultured      ),
+)
+
 RecipeAdditionYeastTableModel::RecipeAdditionYeastTableModel(QTableView * parent, bool editable) :
-   BtTableModelRecipeObserver{
-      parent,
-      editable,
-      {
-         //
-         // Note that for Name, we want the name of the contained Yeast, not the name of the RecipeAdditionYeast
-         //
-         // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
-         // PropertyNames::NamedEntityWithInventory::inventory is not implemented
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Name          , tr("Name"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                     PropertyNames::NamedEntity::name      }}),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Laboratory    , tr("Laboratory"    ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                     PropertyNames::Yeast::laboratory      }}),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, ProductId     , tr("Product ID"    ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                     PropertyNames::Yeast::productId       }}),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Type          , tr("Type"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                     PropertyNames::Yeast::type             }}/*, EnumInfo{Yeast::typeStringMapping, Yeast::typeDisplayNames}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Form          , tr("Form"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                     PropertyNames::Yeast::form             }}/*, EnumInfo{Yeast::formStringMapping, Yeast::formDisplayNames}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Amount        , tr("Amount"        ), PropertyNames::IngredientAmount::amount                /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, AmountType    , tr("Amount Type"   ), PropertyNames::IngredientAmount::amount                , Yeast::validMeasures),
-         // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, TotalInventory, tr("Inventory"     ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                   PropertyNames::Ingredient::totalInventory}}),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Stage         , tr("Stage"         ), PropertyNames::RecipeAddition::stage                    /* , EnumInfo{RecipeAddition::stageStringMapping, RecipeAddition::stageDisplayNames}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Step          , tr("Step"          ), PropertyNames::RecipeAddition::step                    ),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, Attenuation   , tr("Attenuation"   ), PropertyNames::RecipeAdditionYeast::attenuation_pct    /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionYeast, TimesCultured , tr("Times Cultured"), PropertyNames::RecipeAdditionYeast::timesCultured      ),
-      }
-   },
+   BtTableModelRecipeObserver{parent, editable},
    TableModelBase<RecipeAdditionYeastTableModel, RecipeAdditionYeast>{} {
    this->m_rows.clear();
 

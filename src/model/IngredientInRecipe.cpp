@@ -22,54 +22,54 @@
    #include "moc_IngredientInRecipe.cpp"
 #endif
 
-QString IngredientInRecipe::localisedName() { return tr("Ingredient In Recipe"); }
-QString IngredientInRecipe::localisedName_ingredientId() { return tr("Ingredient ID"); }
-
-bool IngredientInRecipe::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
-   // Base class (NamedEntity) will have ensured this cast is valid
-   IngredientInRecipe const & rhs = static_cast<IngredientInRecipe const &>(other);
-   // Base class will already have ensured names are equal
-   return (
-      AUTO_PROPERTY_COMPARE(this, rhs, m_ingredientId , PropertyNames::IngredientInRecipe::ingredientId , propertiesThatDiffer)
-   );
-}
-
-TypeLookup const IngredientInRecipe::typeLookup {
-   "IngredientInRecipe",
-   {
-      PROPERTY_TYPE_LOOKUP_ENTRY(IngredientInRecipe, ingredientId, m_ingredientId),
-   },
-   // Parent class lookup
-   {&OwnedByRecipe::typeLookup}
-};
-
-IngredientInRecipe::IngredientInRecipe(QString name, int const recipeId, int const ingredientId) :
-   OwnedByRecipe{name, recipeId},
-   m_ingredientId{ingredientId} {
-
-   CONSTRUCTOR_END
-   return;
-}
-
-IngredientInRecipe::IngredientInRecipe(NamedParameterBundle const & namedParameterBundle) :
-   OwnedByRecipe{namedParameterBundle},
-   // Although ingredientId is required, we have to supply a default value for when we are reading from BeerXML or BeerJSON
-   SET_REGULAR_FROM_NPB(m_ingredientId, namedParameterBundle, PropertyNames::IngredientInRecipe::ingredientId, -1) {
-
-   CONSTRUCTOR_END
-   return;
-}
-
-IngredientInRecipe::IngredientInRecipe(IngredientInRecipe const & other) :
-   OwnedByRecipe{other},
-   m_ingredientId{other.m_ingredientId} {
-
-   CONSTRUCTOR_END
-   return;
-}
-
-IngredientInRecipe::~IngredientInRecipe() = default;
-
-int IngredientInRecipe::ingredientId() const { return this->m_ingredientId; }
-
-void IngredientInRecipe::setIngredientId(int const val) { SET_AND_NOTIFY(PropertyNames::IngredientInRecipe::ingredientId, this->m_ingredientId, val); return; }
+///QString IngredientInRecipe::localisedName() { return tr("Ingredient In Recipe"); }
+///QString IngredientInRecipe::localisedName_ingredientId() { return tr("Ingredient ID"); }
+///
+///bool IngredientInRecipe::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
+///   // Base class (NamedEntity) will have ensured this cast is valid
+///   IngredientInRecipe const & rhs = static_cast<IngredientInRecipe const &>(other);
+///   // Base class will already have ensured names are equal
+///   return (
+///      AUTO_PROPERTY_COMPARE(this, rhs, m_ingredientId , PropertyNames::IngredientInRecipe::ingredientId , propertiesThatDiffer)
+///   );
+///}
+///
+///TypeLookup const IngredientInRecipe::typeLookup {
+///   "IngredientInRecipe",
+///   {
+///      PROPERTY_TYPE_LOOKUP_ENTRY(IngredientInRecipe, ingredientId, m_ingredientId),
+///   },
+///   // Parent class lookup
+///   {&OwnedByRecipe::typeLookup}
+///};
+///
+///IngredientInRecipe::IngredientInRecipe(QString name, int const recipeId, int const ingredientId) :
+///   OwnedByRecipe{name, recipeId},
+///   m_ingredientId{ingredientId} {
+///
+///   CONSTRUCTOR_END
+///   return;
+///}
+///
+///IngredientInRecipe::IngredientInRecipe(NamedParameterBundle const & namedParameterBundle) :
+///   OwnedByRecipe{namedParameterBundle},
+///   // Although ingredientId is required, we have to supply a default value for when we are reading from BeerXML or BeerJSON
+///   SET_REGULAR_FROM_NPB(m_ingredientId, namedParameterBundle, PropertyNames::IngredientInRecipe::ingredientId, -1) {
+///
+///   CONSTRUCTOR_END
+///   return;
+///}
+///
+///IngredientInRecipe::IngredientInRecipe(IngredientInRecipe const & other) :
+///   OwnedByRecipe{other},
+///   m_ingredientId{other.m_ingredientId} {
+///
+///   CONSTRUCTOR_END
+///   return;
+///}
+///
+///IngredientInRecipe::~IngredientInRecipe() = default;
+///
+///int IngredientInRecipe::ingredientId() const { return this->m_ingredientId; }
+///
+///void IngredientInRecipe::setIngredientId(int const val) { SET_AND_NOTIFY(PropertyNames::IngredientInRecipe::ingredientId, this->m_ingredientId, val); return; }

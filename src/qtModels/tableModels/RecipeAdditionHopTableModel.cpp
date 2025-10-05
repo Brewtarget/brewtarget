@@ -41,33 +41,32 @@
    #include "moc_RecipeAdditionHopTableModel.cpp"
 #endif
 
+COLUMN_INFOS(
+   RecipeAdditionHopTableModel,
+   //
+   // Note that for Name, we want the name of the contained Hop, not the name of the RecipeAdditionHop
+   //
+   // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
+   // PropertyNames::NamedEntityWithInventory::inventory is not implemented
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Name          , tr("Name"       ), PropertyPath{{PropertyNames::RecipeAdditionHop::hop,
+                                                                                          PropertyNames::NamedEntity::name         }}),
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Form          , tr("Form"       ), PropertyPath{{PropertyNames::RecipeAdditionHop::hop,
+                                                                                          PropertyNames::Hop::form                 }}),
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Alpha         , tr("Alpha %"    ), PropertyPath{{PropertyNames::RecipeAdditionHop::hop,
+                                                                                          PropertyNames::Hop::alpha_pct            }}),
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Year          , tr("Year"       ), PropertyPath{{PropertyNames::RecipeAdditionHop::hop,
+                                                                                          PropertyNames::Hop::year                 }}),
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  ),
+   TABLE_MODEL_HEADER(RecipeAdditionHop, AmountType    , tr("Amount Type"), PropertyNames::IngredientAmount::amount                  , Hop::validMeasures),
+   // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
+   TABLE_MODEL_HEADER(RecipeAdditionHop, TotalInventory, tr("Inventory"  ), PropertyPath{{PropertyNames::RecipeAdditionHop::hop,
+                                                                                          PropertyNames::Ingredient::totalInventory}}),
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     ),
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            ),
+)
+
 RecipeAdditionHopTableModel::RecipeAdditionHopTableModel(QTableView * parent, bool editable) :
-   BtTableModelRecipeObserver{
-      parent,
-      editable,
-      {
-         //
-         // Note that for Name, we want the name of the contained Hop, not the name of the RecipeAdditionHop
-         //
-         // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
-         // PropertyNames::NamedEntityWithInventory::inventory is not implemented
-         TABLE_MODEL_HEADER(RecipeAdditionHop, Name          , tr("Name"       ), PropertyPath{{PropertyNames::RecipeAdditionHop::hop,
-                                                                                                PropertyNames::NamedEntity::name         }}),
-         TABLE_MODEL_HEADER(RecipeAdditionHop, Form          , tr("Form"       ), PropertyPath{{PropertyNames::RecipeAdditionHop::hop,
-                                                                                                PropertyNames::Hop::form                 }}/*, EnumInfo{Hop::formStringMapping, Hop::formDisplayNames}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionHop, Alpha         , tr("Alpha %"    ), PropertyPath{{PropertyNames::RecipeAdditionHop::hop,
-                                                                                                PropertyNames::Hop::alpha_pct            }}/*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionHop, Year          , tr("Year"       ), PropertyPath{{PropertyNames::RecipeAdditionHop::hop,
-                                                                                                PropertyNames::Hop::year                 }}),
-         TABLE_MODEL_HEADER(RecipeAdditionHop, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionHop, AmountType    , tr("Amount Type"), PropertyNames::IngredientAmount::amount                  , Hop::validMeasures),
-         // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
-         TABLE_MODEL_HEADER(RecipeAdditionHop, TotalInventory, tr("Inventory"  ), PropertyPath{{PropertyNames::RecipeAdditionHop::hop,
-                                                                                                PropertyNames::Ingredient::totalInventory}}),
-         TABLE_MODEL_HEADER(RecipeAdditionHop, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     /*, EnumInfo{RecipeAddition::stageStringMapping, RecipeAddition::stageDisplayNames}*/),
-         TABLE_MODEL_HEADER(RecipeAdditionHop, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            /*, PrecisionInfo{1}*/),
-      }
-   },
+   BtTableModelRecipeObserver{parent, editable},
    TableModelBase<RecipeAdditionHopTableModel, RecipeAdditionHop>{},
    showIBUs(false) {
    this->m_rows.clear();
@@ -96,7 +95,7 @@ QVariant RecipeAdditionHopTableModel::data(QModelIndex const & index, int role) 
 
 QVariant RecipeAdditionHopTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-      return this->getColumnLabel(section);
+      return ColumnOwnerTraits<RecipeAdditionHopTableModel>::getColumnLabel(section);
    }
    if (showIBUs && recObs && orientation == Qt::Vertical && role == Qt::DisplayRole) {
       QList<double> ibus = recObs->IBUs();

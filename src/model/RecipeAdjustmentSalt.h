@@ -20,7 +20,7 @@
 #include <memory>
 
 #include "model/IngredientAmount.h"
-#include "model/IngredientInRecipe.h"
+#include "model/OwnedByRecipe.h"
 #include "model/RecipeAdditionBase.h"
 #include "model/Recipe.h"
 #include "model/Salt.h"
@@ -50,7 +50,7 @@ class RecipeAdjustmentSaltItemDelegate;
  *        a recipe to be brewed from a different water profile, thus two different brewers brewing the same beer in
  *        different locations might need different salt additions.
  */
-class RecipeAdjustmentSalt : public IngredientInRecipe,
+class RecipeAdjustmentSalt : public OwnedByRecipe,
                              public RecipeAdditionBase<RecipeAdjustmentSalt, Salt>,
                              public IngredientAmount<RecipeAdjustmentSalt, Salt> {
    Q_OBJECT
@@ -105,11 +105,12 @@ public:
    Q_PROPERTY(Salt * salt   READ salt   WRITE setSalt             )
 
    // See model/IngredientAmount.h
-   Q_PROPERTY(Measurement::Amount           amount    READ amount     WRITE setAmount  )
-   Q_PROPERTY(double                        quantity  READ quantity   WRITE setQuantity)
-   Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )
-   Q_PROPERTY(Measurement::PhysicalQuantity measure   READ measure    WRITE setMeasure )
-   Q_PROPERTY(bool                          isWeight  READ isWeight   WRITE setIsWeight)
+   Q_PROPERTY(int                           ingredientId READ ingredientId WRITE setIngredientId)
+   Q_PROPERTY(Measurement::Amount           amount       READ amount       WRITE setAmount      )
+   Q_PROPERTY(double                        quantity     READ quantity     WRITE setQuantity    )
+   Q_PROPERTY(Measurement::Unit const *     unit         READ unit         WRITE setUnit        )
+   Q_PROPERTY(Measurement::PhysicalQuantity measure      READ measure      WRITE setMeasure     )
+   Q_PROPERTY(bool                          isWeight     READ isWeight     WRITE setIsWeight    )
 
    //! \brief When to add the salt (mash or sparge)
    Q_PROPERTY(WhenToAdd whenToAdd      READ whenToAdd      WRITE setWhenToAdd       )
@@ -123,7 +124,7 @@ public:
    virtual NamedEntity * ensureExists(BtStringConst const & property) override;
 
 protected:
-   // Note that we don't override compareWith, as we don't have any non-inherited member variables
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:

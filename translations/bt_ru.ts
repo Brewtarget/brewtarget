@@ -162,64 +162,6 @@
     </message>
 </context>
 <context>
-    <name>BoilStepTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Step Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Temp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ramp Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Temp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Acidity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Chilling Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BoilTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pre-Boil Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>BrewDayFormatter</name>
     <message>
         <source>Brewday</source>
@@ -1477,6 +1419,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Steps</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Ingredient ID</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1933,29 +1879,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
 </context>
 <context>
-    <name>EquipmentTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Tun Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Kettle Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermenter Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
@@ -2169,6 +2092,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Viscosity</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>InventoryFermentables</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -2263,11 +2190,11 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Name</source>
-        <translation>Название</translation>
+        <translation type="vanished">Название</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="vanished">Тип</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -2279,23 +2206,11 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Inventory</source>
-        <translation>Инвентарь</translation>
+        <translation type="vanished">Инвентарь</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Цвет</translation>
-    </message>
-    <message>
-        <source>Yield (DBFG) %</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Цвет</translation>
     </message>
 </context>
 <context>
@@ -2367,67 +2282,12 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
 <context>
     <name>FermentationStepTableModel</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Step Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Temp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Temp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Acidity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Free Rise</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>No</source>
         <translation type="obsolete">Нет</translation>
     </message>
     <message>
         <source>Yes</source>
         <translation type="obsolete">Да</translation>
-    </message>
-    <message>
-        <source>Vessel</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FermentationTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number of Steps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2824,11 +2684,11 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <name>HopTableModel</name>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="vanished">Имя</translation>
     </message>
     <message>
         <source>Alpha %</source>
-        <translation>Альфа %</translation>
+        <translation type="vanished">Альфа %</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -2844,23 +2704,11 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="vanished">Форма</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation>Инвентарь</translation>
-    </message>
-    <message>
-        <source>Year</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Инвентарь</translation>
     </message>
 </context>
 <context>
@@ -2977,17 +2825,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
 </context>
 <context>
-    <name>IngredientInRecipe</name>
-    <message>
-        <source>Ingredient In Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ingredient ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Instruction</name>
     <message>
         <source>Instruction</source>
@@ -3029,7 +2866,66 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished">Инвентарь</translation>
     </message>
     <message>
-        <source>Ingredient ID</source>
+        <source>Date Ordered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Best Before Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Supplier</source>
+        <translation type="unfinished">Поставщик</translation>
+    </message>
+    <message>
+        <source>Quantity Ordered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Purchase Price</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Purchase Tax</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shipping Cost</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quantity Remaining</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ingredient</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>InventoryFermentable</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Ordered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Тип</translation>
+    </message>
+    <message>
+        <source>Amount Received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Remaining</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3533,70 +3429,27 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Название</translation>
+        <translation type="vanished">Название</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="vanished">Тип</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Количество</translation>
+        <translation type="vanished">Количество</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation>Температура настаивания</translation>
+        <translation type="vanished">Температура настаивания</translation>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation>Желаемая температура</translation>
+        <translation type="vanished">Желаемая температура</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Время</translation>
-    </message>
-    <message>
-        <source>End Temp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ramp Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water:Grain</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MashTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Initial Grain Temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total Mash Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Время</translation>
     </message>
 </context>
 <context>
@@ -3902,11 +3755,11 @@ If you need help, please open an issue at %1</source>
     <name>MiscTableModel</name>
     <message>
         <source>Name</source>
-        <translation>Название</translation>
+        <translation type="vanished">Название</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="vanished">Тип</translation>
     </message>
     <message>
         <source>Use</source>
@@ -3921,16 +3774,8 @@ If you need help, please open an issue at %1</source>
         <translation type="vanished">Количество</translation>
     </message>
     <message>
-        <source>Amount Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Inventory</source>
-        <translation>Инвентарь</translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Инвентарь</translation>
     </message>
 </context>
 <context>
@@ -5328,6 +5173,18 @@ Log file may contain more details.</source>
         <source>Formula</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Did not recognise file extension on &quot;%1&quot; so nothing written.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open &quot;%1&quot; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Did not recognise file extension on &quot;%1&quot; so nothing read.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -5967,40 +5824,32 @@ The final volume in the primary is %1.</source>
 <context>
     <name>RecipeAdditionFermentableTableModel</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation type="obsolete">Тип</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation type="unfinished">Выход</translation>
+        <translation type="obsolete">Выход</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Цвет</translation>
+        <translation type="obsolete">Цвет</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количество</translation>
-    </message>
-    <message>
-        <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Количество</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Инвентарь</translation>
+        <translation type="obsolete">Инвентарь</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Этап</translation>
+        <translation type="obsolete">Этап</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Время</translation>
+        <translation type="obsolete">Время</translation>
     </message>
 </context>
 <context>
@@ -6045,40 +5894,28 @@ The final volume in the primary is %1.</source>
 <context>
     <name>RecipeAdditionHopTableModel</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Form</source>
-        <translation type="unfinished">Форма</translation>
+        <translation type="obsolete">Форма</translation>
     </message>
     <message>
         <source>Alpha %</source>
-        <translation type="unfinished">Альфа %</translation>
-    </message>
-    <message>
-        <source>Year</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Альфа %</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количество</translation>
-    </message>
-    <message>
-        <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Количество</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Инвентарь</translation>
+        <translation type="obsolete">Инвентарь</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Этап</translation>
+        <translation type="obsolete">Этап</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Время</translation>
+        <translation type="obsolete">Время</translation>
     </message>
 </context>
 <context>
@@ -6123,32 +5960,24 @@ The final volume in the primary is %1.</source>
 <context>
     <name>RecipeAdditionMiscTableModel</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation type="obsolete">Тип</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количество</translation>
-    </message>
-    <message>
-        <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Количество</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Инвентарь</translation>
+        <translation type="obsolete">Инвентарь</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Этап</translation>
+        <translation type="obsolete">Этап</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Время</translation>
+        <translation type="obsolete">Время</translation>
     </message>
 </context>
 <context>
@@ -6193,52 +6022,36 @@ The final volume in the primary is %1.</source>
 <context>
     <name>RecipeAdditionYeastTableModel</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Laboratory</source>
-        <translation type="unfinished">Лаборатория</translation>
+        <translation type="obsolete">Лаборатория</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="unfinished">ID продукта</translation>
+        <translation type="obsolete">ID продукта</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation type="obsolete">Тип</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Форма</translation>
+        <translation type="obsolete">Форма</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количество</translation>
-    </message>
-    <message>
-        <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Количество</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Инвентарь</translation>
+        <translation type="obsolete">Инвентарь</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Этап</translation>
+        <translation type="obsolete">Этап</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Этап</translation>
-    </message>
-    <message>
-        <source>Attenuation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Times Cultured</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Этап</translation>
     </message>
 </context>
 <context>
@@ -6279,32 +6092,16 @@ The final volume in the primary is %1.</source>
 <context>
     <name>RecipeAdjustmentSaltTableModel</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation type="obsolete">Тип</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количество</translation>
-    </message>
-    <message>
-        <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Количество</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Инвентарь</translation>
-    </message>
-    <message>
-        <source>Added To</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Инвентарь</translation>
     </message>
 </context>
 <context>
@@ -6646,13 +6443,6 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
-    <name>RecipeTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>RecipeTreeView</name>
     <message>
         <source>Snapshots</source>
@@ -6818,32 +6608,16 @@ The final volume in the primary is %1.</source>
 <context>
     <name>SaltTableModel</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation type="obsolete">Количество</translation>
     </message>
     <message>
-        <source>% Acid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Inventory</source>
-        <translation type="unfinished">Инвентарь</translation>
-    </message>
-    <message>
-        <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Инвентарь</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Тип</translation>
     </message>
 </context>
 <context>
@@ -7117,32 +6891,12 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StyleTableModel</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation type="obsolete">Тип</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Категория</translation>
-    </message>
-    <message>
-        <source>Category Number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Style Letter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Style Guide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Категория</translation>
     </message>
 </context>
 <context>
@@ -7769,11 +7523,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Ошибочная колонка: %1</translation>
+        <translation type="vanished">Ошибочная колонка: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Название</translation>
+        <translation type="vanished">Название</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -7781,31 +7535,27 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Calcium (ppm)</source>
-        <translation>Кальций (ppm)</translation>
+        <translation type="vanished">Кальций (ppm)</translation>
     </message>
     <message>
         <source>Bicarbonate (ppm)</source>
-        <translation>Бикарбонат (ppm)</translation>
+        <translation type="vanished">Бикарбонат (ppm)</translation>
     </message>
     <message>
         <source>Sulfate (ppm)</source>
-        <translation>Сульфат (ppm)</translation>
+        <translation type="vanished">Сульфат (ppm)</translation>
     </message>
     <message>
         <source>Chloride (ppm)</source>
-        <translation>Хлорид (ppm)</translation>
+        <translation type="vanished">Хлорид (ppm)</translation>
     </message>
     <message>
         <source>Sodium (ppm)</source>
-        <translation>Сода (ppm)</translation>
+        <translation type="vanished">Сода (ppm)</translation>
     </message>
     <message>
         <source>Magnesium (ppm)</source>
-        <translation>Магнезия (ppm)</translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Магнезия (ppm)</translation>
     </message>
 </context>
 <context>
@@ -8143,15 +7893,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Название</translation>
+        <translation type="vanished">Название</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="vanished">Тип</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Форма</translation>
+        <translation type="vanished">Форма</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -8159,23 +7909,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Laboratory</source>
-        <translation>Лаборатория</translation>
+        <translation type="vanished">Лаборатория</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation>ID продукта</translation>
+        <translation type="vanished">ID продукта</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation>Инвентарь</translation>
-    </message>
-    <message>
-        <source>Amount Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Инвентарь</translation>
     </message>
 </context>
 <context>
@@ -9810,10 +9552,81 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>inventoryFermentableEditor</name>
+    <message>
+        <source>Fermentable Inventory Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Ordered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd MMM yyyy</source>
+        <translation type="unfinished">дд МММ гггг</translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Новый</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Сохранить</translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Отменить</translation>
+    </message>
+</context>
+<context>
     <name>inventoryWindow</name>
     <message>
         <source>Inventory</source>
         <translation type="unfinished">Инвентарь</translation>
+    </message>
+    <message>
+        <source>Fermentables</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation type="unfinished">Хмель</translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished">Прочее</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished">Дрожжи</translation>
+    </message>
+    <message>
+        <source>Salts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

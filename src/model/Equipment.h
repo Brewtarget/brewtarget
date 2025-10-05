@@ -232,19 +232,19 @@ public:
     *        In BeerJSON, there is no record of whether this is a calculated value, it is just the maxiumum_volume of
     *        the "Brew Kettle".
     */
-   Q_PROPERTY(double kettleBoilSize_l            READ kettleBoilSize_l            WRITE setKettleBoilSize_l            ) // Required in BeerJSON (when Brew Kettle record present)
+   Q_PROPERTY(double kettleBoilSize_l       READ kettleBoilSize_l       WRITE setKettleBoilSize_l    ) // Required in BeerJSON (when Brew Kettle record present)
    /**
     * \brief The batch size in liters, aka the target volume of the batch at the start of fermentation.
     *
     *        In BeerJSON, this corresponds to the maxiumum_volume of the "Fermenter".
     */
-   Q_PROPERTY(double fermenterBatchSize_l           READ fermenterBatchSize_l           WRITE setFermenterBatchSize_l           ) // Required in BeerJSON (when Fermenter record present)
+   Q_PROPERTY(double fermenterBatchSize_l   READ fermenterBatchSize_l   WRITE setFermenterBatchSize_l) // Required in BeerJSON (when Fermenter record present)
    /**
     * \brief The mash tun volume in liters.                ⮜⮜⮜ Optional in BeerXML but required in BeerJSON ⮞⮞⮞
     *        This parameter can be used to calculate if a particular mash and grain profile will fit in the mash tun.
     *        It may also be used for thermal calculations in the case of a partially full mash tun.
     */
-   Q_PROPERTY(double mashTunVolume_l       READ mashTunVolume_l       WRITE setMashTunVolume_l           )  // Required in BeerJSON (when Mash Tun record present)
+   Q_PROPERTY(double mashTunVolume_l        READ mashTunVolume_l        WRITE setMashTunVolume_l     )  // Required in BeerJSON (when Mash Tun record present)
    /**
     * \brief The tun mass in kg.                  ⮜⮜⮜ Optional in BeerXML & BeerJSON ⮞⮞⮞
     *        Used primarily to calculate the thermal parameters of the mash tun – in conjunction with the volume and

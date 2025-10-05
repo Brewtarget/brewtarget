@@ -30,17 +30,17 @@
 #include "qtModels/tableModels/TableModelBase.h"
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(MashStep, Name        ,
-                             Type        ,
-                             Amount      ,
-                             Temp        ,
-                             TargetTemp  ,
-                             EndTemp     ,
-                             RampTime    ,
-                             Time        ,
-                             StartAcidity,
-                             EndAcidity  ,
-                             WaterToGrain,)
+COLUMN_NAMES(MashStepTableModel, Name        ,
+                                 Type        ,
+                                 Amount      ,
+                                 Temp        ,
+                                 TargetTemp  ,
+                                 EndTemp     ,
+                                 RampTime    ,
+                                 Time        ,
+                                 StartAcidity,
+                                 EndAcidity  ,
+                                 WaterToGrain,)
 
 /*!
  * \class MashStepTableModel

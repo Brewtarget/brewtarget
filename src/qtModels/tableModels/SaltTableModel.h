@@ -41,12 +41,12 @@ class Mash;
 class Recipe;
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(Salt, Name              ,
-                         Type              ,
-                         PctAcid           ,
-                         TotalInventory    ,
-                         TotalInventoryType,
-                         NumRecipesUsedIn  ,)
+COLUMN_NAMES(SaltTableModel, Name              ,
+                             Type              ,
+                             PctAcid           ,
+                             TotalInventory    ,
+                             TotalInventoryType,
+                             NumRecipesUsedIn  ,)
 
 /*!
  * \class SaltTableModel

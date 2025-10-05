@@ -326,75 +326,85 @@ public:
          Q_FUNC_INFO << "MIME Data:" << (mimeData ? mimeData->text() : "NULL") << ".  "
          "Parent" << (parentIndex.isValid() ? "valid" : "invalid");
 
-      if (!parentIndex.isValid()) {
+      //
+      // TBD For the moment, we skip most folder handling on Inventory items (which don't have folders).  We still have
+      // to allow the existence of TreeFolderNode for them to have the root node, but we turn off everything else.
+      //
+      if constexpr (HasNoFolder<NE>) {
          return false;
-      }
-
-      qDebug() << Q_FUNC_INFO << "Parent row:" << parentIndex.row() << ", column:" << parentIndex.column();
-
-      QByteArray encodedData;
-
-      if (mimeData->hasFormat(TreeItemNode<NE>::DragNDropMimeType)) {
-         encodedData = mimeData->data(TreeItemNode<NE>::DragNDropMimeType);
-      } else if (mimeData->hasFormat(TreeFolderNode<NE>::DragNDropMimeType)) {
-         encodedData = mimeData->data(TreeFolderNode<NE>::DragNDropMimeType);
       } else {
-         qDebug() << Q_FUNC_INFO << "Unrecognised MIME type";
-         return false;   // Don't know what we got, but we don't want it
-      }
 
-      TreeNode * parentNode = this->doTreeNode(parentIndex);
-      if (!parentNode) {
-         // Did you know there's a space between elements in a tree, and you can
-         // actually drop things there? If somebody drops something there, don't
-         // do anything
-         qDebug() << Q_FUNC_INFO << "Invalid drop location";
-         return false;
-      }
-
-      QString targetFolderPath = "";
-      if (parentNode->classifier() == TreeNodeClassifier::Folder) {
-         auto & folderParentNode = static_cast<TreeFolderNode<NE> &>(*parentNode);
-         targetFolderPath = folderParentNode.underlyingItem()->fullPath();
-      } else {
-         Q_ASSERT(parentNode->classifier() == TreeNodeClassifier::PrimaryItem);
-         auto & itemParentNode = static_cast<TreeItemNode<NE> &>(*parentNode);
-         targetFolderPath = itemParentNode.underlyingItem()->folderPath();
-      }
-
-      qDebug() << Q_FUNC_INFO << "Target:" << targetFolderPath;
-
-      // Pull the stream apart and do that which needs done. Late binding ftw!
-      for (QDataStream stream{&encodedData, QIODevice::ReadOnly}; !stream.atEnd(); ) {
-         //
-         // Obviously the format of what we read here has to align with what we write in TreeViewBase::doMimeData.
-         //
-         QString className = "";
-         int id = -1;
-         QString name = "";
-         stream >> className >> id >> name;
-         qDebug() << Q_FUNC_INFO << "Class:" << className << ", Name:" << name << ", ID:" << id;
-
-         if (className == NE::staticMetaObject.className()) {
-            auto item = ObjectStoreWrapper::getById<NE>(id);
-            if (!item) {
-               qDebug() << Q_FUNC_INFO << "Could not find" << NE::staticMetaObject.className() << "with ID" << id;
-               return false;
-            }
-            auto folder = item->folderPath();
-            qDebug() <<
-               Q_FUNC_INFO << "Moving" << item << "from folder" << folder << "to folder" << targetFolderPath;
-            // Dropping an item in a folder just means setting the folder name on that item
-            item->setFolderPath(targetFolderPath);
-            // Now we have to update our own model (ie that of TreeModel) so that the display will update!
-            this->doFolderChanged(item.get());
-         } else if (className == Folder::staticMetaObject.className()) {
-            // I need the actual folder object that got dropped.
-            auto newFolder = std::make_shared<Folder>();
-            newFolder->setfullPath(name);
-
-            this->renameFolder(*newFolder, targetFolderPath);
+         if (!parentIndex.isValid()) {
+            return false;
          }
+
+         qDebug() << Q_FUNC_INFO << "Parent row:" << parentIndex.row() << ", column:" << parentIndex.column();
+
+         QByteArray encodedData;
+
+         if (mimeData->hasFormat(TreeItemNode<NE>::DragNDropMimeType)) {
+            encodedData = mimeData->data(TreeItemNode<NE>::DragNDropMimeType);
+         } else if (mimeData->hasFormat(TreeFolderNode<NE>::DragNDropMimeType)) {
+            encodedData = mimeData->data(TreeFolderNode<NE>::DragNDropMimeType);
+         } else {
+            qDebug() << Q_FUNC_INFO << "Unrecognised MIME type";
+            return false;   // Don't know what we got, but we don't want it
+         }
+
+         TreeNode * parentNode = this->doTreeNode(parentIndex);
+         if (!parentNode) {
+            // Did you know there's a space between elements in a tree, and you can
+            // actually drop things there? If somebody drops something there, don't
+            // do anything
+            qDebug() << Q_FUNC_INFO << "Invalid drop location";
+            return false;
+         }
+
+         QString targetFolderPath = "";
+         if (parentNode->classifier() == TreeNodeClassifier::Folder) {
+            auto & folderParentNode = static_cast<TreeFolderNode<NE> &>(*parentNode);
+            targetFolderPath = folderParentNode.underlyingItem()->fullPath();
+         } else {
+            Q_ASSERT(parentNode->classifier() == TreeNodeClassifier::PrimaryItem);
+            auto & itemParentNode = static_cast<TreeItemNode<NE> &>(*parentNode);
+            targetFolderPath = itemParentNode.underlyingItem()->folderPath();
+         }
+
+         qDebug() << Q_FUNC_INFO << "Target:" << targetFolderPath;
+
+         // Pull the stream apart and do that which needs done. Late binding ftw!
+         for (QDataStream stream{&encodedData, QIODevice::ReadOnly}; !stream.atEnd(); ) {
+            //
+            // Obviously the format of what we read here has to align with what we write in TreeViewBase::doMimeData.
+            //
+            QString className = "";
+            int id = -1;
+            QString name = "";
+            stream >> className >> id >> name;
+            qDebug() << Q_FUNC_INFO << "Class:" << className << ", Name:" << name << ", ID:" << id;
+
+            if (className == NE::staticMetaObject.className()) {
+               auto item = ObjectStoreWrapper::getById<NE>(id);
+               if (!item) {
+                  qDebug() << Q_FUNC_INFO << "Could not find" << NE::staticMetaObject.className() << "with ID" << id;
+                  return false;
+               }
+               auto folder = item->folderPath();
+               qDebug() <<
+                  Q_FUNC_INFO << "Moving" << item << "from folder" << folder << "to folder" << targetFolderPath;
+               // Dropping an item in a folder just means setting the folder name on that item
+               item->setFolderPath(targetFolderPath);
+               // Now we have to update our own model (ie that of TreeModel) so that the display will update!
+               this->doFolderChanged(item.get());
+            } else if (className == Folder::staticMetaObject.className()) {
+               // I need the actual folder object that got dropped.
+               auto newFolder = std::make_shared<Folder>();
+               newFolder->setfullPath(name);
+
+               this->renameFolder(*newFolder, targetFolderPath);
+            }
+         }
+
       }
 
       return true;
@@ -429,7 +439,7 @@ public:
    void insertPrimaryItem(std::shared_ptr<NE> item) {
       QModelIndex parentIndex;
       int childNumber;
-      QString const folderPath = item->folderPath();
+      QString const folderPath = this->elementFolderPath(*item);
       if (!folderPath.isEmpty()) {
          parentIndex = this->findFolder(folderPath, this->m_rootNode.get(), IfNotFound::Create);
          // I cannot imagine this failing, but what the hell
@@ -1160,7 +1170,12 @@ public:
       return this->removeItemByIndex(elementIndex);
    }
 
-   bool renameFolder(Folder & folder, QString newName) {
+   //! No-op version
+   bool renameFolder([[maybe_unused]] Folder & folder, [[maybe_unused]] QString newName) requires (HasNoFolder<NE>) {
+      return false;
+   }
+   //! Substantive version
+   bool renameFolder(Folder & folder, QString newName) requires (!HasNoFolder<NE>) {
       QModelIndex folderIndex = findFolder(folder.fullPath(), nullptr, IfNotFound::ReturnInvalid);
       if (!folderIndex.isValid()) {
          return false;
@@ -1420,6 +1435,20 @@ protected:
       return;
    }
 
+private:
+   /**
+    * \brief For the moment, it's easier simply to pretend that folder path is empty for elements which do not support
+    *        folders.
+    */
+   QString elementFolderPath(NE const & element) {
+      if constexpr (HasNoFolder<NE>) {
+         return "";
+      } else {
+         return element.folderPath();
+      }
+   }
+
+protected:
    void doFolderChanged(QObject * sender) {
       std::shared_ptr<NE> const element = this->senderToElement(sender);
       if (!element) {
@@ -1452,9 +1481,8 @@ protected:
       // Find the new parent folder.  Note that findFolder() will give us the root node if folderPath is empty, so we
       // don't have to handle that here.  Similarly, we can ask it to create the folder if it (is non-empty and) does
       // not exist.
-      QString const & folderPath = element->folderPath();
+      QString const folderPath = this->elementFolderPath(*element);
       bool folderIsNewlyCreated;
-
       QModelIndex newParentIndex = this->findFolder(folderPath,
                                                     this->m_rootNode.get(),
                                                     IfNotFound::Create,

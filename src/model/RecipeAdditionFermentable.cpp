@@ -35,6 +35,18 @@ ObjectStore & RecipeAdditionFermentable::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<RecipeAdditionFermentable>::getInstance();
 }
 
+bool RecipeAdditionFermentable::compareWith(NamedEntity const & other,
+                                            QList<BtStringConst const *> * propertiesThatDiffer) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   RecipeAdditionFermentable const & rhs = static_cast<RecipeAdditionFermentable const &>(other);
+   return (
+      // Parent classes have to be equal
+      this->RecipeAddition    ::compareWith  (rhs, propertiesThatDiffer) &&
+      this->RecipeAdditionBase::compareWith  (rhs, propertiesThatDiffer) &&
+      this->IngredientAmount::doCompareWith(rhs, propertiesThatDiffer)
+   );
+}
+
 TypeLookup const RecipeAdditionFermentable::typeLookup {
    "RecipeAdditionFermentable",
    {
@@ -45,7 +57,6 @@ TypeLookup const RecipeAdditionFermentable::typeLookup {
     std::addressof(IngredientAmount<RecipeAdditionFermentable, Fermentable>::typeLookup)}
 };
 static_assert(std::is_base_of<RecipeAddition, RecipeAdditionFermentable>::value);
-static_assert(std::is_base_of<IngredientAmount<RecipeAdditionFermentable, Fermentable>, RecipeAdditionFermentable>::value);
 
 //
 // This is a compile-time check that HasTypeLookup is working properly.  It doesn't particularly belong here, but I
@@ -55,9 +66,9 @@ static_assert(HasTypeLookup<Fermentable>);
 static_assert(!HasTypeLookup<QString>);
 
 RecipeAdditionFermentable::RecipeAdditionFermentable(QString name, int const recipeId, int const ingredientId) :
-   RecipeAddition{name, recipeId, ingredientId},
+   RecipeAddition{name, recipeId},
    RecipeAdditionBase<RecipeAdditionFermentable, Fermentable>{},
-   IngredientAmount<RecipeAdditionFermentable, Fermentable>{} {
+   IngredientAmount<RecipeAdditionFermentable, Fermentable>{ingredientId} {
 
    CONSTRUCTOR_END
    return;
@@ -71,8 +82,8 @@ RecipeAdditionFermentable::RecipeAdditionFermentable(NamedParameterBundle const 
    // If the addition stage is not specified then we assume it is boil, as this is the first stage at which it is usual
    // to add hops.
    //
-   m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
-                                                             RecipeAddition::Stage::Boil);
+   this->m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
+                                                                   RecipeAddition::Stage::Boil);
 
    CONSTRUCTOR_END
    return;

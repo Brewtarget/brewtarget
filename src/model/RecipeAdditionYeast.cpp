@@ -37,6 +37,18 @@ ObjectStore & RecipeAdditionYeast::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<RecipeAdditionYeast>::getInstance();
 }
 
+bool RecipeAdditionYeast::compareWith(NamedEntity const & other,
+                                       QList<BtStringConst const *> * propertiesThatDiffer) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   RecipeAdditionYeast const & rhs = static_cast<RecipeAdditionYeast const &>(other);
+   return (
+      // Parent classes have to be equal
+      this->RecipeAddition    ::compareWith  (rhs, propertiesThatDiffer) &&
+      this->RecipeAdditionBase::compareWith  (rhs, propertiesThatDiffer) &&
+      this->IngredientAmount  ::doCompareWith(rhs, propertiesThatDiffer)
+   );
+}
+
 TypeLookup const RecipeAdditionYeast::typeLookup {
    "RecipeAdditionYeast",
    {
@@ -62,9 +74,9 @@ static_assert(!HasTypeLookup<QString>);
 
 
 RecipeAdditionYeast::RecipeAdditionYeast(QString name, int const recipeId, int const ingredientId) :
-   RecipeAddition{name, recipeId, ingredientId},
+   RecipeAddition{name, recipeId},
    RecipeAdditionBase<RecipeAdditionYeast, Yeast>{},
-   IngredientAmount<RecipeAdditionYeast, Yeast>{},
+   IngredientAmount<RecipeAdditionYeast, Yeast>{ingredientId},
    m_attenuation_pct  {std::nullopt},
    m_timesCultured    {std::nullopt},
    m_cellCountBillions{std::nullopt} {

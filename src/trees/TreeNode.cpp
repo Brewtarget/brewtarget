@@ -40,6 +40,7 @@
 #include "model/Fermentable.h"
 #include "model/Folder.h"
 #include "model/Hop.h"
+#include "model/InventoryFermentable.h"
 #include "model/Misc.h"
 #include "model/Recipe.h"
 #include "model/Style.h"
@@ -47,6 +48,8 @@
 #include "model/Yeast.h"
 #include "trees/RecipeTreeModel.h"
 #include "trees/TreeModel.h"
+#include "utils/ColumnInfo.h"
+#include "utils/ColumnOwnerTraits.h"
 
 namespace {
    /**
@@ -158,6 +161,68 @@ bool TreeNode::showMe() const {
    return this->m_showMe;
 }
 
+COLUMN_INFOS(
+   TreeItemNode<Recipe>,
+   TREE_NODE_HEADER(TreeItemNode, Recipe, Name             , tr("Name"     ), PropertyNames::NamedEntity::name        ),
+   TREE_NODE_HEADER(TreeItemNode, Recipe, NumberOfAncestors, tr("Snapshots"), PropertyNames::Recipe     ::numAncestors),
+   TREE_NODE_HEADER(TreeItemNode, Recipe, BrewDate         , tr("Date"     ), PropertyNames::Recipe     ::date        ),
+   TREE_NODE_HEADER(TreeItemNode, Recipe, Style            , tr("Style"    ), {PropertyNames::Recipe::style,
+                                                                               PropertyNames::NamedEntity::name}      ),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<Equipment>,
+   TREE_NODE_HEADER(TreeItemNode, Equipment, Name        , tr("Name"      ), PropertyNames::NamedEntity::name              ),
+   TREE_NODE_HEADER(TreeItemNode, Equipment, BoilSize    , tr("Boil Size" ), PropertyNames::Equipment::kettleBoilSize_l    ),
+   TREE_NODE_HEADER(TreeItemNode, Equipment, BatchSize   , tr("Batch Size"), PropertyNames::Equipment::fermenterBatchSize_l),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<Mash>,
+   TREE_NODE_HEADER(TreeItemNode, Mash, Name      , tr("Name"       ), PropertyNames::NamedEntity::name     ),
+   TREE_NODE_HEADER(TreeItemNode, Mash, TotalWater, tr("Total Water"), PropertyNames::Mash::totalMashWater_l),
+   TREE_NODE_HEADER(TreeItemNode, Mash, TotalTime , tr("Total Time" ), PropertyNames::Mash::totalTime_mins  ),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<Boil>,
+   TREE_NODE_HEADER(TreeItemNode, Boil, Name              , tr("Name"           ), PropertyNames::NamedEntity::name  ),
+   TREE_NODE_HEADER(TreeItemNode, Boil, PreBoilSize       , tr("Pre-Boil Size"  ), PropertyNames::Boil::preBoilSize_l),
+   TREE_NODE_HEADER(TreeItemNode, Boil, LengthOfBoilProper, tr("Time At Boiling"), PropertyNames::Boil::boilTime_mins),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<Fermentation>,
+   TREE_NODE_HEADER(TreeItemNode, Fermentation, Name       , tr("Name"       ), PropertyNames::NamedEntity::name       ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentation, Description, tr("Description"), PropertyNames::Fermentation::description),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<Fermentable>,
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Name , tr("Name" ), PropertyNames::NamedEntity::name       ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Type , tr("Type" ), PropertyNames::Fermentable::type       ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Color, tr("Color"), PropertyNames::Fermentable::color_srm  ),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<Hop>,
+   TREE_NODE_HEADER(TreeItemNode, Hop, Name    , tr("Name"   ), PropertyNames::NamedEntity::name       ),
+   TREE_NODE_HEADER(TreeItemNode, Hop, Form    , tr("Type"   ), PropertyNames::Hop::form     ),
+   TREE_NODE_HEADER(TreeItemNode, Hop, AlphaPct, tr("% Alpha"), PropertyNames::Hop::alpha_pct),
+   TREE_NODE_HEADER(TreeItemNode, Hop, Origin  , tr("Origin" ), PropertyNames::Hop::origin   ),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<InventoryFermentable>,
+   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, Name    , tr("Name"   ), {PropertyNames::InventoryFermentable::fermentable,
+                                                                                  PropertyNames::NamedEntity::name}       ),
+   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, DateOrdered    , tr("Date Ordered"    ), PropertyNames::Inventory::dateOrdered),
+   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, Type           , tr("Type"            ), {PropertyNames::InventoryFermentable::fermentable,
+                                                                                                  PropertyNames::Fermentable::type}),
+   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, AmountReceived , tr("Amount Received" ), PropertyNames::InventoryBase::amountReceived ),
+   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, AmountRemaining, tr("Amount Remaining"), PropertyNames::InventoryBase::amountRemaining),
+)
+
 // NOTE: Each TreeItemNode<XYZ>::columnDisplayNames definition below should correspond with the columns defined in
 //       TreeNodeTraits<XYZ, PQR>::ColumnIndex in trees/TreeNodeTraits.h.
 
@@ -170,7 +235,8 @@ template<> EnumStringMapping const TreeItemNode<Recipe>::columnDisplayNames {
 
 template<> EnumStringMapping const TreeItemNode<Equipment>::columnDisplayNames {
    {TreeItemNode<Equipment>::ColumnIndex::Name    , Equipment::tr("Name"     )},
-   {TreeItemNode<Equipment>::ColumnIndex::BoilTime, Equipment::tr("Boil Time")},
+   {TreeItemNode<Equipment>::ColumnIndex::BoilSize , Equipment::tr("Boil Size" )},
+   {TreeItemNode<Equipment>::ColumnIndex::BatchSize, Equipment::tr("Batch Size")},
 };
 
 template<> EnumStringMapping const TreeItemNode<Mash>::columnDisplayNames {
@@ -201,6 +267,14 @@ template<> EnumStringMapping const TreeItemNode<Hop>::columnDisplayNames {
    {TreeItemNode<Hop>::ColumnIndex::Form    , Hop::tr("Type"   )},
    {TreeItemNode<Hop>::ColumnIndex::AlphaPct, Hop::tr("% Alpha")},
    {TreeItemNode<Hop>::ColumnIndex::Origin  , Hop::tr("Origin" )},
+};
+
+template<> EnumStringMapping const TreeItemNode<InventoryFermentable>::columnDisplayNames {
+   {TreeItemNode<InventoryFermentable>::ColumnIndex::Name           , InventoryFermentable::tr("Name"            )},
+   {TreeItemNode<InventoryFermentable>::ColumnIndex::DateOrdered    , InventoryFermentable::tr("Date Ordered"    )},
+   {TreeItemNode<InventoryFermentable>::ColumnIndex::Type           , InventoryFermentable::tr("Type"            )},
+   {TreeItemNode<InventoryFermentable>::ColumnIndex::AmountReceived , InventoryFermentable::tr("Amount Received" )},
+   {TreeItemNode<InventoryFermentable>::ColumnIndex::AmountRemaining, InventoryFermentable::tr("Amount Remaining")},
 };
 
 template<> EnumStringMapping const TreeItemNode<Misc>::columnDisplayNames {
@@ -311,12 +385,12 @@ template<> bool TreeItemNode<Equipment>::columnIsLessThan(TreeItemNode<Equipment
       case TreeItemNode<Equipment>::ColumnIndex::Name:
          return lhs.name() < rhs.name();
 
-      case TreeItemNode<Equipment>::ColumnIndex::BoilTime:
-         return lhs.boilTime_min().value_or(Equipment::default_boilTime_mins) <
-                rhs.boilTime_min().value_or(Equipment::default_boilTime_mins);
+///      case TreeItemNode<Equipment>::ColumnIndex::BoilTime:
+///         return lhs.boilTime_min().value_or(Equipment::default_boilTime_mins) <
+///                rhs.boilTime_min().value_or(Equipment::default_boilTime_mins);
    }
 
-   Q_UNREACHABLE();
+///   Q_UNREACHABLE();
    return lhs.name() < rhs.name();
 }
 
@@ -364,6 +438,20 @@ template<> bool TreeItemNode<Fermentable>::columnIsLessThan(TreeItemNode<Ferment
       case TreeItemNode<Fermentable>::ColumnIndex::Name : return lhs.name()      < rhs.name();
       case TreeItemNode<Fermentable>::ColumnIndex::Type : return lhs.type()      < rhs.type();
       case TreeItemNode<Fermentable>::ColumnIndex::Color: return lhs.color_srm() < rhs.color_srm();
+   }
+   return lhs.name() < rhs.name();
+}
+
+template<> bool TreeItemNode<InventoryFermentable>::columnIsLessThan(TreeItemNode<InventoryFermentable> const & other,
+                                                                     TreeNodeTraits<InventoryFermentable>::ColumnIndex column) const {
+   auto const & lhs = *this->m_underlyingItem;
+   auto const & rhs = *other.m_underlyingItem;
+   switch (column) {
+      case TreeItemNode<InventoryFermentable>::ColumnIndex::Name           : return lhs.ingredient()->name() < rhs.ingredient()->name();
+      case TreeItemNode<InventoryFermentable>::ColumnIndex::DateOrdered    : return lhs.dateOrdered()        < rhs.dateOrdered();
+      case TreeItemNode<InventoryFermentable>::ColumnIndex::Type           : return lhs.ingredient()->type() < rhs.ingredient()->type();
+      case TreeItemNode<InventoryFermentable>::ColumnIndex::AmountReceived : return lhs.amountReceived()     < rhs.amountReceived();
+      case TreeItemNode<InventoryFermentable>::ColumnIndex::AmountRemaining: return lhs.amountRemaining()    < rhs.amountRemaining();
    }
    return lhs.name() < rhs.name();
 }
@@ -700,6 +788,20 @@ template<> QString TreeItemNode<Fermentable>::getToolTip() const {
            .arg(Fermentable::tr("Extract Yield Dry Basis Fine Grind (DBFG)"))
            .arg(yield ? Measurement::displayQuantity(*yield, 3) : "?");
 
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<InventoryFermentable>::getToolTip() const {
+   // TODO: This is placeholder
+   QString const header = getHeader();
+
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
    body += "</table></body></html>";
 
    return header + body;

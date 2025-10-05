@@ -56,6 +56,8 @@ enum class NonPhysicalQuantity {
     *        over time.
     */
    Dimensionless,
+   //! Monetary value
+   Currency,
 };
 
 /**

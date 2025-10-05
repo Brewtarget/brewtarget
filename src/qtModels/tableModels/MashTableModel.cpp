@@ -28,18 +28,17 @@
    #include "moc_MashTableModel.cpp"
 #endif
 
+COLUMN_INFOS(
+   MashTableModel,
+   TABLE_MODEL_HEADER(Mash, Name             , tr("Name"                     ), PropertyNames:: NamedEntity::name            ),
+   TABLE_MODEL_HEADER(Mash, InitialGrainTemp , tr("Initial Grain Temperature"), PropertyNames::        Mash::grainTemp_c     ),
+   TABLE_MODEL_HEADER(Mash, TotalMashWater   , tr("Total Mash Water"         ), PropertyNames::        Mash::totalMashWater_l),
+   TABLE_MODEL_HEADER(Mash, TotalTime        , tr("Total Time"               ), PropertyNames::        Mash::totalTime_mins  ),
+   TABLE_MODEL_HEADER(Mash, NumRecipesUsedIn , tr("N° Recipes"               ), PropertyNames::NamedEntity::numRecipesUsedIn ),
+)
+
 MashTableModel::MashTableModel(QTableView * parent, bool editable) :
-   BtTableModel{
-      parent,
-      editable,
-      {
-         TABLE_MODEL_HEADER(Mash, Name             , tr("Name"                     ), PropertyNames:: NamedEntity::name           ),
-         TABLE_MODEL_HEADER(Mash, InitialGrainTemp , tr("Initial Grain Temperature"), PropertyNames::        Mash::grainTemp_c     /*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(Mash, TotalMashWater   , tr("Total Mash Water"         ), PropertyNames::        Mash::totalMashWater_l/*, PrecisionInfo{1}*/),
-         TABLE_MODEL_HEADER(Mash, TotalTime        , tr("Total Time"               ), PropertyNames::        Mash::totalTime_mins  /*, PrecisionInfo{0}*/),
-         TABLE_MODEL_HEADER(Mash, NumRecipesUsedIn , tr("N° Recipes"               ), PropertyNames::NamedEntity::numRecipesUsedIn),
-      }
-   },
+   BtTableModel{parent, editable},
    TableModelBase<MashTableModel, Mash>{} {
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();

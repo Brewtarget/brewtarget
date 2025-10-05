@@ -42,14 +42,14 @@ class RecipeUseOfWater;
 class WaterItemDelegate;
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(Water, Name            ,
-                          Calcium         ,
-                          Bicarbonate     ,
-                          Sulfate         ,
-                          Chloride        ,
-                          Sodium          ,
-                          Magnesium       ,
-                          NumRecipesUsedIn,)
+COLUMN_NAMES(WaterTableModel, Name            ,
+                              Calcium         ,
+                              Bicarbonate     ,
+                              Sulfate         ,
+                              Chloride        ,
+                              Sodium          ,
+                              Magnesium       ,
+                              NumRecipesUsedIn,)
 
 /*!
  * \class WaterTableModel

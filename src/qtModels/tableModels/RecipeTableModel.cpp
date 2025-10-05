@@ -25,14 +25,13 @@
    #include "moc_RecipeTableModel.cpp"
 #endif
 
+COLUMN_INFOS(
+   RecipeTableModel,
+   TABLE_MODEL_HEADER(Recipe, Name          , tr("Name"           ), PropertyNames::NamedEntity::name    ),
+)
+
 RecipeTableModel::RecipeTableModel(QTableView * parent, bool editable) :
-   BtTableModel{
-      parent,
-      editable,
-      {
-         TABLE_MODEL_HEADER(Recipe, Name          , tr("Name"           ), PropertyNames::NamedEntity::name    ),
-      }
-   },
+   BtTableModel{parent, editable},
    TableModelBase<RecipeTableModel, Recipe>{} {
    this->m_rows.clear();
 

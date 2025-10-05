@@ -117,6 +117,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/editors/FermentationEditor.cpp
     ${repoDir}/src/editors/FermentationStepEditor.cpp
     ${repoDir}/src/editors/HopEditor.cpp
+    ${repoDir}/src/editors/InventoryFermentableEditor.cpp
     ${repoDir}/src/editors/MashEditor.cpp
     ${repoDir}/src/editors/MashStepEditor.cpp
     ${repoDir}/src/editors/MiscEditor.cpp
@@ -126,6 +127,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/editors/YeastEditor.cpp
     ${repoDir}/src/measurement/Amount.cpp
     ${repoDir}/src/measurement/ColorMethods.cpp
+    ${repoDir}/src/measurement/CurrencyAmount.cpp
     ${repoDir}/src/measurement/IbuMethods.cpp
     ${repoDir}/src/measurement/Measurement.cpp
     ${repoDir}/src/measurement/NonPhysicalQuantity.cpp
@@ -148,6 +150,11 @@ set(filesToCompile_cpp
     ${repoDir}/src/model/IngredientInRecipe.cpp
     ${repoDir}/src/model/Instruction.cpp
     ${repoDir}/src/model/Inventory.cpp
+    ${repoDir}/src/model/InventoryFermentable.cpp
+    ${repoDir}/src/model/InventoryHop.cpp
+    ${repoDir}/src/model/InventoryMisc.cpp
+    ${repoDir}/src/model/InventorySalt.cpp
+    ${repoDir}/src/model/InventoryYeast.cpp
     ${repoDir}/src/model/Mash.cpp
     ${repoDir}/src/model/MashStep.cpp
     ${repoDir}/src/model/Misc.cpp
@@ -240,6 +247,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/utils/BtException.cpp
     ${repoDir}/src/utils/BtStringConst.cpp
     ${repoDir}/src/utils/BtStringStream.cpp
+    ${repoDir}/src/utils/ColumnInfo.cpp
     ${repoDir}/src/utils/EnumStringMapping.cpp
     ${repoDir}/src/utils/FileSystemHelpers.cpp
     ${repoDir}/src/utils/Fonts.cpp

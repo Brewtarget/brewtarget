@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/InventorySalt.h is part of Brewtarget, and is copyright the following authors 2024:
+ * model/InventorySalt.h is part of Brewtarget, and is copyright the following authors 2024-2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,17 +23,30 @@
 #include "model/Salt.h"
 #include "model/Inventory.h"
 #include "model/IngredientAmount.h"
+#include "model/InventoryBase.h"
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::InventorySalt { inline BtStringConst const property{#property}; }
+AddPropertyName(salt)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 /**
  * \brief Inventory of \c Salt
  */
-class InventorySalt : public Inventory, public IngredientAmount<InventorySalt, Salt> {
+class InventorySalt : public Inventory,
+                      public IngredientAmount<InventorySalt, Salt>,
+                      public InventoryBase   <InventorySalt, Salt> {
    Q_OBJECT
 
    INGREDIENT_AMOUNT_DECL(InventorySalt, Salt)
    INVENTORY_DECL(Salt, salt)
 
    // See model/IngredientAmount.h for info, getters and setters for these properties
+   Q_PROPERTY(int                           ingredientId READ ingredientId WRITE setIngredientId)
    Q_PROPERTY(Measurement::Amount           amount    READ amount     WRITE setAmount  )
    Q_PROPERTY(double                        quantity  READ quantity   WRITE setQuantity)
    Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )

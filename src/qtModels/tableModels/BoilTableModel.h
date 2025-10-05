@@ -25,9 +25,9 @@
 #include "qtModels/tableModels/TableModelBase.h"
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(Boil, Name            ,
-                         PreBoilSize     ,
-                         NumRecipesUsedIn,)
+COLUMN_NAMES(BoilTableModel, Name            ,
+                             PreBoilSize     ,
+                             NumRecipesUsedIn,)
 
 /*!
  * \class BoilTableModel

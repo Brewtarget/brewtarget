@@ -56,6 +56,18 @@ ObjectStore & RecipeAdditionMisc::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<RecipeAdditionMisc>::getInstance();
 }
 
+bool RecipeAdditionMisc::compareWith(NamedEntity const & other,
+                                     QList<BtStringConst const *> * propertiesThatDiffer) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   RecipeAdditionMisc const & rhs = static_cast<RecipeAdditionMisc const &>(other);
+   return (
+      // Parent classes have to be equal
+      this->RecipeAddition    ::compareWith  (rhs, propertiesThatDiffer) &&
+      this->RecipeAdditionBase::compareWith  (rhs, propertiesThatDiffer) &&
+      this->IngredientAmount  ::doCompareWith(rhs, propertiesThatDiffer)
+   );
+}
+
 TypeLookup const RecipeAdditionMisc::typeLookup {
    "RecipeAdditionMisc",
    {
@@ -78,9 +90,9 @@ static_assert(!HasTypeLookup<QString>);
 
 
 RecipeAdditionMisc::RecipeAdditionMisc(QString name, int const recipeId, int const ingredientId) :
-   RecipeAddition{name, recipeId, ingredientId},
+   RecipeAddition{name, recipeId},
    RecipeAdditionBase<RecipeAdditionMisc, Misc>{},
-   IngredientAmount<RecipeAdditionMisc, Misc>{} {
+   IngredientAmount<RecipeAdditionMisc, Misc>{ingredientId} {
 
    CONSTRUCTOR_END
    return;

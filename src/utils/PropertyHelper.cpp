@@ -91,7 +91,7 @@ QVariant PropertyHelper::readDataFromPropertyValue(
          Q_ASSERT(modelData.canConvert<int>());
          int const enumValue = modelData.toInt();
 //            qDebug() << Q_FUNC_INFO << "Enum value:" << enumValue;
-         std::optional<QString> displayText = enumInfo.displayNames.enumAsIntToString(enumValue);
+         std::optional<QString> displayText = enumInfo.displayNames.enumAsIntToValue(enumValue);
          // It's a coding error if we couldn't find something to display!
          Q_ASSERT(displayText);
          return *displayText;
@@ -243,11 +243,9 @@ QVariant PropertyHelper::readDataFromPropertyValue(
          }
 
          // For display or sort we want to map the PhysicalQuantity to its user-friendly name string
-         std::optional<QString> displayText =
-            Measurement::physicalQuantityDisplayNames.enumToString(physicalQuantity);
-         // It's a coding error if we couldn't find something to display!
-         Q_ASSERT(displayText);
-         return *displayText;
+         // (It's a coding error if we couldn't find something to display, which will result in an exception,
+         // terminating the program and prompting us to fix the bug.)
+         return Measurement::physicalQuantityDisplayNames[physicalQuantity];
       }
 
       // This is the Amount itself

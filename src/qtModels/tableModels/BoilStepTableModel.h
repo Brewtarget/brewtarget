@@ -26,16 +26,16 @@
 #include "qtModels/tableModels/TableModelBase.h"
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(BoilStep, Name        ,
-                             StepTime    ,
-                             StartTemp   ,
-                             RampTime    ,
-                             EndTemp     ,
-                             StartAcidity,
-                             EndAcidity  ,
-                             StartGravity,
-                             EndGravity  ,
-                             ChillingType,)
+COLUMN_NAMES(BoilStepTableModel, Name        ,
+                                 StepTime    ,
+                                 StartTemp   ,
+                                 RampTime    ,
+                                 EndTemp     ,
+                                 StartAcidity,
+                                 EndAcidity  ,
+                                 StartGravity,
+                                 EndGravity  ,
+                                 ChillingType,)
 
 /*!
  * \class BoilStepTableModel

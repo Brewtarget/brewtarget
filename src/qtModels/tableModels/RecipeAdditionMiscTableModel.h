@@ -38,13 +38,13 @@ class BtStringConst;
 class Recipe;
 
 // Define the columns on this table
-TABLE_MODEL_TRAITS(RecipeAdditionMisc, Name          ,
-                                       Type          ,
-                                       Amount        ,
-                                       AmountType    ,
-                                       TotalInventory,
-                                       Stage         ,
-                                       Time          ,)
+COLUMN_NAMES(RecipeAdditionMiscTableModel, Name          ,
+                                           Type          ,
+                                           Amount        ,
+                                           AmountType    ,
+                                           TotalInventory,
+                                           Stage         ,
+                                           Time          ,)
 
 /*!
  * \class RecipeAdditionMiscTableModel

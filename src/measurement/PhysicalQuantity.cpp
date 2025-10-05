@@ -165,6 +165,14 @@ template<> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity<Me
                                                                               Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count>() {
    return Measurement::PhysicalQuantity::Mass;
 }
+//
+// This specialisation is needed because we have a volume-only IngredientAmount for RecipeUseOfWater to keep its
+// structure aligned with RecipeUseOfWater and RecipaAddition* classes.
+//
+template<> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity<Measurement::PhysicalQuantity,
+                                                                              Measurement::PhysicalQuantity::Volume>() {
+   return Measurement::PhysicalQuantity::Volume;
+}
 
 
 Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity(Measurement::ChoiceOfPhysicalQuantity const val) {
@@ -179,9 +187,9 @@ Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity(Measurement::
    Q_UNREACHABLE();
 }
 
-template<Measurement::PhysicalQuantity const pq> bool isValid(Measurement::PhysicalQuantity const physicalQuantity) {
-   return physicalQuantity == pq;
-}
+///template<Measurement::PhysicalQuantity const pq> bool isValid(Measurement::PhysicalQuantity const physicalQuantity) {
+///   return physicalQuantity == pq;
+///}
 template<> bool Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity,
                                      Measurement::ChoiceOfPhysicalQuantity::Mass_Volume      >(Measurement::PhysicalQuantity const physicalQuantity) {
    return (physicalQuantity == Measurement::PhysicalQuantity::Mass  ||
@@ -192,6 +200,10 @@ template<> bool Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity,
    return (physicalQuantity == Measurement::PhysicalQuantity::Mass   ||
            physicalQuantity == Measurement::PhysicalQuantity::Volume ||
            physicalQuantity == Measurement::PhysicalQuantity::Count  );
+}
+template<> bool Measurement::isValid<Measurement::PhysicalQuantity,
+                                     Measurement::PhysicalQuantity::Volume>(Measurement::PhysicalQuantity const physicalQuantity) {
+   return (physicalQuantity == Measurement::PhysicalQuantity::Volume);
 }
 
 bool Measurement::isValid(Measurement::ChoiceOfPhysicalQuantity const choiceOfPhysicalQuantity,

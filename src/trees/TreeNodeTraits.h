@@ -26,6 +26,7 @@
 #include "model/FermentationStep.h"
 #include "model/Folder.h"
 #include "model/Hop.h"
+#include "model/InventoryFermentable.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
@@ -64,8 +65,8 @@ namespace {
 }
 
 /**
- * \brief See comment in qtModels/tableModels/TableModelBase.h for why we use a traits class to allow the following attributes
- *        from each \c Derived class to be accessible in \c TreeNodeBase:
+ * \brief See comment in qtModels/tableModels/TableModelBase.h for why we use a traits class to allow the following
+ *        attributes from each \c Derived class to be accessible in \c TreeNodeBase:
  *           - \c ColumnIndex        = class enum for the columns of this node type
  *           - \c NumberOfColumns    = number of entries in the above.  (Yes, it is a bit frustrating that we cannot
  *                                     easily deduce the number of values of a class enum.  Hopefully this will change
@@ -176,8 +177,9 @@ template<> struct TreeNodeTraits<Recipe, Recipe> {
 
 template<> struct TreeNodeTraits<Equipment, Equipment> {
    enum class ColumnIndex {
-      Name    ,
-      BoilTime,
+      Name     ,
+      BoilSize ,
+      BatchSize,
    };
    static constexpr size_t NumberOfColumns = 2;
    static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
@@ -196,8 +198,11 @@ template<> struct TreeNodeTraits<Equipment, Equipment> {
       switch (column) {
          case ColumnIndex::Name:
             return QVariant(equipment.name());
-         case ColumnIndex::BoilTime:
-            return QVariant::fromValue(equipment.boilTime_min());
+         case ColumnIndex::BoilSize :
+         case ColumnIndex::BatchSize:
+            return QVariant();
+///         case ColumnIndex::BoilTime:
+///            return QVariant::fromValue(equipment.boilTime_min());
       }
       Q_UNREACHABLE();
    }
@@ -263,6 +268,43 @@ template<> struct TreeNodeTraits<Hop, Hop> {
       }
       Q_UNREACHABLE();
    }
+};
+
+template<> struct TreeNodeTraits<InventoryFermentable, InventoryFermentable> {
+   enum class ColumnIndex {
+      Name           ,
+      DateOrdered    ,
+      Type           ,
+      AmountReceived ,
+      AmountRemaining,
+   };
+   static constexpr size_t NumberOfColumns = 5;
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   using TreeType = InventoryFermentable;
+   // We have to support folder node for the root node
+   using ParentPtrTypes = std::variant<TreeFolderNode<InventoryFermentable> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   // InventoryFermentables and other ingredients can be dropped on MainWindow::tabWidget_ingredients
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-ingredient";
+
+   static QString getRootName() { return Fermentable::tr("InventoryFermentables"); }
+
+   static QVariant data(InventoryFermentable const & inventoryFermentable, ColumnIndex const column) {
+      switch (column) {
+         case ColumnIndex::Name:
+            return QVariant::fromValue(inventoryFermentable.ingredient()->name());
+         case ColumnIndex::DateOrdered:
+            return QVariant::fromValue(inventoryFermentable.dateOrdered());
+         case ColumnIndex::Type:
+            return QVariant::fromValue(Fermentable::typeDisplayNames[inventoryFermentable.ingredient()->type()]);
+         case ColumnIndex::AmountReceived:
+            return QVariant::fromValue(inventoryFermentable.amountReceived());
+         case ColumnIndex::AmountRemaining:
+            return QVariant::fromValue(inventoryFermentable.amountRemaining());
+      }
+      Q_UNREACHABLE();
+   }
+
 };
 
 template<> struct TreeNodeTraits<MashStep, Mash> {

@@ -28,16 +28,15 @@
    #include "moc_FermentationTableModel.cpp"
 #endif
 
+COLUMN_INFOS(
+   FermentationTableModel,
+   TABLE_MODEL_HEADER(Fermentation, Name            , tr("Name"           ), PropertyNames::  NamedEntity::name          ),
+   TABLE_MODEL_HEADER(Fermentation, NumSteps        , tr("Number of Steps"), PropertyNames::StepOwnerBase::numSteps      ),
+   TABLE_MODEL_HEADER(Fermentation, NumRecipesUsedIn, tr("N° Recipes"     ), PropertyNames::NamedEntity::numRecipesUsedIn),
+)
+
 FermentationTableModel::FermentationTableModel(QTableView * parent, bool editable) :
-   BtTableModel{
-      parent,
-      editable,
-      {
-         TABLE_MODEL_HEADER(Fermentation, Name            , tr("Name"           ), PropertyNames::  NamedEntity::name          ),
-         TABLE_MODEL_HEADER(Fermentation, NumSteps        , tr("Number of Steps"), PropertyNames::StepOwnerBase::numSteps      ),
-         TABLE_MODEL_HEADER(Fermentation, NumRecipesUsedIn, tr("N° Recipes"     ), PropertyNames::NamedEntity::numRecipesUsedIn),
-      }
-   },
+   BtTableModel{parent, editable},
    TableModelBase<FermentationTableModel, Fermentation>{} {
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();

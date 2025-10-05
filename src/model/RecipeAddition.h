@@ -73,10 +73,11 @@ AddPropertyName(duration_mins  )
  *
  *                                           NamedEntity
  *                                           /    |     \
- *                                          /     |      \
- *           IngredientBase<Hop>   Ingredient   Recipe   RecipeAddition     IngredientAmount<RecipeAdditionHop, Hop>
- *                           \     /                               \            /
- *                            \   /                                 \          /
+ *                                          /     |      \     RecipeAdditionBase<RecipeAdditionHop, Hop>
+ *                                         /      |       \              |
+ *           IngredientBase<Hop>   Ingredient   Recipe   RecipeAddition  |   IngredientAmount<RecipeAdditionHop, Hop>
+ *                           \     /                               \     |       /
+ *                            \   /                                 \    |      /
  *                             Hop                                RecipeAdditionHop
  *
  *        NOTE: We handle \c Water differently than other ingredients / additions because it has a lot less in common
@@ -84,7 +85,7 @@ AddPropertyName(duration_mins  )
  *              \c Water addition in a \c Recipe essentially just says how much water of a particular profile that
  *              recipe uses.  Hence we have \c RecipeUseOfWater not \c RecipeAdditionWater.
  */
-class RecipeAddition : public IngredientInRecipe {
+class RecipeAddition : public OwnedByRecipe {
    Q_OBJECT
 
 public:
@@ -129,7 +130,7 @@ public:
     */
    static TypeLookup const typeLookup;
 
-   RecipeAddition(QString name = "", int const recipeId = -1, int const ingredientId = -1);
+   RecipeAddition(QString name = "", int const recipeId = -1);
    RecipeAddition(RecipeAddition const & other);
    RecipeAddition(NamedParameterBundle const & namedParameterBundle);
 

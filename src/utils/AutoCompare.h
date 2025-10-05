@@ -25,16 +25,17 @@
 
 #include "measurement/Amount.h"
 #include "measurement/ConstrainedAmount.h"
+#include "measurement/CurrencyAmount.h"
 #include "utils/FuzzyCompare.h"
 #include "utils/TypeTraits.h"
 
-
+//! Convenience function for logging
 template<class S>
 S & operator<<(S & stream, std::strong_ordering const & ordering) {
-   if (ordering == std::strong_ordering::less      ) { stream << "less      "; }
+   if (ordering == std::strong_ordering::less      ) { stream << "less"      ; }
    if (ordering == std::strong_ordering::equivalent) { stream << "equivalent"; }
-   if (ordering == std::strong_ordering::equal     ) { stream << "equal     "; }
-   if (ordering == std::strong_ordering::greater   ) { stream << "greater   "; }
+   if (ordering == std::strong_ordering::equal     ) { stream << "equal"     ; }
+   if (ordering == std::strong_ordering::greater   ) { stream << "greater"   ; }
    return stream;
 }
 
@@ -45,10 +46,11 @@ namespace Utils {
     *
     *        Note that, for std::optional, regular comparison is well-defined, so we don't have to do anything special.
     */
-   inline bool AutoCompare(double  const   lhs, double  const   rhs) { return FuzzyCompare(lhs, rhs); }
-   inline bool AutoCompare(int     const   lhs, int     const   rhs) { return lhs == rhs; }
-   inline bool AutoCompare(bool    const   lhs, bool    const   rhs) { return lhs == rhs; }
-   inline bool AutoCompare(QDate   const & lhs, QDate   const & rhs) { return lhs == rhs; }
+   inline bool AutoCompare(double         const   lhs, double         const   rhs) { return FuzzyCompare(lhs, rhs); }
+   inline bool AutoCompare(int            const   lhs, int            const   rhs) { return lhs == rhs; }
+   inline bool AutoCompare(bool           const   lhs, bool           const   rhs) { return lhs == rhs; }
+   inline bool AutoCompare(QDate          const & lhs, QDate          const & rhs) { return lhs == rhs; }
+   inline bool AutoCompare(CurrencyAmount const & lhs, CurrencyAmount const & rhs) { return lhs == rhs; }
    // Amount already implements operator== using fuzzy comparison
    inline bool AutoCompare(Measurement::Amount const & lhs, Measurement::Amount const & rhs) { return lhs == rhs; }
    template<typename PQT, PQT const pqt>
@@ -59,6 +61,9 @@ namespace Utils {
    inline bool AutoCompare(std::optional<double> const & lhs, std::optional<double> const & rhs) { return FuzzyCompare(lhs, rhs); }
    inline bool AutoCompare(std::optional<int   > const & lhs, std::optional<int   > const & rhs) { return lhs == rhs; }
    inline bool AutoCompare(std::optional<bool  > const & lhs, std::optional<bool  > const & rhs) { return lhs == rhs; }
+   inline bool AutoCompare(std::optional<QDate > const & lhs, std::optional<QDate > const & rhs) { return lhs == rhs; }
+   inline bool AutoCompare(std::optional<CurrencyAmount> const & lhs,
+                           std::optional<CurrencyAmount> const & rhs) { return lhs == rhs; }
    inline bool AutoCompare(std::optional<Measurement::Amount> const & lhs,
                            std::optional<Measurement::Amount> const & rhs) { return lhs == rhs; }
 

@@ -1301,10 +1301,9 @@ bool Database::updatePrimaryKeySequenceIfNecessary(QSqlDatabase & connection,
 
 template<class S>
 S & operator<<(S & stream, Database::DbType const dbType) {
-   std::optional<QString> dbTypeAsString = dbTypeToName.enumToString(dbType);
-   if (dbTypeAsString) {
-      stream << *dbTypeAsString;
-   } else {
+   try {
+      stream << dbTypeToName[dbType];
+   } catch (std::out_of_range & e) {
       // This is a coding error
       stream << "Unrecognised database type: " << static_cast<int>(dbType);
    }

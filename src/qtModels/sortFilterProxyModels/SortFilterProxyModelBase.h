@@ -207,9 +207,11 @@ private:
       /* Override QSortFilterProxyModel::filterAcceptsRow                          */                 \
       /* Returns true if the item in the row indicated by the given source_row and */                 \
       /* source_parent should be included in the model; otherwise returns false.   */                 \
-      virtual bool filterAcceptsRow(int source_row, QModelIndex const & source_parent) const;         \
+      virtual bool filterAcceptsRow(int source_row,                                                   \
+                                    QModelIndex const & source_parent) const override;                \
       /* Override QSortFilterProxyModel::lessThan                                  */                 \
-      virtual bool lessThan(QModelIndex const & source_left, QModelIndex const & source_right) const; \
+      virtual bool lessThan(QModelIndex const & source_left,                                          \
+                            QModelIndex const & source_right) const override;                         \
 
 /**
  * \brief Derived classes should include this in their implementation file

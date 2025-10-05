@@ -54,17 +54,29 @@ ObjectStore & RecipeAdjustmentSalt::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<RecipeAdjustmentSalt>::getInstance();
 }
 
+bool RecipeAdjustmentSalt::compareWith(NamedEntity const & other,
+                                       QList<BtStringConst const *> * propertiesThatDiffer) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   RecipeAdjustmentSalt const & rhs = static_cast<RecipeAdjustmentSalt const &>(other);
+   return (
+      // Parent classes have to be equal
+      this->OwnedByRecipe     ::compareWith(rhs, propertiesThatDiffer) &&
+      this->RecipeAdditionBase::compareWith(rhs, propertiesThatDiffer) &&
+      this->IngredientAmount  ::doCompareWith(rhs, propertiesThatDiffer)
+   );
+}
+
 TypeLookup const RecipeAdjustmentSalt::typeLookup {
    "RecipeAdjustmentSalt",
    {
       PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdjustmentSalt, salt     , salt       ),
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdjustmentSalt, whenToAdd, m_whenToAdd, ENUM_INFO(RecipeAdjustmentSalt::whenToAdd)),
    },
-   // Parent classes lookup.  NB: IngredientInRecipe not NamedEntity!
-   {&IngredientInRecipe::typeLookup,
+   // Parent classes lookup.  NB: OwnedByRecipe not NamedEntity!
+   {&OwnedByRecipe::typeLookup,
     std::addressof(IngredientAmount<RecipeAdjustmentSalt, Salt>::typeLookup)}
 };
-static_assert(std::is_base_of<IngredientInRecipe, RecipeAdjustmentSalt>::value);
+static_assert(std::is_base_of<OwnedByRecipe, RecipeAdjustmentSalt>::value);
 static_assert(std::is_base_of<IngredientAmount<RecipeAdjustmentSalt, Salt>, RecipeAdjustmentSalt>::value);
 
 //
@@ -75,16 +87,16 @@ static_assert(HasTypeLookup<Salt>);
 static_assert(!HasTypeLookup<QString>);
 
 RecipeAdjustmentSalt::RecipeAdjustmentSalt(QString name, int const recipeId, int const saltId) :
-   IngredientInRecipe{name, recipeId, saltId},
+   OwnedByRecipe{name, recipeId},
    RecipeAdditionBase<RecipeAdjustmentSalt, Salt>{},
-   IngredientAmount<RecipeAdjustmentSalt, Salt>{} {
+   IngredientAmount<RecipeAdjustmentSalt, Salt>{saltId} {
 
    CONSTRUCTOR_END
    return;
 }
 
 RecipeAdjustmentSalt::RecipeAdjustmentSalt(NamedParameterBundle const & namedParameterBundle) :
-   IngredientInRecipe{namedParameterBundle},
+   OwnedByRecipe{namedParameterBundle},
    RecipeAdditionBase<RecipeAdjustmentSalt, Salt>{},
    IngredientAmount<RecipeAdjustmentSalt, Salt>{namedParameterBundle} {
 
@@ -93,7 +105,7 @@ RecipeAdjustmentSalt::RecipeAdjustmentSalt(NamedParameterBundle const & namedPar
 }
 
 RecipeAdjustmentSalt::RecipeAdjustmentSalt(RecipeAdjustmentSalt const & other) :
-   IngredientInRecipe{other},
+   OwnedByRecipe{other},
    RecipeAdditionBase<RecipeAdjustmentSalt, Salt>{},
    IngredientAmount<RecipeAdjustmentSalt, Salt>{other} {
 

@@ -193,9 +193,9 @@ namespace {
       "fermentable_in_inventory",
       {
          {ObjectStore::FieldType::Int   , "id"            , PropertyNames::NamedEntity::key                     },
-         {ObjectStore::FieldType::Int   , "fermentable_id", PropertyNames::Inventory::ingredientId   , &PRIMARY_TABLE<Fermentable>},
-         {ObjectStore::FieldType::Double, "quantity"      , PropertyNames::IngredientAmount::quantity},
-         {ObjectStore::FieldType::Unit  , "unit"          , PropertyNames::IngredientAmount::unit    , &Measurement::Units::unitStringMapping},
+         {ObjectStore::FieldType::Int   , "fermentable_id", PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Fermentable>},
+         {ObjectStore::FieldType::Double, "quantity"      , PropertyNames::IngredientAmount::quantity}   ,
+         {ObjectStore::FieldType::Unit  , "unit"          , PropertyNames::IngredientAmount::unit        , &Measurement::Units::unitStringMapping},
       }
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventoryFermentable> {};
@@ -246,9 +246,9 @@ namespace {
       "hop_in_inventory",
       {
          {ObjectStore::FieldType::Int   , "id"      , PropertyNames::NamedEntity::key          },
-         {ObjectStore::FieldType::Int   , "hop_id"  , PropertyNames::Inventory::ingredientId   , &PRIMARY_TABLE<Hop>},
-         {ObjectStore::FieldType::Double, "quantity", PropertyNames::IngredientAmount::quantity},
-         {ObjectStore::FieldType::Unit  , "unit"    , PropertyNames::IngredientAmount::unit    , &Measurement::Units::unitStringMapping},
+         {ObjectStore::FieldType::Int   , "hop_id"  , PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Hop>},
+         {ObjectStore::FieldType::Double, "quantity", PropertyNames::IngredientAmount::quantity    },
+         {ObjectStore::FieldType::Unit  , "unit"    , PropertyNames::IngredientAmount::unit        , &Measurement::Units::unitStringMapping},
       }
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventoryHop> {};
@@ -429,9 +429,9 @@ namespace {
       "misc_in_inventory",
       {
          {ObjectStore::FieldType::Int   , "id"      , PropertyNames::NamedEntity::key          },
-         {ObjectStore::FieldType::Int   , "misc_id" , PropertyNames::Inventory::ingredientId   , &PRIMARY_TABLE<Misc>},
-         {ObjectStore::FieldType::Double, "quantity", PropertyNames::IngredientAmount::quantity},
-         {ObjectStore::FieldType::Unit  , "unit"    , PropertyNames::IngredientAmount::unit    , &Measurement::Units::unitStringMapping},
+         {ObjectStore::FieldType::Int   , "misc_id" , PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Misc>},
+         {ObjectStore::FieldType::Double, "quantity", PropertyNames::IngredientAmount::quantity    },
+         {ObjectStore::FieldType::Unit  , "unit"    , PropertyNames::IngredientAmount::unit        , &Measurement::Units::unitStringMapping},
       }
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventoryMisc> {};
@@ -460,9 +460,9 @@ namespace {
       "salt_in_inventory",
       {
          {ObjectStore::FieldType::Int   , "id"      , PropertyNames::NamedEntity::key          },
-         {ObjectStore::FieldType::Int   , "salt_id" , PropertyNames::Inventory::ingredientId   , &PRIMARY_TABLE<Salt>},
-         {ObjectStore::FieldType::Double, "quantity", PropertyNames::IngredientAmount::quantity},
-         {ObjectStore::FieldType::Unit  , "unit"    , PropertyNames::IngredientAmount::unit    , &Measurement::Units::unitStringMapping},
+         {ObjectStore::FieldType::Int   , "salt_id" , PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Salt>},
+         {ObjectStore::FieldType::Double, "quantity", PropertyNames::IngredientAmount::quantity    },
+         {ObjectStore::FieldType::Unit  , "unit"    , PropertyNames::IngredientAmount::unit        , &Measurement::Units::unitStringMapping},
       }
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventorySalt> {};
@@ -580,9 +580,9 @@ namespace {
       "yeast_in_inventory",
       {
          {ObjectStore::FieldType::Int   , "id"            , PropertyNames::NamedEntity::key          },
-         {ObjectStore::FieldType::Int   , "yeast_id"      , PropertyNames::Inventory::ingredientId   , &PRIMARY_TABLE<Yeast>},
-         {ObjectStore::FieldType::Double, "quantity"      , PropertyNames::IngredientAmount::quantity},
-         {ObjectStore::FieldType::Unit  , "unit"          , PropertyNames::IngredientAmount::unit    , &Measurement::Units::unitStringMapping},
+         {ObjectStore::FieldType::Int   , "yeast_id"      , PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Yeast>},
+         {ObjectStore::FieldType::Double, "quantity"      , PropertyNames::IngredientAmount::quantity    },
+         {ObjectStore::FieldType::Unit  , "unit"          , PropertyNames::IngredientAmount::unit        , &Measurement::Units::unitStringMapping},
       }
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventoryYeast> {};
@@ -641,7 +641,7 @@ namespace {
          {ObjectStore::FieldType::String, "name"             , PropertyNames::NamedEntity::name               },
          {ObjectStore::FieldType::Bool  , "deleted"          , PropertyNames::NamedEntity::deleted            },
          {ObjectStore::FieldType::Int   , "recipe_id"        , PropertyNames::OwnedByRecipe::recipeId         , &PRIMARY_TABLE<Recipe>     },
-         {ObjectStore::FieldType::Int   , "fermentable_id"   , PropertyNames::IngredientInRecipe::ingredientId, &PRIMARY_TABLE<Fermentable>},
+         {ObjectStore::FieldType::Int   , "fermentable_id"   , PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Fermentable>},
          {ObjectStore::FieldType::Enum  , "stage"            , PropertyNames::RecipeAddition::stage           , &RecipeAddition::stageStringMapping},
          {ObjectStore::FieldType::Double, "quantity"         , PropertyNames::IngredientAmount::quantity      },
          {ObjectStore::FieldType::Unit  , "unit"             , PropertyNames::IngredientAmount::unit          , &Measurement::Units::unitStringMapping},
@@ -663,7 +663,7 @@ namespace {
          {ObjectStore::FieldType::String, "name"             , PropertyNames::NamedEntity::name               },
          {ObjectStore::FieldType::Bool  , "deleted"          , PropertyNames::NamedEntity::deleted            },
          {ObjectStore::FieldType::Int   , "recipe_id"        , PropertyNames::OwnedByRecipe::recipeId         , &PRIMARY_TABLE<Recipe>},
-         {ObjectStore::FieldType::Int   , "hop_id"           , PropertyNames::IngredientInRecipe::ingredientId, &PRIMARY_TABLE<Hop>   },
+         {ObjectStore::FieldType::Int   , "hop_id"           , PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Hop>   },
          {ObjectStore::FieldType::Enum  , "stage"            , PropertyNames::RecipeAddition::stage           , &RecipeAddition::stageStringMapping},
          {ObjectStore::FieldType::Double, "quantity"         , PropertyNames::IngredientAmount::quantity      },
          {ObjectStore::FieldType::Unit  , "unit"             , PropertyNames::IngredientAmount::unit          , &Measurement::Units::unitStringMapping},
@@ -685,7 +685,7 @@ namespace {
          {ObjectStore::FieldType::String, "name"             , PropertyNames::NamedEntity::name               },
          {ObjectStore::FieldType::Bool  , "deleted"          , PropertyNames::NamedEntity::deleted            },
          {ObjectStore::FieldType::Int   , "recipe_id"        , PropertyNames::OwnedByRecipe::recipeId         , &PRIMARY_TABLE<Recipe>},
-         {ObjectStore::FieldType::Int   , "misc_id"          , PropertyNames::IngredientInRecipe::ingredientId, &PRIMARY_TABLE<Misc>   },
+         {ObjectStore::FieldType::Int   , "misc_id"          , PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Misc>   },
          {ObjectStore::FieldType::Enum  , "stage"            , PropertyNames::RecipeAddition::stage           , &RecipeAddition::stageStringMapping},
          {ObjectStore::FieldType::Double, "quantity"         , PropertyNames::IngredientAmount::quantity      },
          {ObjectStore::FieldType::Unit  , "unit"             , PropertyNames::IngredientAmount::unit          , &Measurement::Units::unitStringMapping},
@@ -707,7 +707,7 @@ namespace {
          {ObjectStore::FieldType::String, "name"               , PropertyNames::NamedEntity::name                     },
          {ObjectStore::FieldType::Bool  , "deleted"            , PropertyNames::NamedEntity::deleted                  },
          {ObjectStore::FieldType::Int   , "recipe_id"          , PropertyNames::OwnedByRecipe::recipeId               , &PRIMARY_TABLE<Recipe>},
-         {ObjectStore::FieldType::Int   , "yeast_id"           , PropertyNames::IngredientInRecipe::ingredientId      , &PRIMARY_TABLE<Yeast>   },
+         {ObjectStore::FieldType::Int   , "yeast_id"           , PropertyNames::IngredientAmount::ingredientId      , &PRIMARY_TABLE<Yeast>   },
          {ObjectStore::FieldType::Enum  , "stage"              , PropertyNames::RecipeAddition::stage                 , &RecipeAddition::stageStringMapping},
          {ObjectStore::FieldType::Double, "quantity"           , PropertyNames::IngredientAmount::quantity            },
          {ObjectStore::FieldType::Unit  , "unit"               , PropertyNames::IngredientAmount::unit                , &Measurement::Units::unitStringMapping},
@@ -732,7 +732,7 @@ namespace {
          {ObjectStore::FieldType::String, "name"       , PropertyNames::NamedEntity::name               },
          {ObjectStore::FieldType::Bool  , "deleted"    , PropertyNames::NamedEntity::deleted            },
          {ObjectStore::FieldType::Int   , "recipe_id"  , PropertyNames::OwnedByRecipe::recipeId         , &PRIMARY_TABLE<Recipe>},
-         {ObjectStore::FieldType::Int   , "salt_id"    , PropertyNames::IngredientInRecipe::ingredientId, &PRIMARY_TABLE<Salt>   },
+         {ObjectStore::FieldType::Int   , "salt_id"    , PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Salt>   },
          {ObjectStore::FieldType::Double, "quantity"   , PropertyNames::IngredientAmount::quantity      },
          {ObjectStore::FieldType::Unit  , "unit"       , PropertyNames::IngredientAmount::unit          , &Measurement::Units::unitStringMapping},
          {ObjectStore::FieldType::Enum  , "when_to_add", PropertyNames::RecipeAdjustmentSalt::whenToAdd , &RecipeAdjustmentSalt::whenToAddStringMapping},
@@ -749,7 +749,7 @@ namespace {
          {ObjectStore::FieldType::String, "name"     , PropertyNames::NamedEntity::name               },
          {ObjectStore::FieldType::Bool  , "deleted"  , PropertyNames::NamedEntity::deleted            },
          {ObjectStore::FieldType::Int   , "recipe_id", PropertyNames::OwnedByRecipe::recipeId         , &PRIMARY_TABLE<Recipe>},
-         {ObjectStore::FieldType::Int   , "water_id" , PropertyNames::IngredientInRecipe::ingredientId, &PRIMARY_TABLE<Water>   },
+         {ObjectStore::FieldType::Int   , "water_id" , PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Water>   },
          {ObjectStore::FieldType::Double, "volume_l" , PropertyNames::RecipeUseOfWater::volume_l      },
       }
    };

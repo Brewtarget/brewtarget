@@ -32,21 +32,20 @@
    #include "moc_WaterTableModel.cpp"
 #endif
 
+COLUMN_INFOS(
+   WaterTableModel,
+   TABLE_MODEL_HEADER(Water, Name            , tr("Name"             ), PropertyNames::NamedEntity::name            ),
+   TABLE_MODEL_HEADER(Water, Calcium         , tr("Calcium (ppm)"    ), PropertyNames::Water::calcium_ppm           ),
+   TABLE_MODEL_HEADER(Water, Bicarbonate     , tr("Bicarbonate (ppm)"), PropertyNames::Water::bicarbonate_ppm       ),
+   TABLE_MODEL_HEADER(Water, Sulfate         , tr("Sulfate (ppm)"    ), PropertyNames::Water::sulfate_ppm           ),
+   TABLE_MODEL_HEADER(Water, Chloride        , tr("Chloride (ppm)"   ), PropertyNames::Water::chloride_ppm          ),
+   TABLE_MODEL_HEADER(Water, Sodium          , tr("Sodium (ppm)"     ), PropertyNames::Water::sodium_ppm            ),
+   TABLE_MODEL_HEADER(Water, Magnesium       , tr("Magnesium (ppm)"  ), PropertyNames::Water::magnesium_ppm         ),
+   TABLE_MODEL_HEADER(Water, NumRecipesUsedIn, tr("N° Recipes"       ), PropertyNames::NamedEntity::numRecipesUsedIn),
+)
+
 WaterTableModel::WaterTableModel(QTableView * parent, bool editable) :
-   BtTableModel{
-      parent,
-      editable,
-      {
-         TABLE_MODEL_HEADER(Water, Name            , tr("Name"             ), PropertyNames::NamedEntity::name            ),
-         TABLE_MODEL_HEADER(Water, Calcium         , tr("Calcium (ppm)"    ), PropertyNames::Water::calcium_ppm           ),
-         TABLE_MODEL_HEADER(Water, Bicarbonate     , tr("Bicarbonate (ppm)"), PropertyNames::Water::bicarbonate_ppm       ),
-         TABLE_MODEL_HEADER(Water, Sulfate         , tr("Sulfate (ppm)"    ), PropertyNames::Water::sulfate_ppm           ),
-         TABLE_MODEL_HEADER(Water, Chloride        , tr("Chloride (ppm)"   ), PropertyNames::Water::chloride_ppm          ),
-         TABLE_MODEL_HEADER(Water, Sodium          , tr("Sodium (ppm)"     ), PropertyNames::Water::sodium_ppm            ),
-         TABLE_MODEL_HEADER(Water, Magnesium       , tr("Magnesium (ppm)"  ), PropertyNames::Water::magnesium_ppm         ),
-         TABLE_MODEL_HEADER(Water, NumRecipesUsedIn, tr("N° Recipes"       ), PropertyNames::NamedEntity::numRecipesUsedIn),
-      }
-   },
+   BtTableModel{parent, editable},
    TableModelBase<WaterTableModel, Water>{} {
    return;
 }
@@ -60,32 +59,7 @@ void WaterTableModel::updateTotals()                                        { re
 
 
 QVariant WaterTableModel::data(const QModelIndex & index, int role) const {
-   if (!this->indexAndRoleOk(index, role)) {
-      return QVariant();
-   }
-
-   auto row = this->m_rows[index.row()];
-
-   auto const columnIndex = static_cast<WaterTableModel::ColumnIndex>(index.column());
-   switch (columnIndex) {
-      case WaterTableModel::ColumnIndex::Name:
-         return QVariant(row->name());
-      case WaterTableModel::ColumnIndex::Calcium:
-         return QVariant(Measurement::displayQuantity(row->calcium_ppm(), 3));
-      case WaterTableModel::ColumnIndex::Bicarbonate:
-         return QVariant(Measurement::displayQuantity(row->bicarbonate_ppm(), 3));
-      case WaterTableModel::ColumnIndex::Sulfate:
-         return QVariant(Measurement::displayQuantity(row->sulfate_ppm(), 3));
-      case WaterTableModel::ColumnIndex::Chloride:
-         return QVariant(Measurement::displayQuantity(row->chloride_ppm(), 3));
-      case WaterTableModel::ColumnIndex::Sodium:
-         return QVariant(Measurement::displayQuantity(row->sodium_ppm(), 3));
-      case WaterTableModel::ColumnIndex::Magnesium:
-         return QVariant(Measurement::displayQuantity(row->magnesium_ppm(), 3));
-      default :
-         qWarning() << Q_FUNC_INFO << tr("Bad column: %1").arg(index.column());
-         return QVariant();
-   }
+   return this->doDataDefault(index, role);
 }
 
 Qt::ItemFlags WaterTableModel::flags(const QModelIndex & index) const {

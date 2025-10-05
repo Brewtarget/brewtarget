@@ -338,9 +338,9 @@ QList<Measurement::UnitSystem const *> Measurement::UnitSystem::getUnitSystems(M
 }
 
 QString Measurement::UnitSystem::getUniqueName(Measurement::UnitSystem::RelativeScale relativeScale) {
-   // It's a coding error if we define a name for a RelativeScale (in which case EnumStringMapping::enumToString will
+   // It's a coding error if we define a name for a RelativeScale (in which case EnumStringMapping::enumToValue will
    // log an error and throw an exception).
-   return relativeScaleToName.enumToString(relativeScale);
+   return relativeScaleToName[relativeScale];
 }
 
 std::optional<Measurement::UnitSystem::RelativeScale> Measurement::UnitSystem::getScaleFromUniqueName(QString relativeScaleAsString) {

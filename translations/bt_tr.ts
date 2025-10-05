@@ -165,58 +165,14 @@
     <name>BoilStepTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
-    </message>
-    <message>
-        <source>Step Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Temp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ramp Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Temp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Acidity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Chilling Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">İsim</translation>
     </message>
 </context>
 <context>
     <name>BoilTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
-    </message>
-    <message>
-        <source>Pre-Boil Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">İsim</translation>
     </message>
 </context>
 <context>
@@ -1356,6 +1312,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Steps</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Ingredient ID</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1663,23 +1623,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <name>EquipmentTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
-    </message>
-    <message>
-        <source>Mash Tun Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Kettle Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermenter Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">İsim</translation>
     </message>
 </context>
 <context>
@@ -1908,6 +1852,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Viscosity</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>InventoryFermentables</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -2006,11 +1954,11 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <name>FermentableTableModel</name>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation type="vanished">İsim</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tür</translation>
+        <translation type="vanished">Tür</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -2022,11 +1970,11 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Inventory</source>
-        <translation>Envanter</translation>
+        <translation type="vanished">Envanter</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Renk</translation>
+        <translation type="vanished">Renk</translation>
     </message>
     <message>
         <source>Method</source>
@@ -2070,15 +2018,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Miktar Türü</translation>
-    </message>
-    <message>
-        <source>Yield (DBFG) %</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Miktar Türü</translation>
     </message>
 </context>
 <context>
@@ -2151,39 +2091,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <name>FermentationStepTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
-    </message>
-    <message>
-        <source>Step Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Temp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Temp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Acidity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Free Rise</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">İsim</translation>
     </message>
     <message>
         <source>No</source>
@@ -2193,24 +2101,12 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Yes</source>
         <translation type="obsolete">Evet</translation>
     </message>
-    <message>
-        <source>Vessel</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>FermentationTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
-    </message>
-    <message>
-        <source>Number of Steps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">İsim</translation>
     </message>
 </context>
 <context>
@@ -2615,11 +2511,11 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <name>HopTableModel</name>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation type="vanished">İsim</translation>
     </message>
     <message>
         <source>Alpha %</source>
-        <translation>Alfa %</translation>
+        <translation type="vanished">Alfa %</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -2635,11 +2531,11 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Form</source>
-        <translation>Biçim</translation>
+        <translation type="vanished">Biçim</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation>Envanter</translation>
+        <translation type="vanished">Envanter</translation>
     </message>
     <message>
         <source>Change Hop Name</source>
@@ -2670,16 +2566,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="vanished">Şerbetçi otu Zamanlamasını Değiştir</translation>
     </message>
     <message>
-        <source>Year</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Miktar Türü</translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Miktar Türü</translation>
     </message>
 </context>
 <context>
@@ -2796,17 +2684,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
 </context>
 <context>
-    <name>IngredientInRecipe</name>
-    <message>
-        <source>Ingredient In Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ingredient ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Instruction</name>
     <message>
         <source>Instruction</source>
@@ -2848,7 +2725,66 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished">Envanter</translation>
     </message>
     <message>
-        <source>Ingredient ID</source>
+        <source>Date Ordered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Best Before Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Supplier</source>
+        <translation type="unfinished">Sağlayıcı</translation>
+    </message>
+    <message>
+        <source>Quantity Ordered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Purchase Price</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Purchase Tax</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shipping Cost</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quantity Remaining</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ingredient</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>InventoryFermentable</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Date Ordered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Tür</translation>
+    </message>
+    <message>
+        <source>Amount Received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Remaining</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3424,27 +3360,27 @@ If you need help, please open an issue at %1</source>
     <name>MashStepTableModel</name>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation type="vanished">İsim</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tür</translation>
+        <translation type="vanished">Tür</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Miktar</translation>
+        <translation type="vanished">Miktar</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation>Daldırma Sıcaklığı</translation>
+        <translation type="vanished">Daldırma Sıcaklığı</translation>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation>Hedeflenen Sıcaklık</translation>
+        <translation type="vanished">Hedeflenen Sıcaklık</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Süre</translation>
+        <translation type="vanished">Süre</translation>
     </message>
     <message>
         <source>Change Mash Step Name</source>
@@ -3478,48 +3414,12 @@ If you need help, please open an issue at %1</source>
         <source>Change Mash Step Time</source>
         <translation type="vanished">Mayşe Adımı Zamanını Değiştir</translation>
     </message>
-    <message>
-        <source>End Temp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ramp Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water:Grain</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MashTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
-    </message>
-    <message>
-        <source>Initial Grain Temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total Mash Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">İsim</translation>
     </message>
 </context>
 <context>
@@ -3837,11 +3737,11 @@ If you need help, please open an issue at %1</source>
     <name>MiscTableModel</name>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation type="vanished">İsim</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tür</translation>
+        <translation type="vanished">Tür</translation>
     </message>
     <message>
         <source>Use</source>
@@ -3857,11 +3757,11 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation>Miktar Türü</translation>
+        <translation type="vanished">Miktar Türü</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation>Envanter</translation>
+        <translation type="vanished">Envanter</translation>
     </message>
     <message>
         <source>Change Misc Name</source>
@@ -3890,10 +3790,6 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Change Misc Amount Type</source>
         <translation type="vanished">Diğer için Miktar Türünü Değiştir</translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5337,6 +5233,18 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
         <source>Formula</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Did not recognise file extension on &quot;%1&quot; so nothing written.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open &quot;%1&quot; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Did not recognise file extension on &quot;%1&quot; so nothing read.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -5977,39 +5885,39 @@ The final volume in the primary is %1.</source>
     <name>RecipeAdditionFermentableTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
+        <translation type="obsolete">İsim</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tür</translation>
+        <translation type="obsolete">Tür</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation type="unfinished">Verimlilik</translation>
+        <translation type="obsolete">Verimlilik</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Renk</translation>
+        <translation type="obsolete">Renk</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Miktar</translation>
+        <translation type="obsolete">Miktar</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Miktar Türü</translation>
+        <translation type="obsolete">Miktar Türü</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Envanter</translation>
+        <translation type="obsolete">Envanter</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Aşama</translation>
+        <translation type="obsolete">Aşama</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation type="obsolete">Süre</translation>
     </message>
 </context>
 <context>
@@ -6055,39 +5963,35 @@ The final volume in the primary is %1.</source>
     <name>RecipeAdditionHopTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
+        <translation type="obsolete">İsim</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Biçim</translation>
+        <translation type="obsolete">Biçim</translation>
     </message>
     <message>
         <source>Alpha %</source>
-        <translation type="unfinished">Alfa %</translation>
-    </message>
-    <message>
-        <source>Year</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Alfa %</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Miktar</translation>
+        <translation type="obsolete">Miktar</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Miktar Türü</translation>
+        <translation type="obsolete">Miktar Türü</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Envanter</translation>
+        <translation type="obsolete">Envanter</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Aşama</translation>
+        <translation type="obsolete">Aşama</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation type="obsolete">Süre</translation>
     </message>
 </context>
 <context>
@@ -6133,31 +6037,31 @@ The final volume in the primary is %1.</source>
     <name>RecipeAdditionMiscTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
+        <translation type="obsolete">İsim</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tür</translation>
+        <translation type="obsolete">Tür</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Miktar</translation>
+        <translation type="obsolete">Miktar</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Miktar Türü</translation>
+        <translation type="obsolete">Miktar Türü</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Envanter</translation>
+        <translation type="obsolete">Envanter</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Aşama</translation>
+        <translation type="obsolete">Aşama</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation type="obsolete">Süre</translation>
     </message>
 </context>
 <context>
@@ -6203,51 +6107,47 @@ The final volume in the primary is %1.</source>
     <name>RecipeAdditionYeastTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
+        <translation type="obsolete">İsim</translation>
     </message>
     <message>
         <source>Laboratory</source>
-        <translation type="unfinished">Laboratuvar</translation>
+        <translation type="obsolete">Laboratuvar</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="unfinished">Ürün Kimliği</translation>
+        <translation type="obsolete">Ürün Kimliği</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tür</translation>
+        <translation type="obsolete">Tür</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Biçim</translation>
+        <translation type="obsolete">Biçim</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Miktar</translation>
+        <translation type="obsolete">Miktar</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Miktar Türü</translation>
+        <translation type="obsolete">Miktar Türü</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Envanter</translation>
+        <translation type="obsolete">Envanter</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Aşama</translation>
+        <translation type="obsolete">Aşama</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Adım</translation>
+        <translation type="obsolete">Adım</translation>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation type="unfinished">Sindirme</translation>
-    </message>
-    <message>
-        <source>Times Cultured</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Sindirme</translation>
     </message>
 </context>
 <context>
@@ -6289,31 +6189,31 @@ The final volume in the primary is %1.</source>
     <name>RecipeAdjustmentSaltTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
+        <translation type="obsolete">İsim</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tür</translation>
+        <translation type="obsolete">Tür</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Miktar</translation>
+        <translation type="obsolete">Miktar</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Miktar Türü</translation>
+        <translation type="obsolete">Miktar Türü</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Envanter</translation>
+        <translation type="obsolete">Envanter</translation>
     </message>
     <message>
         <source>Added To</source>
-        <translation type="unfinished">Şuna eklendi</translation>
+        <translation type="obsolete">Şuna eklendi</translation>
     </message>
     <message>
         <source>% Acid</source>
-        <translation type="unfinished">% Asit</translation>
+        <translation type="obsolete">% Asit</translation>
     </message>
 </context>
 <context>
@@ -6674,7 +6574,7 @@ The final volume in the primary is %1.</source>
     <name>RecipeTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
+        <translation type="obsolete">İsim</translation>
     </message>
 </context>
 <context>
@@ -6872,7 +6772,7 @@ The final volume in the primary is %1.</source>
     <name>SaltTableModel</name>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation type="vanished">İsim</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -6884,7 +6784,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>% Acid</source>
-        <translation>% Asit</translation>
+        <translation type="vanished">% Asit</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
@@ -6892,19 +6792,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Envanter</translation>
+        <translation type="obsolete">Envanter</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Miktar Türü</translation>
+        <translation type="obsolete">Miktar Türü</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tür</translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Tür</translation>
     </message>
 </context>
 <context>
@@ -7179,31 +7075,15 @@ The final volume in the primary is %1.</source>
     <name>StyleTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
+        <translation type="obsolete">İsim</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tür</translation>
+        <translation type="obsolete">Tür</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Kategori</translation>
-    </message>
-    <message>
-        <source>Category Number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Style Letter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Style Guide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Kategori</translation>
     </message>
 </context>
 <context>
@@ -7878,11 +7758,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Kötü sütun: %1</translation>
+        <translation type="vanished">Kötü sütun: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation type="vanished">İsim</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -7890,31 +7770,27 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Calcium (ppm)</source>
-        <translation>Kalsiyum (ppm)</translation>
+        <translation type="vanished">Kalsiyum (ppm)</translation>
     </message>
     <message>
         <source>Bicarbonate (ppm)</source>
-        <translation>Bikarbonat (ppm)</translation>
+        <translation type="vanished">Bikarbonat (ppm)</translation>
     </message>
     <message>
         <source>Sulfate (ppm)</source>
-        <translation>Sülfat (ppm)</translation>
+        <translation type="vanished">Sülfat (ppm)</translation>
     </message>
     <message>
         <source>Chloride (ppm)</source>
-        <translation>Klorür (ppm)</translation>
+        <translation type="vanished">Klorür (ppm)</translation>
     </message>
     <message>
         <source>Sodium (ppm)</source>
-        <translation>Sodyum (ppm)</translation>
+        <translation type="vanished">Sodyum (ppm)</translation>
     </message>
     <message>
         <source>Magnesium (ppm)</source>
-        <translation>Magnezyum (ppm)</translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Magnezyum (ppm)</translation>
     </message>
 </context>
 <context>
@@ -8263,15 +8139,15 @@ The final volume in the primary is %1.</source>
     <name>YeastTableModel</name>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation type="vanished">İsim</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tür</translation>
+        <translation type="vanished">Tür</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Biçim</translation>
+        <translation type="vanished">Biçim</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -8279,15 +8155,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Laboratory</source>
-        <translation>Laboratuvar</translation>
+        <translation type="vanished">Laboratuvar</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation>Ürün Kimliği</translation>
+        <translation type="vanished">Ürün Kimliği</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation>Envanter</translation>
+        <translation type="vanished">Envanter</translation>
     </message>
     <message>
         <source>Change Yeast Name</source>
@@ -8319,11 +8195,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Miktar Türü</translation>
-    </message>
-    <message>
-        <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Miktar Türü</translation>
     </message>
 </context>
 <context>
@@ -9831,10 +9703,81 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>inventoryFermentableEditor</name>
+    <message>
+        <source>Fermentable Inventory Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation type="unfinished">Ana</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">İsim</translation>
+    </message>
+    <message>
+        <source>Date Ordered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd MMM yyyy</source>
+        <translation type="unfinished">gg AA yyyy</translation>
+    </message>
+    <message>
+        <source>ID in database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Yeni</translation>
+    </message>
+    <message>
+        <source>Save and close</source>
+        <translation type="unfinished">Kaydet ve kapat</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Kaydet</translation>
+    </message>
+    <message>
+        <source>Discard and close</source>
+        <translation type="unfinished">Kaydetmeden çık</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">İptal</translation>
+    </message>
+</context>
+<context>
     <name>inventoryWindow</name>
     <message>
         <source>Inventory</source>
         <translation type="unfinished">Envanter</translation>
+    </message>
+    <message>
+        <source>Fermentables</source>
+        <translation type="unfinished">Mayalanabilenler</translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation type="unfinished">Şerbetçi Otları</translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished">Diğerleri</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished">Mayalar</translation>
+    </message>
+    <message>
+        <source>Salts</source>
+        <translation type="unfinished">Tuzlar</translation>
     </message>
 </context>
 <context>

@@ -300,6 +300,10 @@ namespace Measurement {
     * \return \c true if \c physicalQuantity is a valid option for \c variantPhysicalQuantity, false otherwise
     */
    template<PhysicalQuantityTypes PQT, PQT const pqt> bool isValid(PhysicalQuantity const physicalQuantity);
+
+   /**
+    * \brief Alternate version for when both parameters are only known at run-time
+    */
    bool isValid(ChoiceOfPhysicalQuantity const choiceOfPhysicalQuantity, PhysicalQuantity const physicalQuantity);
 
 }

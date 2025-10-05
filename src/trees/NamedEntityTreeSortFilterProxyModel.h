@@ -37,6 +37,13 @@ class FermentableTreeSortFilterProxyModel :
    TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Fermentable)
 };
 
+class InventoryFermentableTreeSortFilterProxyModel :
+   public QSortFilterProxyModel,
+   public TreeSortFilterProxyModelBase<InventoryFermentableTreeSortFilterProxyModel, InventoryFermentableTreeModel, InventoryFermentable> {
+   Q_OBJECT
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(InventoryFermentable)
+};
+
 class MashTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
    public TreeSortFilterProxyModelBase<MashTreeSortFilterProxyModel, MashTreeModel, Mash> {
