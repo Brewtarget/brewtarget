@@ -386,14 +386,22 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                            parsedValueOk = date.isValid();
                         }
                         // .:TBD:. Maybe we could try some more formats here
+
+                        if (!parsedValueOk) {
+                           // This could be coding error, as we should have already validated the field via XSD parsing.
+                           // However, per the comments in BeerXml.xsd, it can be duff data in the XML file, in which case
+                           // we behave as though no date were specified.
+                           qWarning() <<
+                              Q_FUNC_INFO << "Ignoring " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
+                              fieldDefinition.xPath << "=" << value << " as could not be parsed as ISO 8601 date";
+                           //
+                           // Stop things blowing up below.  Since we can't understand the date, substitute today's
+                           // date.
+                           //
+                           date = QDate::currentDate();
+                           parsedValueOk = true;
+                        }
                         parsedValue = Optional::variantFromRaw(date, propertyIsOptional);
-                     }
-                     if (!parsedValueOk) {
-                        // This is almost certainly a coding error, as we should have already validated the field via
-                        // XSD parsing.
-                        qWarning() <<
-                           Q_FUNC_INFO << "Ignoring " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
-                           fieldDefinition.xPath << "=" << value << " as could not be parsed as ISO 8601 date";
                      }
                      break;
 

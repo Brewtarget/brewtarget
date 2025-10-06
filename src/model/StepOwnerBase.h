@@ -40,6 +40,10 @@ AddPropertyName(steps   )
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
 
+/**
+ * \brief This is a nothing class that exists to allow us to determine whether something inherits from the
+ *        \c StepOwnerBase CRTP class.
+ */
 class StepOwner{};
 
 #define StepOwnerBaseOptions OwnedSetOptions{ .enumerated = true }
@@ -263,8 +267,13 @@ TypeLookup const StepOwnerBase<Derived, DerivedStep>::typeLookup {
           NonPhysicalQuantity::OrdinalNumeral
        )},
    },
-   // Parent class lookup: none as we are at the top of this arm of the inheritance tree
-   {}
+   // Parent class lookup: Although we are at the top of this branch of the inheritance tree, OwnedSet has a similar
+   // role to a base class for us.
+   {std::addressof(OwnedSet<Derived,
+                   DerivedStep,
+                   PropertyNames::StepOwnerBase::steps,
+                   nullptr,
+                   StepOwnerBaseOptions>::typeLookup)}
 };
 
 /**

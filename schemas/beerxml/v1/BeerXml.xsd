@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  *╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * beerxml/v1/BeerXml.xsd is part of Brewtarget, and is Copyright the following authors 2020-2024
+ * beerxml/v1/BeerXml.xsd is part of Brewtarget, and is Copyright the following authors 2020-2025
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
@@ -78,6 +78,13 @@
       <xs:restriction base="xs:decimal">
          <xs:minInclusive value="0"/>
          <xs:maxInclusive value="100"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+   <!-- An "no max" percentage is one that can be more than 100 -->
+   <xs:simpleType name="NoMaxPercentage">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0"/>
       </xs:restriction>
    </xs:simpleType>
 
@@ -212,6 +219,17 @@
    <!-- ...then create a union of blank and date -->
    <xs:simpleType name="DateOrBlank">
       <xs:union memberTypes="xs:date Blank" />
+   </xs:simpleType>
+   <!-- This is to handle a bug in old versions of the code where 'CURRENT_DATETIME' is written to a date field -->
+   <xs:simpleType name="DateOrString">
+      <xs:union memberTypes="xs:date xs:string" />
+   </xs:simpleType>
+
+   <!-- Some fields we write as Date but want to accept DateTime as valid.  Eg older versions of the software write
+        BREWDATE as a date-and-time rather than just a date.
+   -->
+   <xs:simpleType name="DateOrDateTime">
+      <xs:union memberTypes="xs:date xs:dateTime" />
    </xs:simpleType>
 
    <!-- This is for Fermentable::type, but we can't use FermentableType as we use that for Fermentable below -->
@@ -973,12 +991,17 @@
          <xs:element name="ACTUAL_ABV" type="xs:decimal"/>
          <xs:element name="ATTENUATION" type="SimplePercentage"/>
          <xs:element name="BOIL_OFF" type="VolumeInLiters"/>
-         <xs:element name="BREWDATE" type="xs:date"/> <!-- By default XML dates are ISO 8601 format aka The One True Date Format -->
-         <xs:element name="BREWHOUSE_EFF" type="SimplePercentage"/>
+         <xs:element name="BREWDATE" type="DateOrDateTime"/> <!-- By default XML dates are ISO 8601 format aka The One True Date Format -->
+         <!-- Although we'd expect efficiency to be less than 100, there are files we encounter where it is much more,
+              so we need to allow for that. -->
+         <xs:element name="BREWHOUSE_EFF" type="NoMaxPercentage"/>
          <xs:element name="EFF_INTO_BK" type="SimplePercentage"/>
          <!-- This is an ISO 8601 format date, unless it's an empty string.  We might want to switch to omitting the
-              element when there is no date, so make it optional too. -->
-         <xs:element name="DATE_FERMENTED_OUT" type="DateOrBlank" minOccurs="0" maxOccurs="1"/>
+              element when there is no date, so make it optional too.
+              There is a bug in older versions of the software that causes 'CURRENT_DATETIME' to be written to this
+              field, so we accept that too!  The importing code will just log an error that it could not parse the
+              date. -->
+         <xs:element name="DATE_FERMENTED_OUT" type="DateOrString" minOccurs="0" maxOccurs="1"/>
          <xs:element name="FG" type="SpecificGravity"/>
          <xs:element name="FINAL_VOLUME" type="VolumeInLiters"/>
          <xs:element name="MASH_FINAL_TEMP" type="TemperatureInCelsius"/>
