@@ -62,6 +62,13 @@ namespace PropertyHelper {
    );
 
    /**
+    * \brief Called by, eg, \c TableModelBase::isLessThan
+    */
+   bool isLessThan(QVariant const &  leftItem,
+                   QVariant const & rightItem,
+                   TypeInfo const & typeInfo);
+
+   /**
     *
     * \param physicalQuantity Needs to be supplied if and only if the type is \c Measurement::MixedPhysicalQuantities
     *

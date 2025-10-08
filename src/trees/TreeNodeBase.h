@@ -17,11 +17,14 @@
 #define TREES_TREENODEBASE_H
 #pragma once
 
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
+
 #include "trees/TreeNode.h"
 #include "trees/TreeNodeTraits.h"
+#include "utils/ColumnInfo.h"
+#include "utils/ColumnOwnerTraits.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
-
-#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
+#include "utils/PropertyHelper.h"
 
 /**
  * \class TreeNodeBase Curiously Recurring Template Base for NewTreeNode subclasses
@@ -146,6 +149,60 @@ public:
 
    virtual TreeNodeClassifier classifier() const override {
       return NodeClassifier;
+   }
+
+   /**
+    * \brief Similar to \c TreeModelBase::get_ColumnInfo
+    */
+   ColumnInfo const & get_ColumnInfo(ColumnIndex const columnIndex) const {
+      return ColumnOwnerTraits<Derived>::getColumnInfo(static_cast<size_t>(columnIndex));
+   }
+
+   QVariant readDataFromModel(ColumnInfo const & columnInfo, int const role) const {
+      QVariant modelData = columnInfo.propertyPath.getValue(*this->m_underlyingItem);
+      if (!modelData.isValid()) {
+         // It's a programming error if we couldn't read a property modelData
+         qCritical() <<
+            Q_FUNC_INFO <<
+               "Unable to read" << this->derived() << "property" << columnInfo.propertyPath << "(Got" << modelData <<
+               ")";
+         Q_ASSERT(false); // Stop here on debug builds
+      }
+
+      TypeInfo const & typeInfo = columnInfo.typeInfo;
+
+      // Uncomment this log statement if asserts in PropertyHelper::readDataFromPropertyValue are firing
+//      qDebug() <<
+//         Q_FUNC_INFO << columnInfo.columnFqName << ", propertyPath:" << columnInfo.propertyPath << "TypeInfo:" <<
+//         typeInfo << ", modelData:" << modelData;
+
+      return PropertyHelper::readDataFromPropertyValue(modelData,
+                                                       typeInfo,
+                                                       role,
+                                                       columnInfo.extras.has_value(),
+                                                       columnInfo.getForcedSystemOfMeasurement(),
+                                                       columnInfo.getForcedRelativeScale());
+   }
+
+   /**
+    * \brief Similar to \c TreeModelBase::readDataFromModel
+    */
+   QVariant readDataFromModel(ColumnIndex const columnIndex, int const role) const {
+
+      ColumnInfo const & columnInfo = this->get_ColumnInfo(columnIndex);
+      return this->readDataFromModel(columnInfo, role);
+
+   }
+
+   /**
+    *
+    */
+   bool columnIsLessThan(Derived const & other, ColumnIndex const columnIndex) const {
+      ColumnInfo const & columnInfo = this->get_ColumnInfo(columnIndex);
+      QVariant  leftItem = this->readDataFromModel(columnInfo, Qt::UserRole);
+      QVariant rightItem = other.readDataFromModel(columnInfo, Qt::UserRole);
+
+      return PropertyHelper::isLessThan(leftItem, rightItem, columnInfo.typeInfo);
    }
 
    virtual QVariant data(int const column, int const role) const override {
@@ -458,16 +515,16 @@ public:
    ~TreeFolderNode() = default;
 
    static EnumStringMapping const columnDisplayNames;
-   bool columnIsLessThan(TreeFolderNode<NE> const & other, TreeNodeTraits<Folder, NE>::ColumnIndex column) const {
-      auto const & lhs = *this->m_underlyingItem;
-      auto const & rhs = *other.m_underlyingItem;
-      switch (column) {
-         case TreeNodeTraits<Folder, NE>::ColumnIndex::Name     : return lhs.name    () < rhs.name    ();
-         case TreeNodeTraits<Folder, NE>::ColumnIndex::Path     : return lhs.path    () < rhs.path    ();
-         case TreeNodeTraits<Folder, NE>::ColumnIndex::FullPath : return lhs.fullPath() < rhs.fullPath();
-      }
-      Q_UNREACHABLE(); // We should never get here
-   }
+///   bool columnIsLessThan(TreeFolderNode<NE> const & other, TreeNodeTraits<Folder, NE>::ColumnIndex column) const {
+///      auto const & lhs = *this->m_underlyingItem;
+///      auto const & rhs = *other.m_underlyingItem;
+///      switch (column) {
+///         case TreeNodeTraits<Folder, NE>::ColumnIndex::Name     : return lhs.name    () < rhs.name    ();
+///         case TreeNodeTraits<Folder, NE>::ColumnIndex::Path     : return lhs.path    () < rhs.path    ();
+///         case TreeNodeTraits<Folder, NE>::ColumnIndex::FullPath : return lhs.fullPath() < rhs.fullPath();
+///      }
+///      Q_UNREACHABLE(); // We should never get here
+///   }
 
    // Have to override the version in \c TreeNodeBase as that will give Folder::staticMetaObject.className() rather
    // than NE::staticMetaObject.className()
@@ -489,8 +546,8 @@ public:
    virtual ~TreeItemNode() = default;
 
    static EnumStringMapping const columnDisplayNames;
-   bool columnIsLessThan(TreeItemNode<NE> const & other,
-                         TreeNodeTraits<NE, typename TreeTypeDeducer<NE>::TreeType>::ColumnIndex column) const;
+///   bool columnIsLessThan(TreeItemNode<NE> const & other,
+///                         TreeNodeTraits<NE, typename TreeTypeDeducer<NE>::TreeType>::ColumnIndex column) const;
 
    QString getToolTip() const;
 
@@ -529,5 +586,34 @@ public:
 static_assert(IsSubstantiveVariant<TreeFolderNode<Equipment>::ChildPtrTypes>);
 static_assert(IsSubstantiveVariant<TreeFolderNode<Style>::ChildPtrTypes>);
 static_assert(IsNullVariant<TreeItemNode<Equipment>::ChildPtrTypes>);
+
+
+//
+// All folders have the same columns, so we'd like to do a partial specialisation here of
+// ColumnOwnerTraits::getColumnInfos() for TreeFolderNode<NE>.  However, you cannot partially specialize only a single
+// member function of a template class, you must partially specialize the whole class.  Fortunately
+//
+// So, instead, we do a specialisation on the "nothing" TreeFolderNodeCommon base class of TreeFolderNode.  It means we
+// can't use the TREE_NODE_HEADER macro, but that is a small price to pay.
+//
+template<class NE>
+struct ColumnOwnerTraitsData<TreeFolderNode<NE>> {
+   static std::vector<ColumnInfo> const & getColumnInfos() {
+      /* Meyers singleton */
+      static std::vector<ColumnInfo> const columnInfos {
+///         ColumnInfo{"TreeFolderNodeCommon", "Name", "TreeFolderNodeCommon::ColumnIndex::Name",
+///               static_cast<size_t>(TreeFolderNode<NE>::ColumnIndex::Name),
+///               Folder::tr("Name"     ),
+///               Folder::typeLookup,
+///               PropertyNames::NamedEntity::name}
+
+         TREE_NODE_HEADER(TreeFolderNode, Folder, Name    , tr("Name"     ), PropertyNames::NamedEntity::name),
+         TREE_NODE_HEADER(TreeFolderNode, Folder, Path    , tr("Path"     ), PropertyNames::Folder::path    ),
+         TREE_NODE_HEADER(TreeFolderNode, Folder, FullPath, tr("Full Path"), PropertyNames::Folder::fullPath),
+      };
+      return columnInfos;
+   }
+};
+
 
 #endif

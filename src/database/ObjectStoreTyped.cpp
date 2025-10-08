@@ -26,6 +26,7 @@
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
 #include "model/FermentationStep.h"
+#include "model/Folder.h"
 #include "model/Hop.h"
 #include "model/Instruction.h"
 #include "model/Inventory.h"
@@ -822,6 +823,21 @@ namespace {
    // Instructions don't have children
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Instruction> {};
 
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   // Database field mappings for Folder
+   // NB: folders aren't displayed in trees, and get no folder
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Folder> {
+      "folder",
+      {
+         {ObjectStore::FieldType::Int   , "id"           , PropertyNames::NamedEntity::key       },
+         {ObjectStore::FieldType::String, "name"         , PropertyNames::NamedEntity::name      },
+         {ObjectStore::FieldType::Bool  , "deleted"      , PropertyNames::NamedEntity::deleted   },
+      }
+   };
+   // Instructions don't have children
+   template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Folder> {};
+
 }
 
 
@@ -891,6 +907,7 @@ template ObjectStoreTyped<Equipment                > & ObjectStoreTyped<Equipmen
 template ObjectStoreTyped<Fermentable              > & ObjectStoreTyped<Fermentable              >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Fermentation             > & ObjectStoreTyped<Fermentation             >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<FermentationStep         > & ObjectStoreTyped<FermentationStep         >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder                   > & ObjectStoreTyped<Folder                   >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Hop                      > & ObjectStoreTyped<Hop                      >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Instruction              > & ObjectStoreTyped<Instruction              >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<InventoryFermentable     > & ObjectStoreTyped<InventoryFermentable     >::getInstance(Database * database = nullptr);
@@ -925,6 +942,8 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    if (ObjectStoreTyped<Fermentable              >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Fermentable"              ; }
    if (ObjectStoreTyped<Fermentation             >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Fermentation"             ; }
    if (ObjectStoreTyped<FermentationStep         >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "FermentationStep"         ; }
+// TODO Folders are not yet stored in the DB.  The object store exists for them, but is not used and we haven't implemented the DB table yet.
+//   if (ObjectStoreTyped<Folder                   >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Folder"                   ; }
    if (ObjectStoreTyped<Hop                      >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Hop"                      ; }
    if (ObjectStoreTyped<Instruction              >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Instruction"              ; }
    if (ObjectStoreTyped<InventoryFermentable     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "InventoryFermentable"     ; }
@@ -971,6 +990,7 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    postLoadInit(ObjectStoreTyped<Fermentable              >::getInstance());
    postLoadInit(ObjectStoreTyped<Fermentation             >::getInstance());
    postLoadInit(ObjectStoreTyped<FermentationStep         >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder                   >::getInstance());
    postLoadInit(ObjectStoreTyped<Hop                      >::getInstance());
    postLoadInit(ObjectStoreTyped<Instruction              >::getInstance());
    postLoadInit(ObjectStoreTyped<InventoryFermentable     >::getInstance());
@@ -1007,6 +1027,7 @@ namespace {
          &ObjectStoreTyped<Fermentable              >::getInstance(database),
          &ObjectStoreTyped<Fermentation             >::getInstance(database),
          &ObjectStoreTyped<FermentationStep         >::getInstance(database),
+         &ObjectStoreTyped<Folder                   >::getInstance(database),
          &ObjectStoreTyped<Hop                      >::getInstance(database),
          &ObjectStoreTyped<Instruction              >::getInstance(database),
          &ObjectStoreTyped<InventoryFermentable     >::getInstance(database),

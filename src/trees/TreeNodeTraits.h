@@ -17,6 +17,8 @@
 #define TREES_TREENODETRAITS_H
 #pragma once
 
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
+
 #include "config.h"
 #include "model/Boil.h"
 #include "model/BoilStep.h"
@@ -34,8 +36,6 @@
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
-
-#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 namespace {
    /**
@@ -591,7 +591,7 @@ template<> struct TreeNodeTraits<Style, Style> {
       Name          ,
       Category      ,
       CategoryNumber,
-      CategoryLetter,
+      StyleLetter   ,
       StyleGuide    ,
    };
    static constexpr size_t NumberOfColumns = 5;
@@ -611,7 +611,7 @@ template<> struct TreeNodeTraits<Style, Style> {
             return QVariant(style.category());
          case ColumnIndex::CategoryNumber:
             return QVariant(style.categoryNumber());
-         case ColumnIndex::CategoryLetter:
+         case ColumnIndex::StyleLetter:
             return QVariant(style.styleLetter());
          case ColumnIndex::StyleGuide:
             return QVariant(style.styleGuide());
@@ -662,6 +662,5 @@ template<> struct TreeNodeTraits<Water, Water> {
       Q_UNREACHABLE();
    }
 };
-
 
 #endif

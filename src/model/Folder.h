@@ -22,6 +22,17 @@
 #include <QObject>
 #include <QString>
 
+#include "model/NamedEntity.h"
+
+//======================================================================================================================
+//========================================== Start of property name constants ==========================================
+// See comment in model/NamedEntity.h
+#define AddPropertyName(property) namespace PropertyNames::Folder { inline BtStringConst const property{#property}; }
+AddPropertyName(fullPath)
+AddPropertyName(path)
+#undef AddPropertyName
+//=========================================== End of property name constants ===========================================
+//======================================================================================================================
 
 /*!
  * \class Folder
@@ -44,7 +55,7 @@
  * trees.
  *
  */
-class Folder : public QObject {
+class Folder : public NamedEntity {
    Q_OBJECT
 
 public:
@@ -52,29 +63,44 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_path();
+   static QString localisedName_fullPath();
+
+   /**
+    * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
+    *        info.
+    */
+   static TypeLookup const typeLookup;
+   TYPE_LOOKUP_GETTER
 
    Folder(QString const & fullPath = "");
+   Folder(NamedParameterBundle const & namedParameterBundle);
    Folder(Folder const & other);
 
    virtual ~Folder();
 
-   // Getters
-   QString name() const;
+   //=================================================== PROPERTIES ====================================================
+   Q_PROPERTY(QString path     READ path     WRITE setPath    )
+
+   /**
+    * \brief \c fullPath is just \c path plus \c name, so this property is merely a convenience
+    */
+   Q_PROPERTY(QString fullPath READ fullPath WRITE setFullPath)
+
+   //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    QString path() const;
    QString fullPath() const;
 
-   //Setter
-   void setName(QString var);
+   //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setPath(QString var);
-   void setfullPath(QString var);
+   void setFullPath(QString var);
 
-   //! \brief do some tests to see if the provided name is mine
-   bool isFolder(QString name);
+protected:
+   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
+   virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
-   QString m_name = "";
    QString m_path = "";
-   QString m_fullPath = "";
 
 };
 

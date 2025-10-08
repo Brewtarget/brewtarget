@@ -401,80 +401,8 @@ public:
       QVariant  leftItem = this->readDataFromModel( leftIndex, Qt::UserRole);
       QVariant rightItem = this->readDataFromModel(rightIndex, Qt::UserRole);
 
-      // Normally leave this commented out as it generates far too much logging
-//      qDebug() << Q_FUNC_INFO << "leftItem:" << leftItem << "; rightItem:" << rightItem;
-
-      //
-      // It's not crazy to have null come before valid values
-      //
-      if (leftItem.isNull()) {
-         return true;
-      }
-      if (rightItem.isNull()) {
-         return false;
-      }
-
       ColumnInfo const & columnInfo = this->get_ColumnInfo(leftIndex);
-      if (columnInfo.typeInfo.fieldType) {
-         QuantityFieldType const fieldType = *columnInfo.typeInfo.fieldType;
-         if (std::holds_alternative<NonPhysicalQuantity>(fieldType)) {
-            auto const nonPhysicalQuantity = std::get<NonPhysicalQuantity>(fieldType);
-            switch (nonPhysicalQuantity) {
-               case NonPhysicalQuantity::Date:
-               case NonPhysicalQuantity::String:
-               case NonPhysicalQuantity::Enum:
-               case NonPhysicalQuantity::Bool:
-                  return leftItem.toString() < rightItem.toString();
-
-               case NonPhysicalQuantity::Percentage:
-               case NonPhysicalQuantity::Dimensionless:
-                  return leftItem.toDouble() < rightItem.toDouble();
-
-               case NonPhysicalQuantity::OrdinalNumeral:
-               case NonPhysicalQuantity::CardinalNumber:
-                  return leftItem.toInt() < rightItem.toInt();
-
-               case NonPhysicalQuantity::Currency:
-                  return  leftItem.value<CurrencyAmount>() <
-                         rightItem.value<CurrencyAmount>();
-
-               // No default case as we want compiler to warn us if we missed a case above
-            }
-         } else if (std::holds_alternative<Measurement::PhysicalQuantity>(fieldType)) {
-            return  leftItem.value<Measurement::Amount>().toCanonical() <
-                   rightItem.value<Measurement::Amount>().toCanonical();
-         } else {
-            Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(fieldType));
-            //
-            // Per comment in readDataFromModel(), this field could be either the amount itself or a drop-down for the
-            // PhysicalQuantity of the amount.  In the latter case, readDataFromModel() will have returned us a QString,
-            // otherwise we'll have an Amount.
-            //
-            if (leftItem.typeId() == QMetaType::QString) {
-               //
-               // Field type should be determined only by column, not by row
-               //
-               Q_ASSERT(rightItem.typeId() == QMetaType::QString);
-               return leftItem.toString() < rightItem.toString();
-            }
-
-            //
-            // It's not instantly obvious how to sort a mixture of, eg, masses and volumes.  For the moment, we convert
-            // everything to canonical units (kilograms for mass, liters for volume, etc) and then sort by the
-            // quantities.
-            //
-            return  leftItem.value<Measurement::Amount>().toCanonical() <
-                   rightItem.value<Measurement::Amount>().toCanonical();
-         }
-
-         //
-         // It's a coding error if we didn't handle every case above
-         //
-         qWarning() << Q_FUNC_INFO << "Unhandled field type:" << fieldType;
-      }
-
-      return true;
-
+      return PropertyHelper::isLessThan(leftItem, rightItem, columnInfo.typeInfo);
    }
 
 protected:
