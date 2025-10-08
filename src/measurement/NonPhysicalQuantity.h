@@ -58,6 +58,11 @@ enum class NonPhysicalQuantity {
    Dimensionless,
    //! Monetary value
    Currency,
+   /**
+    * \brief This is primarily used for \c OwnedSet::items.  (We mostly don't expose lists of object through Qt
+    *        Properties.)
+    */
+   Objects,
 };
 
 /**

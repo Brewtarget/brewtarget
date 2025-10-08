@@ -420,21 +420,21 @@ public:
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
    //! \brief The fermentable additions.
-   Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions   READ fermentableAdditions WRITE setFermentableAdditions   STORED false)
+   Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions   READ fermentableAdditions   WRITE setFermentableAdditions   STORED false)
    //! \brief The hop additions.
-   Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionHop>> hopAdditions   READ hopAdditions WRITE setHopAdditions   STORED false)
+   Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionHop>>         hopAdditions           READ hopAdditions           WRITE setHopAdditions           STORED false)
    //! \brief The misc additions.
-   Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionMisc>> miscAdditions   READ miscAdditions WRITE setMiscAdditions   STORED false)
+   Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionMisc>>        miscAdditions          READ miscAdditions          WRITE setMiscAdditions          STORED false)
    //! \brief The yeast additions.
-   Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionYeast>> yeastAdditions   READ yeastAdditions WRITE setYeastAdditions   STORED false)
+   Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionYeast>>       yeastAdditions         READ yeastAdditions         WRITE setYeastAdditions         STORED false)
    //! \brief The waters.
-   Q_PROPERTY(QList<std::shared_ptr<RecipeUseOfWater>> waterUses   READ waterUses   WRITE setWaterUses   STORED false)
+   Q_PROPERTY(QList<std::shared_ptr<RecipeUseOfWater>>          waterUses              READ waterUses              WRITE setWaterUses              STORED false)
    //! \brief The salt adjustments.
-   Q_PROPERTY(QList<std::shared_ptr<RecipeAdjustmentSalt>> saltAdjustments    READ saltAdjustments    WRITE setSaltAdjustments   STORED false)
+   Q_PROPERTY(QList<std::shared_ptr<RecipeAdjustmentSalt>>      saltAdjustments        READ saltAdjustments        WRITE setSaltAdjustments        STORED false)
    //! \brief The brew notes.
-   Q_PROPERTY(QList<std::shared_ptr<BrewNote>> brewNotes   READ brewNotes /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY(QList<std::shared_ptr<BrewNote>>                  brewNotes              READ brewNotes              WRITE setBrewNotes              STORED false)
    //! \brief The instructions.
-   Q_PROPERTY(QList<std::shared_ptr<Instruction>> instructions   READ instructions /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY(QList<std::shared_ptr<Instruction>>               instructions           READ instructions           WRITE setInstructions           STORED false)
 
    //! \brief The immediate ancestor
    Q_PROPERTY(int    ancestorId READ getAncestorId WRITE setAncestorId)
@@ -682,6 +682,8 @@ public:
    void setYeastAdditions      (QList<std::shared_ptr<RecipeAdditionYeast      >> val);
    void setSaltAdjustments     (QList<std::shared_ptr<RecipeAdjustmentSalt     >> val);
    void setWaterUses           (QList<std::shared_ptr<RecipeUseOfWater         >> val);
+   void setBrewNotes           (QList<std::shared_ptr<BrewNote                 >> val);
+   void setInstructions        (QList<std::shared_ptr<Instruction              >> val);
 
    /**
     * \brief These calls are intended for use by the ObjectStore when pulling data from the database.  As such they do

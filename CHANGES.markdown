@@ -21,6 +21,7 @@ Bug fixes and minor enhancements.  Mac packaging should be fixed in this release
 
 ### Bug Fixes
 * Qt Libs missing in 4.2.0 on MacOS [1022](https://github.com/Brewtarget/brewtarget/issues/1022)
+* Various XML import problems [1032](https://github.com/Brewtarget/brewtarget/issues/1032)
 
 ### Release Timestamp
 Sat, 6 Sep 2025 04:02:02 +0100

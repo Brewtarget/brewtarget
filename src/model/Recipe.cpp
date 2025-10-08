@@ -2188,6 +2188,8 @@ void Recipe::setMiscAdditions       (QList<std::shared_ptr<RecipeAdditionMisc   
 void Recipe::setYeastAdditions      (QList<std::shared_ptr<RecipeAdditionYeast      >> val) { this->setAdditions(val); return; }
 void Recipe::setSaltAdjustments     (QList<std::shared_ptr<RecipeAdjustmentSalt     >> val) { this->setAdditions(val); return; }
 void Recipe::setWaterUses           (QList<std::shared_ptr<RecipeUseOfWater         >> val) { this->setAdditions(val); return; }
+void Recipe::setBrewNotes           (QList<std::shared_ptr<BrewNote                 >> val) { this->setAdditions(val); return; }
+void Recipe::setInstructions        (QList<std::shared_ptr<Instruction              >> val) { this->setAdditions(val); return; }
 
 // Note that, because these setBlahId member functions are supposed only to be used by by ObjectStore, and are not
 // intended for more general use, they do not call setAndNofify

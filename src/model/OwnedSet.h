@@ -797,7 +797,8 @@ TypeLookup const OwnedSet<Owner, Item, propertyName, itemChangedSlot, ownedSetOp
        TypeInfo::construct<MemberFunctionReturnType_t<&OwnedSet::items>>(
           PropertyNames::OwnedSet::items,
           OwnedSet::localisedName_items,
-          TypeLookupOf<MemberFunctionReturnType_t<&OwnedSet::items>>::value
+          TypeLookupOf<MemberFunctionReturnType_t<&OwnedSet::items>>::value,
+          NonPhysicalQuantity::Objects
        )},
    },
    // Parent class lookup: none as we are at the top of this arm of the inheritance tree
