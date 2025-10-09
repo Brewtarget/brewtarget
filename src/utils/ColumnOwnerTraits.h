@@ -84,6 +84,9 @@ struct ColumnOwnerTraits {
       return getColumnInfo(columnIndex).label;
    }
 
+   // We _could_ use size_t for numColumns, since it's obviously never negative.  However, various Qt functions for
+   // column number use int (and -1 means "invalid"), so we can spare ourselves compiler warnings about comparing signed
+   // and unsigned types by sticking to int ourselves.
    [[nodiscard]] static int numColumns() {
       return ColumnOwnerTraitsData<ColumnOwner>::getColumnInfos().size();
    }

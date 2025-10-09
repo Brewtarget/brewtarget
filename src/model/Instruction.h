@@ -115,8 +115,6 @@ public:
    void setInterval_mins(double  const   val);
    void addReagent      (QString const & val);
 
-///   virtual std::shared_ptr<Recipe> owningRecipe() const override;
-
 signals:
 
 protected:

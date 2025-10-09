@@ -49,7 +49,6 @@ public:
                         XmlRecordDefinition const & recordDefinition) :
       XmlRecord{xmlCoding, recordDefinition},
       Serialization::NamedEntityRecordBase<XmlNamedEntityRecord<NE>, NE>{} {
-///      this->m_includeInStats = this->includedInStats();
       return;
    }
 

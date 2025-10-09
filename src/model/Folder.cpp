@@ -86,22 +86,11 @@ Folder::Folder(Folder const & other) :
 
 Folder::~Folder() = default;
 
-///QString Folder::name() const { return m_name; }
 QString Folder::path() const { return m_path; }
 QString Folder::fullPath() const { return QString{"%1/%2"}.arg(this->m_path).arg(this->name()); }
 
-///// changing the name changes the fullPath
-///void Folder::setName(QString var) {
-///   this->NamedEntity::setName(var);
-//////   m_name = var;
-///   m_fullPath = m_path.append("/").append(var);
-///   return;
-///}
-
-// changing the path changes the fullPath
 void Folder::setPath(QString var) {
    m_path = var;
-///   m_fullPath = m_path.append("/").append(m_name);
    return;
 }
 
@@ -113,15 +102,9 @@ void Folder::setFullPath(QString var) {
       this->setName(pieces.last());
       pieces.removeLast();
       this->setPath(pieces.join("/"));
-
-///      m_fullPath = var;
-
    } else {
       this->setName(var);
       this->setPath(var);
-///      m_name = var;
-///      m_path = var;
-///      m_fullPath = var;
    }
    return;
 }

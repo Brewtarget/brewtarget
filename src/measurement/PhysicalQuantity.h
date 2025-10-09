@@ -264,10 +264,6 @@ namespace Measurement {
    concept CONCEPT_FIX_UP PhysicalQuantityTypes =
       std::same_as<T, Measurement::PhysicalQuantity> ||
       std::same_as<T, Measurement::ChoiceOfPhysicalQuantity>;
-///   template <typename T>
-///   concept CONCEPT_FIX_UP PhysicalQuantityConstTypes =
-///      std::same_as<T, Measurement::PhysicalQuantity const> ||
-///      std::same_as<T, Measurement::ChoiceOfPhysicalQuantity const>;
 
    /**
     * \brief For each set of alternates implied by a value of \c ChoiceOfPhysicalQuantity, there needs to be a default

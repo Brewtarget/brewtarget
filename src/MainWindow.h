@@ -192,9 +192,6 @@ public slots:
    void editRecipeBoil();
    void editRecipeFermentation();
 
-///   //! \brief Save the current recipe's mash to be used in other recipes.
-///   void saveMash();
-
    //! \brief Create a new recipe in the database.
    std::shared_ptr<Recipe> newRecipe();
    void newRecipeInFolder(QString folderPath);
@@ -262,7 +259,8 @@ public slots:
 public:
    //
    // TBD: This is all a bit clunky, as ideally the UI should update itself when things change on the Recipe.
-   //      We should fix BtComboBoxNamedEntityBase to allow it to observe a Recipe.
+   //      We should fix BtComboBoxNamedEntityBase to allow it to observe a Recipe in the same way that
+   //      RecipeAttributeButtonBase does.
    //
    void updateStyleInUi();
    void updateEquipmentInUi();

@@ -87,12 +87,6 @@ bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value,
       case WaterTableModel::ColumnIndex::Name:
          row->setName(value.toString());
          break;
-///      case WaterTableModel::ColumnIndex::Amount:
-///         row->setAmount(Measurement::qStringToSI(value.toString(),
-///                                                 Measurement::PhysicalQuantity::Volume,
-///                                                 this->getColumnInfo(columnIndex).getForcedSystemOfMeasurement(),
-///                                                 this->getColumnInfo(columnIndex).getForcedRelativeScale()).quantity);
-///         break;
       case WaterTableModel::ColumnIndex::Calcium:
          row->setCalcium_ppm(Localization::toDouble(value.toString(), Q_FUNC_INFO));
          break;

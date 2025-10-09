@@ -35,8 +35,7 @@
 #endif
 
 BtTableModelRecipeObserver::BtTableModelRecipeObserver(QTableView * parent,
-                                                       bool editable/*,
-                                                       std::initializer_list<ColumnInfo> columnInfos*/) :
+                                                       bool editable) :
    BtTableModel{parent, editable/*, columnInfos*/},
    recObs{nullptr} {
    return;
@@ -44,33 +43,9 @@ BtTableModelRecipeObserver::BtTableModelRecipeObserver(QTableView * parent,
 
 BtTableModelRecipeObserver::~BtTableModelRecipeObserver() = default;
 
-//======================================================================================================================
-
-///void ColumnInfo::setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement) const {
-///   SmartAmounts::setForcedSystemOfMeasurement(this->modelName, this->columnName, forcedSystemOfMeasurement);
-///   return;
-///}
-///
-///void ColumnInfo::setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) const {
-///   SmartAmounts::setForcedRelativeScale(this->modelName, this->columnName, forcedScale);
-///   return;
-///}
-///
-///std::optional<Measurement::SystemOfMeasurement> ColumnInfo::getForcedSystemOfMeasurement() const {
-///   return SmartAmounts::getForcedSystemOfMeasurement(this->modelName, this->columnName);
-///}
-///
-///std::optional<Measurement::UnitSystem::RelativeScale> ColumnInfo::getForcedRelativeScale() const {
-///   return SmartAmounts::getForcedRelativeScale(this->modelName, this->columnName);
-///}
-
-//======================================================================================================================
-
 BtTableModel::BtTableModel(QTableView * parent,
-                           bool editable/*,
-                           std::initializer_list<ColumnInfo> columnInfos*/) :
+                           bool editable) :
    QAbstractTableModel{parent},
-///   ColumnOwner{columnInfos},
    m_parentTableWidget{parent},
    m_editable{editable} {
 
@@ -89,10 +64,6 @@ BtTableModel::BtTableModel(QTableView * parent,
 }
 
 BtTableModel::~BtTableModel() = default;
-
-///int BtTableModel::columnCount(QModelIndex const & /*parent*/) const {
-///   return this->numColumns();
-///}
 
 QVariant BtTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
    //

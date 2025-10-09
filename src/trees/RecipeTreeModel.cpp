@@ -308,7 +308,6 @@ void RecipeTreeModel::revertRecipeToPreviousVersion(QModelIndex index) {
 // This is detaching a Recipe from its previous versions
 void RecipeTreeModel::orphanRecipe(QModelIndex index) {
    TreeNode* node = this->treeNode(index);
-///   TreeNode* parentNode = node->rawParent();
    QModelIndex pIndex = this->parent(index);
 
    // It's a coding error if the index supplied doesn't point to a Recipe node...

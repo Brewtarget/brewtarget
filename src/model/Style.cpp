@@ -304,7 +304,6 @@ void Style::setCarbMax_vol      (std::optional<double> const   val) { SET_AND_NO
 void Style::setAbvMin_pct       (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Style::abvMin_pct       , this->m_abvMin_pct       , this->enforceMinAndMax(val, "min abv pct", 0.0, 100.0)); }
 void Style::setAbvMax_pct       (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Style::abvMax_pct       , this->m_abvMax_pct       , this->enforceMinAndMax(val, "max abv pct", 0.0, 100.0)); }
 void Style::setNotes            (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Style::notes            , this->m_notes            , val); }
-///void Style::setProfile          (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Style::profile          , this->m_profile          , val); }
 void Style::setIngredients      (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Style::ingredients      , this->m_ingredients      , val); }
 void Style::setExamples         (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Style::examples         , this->m_examples         , val); }
 // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞

@@ -87,9 +87,9 @@ namespace {
    //    - Freestanding FermentationStep records
    //
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <HOP>...</HOP> BeerXML records
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    EnumStringMapping const BEER_XML_HOP_TYPE_MAPPER {
       {Hop::Type::Bittering              , "Bittering"                         },
       {Hop::Type::Aroma                  , "Aroma"                             },
@@ -181,9 +181,9 @@ namespace {
       {BeerXml_HopBase, BeerXml_HopType_ExclBase}
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <FERMENTABLE>...</FERMENTABLE> BeerXML records
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    EnumStringMapping const BEER_XML_FERMENTABLE_TYPE_MAPPER {
       {Fermentable::Type::Grain        , "Grain"              },
       {Fermentable::Type::Sugar        , "Sugar"              },
@@ -239,7 +239,6 @@ namespace {
       {XmlRecordDefinition::FieldType::String          , "POTENTIAL"                     , BtString::NULL_STR                                   }, // Extension tag
       {XmlRecordDefinition::FieldType::String          , "INVENTORY"                     , BtString::NULL_STR                                   }, // Extension tag
       {XmlRecordDefinition::FieldType::String          , "DISPLAY_COLOR"                 , BtString::NULL_STR                                   }, // Extension tag
-///      {XmlRecordDefinition::FieldType::Bool            , "IS_MASHED"                     , PropertyNames::Fermentable::isMashed                 }, // Non-standard: not part of BeerXML 1.0
       // ⮜⮜⮜ Following are new fields that BeerJSON adds to BeerXML, so all extension tags in BeerXML ⮞⮞⮞
       {XmlRecordDefinition::FieldType::Enum            , "GRAIN_GROUP"                   , PropertyNames::Fermentable::grainGroup               , &Fermentable::grainGroupStringMapping},
       {XmlRecordDefinition::FieldType::String          , "PRODUCER"                      , PropertyNames::Fermentable::producer                 },
@@ -272,9 +271,9 @@ namespace {
       {BeerXml_FermentableBase, BeerXml_FermentableType_ExclBase}
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <YEAST>...</YEAST> BeerXML records
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    EnumStringMapping const BEER_XML_YEAST_TYPE_MAPPER {
       {Yeast::Type::Ale      , "Ale"      },
       {Yeast::Type::Lager    , "Lager"    },
@@ -374,9 +373,9 @@ namespace {
       {BeerXml_YeastBase, BeerXml_YeastType_ExclBase}
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <MISC>...</MISC> BeerXML records
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    EnumStringMapping const BEER_XML_MISC_TYPE_MAPPER {
       {Misc::Type::Spice      , "Spice"           },
       {Misc::Type::Fining     , "Fining"          },
@@ -478,9 +477,9 @@ namespace {
       {BeerXml_WaterBase, BeerXml_WaterType_ExclBase}
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <STYLE>...</STYLE> BeerXML records
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    EnumStringMapping const BEER_XML_STYLE_TYPE_MAPPER {
       // See comment in model/Style.h for more on the mapping here.  TLDR is that our style types are now based on those
       // in BeerJSON, which are somewhat different than those in BeerXML.  This is tricky as we still need to be able to
@@ -548,9 +547,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <MASH_STEP>...</MASH_STEP> BeerXML records
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    EnumStringMapping const BEER_XML_MASH_STEP_TYPE_MAPPER {
       {MashStep::Type::Infusion   , "Infusion"                      },
       {MashStep::Type::Temperature, "Temperature"                   },
@@ -594,9 +593,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <MASH>...</MASH> BeerXML records
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<Mash> {
       std::in_place_type_t<Mash>{},
       "MASH",            // XML record name
@@ -621,12 +620,12 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <EQUIPMENT>...</EQUIPMENT> BeerXML records
    //
    // Fields marked ‡ are non-standard, in that they are not part of BeerXML 1.0, so likely will not be recognised by
    // other programs.
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<Equipment> {
       std::in_place_type_t<Equipment>{},
       "EQUIPMENT",            // XML record name
@@ -696,9 +695,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <INSTRUCTION>...</INSTRUCTION> BeerXML records
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<Instruction> {
       std::in_place_type_t<Instruction>{},
       "INSTRUCTION",            // XML record name
@@ -715,14 +714,14 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <BREWNOTE>...</BREWNOTE> BeerXML records
    // NB There is no NAME field on a BREWNOTE
    //
    // Since this is only used by Brewtarget/Brewken, we could probably lose the VERSION field here (with  corresponding
    // changes to BeerXml.xsd), at the cost of creating files that would not be readable by old versions of those
    // programs.  But it seems small bother to leave it be.
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<BrewNote> {
       std::in_place_type_t<BrewNote>{},
       "BREWNOTE",            // XML record name
@@ -763,11 +762,11 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for the fermentable part(!) of <FERMENTABLE>...</FERMENTABLE> BeerXML records inside <RECIPE>...</RECIPE> records
    //
    // See comment on BEER_XML_RECORD_DEFN_HOP_IN_RECIPE_ADDITION_HOP below!
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    XmlRecordDefinition const BEER_XML_RECORD_DEFN_FERMENTABLE_IN_RECIPE_ADDITION_FERMENTABLE {
       std::in_place_type_t<Fermentable>{},
       "FERMENTABLE",            // XML record name
@@ -775,11 +774,11 @@ namespace {
       {BeerXml_FermentableBase}
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <FERMENTABLE>...</FERMENTABLE> BeerXML records inside <RECIPE>...</RECIPE> records
    //
    // See comment on BEER_XML_RECORD_DEFN<RecipeAdditionHop> below!
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<RecipeAdditionFermentable> {
       std::in_place_type_t<RecipeAdditionFermentable>{},
       "FERMENTABLE",                          // XML record name
@@ -799,7 +798,7 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for the hop part(!) of <HOP>...</HOP> BeerXML records inside <RECIPE>...</RECIPE> records
    //
    // In BeerXML, a <HOP>...</HOP> record inside a <RECIPE>...</RECIPE> records is a "hop addition".  We now model this
@@ -808,7 +807,7 @@ namespace {
    // is just the ID of the hop we want to add.  In BeerXML, it's all the same fields as in a freestanding hop.  To
    // square this circle, we use the "Base Record" trick (descibed in serialization/json/JsonRecordDefinition.h, but
    // equally applicable to XML processing) to treat some of the HOP fields as though they were a separate sub-record.
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    XmlRecordDefinition const BEER_XML_RECORD_DEFN_HOP_IN_RECIPE_ADDITION_HOP {
       std::in_place_type_t<Hop>{},
       "HOP",                    // XML record name
@@ -816,14 +815,14 @@ namespace {
       {BeerXml_HopBase}
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <HOP>...</HOP> BeerXML records inside <RECIPE>...</RECIPE> records
    //
    // Note that the AMOUNT field here is quantity in kilograms (unless the extension field UNIT is present).  Because
    // Hop::defaultMeasure is Measurement::PhysicalQuantity::Mass and our canonical Unit for Mass is
    // Measurement::Units::kilograms, we don't have to do anything special to read in a record without the UNIT field.
    // Everything should "just work".
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<RecipeAdditionHop> {
       std::in_place_type_t<RecipeAdditionHop>{},
       "HOP",                          // XML record name
@@ -844,11 +843,11 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for the misc part(!) of <MISC>...</MISC> BeerXML records inside <RECIPE>...</RECIPE> records
    //
    // See comment on BEER_XML_RECORD_DEFN_HOP_IN_RECIPE_ADDITION_HOP above!
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    XmlRecordDefinition const BEER_XML_RECORD_DEFN_MISC_IN_RECIPE_ADDITION_MISC {
       std::in_place_type_t<Misc>{},
       "MISC",            // XML record name
@@ -856,11 +855,11 @@ namespace {
       {BeerXml_MiscBase}
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <MISC>...</MISC> BeerXML records inside <RECIPE>...</RECIPE> records
    //
    // See comment on BEER_XML_RECORD_DEFN<RecipeAdditionHop> above!
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<RecipeAdditionMisc> {
       std::in_place_type_t<RecipeAdditionMisc>{},
       "MISC",                          // XML record name
@@ -881,11 +880,11 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for the fermentable part(!) of <YEAST>...</YEAST> BeerXML records inside <RECIPE>...</RECIPE> records
    //
    // See comment on BEER_XML_RECORD_DEFN_HOP_IN_RECIPE_ADDITION_HOP above!
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    XmlRecordDefinition const BEER_XML_RECORD_DEFN_YEAST_IN_RECIPE_ADDITION_YEAST {
       std::in_place_type_t<Yeast>{},
       "YEAST",            // XML record name
@@ -893,11 +892,11 @@ namespace {
       {BeerXml_YeastBase}
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <YEAST>...</YEAST> BeerXML records inside <RECIPE>...</RECIPE> records
    //
    // See comment on BEER_XML_RECORD_DEFN<RecipeAdditionHop> above!
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<RecipeAdditionYeast> {
       std::in_place_type_t<RecipeAdditionYeast>{},
       "YEAST",                          // XML record name
@@ -923,11 +922,11 @@ namespace {
    };
 
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for the water part(!) of <WATER>...</WATER> BeerXML records inside <RECIPE>...</RECIPE> records
    //
    // See comment on BEER_XML_RECORD_DEFN_HOP_IN_RECIPE_ADDITION_HOP above!
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    XmlRecordDefinition const BEER_XML_RECORD_DEFN_WATER_IN_RECIPE_USE_OF_WATER {
       std::in_place_type_t<Water>{},
       "Water",            // XML record name
@@ -935,11 +934,11 @@ namespace {
       {BeerXml_WaterBase}
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <WATER>...</WATER> BeerXML records inside <RECIPE>...</RECIPE> records
    //
    // See comment on BEER_XML_RECORD_DEFN<RecipeAdditionHop> above!
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<RecipeUseOfWater> {
       std::in_place_type_t<RecipeUseOfWater>{},
       "WATER",                          // XML record name
@@ -951,9 +950,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <RECIPE>...</RECIPE> BeerXML records
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    EnumStringMapping const BEER_XML_RECIPE_STEP_TYPE_MAPPER {
       {Recipe::Type::Extract    , "Extract"                   },
       {Recipe::Type::PartialMash, "Partial Mash"              },
@@ -1058,9 +1057,9 @@ namespace {
       }
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for root of BeerXML document
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    XmlRecordDefinition const BEER_XML_RECORD_DEFN_ROOT {
       "BEER_XML", // XML record name
       nullptr,    // Type Lookup for our corresponding model object
@@ -1225,7 +1224,7 @@ namespace {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
 
 
 BeerXML & BeerXML::getInstance() {
@@ -1248,7 +1247,7 @@ BeerXML::BeerXML() {
 // header file)
 BeerXML::~BeerXML() = default;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
 
 void BeerXML::createXmlFile(QFile & outFile) const {
    QTextStream out(&outFile);

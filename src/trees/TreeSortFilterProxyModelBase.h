@@ -55,42 +55,69 @@ protected:
       TreeNode const * lhs = treeModel->doTreeNode(left );
       TreeNode const * rhs = treeModel->doTreeNode(right);
 
+      //
+      // NOTE that we have to be careful about column indexes here.  A tree can have up to three different types of node
+      // (Folder, PrimaryItem and SecondaryItem), each of which potentially has a different number of columns.  So we
+      // may be sorting by a column for which some of the node types do not have data.
+      //
+      int const rawColumnNum = left.column();
+
       // If the two node types are the same then we can leave the comparison to the overloaded functions in TreeNode.h /
       // TreeNode.cpp
       if (lhs->classifier() == TreeNodeClassifier::Folder &&
           rhs->classifier() == TreeNodeClassifier::Folder) {
+         if (rawColumnNum >= ColumnOwnerTraits<TreeFolderNode<NE>>::numColumns()) {
+            return false;
+         }
          auto const & lhsFolder = static_cast<TreeFolderNode<NE> const &>(*lhs);
          auto const & rhsFolder = static_cast<TreeFolderNode<NE> const &>(*rhs);
-         auto const      column = static_cast<TreeFolderNode<NE>::ColumnIndex>(left.column());
+         auto const      column = static_cast<TreeFolderNode<NE>::ColumnIndex>(rawColumnNum);
          return lhsFolder.columnIsLessThan(rhsFolder, column);
       }
 
       if (lhs->classifier() == TreeNodeClassifier::PrimaryItem &&
           rhs->classifier() == TreeNodeClassifier::PrimaryItem) {
+         if (rawColumnNum >= ColumnOwnerTraits<TreeItemNode<NE>>::numColumns()) {
+            return false;
+         }
          auto const & lhsNode = static_cast<TreeItemNode<NE> const &>(*lhs);
          auto const & rhsNode = static_cast<TreeItemNode<NE> const &>(*rhs);
-         auto const    column = static_cast<TreeItemNode<NE>::ColumnIndex>(left.column());
+         auto const    column = static_cast<TreeItemNode<NE>::ColumnIndex>(rawColumnNum);
          return lhsNode.columnIsLessThan(rhsNode, column);
       }
 
       if constexpr (!IsVoid<SNE>) {
          if (lhs->classifier() == TreeNodeClassifier::SecondaryItem &&
              rhs->classifier() == TreeNodeClassifier::SecondaryItem) {
+            if (rawColumnNum >= ColumnOwnerTraits<TreeItemNode<SNE>>::numColumns()) {
+               return false;
+            }
             auto const & lhsNode = static_cast<TreeItemNode<SNE> const &>(*lhs);
             auto const & rhsNode = static_cast<TreeItemNode<SNE> const &>(*rhs);
-            auto const    column = static_cast<TreeItemNode<SNE>::ColumnIndex>(left.column());
+            auto const    column = static_cast<TreeItemNode<SNE>::ColumnIndex>(rawColumnNum);
             return lhsNode.columnIsLessThan(rhsNode, column);
          }
       }
 
-      // If the node types are different, then we want folders before items.  Beyond that, the only meaningful
-      // comparison we can do is on the name.
-      if (lhs->classifier() == TreeNodeClassifier::Folder) {
+      // If the node types are different, then we want folders before items, and primary items before secondary items.
+      // Beyond that, the only meaningful comparison we can do is on the name.
+      if (lhs->classifier() == TreeNodeClassifier::Folder &&
+          rhs->classifier() != TreeNodeClassifier::Folder) {
          return true;
       }
       if (rhs->classifier() == TreeNodeClassifier::Folder) {
          return false;
       }
+      if (lhs->classifier() != TreeNodeClassifier::Folder) {
+         if (lhs->classifier() == TreeNodeClassifier::PrimaryItem &&
+             rhs->classifier() != TreeNodeClassifier::PrimaryItem) {
+            return true;
+         }
+         if (rhs->classifier() == TreeNodeClassifier::PrimaryItem) {
+            return false;
+         }
+      }
+
       return lhs->name() < rhs->name();
    }
 

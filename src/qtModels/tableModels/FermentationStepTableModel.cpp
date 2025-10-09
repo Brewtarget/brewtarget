@@ -108,13 +108,13 @@ bool FermentationStepTableModel::setData(QModelIndex const & index, QVariant con
    return this->doSetDataDefault(index, value, role);
 }
 
-/////==========================CLASS FermentationStepItemDelegate===============================
+//========================================= CLASS FermentationStepItemDelegate =========================================
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase
 TABLE_MODEL_COMMON_CODE(FermentationStep, fermentationStep, PropertyNames::Recipe::fermentationId)
 // Insert the boiler-plate stuff that we cannot do in StepTableModelBase
 STEP_TABLE_MODEL_COMMON_CODE(Fermentation)
-//=============================================== CLASS FermentationStepItemDelegate ================================================
+//========================================= CLASS FermentationStepItemDelegate =========================================
 
 // Insert the boiler-plate stuff that we cannot do in ItemDelegate
 ITEM_DELEGATE_COMMON_CODE(FermentationStep)

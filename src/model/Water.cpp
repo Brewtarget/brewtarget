@@ -309,7 +309,6 @@ Water & Water::operator=(Water other) {
 }
 
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
-///double                     Water::amount          () const { return                    m_amount            ; }
 double                     Water::calcium_ppm     () const { return                    m_calcium_ppm       ; }
 double                     Water::bicarbonate_ppm () const { return                    m_bicarbonate_ppm   ; }
 double                     Water::sulfate_ppm     () const { return                    m_sulfate_ppm       ; }
@@ -333,7 +332,6 @@ std::optional<double>      Water::nitrite_ppm     () const { return             
 std::optional<double>      Water::fluoride_ppm    () const { return                    m_fluoride_ppm ; }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
-///void Water::setAmount          (double              const   val) { SET_AND_NOTIFY(PropertyNames::Water::amount          , m_amount            ,                            val ); return; }
 void Water::setCalcium_ppm     (double                const   val) { SET_AND_NOTIFY(PropertyNames::Water::calcium_ppm     , m_calcium_ppm       , val); return; }
 void Water::setBicarbonate_ppm (double                const   val) { SET_AND_NOTIFY(PropertyNames::Water::bicarbonate_ppm , m_bicarbonate_ppm   , val); return; }
 void Water::setSulfate_ppm     (double                const   val) { SET_AND_NOTIFY(PropertyNames::Water::sulfate_ppm     , m_sulfate_ppm       , val); return; }

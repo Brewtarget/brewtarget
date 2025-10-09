@@ -84,17 +84,14 @@ void LatestReleaseFinder::checkMainRespository() {
       "to check for latest release";
 
    try {
-///      boost::asio::io_service ioService;
       boost::asio::io_context ioContext;
       //
       // A lot of old example code for Boost still uses sslv23_client.  However, TLS 1.3 has been out since 2018, and we
       // know GitHub (along with most other web sites) supports it.  So there's no reason not to use that.
       //
       boost::asio::ssl::context securityContext(boost::asio::ssl::context::tlsv13_client);
-///      boost::asio::ssl::stream<boost::asio::ip::tcp::socket> secureSocket{ioService, securityContext};
       boost::asio::ssl::stream<boost::asio::ip::tcp::socket> secureSocket{ioContext, securityContext};
       // The resolver essentially does the DNS requests to look up the host address etc
-///      boost::asio::ip::tcp::resolver tcpIpResolver{ioService};
       boost::asio::ip::tcp::resolver tcpIpResolver{ioContext};
       auto endpoint = tcpIpResolver.resolve(host, port);
 

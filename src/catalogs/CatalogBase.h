@@ -225,11 +225,6 @@ public:
       this->m_contextMenu->addAction(this->m_action_new        );
       this->m_contextMenu->addAction(this->m_action_merge      );
 
-///      this->m_contextMenu->addAction(Derived::tr("Add %1 to recipe").arg(NE::localisedName()), &this->derived(), &Derived::addSelectedToRecipe);
-///      this->m_contextMenu->addAction(Derived::tr("Edit"                                     ), &this->derived(), &Derived::editSelected);
-///      this->m_contextMenu->addAction(Derived::tr("Delete"                                   ), &this->derived(), &Derived::deleteSelected);
-///      this->m_contextMenu->addAction(Derived::tr("New %1"          ).arg(NE::localisedName()), &this->derived(), &Derived::newItem);
-
       // Setting Qt::CustomContextMenu here causes the signal customContextMenuRequested() to be emitted when the user
       // requests the context menu (by right-clicking).
       this->derived().setContextMenuPolicy(Qt::CustomContextMenu);
@@ -559,7 +554,6 @@ public:
                ).arg(NE::localisedName()).arg(firstItem->key()).arg(lastItem->key()).arg(detailedText.asString())
             );
 
-///            diffsFoundMessageBox.setDetailedText(detailedText.asString());
             diffsFoundMessageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No |QMessageBox::Cancel);
             diffsFoundMessageBox.setDefaultButton(QMessageBox::No);
 

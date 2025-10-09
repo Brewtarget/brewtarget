@@ -48,12 +48,10 @@ public:
                          JsonRecordDefinition const & recordDefinition) :
       JsonRecord{jsonCoding, recordData, recordDefinition /*, NE::staticMetaObject.className()*/},
       Serialization::NamedEntityRecordBase<JsonNamedEntityRecord<NE>, NE>{} {
-///      this->m_includeInStats = this->includedInStats();
       return;
    }
 
    NAMED_ENTITY_RECORD_COMMON_DECL(JsonNamedEntityRecord, NE)
-
 };
 
 #endif

@@ -41,18 +41,6 @@ protected:
                                QTextStream & out,
                                int indentLevel,
                                char const * const indentString) const;
-
-///   /**
-///    * \brief We need to know about our containing entity to decide whether to include the Mash record in the stats.
-///    *
-///    *        If the Mash is outside a Recipe, then we DO want to include it in stats.  If it's inside a Recipe then we
-///    *        don't call it out with a separate stats entry.  It suffices to tell the user how many Recipes we read in
-///    *        without also counting how many Mashes inside Recipes we read.
-///    *
-///    *        Additionally, if the Recipe gets deleted after being read in (because at that point we determine it's a
-///    *        duplicate), this means we don't have to try to unpick stats about Mashes.
-///    */
-///   virtual void setContainingEntity(std::shared_ptr<NamedEntity> containingEntity);
 };
 
 #endif

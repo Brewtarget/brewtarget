@@ -819,11 +819,6 @@ public:
             equipment ? equipment->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) :
                         PhysicalConstants::grainAbsorption_Lkg
          };
-///         if (equipment) {
-///            absorption_lKg = equipment->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg);
-///         } else {
-///            absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
-///         }
 
          calculatedWortFromMash_l = (waterAdded_l - absorption_lKg * this->m_grainsInMash_kg);
       }
@@ -870,11 +865,6 @@ public:
          equipment ? equipment->wortEndOfBoil_l(calculatedBoilVolume_l) :
                      this->m_self.batchSize_l() // Give up.
       };
-///      if (equipment) {
-///         calculatedPostBoilVolume_l = equipment->wortEndOfBoil_l(calculatedBoilVolume_l);
-///      } else {
-///         calculatedPostBoilVolume_l = this->m_self.batchSize_l(); // Give up.
-///      }
 
       if (!qFuzzyCompare(calculatedWortFromMash_l, this->m_wortFromMash_l)) {
 //         qDebug() <<

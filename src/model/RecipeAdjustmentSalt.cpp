@@ -35,7 +35,6 @@ QString RecipeAdjustmentSalt::localisedName_whenToAdd() { return tr("When To Add
 QString RecipeAdjustmentSalt::instanceNameTemplate() { return tr("Addition of %1"); }
 
 EnumStringMapping const RecipeAdjustmentSalt::whenToAddStringMapping {
-///   {RecipeAdjustmentSalt::WhenToAdd::Never , "never" },
    {RecipeAdjustmentSalt::WhenToAdd::Mash  , "mash"  },
    {RecipeAdjustmentSalt::WhenToAdd::Sparge, "sparge"},
    {RecipeAdjustmentSalt::WhenToAdd::Ratio , "ratio" },
@@ -43,7 +42,6 @@ EnumStringMapping const RecipeAdjustmentSalt::whenToAddStringMapping {
 };
 
 EnumStringMapping const RecipeAdjustmentSalt::whenToAddDisplayNames {
-///   {RecipeAdjustmentSalt::WhenToAdd::Never , tr("Never" )},
    {RecipeAdjustmentSalt::WhenToAdd::Mash  , tr("Mash"  )},
    {RecipeAdjustmentSalt::WhenToAdd::Sparge, tr("Sparge")},
    {RecipeAdjustmentSalt::WhenToAdd::Ratio , tr("Ratio" )},

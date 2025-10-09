@@ -102,8 +102,6 @@ AddSettingName(windowState)
 #define AddSettingSection(section) namespace PersistentSettings::Sections { BtStringConst const section{#section}; }
 AddSettingSection(alcoholTool)
 AddSettingSection(backups)
-///AddSettingSection(fermentableTable)
-///AddSettingSection(hopTable)
 AddSettingSection(MainWindow)
 AddSettingSection(mashStepTableModel)
 AddSettingSection(miscTable)

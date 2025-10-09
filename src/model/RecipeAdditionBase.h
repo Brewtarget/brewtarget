@@ -129,10 +129,6 @@ public:
          if (ll.m_amount != rr.m_amount) {
             return ll.m_amount < rr.m_amount ? std::strong_ordering::less : std::strong_ordering::greater;
          }
-///      } else {
-///         if (ll.m_volume_l != rr.m_volume_l) {
-///            return ll.m_volume_l < rr.m_volume_l ? std::strong_ordering::less : std::strong_ordering::greater;
-///         }
       }
       int nameComparison {ll.name().compare(rr.name(), Qt::CaseInsensitive)};
       if (0 != nameComparison) {

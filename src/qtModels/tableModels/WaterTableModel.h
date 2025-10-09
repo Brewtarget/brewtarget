@@ -60,35 +60,6 @@ class WaterTableModel : public BtTableModel, public TableModelBase<WaterTableMod
    Q_OBJECT
 
    TABLE_MODEL_COMMON_DECL(Water)
-///
-///public:
-///   WaterTableModel(QTableView * parent = nullptr);
-///   virtual ~WaterTableModel();
-///
-///   //! \brief Casting wrapper for \c BtTableModel::getColumnInfo
-///   ColumnInfo const & getColumnInfo(ColumnIndex const columnIndex) const;
-///
-///   void addWaters(QList<std::shared_ptr<Water> > waters);
-///   void addWaters(Recipe const & recipe);
-///   void observeRecipe(Recipe* rec);
-///   void observeDatabase(bool val);
-///   void removeAll();
-///
-///   //! Reimplemented from QAbstractTableModel.
-///   virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-///   //! Reimplemented from QAbstractTableModel.
-///   virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-///   //! Reimplemented from QAbstractTableModel.
-///   virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-///   //! Reimplemented from QAbstractTableModel.
-///   virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
-///   //! Reimplemented from QAbstractTableModel.
-///   virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-///
-///public slots:
-///   void changed(QMetaProperty,QVariant);
-///   void addWater(int waterId);
-///   void removeWater(int waterId, std::shared_ptr<QObject> object);
 };
 
 //=============================================== CLASS WaterItemDelegate ===============================================
@@ -103,26 +74,5 @@ class WaterItemDelegate : public QItemDelegate,
 
    ITEM_DELEGATE_COMMON_DECL(Water)
 };
-
-
-////*!
-/// * \class WaterItemDelegate
-/// *
-/// * \brief Item delegate for water tables.
-/// */
-///class WaterItemDelegate : public QItemDelegate {
-///   Q_OBJECT
-///
-///public:
-///   WaterItemDelegate(QObject* parent = nullptr);
-///
-///   // Inherited functions.
-///   virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-///   virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
-///   virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-///   virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-///
-///private:
-///};
 
 #endif

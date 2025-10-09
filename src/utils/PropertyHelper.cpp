@@ -215,15 +215,6 @@ QVariant PropertyHelper::readDataFromPropertyValue(
       // In both cases, we start by getting the amount from the model.
       //
       Measurement::Amount const amount = modelData.value<Measurement::Amount>();
-///      if (modelData.canConvert<Measurement::Amount>()) {
-///         amount = modelData.value<Measurement::Amount>();
-///      } else {
-///         // It's a coding error if we get here
-///         qCritical() <<
-///            Q_FUNC_INFO << /* columnInfo.columnFqName << */ "Don't know how to parse" << /* columnInfo.propertyPath << */
-///            "TypeInfo:" << typeInfo << ", modelData:" << modelData;
-///         Q_ASSERT(false);
-///      }
       if (!amount.isValid()) {
          // It's a coding error if we get here
          qCritical() <<
@@ -306,6 +297,11 @@ bool PropertyHelper::isLessThan(QVariant const &  leftItem, QVariant const & rig
             case NonPhysicalQuantity::Currency:
                return  leftItem.value<CurrencyAmount>() <
                         rightItem.value<CurrencyAmount>();
+
+            case NonPhysicalQuantity::Objects:
+               // We shouldn't be trying to compare lists of objects
+               qWarning() << Q_FUNC_INFO << "Can't compare " << typeInfo;
+               return false;
 
             // No default case as we want compiler to warn us if we missed a case above
          }

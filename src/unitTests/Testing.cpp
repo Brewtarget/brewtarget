@@ -320,22 +320,6 @@ Testing::Testing() :
 
    registerMetaTypes();
 
-///   qInfo() <<
-///      Q_FUNC_INFO << "Temp directory:" << this->pimpl->m_tempDir << ", permissions:" <<
-///      std::filesystem::status(this->pimpl->m_tempDir);
-///
-///   std::error_code errorCode{};
-///   std::filesystem::current_path(this->pimpl->m_tempDir, errorCode);
-///   if (errorCode) {
-///      qCritical() <<
-///         Q_FUNC_INFO << "Unable to change directory to" << this->pimpl->m_tempDir << errorCode;
-///      throw std::runtime_error{"Unable to change to temp directory"};
-///   }
-///
-///   qInfo() <<
-///      Q_FUNC_INFO << "Current directory:" << std::filesystem::current_path().c_str() << ", permissions:" <<
-///      std::filesystem::status(std::filesystem::current_path());
-
    //
    // Create a unique temporary directory using a random number as part of a subdirectory name inside whatever
    // system-standard temp directory Qt proposes to us.  (We also put the application name in the subdirectory name so
@@ -495,7 +479,6 @@ void Testing::initTestCase() {
       this->pimpl->m_twoRow->setFineGrindYield_pct(70.0);
       this->pimpl->m_twoRow->setColor_srm(2.0);
       this->pimpl->m_twoRow->setMoisture_pct(0);
-///      this->pimpl->m_twoRow->setIsMashed(true);
    } catch (std::exception const & e) {
       // When an exception gets to Qt, it will barf something along the lines of "Caught unhandled exception" without
       // leaving you much the wiser.  If we can intercept the exception along the way, we can ensure more details are

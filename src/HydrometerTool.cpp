@@ -46,7 +46,6 @@ HydrometerTool::HydrometerTool(QWidget* parent) : QDialog(parent) {
    SMART_FIELD_INIT_FS(HydrometerTool, label_inputTemp     , lineEdit_inputTemp     , double, Measurement::PhysicalQuantity::Temperature);
 
    this->lineEdit_calibratedTemp->setQuantity(15.55555556);
-///      lineEdit_outputSg->setForcedSystemOfMeasurement(Measurement::SystemOfMeasurement::SpecificGravity);
 
    connect(this->pushButton_convert,   &QAbstractButton::clicked,                      this,                          &HydrometerTool::convert   );
    connect(this->label_inputTemp,      &SmartLabel::changedSystemOfMeasurementOrScale, this->lineEdit_inputTemp,      &SmartLineEdit::lineChanged);

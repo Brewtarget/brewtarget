@@ -147,7 +147,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/model/Folder.cpp
     ${repoDir}/src/model/Hop.cpp
     ${repoDir}/src/model/Ingredient.cpp
-    ${repoDir}/src/model/IngredientInRecipe.cpp
     ${repoDir}/src/model/Instruction.cpp
     ${repoDir}/src/model/Inventory.cpp
     ${repoDir}/src/model/InventoryFermentable.cpp

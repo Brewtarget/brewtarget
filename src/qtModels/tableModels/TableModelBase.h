@@ -92,19 +92,6 @@ template <typename T> concept CONCEPT_FIX_UP DoesNotObserveRecipe = std::negatio
 //       what is going on.
 //
 
-
-////**
-/// * \brief We want, eg, \c HopTableModel to inherit from \c TableModelBase<HopTableModel, Hop> and to have its own enum
-/// *        \c HopTableModel::ColumnIndex.  But we'd also like \c HopTableModel::ColumnIndex to be accessible from within
-/// *        \c TableModelBase, which normally isn't possible, eg as explained at
-/// *        https://stackoverflow.com/questions/5534759/c-with-crtp-class-defined-in-the-derived-class-is-not-accessible-in-the-base
-/// *        However, per the same link, the way around this is to use a traits class.  This is another "trick" where we
-/// *        declare a template for the "traits" class before the base class of the curiously recurring template pattern
-/// *        (CRTP), but then specialise that "traits" class in the derived class.
-/// */
-///template<class Derived>
-///struct TableModelTraits;
-
 /**
  * \brief See comment in qtModels/tableModels/BtTableModel.h for more info on inheritance structure
  *
@@ -139,7 +126,6 @@ public:
    // In theory, in C++20, we don't need the `typename` here, but, per comment in ColumnInfo, we need to
    // retain it until our Mac build environment is using a more recent version of Clang.
    //
-///   using ColumnIndex = typename TableModelTraits<Derived>::ColumnIndex;
    using ColumnIndex = typename ColumnIndexHolder<Derived>::ColumnIndex;
 
 protected:

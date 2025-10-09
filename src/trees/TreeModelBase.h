@@ -160,11 +160,11 @@ public:
    }
 
    int doColumnCount([[maybe_unused]] QModelIndex const & parent) const {
-      return TreeItemNode<NE>::NumberOfColumns;
+      return ColumnOwnerTraits<TreeItemNode<NE>>::numColumns();
    }
 
    QModelIndex doIndex(int const row, int const column, QModelIndex const & parent) const {
-      if (parent.isValid() && parent.column() >= TreeItemNode<NE>::NumberOfColumns) {
+      if (parent.isValid() && parent.column() >= ColumnOwnerTraits<TreeItemNode<NE>>::numColumns()) {
          return QModelIndex();
       }
 

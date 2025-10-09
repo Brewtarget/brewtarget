@@ -269,7 +269,7 @@ namespace {
    //       order slightly to allow for the fact that some records need to refer to each other -- eg
    //       BEER_JSON_RECORD_DEFN<Mash> refers to BEER_JSON_RECORD_DEFN<MashStep>, so the latter is defined
    //       before the former.
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Top-level field mappings for BeerJSON files
    //
    // The root of a BeerJSON document is an object named "beerjson".  Inside this are some or all of the following
@@ -326,11 +326,11 @@ namespace {
    // std::array (which can be constexpr) cannot deduce its own length when used with non-trivial types, and the
    // proposed std::make_array is still experimental and not yet actually part of std.  (There are various workarounds
    // with template metaprogramming but it's all a bit painful compared with the marginal benefit we would get.)
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for fermentables BeerJSON records - see schemas/beerjson/1.0/fermentable.json
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_FermentableBase {
       // Type                                                 XPath                           Q_PROPERTY                                        Value Decoder
       {JsonRecordDefinition::FieldType::String              , "name"                        , PropertyNames::NamedEntity::name                ,                                      },
@@ -380,9 +380,9 @@ namespace {
       {BeerJson_FermentableBase, BeerJson_FermentableType_ExclBase}
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for hop_varieties BeerJSON records - see schemas/beerjson/1.0/hop.json
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_HopBase {
       // Type                                            XPath         Q_PROPERTY                        Value Decoder
       {JsonRecordDefinition::FieldType::String         , "name"      , PropertyNames::NamedEntity::name},
@@ -424,9 +424,9 @@ namespace {
       {BeerJson_HopBase, BeerJson_HopType_ExclBase}
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for miscellaneous_ingredients BeerJSON records - see schemas/beerjson/1.0/misc.json
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_MiscBase {
       // Type                                   XPath         Q_PROPERTY                        Value Decoder
       {JsonRecordDefinition::FieldType::String, "name"      , PropertyNames::NamedEntity::name},
@@ -446,9 +446,9 @@ namespace {
       {BeerJson_MiscBase, BeerJson_MiscType_ExclBase}
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for cultures BeerJSON records - see schemas/beerjson/1.0/culture.json
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_YeastBase {
       // Type                                   XPath         Q_PROPERTY                        Value Decoder
       {JsonRecordDefinition::FieldType::String, "name"      , PropertyNames::NamedEntity::name},
@@ -488,9 +488,9 @@ namespace {
       {BeerJson_YeastBase, BeerJson_YeastType_ExclBase}
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for water BeerJSON records - see schemas/beerjson/1.0/water.json
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_WaterBase {
       // Type                                                 XPath          Q_PROPERTY                             Value Decoder
       {JsonRecordDefinition::FieldType::String              , "name"       , PropertyNames::NamedEntity::name     },
@@ -522,9 +522,9 @@ namespace {
       {BeerJson_WaterBase, BeerJson_WaterType_ExclBase}
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for styles BeerJSON records - see schemas/beerjson/1.0/style.json
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_StyleBase {
       // Type                                   XPath              Q_PROPERTY                           Value Decoder
       {JsonRecordDefinition::FieldType::String, "name"           , PropertyNames::NamedEntity::name    },
@@ -570,9 +570,9 @@ namespace {
       {BeerJson_StyleBase}
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for mash steps BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> JsonRecordDefinition const BEER_JSON_RECORD_DEFN<MashStep> {
       std::in_place_type_t<MashStep>{},
       "mash_steps", // JSON record name (not actually used as MashStep always part of a Mash
@@ -593,9 +593,9 @@ namespace {
       }
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for mashes BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> JsonRecordDefinition const BEER_JSON_RECORD_DEFN<Mash> {
       std::in_place_type_t<Mash>{},
       "mashes", // JSON record name
@@ -609,12 +609,12 @@ namespace {
    };
 
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for fermentation_steps BeerJSON records
    //
    // NB: Although FermentationStep inherits (via StepExtended) from Step, the rampTime_mins field is not used and
    //     should not be stored in the DB or serialised.  See comment in model/Step.h.
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> JsonRecordDefinition const BEER_JSON_RECORD_DEFN<FermentationStep> {
       std::in_place_type_t<FermentationStep>{},
       "fermentation_steps", // JSON record name
@@ -634,9 +634,9 @@ namespace {
       }
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for fermentations BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> JsonRecordDefinition const BEER_JSON_RECORD_DEFN<Fermentation> {
       std::in_place_type_t<Fermentation>{},
       "fermentations", // JSON record name
@@ -649,14 +649,14 @@ namespace {
       }
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for equipments BeerJSON records
    //
    // Yes, all the permutations below are technically allowed in BeerJSON.  I think this is a place where simplifying
    // the schema won out over precision.  Where possible, we simply ignore the field permutations that don't seem to
    // make sense (eg grain_absorption_rate on Hot Liquor Tank) or seem unimportant (eg drain_rate_per_minute on HLT).
    // However, note that some fields are required on all vessels, in particular "loss" and "maximum_volume".
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> JsonRecordDefinition const BEER_JSON_RECORD_DEFN<Equipment> {
       std::in_place_type_t<Equipment>{},
       "equipments", // JSON record name
@@ -877,9 +877,9 @@ namespace {
       }
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for the FermentableBase part of FermentableAdditionType BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    JsonRecordDefinition const BEER_JSON_RECORD_DEFN_FERMENTABLE_IN_ADDITION {
       std::in_place_type_t<Fermentable>{},
       "fermentable base", // JSON record name
@@ -887,9 +887,9 @@ namespace {
       JsonRecordDefinition::RecordType::Outline
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for the HopBase part of HopAdditionType BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    JsonRecordDefinition const BEER_JSON_RECORD_DEFN_HOP_IN_ADDITION {
       std::in_place_type_t<Hop>{},
       "hop base", // JSON record name
@@ -897,9 +897,9 @@ namespace {
       JsonRecordDefinition::RecordType::Outline
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for the MiscBase part of MiscAdditionType BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    JsonRecordDefinition const BEER_JSON_RECORD_DEFN_MISC_IN_ADDITION {
       std::in_place_type_t<Misc>{},
       "misc base", // JSON record name
@@ -907,9 +907,9 @@ namespace {
       JsonRecordDefinition::RecordType::Outline
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for the YeastBase part of YeastAdditionType BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    JsonRecordDefinition const BEER_JSON_RECORD_DEFN_YEAST_IN_ADDITION {
       std::in_place_type_t<Yeast>{},
       "yeast base", // JSON record name
@@ -917,9 +917,9 @@ namespace {
       JsonRecordDefinition::RecordType::Outline
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for the WaterBase part of WaterAdditionType BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    JsonRecordDefinition const BEER_JSON_RECORD_DEFN_WATER_IN_ADDITION {
       std::in_place_type_t<Water>{},
       "water base", // JSON record name
@@ -927,9 +927,9 @@ namespace {
       JsonRecordDefinition::RecordType::Outline
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for fermentable_additions, hop_additions, misc_additions, yeast_additions, water_additions BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // The timing bit is the same across Fermentable, Hop, Misc and Yeast
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_IngredientAdditionType_Timing {
       // Type                                                       XPath                      Q_PROPERTY                                       Value Decoder
@@ -1027,9 +1027,9 @@ namespace {
       }
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for boil BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> JsonRecordDefinition const BEER_JSON_RECORD_DEFN<Boil> {
       std::in_place_type_t<Boil>{},
       "boil", // JSON record name.  Note that it's singular (for some unexplained reason)
@@ -1044,9 +1044,9 @@ namespace {
       }
    };
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for recipes BeerJSON records
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> JsonRecordDefinition const BEER_JSON_RECORD_DEFN<Recipe> {
       std::in_place_type_t<Recipe>{},
       "recipes", // JSON record name
@@ -1111,15 +1111,15 @@ namespace {
    };
 
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for packaging BeerJSON records TODO
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
 //      JsonRecordDefinition::create< JsonNamedEntityRecord< Packaging > >,
 
 
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for root of BeerJSON document
-   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    JsonRecordDefinition const BEER_JSON_RECORD_DEFN_ROOT {
       "beerjson", // JSON record name
       nullptr,
