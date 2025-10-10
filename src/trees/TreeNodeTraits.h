@@ -183,6 +183,7 @@ template<> struct TreeNodeTraits<InventoryFermentable, InventoryFermentable> {
 template<> struct TreeNodeTraits<MashStep, Mash> {
    enum class ColumnIndex {
       Name    ,
+      Volume  ,
       StepTime,
 //      Type        ,
 //      Amount      ,
