@@ -372,8 +372,7 @@ public:
          // Probably not 100% necessary to lock the pool against modifications, as we're not planning any after start-up, but...
          //this->grammarPool.lockPool();
 
-         /// TBD probably need to lock other things here ///
-
+         // TBD probably need to lock other things here
 
          xercesc::DOMConfiguration * config = this->m_parser->getDomConfig();
          config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, &domErrorHandler);
@@ -556,7 +555,7 @@ public:
    xercesc::DOMLSParser * m_parser;
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//======================================================================================================================
 
 XmlCoding::XmlCoding(QString const name,
                      QString const schemaResource,

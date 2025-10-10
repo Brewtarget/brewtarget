@@ -39,11 +39,11 @@
 #endif
 
 QString Misc::localisedName() { return tr("Miscellaneous"); }
-QString Misc::localisedName_notes    (){ return tr("Notes"     ); }
-QString Misc::localisedName_producer (){ return tr("Producer"  ); }
-QString Misc::localisedName_productId(){ return tr("Product ID"); }
-QString Misc::localisedName_type     (){ return tr("Type"      ); }
-QString Misc::localisedName_useFor   (){ return tr("Use For"   ); }
+QString Misc::localisedName_notes    () { return tr("Notes"     ); }
+QString Misc::localisedName_producer () { return tr("Producer"  ); }
+QString Misc::localisedName_productId() { return tr("Product ID"); }
+QString Misc::localisedName_type     () { return tr("Type"      ); }
+QString Misc::localisedName_useFor   () { return tr("Use For"   ); }
 
 EnumStringMapping const Misc::typeStringMapping {
    {Misc::Type::Spice      , "spice"      },

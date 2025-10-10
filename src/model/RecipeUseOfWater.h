@@ -106,8 +106,6 @@ protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
-protected:
-///   double m_volume_l;
 };
 
 BT_DECLARE_METATYPES(RecipeUseOfWater)

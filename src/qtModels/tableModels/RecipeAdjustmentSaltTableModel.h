@@ -77,13 +77,11 @@ public:
    void saveAndClose();
 
 public slots:
-///   void catchSalt();
 
 signals:
    void newTotals();
 
 private:
-///   double spargePct;
    double multiplier(RecipeAdjustmentSalt const & salt, bool const convertKilogramsToGrams = true) const;
 };
 

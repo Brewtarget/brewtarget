@@ -98,7 +98,6 @@ void InfoText::setText(const QString & text) {
 void InfoText::mouseReleaseEvent(QMouseEvent * event) {
    // Not sure the base class actually does anything, but good form to call it
    this->QLabel::mouseReleaseEvent(event);
-///   qDebug() << Q_FUNC_INFO << "Buddy" << this->buddy();
    // Simplest way to achieve what we want and keep the button and info text in sync is to tell the button it was
    // clicked.
    if (m_infoButton && this->isVisible()) {
@@ -106,17 +105,6 @@ void InfoText::mouseReleaseEvent(QMouseEvent * event) {
    }
    return;
 }
-
-
-
-///void InfoText::connectWithBuddy() {
-///   QWidget * buddy = this->buddy();
-///   InfoButton * buddyButton = qobject_cast<InfoButton *>(buddy);
-///   // It's a coding error if we don't have a buddy at this point or it's not an InfoButton
-///   Q_ASSERT(buddyButton);
-///   buddyButton->linkWith(this);
-///   return;
-///}
 
 void InfoText::show() {
    this->QLabel::show();

@@ -40,8 +40,6 @@ class TypeLookup;
 AddPropertyName(dateBestBefore   )
 AddPropertyName(dateOrdered      )
 AddPropertyName(dateReceived     )
-///AddPropertyName(ingredient       )
-///AddPropertyName(ingredientId     )
 AddPropertyName(purchasePrice    )
 AddPropertyName(purchaseTax      )
 AddPropertyName(quantityOrdered  )
@@ -92,7 +90,6 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
-///   static QString localisedName_ingredientId     ();
    static QString localisedName_dateOrdered      ();
    static QString localisedName_dateReceived     ();
    static QString localisedName_dateBestBefore   ();
@@ -117,8 +114,6 @@ public:
    virtual ~Inventory();
 
    //=================================================== PROPERTIES ====================================================
-///   Q_PROPERTY(int    ingredientId     READ ingredientId     WRITE setIngredientId    )
-
    Q_PROPERTY(std::optional<QDate> dateOrdered      READ dateOrdered      WRITE setDateOrdered   )
    Q_PROPERTY(std::optional<QDate> dateReceived     READ dateReceived     WRITE setDateReceived  )
    Q_PROPERTY(std::optional<QDate> dateBestBefore   READ dateBestBefore   WRITE setDateBestBefore)
@@ -146,11 +141,7 @@ public:
    //! \brief Calculated quantity remaining
    Q_PROPERTY(double quantityRemaining   READ quantityRemaining   STORED false)
 
-///   //! \brief Convenience property to get \c Ingredient directly
-///   Q_PROPERTY(std::shared_ptr<Ingredient> ingredient   READ ingredient   STORED false)
-
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-///   int                           ingredientId   () const;
    std::optional<QDate>               dateOrdered    () const;
    std::optional<QDate>               dateReceived   () const;
    std::optional<QDate>               dateBestBefore () const;
@@ -161,10 +152,8 @@ public:
    std::optional<CurrencyAmount>      shippingCost   () const;
    // Getters for calculated values
    double              quantityRemaining() const;
-///   virtual std::shared_ptr<Ingredient> ingredient() const = 0;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-///   void setIngredientId   (int                           const   val);
    void setDateOrdered    (std::optional<QDate>          const & val);
    void setDateReceived   (std::optional<QDate>          const & val);
    void setDateBestBefore (std::optional<QDate>          const & val);
@@ -196,7 +185,6 @@ public:
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 
-///   int                           m_ingredientId   ;
    std::optional<QDate>          m_dateOrdered    ;
    std::optional<QDate>          m_dateReceived   ;
    std::optional<QDate>          m_dateBestBefore ;
@@ -217,9 +205,9 @@ template <typename T> concept CONCEPT_FIX_UP IsInventory = std::is_base_of_v<Inv
 
 namespace InventoryTools {
    /**
-   * \return First found \c Inventory subclass object exists for the supplied \c Ingredient subclass object.  Or
-   *         \c nullptr if none is found.
-   */
+    * \return First found \c Inventory subclass object exists for the supplied \c Ingredient subclass object.  Or
+    *         \c nullptr if none is found.
+    */
    template<IsInventory Inv, IsIngredient Ing>
    std::shared_ptr<Inv> firstInventory(Ing const & ing) {
       auto ingredientId = ing.key();
@@ -232,9 +220,9 @@ namespace InventoryTools {
    }
 
    /**
-   * \return \c true if at least one \c Inventory subclass object exists for the supplied \c Ingredient subclass object;
-   *         \c false otherwise.
-   */
+    * \return \c true if at least one \c Inventory subclass object exists for the supplied \c Ingredient subclass object;
+    *         \c false otherwise.
+    */
    template<IsIngredient Ing>
    bool hasInventory(Ing const & ing) {
       auto result = InventoryTools::firstInventory<typename Ing::InventoryClass, Ing>(ing);
@@ -245,9 +233,9 @@ namespace InventoryTools {
    }
 
    /**
-   * \return A suitable \c Inventory subclass object for the supplied \c Ingredient subclass object.  If the former does
-   *         not exist, it will be created.
-   */
+    * \return A suitable \c Inventory subclass object for the supplied \c Ingredient subclass object.  If the former does
+    *         not exist, it will be created.
+    */
    template<IsIngredient Ing>
    std::shared_ptr<typename Ing::InventoryClass> getInventory(Ing const & ing) {
       //

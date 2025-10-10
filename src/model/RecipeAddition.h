@@ -19,7 +19,7 @@
 
 #include <QString>
 
-#include "model/IngredientInRecipe.h"
+#include "model/OwnedByRecipe.h"
 #include "utils/EnumStringMapping.h"
 
 //======================================================================================================================

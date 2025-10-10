@@ -210,10 +210,6 @@ void Salt::setType(Salt::Type type) {
    return;
 }
 
-///void Salt::setIsAcid(bool val) {
-///   SET_AND_NOTIFY(PropertyNames::Salt::isAcid, this->m_is_acid, val);
-///}
-
 void Salt::setPercentAcid(std::optional<double> val) {
    // .:TBD:. Maybe we should check here that we are an acid...
    SET_AND_NOTIFY(PropertyNames::Salt::percentAcid, this->m_percentAcid, val);

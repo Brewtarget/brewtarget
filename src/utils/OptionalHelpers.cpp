@@ -31,6 +31,7 @@ void Optional::removeOptionalWrapper(QVariant & propertyValue, TypeInfo const & 
    if (typeInfo.typeIndex == typeid(int         )) { removeOptionalWrapper<int         >(propertyValue, hasValue); return; }
    if (typeInfo.typeIndex == typeid(unsigned int)) { removeOptionalWrapper<unsigned int>(propertyValue, hasValue); return; }
    if (typeInfo.typeIndex == typeid(bool        )) { removeOptionalWrapper<bool        >(propertyValue, hasValue); return; }
+   if (typeInfo.typeIndex == typeid(QDate       )) { removeOptionalWrapper<QDate       >(propertyValue, hasValue); return; }
 
    // If the native type is an enum, then the QVariant should actually contain an int
    if (typeInfo.isEnum() && propertyValue.canConvert<std::optional<int>>()) {

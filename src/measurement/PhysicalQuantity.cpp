@@ -187,9 +187,6 @@ Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity(Measurement::
    Q_UNREACHABLE();
 }
 
-///template<Measurement::PhysicalQuantity const pq> bool isValid(Measurement::PhysicalQuantity const physicalQuantity) {
-///   return physicalQuantity == pq;
-///}
 template<> bool Measurement::isValid<Measurement::ChoiceOfPhysicalQuantity,
                                      Measurement::ChoiceOfPhysicalQuantity::Mass_Volume      >(Measurement::PhysicalQuantity const physicalQuantity) {
    return (physicalQuantity == Measurement::PhysicalQuantity::Mass  ||

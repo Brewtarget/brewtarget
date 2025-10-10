@@ -109,8 +109,7 @@ public:
     * \param columnInfos Needs to be in order
     */
    BtTableModel(QTableView * parent,
-                bool editable/*,
-                std::initializer_list<ColumnInfo> columnInfos*/);
+                bool editable);
    virtual ~BtTableModel();
 
    // Per https://doc.qt.io/qt-5/qabstracttablemodel.html, when subclassing QAbstractTableModel, you must implement
@@ -156,8 +155,7 @@ protected:
 class BtTableModelRecipeObserver : public BtTableModel {
 public:
    BtTableModelRecipeObserver(QTableView * parent,
-                              bool editable/*,
-                              std::initializer_list<ColumnInfo> columnInfos*/);
+                              bool editable);
    ~BtTableModelRecipeObserver();
 
    /**

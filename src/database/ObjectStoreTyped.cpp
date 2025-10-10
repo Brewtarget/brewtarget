@@ -26,6 +26,7 @@
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
 #include "model/FermentationStep.h"
+#include "model/Folder.h"
 #include "model/Hop.h"
 #include "model/Instruction.h"
 #include "model/Inventory.h"
@@ -78,9 +79,9 @@ namespace {
    //       slightly more readable.
    //
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Equipment
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Equipment> {
       "equipment",
       {
@@ -140,9 +141,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Fermentable
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Fermentable> {
       "fermentable",
       {
@@ -186,9 +187,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for InventoryFermentable
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<InventoryFermentable> {
       "fermentable_in_inventory",
       {
@@ -200,9 +201,9 @@ namespace {
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventoryFermentable> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Hop
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Hop> {
       "hop",
       {
@@ -239,9 +240,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for InventoryHop
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<InventoryHop> {
       "hop_in_inventory",
       {
@@ -253,9 +254,9 @@ namespace {
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventoryHop> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Mash
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Mash> {
       "mash",
       {
@@ -276,10 +277,10 @@ namespace {
    // Mashes don't have children, and the link with their MashSteps is stored in the MashStep (as between Recipe and BrewNotes)
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Mash> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for MashStep
    // NB: MashSteps don't get folders, because they don't separate from their Mash
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<MashStep> {
       "mash_step",
       {
@@ -308,9 +309,9 @@ namespace {
    // MashSteps don't have children
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<MashStep> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Boil
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Boil> {
       "boil",
       {
@@ -326,10 +327,10 @@ namespace {
    // Boils don't have children, and the link with their BoilSteps is stored in the BoilStep (as between Recipe and BrewNotes)
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Boil> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for BoilStep
    // NB: BoilSteps don't get folders, because they don't separate from their Boil
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<BoilStep> {
       "boil_step",
       {
@@ -354,9 +355,9 @@ namespace {
    // BoilSteps don't have children
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<BoilStep> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Fermentation
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Fermentation> {
       "fermentation",
       {
@@ -371,14 +372,14 @@ namespace {
    // Fermentations don't have children, and the link with their FermentationSteps is stored in the FermentationStep (as between Recipe and BrewNotes)
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Fermentation> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for FermentationStep
    //
    // NB: FermentationSteps don't get folders, because they don't separate from their Fermentation
    //
    // NB: Although FermentationStep inherits (via StepExtended) from Step, the rampTime_mins field is not used and
    //     should not be stored in the DB or serialised.  See comment in model/Step.h.
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<FermentationStep> {
       "fermentation_step",
       {
@@ -403,9 +404,9 @@ namespace {
    // FermentationSteps don't have children
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<FermentationStep> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Misc
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Misc> {
       "misc",
       {
@@ -422,9 +423,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for InventoryMisc
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<InventoryMisc> {
       "misc_in_inventory",
       {
@@ -436,9 +437,9 @@ namespace {
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventoryMisc> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Salt
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Salt> {
       "salt",
       {
@@ -453,9 +454,9 @@ namespace {
    // Salts don't have children
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Salt> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for InventorySalt
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<InventorySalt> {
       "salt_in_inventory",
       {
@@ -467,9 +468,9 @@ namespace {
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventorySalt> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Style
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Style> {
       "style",
       {
@@ -506,9 +507,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Water
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Water> {
       "water",
       {
@@ -539,9 +540,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Yeast
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Yeast> {
       "yeast",
       {
@@ -573,9 +574,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for InventoryYeast
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<InventoryYeast> {
       "yeast_in_inventory",
       {
@@ -587,9 +588,9 @@ namespace {
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<InventoryYeast> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Recipe
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Recipe> {
       "recipe",
       {
@@ -631,9 +632,9 @@ namespace {
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Recipe> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for RecipeAdditionFermentable
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<RecipeAdditionFermentable> {
       "fermentable_in_recipe",
       {
@@ -653,9 +654,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for RecipeAdditionHop
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<RecipeAdditionHop> {
       "hop_in_recipe",
       {
@@ -675,9 +676,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for RecipeAdditionMisc
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<RecipeAdditionMisc> {
       "misc_in_recipe",
       {
@@ -697,9 +698,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for RecipeAdditionYeast
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<RecipeAdditionYeast> {
       "yeast_in_recipe",
       {
@@ -722,9 +723,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for RecipeAdjustmentSalt
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<RecipeAdjustmentSalt> {
       "salt_in_recipe",
       {
@@ -739,9 +740,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for RecipeUseOfWater
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<RecipeUseOfWater> {
       "water_in_recipe",
       {
@@ -754,9 +755,9 @@ namespace {
       }
    };
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for BrewNote
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<BrewNote> {
       "brewnote",
       {
@@ -800,10 +801,10 @@ namespace {
    // BrewNotes don't have children
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<BrewNote> {};
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Instruction
    // NB: instructions aren't displayed in trees, and get no folder
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Instruction> {
       "instruction",
       {
@@ -821,6 +822,21 @@ namespace {
    };
    // Instructions don't have children
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Instruction> {};
+
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   // Database field mappings for Folder
+   // NB: folders aren't displayed in trees, and get no folder
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Folder> {
+      "folder",
+      {
+         {ObjectStore::FieldType::Int   , "id"           , PropertyNames::NamedEntity::key       },
+         {ObjectStore::FieldType::String, "name"         , PropertyNames::NamedEntity::name      },
+         {ObjectStore::FieldType::Bool  , "deleted"      , PropertyNames::NamedEntity::deleted   },
+      }
+   };
+   // Instructions don't have children
+   template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Folder> {};
 
 }
 
@@ -891,6 +907,7 @@ template ObjectStoreTyped<Equipment                > & ObjectStoreTyped<Equipmen
 template ObjectStoreTyped<Fermentable              > & ObjectStoreTyped<Fermentable              >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Fermentation             > & ObjectStoreTyped<Fermentation             >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<FermentationStep         > & ObjectStoreTyped<FermentationStep         >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder                   > & ObjectStoreTyped<Folder                   >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Hop                      > & ObjectStoreTyped<Hop                      >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Instruction              > & ObjectStoreTyped<Instruction              >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<InventoryFermentable     > & ObjectStoreTyped<InventoryFermentable     >::getInstance(Database * database = nullptr);
@@ -925,6 +942,8 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    if (ObjectStoreTyped<Fermentable              >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Fermentable"              ; }
    if (ObjectStoreTyped<Fermentation             >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Fermentation"             ; }
    if (ObjectStoreTyped<FermentationStep         >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "FermentationStep"         ; }
+// TODO Folders are not yet stored in the DB.  The object store exists for them, but is not used and we haven't implemented the DB table yet.
+//   if (ObjectStoreTyped<Folder                   >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Folder"                   ; }
    if (ObjectStoreTyped<Hop                      >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Hop"                      ; }
    if (ObjectStoreTyped<Instruction              >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Instruction"              ; }
    if (ObjectStoreTyped<InventoryFermentable     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "InventoryFermentable"     ; }
@@ -971,6 +990,7 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    postLoadInit(ObjectStoreTyped<Fermentable              >::getInstance());
    postLoadInit(ObjectStoreTyped<Fermentation             >::getInstance());
    postLoadInit(ObjectStoreTyped<FermentationStep         >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder                   >::getInstance());
    postLoadInit(ObjectStoreTyped<Hop                      >::getInstance());
    postLoadInit(ObjectStoreTyped<Instruction              >::getInstance());
    postLoadInit(ObjectStoreTyped<InventoryFermentable     >::getInstance());
@@ -1007,6 +1027,7 @@ namespace {
          &ObjectStoreTyped<Fermentable              >::getInstance(database),
          &ObjectStoreTyped<Fermentation             >::getInstance(database),
          &ObjectStoreTyped<FermentationStep         >::getInstance(database),
+         &ObjectStoreTyped<Folder                   >::getInstance(database),
          &ObjectStoreTyped<Hop                      >::getInstance(database),
          &ObjectStoreTyped<Instruction              >::getInstance(database),
          &ObjectStoreTyped<InventoryFermentable     >::getInstance(database),

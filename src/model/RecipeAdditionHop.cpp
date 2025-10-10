@@ -112,7 +112,6 @@ RecipeAdditionHop::RecipeAdditionHop(NamedParameterBundle const & namedParameter
    //
    m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
                                                              RecipeAddition::Stage::Boil);
-///   qDebug() << Q_FUNC_INFO << "RecipeAdditionHop #" << this->key() << ": Recipe #" << this->m_recipeId << ", Hop #" << this->m_ingredientId;
 
    CONSTRUCTOR_END
    return;

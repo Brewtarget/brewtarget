@@ -59,11 +59,6 @@ namespace Measurement {
     */
    void setDisplayUnitSystem(PhysicalQuantity physicalQuantity, UnitSystem const & unitSystem);
 
-///   /**
-///    * \brief Set the supplied \c UnitSystem as the display \c UnitSystem for the \c PhysicalQuantity to which it relates
-///    */
-///   void setDisplayUnitSystem(UnitSystem const & unitSystem);
-
    /**
     * \brief Get the display \c UnitSystem for the specified \c PhysicalQuantity
     */

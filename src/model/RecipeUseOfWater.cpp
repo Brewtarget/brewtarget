@@ -37,9 +37,8 @@ ObjectStore & RecipeUseOfWater::getObjectStoreTypedInstance() const {
 bool RecipeUseOfWater::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    RecipeUseOfWater const & rhs = static_cast<RecipeUseOfWater const &>(other);
-///   // Base class will already have ensured names are equal
+   // Base class will already have ensured names are equal
    return (
-///      AUTO_PROPERTY_COMPARE(this, rhs, m_volume_l, PropertyNames::RecipeUseOfWater::volume_l, propertiesThatDiffer) &&
       // Parent classes have to be equal
       this->OwnedByRecipe     ::compareWith  (rhs, propertiesThatDiffer) &&
       this->RecipeAdditionBase::compareWith  (rhs, propertiesThatDiffer) &&
@@ -51,7 +50,6 @@ TypeLookup const RecipeUseOfWater::typeLookup {
    "RecipeUseOfWater",
    {
       PROPERTY_TYPE_LOOKUP_NO_MV(RecipeUseOfWater, water   , water     ),
-///      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeUseOfWater, volume_l, m_volume_l, Measurement::PhysicalQuantity::Volume),
    },
    // Parent classes lookup.  NB: OwnedByRecipe not NamedEntity!
    {&OwnedByRecipe::typeLookup,
@@ -86,11 +84,9 @@ RecipeUseOfWater::RecipeUseOfWater(RecipeUseOfWater const & other) :
 RecipeUseOfWater::~RecipeUseOfWater() = default;
 
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
-///double  RecipeUseOfWater::volume_l    () const { return this->m_volume_l; }
 double  RecipeUseOfWater::volume_l    () const { return this->amount().quantity; }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
-///void RecipeUseOfWater::setVolume_l    (double const val) { this->m_volume_l = val; return; }
 void RecipeUseOfWater::setVolume_l    (double const val) { this->setAmount(Measurement::Amount{val, Measurement::Units::liters}); return; }
 
 // Boilerplate code for IngredientAmount and RecipeAddition

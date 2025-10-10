@@ -370,11 +370,8 @@ void SmartField::setAmount(Measurement::Amount const & amount) {
          fieldType;
    }
 
-   // For the moment, I'm going to say this function should _only_ be called for ChoiceOfPhysicalQuantity
-///   Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*this->getTypeInfo().fieldType));
-
    // Usually leave this debug log commented out unless trouble-shooting as it generates a lot of logging
-   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
+//   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
    this->setRawText(this->displayAmount(amount, this->pimpl->m_precision));
    return;
 }
@@ -382,7 +379,7 @@ void SmartField::setAmount(Measurement::Amount const & amount) {
 void SmartField::setAmount(std::optional<Measurement::Amount> const & amount) {
    Q_ASSERT(this->pimpl->m_initialised);
    // Usually leave this debug log commented out unless trouble-shooting as it generates a lot of logging
-   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
+//   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
    if (!amount) {
       this->setRawText("");
       return;

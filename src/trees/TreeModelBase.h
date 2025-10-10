@@ -160,11 +160,11 @@ public:
    }
 
    int doColumnCount([[maybe_unused]] QModelIndex const & parent) const {
-      return TreeItemNode<NE>::NumberOfColumns;
+      return ColumnOwnerTraits<TreeItemNode<NE>>::numColumns();
    }
 
    QModelIndex doIndex(int const row, int const column, QModelIndex const & parent) const {
-      if (parent.isValid() && parent.column() >= TreeItemNode<NE>::NumberOfColumns) {
+      if (parent.isValid() && parent.column() >= ColumnOwnerTraits<TreeItemNode<NE>>::numColumns()) {
          return QModelIndex();
       }
 
@@ -399,7 +399,7 @@ public:
             } else if (className == Folder::staticMetaObject.className()) {
                // I need the actual folder object that got dropped.
                auto newFolder = std::make_shared<Folder>();
-               newFolder->setfullPath(name);
+               newFolder->setFullPath(name);
 
                this->renameFolder(*newFolder, targetFolderPath);
             }
@@ -734,7 +734,7 @@ public:
             // Child is a folder
             auto folderNode = std::get<std::shared_ptr<TreeFolderNode<NE>>>(child);
             auto folder = folderNode->underlyingItem();
-            if (folder->isFolder(targetPath)) {
+            if (folder->fullPath() == targetPath) {
                // The folder name matches the part we are looking at
                if (dirs.isEmpty()) {
                   // There are no more subtrees to look for, we found it
@@ -962,7 +962,7 @@ private:
 
          // Set the full path, which will set the name and the path
          auto newFolder = std::make_shared<Folder>();
-         newFolder->setfullPath(folderPath);
+         newFolder->setFullPath(folderPath);
 
          auto newFolderNode = std::make_shared<TreeFolderNode<NE>>(this->derived(), parentNode, newFolder);
          int const numChildren = parentNode->childCount();

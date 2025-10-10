@@ -31,7 +31,6 @@
 #endif
 
 QString Inventory::localisedName() { return tr("Inventory"); }
-///QString Inventory::localisedName_ingredientId     () { return tr("Ingredient ID"     ); }
 QString Inventory::localisedName_dateOrdered      () { return tr("Date Ordered"      ); }
 QString Inventory::localisedName_dateReceived     () { return tr("Date Received"     ); }
 QString Inventory::localisedName_dateBestBefore   () { return tr("Best Before Date"  ); }
@@ -47,7 +46,6 @@ bool Inventory::compareWith(NamedEntity const & other, QList<BtStringConst const
    // Base class (NamedEntity) will have ensured this cast is valid
    Inventory const & rhs = static_cast<Inventory const &>(other);
    return (
-///      AUTO_PROPERTY_COMPARE(this, rhs, m_ingredientId   , PropertyNames::Inventory::ingredientId   , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_dateOrdered    , PropertyNames::Inventory::dateOrdered    , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_dateReceived   , PropertyNames::Inventory::dateReceived   , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_dateBestBefore , PropertyNames::Inventory::dateBestBefore , propertiesThatDiffer) &&
@@ -62,25 +60,21 @@ bool Inventory::compareWith(NamedEntity const & other, QList<BtStringConst const
 TypeLookup const Inventory::typeLookup {
    "Inventory",
    {
-///      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, ingredientId     , m_ingredientId   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, dateOrdered      , m_dateOrdered    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, dateReceived     , m_dateReceived   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, dateBestBefore   , m_dateBestBefore ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, supplier         , m_supplier       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, quantityOrdered  , m_quantityOrdered),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, purchasePrice    , m_purchasePrice  ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, purchaseTax      , m_purchaseTax    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, shippingCost     , m_shippingCost   ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Inventory, quantityRemaining, quantityRemaining),
-///      PROPERTY_TYPE_LOOKUP_NO_MV(Inventory, ingredient       , ingredient       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, dateOrdered      , m_dateOrdered    , NonPhysicalQuantity::Date),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, dateReceived     , m_dateReceived   , NonPhysicalQuantity::Date),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, dateBestBefore   , m_dateBestBefore , NonPhysicalQuantity::Date),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, supplier         , m_supplier       , NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, quantityOrdered  , m_quantityOrdered, NonPhysicalQuantity::Dimensionless),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, purchasePrice    , m_purchasePrice  , NonPhysicalQuantity::Currency),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, purchaseTax      , m_purchaseTax    , NonPhysicalQuantity::Currency),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Inventory, shippingCost     , m_shippingCost   , NonPhysicalQuantity::Currency),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Inventory, quantityRemaining, quantityRemaining, NonPhysicalQuantity::Dimensionless),
    },
    {&NamedEntity::typeLookup}
 };
 
 Inventory::Inventory(QString const & name) :
    NamedEntity{name},
-///   IngredientAmount{},
-///   m_ingredientId   {-1},
    m_dateOrdered    {},
    m_dateReceived   {},
    m_dateBestBefore {},
@@ -96,8 +90,6 @@ Inventory::Inventory(QString const & name) :
 
 Inventory::Inventory(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity{namedParameterBundle},
-///   IngredientAmount{namedParameterBundle},
-///   SET_REGULAR_FROM_NPB (m_ingredientId   , namedParameterBundle, PropertyNames::Inventory::ingredientId   ),
    SET_REGULAR_FROM_NPB (m_dateOrdered    , namedParameterBundle, PropertyNames::Inventory::dateOrdered    , std::nullopt),
    SET_REGULAR_FROM_NPB (m_dateReceived   , namedParameterBundle, PropertyNames::Inventory::dateReceived   , std::nullopt),
    SET_REGULAR_FROM_NPB (m_dateBestBefore , namedParameterBundle, PropertyNames::Inventory::dateBestBefore , std::nullopt),
@@ -113,8 +105,6 @@ Inventory::Inventory(NamedParameterBundle const & namedParameterBundle) :
 
 Inventory::Inventory(Inventory const & other) :
    NamedEntity      {other},
-///   IngredientAmount {other},
-///   m_ingredientId   {other.m_ingredientId   },
    m_dateOrdered    {other.m_dateOrdered    },
    m_dateReceived   {other.m_dateReceived   },
    m_dateBestBefore {other.m_dateBestBefore },
@@ -131,7 +121,6 @@ Inventory::Inventory(Inventory const & other) :
 Inventory::~Inventory() = default;
 
 //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-///int                           Inventory::ingredientId   () const { return this->m_ingredientId   ; }
 std::optional<QDate>          Inventory::dateOrdered    () const { return this->m_dateOrdered    ; }
 std::optional<QDate>          Inventory::dateReceived   () const { return this->m_dateReceived   ; }
 std::optional<QDate>          Inventory::dateBestBefore () const { return this->m_dateBestBefore ; }
@@ -149,7 +138,6 @@ double Inventory::quantityRemaining() const {
 }
 
 //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-///void Inventory::setIngredientId   (int                           const   val) { SET_AND_NOTIFY(PropertyNames::Inventory::ingredientId   , this->m_ingredientId   , val); return;}
 void Inventory::setDateOrdered    (std::optional<QDate>          const & val) { SET_AND_NOTIFY(PropertyNames::Inventory::dateOrdered    , this->m_dateOrdered    , val); return;}
 void Inventory::setDateReceived   (std::optional<QDate>          const & val) { SET_AND_NOTIFY(PropertyNames::Inventory::dateReceived   , this->m_dateReceived   , val); return;}
 void Inventory::setDateBestBefore (std::optional<QDate>          const & val) { SET_AND_NOTIFY(PropertyNames::Inventory::dateBestBefore , this->m_dateBestBefore , val); return;}

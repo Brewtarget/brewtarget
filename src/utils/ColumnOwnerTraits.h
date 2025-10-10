@@ -31,32 +31,36 @@ template<class Derived>
 struct ColumnIndexHolder;
 
 /**
+ * \brief We want the data about the columns to be in a Meyers singleton to avoid static initialisation order fiasco.
+ *        The function to access that singleton might naturally be a static member function on \c ColumnOwnerTraits.
+ *        However, we need to be able to partially specialise the function (for \c TreeFolderNode), and C++ does not
+ *        permit partial specialisation of an individual member function of a templated class (nor of a global or
+ *        namespace function).  So we make a separate class instead.
+ *
+ *        We're using a \c std::vector here because it's easier for constant lists.  (With \c QVector, at least in
+ *        Qt 5, the items stored even in a const instance still need to be default constructable and copyable.)
+ */
+template<class ColumnOwner>
+struct ColumnOwnerTraitsData {
+   static std::vector<ColumnInfo> const & getColumnInfos();
+};
+
+/**
  * \class ColumnOwnerTraits
  *
- * \brief Traits base class for subclasses of \c BtTableModel and \c TreeNode to hold other info about their table
- *        columns.
+ * \brief Helper class for \c ColumnOwnerTraits.  We want to be able to do partial specialisations of
+ *        \c ColumnOwnerTraits::getColumnInfos, but C++ does not permit partial specialisations of an individual member
+ *        function of a templated class.  You have to do a partial specialisation of the whole templated class.  As a
+ *        workaround, we split out the parts we don't need to specialise into this separate class.
  */
 template<class ColumnOwner>
 struct ColumnOwnerTraits {
-
-   /**
-    * \brief We're using a \c std::vector here because it's easier for constant lists.  (With \c QVector, at least in
-    *        Qt 5, the items stored even in a const instance still need to be default constructable and copyable.)
-    *
-    *        Ideally we'd have a \c constexpr static member variable here that is instantiated in the template
-    *        specialisations.
-    *        However, AFAICT, that's not possible.  Instead, to avoid static initialisation order fiasco, we use a
-    *        Meyers singleton.
-    *
-    *        Derived classes should use the COLUMN_INFOS macro below to define this function.
-    */
-   static std::vector<ColumnInfo> const & getColumnInfos();
 
    //
    // This is a traits class, so it only has static members and does not need any constructor or destructor
    //
    [[nodiscard]] static ColumnInfo const & getColumnInfo(size_t const columnIndex) {
-      std::vector<ColumnInfo> const & columnInfos = getColumnInfos();
+      std::vector<ColumnInfo> const & columnInfos = ColumnOwnerTraitsData<ColumnOwner>::getColumnInfos();
 
       // It's a coding error to call this for a non-existent column
       Q_ASSERT(columnIndex < columnInfos.size());
@@ -80,8 +84,11 @@ struct ColumnOwnerTraits {
       return getColumnInfo(columnIndex).label;
    }
 
+   // We _could_ use size_t for numColumns, since it's obviously never negative.  However, various Qt functions for
+   // column number use int (and -1 means "invalid"), so we can spare ourselves compiler warnings about comparing signed
+   // and unsigned types by sticking to int ourselves.
    [[nodiscard]] static int numColumns() {
-      return getColumnInfos().size();
+      return ColumnOwnerTraitsData<ColumnOwner>::getColumnInfos().size();
    }
 
 };
@@ -106,14 +113,14 @@ struct ColumnOwnerTraits {
  * \brief ColumnOwner classes (eg subclasses of \c BtTableModel) should use this to define the \c getColumnInfos member
  *        function.
  */
-#define COLUMN_INFOS(Derived, ...)                                                        \
-template<> std::vector<ColumnInfo> const & ColumnOwnerTraits<Derived>::getColumnInfos() { \
-   /* Meyers singleton */                                                                 \
-   static std::vector<ColumnInfo> const columnInfos {                                     \
-      __VA_ARGS__                                                                         \
-   };                                                                                     \
-   return columnInfos;                                                                    \
-}                                                                                         \
+#define COLUMN_INFOS(Derived, ...)                                                                 \
+   template<> std::vector<ColumnInfo> const & ColumnOwnerTraitsData<Derived>::getColumnInfos() { \
+      /* Meyers singleton */                                                                       \
+      static std::vector<ColumnInfo> const columnInfos {                                           \
+         __VA_ARGS__                                                                               \
+      };                                                                                           \
+      return columnInfos;                                                                          \
+   }                                                                                               \
 
 
 #endif

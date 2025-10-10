@@ -17,11 +17,14 @@
 #define TREES_TREENODEBASE_H
 #pragma once
 
+#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
+
 #include "trees/TreeNode.h"
 #include "trees/TreeNodeTraits.h"
+#include "utils/ColumnInfo.h"
+#include "utils/ColumnOwnerTraits.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
-
-#include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
+#include "utils/PropertyHelper.h"
 
 /**
  * \class TreeNodeBase Curiously Recurring Template Base for NewTreeNode subclasses
@@ -87,10 +90,6 @@ template<class Derived, class NE, class TreeType>
 class TreeNodeBase : public TreeNode, public CuriouslyRecurringTemplateBase<TreeNodeBasePhantom, Derived> {
 public:
    using ColumnIndex        = typename TreeNodeTraits<NE, TreeType>::ColumnIndex;
-   // We _could_ use size_t for NumberOfColumns, since it's obviously never negative.  However, various Qt functions for
-   // column number use int (and -1 means "invalid"), so we can spare ourselves compiler warnings about comparing signed
-   // and unsigned types by sticking to int ourselves.
-   static constexpr int                NumberOfColumns = TreeNodeTraits<NE, TreeType>::NumberOfColumns;
    static constexpr TreeNodeClassifier NodeClassifier  = TreeNodeTraits<NE, TreeType>::NodeClassifier;
    using ParentPtrTypes     = typename TreeNodeTraits<NE, TreeType>::ParentPtrTypes;
    using ChildPtrTypes      = typename TreeNodeTraits<NE, TreeType>::ChildPtrTypes;
@@ -148,20 +147,80 @@ public:
       return NodeClassifier;
    }
 
+   /**
+    * \brief Similar to \c TreeModelBase::get_ColumnInfo
+    */
+   ColumnInfo const & get_ColumnInfo(ColumnIndex const columnIndex) const {
+      return ColumnOwnerTraits<Derived>::getColumnInfo(static_cast<size_t>(columnIndex));
+   }
+
+   QVariant readDataFromModel(ColumnInfo const & columnInfo, int const role) const {
+      QVariant modelData = columnInfo.propertyPath.getValue(*this->m_underlyingItem);
+      if (!modelData.isValid()) {
+         //
+         // You might think it's a programming error if we couldn't read a property modelData, but there are
+         // circumstances where this is expected -- eg reading "style/name" from a Recipe that does not have style set.
+         //
+         qWarning() <<
+            Q_FUNC_INFO <<
+               "Unable to read" << this->derived() << "property" << columnInfo.propertyPath << "(Got" << modelData <<
+               ")";
+         return QVariant{};
+      }
+
+      TypeInfo const & typeInfo = columnInfo.typeInfo;
+
+      // Uncomment this log statement if asserts in PropertyHelper::readDataFromPropertyValue are firing
+//      qDebug() <<
+//         Q_FUNC_INFO << columnInfo.columnFqName << ", propertyPath:" << columnInfo.propertyPath << "TypeInfo:" <<
+//         typeInfo << ", modelData:" << modelData;
+
+      return PropertyHelper::readDataFromPropertyValue(modelData,
+                                                       typeInfo,
+                                                       role,
+                                                       columnInfo.extras.has_value(),
+                                                       columnInfo.getForcedSystemOfMeasurement(),
+                                                       columnInfo.getForcedRelativeScale());
+   }
+
+   /**
+    * \brief Similar to \c TreeModelBase::readDataFromModel
+    */
+   QVariant readDataFromModel(ColumnIndex const columnIndex, int const role) const {
+
+      ColumnInfo const & columnInfo = this->get_ColumnInfo(columnIndex);
+      return this->readDataFromModel(columnInfo, role);
+
+   }
+
+   /**
+    *
+    */
+   bool columnIsLessThan(Derived const & other, ColumnIndex const columnIndex) const {
+      ColumnInfo const & columnInfo = this->get_ColumnInfo(columnIndex);
+      QVariant  leftItem = this->readDataFromModel(columnInfo, Qt::UserRole);
+      QVariant rightItem = other.readDataFromModel(columnInfo, Qt::UserRole);
+
+      return PropertyHelper::isLessThan(leftItem, rightItem, columnInfo.typeInfo);
+   }
+
    virtual QVariant data(int const column, int const role) const override {
-      if (column < 0 || column >= NumberOfColumns) {
+      if (column < 0 || column >= ColumnOwnerTraits<Derived>::numColumns()) {
          return QVariant{};
       }
 
       // Check above means this cast is valid
-      auto const typedColumn = static_cast<ColumnIndex>(column);
+      auto const columnIndex = static_cast<ColumnIndex>(column);
+      ColumnInfo const & columnInfo = this->get_ColumnInfo(columnIndex);
 
       switch (role) {
          case Qt::ToolTipRole:
             if (this->m_underlyingItem) {
                if constexpr (NodeClassifier == TreeNodeClassifier::Folder) {
                   // Tooltip for folders is just the name of the tree - eg "Recipes" for the Recipe tree
-                  return QVariant(TreeNodeTraits<TreeType>::getRootName());
+                  // We only ever care about this for primary items where, by definition, the tree type is the same as
+                  // the primary item type.
+                  return QVariant(TreeNodeTraits<TreeType, TreeType>::getRootName());
                } else {
                   return this->derived().getToolTip();
                }
@@ -170,15 +229,15 @@ public:
 
          case Qt::DisplayRole:
             if (this->m_underlyingItem) {
-               return TreeNodeTraits<NE, TreeType>::data(*this->m_underlyingItem, typedColumn);
+               return this->readDataFromModel(columnInfo, Qt::DisplayRole);
             }
             // Special handling for the root node
             if (!this->rawParent()) {
                // For the root node, we display the name of the tree in the first column
                // Root node is always a folder
                if constexpr (NodeClassifier == TreeNodeClassifier::Folder) {
-                  if (typedColumn == ColumnIndex::Name) {
-                     return QVariant(TreeNodeTraits<TreeType>::getRootName());
+                  if (columnIndex == ColumnIndex::Name) {
+                     return QVariant(TreeNodeTraits<TreeType, TreeType>::getRootName());
                   }
                }
                return QVariant{};
@@ -199,10 +258,11 @@ public:
    }
 
    static QVariant header(size_t const section) {
-      if (/*section < 0 || */section >= NumberOfColumns) {
+      auto const numColumns = static_cast<size_t>(ColumnOwnerTraits<Derived>::numColumns());
+      if (section >= numColumns) {
          return QVariant();
       }
-      return QVariant(Derived::columnDisplayNames[section]);
+      return ColumnOwnerTraits<Derived>::getColumnLabel(section);
    }
 
    /**
@@ -457,18 +517,6 @@ public:
    using TreeNodeBase<TreeFolderNode<NE>, Folder, NE>::TreeNodeBase;
    ~TreeFolderNode() = default;
 
-   static EnumStringMapping const columnDisplayNames;
-   bool columnIsLessThan(TreeFolderNode<NE> const & other, TreeNodeTraits<Folder, NE>::ColumnIndex column) const {
-      auto const & lhs = *this->m_underlyingItem;
-      auto const & rhs = *other.m_underlyingItem;
-      switch (column) {
-         case TreeNodeTraits<Folder, NE>::ColumnIndex::Name     : return lhs.name    () < rhs.name    ();
-         case TreeNodeTraits<Folder, NE>::ColumnIndex::Path     : return lhs.path    () < rhs.path    ();
-         case TreeNodeTraits<Folder, NE>::ColumnIndex::FullPath : return lhs.fullPath() < rhs.fullPath();
-      }
-      Q_UNREACHABLE(); // We should never get here
-   }
-
    // Have to override the version in \c TreeNodeBase as that will give Folder::staticMetaObject.className() rather
    // than NE::staticMetaObject.className()
    virtual QString className() const override {
@@ -487,10 +535,6 @@ class TreeItemNode : public TreeNodeBase<TreeItemNode<NE>, NE, typename TreeType
 public:
    using TreeNodeBase<TreeItemNode<NE>, NE, typename TreeTypeDeducer<NE>::TreeType>::TreeNodeBase;
    virtual ~TreeItemNode() = default;
-
-   static EnumStringMapping const columnDisplayNames;
-   bool columnIsLessThan(TreeItemNode<NE> const & other,
-                         TreeNodeTraits<NE, typename TreeTypeDeducer<NE>::TreeType>::ColumnIndex column) const;
 
    QString getToolTip() const;
 
@@ -529,5 +573,23 @@ public:
 static_assert(IsSubstantiveVariant<TreeFolderNode<Equipment>::ChildPtrTypes>);
 static_assert(IsSubstantiveVariant<TreeFolderNode<Style>::ChildPtrTypes>);
 static_assert(IsNullVariant<TreeItemNode<Equipment>::ChildPtrTypes>);
+
+
+//
+// All folders have the same columns, so we do a partial specialisation here.
+//
+template<class NE>
+struct ColumnOwnerTraitsData<TreeFolderNode<NE>> {
+   static std::vector<ColumnInfo> const & getColumnInfos() {
+      // Meyers singleton
+      static std::vector<ColumnInfo> const columnInfos {
+         TREE_NODE_HEADER(TreeFolderNode, Folder, Name    , tr("Name"     ), PropertyNames::NamedEntity::name),
+         TREE_NODE_HEADER(TreeFolderNode, Folder, Path    , tr("Path"     ), PropertyNames::Folder::path    ),
+         TREE_NODE_HEADER(TreeFolderNode, Folder, FullPath, tr("Full Path"), PropertyNames::Folder::fullPath),
+      };
+      return columnInfos;
+   }
+};
+
 
 #endif

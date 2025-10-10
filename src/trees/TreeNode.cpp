@@ -171,6 +171,11 @@ COLUMN_INFOS(
 )
 
 COLUMN_INFOS(
+   TreeItemNode<BrewNote>,
+   TREE_NODE_HEADER(TreeItemNode, BrewNote, BrewDate, tr("Date"), PropertyNames::BrewNote::brewDate),
+)
+
+COLUMN_INFOS(
    TreeItemNode<Equipment>,
    TREE_NODE_HEADER(TreeItemNode, Equipment, Name        , tr("Name"      ), PropertyNames::NamedEntity::name              ),
    TREE_NODE_HEADER(TreeItemNode, Equipment, BoilSize    , tr("Boil Size" ), PropertyNames::Equipment::kettleBoilSize_l    ),
@@ -185,6 +190,12 @@ COLUMN_INFOS(
 )
 
 COLUMN_INFOS(
+   TreeItemNode<MashStep>,
+   TREE_NODE_HEADER(TreeItemNode, MashStep, Name    , tr("Name"     ), PropertyNames::NamedEntity::name      ),
+   TREE_NODE_HEADER(TreeItemNode, MashStep, StepTime, tr("Step Time"), PropertyNames::StepBase::stepTime_mins),
+)
+
+COLUMN_INFOS(
    TreeItemNode<Boil>,
    TREE_NODE_HEADER(TreeItemNode, Boil, Name              , tr("Name"           ), PropertyNames::NamedEntity::name  ),
    TREE_NODE_HEADER(TreeItemNode, Boil, PreBoilSize       , tr("Pre-Boil Size"  ), PropertyNames::Boil::preBoilSize_l),
@@ -192,24 +203,36 @@ COLUMN_INFOS(
 )
 
 COLUMN_INFOS(
+   TreeItemNode<BoilStep>,
+   TREE_NODE_HEADER(TreeItemNode, BoilStep, Name    , tr("Name"     ), PropertyNames::NamedEntity::name      ),
+   TREE_NODE_HEADER(TreeItemNode, BoilStep, StepTime, tr("Step Time"), PropertyNames::StepBase::stepTime_mins),
+)
+
+COLUMN_INFOS(
    TreeItemNode<Fermentation>,
-   TREE_NODE_HEADER(TreeItemNode, Fermentation, Name       , tr("Name"       ), PropertyNames::NamedEntity::name       ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentation, Name       , tr("Name"       ), PropertyNames::NamedEntity::name        ),
    TREE_NODE_HEADER(TreeItemNode, Fermentation, Description, tr("Description"), PropertyNames::Fermentation::description),
 )
 
 COLUMN_INFOS(
+   TreeItemNode<FermentationStep>,
+   TREE_NODE_HEADER(TreeItemNode, FermentationStep, Name    , tr("Name"     ), PropertyNames::NamedEntity::name      ),
+   TREE_NODE_HEADER(TreeItemNode, FermentationStep, StepTime, tr("Step Time"), PropertyNames::StepBase::stepTime_days), // NB Days not Mins for fermentation steps
+)
+
+COLUMN_INFOS(
    TreeItemNode<Fermentable>,
-   TREE_NODE_HEADER(TreeItemNode, Fermentable, Name , tr("Name" ), PropertyNames::NamedEntity::name       ),
-   TREE_NODE_HEADER(TreeItemNode, Fermentable, Type , tr("Type" ), PropertyNames::Fermentable::type       ),
-   TREE_NODE_HEADER(TreeItemNode, Fermentable, Color, tr("Color"), PropertyNames::Fermentable::color_srm  ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Name , tr("Name" ), PropertyNames::NamedEntity::name     ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Type , tr("Type" ), PropertyNames::Fermentable::type     ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Color, tr("Color"), PropertyNames::Fermentable::color_srm),
 )
 
 COLUMN_INFOS(
    TreeItemNode<Hop>,
-   TREE_NODE_HEADER(TreeItemNode, Hop, Name    , tr("Name"   ), PropertyNames::NamedEntity::name       ),
-   TREE_NODE_HEADER(TreeItemNode, Hop, Form    , tr("Type"   ), PropertyNames::Hop::form     ),
-   TREE_NODE_HEADER(TreeItemNode, Hop, AlphaPct, tr("% Alpha"), PropertyNames::Hop::alpha_pct),
-   TREE_NODE_HEADER(TreeItemNode, Hop, Origin  , tr("Origin" ), PropertyNames::Hop::origin   ),
+   TREE_NODE_HEADER(TreeItemNode, Hop, Name    , tr("Name"   ), PropertyNames::NamedEntity::name),
+   TREE_NODE_HEADER(TreeItemNode, Hop, Form    , tr("Type"   ), PropertyNames::Hop::form        ),
+   TREE_NODE_HEADER(TreeItemNode, Hop, AlphaPct, tr("% Alpha"), PropertyNames::Hop::alpha_pct   ),
+   TREE_NODE_HEADER(TreeItemNode, Hop, Origin  , tr("Origin" ), PropertyNames::Hop::origin      ),
 )
 
 COLUMN_INFOS(
@@ -223,320 +246,50 @@ COLUMN_INFOS(
    TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, AmountRemaining, tr("Amount Remaining"), PropertyNames::InventoryBase::amountRemaining),
 )
 
-// NOTE: Each TreeItemNode<XYZ>::columnDisplayNames definition below should correspond with the columns defined in
-//       TreeNodeTraits<XYZ, PQR>::ColumnIndex in trees/TreeNodeTraits.h.
+COLUMN_INFOS(
+   TreeItemNode<Misc>,
+   TREE_NODE_HEADER(TreeItemNode, Misc, Name, tr("Name"), PropertyNames::NamedEntity::name),
+   TREE_NODE_HEADER(TreeItemNode, Misc, Type, tr("Type"), PropertyNames::Misc::type       ),
+)
 
-template<> EnumStringMapping const TreeItemNode<Recipe>::columnDisplayNames {
-   {TreeItemNode<Recipe>::ColumnIndex::Name             , Recipe::tr("Name"     )},
-   {TreeItemNode<Recipe>::ColumnIndex::NumberOfAncestors, Recipe::tr("Snapshots")},
-   {TreeItemNode<Recipe>::ColumnIndex::BrewDate         , Recipe::tr("Brew Date")},
-   {TreeItemNode<Recipe>::ColumnIndex::Style            , Recipe::tr("Style"    )},
-};
+COLUMN_INFOS(
+   TreeItemNode<Salt>,
+   TREE_NODE_HEADER(TreeItemNode, Salt, Name       , tr("Name"       ), PropertyNames::NamedEntity::name),
+   TREE_NODE_HEADER(TreeItemNode, Salt, Type       , tr("Type"       ), PropertyNames::Salt::type       ),
+   TREE_NODE_HEADER(TreeItemNode, Salt, IsAcid     , tr("IsAcid"     ), PropertyNames::Salt::isAcid     ),
+   TREE_NODE_HEADER(TreeItemNode, Salt, PercentAcid, tr("PercentAcid"), PropertyNames::Salt::percentAcid),
+)
 
-template<> EnumStringMapping const TreeItemNode<Equipment>::columnDisplayNames {
-   {TreeItemNode<Equipment>::ColumnIndex::Name    , Equipment::tr("Name"     )},
-   {TreeItemNode<Equipment>::ColumnIndex::BoilSize , Equipment::tr("Boil Size" )},
-   {TreeItemNode<Equipment>::ColumnIndex::BatchSize, Equipment::tr("Batch Size")},
-};
+COLUMN_INFOS(
+   TreeItemNode<Yeast>,
+   TREE_NODE_HEADER(TreeItemNode, Yeast, Name      , tr("Name"      ), PropertyNames::NamedEntity::name),
+   TREE_NODE_HEADER(TreeItemNode, Yeast, Laboratory, tr("Laboratory"), PropertyNames::Yeast::laboratory),
+   TREE_NODE_HEADER(TreeItemNode, Yeast, ProductId , tr("Product ID"), PropertyNames::Yeast::productId ),
+   TREE_NODE_HEADER(TreeItemNode, Yeast, Type      , tr("Type"      ), PropertyNames::Yeast::type      ),
+   TREE_NODE_HEADER(TreeItemNode, Yeast, Form      , tr("Form"      ), PropertyNames::Yeast::form      ),
+)
 
-template<> EnumStringMapping const TreeItemNode<Mash>::columnDisplayNames {
-   {TreeItemNode<Mash>::ColumnIndex::Name      , Mash::tr("Name"       )},
-   {TreeItemNode<Mash>::ColumnIndex::TotalWater, Mash::tr("Total Water")},
-   {TreeItemNode<Mash>::ColumnIndex::TotalTime , Mash::tr("Total Time" )},
-};
+COLUMN_INFOS(
+   TreeItemNode<Style>,
+   TREE_NODE_HEADER(TreeItemNode, Style, Name          , tr("Name"    ), PropertyNames::NamedEntity::name    ),
+   TREE_NODE_HEADER(TreeItemNode, Style, Category      , tr("Category"), PropertyNames::Style::category      ),
+   TREE_NODE_HEADER(TreeItemNode, Style, CategoryNumber, tr("Number"  ), PropertyNames::Style::categoryNumber),
+   TREE_NODE_HEADER(TreeItemNode, Style, StyleLetter   , tr("Letter"  ), PropertyNames::Style::styleLetter   ),
+   TREE_NODE_HEADER(TreeItemNode, Style, StyleGuide    , tr("Guide"   ), PropertyNames::Style::styleGuide    ),
+)
 
-template<> EnumStringMapping const TreeItemNode<Boil>::columnDisplayNames {
-   {TreeItemNode<Boil>::ColumnIndex::Name              , Boil::tr("Name"           )},
-   {TreeItemNode<Boil>::ColumnIndex::PreBoilSize       , Boil::tr("Pre-Boil Size"  )},
-   {TreeItemNode<Boil>::ColumnIndex::LengthOfBoilProper, Boil::tr("Time At Boiling")},
-};
+COLUMN_INFOS(
+   TreeItemNode<Water>,
+   TREE_NODE_HEADER(TreeItemNode, Water, Name       , tr("Name"), PropertyNames::NamedEntity::name     ),
+   TREE_NODE_HEADER(TreeItemNode, Water, Calcium    , tr("Ca"  ), PropertyNames::Water::calcium_ppm    ),
+   TREE_NODE_HEADER(TreeItemNode, Water, Bicarbonate, tr("HCO3"), PropertyNames::Water::bicarbonate_ppm),
+   TREE_NODE_HEADER(TreeItemNode, Water, Sulfate    , tr("SO4" ), PropertyNames::Water::sulfate_ppm    ),
+   TREE_NODE_HEADER(TreeItemNode, Water, Chloride   , tr("Cl"  ), PropertyNames::Water::chloride_ppm   ),
+   TREE_NODE_HEADER(TreeItemNode, Water, Sodium     , tr("Na"  ), PropertyNames::Water::sodium_ppm     ),
+   TREE_NODE_HEADER(TreeItemNode, Water, Magnesium  , tr("Mg"  ), PropertyNames::Water::magnesium_ppm  ),
+   TREE_NODE_HEADER(TreeItemNode, Water, pH         , tr("pH"  ), PropertyNames::Water::ph             ),
+)
 
-template<> EnumStringMapping const TreeItemNode<Fermentation>::columnDisplayNames {
-   {TreeItemNode<Fermentation>::ColumnIndex::Name       , Fermentation::tr("Name"       )},
-   {TreeItemNode<Fermentation>::ColumnIndex::Description, Fermentation::tr("Description")},
-};
-
-template<> EnumStringMapping const TreeItemNode<Fermentable>::columnDisplayNames {
-   {TreeItemNode<Fermentable>::ColumnIndex::Name , Fermentable::tr("Name" )},
-   {TreeItemNode<Fermentable>::ColumnIndex::Type , Fermentable::tr("Type" )},
-   {TreeItemNode<Fermentable>::ColumnIndex::Color, Fermentable::tr("Color")},
-};
-
-template<> EnumStringMapping const TreeItemNode<Hop>::columnDisplayNames {
-   {TreeItemNode<Hop>::ColumnIndex::Name    , Hop::tr("Name"   )},
-   {TreeItemNode<Hop>::ColumnIndex::Form    , Hop::tr("Type"   )},
-   {TreeItemNode<Hop>::ColumnIndex::AlphaPct, Hop::tr("% Alpha")},
-   {TreeItemNode<Hop>::ColumnIndex::Origin  , Hop::tr("Origin" )},
-};
-
-template<> EnumStringMapping const TreeItemNode<InventoryFermentable>::columnDisplayNames {
-   {TreeItemNode<InventoryFermentable>::ColumnIndex::Name           , InventoryFermentable::tr("Name"            )},
-   {TreeItemNode<InventoryFermentable>::ColumnIndex::DateOrdered    , InventoryFermentable::tr("Date Ordered"    )},
-   {TreeItemNode<InventoryFermentable>::ColumnIndex::Type           , InventoryFermentable::tr("Type"            )},
-   {TreeItemNode<InventoryFermentable>::ColumnIndex::AmountReceived , InventoryFermentable::tr("Amount Received" )},
-   {TreeItemNode<InventoryFermentable>::ColumnIndex::AmountRemaining, InventoryFermentable::tr("Amount Remaining")},
-};
-
-template<> EnumStringMapping const TreeItemNode<Misc>::columnDisplayNames {
-   {TreeItemNode<Misc>::ColumnIndex::Name, Misc::tr("Name")},
-   {TreeItemNode<Misc>::ColumnIndex::Type, Misc::tr("Type")},
-};
-
-template<> EnumStringMapping const TreeItemNode<Salt>::columnDisplayNames {
-   {TreeItemNode<Salt>::ColumnIndex::Name       , Salt::tr("Name"       )},
-   {TreeItemNode<Salt>::ColumnIndex::Type       , Salt::tr("Type"       )},
-   {TreeItemNode<Salt>::ColumnIndex::IsAcid     , Salt::tr("IsAcid"     )},
-   {TreeItemNode<Salt>::ColumnIndex::PercentAcid, Salt::tr("PercentAcid")},
-};
-
-template<> EnumStringMapping const TreeItemNode<Yeast>::columnDisplayNames {
-   {TreeItemNode<Yeast>::ColumnIndex::Name      , Yeast::tr("Name"      )},
-   {TreeItemNode<Yeast>::ColumnIndex::Laboratory, Yeast::tr("Laboratory")},
-   {TreeItemNode<Yeast>::ColumnIndex::ProductId , Yeast::tr("Product ID")},
-   {TreeItemNode<Yeast>::ColumnIndex::Type      , Yeast::tr("Type"      )},
-   {TreeItemNode<Yeast>::ColumnIndex::Form      , Yeast::tr("Form"      )},
-};
-
-template<> EnumStringMapping const TreeItemNode<Style>::columnDisplayNames {
-   {TreeItemNode<Style>::ColumnIndex::Name          , Style::tr("Name"    )},
-   {TreeItemNode<Style>::ColumnIndex::Category      , Style::tr("Category")},
-   {TreeItemNode<Style>::ColumnIndex::CategoryNumber, Style::tr("Number"  )},
-   {TreeItemNode<Style>::ColumnIndex::CategoryLetter, Style::tr("Letter"  )},
-   {TreeItemNode<Style>::ColumnIndex::StyleGuide    , Style::tr("Guide"   )},
-};
-
-template<> EnumStringMapping const TreeItemNode<Water>::columnDisplayNames {
-   {TreeItemNode<Water>::ColumnIndex::Name       , Water::tr("Name")},
-   {TreeItemNode<Water>::ColumnIndex::Calcium    , Water::tr("Ca"  )},
-   {TreeItemNode<Water>::ColumnIndex::Bicarbonate, Water::tr("HCO3")},
-   {TreeItemNode<Water>::ColumnIndex::Sulfate    , Water::tr("SO4" )},
-   {TreeItemNode<Water>::ColumnIndex::Chloride   , Water::tr("Cl"  )},
-   {TreeItemNode<Water>::ColumnIndex::Sodium     , Water::tr("Na"  )},
-   {TreeItemNode<Water>::ColumnIndex::Magnesium  , Water::tr("Mg"  )},
-   {TreeItemNode<Water>::ColumnIndex::pH         , Water::tr("pH"  )},
-};
-
-// All folders have the same columns, so, for the moment, we just define the one with the shortest name.
-// At some point, we might want to move this to the header file
-template<> EnumStringMapping const TreeFolderNode<Hop>::columnDisplayNames {
-   {TreeFolderNode<Hop>::ColumnIndex::Name    , Folder::tr("Name"    )},
-   {TreeFolderNode<Hop>::ColumnIndex::Path    , Folder::tr("PATH"    )},
-   {TreeFolderNode<Hop>::ColumnIndex::FullPath, Folder::tr("FULLPATH")},
-};
-
-template<> bool TreeItemNode<Recipe>::columnIsLessThan(TreeItemNode<Recipe> const & other,
-                                                       TreeNodeTraits<Recipe>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-
-   //
-   // If two ancestor recipes share the same parent, we show them in reverse order of creation, regardless of what
-   // column we are sorting by.
-   //
-   // We are safe to dereference rawParent() here because the root node is always a Folder and never a Recipe
-   //
-   if (this->rawParent() == other.rawParent() &&
-       this->rawParent()->classifier() == TreeNodeClassifier::PrimaryItem) {
-      return lhs.key() > rhs.key();
-   }
-
-   switch (column) {
-      case TreeItemNode<Recipe>::ColumnIndex::Name:
-         return lhs.name() < rhs.name();
-
-      case TreeItemNode<Recipe>::ColumnIndex::BrewDate:
-         return lhs.date() < rhs.date();
-
-      case TreeItemNode<Recipe>::ColumnIndex::Style:
-         if (!lhs.style()) {
-            return true;
-         }
-         if (!rhs.style()) {
-            return false;
-         }
-         return lhs.style()->name() < rhs.style()->name();
-
-      case TreeItemNode<Recipe>::ColumnIndex::NumberOfAncestors:
-         return lhs.ancestors().length() < rhs.ancestors().length();
-   }
-
-   Q_UNREACHABLE();
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<BrewNote>::columnIsLessThan(TreeItemNode<BrewNote> const & other,
-                                                         TreeNodeTraits<BrewNote, Recipe>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<BrewNote>::ColumnIndex::BrewDate:
-         return lhs.brewDate() < rhs.brewDate();
-   }
-
-   Q_UNREACHABLE();
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Equipment>::columnIsLessThan(TreeItemNode<Equipment> const & other,
-                                                          TreeNodeTraits<Equipment>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Equipment>::ColumnIndex::Name:
-         return lhs.name() < rhs.name();
-
-///      case TreeItemNode<Equipment>::ColumnIndex::BoilTime:
-///         return lhs.boilTime_min().value_or(Equipment::default_boilTime_mins) <
-///                rhs.boilTime_min().value_or(Equipment::default_boilTime_mins);
-   }
-
-///   Q_UNREACHABLE();
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Mash>::columnIsLessThan(TreeItemNode<Mash> const & other,
-                                                     TreeNodeTraits<Mash>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Mash>::ColumnIndex::Name      : return lhs.name() < rhs.name();
-      case TreeItemNode<Mash>::ColumnIndex::TotalWater: return lhs.totalMashWater_l() < rhs.totalMashWater_l();
-      case TreeItemNode<Mash>::ColumnIndex::TotalTime : return lhs.totalTime_mins()   < rhs.totalTime_mins();
-   }
-   Q_UNREACHABLE();
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Boil>::columnIsLessThan(TreeItemNode<Boil> const & other,
-                                                     TreeNodeTraits<Boil>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Boil>::ColumnIndex::Name              : return lhs.name() < rhs.name();
-      case TreeItemNode<Boil>::ColumnIndex::PreBoilSize       : return lhs.preBoilSize_l() < rhs.preBoilSize_l();
-      case TreeItemNode<Boil>::ColumnIndex::LengthOfBoilProper: return lhs.boilTime_mins() < rhs.boilTime_mins();
-   }
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Fermentation>::columnIsLessThan(TreeItemNode<Fermentation> const & other,
-                                                             TreeNodeTraits<Fermentation>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Fermentation>::ColumnIndex::Name       : return lhs.name() < rhs.name();
-      case TreeItemNode<Fermentation>::ColumnIndex::Description: return lhs.description() < rhs.description();
-   }
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Fermentable>::columnIsLessThan(TreeItemNode<Fermentable> const & other,
-                                                            TreeNodeTraits<Fermentable>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Fermentable>::ColumnIndex::Name : return lhs.name()      < rhs.name();
-      case TreeItemNode<Fermentable>::ColumnIndex::Type : return lhs.type()      < rhs.type();
-      case TreeItemNode<Fermentable>::ColumnIndex::Color: return lhs.color_srm() < rhs.color_srm();
-   }
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<InventoryFermentable>::columnIsLessThan(TreeItemNode<InventoryFermentable> const & other,
-                                                                     TreeNodeTraits<InventoryFermentable>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<InventoryFermentable>::ColumnIndex::Name           : return lhs.ingredient()->name() < rhs.ingredient()->name();
-      case TreeItemNode<InventoryFermentable>::ColumnIndex::DateOrdered    : return lhs.dateOrdered()        < rhs.dateOrdered();
-      case TreeItemNode<InventoryFermentable>::ColumnIndex::Type           : return lhs.ingredient()->type() < rhs.ingredient()->type();
-      case TreeItemNode<InventoryFermentable>::ColumnIndex::AmountReceived : return lhs.amountReceived()     < rhs.amountReceived();
-      case TreeItemNode<InventoryFermentable>::ColumnIndex::AmountRemaining: return lhs.amountRemaining()    < rhs.amountRemaining();
-   }
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Hop>::columnIsLessThan(TreeItemNode<Hop> const & other,
-                                                    TreeNodeTraits<Hop>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Hop>::ColumnIndex::Name    : return lhs.name()      < rhs.name();
-      case TreeItemNode<Hop>::ColumnIndex::Form    : return lhs.form()      < rhs.form();
-      case TreeItemNode<Hop>::ColumnIndex::AlphaPct: return lhs.alpha_pct() < rhs.alpha_pct();
-      case TreeItemNode<Hop>::ColumnIndex::Origin  : return lhs.origin()    < rhs.origin();
-   }
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Misc>::columnIsLessThan(TreeItemNode<Misc> const & other,
-                                                     TreeNodeTraits<Misc>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Misc>::ColumnIndex::Name: return lhs.name() < rhs.name();
-      case TreeItemNode<Misc>::ColumnIndex::Type: return lhs.type() < rhs.type();
-   }
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Salt>::columnIsLessThan(TreeItemNode<Salt> const & other,
-                                                     TreeNodeTraits<Salt>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Salt>::ColumnIndex::Name       : return lhs.name()        < rhs.name();
-      case TreeItemNode<Salt>::ColumnIndex::Type       : return lhs.type()        < rhs.type();
-      case TreeItemNode<Salt>::ColumnIndex::IsAcid     : return lhs.isAcid()      < rhs.isAcid();
-      case TreeItemNode<Salt>::ColumnIndex::PercentAcid: return lhs.percentAcid() < rhs.percentAcid();
-   }
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Style>::columnIsLessThan(TreeItemNode<Style> const & other,
-                                                      TreeNodeTraits<Style>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Style>::ColumnIndex::Name          : return lhs.name()           < rhs.name();
-      case TreeItemNode<Style>::ColumnIndex::Category      : return lhs.category()       < rhs.category();
-      case TreeItemNode<Style>::ColumnIndex::CategoryNumber: return lhs.categoryNumber() < rhs.categoryNumber();
-      case TreeItemNode<Style>::ColumnIndex::CategoryLetter: return lhs.styleLetter()    < rhs.styleLetter();
-      case TreeItemNode<Style>::ColumnIndex::StyleGuide    : return lhs.styleGuide()     < rhs.styleGuide();
-   }
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Yeast>::columnIsLessThan(TreeItemNode<Yeast> const & other,
-                                                      TreeNodeTraits<Yeast>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Yeast>::ColumnIndex::Name      : return lhs.name()       < rhs.name();
-      case TreeItemNode<Yeast>::ColumnIndex::Laboratory: return lhs.laboratory() < rhs.laboratory();
-      case TreeItemNode<Yeast>::ColumnIndex::ProductId : return lhs.productId()  < rhs.productId();
-      case TreeItemNode<Yeast>::ColumnIndex::Type      : return lhs.type()       < rhs.type();
-      case TreeItemNode<Yeast>::ColumnIndex::Form      : return lhs.form()       < rhs.form();
-   }
-   return lhs.name() < rhs.name();
-}
-
-template<> bool TreeItemNode<Water>::columnIsLessThan(TreeItemNode<Water> const & other,
-                                                      TreeNodeTraits<Water>::ColumnIndex column) const {
-   auto const & lhs = *this->m_underlyingItem;
-   auto const & rhs = *other.m_underlyingItem;
-   switch (column) {
-      case TreeItemNode<Water>::ColumnIndex::Name       : return lhs.name()            < rhs.name();
-      case TreeItemNode<Water>::ColumnIndex::pH         : return lhs.ph()              < rhs.ph();
-      case TreeItemNode<Water>::ColumnIndex::Bicarbonate: return lhs.bicarbonate_ppm() < rhs.bicarbonate_ppm();
-      case TreeItemNode<Water>::ColumnIndex::Sulfate    : return lhs.sulfate_ppm()     < rhs.sulfate_ppm();
-      case TreeItemNode<Water>::ColumnIndex::Chloride   : return lhs.chloride_ppm()    < rhs.chloride_ppm();
-      case TreeItemNode<Water>::ColumnIndex::Sodium     : return lhs.sodium_ppm()      < rhs.sodium_ppm();
-      case TreeItemNode<Water>::ColumnIndex::Magnesium  : return lhs.magnesium_ppm()   < rhs.magnesium_ppm();
-      case TreeItemNode<Water>::ColumnIndex::Calcium    : return lhs.calcium_ppm()     < rhs.calcium_ppm();
-   }
-   return lhs.name() < rhs.name();
-}
 
 template<> QString TreeItemNode<Recipe>::getToolTip() const {
    auto style = this->m_underlyingItem->style();
