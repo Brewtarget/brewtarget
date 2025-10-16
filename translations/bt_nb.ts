@@ -103,14 +103,10 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Pre-Boil Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Time At Boiling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -150,10 +146,6 @@
     </message>
     <message>
         <source>Step time (mins)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 mins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1371,6 +1363,18 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Ingredient ID</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Amount Ordered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Remaining</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
@@ -1380,7 +1384,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -1909,7 +1913,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Type</source>
@@ -2180,7 +2184,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Description</source>
@@ -2215,10 +2219,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Step time (days)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 days</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2264,19 +2264,27 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <name>Folder</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>PATH</source>
-        <translation type="unfinished">STI</translation>
+        <translation type="obsolete">STI</translation>
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation type="unfinished">HEL STI</translation>
+        <translation type="obsolete">HEL STI</translation>
     </message>
     <message>
         <source>Folder</source>
         <translation type="unfinished">Mappe</translation>
+    </message>
+    <message>
+        <source>Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full Path</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2414,15 +2422,11 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Type</source>
         <translation type="unfinished">Type</translation>
-    </message>
-    <message>
-        <source>% Alpha</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Origin</source>
@@ -2884,23 +2888,11 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <name>InventoryFermentable</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
-    </message>
-    <message>
-        <source>Date Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
-    </message>
-    <message>
-        <source>Amount Received</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount Remaining</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Type</translation>
     </message>
 </context>
 <context>
@@ -3218,11 +3210,7 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
-    </message>
-    <message>
-        <source>Total Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Total Time</source>
@@ -3360,10 +3348,6 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Step time (mins)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 mins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3612,7 +3596,7 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Type</source>
@@ -3803,6 +3787,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Change %1 on %2 Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Navn</translation>
+    </message>
+    <message>
+        <source>Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full Path</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4055,6 +4051,13 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Recipe ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Owner</name>
+    <message>
+        <source>Items</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5477,15 +5480,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
-    </message>
-    <message>
-        <source>Snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished">Bryggedato</translation>
+        <translation type="obsolete">Bryggedato</translation>
     </message>
     <message>
         <source>Style</source>
@@ -5746,6 +5745,10 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>Yes</source>
         <translation type="unfinished">Ja</translation>
+    </message>
+    <message>
+        <source>Number of Snapshots</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6587,19 +6590,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Type</source>
         <translation type="unfinished">Type</translation>
-    </message>
-    <message>
-        <source>IsAcid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PercentAcid</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Salts</source>
@@ -6782,7 +6777,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Category</source>
@@ -6790,11 +6785,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">Nummer</translation>
+        <translation type="obsolete">Nummer</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished">Bokstav</translation>
+        <translation type="obsolete">Bokstav</translation>
     </message>
     <message>
         <source>Guide</source>
@@ -7349,14 +7344,10 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7712,7 +7703,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation type="obsolete">Navn</translation>
     </message>
     <message>
         <source>Type</source>
