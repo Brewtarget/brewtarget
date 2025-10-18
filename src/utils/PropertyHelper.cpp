@@ -177,11 +177,15 @@ QVariant PropertyHelper::readDataFromPropertyValue(
          double const rawValue = modelData.value<double>();
          //
          // This is one of the points where it's important that NamedEntity classes always store data in canonical
-         // units.  For any properties where that's _not_ the case, we need to ensure we're passing
-         // Measurement::Amount, ie the units are always included.
+         // units.  For any properties where that's _not_ the case, we need either to:
+         //   - ensure we're passing Measurement::Amount, ie the units are always included; or
+         //   - specify the non-canonical unit in TypeInfo.
          //
          auto const physicalQuantity = std::get<Measurement::PhysicalQuantity>(*typeInfo.fieldType);
-         Measurement::Amount const amount{rawValue, Measurement::Unit::getCanonicalUnit(physicalQuantity)};
+         Measurement::Unit const & unit{
+            typeInfo.unit ? *typeInfo.unit : Measurement::Unit::getCanonicalUnit(physicalQuantity)
+         };
+         Measurement::Amount const amount{rawValue, unit};
 
          // For sorting, we need the actual amount
          if (role == Qt::UserRole) {

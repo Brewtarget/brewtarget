@@ -98,15 +98,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Pre-Boil Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Time At Boiling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -146,10 +138,6 @@
     </message>
     <message>
         <source>Step time (mins)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 mins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -979,15 +967,23 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Ingredient ID</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Amount Ordered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Remaining</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1333,10 +1329,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1484,10 +1476,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1523,10 +1511,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Free Rise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1546,19 +1530,15 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
 <context>
     <name>Folder</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PATH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FULLPATH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full Path</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1676,15 +1656,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% Alpha</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1992,29 +1964,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
 </context>
 <context>
-    <name>InventoryFermentable</name>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date Ordered</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount Received</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount Remaining</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
         <source>Equipment request</source>
@@ -2228,14 +2177,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Total Time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2363,10 +2304,6 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Step time (mins)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 mins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2532,10 +2469,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2588,6 +2521,18 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Change %1 on %2 Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full Path</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2764,6 +2709,13 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Recipe ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Owner</name>
+    <message>
+        <source>Items</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3982,18 +3934,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Style</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4251,6 +4191,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of Snapshots</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4890,19 +4834,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IsAcid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PercentAcid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5055,19 +4987,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Letter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5421,15 +5341,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5734,10 +5646,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Laboratory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

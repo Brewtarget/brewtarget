@@ -411,6 +411,67 @@ def copyWithoutCommentsOrFolds(inputPath, outputPath):
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
+# Helper function to get Linux distro name and release number
+#
+# Returns a dictionary with:
+#   "name" set to distro name (string)
+#   "release" set to the release number (string)
+#   "major" set to release major number (int)
+#   "minor" set to release minor number (int)
+#
+# Example outputs:
+#                     Ubuntu                 Debian
+#                     ======                 ======
+#       name:         "Ubuntu"               "Debian"
+#       release:      "24.04"                "12"
+#       major:        24                     12
+#       minor:        4                      0
+#
+#-----------------------------------------------------------------------------------------------------------------------
+def getLinuxDistroInfo():
+   # See comment above about why it's OK to call logging.getLogger() more than once
+   log = logging.getLogger(__name__)
+
+   distroInfo = {
+      "name": "Unknown",
+      "release": "",
+      "major":   "",
+      "minor":   ""
+   }
+
+   #
+   # We run lsb_release -a to give full output for logging.  But we then run again just to output the parameters we
+   # want (which seems less work and more reliable than parsing the full output with regular expressions).
+   #
+   # It is not a fatal error if we cannot run lsb_release.  (Caller has to decide what to do if we couldn't determine
+   # release info.)  So, we deliberately don't use btUtils.abortOnRunFail here.
+   #
+   lsbResult = subprocess.run(['lsb_release', '-a'], capture_output=True)
+   if (lsbResult.returncode != 0):
+      log.info('Ignoring error running lsb_release -a: ' + lsbResult.stderr.decode('UTF-8'))
+   else:
+      lsbOutput = lsbResult.stdout.decode('UTF-8').rstrip()
+      log.info('Output from running lsb_release -a: ' + lsbOutput)
+      #
+      # We assume that if `lsb_release -a` ran OK then the other invocations below will too
+      #
+      distroInfo["name"] = str(
+         subprocess.run(['lsb_release', '-is'], encoding = "utf-8", capture_output = True).stdout
+      ).rstrip()
+      distroInfo["release"] = str(
+         subprocess.run(['lsb_release', '-rs'], encoding = "utf-8", capture_output = True).stdout
+      ).rstrip()
+
+      #
+      # Now split release into major and minor
+      #
+      parsedRelease = packaging.version.parse(distroInfo["release"])
+      distroInfo["major"] = parsedRelease.major
+      distroInfo["minor"] = parsedRelease.minor
+
+   return distroInfo
+
+#-----------------------------------------------------------------------------------------------------------------------
 # Create fileToDistribute.sha256sum for a given fileToDistribute in a given directory
 #-----------------------------------------------------------------------------------------------------------------------
 def writeSha256sum(directory, fileToDistribute):
@@ -496,13 +557,11 @@ def installDependencies():
          # NOTE: For the moment at least, we are assuming you are on Ubuntu or another Debian-based Linux.  For other
          # flavours of the OS you need to install libraries and frameworks manually.
          #
-         distroName = str(
-            btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-is'], encoding = "utf-8", capture_output = True)).stdout
-         ).rstrip()
-         distroRelease = str(
-            btUtils.abortOnRunFail(subprocess.run(['lsb_release', '-rs'], encoding = "utf-8", capture_output = True)).stdout
-         ).rstrip()
-         log.debug('Linux distro: ' + distroName + ', release: ' + distroRelease)
+         distroInfo = getLinuxDistroInfo()
+         distroName = distroInfo["name"]
+         distroRelease = distroInfo["release"]
+         log.debug('Linux distro: ' + distroName + ', release: ' + distroRelease + ' (' + str(distroInfo["major"]) +
+                   '.' + str(distroInfo["minor"]) + ')')
 
          #
          # For almost everything apart form Boost (see below) we can rely on the distro packages.  A few notes:
@@ -2094,6 +2153,25 @@ def doPackage():
          # Move the .deb file to the top-level directory
          shutil.move(debPackageName, dir_packages_platform)
 
+         #
+         # If we are on Ubuntu, we would like to edit the package name to include the Ubuntu major version number.
+         # This is because we typically release two versions of the Linux packages -- one built on the last Ubuntu LTS
+         # release, and one built on the previous one.
+         #
+         distroInfo = getLinuxDistroInfo()
+         if ('Ubuntu' == distroInfo["name"]):
+            #
+            # We want to rename, eg "brewtarget-4.2.1-1_amd64.deb" to "brewtarget-4.2.1_22-1_amd64.deb" or
+            # "brewken-1.0.3-1_amd64.deb" to "brewken-1.0.3_22-1_amd64.deb".  This is relatively easy if we can assume
+            # there are always two '-' characters.  (So we never want to rename "brewtarget" to "brew-target"! :o>)
+            #
+            oldDebPackageName = debPackageName
+            nameParts = debPackageName.split('-')
+            debPackageName = nameParts[0] + '-' + nameParts[1] + '_' + str(distroInfo["major"]) + '-' + nameParts[2]
+            os.chdir(dir_packages_platform)
+            log.info('Renaming ' + oldDebPackageName + ' to ' + debPackageName)
+            os.rename(oldDebPackageName, debPackageName)
+
          # We don't particularly need to change back to the previous working directory, but it's tidy to do so.
          os.chdir(previousWorkingDirectory)
 
@@ -2353,6 +2431,26 @@ def doPackage():
 
          # Move the .rpm file to the top-level directory
          shutil.move(dir_packages_rpm_output.joinpath(rpmPackageName), dir_packages_platform)
+
+         #
+         # As with the .deb file above, if we are on Ubuntu, we would like to edit the package name to include the
+         # Ubuntu major version number.
+         #
+         if ('Ubuntu' == distroInfo["name"]):
+            #
+            # We want to rename, eg "brewtarget-4.2.1-1_x86_64.rpm" to "brewtarget-4.2.1_22-1_x86_64.rpm" or
+            # "brewken-1.0.3-1_x86_64.rpm" to "brewken-1.0.3_22-1_x86_64.rpm".  This is the same structure as the .deb
+            # files, so it's the same logic here.
+            #
+            oldRpmPackageName = rpmPackageName
+            nameParts = rpmPackageName.split('-')
+            rpmPackageName = nameParts[0] + '-' + nameParts[1] + '_' + str(distroInfo["major"]) + '-' + nameParts[2]
+            os.chdir(dir_packages_platform)
+            log.info('Renaming ' + oldRpmPackageName + ' to ' + rpmPackageName)
+            os.rename(oldRpmPackageName, rpmPackageName)
+
+         # We don't particularly need to change back to the previous working directory, but it's tidy to do so.
+         os.chdir(previousWorkingDirectory)
 
          #
          # Make the checksum file

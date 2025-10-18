@@ -192,6 +192,7 @@ COLUMN_INFOS(
 COLUMN_INFOS(
    TreeItemNode<MashStep>,
    TREE_NODE_HEADER(TreeItemNode, MashStep, Name    , tr("Name"     ), PropertyNames::NamedEntity::name      ),
+   TREE_NODE_HEADER(TreeItemNode, MashStep, Volume  , tr("Volume"   ), PropertyNames::MashStep::amount_l     ),
    TREE_NODE_HEADER(TreeItemNode, MashStep, StepTime, tr("Step Time"), PropertyNames::StepBase::stepTime_mins),
 )
 

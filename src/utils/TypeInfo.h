@@ -23,6 +23,7 @@
 
 #include "measurement/QuantityFieldType.h"
 #include "measurement/PhysicalQuantity.h"
+#include "measurement/Unit.h"
 #include "model/NamedEntityCasters.h"
 #include "utils/TypeTraits.h"
 
@@ -200,10 +201,19 @@ struct TypeInfo {
     */
    using DisplayAs = std::optional<std::variant<DisplayInfo::Enum,
                                                 DisplayInfo::Bool,
-                                                DisplayInfo::Precision/*,
-                                                Measurement::ChoiceOfPhysicalQuantity*/>>;
+                                                DisplayInfo::Precision>>;
    TypeInfo::DisplayAs displayAs;
 
+   /**
+    * \brief For a small minority of properties that hold a \c PhysicalQuantity in non-canonical units (eg
+    *        \c StepBase::stepTime_days), this field holds what those units are.
+    *
+    *        NB for \c NonPhysicalQuantity and for \c PhysicalQuantity in canonical units, this field will be null.
+    *
+    *        (TBD We could consider storing unit here also for canonical units, via calling
+    *         Measurement::Unit::getCanonicalUnit.)
+    */
+   Measurement::Unit const * unit;
 
    /**
     * \brief Factory functions to construct a \c TypeInfo for a given type.
@@ -214,7 +224,8 @@ struct TypeInfo {
                                                         QString (&localisedNameFunction) (),
                                                         TypeLookup const * typeLookup,
                                                         std::optional<QuantityFieldType> fieldType = std::nullopt,
-                                                        DisplayAs displayAs = std::nullopt) {
+                                                        DisplayAs displayAs = std::nullopt,
+                                                        Measurement::Unit const * unit = nullptr) {
       return TypeInfo{makeTypeIndex<T>(),
                       makeClassification<T>(),
                       makePointerType<T>(),
@@ -223,7 +234,8 @@ struct TypeInfo {
                       typeLookup,
                       fieldType,
                       propertyName,
-                      displayAs};
+                      displayAs,
+                      unit};
    }
 };
 
