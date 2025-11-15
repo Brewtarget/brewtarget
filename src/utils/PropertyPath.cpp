@@ -18,12 +18,19 @@
 #include "model/NamedEntity.h"
 
 PropertyPath::PropertyPath(BtStringConst const & singleProperty) :
-   m_properties{1, &singleProperty}, m_path{*singleProperty} {
+   m_properties   {1, &singleProperty},
+   m_path         {*singleProperty},
+   m_indexOfName  {0},
+   m_localisedName{nullptr} {
    return;
 }
 
-PropertyPath::PropertyPath(std::initializer_list<std::reference_wrapper<BtStringConst const>> listOfProperties) :
-   m_properties{}, m_path{} {
+PropertyPath::PropertyPath(std::initializer_list<std::reference_wrapper<BtStringConst const>> listOfProperties,
+                           int indexOfName) :
+   m_properties{},
+   m_path{},
+   m_indexOfName  {indexOfName},
+   m_localisedName{nullptr} {
    bool first = true;
    for (auto const & ii : listOfProperties) {
       m_properties.append(&ii.get());
@@ -33,19 +40,27 @@ PropertyPath::PropertyPath(std::initializer_list<std::reference_wrapper<BtString
       first = false;
       m_path.append(*ii.get());
    }
+
+   // Obviously a coding error if name index is out of range
+   Q_ASSERT(m_indexOfName >= 0);
+   Q_ASSERT(m_indexOfName < m_properties.length());
    return;
 }
 
 PropertyPath::PropertyPath(PropertyPath const & other) :
-   m_properties{other.m_properties},
-   m_path      {other.m_path      } {
+   m_properties   {other.m_properties   },
+   m_path         {other.m_path         },
+   m_indexOfName  {other.m_indexOfName  },
+   m_localisedName{other.m_localisedName} {
    return;
 }
 
 PropertyPath & PropertyPath::operator=(PropertyPath const & other) {
    if (this != &other) {
-      m_properties = other.m_properties;
-      m_path       = other.m_path      ;
+      this->m_properties    = other.m_properties   ;
+      this->m_path          = other.m_path         ;
+      this->m_indexOfName   = other.m_indexOfName  ;
+      this->m_localisedName = other.m_localisedName;
    }
    return *this;
 }
@@ -74,8 +89,12 @@ TypeInfo const & PropertyPath::getTypeInfo(TypeLookup const & baseTypeLookup) co
 //   qDebug() << Q_FUNC_INFO << "Applying PropertyPath" << *this << "to" << baseTypeLookup;
 
    TypeLookup const * typeLookup = &baseTypeLookup;
+   int index = 0;
    for (auto const property : this->m_properties) {
       TypeInfo const & typeInfo = typeLookup->getType(*property);
+      if (!this->m_localisedName && index++ == this->m_indexOfName) {
+         this->m_localisedName = &typeInfo.localisedName;
+      }
       if (property == this->m_properties.last()) {
          returnValue = &typeInfo;
          break;
@@ -91,7 +110,6 @@ TypeInfo const & PropertyPath::getTypeInfo(TypeLookup const & baseTypeLookup) co
    }
 
    return *returnValue;
-
 }
 
 [[nodiscard]] bool PropertyPath::setValue(NamedEntity & obj, QVariant const & val) const {
@@ -226,7 +244,8 @@ QVariant PropertyPath::getValue(NamedEntity const & obj) const {
       }
 
       if (!ne) {
-         qDebug() << Q_FUNC_INFO << "Property" << *property << "returned nullptr";
+         // Normally keep the next line commented out otherwise it generates too many lines in the log file
+//         qDebug() << Q_FUNC_INFO << "Property" << *property << "returned nullptr";
          break;
       }
    }
@@ -235,4 +254,20 @@ QVariant PropertyPath::getValue(NamedEntity const & obj) const {
 //   qDebug() << Q_FUNC_INFO << "Returning" << retVal;
 
    return retVal;
+}
+
+QString PropertyPath::getLocalisedName() const {
+   //
+   // It's a coding error if this is called before m_localisedName has been initialised (by a call to getTypeInfo)
+   //
+   if (!this->m_localisedName) {
+      qCritical() << Q_FUNC_INFO << "getLocalisedName was called before getTypeInfo!";
+      qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
+      //
+      // We don't need to terminate the program here.  There is no risk of data corruption, and the coding error should
+      // be pretty evident in the UI.
+      //
+      return "Null!";
+   }
+   return (*this->m_localisedName)();
 }

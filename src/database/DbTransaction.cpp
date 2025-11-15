@@ -51,7 +51,8 @@ DbTransaction::DbTransaction(Database & database,
 }
 
 DbTransaction::~DbTransaction() {
-   qDebug() << Q_FUNC_INFO;
+   // Normally leave the next line commented out
+//   qDebug() << Q_FUNC_INFO;
    if (!committed) {
       bool succeeded = this->connection.rollback();
       qDebug() <<

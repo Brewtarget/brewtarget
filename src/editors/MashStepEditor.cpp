@@ -28,7 +28,7 @@
 
 MashStepEditor::MashStepEditor(QWidget* parent, QString const editorName) :
    QDialog{parent},
-   StepEditorBase<MashStepEditor, MashStep>{},
+   EnumeratedItemEditorBase<MashStepEditor, MashStep>{},
    EditorBase<MashStepEditor, MashStep, MashStepEditorOptions>{editorName} {
    this->setupUi(this);
    this->postSetupUiInit({
@@ -40,7 +40,7 @@ MashStepEditor::MashStepEditor(QWidget* parent, QString const editorName) :
       // We retain infuseTemp_c for now, even though it is not part of BeerJSON.  TBD whether it is needed longer-term.
       //
       EDITOR_FIELD_NORM(MashStep, label_name        , lineEdit_name        , NamedEntity::name                  ),
-      EDITOR_FIELD_NORM(MashStep, label_stepNum     , label_stepNum_value  , EnumeratedBase::stepNumber         ),
+      EDITOR_FIELD_NORM(MashStep, label_stepNum     , label_stepNum_value  , EnumeratedBase::sequenceNumber     ),
       EDITOR_FIELD_NORM(MashStep, label_description , textEdit_description , Step::description                  ),
       EDITOR_FIELD_NORM(MashStep, label_amount      , lineEdit_amount      , MashStep::amount_l                 ),
       EDITOR_FIELD_NORM(MashStep, label_stepTemp    , lineEdit_stepTemp    , StepBase::startTemp_c           , 1),

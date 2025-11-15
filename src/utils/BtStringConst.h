@@ -45,8 +45,25 @@ class QTextStream;
  */
 class BtStringConst {
 public:
-   // NB: Constructors are all explicit as we don't want to construct with implicit conversions
-   explicit BtStringConst(char const * const cString);
+   /**
+    * \brief Main constructor.
+    *
+    *        It's tempting to make all the constructors explicit, but this then prevents us from using
+    *        \c std::initializer_list<BtStringConst> to initialise \c QVector<BtStringConst>.
+    *
+    *        The downside of this constructor not being explicit is that it can result in ambiguous function overloads.
+    *        Eg, if we have:
+    *
+    *           void somefunc(QString       const & parm);
+    *           void somefunc(BtStringConst const & parm);
+    *           ...
+    *           someFunc("My Text");
+    *
+    *        the call on the last line above is ambiguous because both \c QString and \c BtStringConst have constructors
+    *        that can implicitly convert from `char const *`.  The workaround (which we use in \c PersistentSettings) is
+    *        to change the name of one of the overloaded functions.
+    */
+   BtStringConst(char const * const cString);
    //! Copy constructor OK
    explicit BtStringConst(BtStringConst const &);
    //! Move constructor OK

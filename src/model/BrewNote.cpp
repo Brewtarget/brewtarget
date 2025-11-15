@@ -107,7 +107,7 @@ TypeLookup const BrewNote::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, fg               , m_fg               , Measurement::PhysicalQuantity::Density    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, finalVolume_l    , m_finalVolume_l    , Measurement::PhysicalQuantity::Volume     ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, mashFinTemp_c    , m_mashFinTemp_c    , Measurement::PhysicalQuantity::Temperature),
-      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, notes            , m_notes                                                        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, notes            , m_notes            ,           NonPhysicalQuantity::String     ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, og               , m_og               , Measurement::PhysicalQuantity::Density    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, pitchTemp_c      , m_pitchTemp_c      , Measurement::PhysicalQuantity::Temperature),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewNote, postBoilVolume_l , m_postBoilVolume_l , Measurement::PhysicalQuantity::Volume     ),

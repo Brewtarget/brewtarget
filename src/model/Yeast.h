@@ -34,7 +34,7 @@
 
 class YeastCatalog;
 class YeastEditor;
-class InventoryYeast;
+class StockPurchaseYeast;
 class YeastItemDelegate;
 class RecipeAdditionYeast;
 class YeastSortFilterProxyModel;
@@ -214,7 +214,7 @@ public:
    //
    using CatalogClass              = YeastCatalog;
    using EditorClass               = YeastEditor;
-   using InventoryClass            = InventoryYeast;
+   using StockPurchaseClass            = StockPurchaseYeast;
    using ItemDelegateClass         = YeastItemDelegate;
    using RecipeAdditionClass       = RecipeAdditionYeast;
    using SortFilterProxyModelClass = YeastSortFilterProxyModel;

@@ -54,11 +54,11 @@ namespace Measurement {
       Amount(double const quantity, Unit const & unit);
 
       /**
-       * Constructs quantity amount in the default units for the given \c PhysicalQuantity
+       * \brief Constructs quantity amount in the default (aka canonical) units for the given \c PhysicalQuantity
        *
-       * NOTE It is the caller's responsibility to ensure that the defaulted or supplied quantity is valid.  (Eg for
-       * mass or volume, it is safe to assume that 0.0 means the same for all units, but, for temperature, this is not
-       * the case.)
+       *        NOTE: It is the caller's responsibility to ensure that the defaulted or supplied quantity is valid.  (Eg
+       *              for mass or volume, it is safe to assume that 0.0 means the same for all units, but, for
+       *              temperature, this is not the case.)
        */
       Amount(PhysicalQuantity const physicalQuantity, double const quantity = 0.0);
 
@@ -94,6 +94,17 @@ namespace Measurement {
 
       //! Convenience function for converting this Amount to canonical units (via \c Unit::toCanonical)
       Amount toCanonical() const;
+
+      /**
+       * \brief We allow addition of two Amounts.  The result will be in canonical units.
+       *
+       *        NOTE: If we try to add amounts for two different physical quantities, the result will likely be
+       *              meaningless.  The program will log an error but not terminate.
+       *
+       *              At the moment, the main scenario for this is if a user has two \c StockPurchase subclass items for
+       *              the same \c Ingredient but with different \c IngredientAmount::measure attributes.
+       */
+      Amount operator+(Amount const & other) const;
    };
 
 }
@@ -104,6 +115,6 @@ namespace Measurement {
  *        Implementation is in the .cpp file because we need to #include "measurement/Unit.h", which we can't do in this
  *        header, per comment above.
  */
-template<class S> S & operator<<(S & stream, Measurement::Amount const amount);
+template<class S> S & operator<<(S & stream, Measurement::Amount const & amount);
 
 #endif

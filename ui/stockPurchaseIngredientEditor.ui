@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version ="6.0">
+ <!--
+  This is the base layout for all stock purchase editors (StockPurchaseFermentableEditor, StockPurchaseHopEditor, etc).
+  The differences between the different editors are very small, so we add them in code (in
+  editors/StockPurchaseFermentableEditor.cpp, editors/StockPurchaseHopEditor.cpp, etc) to avoid having to have huge
+  amounts of XML shared between five editor-specific .ui files.
+
+  The downside is that we get slightly less compile-time checking than doing all the layout in .ui files, but I think
+  the maintainability gains make that a price worth paying.
+ -->
+ <class>stockPurchaseIngredientEditor</class>
+ <widget class="QDialog" name="stockPurchaseIngredientEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>658</width>
+    <height>325</height>
+   </rect>
+  </property>
+  <!-- This is set in code.
+  <property name="windowTitle">
+   <string>Fermentable Stock Purchase Editor</string>
+  </property>
+  -->
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget_editor">
+     <property name="tabPosition">
+      <enum>QTabWidget::West</enum>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="usesScrollButtons">
+      <bool>false</bool>
+     </property>
+     <widget class="QWidget" name="tab_main">
+      <attribute name="title">
+       <string>Main</string>
+      </attribute>
+
+      <layout class="QGridLayout" name="gridLayout_main">
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_ingredient">
+         <!-- This is set in code.
+         <property name="text">
+          <string>Fermentable</string>
+         </property>
+          -->
+        </widget>
+       </item>
+       <!--
+       This combo box is added in code.  Commented example here is for Fermentable.
+       <item row="0" column="2" colspan="4">
+        <widget class="BtComboBoxFermentable" name="comboBox_ingredient">
+        </widget>
+       </item>
+       -->
+
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_supplier">
+         <property name="text">
+          <string>Supplier</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" colspan="4">
+        <widget class="QLineEdit" name="lineEdit_supplier"></widget>
+       </item>
+
+       <item row="4" column="1">
+        <widget class="QLabel" name="label_note">
+         <property name="text">
+          <string>Note</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2" colspan="4">
+        <widget class="QLineEdit" name="lineEdit_note"></widget>
+       </item>
+
+       <item row="6" column="1" colspan="2" rowspan="3">
+        <widget class="QGroupBox" name="groupBox_Ordered">
+         <property name="title">
+          <string>Ordered</string>
+         </property>
+         <!-- In this inner layout for the group box, we try to keep the same row and column numbers as in the outer
+              layout, to minimise confusion.  -->
+         <layout class="QGridLayout" name="layout_Ordered">
+          <item row="6" column="1">
+           <widget class="QLabel" name="label_dateOrdered">
+            <property name="text">
+             <string>Date</string>
+            </property>
+            <property name="buddy">
+             <cstring>dateEdit_dateOrdered</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="BtOptionalDateEdit" name="dateEdit_dateOrdered">
+            <property name="displayFormat">
+             <string>dd MMM yyyy</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+
+          <item row="8" column="1">
+           <widget class="SmartLabel" name="label_amountOrdered">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="text">
+             <string>Amount</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_amountOrdered</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="2">
+           <widget class="SmartLineEdit" name="lineEdit_amountOrdered">
+            <property name="toolTip">
+             <string>Amount ordered</string>
+            </property>
+           </widget>
+          </item>
+
+         </layout>
+        </widget>
+       </item>
+
+       <item row="6" column="4" colspan="2" rowspan="3">
+        <widget class="QGroupBox" name="groupBox_Received">
+         <property name="title">
+          <string>Received</string>
+         </property>
+         <!-- In this inner layout for the group box, we try to keep the same row and column numbers as in the outer
+              layout, to minimise confusion.  -->
+         <layout class="QGridLayout" name="layout_Received">
+
+          <item row="6" column="4">
+           <widget class="QLabel" name="label_dateReceived">
+            <property name="text">
+             <string>Date</string>
+            </property>
+            <property name="buddy">
+             <cstring>dateEdit_dateReceived</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="5">
+           <widget class="BtOptionalDateEdit" name="dateEdit_dateReceived">
+            <property name="displayFormat">
+             <string>dd MMM yyyy</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+
+          <item row="8" column="4">
+           <widget class="SmartLabel" name="label_amountReceived">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="text">
+             <string>Amount</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_amountReceived</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="5">
+           <widget class="SmartLineEdit" name="lineEdit_amountReceived">
+            <property name="toolTip">
+             <string>Amount received</string>
+            </property>
+           </widget>
+          </item>
+
+         </layout>
+        </widget>
+       </item>
+
+       <item row="10" column="4">
+        <widget class="QLabel" name="label_amountType">
+         <property name="toolTip">
+          <string>Whether the amount is weight or volume</string>
+         </property>
+         <property name="text">
+          <string>Amount Type</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBox_amountType</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="5">
+        <widget class="BtComboBoxEnum" name="comboBox_amountType">
+         <property name="toolTip">
+          <string>Whether the amount is weight or volume</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="12" column="1" colspan="5">
+        <widget class="QGroupBox" name="groupBox_Uses">
+         <property name="title">
+          <string>Uses</string>
+         </property>
+         <layout class="QVBoxLayout" name="layout_Uses">
+           <!-- Set in code.
+          <item>
+           <widget class="StockUseFermentablesWidget" name="enumeratedItemsWidget"></widget>
+          </item>
+           -->
+         </layout>
+        </widget>
+       </item>
+
+       <item row="14" column="1">
+        <widget class="SmartLabel" name="label_amountRemaining">
+         <property name="text">
+          <string>Amount Remaining</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="2">
+        <widget class="SmartValueDisplay" name="label_amountRemaining_value"></widget>
+       </item>
+
+       <item row="14" column="4">
+        <widget class="QLabel" name="label_dateBestBefore">
+         <property name="text">
+          <string>Best Before</string>
+         </property>
+         <property name="buddy">
+          <cstring>dateEdit_dateBestBefore</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="5">
+        <widget class="BtOptionalDateEdit" name="dateEdit_dateBestBefore">
+         <property name="displayFormat">
+          <string>dd MMM yyyy</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+
+       <item row="16" column="0">
+        <widget class="InfoButton" name="infoButton_id"></widget>
+       </item>
+       <item row="16" column="1">
+        <widget class="QLabel" name="label_id">
+         <property name="text">
+          <string>ID in database</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="2">
+        <widget class="QLabel" name="label_id_value">
+        </widget>
+       </item>
+
+       <item row="17" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_id">
+         <property name="buddy">
+          <cstring>infoButton_id</cstring>
+         </property>
+         <property name="text">
+          <string>You can normally ignore this, but it's sometimes useful for debugging.</string>
+         </property>
+        </widget>
+       </item>
+
+      </layout>
+     </widget>
+
+     <widget class="QWidget" name="tab_extra">
+      <attribute name="title">
+       <string>Extras</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_extras">
+       <!-- Class-specific fields (eg Alpha Acid for StockPurchaseHopEditor) are added to this tab in code. -->
+
+       <item row="12" column="1">
+        <widget class="QLabel" name="label_purchasePrice">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Purchase Price</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_purchasePrice</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="2">
+        <widget class="BtLineEditCurrency" name="lineEdit_purchasePrice">
+         <property name="toolTip">
+          <string>Purchase Price</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="12" column="4">
+        <widget class="QLabel" name="label_purchaseTax">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Purchase Tax</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_purchaseTax</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="5">
+        <widget class="BtLineEditCurrency" name="lineEdit_purchaseTax">
+         <property name="toolTip">
+          <string>Purchase Tax</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="14" column="1">
+        <widget class="QLabel" name="label_shippingCost">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Shipping Cost</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_shippingCost</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="2">
+        <widget class="BtLineEditCurrency" name="lineEdit_shippingCost">
+         <property name="toolTip">
+          <string>Shipping Cost</string>
+         </property>
+        </widget>
+       </item>
+
+      </layout>
+     </widget>
+
+    </widget>
+   </item>
+
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_Buttons">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <spacer name="horizontalSpacer_Buttons">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_new">
+       <property name="toolTip">
+        <string>New</string>
+       </property>
+       <property name="text">
+        <string>New</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_save">
+       <property name="toolTip">
+        <string>Save and close</string>
+       </property>
+       <property name="text">
+        <string>Save</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_cancel">
+       <property name="toolTip">
+        <string>Discard and close</string>
+       </property>
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtComboBoxEnum</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBoxEnum.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtOptionalDateEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>widgets/BtOptionalDateEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtLineEditCurrency</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/BtLineEditCurrency.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SmartLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartLabel.h</header>
+   <slots>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>SmartLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/SmartLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>SmartValueDisplay</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartValueDisplay.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
+</ui>

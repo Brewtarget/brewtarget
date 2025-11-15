@@ -253,7 +253,9 @@ void EquipmentEditor::postReadFieldsFromEditItem([[maybe_unused]] std::optional<
    this->hideOrShowOptionalVessels();
 
    this->checkBox_defaultEquipment->blockSignals(true);
-   this->checkBox_defaultEquipment->setChecked(m_editItem->key() == PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1));
+   this->checkBox_defaultEquipment->setChecked(
+      m_editItem->key() == PersistentSettings::value_ck(PersistentSettings::Names::defaultEquipmentKey, -1)
+   );
    this->checkBox_defaultEquipment->blockSignals(false);
 
    return;
@@ -320,13 +322,13 @@ void EquipmentEditor::updateDefaultEquipment() {
    }
 
    if (this->checkBox_defaultEquipment->isChecked()) {
-      PersistentSettings::insert(PersistentSettings::Names::defaultEquipmentKey, m_editItem->key());
+      PersistentSettings::insert_ck(PersistentSettings::Names::defaultEquipmentKey, m_editItem->key());
       return;
    }
 
-   QVariant currentDefault = PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1);
+   QVariant currentDefault = PersistentSettings::value_ck(PersistentSettings::Names::defaultEquipmentKey, -1);
    if (currentDefault == m_editItem->key()) {
-      PersistentSettings::insert(PersistentSettings::Names::defaultEquipmentKey, -1);
+      PersistentSettings::insert_ck(PersistentSettings::Names::defaultEquipmentKey, -1);
    }
    return;
 }

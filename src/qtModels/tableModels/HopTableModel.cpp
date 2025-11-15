@@ -30,6 +30,8 @@
 #include <QVariant>
 #include <QWidget>
 
+#include "model/StockPurchaseHop.h"
+
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_HopTableModel.cpp"
@@ -37,13 +39,13 @@
 
 COLUMN_INFOS(
    HopTableModel,
-   TABLE_MODEL_HEADER(Hop, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
-   TABLE_MODEL_HEADER(Hop, Form              , tr("Form"       ), PropertyNames::Hop::form                    ),
-   TABLE_MODEL_HEADER(Hop, Year              , tr("Year"       ), PropertyNames::Hop::year                    ),
-   TABLE_MODEL_HEADER(Hop, Alpha             , tr("Alpha %"    ), PropertyNames::Hop::alpha_pct               ),
-   TABLE_MODEL_HEADER(Hop, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   ),
-   TABLE_MODEL_HEADER(Hop, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Hop::validMeasures),
-   TABLE_MODEL_HEADER(Hop, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
+   TABLE_MODEL_HEADER(Hop, Name              , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Hop, Form              , PropertyNames::Hop::form                    ), // "Form"
+   TABLE_MODEL_HEADER(Hop, Year              , PropertyNames::Hop::year                    ), // "Year"
+   TABLE_MODEL_HEADER(Hop, Alpha             , PropertyNames::Hop::alpha_pct               ), // "Alpha %"
+   TABLE_MODEL_HEADER(Hop, TotalInventory    , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
+///   TABLE_MODEL_HEADER(Hop, TotalInventoryType, PropertyNames::Ingredient::totalInventory   , Hop::validMeasures), // "Amount Type"
+   TABLE_MODEL_HEADER(Hop, NumRecipesUsedIn  , PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 HopTableModel::HopTableModel(QTableView * parent, bool editable) :
@@ -54,7 +56,7 @@ HopTableModel::HopTableModel(QTableView * parent, bool editable) :
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &HopTableModel::contextMenu);
-   connect(&ObjectStoreTyped<InventoryHop>::getInstance(), &ObjectStoreTyped<InventoryHop>::signalPropertyChanged, this,
+   connect(&ObjectStoreTyped<StockPurchaseHop>::getInstance(), &ObjectStoreTyped<StockPurchaseHop>::signalPropertyChanged, this,
            &HopTableModel::changedInventory);
    return;
 }
@@ -71,14 +73,6 @@ void HopTableModel::setShowIBUs(bool var) {
 
 QVariant HopTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags HopTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<HopTableModel>(
-      index,
-      this->m_editable,
-      {{HopTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEditable}}
-   );
 }
 
 bool HopTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

@@ -68,28 +68,56 @@ AddSettingName(firstWortHopAdjustment)
 AddSettingName(forcedLocale)
 AddSettingName(frequency)                        // backups section
 AddSettingName(geometry)
+AddSettingName(geometry_boilCatalog        )  // MainWindow section
+AddSettingName(geometry_equipmentCatalog   )  // MainWindow section
+AddSettingName(geometry_fermentableCatalog )  // MainWindow section
+AddSettingName(geometry_fermentationCatalog)  // MainWindow section
+AddSettingName(geometry_hopCatalog         )  // MainWindow section
+AddSettingName(geometry_mashCatalog        )  // MainWindow section
+AddSettingName(geometry_miscCatalog        )  // MainWindow section
+AddSettingName(geometry_saltCatalog        )  // MainWindow section
+AddSettingName(geometry_styleCatalog       )  // MainWindow section
+AddSettingName(geometry_waterCatalog       )  // MainWindow section
+AddSettingName(geometry_yeastCatalog       )  // MainWindow section
+AddSettingName(geometry_stockWindow) // MainWindow section
 AddSettingName(ibu_formula)
 AddSettingName(language)
 AddSettingName(last_db_merge_req)
 AddSettingName(LogDirectory)
 AddSettingName(LoggingLevel)
 AddSettingName(mashHopAdjustment)
-AddSettingName(mashStepTableWidget_headerState)  // MainWindow section
-AddSettingName(boilStepTableWidget_headerState)  // MainWindow section
+AddSettingName(        mashStepTableWidget_headerState)  // MainWindow section
+AddSettingName(        boilStepTableWidget_headerState)  // MainWindow section
 AddSettingName(fermentationStepTableWidget_headerState)  // MainWindow section
 AddSettingName(maximum)                          // backups section
 AddSettingName(productionDate)
 AddSettingName(recipeKey)
 AddSettingName(showsnapshots)
 AddSettingName(splitter_horizontal_State)        // MainWindow section
-AddSettingName(splitter_vertical_State)          // MainWindow section
-AddSettingName(treeView_equipment_headerState)       // MainWindow section
-AddSettingName(treeView_fermentable_headerState)        // MainWindow section
-AddSettingName(treeView_hop_headerState)        // MainWindow section
-AddSettingName(treeView_misc_headerState)        // MainWindow section
-AddSettingName(treeView_recipe_headerState)      // MainWindow section
-AddSettingName(treeView_style_headerState)       // MainWindow section
-AddSettingName(treeView_yeast_headerState)       // MainWindow section
+AddSettingName(splitter_vertical_State  )        // MainWindow section
+AddSettingName(treeView_equipment_headerState  ) // MainWindow section
+AddSettingName(treeView_fermentable_headerState) // MainWindow section
+AddSettingName(treeView_hop_headerState        ) // MainWindow section
+AddSettingName(treeView_misc_headerState       ) // MainWindow section
+AddSettingName(treeView_recipe_headerState     ) // MainWindow section
+AddSettingName(treeView_style_headerState      ) // MainWindow section
+AddSettingName(treeView_yeast_headerState      ) // MainWindow section
+AddSettingName(uiState_boilCatalog        )  // MainWindow section
+AddSettingName(uiState_equipmentCatalog   )  // MainWindow section
+AddSettingName(uiState_fermentableCatalog )  // MainWindow section
+AddSettingName(uiState_fermentationCatalog)  // MainWindow section
+AddSettingName(uiState_hopCatalog         )  // MainWindow section
+AddSettingName(uiState_mashCatalog        )  // MainWindow section
+AddSettingName(uiState_miscCatalog        )  // MainWindow section
+AddSettingName(uiState_saltCatalog        )  // MainWindow section
+AddSettingName(uiState_styleCatalog       )  // MainWindow section
+AddSettingName(uiState_waterCatalog       )  // MainWindow section
+AddSettingName(uiState_yeastCatalog       )  // MainWindow section
+AddSettingName(uiState_stockManagerFermentable) // StockWindow section
+AddSettingName(uiState_stockManagerHop        ) // StockWindow section
+AddSettingName(uiState_stockManagerMisc       ) // StockWindow section
+AddSettingName(uiState_stockManagerSalt       ) // StockWindow section
+AddSettingName(uiState_stockManagerYeast      ) // StockWindow section
 AddSettingName(UserDataDirectory)
 AddSettingName(versioning)
 AddSettingName(windowState)
@@ -109,6 +137,7 @@ AddSettingSection(miscTableModel)
 AddSettingSection(saltTable)
 AddSettingSection(yeastTable)
 AddSettingSection(yeastTableModel)
+AddSettingSection(StockWindow)
 #undef AddSettingName
 //========================================= End of setting SECTION constants ===========================================
 //======================================================================================================================
@@ -178,22 +207,27 @@ namespace PersistentSettings {
       UNIT
    };
 
+   //
+   // See comment in utils/BtStringConst.h for why we can't overload between QString and BtStringConst.  This is why we
+   // have contains_ck, insert_ck, etc (where ck stands for "const key").
+   //
+
    /**
     * \brief Returns true if the persistent settings storage contains an item with "fully-qualified" key (generated
     *        from key, section and Extension); otherwise returns false.
     */
-   bool contains(QString const & key,            QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
-   bool contains(BtStringConst const & constKey, QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
-   bool contains(BtStringConst const & constKey, BtStringConst const & constSection, Extension extension = PersistentSettings::Extension::NONE);
+   bool contains   (QString const & key,            QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
+   bool contains_ck(BtStringConst const & constKey, QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
+   bool contains_ck(BtStringConst const & constKey, BtStringConst const & constSection, Extension extension = PersistentSettings::Extension::NONE);
 
    /**
     * \brief Inserts a new item with the "fully-qualified" key (generated from key, section and Extension) and a value
     *        of value.
     *        If there is already an item with a corresponding key, that item's value is replaced with value.
     */
-   void insert(QString const & key,            QVariant value, QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
-   void insert(BtStringConst const & constKey, QVariant value, QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
-   void insert(BtStringConst const & constKey, QVariant value, BtStringConst const & constSection, Extension extension = PersistentSettings::Extension::NONE);
+   void insert   (QString const & key,            QVariant value, QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
+   void insert_ck(BtStringConst const & constKey, QVariant value, QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
+   void insert_ck(BtStringConst const & constKey, QVariant value, BtStringConst const & constSection, Extension extension = PersistentSettings::Extension::NONE);
 
    /**
     * \brief Returns the value associated with the "fully-qualified" key (generated from key, section and Extension).
@@ -201,17 +235,17 @@ namespace PersistentSettings {
     *        defaultValue.
     *        If no defaultValue is specified, the function returns a default-constructed value.
     */
-   QVariant value(QString const & key,            QVariant const defaultValue = QVariant(), QString const section = QString(),  Extension = PersistentSettings::Extension::NONE);
-   QVariant value(BtStringConst const & constKey, QVariant const defaultValue = QVariant(), QString const section = QString(),  Extension = PersistentSettings::Extension::NONE);
-   QVariant value(BtStringConst const & constKey, QVariant const defaultValue,              BtStringConst const & constSection, Extension = PersistentSettings::Extension::NONE);
+   QVariant value   (QString const & key,            QVariant const defaultValue = QVariant(), QString const section = QString(),  Extension = PersistentSettings::Extension::NONE);
+   QVariant value_ck(BtStringConst const & constKey, QVariant const defaultValue = QVariant(), QString const section = QString(),  Extension = PersistentSettings::Extension::NONE);
+   QVariant value_ck(BtStringConst const & constKey, QVariant const defaultValue,              BtStringConst const & constSection, Extension = PersistentSettings::Extension::NONE);
 
    /**
     * \brief Removes the item matching key (unless key is the name of a section, in which case it removes all keys in
     *        that section -- hence one reason you don't want keys and sections to share names).
     */
-   void remove(QString const & key,             QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
-   void remove(BtStringConst const & constName, QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
-   void remove(BtStringConst const & constName, BtStringConst const & constSection, Extension extension = PersistentSettings::Extension::NONE);
+   void remove   (QString const & key,             QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
+   void remove_ck(BtStringConst const & constName, QString const section = QString(),  Extension extension = PersistentSettings::Extension::NONE);
+   void remove_ck(BtStringConst const & constName, BtStringConst const & constSection, Extension extension = PersistentSettings::Extension::NONE);
 
    /**
     * \brief Read in an enum from persistent settings
@@ -221,7 +255,7 @@ namespace PersistentSettings {
                  EnumStringMapping const & enumStringMapping,
                  E & readInValue,
                  E const defaultValue) {
-      auto savedSetting = PersistentSettings::value(settingName, enumStringMapping[defaultValue]).toString();
+      auto savedSetting = PersistentSettings::value_ck(settingName, enumStringMapping[defaultValue]).toString();
       try {
          readInValue = enumStringMapping.stringToEnum<E>(savedSetting);
       } catch (std::out_of_range const & exception) {
@@ -231,6 +265,60 @@ namespace PersistentSettings {
          readInValue = defaultValue;
       }
       return;
+   }
+
+   /**
+    * \brief Save UI state for a given window / UI element
+    */
+   template<class UiElement>
+   void saveUiState(BtStringConst const & property,
+                    UiElement const & uiElement,
+                    BtStringConst const & section = PersistentSettings::Sections::MainWindow) {
+      PersistentSettings::insert_ck(property, uiElement.saveState(), section);
+      return;
+   }
+
+   /**
+    * \brief Restore UI state for a given window / UI element
+    *
+    * \return \c true if state was restored, \c false otherwise (ie no saved state was found)
+    */
+   template<class UiElement>
+   bool restoreUiState(BtStringConst const & property,
+                       UiElement & uiElement,
+                       BtStringConst const & section = PersistentSettings::Sections::MainWindow) {
+      if (PersistentSettings::contains_ck(property, section)) {
+         uiElement.restoreState(PersistentSettings::value_ck(property, QVariant(), section).toByteArray());
+         return true;
+      }
+      return false;
+   }
+
+   /**
+    * \brief Save geometry for a given window
+    */
+   template<class WidgetClass>
+   void saveGeometry(BtStringConst const & property,
+                     WidgetClass const & widget,
+                     BtStringConst const & section = PersistentSettings::Sections::MainWindow) {
+      PersistentSettings::insert_ck(property, widget.saveGeometry(), section);
+      return;
+   }
+
+   /**
+    * \brief Restore geometry for a given window
+    *
+    * \return \c true if geometry was restored, \c false otherwise (ie no saved geometry was found)
+    */
+   template<class WidgetClass>
+   bool restoreGeometry(BtStringConst const & property,
+                        WidgetClass & widget,
+                        BtStringConst const & section = PersistentSettings::Sections::MainWindow) {
+      if (PersistentSettings::contains_ck(property, section)) {
+         widget.restoreGeometry(PersistentSettings::value_ck(property, QVariant(), section).toByteArray());
+         return true;
+      }
+      return false;
    }
 
 }

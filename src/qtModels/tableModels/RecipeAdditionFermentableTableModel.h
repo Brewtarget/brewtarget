@@ -23,7 +23,7 @@
 #define TABLEMODELS_RECIPEADDITIONFERMENTABLETABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaProperty>
 #include <QModelIndex>
 #include <QVariant>
@@ -88,7 +88,7 @@ private:
  * \brief An item delegate for \c RecipeAdditionFermentableTableModel
  */
 class RecipeAdditionFermentableItemDelegate :
-   public QItemDelegate,
+   public QStyledItemDelegate,
    public ItemDelegate<RecipeAdditionFermentableItemDelegate, RecipeAdditionFermentableTableModel> {
    Q_OBJECT
 

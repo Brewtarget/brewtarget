@@ -323,7 +323,7 @@ public:
     *           exactly one \c Recipe and which get deleted if that \c Recipe is deleted.  A change to one of these
     *           items is treated as a change to the \c Recipe.
     *
-    *         - Independent items such as \c Equipment, \c Hop, \c InventoryHop which exist independently of any
+    *         - Independent items such as \c Equipment, \c Hop, \c StockPurchaseHop which exist independently of any
     *           \c Recipe.  Even if all recipes were deleted, these things would continue to exist.  (However the
     *           reverse is not necessarily true, in that we should not delete, eg, a \c Hop if it is being used, via
     *           \c RecipeAdditionHop, in one or more \c Recipes.)  A change to one of these items \b may affect one or
@@ -356,11 +356,11 @@ public:
     *             │    ├── RecipeAdjustmentSalt          │    ├── Misc
     *             │    └── RecipeAdditionYeast           │    ├── Salt
     *             └── RecipeUseOfWater                   │    └── Yeast
-    *                                                    ├── Inventory
-    *                                                    │    ├── InventoryFermentable (owned by its Fermentable)
-    *                                                    │    ├── InventoryHop         (owned by its Hop        )
-    *                                                    │    ├── InventoryMisc        (owned by its Misc       )
-    *                                                    │    └── InventoryYeast       (owned by its Yeast      )
+    *                                                    ├── StockPurchase
+    *                                                    │    ├── StockPurchaseFermentable (owned by its Fermentable)
+    *                                                    │    ├── StockPurchaseHop         (owned by its Hop        )
+    *                                                    │    ├── StockPurchaseMisc        (owned by its Misc       )
+    *                                                    │    └── StockPurchaseYeast       (owned by its Yeast      )
     *                                                    ├── Mash †
     *                                                    ├── Recipe (but owns itself for the purpose of changes)
     *                                                    ├── Step

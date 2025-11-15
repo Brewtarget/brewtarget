@@ -773,7 +773,7 @@ public:
 
 signals:
    //! Emitted when the number (or order) of instructions changes, or when you should call instructions() again.
-   void stepsChanged();
+   void ownedItemsChanged();
 
 public slots:
    void acceptChangeToContainedObject(QMetaProperty prop, QVariant val);

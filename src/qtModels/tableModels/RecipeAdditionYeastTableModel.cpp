@@ -34,7 +34,7 @@
 
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "model/Inventory.h"
+#include "model/StockPurchase.h"
 #include "model/Recipe.h"
 
 #ifdef BUILDING_WITH_CMAKE
@@ -47,27 +47,25 @@ COLUMN_INFOS(
    //
    // Note that for Name, we want the name of the contained Yeast, not the name of the RecipeAdditionYeast
    //
-   // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
-   // PropertyNames::NamedEntityWithInventory::inventory is not implemented
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Name          , tr("Name"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                PropertyNames::NamedEntity::name      }}),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Laboratory    , tr("Laboratory"    ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                PropertyNames::Yeast::laboratory      }}),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, ProductId     , tr("Product ID"    ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                PropertyNames::Yeast::productId       }}),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Type          , tr("Type"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                PropertyNames::Yeast::type             }}),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Form          , tr("Form"          ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                                PropertyNames::Yeast::form             }}),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Amount        , tr("Amount"        ), PropertyNames::IngredientAmount::amount                ),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, AmountType    , tr("Amount Type"   ), PropertyNames::IngredientAmount::amount                , Yeast::validMeasures),
-   // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, TotalInventory, tr("Inventory"     ), PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,
-                                                                                             PropertyNames::Ingredient::totalInventory}}),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Stage         , tr("Stage"         ), PropertyNames::RecipeAddition::stage                   ),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Step          , tr("Step"          ), PropertyNames::RecipeAddition::step                    ),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Attenuation   , tr("Attenuation"   ), PropertyNames::RecipeAdditionYeast::attenuation_pct    ),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, TimesCultured , tr("Times Cultured"), PropertyNames::RecipeAdditionYeast::timesCultured      ),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Name          , PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Name"
+                                                                         PropertyNames::NamedEntity::name      }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Laboratory    , PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Laboratory"
+                                                                         PropertyNames::Yeast::laboratory      }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, ProductId     , PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Product ID"
+                                                                         PropertyNames::Yeast::productId       }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Type          , PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Type"
+                                                                         PropertyNames::Yeast::type             }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Form          , PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Form"
+                                                                         PropertyNames::Yeast::form             }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Amount        , PropertyNames::IngredientAmount::amount                ),       // "Amount"
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, AmountType    , PropertyNames::IngredientAmount::amount, Yeast::validMeasures), // "Amount Type"
+   // Total inventory is read-only, so there is intentionally no TotalInventoryType column
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, TotalInventory, PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Inventory"
+                                                                         PropertyNames::Ingredient::totalInventory}, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Stage         , PropertyNames::RecipeAddition::stage                   ),       // "Stage"
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Step          , PropertyNames::RecipeAddition::step                    ),       // "Step"
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Attenuation   , PropertyNames::RecipeAdditionYeast::attenuation_pct    ),       // "Attenuation"
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, TimesCultured , PropertyNames::RecipeAdditionYeast::timesCultured      ),       // "Times Cultured"
 )
 
 RecipeAdditionYeastTableModel::RecipeAdditionYeastTableModel(QTableView * parent, bool editable) :
@@ -77,7 +75,7 @@ RecipeAdditionYeastTableModel::RecipeAdditionYeastTableModel(QTableView * parent
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionYeastTableModel::contextMenu);
-   connect(&ObjectStoreTyped<InventoryYeast>::getInstance(), &ObjectStoreTyped<InventoryYeast>::signalPropertyChanged, this,
+   connect(&ObjectStoreTyped<StockPurchaseYeast>::getInstance(), &ObjectStoreTyped<StockPurchaseYeast>::signalPropertyChanged, this,
            &RecipeAdditionYeastTableModel::changedInventory);
    return;
 }
@@ -90,14 +88,6 @@ void RecipeAdditionYeastTableModel::updateTotals()                              
 
 QVariant RecipeAdditionYeastTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags RecipeAdditionYeastTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<RecipeAdditionYeastTableModel>(
-      index,
-      this->m_editable,
-      {{RecipeAdditionYeastTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEnabled}}
-   );
 }
 
 bool RecipeAdditionYeastTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

@@ -17,7 +17,7 @@
 #define TABLEMODELS_EQUIPMENTTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaProperty>
 #include <QModelIndex>
 #include <QVariant>
@@ -55,7 +55,7 @@ class EquipmentTableModel : public BtTableModel, public TableModelBase<Equipment
  * \brief Item delegate for equipment tables.
  * \sa EquipmentTableModel
  */
-class EquipmentItemDelegate : public QItemDelegate, public ItemDelegate<EquipmentItemDelegate, EquipmentTableModel> {
+class EquipmentItemDelegate : public QStyledItemDelegate, public ItemDelegate<EquipmentItemDelegate, EquipmentTableModel> {
    Q_OBJECT
 
    ITEM_DELEGATE_COMMON_DECL(Equipment)

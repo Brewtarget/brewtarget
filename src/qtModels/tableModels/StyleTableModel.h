@@ -17,7 +17,7 @@
 #define TABLEMODELS_STYLETABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
 #include "model/Style.h"
 #include "qtModels/tableModels/ItemDelegate.h"
@@ -49,7 +49,7 @@ class StyleTableModel : public BtTableModel, public TableModelBase<StyleTableMod
  * \brief Item delegate for style tables.
  * \sa StyleTableModel
  */
-class StyleItemDelegate : public QItemDelegate,
+class StyleItemDelegate : public QStyledItemDelegate,
                           public ItemDelegate<StyleItemDelegate, StyleTableModel> {
    Q_OBJECT
    ITEM_DELEGATE_COMMON_DECL(Style)

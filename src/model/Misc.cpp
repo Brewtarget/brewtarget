@@ -28,7 +28,7 @@
 #include <QVector>
 
 #include "database/ObjectStoreWrapper.h"
-#include "model/InventoryMisc.h"
+#include "model/StockPurchaseMisc.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"

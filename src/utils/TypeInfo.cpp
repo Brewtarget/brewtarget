@@ -34,3 +34,7 @@ bool TypeInfo::isOptional() const {
    }
    return false;
 }
+
+bool TypeInfo::isReadOnly() const {
+   return this->access == TypeInfo::Access::ReadOnly;
+}

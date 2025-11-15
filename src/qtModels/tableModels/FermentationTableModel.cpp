@@ -30,9 +30,9 @@
 
 COLUMN_INFOS(
    FermentationTableModel,
-   TABLE_MODEL_HEADER(Fermentation, Name            , tr("Name"           ), PropertyNames::  NamedEntity::name          ),
-   TABLE_MODEL_HEADER(Fermentation, NumSteps        , tr("Number of Steps"), PropertyNames::StepOwnerBase::numSteps      ),
-   TABLE_MODEL_HEADER(Fermentation, NumRecipesUsedIn, tr("N° Recipes"     ), PropertyNames::NamedEntity::numRecipesUsedIn),
+   TABLE_MODEL_HEADER(Fermentation, Name            , PropertyNames::  NamedEntity::name          ), // "Name"
+   TABLE_MODEL_HEADER(Fermentation, NumSteps        , PropertyNames::StepOwnerBase::numSteps      ), // "Number of Steps"
+   TABLE_MODEL_HEADER(Fermentation, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 FermentationTableModel::FermentationTableModel(QTableView * parent, bool editable) :
@@ -52,10 +52,6 @@ void FermentationTableModel::updateTotals()                                     
 
 QVariant FermentationTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags FermentationTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<FermentationTableModel>(index, this->m_editable);
 }
 
 bool FermentationTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

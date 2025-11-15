@@ -191,11 +191,11 @@ public:
    void ensureStandardProfile();
 
 public slots:
-   void acceptStepChange(QMetaProperty, QVariant);
+   void acceptSetMemberChange(QMetaProperty, QVariant);
 
 signals:
    // Emitted when the number of steps change, or when you should call boilSteps() again.
-   void stepsChanged();
+   void ownedItemsChanged();
 
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;

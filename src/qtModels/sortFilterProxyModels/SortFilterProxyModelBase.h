@@ -33,9 +33,6 @@
  *        Derived classes need include \c SORT_FILTER_PROXY_MODEL_COMMON_DECL in their header file and
  *        \c SORT_FILTER_PROXY_MODEL_COMMON_CODE in their \c .cpp file.  This will provide an appropriate override of
  *        \c QSortFilterProxyModel::lessThan to do the per-column logic for sorting (via \c TableModelBase::isLessThan).
- *
- *        NOTE: In the past, we have used both \c QAbstractListModel and \c QAbstractTableModel in different places,
- *              requiring this class to support both. ¥¥¥
  */
 template<class Derived> class SortFilterProxyModelPhantom;
 template<class Derived, class NeTableModel, class NeListModel>

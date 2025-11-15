@@ -25,7 +25,7 @@
 
 BoilStepEditor::BoilStepEditor(QWidget* parent, QString const editorName) :
    QDialog{parent},
-   StepEditorBase<BoilStepEditor, BoilStep>{},
+   EnumeratedItemEditorBase<BoilStepEditor, BoilStep>{},
    EditorBase<BoilStepEditor, BoilStep, BoilStepEditorOptions>(editorName) {
    this->setupUi(this);
    this->postSetupUiInit({

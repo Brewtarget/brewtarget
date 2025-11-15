@@ -49,7 +49,7 @@ QString Equipment::localisedName_hltType                    () { return tr("HLT 
 QString Equipment::localisedName_hltVolume_l                () { return tr("HLT Volume"                 ); }
 QString Equipment::localisedName_hltWeight_kg               () { return tr("HLT Weight"                 ); }
 QString Equipment::localisedName_hopUtilization_pct         () { return tr("Hop Utilization"            ); }
-QString Equipment::localisedName_kettleBoilSize_l           () { return tr("Kettle Boil Size"           ); }
+QString Equipment::localisedName_kettleBoilSize_l           () { return tr("Boil Size"                  ); } // Shorter than "Kettle Boil Size"
 QString Equipment::localisedName_kettleEvaporationPerHour_l () { return tr("Kettle Evaporation Per Hour"); }
 QString Equipment::localisedName_kettleInternalDiameter_cm  () { return tr("Kettle Internal Diameter"   ); }
 QString Equipment::localisedName_kettleNotes                () { return tr("Kettle Notes"               ); }

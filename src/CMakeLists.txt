@@ -27,7 +27,9 @@
 #
 
 #
-# Variable that contains all the .cpp files in this project.
+# Variable that contains almost all the .cpp files in this project - specifically all the ones that are common between
+# the actual application and the unit test executable.  Essentially this is everything except main.cpp and the contents
+# of src/unitTests.
 #
 # You can recreate the body of this list by running the following from the bash prompt in the build directory:
 #    find ../src -name '*.cpp' | LC_ALL=C sort | sed 's+^../src+    ${repoDir}/src+' | grep -v Testing.cpp | grep -v main.cpp
@@ -58,8 +60,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/Html.cpp
     ${repoDir}/src/HydrometerTool.cpp
     ${repoDir}/src/IbuGuSlider.cpp
-    ${repoDir}/src/InventoryFormatter.cpp
-    ${repoDir}/src/InventoryWindow.cpp
     ${repoDir}/src/LatestReleaseFinder.cpp
     ${repoDir}/src/Localization.cpp
     ${repoDir}/src/Logging.cpp
@@ -78,6 +78,8 @@ set(filesToCompile_cpp
     ${repoDir}/src/RecipeFormatter.cpp
     ${repoDir}/src/RefractoDialog.cpp
     ${repoDir}/src/ScaleRecipeTool.cpp
+    ${repoDir}/src/StockFormatter.cpp
+    ${repoDir}/src/StockWindow.cpp
     ${repoDir}/src/StrikeWaterDialog.cpp
     ${repoDir}/src/StyleRangeWidget.cpp
     ${repoDir}/src/TimerListDialog.cpp
@@ -117,11 +119,16 @@ set(filesToCompile_cpp
     ${repoDir}/src/editors/FermentationEditor.cpp
     ${repoDir}/src/editors/FermentationStepEditor.cpp
     ${repoDir}/src/editors/HopEditor.cpp
-    ${repoDir}/src/editors/InventoryFermentableEditor.cpp
     ${repoDir}/src/editors/MashEditor.cpp
     ${repoDir}/src/editors/MashStepEditor.cpp
     ${repoDir}/src/editors/MiscEditor.cpp
     ${repoDir}/src/editors/SaltEditor.cpp
+    ${repoDir}/src/editors/StockPurchaseFermentableEditor.cpp
+    ${repoDir}/src/editors/StockPurchaseHopEditor.cpp
+    ${repoDir}/src/editors/StockPurchaseMiscEditor.cpp
+    ${repoDir}/src/editors/StockPurchaseSaltEditor.cpp
+    ${repoDir}/src/editors/StockPurchaseYeastEditor.cpp
+    ${repoDir}/src/editors/StockUseIngredientEditor.cpp
     ${repoDir}/src/editors/StyleEditor.cpp
     ${repoDir}/src/editors/WaterEditor.cpp
     ${repoDir}/src/editors/YeastEditor.cpp
@@ -148,12 +155,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/model/Hop.cpp
     ${repoDir}/src/model/Ingredient.cpp
     ${repoDir}/src/model/Instruction.cpp
-    ${repoDir}/src/model/Inventory.cpp
-    ${repoDir}/src/model/InventoryFermentable.cpp
-    ${repoDir}/src/model/InventoryHop.cpp
-    ${repoDir}/src/model/InventoryMisc.cpp
-    ${repoDir}/src/model/InventorySalt.cpp
-    ${repoDir}/src/model/InventoryYeast.cpp
     ${repoDir}/src/model/Mash.cpp
     ${repoDir}/src/model/MashStep.cpp
     ${repoDir}/src/model/Misc.cpp
@@ -172,6 +173,14 @@ set(filesToCompile_cpp
     ${repoDir}/src/model/Salt.cpp
     ${repoDir}/src/model/Step.cpp
     ${repoDir}/src/model/StepExtended.cpp
+    ${repoDir}/src/model/StockPurchase.cpp
+    ${repoDir}/src/model/StockPurchaseFermentable.cpp
+    ${repoDir}/src/model/StockPurchaseHop.cpp
+    ${repoDir}/src/model/StockPurchaseMisc.cpp
+    ${repoDir}/src/model/StockPurchaseSalt.cpp
+    ${repoDir}/src/model/StockPurchaseYeast.cpp
+    ${repoDir}/src/model/StockUse.cpp
+    ${repoDir}/src/model/StockUseIngredient.cpp
     ${repoDir}/src/model/Style.cpp
     ${repoDir}/src/model/Water.cpp
     ${repoDir}/src/model/Yeast.cpp
@@ -212,6 +221,11 @@ set(filesToCompile_cpp
     ${repoDir}/src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/RecipeTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/SaltTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/StockUseFermentableTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/StockUseHopTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/StockUseMiscTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/StockUseSaltTableModel.cpp
+    ${repoDir}/src/qtModels/tableModels/StockUseYeastTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/StyleTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/WaterTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/YeastTableModel.cpp
@@ -260,11 +274,15 @@ set(filesToCompile_cpp
     ${repoDir}/src/utils/TimerUtils.cpp
     ${repoDir}/src/utils/TypeInfo.cpp
     ${repoDir}/src/utils/TypeLookup.cpp
+    ${repoDir}/src/utils/WindowDistributor.cpp
     ${repoDir}/src/widgets/Animator.cpp
     ${repoDir}/src/widgets/BtComboBoxBool.cpp
     ${repoDir}/src/widgets/BtComboBoxEnum.cpp
     ${repoDir}/src/widgets/BtComboBoxNamedEntity.cpp
+    ${repoDir}/src/widgets/BtComboBoxObject.cpp
+    ${repoDir}/src/widgets/BtLineEditCurrency.cpp
     ${repoDir}/src/widgets/BtOptionalDateEdit.cpp
+    ${repoDir}/src/widgets/EnumeratedItemsWidget.cpp
     ${repoDir}/src/widgets/InfoButton.cpp
     ${repoDir}/src/widgets/InfoText.cpp
     ${repoDir}/src/widgets/SelectionControl.cpp
@@ -275,7 +293,15 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/SmartLabel.cpp
     ${repoDir}/src/widgets/SmartLineEdit.cpp
     ${repoDir}/src/widgets/SmartValueDisplay.cpp
-    ${repoDir}/src/widgets/StepsWidget.cpp
+    ${repoDir}/src/widgets/StockManagerIngredient.cpp
+    ${repoDir}/src/widgets/StockManager.cpp
     ${repoDir}/src/widgets/ToggleSwitch.cpp
     ${repoDir}/src/widgets/UnitAndScalePopUpMenu.cpp
+)
+#
+# Extra files we compile for unit testing
+#
+set(unitTestFiles_cpp
+    ${repoDir}/src/unitTests/Testing.cpp
+    ${repoDir}/src/unitTests/TestMultiVector.cpp
 )

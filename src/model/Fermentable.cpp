@@ -28,8 +28,7 @@
 #include <QVariant>
 
 #include "database/ObjectStoreWrapper.h"
-#include "model/Inventory.h"
-#include "model/InventoryFermentable.h"
+#include "model/StockPurchaseFermentable.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
@@ -52,13 +51,13 @@ QString Fermentable::localisedName_di_ph                 () { return tr("DI pH" 
 QString Fermentable::localisedName_dmsP_ppm              () { return tr("DMS precursors"              ); }
 QString Fermentable::localisedName_fan_ppm               () { return tr("Free Amino Nitrogen (FAN)"   ); }
 QString Fermentable::localisedName_fermentability_pct    () { return tr("Fermentability"              ); }
-QString Fermentable::localisedName_fineGrindYield_pct    () { return tr("FineGrindYield"              ); }
+QString Fermentable::localisedName_fineGrindYield_pct    () { return tr("Yield (DBFG) %"              ); } // We'll treat this as default yield, for now at least
 QString Fermentable::localisedName_friability_pct        () { return tr("Friability"                  ); }
 QString Fermentable::localisedName_grainGroup            () { return tr("Grain Group"                 ); }
 QString Fermentable::localisedName_hardnessPrpGlassy_pct () { return tr("Hardness Proportion Glassy"  ); }
 QString Fermentable::localisedName_hardnessPrpHalf_pct   () { return tr("Hardness Proportion Half"    ); }
 QString Fermentable::localisedName_hardnessPrpMealy_pct  () { return tr("Hardness Proportion Mealy"   ); }
-QString Fermentable::localisedName_ibuGalPerLb           () { return tr("Ibu Gal Per Lb"              ); }
+QString Fermentable::localisedName_ibuGalPerLb           () { return tr("IBU Gal Per Lb"              ); }
 QString Fermentable::localisedName_kernelSizePrpPlump_pct() { return tr("Kernel Size Proportion Plump"); }
 QString Fermentable::localisedName_kernelSizePrpThin_pct () { return tr("Kernel Size Proportion Thin" ); }
 QString Fermentable::localisedName_kolbachIndex_pct      () { return tr("Kolbach Index"               ); }

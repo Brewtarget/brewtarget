@@ -41,7 +41,8 @@ public:
    virtual ~BtComboBoxEnum();
 
    /**
-    * \brief Post-construction initialisation.  Usually called via \c BT_COMBO_BOX_INIT macro
+    * \brief Post-construction initialisation.  Other than in \c EditorBaseField, usually called via
+    *        \c BT_COMBO_BOX_INIT macro
     *
     *        According to https://bugreports.qt.io/browse/QTBUG-50823 it is never going to be possible to specify the
     *        data (as opposed to display text) for a combo box via the .ui file.  So we have to do it in code instead.
@@ -58,9 +59,12 @@ public:
     *                           \c displayNameMapping, the combo box should show only the values in the supplied list.
     *                           This is useful eg for offering a choice of \c Measurement::PhysicalQuantity values for a
     *                           \c Measurement::ChoiceOfPhysicalQuantity value.
-    * \param controlledField    If specified, then this is the field whose \c Measurement::PhysicalQuantity is
-    *                           shown and controlled by this combo box.  (Note that we do \b not use this in table
-    *                           models.)
+    * \param controlledFields   If specified, then this is, usually, the single other field whose
+    *                           \c Measurement::PhysicalQuantity is shown and controlled by this combo box.  (Note that
+    *                           we do \b not use this in table models.)  Where there are multiple controlled fields,
+    *                           (eg on Inventory objects where amount ordered and amount received should be of the same
+    *                           type -- both mass or both volume etc), then the first field in the list is the "primary"
+    *                           one from which we pick up the physical quantity.
     */
    void init(char const * const editorName,
              char const * const comboBoxName,
@@ -69,7 +73,7 @@ public:
              EnumStringMapping const & displayNameMapping,
              TypeInfo          const & typeInfo,
              std::vector<int>  const * restrictTo = nullptr,
-             SmartLineEdit *           controlledField = nullptr);
+             std::vector<SmartLineEdit *> controlledFields = {});
 
    /**
     * \brief For the case where we have a controlledField (see last parameter to \c init above), we want to be able to
@@ -87,7 +91,7 @@ public:
    [[nodiscard]] bool isOptional() const;
 
    /**
-    * \brief Set value of a combo box from an optional enum val
+    * \brief Set value of the combo box from an optional enum val
     *
     *        It looks a bit funky disabling this specialisation for a T that is optional, but the point is that we don't
     *        want the compiler to ever create a \c std::optional<std::optional<T>> type.  (Eg, we don't want to write
@@ -107,7 +111,7 @@ public:
    }
 
    /**
-    * \brief Set value of a combo box from a non-optional enum val
+    * \brief Set value of the combo box from a non-optional enum val
     *
     * \param value
     */
@@ -118,7 +122,7 @@ public:
    }
 
    /**
-    * \brief Get value of a combo box for an optional enum val
+    * \brief Get value of the combo box for an optional enum val
     */
    template<typename EE> [[nodiscard]] std::optional<EE> getOptValue() const {
       Q_ASSERT(this->isOptional());
@@ -130,7 +134,7 @@ public:
    }
 
    /**
-    * \brief Get value of a combo box for a non-optional enum val
+    * \brief Get value of the combo box for a non-optional enum val
     */
    template<typename EE> [[nodiscard]] EE getNonOptValue() const {
       Q_ASSERT(!this->isOptional());
@@ -138,7 +142,7 @@ public:
    }
 
    /**
-    * \brief Get value of a combo box
+    * \brief Similar to \c SmartField::getAsVariant
     */
    [[nodiscard]] QVariant getAsVariant() const;
 
@@ -198,6 +202,8 @@ private:
  *
  *           BT_COMBO_BOX_INIT(HopEditor, comboBox_hopForm, Hop, form);
  *
+ *        However, in editors, use EDITOR_FIELD_ENUM and EDITOR_FIELD_COPQ instead.
+ *
  *        NOTE: We are more concise here than in \c SMART_FIELD_INIT and related macros because none of the combo boxes
  *              need to access inherited properties.  Eg, in \c HopEditor, all the properties for combo boxes are going
  *              to be \c PropertyNames::Hop::somethingOrOther, which is not always the case for other types of field.
@@ -218,6 +224,8 @@ private:
 
 /**
  * \brief Alternate version of \c BT_COMBO_BOX_INIT for when we have Measurement::ChoiceOfPhysicalQuantity
+ *
+ *        NOTE: This does not currently handle multiple controlled fields, but could easily be extended to do so.
  */
 #define BT_COMBO_BOX_INIT_COPQ(editorClass, comboBoxName, modelClass, fqPropertyName, controlledField) \
    this->comboBoxName->init(#editorClass,                                                   \
@@ -227,7 +235,7 @@ private:
                             Measurement::physicalQuantityDisplayNames,                      \
                             modelClass::typeLookup.getType(fqPropertyName),                 \
                             &Measurement::allPossibilitiesAsInt(modelClass::validMeasures), \
-                            controlledField)
+                            {controlledField})
 
 /**
  * \brief Alternate version of \c BT_COMBO_BOX_INIT for when the variable we are initialising is not a member variable

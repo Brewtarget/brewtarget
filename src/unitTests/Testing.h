@@ -25,7 +25,17 @@
 #include <QObject>
 
 
-
+/**
+ * \brief This class is the entry point to the (currently) limited unit tests that we have.
+ *
+ *        For the moment at least we use the Qt Test framework and the \c QTEST_MAIN macro to create entry points (which
+ *        must be member functions of a single class).
+ *
+ *        To add a new test, at minimum three things are required:
+ *           - Create a new public member function on this class -- eg \c void \c testFooBar()
+ *           - Create a corresponding \c add_test line in \c CMakeLists.txt
+ *           - Create a corresponding \c test() line in \c meson.build
+ */
 class Testing : public QObject {
    Q_OBJECT
 
@@ -82,6 +92,12 @@ private slots:
     *        \c NamedEntity and subclasses thereof).
     */
    void testTypeLookups();
+
+   /**
+    * \brief Check for off-by-one errors etc in the implementation of \c MultiVector
+    *
+    */
+   void testMultiVector();
 
    //! \brief Verify Log rotation is working
    void testLogRotation();

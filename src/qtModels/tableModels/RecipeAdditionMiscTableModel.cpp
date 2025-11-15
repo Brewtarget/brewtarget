@@ -33,7 +33,7 @@
 
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "model/Inventory.h"
+#include "model/StockPurchase.h"
 #include "model/Recipe.h"
 
 #ifdef BUILDING_WITH_CMAKE
@@ -46,19 +46,17 @@ COLUMN_INFOS(
    //
    // Note that for Name, we want the name of the contained Misc, not the name of the RecipeAdditionMisc
    //
-   // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
-   // PropertyNames::NamedEntityWithInventory::inventory is not implemented
-   TABLE_MODEL_HEADER(RecipeAdditionMisc, Name          , tr("Name"       ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
-                                                                                             PropertyNames::NamedEntity::name         }}),
-   TABLE_MODEL_HEADER(RecipeAdditionMisc, Type          , tr("Type"       ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
-                                                                                             PropertyNames::Misc::type                 }}),
-   TABLE_MODEL_HEADER(RecipeAdditionMisc, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  ),
-   TABLE_MODEL_HEADER(RecipeAdditionMisc, AmountType    , tr("Amount Type"), PropertyNames::IngredientAmount::amount                  , Misc::validMeasures),
-   // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
-   TABLE_MODEL_HEADER(RecipeAdditionMisc, TotalInventory, tr("Inventory"  ), PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,
-                                                                                             PropertyNames::Ingredient::totalInventory}}),
-   TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     ),
-   TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            ),
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Name          , PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,         // "Name"
+                                                                        PropertyNames::NamedEntity::name      }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Type          , PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,         // "Type"
+                                                                        PropertyNames::Misc::type             }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Amount        , PropertyNames::IngredientAmount::amount             ),         // "Amount"
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, AmountType    , PropertyNames::IngredientAmount::amount, Misc::validMeasures), // "Amount Type"
+   // Total inventory is read-only, so there is intentionally no TotalInventoryType column
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, TotalInventory, PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,         // "Inventory"
+                                                                        PropertyNames::Ingredient::totalInventory}, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , PropertyNames::RecipeAddition::stage                     ),    // "Stage"
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , PropertyNames::RecipeAddition::addAtTime_mins            ),    // "Time"
 )
 
 RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, bool editable) :
@@ -69,7 +67,7 @@ RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, 
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionMiscTableModel::contextMenu);
-   connect(&ObjectStoreTyped<InventoryMisc>::getInstance(), &ObjectStoreTyped<InventoryMisc>::signalPropertyChanged, this,
+   connect(&ObjectStoreTyped<StockPurchaseMisc>::getInstance(), &ObjectStoreTyped<StockPurchaseMisc>::signalPropertyChanged, this,
            &RecipeAdditionMiscTableModel::changedInventory);
    return;
 }
@@ -101,14 +99,6 @@ QVariant RecipeAdditionMiscTableModel::headerData(int section, Qt::Orientation o
       }
    }
    return QVariant();
-}
-
-Qt::ItemFlags RecipeAdditionMiscTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<RecipeAdditionMiscTableModel>(
-      index,
-      this->m_editable,
-      {{RecipeAdditionMiscTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEnabled}}
-   );
 }
 
 bool RecipeAdditionMiscTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

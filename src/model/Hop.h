@@ -36,7 +36,7 @@
 
 class HopCatalog;
 class HopEditor;
-class InventoryHop;
+class StockPurchaseHop;
 class HopItemDelegate;
 class RecipeAdditionHop;
 class HopSortFilterProxyModel;
@@ -84,7 +84,7 @@ AddPropertyName(year              )
  *        TBD: Ideally we would find a way to model:
  *           > A general type of Hop - eg "East Kent Goldings", which will have an alpha acid range
  *           > A specific form and harvest - eg "Pellet 2020 harvest", which will have a single alpha acid value eg 6.0%
- *        Probably we should do this via Inventory.
+ *        Probably we should do this via StockPurchase.
  *
  * TODO TODO TODO TODO TODO TODO TODO TODO TODO Sort out inventory!
  */
@@ -194,7 +194,7 @@ public:
    //
    using CatalogClass              = HopCatalog;
    using EditorClass               = HopEditor;
-   using InventoryClass            = InventoryHop;
+   using StockPurchaseClass            = StockPurchaseHop;
    using ItemDelegateClass         = HopItemDelegate;
    using RecipeAdditionClass       = RecipeAdditionHop;
    using SortFilterProxyModelClass = HopSortFilterProxyModel;
@@ -214,7 +214,7 @@ public:
    virtual ~Hop();
 
    //=================================================== PROPERTIES ====================================================
-   //! \brief The percent alpha acid
+   //! \brief Typical percent alpha acid for this type of hop.  ⮜⮜⮜ Required in BeerJSON and BeerXML ⮞⮞⮞
    Q_PROPERTY(double                alpha_pct    READ alpha_pct    WRITE setAlpha_pct            )
    /**
     * \brief The \c Form.                ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
@@ -228,14 +228,14 @@ public:
    //! \brief The origin.
    Q_PROPERTY(QString               origin       READ origin       WRITE setOrigin               )
    //! \brief The notes.
-   Q_PROPERTY(QString               notes                 READ notes                 WRITE setNotes                )
+   Q_PROPERTY(QString               notes        READ notes        WRITE setNotes                )
    /**
     * \brief The \c Type.           ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
     *
     *        See comment in \c model/Fermentable.h for \c grainGroup property for why this has to be
     *        \c std::optional<int>, not \c std::optional<Use>
     */
-   Q_PROPERTY(std::optional<int>    type                  READ typeAsInt             WRITE setTypeAsInt            )
+   Q_PROPERTY(std::optional<int>    type         READ typeAsInt    WRITE setTypeAsInt            )
    /**
     * \brief The hop stability index in percent.  The Hop Stability Index (HSI) is defined as the percentage of hop
     *        alpha lost in 6 months of storage.  It may be related to the Hop Storage Index...
@@ -339,7 +339,7 @@ public:
    void setXanthohumol_pct   (std::optional<double> const   val);
    void setProducer          (QString               const & val);
    void setProductId         (QString               const & val);
-   void setYear              (QString               const   val);
+   void setYear              (QString               const & val);
 
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;

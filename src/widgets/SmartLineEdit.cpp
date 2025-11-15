@@ -159,7 +159,7 @@ void SmartLineEdit::setTextCursor(QString const & text, int cursorPosition) {
 }
 
 void SmartLineEdit::onLineChanged() {
-   qDebug() << Q_FUNC_INFO;
+//   qDebug() << Q_FUNC_INFO;
    Q_ASSERT(this->isInitialised());
 
    if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {

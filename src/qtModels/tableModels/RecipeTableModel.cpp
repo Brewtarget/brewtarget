@@ -27,7 +27,7 @@
 
 COLUMN_INFOS(
    RecipeTableModel,
-   TABLE_MODEL_HEADER(Recipe, Name          , tr("Name"           ), PropertyNames::NamedEntity::name    ),
+   TABLE_MODEL_HEADER(Recipe, Name, PropertyNames::NamedEntity::name),
 )
 
 RecipeTableModel::RecipeTableModel(QTableView * parent, bool editable) :
@@ -48,10 +48,6 @@ void RecipeTableModel::updateTotals()                                         { 
 
 QVariant RecipeTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags RecipeTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<RecipeTableModel>(index, this->m_editable);
 }
 
 bool RecipeTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

@@ -314,15 +314,15 @@ public:
 
    bool loadPgSQL(Database & database) {
 
-      this->dbHostname = PersistentSettings::value(PersistentSettings::Names::dbHostname).toString();
-      this->dbPortnum  = PersistentSettings::value(PersistentSettings::Names::dbPortnum).toInt();
-      this->dbName     = PersistentSettings::value(PersistentSettings::Names::dbName).toString();
-      this->dbSchema   = PersistentSettings::value(PersistentSettings::Names::dbSchema).toString();
+      this->dbHostname = PersistentSettings::value_ck(PersistentSettings::Names::dbHostname).toString();
+      this->dbPortnum  = PersistentSettings::value_ck(PersistentSettings::Names::dbPortnum).toInt();
+      this->dbName     = PersistentSettings::value_ck(PersistentSettings::Names::dbName).toString();
+      this->dbSchema   = PersistentSettings::value_ck(PersistentSettings::Names::dbSchema).toString();
 
-      this->dbUsername = PersistentSettings::value(PersistentSettings::Names::dbUsername).toString();
+      this->dbUsername = PersistentSettings::value_ck(PersistentSettings::Names::dbUsername).toString();
 
-      if (PersistentSettings::contains(PersistentSettings::Names::dbPassword)) {
-         this->dbPassword = PersistentSettings::value(PersistentSettings::Names::dbPassword).toString();
+      if (PersistentSettings::contains_ck(PersistentSettings::Names::dbPassword)) {
+         this->dbPassword = PersistentSettings::value_ck(PersistentSettings::Names::dbPassword).toString();
       } else {
          bool isOk = false;
 
@@ -437,7 +437,7 @@ public:
          // If we're in interactive mode (rather than, eg, running unit tests), we should tell the user, including
          // giving them a chance to abort.
          //
-         QString const backupDir = PersistentSettings::value(
+         QString const backupDir = PersistentSettings::value_ck(
             PersistentSettings::Names::directory,
             PersistentSettings::getUserDataDir().canonicalPath(),
             PersistentSettings::Sections::backups
@@ -516,14 +516,14 @@ public:
    }
 
    void automaticBackup(Database & database) {
-      int count = PersistentSettings::value(PersistentSettings::Names::count, 0, PersistentSettings::Sections::backups).toInt() + 1;
-      int frequency = PersistentSettings::value(PersistentSettings::Names::frequency, 4, PersistentSettings::Sections::backups).toInt();
-      int maxBackups = PersistentSettings::value(PersistentSettings::Names::maximum, 10, PersistentSettings::Sections::backups).toInt();
+      int count      = PersistentSettings::value_ck(PersistentSettings::Names::count    ,  0, PersistentSettings::Sections::backups).toInt() + 1;
+      int frequency  = PersistentSettings::value_ck(PersistentSettings::Names::frequency,  4, PersistentSettings::Sections::backups).toInt();
+      int maxBackups = PersistentSettings::value_ck(PersistentSettings::Names::maximum  , 10, PersistentSettings::Sections::backups).toInt();
 
       // The most common case is update the counter and nothing else
       // A frequency of 1 means backup every time. Which this statisfies
       if ( count % frequency != 0 ) {
-         PersistentSettings::insert(PersistentSettings::Names::count, count, PersistentSettings::Sections::backups);
+         PersistentSettings::insert_ck(PersistentSettings::Names::count, count, PersistentSettings::Sections::backups);
          return;
       }
 
@@ -534,8 +534,12 @@ public:
          return;
       }
 
-      QString backupDir = PersistentSettings::value(PersistentSettings::Names::directory, PersistentSettings::getUserDataDir().canonicalPath(), PersistentSettings::Sections::backups).toString();
-      QString listOfFiles = PersistentSettings::value(PersistentSettings::Names::files, QVariant(), PersistentSettings::Sections::backups).toString();
+      QString backupDir = PersistentSettings::value_ck(PersistentSettings::Names::directory,
+                                                       PersistentSettings::getUserDataDir().canonicalPath(),
+                                                       PersistentSettings::Sections::backups).toString();
+      QString listOfFiles = PersistentSettings::value_ck(PersistentSettings::Names::files,
+                                                         QVariant(),
+                                                         PersistentSettings::Sections::backups).toString();
       QStringList fileNames = listOfFiles.split(",", Qt::SkipEmptyParts);
 
       QString halfName = QString("%1.%2").arg("databaseBackup").arg(QDate::currentDate().toString("yyyyMMdd"));
@@ -557,7 +561,7 @@ public:
       // If we have maxBackups == -1, it means never clean. It also means we
       // don't track the filenames.
       if ( maxBackups == -1 )  {
-         PersistentSettings::remove(PersistentSettings::Names::files, PersistentSettings::Sections::backups);
+         PersistentSettings::remove_ck(PersistentSettings::Names::files, PersistentSettings::Sections::backups);
          return;
       }
 
@@ -590,8 +594,8 @@ public:
       listOfFiles = fileNames.join(",");
 
       // finally, reset the counter and save the new list of files
-      PersistentSettings::insert(PersistentSettings::Names::count, 0, PersistentSettings::Sections::backups);
-      PersistentSettings::insert(PersistentSettings::Names::files, listOfFiles, PersistentSettings::Sections::backups);
+      PersistentSettings::insert_ck(PersistentSettings::Names::count, 0          , PersistentSettings::Sections::backups);
+      PersistentSettings::insert_ck(PersistentSettings::Names::files, listOfFiles, PersistentSettings::Sections::backups);
 
       return;
    }
@@ -917,8 +921,8 @@ Database& Database::instance(Database::DbType dbType) {
       // currentDbType).
       if (Database::DbType::NODB == currentDbType) {
          currentDbType = static_cast<Database::DbType>(
-            PersistentSettings::value(PersistentSettings::Names::dbType,
-                                      static_cast<int>(Database::DbType::SQLITE)).toInt()
+            PersistentSettings::value_ck(PersistentSettings::Names::dbType,
+                                         static_cast<int>(Database::DbType::SQLITE)).toInt()
          );
       }
       dbType = currentDbType;

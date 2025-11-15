@@ -36,6 +36,8 @@ namespace SmartAmounts {
     *        there are additional \c SmartField buddies, then this function should be called multiple times.
     *
     *        See comment in \c widgets/SmartLabel.h for more details.
+    *
+    *        TODO: Init should be init in this function name and the following two
     */
    template<class LabelType>
    void Init(char const * const editorName,
@@ -241,17 +243,22 @@ namespace SmartAmounts {
  *                    static local \c TypeInfo struct to pass by reference to \c SmartField::init.
  * \param ...  Any remaining arguments are passed through to \c SmartField::init in fourth position and above
  */
-#define SMART_FIELD_INIT_FS(editorClass, labelName, fieldName, nativeType, quantityFieldType, ...) \
+#define SMART_FIELD_INIT_FS(editorClass, labelName, fieldName, nativeType, quantityFieldType, ...)  \
    class DisplayNameFor_##fieldName { public: static inline QString get() { return #fieldName; } }; \
-   static auto const typeInfoFor_##fieldName = TypeInfo::construct<nativeType>(PropertyNames::None::none, DisplayNameFor_##fieldName::get, nullptr, quantityFieldType); \
-   SmartAmounts::Init(#editorClass, \
-                      #labelName, \
+   static auto const typeInfoFor_##fieldName =                         \
+      TypeInfo::construct<nativeType>(PropertyNames::None::none,       \
+                                      DisplayNameFor_##fieldName::get, \
+                                      nullptr,                         \
+                                      TypeInfo::Access::ReadWrite,     \
+                                      quantityFieldType);              \
+   SmartAmounts::Init(#editorClass,                        \
+                      #labelName,                          \
                       SFI_FQ_NAME(editorClass, labelName), \
-                      *this->labelName, \
-                      #fieldName, \
+                      *this->labelName,                    \
+                      #fieldName,                          \
                       SFI_FQ_NAME(editorClass, fieldName), \
-                      *this->fieldName, \
-                      typeInfoFor_##fieldName \
+                      *this->fieldName,                    \
+                      typeInfoFor_##fieldName              \
                       __VA_OPT__(, __VA_ARGS__))
 
 
@@ -259,17 +266,21 @@ namespace SmartAmounts {
  * \brief An alternate version of \c SMART_FIELD_INIT_FS for use when there is no \c modelClass and display units are
  *        fixed.
  */
-#define SMART_FIELD_INIT_FIXED(editorClass, labelName, fieldName, nativeType, fixedUnit, ...) \
+#define SMART_FIELD_INIT_FIXED(editorClass, labelName, fieldName, nativeType, fixedUnit, ...)       \
    class DisplayNameFor_##fieldName { public: static inline QString get() { return #fieldName; } }; \
-   static auto const typeInfoFor_##fieldName = \
-      TypeInfo::construct<nativeType>(PropertyNames::None::none, DisplayNameFor_##fieldName::get, nullptr, fixedUnit.getPhysicalQuantity()); \
-   SmartAmounts::InitFixed(#editorClass, \
-                           *this->labelName, \
-                           #fieldName, \
+   static auto const typeInfoFor_##fieldName =                          \
+      TypeInfo::construct<nativeType>(PropertyNames::None::none,        \
+                                      DisplayNameFor_##fieldName::get,  \
+                                      nullptr,                          \
+                                      TypeInfo::Access::ReadWrite,      \
+                                      fixedUnit.getPhysicalQuantity()); \
+   SmartAmounts::InitFixed(#editorClass,                        \
+                           *this->labelName,                    \
+                           #fieldName,                          \
                            SFI_FQ_NAME(editorClass, fieldName), \
-                           *this->fieldName, \
-                           typeInfoFor_##fieldName, \
-                           fixedUnit \
+                           *this->fieldName,                    \
+                           typeInfoFor_##fieldName,             \
+                           fixedUnit                            \
                            __VA_OPT__(, __VA_ARGS__))
 
 #endif

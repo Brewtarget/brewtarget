@@ -192,7 +192,7 @@ ScaleRecipeEquipmentPage::ScaleRecipeEquipmentPage(QWidget* parent) :
    retranslateUi();
    this->m_equipComboBox->init();
 
-   registerField("m_equipComboBox", m_equipComboBox, *PropertyNames::BtComboBoxNamedEntity::currentId, "currentIndexChanged");
+   registerField("m_equipComboBox", m_equipComboBox, *PropertyNames::BtComboBoxObject::currentId, "currentIndexChanged");
    registerField("m_efficiencyLineEdit", m_efficiencyLineEdit);
    return;
 }
@@ -201,7 +201,7 @@ void ScaleRecipeEquipmentPage::doLayout() {
 
    layout->addRow(m_equipLabel, m_equipComboBox);
    layout->addRow(m_efficiencyLabel, m_efficiencyLineEdit);
-   m_efficiencyLineEdit->setText(PersistentSettings::value(PersistentSettings::Names::defaultEfficiency, 70.0).toString());
+   m_efficiencyLineEdit->setText(PersistentSettings::value_ck(PersistentSettings::Names::defaultEfficiency, 70.0).toString());
    setLayout(layout);
    return;
 }

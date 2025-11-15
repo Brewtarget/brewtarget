@@ -134,7 +134,7 @@ QList<QString> Instruction::reagents     () const { return this->m_reagents     
 
 
 bool operator<(Instruction & lhs, Instruction & rhs) {
-   return lhs.stepNumber() < rhs.stepNumber();
+   return lhs.sequenceNumber() < rhs.sequenceNumber();
 }
 
 // Insert boiler-plate wrapper functions that call down to EnumeratedBase

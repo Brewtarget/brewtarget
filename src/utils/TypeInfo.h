@@ -25,6 +25,7 @@
 #include "measurement/PhysicalQuantity.h"
 #include "measurement/Unit.h"
 #include "model/NamedEntityCasters.h"
+#include "utils/OptionalHelpers.h"
 #include "utils/TypeTraits.h"
 
 class BtStringConst;
@@ -185,6 +186,19 @@ struct TypeInfo {
    BtStringConst const & propertyName;
 
    /**
+    * \brief In principle, we can determine whether a field is read-only via the Qt Property System, but it's a bit more
+    *        direct to just store a flag here.
+    */
+   enum class Access {
+      ReadWrite,
+      ReadOnly ,
+      WriteOnly, // Not sure we need this, but doesn't hurt to have it
+   };
+   Access access;
+   //! \brief Not strictly necessary but makes calling code a bit more readable
+   bool isReadOnly() const;
+
+   /**
     * \return \c true if \c classification is \c RequiredEnum or \c OptionalEnum, \c false otherwise (ie if
     *         \c classification is \c RequiredOther or \c OptionalOther
     */
@@ -223,6 +237,7 @@ struct TypeInfo {
    template<typename T> const static TypeInfo construct(BtStringConst const & propertyName,
                                                         QString (&localisedNameFunction) (),
                                                         TypeLookup const * typeLookup,
+                                                        Access access = Access::ReadWrite,
                                                         std::optional<QuantityFieldType> fieldType = std::nullopt,
                                                         DisplayAs displayAs = std::nullopt,
                                                         Measurement::Unit const * unit = nullptr) {
@@ -234,6 +249,26 @@ struct TypeInfo {
                       typeLookup,
                       fieldType,
                       propertyName,
+                      access,
+                      displayAs,
+                      unit};
+   }
+
+   template<typename T> const static TypeInfo construct(BtStringConst const & propertyName,
+                                                        QString (&localisedNameFunction) (),
+                                                        TypeLookup const * typeLookup,
+                                                        std::optional<QuantityFieldType> fieldType,
+                                                        DisplayAs displayAs = std::nullopt,
+                                                        Measurement::Unit const * unit = nullptr) {
+      return TypeInfo{makeTypeIndex<T>(),
+                      makeClassification<T>(),
+                      makePointerType<T>(),
+                      makeCasters<T>(),
+                      localisedNameFunction,
+                      typeLookup,
+                      fieldType,
+                      propertyName,
+                      Access::ReadWrite,
                       displayAs,
                       unit};
    }
@@ -270,13 +305,14 @@ S & operator<<(S & stream, TypeInfo const * typeInfo) {
  *        Eg, instead of writing:
  *
  *           ... NonPhysicalQuantity::Enum, DisplayInfo::Enum{BoilStep::chillingTypeStringMapping,
- *                                                            BoilStep::chillingTypeDisplayNames} ...
+ *                                                                                         BoilStep::chillingTypeDisplayNames} ...
  *
  *        we can write:
  *
  *           ... ENUM_INFO(BoilStep::chillingType) ...
  */
-#define ENUM_INFO(enumType) NonPhysicalQuantity::Enum, DisplayInfo::Enum{enumType##StringMapping, enumType##DisplayNames}
+#define ENUM_INFO(enumType) NonPhysicalQuantity::Enum,   \
+                            DisplayInfo::Enum{enumType##StringMapping, enumType##DisplayNames}
 
 /**
  * \brief This macro makes it easier to initialise \c fieldType and \c displayAs in \c TypeInfo constructor for boolean
@@ -288,6 +324,7 @@ S & operator<<(S & stream, TypeInfo const * typeInfo) {
  *
  *           ... BOOL_INFO(tr("No"), tr("Yes")) ...
  */
-#define BOOL_INFO(offText, onText) NonPhysicalQuantity::Bool, DisplayInfo::Bool{offText, onText}
+#define BOOL_INFO(offText, onText) NonPhysicalQuantity::Bool,   \
+                                   DisplayInfo::Bool{offText, onText}
 
 #endif

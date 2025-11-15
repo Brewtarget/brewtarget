@@ -27,11 +27,11 @@
 
 COLUMN_INFOS(
    EquipmentTableModel,
-   TABLE_MODEL_HEADER(Equipment, Name            , tr("Name"            ), PropertyNames::NamedEntity::name              ),
-   TABLE_MODEL_HEADER(Equipment, MashTunVolume   , tr("Mash Tun Volume" ), PropertyNames::Equipment::mashTunVolume_l     ),
-   TABLE_MODEL_HEADER(Equipment, KettleVolume    , tr("Kettle Volume"   ), PropertyNames::Equipment::kettleBoilSize_l    ),
-   TABLE_MODEL_HEADER(Equipment, FermenterVolume , tr("Fermenter Volume"), PropertyNames::Equipment::fermenterBatchSize_l),
-   TABLE_MODEL_HEADER(Equipment, NumRecipesUsedIn, tr("N° Recipes"      ), PropertyNames::NamedEntity::numRecipesUsedIn  ),
+   TABLE_MODEL_HEADER(Equipment, Name            , PropertyNames::NamedEntity::name              ), // "Name"
+   TABLE_MODEL_HEADER(Equipment, MashTunVolume   , PropertyNames::Equipment::mashTunVolume_l     ), // "Mash Tun Volume"
+   TABLE_MODEL_HEADER(Equipment, KettleVolume    , PropertyNames::Equipment::kettleBoilSize_l    ), // "Kettle Volume"
+   TABLE_MODEL_HEADER(Equipment, FermenterVolume , PropertyNames::Equipment::fermenterBatchSize_l), // "Fermenter Volume"
+   TABLE_MODEL_HEADER(Equipment, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn  ), // "N° Recipes"
 )
 
 EquipmentTableModel::EquipmentTableModel(QTableView* parent, bool editable) :
@@ -52,10 +52,6 @@ void EquipmentTableModel::updateTotals()                                        
 
 QVariant EquipmentTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags EquipmentTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<EquipmentTableModel>(index, this->m_editable);
 }
 
 bool EquipmentTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

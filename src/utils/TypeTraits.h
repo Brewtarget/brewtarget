@@ -155,12 +155,23 @@ template <typename T> concept CONCEPT_FIX_UP IsVoid  = std::is_void<T>::value;
 // valid if the member variable exists.  Because SFINAE, if the member variable does not exist, the specialisation is
 // ignored.
 //
+// Note that HAS_MEMBER has to work for two cases:
+//    HAS_MEMBER(MyClass, myMember)
+//    HAS_MEMBER(typename MyClassAlias, myMember)
+// (You might think that we can just always put typename in case it's needed, but the compiler disagrees.)
+// Using HAS_MEMBER_GET_OVERLOAD is a standard macro "trick" to allow us to have two "overloads" of HAS_MEMBER that
+// actually resolve down to HAS_MEMBER_2 and HAS_MEMBER_3 (where the subscript is the number of parameters).
+//
+
+
 #define CREATE_HAS_MEMBER(memberName) \
 template <typename T, typename = void> struct has_MemberCalled_##memberName : std::false_type{}; \
 template <typename T> struct has_MemberCalled_##memberName<T, decltype((void)T::member)> : std::true_type{}; \
 template <typename T> concept CONCEPT_FIX_UP HasMemberCalled_##memberName = has_MemberCalled_##memberName<T>::value;
 
-#define HAS_MEMBER(className, memberName) \
-HasMemberCalled_##memberName<className>
+#define HAS_MEMBER_2(    className, memberName)  HasMemberCalled_##memberName<         className>
+#define HAS_MEMBER_3(tn, className, memberName)  HasMemberCalled_##memberName<typename className>
+#define HAS_MEMBER_GET_OVERLOAD(param1, param2, param3, NAME, ...) NAME
+#define HAS_MEMBER(...) HAS_MEMBER_GET_OVERLOAD(__VA_ARGS__, HAS_MEMBER_3, HAS_MEMBER_2)(__VA_ARGS__)
 
 #endif

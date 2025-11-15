@@ -25,6 +25,7 @@
 #include "measurement/QuantityFieldType.h"
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
+#include "PersistentSettings.h"
 #include "utils/OptionalHelpers.h"
 #include "widgets/SmartAmounts.h"
 #include "widgets/UnitAndScalePopUpMenu.h"
@@ -85,6 +86,16 @@ QVariant BtTableModel::headerData(int section, Qt::Orientation orientation, int 
    }
 
    return QVariant();
+}
+
+void BtTableModel::saveUiState(BtStringConst const & property, BtStringConst const & section) const {
+   PersistentSettings::saveUiState(property, *this->m_parentTableWidget->horizontalHeader(), section);
+   return;
+}
+
+void BtTableModel::restoreUiState(BtStringConst const & property, BtStringConst const & section) {
+   PersistentSettings::restoreUiState(property, *this->m_parentTableWidget->horizontalHeader(), section);
+   return;
 }
 
 void BtTableModel::contextMenu(QPoint const & point) {

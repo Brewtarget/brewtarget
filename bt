@@ -24,12 +24,24 @@
 #
 #    ./bt setup                  Sets up Git options and configures the 'mbuild' meson build directory
 #
-#    ./bt setup all              As above but also tries to install all tools and dependencies we need
+#    ./bt setup all              As above but also tries to install all tools and dependencies we need (except the tool
+#                                needed to generate an AppImage -- see below)
 #
 #    ./bt package                Does the packaging.  First runs 'meson install' (with extra options to "install"
 #                                binaries, data etc to a subdirectory of the build directory rather than to where they
 #                                need to be for a local install).  Then creates a distributable package, making use
 #                                of various build variables passed back from Meson.
+#
+#    ./bt appimage               Creates a Linux AppImage.  NOTE that this involves downloading and running an
+#                                executable tool from https://github.com/AppImage/appimagetool/releases/tag/continuous.
+#                                This is potentially less secure than installing from your distro's standard
+#                                repositories.
+#
+#                                (The `appimagetool` tool for building AppImages is, AFAICT, not available in standard
+#                                Ubuntu/Debian/CentOS repositories.  It is, of course, primarily distributed as an
+#                                AppImage -- which is actually a wrapper that downloads the latest version of the tool.
+#                                Since it's only needed to build AppImages, and since most folks doing builds don't need
+#                                to do that, we don't included it in the `setup all` functionality above.)
 #
 # NOTE: This tool, used in conjunction with Meson, is now the official way to build and package the software.  We will
 #       continue to support CMake indefinitely for local compiles and installs, since it is such a widespread and

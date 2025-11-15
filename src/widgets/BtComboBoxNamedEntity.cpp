@@ -15,57 +15,14 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "widgets/BtComboBoxNamedEntity.h"
 
-#include <QListView>
-#include <QStyle>
-#include <QStyleOptionButton>
-#include <QStyleOptionComboBox>
-#include <QStylePainter>
-
-#ifdef BUILDING_WITH_CMAKE
-   // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-   #include "moc_BtComboBoxNamedEntity.cpp"
-#endif
-
-BtComboBoxNamedEntity::BtComboBoxNamedEntity(char const * const name, QWidget* parent) :
-   QComboBox{parent},
-   m_name{name} {
-   return;
-}
-
-BtComboBoxNamedEntity::~BtComboBoxNamedEntity() = default;
-
-/**
- * \brief Set the ID of the selected \c NamedEntity
- *
- * \param value -1 means nothing selected
- */
-void BtComboBoxNamedEntity::setCurrentId(int value) {
-   //
-   // See comment in widgets/BtComboBoxNamedEntity.h for why the "nothing selected" option cannot appear explicitly
-   //
-   int const index {value < 0 ? -1 : this->findData(value)};
-   qDebug() << Q_FUNC_INFO << this->m_name << "value:" << value << ", index:" << index;
-
-   // It's probably a coding error to set an ID we don't know about, but it could also be bad data.  In either case, we
-   // can recover.
-   if (value > 0 && index < 0) {
-      qWarning() << Q_FUNC_INFO << "Unable to find value" << value << "for BtComboBoxNamedEntity" << this->m_name;
-      qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
-      return;
-   }
-
-   this->setCurrentIndex(index);
-   return;
-}
-
-int BtComboBoxNamedEntity::getCurrentId() const {
-   QVariant id = this->currentData();
-   return id.toInt();
-}
-
-BT_COMBO_BOX_NAMED_ENTITY_CODE(Boil        )
-BT_COMBO_BOX_NAMED_ENTITY_CODE(Equipment   )
-BT_COMBO_BOX_NAMED_ENTITY_CODE(Mash        )
-BT_COMBO_BOX_NAMED_ENTITY_CODE(Fermentation)
-BT_COMBO_BOX_NAMED_ENTITY_CODE(Style       )
-BT_COMBO_BOX_NAMED_ENTITY_CODE(Water       )
+BT_COMBO_BOX_OBJECT_CODE(Boil        )
+BT_COMBO_BOX_OBJECT_CODE(Equipment   )
+BT_COMBO_BOX_OBJECT_CODE(Mash        )
+BT_COMBO_BOX_OBJECT_CODE(Fermentable )
+BT_COMBO_BOX_OBJECT_CODE(Fermentation)
+BT_COMBO_BOX_OBJECT_CODE(Hop         )
+BT_COMBO_BOX_OBJECT_CODE(Misc        )
+BT_COMBO_BOX_OBJECT_CODE(Salt        )
+BT_COMBO_BOX_OBJECT_CODE(Style       )
+BT_COMBO_BOX_OBJECT_CODE(Water       )
+BT_COMBO_BOX_OBJECT_CODE(Yeast       )

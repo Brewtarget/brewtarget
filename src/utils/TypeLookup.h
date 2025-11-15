@@ -134,7 +134,8 @@ template<HasTypeLookup T> struct TypeLookupOf<std::unique_ptr<T>> : std::integra
    {&PropertyNames::className::propName, \
     TypeInfo::construct<decltype(className::memberVar)>(PropertyNames::className::propName, \
                                                         className::localisedName_##propName, \
-                                                        TypeLookupOf<decltype(className::memberVar)>::value \
+                                                        TypeLookupOf<decltype(className::memberVar)>::value, \
+                                                        TypeInfo::Access::ReadWrite \
                                                         __VA_OPT__ (, __VA_ARGS__))}
 
 /**
@@ -190,8 +191,21 @@ template<auto MembFnPtr> using MemberFunctionFirstParamType_t = typename MemberF
    {&PropertyNames::className::propName, \
     TypeInfo::construct<MemberFunctionReturnType_t<&className::getter>>(PropertyNames::className::propName, \
                                                                         className::localisedName_##propName, \
-                                                                        TypeLookupOf<MemberFunctionReturnType_t<&className::getter>>::value \
+                                                                        TypeLookupOf<MemberFunctionReturnType_t<&className::getter>>::value, \
+                                                                        TypeInfo::Access::ReadWrite \
                                                                         __VA_OPT__ (, __VA_ARGS__))}
+
+/**
+ *\brief Same as \c PROPERTY_TYPE_LOOKUP_NO_MV but for read-only property
+ */
+#define PROPERTY_TYPE_LOOKUP_RD_MF(className, propName, getter, ...) \
+   {&PropertyNames::className::propName, \
+    TypeInfo::construct<MemberFunctionReturnType_t<&className::getter>>(PropertyNames::className::propName, \
+                                                                        className::localisedName_##propName, \
+                                                                        TypeLookupOf<MemberFunctionReturnType_t<&className::getter>>::value, \
+                                                                        TypeInfo::Access::ReadOnly \
+                                                                        __VA_OPT__ (, __VA_ARGS__))}
+
 
 /**
  * \brief Convenience functions for logging

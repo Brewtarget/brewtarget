@@ -117,7 +117,7 @@ void RecipeTreeModel::addSubTree(Recipe const & recipe,
                                  TreeItemNode<Recipe> & recipeNode/*,
                                  bool const recurse*/) {
 
-   bool const showSnapshots = PersistentSettings::value(PersistentSettings::Names::showsnapshots, false).toBool();
+   bool const showSnapshots = PersistentSettings::value_ck(PersistentSettings::Names::showsnapshots, false).toBool();
 
    QModelIndex recipeNodeIndex = this->indexOfNode(&recipeNode);
    TreeNode * recipeParent = recipeNode.rawParent();
@@ -232,10 +232,9 @@ void RecipeTreeModel::showOrHideAllAncestors(bool show) {
 
 void RecipeTreeModel::recipePropertyChanged(int recipeId, BtStringConst const & propertyName) {
    // If a Recipe's ancestor ID has changed then it might be because a new ancestor has been created
-   // .:TBD:. We could probably get away with propertyName == PropertyNames::Recipe::ancestorId here because
-   // we always use the same constants for property names.
    if (propertyName != PropertyNames::Recipe::ancestorId) {
-      qDebug() << Q_FUNC_INFO << "Ignoring change to" << propertyName << "on Recipe" << recipeId;
+      qDebug() <<
+         Q_FUNC_INFO << "Ignoring change to" << propertyName << "on Recipe" << recipeId << "(as not ancestry change)";
       return;
    }
 

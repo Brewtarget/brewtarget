@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
-    <normaloff>:/images/brewtarget.svg</normaloff>:/images/brewtarget.svg</iconset>
+    <normaloff>:/images/brewken.svg</normaloff>:/images/brewken.svg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -90,7 +90,7 @@
            </property>
            <attribute name="icon">
             <iconset resource="../resources.qrc">
-             <normaloff>:/images/brewtarget.svg</normaloff>:/images/brewtarget.svg</iconset>
+             <normaloff>:/images/brewken.svg</normaloff>:/images/brewken.svg</iconset>
            </attribute>
            <attribute name="title">
             <string/>
@@ -354,7 +354,7 @@
              <number>0</number>
             </property>
             <property name="mimeAccepted" stdset="0">
-             <string notr="true">application/x-brewtarget-recipe</string>
+             <string notr="true">application/x-brewken-recipe</string>
             </property>
             <widget class="QWidget" name="tab_recipe">
              <property name="acceptDrops">
@@ -1045,7 +1045,7 @@
              <number>0</number>
             </property>
             <property name="mimeAccepted" stdset="0">
-             <string notr="true">application/x-brewtarget-ingredient</string>
+             <string notr="true">application/x-brewken-ingredient</string>
             </property>
 
             <widget class="QWidget" name="recipeFermentableTab">
@@ -2422,17 +2422,17 @@
   <customwidget>
    <class>MashStepsWidget</class>
    <extends>QWidget</extends>
-   <header>widgets/StepsWidget.h</header>
+   <header>widgets/EnumeratedItemsWidget.h</header>
   </customwidget>
   <customwidget>
    <class>BoilStepsWidget</class>
    <extends>QWidget</extends>
-   <header>widgets/StepsWidget.h</header>
+   <header>widgets/EnumeratedItemsWidget.h</header>
   </customwidget>
   <customwidget>
    <class>FermentationStepsWidget</class>
    <extends>QWidget</extends>
-   <header>widgets/StepsWidget.h</header>
+   <header>widgets/EnumeratedItemsWidget.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

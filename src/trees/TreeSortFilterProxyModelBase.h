@@ -122,19 +122,14 @@ protected:
    }
 
    /**
-    * \brief Implements override of \c QSortFilterProxyModel::filterAcceptsRow.
+    * \brief Implements partial override of \c QSortFilterProxyModel::filterAcceptsRow.
     *
     *        Returns \c true if the item in the row indicated by the given \c row and \c parent should be included in
     *        the model; otherwise returns \c false.
     *
-    *        Note: The row and index passed in correspond to the source model
+    *        NOTE: The row and index passed in correspond to the \b source model
     */
-   bool doFilterAcceptsRow(int row, QModelIndex const & parent) const {
-      if (!parent.isValid()) {
-         // If the parent is invalid, it means we're being asked about the root node.  We always want to show this.
-         return true;
-      }
-
+   bool doFilterAcceptsRow(int row, QModelIndex const & parentIndex) const {
       NeTreeModel * treeModel = qobject_cast<NeTreeModel *>(this->derived().sourceModel());
       if (!treeModel) {
          // This shouldn't happen
@@ -142,14 +137,19 @@ protected:
          return false;
       }
 
-      QModelIndex child = treeModel->index(row, 0, parent);
-      if (!child.isValid()) {
+      //
+      // Get the index of the child node to be filtered
+      //
+      QModelIndex childIndex = treeModel->index(row, 0, parentIndex);
+      if (!childIndex.isValid()) {
          // This shouldn't happen
-         qWarning() << Q_FUNC_INFO << "Invalid child";
+         qWarning() << Q_FUNC_INFO << "Invalid childIndex";
          return false;
       }
 
-      TreeNode * childNode = treeModel->doTreeNode(parent);
+      TreeNode * childNode = treeModel->doTreeNode(childIndex);
+
+      // Always show folders
       if (childNode->classifier() == TreeNodeClassifier::Folder) {
          return true;
       }
@@ -164,11 +164,12 @@ protected:
 
       // Hide deleted items
       NamedEntity * underlyingItem = childNode->rawUnderlyingItem();
-      if (underlyingItem) {
-         return !underlyingItem->deleted();
+      if (underlyingItem && underlyingItem->deleted()) {
+         return false;
       }
 
-      return true;
+      // Base class does remaining filtering -- eg for Derived::setFilterFixedString (see TreeViewBase::filter).
+      return this->derived().QSortFilterProxyModel::filterAcceptsRow(row, parentIndex);
    }
 };
 

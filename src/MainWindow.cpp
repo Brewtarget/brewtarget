@@ -82,8 +82,8 @@
 #include "HelpDialog.h"
 #include "Html.h"
 #include "HydrometerTool.h"
-#include "InventoryFormatter.h"
-#include "InventoryWindow.h"
+#include "StockFormatter.h"
+#include "StockWindow.h"
 #include "MashDesigner.h"
 #include "MashWizard.h"
 #include "OgAdjuster.h"
@@ -323,31 +323,40 @@ public:
     *        Most dialogs are initialized in here. That should include any initial configurations as well.
     */
    void setupDialogs() {
-      m_aboutDialog                = std::make_unique<AboutDialog               >(&m_self);
-      m_helpDialog                 = std::make_unique<HelpDialog                >(&m_self);
-      m_equipmentCatalog           = std::make_unique<EquipmentCatalog          >(&m_self);
+      // Catalogs
+      m_boilCatalog         = std::make_unique<        BoilCatalog>(&m_self);
+      m_equipmentCatalog    = std::make_unique<   EquipmentCatalog>(&m_self);
+      m_fermentableCatalog  = std::make_unique< FermentableCatalog>(&m_self);
+      m_fermentationCatalog = std::make_unique<FermentationCatalog>(&m_self);
+      m_hopCatalog          = std::make_unique<         HopCatalog>(&m_self);
+      m_mashCatalog         = std::make_unique<        MashCatalog>(&m_self);
+      m_miscCatalog         = std::make_unique<        MiscCatalog>(&m_self);
+      m_saltCatalog         = std::make_unique<        SaltCatalog>(&m_self);
+      m_styleCatalog        = std::make_unique<       StyleCatalog>(&m_self);
+      m_waterCatalog        = std::make_unique<       WaterCatalog>(&m_self);
+      m_yeastCatalog        = std::make_unique<       YeastCatalog>(&m_self);
+
+      // Editors
+      m_boilEditor                 = std::make_unique<BoilEditor                >(&m_self);
+      m_boilStepEditor             = std::make_unique<BoilStepEditor            >(&m_self);
       m_equipmentEditor            = std::make_unique<EquipmentEditor           >(&m_self);
-      m_fermentableCatalog         = std::make_unique<FermentableCatalog        >(&m_self);
       m_fermentableEditor          = std::make_unique<FermentableEditor         >(&m_self);
-      m_hopCatalog                 = std::make_unique<HopCatalog                >(&m_self);
+      m_fermentationEditor         = std::make_unique<FermentationEditor        >(&m_self);
+      m_fermentationStepEditor     = std::make_unique<FermentationStepEditor    >(&m_self);
       m_hopEditor                  = std::make_unique<HopEditor                 >(&m_self);
       m_mashEditor                 = std::make_unique<MashEditor                >(&m_self);
       m_mashStepEditor             = std::make_unique<MashStepEditor            >(&m_self);
-      m_boilEditor                 = std::make_unique<BoilEditor                >(&m_self);
-      m_boilStepEditor             = std::make_unique<BoilStepEditor            >(&m_self);
-      m_fermentationEditor         = std::make_unique<FermentationEditor        >(&m_self);
-      m_fermentationStepEditor     = std::make_unique<FermentationStepEditor    >(&m_self);
-      m_mashWizard                 = std::make_unique<MashWizard                >(&m_self);
-      m_miscCatalog                = std::make_unique<MiscCatalog               >(&m_self);
       m_miscEditor                 = std::make_unique<MiscEditor                >(&m_self);
-      m_saltCatalog                = std::make_unique<SaltCatalog               >(&m_self);
-      m_waterCatalog               = std::make_unique<WaterCatalog              >(&m_self);
-      m_inventoryWindow            = std::make_unique<InventoryWindow           >(&m_self);
       m_saltEditor                 = std::make_unique<SaltEditor                >(&m_self);
-      m_styleCatalog               = std::make_unique<StyleCatalog              >(&m_self);
       m_styleEditor                = std::make_unique<StyleEditor               >(&m_self);
-      m_yeastCatalog               = std::make_unique<YeastCatalog              >(&m_self);
+      m_waterEditor                = std::make_unique<WaterEditor               >(&m_self);
       m_yeastEditor                = std::make_unique<YeastEditor               >(&m_self);
+
+      // Other
+      m_aboutDialog                = std::make_unique<AboutDialog               >(&m_self);
+      m_helpDialog                 = std::make_unique<HelpDialog                >(&m_self);
+      m_mashWizard                 = std::make_unique<MashWizard                >(&m_self);
+      m_stockWindow                = std::make_unique<StockWindow               >(&m_self);
       m_optionDialog               = std::make_unique<OptionDialog              >(&m_self);
       m_recipeScaler               = std::make_unique<ScaleRecipeTool           >(&m_self);
       m_recipeFormatter            = std::make_unique<RecipeFormatter           >(&m_self);
@@ -364,11 +373,7 @@ public:
       m_pitchDialog                = std::make_unique<PitchDialog               >(&m_self);
       m_btDatePopup                = std::make_unique<BtDatePopup               >(&m_self);
       m_waterProfileAdjustmentTool = std::make_unique<WaterProfileAdjustmentTool>(&m_self);
-      m_waterEditor                = std::make_unique<WaterEditor               >(&m_self);
       m_ancestorDialog             = std::make_unique<AncestorDialog            >(&m_self);
-      m_mashCatalog                = std::make_unique<MashCatalog               >(&m_self);
-      m_boilCatalog                = std::make_unique<BoilCatalog               >(&m_self);
-      m_fermentationCatalog        = std::make_unique<FermentationCatalog       >(&m_self);
 
       return;
    }
@@ -434,23 +439,23 @@ public:
    // Here we have a parameter anyway, so we can just use overloading directly
    void setStepOwner(std::shared_ptr<Mash> stepOwner) {
       this->m_recipeObs->setMash(stepOwner);
-      this->m_mashStepEditor->setStepOwner(stepOwner);
+      this->m_mashStepEditor->setOwner(stepOwner);
       this->m_self.mashButton->setMash(stepOwner);
-      this->m_self.mashStepsWidget->setStepOwner(stepOwner);
+      this->m_self.mashStepsWidget->setOwner(stepOwner);
       return;
    }
    void setStepOwner(std::shared_ptr<Boil> stepOwner) {
       this->m_recipeObs->setBoil(stepOwner);
-      this->m_boilStepEditor->setStepOwner(stepOwner);
+      this->m_boilStepEditor->setOwner(stepOwner);
       this->m_self.boilButton->setBoil(stepOwner);
-      this->m_self.boilStepsWidget->setStepOwner(stepOwner);
+      this->m_self.boilStepsWidget->setOwner(stepOwner);
       return;
    }
    void setStepOwner(std::shared_ptr<Fermentation> stepOwner) {
       this->m_recipeObs->setFermentation(stepOwner);
-      this->m_fermentationStepEditor->setStepOwner(stepOwner);
+      this->m_fermentationStepEditor->setOwner(stepOwner);
       this->m_self.fermentationButton->setFermentation(stepOwner);
-      this->m_self.fermentationStepsWidget->setStepOwner(stepOwner);
+      this->m_self.fermentationStepsWidget->setOwner(stepOwner);
       return;
    }
 
@@ -458,12 +463,6 @@ public:
       auto & stepEditor = this->getStepEditor<StepClass>();
       stepEditor.setEditItem(step);
       stepEditor.setVisible(true);
-      return;
-   }
-
-   template<class UiElement>
-   void saveUiState(BtStringConst const & property, UiElement const & uiElement) {
-      PersistentSettings::insert(property, uiElement->saveState(), PersistentSettings::Sections::MainWindow);
       return;
    }
 
@@ -634,33 +633,137 @@ public:
       this->setBrewNote(*bNote);
       return;
    }
-
-   //! \brief copies an existing brewnote to a new brewday
-   void copySelectedBrewNote() {
-      QModelIndexList indexes = this->m_self.treeView_recipe->selectionModel()->selectedRows();
-      for (QModelIndex selected : indexes) {
-         auto selectedBrewNote = this->m_self.treeView_recipe->getItem<BrewNote>(selected);
-         auto recipe           = this->m_self.treeView_recipe->getItem<Recipe>(this->m_self.treeView_recipe->parentIndex(selected));
-
-         if (!selectedBrewNote || !recipe) {
-            return;
+   /**
+    * \brief Gets the first selected Recipe
+    */
+   std::shared_ptr<Recipe> getSelectedRecipe() {
+      for (QModelIndex selected : this->m_self.treeView_recipe->selectionModel()->selectedRows()) {
+         auto recipe   = this->m_self.treeView_recipe->getItem<Recipe  >(selected);
+         if (recipe) {
+            return recipe;
          }
-
-         auto newBrewNote = std::make_shared<BrewNote>(*selectedBrewNote);
-         newBrewNote->setBrewDate();
-         ObjectStoreWrapper::insert(newBrewNote);
-
-         if (recipe.get() != this->m_recipeObs) {
-            this->m_self.setRecipe(recipe.get());
-         }
-
-         this->setBrewNote(*newBrewNote);
-
-         this->m_self.setTreeSelection(this->m_self.treeView_recipe->findElement(newBrewNote.get()));
       }
-      return;
+      return nullptr;
    }
 
+   /**
+    * \brief Gets the first selected BrewNote and its Recipe
+    */
+   std::tuple<std::shared_ptr<BrewNote>, std::shared_ptr<Recipe>> getSelectedBrewNoteAndRecipe() {
+      for (QModelIndex selected : this->m_self.treeView_recipe->selectionModel()->selectedRows()) {
+         QModelIndex parent = this->m_self.treeView_recipe->parentIndex(selected);
+         auto brewNote = this->m_self.treeView_recipe->getItem<BrewNote>(selected);
+         auto recipe   = this->m_self.treeView_recipe->getItem<Recipe  >(parent  );
+         if (brewNote && recipe) {
+            return {brewNote, recipe};
+         }
+      }
+      return {nullptr, nullptr};
+   }
+
+   //! \brief copies an existing brewnote to a new brewday
+   BrewNote * copySelectedBrewNote() {
+      auto [selectedBrewNote, recipe] = this->getSelectedBrewNoteAndRecipe();
+      if (!selectedBrewNote || !recipe) {
+         return nullptr;
+      }
+
+      auto newBrewNote = std::make_shared<BrewNote>(*selectedBrewNote);
+      newBrewNote->setBrewDate();
+      ObjectStoreWrapper::insert(newBrewNote);
+
+      if (recipe.get() != this->m_recipeObs) {
+         this->m_self.setRecipe(recipe.get());
+      }
+
+      this->setBrewNote(*newBrewNote);
+
+      this->m_self.setTreeSelection(this->m_self.treeView_recipe->findElement(newBrewNote.get()));
+
+      return newBrewNote.get();
+   }
+
+   /**
+    * \brief creates a new brewnote
+    */
+   BrewNote * createBrewNote() {
+      auto recipe = this->getSelectedRecipe();
+      if (!recipe) {
+         return nullptr;
+      }
+
+      // Make sure everything is properly set and selected
+      if (recipe.get() != this->m_recipeObs) {
+         this->m_self.setRecipe(recipe.get());
+      }
+
+      auto brewNote = std::make_shared<BrewNote>(*recipe);
+      brewNote->populateNote(recipe.get());
+      brewNote->setBrewDate();
+      ObjectStoreWrapper::insert(brewNote);
+
+      this->setBrewNote(*brewNote);
+
+      QModelIndex brewNoteIndex = this->m_self.treeView_recipe->findElement(brewNote.get());
+      if (brewNoteIndex.isValid()) {
+         this->m_self.setTreeSelection(brewNoteIndex);
+      } else {
+         qWarning() << Q_FUNC_INFO << "Unable to find newly created BrewNote in Recipe tree";
+      }
+
+      return brewNote.get();
+   }
+
+   /**
+    * \brief Reduces the inventory by the selected recipes
+    */
+   void reduceInventory(BrewNote & brewNote) {
+      std::shared_ptr<Recipe> rec = brewNote.recipe();
+      if (!rec) {
+         // This shouldn't happen
+         qCritical() << Q_FUNC_INFO << "No recipe for" << brewNote;
+         return;
+      }
+
+      // Make sure everything is properly set and selected
+      if (rec.get() != this->m_recipeObs) {
+         this->m_self.setRecipe(rec.get());
+      }
+
+      //
+      // Reduce fermentables, miscs, hops, yeasts
+      //
+      // Note that the amount can be mass, volume or (for Yeast and Misc) count.  We don't worry about which here as
+      // we assume that a given type of ingredient is always measured in the same way.
+      //
+      for (auto addition : rec->fermentableAdditions()) {
+         StockPurchaseFermentable::reduceTotalInventory(*addition->ingredientRaw(),
+                                                        addition->amount(),
+                                                        brewNote);
+      }
+      for (auto addition : rec->hopAdditions()) {
+         StockPurchaseHop::reduceTotalInventory(*addition->ingredientRaw(),
+                                                addition->amount(),
+                                                brewNote);
+      }
+      for (auto addition : rec->miscAdditions()) {
+         StockPurchaseMisc::reduceTotalInventory(*addition->ingredientRaw(),
+                                                 addition->amount(),
+                                                 brewNote);
+      }
+      for (auto addition : rec->yeastAdditions()) {
+         StockPurchaseYeast::reduceTotalInventory(*addition->ingredientRaw(),
+                                                  addition->amount(),
+                                                  brewNote);
+      }
+      for (auto addition : rec->saltAdjustments()) {
+         StockPurchaseSalt::reduceTotalInventory(*addition->ingredientRaw(),
+                                                 addition->amount(),
+                                                 brewNote);
+      }
+
+      return;
+   }
 
 
    //================================================ MEMBER VARIABLES =================================================
@@ -675,32 +778,42 @@ public:
    VeriTable<RecipeAdjustmentSalt     > m_saltAdditionsVeriTable       ;
 
    // All initialised in setupDialogs
-   std::unique_ptr<AboutDialog               > m_aboutDialog           ;
-   std::unique_ptr<AlcoholTool               > m_alcoholTool           ;
-   std::unique_ptr<AncestorDialog            > m_ancestorDialog        ;
-   std::unique_ptr<MashCatalog               > m_mashCatalog           ;
    std::unique_ptr<BoilCatalog               > m_boilCatalog           ;
+   std::unique_ptr<EquipmentCatalog          > m_equipmentCatalog      ;
+   std::unique_ptr<FermentableCatalog        > m_fermentableCatalog    ;
    std::unique_ptr<FermentationCatalog       > m_fermentationCatalog   ;
+   std::unique_ptr<HopCatalog                > m_hopCatalog            ;
+   std::unique_ptr<MashCatalog               > m_mashCatalog           ;
+   std::unique_ptr<MiscCatalog               > m_miscCatalog           ;
+   std::unique_ptr<SaltCatalog               > m_saltCatalog           ;
+   std::unique_ptr<StyleCatalog              > m_styleCatalog          ;
+   std::unique_ptr<WaterCatalog              > m_waterCatalog          ;
+   std::unique_ptr<YeastCatalog              > m_yeastCatalog          ;
+
    std::unique_ptr<BoilEditor                > m_boilEditor            ;
    std::unique_ptr<BoilStepEditor            > m_boilStepEditor        ;
-   std::unique_ptr<BtDatePopup               > m_btDatePopup           ;
-   std::unique_ptr<ConverterTool             > m_converterTool         ;
-   std::unique_ptr<EquipmentCatalog          > m_equipmentCatalog      ;
    std::unique_ptr<EquipmentEditor           > m_equipmentEditor       ;
-   std::unique_ptr<FermentableCatalog        > m_fermentableCatalog    ;
    std::unique_ptr<FermentableEditor         > m_fermentableEditor     ;
    std::unique_ptr<FermentationEditor        > m_fermentationEditor    ;
    std::unique_ptr<FermentationStepEditor    > m_fermentationStepEditor;
-   std::unique_ptr<HelpDialog                > m_helpDialog            ;
-   std::unique_ptr<HopCatalog                > m_hopCatalog            ;
    std::unique_ptr<HopEditor                 > m_hopEditor             ;
-   std::unique_ptr<HydrometerTool            > m_hydrometerTool        ;
-   std::unique_ptr<MashDesigner              > m_mashDesigner          ;
    std::unique_ptr<MashEditor                > m_mashEditor            ;
    std::unique_ptr<MashStepEditor            > m_mashStepEditor        ;
-   std::unique_ptr<MashWizard                > m_mashWizard            ;
-   std::unique_ptr<MiscCatalog               > m_miscCatalog           ;
    std::unique_ptr<MiscEditor                > m_miscEditor            ;
+   std::unique_ptr<SaltEditor                > m_saltEditor            ;
+   std::unique_ptr<StyleEditor               > m_styleEditor           ;
+   std::unique_ptr<WaterEditor               > m_waterEditor           ;
+   std::unique_ptr<YeastEditor               > m_yeastEditor           ;
+
+   std::unique_ptr<AboutDialog               > m_aboutDialog           ;
+   std::unique_ptr<AlcoholTool               > m_alcoholTool           ;
+   std::unique_ptr<AncestorDialog            > m_ancestorDialog        ;
+   std::unique_ptr<BtDatePopup               > m_btDatePopup           ;
+   std::unique_ptr<ConverterTool             > m_converterTool         ;
+   std::unique_ptr<HelpDialog                > m_helpDialog            ;
+   std::unique_ptr<HydrometerTool            > m_hydrometerTool        ;
+   std::unique_ptr<MashDesigner              > m_mashDesigner          ;
+   std::unique_ptr<MashWizard                > m_mashWizard            ;
    std::unique_ptr<OgAdjuster                > m_ogAdjuster            ;
    std::unique_ptr<OptionDialog              > m_optionDialog          ;
    std::unique_ptr<PitchDialog               > m_pitchDialog           ;
@@ -710,17 +823,9 @@ public:
    std::unique_ptr<RefractoDialog            > m_refractoDialog        ;
    std::unique_ptr<ScaleRecipeTool           > m_recipeScaler          ;
    std::unique_ptr<StrikeWaterDialog         > m_strikeWaterDialog     ;
-   std::unique_ptr<SaltCatalog               > m_saltCatalog           ;
-   std::unique_ptr<WaterCatalog              > m_waterCatalog          ;
-   std::unique_ptr<InventoryWindow           > m_inventoryWindow       ;
-   std::unique_ptr<SaltEditor                > m_saltEditor            ;
-   std::unique_ptr<StyleCatalog              > m_styleCatalog          ;
-   std::unique_ptr<StyleEditor               > m_styleEditor           ;
+   std::unique_ptr<StockWindow               > m_stockWindow           ;
    std::unique_ptr<TimerMainDialog           > m_timerMainDialog       ;
    std::unique_ptr<WaterProfileAdjustmentTool> m_waterProfileAdjustmentTool;
-   std::unique_ptr<WaterEditor               > m_waterEditor           ;
-   std::unique_ptr<YeastCatalog              > m_yeastCatalog          ;
-   std::unique_ptr<YeastEditor               > m_yeastEditor           ;
 
    QString highSS, lowSS, goodSS, boldSS; // Palette replacements
 };
@@ -1040,9 +1145,11 @@ void MainWindow::setupRanges() {
 void MainWindow::restoreSavedState() {
 
    // If we saved a size the last time we ran, use it
-   if (PersistentSettings::contains(PersistentSettings::Names::geometry)) {
-      restoreGeometry(PersistentSettings::value(PersistentSettings::Names::geometry).toByteArray());
-      restoreState(PersistentSettings::value(PersistentSettings::Names::windowState).toByteArray());
+   if (PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry   , *this, BtString::EMPTY_STR)) {
+       PersistentSettings::restoreUiState (PersistentSettings::Names::windowState, *this, BtString::EMPTY_STR);
+///   if (PersistentSettings::contains_ck(PersistentSettings::Names::geometry)) {
+///      restoreGeometry(PersistentSettings::value_ck(PersistentSettings::Names::geometry   ).toByteArray());
+///      restoreState   (PersistentSettings::value_ck(PersistentSettings::Names::windowState).toByteArray());
    } else {
       // otherwise, guess a reasonable size at 1/4 of the screen.
       QScreen * screen = this->screen();
@@ -1057,8 +1164,8 @@ void MainWindow::restoreSavedState() {
 
    // If we saved the selected recipe name the last time we ran, select it and show it.
    int key = -1;
-   if (PersistentSettings::contains(PersistentSettings::Names::recipeKey)) {
-      key = PersistentSettings::value(PersistentSettings::Names::recipeKey).toInt();
+   if (PersistentSettings::contains_ck(PersistentSettings::Names::recipeKey)) {
+      key = PersistentSettings::value_ck(PersistentSettings::Names::recipeKey).toInt();
    } else {
       auto firstRecipeWeFind = ObjectStoreTyped<Recipe>::getInstance().findFirstMatching(
          // This trivial lambda gives us the first recipe in the list, if there is one
@@ -1080,65 +1187,46 @@ void MainWindow::restoreSavedState() {
    }
 
    // UI restore state
-   if (PersistentSettings::contains(PersistentSettings::Names::splitter_vertical_State,
-                                    PersistentSettings::Sections::MainWindow)) {
-      splitter_vertical->restoreState(PersistentSettings::value(PersistentSettings::Names::splitter_vertical_State,
-                                                                QVariant(),
-                                                                PersistentSettings::Sections::MainWindow).toByteArray());
-   }
-   if (PersistentSettings::contains(PersistentSettings::Names::splitter_horizontal_State,
-                                    PersistentSettings::Sections::MainWindow)) {
-      splitter_horizontal->restoreState(PersistentSettings::value(PersistentSettings::Names::splitter_horizontal_State,
-                                                                  QVariant(),
-                                                                  PersistentSettings::Sections::MainWindow).toByteArray());
-   }
-   if (PersistentSettings::contains(PersistentSettings::Names::treeView_recipe_headerState,
-                                    PersistentSettings::Sections::MainWindow)) {
-      treeView_recipe->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_recipe_headerState,
-                                                                        QVariant(),
-                                                                        PersistentSettings::Sections::MainWindow).toByteArray());
-   }
-   if (PersistentSettings::contains(PersistentSettings::Names::treeView_style_headerState,
-                                    PersistentSettings::Sections::MainWindow)) {
-      treeView_style->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_style_headerState,
-                                                                       QVariant(),
-                                                                       PersistentSettings::Sections::MainWindow).toByteArray());
-   }
-   if (PersistentSettings::contains(PersistentSettings::Names::treeView_equipment_headerState,
-                                    PersistentSettings::Sections::MainWindow)) {
-      treeView_equipment->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_equipment_headerState,
-                                                                       QVariant(),
-                                                                       PersistentSettings::Sections::MainWindow).toByteArray());
-   }
-   if (PersistentSettings::contains(PersistentSettings::Names::treeView_fermentable_headerState,
-                                    PersistentSettings::Sections::MainWindow)) {
-      treeView_fermentable->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_fermentable_headerState,
-                                                                      QVariant(),
-                                                                      PersistentSettings::Sections::MainWindow).toByteArray());
-   }
-   if (PersistentSettings::contains(PersistentSettings::Names::treeView_hop_headerState,
-                                    PersistentSettings::Sections::MainWindow)) {
-      treeView_hop->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_hop_headerState,
-                                                                      QVariant(),
-                                                                      PersistentSettings::Sections::MainWindow).toByteArray());
-   }
-   if (PersistentSettings::contains(PersistentSettings::Names::treeView_misc_headerState,
-                                    PersistentSettings::Sections::MainWindow)) {
-      treeView_misc->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_misc_headerState,
-                                                                      QVariant(),
-                                                                      PersistentSettings::Sections::MainWindow).toByteArray());
-   }
-   if (PersistentSettings::contains(PersistentSettings::Names::treeView_yeast_headerState,
-                                    PersistentSettings::Sections::MainWindow)) {
-      treeView_yeast->header()->restoreState(PersistentSettings::value(PersistentSettings::Names::treeView_yeast_headerState,
-                                                                       QVariant(),
-                                                                       PersistentSettings::Sections::MainWindow).toByteArray());
-   }
+   PersistentSettings::restoreUiState(PersistentSettings::Names::splitter_vertical_State         , *this->splitter_vertical             );
+   PersistentSettings::restoreUiState(PersistentSettings::Names::splitter_horizontal_State       , *this->splitter_horizontal           );
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_recipe_headerState     , *this->treeView_recipe     ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_style_headerState      , *this->treeView_style      ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_equipment_headerState  , *this->treeView_equipment  ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_fermentable_headerState, *this->treeView_fermentable->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_hop_headerState        , *this->treeView_hop        ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_misc_headerState       , *this->treeView_misc       ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_yeast_headerState      , *this->treeView_yeast      ->header());
+
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_boilCatalog        , *this->pimpl->m_boilCatalog        );
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_equipmentCatalog   , *this->pimpl->m_equipmentCatalog   );
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_fermentableCatalog , *this->pimpl->m_fermentableCatalog );
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_fermentationCatalog, *this->pimpl->m_fermentationCatalog);
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_hopCatalog         , *this->pimpl->m_hopCatalog         );
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_mashCatalog        , *this->pimpl->m_mashCatalog        );
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_miscCatalog        , *this->pimpl->m_miscCatalog        );
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_saltCatalog        , *this->pimpl->m_saltCatalog        );
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_styleCatalog       , *this->pimpl->m_styleCatalog       );
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_waterCatalog       , *this->pimpl->m_waterCatalog       );
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_yeastCatalog       , *this->pimpl->m_yeastCatalog       );
+
+   this->pimpl->m_boilCatalog        ->restoreUiState(PersistentSettings::Names::uiState_boilCatalog        );
+   this->pimpl->m_equipmentCatalog   ->restoreUiState(PersistentSettings::Names::uiState_equipmentCatalog   );
+   this->pimpl->m_fermentableCatalog ->restoreUiState(PersistentSettings::Names::uiState_fermentableCatalog );
+   this->pimpl->m_fermentationCatalog->restoreUiState(PersistentSettings::Names::uiState_fermentationCatalog);
+   this->pimpl->m_hopCatalog         ->restoreUiState(PersistentSettings::Names::uiState_hopCatalog         );
+   this->pimpl->m_mashCatalog        ->restoreUiState(PersistentSettings::Names::uiState_mashCatalog        );
+   this->pimpl->m_miscCatalog        ->restoreUiState(PersistentSettings::Names::uiState_miscCatalog        );
+   this->pimpl->m_saltCatalog        ->restoreUiState(PersistentSettings::Names::uiState_saltCatalog        );
+   this->pimpl->m_styleCatalog       ->restoreUiState(PersistentSettings::Names::uiState_styleCatalog       );
+   this->pimpl->m_waterCatalog       ->restoreUiState(PersistentSettings::Names::uiState_waterCatalog       );
+   this->pimpl->m_yeastCatalog       ->restoreUiState(PersistentSettings::Names::uiState_yeastCatalog       );
 
    this->        mashStepsWidget->restoreUiState(PersistentSettings::Names::        mashStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->        boilStepsWidget->restoreUiState(PersistentSettings::Names::        boilStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->fermentationStepsWidget->restoreUiState(PersistentSettings::Names::fermentationStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
 
+   PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_stockWindow, *this->pimpl->m_stockWindow);
+   this->pimpl->m_stockWindow->restoreUiState();
    return;
 }
 
@@ -1146,7 +1234,7 @@ void MainWindow::restoreSavedState() {
 void MainWindow::setupTriggers() {
    // Connect actions defined in *.ui files to methods in code
    connect(actionExit                      , &QAction::triggered, this                                      , &QWidget::close                    ); // > File > Exit
-   connect(actionAbout                     , &QAction::triggered, this->pimpl->m_aboutDialog.get()          , &QWidget::show                     ); // > About > About Brewtarget
+   connect(actionAbout                     , &QAction::triggered, this->pimpl->m_aboutDialog.get()          , &QWidget::show                     ); // > About > About Brewken
    connect(actionHelp                      , &QAction::triggered, this->pimpl->m_helpDialog.get()           , &QWidget::show                     ); // > About > Help
 
    connect(actionNewRecipe                 , &QAction::triggered, this                                      , &MainWindow::newRecipe             ); // > File > New Recipe
@@ -1167,7 +1255,7 @@ void MainWindow::setupTriggers() {
    connect(actionYeasts                    , &QAction::triggered, this->pimpl->m_yeastCatalog.get()         , &QWidget::show                     ); // > View > Yeasts
    connect(actionSalts                     , &QAction::triggered, this->pimpl->m_saltCatalog.get()          , &QWidget::show                     ); // > View > Salts
    connect(actionWaters                    , &QAction::triggered, this->pimpl->m_waterCatalog.get()         , &QWidget::show                     ); // > View > Waters
-   connect(actionInventory                 , &QAction::triggered, this->pimpl->m_inventoryWindow.get()      , &QWidget::show                     ); // > View > Inventory
+   connect(actionInventory                 , &QAction::triggered, this->pimpl->m_stockWindow.get()      , &QWidget::show                     ); // > View > Inventory
    connect(actionOptions                   , &QAction::triggered, this->pimpl->m_optionDialog.get()         , &OptionDialog::show                ); // > Tools > Options
 //   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual);                                               // > About > Manual
    connect(actionScale_Recipe              , &QAction::triggered, this->pimpl->m_recipeScaler.get()         , &QWidget::show                     ); // > Tools > Scale Recipe
@@ -1601,18 +1689,18 @@ void MainWindow::showChanges(QMetaProperty* prop) {
 
    // See if we need to change the mash in the table.
    if (this->pimpl->m_recipeObs->mash() && (updateAll || propName == PropertyNames::Recipe::mash)) {
-      this->mashStepsWidget->setStepOwner(this->pimpl->m_recipeObs->mash());
+      this->mashStepsWidget->setOwner(this->pimpl->m_recipeObs->mash());
    }
    // See if we need to change the boil in the table.
    if (this->pimpl->m_recipeObs->boil() &&
        (updateAll ||
         propName == PropertyNames::Recipe::boil ||
         propName == PropertyNames::StepOwnerBase::steps)) {
-      this->boilStepsWidget->setStepOwner(this->pimpl->m_recipeObs->boil());
+      this->boilStepsWidget->setOwner(this->pimpl->m_recipeObs->boil());
    }
    // See if we need to change the fermentation in the table.
    if (this->pimpl->m_recipeObs->fermentation() && (updateAll || propName == PropertyNames::Recipe::fermentation)) {
-      this->fermentationStepsWidget->setStepOwner(this->pimpl->m_recipeObs->fermentation());
+      this->fermentationStepsWidget->setOwner(this->pimpl->m_recipeObs->fermentation());
    }
 
    // Not sure about this, but I am annoyed that modifying the hop usage
@@ -1997,6 +2085,12 @@ template<>       Style::CatalogClass & MainWindow::getCatalog<      Style>() con
 template<>       Water::CatalogClass & MainWindow::getCatalog<      Water>() const { return *this->pimpl->      m_waterCatalog; }
 template<>       Yeast::CatalogClass & MainWindow::getCatalog<      Yeast>() const { return *this->pimpl->      m_yeastCatalog; }
 
+//
+// There is no general case for MainWindow::getWindow(), only specialisations.
+//
+template<> StockWindow & MainWindow::getWindow<StockWindow>() const { return *this->pimpl->m_stockWindow; }
+
+
 /**
  * This is akin to a special case of MainWindow::exportSelected()
  */
@@ -2105,12 +2199,12 @@ std::shared_ptr<Recipe>  MainWindow::newRecipe() {
 
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
-   newRec ->setBatchSize_l   (PersistentSettings::value(PersistentSettings::Names::defaultBatchSize_l  , 18.93).toDouble());
-   newBoil->setPreBoilSize_l (PersistentSettings::value(PersistentSettings::Names::defaultPreBoilSize_l, 23.47).toDouble());
-   newRec ->setEfficiency_pct(PersistentSettings::value(PersistentSettings::Names::defaultEfficiency   , 70.0 ).toDouble());
+   newRec ->setBatchSize_l   (PersistentSettings::value_ck(PersistentSettings::Names::defaultBatchSize_l  , 18.93).toDouble());
+   newBoil->setPreBoilSize_l (PersistentSettings::value_ck(PersistentSettings::Names::defaultPreBoilSize_l, 23.47).toDouble());
+   newRec ->setEfficiency_pct(PersistentSettings::value_ck(PersistentSettings::Names::defaultEfficiency   , 70.0 ).toDouble());
 
    // We need a valid key, so insert the recipe before we add equipment
-   QVariant const defEquipKey = PersistentSettings::value(PersistentSettings::Names::defaultEquipmentKey, -1);
+   QVariant const defEquipKey = PersistentSettings::value_ck(PersistentSettings::Names::defaultEquipmentKey, -1);
    if (defEquipKey != -1) {
       auto equipment = ObjectStoreWrapper::getById<Equipment>(defEquipKey.toInt());
       // I really want to do this before we've written the object to the
@@ -2162,96 +2256,19 @@ void MainWindow::setTreeSelection(QModelIndex index) {
    return;
 }
 
-// reduces the inventory by the selected recipes
-void MainWindow::reduceInventory() {
-
-   for (QModelIndex selected : treeView_recipe->selectionModel()->selectedRows()) {
-      auto rec = treeView_recipe->getItem<Recipe>(selected);
-      if (!rec) {
-         // Try the parent recipe
-         rec = treeView_recipe->getItem<Recipe>(treeView_recipe->parentIndex(selected));
-         if (!rec) {
-            continue;
-         }
-      }
-
-      // Make sure everything is properly set and selected
-      if (rec.get() != this->pimpl->m_recipeObs) {
-         this->setRecipe(rec.get());
-      }
-
-      //
-      // Reduce fermentables, miscs, hops, yeasts
-      //
-      // Note that the amount can be mass, volume or (for Yeast and Misc) count.  We don't worry about which here as we
-      // assume that a given type of ingredient is always measured in the same way.
-      //
-      for (auto ii : rec->fermentableAdditions()) {
-         auto inv = ii->fermentable()->totalInventory();
-         inv.quantity = std::max(inv.quantity - ii->amount().quantity, 0.0);
-         ii->fermentable()->setTotalInventory(inv);
-      }
-      for (auto ii : rec->hopAdditions()) {
-         auto inv = ii->hop()->totalInventory();
-         inv.quantity = std::max(inv.quantity - ii->amount().quantity, 0.0);
-         ii->hop()->setTotalInventory(inv);
-      }
-      for (auto ii : rec->miscAdditions()) {
-         auto inv = ii->misc()->totalInventory();
-         inv.quantity = std::max(inv.quantity - ii->amount().quantity, 0.0);
-         ii->misc()->setTotalInventory(inv);
-      }
-      for (auto ii : rec->yeastAdditions()) {
-         auto inv = ii->yeast()->totalInventory();
-         inv.quantity = std::max(inv.quantity - ii->amount().quantity, 0.0);
-         ii->yeast()->setTotalInventory(inv);
-      }
-   }
-
-   return;
-}
-
-// Need to make sure the recipe tree is active, I think
-void MainWindow::newBrewNote() {
-   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
-
-   for (QModelIndex selected : indexes) {
-      auto recipe = this->treeView_recipe->getItem<Recipe>(selected);
-      if (!recipe) {
-         continue;
-      }
-
-      // Make sure everything is properly set and selected
-      if (recipe.get() != this->pimpl->m_recipeObs) {
-         this->setRecipe(recipe.get());
-      }
-
-      auto brewNote = std::make_shared<BrewNote>(*recipe);
-      brewNote->populateNote(recipe.get());
-      brewNote->setBrewDate();
-      ObjectStoreWrapper::insert(brewNote);
-
-      this->pimpl->setBrewNote(*brewNote);
-
-      QModelIndex brewNoteIndex = treeView_recipe->findElement(brewNote.get());
-      if (brewNoteIndex.isValid()) {
-         this->setTreeSelection(brewNoteIndex);
-      } else {
-         qWarning() << Q_FUNC_INFO << "Unable to find newly created BrewNote in Recipe tree";
-      }
-   }
-   return;
-}
-
 void MainWindow::brewItHelper() {
-   this->newBrewNote();
-   this->reduceInventory();
+   auto brewNote = this->pimpl->createBrewNote();
+   if (brewNote) {
+      this->pimpl->reduceInventory(*brewNote);
+   }
    return;
 }
 
 void MainWindow::brewAgainHelper() {
-   this->pimpl->copySelectedBrewNote();
-   this->reduceInventory();
+   auto brewNote = this->pimpl->copySelectedBrewNote();
+   if (brewNote) {
+      this->pimpl->reduceInventory(*brewNote);
+   }
    return;
 }
 
@@ -2342,25 +2359,53 @@ void MainWindow::editRecipeFermentation() {
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/) {
    Application::saveSystemOptions();
-   PersistentSettings::insert(PersistentSettings::Names::geometry, saveGeometry());
-   PersistentSettings::insert(PersistentSettings::Names::windowState, saveState());
-   if ( this->pimpl->m_recipeObs )
-      PersistentSettings::insert(PersistentSettings::Names::recipeKey, this->pimpl->m_recipeObs->key());
+   PersistentSettings::insert_ck(PersistentSettings::Names::geometry, saveGeometry());
+   PersistentSettings::insert_ck(PersistentSettings::Names::windowState, saveState());
+   if (this->pimpl->m_recipeObs) {
+      PersistentSettings::insert_ck(PersistentSettings::Names::recipeKey, this->pimpl->m_recipeObs->key());
+   }
 
    // UI save state
-   this->pimpl->saveUiState(PersistentSettings::Names::splitter_vertical_State                , splitter_vertical                              );
-   this->pimpl->saveUiState(PersistentSettings::Names::splitter_horizontal_State              , splitter_horizontal                            );
-   this->pimpl->saveUiState(PersistentSettings::Names::treeView_recipe_headerState            , treeView_recipe->header()                      );
-   this->pimpl->saveUiState(PersistentSettings::Names::treeView_style_headerState             , treeView_style->header()                       );
-   this->pimpl->saveUiState(PersistentSettings::Names::treeView_equipment_headerState         , treeView_equipment->header()                   );
-   this->pimpl->saveUiState(PersistentSettings::Names::treeView_fermentable_headerState       , treeView_fermentable->header()                 );
-   this->pimpl->saveUiState(PersistentSettings::Names::treeView_hop_headerState               , treeView_hop->header()                         );
-   this->pimpl->saveUiState(PersistentSettings::Names::treeView_misc_headerState              , treeView_misc->header()                        );
-   this->pimpl->saveUiState(PersistentSettings::Names::treeView_yeast_headerState             , treeView_yeast->header()                       );
+   PersistentSettings::saveUiState(PersistentSettings::Names::splitter_vertical_State         , *this->splitter_vertical             );
+   PersistentSettings::saveUiState(PersistentSettings::Names::splitter_horizontal_State       , *this->splitter_horizontal           );
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_recipe_headerState     , *this->treeView_recipe     ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_style_headerState      , *this->treeView_style      ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_equipment_headerState  , *this->treeView_equipment  ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_fermentable_headerState, *this->treeView_fermentable->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_hop_headerState        , *this->treeView_hop        ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_misc_headerState       , *this->treeView_misc       ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_yeast_headerState      , *this->treeView_yeast      ->header());
+
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_boilCatalog        , *this->pimpl->m_boilCatalog        );
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_equipmentCatalog   , *this->pimpl->m_equipmentCatalog   );
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_fermentableCatalog , *this->pimpl->m_fermentableCatalog );
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_fermentationCatalog, *this->pimpl->m_fermentationCatalog);
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_hopCatalog         , *this->pimpl->m_hopCatalog         );
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_mashCatalog        , *this->pimpl->m_mashCatalog        );
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_miscCatalog        , *this->pimpl->m_miscCatalog        );
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_saltCatalog        , *this->pimpl->m_saltCatalog        );
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_styleCatalog       , *this->pimpl->m_styleCatalog       );
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_waterCatalog       , *this->pimpl->m_waterCatalog       );
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_yeastCatalog       , *this->pimpl->m_yeastCatalog       );
+
+   this->pimpl->m_boilCatalog        ->saveUiState(PersistentSettings::Names::uiState_boilCatalog        );
+   this->pimpl->m_equipmentCatalog   ->saveUiState(PersistentSettings::Names::uiState_equipmentCatalog   );
+   this->pimpl->m_fermentableCatalog ->saveUiState(PersistentSettings::Names::uiState_fermentableCatalog );
+   this->pimpl->m_fermentationCatalog->saveUiState(PersistentSettings::Names::uiState_fermentationCatalog);
+   this->pimpl->m_hopCatalog         ->saveUiState(PersistentSettings::Names::uiState_hopCatalog         );
+   this->pimpl->m_mashCatalog        ->saveUiState(PersistentSettings::Names::uiState_mashCatalog        );
+   this->pimpl->m_miscCatalog        ->saveUiState(PersistentSettings::Names::uiState_miscCatalog        );
+   this->pimpl->m_saltCatalog        ->saveUiState(PersistentSettings::Names::uiState_saltCatalog        );
+   this->pimpl->m_styleCatalog       ->saveUiState(PersistentSettings::Names::uiState_styleCatalog       );
+   this->pimpl->m_waterCatalog       ->saveUiState(PersistentSettings::Names::uiState_waterCatalog       );
+   this->pimpl->m_yeastCatalog       ->saveUiState(PersistentSettings::Names::uiState_yeastCatalog       );
 
    this->        mashStepsWidget->saveUiState(PersistentSettings::Names::        mashStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->        boilStepsWidget->saveUiState(PersistentSettings::Names::        boilStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->fermentationStepsWidget->saveUiState(PersistentSettings::Names::fermentationStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
+
+   PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_stockWindow, *this->pimpl->m_stockWindow);
+   this->pimpl->m_stockWindow->saveUiState();
 
    // After unloading the database, can't make any more queries to it, so first
    // make the main window disappear so that redraw events won't inadvertently

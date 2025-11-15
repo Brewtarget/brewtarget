@@ -248,8 +248,8 @@ void IbuMethods::loadFormula() {
 }
 
 void IbuMethods::saveFormula() {
-   PersistentSettings::insert(PersistentSettings::Names::ibu_formula,
-                              IbuMethods::formulaStringMapping[IbuMethods::formula]);
+   PersistentSettings::insert_ck(PersistentSettings::Names::ibu_formula,
+                                 IbuMethods::formulaStringMapping[IbuMethods::formula]);
    return;
 }
 

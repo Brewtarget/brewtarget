@@ -84,8 +84,8 @@ void ColorMethods::loadFormula() {
 }
 
 void ColorMethods::saveFormula() {
-   PersistentSettings::insert(PersistentSettings::Names::color_formula,
-                              ColorMethods::formulaStringMapping[ColorMethods::formula]);
+   PersistentSettings::insert_ck(PersistentSettings::Names::color_formula,
+                                 ColorMethods::formulaStringMapping[ColorMethods::formula]);
    return;
 }
 

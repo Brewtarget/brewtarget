@@ -31,7 +31,7 @@ class NamedEntity;
 /**
  * \brief In our (de)serialisation code (to and from database, BeerXML, BeerJSON), we mostly, but not always, have a
  *        one-to-one relationship between "object in our data model" and "record in the format we are serailising
- *        to/from".  Where such a 1-1 mapping is not possible, we can often bridget the gap with XPaths and XPath-like
+ *        to/from".  Where such a 1-1 mapping is not possible, we can often bridge the gap with XPaths and XPath-like
  *        identifiers.  Eg, a \c JsonXPath allows a property on a model object to map to a field on a sub-record of
  *        the corresponding BeerJSON record.
  *
@@ -60,8 +60,12 @@ public:
     *
     *        Using an \c initializer_list of \c reference_wrapper just saves the caller from having to prefix everything
     *        with '&'.
+    *
+    * \param
+    * \param indexOfName
     */
-   PropertyPath(std::initializer_list<std::reference_wrapper<BtStringConst const>> listOfProperties);
+   PropertyPath(std::initializer_list<std::reference_wrapper<BtStringConst const>> listOfProperties,
+                int indexOfName = 1);
 
    PropertyPath(PropertyPath const & other);
 
@@ -74,6 +78,10 @@ public:
 
    ~PropertyPath();
 
+   /**
+    * \brief For a trivial path this will be the same as the single constituent property.  For a non-trivial path it
+    *        will be all the properties joined by '/' characters.
+    */
    QString asXPath() const;
 
    QVector<BtStringConst const *> const & properties() const;
@@ -113,12 +121,36 @@ public:
     */
    QVariant getValue(NamedEntity const & obj) const;
 
+   /**
+    * \brief Returns the localised name suitable for labels, column headings etc.
+    *
+    *        NOTE this \b must be called \b after \c getTypeInfo
+    */
+   QString getLocalisedName() const;
+
 private:
    //! \brief The list of properties in this path
    QVector<BtStringConst const *> m_properties;
 
    //! \brief The string representation this path (mostly for logging)
    QString m_path;
+
+   /**
+    * \brief For a non-trivial path, this determines which path element should be used for titles/labels/etc.  This can
+    *        differ from the last element, which we use for all other \c TypeInfo requests. Eg for
+    *        {PropertyNames::Recipe::style, PropertyNames::NamedEntity::name} we would want to show "Style" rather than
+    *        "Name" as the heading.  For {PropertyNames::StockUse::brewNote, PropertyNames::OwnedByRecipe::recipe,
+    *        PropertyNames::NamedEntity::name}, we'd want to show "Recipe".
+    */
+   int m_indexOfName;
+
+   /**
+    * \brief Pointer to a static member function that returns the localised name to display for this property path.
+    *
+    *        This is not set until after the first call to \c getTypeInfo.
+    */
+   mutable QString (*m_localisedName) () = nullptr;
+
 };
 
 /**

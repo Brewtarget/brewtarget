@@ -126,12 +126,29 @@ private:
 
    ~StepOwnerBase() = default;
 
+public:
+   OwnedSet<Derived,
+            DerivedStep,
+            PropertyNames::StepOwnerBase::steps,
+            nullptr,
+            StepOwnerBaseOptions> & ownedSet() {
+      return this->m_stepSet;
+   }
+
+
    // TBD: This public block of member functions is just a wrapper around the OwnedSet interface.  We could get rid of
    // it if we inherited from OwnedSet.
-public:
    QList<std::shared_ptr<DerivedStep>> steps() const {
       return this->m_stepSet.items();
    }
+   /**
+    * \brief This "function alias" is used by \c EnumeratedBase and \c TreeModelBase.
+    *
+    *        True member function aliases do not currently exist in C++, and nor do references to member functions --
+    *        see https://stackoverflow.com/questions/21952386/why-doesnt-reference-to-member-exist-in-c.  So this
+    *        wrapper is the best we can do.
+    */
+   QList<std::shared_ptr<DerivedStep>> ownedItems() const { return this->steps(); }
 
    /**
     * \brief Returns the step at the specified position, if it exists, or \c nullptr if not
@@ -194,7 +211,7 @@ public:
    /*!
     * \brief Swap Steps \c step1 and \c step2
     */
-   void swapSteps(DerivedStep & lhs, DerivedStep & rhs) {
+   void swapOrder(DerivedStep & lhs, DerivedStep & rhs) {
       this->m_stepSet.swap(lhs, rhs);
       return;
    }
@@ -222,18 +239,15 @@ private:
    }
 
    /**
-    * \brief Intended to be called from \c Derived::acceptStepChange
+    * \brief Intended to be called from \c Derived::acceptSetMemberChange
     *
     * \param sender - Result of caller calling \c this->sender() (which is protected, so we can't call it here)
-    * \param prop - As received by Derived::acceptStepChange
-    * \param val  - As received by Derived::acceptStepChange
-    * \param additionalProperties - Additional properties for which to emit \c changed signal if the change we are
-    *                               receiving comes from one of our steps.  TODO: Remove this
+    * \param prop - As received by Derived::acceptSetMemberChange
+    * \param val  - As received by Derived::acceptSetMemberChange
     */
-   void doAcceptStepChange(QObject * sender,
+   void doAcceptSetMemberChange(QObject * sender,
                            QMetaProperty prop,
-                           QVariant      val,
-                           [[maybe_unused]] QList<BtStringConst const *> const additionalProperties = {}) {
+                           QVariant      val) {
       DerivedStep * stepSender = qobject_cast<DerivedStep*>(sender);
       if (!stepSender) {
          return;

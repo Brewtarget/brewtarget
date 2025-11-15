@@ -37,11 +37,49 @@ class FermentableTreeSortFilterProxyModel :
    TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Fermentable)
 };
 
-class InventoryFermentableTreeSortFilterProxyModel :
+class StockPurchaseFermentableTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
-   public TreeSortFilterProxyModelBase<InventoryFermentableTreeSortFilterProxyModel, InventoryFermentableTreeModel, InventoryFermentable> {
+   public TreeSortFilterProxyModelBase<StockPurchaseFermentableTreeSortFilterProxyModel,
+                                       StockPurchaseFermentableTreeModel,
+                                       StockPurchaseFermentable> {
    Q_OBJECT
-   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(InventoryFermentable)
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseFermentable)
+};
+
+class StockPurchaseHopTreeSortFilterProxyModel :
+   public QSortFilterProxyModel,
+   public TreeSortFilterProxyModelBase<StockPurchaseHopTreeSortFilterProxyModel,
+                                       StockPurchaseHopTreeModel,
+                                       StockPurchaseHop> {
+   Q_OBJECT
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseHop)
+};
+
+class StockPurchaseMiscTreeSortFilterProxyModel :
+   public QSortFilterProxyModel,
+   public TreeSortFilterProxyModelBase<StockPurchaseMiscTreeSortFilterProxyModel,
+                                       StockPurchaseMiscTreeModel,
+                                       StockPurchaseMisc> {
+   Q_OBJECT
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseMisc)
+};
+
+class StockPurchaseSaltTreeSortFilterProxyModel :
+   public QSortFilterProxyModel,
+   public TreeSortFilterProxyModelBase<StockPurchaseSaltTreeSortFilterProxyModel,
+                                       StockPurchaseSaltTreeModel,
+                                       StockPurchaseSalt> {
+   Q_OBJECT
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseSalt)
+};
+
+class StockPurchaseYeastTreeSortFilterProxyModel :
+   public QSortFilterProxyModel,
+   public TreeSortFilterProxyModelBase<StockPurchaseYeastTreeSortFilterProxyModel,
+                                       StockPurchaseYeastTreeModel,
+                                       StockPurchaseYeast> {
+   Q_OBJECT
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseYeast)
 };
 
 class MashTreeSortFilterProxyModel :

@@ -27,13 +27,13 @@
 
 COLUMN_INFOS(
    StyleTableModel,
-   TABLE_MODEL_HEADER(Style, Name            , tr("Name"           ), PropertyNames::NamedEntity::name            ),
-   TABLE_MODEL_HEADER(Style, Type            , tr("Type"           ), PropertyNames::Style::type                  ),
-   TABLE_MODEL_HEADER(Style, Category        , tr("Category"       ), PropertyNames::Style::category              ),
-   TABLE_MODEL_HEADER(Style, CategoryNumber  , tr("Category Number"), PropertyNames::Style::categoryNumber        ),
-   TABLE_MODEL_HEADER(Style, StyleLetter     , tr("Style Letter"   ), PropertyNames::Style::styleLetter           ),
-   TABLE_MODEL_HEADER(Style, StyleGuide      , tr("Style Guide"    ), PropertyNames::Style::styleGuide            ),
-   TABLE_MODEL_HEADER(Style, NumRecipesUsedIn, tr("N° Recipes"     ), PropertyNames::NamedEntity::numRecipesUsedIn),
+   TABLE_MODEL_HEADER(Style, Name            , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Style, Type            , PropertyNames::Style::type                  ), // "Type"
+   TABLE_MODEL_HEADER(Style, Category        , PropertyNames::Style::category              ), // "Category"
+   TABLE_MODEL_HEADER(Style, CategoryNumber  , PropertyNames::Style::categoryNumber        ), // "Category Number"
+   TABLE_MODEL_HEADER(Style, StyleLetter     , PropertyNames::Style::styleLetter           ), // "Style Letter"
+   TABLE_MODEL_HEADER(Style, StyleGuide      , PropertyNames::Style::styleGuide            ), // "Style Guide"
+   TABLE_MODEL_HEADER(Style, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 StyleTableModel::StyleTableModel(QTableView* parent, bool editable) :
@@ -54,10 +54,6 @@ void StyleTableModel::updateTotals()                                       { ret
 
 QVariant StyleTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags StyleTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<StyleTableModel>(index, this->m_editable);
 }
 
 bool StyleTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

@@ -29,7 +29,7 @@
 #include "undoRedo/Undoable.h"
 #include "measurement/Measurement.h"
 #include "model/IngredientAmount.h"
-#include "model/Inventory.h"
+#include "model/StockPurchase.h"
 #include "model/Recipe.h"
 #include "qtModels/tableModels/BtTableModel.h"
 #include "undoRedo/UndoableAddOrRemove.h"
@@ -37,6 +37,7 @@
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/MetaTypes.h"
 #include "utils/PropertyHelper.h"
+#include "utils/TypeTraits.h"
 
 // TODO: We would like to change "Add to Recipe" to "Set for Recipe" for things where the recipe only has one of them, eg Style or Equipment
 
@@ -68,9 +69,9 @@ template <typename T> concept CONCEPT_FIX_UP DoesNotObserveRecipe = std::negatio
 //       The way round this is to template the member function so that the evaluation of the constraint is deferred
 //       until after the class declaration of `Derived` is complete.  Now, in, eg, HopTableModel we can call the right
 //       version via:
-//          this->updateInventory<HopTableModel>(...);
+//          this->updateStockPurchase<HopTableModel>(...);
 //
-//       (I did also try `this->updateInventory<decltype(*this)>(...)`, but I couldn't get it to work.)
+//       (I did also try `this->updateStockPurchase<decltype(*this)>(...)`, but I couldn't get it to work.)
 //
 //       But what if we want to call one of these templated functions from inside TableModelBase?  Well, then we have to
 //       call down to a wrapper function in Derived that knows which version of the TableModelBase function to call.  Eg
@@ -91,6 +92,13 @@ template <typename T> concept CONCEPT_FIX_UP DoesNotObserveRecipe = std::negatio
 //       Essentially, every time you see `template<class Caller>` below, something along the lines described above is
 //       what is going on.
 //
+
+/**
+ * This is to allow us to detect at compile time (via \c HAS_MEMBER) whether a table model has a Name column
+ */
+CREATE_HAS_MEMBER(Name);
+CREATE_HAS_MEMBER(TotalInventory);
+CREATE_HAS_MEMBER(PctAcid);
 
 /**
  * \brief See comment in qtModels/tableModels/BtTableModel.h for more info on inheritance structure
@@ -493,7 +501,9 @@ protected:
          return false;
       }
 
-      if (role != Qt::DisplayRole && role != Qt::EditRole) {
+      if (role != Qt::DisplayRole &&
+          role != Qt::EditRole &&
+          role != Qt::TextAlignmentRole) {
          // No need to log anything here, as it's perfectly normal to get called with other roles
          return false;
       }
@@ -527,6 +537,10 @@ protected:
       //
       auto row = this->m_rows[index.row()];
       ColumnInfo const & columnInfo = this->get_ColumnInfo(index);
+      TypeInfo const & typeInfo = columnInfo.typeInfo;
+      if (role == Qt::TextAlignmentRole) {
+         return PropertyHelper::getAlignment(typeInfo);
+      }
 
       QVariant modelData = columnInfo.propertyPath.getValue(*row);
       if (!modelData.isValid()) {
@@ -536,8 +550,6 @@ protected:
             columnInfo.propertyPath << "(Got" << modelData << ")";
          Q_ASSERT(false); // Stop here on debug builds
       }
-
-      TypeInfo const & typeInfo = columnInfo.typeInfo;
 
       // Uncomment this log statement if asserts in PropertyHelper::readDataFromPropertyValue are firing
 //      qDebug() <<
@@ -598,14 +610,14 @@ protected:
    }
 
    template<class TM>
-   void updateInventory(int invKey, BtStringConst const & propertyName) requires IsTableModel<TM> &&
-                                                                                 CanHaveInventory<NE> {
+   void updateStockPurchase(int invKey, BtStringConst const & propertyName) requires IsTableModel<TM> &&
+                                                                                 CanHaveStockPurchase<NE> {
       // Substantive version
       if (propertyName == PropertyNames::IngredientAmount::amount) {
          for (int ii = 0; ii < this->m_rows.size(); ++ii) {
             std::shared_ptr<NE> ingredient = this->m_rows.at(ii);
-            if (InventoryTools::hasInventory<NE>(*ingredient)) {
-               std::shared_ptr<typename NE::InventoryClass> inventory = InventoryTools::getInventory(*ingredient);
+            if (StockPurchaseTools::hasStockPurchase<NE>(*ingredient)) {
+               std::shared_ptr<typename NE::StockPurchaseClass> inventory = StockPurchaseTools::getStockPurchase(*ingredient);
                if (inventory->key() == invKey) {
                   emit this->derived().dataChanged(
                      this->derived().createIndex(ii, static_cast<int>(Derived::ColumnIndex::TotalInventory)),
@@ -618,9 +630,9 @@ protected:
       return;
    }
    template<class TM>
-   void updateInventory([[maybe_unused]] int invKey,
+   void updateStockPurchase([[maybe_unused]] int invKey,
                         [[maybe_unused]] BtStringConst const & propertyName) requires IsTableModel<TM> &&
-                                                                                      CannotHaveInventory<NE> {
+                                                                                      CannotHaveStockPurchase<NE> {
       // No-op version
       return;
    }
@@ -700,6 +712,40 @@ protected:
       return this->readDataFromModel(index, role);
    }
 
+   Qt::ItemFlags doFlags(QModelIndex const & index) const {
+      bool const tableIsEditable = this->derived().m_editable;
+      static Qt::ItemFlags const defaults = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
+      auto const columnIndex = static_cast<ColumnIndex>(index.column());
+
+      // Not every table has a name column
+      if constexpr (HAS_MEMBER(ColumnIndex, Name)) {
+         if (columnIndex == ColumnIndex::Name) {
+            return defaults;
+         }
+      }
+      // If there's a TotalInventory column, it's read-only
+      if constexpr (HAS_MEMBER(typename Derived::ColumnIndex, TotalInventory)) {
+         if (columnIndex == Derived::ColumnIndex::TotalInventory) {
+            return defaults /*| Qt::ItemIsEnabled*/;
+         }
+      }
+      // This is only for SaltTableModel and RecipeAdjustmentSaltTableModel, but it's still less work to do a special
+      // case here than have each subclass implement its own flags function.
+      if constexpr (HAS_MEMBER(typename Derived::ColumnIndex, PctAcid)) {
+         if (columnIndex == Derived::ColumnIndex::PctAcid &&
+             !this->derived().m_rows[index.row()]->isAcid()) {
+            return Qt::NoItemFlags;
+         }
+      }
+
+      ColumnInfo const & columnInfo = this->get_ColumnInfo(index);
+      if (columnInfo.typeInfo.isReadOnly()) {
+         return defaults | Qt::ItemIsEnabled;
+      }
+
+      return defaults | (tableIsEditable ? Qt::ItemIsEditable : Qt::NoItemFlags);
+   }
+
    //! \brief Default implementation for Derived::setData
    template<bool updateHeader = false>
    bool doSetDataDefault(QModelIndex const & index, QVariant const & value, int role) {
@@ -724,41 +770,6 @@ protected:
 
    QList< std::shared_ptr<NE> > m_rows;
 };
-
-namespace TableModelHelper {
-
-   /**
-    * \brief Implementation for \c TableModelBase::Derived::flags
-    *
-    *        NB: This can't be a member function of \c TableModelBase because otherwise the compiler will complain about
-    *            "invalid use of incomplete type" for \c Derived.
-    */
-   template<class Derived>
-   Qt::ItemFlags doFlags(
-      QModelIndex const & index,
-      bool const editable,
-      std::vector<std::pair<typename Derived::ColumnIndex, typename Qt::ItemFlags>> const & columnExtraFlags = {},
-      Qt::ItemFlags defaults = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled
-   ) {
-      auto const columnIndex = static_cast<Derived::ColumnIndex>(index.column());
-      if (columnIndex == Derived::ColumnIndex::Name) {
-         return defaults;
-      }
-      auto extraFlags = std::find_if(
-         columnExtraFlags.begin(),
-         columnExtraFlags.end(),
-         [&](std::pair<typename Derived::ColumnIndex, typename Qt::ItemFlags> const & element) {
-            return element.first == columnIndex;
-         }
-      );
-      if (extraFlags != columnExtraFlags.end()) {
-         return defaults | extraFlags->second;
-      }
-
-      return defaults | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
-   }
-
-}
 
 
 /**
@@ -821,7 +832,7 @@ namespace TableModelHelper {
  *        NB: Mostly I have tried to make these macro-included function bodies trivial.  Macros are a bit clunky, so we
  *            only really want to use them for the things that are hard to do other ways.
  *
- *        Note that the RecipePropertyName parameter is ultimately ignored in updateInventory for table models that
+ *        Note that the RecipePropertyName parameter is ultimately ignored in updateStockPurchase for table models that
  *        do not observe a recipe, so can be set to PropertyNames::None::none in such cases.
  */
 #define TABLE_MODEL_COMMON_CODE(NeName, LcNeName, RecipePropertyName) \
@@ -844,6 +855,9 @@ namespace TableModelHelper {
    int NeName##TableModel::rowCount([[maybe_unused]] QModelIndex const & parent) const {                \
       return this->m_rows.size();                                                                       \
    }                                                                                                    \
+   Qt::ItemFlags NeName##TableModel::flags(QModelIndex const & index) const {                           \
+      return this->doFlags(index);                                                                      \
+   }                                                                                                    \
    void NeName##TableModel::addItem(int itemId) {                                                       \
       this->addById(itemId);                                                                            \
       return;                                                                                           \
@@ -858,7 +872,7 @@ namespace TableModelHelper {
    }                                                                                                    \
                                                                                                         \
    void NeName##TableModel::changedInventory(int invKey, BtStringConst const & propertyName) {          \
-      this->updateInventory<NeName##TableModel>(invKey, propertyName);                                  \
+      this->updateStockPurchase<NeName##TableModel>(invKey, propertyName);                                  \
       return;                                                                                           \
    }
 

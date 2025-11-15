@@ -34,21 +34,21 @@ public:
       m_nameMapping       {nullptr},
       m_displayNameMapping{nullptr},
       m_typeInfo          {nullptr},
-      m_controlledField   {nullptr} {
+      m_controlledFields  {} {
       return;
    }
 
    ~impl() = default;
 
-   BtComboBoxEnum          & m_self              ;
-   bool                      m_initialised       ;
-   char const *              m_editorName        ;
-   char const *              m_comboBoxName      ;
-   char const *              m_comboBoxFqName    ;
-   EnumStringMapping const * m_nameMapping       ;
-   EnumStringMapping const * m_displayNameMapping;
-   TypeInfo          const * m_typeInfo          ;
-   SmartLineEdit *           m_controlledField   ;
+   BtComboBoxEnum &             m_self              ;
+   bool                         m_initialised       ;
+   char const *                 m_editorName        ;
+   char const *                 m_comboBoxName      ;
+   char const *                 m_comboBoxFqName    ;
+   EnumStringMapping const *    m_nameMapping       ;
+   EnumStringMapping const *    m_displayNameMapping;
+   TypeInfo          const *    m_typeInfo          ;
+   std::vector<SmartLineEdit *> m_controlledFields  ;
 
 };
 
@@ -70,8 +70,8 @@ void BtComboBoxEnum::init(char const * const        editorName        ,
                           EnumStringMapping const & displayNameMapping,
                           TypeInfo          const & typeInfo          ,
                           std::vector<int>  const * restrictTo        ,
-                          SmartLineEdit *           controlledField) {
-   qDebug() << Q_FUNC_INFO << comboBoxFqName << ":" << typeInfo;
+                          std::vector<SmartLineEdit *> controlledFields) {
+//   qDebug() << Q_FUNC_INFO << comboBoxFqName << ":" << typeInfo;
 
    // It's a coding error to call init twice
    Q_ASSERT(!this->pimpl->m_initialised);
@@ -91,7 +91,7 @@ void BtComboBoxEnum::init(char const * const        editorName        ,
    this->pimpl->m_nameMapping        = &nameMapping       ;
    this->pimpl->m_displayNameMapping = &displayNameMapping;
    this->pimpl->m_typeInfo           = &typeInfo          ;
-   this->pimpl->m_controlledField    =  controlledField   ;
+   this->pimpl->m_controlledFields   =  controlledFields  ;
 
    // It's a coding error if we already have any items in the combo box.  (This could eg happen if any were defined in
    // the .ui file.)
@@ -117,7 +117,7 @@ void BtComboBoxEnum::init(char const * const        editorName        ,
 
    // In the special case where we're handling Measurement::ChoiceOfPhysicalQuantity, we need to pick up the right
    // initial value
-   if (this->pimpl->m_controlledField) {
+   if (this->pimpl->m_controlledFields.size() > 0) {
       this->autoSetFromControlledField();
    }
 
@@ -137,12 +137,13 @@ void BtComboBoxEnum::autoSetFromControlledField() {
 //      Logging::getStackTrace();
 
    // It's a coding error to call this when there is no controlled field
-   Q_ASSERT(this->pimpl->m_controlledField);
+   Q_ASSERT(this->pimpl->m_controlledFields.size() > 0);
 
    // Equally it's a coding error if we have a controlled field for anything other than choice of physical quantity
    Q_ASSERT(holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*this->pimpl->m_typeInfo->fieldType));
 
-   Measurement::PhysicalQuantity const physicalQuantity = this->pimpl->m_controlledField->getPhysicalQuantity();
+   // We pick the PhysicalQuantity up from the first controlled field (and assume the others are the same!)
+   Measurement::PhysicalQuantity const physicalQuantity = this->pimpl->m_controlledFields[0]->getPhysicalQuantity();
 
    // Uncomment the next statement for diagnosing asserts!
 //   qDebug() <<
@@ -230,7 +231,7 @@ QVariant BtComboBoxEnum::getAsVariant() const {
 }
 
 void BtComboBoxEnum::onIndexChanged([[maybe_unused]] int const index) {
-   if (this->pimpl->m_initialised && this->pimpl->m_controlledField) {
+   if (this->pimpl->m_initialised && this->pimpl->m_controlledFields.size() > 0) {
       // Uncomment the next statement for diagnosing asserts!
 //      qDebug() <<
 //         Q_FUNC_INFO << "index:" << index << ", raw value:" << this->currentData() << ", decodes to: " <<
@@ -239,7 +240,9 @@ void BtComboBoxEnum::onIndexChanged([[maybe_unused]] int const index) {
       if (rawPhysicalQuantity) {
          Measurement::PhysicalQuantity const physicalQuantity =
             static_cast<Measurement::PhysicalQuantity>(*rawPhysicalQuantity);
-         this->pimpl->m_controlledField->selectPhysicalQuantity(physicalQuantity);
+         for (auto controlledField : this->pimpl->m_controlledFields) {
+            controlledField->selectPhysicalQuantity(physicalQuantity);
+         }
       }
    }
    return;

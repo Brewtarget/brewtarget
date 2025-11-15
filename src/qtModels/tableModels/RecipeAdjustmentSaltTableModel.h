@@ -21,7 +21,7 @@
 #define TABLEMODELS_RECIPEADJUSTMENTSALTTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QList>
 #include <QMetaProperty>
 #include <QModelIndex>
@@ -92,7 +92,7 @@ private:
  * \sa RecipeAdjustmentSaltTableModel.
  */
 class RecipeAdjustmentSaltItemDelegate :
-   public QItemDelegate,
+   public QStyledItemDelegate,
    public ItemDelegate<RecipeAdjustmentSaltItemDelegate, RecipeAdjustmentSaltTableModel> {
    Q_OBJECT
 

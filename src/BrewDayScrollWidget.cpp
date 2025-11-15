@@ -353,7 +353,7 @@ void BrewDayScrollWidget::repopulateListWidget() {
 
    for (auto ins : this->m_recIns ) {
       //QString text = tr("Step %1: %2").arg(i).arg(ins->name());
-      QString text = tr("Step %1: %2").arg(ins->stepNumber()).arg(ins->name());
+      QString text = tr("Step %1: %2").arg(ins->sequenceNumber()).arg(ins->name());
       listWidget->addItem(new QListWidgetItem(text));
    }
 

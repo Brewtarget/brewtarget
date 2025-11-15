@@ -18,6 +18,17 @@
 #include "utils/EnumStringMapping.h"
 #include "utils/OptionalHelpers.h"
 
+Qt::AlignmentFlag PropertyHelper::getAlignment(TypeInfo const & typeInfo) {
+   //
+   // Number fields are right-aligned
+   //
+   if (typeInfo.typeIndex == typeid(double             ) ||
+       typeInfo.typeIndex == typeid(Measurement::Amount)) {
+      return Qt::AlignRight;
+   }
+   return Qt::AlignLeft;
+}
+
 QVariant PropertyHelper::readDataFromPropertyValue(
    QVariant modelData,
    TypeInfo const & typeInfo,
@@ -44,7 +55,7 @@ QVariant PropertyHelper::readDataFromPropertyValue(
    //      widget.  For other types, we want to hand back something that can be converted to QString.
    //
    //    - For Qt::DisplayRole, we're typically being called from QSortFilterProxyModel::data which is, in turn, called
-   //      by QItemDelegate::paint.  We don't want to override QItemDelegate::paint in ItemDelegate, because it would be
+   //      by QStyledItemDelegate::paint.  We don't want to override QStyledItemDelegate::paint in ItemDelegate, because it would be
    //      overkill.  So, here, we just need to make sure we're returning something that can sensibly be converted to
    //      QString.
    //

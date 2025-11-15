@@ -115,8 +115,8 @@ void Fermentation::setPrimary  (std::shared_ptr<FermentationStep> val) { this->s
 void Fermentation::setSecondary(std::shared_ptr<FermentationStep> val) { this->setStepAt(val, 2); return; }
 void Fermentation::setTertiary (std::shared_ptr<FermentationStep> val) { this->setStepAt(val, 3); return; }
 
-void Fermentation::acceptStepChange(QMetaProperty prop, QVariant val) {
-   this->doAcceptStepChange(this->sender(), prop, val, {});
+void Fermentation::acceptSetMemberChange(QMetaProperty prop, QVariant val) {
+   this->doAcceptSetMemberChange(this->sender(), prop, val);
    return;
 }
 

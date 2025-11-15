@@ -26,7 +26,12 @@
 #include "model/FermentationStep.h"
 #include "model/Folder.h"
 #include "model/Hop.h"
-#include "model/InventoryFermentable.h"
+#include "model/StockPurchaseFermentable.h"
+#include "model/StockPurchaseMisc.h"
+#include "model/StockPurchaseHop.h"
+#include "model/StockPurchaseSalt.h"
+#include "model/StockPurchaseYeast.h"
+#include "model/StockUseIngredient.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
@@ -64,6 +69,9 @@
 template<class NE, class TreeType>
 struct TreeNodeTraits;
 
+//
+// NOTE that the ColumnIndex enums below need to correspond with the COLUMN_INFOS definitions in TreeNode.cpp
+//
 
 template<class NE> class TreeFolderNode;
 template<class NE> class TreeItemNode;
@@ -161,23 +169,195 @@ template<> struct TreeNodeTraits<Hop, Hop> {
    static QString getRootName() { return Hop::tr("Hops"); }
 };
 
-template<> struct TreeNodeTraits<InventoryFermentable, InventoryFermentable> {
+template<> struct TreeNodeTraits<StockUseFermentable, StockPurchaseFermentable> {
+   enum class ColumnIndex {
+      Reason         ,
+      Date           ,
+      Comment        ,
+      Recipe         ,
+      AmountUsed     ,
+      AmountRemaining,
+   };
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+
+   using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseFermentable> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   // StockUseFermentables cannot be dropped anywhere
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventoryChange";
+};
+
+template<> struct TreeNodeTraits<StockPurchaseFermentable, StockPurchaseFermentable> {
    enum class ColumnIndex {
       Name           ,
       DateOrdered    ,
-      Type           ,
+      Supplier       ,
+      DateReceived   ,
       AmountReceived ,
       AmountRemaining,
+      Note           ,
    };
    static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    // We have to support folder node for the root node
-   using ParentPtrTypes = std::variant<TreeFolderNode<InventoryFermentable> *>;
-   using ChildPtrTypes = std::variant<std::monostate>;
-   // InventoryFermentables and other ingredients can be dropped on MainWindow::tabWidget_ingredients
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-ingredient";
+   using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseFermentable> *>;
+   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseFermentable>>>;
+   // StockPurchaseFermentables cannot be dropped anywhere except folders
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventory";
 
-   static QString getRootName() { return Fermentable::tr("InventoryFermentables"); }
+   static QString getRootName() { return Fermentable::tr("Fermentable Purchases"); }
+};
+
+
+template<> struct TreeNodeTraits<StockUseHop, StockPurchaseHop> {
+   enum class ColumnIndex {
+      Reason         ,
+      Date           ,
+      Comment        ,
+      Recipe         ,
+      AmountUsed     ,
+      AmountRemaining,
+   };
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+
+   using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseHop> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   // StockUseHops cannot be dropped anywhere
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventoryChange";
+};
+
+template<> struct TreeNodeTraits<StockPurchaseHop, StockPurchaseHop> {
+   enum class ColumnIndex {
+      Name           ,
+      DateOrdered    ,
+      Supplier       ,
+      DateReceived   ,
+      AmountReceived ,
+      AmountRemaining,
+      Note           ,
+   };
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+
+   // We have to support folder node for the root node
+   using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseHop> *>;
+   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseHop>>>;
+   // StockPurchaseHops cannot be dropped anywhere except folders
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventory";
+
+   static QString getRootName() { return Hop::tr("Hop Purchases"); }
+};
+
+template<> struct TreeNodeTraits<StockUseMisc, StockPurchaseMisc> {
+   enum class ColumnIndex {
+      Reason         ,
+      Date           ,
+      Comment        ,
+      Recipe         ,
+      AmountUsed     ,
+      AmountRemaining,
+   };
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+
+   using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseMisc> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   // StockUseMiscs cannot be dropped anywhere
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventoryChange";
+};
+
+template<> struct TreeNodeTraits<StockPurchaseMisc, StockPurchaseMisc> {
+   enum class ColumnIndex {
+      Name           ,
+      DateOrdered    ,
+      Supplier       ,
+      DateReceived   ,
+      AmountReceived ,
+      AmountRemaining,
+      Note           ,
+   };
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+
+   // We have to support folder node for the root node
+   using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseMisc> *>;
+   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseMisc>>>;
+   // StockPurchaseMiscs cannot be dropped anywhere except folders
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventory";
+
+   static QString getRootName() { return Misc::tr("Misc Purchases"); }
+};
+
+template<> struct TreeNodeTraits<StockUseSalt, StockPurchaseSalt> {
+   enum class ColumnIndex {
+      Reason         ,
+      Date           ,
+      Comment        ,
+      Recipe         ,
+      AmountUsed     ,
+      AmountRemaining,
+   };
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+
+   using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseSalt> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   // StockUseSalts cannot be dropped anywhere
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventoryChange";
+};
+
+template<> struct TreeNodeTraits<StockPurchaseSalt, StockPurchaseSalt> {
+   enum class ColumnIndex {
+      Name           ,
+      DateOrdered    ,
+      Supplier       ,
+      DateReceived   ,
+      AmountReceived ,
+      AmountRemaining,
+      Note           ,
+   };
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+
+   // We have to support folder node for the root node
+   using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseSalt> *>;
+   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseSalt>>>;
+   // StockPurchaseSalts cannot be dropped anywhere except folders
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventory";
+
+   static QString getRootName() { return Salt::tr("Salt Purchases"); }
+};
+
+template<> struct TreeNodeTraits<StockUseYeast, StockPurchaseYeast> {
+   enum class ColumnIndex {
+      Reason         ,
+      Date           ,
+      Comment        ,
+      Recipe         ,
+      AmountUsed     ,
+      AmountRemaining,
+   };
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+
+   using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseYeast> *>;
+   using ChildPtrTypes = std::variant<std::monostate>;
+   // StockUseYeasts cannot be dropped anywhere
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventoryChange";
+};
+
+template<> struct TreeNodeTraits<StockPurchaseYeast, StockPurchaseYeast> {
+   enum class ColumnIndex {
+      Name           ,
+      DateOrdered    ,
+      Supplier       ,
+      DateReceived   ,
+      AmountReceived ,
+      AmountRemaining,
+      Note           ,
+   };
+   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+
+   // We have to support folder node for the root node
+   using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseYeast> *>;
+   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseYeast>>>;
+   // StockPurchaseYeasts cannot be dropped anywhere except folders
+   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventory";
+
+   static QString getRootName() { return Yeast::tr("Yeast Purchases"); }
 };
 
 template<> struct TreeNodeTraits<MashStep, Mash> {

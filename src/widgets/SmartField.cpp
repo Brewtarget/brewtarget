@@ -76,16 +76,26 @@ public:
       // Similarly, it's a coding error to have neither SmartBuddyLabel nor SmartAmountSettings
       Q_ASSERT(this->m_settings || this->m_smartBuddyLabel);
 
+      TypeInfo const & typeInfo = this->m_self.getTypeInfo();
+
       if (precision) {
+         // Uncomment this log statement if the assert below is firing
+//         qDebug() <<
+//            Q_FUNC_INFO << "m_fieldFqName:" << m_fieldFqName << ", typeInfo:" << typeInfo << ", precision" <<
+//            *precision;
+
          // It's a coding error to specify precision for a field that's not a (possibly optional) double (or a float,
          // but we don't use float) or an Amount.  However, we allow precision of 0 for a type that is stored as an int
          // or unsigned int, because that's what we're going to set it to anyway.
-         Q_ASSERT(this->m_self.getTypeInfo().typeIndex == typeid(double) ||
-                  this->m_self.getTypeInfo().typeIndex == typeid(std::optional<double>) ||
-                  this->m_self.getTypeInfo().typeIndex == typeid(Measurement::Amount) ||
-                  this->m_self.getTypeInfo().typeIndex == typeid(std::optional<Measurement::Amount>) ||
-                  (0 == *precision && this->m_self.getTypeInfo().typeIndex == typeid(int         )) ||
-                  (0 == *precision && this->m_self.getTypeInfo().typeIndex == typeid(unsigned int)) );
+         //
+         // TBD: I think the std::optional lines are superfluous here because we ensure typeInfo.typeIndex matches the
+         //      underlying type.
+         Q_ASSERT(typeInfo.typeIndex == typeid(double) ||
+                  typeInfo.typeIndex == typeid(std::optional<double>) ||
+                  typeInfo.typeIndex == typeid(Measurement::Amount) ||
+                  typeInfo.typeIndex == typeid(std::optional<Measurement::Amount>) ||
+                  (0 == *precision && typeInfo.typeIndex == typeid(int         )) ||
+                  (0 == *precision && typeInfo.typeIndex == typeid(unsigned int)) );
 
          // It's a coding error if precision is not some plausible value.  For the moment at least, we assert there
          // are no envisageable circumstances where we need to show more than 3 decimal places
@@ -93,13 +103,13 @@ public:
          this->m_precision = *precision;
       }
       // For integers, there are no decimal places to show
-      if (this->m_self.getTypeInfo().typeIndex == typeid(int) ||
-          this->m_self.getTypeInfo().typeIndex == typeid(unsigned int)) {
+      if (typeInfo.typeIndex == typeid(int) ||
+          typeInfo.typeIndex == typeid(unsigned int)) {
          this->m_precision = 0;
       }
       this->m_maximalDisplayString = maximalDisplayString;
 
-      if (std::holds_alternative<NonPhysicalQuantity>(*this->m_self.getTypeInfo().fieldType)) {
+      if (std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
          // It's a coding error to have a smartBuddyLabel for a NonPhysicalQuantity
          Q_ASSERT(!this->m_smartBuddyLabel);
       } else {

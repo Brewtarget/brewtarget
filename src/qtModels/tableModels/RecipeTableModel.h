@@ -17,7 +17,7 @@
 #define TABLEMODELS_RECIPETABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
 #include "model/Recipe.h"
 #include "qtModels/tableModels/ItemDelegate.h"
@@ -43,7 +43,7 @@ class RecipeTableModel : public BtTableModel, public TableModelBase<RecipeTableM
  * \brief Item delegate for style tables.
  * \sa RecipeTableModel
  */
-class RecipeItemDelegate : public QItemDelegate,
+class RecipeItemDelegate : public QStyledItemDelegate,
                            public ItemDelegate<RecipeItemDelegate, RecipeTableModel> {
    Q_OBJECT
    ITEM_DELEGATE_COMMON_DECL(Recipe)

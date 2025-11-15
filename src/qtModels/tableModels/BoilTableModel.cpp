@@ -30,9 +30,9 @@
 
 COLUMN_INFOS(
    BoilTableModel,
-   TABLE_MODEL_HEADER(Boil, Name            , tr("Name"         ), PropertyNames:: NamedEntity::name           ),
-   TABLE_MODEL_HEADER(Boil, PreBoilSize     , tr("Pre-Boil Size"), PropertyNames::        Boil::preBoilSize_l  ),
-   TABLE_MODEL_HEADER(Boil, NumRecipesUsedIn, tr("N° Recipes"   ), PropertyNames::NamedEntity::numRecipesUsedIn),
+   TABLE_MODEL_HEADER(Boil, Name            , PropertyNames:: NamedEntity::name           ), // "Name"
+   TABLE_MODEL_HEADER(Boil, PreBoilSize     , PropertyNames::        Boil::preBoilSize_l  ), // "Pre-Boil Size"
+   TABLE_MODEL_HEADER(Boil, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 BoilTableModel::BoilTableModel(QTableView * parent, bool editable) :
@@ -52,10 +52,6 @@ void BoilTableModel::updateTotals()                                       { retu
 
 QVariant BoilTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags BoilTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<BoilTableModel>(index, this->m_editable);
 }
 
 bool BoilTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

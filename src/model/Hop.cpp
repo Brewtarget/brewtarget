@@ -25,7 +25,7 @@
 #include <QObject>
 
 #include "database/ObjectStoreWrapper.h"
-#include "model/InventoryHop.h"
+#include "model/StockPurchaseHop.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
@@ -36,8 +36,8 @@
 #endif
 
 QString Hop::localisedName() { return tr("Hop"); }
-QString Hop::localisedName_alpha_pct         () { return tr("Alpha Acid"         ); }
-QString Hop::localisedName_beta_pct          () { return tr("Beta Acids"         ); }
+QString Hop::localisedName_alpha_pct         () { return tr("%% Alpha"           ); }
+QString Hop::localisedName_beta_pct          () { return tr("%% Beta"            ); }
 QString Hop::localisedName_bPinene_pct       () { return tr("β-Pinene"           ); }
 QString Hop::localisedName_caryophyllene_pct () { return tr("Caryophyllene"      ); }
 QString Hop::localisedName_cohumulone_pct    () { return tr("Cohumulone"         ); }
@@ -347,8 +347,8 @@ void Hop::setPinene_pct           (std::optional<double>    const   val) { SET_A
 void Hop::setPolyphenols_pct      (std::optional<double>    const   val) { SET_AND_NOTIFY(PropertyNames::Hop::polyphenols_pct      , this->m_polyphenols_pct      , this->enforceMinAndMax(val, "polyphenols_pct",       0.0, 100.0)); return; }
 void Hop::setXanthohumol_pct      (std::optional<double>    const   val) { SET_AND_NOTIFY(PropertyNames::Hop::xanthohumol_pct      , this->m_xanthohumol_pct      , this->enforceMinAndMax(val, "xanthohumol_pct",       0.0, 100.0)); return; }
 void Hop::setProducer             (QString                  const & val) { SET_AND_NOTIFY(PropertyNames::Hop::producer             , this->m_producer             , val                                                             ); return; }
-void Hop::setProductId           (QString                  const & val) { SET_AND_NOTIFY(PropertyNames::Hop::productId           , this->m_productId           , val                                                             ); return; }
-void Hop::setYear                 (QString                  const   val) { SET_AND_NOTIFY(PropertyNames::Hop::year                 , this->m_year                 , val                                                             ); return; }
+void Hop::setProductId            (QString                  const & val) { SET_AND_NOTIFY(PropertyNames::Hop::productId            , this->m_productId           , val                                                             ); return; }
+void Hop::setYear                 (QString                  const & val) { SET_AND_NOTIFY(PropertyNames::Hop::year                 , this->m_year                 , val                                                             ); return; }
 
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Hop)

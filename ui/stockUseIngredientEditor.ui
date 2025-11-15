@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version ="6.0">
+ <class>stockUseIngredientEditor</class>
+ <widget class="QDialog" name="stockUseIngredientEditor">
+  <!-- This is set in code.
+  <property name="windowTitle">
+   <string>Fermentable Stock Use Editor</string>
+  </property>
+  -->
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_date">
+       <property name="text">
+        <string>Date</string>
+       </property>
+       <property name="buddy">
+        <cstring>dateEdit_date</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QDateEdit" name="dateEdit_date">
+       <property name="displayFormat">
+        <string>dd MMM yyyy</string>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+
+     <item row="2" column="4">
+      <widget class="QLabel" name="label_reason">
+       <property name="text">
+        <string>Reason</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_reason</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="5">
+      <widget class="BtComboBoxEnum" name="comboBox_reason">
+       <property name="toolTip">
+        <string>Change type</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="4" column="1">
+      <widget class="SmartLabel" name="label_amountUsed">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>Amount</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_amountUsed</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="SmartLineEdit" name="lineEdit_amountUsed">
+       <property name="toolTip">
+        <string>Amount used</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="6" column="1">
+      <widget class="QLabel" name="label_comment">
+       <property name="text">
+        <string>Comment</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_comment</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2" colspan="4">
+      <widget class="QLineEdit" name="lineEdit_comment">
+       <property name="toolTip">
+        <string>Comment</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="8" column="1">
+      <widget class="QLabel" name="label_recipe">
+       <property name="text">
+        <string>Recipe</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2" colspan="4">
+      <widget class="QLabel" name="label_recipe_value">
+      </widget>
+     </item>
+
+     <item row="13" column="0">
+      <widget class="InfoButton" name="infoButton_id"></widget>
+     </item>
+     <item row="13" column="1">
+      <widget class="QLabel" name="label_id">
+       <property name="text">
+        <string>ID in database</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="2">
+      <widget class="QLabel" name="label_id_value">
+      </widget>
+     </item>
+     <item row="14" column="1" colspan="5">
+      <widget class="InfoText" name="infoText_id">
+       <property name="buddy">
+        <cstring>infoButton_id</cstring>
+       </property>
+       <property name="text">
+        <string>You can normally ignore this, but it's sometimes useful for debugging.</string>
+       </property>
+      </widget>
+     </item>
+
+    </layout>
+   </item>
+
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_Buttons">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <spacer name="horizontalSpacer_Buttons">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_new">
+       <property name="toolTip">
+        <string>New</string>
+       </property>
+       <property name="text">
+        <string>New</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_save">
+       <property name="toolTip">
+        <string>Save and close</string>
+       </property>
+       <property name="text">
+        <string>Save</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_cancel">
+       <property name="toolTip">
+        <string>Discard and close</string>
+       </property>
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtComboBoxEnum</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBoxEnum.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SmartLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SmartLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/SmartLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
+</ui>

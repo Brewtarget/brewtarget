@@ -18,7 +18,7 @@
 #define TABLEMODELS_FERMENTATIONSTEPTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaProperty>
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
@@ -30,8 +30,8 @@
 #include "model/FermentationStep.h"
 #include "model/Fermentation.h"
 #include "qtModels/tableModels/BtTableModel.h"
+#include "qtModels/tableModels/EnumeratedItemTableModelBase.h"
 #include "qtModels/tableModels/ItemDelegate.h"
-#include "qtModels/tableModels/StepTableModelBase.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
 // Define the columns on this table
@@ -54,11 +54,11 @@ COLUMN_NAMES(FermentationStepTableModel, Name        ,
  */
 class FermentationStepTableModel : public BtTableModel,
                                    public TableModelBase<FermentationStepTableModel, FermentationStep>,
-                                   public StepTableModelBase<FermentationStepTableModel, FermentationStep, Fermentation> {
+                                   public EnumeratedItemTableModelBase<FermentationStepTableModel, FermentationStep, Fermentation> {
    Q_OBJECT
 
    TABLE_MODEL_COMMON_DECL(FermentationStep)
-   STEP_TABLE_MODEL_COMMON_DECL(Fermentation)
+   ENUMERATED_ITEM_TABLE_MODEL_COMMON_DECL(FermentationStep, Fermentation)
 };
 
 //============================================ CLASS FermentationStepItemDelegate ==============================================
@@ -69,7 +69,7 @@ class FermentationStepTableModel : public BtTableModel,
  * \brief An item delegate for hop tables.
  * \sa FermentationStepTableModel
  */
-class FermentationStepItemDelegate : public QItemDelegate,
+class FermentationStepItemDelegate : public QStyledItemDelegate,
                                      public ItemDelegate<FermentationStepItemDelegate, FermentationStepTableModel> {
    Q_OBJECT
 

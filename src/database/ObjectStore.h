@@ -20,6 +20,11 @@
 
 #include <memory> // For PImpl
 #include <optional>
+#include <vector>
+
+#include "utils/MultiVector.h"
+
+
 
 #include <QObject>
 #include <QSqlDatabase>
@@ -82,14 +87,15 @@ public:
     *        the right conversions for us.
     */
    enum class FieldType {
-      Bool,
-      Int,
-      UInt,
+      Bool  ,
+      Int   ,
+      UInt  ,
       Double,
       String,
-      Date,
-      Enum,   // Stored as a string in the DB
-      Unit,   // Stored as a string in the DB
+      Date  ,
+      Enum  ,   // Stored as a string in the DB
+      Unit  ,   // Stored as a string in the DB
+      Money ,   // Stored as string and int in DB
    };
 
    /**
@@ -108,9 +114,9 @@ public:
 
    struct TableDefinition;
    struct TableField {
-      FieldType     const fieldType;
-      BtStringConst const columnName;   // Shouldn't ever be empty in practice
-      BtStringConst const propertyName; // Can be empty in a junction table (see below)
+      FieldType              const fieldType;
+      QVector<BtStringConst> const columnNames;   // Shouldn't ever be empty in practice
+      BtStringConst          const propertyName; // Can be empty in a junction table (see below)
       using ValueDecoder =
          std::variant<std::monostate,
                       EnumStringMapping              const *,  // FieldType::Enum
@@ -119,10 +125,10 @@ public:
       ValueDecoder valueDecoder;
 
       //! Constructor
-      TableField(FieldType     const   fieldType,
-                 char const *  const   columnName,
-                 BtStringConst const & propertyName = BtString::NULL_STR,
-                 ValueDecoder  const   valueDecoder = ValueDecoder{});
+      TableField(FieldType                            const   fieldType,
+                 std::initializer_list<BtStringConst>         columnNames,
+                 BtStringConst                        const & propertyName = BtString::NULL_STR,
+                 ValueDecoder                         const   valueDecoder = ValueDecoder{});
    };
 
    /**
@@ -131,10 +137,16 @@ public:
     */
    struct TableDefinition {
       BtStringConst tableName;
-      QVector<TableField> const tableFields;
-      //! Constructor
+      MultiVector<TableField> const tableFields;
+      /**
+       * \brief Constructor
+       *
+       * \param commonFields Used when we have several column definitions that are shared between multiple tables (eg
+       *                     InventoryFermentable, InventoryHop, etc).
+       */
       TableDefinition(char const * const tableName,
-                      std::initializer_list<TableField> const tableFields);
+                      std::initializer_list<TableField> thisTableFields,
+                      std::initializer_list<std::vector<TableField> const *> commonFields = {});
    };
 
    /**
@@ -543,6 +555,23 @@ S & operator<<(S & stream, ObjectStore::FieldType const fieldType) {
    stream << "FieldType #" << static_cast<int>(fieldType) << ": (" << ObjectStore::getDisplayName(fieldType) << ")";
    return stream;
 }
+
+template<class S>
+S & operator<<(S & stream, ObjectStore::TableField const & tableField) {
+   QString columnNames{};
+   QTextStream columnNamesStream{&columnNames};
+   bool first = true;
+   for (auto const & ii : tableField.columnNames) {
+      columnNamesStream << (first ? "" : ", ") << *ii;
+      first = false;
+   }
+
+   stream <<
+      "TableField{fieldType: " << tableField.fieldType << "; columnNames: " << columnNames << "; propertyName: " <<
+      tableField.propertyName << "}";
+   return stream;
+}
+
 
 template<class S>
 S & operator<<(S & stream, ObjectStore const & objectStore) {

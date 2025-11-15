@@ -216,6 +216,7 @@ public:
       this->derived().setAndNotify(PropertyNames::StepBase::rampTime_mins, this->m_rampTime_mins, val);
       return;
    }
+
 private:
 
    // Called from StepBase::toString.  Only a member function to allow us to use StepBase::Empty.  (Alternative was
@@ -298,6 +299,7 @@ TypeLookup const StepBase<Derived, Owner, stepBaseOptions>::typeLookup {
    // Parent class lookup
    {&EnumeratedBase<Derived, Owner>::typeLookup}
 };
+
 
 /**
  * \brief Derived classes should include this in their header file, right after Q_OBJECT.  Concrete derived classes also

@@ -44,8 +44,7 @@ AddPropertyName(unit    ) // Only quantity and unit should be used in database m
 
 /**
  * \brief Represents an amount of an ingredient.  These amounts are used in two places: in the \c RecipeAddition
- *        subclasses for the amount of an ingredient being added to a \c Recipe; and in the \c Inventory subclasses for
- *        the amount of an ingredient held in stock.
+ *        subclasses for the amount of an ingredient being added to a \c Recipe; and in the \c StockPurchase subclasses.
  *
  *        In our model, different types of ingredients are allowed to be measured in different ways:
  *
@@ -96,12 +95,12 @@ AddPropertyName(unit    ) // Only quantity and unit should be used in database m
  *        ---
  *
  *        Because this class is essentially just adding a couple of fields to its "owner" (eg \c RecipeAdditionHop,
- *        \c InventoryHop), it doesn't merit being a full-fledged \c NamedEntity with its own separate database table.
- *        Nonetheless, we do want the fields of this class to be stored in the database(!) but just as extra columns on
- *        the tables used by the "owner" classes.  And we want to be able to take advantage of utility functions such as
- *        \c NamedEntity::setAndNotify().  Using the Curiously Recurring Template (CRTP) pattern allows us to piggy-back
- *        the fields of this class onto the "owner" class at the cost of some slight ugliness/complexity in the code,
- *        which we mostly hide from the "owner" class with macros.
+ *        \c StockPurchaseHop), it doesn't merit being a full-fledged \c NamedEntity with its own separate database
+ *        table.  Nonetheless, we do want the fields of this class to be stored in the database(!) but just as extra
+ *        columns on the tables used by the "owner" classes.  And we want to be able to take advantage of utility
+ *        functions such as \c NamedEntity::setAndNotify().  Using the Curiously Recurring Template (CRTP) pattern
+ *        allows us to piggy-back the fields of this class onto the "owner" class at the cost of some slight
+ *        ugliness/complexity in the code, which we mostly hide from the "owner" class with macros.
  *
  *        ---
  *
@@ -177,6 +176,13 @@ public:
    static QString localisedName_measure     () { return Derived::tr("Measure"      ); }
    static QString localisedName_quantity    () { return Derived::tr("Quantity"     ); }
    static QString localisedName_unit        () { return Derived::tr("Unit"         ); }
+
+   /**
+    * \brief This alias makes it easy for other classes to refer to the ingredient class.  Eg, in
+    *        \c StockUseBase, we can refer to \c StockPurchaseClass::IngredientClassType and this will be
+    *        \c Fermentable for \c StockPurchaseFermentable, \c Hop for \c StockPurchaseHop, etc.
+    */
+   using IngredientClassType = IngredientClass;
 
    using ValidMeasuresType = std::remove_const_t<decltype(IngredientClass::validMeasures)>;
    using AmountType = Measurement::ConstrainedAmount<ValidMeasuresType, IngredientClass::validMeasures>;
@@ -270,10 +276,10 @@ public:
    /**
     * \brief As with \c ingredientRaw, it's the same deal for setters
     */
-   void setIngredientRaw(IngredientClass * const val) {
+   void setIngredientRaw(IngredientClass const * const val) {
       if (val) {
          this->derived().setIngredientId(val->key());
-         this->derived().setName(Derived::tr("Addition of %1").arg(val->name()));
+         this->derived().setName(Derived::instanceNameTemplate().arg(val->name()));
       } else {
          // Normally we don't want to invalidate the Ingredient on a RecipeAddition, because it doesn't buy us anything.
          qWarning() <<
@@ -352,11 +358,13 @@ TypeLookup const IngredientAmount<Derived, IngredientClass>::typeLookup {
           IngredientAmount::localisedName_ingredientId,
           TypeLookupOf<decltype(IngredientAmount<Derived, IngredientClass>::m_ingredientId)>::value
        )},
+      // NB: We want type to be Amount, not ConstrainedAmount to match Qt property and accessors, hence use of
+      // the Derived::amount function here rather than IngredientAmount::m_amount or IngredientAmount::getAmount
       {&PropertyNames::IngredientAmount::amount,
-       TypeInfo::construct<decltype(IngredientAmount<Derived, IngredientClass>::m_amount)>(
+       TypeInfo::construct<MemberFunctionReturnType_t<&Derived::amount>>(
           PropertyNames::IngredientAmount::amount,
           IngredientAmount::localisedName_amount,
-          TypeLookupOf<decltype(IngredientAmount<Derived, IngredientClass>::m_amount)>::value,
+          TypeLookupOf<MemberFunctionReturnType_t<&Derived::amount>>::value,
           IngredientClass::validMeasures,
           DisplayInfo::Precision{1}
        )},

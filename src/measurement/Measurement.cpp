@@ -51,7 +51,7 @@ namespace {
    void loadDisplayScale(Measurement::PhysicalQuantity const physicalQuantity,
                          BtStringConst const &               settingName,
                          Measurement::UnitSystem    const &  defaultUnitSystem) {
-      QString unitSystemName = PersistentSettings::value(settingName, defaultUnitSystem.uniqueName).toString();
+      QString unitSystemName = PersistentSettings::value_ck(settingName, defaultUnitSystem.uniqueName).toString();
       Measurement::UnitSystem const * unitSystem = Measurement::UnitSystem::getInstanceByUniqueName(unitSystemName);
       if (nullptr == unitSystem) {
          qWarning() <<
@@ -133,8 +133,8 @@ void Measurement::loadDisplayScales() {
 void Measurement::saveDisplayScales() {
    for (auto const & ii : Measurement::physicalQuantityStringMapping) {
       auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.key);
-      PersistentSettings::insert(Measurement::getSettingsName(physicalQuantity),
-                                 Measurement::getDisplayUnitSystem(physicalQuantity).uniqueName);
+      PersistentSettings::insert_ck(Measurement::getSettingsName(physicalQuantity),
+                                    Measurement::getDisplayUnitSystem(physicalQuantity).uniqueName);
    }
    return;
 }

@@ -539,33 +539,6 @@ message('OpenSSL Library:', openSslDependency.name(), 'found =', openSslDependen
 # Other directories to search in for headers.  Meson will barf an error if any of these directories does not exist.
 includeDirs = include_directories('src', 'third-party/valijson/include', 'third-party/libbacktrace')
 
-
-#=======================================================================================================================
-#============================================= Extra Windows dependencies ==============================================
-#=======================================================================================================================
-# .:TBD:. Don't think we need this bit any more
-if host_machine.system() == 'windows'
-   #
-   # We can't assume that the person running the code will have MSYS2/MinGW installed, so we need to include the DLLs
-   # that ship with them and get pulled in by the packaging process.  There is a bit of trial-and-error in compiling
-   # this list, but, mostly, if you miss a needed DLL from the package, Windows will give you an error message at
-   # start-up telling you which DLL(s) it needed but could not find.
-   #
-   foreach extraLib : ['gcc',
-                       'winpthread',
-                       'stdc++',
-                       'xalanMsg']
-      extraLibDependency = compiler.find_library(extraLib, required : true)
-      if extraLibDependency.found()
-#         extraLibPath = extraLibDependency.get_variable(cmake : 'LIB_ARCH_LIST')
-#         message(extraLib, ' found at', extraLibPath)
-#         sharedLibraryPaths += extraLibPath
-      else
-#         message(extraLib, ' not found')
-      endif
-   endforeach
-endif
-
 #=======================================================================================================================
 #============================================== Extra Apple dependencies ===============================================
 #=======================================================================================================================
@@ -627,8 +600,6 @@ commonSourceFiles = files([
    'src/Html.cpp',
    'src/HydrometerTool.cpp',
    'src/IbuGuSlider.cpp',
-   'src/InventoryFormatter.cpp',
-   'src/InventoryWindow.cpp',
    'src/LatestReleaseFinder.cpp',
    'src/Localization.cpp',
    'src/Logging.cpp',
@@ -647,6 +618,8 @@ commonSourceFiles = files([
    'src/RecipeFormatter.cpp',
    'src/RefractoDialog.cpp',
    'src/ScaleRecipeTool.cpp',
+   'src/StockFormatter.cpp',
+   'src/StockWindow.cpp',
    'src/StrikeWaterDialog.cpp',
    'src/StyleRangeWidget.cpp',
    'src/TimerListDialog.cpp',
@@ -686,11 +659,16 @@ commonSourceFiles = files([
    'src/editors/FermentationEditor.cpp',
    'src/editors/FermentationStepEditor.cpp',
    'src/editors/HopEditor.cpp',
-   'src/editors/InventoryFermentableEditor.cpp',
    'src/editors/MashEditor.cpp',
    'src/editors/MashStepEditor.cpp',
    'src/editors/MiscEditor.cpp',
    'src/editors/SaltEditor.cpp',
+   'src/editors/StockPurchaseFermentableEditor.cpp',
+   'src/editors/StockPurchaseHopEditor.cpp',
+   'src/editors/StockPurchaseMiscEditor.cpp',
+   'src/editors/StockPurchaseSaltEditor.cpp',
+   'src/editors/StockPurchaseYeastEditor.cpp',
+   'src/editors/StockUseIngredientEditor.cpp',
    'src/editors/StyleEditor.cpp',
    'src/editors/WaterEditor.cpp',
    'src/editors/YeastEditor.cpp',
@@ -717,12 +695,6 @@ commonSourceFiles = files([
    'src/model/Hop.cpp',
    'src/model/Ingredient.cpp',
    'src/model/Instruction.cpp',
-   'src/model/Inventory.cpp',
-   'src/model/InventoryFermentable.cpp',
-   'src/model/InventoryHop.cpp',
-   'src/model/InventoryMisc.cpp',
-   'src/model/InventorySalt.cpp',
-   'src/model/InventoryYeast.cpp',
    'src/model/Mash.cpp',
    'src/model/MashStep.cpp',
    'src/model/Misc.cpp',
@@ -741,6 +713,14 @@ commonSourceFiles = files([
    'src/model/Salt.cpp',
    'src/model/Step.cpp',
    'src/model/StepExtended.cpp',
+   'src/model/StockPurchase.cpp',
+   'src/model/StockPurchaseFermentable.cpp',
+   'src/model/StockPurchaseHop.cpp',
+   'src/model/StockPurchaseMisc.cpp',
+   'src/model/StockPurchaseSalt.cpp',
+   'src/model/StockPurchaseYeast.cpp',
+   'src/model/StockUse.cpp',
+   'src/model/StockUseIngredient.cpp',
    'src/model/Style.cpp',
    'src/model/Water.cpp',
    'src/model/Yeast.cpp',
@@ -781,6 +761,11 @@ commonSourceFiles = files([
    'src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp',
    'src/qtModels/tableModels/RecipeTableModel.cpp',
    'src/qtModels/tableModels/SaltTableModel.cpp',
+   'src/qtModels/tableModels/StockUseFermentableTableModel.cpp',
+   'src/qtModels/tableModels/StockUseHopTableModel.cpp',
+   'src/qtModels/tableModels/StockUseMiscTableModel.cpp',
+   'src/qtModels/tableModels/StockUseSaltTableModel.cpp',
+   'src/qtModels/tableModels/StockUseYeastTableModel.cpp',
    'src/qtModels/tableModels/StyleTableModel.cpp',
    'src/qtModels/tableModels/WaterTableModel.cpp',
    'src/qtModels/tableModels/YeastTableModel.cpp',
@@ -829,11 +814,15 @@ commonSourceFiles = files([
    'src/utils/TimerUtils.cpp',
    'src/utils/TypeInfo.cpp',
    'src/utils/TypeLookup.cpp',
+   'src/utils/WindowDistributor.cpp',
    'src/widgets/Animator.cpp',
    'src/widgets/BtComboBoxBool.cpp',
    'src/widgets/BtComboBoxEnum.cpp',
    'src/widgets/BtComboBoxNamedEntity.cpp',
+   'src/widgets/BtComboBoxObject.cpp',
+   'src/widgets/BtLineEditCurrency.cpp',
    'src/widgets/BtOptionalDateEdit.cpp',
+   'src/widgets/EnumeratedItemsWidget.cpp',
    'src/widgets/InfoButton.cpp',
    'src/widgets/InfoText.cpp',
    'src/widgets/SelectionControl.cpp',
@@ -844,7 +833,8 @@ commonSourceFiles = files([
    'src/widgets/SmartLabel.cpp',
    'src/widgets/SmartLineEdit.cpp',
    'src/widgets/SmartValueDisplay.cpp',
-   'src/widgets/StepsWidget.cpp',
+   'src/widgets/StockManagerIngredient.cpp',
+   'src/widgets/StockManager.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
 ])
@@ -853,8 +843,12 @@ applicationMainSourceFile = files([
    'src/main.cpp'
 ])
 
-unitTestMainSourceFile = files([
-   'src/unitTests/Testing.cpp'
+#
+# Extra files we compile for unit testing
+#
+unitTestExtraSourceFiles = files([
+   'src/unitTests/Testing.cpp',
+   'src/unitTests/TestMultiVector.cpp'
 ])
 
 #
@@ -862,7 +856,7 @@ unitTestMainSourceFile = files([
 # headers in the project.  Also, note that there is a separate (trivial) list of MOC headers for the unit test runner.
 #
 # You can recreate the body of this list by running the following from the bash prompt in the mbuild directory:
-#    grep -rl '^ *Q_OBJECT' ../src | grep -v Testing.h | LC_ALL=C sort | sed "s+^../src/+   \'src/+; s/$/\',/"
+#    grep -rl '^ *Q_OBJECT' ../src | grep -v src/unitTests/ | LC_ALL=C sort | sed "s+^../src/+   \'src/+; s/$/\',/"
 #
 # (See https://stackoverflow.com/questions/68319427/bash-sort-command-do-not-treat-dots for why LC_ALL=C is needed!)
 #
@@ -882,7 +876,6 @@ mocHeaders = files([
    'src/HelpDialog.h',
    'src/HydrometerTool.h',
    'src/IbuGuSlider.h',
-   'src/InventoryWindow.h',
    'src/LatestReleaseFinder.h',
    'src/MainWindow.h',
    'src/MashDesigner.h',
@@ -897,6 +890,7 @@ mocHeaders = files([
    'src/RecipeFormatter.h',
    'src/RefractoDialog.h',
    'src/ScaleRecipeTool.h',
+   'src/StockWindow.h',
    'src/StrikeWaterDialog.h',
    'src/StyleRangeWidget.h',
    'src/TimerListDialog.h',
@@ -930,11 +924,16 @@ mocHeaders = files([
    'src/editors/FermentationEditor.h',
    'src/editors/FermentationStepEditor.h',
    'src/editors/HopEditor.h',
-   'src/editors/InventoryFermentableEditor.h',
    'src/editors/MashEditor.h',
    'src/editors/MashStepEditor.h',
    'src/editors/MiscEditor.h',
    'src/editors/SaltEditor.h',
+   'src/editors/StockPurchaseFermentableEditor.h',
+   'src/editors/StockPurchaseHopEditor.h',
+   'src/editors/StockPurchaseMiscEditor.h',
+   'src/editors/StockPurchaseSaltEditor.h',
+   'src/editors/StockPurchaseYeastEditor.h',
+   'src/editors/StockUseIngredientEditor.h',
    'src/editors/StyleEditor.h',
    'src/editors/WaterEditor.h',
    'src/editors/YeastEditor.h',
@@ -949,12 +948,6 @@ mocHeaders = files([
    'src/model/Hop.h',
    'src/model/Ingredient.h',
    'src/model/Instruction.h',
-   'src/model/Inventory.h',
-   'src/model/InventoryFermentable.h',
-   'src/model/InventoryHop.h',
-   'src/model/InventoryMisc.h',
-   'src/model/InventorySalt.h',
-   'src/model/InventoryYeast.h',
    'src/model/Mash.h',
    'src/model/MashStep.h',
    'src/model/Misc.h',
@@ -972,6 +965,14 @@ mocHeaders = files([
    'src/model/Salt.h',
    'src/model/Step.h',
    'src/model/StepExtended.h',
+   'src/model/StockPurchase.h',
+   'src/model/StockPurchaseFermentable.h',
+   'src/model/StockPurchaseHop.h',
+   'src/model/StockPurchaseMisc.h',
+   'src/model/StockPurchaseSalt.h',
+   'src/model/StockPurchaseYeast.h',
+   'src/model/StockUse.h',
+   'src/model/StockUseIngredient.h',
    'src/model/Style.h',
    'src/model/Water.h',
    'src/model/Yeast.h',
@@ -1000,12 +1001,12 @@ mocHeaders = files([
    'src/qtModels/sortFilterProxyModels/HopSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/MashSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/MiscSortFilterProxyModel.h',
-   'src/qtModels/sortFilterProxyModels/RecipeSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/RecipeAdditionFermentableSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/RecipeAdjustmentSaltSortFilterProxyModel.h',
+   'src/qtModels/sortFilterProxyModels/RecipeSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h',
@@ -1028,6 +1029,11 @@ mocHeaders = files([
    'src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.h',
    'src/qtModels/tableModels/RecipeTableModel.h',
    'src/qtModels/tableModels/SaltTableModel.h',
+   'src/qtModels/tableModels/StockUseFermentableTableModel.h',
+   'src/qtModels/tableModels/StockUseHopTableModel.h',
+   'src/qtModels/tableModels/StockUseMiscTableModel.h',
+   'src/qtModels/tableModels/StockUseSaltTableModel.h',
+   'src/qtModels/tableModels/StockUseYeastTableModel.h',
    'src/qtModels/tableModels/StyleTableModel.h',
    'src/qtModels/tableModels/WaterTableModel.h',
    'src/qtModels/tableModels/YeastTableModel.h',
@@ -1042,7 +1048,10 @@ mocHeaders = files([
    'src/widgets/BtComboBoxBool.h',
    'src/widgets/BtComboBoxEnum.h',
    'src/widgets/BtComboBoxNamedEntity.h',
+   'src/widgets/BtComboBoxObject.h',
+   'src/widgets/BtLineEditCurrency.h',
    'src/widgets/BtOptionalDateEdit.h',
+   'src/widgets/EnumeratedItemsWidget.h',
    'src/widgets/InfoButton.h',
    'src/widgets/InfoText.h',
    'src/widgets/SelectionControl.h',
@@ -1050,7 +1059,7 @@ mocHeaders = files([
    'src/widgets/SmartLabel.h',
    'src/widgets/SmartLineEdit.h',
    'src/widgets/SmartValueDisplay.h',
-   'src/widgets/StepsWidget.h',
+   'src/widgets/StockManagerIngredient.h',
    'src/widgets/ToggleSwitch.h',
 ])
 
@@ -1076,8 +1085,6 @@ uiFiles = files([
    'ui/fermentationEditor.ui',
    'ui/fermentationStepEditor.ui',
    'ui/hopEditor.ui',
-   'ui/inventoryFermentableEditor.ui',
-   'ui/inventoryWindow.ui',
    'ui/mainWindow.ui',
    'ui/mashDesigner.ui',
    'ui/mashEditor.ui',
@@ -1091,14 +1098,16 @@ uiFiles = files([
    'ui/recipeExtrasWidget.ui',
    'ui/refractoDialog.ui',
    'ui/saltEditor.ui',
+   'ui/stockPurchaseIngredientEditor.ui',
+   'ui/stockUseIngredientEditor.ui',
    'ui/strikeWaterDialog.ui',
    'ui/styleEditor.ui',
    'ui/timerDialog.ui',
    'ui/timerListDialog.ui',
    'ui/timerMainDialog.ui',
    'ui/timerWidget.ui',
-   'ui/waterProfileAdjustmentTool.ui',
    'ui/waterEditor.ui',
+   'ui/waterProfileAdjustmentTool.ui',
    'ui/yeastEditor.ui',
 ])
 
@@ -1633,6 +1642,9 @@ if compiler.get_id() == 'gcc'
    # -fconcepts  Is needed on older versions of GCC to enable C++20 concepts (because specifying C++20 was not enough
    #             for some reason).
    #
+   # -fconcepts-diagnostics-depth  This needs to be set to 2 or higher to give more detailed diagnostics if there is a
+   #                               compile-time error (eg from `static_assert(std::random_access_iterator<iterator>)`).
+   #
    # The following are, according to some comments at
    # https://stackoverflow.com/questions/52583544/boost-stack-trace-not-showing-function-names-and-line-numbers, needed
    # for Boost stacktrace to work properly:
@@ -1648,7 +1660,8 @@ if compiler.get_id() == 'gcc'
    add_global_arguments(['-g3',
                          '-O2',
                          '-z', 'noexecstack', # NB Not '-z noexecstack' as otherwise will be passed to gcc in quotes!
-                         '-fconcepts'
+                         '-fconcepts',
+                         '-fconcepts-diagnostics-depth=2'
                          ], language : 'cpp')
    if host_machine.system() == 'windows'
       add_global_arguments     (['-no-pie', '-fno-pie'], language : 'cpp')
@@ -1728,7 +1741,7 @@ mainExecutable = executable(mainExecutableTargetName,
                             win_subsystem : 'windows')
 
 testRunner = executable(testRunnerTargetName,
-                        unitTestMainSourceFile,
+                        unitTestExtraSourceFiles,
                         generatedFromQrc,
                         generatedFromMocForUnitTests,
                         include_directories : includeDirs,
@@ -1739,17 +1752,18 @@ testRunner = executable(testRunnerTargetName,
 #=======================================================================================================================
 #===================================================== Unit Tests ======================================================
 #=======================================================================================================================
-test('Test integer sizes',                   testRunner, args : ['pstdintTest'])
-test('Test recipe calculations - all grain', testRunner, args : ['recipeCalcTest_allGrain'])
-test('Test post boil loss OG',               testRunner, args : ['postBoilLossOgTest'])
-test('Test unit conversions',                testRunner, args : ['testUnitConversions'])
-test('Test NamedParameterBundle',            testRunner, args : ['testNamedParameterBundle'])
-test('Test number display and parsing',      testRunner, args : ['testNumberDisplayAndParsing'])
-test('Test algorithms',                      testRunner, args : ['testAlgorithms'])
-test('Test type lookups',                    testRunner, args : ['testTypeLookups'])
-test('Test inventory',                       testRunner, args : ['testInventory'])
+test('Test integer sizes'                  , testRunner, args : ['pstdintTest'                ])
+test('Test recipe calculations - all grain', testRunner, args : ['recipeCalcTest_allGrain'    ])
+test('Test post boil loss OG'              , testRunner, args : ['postBoilLossOgTest'         ])
+test('Test unit conversions'               , testRunner, args : ['testUnitConversions'        ])
+test('Test NamedParameterBundle'           , testRunner, args : ['testNamedParameterBundle'   ])
+test('Test number display and parsing'     , testRunner, args : ['testNumberDisplayAndParsing'])
+test('Test algorithms'                     , testRunner, args : ['testAlgorithms'             ])
+test('Test type lookups'                   , testRunner, args : ['testTypeLookups'            ])
+test('Test inventory'                      , testRunner, args : ['testInventory'              ])
+test('Test MultiVector'                    , testRunner, args : ['testMultiVector'            ])
 # Need a bit longer than the default 30 second timeout for the log rotation test on some platforms
-test('Test log rotation',                    testRunner, args : ['testLogRotation'], timeout : 60)
+test('Test log rotation'                   , testRunner, args : ['testLogRotation'            ], timeout : 60)
 
 #===
 

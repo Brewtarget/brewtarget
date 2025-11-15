@@ -62,6 +62,7 @@
 #include "model/RecipeAdditionFermentable.h"
 #include "model/RecipeAdditionHop.h"
 #include "PersistentSettings.h"
+#include "unitTests/TestMultiVector.h"
 #include "utils/ErrorCodeToStream.h"
 #include "utils/FileSystemHelpers.h"
 
@@ -439,9 +440,9 @@ void Testing::initTestCase() {
 
       // Setting French locale below forces ',' as decimal separator and '.' as thousands separator.  Hopefully this
       // helps catch cases where we incorrectly assume locale 'C' etc.
-      PersistentSettings::insert(PersistentSettings::Names::color_formula, "morey"  );
-      PersistentSettings::insert(PersistentSettings::Names::ibu_formula  , "tinseth");
-      PersistentSettings::insert(PersistentSettings::Names::forcedLocale , "fr_FR"  );
+      PersistentSettings::insert_ck(PersistentSettings::Names::color_formula, "morey"  );
+      PersistentSettings::insert_ck(PersistentSettings::Names::ibu_formula  , "tinseth");
+      PersistentSettings::insert_ck(PersistentSettings::Names::forcedLocale , "fr_FR"  );
 
       // Tell the application not to require any "user" input on starting
       Application::setInteractive(false);
@@ -836,6 +837,13 @@ void Testing::testTypeLookups() {
             "PropertyNames::Fermentable::grainGroup not optional enum");
    return;
 }
+
+void Testing::testMultiVector() {
+   UnitTests::doTestsForMultiVector();
+   return;
+}
+
+
 void Testing::testLogRotation() {
    qDebug() << Q_FUNC_INFO << "Logging to" << Logging::getDirectory();
 

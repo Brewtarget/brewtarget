@@ -137,7 +137,7 @@ void TreeView::keyPressEvent(QKeyEvent * event) {
 }
 
 void TreeView::rowsInserted(QModelIndex const & parent, int start, int end) {
-   qDebug() << Q_FUNC_INFO << "Rows" << start << "-" << end << "added to" << parent;
+   qDebug() << Q_FUNC_INFO << "Rows" << start << "-" << end << "added to" << parent << "=" << this->treeNode(parent);
    this->QTreeView::rowsInserted(parent, start, end);
    return;
 }

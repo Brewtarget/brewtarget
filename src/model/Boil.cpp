@@ -30,11 +30,11 @@
    #include "moc_Boil.cpp"
 #endif
 
-QString Boil::localisedName              () { return tr("Boil"         ); }
-QString Boil::localisedName_description  () { return tr("Description"  ); };
-QString Boil::localisedName_notes        () { return tr("Notes"        ); };
-QString Boil::localisedName_preBoilSize_l() { return tr("Pre-Boil Size"); };
-QString Boil::localisedName_boilTime_mins() { return tr("Boil Time"    ); };
+QString Boil::localisedName              () { return tr("Boil"           ); }
+QString Boil::localisedName_description  () { return tr("Description"    ); };
+QString Boil::localisedName_notes        () { return tr("Notes"          ); };
+QString Boil::localisedName_preBoilSize_l() { return tr("Pre-Boil Size"  ); };
+QString Boil::localisedName_boilTime_mins() { return tr("Time At Boiling"); }; // aka "Boil Time"
 
 bool Boil::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
@@ -161,9 +161,8 @@ void Boil::setBoilTime_mins(double const val) {
    return;
 }
 
-void Boil::acceptStepChange(QMetaProperty prop, QVariant val) {
-   // TBD I don't think anything listens for changes to boilTime_mins
-   this->doAcceptStepChange(this->sender(), prop, val, {&PropertyNames::Boil::boilTime_mins});
+void Boil::acceptSetMemberChange(QMetaProperty prop, QVariant val) {
+   this->doAcceptSetMemberChange(this->sender(), prop, val);
    return;
 }
 

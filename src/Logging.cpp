@@ -313,8 +313,8 @@ QVector<Logging::LevelDetail> const Logging::levelDetails{
 
 QString Logging::getStringFromLogLevel(const Logging::Level level) {
    auto match = std::find_if(Logging::levelDetails.begin(),
-                              Logging::levelDetails.end(),
-                              [level](LevelDetail ld) {return ld.level == level;});
+                             Logging::levelDetails.end(),
+                             [level](LevelDetail ld) {return ld.level == level;});
    // It's a coding error if we couldn't find the level
    Q_ASSERT(match != Logging::levelDetails.end());
 
@@ -337,7 +337,7 @@ Logging::Level Logging::getLogLevel() {
 
 void Logging::setLogLevel(Level newLevel) {
    currentLoggingLevel = newLevel;
-   PersistentSettings::insert(PersistentSettings::Names::LoggingLevel, Logging::getStringFromLogLevel(currentLoggingLevel));
+   PersistentSettings::insert_ck(PersistentSettings::Names::LoggingLevel, Logging::getStringFromLogLevel(currentLoggingLevel));
    return;
 }
 
@@ -359,10 +359,10 @@ bool Logging::initializeLogging() {
    // We _really_ need to see problems with opening the log file on stderr!
    TemporarilyForceStderrLogging temporarilyForceStderrLogging;
 
-   currentLoggingLevel = Logging::getLogLevelFromString(PersistentSettings::value(PersistentSettings::Names::LoggingLevel, "INFO").toString());
+   currentLoggingLevel = Logging::getLogLevelFromString(PersistentSettings::value_ck(PersistentSettings::Names::LoggingLevel, "INFO").toString());
    Logging::setDirectory(
-      PersistentSettings::contains(PersistentSettings::Names::LogDirectory) ?
-         std::optional<QDir>(PersistentSettings::value(PersistentSettings::Names::LogDirectory).toString()) : std::optional<QDir>(std::nullopt)
+      PersistentSettings::contains_ck(PersistentSettings::Names::LogDirectory) ?
+         std::optional<QDir>(PersistentSettings::value_ck(PersistentSettings::Names::LogDirectory).toString()) : std::optional<QDir>(std::nullopt)
    );
 
    qInstallMessageHandler(logMessageHandler);
@@ -430,7 +430,7 @@ bool Logging::setDirectory(std::optional<QDir> newDirectory, Logging::PersistNew
 
    // At this point, enough has succeeded that we're OK to commit to using the new directory
    if (persistNewDirectory == Logging::NewDirectoryIsPermanent) {
-      PersistentSettings::insert(PersistentSettings::Names::LogDirectory, logDirectory.absolutePath());
+      PersistentSettings::insert_ck(PersistentSettings::Names::LogDirectory, logDirectory.absolutePath());
    }
 
    //

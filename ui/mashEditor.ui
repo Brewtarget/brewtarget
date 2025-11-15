@@ -66,7 +66,7 @@
        </item>
 
        <item row="8" column="1" colspan="5">
-         <widget class="MashStepsWidget" name="stepsWidget">
+         <widget class="MashStepsWidget" name="enumeratedItemsWidget">
          </widget>
        </item>
 
@@ -419,7 +419,7 @@
   <customwidget>
    <class>MashStepsWidget</class>
    <extends>QWidget</extends>
-   <header>widgets/StepsWidget.h</header>
+   <header>widgets/EnumeratedItemsWidget.h</header>
   </customwidget>
 
  </customwidgets>

@@ -27,7 +27,7 @@
 #include <QStandardPaths>
 #include <QTextBrowser>
 
-#include "InventoryFormatter.h"
+#include "StockFormatter.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -343,13 +343,13 @@ void PrintAndPreviewDialog::updatePreview() {
             pDoc += brewDayFormatter->buildHtml();
          }
       } else if (verticalTabWidget->currentIndex() == 1) {
-         InventoryFormatter::HtmlGenerationFlags flags;
-         if (checkBox_inventoryFermentables->isChecked()) { flags |= InventoryFormatter::HtmlGenerationFlag::FERMENTABLES ; }
-         if (checkBox_inventoryHops->isChecked()        ) { flags |= InventoryFormatter::HtmlGenerationFlag::HOPS         ; }
-         if (checkBox_inventoryYeast->isChecked()       ) { flags |= InventoryFormatter::HtmlGenerationFlag::YEAST        ; }
-         if (checkBox_inventoryMicellaneous->isChecked()) { flags |= InventoryFormatter::HtmlGenerationFlag::MISCELLANEOUS; }
+         StockFormatter::HtmlGenerationFlags flags;
+         if (checkBox_inventoryFermentables->isChecked()) { flags |= StockFormatter::HtmlGenerationFlag::FERMENTABLES ; }
+         if (checkBox_inventoryHops->isChecked()        ) { flags |= StockFormatter::HtmlGenerationFlag::HOPS         ; }
+         if (checkBox_inventoryYeast->isChecked()       ) { flags |= StockFormatter::HtmlGenerationFlag::YEAST        ; }
+         if (checkBox_inventoryMicellaneous->isChecked()) { flags |= StockFormatter::HtmlGenerationFlag::MISCELLANEOUS; }
 
-         pDoc = InventoryFormatter::createInventoryHtml(flags);
+         pDoc = StockFormatter::createStockHtml(flags);
       }
       // adding the generated HTML to the QTexBrowser.
       htmlDocument->setHtml(pDoc);
@@ -514,13 +514,13 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer) {
 
       hDoc += recipeFormatter->buildHtmlFooter();
    } else if (verticalTabWidget->currentIndex() == 1) {
-      InventoryFormatter::HtmlGenerationFlags flags;
-      if (checkBox_inventoryFermentables->isChecked()) { flags |= InventoryFormatter::HtmlGenerationFlag::FERMENTABLES ; }
-      if (checkBox_inventoryHops->isChecked()        ) { flags |= InventoryFormatter::HtmlGenerationFlag::HOPS         ; }
-      if (checkBox_inventoryYeast->isChecked()       ) { flags |= InventoryFormatter::HtmlGenerationFlag::YEAST        ; }
-      if (checkBox_inventoryMicellaneous->isChecked()) { flags |= InventoryFormatter::HtmlGenerationFlag::MISCELLANEOUS; }
+      StockFormatter::HtmlGenerationFlags flags;
+      if (checkBox_inventoryFermentables->isChecked()) { flags |= StockFormatter::HtmlGenerationFlag::FERMENTABLES ; }
+      if (checkBox_inventoryHops->isChecked()        ) { flags |= StockFormatter::HtmlGenerationFlag::HOPS         ; }
+      if (checkBox_inventoryYeast->isChecked()       ) { flags |= StockFormatter::HtmlGenerationFlag::YEAST        ; }
+      if (checkBox_inventoryMicellaneous->isChecked()) { flags |= StockFormatter::HtmlGenerationFlag::MISCELLANEOUS; }
 
-      hDoc += InventoryFormatter::createInventoryHtml(flags);
+      hDoc += StockFormatter::createStockHtml(flags);
    }
 
    // Render the page onto the painter/printer for preview/printing.

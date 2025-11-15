@@ -134,11 +134,11 @@ public:
    void setTertiary (std::shared_ptr<FermentationStep> val);
 
 public slots:
-   void acceptStepChange(QMetaProperty, QVariant);
+   void acceptSetMemberChange(QMetaProperty, QVariant);
 
 signals:
    //! Emitted when the number of steps change, or when you should call fermentationSteps() again.
-   void stepsChanged();
+   void ownedItemsChanged();
 
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;

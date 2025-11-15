@@ -25,6 +25,7 @@
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::OwnedByRecipe { inline BtStringConst const property{#property}; }
+AddPropertyName(recipe  )
 AddPropertyName(recipeId)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -41,6 +42,7 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
+   static QString localisedName_recipe  ();
    static QString localisedName_recipeId();
 
    /**
@@ -55,7 +57,9 @@ public:
 
    virtual ~OwnedByRecipe();
 
-   Q_PROPERTY(int recipeId   READ recipeId   WRITE setRecipeId   STORED false)
+   //=================================================== PROPERTIES ====================================================
+   Q_PROPERTY(int                     recipeId   READ recipeId   WRITE setRecipeId)
+   Q_PROPERTY(std::shared_ptr<Recipe> recipe     READ recipe     /*WRITE setRecipe*/  )
 
    void setRecipeId(int const val);
    void setRecipe(Recipe * recipe);

@@ -40,7 +40,8 @@
 #include "model/Fermentable.h"
 #include "model/Folder.h"
 #include "model/Hop.h"
-#include "model/InventoryFermentable.h"
+#include "model/StockPurchaseFermentable.h"
+#include "model/StockUseIngredient.h"
 #include "model/Misc.h"
 #include "model/Recipe.h"
 #include "model/Style.h"
@@ -163,132 +164,241 @@ bool TreeNode::showMe() const {
 
 COLUMN_INFOS(
    TreeItemNode<Recipe>,
-   TREE_NODE_HEADER(TreeItemNode, Recipe, Name             , tr("Name"     ), PropertyNames::NamedEntity::name        ),
-   TREE_NODE_HEADER(TreeItemNode, Recipe, NumberOfAncestors, tr("Snapshots"), PropertyNames::Recipe     ::numAncestors),
-   TREE_NODE_HEADER(TreeItemNode, Recipe, BrewDate         , tr("Date"     ), PropertyNames::Recipe     ::date        ),
-   TREE_NODE_HEADER(TreeItemNode, Recipe, Style            , tr("Style"    ), {PropertyNames::Recipe::style,
-                                                                               PropertyNames::NamedEntity::name}      ),
+   TREE_NODE_HEADER(TreeItemNode, Recipe, Name             , PropertyNames::NamedEntity::name        ), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, Recipe, NumberOfAncestors, PropertyNames::Recipe     ::numAncestors), // "Snapshots"
+   TREE_NODE_HEADER(TreeItemNode, Recipe, BrewDate         , PropertyNames::Recipe     ::date        ), // "Date"
+   TREE_NODE_HEADER(TreeItemNode, Recipe, Style            , PropertyPath{{PropertyNames::Recipe::style,             // "Style"
+                                                                           PropertyNames::NamedEntity::name}, 0} ),
 )
 
 COLUMN_INFOS(
    TreeItemNode<BrewNote>,
-   TREE_NODE_HEADER(TreeItemNode, BrewNote, BrewDate, tr("Date"), PropertyNames::BrewNote::brewDate),
+   TREE_NODE_HEADER(TreeItemNode, BrewNote, BrewDate, PropertyNames::BrewNote::brewDate), // "Date"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Equipment>,
-   TREE_NODE_HEADER(TreeItemNode, Equipment, Name        , tr("Name"      ), PropertyNames::NamedEntity::name              ),
-   TREE_NODE_HEADER(TreeItemNode, Equipment, BoilSize    , tr("Boil Size" ), PropertyNames::Equipment::kettleBoilSize_l    ),
-   TREE_NODE_HEADER(TreeItemNode, Equipment, BatchSize   , tr("Batch Size"), PropertyNames::Equipment::fermenterBatchSize_l),
+   TREE_NODE_HEADER(TreeItemNode, Equipment, Name     , PropertyNames::NamedEntity::name              ), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, Equipment, BoilSize , PropertyNames::Equipment::kettleBoilSize_l    ), // "Boil Size"
+   TREE_NODE_HEADER(TreeItemNode, Equipment, BatchSize, PropertyNames::Equipment::fermenterBatchSize_l), // "Batch Size"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Mash>,
-   TREE_NODE_HEADER(TreeItemNode, Mash, Name      , tr("Name"       ), PropertyNames::NamedEntity::name     ),
-   TREE_NODE_HEADER(TreeItemNode, Mash, TotalWater, tr("Total Water"), PropertyNames::Mash::totalMashWater_l),
-   TREE_NODE_HEADER(TreeItemNode, Mash, TotalTime , tr("Total Time" ), PropertyNames::Mash::totalTime_mins  ),
+   TREE_NODE_HEADER(TreeItemNode, Mash, Name      , PropertyNames::NamedEntity::name     ), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, Mash, TotalWater, PropertyNames::Mash::totalMashWater_l), // "Total Water"
+   TREE_NODE_HEADER(TreeItemNode, Mash, TotalTime , PropertyNames::Mash::totalTime_mins  ), // "Total Time"
 )
 
 COLUMN_INFOS(
    TreeItemNode<MashStep>,
-   TREE_NODE_HEADER(TreeItemNode, MashStep, Name    , tr("Name"     ), PropertyNames::NamedEntity::name      ),
-   TREE_NODE_HEADER(TreeItemNode, MashStep, Volume  , tr("Volume"   ), PropertyNames::MashStep::amount_l     ),
-   TREE_NODE_HEADER(TreeItemNode, MashStep, StepTime, tr("Step Time"), PropertyNames::StepBase::stepTime_mins),
+   TREE_NODE_HEADER(TreeItemNode, MashStep, Name    , PropertyNames::NamedEntity::name      ), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, MashStep, Volume  , PropertyNames::MashStep::amount_l     ), // "Volume"
+   TREE_NODE_HEADER(TreeItemNode, MashStep, StepTime, PropertyNames::StepBase::stepTime_mins), // "Step Time"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Boil>,
-   TREE_NODE_HEADER(TreeItemNode, Boil, Name              , tr("Name"           ), PropertyNames::NamedEntity::name  ),
-   TREE_NODE_HEADER(TreeItemNode, Boil, PreBoilSize       , tr("Pre-Boil Size"  ), PropertyNames::Boil::preBoilSize_l),
-   TREE_NODE_HEADER(TreeItemNode, Boil, LengthOfBoilProper, tr("Time At Boiling"), PropertyNames::Boil::boilTime_mins),
+   TREE_NODE_HEADER(TreeItemNode, Boil, Name              , PropertyNames::NamedEntity::name  ), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, Boil, PreBoilSize       , PropertyNames::Boil::preBoilSize_l), // "Pre-Boil Size"
+   TREE_NODE_HEADER(TreeItemNode, Boil, LengthOfBoilProper, PropertyNames::Boil::boilTime_mins), // "Time At Boiling"
 )
 
 COLUMN_INFOS(
    TreeItemNode<BoilStep>,
-   TREE_NODE_HEADER(TreeItemNode, BoilStep, Name    , tr("Name"     ), PropertyNames::NamedEntity::name      ),
-   TREE_NODE_HEADER(TreeItemNode, BoilStep, StepTime, tr("Step Time"), PropertyNames::StepBase::stepTime_mins),
+   TREE_NODE_HEADER(TreeItemNode, BoilStep, Name    , PropertyNames::NamedEntity::name      ), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, BoilStep, StepTime, PropertyNames::StepBase::stepTime_mins), // "Step Time"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Fermentation>,
-   TREE_NODE_HEADER(TreeItemNode, Fermentation, Name       , tr("Name"       ), PropertyNames::NamedEntity::name        ),
-   TREE_NODE_HEADER(TreeItemNode, Fermentation, Description, tr("Description"), PropertyNames::Fermentation::description),
+   TREE_NODE_HEADER(TreeItemNode, Fermentation, Name       , PropertyNames::NamedEntity::name        ),
+   TREE_NODE_HEADER(TreeItemNode, Fermentation, Description, PropertyNames::Fermentation::description),
 )
 
 COLUMN_INFOS(
    TreeItemNode<FermentationStep>,
-   TREE_NODE_HEADER(TreeItemNode, FermentationStep, Name    , tr("Name"     ), PropertyNames::NamedEntity::name      ),
-   TREE_NODE_HEADER(TreeItemNode, FermentationStep, StepTime, tr("Step Time"), PropertyNames::StepBase::stepTime_days), // NB Days not Mins for fermentation steps
+   TREE_NODE_HEADER(TreeItemNode, FermentationStep, Name    , PropertyNames::NamedEntity::name      ),
+   TREE_NODE_HEADER(TreeItemNode, FermentationStep, StepTime, PropertyNames::StepBase::stepTime_days), // NB Days not Mins for fermentation steps
 )
 
 COLUMN_INFOS(
    TreeItemNode<Fermentable>,
-   TREE_NODE_HEADER(TreeItemNode, Fermentable, Name , tr("Name" ), PropertyNames::NamedEntity::name     ),
-   TREE_NODE_HEADER(TreeItemNode, Fermentable, Type , tr("Type" ), PropertyNames::Fermentable::type     ),
-   TREE_NODE_HEADER(TreeItemNode, Fermentable, Color, tr("Color"), PropertyNames::Fermentable::color_srm),
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Name , PropertyNames::NamedEntity::name     ), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Type , PropertyNames::Fermentable::type     ), // "Type"
+   TREE_NODE_HEADER(TreeItemNode, Fermentable, Color, PropertyNames::Fermentable::color_srm), // "Color"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Hop>,
-   TREE_NODE_HEADER(TreeItemNode, Hop, Name    , tr("Name"   ), PropertyNames::NamedEntity::name),
-   TREE_NODE_HEADER(TreeItemNode, Hop, Form    , tr("Type"   ), PropertyNames::Hop::form        ),
-   TREE_NODE_HEADER(TreeItemNode, Hop, AlphaPct, tr("% Alpha"), PropertyNames::Hop::alpha_pct   ),
-   TREE_NODE_HEADER(TreeItemNode, Hop, Origin  , tr("Origin" ), PropertyNames::Hop::origin      ),
+   TREE_NODE_HEADER(TreeItemNode, Hop, Name    , PropertyNames::NamedEntity::name), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, Hop, Form    , PropertyNames::Hop::form        ), // "Type"
+   TREE_NODE_HEADER(TreeItemNode, Hop, AlphaPct, PropertyNames::Hop::alpha_pct   ), // "% Alpha"
+   TREE_NODE_HEADER(TreeItemNode, Hop, Origin  , PropertyNames::Hop::origin      ), // "Origin"
 )
 
 COLUMN_INFOS(
-   TreeItemNode<InventoryFermentable>,
-   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, Name    , tr("Name"   ), {PropertyNames::InventoryFermentable::fermentable,
-                                                                                  PropertyNames::NamedEntity::name}       ),
-   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, DateOrdered    , tr("Date Ordered"    ), PropertyNames::Inventory::dateOrdered),
-   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, Type           , tr("Type"            ), {PropertyNames::InventoryFermentable::fermentable,
-                                                                                                  PropertyNames::Fermentable::type}),
-   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, AmountReceived , tr("Amount Received" ), PropertyNames::InventoryBase::amountReceived ),
-   TREE_NODE_HEADER(TreeItemNode, InventoryFermentable, AmountRemaining, tr("Amount Remaining"), PropertyNames::InventoryBase::amountRemaining),
+   TreeItemNode<StockPurchaseFermentable>,
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, Name           , PropertyPath{{PropertyNames::StockPurchaseFermentable::fermentable,
+                                                                                           PropertyNames::NamedEntity::name}, 1}),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, Supplier       , PropertyNames::StockPurchase::supplier    ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, DateReceived   , PropertyNames::StockPurchase::dateReceived),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, Note           , PropertyNames::StockPurchase::note        ),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<StockUseFermentable>,
+   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Reason         , PropertyNames::StockUse::reason),
+   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Date           , PropertyNames::StockUse::date  ),
+   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Comment        , PropertyNames::StockUse::comment),
+   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
+                                                                                      PropertyNames::OwnedByRecipe::recipe,
+                                                                                      PropertyNames::NamedEntity::name}, 1}),
+   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
+   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<StockPurchaseHop>,
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, Name           , PropertyPath{{PropertyNames::StockPurchaseHop::hop,
+                                                                                   PropertyNames::NamedEntity::name}, 1}),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, Supplier       , PropertyNames::StockPurchase::supplier    ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, DateReceived   , PropertyNames::StockPurchase::dateReceived),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, Note           , PropertyNames::StockPurchase::note        ),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<StockUseHop>,
+   TREE_NODE_HEADER(TreeItemNode, StockUseHop, Reason         , PropertyNames::StockUse::reason),
+   TREE_NODE_HEADER(TreeItemNode, StockUseHop, Date           , PropertyNames::StockUse::date  ),
+   TREE_NODE_HEADER(TreeItemNode, StockUseHop, Comment        , PropertyNames::StockUse::comment),
+   TREE_NODE_HEADER(TreeItemNode, StockUseHop, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
+                                                                              PropertyNames::OwnedByRecipe::recipe,
+                                                                              PropertyNames::NamedEntity::name}, 1}),
+   TREE_NODE_HEADER(TreeItemNode, StockUseHop, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
+   TREE_NODE_HEADER(TreeItemNode, StockUseHop, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<StockPurchaseMisc>,
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, Name           , PropertyPath{{PropertyNames::StockPurchaseMisc::misc,
+                                                                                    PropertyNames::NamedEntity::name}, 1}),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, Supplier       , PropertyNames::StockPurchase::supplier    ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, DateReceived   , PropertyNames::StockPurchase::dateReceived),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, Note           , PropertyNames::StockPurchase::note        ),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<StockUseMisc>,
+   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Reason         , PropertyNames::StockUse::reason),
+   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Date           , PropertyNames::StockUse::date  ),
+   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Comment        , PropertyNames::StockUse::comment),
+   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
+                                                                               PropertyNames::OwnedByRecipe::recipe,
+                                                                               PropertyNames::NamedEntity::name}, 1}),
+   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
+   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<StockPurchaseSalt>,
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, Name           , PropertyPath{{PropertyNames::StockPurchaseSalt::salt,
+                                                                                    PropertyNames::NamedEntity::name}, 1}),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, Supplier       , PropertyNames::StockPurchase::supplier    ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, DateReceived   , PropertyNames::StockPurchase::dateReceived),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, Note           , PropertyNames::StockPurchase::note        ),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<StockUseSalt>,
+   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Reason         , PropertyNames::StockUse::reason),
+   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Date           , PropertyNames::StockUse::date  ),
+   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Comment        , PropertyNames::StockUse::comment),
+   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
+                                                                               PropertyNames::OwnedByRecipe::recipe,
+                                                                               PropertyNames::NamedEntity::name}, 1}),
+   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
+   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<StockPurchaseYeast>,
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, Name           , PropertyPath{{PropertyNames::StockPurchaseYeast::yeast,
+                                                                                     PropertyNames::NamedEntity::name}, 1}),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, Supplier       , PropertyNames::StockPurchase::supplier    ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, DateReceived   , PropertyNames::StockPurchase::dateReceived),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
+   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, Note           , PropertyNames::StockPurchase::note        ),
+)
+
+COLUMN_INFOS(
+   TreeItemNode<StockUseYeast>,
+   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Reason         , PropertyNames::StockUse::reason),
+   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Date           , PropertyNames::StockUse::date  ),
+   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Comment        , PropertyNames::StockUse::comment),
+   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
+                                                                                PropertyNames::OwnedByRecipe::recipe,
+                                                                                PropertyNames::NamedEntity::name}, 1}),
+   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
+   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
 )
 
 COLUMN_INFOS(
    TreeItemNode<Misc>,
-   TREE_NODE_HEADER(TreeItemNode, Misc, Name, tr("Name"), PropertyNames::NamedEntity::name),
-   TREE_NODE_HEADER(TreeItemNode, Misc, Type, tr("Type"), PropertyNames::Misc::type       ),
+   TREE_NODE_HEADER(TreeItemNode, Misc, Name, PropertyNames::NamedEntity::name),
+   TREE_NODE_HEADER(TreeItemNode, Misc, Type, PropertyNames::Misc::type       ),
 )
 
 COLUMN_INFOS(
    TreeItemNode<Salt>,
-   TREE_NODE_HEADER(TreeItemNode, Salt, Name       , tr("Name"       ), PropertyNames::NamedEntity::name),
-   TREE_NODE_HEADER(TreeItemNode, Salt, Type       , tr("Type"       ), PropertyNames::Salt::type       ),
-   TREE_NODE_HEADER(TreeItemNode, Salt, IsAcid     , tr("IsAcid"     ), PropertyNames::Salt::isAcid     ),
-   TREE_NODE_HEADER(TreeItemNode, Salt, PercentAcid, tr("PercentAcid"), PropertyNames::Salt::percentAcid),
+   TREE_NODE_HEADER(TreeItemNode, Salt, Name       , PropertyNames::NamedEntity::name),
+   TREE_NODE_HEADER(TreeItemNode, Salt, Type       , PropertyNames::Salt::type       ),
+   TREE_NODE_HEADER(TreeItemNode, Salt, IsAcid     , PropertyNames::Salt::isAcid     ),
+   TREE_NODE_HEADER(TreeItemNode, Salt, PercentAcid, PropertyNames::Salt::percentAcid),
 )
 
 COLUMN_INFOS(
    TreeItemNode<Yeast>,
-   TREE_NODE_HEADER(TreeItemNode, Yeast, Name      , tr("Name"      ), PropertyNames::NamedEntity::name),
-   TREE_NODE_HEADER(TreeItemNode, Yeast, Laboratory, tr("Laboratory"), PropertyNames::Yeast::laboratory),
-   TREE_NODE_HEADER(TreeItemNode, Yeast, ProductId , tr("Product ID"), PropertyNames::Yeast::productId ),
-   TREE_NODE_HEADER(TreeItemNode, Yeast, Type      , tr("Type"      ), PropertyNames::Yeast::type      ),
-   TREE_NODE_HEADER(TreeItemNode, Yeast, Form      , tr("Form"      ), PropertyNames::Yeast::form      ),
+   TREE_NODE_HEADER(TreeItemNode, Yeast, Name      , PropertyNames::NamedEntity::name), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, Yeast, Laboratory, PropertyNames::Yeast::laboratory), // "Laboratory"
+   TREE_NODE_HEADER(TreeItemNode, Yeast, ProductId , PropertyNames::Yeast::productId ), // "Product ID"
+   TREE_NODE_HEADER(TreeItemNode, Yeast, Type      , PropertyNames::Yeast::type      ), // "Type"
+   TREE_NODE_HEADER(TreeItemNode, Yeast, Form      , PropertyNames::Yeast::form      ), // "Form"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Style>,
-   TREE_NODE_HEADER(TreeItemNode, Style, Name          , tr("Name"    ), PropertyNames::NamedEntity::name    ),
-   TREE_NODE_HEADER(TreeItemNode, Style, Category      , tr("Category"), PropertyNames::Style::category      ),
-   TREE_NODE_HEADER(TreeItemNode, Style, CategoryNumber, tr("Number"  ), PropertyNames::Style::categoryNumber),
-   TREE_NODE_HEADER(TreeItemNode, Style, StyleLetter   , tr("Letter"  ), PropertyNames::Style::styleLetter   ),
-   TREE_NODE_HEADER(TreeItemNode, Style, StyleGuide    , tr("Guide"   ), PropertyNames::Style::styleGuide    ),
+   TREE_NODE_HEADER(TreeItemNode, Style, Name          , PropertyNames::NamedEntity::name    ), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, Style, Category      , PropertyNames::Style::category      ), // "Category"
+   TREE_NODE_HEADER(TreeItemNode, Style, CategoryNumber, PropertyNames::Style::categoryNumber), // "Number"
+   TREE_NODE_HEADER(TreeItemNode, Style, StyleLetter   , PropertyNames::Style::styleLetter   ), // "Letter"
+   TREE_NODE_HEADER(TreeItemNode, Style, StyleGuide    , PropertyNames::Style::styleGuide    ), // "Guide"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Water>,
-   TREE_NODE_HEADER(TreeItemNode, Water, Name       , tr("Name"), PropertyNames::NamedEntity::name     ),
-   TREE_NODE_HEADER(TreeItemNode, Water, Calcium    , tr("Ca"  ), PropertyNames::Water::calcium_ppm    ),
-   TREE_NODE_HEADER(TreeItemNode, Water, Bicarbonate, tr("HCO3"), PropertyNames::Water::bicarbonate_ppm),
-   TREE_NODE_HEADER(TreeItemNode, Water, Sulfate    , tr("SO4" ), PropertyNames::Water::sulfate_ppm    ),
-   TREE_NODE_HEADER(TreeItemNode, Water, Chloride   , tr("Cl"  ), PropertyNames::Water::chloride_ppm   ),
-   TREE_NODE_HEADER(TreeItemNode, Water, Sodium     , tr("Na"  ), PropertyNames::Water::sodium_ppm     ),
-   TREE_NODE_HEADER(TreeItemNode, Water, Magnesium  , tr("Mg"  ), PropertyNames::Water::magnesium_ppm  ),
-   TREE_NODE_HEADER(TreeItemNode, Water, pH         , tr("pH"  ), PropertyNames::Water::ph             ),
+   TREE_NODE_HEADER(TreeItemNode, Water, Name       , PropertyNames::NamedEntity::name     ), // "Name"
+   TREE_NODE_HEADER(TreeItemNode, Water, Calcium    , PropertyNames::Water::calcium_ppm    ), // "Ca"
+   TREE_NODE_HEADER(TreeItemNode, Water, Bicarbonate, PropertyNames::Water::bicarbonate_ppm), // "HCO3"
+   TREE_NODE_HEADER(TreeItemNode, Water, Sulfate    , PropertyNames::Water::sulfate_ppm    ), // "SO4"
+   TREE_NODE_HEADER(TreeItemNode, Water, Chloride   , PropertyNames::Water::chloride_ppm   ), // "Cl"
+   TREE_NODE_HEADER(TreeItemNode, Water, Sodium     , PropertyNames::Water::sodium_ppm     ), // "Na"
+   TREE_NODE_HEADER(TreeItemNode, Water, Magnesium  , PropertyNames::Water::magnesium_ppm  ), // "Mg"
+   TREE_NODE_HEADER(TreeItemNode, Water, pH         , PropertyNames::Water::ph             ), // "pH"
 )
 
 
@@ -547,7 +657,133 @@ template<> QString TreeItemNode<Fermentable>::getToolTip() const {
    return header + body;
 }
 
-template<> QString TreeItemNode<InventoryFermentable>::getToolTip() const {
+template<> QString TreeItemNode<StockPurchaseFermentable>::getToolTip() const {
+   // TODO: This is placeholder
+   QString const header = getHeader();
+
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<StockUseFermentable>::getToolTip() const {
+   // TODO: This is placeholder
+   QString const header = getHeader();
+
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<StockPurchaseHop>::getToolTip() const {
+   // TODO: This is placeholder
+   QString const header = getHeader();
+
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<StockUseHop>::getToolTip() const {
+   // TODO: This is placeholder
+   QString const header = getHeader();
+
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<StockPurchaseMisc>::getToolTip() const {
+   // TODO: This is placeholder
+   QString const header = getHeader();
+
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<StockUseMisc>::getToolTip() const {
+   // TODO: This is placeholder
+   QString const header = getHeader();
+
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<StockPurchaseSalt>::getToolTip() const {
+   // TODO: This is placeholder
+   QString const header = getHeader();
+
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<StockUseSalt>::getToolTip() const {
+   // TODO: This is placeholder
+   QString const header = getHeader();
+
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<StockPurchaseYeast>::getToolTip() const {
+   // TODO: This is placeholder
+   QString const header = getHeader();
+
+   QString body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( this->m_underlyingItem->name() );
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
+template<> QString TreeItemNode<StockUseYeast>::getToolTip() const {
    // TODO: This is placeholder
    QString const header = getHeader();
 
