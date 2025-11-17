@@ -17,11 +17,7 @@
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-   #include "moc_StockUseFermentableEditor.cpp"
-   #include "moc_StockUseHopEditor.cpp"
-   #include "moc_StockUseMiscEditor.cpp"
-   #include "moc_StockUseSaltEditor.cpp"
-   #include "moc_StockUseYeastEditor.cpp"
+   #include "moc_StockUseIngredientEditor.cpp"
 #endif
 
 StockUseFermentableEditor::StockUseFermentableEditor(QWidget* parent, QString const editorName) :

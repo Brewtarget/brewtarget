@@ -279,6 +279,7 @@ public:
     *        with, say, a raw pointer, so this template trick ensures it can't.
     */
    template <typename D> void insert(D) = delete;
+   template <typename D> void insert(D *) = delete;
 
    /**
     * \brief Update an existing object in the DB

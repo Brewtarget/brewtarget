@@ -140,24 +140,20 @@ namespace ObjectStoreWrapper {
     *        additional coding, in all cases: (i) object intentionally discarded, (ii) object stored, (iii) ghastly
     *        error happens causing exceptions etc.
     */
-   template<class NE> int insert(std::shared_ptr<NE> ne) {
+   template<class NE> int insert(std::shared_ptr<NE> & ne) {
       return ObjectStoreTyped<NE>::getInstance().insert(ne);
    }
 
    /**
-    * \brief Deprecated way of inserting a new object in a store
-    *
-    *        Caller doesn't have a shared_ptr so gives us a reference to the object directly.  The main problem with
-    *        this is that, if the caller doesn't reach the point of storing the object in the object store, then, extra
-    *        hand-rolled code, the object's destructor doesn't get called.  A secondary problem is that, if a caller
-    *        _does_ have a shared_ptr to the object but inadvertently passes us the reference to the object itself then
-    *        the new shared_ptr we create will not know about the caller's shared_ptr, so the object's destructor will
-    *        get called twice and, sooner or later, we'll get a segfault.
+    * \brief We don't want people to insert without having a shared_ptr, because it creates numerous problems:
+    *          - If the caller's object goes out of scope and gets destructed, the object we have in the ObjectStore is
+    *            no longer valid.
+    *          - If a caller _does_ have a shared_ptr to the object but inadvertently passes us the reference to the
+    *            object itself then the new shared_ptr we create will not know about the caller's shared_ptr, so the
+    *            object's destructor will get called twice and, sooner or later, we'll get a segfault.
     */
-   template<class NE> int insert(NE & ne) {
-      qWarning() << Q_FUNC_INFO << "Deprecated function";
-      return ObjectStoreTyped<NE>::getInstance().insert(ne);
-   }
+   template<class NE> int insert(NE & ne) = delete;
+   template<class NE> int insert(NE * ne) = delete;
 
    template<class NE> std::shared_ptr<NE> insertCopyOf(NE const & ne) {
       return ObjectStoreTyped<NE>::getInstance().insertCopyOf(ne);

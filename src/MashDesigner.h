@@ -92,7 +92,6 @@ private:
    bool isTemperature() const;
    bool isDecoction() const;
 
-
    Recipe* m_recObs;
    std::shared_ptr<Mash     > m_mash;
    std::shared_ptr<Equipment> m_equipment;

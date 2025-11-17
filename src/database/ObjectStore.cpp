@@ -726,7 +726,7 @@ public:
                                                            typeLookup{typeLookup},
                                                            primaryTable{primaryTable},
                                                            junctionTables{junctionTables},
-                                                           allObjects{},
+                                                           m_allObjects{},
                                                            database{nullptr} {
       return;
    }
@@ -1444,12 +1444,14 @@ public:
       return primaryKeyInDb;
    }
 
+   //================================================ Member Variables =================================================
+
    char const * const m_className;
    ObjectStore::State m_state;
    TypeLookup const & typeLookup;
    TableDefinition const & primaryTable;
    JunctionTableDefinitions const & junctionTables;
-   QHash<int, std::shared_ptr<QObject> > allObjects;
+   QHash<int, std::shared_ptr<QObject> > m_allObjects;
    Database * database;
 };
 
@@ -1490,7 +1492,7 @@ ObjectStore::~ObjectStore() {
    // been destroyed, but it can be useful to turn this on when debugging ObjectStore problems.
 //   qDebug() <<
 //      Q_FUNC_INFO << "Destruct of object store for primary table" << this->pimpl->primaryTable.tableName <<
-//      "(containing" << this->pimpl->allObjects.size() << "objects)";
+//      "(containing" << this->pimpl->m_allObjects.size() << "objects)";
    return;
 }
 
@@ -1503,8 +1505,8 @@ ObjectStore::State ObjectStore::state() const {
 }
 
 void ObjectStore::logDiagnostics() const {
-   for (int key : this->pimpl->allObjects.keys()) {
-      std::shared_ptr<QObject> object = this->pimpl->allObjects.value(key);
+   for (int key : this->pimpl->m_allObjects.keys()) {
+      std::shared_ptr<QObject> object = this->pimpl->m_allObjects.value(key);
       qDebug() <<
          Q_FUNC_INFO << "Object @" << static_cast<void *>(object.get()) << "stored as #" << key << "has key" <<
          this->pimpl->getPrimaryKey(*object) << "and shared pointer use count" << object.use_count();
@@ -1734,8 +1736,8 @@ void ObjectStore::loadAll(Database * database) {
 
       // ...and store it
       // It's a coding error if we have two objects with the same primary key
-      Q_ASSERT(!this->pimpl->allObjects.contains(primaryKey));
-      this->pimpl->allObjects.insert(primaryKey, object);
+      Q_ASSERT(!this->pimpl->m_allObjects.contains(primaryKey));
+      this->pimpl->m_allObjects.insert(primaryKey, object);
       // Normally leave this debug output commented, as it generates a lot of logging at start-up, but can be useful to
       // enable for debugging.
 //      qDebug() <<
@@ -1744,7 +1746,7 @@ void ObjectStore::loadAll(Database * database) {
    }
 
    qDebug() <<
-      Q_FUNC_INFO << "Read" << this->pimpl->allObjects.size() << "entries from primary table" <<
+      Q_FUNC_INFO << "Read" << this->pimpl->m_allObjects.size() << "entries from primary table" <<
       this->pimpl->primaryTable.tableName;
 
    //
@@ -1890,29 +1892,29 @@ void ObjectStore::loadAll(Database * database) {
 }
 
 size_t ObjectStore::size() const {
-   return this->pimpl->allObjects.size();
+   return this->pimpl->m_allObjects.size();
 }
 
 bool ObjectStore::contains(int id) const {
-   return this->pimpl->allObjects.contains(id);
+   return this->pimpl->m_allObjects.contains(id);
 }
 
 std::shared_ptr<QObject> ObjectStore::getById(int id) const {
    // Callers should always check that the object they are requesting exists.  However, if a caller does request
    // something invalid, then we at least want to log that for debugging.
-   if (!this->pimpl->allObjects.contains(id)) {
+   if (!this->pimpl->m_allObjects.contains(id)) {
       qCritical() <<
          Q_FUNC_INFO << "Unable to find cached object with ID" << id << "(which should be stored in DB table" <<
          this->pimpl->primaryTable.tableName << ")";
    }
-   return this->pimpl->allObjects.value(id);
+   return this->pimpl->m_allObjects.value(id);
 }
 
 QList<std::shared_ptr<QObject> > ObjectStore::getByIds(QVector<int> const & listOfIds) const {
    QList<std::shared_ptr<QObject> > listToReturn;
    for (auto id : listOfIds) {
-      if (this->pimpl->allObjects.contains(id)) {
-         listToReturn.append(this->pimpl->allObjects.value(id));
+      if (this->pimpl->m_allObjects.contains(id)) {
+         listToReturn.append(this->pimpl->m_allObjects.value(id));
       } else {
          qWarning() <<
             Q_FUNC_INFO << "Unable to find object with ID" << id << "(DB table" <<
@@ -1936,8 +1938,8 @@ int ObjectStore::insert(std::shared_ptr<QObject> object) {
    // Add the object to our list of all objects of this type (asserting that it should be impossible for an object with
    // this ID to already exist in that list).
    //
-   Q_ASSERT(!this->pimpl->allObjects.contains(primaryKey));
-   this->pimpl->allObjects.insert(primaryKey, object);
+   Q_ASSERT(!this->pimpl->m_allObjects.contains(primaryKey));
+   this->pimpl->m_allObjects.insert(primaryKey, object);
 
    // Everything succeeded if we got this far so we can wrap up the transaction
    dbTransaction.commit();
@@ -2154,9 +2156,9 @@ std::shared_ptr<QObject> ObjectStore::defaultSoftDelete(int id) {
    // deleted but remains in the DB) then there isn't actually anything we need to do with its MashSteps.
    //
    qDebug() << Q_FUNC_INFO << "Soft delete" << this->pimpl->m_className << "#" << id;
-   auto object = this->pimpl->allObjects.value(id);
-   if (this->pimpl->allObjects.contains(id)) {
-      this->pimpl->allObjects.remove(id);
+   auto object = this->pimpl->m_allObjects.value(id);
+   if (this->pimpl->m_allObjects.contains(id)) {
+      this->pimpl->m_allObjects.remove(id);
 
       // Tell any bits of the UI that need to know that an object was deleted
       emit this->signalObjectDeleted(id, object);
@@ -2173,7 +2175,7 @@ std::shared_ptr<QObject> ObjectStore::defaultHardDelete(int id) {
    // generically.
    //
    qDebug() << Q_FUNC_INFO << "Hard delete" << this->pimpl->m_className << "#" << id;
-   auto object = this->pimpl->allObjects.value(id);
+   auto object = this->pimpl->m_allObjects.value(id);
    QSqlDatabase connection = this->pimpl->database->sqlDatabase();
    DbTransaction dbTransaction{*this->pimpl->database,
                                connection,
@@ -2241,7 +2243,7 @@ std::shared_ptr<QObject> ObjectStore::defaultHardDelete(int id) {
    //
    // Remove the object from the cache
    //
-   this->pimpl->allObjects.remove(id);
+   this->pimpl->m_allObjects.remove(id);
 
    // Tell any bits of the UI that need to know that an object was deleted
    emit this->signalObjectDeleted(id, object);
@@ -2252,22 +2254,22 @@ std::shared_ptr<QObject> ObjectStore::defaultHardDelete(int id) {
 std::shared_ptr<QObject> ObjectStore::findFirstMatching(
    std::function<bool(std::shared_ptr<QObject>)> const & matchFunction
 ) const {
-   auto result = std::find_if(this->pimpl->allObjects.cbegin(), this->pimpl->allObjects.cend(), matchFunction);
-   if (result == this->pimpl->allObjects.cend()) {
+   auto result = std::find_if(this->pimpl->m_allObjects.cbegin(), this->pimpl->m_allObjects.cend(), matchFunction);
+   if (result == this->pimpl->m_allObjects.cend()) {
       return nullptr;
    }
    return *result;
 }
 
 std::optional< QObject * > ObjectStore::findFirstMatching(std::function<bool(QObject *)> const & matchFunction) const {
-   // std::find_if on this->pimpl->allObjects is going to need a lambda that takes shared pointer to QObject
+   // std::find_if on this->pimpl->m_allObjects is going to need a lambda that takes shared pointer to QObject
    // We create a wrapper lambda with this profile that just extracts the raw pointer and passes it through to the
    // caller's lambda
    auto wrapperMatchFunction {
       [matchFunction](std::shared_ptr<QObject> obj) {return matchFunction(obj.get());}
    };
-   auto result = std::find_if(this->pimpl->allObjects.cbegin(), this->pimpl->allObjects.cend(), wrapperMatchFunction);
-   if (result == this->pimpl->allObjects.cend()) {
+   auto result = std::find_if(this->pimpl->m_allObjects.cbegin(), this->pimpl->m_allObjects.cend(), wrapperMatchFunction);
+   if (result == this->pimpl->m_allObjects.cend()) {
       return std::nullopt;
    }
    return result->get();
@@ -2280,8 +2282,8 @@ QList<std::shared_ptr<QObject> > ObjectStore::findAllMatching(
    // rest of the code expects it and (b) from Qt 6, QList will become the same as QVector (see
    // https://www.qt.io/blog/qlist-changes-in-qt-6)
    QList<std::shared_ptr<QObject> > results;
-   std::copy_if(this->pimpl->allObjects.cbegin(),
-                this->pimpl->allObjects.cend(),
+   std::copy_if(this->pimpl->m_allObjects.cbegin(),
+                this->pimpl->m_allObjects.cend(),
                 std::back_inserter(results), matchFunction);
    return results;
 }
@@ -2309,7 +2311,7 @@ QVector<int> ObjectStore::idsOfAllMatching(
    // It would be nice to use C++20 ranges here, but I couldn't find a way to use them with QHash in such a way that the
    // keys of the hash would be accessible in the range.  So, for now, we do it the old way.
    QVector<int> results;
-   for (auto hashEntry = this->pimpl->allObjects.cbegin(); hashEntry != this->pimpl->allObjects.cend(); ++hashEntry) {
+   for (auto hashEntry = this->pimpl->m_allObjects.cbegin(); hashEntry != this->pimpl->m_allObjects.cend(); ++hashEntry) {
       if (matchFunction(hashEntry.value().get())) {
          results.append(hashEntry.key());
       }
@@ -2319,7 +2321,7 @@ QVector<int> ObjectStore::idsOfAllMatching(
 
 int ObjectStore::numMatching(std::function<bool(QObject const *)> const & matchFunction) const {
    int count = 0;
-   for (auto hashEntry = this->pimpl->allObjects.cbegin(); hashEntry != this->pimpl->allObjects.cend(); ++hashEntry) {
+   for (auto hashEntry = this->pimpl->m_allObjects.cbegin(); hashEntry != this->pimpl->m_allObjects.cend(); ++hashEntry) {
       if (matchFunction(hashEntry.value().get())) {
          ++count;
       }
@@ -2329,14 +2331,14 @@ int ObjectStore::numMatching(std::function<bool(QObject const *)> const & matchF
 
 QList<std::shared_ptr<QObject> > ObjectStore::getAll() const {
    // QHash already knows how to return a QList of its values
-   return this->pimpl->allObjects.values();
+   return this->pimpl->m_allObjects.values();
 }
 
 QList<QObject *> ObjectStore::getAllRaw() const {
    QList<QObject *> listToReturn;
-   listToReturn.reserve(this->pimpl->allObjects.size());
-   std::transform(this->pimpl->allObjects.cbegin(),
-                  this->pimpl->allObjects.cend(),
+   listToReturn.reserve(this->pimpl->m_allObjects.size());
+   std::transform(this->pimpl->m_allObjects.cbegin(),
+                  this->pimpl->m_allObjects.cend(),
                   std::back_inserter(listToReturn),
                   [](auto & sharedPointer) { return sharedPointer.get(); });
    return listToReturn;
@@ -2353,7 +2355,7 @@ bool ObjectStore::writeAllToNewDb(Database & databaseNew, QSqlDatabase & connect
    // than let the DB generate new ones when we do the inserts, so the third parameter to this->pimpl->insertObjectInDb
    // is true.
    //
-   for (auto object : this->pimpl->allObjects) {
+   for (auto object : this->pimpl->m_allObjects) {
       if (this->pimpl->insertObjectInDb(connectionNew, *object, true) <= 0) {
          return false;
       }

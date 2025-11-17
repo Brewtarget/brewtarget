@@ -103,14 +103,11 @@
          <property name="text">
           <string>Total Inventory</string>
          </property>
-         <property name="buddy">
-          <cstring>lineEdit_inventory</cstring>
-         </property>
         </widget>
        </item>
        <item row="3" column="2">
         <!-- We could do this by inserting another column in the QGridLayout, but I think this is simpler. -->
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <layout class="QHBoxLayout" name="horizontalLayout_inventory">
          <item>
           <widget class="SmartValueDisplay" name="display_totalInventory">
            <property name="toolTip">
@@ -583,7 +580,6 @@
   <tabstop>comboBox_yeastForm</tabstop>
   <tabstop>lineEdit_laboratory</tabstop>
   <tabstop>lineEdit_productId</tabstop>
-  <tabstop>lineEdit_inventory</tabstop>
   <tabstop>lineEdit_attenuationMin</tabstop>
   <tabstop>lineEdit_attenuationMax</tabstop>
   <tabstop>lineEdit_minTemperature</tabstop>

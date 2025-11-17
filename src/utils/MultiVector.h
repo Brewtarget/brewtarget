@@ -210,7 +210,7 @@ public:
    public:
       // Can't use a reference here as iterator needs to be default constructable
       MultiVector const *      m_multiVector = nullptr;
-      MvCoordinates m_coordinates = {-1, -1};
+      MvCoordinates m_coordinates = {0, 0};
 
    };
 

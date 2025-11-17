@@ -61,6 +61,7 @@
 #include "model/Recipe.h"
 #include "model/RecipeAdditionFermentable.h"
 #include "model/RecipeAdditionHop.h"
+#include "model/StockPurchaseHop.h"
 #include "PersistentSettings.h"
 #include "unitTests/TestMultiVector.h"
 #include "utils/ErrorCodeToStream.h"
@@ -929,9 +930,13 @@ void Testing::pstdintTest() {
 void Testing::testInventory() {
    qDebug() << Q_FUNC_INFO << "Starting";
    Measurement::Amount amountOfHop{123.45, Measurement::Units::kilograms};
-   bool setOk = this->pimpl->m_cascade_4pct->setProperty(*PropertyNames::Ingredient::totalInventory,
-                                                         QVariant::fromValue<Measurement::Amount>(amountOfHop));
-   QVERIFY2(setOk, "Error setting hop inventory property");
+   auto hopPurchase = std::make_shared<StockPurchaseHop>("Hop Purchase");
+   hopPurchase->setHop(this->pimpl->m_cascade_4pct.get());
+   hopPurchase->setAmount(amountOfHop);
+   ObjectStoreWrapper::insert(hopPurchase);
+///   bool setOk = this->pimpl->m_cascade_4pct->setProperty(*PropertyNames::Ingredient::totalInventory,
+///                                                         QVariant::fromValue<Measurement::Amount>(amountOfHop));
+///   QVERIFY2(setOk, "Error setting hop inventory property");
    QVariant inventoryRaw = this->pimpl->m_cascade_4pct->property(*PropertyNames::Ingredient::totalInventory);
    QVERIFY2(inventoryRaw.canConvert<Measurement::Amount>(), "Error retrieving hop inventory property");
    Measurement::Amount inventory = inventoryRaw.value<Measurement::Amount>();

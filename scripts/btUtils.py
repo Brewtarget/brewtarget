@@ -21,112 +21,23 @@
 #-----------------------------------------------------------------------------------------------------------------------
 # Python built-in modules we use
 #-----------------------------------------------------------------------------------------------------------------------
+import glob
 import logging
 import os
 import pathlib
+import re
+import shutil
 import subprocess
+import packaging.version
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Helper function to return the 'base' directory (ie the one above the directory in which this file lives).
+# Our own modules
 #-----------------------------------------------------------------------------------------------------------------------
-def getBaseDir():
-   dir_thisScript = pathlib.Path(__file__).parent.resolve()
-   dir_base = dir_thisScript.parent.resolve()
-   return dir_base
+import btExecute
+import btLogger
+import btFileSystem
 
-#-----------------------------------------------------------------------------------------------------------------------
-# Helper function to return a logger that logs to stderr
-#
-# param logLevel - Initial level to log at
-#-----------------------------------------------------------------------------------------------------------------------
-def getLogger(logLevel = logging.INFO):
-   logging.basicConfig(format='%(message)s')
-   # Per https://docs.python.org/3/library/logging.html __name__ is the module’s name in the Python package namespace.
-   # This is fine for us.  I don't think we care too much what the logger's name is.
-   log = logging.getLogger(__name__)
-   log.setLevel(logLevel)
-   # Include the log level in the message
-   handler = logging.StreamHandler()
-   handler.setFormatter(
-      # You can add timestamps etc to logs, but that's overkill for this script.  Source file location of log message is
-      # however pretty useful for debugging.
-      logging.Formatter('{levelname:s}:  {message}  [{filename:s}:{lineno:d}]', style='{')
-   )
-   log.addHandler(handler)
-   # If we don't do this, everything gets printed twice
-   log.propagate = False
-   return log
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Helper function for checking result of running external commands
-#
-# Given a CompletedProcess object returned from subprocess.run(), this checks the return code and, if it is non-zero
-# stops this script with an error message and the same return code.  Otherwise the CompletedProcess object is returned
-# to the caller (to make it easier to chain things together).
-#-----------------------------------------------------------------------------------------------------------------------
-def abortOnRunFail(runResult: subprocess.CompletedProcess):
-   if (runResult.returncode != 0):
-      # Per https://docs.python.org/3/library/logging.html, "Multiple calls to logging.getLogger() with the same name
-      # [parameter] will always return a reference to the same Logger object."  So we are safe to set log in this way.
-      log = logging.getLogger(__name__)
-
-      # According to https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess,
-      # CompletedProcess.args (the arguments used to launch the process) "may be a list or a string", but it's not clear
-      # when it would be one or the other.
-      if (isinstance(runResult.args, str)):
-         log.critical('Error running ' + runResult.args)
-      else:
-         commandName = os.path.basename(runResult.args[0])
-         log.critical('Error running ' + commandName + ' (' + ' '.join(str(ii) for ii in runResult.args) + ')')
-      if runResult.stderr:
-         log.critical('stderr: ' + runResult.stderr.decode('UTF-8'))
-      exit(runResult.returncode)
-
-   return runResult
-
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Helper function for copying one or more files to a directory that might not yet exist
-#-----------------------------------------------------------------------------------------------------------------------
-def copyFilesToDir(files, directory):
-   os.makedirs(directory, exist_ok=True)
-   for currentFile in files:
-      log.debug('Copying ' + currentFile + ' to ' + directory)
-      shutil.copy2(currentFile, directory)
-   return
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Helper function for counting files in a directory tree
-#-----------------------------------------------------------------------------------------------------------------------
-def numFilesInTree(path):
-   numFiles = 0
-   for root, dirs, files in os.walk(path):
-      numFiles += len(files)
-   return numFiles
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Helper function for finding the first match of file under path
-#-----------------------------------------------------------------------------------------------------------------------
-def findFirstMatchingFile(fileName, path):
-   for root, dirs, files in os.walk(path):
-      if fileName in files:
-         return os.path.join(root, fileName)
-   return ''
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Helper function for downloading a file
-#-----------------------------------------------------------------------------------------------------------------------
-def downloadFile(url):
-   filename = url.split('/')[-1]
-   log.info('Downloading ' + url + ' to ' + filename + ' in directory ' + pathlib.Path.cwd().as_posix())
-   response = requests.get(url)
-   if (response.status_code != 200):
-      log.critical('Error code ' + str(response.status_code) + ' while downloading ' + url)
-      exit(1)
-   with open(filename, 'wb') as fd:
-      for chunk in response.iter_content(chunk_size = 128):
-         fd.write(chunk)
-   return
+log = btLogger.getLogger()
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Helper function for finding and copying extra libraries
@@ -172,4 +83,126 @@ def findAndCopyLibs(pathsToSearch, extraLibs, libExtension, libRegex, targetDire
       if (not found):
          log.critical('Could not find '+ extraLib + ' library in any of the following directories: ' + ', '.join(pathsToSearch))
          exit(1)
+   return
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Helper function to get Linux distro name and release number
+#
+# Returns a dictionary with:
+#   "name" set to distro name (string)
+#   "release" set to the release number (string)
+#   "major" set to release major number (int)
+#   "minor" set to release minor number (int)
+#
+# Example outputs:
+#                     Ubuntu                 Debian
+#                     ======                 ======
+#       name:         "Ubuntu"               "Debian"
+#       release:      "24.04"                "12"
+#       major:        24                     12
+#       minor:        4                      0
+#
+#-----------------------------------------------------------------------------------------------------------------------
+def getLinuxDistroInfo():
+   # See comment above about why it's OK to call logging.getLogger() more than once
+   log = logging.getLogger(__name__)
+
+   distroInfo = {
+      "name": "Unknown",
+      "release": "",
+      "major":   "",
+      "minor":   ""
+   }
+
+   #
+   # We run lsb_release -a to give full output for logging.  But we then run again just to output the parameters we
+   # want (which seems less work and more reliable than parsing the full output with regular expressions).
+   #
+   # It is not a fatal error if we cannot run lsb_release.  (Caller has to decide what to do if we couldn't determine
+   # release info.)  So, we deliberately don't use btUtils.abortOnRunFail here.
+   #
+   lsbResult = subprocess.run(['lsb_release', '-a'], capture_output=True)
+   if (lsbResult.returncode != 0):
+      log.info('Ignoring error running lsb_release -a: ' + lsbResult.stderr.decode('UTF-8'))
+   else:
+      lsbOutput = lsbResult.stdout.decode('UTF-8').rstrip()
+      log.info('Output from running lsb_release -a: ' + lsbOutput)
+      #
+      # We assume that if `lsb_release -a` ran OK then the other invocations below will too
+      #
+      distroInfo["name"] = str(
+         subprocess.run(['lsb_release', '-is'], encoding = "utf-8", capture_output = True).stdout
+      ).rstrip()
+      distroInfo["release"] = str(
+         subprocess.run(['lsb_release', '-rs'], encoding = "utf-8", capture_output = True).stdout
+      ).rstrip()
+
+      #
+      # Now split release into major and minor
+      #
+      parsedRelease = packaging.version.parse(distroInfo["release"])
+      distroInfo["major"] = parsedRelease.major
+      distroInfo["minor"] = parsedRelease.minor
+
+   return distroInfo
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Set global variables exe_git and exe_meson with the locations of the git and meson executables plus mesonVersion with
+# the version of meson installed
+#
+# We want to give helpful error messages if Meson or Git is not installed.  For other missing dependencies we can rely
+# on Meson itself to give explanatory error messages.
+#-----------------------------------------------------------------------------------------------------------------------
+def findMesonAndGit():
+   # Advice at https://docs.python.org/3/library/subprocess.html is "For maximum reliability, use a fully qualified path
+   # for the executable. To search for an unqualified name on PATH, use shutil.which()"
+
+   # Check Meson is installed.  (See installDependencies() below for what we do to attempt to install it from this
+   # script.)
+   global exe_meson
+   exe_meson = shutil.which("meson")
+   if (exe_meson is None or exe_meson == ""):
+      log.critical('Cannot find meson - please see https://mesonbuild.com/Getting-meson.html for how to install')
+      exit(1)
+
+   global mesonVersion
+   rawVersion = btExecute.abortOnRunFail(subprocess.run([exe_meson, '--version'], capture_output=True)).stdout.decode('UTF-8').rstrip()
+   log.debug('Meson version raw: ' + rawVersion)
+   mesonVersion = packaging.version.parse(rawVersion)
+   log.debug('Meson version parsed: ' + str(mesonVersion))
+
+   # Check Git is installed if its magic directory is present
+   global exe_git
+   exe_git   = shutil.which("git")
+   if (btFileSystem.dir_gitInfo.is_dir()):
+      log.debug('Found git information directory:' + btFileSystem.dir_gitInfo.as_posix())
+      if (exe_git is None or exe_git == ""):
+         log.critical('Cannot find git - please see https://git-scm.com/downloads for how to install')
+         exit(1)
+
+   return
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Ensure git submodules are present
+#
+# When a git repository is cloned, the submodules don't get cloned until you specifically ask for it via the
+# --recurse-submodules flag.
+#
+# (Adding submodules is done via Git itself.  Eg:
+#    cd ../third-party
+#    git submodule add https://github.com/ianlancetaylor/libbacktrace
+# But this only needs to be done once, by one person, and committed to our repository, where the connection is
+# stored in the .gitmodules file.)
+#-----------------------------------------------------------------------------------------------------------------------
+def ensureSubmodulesPresent():
+   findMesonAndGit()
+   if (not btFileSystem.dir_gitSubmodules.is_dir()):
+      log.info('Creating submodules directory: ' + btFileSystem.dir_gitSubmodules.as_posix())
+      os.makedirs(btFileSystem.dir_gitSubmodules, exist_ok=True)
+   if (btFileSystem.numFilesInTree(btFileSystem.dir_gitSubmodules) < btFileSystem.num_gitSubmodules):
+      log.info('Pulling in submodules in ' + btFileSystem.dir_gitSubmodules.as_posix())
+      btExecute.abortOnRunFail(subprocess.run([exe_git, "submodule", "init"], capture_output=False))
+      btExecute.abortOnRunFail(subprocess.run([exe_git, "submodule", "update"], capture_output=False))
    return

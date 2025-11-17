@@ -26,13 +26,16 @@
 # double quotes avoids having to escape a single quote.
 #-----------------------------------------------------------------------------------------------------------------------
 
+#-----------------------------------------------------------------------------------------------------------------------
+# This needs to be imported first to do some more bootstrapping
+#-----------------------------------------------------------------------------------------------------------------------
+import btInitVenv
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Python built-in modules we use
 #-----------------------------------------------------------------------------------------------------------------------
 import argparse
 import datetime
-import getpass
 import glob
 import logging
 import os
@@ -43,14 +46,17 @@ import shutil
 import stat
 import subprocess
 import sys
-import tempfile
-from decimal import Decimal
+import packaging.version
+import tomlkit
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Our own modules
 #-----------------------------------------------------------------------------------------------------------------------
 import btUtils
 import btDependencies
+import btLogger
+import btExecute
+import btFileSystem
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Global constants
@@ -59,12 +65,10 @@ import btDependencies
 projectName = 'brewtarget'
 capitalisedProjectName = projectName.capitalize()
 projectUrl = 'https://github.com/' + capitalisedProjectName + '/' + projectName + '/'
+exe_python = shutil.which('python3')
 
 # By default we'll log at logging.INFO, but this can be overridden via the -v and -q command line options -- see below
-log = btUtils.getLogger()
-
-exe_python = shutil.which('python3')
-log.info('sys.version: ' + sys.version + '; exe_python: ' + exe_python + '; ' + sys.executable)
+log = btLogger.getLogger()
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Welcome banner and environment info
@@ -75,96 +79,6 @@ log.info(
    platform.system() + ' (' + platform.release() + '), using Python ' + platform.python_version() + ' from ' +
    exe_python + ', with command line arguments, at ' + datetime.datetime.now().strftime('%c') + ' ⭐'
 )
-
-# This is long but it can be a useful diagnostic
-log.info('Environment variables vvv')
-envVars = dict(os.environ)
-for key, value in envVars.items():
-   log.info('Env: ' + key + '=' + value)
-log.info('Environment variables ^^^')
-
-# Since (courtesy of the 'bt' script that invokes us) we're running in a venv, the pip we find should be the one in the
-# venv.  This means that it will install to the venv and not mind about external package managers.
-exe_pip = shutil.which('pip3')
-# If Pip still isn't installed we need to bail here.
-if (exe_pip is None or exe_pip == ''):
-   pathEnvVar = ''
-   if ('PATH' in os.environ):
-      pathEnvVar = os.environ['PATH']
-   log.critical(
-      'Cannot find pip (PATH=' + pathEnvVar + ') - please see https://pip.pypa.io/en/stable/installation/ for how to ' +
-      'install'
-   )
-   exit(1)
-
-log.info('Found pip at: ' + exe_pip)
-
-#
-# Of course, when you run the pip in the venv, it might complain that it is not up-to-date.  So we should ensure that
-# first.  Note that it is Python we must run to upgrade pip, as pip cannot upgrade itself.  (Pip will happily _try_ to
-# upgrade itself, but then, on Windows at least, will get stuck when it tries to remove the old version of itself
-# because "process cannot access the file because it is being used by another process".)
-#
-# You might think we could use sys.executable instead of exe_python here.  However, on Windows at least, that gives the
-# wrong python executable: the "system" one rather than the venv one.
-#
-log.info('Running ' + exe_python + '-m pip install --upgrade pip')
-btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--upgrade', 'pip']))
-
-#
-# Per https://docs.python.org/3/library/sys.html#sys.path, this is the search path for Python modules, which is useful
-# for debugging import problems.  Provided that we  started with a clean venv (so there is only one version of Python
-# installed in it), then the search path for packages should include the directory
-# '/some/path/to/.venv/lib/pythonX.yy/site-packages' (where 'X.yy' is the Python version number (eg 3.11, 3.12, etc).
-# If there is more than one version of Python in the venv, then none of these site-packages directories will be in the
-# path.  (We could, in principle, add it manually, but it's a bit fiddly and not necessary since we don't use the venv
-# for anything other than running this script.)
-#
-log.info('Initial module search paths:\n   ' + '\n   '.join(sys.path))
-
-#
-# Mostly, from here on out we'd be fine to invoke pip directly, eg via:
-#
-#    btUtils.abortOnRunFail(subprocess.run([exe_pip, 'install', 'setuptools']))
-#
-# However, in practice, it turns out this can lead to problems in the Windows MSYS2 environment.  According to
-# https://stackoverflow.com/questions/12332975/how-can-i-install-a-python-module-within-code, the recommended and most
-# robust way to invoke pip from within a Python script is via:
-#
-#    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-#
-# Where package is whatever package you want to install.  However, note comments above that we need exe_python rather
-# than sys.executable.
-#
-
-#
-# We use the packaging module (see https://pypi.org/project/packaging/) for handling version numbers (as described at
-# https://packaging.pypa.io/en/stable/version.html).
-#
-# On some platforms, we also need to install setuptools to be able to access packaging.version.  (NB: On MacOS,
-# setuptools is now installed by default by Homebrew when it installs Python, so we'd get an error if we try to install
-# it via pip here.  On Windows in MSYS2, packaging and setuptools need to be installed via pacman.)
-#
-log.info('pip install packaging')
-btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', 'packaging']))
-from packaging import version
-log.info('pip install setuptools')
-btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', 'setuptools']))
-import packaging.version
-
-# The requests library (see https://pypi.org/project/requests/) is used for downloading files in a more Pythonic way
-# than invoking wget through the shell.
-log.info('pip install requests')
-btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', 'requests']))
-import requests
-
-#
-# Once all platforms we're running on have Python version 3.11 or above, we will be able to use the built-in tomllib
-# library (see https://docs.python.org/3/library/tomllib.html) for parsing TOML.  Until then, it's easier to import the
-# tomlkit library (see https://pypi.org/project/tomlkit/) which actually has rather more functionality than we need
-#
-btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'tomlkit']))
-import tomlkit
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Parse command line arguments
@@ -245,59 +159,14 @@ log.debug('Working directory when invoked: ' + pathlib.Path.cwd().as_posix())
 #-----------------------------------------------------------------------------------------------------------------------
 # Standard Directories
 #-----------------------------------------------------------------------------------------------------------------------
-dir_base          = btUtils.getBaseDir()
-dir_gitInfo       = dir_base.joinpath('.git')
-dir_build         = dir_base.joinpath('mbuild')
-# Where submodules live and how many there are.  Currently there are 2: libbacktrace and valijson
-dir_gitSubmodules = dir_base.joinpath('third-party')
-num_gitSubmodules = 2
-# Top-level packaging directory - NB deliberately different name from 'packaging' (= dir_base.joinpath('packaging'))
-dir_packages          = dir_build.joinpath('packages')
-dir_packages_platform = dir_packages.joinpath(platform.system().lower())   # Platform-specific packaging directory
-dir_packages_source   = dir_packages.joinpath('source')
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Set global variables exe_git and exe_meson with the locations of the git and meson executables plus mesonVersion with
-# the version of meson installed
-#
-# We want to give helpful error messages if Meson or Git is not installed.  For other missing dependencies we can rely
-# on Meson itself to give explanatory error messages.
-#-----------------------------------------------------------------------------------------------------------------------
-def findMesonAndGit():
-   # Advice at https://docs.python.org/3/library/subprocess.html is "For maximum reliability, use a fully qualified path
-   # for the executable. To search for an unqualified name on PATH, use shutil.which()"
-
-   # Check Meson is installed.  (See installDependencies() below for what we do to attempt to install it from this
-   # script.)
-   global exe_meson
-   exe_meson = shutil.which("meson")
-   if (exe_meson is None or exe_meson == ""):
-      log.critical('Cannot find meson - please see https://mesonbuild.com/Getting-meson.html for how to install')
-      exit(1)
-
-   global mesonVersion
-   rawVersion = btUtils.abortOnRunFail(subprocess.run([exe_meson, '--version'], capture_output=True)).stdout.decode('UTF-8').rstrip()
-   log.debug('Meson version raw: ' + rawVersion)
-   mesonVersion = packaging.version.parse(rawVersion)
-   log.debug('Meson version parsed: ' + str(mesonVersion))
-
-   # Check Git is installed if its magic directory is present
-   global exe_git
-   exe_git   = shutil.which("git")
-   if (dir_gitInfo.is_dir()):
-      log.debug('Found git information directory:' + dir_gitInfo.as_posix())
-      if (exe_git is None or exe_git == ""):
-         log.critical('Cannot find git - please see https://git-scm.com/downloads for how to install')
-         exit(1)
-
-   return
+btFileSystem.setGlobalDirVars()
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Copy a file, removing comments and folded lines
 #
 # Have had various problems with comments in debian package control file, even though they are theoretically allowed, so
 # we strip them out here, hence slightly more involved code than just
-#    shutil.copy2(dir_build.joinpath('control'), dir_packages_deb_control)
+#    shutil.copy2(btFileSystem.dir_build.joinpath('control'), dir_packages_deb_control)
 #
 # Similarly, some of the fields in the debian control file that we want to split across multiple lines are not actually
 # allowed to be so "folded" by the Debian package generator.  So, we do our own folding here.  (At the same time, we
@@ -323,67 +192,6 @@ def copyWithoutCommentsOrFolds(inputPath, outputPath):
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Helper function to get Linux distro name and release number
-#
-# Returns a dictionary with:
-#   "name" set to distro name (string)
-#   "release" set to the release number (string)
-#   "major" set to release major number (int)
-#   "minor" set to release minor number (int)
-#
-# Example outputs:
-#                     Ubuntu                 Debian
-#                     ======                 ======
-#       name:         "Ubuntu"               "Debian"
-#       release:      "24.04"                "12"
-#       major:        24                     12
-#       minor:        4                      0
-#
-#-----------------------------------------------------------------------------------------------------------------------
-def getLinuxDistroInfo():
-   # See comment above about why it's OK to call logging.getLogger() more than once
-   log = logging.getLogger(__name__)
-
-   distroInfo = {
-      "name": "Unknown",
-      "release": "",
-      "major":   "",
-      "minor":   ""
-   }
-
-   #
-   # We run lsb_release -a to give full output for logging.  But we then run again just to output the parameters we
-   # want (which seems less work and more reliable than parsing the full output with regular expressions).
-   #
-   # It is not a fatal error if we cannot run lsb_release.  (Caller has to decide what to do if we couldn't determine
-   # release info.)  So, we deliberately don't use btUtils.abortOnRunFail here.
-   #
-   lsbResult = subprocess.run(['lsb_release', '-a'], capture_output=True)
-   if (lsbResult.returncode != 0):
-      log.info('Ignoring error running lsb_release -a: ' + lsbResult.stderr.decode('UTF-8'))
-   else:
-      lsbOutput = lsbResult.stdout.decode('UTF-8').rstrip()
-      log.info('Output from running lsb_release -a: ' + lsbOutput)
-      #
-      # We assume that if `lsb_release -a` ran OK then the other invocations below will too
-      #
-      distroInfo["name"] = str(
-         subprocess.run(['lsb_release', '-is'], encoding = "utf-8", capture_output = True).stdout
-      ).rstrip()
-      distroInfo["release"] = str(
-         subprocess.run(['lsb_release', '-rs'], encoding = "utf-8", capture_output = True).stdout
-      ).rstrip()
-
-      #
-      # Now split release into major and minor
-      #
-      parsedRelease = packaging.version.parse(distroInfo["release"])
-      distroInfo["major"] = parsedRelease.major
-      distroInfo["minor"] = parsedRelease.minor
-
-   return distroInfo
-
-#-----------------------------------------------------------------------------------------------------------------------
 # Create fileToDistribute.sha256sum for a given fileToDistribute in a given directory
 #-----------------------------------------------------------------------------------------------------------------------
 def writeSha256sum(directory, fileToDistribute):
@@ -398,35 +206,12 @@ def writeSha256sum(directory, fileToDistribute):
    previousWorkingDirectory = pathlib.Path.cwd().as_posix()
    os.chdir(directory)
    with open(directory.joinpath(fileToDistribute + '.sha256sum').as_posix(),'w') as sha256File:
-      btUtils.abortOnRunFail(
+      btExecute.abortOnRunFail(
          subprocess.run(['sha256sum', fileToDistribute],
                         capture_output=False,
                         stdout=sha256File)
       )
    os.chdir(previousWorkingDirectory)
-   return
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Ensure git submodules are present
-#
-# When a git repository is cloned, the submodules don't get cloned until you specifically ask for it via the
-# --recurse-submodules flag.
-#
-# (Adding submodules is done via Git itself.  Eg:
-#    cd ../third-party
-#    git submodule add https://github.com/ianlancetaylor/libbacktrace
-# But this only needs to be done once, by one person, and committed to our repository, where the connection is
-# stored in the .gitmodules file.)
-#-----------------------------------------------------------------------------------------------------------------------
-def ensureSubmodulesPresent():
-   findMesonAndGit()
-   if (not dir_gitSubmodules.is_dir()):
-      log.info('Creating submodules directory: ' + dir_gitSubmodules.as_posix())
-      os.makedirs(dir_gitSubmodules, exist_ok=True)
-   if (btUtils.numFilesInTree(dir_gitSubmodules) < num_gitSubmodules):
-      log.info('Pulling in submodules in ' + dir_gitSubmodules.as_posix())
-      btUtils.abortOnRunFail(subprocess.run([exe_git, "submodule", "init"], capture_output=False))
-      btUtils.abortOnRunFail(subprocess.run([exe_git, "submodule", "update"], capture_output=False))
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -436,17 +221,17 @@ def doSetup(setupOption):
    if (setupOption == 'all'):
       btDependencies.installDependencies()
 
-   findMesonAndGit()
+   btUtils.findMesonAndGit()
 
    # If this is a git checkout then let's set up git with the project standards
-   if (dir_gitInfo.is_dir()):
+   if (btFileSystem.dir_gitInfo.is_dir()):
       log.info('Setting up ' + capitalisedProjectName + ' git preferences')
       # Enforce indentation with spaces, not tabs.
-      btUtils.abortOnRunFail(
+      btExecute.abortOnRunFail(
          subprocess.run(
-            [exe_git,
+            [btUtils.exe_git,
                "config",
-               "--file", dir_gitInfo.joinpath('config').as_posix(),
+               "--file", btFileSystem.dir_gitInfo.joinpath('config').as_posix(),
                "core.whitespace",
                "tabwidth=3,tab-in-indent"],
             capture_output=False
@@ -454,10 +239,10 @@ def doSetup(setupOption):
       )
 
       # Enable the standard pre-commit hook that warns you about whitespace errors
-      shutil.copy2(dir_gitInfo.joinpath('hooks/pre-commit.sample'),
-                   dir_gitInfo.joinpath('hooks/pre-commit'))
+      shutil.copy2(btFileSystem.dir_gitInfo.joinpath('hooks/pre-commit.sample'),
+                   btFileSystem.dir_gitInfo.joinpath('hooks/pre-commit'))
 
-      ensureSubmodulesPresent()
+      btUtils.ensureSubmodulesPresent()
 
    # Check whether Meson build directory is already set up.  (Although nothing bad happens, if you run setup twice,
    # it complains and tells you to run configure.)
@@ -466,8 +251,8 @@ def doSetup(setupOption):
    # https://mesonbuild.com/IDE-integration.html#ide-integration)
    runMesonSetup = True
    warnAboutCurrentDirectory = False
-   if (dir_build.joinpath('meson-info/meson-info.json').is_file()):
-      log.info('Meson build directory ' + dir_build.as_posix() + ' appears to be already set up')
+   if (btFileSystem.dir_build.joinpath('meson-info/meson-info.json').is_file()):
+      log.info('Meson build directory ' + btFileSystem.dir_build.as_posix() + ' appears to be already set up')
       #
       # You usually only need to reset things after you've done certain edits to defaults etc in meson.build.  There
       # are a whole bunch of things you can control with the 'meson configure' command, but it's simplest in some ways
@@ -485,21 +270,21 @@ def doSetup(setupOption):
       else:
          # It's very possible that the user's current working directory is mbuild.  If so, we need to warn them and move
          # up a directory (as 'meson setup' gets upset if current working directory does not exist).
-         log.info('Removing existing Meson build directory ' + dir_build.as_posix())
-         if (pathlib.Path.cwd().as_posix() == dir_build.as_posix()):
+         log.info('Removing existing Meson build directory ' + btFileSystem.dir_build.as_posix())
+         if (pathlib.Path.cwd().as_posix() == btFileSystem.dir_build.as_posix()):
             # We write a warning out here for completeness, but we really need to show it further down as it will have
             # scrolled off the top of the terminal with all the output from 'meson setup'
             log.warning('You are currently in the directory we are about to delete.  ' +
                         'You will need to change directory!')
             warnAboutCurrentDirectory = True
-            os.chdir(dir_base)
-         shutil.rmtree(dir_build)
+            os.chdir(btFileSystem.dir_base)
+         shutil.rmtree(btFileSystem.dir_build)
 
    if (runMesonSetup):
-      log.info('Setting up ' + dir_build.as_posix() + ' meson build directory')
+      log.info('Setting up ' + btFileSystem.dir_build.as_posix() + ' meson build directory')
       # See https://mesonbuild.com/Commands.html#setup for all the optional parameters to meson setup
       # Note that meson setup will create the build directory (along with various subdirectories)
-      btUtils.abortOnRunFail(subprocess.run([exe_meson, "setup", dir_build.as_posix(), dir_base.as_posix()],
+      btExecute.abortOnRunFail(subprocess.run([btUtils.exe_meson, "setup", btFileSystem.dir_build.as_posix(), btFileSystem.dir_base.as_posix()],
                                             capture_output=False))
 
       log.info('Finished setting up Meson build.  Note that the warnings above about path separator and optimization ' +
@@ -511,7 +296,7 @@ def doSetup(setupOption):
    log.debug('PATH=' + os.environ["PATH"])
    print()
    print('You can now build, test, install and run ' + capitalisedProjectName + ' with the following commands:')
-   print('   cd ' + os.path.relpath(dir_build))
+   print('   cd ' + os.path.relpath(btFileSystem.dir_build))
    print('   meson compile')
    print('   meson test')
    if (platform.system() == 'Linux'):
@@ -584,7 +369,7 @@ def doPackage():
    #       too many meseon.build settings in this file.
    #
 
-   findMesonAndGit()
+   btUtils.findMesonAndGit()
 
    #
    # The top-level directory structure we create inside the build directory (mbuild) for packaging is:
@@ -605,17 +390,17 @@ def doPackage():
    # Step 1 : Create a top-level package directory structure
    #          We'll make the relevant top-level directory and ensure it starts out empty
    #          (We don't have to make dir_packages as it will automatically get created by os.makedirs when we ask it to
-   #          create dir_packages_platform.)
-   if (dir_packages_platform.is_dir()):
-      log.info('Removing existing ' + dir_packages_platform.as_posix() + ' directory tree')
-      shutil.rmtree(dir_packages_platform)
-   log.info('Creating directory ' + dir_packages_platform.as_posix())
-   os.makedirs(dir_packages_platform)
+   #          create btFileSystem.dir_packages_platform.)
+   if (btFileSystem.dir_packages_platform.is_dir()):
+      log.info('Removing existing ' + btFileSystem.dir_packages_platform.as_posix() + ' directory tree')
+      shutil.rmtree(btFileSystem.dir_packages_platform)
+   log.info('Creating directory ' + btFileSystem.dir_packages_platform.as_posix())
+   os.makedirs(btFileSystem.dir_packages_platform)
 
    # We change into the build directory.  This doesn't affect the caller (of this script) because we're a separate
    # sub-process from the (typically) shell that invoked us and we cannot change the parent process's working
    # directory.
-   os.chdir(dir_build)
+   os.chdir(btFileSystem.dir_build)
    log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
 
    #
@@ -633,13 +418,13 @@ def doPackage():
    # won't pick up other things that happen to be hanging around in the source etc directory trees.
    #
    log.info('Creating source tarball')
-   if (mesonVersion >= packaging.version.parse('0.62.0')):
-      btUtils.abortOnRunFail(
-         subprocess.run([exe_meson, 'dist', '--no-tests', '--allow-dirty'], capture_output=False)
+   if (btUtils.mesonVersion >= packaging.version.parse('0.62.0')):
+      btExecute.abortOnRunFail(
+         subprocess.run([btUtils.exe_meson, 'dist', '--no-tests', '--allow-dirty'], capture_output=False)
       )
    else:
-      btUtils.abortOnRunFail(
-         subprocess.run([exe_meson, 'dist', '--no-tests'], capture_output=False)
+      btExecute.abortOnRunFail(
+         subprocess.run([btUtils.exe_meson, 'dist', '--no-tests'], capture_output=False)
       )
 
    #
@@ -659,21 +444,21 @@ def doPackage():
    # We are only talking about 2 files, so some of this is overkill, but it's easier to be consistent with what we do
    # for the other subdirectories of mbuild/packages
    #
-   if (dir_packages_source.is_dir()):
-      log.info('Removing existing ' + dir_packages_source.as_posix() + ' directory tree')
-      shutil.rmtree(dir_packages_source)
-   log.info('Creating directory ' + dir_packages_source.as_posix())
-   os.makedirs(dir_packages_source)
-   meson_dist_dir = dir_build.joinpath('meson-dist')
+   if (btFileSystem.dir_packages_source.is_dir()):
+      log.info('Removing existing ' + btFileSystem.dir_packages_source.as_posix() + ' directory tree')
+      shutil.rmtree(btFileSystem.dir_packages_source)
+   log.info('Creating directory ' + btFileSystem.dir_packages_source.as_posix())
+   os.makedirs(btFileSystem.dir_packages_source)
+   meson_dist_dir = btFileSystem.dir_build.joinpath('meson-dist')
    for fileName in os.listdir(meson_dist_dir.as_posix()):
-      log.debug('Moving ' + fileName + ' from ' + meson_dist_dir.as_posix() + ' to ' + dir_packages_source.as_posix())
+      log.debug('Moving ' + fileName + ' from ' + meson_dist_dir.as_posix() + ' to ' + btFileSystem.dir_packages_source.as_posix())
       # shutil.move will error rather than overwrite an existing file, so we handle that case manually (although in
       # theory it should never arise)
-      targetFile = dir_packages_source.joinpath(fileName)
+      targetFile = btFileSystem.dir_packages_source.joinpath(fileName)
       if os.path.exists(targetFile):
          log.debug('Removing old ' + targetFile)
          os.remove(targetFile)
-      shutil.move(meson_dist_dir.joinpath(fileName), dir_packages_source)
+      shutil.move(meson_dist_dir.joinpath(fileName), btFileSystem.dir_packages_source)
 
    #
    # Running 'meson install' with the --destdir option will put all the installable files (program executable,
@@ -683,7 +468,7 @@ def doPackage():
    #
    log.info('Running meson install with --destdir option')
    # See https://mesonbuild.com/Commands.html#install for the optional parameters to meson install
-   btUtils.abortOnRunFail(subprocess.run([exe_meson, 'install', '--destdir', dir_packages_platform.as_posix()],
+   btExecute.abortOnRunFail(subprocess.run([btUtils.exe_meson, 'install', '--destdir', btFileSystem.dir_packages_platform.as_posix()],
                                  capture_output=False))
 
    #
@@ -691,7 +476,7 @@ def doPackage():
    # read in to get useful settings exported from the build system.
    #
    global buildConfig
-   with open(dir_build.joinpath('config.toml').as_posix()) as buildConfigFile:
+   with open(btFileSystem.dir_build.joinpath('config.toml').as_posix()) as buildConfigFile:
       buildConfig = tomlkit.parse(buildConfigFile.read())
    log.debug('Shared libraries: ' + ', '.join(buildConfig["CONFIG_SHARED_LIBRARY_PATHS"]))
 
@@ -733,8 +518,8 @@ def doPackage():
          # inside the mbuild/packages directory tree, we just need to move everything out of linux/usr/local up one
          # level into linux/usr and then remove the empty linux/usr/local directory
          #
-         log.debug('Moving usr/local files to usr inside ' + dir_packages_platform.as_posix())
-         targetDir = dir_packages_platform.joinpath('usr')
+         log.debug('Moving usr/local files to usr inside ' + btFileSystem.dir_packages_platform.as_posix())
+         targetDir = btFileSystem.dir_packages_platform.joinpath('usr')
          sourceDir = targetDir.joinpath('local')
          for fileName in os.listdir(sourceDir.as_posix()):
             shutil.move(sourceDir.joinpath(fileName), targetDir)
@@ -747,9 +532,9 @@ def doPackage():
          # file.  The procedure to do this is described in the 'only-keep-debug' section of `man objcopy`.  However, we
          # need to work out where to put the .dbg file so that it remains usable but lintian does not complain about it.
          #
-         dir_packages_bin = dir_packages_platform.joinpath('usr').joinpath('bin')
+         dir_packages_bin = btFileSystem.dir_packages_platform.joinpath('usr').joinpath('bin')
          log.debug('Stripping debug symbols')
-         btUtils.abortOnRunFail(
+         btExecute.abortOnRunFail(
             subprocess.run(
                ['strip',
                 '--strip-unneeded',
@@ -825,14 +610,14 @@ def doPackage():
          # etc
          log.debug('Creating debian package top-level directories')
          debPackageDirName = projectName + '-' + buildConfig['CONFIG_VERSION_STRING'] + '-1_amd64'
-         dir_packages_deb = dir_packages_platform.joinpath('debbuild').joinpath(debPackageDirName)
+         dir_packages_deb = btFileSystem.dir_packages_platform.joinpath('debbuild').joinpath(debPackageDirName)
          dir_packages_deb_control = dir_packages_deb.joinpath('DEBIAN')
          os.makedirs(dir_packages_deb_control) # This will also automatically create parent directories
          dir_packages_deb_doc = dir_packages_deb.joinpath('usr/share/doc').joinpath(projectName)
 
          # Copy the linux/usr tree inside the top-level directory for the deb package
          log.debug('Copying deb package contents')
-         shutil.copytree(dir_packages_platform.joinpath('usr'), dir_packages_deb.joinpath('usr'))
+         shutil.copytree(btFileSystem.dir_packages_platform.joinpath('usr'), dir_packages_deb.joinpath('usr'))
 
          #
          # Copy the Debian Binary package control file to where it belongs
@@ -840,7 +625,7 @@ def doPackage():
          # The meson build will have generated this file from packaging/linux/control.in
          #
          log.debug('Copying deb package control file')
-         copyWithoutCommentsOrFolds(dir_build.joinpath('control').as_posix(),
+         copyWithoutCommentsOrFolds(btFileSystem.dir_build.joinpath('control').as_posix(),
                                     dir_packages_deb_control.joinpath('control').as_posix())
 
 
@@ -857,8 +642,8 @@ def doPackage():
          os.environ['CONFIG_CHANGE_LOG_UNCOMPRESSED'] = buildConfig['CONFIG_CHANGE_LOG_UNCOMPRESSED']
          os.environ['CONFIG_CHANGE_LOG_COMPRESSED'  ] = dir_packages_deb_doc.joinpath('changelog.Debian.gz').as_posix()
          os.environ['CONFIG_PACKAGE_MAINTAINER'     ] = buildConfig['CONFIG_PACKAGE_MAINTAINER'     ]
-         btUtils.abortOnRunFail(
-            subprocess.run([dir_base.joinpath('packaging').joinpath('generateCompressedChangeLog.sh')],
+         btExecute.abortOnRunFail(
+            subprocess.run([btFileSystem.dir_base.joinpath('packaging').joinpath('generateCompressedChangeLog.sh')],
                            capture_output=False)
          )
          # Shell script gives wrong permissions on output (which lintian would complain about), so fix them here (from
@@ -877,7 +662,7 @@ def doPackage():
          dir_packages_deb_man = dir_packages_deb.joinpath('usr').joinpath('share').joinpath('man')
          dir_packages_deb_man1 = dir_packages_deb_man.joinpath('man1')
          log.debug('Compressing man page')
-         btUtils.abortOnRunFail(
+         btExecute.abortOnRunFail(
             subprocess.run(['gzip', '-9n', dir_packages_deb_man1.joinpath(projectName + '.1')], capture_output=False)
          )
 
@@ -887,8 +672,8 @@ def doPackage():
          # Generates the package with the same name as the package directory plus '.deb' on the end
          log.info('Generating deb package')
          previousWorkingDirectory = pathlib.Path.cwd().as_posix()
-         os.chdir(dir_packages_platform.joinpath('debbuild'))
-         btUtils.abortOnRunFail(
+         os.chdir(btFileSystem.dir_packages_platform.joinpath('debbuild'))
+         btExecute.abortOnRunFail(
             subprocess.run(['dpkg-deb', '--build', '--root-owner-group', debPackageDirName], capture_output=False)
          )
 
@@ -905,19 +690,19 @@ def doPackage():
          # Still, we try to fix as many warnings as possible.  As at 2022-08-11 we currently have one warning that we do
          # not ship a man page.  We should get to this at some point.
          log.info('Running lintian to check the created deb package for errors and warnings')
-         btUtils.abortOnRunFail(
+         btExecute.abortOnRunFail(
             subprocess.run(['lintian', '--no-tag-display-limit', debPackageName], capture_output=False)
          )
 
          # Move the .deb file to the top-level directory
-         shutil.move(debPackageName, dir_packages_platform)
+         shutil.move(debPackageName, btFileSystem.dir_packages_platform)
 
          #
          # If we are on Ubuntu, we would like to edit the package name to include the Ubuntu major version number.
          # This is because we typically release two versions of the Linux packages -- one built on the last Ubuntu LTS
          # release, and one built on the previous one.
          #
-         distroInfo = getLinuxDistroInfo()
+         distroInfo = btUtils.getLinuxDistroInfo()
          if ('Ubuntu' == distroInfo["name"]):
             #
             # We want to rename, eg "brewtarget-4.2.1-1_amd64.deb" to "brewtarget-4.2.1_22-1_amd64.deb" or
@@ -927,7 +712,7 @@ def doPackage():
             oldDebPackageName = debPackageName
             nameParts = debPackageName.split('-')
             debPackageName = nameParts[0] + '-' + nameParts[1] + '_' + str(distroInfo["major"]) + '-' + nameParts[2]
-            os.chdir(dir_packages_platform)
+            os.chdir(btFileSystem.dir_packages_platform)
             log.info('Renaming ' + oldDebPackageName + ' to ' + debPackageName)
             os.rename(oldDebPackageName, debPackageName)
 
@@ -938,7 +723,7 @@ def doPackage():
          # Make the checksum file
          #
          log.info('Generating checksum file for ' + debPackageName)
-         writeSha256sum(dir_packages_platform, debPackageName)
+         writeSha256sum(btFileSystem.dir_packages_platform, debPackageName)
 
          #--------------------------------------------------------------------------------------------------------------
          #---------------------------------------------- RPM .rpm Package ----------------------------------------------
@@ -992,7 +777,7 @@ def doPackage():
          # Make the top-level directory for the rpm package and the SPECS subdirectory etc
          log.debug('Creating rpm package top-level directories')
          rpmPackageDirName = 'rpmbuild'
-         dir_packages_rpm = dir_packages_platform.joinpath(rpmPackageDirName)
+         dir_packages_rpm = btFileSystem.dir_packages_platform.joinpath(rpmPackageDirName)
          dir_packages_rpm_specs = dir_packages_rpm.joinpath('SPECS')
          os.makedirs(dir_packages_rpm_specs) # This will also automatically create dir_packages_rpm
          dir_packages_rpm_buildroot = dir_packages_rpm.joinpath('BUILDROOT')
@@ -1000,11 +785,11 @@ def doPackage():
 
          # Copy the linux/usr tree inside the top-level directory for the rpm package
          log.debug('Copying rpm package contents')
-         shutil.copytree(dir_packages_platform.joinpath('usr'), dir_packages_rpm_buildroot.joinpath('usr'))
+         shutil.copytree(btFileSystem.dir_packages_platform.joinpath('usr'), dir_packages_rpm_buildroot.joinpath('usr'))
 
          # Copy the RPM spec file, doing the same unfolding etc as for the Debian control file above
          log.debug('Copying rpm spec file')
-         copyWithoutCommentsOrFolds(dir_build.joinpath('rpm.spec').as_posix(),
+         copyWithoutCommentsOrFolds(btFileSystem.dir_build.joinpath('rpm.spec').as_posix(),
                                     dir_packages_rpm_specs.joinpath('rpm.spec').as_posix())
 
          #
@@ -1107,7 +892,7 @@ def doPackage():
          dir_packages_rpm_man = dir_packages_rpm_buildroot.joinpath('usr').joinpath('share').joinpath('man')
          dir_packages_rpm_man1 = dir_packages_rpm_man.joinpath('man1')
          log.debug('Compressing man page')
-         btUtils.abortOnRunFail(
+         btExecute.abortOnRunFail(
             subprocess.run(
                ['bzip2', '--compress', dir_packages_rpm_man1.joinpath(projectName + '.1')],
                capture_output=False
@@ -1128,7 +913,7 @@ def doPackage():
          # error "Macro % has illegal name".)
          #
          log.info('Generating rpm package')
-         btUtils.abortOnRunFail(
+         btExecute.abortOnRunFail(
             subprocess.run(
                ['rpmbuild',
                 '--define=_topdir ' + dir_packages_rpm.as_posix(),
@@ -1162,7 +947,7 @@ def doPackage():
          # have a look at this, provided we can use it without messing up anything the user has already installed from
          # distro packages.)
          #
-         rawVersion = btUtils.abortOnRunFail(
+         rawVersion = btExecute.abortOnRunFail(
             subprocess.run(['rpmlint', '--version'], capture_output=True)).stdout.decode('UTF-8'
          ).rstrip()
          log.debug('rpmlint version raw: ' + rawVersion)
@@ -1178,18 +963,18 @@ def doPackage():
          else:
             log.info('Running rpmlint (v' + str(rpmlintVersion) +
                      ') to check the created rpm package for errors and warnings')
-            btUtils.abortOnRunFail(
+            btExecute.abortOnRunFail(
                subprocess.run(
                   ['rpmlint',
                    '--config',
-                   dir_base.joinpath('packaging/linux'),
+                   btFileSystem.dir_base.joinpath('packaging/linux'),
                    dir_packages_rpm_output.joinpath(rpmPackageName).as_posix()],
                   capture_output=False
                )
             )
 
          # Move the .rpm file to the top-level directory
-         shutil.move(dir_packages_rpm_output.joinpath(rpmPackageName), dir_packages_platform)
+         shutil.move(dir_packages_rpm_output.joinpath(rpmPackageName), btFileSystem.dir_packages_platform)
 
          #
          # As with the .deb file above, if we are on Ubuntu, we would like to edit the package name to include the
@@ -1204,7 +989,7 @@ def doPackage():
             oldRpmPackageName = rpmPackageName
             nameParts = rpmPackageName.split('-')
             rpmPackageName = nameParts[0] + '-' + nameParts[1] + '_' + str(distroInfo["major"]) + '-' + nameParts[2]
-            os.chdir(dir_packages_platform)
+            os.chdir(btFileSystem.dir_packages_platform)
             log.info('Renaming ' + oldRpmPackageName + ' to ' + rpmPackageName)
             os.rename(oldRpmPackageName, rpmPackageName)
 
@@ -1215,7 +1000,7 @@ def doPackage():
          # Make the checksum file
          #
          log.info('Generating checksum file for ' + rpmPackageName)
-         writeSha256sum(dir_packages_platform, rpmPackageName)
+         writeSha256sum(btFileSystem.dir_packages_platform, rpmPackageName)
 
       #-----------------------------------------------------------------------------------------------------------------
       #----------------------------------------------- Windows Packaging -----------------------------------------------
@@ -1277,19 +1062,19 @@ def doPackage():
          # (An alternative approach would be to invoke meson with the --bindir parameter to manually choose the
          # directory for the executable.)
          #
-         packageBinDirList = glob.glob('./**/bin/', root_dir=dir_packages_platform.as_posix(), recursive=True)
+         packageBinDirList = glob.glob('./**/bin/', root_dir=btFileSystem.dir_packages_platform.as_posix(), recursive=True)
          if (len(packageBinDirList) == 0):
             log.critical(
-               'Cannot find bin subdirectory of ' + dir_packages_platform.as_posix() + ' packaging directory'
+               'Cannot find bin subdirectory of ' + btFileSystem.dir_packages_platform.as_posix() + ' packaging directory'
             )
             exit(1)
          if (len(packageBinDirList) > 1):
             log.warning(
-               'Found more than one bin subdirectory of ' + dir_packages_platform.as_posix() +
+               'Found more than one bin subdirectory of ' + btFileSystem.dir_packages_platform.as_posix() +
                ' packaging directory: ' + '; '.join(packageBinDirList) + '.  Assuming first is the one we need'
             )
 
-         dir_packages_win_bin = dir_packages_platform.joinpath(packageBinDirList[0])
+         dir_packages_win_bin = btFileSystem.dir_packages_platform.joinpath(packageBinDirList[0])
          log.debug('Package bin dir: ' + dir_packages_win_bin.as_posix())
 
          #
@@ -1317,7 +1102,7 @@ def doPackage():
          log.debug('Running windeployqt')
          previousWorkingDirectory = pathlib.Path.cwd().as_posix()
          os.chdir(dir_packages_win_bin)
-         btUtils.abortOnRunFail(
+         btExecute.abortOnRunFail(
             subprocess.run(['windeployqt6',
                             '--verbose', '2',        # 2 is the maximum
                             projectName + '.exe'],
@@ -1420,15 +1205,15 @@ def doPackage():
             'libzstd'      , # ZStandard (aka zstd) = fast lossless compression algorithm
             'zlib'         , # ZLib compression library
          ]
-         findAndCopyLibs(pathsToSearch, extraLibs, 'dll', '-?[0-9]*.dll', dir_packages_win_bin)
+         btUtils.findAndCopyLibs(pathsToSearch, extraLibs, 'dll', '-?[0-9]*.dll', dir_packages_win_bin)
 
          # Copy the NSIS installer script to where it belongs
-         shutil.copy2(dir_build.joinpath('NsisInstallerScript.nsi'), dir_packages_platform)
+         shutil.copy2(btFileSystem.dir_build.joinpath('NsisInstallerScript.nsi'), btFileSystem.dir_packages_platform)
 
          # We change into the packaging directory and invoke the NSIS Compiler (aka MakeNSIS.exe)
-         os.chdir(dir_packages_platform)
+         os.chdir(btFileSystem.dir_packages_platform)
          log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
-         btUtils.abortOnRunFail(
+         btExecute.abortOnRunFail(
             # FYI, we don't need it here, but if you run makensis from the MSYS2 command line (Mintty), you need double
             # slashes on the options (//V4 instead of /V4 etc).
             subprocess.run(
@@ -1454,7 +1239,7 @@ def doPackage():
          #
          winInstallerName = capitalisedProjectName + ' ' + buildConfig['CONFIG_VERSION_STRING'] + ' Windows Installer.exe'
          log.info('Generating checksum file for ' + winInstallerName)
-         writeSha256sum(dir_packages_platform, winInstallerName)
+         writeSha256sum(btFileSystem.dir_packages_platform, winInstallerName)
 
          #--------------------------------------------------------------------------------------------------------------
          # Signing Windows binaries is a separate step.  For Brewtarget, it is possible, with the help of SignPath, to
@@ -1570,8 +1355,8 @@ def doPackage():
          #
          log.debug('Creating Mac app bundle top-level directories')
          macBundleDirName = projectName + '_' + buildConfig['CONFIG_VERSION_STRING'] + '_MacOS.app'
-         # dir_packages_platform = mbuild/packages/darwin
-         dir_packages_mac = dir_packages_platform.joinpath(macBundleDirName).joinpath('Contents')
+         # btFileSystem.dir_packages_platform = mbuild/packages/darwin
+         dir_packages_mac = btFileSystem.dir_packages_platform.joinpath(macBundleDirName).joinpath('Contents')
          dir_packages_mac_bin = dir_packages_mac.joinpath('MacOS')
          dir_packages_mac_rsc = dir_packages_mac.joinpath('Resources')
          dir_packages_mac_frm = dir_packages_mac.joinpath('Frameworks')
@@ -1604,44 +1389,44 @@ def doPackage():
          #
          # However, we are not currently shipping man page on Mac
          #
-         dir_buildOutputRoot = ''
+         btFileSystem.dir_buildOutputRoot = ''
          possible_buildOutputRoots = ['usr/local', 'opt/homebrew']
          for subDir in possible_buildOutputRoots:
-            candidateDir = dir_packages_platform.joinpath(subDir)
+            candidateDir = btFileSystem.dir_packages_platform.joinpath(subDir)
             log.debug('Is ' + candidateDir.as_posix() + ' a directory? ' + str(os.path.isdir(candidateDir)))
             if (os.path.isdir(candidateDir)):
-               dir_buildOutputRoot = candidateDir
+               btFileSystem.dir_buildOutputRoot = candidateDir
                break
 
-         if ('' == dir_buildOutputRoot):
+         if ('' == btFileSystem.dir_buildOutputRoot):
             log.error('Unable to find build output root!')
          else:
-            log.debug('Detected build output root as ' + dir_buildOutputRoot.as_posix())
+            log.debug('Detected build output root as ' + btFileSystem.dir_buildOutputRoot.as_posix())
 
          #
          # If we get errors about things not being found, the following can be a helpful diagnostic
          #
-         log.debug('Directory tree of ' + dir_packages_platform.as_posix())
-         btUtils.abortOnRunFail(
-            subprocess.run(['tree', '-sh', dir_packages_platform.as_posix()], capture_output=False)
+         log.debug('Directory tree of ' + btFileSystem.dir_packages_platform.as_posix())
+         btExecute.abortOnRunFail(
+            subprocess.run(['tree', '-sh', btFileSystem.dir_packages_platform.as_posix()], capture_output=False)
          )
 
          # Rather than create dir_packages_mac_rsc directly, it's simplest to copy the whole Resources tree from
          # mbuild/mackages/darwin/usr/local/Contents/Resources, as we want everything that's inside it
          log.debug(
-            'Copying Resources from ' + dir_buildOutputRoot.joinpath('Contents/Resources').as_posix() +
+            'Copying Resources from ' + btFileSystem.dir_buildOutputRoot.joinpath('Contents/Resources').as_posix() +
             ' to ' + dir_packages_mac_rsc.as_posix()
          )
-         shutil.copytree(dir_buildOutputRoot.joinpath('Contents/Resources'), dir_packages_mac_rsc)
+         shutil.copytree(btFileSystem.dir_buildOutputRoot.joinpath('Contents/Resources'), dir_packages_mac_rsc)
 
          # Copy the Information Property List file to where it belongs
          log.debug('Copying Information Property List file')
-         shutil.copy2(dir_build.joinpath('Info.plist').as_posix(), dir_packages_mac)
+         shutil.copy2(btFileSystem.dir_build.joinpath('Info.plist').as_posix(), dir_packages_mac)
 
          # Because Meson is geared towards local installs, in the mbuild/mackages/darwin directory, it is going to have
          # placed the executable in the usr/local/bin or opt/homebrew/bin subdirectory.  Copy it to the right place.
          log.debug('Copying executable')
-         shutil.copy2(dir_buildOutputRoot.joinpath('bin').joinpath(capitalisedProjectName).as_posix(),
+         shutil.copy2(btFileSystem.dir_buildOutputRoot.joinpath('bin').joinpath(capitalisedProjectName).as_posix(),
                       dir_packages_mac_bin)
 
          #
@@ -1687,7 +1472,7 @@ def doPackage():
          previousWorkingDirectory = pathlib.Path.cwd().as_posix()
          log.debug('Running otool before macdeployqt')
          os.chdir(dir_packages_mac_bin)
-         otoolOutputExe = btUtils.abortOnRunFail(
+         otoolOutputExe = btExecute.abortOnRunFail(
             subprocess.run(['otool',
                             '-L',
                             capitalisedProjectName],
@@ -1749,7 +1534,7 @@ def doPackage():
             xalanDir = '/usr/local/opt/xalan-c/lib/'
             xalanLibName = 'libxalan-c.112.dylib'
          log.debug('xalanDir: ' + xalanDir + '; contents:')
-         btUtils.abortOnRunFail(subprocess.run(['ls', '-l', xalanDir], capture_output=False))
+         btExecute.abortOnRunFail(subprocess.run(['ls', '-l', xalanDir], capture_output=False))
 
          #
          # Strictly speaking, we should look at every /usr/local/opt/.../*.dylib dependency of our executable, and run
@@ -1779,7 +1564,7 @@ def doPackage():
          #                       when @rpath is specified
          #
          log.debug('Running otool -L on ' + xalanDir + xalanLibName)
-         otoolOutputXalan = btUtils.abortOnRunFail(
+         otoolOutputXalan = btExecute.abortOnRunFail(
             subprocess.run(['otool',
                             '-L',
                             xalanDir + xalanLibName],
@@ -1813,7 +1598,7 @@ def doPackage():
                    ' --bundle-deps' +
                    ' --fix-file ' + dir_packages_mac_bin.joinpath(capitalisedProjectName).as_posix() +
                    ' --install-path ' + '@executable_path/' + os.path.relpath(dir_packages_mac_frm, dir_packages_mac_bin))
-         btUtils.abortOnRunFail(
+         btExecute.abortOnRunFail(
             subprocess.run(
                ['dylibbundler',
                 '--dest-dir', dir_packages_mac_frm.as_posix(),
@@ -1881,7 +1666,7 @@ def doPackage():
                   # Looks like symlinks are all relative and point inside the tree we are copying, so it's safe to copy
                   # them _as_ symlinks below.
                   #
-                  btUtils.abortOnRunFail(
+                  btExecute.abortOnRunFail(
                      subprocess.run(
                         ['find', dependencyPath, '-exec', 'ls', '-ld', '{}', '+'],
                         capture_output=False
@@ -1904,7 +1689,7 @@ def doPackage():
                   copiedLibrary = dependencyTarget.joinpath('Versions', 'Current', dependency)
                   log.debug('Fixing absolute dependencies for ' + dependency + ' (at' + copiedLibrary.as_posix() + ')')
 
-                  otoolOutputCopiedLibrary = btUtils.abortOnRunFail(
+                  otoolOutputCopiedLibrary = btExecute.abortOnRunFail(
                      subprocess.run(['otool',
                                     '-L',
                                     copiedLibrary.as_posix()],
@@ -1955,7 +1740,7 @@ def doPackage():
                               'Running install_name_tool -id ' + qtDepRelPath + ' ' + copiedLibrary.as_posix()
                            )
 
-                           btUtils.abortOnRunFail(
+                           btExecute.abortOnRunFail(
                               subprocess.run(
                                  ['install_name_tool',
                                  '-id',
@@ -1970,7 +1755,7 @@ def doPackage():
                               copiedLibrary.as_posix()
                            )
 
-                           btUtils.abortOnRunFail(
+                           btExecute.abortOnRunFail(
                               subprocess.run(
                                  ['install_name_tool',
                                  '-change',
@@ -1981,7 +1766,7 @@ def doPackage():
                               )
                            )
 
-                  otoolOutputCopiedLibrary = btUtils.abortOnRunFail(
+                  otoolOutputCopiedLibrary = btExecute.abortOnRunFail(
                      subprocess.run(['otool',
                                     '-L',
                                     copiedLibrary],
@@ -2006,7 +1791,7 @@ def doPackage():
          extraLibs = [
             'libdbus'  , # Eg libdbus-1.3.dylib
          ]
-         findAndCopyLibs(pathsToSearch, extraLibs, 'dylib', '.*.dylib', dir_packages_mac_bin)
+         btUtils.findAndCopyLibs(pathsToSearch, extraLibs, 'dylib', '.*.dylib', dir_packages_mac_bin)
 
          #
          # Before we try to run macdeployqt, we need to make sure its directory is in the PATH.  (Depending on how Qt
@@ -2076,8 +1861,8 @@ def doPackage():
          #
          log.debug('Running macdeployqt (PATH=' + os.environ['PATH'] + ')')
          log.debug('qtFrameworksDir=' + qtFrameworksDir)
-         os.chdir(dir_packages_platform)
-         btUtils.abortOnRunFail(
+         os.chdir(btFileSystem.dir_packages_platform)
+         btExecute.abortOnRunFail(
             #
             # NOTE: For at least some macdeployqt errors, it will not return an error code, but will merely log an ERROR
             #       message (eg "ERROR: Cannot resolve rpath") and carry on.
@@ -2100,7 +1885,7 @@ def doPackage():
          # The result of specifying the `-dmg' flag should be a [projectName]_[versionNumber].dmg file
          #
          log.debug('Directory tree after running macdeployqt')
-         btUtils.abortOnRunFail(subprocess.run(['tree', '-sh'], capture_output=False))
+         btExecute.abortOnRunFail(subprocess.run(['tree', '-sh'], capture_output=False))
          dmgFileName = macBundleDirName.replace('.app', '.dmg')
 
          #
@@ -2109,13 +1894,13 @@ def doPackage():
          #
          log.debug('Running otool on ' + capitalisedProjectName + ' executable after macdeployqt')
          os.chdir(dir_packages_mac_bin)
-         btUtils.abortOnRunFail(subprocess.run(['otool', '-L', capitalisedProjectName], capture_output=False))
-         btUtils.abortOnRunFail(subprocess.run(['otool', '-l', capitalisedProjectName], capture_output=False))
+         btExecute.abortOnRunFail(subprocess.run(['otool', '-L', capitalisedProjectName], capture_output=False))
+         btExecute.abortOnRunFail(subprocess.run(['otool', '-l', capitalisedProjectName], capture_output=False))
          log.debug('Running otool on ' + xalanDir + xalanLibName + ' library after macdeployqt')
          os.chdir(dir_packages_mac_frm)
-         btUtils.abortOnRunFail(subprocess.run(['otool', '-L', xalanDir + xalanLibName], capture_output=False))
+         btExecute.abortOnRunFail(subprocess.run(['otool', '-L', xalanDir + xalanLibName], capture_output=False))
 
-         log.info('Created ' + dmgFileName + ' in directory ' + dir_packages_platform.as_posix())
+         log.info('Created ' + dmgFileName + ' in directory ' + btFileSystem.dir_packages_platform.as_posix())
 
          #
          # We can now mount the disk image and check its contents.  (I don't think we can modify the contents though.)
@@ -2123,20 +1908,20 @@ def doPackage():
          # By default, a disk image called foobar.dmg will get mounted at /Volumes/foobar.
          #
          log.debug('Running hdiutil to mount ' + dmgFileName)
-         os.chdir(dir_packages_platform)
-         btUtils.abortOnRunFail(
+         os.chdir(btFileSystem.dir_packages_platform)
+         btExecute.abortOnRunFail(
             subprocess.run(
                ['hdiutil', 'attach', '-verbose', dmgFileName]
             )
          )
          mountPoint = '/Volumes/' + dmgFileName.replace('.dmg', '')
          log.debug('Directory tree of disk image')
-         btUtils.abortOnRunFail(
+         btExecute.abortOnRunFail(
             subprocess.run(['tree', '-sh', mountPoint], capture_output=False)
          )
          log.debug('Running hdiutil to unmount ' + mountPoint)
-         os.chdir(dir_packages_platform)
-         btUtils.abortOnRunFail(
+         os.chdir(btFileSystem.dir_packages_platform)
+         btExecute.abortOnRunFail(
             subprocess.run(
                ['hdiutil', 'detach', '-verbose', mountPoint]
             )
@@ -2146,7 +1931,7 @@ def doPackage():
          # Make the checksum file
          #
          log.info('Generating checksum file for ' + dmgFileName)
-         writeSha256sum(dir_packages_platform, dmgFileName)
+         writeSha256sum(btFileSystem.dir_packages_platform, dmgFileName)
 
          os.chdir(previousWorkingDirectory)
 
@@ -2158,8 +1943,8 @@ def doPackage():
    print()
    print('⭐ Packaging complete ⭐')
    print('See:')
-   print('   ' + dir_packages_platform.as_posix() + ' for binaries')
-   print('   ' + dir_packages_source.as_posix() + ' for source')
+   print('   ' + btFileSystem.dir_packages_platform.as_posix() + ' for binaries')
+   print('   ' + btFileSystem.dir_packages_source.as_posix() + ' for source')
    return
 
 #-----------------------------------------------------------------------------------------------------------------------

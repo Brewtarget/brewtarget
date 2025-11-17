@@ -1,12 +1,12 @@
 #-----------------------------------------------------------------------------------------------------------------------
-# scripts/btDependencies.py is part of Brewken, and is copyright the following authors 2022-2025:
+# scripts/btDependencies.py is part of Brewtarget, and is copyright the following authors 2022-2025:
 #   • Matt Young <mfsy@yahoo.com>
 #
-# Brewken is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
 # version.
 #
-# Brewken is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
 # warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 # details.
 #
@@ -21,14 +21,42 @@
 #-----------------------------------------------------------------------------------------------------------------------
 # Python built-in modules we use
 #-----------------------------------------------------------------------------------------------------------------------
+from decimal import Decimal
+import getpass
+import os
+import packaging.version
+import pathlib
 import platform
+import re
+import requests
+import shutil
+import subprocess
+import tempfile
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Our own modules
 #-----------------------------------------------------------------------------------------------------------------------
+import btExecute
+import btFileSystem
+import btLogger
 import btUtils
 
-log = btUtils.getLogger()
+log = btLogger.getLogger()
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Helper function for downloading a file
+#-----------------------------------------------------------------------------------------------------------------------
+def downloadFile(url):
+   filename = url.split('/')[-1]
+   log.info('Downloading ' + url + ' to ' + filename + ' in directory ' + pathlib.Path.cwd().as_posix())
+   response = requests.get(url)
+   if (response.status_code != 200):
+      log.critical('Error code ' + str(response.status_code) + ' while downloading ' + url)
+      exit(1)
+   with open(filename, 'wb') as fd:
+      for chunk in response.iter_content(chunk_size = 128):
+         fd.write(chunk)
+   return
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Function to install dependencies -- called if the user runs 'bt setup all'
@@ -70,7 +98,7 @@ def installDependencies():
          # NOTE: For the moment at least, we are assuming you are on Ubuntu or another Debian-based Linux.  For other
          # flavours of the OS you need to install libraries and frameworks manually.
          #
-         distroInfo = getLinuxDistroInfo()
+         distroInfo = btUtils.getLinuxDistroInfo()
          distroName = distroInfo["name"]
          distroRelease = distroInfo["release"]
          log.debug('Linux distro: ' + distroName + ', release: ' + distroRelease + ' (' + str(distroInfo["major"]) +
@@ -94,62 +122,68 @@ def installDependencies():
          # about lupdate are (so far unsuccessful) attempts to get a Qt6 version of lupdate installed.
          #
          log.info('Ensuring libraries and frameworks are installed')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt-get', 'update']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt-get', 'update']))
 
          qt6svgDevPackage = 'qt6-svg-dev'
          if ('Ubuntu' == distroName and Decimal(distroRelease) < Decimal('24.04')):
             qt6svgDevPackage = 'libqt6svg6-dev'
 
-         btUtils.abortOnRunFail(
-            subprocess.run(
-               ['sudo', 'apt', 'install', '-y',
-
-                'build-essential',
-                'cmake',
-                'coreutils',
-                'git',
-                #
-                # On Ubuntu 22.04, installing the packages for the Qt GUI module, does not automatically install all its
-                # dependencies.  At compile-time we get an error "Qt6Gui could not be found because dependency
-                # WrapOpenGL could not be found".  Various different posts suggest what packages are needed to satisfy
-                # this dependency.  With a bit of trial-and-error, we have the following.
-                #
-                'libgl1',
-                'libglx-dev',
-                'libgl1-mesa-dev',
-                #
-                'libqt6gui6', # Qt GUI module -- needed for QColor (per https://doc.qt.io/qt-6.2/qtgui-module.html)
-                'libqt6sql6-psql',
-                'libqt6sql6-sqlite',
-                'libqt6svg6',
-                'libqt6svgwidgets6',
-                'libssl-dev', # For OpenSSL headers
-                'libxalan-c-dev',
-                'libxerces-c-dev',
-                'meson',
-                'ninja-build',
-                'pandoc',
-                'python3',
-                'python3-dev',
-                'qmake6', # Possibly needed for Qt6 lupdate
-                'qt6-base-dev',
-                'qt6-l10n-tools', # Needed for Qt6 lupdate?
-                'qt6-multimedia-dev',
-                'qt6-tools-dev',
-                'qt6-translations-l10n', # Puts all the *.qm files in /usr/share/qt6/translations
-                qt6svgDevPackage,
-                'qttools5-dev-tools', # For Qt5 version of lupdate, per comment above
-                'qt6-tools-dev-tools',
-                #
-                # The following are needed to build the install packages (rather than just install locally)
-                #
-                'debhelper', # Needed to build .deb packages for Debian/Ubuntu
-                'lintian'  , # Needed to validate .deb packages
-                'rpm'      , # Needed to build RPMs
-                'rpmlint'    # Needed to validate RPMs
-               ]
+         #
+         # We could install all these with a single command, but it's slightly easier to debug problems if we do the
+         # installs one-by-one.
+         #
+         installList = [
+            'build-essential',
+            'cmake',
+            'coreutils',
+            'git',
+            #
+            # On Ubuntu 22.04, installing the packages for the Qt GUI module, does not automatically install all its
+            # dependencies.  At compile-time we get an error "Qt6Gui could not be found because dependency
+            # WrapOpenGL could not be found".  Various different posts suggest what packages are needed to satisfy
+            # this dependency.  With a bit of trial-and-error, we have the following.
+            #
+            'libgl1',
+            'libglx-dev',
+            'libgl1-mesa-dev',
+            #
+            'libqt6gui6', # Qt GUI module -- needed for QColor (per https://doc.qt.io/qt-6.2/qtgui-module.html)
+            'libqt6sql6-psql',
+            'libqt6sql6-sqlite',
+            'libqt6svg6',
+            'libqt6svgwidgets6',
+            'libssl-dev', # For OpenSSL headers
+            'libxalan-c-dev',
+            'libxerces-c-dev',
+            'meson',
+            'ninja-build',
+            'pandoc',
+            'python3',
+            'python3-dev',
+            'qmake6', # Possibly needed for Qt6 lupdate
+            'qt6-base-dev',
+            'qt6-l10n-tools', # Needed for Qt6 lupdate?
+            'qt6-multimedia-dev',
+            'qt6-tools-dev',
+            'qt6-translations-l10n', # Puts all the *.qm files in /usr/share/qt6/translations
+            qt6svgDevPackage,
+            'qttools5-dev-tools', # For Qt5 version of lupdate, per comment above
+            'qt6-tools-dev-tools',
+            #
+            # The following are needed to build the install packages (rather than just install locally)
+            #
+            'debhelper', # Needed to build .deb packages for Debian/Ubuntu
+            'lintian'  , # Needed to validate .deb packages
+            'rpm'      , # Needed to build RPMs
+            'rpmlint'    # Needed to validate RPMs
+         ]
+         for packageToInstall in installList:
+            log.debug('Installing ' + packageToInstall)
+            btExecute.abortOnRunFail(
+               subprocess.run(
+                  ['sudo', 'apt', 'install', '-y', packageToInstall]
+               )
             )
-         )
 
          #
          # Thanks to the build-essential package (installed if necessary above), we know there is now _some_ version of
@@ -158,7 +192,7 @@ def installDependencies():
          # default one).
          #
          minGppVersion = packaging.version.parse('10.1.0')
-         gppVersionOutput = btUtils.abortOnRunFail(
+         gppVersionOutput = btExecute.abortOnRunFail(
             subprocess.run(['g++', '--version'], encoding = "utf-8", capture_output = True)
          )
          # We only want the first line of the output from `g++ --version`.  The rest is just the copyright notice.
@@ -171,7 +205,7 @@ def installDependencies():
          log.debug('Parsed as ' + str(gppVersionFound) + '.')
          if (gppVersionFound < minGppVersion):
             log.info('Installing gcc/g++ 10 as current version is ' + str(gppVersionFound))
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', '-y', 'gcc-10', 'g++-10']))
+            btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', '-y', 'gcc-10', 'g++-10']))
             #
             # Now we have to tell the system to use the version 10 compiler by default.  This is a little bit high-
             # handed, but we need a way for the automated "old Linux" build to work and I can't find another way to make
@@ -180,7 +214,7 @@ def installDependencies():
             # This is relatively easily reversible for anyone setting up a local build.
             #
             log.info('Running "update-alternatives" command to set gcc/g++ 10 as default compiler')
-            btUtils.abortOnRunFail(subprocess.run([
+            btExecute.abortOnRunFail(subprocess.run([
                'sudo', 'update-alternatives', '--install', '/usr/bin/gcc', 'gcc', '/usr/bin/gcc-10', '60', '--slave', '/usr/bin/g++', 'g++', '/usr/bin/g++-10'
             ]))
 
@@ -211,7 +245,7 @@ def installDependencies():
             possibleBoostVersionHeaders.append(pathlib.Path(os.environ['BOOST_ROOT']).joinpath('boost/version.hpp'))
          for boostVersionHeader in possibleBoostVersionHeaders:
             if (boostVersionHeader.is_file()):
-               runResult = btUtils.abortOnRunFail(
+               runResult = btExecute.abortOnRunFail(
                   subprocess.run(
                      ['grep', '#define BOOST_LIB_VERSION ', boostVersionHeader.as_posix()],
                      encoding = "utf-8",
@@ -368,9 +402,9 @@ def installDependencies():
 #               os.chdir(boostUnderscoreName)
                os.chdir(boostBaseName)
                log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
-               btUtils.abortOnRunFail(subprocess.run(['./bootstrap.sh', '--with-python=python3']))
+               btExecute.abortOnRunFail(subprocess.run(['./bootstrap.sh', '--with-python=python3']))
                log.debug('Boost bootstrap finished')
-               btUtils.abortOnRunFail(subprocess.run(
+               btExecute.abortOnRunFail(subprocess.run(
                   ['sudo', './b2', '--with-json',
                                    '--with-stacktrace',
                                    'install'])
@@ -383,7 +417,7 @@ def installDependencies():
                # inside it will be owned by root, so there will be a permissions error when Python attempts to delete
                # the directory tree.  Fixing the permissions beforehand is a slightly clunky way around this.
                #
-               btUtils.abortOnRunFail(
+               btExecute.abortOnRunFail(
                   subprocess.run(
                      ['sudo', 'chmod', '--recursive', 'a+rw', tmpDirName]
                   )
@@ -414,13 +448,13 @@ def installDependencies():
          #
          if ('Ubuntu' == distroName and Decimal(distroRelease) < Decimal('24.04')):
             log.info('Installing newer version of Meson the hard way')
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'remove', '-y', 'meson']))
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson']))
+            btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'remove', '-y', 'meson']))
+            btExecute.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson']))
             #
             # Now fix lupdate
             #
             fullPath_qmake6 = shutil.which('qmake6')
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'qtchooser', '-install', 'qt6', fullPath_qmake6]))
+            btExecute.abortOnRunFail(subprocess.run(['sudo', 'qtchooser', '-install', 'qt6', fullPath_qmake6]))
 
       #-----------------------------------------------------------------------------------------------------------------
       #--------------------------------------------- Windows Dependencies ----------------------------------------------
@@ -442,7 +476,7 @@ def installDependencies():
             exit(1)
          # We could just run uname without the -a option, but the latter gives some useful diagnostics to log
          unameResult = str(
-            btUtils.abortOnRunFail(subprocess.run([exe_uname, '-a'], encoding = "utf-8", capture_output = True)).stdout
+            btExecute.abortOnRunFail(subprocess.run([exe_uname, '-a'], encoding = "utf-8", capture_output = True)).stdout
          ).rstrip()
          log.debug('Running uname -a gives ' + unameResult)
          # Output from `uname -a` will be of the form
@@ -463,7 +497,8 @@ def installDependencies():
 
          # Ensure pip is up-to-date.  This is what the error message tells you to run if it's not!
          log.info('Ensuring Python pip is up-to-date')
-         btUtils.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--upgrade', 'pip']))
+         exe_python = shutil.which('python3')
+         btExecute.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--upgrade', 'pip']))
 
          #
          # When we update packages below, we get "error: failed to commit transaction (conflicting files)" errors for a
@@ -476,8 +511,8 @@ def installDependencies():
          # on the command line, hence why the overwrite parameter is '*python*' not '"*python*"'.
          #
          log.info('Ensuring Python packaging is up-to-date')
-         btUtils.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-i686-python-packaging']))
-         btUtils.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-x86_64-python-packaging']))
+         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-i686-python-packaging']))
+         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-x86_64-python-packaging']))
 
          #
          # Before we install packages, we want to make sure the MSYS2 installation itself is up-to-date, otherwise you
@@ -487,8 +522,8 @@ def installDependencies():
          #   pacman -S -u should upgrades all currently-installed packages that are out-of-date
          #
          log.info('Ensuring required libraries and frameworks are installed')
-         btUtils.abortOnRunFail(subprocess.run(['pacman', '-S', '-y', '--noconfirm']))
-         btUtils.abortOnRunFail(subprocess.run(['pacman', '-S', '-u', '--noconfirm']))
+         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '-y', '--noconfirm']))
+         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '-u', '--noconfirm']))
 
          #
          # We _could_ just invoke pacman once with the list of everything we want to install.  However, this can make
@@ -555,7 +590,7 @@ def installDependencies():
                         ]
          for packageToInstall in installList:
             log.debug('Installing ' + packageToInstall)
-            btUtils.abortOnRunFail(
+            btExecute.abortOnRunFail(
                subprocess.run(
                   ['pacman', '-S', '--needed', '--noconfirm', '--disable-download-timeout', packageToInstall]
                )
@@ -584,8 +619,8 @@ def installDependencies():
          shutil.unpack_archive('Locate.zip', 'Locate')
          downloadFile('https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip')
          shutil.unpack_archive('Nsislog.zip', 'Nsislog')
-         copyFilesToDir(['Locate/Include/Locate.nsh'], '/mingw32/share/nsis/Include/')
-         copyFilesToDir(['Locate/Plugin/locate.dll',
+         btFileSystem.copyFilesToDir(['Locate/Include/Locate.nsh'], '/mingw32/share/nsis/Include/')
+         btFileSystem.copyFilesToDir(['Locate/Plugin/locate.dll',
                          'Nsislog/plugin/nsislog.dll'],'/mingw32/share/nsis/Plugins/ansi/')
          os.chdir(previousWorkingDirectory)
          shutil.rmtree(tmpDirName, ignore_errors=False)
@@ -610,7 +645,7 @@ def installDependencies():
          # It's useful to know what version of MacOS we're running on.  Getting the version number is straightforward,
          # so we start with that.
          #
-         macOsVersionRaw = btUtils.abortOnRunFail(
+         macOsVersionRaw = btExecute.abortOnRunFail(
             subprocess.run(['sw_vers', '-productVersion'], capture_output=True)
          ).stdout.decode('UTF-8').rstrip()
          log.debug('MacOS version: ' + macOsVersionRaw)
@@ -758,7 +793,7 @@ def installDependencies():
                # formula if neither '--formula' nor '--cask' is specified, but it emits a warning, which we might as
                # well suppress, since we know we always want the formula.
                #
-               btUtils.abortOnRunFail(subprocess.run(['brew', 'install', '--formula', packageToInstall]))
+               btExecute.abortOnRunFail(subprocess.run(['brew', 'install', '--formula', packageToInstall]))
 
          #
          # Having installed things it depends on, we should now be able to install MacPorts -- either from source or
@@ -788,27 +823,27 @@ def installDependencies():
          # scripted.
          #
          log.debug('Installing MacPorts from binary')
-         btUtils.abortOnRunFail(subprocess.run(['pwd']))
-         btUtils.abortOnRunFail(subprocess.run(['ls', '-l']))
+         btExecute.abortOnRunFail(subprocess.run(['pwd']))
+         btExecute.abortOnRunFail(subprocess.run(['ls', '-l']))
          macPortsPackage = macPortsName + '-' + macOsVersion + '-' + macOsReleaseName + '.pkg'
          downloadUrl = 'https://github.com/macports/macports-base/releases/download/v' + macPortsVersion + '/' + macPortsPackage
-         btUtils.abortOnRunFail(subprocess.run(['curl', '-L', '-O', downloadUrl]))
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'installer', '-package', macPortsPackage, '-target', '/']))
-         btUtils.abortOnRunFail(subprocess.run(['ls', '-l']))
+         btExecute.abortOnRunFail(subprocess.run(['curl', '-L', '-O', downloadUrl]))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'installer', '-package', macPortsPackage, '-target', '/']))
+         btExecute.abortOnRunFail(subprocess.run(['ls', '-l']))
 
          #
          # Instructions for source install are at https://guide.macports.org/#installing.macports.source.
          #
 #         log.debug('Installing MacPorts from source')
-#         btUtils.abortOnRunFail(subprocess.run(['curl', '-L', '-O', 'https://distfiles.macports.org/MacPorts/' + macPortsName + '.tar.bz2']))
-#         btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', macPortsName + '.tar.bz2']))
-#         btUtils.abortOnRunFail(subprocess.run(['cd', macPortsName]))
-#         btUtils.abortOnRunFail(subprocess.run(['./configure']))
-#         btUtils.abortOnRunFail(subprocess.run(['make']))
-#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'make', 'install']))
-#         btUtils.abortOnRunFail(subprocess.run(['cd', '..']))
-#         btUtils.abortOnRunFail(subprocess.run(['pwd']))
-#         btUtils.abortOnRunFail(subprocess.run(['ls', '-l']))
+#         btExecute.abortOnRunFail(subprocess.run(['curl', '-L', '-O', 'https://distfiles.macports.org/MacPorts/' + macPortsName + '.tar.bz2']))
+#         btExecute.abortOnRunFail(subprocess.run(['tar', 'xf', macPortsName + '.tar.bz2']))
+#         btExecute.abortOnRunFail(subprocess.run(['cd', macPortsName]))
+#         btExecute.abortOnRunFail(subprocess.run(['./configure']))
+#         btExecute.abortOnRunFail(subprocess.run(['make']))
+#         btExecute.abortOnRunFail(subprocess.run(['sudo', 'make', 'install']))
+#         btExecute.abortOnRunFail(subprocess.run(['cd', '..']))
+#         btExecute.abortOnRunFail(subprocess.run(['pwd']))
+#         btExecute.abortOnRunFail(subprocess.run(['ls', '-l']))
 
          #
          # Neither binary nor source install automatically adds the port command to the path, so we do it here.
@@ -820,9 +855,9 @@ def installDependencies():
          os.environ["PATH"] = macPortsPrefix + '/bin' + os.pathsep + macPortsPrefix + '/sbin' + os.pathsep + os.environ["PATH"]
          log.debug('After fix-up, PATH=' + os.environ["PATH"])
          macPortsDirFile = '/etc/paths.d/90-macPortsPaths'
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'touch'              , macPortsDirFile]))
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'chown', 'root:wheel', macPortsDirFile]))
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'a+rw'      , macPortsDirFile]))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'touch'              , macPortsDirFile]))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'chown', 'root:wheel', macPortsDirFile]))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'a+rw'      , macPortsDirFile]))
          with open(macPortsDirFile, 'a+') as macPortsDirPaths:
             macPortsDirPaths.write(macPortsPrefix + '/bin'  + '\n')
             macPortsDirPaths.write(macPortsPrefix + '/sbin' + '\n')
@@ -848,7 +883,7 @@ def installDependencies():
          # that from the outset, and live with the fact that it generates a lot of logging.
          #
          log.debug('First run of MacPorts selfupdate')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'selfupdate']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'selfupdate']))
 
          #
          # Sometimes you need to run selfupdate twice, because MacPorts itself was too out of date to update the ports
@@ -859,16 +894,16 @@ def installDependencies():
          # harm is done.
          #
          log.debug('Second run of MacPorts selfupdate')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
 
          # Per https://guide.macports.org/#using.port.diagnose this will tell us about "common issues in the user's
          # environment".
          log.debug('Check environment is OK')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'diagnose', '--quiet']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', 'diagnose', '--quiet']))
 
          # Per https://guide.macports.org/#using.port.installed, this tells us what ports are already installed
          log.debug('List ports already installed')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'installed']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', 'installed']))
 
          #
          # Now install packages we want from MacPorts
@@ -899,18 +934,18 @@ def installDependencies():
             #
             # Add the '-v' option here for "verbose", which is useful in diagnosing problems with port installs:
             #
-            #    btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'install', packageToInstall]))
+            #    btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'install', packageToInstall]))
             #
             # However, it generates a _lot_ of output, so we normally leave it turned off.
             #
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
+            btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', 'install', packageToInstall]))
 
          #
          # Sometimes MacPorts prompts you to upgrade already installed ports with the `port upgrade outdated` command.
          # I'm not convinced it is always harmless to do this!  Uncomment the following if we decide it's a good idea.
          #
 #         log.debug('Ensuring installed ports up-to-date')
-#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'port', 'upgrade', 'outdated']))
+#         btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', 'upgrade', 'outdated']))
 
          #--------------------------------------------------------------------------------------------------------------
          # By default, even once Qt is installed, whether from Homebrew or MacPorts, Meson will not find it.  Apparently
@@ -944,13 +979,13 @@ def installDependencies():
             # `brew link qt5 --force` to "symlink the various Qt binaries and libraries into your /usr/local/bin and
             # /usr/local/lib directories".
             #
-            btUtils.abortOnRunFail(subprocess.run(['brew', 'link', '--force', 'qt6']))
+            btExecute.abortOnRunFail(subprocess.run(['brew', 'link', '--force', 'qt6']))
 
-            qtBaseDir = btUtils.abortOnRunFail(
+            qtBaseDir = btExecute.abortOnRunFail(
                subprocess.run(['brew', '--prefix', 'qt@6'], capture_output=True)
             ).stdout.decode('UTF-8').rstrip()
 
-            qmakePath = findFirstMatchingFile('qmake', qtBaseDir)
+            qmakePath = btFileSystem.findFirstMatchingFile('qmake', qtBaseDir)
             if ('' == qmakePath):
                log.error('Unable to write to find qmake under ' + qtBaseDir)
             else:
@@ -986,7 +1021,7 @@ def installDependencies():
             # were found in /opt/local/libexec/qt5/bin/, then we'd want to run
             # `ln -s /opt/local/libexec/qt5/bin/qmake /opt/local/bin/qmake`.
             #
-            qmakePath = findFirstMatchingFile('qmake', '/opt')
+            qmakePath = btFileSystem.findFirstMatchingFile('qmake', '/opt')
             if ('' == qmakePath):
                log.error('Unable to write to find qmake under /opt')
             else:
@@ -996,7 +1031,7 @@ def installDependencies():
                # `pathlib.Path('/opt/local/bin/qmake').symlink_to(qmakePath)`.  However, this will give a "Permission
                # denied" error.  We need to do it as root, via sudo.
                #
-               btUtils.abortOnRunFail(subprocess.run(['sudo', 'ln', '-s', qmakePath, '/opt/local/bin/qmake'], capture_output=False))
+               btExecute.abortOnRunFail(subprocess.run(['sudo', 'ln', '-s', qmakePath, '/opt/local/bin/qmake'], capture_output=False))
 
             qtBinDir = os.path.dirname(qmakePath)
             qtBaseDir = os.path.dirname(qtBinDir)
@@ -1005,7 +1040,7 @@ def installDependencies():
          # Normally leave the next line commented out as it generates a _lot_ of output.  Can be useful for diagnosing
          # problems with GitHub action builds.
          #
-#         btUtils.abortOnRunFail(subprocess.run(['tree', '-sh', qtBaseDir], capture_output=False))
+#         btExecute.abortOnRunFail(subprocess.run(['tree', '-sh', qtBaseDir], capture_output=False))
 
          #
          # We now fix various environment variables needed for the builds to pick up Qt headers, libraries, etc.
@@ -1051,11 +1086,11 @@ def installDependencies():
          #
          bashProfilePath = os.path.expanduser('~/.bash_profile')
          log.debug('Adding Qt Bin and Lib Dirs ' + qtBinDir + '; ' + qtLibDir + ' to PATH in ' + bashProfilePath)
-         btUtils.abortOnRunFail(subprocess.run(['ls', '-l', bashProfilePath], capture_output=False))
+         btExecute.abortOnRunFail(subprocess.run(['ls', '-l', bashProfilePath], capture_output=False))
          currentUser = getpass.getuser()
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'chown', currentUser, bashProfilePath], capture_output=False))
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'u+w', bashProfilePath], capture_output=False))
-         btUtils.abortOnRunFail(subprocess.run(['ls', '-l', bashProfilePath], capture_output=False))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'chown', currentUser, bashProfilePath], capture_output=False))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'u+w', bashProfilePath], capture_output=False))
+         btExecute.abortOnRunFail(subprocess.run(['ls', '-l', bashProfilePath], capture_output=False))
          with open(bashProfilePath, 'a+') as bashProfile:
             bashProfile.write('export PATH="' + qtBinDir + os.pathsep + qtLibDir + os.pathsep + '$PATH"')
          #
@@ -1070,8 +1105,8 @@ def installDependencies():
          # The slight complication is that you need to be root to create a file in /etc/paths.d/, so we need to go via
          # the shell to run sudo.
          #
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'touch', '/etc/paths.d/01-qtToolPaths']))
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'a+rw', '/etc/paths.d/01-qtToolPaths']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'touch', '/etc/paths.d/01-qtToolPaths']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'chmod', 'a+rw', '/etc/paths.d/01-qtToolPaths']))
          with open('/etc/paths.d/01-qtToolPaths', 'a+') as qtToolPaths:
             qtToolPaths.write(qtBinDir + '\n')
             qtToolPaths.write(qtLibDir + '\n')
@@ -1109,7 +1144,7 @@ def installDependencies():
          # Note that we install with the [badge_icons] extra so we can use the badge_icon setting (see
          # https://dmgbuild.readthedocs.io/en/latest/settings.html#badge_icon)
          #
-#         btUtils.abortOnRunFail(subprocess.run(['pip3', 'install', 'dmgbuild[badge_icons]']))
+#         btExecute.abortOnRunFail(subprocess.run(['pip3', 'install', 'dmgbuild[badge_icons]']))
 
          #
          # TBD: If, in future, we have further problems installing Xerces and/or Xalan-C++ from ports, the commented
@@ -1117,18 +1152,18 @@ def installDependencies():
          #
 #         xalanCSourceUrl = 'https://github.com/apache/xalan-c/releases/download/Xalan-C_1_12_0/xalan_c-1.12.tar.gz'
 #         log.debug('Downloading Xalan-C++ source from ' + xalanCSourceUrl)
-#         btUtils.abortOnRunFail(subprocess.run([
+#         btExecute.abortOnRunFail(subprocess.run([
 #            'wget',
 #            xalanCSourceUrl
 #         ]))
-#         btUtils.abortOnRunFail(subprocess.run(['tar', 'xf', 'xalan_c-1.12.tar.gz']))
+#         btExecute.abortOnRunFail(subprocess.run(['tar', 'xf', 'xalan_c-1.12.tar.gz']))
 #
 #         os.chdir('xalan_c-1.12')
 #         log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
 #         os.makedirs('build')
 #         os.chdir('build')
 #         log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
-#         btUtils.abortOnRunFail(subprocess.run([
+#         btExecute.abortOnRunFail(subprocess.run([
 #            'cmake',
 #            '-G',
 #            'Ninja',
@@ -1138,11 +1173,11 @@ def installDependencies():
 #            '..'
 #         ]))
 #         log.debug('Building Xalan-C++')
-#         btUtils.abortOnRunFail(subprocess.run(['ninja']))
+#         btExecute.abortOnRunFail(subprocess.run(['ninja']))
 #         log.debug('Running Xalan-C++ tests')
-#         btUtils.abortOnRunFail(subprocess.run(['ctest', '-V', '-j', '8']))
+#         btExecute.abortOnRunFail(subprocess.run(['ctest', '-V', '-j', '8']))
 #         log.debug('Installing Xalan-C++')
-#         btUtils.abortOnRunFail(subprocess.run(['sudo', 'ninja', 'install']))
+#         btExecute.abortOnRunFail(subprocess.run(['sudo', 'ninja', 'install']))
 
       case _:
          log.critical('Unrecognised platform: ' + platform.system())
@@ -1156,10 +1191,10 @@ def installDependencies():
    # and not any more included with GCC by default.  It's not a large library so, unless and until we start using Conan,
    # the easiest approach seems to be to bring it in as a Git submodule and compile from source.
    #
-   ensureSubmodulesPresent()
+   btUtils.ensureSubmodulesPresent()
    log.info('Checking libbacktrace is built')
    previousWorkingDirectory = pathlib.Path.cwd().as_posix()
-   backtraceDir = dir_gitSubmodules.joinpath('libbacktrace')
+   backtraceDir = btFileSystem.dir_gitSubmodules.joinpath('libbacktrace')
    os.chdir(backtraceDir)
    log.debug('Run configure and make in ' + backtraceDir.as_posix())
    #
@@ -1176,8 +1211,8 @@ def installDependencies():
    # (I haven't delved deeply into this but, confusingly, if you run `sh ./configure` it puts 'SHELL = /bin/bash' in the
    # Makefile, whereas, if you run `bash ./configure`, it puts the line 'SHELL = /bin/sh' in the Makefile.)
    #
-   btUtils.abortOnRunFail(subprocess.run(['sh', './configure']))
-   btUtils.abortOnRunFail(subprocess.run(['make']))
+   btExecute.abortOnRunFail(subprocess.run(['sh', './configure']))
+   btExecute.abortOnRunFail(subprocess.run(['make']))
    os.chdir(previousWorkingDirectory)
 
    log.info('*** Finished checking / installing dependencies ***')
