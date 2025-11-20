@@ -240,7 +240,7 @@
         </widget>
        </item>
        <item row="14" column="2">
-        <widget class="SmartValueDisplay" name="label_amountRemaining_value"></widget>
+        <widget class="SmartValueDisplay" name="display_amountRemaining"></widget>
        </item>
 
        <item row="14" column="4">
@@ -293,12 +293,25 @@
       </layout>
      </widget>
 
-     <widget class="QWidget" name="tab_extra">
+     <widget class="QWidget" name="tab_extras">
       <attribute name="title">
        <string>Extras</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_extras">
        <!-- Class-specific fields (eg Alpha Acid for StockPurchaseHopEditor) are added to this tab in code. -->
+       <item row="1" column="3">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
 
        <item row="12" column="1">
         <widget class="QLabel" name="label_purchasePrice">

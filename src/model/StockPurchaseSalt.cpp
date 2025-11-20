@@ -74,6 +74,12 @@ StockPurchaseSalt::StockPurchaseSalt(StockPurchaseSalt const & other) :
 
 StockPurchaseSalt::~StockPurchaseSalt() = default;
 
+void StockPurchaseSalt::setIngredient(Salt const & val) {
+   // No extra work to do for Salts
+   this->setIngredientId(val.key());
+   return;
+}
+
 // Boilerplate code for StockPurchase and IngredientAmount
 STOCK_PURCHASE_COMMON_CODE(Salt, salt)
 INGREDIENT_AMOUNT_COMMON_CODE(StockPurchaseSalt, Salt)

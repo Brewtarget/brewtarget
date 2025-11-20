@@ -18,14 +18,14 @@
 #include "database/ObjectStoreWrapper.h"
 #include "utils/AutoCompare.h"
 
-QString StockUse::localisedName() { return tr("StockPurchase Change"); }
-QString StockUse::localisedName_brewNote         () { return tr("Brew Note"    ); }
-QString StockUse::localisedName_brewNoteId       () { return tr("Brew Note ID" ); }
-QString StockUse::localisedName_comment          () { return tr("Comment"      ); }
-QString StockUse::localisedName_date             () { return tr("Date"         ); }
-QString StockUse::localisedName_ownerId          () { return tr("Owner ID"     ); }
-QString StockUse::localisedName_quantityUsed     () { return tr("Quantity Used"); }
-QString StockUse::localisedName_reason           () { return tr("Reason"       ); }
+QString StockUse::localisedName() { return tr("Stock Use"); }
+QString StockUse::localisedName_brewNote    () { return tr("Brew Note"    ); }
+QString StockUse::localisedName_brewNoteId  () { return tr("Brew Note ID" ); }
+QString StockUse::localisedName_comment     () { return tr("Comment"      ); }
+QString StockUse::localisedName_date        () { return tr("Date"         ); }
+QString StockUse::localisedName_ownerId     () { return tr("Owner ID"     ); }
+QString StockUse::localisedName_quantityUsed() { return tr("Quantity Used"); }
+QString StockUse::localisedName_reason      () { return tr("Reason"       ); }
 
 EnumStringMapping const StockUse::reasonStringMapping {
    {StockUse::Reason::Used    , "used"    },
@@ -55,12 +55,12 @@ bool StockUse::compareWith(NamedEntity const & other, QList<BtStringConst const 
 TypeLookup const StockUse::typeLookup {
    "StockUse",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, date             , m_date           , NonPhysicalQuantity::Date         ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, reason           , m_reason         , ENUM_INFO(StockUse::reason)),
-      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, quantityUsed     , m_quantityUsed   , NonPhysicalQuantity::Dimensionless),
-      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, comment          , m_comment        , NonPhysicalQuantity::String       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, brewNoteId       , m_brewNoteId     ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(StockUse, brewNote         , brewNote         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, date        , m_date        , NonPhysicalQuantity::Date         ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, reason      , m_reason      , ENUM_INFO(StockUse::reason)),
+      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, quantityUsed, m_quantityUsed, NonPhysicalQuantity::Dimensionless),
+      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, comment     , m_comment     , NonPhysicalQuantity::String       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, brewNoteId  , m_brewNoteId  ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(StockUse, brewNote    , brewNote      ),
    },
    {&NamedEntity::typeLookup}
 };
@@ -77,11 +77,11 @@ StockUse::StockUse(QString name) :
 
 StockUse::StockUse(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity{namedParameterBundle},
-   SET_REGULAR_FROM_NPB(m_date        , namedParameterBundle, PropertyNames::StockUse::date             ),
-   SET_REGULAR_FROM_NPB(m_reason      , namedParameterBundle, PropertyNames::StockUse::reason           ),
-   SET_REGULAR_FROM_NPB(m_quantityUsed, namedParameterBundle, PropertyNames::StockUse::quantityUsed     ),
-   SET_REGULAR_FROM_NPB(m_comment     , namedParameterBundle, PropertyNames::StockUse::comment          ),
-   SET_REGULAR_FROM_NPB(m_brewNoteId  , namedParameterBundle, PropertyNames::StockUse::brewNoteId       ) {
+   SET_REGULAR_FROM_NPB(m_date        , namedParameterBundle, PropertyNames::StockUse::date        ),
+   SET_REGULAR_FROM_NPB(m_reason      , namedParameterBundle, PropertyNames::StockUse::reason      ),
+   SET_REGULAR_FROM_NPB(m_quantityUsed, namedParameterBundle, PropertyNames::StockUse::quantityUsed),
+   SET_REGULAR_FROM_NPB(m_comment     , namedParameterBundle, PropertyNames::StockUse::comment     ),
+   SET_REGULAR_FROM_NPB(m_brewNoteId  , namedParameterBundle, PropertyNames::StockUse::brewNoteId  ) {
    return;
 }
 

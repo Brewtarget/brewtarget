@@ -36,8 +36,8 @@
 #endif
 
 QString Hop::localisedName() { return tr("Hop"); }
-QString Hop::localisedName_alpha_pct         () { return tr("%% Alpha"           ); }
-QString Hop::localisedName_beta_pct          () { return tr("%% Beta"            ); }
+QString Hop::localisedName_alpha_pct         () { return tr("% Alpha"            ); }
+QString Hop::localisedName_beta_pct          () { return tr("% Beta"             ); }
 QString Hop::localisedName_bPinene_pct       () { return tr("β-Pinene"           ); }
 QString Hop::localisedName_caryophyllene_pct () { return tr("Caryophyllene"      ); }
 QString Hop::localisedName_cohumulone_pct    () { return tr("Cohumulone"         ); }

@@ -496,6 +496,8 @@ public:                                                       \
                                                                                      \
    IngredientName * LcIngredientName() const ;                                       \
    void set##IngredientName(IngredientName * val);                                   \
+   /* Called from \c WindowDistributor::editorForNewStockPurchase */                 \
+   void setIngredient(IngredientName const & val);                                   \
                                                                                      \
    /** \brief We need this for \c ObjectStoreTyped to call */                        \
    virtual void hardDeleteOwnedEntities() override;                                  \

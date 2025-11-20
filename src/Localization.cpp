@@ -245,6 +245,14 @@ QString Localization::displayDateUserFormated(QDate const & date) {
    return date.toString(format);
 }
 
+QString Localization::displayDateUserFormated(std::optional<QDate> const & date) {
+   if (!date) {
+      return "-";
+   }
+   return Localization::displayDateUserFormated(*date);
+}
+
+
 [[nodiscard]] bool Localization::isSupportedLanguage(QString const & twoLetterLanguage) {
    QVector<Localization::LanguageInfo> const & languageInfos {Localization::languageInfo()};
    auto const match = std::find_if(

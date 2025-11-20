@@ -778,33 +778,36 @@ public:
    VeriTable<RecipeAdjustmentSalt     > m_saltAdditionsVeriTable       ;
 
    // All initialised in setupDialogs
-   std::unique_ptr<BoilCatalog               > m_boilCatalog           ;
-   std::unique_ptr<EquipmentCatalog          > m_equipmentCatalog      ;
-   std::unique_ptr<FermentableCatalog        > m_fermentableCatalog    ;
-   std::unique_ptr<FermentationCatalog       > m_fermentationCatalog   ;
-   std::unique_ptr<HopCatalog                > m_hopCatalog            ;
-   std::unique_ptr<MashCatalog               > m_mashCatalog           ;
-   std::unique_ptr<MiscCatalog               > m_miscCatalog           ;
-   std::unique_ptr<SaltCatalog               > m_saltCatalog           ;
-   std::unique_ptr<StyleCatalog              > m_styleCatalog          ;
-   std::unique_ptr<WaterCatalog              > m_waterCatalog          ;
-   std::unique_ptr<YeastCatalog              > m_yeastCatalog          ;
+   std::unique_ptr<        BoilCatalog>         m_boilCatalog;
+   std::unique_ptr<   EquipmentCatalog>    m_equipmentCatalog;
+   std::unique_ptr< FermentableCatalog>  m_fermentableCatalog;
+   std::unique_ptr<FermentationCatalog> m_fermentationCatalog;
+   std::unique_ptr<         HopCatalog>          m_hopCatalog;
+   std::unique_ptr<        MashCatalog>         m_mashCatalog;
+   std::unique_ptr<        MiscCatalog>         m_miscCatalog;
+   std::unique_ptr<        SaltCatalog>         m_saltCatalog;
+   std::unique_ptr<       StyleCatalog>        m_styleCatalog;
+   std::unique_ptr<       WaterCatalog>        m_waterCatalog;
+   std::unique_ptr<       YeastCatalog>        m_yeastCatalog;
 
-   std::unique_ptr<BoilEditor                > m_boilEditor            ;
-   std::unique_ptr<BoilStepEditor            > m_boilStepEditor        ;
-   std::unique_ptr<EquipmentEditor           > m_equipmentEditor       ;
-   std::unique_ptr<FermentableEditor         > m_fermentableEditor     ;
-   std::unique_ptr<FermentationEditor        > m_fermentationEditor    ;
-   std::unique_ptr<FermentationStepEditor    > m_fermentationStepEditor;
-   std::unique_ptr<HopEditor                 > m_hopEditor             ;
-   std::unique_ptr<MashEditor                > m_mashEditor            ;
-   std::unique_ptr<MashStepEditor            > m_mashStepEditor        ;
-   std::unique_ptr<MiscEditor                > m_miscEditor            ;
-   std::unique_ptr<SaltEditor                > m_saltEditor            ;
-   std::unique_ptr<StyleEditor               > m_styleEditor           ;
-   std::unique_ptr<WaterEditor               > m_waterEditor           ;
-   std::unique_ptr<YeastEditor               > m_yeastEditor           ;
+   std::unique_ptr<            BoilEditor>             m_boilEditor;
+   std::unique_ptr<        BoilStepEditor>         m_boilStepEditor;
+   std::unique_ptr<       EquipmentEditor>        m_equipmentEditor;
+   std::unique_ptr<     FermentableEditor>      m_fermentableEditor;
+   std::unique_ptr<    FermentationEditor>     m_fermentationEditor;
+   std::unique_ptr<FermentationStepEditor> m_fermentationStepEditor;
+   std::unique_ptr<             HopEditor>              m_hopEditor;
+   std::unique_ptr<            MashEditor>             m_mashEditor;
+   std::unique_ptr<        MashStepEditor>         m_mashStepEditor;
+   std::unique_ptr<            MiscEditor>             m_miscEditor;
+   std::unique_ptr<            SaltEditor>             m_saltEditor;
+   std::unique_ptr<           StyleEditor>            m_styleEditor;
+   std::unique_ptr<           WaterEditor>            m_waterEditor;
+   std::unique_ptr<           YeastEditor>            m_yeastEditor;
 
+   //
+   // TBD: Have another look at the naming of these windows -- dialog vs tool etc
+   //
    std::unique_ptr<AboutDialog               > m_aboutDialog           ;
    std::unique_ptr<AlcoholTool               > m_alcoholTool           ;
    std::unique_ptr<AncestorDialog            > m_ancestorDialog        ;
@@ -839,21 +842,20 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
 
    // Initialise smart labels etc early, but after call to this->setupUi() because otherwise member variables such as
    // label_name will not yet be set.
-   // .:TBD:. We should fix some of these inconsistently-named labels
    //
    // TBD: Not sure what original difference was supposed to be between label_targetBatchSize & label_batchSize or
    //      between label_targetBoilSize and label_boilSize.
    //
-   SMART_FIELD_INIT(MainWindow, label_name           , lineEdit_name      , Recipe, PropertyNames::NamedEntity::name        );
-   SMART_FIELD_INIT(MainWindow, label_targetBatchSize, lineEdit_batchSize , Recipe, PropertyNames::Recipe::batchSize_l   , 2);
-   SMART_FIELD_INIT(MainWindow, label_targetBoilSize , label_targetBoilSize_value  , Boil  , PropertyNames::Boil::preBoilSize_l   , 2);
-   SMART_FIELD_INIT(MainWindow, label_efficiency     , lineEdit_efficiency, Recipe, PropertyNames::Recipe::efficiency_pct, 1);
-   SMART_FIELD_INIT(MainWindow, label_boilTime       , label_boilTime_value  , Boil  , PropertyNames::Boil::boilTime_mins   , 0);
-   SMART_FIELD_INIT(MainWindow, label_boilSg         , label_boilSg_value    , Recipe, PropertyNames::Recipe::boilGrav      , 3);
+   SMART_FIELD_INIT(MainWindow, label_name           , lineEdit_name       , Recipe, PropertyNames::NamedEntity::name        );
+   SMART_FIELD_INIT(MainWindow, label_targetBatchSize, lineEdit_batchSize  , Recipe, PropertyNames::Recipe::batchSize_l   , 2);
+   SMART_FIELD_INIT(MainWindow, label_targetBoilSize , value_targetBoilSize, Boil  , PropertyNames::Boil::preBoilSize_l   , 2);
+   SMART_FIELD_INIT(MainWindow, label_efficiency     , lineEdit_efficiency , Recipe, PropertyNames::Recipe::efficiency_pct, 1);
+   SMART_FIELD_INIT(MainWindow, label_boilTime       , value_boilTime      , Boil  , PropertyNames::Boil::boilTime_mins   , 0);
+   SMART_FIELD_INIT(MainWindow, label_boilSg         , value_boilSg        , Recipe, PropertyNames::Recipe::boilGrav      , 3);
 
-   SMART_FIELD_INIT_NO_SF(MainWindow, oGLabel        , Recipe, PropertyNames::Recipe::og         );
-   SMART_FIELD_INIT_NO_SF(MainWindow, fGLabel        , Recipe, PropertyNames::Recipe::fg         );
-   SMART_FIELD_INIT_NO_SF(MainWindow, colorSRMLabel  , Recipe, PropertyNames::Recipe::color_srm  );
+   SMART_FIELD_INIT_NO_SF(MainWindow, label_og       , Recipe, PropertyNames::Recipe::og         );
+   SMART_FIELD_INIT_NO_SF(MainWindow, label_fg       , Recipe, PropertyNames::Recipe::fg         );
+   SMART_FIELD_INIT_NO_SF(MainWindow, label_color    , Recipe, PropertyNames::Recipe::color_srm  );
    SMART_FIELD_INIT_NO_SF(MainWindow, label_batchSize, Recipe, PropertyNames::Recipe::batchSize_l);
    SMART_FIELD_INIT_NO_SF(MainWindow, label_boilSize , Boil  , PropertyNames::Boil::preBoilSize_l);
 
@@ -863,14 +865,20 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
    // Horizontal tabs, please -- even on Mac OS, as the tabs contain square icons
    tabWidget_Trees->tabBar()->setStyle(new BtHorizontalTabs(true));
 
-   /* PLEASE DO NOT REMOVE.
-    This code is left here, commented out, intentionally. The only way I can
-    test internationalization is by forcing the locale manually. I am tired
-    of having to figure this out every time I need to test.
-    PLEASE DO NOT REMOVE.
-   QLocale german(QLocale::German,QLocale::Germany);
-   QLocale::setDefault(german);
-   */
+   //-------------------------------------------------------------------------------------------------------------------
+   // NOTE for testing internationalization
+   //
+   // Older versions of the software had some commented-out code here to allow a "forced" locale via a code edit:
+   //
+   //    QLocale german(QLocale::German,QLocale::Germany);
+   //    QLocale::setDefault(german);
+   //
+   // However, this is no longer needed.  Per code and comments in Localization.cpp, a forced locale can be set at
+   // runtime via the config file, eg:
+   //
+   //    forcedLocale=fr_FR
+   //
+   //-------------------------------------------------------------------------------------------------------------------
 
    // If the database doesn't load, we bail
    if (!Database::instance().loadSuccessful() ) {
@@ -1234,7 +1242,7 @@ void MainWindow::restoreSavedState() {
 void MainWindow::setupTriggers() {
    // Connect actions defined in *.ui files to methods in code
    connect(actionExit                      , &QAction::triggered, this                                      , &QWidget::close                    ); // > File > Exit
-   connect(actionAbout                     , &QAction::triggered, this->pimpl->m_aboutDialog.get()          , &QWidget::show                     ); // > About > About Brewken
+   connect(actionAbout                     , &QAction::triggered, this->pimpl->m_aboutDialog.get()          , &QWidget::show                     ); // > About > About Brewtarget
    connect(actionHelp                      , &QAction::triggered, this->pimpl->m_helpDialog.get()           , &QWidget::show                     ); // > About > Help
 
    connect(actionNewRecipe                 , &QAction::triggered, this                                      , &MainWindow::newRecipe             ); // > File > New Recipe
@@ -1351,9 +1359,9 @@ void MainWindow::setupTextEdit() {
 // anything using a SmartLabel::changedSystemOfMeasurementOrScale signal should go in here
 void MainWindow::setupLabels() {
    // These are the sliders. I need to consider these harder, but small steps
-   connect(this->oGLabel,       &SmartLabel::changedSystemOfMeasurementOrScale, this, &MainWindow::redisplayLabel);
-   connect(this->fGLabel,       &SmartLabel::changedSystemOfMeasurementOrScale, this, &MainWindow::redisplayLabel);
-   connect(this->colorSRMLabel, &SmartLabel::changedSystemOfMeasurementOrScale, this, &MainWindow::redisplayLabel);
+   connect(this->label_og,       &SmartLabel::changedSystemOfMeasurementOrScale, this, &MainWindow::redisplayLabel);
+   connect(this->label_fg,       &SmartLabel::changedSystemOfMeasurementOrScale, this, &MainWindow::redisplayLabel);
+   connect(this->label_color, &SmartLabel::changedSystemOfMeasurementOrScale, this, &MainWindow::redisplayLabel);
    return;
 }
 
@@ -1605,9 +1613,9 @@ void MainWindow::showChanges(QMetaProperty* prop) {
    this->lineEdit_efficiency->setQuantity(this->pimpl->m_recipeObs->efficiency_pct());
    // TODO: One day we'll want to do some work to properly handle no-boil recipes....
    std::optional<double> const boilSize = this->pimpl->m_recipeObs->boil() ? this->pimpl->m_recipeObs->boil()->preBoilSize_l() : std::nullopt;
-   this->label_targetBoilSize_value->setQuantity(boilSize);
-   this->label_boilTime_value->setQuantity(this->pimpl->m_recipeObs->boil() ? this->pimpl->m_recipeObs->boil()->boilTime_mins() : 0.0);
-   this->label_boilSg_value  ->setQuantity(this->pimpl->m_recipeObs->boilGrav());
+   this->value_targetBoilSize->setQuantity(boilSize);
+   this->value_boilTime->setQuantity(this->pimpl->m_recipeObs->boil() ? this->pimpl->m_recipeObs->boil()->boilTime_mins() : 0.0);
+   this->value_boilSg  ->setQuantity(this->pimpl->m_recipeObs->boilGrav());
    this->lineEdit_name      ->setCursorPosition(0);
    this->lineEdit_batchSize ->setCursorPosition(0);
    this->lineEdit_efficiency->setCursorPosition(0);
@@ -1635,14 +1643,14 @@ void MainWindow::showChanges(QMetaProperty* prop) {
 
    auto style = this->pimpl->m_recipeObs->style();
    if (style) {
-      updateDensitySlider(*this->styleRangeWidget_og, *this->oGLabel, style->ogMin(), style->ogMax(), 1.120);
+      updateDensitySlider(*this->styleRangeWidget_og, *this->label_og, style->ogMin(), style->ogMax(), 1.120);
    }
-   this->styleRangeWidget_og->setValue(this->oGLabel->getAmountToDisplay(this->pimpl->m_recipeObs->og()));
+   this->styleRangeWidget_og->setValue(this->label_og->getAmountToDisplay(this->pimpl->m_recipeObs->og()));
 
    if (style) {
-      updateDensitySlider(*this->styleRangeWidget_fg, *this->fGLabel, style->fgMin(), style->fgMax(), 1.030);
+      updateDensitySlider(*this->styleRangeWidget_fg, *this->label_fg, style->fgMin(), style->fgMax(), 1.030);
    }
-   this->styleRangeWidget_fg->setValue(this->fGLabel->getAmountToDisplay(this->pimpl->m_recipeObs->fg()));
+   this->styleRangeWidget_fg->setValue(this->label_fg->getAmountToDisplay(this->pimpl->m_recipeObs->fg()));
 
    this->styleRangeWidget_abv->setValue(this->pimpl->m_recipeObs->ABV_pct());
    this->styleRangeWidget_ibu->setValue(this->pimpl->m_recipeObs->IBU());
@@ -1662,11 +1670,11 @@ void MainWindow::showChanges(QMetaProperty* prop) {
    // Colors need the same basic treatment as gravity
    if (style) {
       updateColorSlider(*this->styleRangeWidget_srm,
-                        *this->colorSRMLabel,
+                        *this->label_color,
                         style->colorMin_srm(),
                         style->colorMax_srm());
    }
-   this->styleRangeWidget_srm->setValue(this->colorSRMLabel->getAmountToDisplay(this->pimpl->m_recipeObs->color_srm()));
+   this->styleRangeWidget_srm->setValue(this->label_color->getAmountToDisplay(this->pimpl->m_recipeObs->color_srm()));
 
    // In some, incomplete, recipes, OG is approximately 1.000, which then makes GU close to 0 and thus IBU/GU insanely
    // large.  Besides being meaningless, such a large number takes up a lot of space.  So, where gravity units are
@@ -1731,14 +1739,14 @@ void MainWindow::displayRangesEtcForCurrentRecipeStyle() {
 
    auto const style = this->pimpl->m_recipeObs->style();
    if (style) {
-      this->styleRangeWidget_og->setPreferredRange(this->oGLabel->getRangeToDisplay(style->ogMin(), style->ogMax()));
+      this->styleRangeWidget_og->setPreferredRange(this->label_og->getRangeToDisplay(style->ogMin(), style->ogMax()));
 
-      this->styleRangeWidget_fg->setPreferredRange(this->fGLabel->getRangeToDisplay(style->ogMin(), style->ogMax()));
+      this->styleRangeWidget_fg->setPreferredRange(this->label_fg->getRangeToDisplay(style->ogMin(), style->ogMax()));
 
       // If min and/or max ABV is not set on the Style, then use some sensible outer limit(s)
       this->styleRangeWidget_abv->setPreferredRange(style->abvMin_pct().value_or(0.0), style->abvMax_pct().value_or(50.0));
       this->styleRangeWidget_ibu->setPreferredRange(style->ibuMin(), style->ibuMax());
-      this->styleRangeWidget_srm->setPreferredRange(this->colorSRMLabel->getRangeToDisplay(style->colorMin_srm(),
+      this->styleRangeWidget_srm->setPreferredRange(this->label_color->getRangeToDisplay(style->colorMin_srm(),
                                                                                            style->colorMax_srm()));
    }
 

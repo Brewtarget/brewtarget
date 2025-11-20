@@ -49,6 +49,11 @@ using EnumAndItsString = EnumKeyValue<QString>;
  *              the number of values in the enum (subject to the assumption that every value in the enum was given a
  *              mapping entry).  Use \c FlagEnumStringMapping for enums such as \c Ingredient::Measure where this is not
  *              the case.
+ *
+ *        TODO: We should create a similar class for translatable strings that calls \c tr at time of use rather than
+ *              time of construction.  This could be done with function pointers or with \c QT_TRANSLATE_NOOP() or
+ *              \c QT_TR_NOOP() -- per https://doc.qt.io/qt-6/i18n-source-translation.html#c-use-noop-macros.  We could
+ *              even add a template parameter to this class `bool translated = false`...
  */
 class EnumStringMapping : public EnumMapping<QString> {
 public:

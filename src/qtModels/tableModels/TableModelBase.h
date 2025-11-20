@@ -610,20 +610,18 @@ protected:
    }
 
    template<class TM>
-   void updateStockPurchase(int invKey, BtStringConst const & propertyName) requires IsTableModel<TM> &&
-                                                                                 CanHaveStockPurchase<NE> {
+   void updateStockPurchase(int invKey,
+                            BtStringConst const & propertyName) requires IsTableModel<TM> && CanHaveStockPurchase<NE> {
       // Substantive version
       if (propertyName == PropertyNames::IngredientAmount::amount) {
+         auto stockPurchase = ObjectStoreWrapper::getById<typename NE::StockPurchaseClass>(invKey);
          for (int ii = 0; ii < this->m_rows.size(); ++ii) {
             std::shared_ptr<NE> ingredient = this->m_rows.at(ii);
-            if (StockPurchaseTools::hasStockPurchase<NE>(*ingredient)) {
-               std::shared_ptr<typename NE::StockPurchaseClass> inventory = StockPurchaseTools::getStockPurchase(*ingredient);
-               if (inventory->key() == invKey) {
-                  emit this->derived().dataChanged(
-                     this->derived().createIndex(ii, static_cast<int>(Derived::ColumnIndex::TotalInventory)),
-                     this->derived().createIndex(ii, static_cast<int>(Derived::ColumnIndex::TotalInventory))
-                  );
-               }
+            if (ingredient->key() == stockPurchase->ingredientId()) {
+               emit this->derived().dataChanged(
+                  this->derived().createIndex(ii, static_cast<int>(Derived::ColumnIndex::TotalInventory)),
+                  this->derived().createIndex(ii, static_cast<int>(Derived::ColumnIndex::TotalInventory))
+               );
             }
          }
       }

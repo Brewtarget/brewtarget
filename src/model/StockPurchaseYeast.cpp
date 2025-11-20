@@ -72,6 +72,12 @@ StockPurchaseYeast::StockPurchaseYeast(StockPurchaseYeast const & other) :
 
 StockPurchaseYeast::~StockPurchaseYeast() = default;
 
+void StockPurchaseYeast::setIngredient(Yeast const & val) {
+   // No extra work to do for Yeasts
+   this->setIngredientId(val.key());
+   return;
+}
+
 // Boilerplate code for StockPurchase and IngredientAmount
 STOCK_PURCHASE_COMMON_CODE(Yeast, yeast)
 INGREDIENT_AMOUNT_COMMON_CODE(StockPurchaseYeast, Yeast)

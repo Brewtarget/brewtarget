@@ -25,7 +25,7 @@
    #include "moc_StockPurchase.cpp"
 #endif
 
-QString StockPurchase::localisedName() { return tr("StockPurchase"); }
+QString StockPurchase::localisedName() { return tr("Stock Purchase"); }
 QString StockPurchase::localisedName_dateOrdered      () { return tr("Date Ordered"      ); }
 QString StockPurchase::localisedName_dateReceived     () { return tr("Date Received"     ); }
 QString StockPurchase::localisedName_dateBestBefore   () { return tr("Best Before Date"  ); }

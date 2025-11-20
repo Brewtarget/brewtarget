@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * editors/InventoryFermentableEditor.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * editors/StockPurchaseFermentableEditor.cpp is part of Brewtarget, and is copyright the following authors 2025:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -41,6 +41,7 @@ StockPurchaseFermentableEditor::StockPurchaseFermentableEditor(QWidget* parent, 
    this->postSetupUiInit({
       EDITOR_FIELD_NORM(StockPurchaseFermentable, label_ingredient    , comboBox_ingredient    , StockPurchaseFermentable::fermentable),
       EDITOR_FIELD_NORM(StockPurchaseFermentable, label_supplier      , lineEdit_supplier      , StockPurchase::supplier   ),
+      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_note          , lineEdit_note          , StockPurchase::note       ),
       EDITOR_FIELD_NORM(StockPurchaseFermentable, label_dateOrdered   , dateEdit_dateOrdered   , StockPurchase::dateOrdered),
       EDITOR_FIELD_NORM(StockPurchaseFermentable, label_dateReceived  , dateEdit_dateReceived  , StockPurchase::dateReceived),
       EDITOR_FIELD_NORM(StockPurchaseFermentable, label_amountOrdered , lineEdit_amountOrdered , StockPurchaseBase::amountOrdered , 1, WhenToWriteField::Late),
@@ -48,11 +49,11 @@ StockPurchaseFermentableEditor::StockPurchaseFermentableEditor(QWidget* parent, 
       EDITOR_FIELD_COPQ(StockPurchaseFermentable, label_amountType    , comboBox_amountType    , StockPurchaseBase::amountReceived, {lineEdit_amountReceived,
                                                                                                                                      lineEdit_amountOrdered},
                                                                                                                                     WhenToWriteField::Never),
-      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_amountRemaining, label_amountRemaining_value, StockPurchaseBase::amountRemaining, 1),
-      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_purchasePrice  , lineEdit_purchasePrice     , StockPurchase::purchasePrice ),
-      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_purchaseTax    , lineEdit_purchaseTax       , StockPurchase::purchaseTax   ),
-      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_shippingCost   , lineEdit_shippingCost      , StockPurchase::shippingCost  ),
-      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_dateBestBefore , dateEdit_dateBestBefore    , StockPurchase::dateBestBefore),
+      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_amountRemaining, display_amountRemaining, StockPurchaseBase::amountRemaining, 1),
+      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_purchasePrice  , lineEdit_purchasePrice , StockPurchase::purchasePrice ),
+      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_purchaseTax    , lineEdit_purchaseTax   , StockPurchase::purchaseTax   ),
+      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_shippingCost   , lineEdit_shippingCost  , StockPurchase::shippingCost  ),
+      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_dateBestBefore , dateEdit_dateBestBefore, StockPurchase::dateBestBefore),
    });
    return;
 }

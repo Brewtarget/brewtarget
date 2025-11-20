@@ -73,6 +73,12 @@ StockPurchaseFermentable::StockPurchaseFermentable(StockPurchaseFermentable cons
 
 StockPurchaseFermentable::~StockPurchaseFermentable() = default;
 
+void StockPurchaseFermentable::setIngredient(Fermentable const & val) {
+   // No extra work to do for Fermentables
+   this->setIngredientId(val.key());
+   return;
+}
+
 // Boilerplate code for StockPurchase and IngredientAmount
 STOCK_PURCHASE_COMMON_CODE(Fermentable, fermentable)
 INGREDIENT_AMOUNT_COMMON_CODE(StockPurchaseFermentable, Fermentable)

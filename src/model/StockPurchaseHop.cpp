@@ -102,6 +102,17 @@ void StockPurchaseHop::setForm     (std::optional<Hop::Form> const   val) { SET_
 void StockPurchaseHop::setFormAsInt(std::optional<int>       const   val) { SET_AND_NOTIFY(PropertyNames::StockPurchaseHop::form     , this->m_form     , Optional::fromOptInt<Hop::Form>(val)); return; }
 void StockPurchaseHop::setYear     (QString                  const & val) { SET_AND_NOTIFY(PropertyNames::StockPurchaseHop::year     , this->m_year     , val); return; }
 
+void StockPurchaseHop::setIngredient(Hop const & val) {
+   qDebug() << Q_FUNC_INFO << "Alpha:" << val.alpha_pct();
+   // For Hops, we take default values for our optional fields
+   if (!this->m_alpha_pct    ) { this->setAlpha_pct(val.alpha_pct()); }
+   if (!this->m_form         ) { this->setForm     (val.form     ()); }
+   if (this->m_year.isEmpty()) { this->setYear     (val.year     ()); }
+
+   this->setIngredientId(val.key());
+   return;
+}
+
 // Boilerplate code for StockPurchase and IngredientAmount
 STOCK_PURCHASE_COMMON_CODE(Hop, hop)
 INGREDIENT_AMOUNT_COMMON_CODE(StockPurchaseHop, Hop)

@@ -78,7 +78,7 @@
         </widget>
        </item>
        <item row="10" column="2">
-        <widget class="SmartValueDisplay" name="label_totalMashWater_value">
+        <widget class="SmartValueDisplay" name="value_totalMashWater">
         </widget>
        </item>
        <item row="10" column="4">
@@ -89,7 +89,7 @@
         </widget>
        </item>
        <item row="10" column="5">
-        <widget class="SmartValueDisplay" name="label_totalTime_value">
+        <widget class="SmartValueDisplay" name="value_totalTime">
         </widget>
        </item>
 

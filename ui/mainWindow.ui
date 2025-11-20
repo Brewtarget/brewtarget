@@ -584,12 +584,12 @@
                        <string>Tar&amp;get Boil Size</string>
                       </property>
                       <property name="buddy">
-                       <cstring>label_targetBoilSize_value</cstring>
+                       <cstring>value_targetBoilSize</cstring>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="1">
-                     <widget class="SmartValueDisplay" name="label_targetBoilSize_value">
+                     <widget class="SmartValueDisplay" name="value_targetBoilSize">
                       <property name="toolTip">
                        <string>See Boil tab below</string>
                       </property>
@@ -604,12 +604,12 @@
                        <string>Boil Time</string>
                       </property>
                       <property name="buddy">
-                       <cstring>label_boilTime_value</cstring>
+                       <cstring>value_boilTime</cstring>
                       </property>
                      </widget>
                     </item>
                     <item row="7" column="1">
-                     <widget class="SmartValueDisplay" name="label_boilTime_value">
+                     <widget class="SmartValueDisplay" name="value_boilTime">
                       <property name="toolTip">
                        <string>See Boil tab below</string>
                       </property>
@@ -624,12 +624,12 @@
                        <string>Boil SG</string>
                       </property>
                       <property name="buddy">
-                       <cstring>label_boilSg_value</cstring>
+                       <cstring>value_boilSg</cstring>
                       </property>
                      </widget>
                     </item>
                     <item row="8" column="1">
-                     <widget class="SmartValueDisplay" name="label_boilSg_value">
+                     <widget class="SmartValueDisplay" name="value_boilSg">
                      </widget>
                     </item>
                     <item row="9" column="0">
@@ -738,7 +738,7 @@
                      </widget>
                     </item>
                     <item row="4" column="0">
-                     <widget class="SmartLabel" name="colorSRMLabel">
+                     <widget class="SmartLabel" name="label_color">
                       <property name="contextMenuPolicy">
                        <enum>Qt::CustomContextMenu</enum>
                       </property>
@@ -777,7 +777,7 @@
                      </widget>
                     </item>
                     <item row="0" column="0">
-                     <widget class="SmartLabel" name="oGLabel">
+                     <widget class="SmartLabel" name="label_og">
                       <property name="contextMenuPolicy">
                        <enum>Qt::CustomContextMenu</enum>
                       </property>
@@ -787,7 +787,7 @@
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="SmartLabel" name="fGLabel">
+                     <widget class="SmartLabel" name="label_fg">
                       <property name="contextMenuPolicy">
                        <enum>Qt::CustomContextMenu</enum>
                       </property>
@@ -2452,9 +2452,9 @@
   <tabstop>equipmentButton</tabstop>
   <tabstop>equipmentComboBox</tabstop>
   <tabstop>lineEdit_batchSize</tabstop>
-  <tabstop>label_targetBoilSize_value</tabstop>
+  <tabstop>value_targetBoilSize</tabstop>
   <tabstop>lineEdit_efficiency</tabstop>
-  <tabstop>label_boilTime_value</tabstop>
+  <tabstop>value_boilTime</tabstop>
   <tabstop>scrollArea_tables</tabstop>
   <tabstop>tabWidget_ingredients</tabstop>
   <tabstop>fermentableAdditionTable</tabstop>

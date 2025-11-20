@@ -95,6 +95,11 @@ namespace Localization {
    QString displayDateUserFormated(QDate const & date);
 
    /**
+    * \brief Overload for optional dates.
+    */
+   QString displayDateUserFormated(std::optional<QDate> const & date);
+
+   /**
     * \return \c true if the supplied language code is one we support, \c false otherwise
     */
    [[nodiscard]] bool isSupportedLanguage(QString const & twoLetterLanguage);

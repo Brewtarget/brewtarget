@@ -68,7 +68,13 @@ namespace WindowDistributor {
    template<class IngredientClass>
    void editorForNewStockPurchase(IngredientClass const * ingredient) requires(std::is_base_of_v<Ingredient, IngredientClass>) {
       auto stockPurchase = std::make_shared<typename IngredientClass::StockPurchaseClass>();
-      stockPurchase->setIngredientRaw(ingredient);
+      if (ingredient) {
+         //
+         // This call will also set any "extra fields" on the StockPurchase from the Ingredient to default values -- eg
+         // Alpha % on StockPurchaseHop.
+         //
+         stockPurchase->setIngredient(*ingredient);
+      }
       auto & stockPurchaseEditor = WindowDistributor::get<typename IngredientClass::StockPurchaseClass::EditorClass>();
       stockPurchaseEditor.setEditItem(stockPurchase);
       stockPurchaseEditor.show();

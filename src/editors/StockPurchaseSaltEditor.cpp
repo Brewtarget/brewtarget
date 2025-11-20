@@ -47,6 +47,7 @@ StockPurchaseSaltEditor::StockPurchaseSaltEditor(QWidget* parent, QString const 
    this->postSetupUiInit({
       EDITOR_FIELD_NORM(StockPurchaseSalt, label_ingredient    , comboBox_ingredient    , StockPurchaseSalt::salt),
       EDITOR_FIELD_NORM(StockPurchaseSalt, label_supplier      , lineEdit_supplier      , StockPurchase::supplier   ),
+      EDITOR_FIELD_NORM(StockPurchaseSalt, label_note          , lineEdit_note          , StockPurchase::note       ),
       EDITOR_FIELD_NORM(StockPurchaseSalt, label_dateOrdered   , dateEdit_dateOrdered   , StockPurchase::dateOrdered),
       EDITOR_FIELD_NORM(StockPurchaseSalt, label_dateReceived  , dateEdit_dateReceived  , StockPurchase::dateReceived),
       EDITOR_FIELD_NORM(StockPurchaseSalt, label_amountOrdered , lineEdit_amountOrdered , StockPurchaseBase::amountOrdered , 1, WhenToWriteField::Late),
@@ -54,11 +55,11 @@ StockPurchaseSaltEditor::StockPurchaseSaltEditor(QWidget* parent, QString const 
       EDITOR_FIELD_COPQ(StockPurchaseSalt, label_amountType    , comboBox_amountType    , StockPurchaseBase::amountReceived, {lineEdit_amountReceived,
                                                                                                                                      lineEdit_amountOrdered},
                                                                                                                                     WhenToWriteField::Never),
-      EDITOR_FIELD_NORM(StockPurchaseSalt, label_amountRemaining, label_amountRemaining_value, StockPurchaseBase::amountRemaining, 1),
-      EDITOR_FIELD_NORM(StockPurchaseSalt, label_purchasePrice  , lineEdit_purchasePrice     , StockPurchase::purchasePrice ),
-      EDITOR_FIELD_NORM(StockPurchaseSalt, label_purchaseTax    , lineEdit_purchaseTax       , StockPurchase::purchaseTax   ),
-      EDITOR_FIELD_NORM(StockPurchaseSalt, label_shippingCost   , lineEdit_shippingCost      , StockPurchase::shippingCost  ),
-      EDITOR_FIELD_NORM(StockPurchaseSalt, label_dateBestBefore , dateEdit_dateBestBefore    , StockPurchase::dateBestBefore),
+      EDITOR_FIELD_NORM(StockPurchaseSalt, label_amountRemaining, display_amountRemaining, StockPurchaseBase::amountRemaining, 1),
+      EDITOR_FIELD_NORM(StockPurchaseSalt, label_purchasePrice  , lineEdit_purchasePrice , StockPurchase::purchasePrice ),
+      EDITOR_FIELD_NORM(StockPurchaseSalt, label_purchaseTax    , lineEdit_purchaseTax   , StockPurchase::purchaseTax   ),
+      EDITOR_FIELD_NORM(StockPurchaseSalt, label_shippingCost   , lineEdit_shippingCost  , StockPurchase::shippingCost  ),
+      EDITOR_FIELD_NORM(StockPurchaseSalt, label_dateBestBefore , dateEdit_dateBestBefore, StockPurchase::dateBestBefore),
    });
    return;
 }

@@ -73,6 +73,12 @@ StockPurchaseMisc::StockPurchaseMisc(StockPurchaseMisc const & other) :
 
 StockPurchaseMisc::~StockPurchaseMisc() = default;
 
+void StockPurchaseMisc::setIngredient(Misc const & val) {
+   // No extra work to do for Miscs
+   this->setIngredientId(val.key());
+   return;
+}
+
 // Boilerplate code for StockPurchase and IngredientAmount
 STOCK_PURCHASE_COMMON_CODE(Misc, misc)
 INGREDIENT_AMOUNT_COMMON_CODE(StockPurchaseMisc, Misc)

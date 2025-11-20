@@ -338,7 +338,7 @@ public:
     *
     * \return \c std::nullopt if the user cancelled the deletion
     */
-   std::optional<QModelIndex> doDeleteItems(QModelIndexList const & selectedViewIndexes) requires (!IsStockPurchase<NE>) {
+   std::optional<QModelIndex> doDeleteItems(QModelIndexList const & selectedViewIndexes) {
       //
       // Later on we're going to want to have the node just before or after the ones we deleted, so we can make it the
       // selected one.  The QModelIndex objects won't be valid after we modify the tree structure, so we want to get the
@@ -379,9 +379,14 @@ public:
          // (or Style, Equipment, Mash, etc) is used in any Recipes.  If so, we want to prevent them from deleting it.
          // TODO: This is similar logic to that in CatalogBase, and we should combine in one place at some point.
          //
-         // But in the case of deleting a Recipe, this is not meaningful (because a Recipe is not used in another
-         // Recipe).  Similarly, there is no special additional text for a secondary item (eg BrewNote), because it is
-         // only used by its parent.
+         // But this is not meaningful in the following cases:
+         //    - deleting a Recipe (because a Recipe is not used in another Recipe);
+         //    - deleting a StockPurchase (because StockPurchase is not used in a Recipe)
+         //    - deleting a secondary item (eg BrewNote), because it is only used by its parent.
+         //
+         // TODO: We should, somewhere, handle the case of a Recipe being deleted that has BrewNotes referred to by a
+         //       StockUse subclass.  For soft delete, we maybe just need to update the UI to not show there is a
+         //       BrewNote for that StockUse.  For hard delete, need to remove the BrewNote ID from the StockUse.
          //
          QString confirmationMessage = Derived::tr("Delete %1 #%2 \"%3\"?").arg(
                                           treeNode->localisedClassName()
@@ -390,7 +395,7 @@ public:
                                        ).arg(
                                           treeNode->name()
                                        );
-         if constexpr (!std::same_as<NE, Recipe>) {
+         if constexpr (!std::same_as<NE, Recipe> && !IsStockPurchase<NE>) {
             if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
                TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
                int const numRecipesUsedIn = primaryTreeNode.underlyingItem()->numRecipesUsedIn();
@@ -448,14 +453,6 @@ public:
 
       // If newSelectedTreeNode is null, this will just return the index of the root node
       return this->indexOfNode(newSelectedTreeNode);
-   }
-
-   /**
-    *
-    */
-   std::optional<QModelIndex> doDeleteItems(QModelIndexList const & selectedViewIndexes) requires (IsStockPurchase<NE>) {
-      // TODO Placeholder
-      return std::nullopt;
    }
 
    /**

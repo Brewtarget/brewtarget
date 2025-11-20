@@ -64,6 +64,7 @@ class StockPurchaseMisc : public StockPurchase,
    Q_PROPERTY(Measurement::Unit const *     unit      READ unit       WRITE setUnit    )
    Q_PROPERTY(Measurement::PhysicalQuantity measure   READ measure    WRITE setMeasure )
    Q_PROPERTY(bool                          isWeight  READ isWeight   WRITE setIsWeight)
+
 };
 
 #endif

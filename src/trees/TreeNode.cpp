@@ -657,144 +657,277 @@ template<> QString TreeItemNode<Fermentable>::getToolTip() const {
    return header + body;
 }
 
+//
+// TBD: For the moment, the TreeItemNode::getToolTip code for StockPurchaseFermentable, StockPurchaseHop, etc is just
+//      copy-paste identical.  In time, we'll either want to tweak individual ones or merge them all.
+//
 template<> QString TreeItemNode<StockPurchaseFermentable>::getToolTip() const {
-   // TODO: This is placeholder
-   QString const header = getHeader();
+   QString outputString = getHeader();
+   QTextStream output{&outputString};
 
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   body += "</table></body></html>";
+   output <<
+      "<body>"
+        "<div id=\"headerdiv\">"
+          "<caption>" << this->m_underlyingItem->name() << "</caption>"
+        "</div>"
+        "<table id=\"tooltip\">"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchase::localisedName_dateOrdered() << "</td>"
+            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateOrdered()) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchase::localisedName_dateReceived() << "</td>"
+            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateReceived()) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountReceived() << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountReceived(), 1) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountRemaining() << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountRemaining(), 1) << "</td>"
+          "</tr>"
+        "</table>"
+      "</body>"
+      "</html>";
 
-   return header + body;
+   return outputString;
 }
 
+//
+// TBD: For the moment, the TreeItemNode::getToolTip code for StockUseFermentable, StockUseHop, etc is just
+//      copy-paste identical.  In time, we'll either want to tweak individual ones or merge them all.
+//
 template<> QString TreeItemNode<StockUseFermentable>::getToolTip() const {
-   // TODO: This is placeholder
-   QString const header = getHeader();
-
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   body += "</table></body></html>";
-
-   return header + body;
+   QString outputString = getHeader();
+   QTextStream output{&outputString};
+   output <<
+      "<body>"
+        "<div id=\"headerdiv\">"
+        "<caption>" << this->m_underlyingItem->name() << "</caption>"
+        "</div>"
+        "<table id=\"tooltip\">"
+          "<tr>"
+            "<td class=\"left\">" << Localization::displayDateUserFormated(this->m_underlyingItem->date()) << "</td>"
+            "<td class=\"value\">" << StockUse::reasonDisplayNames[this->m_underlyingItem->reason()] << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountUsed(), 1) << "</td>"
+          "</tr>"
+        "</table>"
+      "</body>"
+      "</html>";
+   return outputString;
 }
 
 template<> QString TreeItemNode<StockPurchaseHop>::getToolTip() const {
-   // TODO: This is placeholder
-   QString const header = getHeader();
+   QString outputString = getHeader();
+   QTextStream output{&outputString};
 
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   body += "</table></body></html>";
+   output <<
+      "<body>"
+        "<div id=\"headerdiv\">"
+          "<caption>" << this->m_underlyingItem->name() << "</caption>"
+        "</div>"
+        "<table id=\"tooltip\">"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchase::localisedName_dateOrdered() << "</td>"
+            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateOrdered()) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchase::localisedName_dateReceived() << "</td>"
+            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateReceived()) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountReceived() << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountReceived(), 1) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountRemaining() << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountRemaining(), 1) << "</td>"
+          "</tr>"
+        "</table>"
+      "</body>"
+      "</html>";
 
-   return header + body;
+   return outputString;
 }
 
 template<> QString TreeItemNode<StockUseHop>::getToolTip() const {
-   // TODO: This is placeholder
-   QString const header = getHeader();
-
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   body += "</table></body></html>";
-
-   return header + body;
+   QString outputString = getHeader();
+   QTextStream output{&outputString};
+   output <<
+      "<body>"
+        "<div id=\"headerdiv\">"
+        "<caption>" << this->m_underlyingItem->name() << "</caption>"
+        "</div>"
+        "<table id=\"tooltip\">"
+          "<tr>"
+            "<td class=\"left\">" << Localization::displayDateUserFormated(this->m_underlyingItem->date()) << "</td>"
+            "<td class=\"value\">" << StockUse::reasonDisplayNames[this->m_underlyingItem->reason()] << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountUsed(), 1) << "</td>"
+          "</tr>"
+        "</table>"
+      "</body>"
+      "</html>";
+   return outputString;
 }
 
 template<> QString TreeItemNode<StockPurchaseMisc>::getToolTip() const {
-   // TODO: This is placeholder
-   QString const header = getHeader();
+   QString outputString = getHeader();
+   QTextStream output{&outputString};
 
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   body += "</table></body></html>";
+   output <<
+      "<body>"
+        "<div id=\"headerdiv\">"
+          "<caption>" << this->m_underlyingItem->name() << "</caption>"
+        "</div>"
+        "<table id=\"tooltip\">"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchase::localisedName_dateOrdered() << "</td>"
+            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateOrdered()) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchase::localisedName_dateReceived() << "</td>"
+            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateReceived()) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountReceived() << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountReceived(), 1) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountRemaining() << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountRemaining(), 1) << "</td>"
+          "</tr>"
+        "</table>"
+      "</body>"
+      "</html>";
 
-   return header + body;
+   return outputString;
 }
 
 template<> QString TreeItemNode<StockUseMisc>::getToolTip() const {
-   // TODO: This is placeholder
-   QString const header = getHeader();
-
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   body += "</table></body></html>";
-
-   return header + body;
+   QString outputString = getHeader();
+   QTextStream output{&outputString};
+   output <<
+      "<body>"
+        "<div id=\"headerdiv\">"
+        "<caption>" << this->m_underlyingItem->name() << "</caption>"
+        "</div>"
+        "<table id=\"tooltip\">"
+          "<tr>"
+            "<td class=\"left\">" << Localization::displayDateUserFormated(this->m_underlyingItem->date()) << "</td>"
+            "<td class=\"value\">" << StockUse::reasonDisplayNames[this->m_underlyingItem->reason()] << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountUsed(), 1) << "</td>"
+          "</tr>"
+        "</table>"
+      "</body>"
+      "</html>";
+   return outputString;
 }
 
 template<> QString TreeItemNode<StockPurchaseSalt>::getToolTip() const {
-   // TODO: This is placeholder
-   QString const header = getHeader();
+   QString outputString = getHeader();
+   QTextStream output{&outputString};
 
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   body += "</table></body></html>";
+   output <<
+      "<body>"
+        "<div id=\"headerdiv\">"
+          "<caption>" << this->m_underlyingItem->name() << "</caption>"
+        "</div>"
+        "<table id=\"tooltip\">"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchase::localisedName_dateOrdered() << "</td>"
+            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateOrdered()) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchase::localisedName_dateReceived() << "</td>"
+            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateReceived()) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountReceived() << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountReceived(), 1) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountRemaining() << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountRemaining(), 1) << "</td>"
+          "</tr>"
+        "</table>"
+      "</body>"
+      "</html>";
 
-   return header + body;
+   return outputString;
 }
 
 template<> QString TreeItemNode<StockUseSalt>::getToolTip() const {
-   // TODO: This is placeholder
-   QString const header = getHeader();
-
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   body += "</table></body></html>";
-
-   return header + body;
+   QString outputString = getHeader();
+   QTextStream output{&outputString};
+   output <<
+      "<body>"
+        "<div id=\"headerdiv\">"
+        "<caption>" << this->m_underlyingItem->name() << "</caption>"
+        "</div>"
+        "<table id=\"tooltip\">"
+          "<tr>"
+            "<td class=\"left\">" << Localization::displayDateUserFormated(this->m_underlyingItem->date()) << "</td>"
+            "<td class=\"value\">" << StockUse::reasonDisplayNames[this->m_underlyingItem->reason()] << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountUsed(), 1) << "</td>"
+          "</tr>"
+        "</table>"
+      "</body>"
+      "</html>";
+   return outputString;
 }
 
 template<> QString TreeItemNode<StockPurchaseYeast>::getToolTip() const {
-   // TODO: This is placeholder
-   QString const header = getHeader();
+   QString outputString = getHeader();
+   QTextStream output{&outputString};
 
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   body += "</table></body></html>";
+   output <<
+      "<body>"
+        "<div id=\"headerdiv\">"
+          "<caption>" << this->m_underlyingItem->name() << "</caption>"
+        "</div>"
+        "<table id=\"tooltip\">"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchase::localisedName_dateOrdered() << "</td>"
+            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateOrdered()) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchase::localisedName_dateReceived() << "</td>"
+            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateReceived()) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountReceived() << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountReceived(), 1) << "</td>"
+          "</tr>"
+          "<tr>"
+            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountRemaining() << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountRemaining(), 1) << "</td>"
+          "</tr>"
+        "</table>"
+      "</body>"
+      "</html>";
 
-   return header + body;
+   return outputString;
 }
 
 template<> QString TreeItemNode<StockUseYeast>::getToolTip() const {
-   // TODO: This is placeholder
-   QString const header = getHeader();
-
-   QString body   = "<body>";
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   body += "</table></body></html>";
-
-   return header + body;
+   QString outputString = getHeader();
+   QTextStream output{&outputString};
+   output <<
+      "<body>"
+        "<div id=\"headerdiv\">"
+        "<caption>" << this->m_underlyingItem->name() << "</caption>"
+        "</div>"
+        "<table id=\"tooltip\">"
+          "<tr>"
+            "<td class=\"left\">" << Localization::displayDateUserFormated(this->m_underlyingItem->date()) << "</td>"
+            "<td class=\"value\">" << StockUse::reasonDisplayNames[this->m_underlyingItem->reason()] << "</td>"
+            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountUsed(), 1) << "</td>"
+          "</tr>"
+        "</table>"
+      "</body>"
+      "</html>";
+   return outputString;
 }
 
 template<> QString TreeItemNode<Hop>::getToolTip() const {

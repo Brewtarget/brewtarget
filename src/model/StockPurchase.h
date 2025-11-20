@@ -205,59 +205,32 @@ protected:
  */
 template <typename T> concept CONCEPT_FIX_UP IsStockPurchase = std::is_base_of_v<StockPurchase, T>;
 
-namespace StockPurchaseTools {
-   /**
-    * \return First found \c StockPurchase subclass object exists for the supplied \c Ingredient subclass object.  Or
-    *         \c nullptr if none is found.
-    */
-   template<IsStockPurchase Inv, IsIngredient Ing>
-   std::shared_ptr<Inv> firstStockPurchase(Ing const & ing) {
-      auto ingredientId = ing.key();
-      auto result = ObjectStoreWrapper::findFirstMatching<Inv>(
-         [ingredientId](std::shared_ptr<Inv> inventory) {
-            return inventory->ingredientId() == ingredientId;
-         }
-      );
-      return result;
-   }
-
-   /**
-    * \return \c true if at least one \c StockPurchase subclass object exists for the supplied \c Ingredient subclass object;
-    *         \c false otherwise.
-    */
-   template<IsIngredient Ing>
-   bool hasStockPurchase(Ing const & ing) {
-      auto result = StockPurchaseTools::firstStockPurchase<typename Ing::StockPurchaseClass, Ing>(ing);
-      // Although smart pointers can be treated as booleans inside if statements (eg `if (result)` etc) they are not
-      // implicitly convertible to bool in other circumstances.  The double negation here is a trick to get around this
-      // which avoids a cast or something painful such as `result ? true : false`.
-      return !!result;
-   }
-
-   /**
-    * \return A suitable \c StockPurchase subclass object for the supplied \c Ingredient subclass object.  If the former does
-    *         not exist, it will be created.
-    */
-   template<IsIngredient Ing>
-   std::shared_ptr<typename Ing::StockPurchaseClass> getStockPurchase(Ing const & ing) {
-      //
-      // At the moment, we assume there is at most one StockPurchase object per ingredient object.  In time we would like to
-      // extend this to manage, eg, different purchases/batches as separate StockPurchase items, but that's for another day.
-      //
-      auto result = firstStockPurchase<typename Ing::StockPurchaseClass, Ing>(ing);
-      if (result) {
-         return result;
-      }
-
-      auto newStockPurchase = std::make_shared<typename Ing::StockPurchaseClass>();
-      newStockPurchase->setIngredientId(ing.key());
-      // Even though the StockPurchase base class does not have a setQuantity member function, we know that all its
-      // subclasses will, so this line will be fine when this template function is instantiated.
-      newStockPurchase->setQuantity(0.0);
-      ObjectStoreWrapper::insert<typename Ing::StockPurchaseClass>(newStockPurchase);
-      return newStockPurchase;
-   }
-}
+///namespace StockPurchaseTools {
+///
+///   /**
+///    * \return A suitable \c StockPurchase subclass object for the supplied \c Ingredient subclass object.  If the former does
+///    *         not exist, it will be created.
+///    */
+///   template<IsIngredient Ing>
+///   std::shared_ptr<typename Ing::StockPurchaseClass> getStockPurchase(Ing const & ing) {
+//////      //
+//////      // At the moment, we assume there is at most one StockPurchase object per ingredient object.  In time we would like to
+//////      // extend this to manage, eg, different purchases/batches as separate StockPurchase items, but that's for another day.
+//////      //
+//////      auto result = firstStockPurchase<typename Ing::StockPurchaseClass, Ing>(ing);
+//////      if (result) {
+//////         return result;
+//////      }
+///
+///      auto newStockPurchase = std::make_shared<typename Ing::StockPurchaseClass>();
+///      newStockPurchase->setIngredient(ing);
+///      // Even though the StockPurchase base class does not have a setQuantity member function, we know that all its
+///      // subclasses will, so this line will be fine when this template function is instantiated.
+///      newStockPurchase->setQuantity(0.0);
+///      ObjectStoreWrapper::insert<typename Ing::StockPurchaseClass>(newStockPurchase);
+///      return newStockPurchase;
+///   }
+///}
 
 
 #endif
