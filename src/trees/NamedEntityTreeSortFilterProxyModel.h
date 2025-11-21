@@ -41,45 +41,50 @@ class StockPurchaseFermentableTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
    public TreeSortFilterProxyModelBase<StockPurchaseFermentableTreeSortFilterProxyModel,
                                        StockPurchaseFermentableTreeModel,
-                                       StockPurchaseFermentable> {
+                                       StockPurchaseFermentable,
+                                       StockUseFermentable> {
    Q_OBJECT
-   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseFermentable)
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseFermentable, StockUseFermentable)
 };
 
 class StockPurchaseHopTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
    public TreeSortFilterProxyModelBase<StockPurchaseHopTreeSortFilterProxyModel,
                                        StockPurchaseHopTreeModel,
-                                       StockPurchaseHop> {
+                                       StockPurchaseHop,
+                                       StockUseHop> {
    Q_OBJECT
-   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseHop)
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseHop, StockUseHop)
 };
 
 class StockPurchaseMiscTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
    public TreeSortFilterProxyModelBase<StockPurchaseMiscTreeSortFilterProxyModel,
                                        StockPurchaseMiscTreeModel,
-                                       StockPurchaseMisc> {
+                                       StockPurchaseMisc,
+                                       StockUseMisc> {
    Q_OBJECT
-   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseMisc)
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseMisc, StockUseMisc)
 };
 
 class StockPurchaseSaltTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
    public TreeSortFilterProxyModelBase<StockPurchaseSaltTreeSortFilterProxyModel,
                                        StockPurchaseSaltTreeModel,
-                                       StockPurchaseSalt> {
+                                       StockPurchaseSalt,
+                                       StockUseSalt> {
    Q_OBJECT
-   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseSalt)
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseSalt, StockUseSalt)
 };
 
 class StockPurchaseYeastTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
    public TreeSortFilterProxyModelBase<StockPurchaseYeastTreeSortFilterProxyModel,
                                        StockPurchaseYeastTreeModel,
-                                       StockPurchaseYeast> {
+                                       StockPurchaseYeast,
+                                       StockUseYeast> {
    Q_OBJECT
-   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseYeast)
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseYeast, StockUseYeast)
 };
 
 class MashTreeSortFilterProxyModel :

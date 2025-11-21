@@ -75,10 +75,11 @@ QString BrewNote::localisedName_strikeTemp_c     () { return tr("Strike Temperat
 QString BrewNote::localisedName_volumeIntoBK_l   () { return tr("Volume Into Boil Kettle"          ); }
 QString BrewNote::localisedName_volumeIntoFerm_l () { return tr("Volume Into Fermentor"            ); }
 
-// BrewNote doesn't use its name field, so we sort by brew date
-// TBD: Could consider copying date into name field and leaving the default ordering
-bool BrewNote::operator<(BrewNote const & other) const { return this->m_brewDate < other.m_brewDate; }
-bool BrewNote::operator>(BrewNote const & other) const { return this->m_brewDate > other.m_brewDate; }
+std::strong_ordering BrewNote::operator<=>(BrewNote const & other) const {
+   // If two BrewNotes have the same Date, then we assume the one with the smaller ID is earlier
+   return Utils::Auto3WayCompare(this->m_brewDate, other.m_brewDate,
+                                 this->key()     , other.key());
+}
 
 bool BrewNote::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid

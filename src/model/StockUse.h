@@ -109,6 +109,11 @@ public:
 
    virtual ~StockUse();
 
+   /**
+    * \brief StockUse instances are ordered by date rather than name, so we have to override \c NamedEntity ordering
+    */
+   std::strong_ordering operator<=>(StockUse const & other) const;
+
    //=================================================== PROPERTIES ====================================================
    Q_PROPERTY(QDate   date           READ date           WRITE setDate        )
 

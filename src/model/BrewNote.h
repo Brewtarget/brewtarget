@@ -134,8 +134,10 @@ public:
 
    virtual ~BrewNote();
 
-   bool operator<(BrewNote const & other) const;
-   bool operator>(BrewNote const & other) const;
+   /**
+    * \brief BrewNote instances are ordered by date rather than name, so we have to override \c NamedEntity ordering
+    */
+   std::strong_ordering operator<=>(BrewNote const & other) const;
 
    //=================================================== PROPERTIES ====================================================
    Q_PROPERTY(QDate   brewDate            READ brewDate            WRITE setBrewDate         )

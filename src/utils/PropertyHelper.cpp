@@ -296,6 +296,8 @@ bool PropertyHelper::isLessThan(QVariant const &  leftItem, QVariant const & rig
          auto const nonPhysicalQuantity = std::get<NonPhysicalQuantity>(fieldType);
          switch (nonPhysicalQuantity) {
             case NonPhysicalQuantity::Date:
+               return leftItem.toDate() < rightItem.toDate();
+
             case NonPhysicalQuantity::String:
             case NonPhysicalQuantity::Enum:
             case NonPhysicalQuantity::Bool:
