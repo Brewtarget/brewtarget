@@ -39,13 +39,12 @@
 
 COLUMN_INFOS(
    HopTableModel,
-   TABLE_MODEL_HEADER(Hop, Name              , PropertyNames::NamedEntity::name            ), // "Name"
-   TABLE_MODEL_HEADER(Hop, Form              , PropertyNames::Hop::form                    ), // "Form"
-   TABLE_MODEL_HEADER(Hop, Year              , PropertyNames::Hop::year                    ), // "Year"
-   TABLE_MODEL_HEADER(Hop, Alpha             , PropertyNames::Hop::alpha_pct               ), // "Alpha %"
-   TABLE_MODEL_HEADER(Hop, TotalInventory    , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
-///   TABLE_MODEL_HEADER(Hop, TotalInventoryType, PropertyNames::Ingredient::totalInventory   , Hop::validMeasures), // "Amount Type"
-   TABLE_MODEL_HEADER(Hop, NumRecipesUsedIn  , PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
+   TABLE_MODEL_HEADER(Hop, Name            , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Hop, Form            , PropertyNames::Hop::form                    ), // "Form"
+   TABLE_MODEL_HEADER(Hop, Year            , PropertyNames::Hop::year                    ), // "Year"
+   TABLE_MODEL_HEADER(Hop, Alpha           , PropertyNames::Hop::alpha_pct               ), // "Alpha %"
+   TABLE_MODEL_HEADER(Hop, TotalInventory  , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
+   TABLE_MODEL_HEADER(Hop, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 HopTableModel::HopTableModel(QTableView * parent, bool editable) :

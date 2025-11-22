@@ -29,6 +29,9 @@ bool StockPurchaseHop::compareWith(NamedEntity const & other,
    // Base class (NamedEntity) will have ensured this cast is valid
    StockPurchaseHop const & rhs = static_cast<StockPurchaseHop const &>(other);
    return (
+      AUTO_PROPERTY_COMPARE(this, rhs, m_alpha_pct, PropertyNames::StockPurchaseHop::alpha_pct, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_form     , PropertyNames::StockPurchaseHop::form     , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_year     , PropertyNames::StockPurchaseHop::year     , propertiesThatDiffer) &&
       // Parent classes have to be equal
       this->StockPurchase       ::compareWith(rhs, propertiesThatDiffer) &&
       this->IngredientAmount::doCompareWith(rhs, propertiesThatDiffer)
@@ -103,8 +106,7 @@ void StockPurchaseHop::setFormAsInt(std::optional<int>       const   val) { SET_
 void StockPurchaseHop::setYear     (QString                  const & val) { SET_AND_NOTIFY(PropertyNames::StockPurchaseHop::year     , this->m_year     , val); return; }
 
 void StockPurchaseHop::setIngredient(Hop const & val) {
-   qDebug() << Q_FUNC_INFO << "Alpha:" << val.alpha_pct();
-   // For Hops, we take default values for our optional fields
+   // Take default values for our optional fields that can "override" those of the base Hop
    if (!this->m_alpha_pct    ) { this->setAlpha_pct(val.alpha_pct()); }
    if (!this->m_form         ) { this->setForm     (val.form     ()); }
    if (this->m_year.isEmpty()) { this->setYear     (val.year     ()); }

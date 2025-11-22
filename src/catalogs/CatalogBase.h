@@ -188,7 +188,6 @@ public:
       this->m_verticalLayout  ->addWidget(this->m_tableWidget           );
       this->m_verticalLayout  ->addLayout(this->m_horizontalLayout      );
 
-///      this->derived().setMinimumSize(800, 300);
       this->derived().setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
       this->retranslateUi();

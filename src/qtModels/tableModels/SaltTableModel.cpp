@@ -33,12 +33,11 @@
 
 COLUMN_INFOS(
    SaltTableModel,
-   TABLE_MODEL_HEADER(Salt, Name              , PropertyNames::NamedEntity::name            ), // "Name"
-   TABLE_MODEL_HEADER(Salt, Type              , PropertyNames::Salt::type                   ), // "Type"
-   TABLE_MODEL_HEADER(Salt, PctAcid           , PropertyNames::Salt::percentAcid            ), // "% Acid"
-   TABLE_MODEL_HEADER(Salt, TotalInventory    , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
-///   TABLE_MODEL_HEADER(Salt, TotalInventoryType, PropertyNames::Ingredient::totalInventory   , Salt::validMeasures), // "Amount Type"
-   TABLE_MODEL_HEADER(Salt, NumRecipesUsedIn  , PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
+   TABLE_MODEL_HEADER(Salt, Name            , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Salt, Type            , PropertyNames::Salt::type                   ), // "Type"
+   TABLE_MODEL_HEADER(Salt, PctAcid         , PropertyNames::Salt::percentAcid            ), // "% Acid"
+   TABLE_MODEL_HEADER(Salt, TotalInventory  , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
+   TABLE_MODEL_HEADER(Salt, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 SaltTableModel::SaltTableModel(QTableView* parent, bool editable) :

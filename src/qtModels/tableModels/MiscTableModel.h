@@ -35,11 +35,10 @@ class BtStringConst;
 class Recipe;
 
 // Define the columns on this table
-COLUMN_NAMES(MiscTableModel, Name              ,
-                             Type              ,
-                             TotalInventory    ,
-///                             TotalInventoryType,
-                             NumRecipesUsedIn  ,)
+COLUMN_NAMES(MiscTableModel, Name            ,
+                             Type            ,
+                             TotalInventory  ,
+                             NumRecipesUsedIn,)
 
 /*!
  * \class MiscTableModel

@@ -415,7 +415,7 @@ void Fermentable::setSupplier                 (QString                   const &
 void Fermentable::setNotes                    (QString                   const & val) { SET_AND_NOTIFY(PropertyNames::Fermentable::notes                    , this->m_notes                    , val); return; }
 void Fermentable::setRecommendMash            (std::optional<bool>       const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::recommendMash            , this->m_recommendMash            , val); return; }
 void Fermentable::setIbuGalPerLb              (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::ibuGalPerLb              , this->m_ibuGalPerLb              , val); return; }
-void Fermentable::setColor_lovibond           (double                    const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::color_lovibond           , this->m_color_lovibond                , this->enforceMin      (val, "color"));                      return; }
+void Fermentable::setColor_lovibond           (double                    const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::color_lovibond           , this->m_color_lovibond           , this->enforceMin      (val, "color"));                      return; }
 
 void Fermentable::setColor_srm                (double                    const   val) {
    this->setColor_lovibond(Measurement::Units::lovibond.fromCanonical(val));

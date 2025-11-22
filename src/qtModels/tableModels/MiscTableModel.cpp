@@ -37,11 +37,10 @@
 
 COLUMN_INFOS(
    MiscTableModel,
-   TABLE_MODEL_HEADER(Misc, Name              , PropertyNames::NamedEntity::name            ), // "Name"
-   TABLE_MODEL_HEADER(Misc, Type              , PropertyNames::Misc::type                   ), // "Type"
-   TABLE_MODEL_HEADER(Misc, TotalInventory    , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
-///   TABLE_MODEL_HEADER(Misc, TotalInventoryType, PropertyNames::Ingredient::totalInventory   , Misc::validMeasures), // "Amount Type"
-   TABLE_MODEL_HEADER(Misc, NumRecipesUsedIn  , PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
+   TABLE_MODEL_HEADER(Misc, Name            , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Misc, Type            , PropertyNames::Misc::type                   ), // "Type"
+   TABLE_MODEL_HEADER(Misc, TotalInventory  , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
+   TABLE_MODEL_HEADER(Misc, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :

@@ -94,7 +94,6 @@ struct ColumnOwnerTraits {
          return Ingredient::tr("Amount Type");
       }
       return getColumnInfo(columnIndex).propertyPath.getLocalisedName();
-///      return getColumnInfo(columnIndex).label;
    }
 
    // We _could_ use size_t for numColumns, since it's obviously never negative.  However, various Qt functions for

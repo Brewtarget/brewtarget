@@ -205,32 +205,4 @@ protected:
  */
 template <typename T> concept CONCEPT_FIX_UP IsStockPurchase = std::is_base_of_v<StockPurchase, T>;
 
-///namespace StockPurchaseTools {
-///
-///   /**
-///    * \return A suitable \c StockPurchase subclass object for the supplied \c Ingredient subclass object.  If the former does
-///    *         not exist, it will be created.
-///    */
-///   template<IsIngredient Ing>
-///   std::shared_ptr<typename Ing::StockPurchaseClass> getStockPurchase(Ing const & ing) {
-//////      //
-//////      // At the moment, we assume there is at most one StockPurchase object per ingredient object.  In time we would like to
-//////      // extend this to manage, eg, different purchases/batches as separate StockPurchase items, but that's for another day.
-//////      //
-//////      auto result = firstStockPurchase<typename Ing::StockPurchaseClass, Ing>(ing);
-//////      if (result) {
-//////         return result;
-//////      }
-///
-///      auto newStockPurchase = std::make_shared<typename Ing::StockPurchaseClass>();
-///      newStockPurchase->setIngredient(ing);
-///      // Even though the StockPurchase base class does not have a setQuantity member function, we know that all its
-///      // subclasses will, so this line will be fine when this template function is instantiated.
-///      newStockPurchase->setQuantity(0.0);
-///      ObjectStoreWrapper::insert<typename Ing::StockPurchaseClass>(newStockPurchase);
-///      return newStockPurchase;
-///   }
-///}
-
-
 #endif

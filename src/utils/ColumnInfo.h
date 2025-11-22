@@ -61,21 +61,6 @@ struct ColumnInfo {
     */
    size_t const index;
 
-///private:
-///   /**
-///    * \brief The localised text to display in this column header
-///    *
-///    *        TBD: We probably ought to be able to get this from \c typeInfo, but need to check how we're going to handle
-///    *             property paths such as {PropertyNames::Recipe::style, PropertyNames::NamedEntity::name} (which we
-///    *             would want to show as "Style" rather than "Name").  I think the answer is either that we have an
-///    *             optional label.  We probably don't want to populate the optional label directly.  Rather, for a non-
-///    *             trivial property path, we specify the index of the path element to use as the name -- eg on a StockUse
-///    *             subclass, in {PropertyNames::StockUse::brewNote, PropertyNames::OwnedByRecipe::recipe,
-///    *             PropertyNames::NamedEntity::name} we'd want the middle element of the path.
-///    */
-///   QString const label;
-///public:
-
    /**
     * \brief What type of data is shown in this column
     */
@@ -101,7 +86,6 @@ struct ColumnInfo {
               char const * const   columnName  ,
               char const * const   columnFqName,
               size_t       const   index       ,
-///              QString      const   label       ,
               TypeLookup   const & typeLookup  ,
               PropertyPath         propertyPath,
               Extras       const   extras = std::nullopt);

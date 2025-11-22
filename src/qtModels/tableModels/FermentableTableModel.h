@@ -41,13 +41,12 @@ class BtStringConst;
 class Recipe;
 
 // Define the columns on this table
-COLUMN_NAMES(FermentableTableModel, Name              ,
-                                    Type              ,
-                                    Yield             ,
-                                    Color             ,
-                                    TotalInventory    ,
-///                                    TotalInventoryType,
-                                    NumRecipesUsedIn  ,)
+COLUMN_NAMES(FermentableTableModel, Name            ,
+                                    Type            ,
+                                    Yield           ,
+                                    Color           ,
+                                    TotalInventory  ,
+                                    NumRecipesUsedIn,)
 
 /*!
  * \class FermentableTableModel

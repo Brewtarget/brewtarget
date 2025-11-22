@@ -36,6 +36,12 @@ StockPurchaseFermentableEditor::StockPurchaseFermentableEditor(QWidget* parent, 
    this->enumeratedItemsWidget->setObjectName("enumeratedItemsWidget");
    this->layout_Uses->addWidget(this->enumeratedItemsWidget);
 
+   this->   label_color = new SmartLabel   {this->tab_extras};
+   this->lineEdit_color = new SmartLineEdit{this->tab_extras};
+   this->label_color->setBuddy(this->lineEdit_color);
+   this->gridLayout_extras->addWidget(this->   label_color, 2, 4, 1, 1);
+   this->gridLayout_extras->addWidget(this->lineEdit_color, 2, 5, 1, 1);
+
    this->retranslateUi();
 
    this->postSetupUiInit({
@@ -54,6 +60,10 @@ StockPurchaseFermentableEditor::StockPurchaseFermentableEditor(QWidget* parent, 
       EDITOR_FIELD_NORM(StockPurchaseFermentable, label_purchaseTax    , lineEdit_purchaseTax   , StockPurchase::purchaseTax   ),
       EDITOR_FIELD_NORM(StockPurchaseFermentable, label_shippingCost   , lineEdit_shippingCost  , StockPurchase::shippingCost  ),
       EDITOR_FIELD_NORM(StockPurchaseFermentable, label_dateBestBefore , dateEdit_dateBestBefore, StockPurchase::dateBestBefore),
+      //
+      // Extra fields specific to \c StockPurchaseFermentable
+      //
+      EDITOR_FIELD_NORM(StockPurchaseFermentable, label_color          , lineEdit_color         , StockPurchaseFermentable::color_srm, 1),
    });
    return;
 }
@@ -63,6 +73,8 @@ StockPurchaseFermentableEditor::~StockPurchaseFermentableEditor() = default;
 void StockPurchaseFermentableEditor::retranslateUi() {
    this->setWindowTitle(QCoreApplication::translate("StockPurchaseFermentableEditor", "Fermentable Stock Purchase Editor", nullptr));
    this->label_ingredient->setText(Fermentable::localisedName());
+
+   this->label_color->setText(StockPurchaseFermentable::localisedName_color_srm());
 
    this->Ui::stockPurchaseIngredientEditor::retranslateUi(this);
    return;

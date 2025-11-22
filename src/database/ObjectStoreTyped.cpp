@@ -775,6 +775,7 @@ namespace {
       {
          {ObjectStore::FieldType::Int, {"id"            }, PropertyNames::NamedEntity::key              },
          {ObjectStore::FieldType::Int, {"fermentable_id"}, PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Fermentable>},
+         {ObjectStore::FieldType::Double, {"color_lovibond"}, PropertyNames::StockPurchaseFermentable::color_lovibond        },
       },
       {&NAMED_ENTITY_COMMON_FIELDS, &INGREDIENT_AMOUNT_COMMON_FIELDS, &STOCK_PURCHASE_COMMON_FIELDS}
    };

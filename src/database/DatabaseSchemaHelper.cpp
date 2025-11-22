@@ -2681,9 +2681,10 @@ namespace {
          //
          // Now add the ingredient-specific columns.  (See comments in InventoryHop and Hop for why year is a string.)
          //
-         {QString("ALTER TABLE         hop_stock_purchase ADD COLUMN alpha_pct %1").arg(db.getDbNativeTypeName<double >())},
-         {QString("ALTER TABLE         hop_stock_purchase ADD COLUMN form      %1").arg(db.getDbNativeTypeName<QString>())},
-         {QString("ALTER TABLE         hop_stock_purchase ADD COLUMN year      %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE fermentable_stock_purchase ADD COLUMN color_lovibond %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE         hop_stock_purchase ADD COLUMN alpha_pct      %1").arg(db.getDbNativeTypeName<double >())},
+         {QString("ALTER TABLE         hop_stock_purchase ADD COLUMN form           %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE         hop_stock_purchase ADD COLUMN year           %1").arg(db.getDbNativeTypeName<QString>())},
 
          //
          // Old inventory entries are retained as legacy stock purchases, but they won't have values in the new columns.

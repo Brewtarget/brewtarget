@@ -50,6 +50,12 @@ public:
 
    BtComboBoxFermentable *      comboBox_ingredient   = nullptr;
    StockUseFermentablesWidget * enumeratedItemsWidget = nullptr;
+
+    /**
+     * Extra fields specific to \c StockPurchaseFermentable
+     */
+    SmartLabel     *    label_color = nullptr;
+    SmartLineEdit  * lineEdit_color = nullptr;
 };
 
 #endif

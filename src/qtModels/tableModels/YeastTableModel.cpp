@@ -37,14 +37,13 @@
 
 COLUMN_INFOS(
    YeastTableModel,
-   TABLE_MODEL_HEADER(Yeast, Name              , PropertyNames::NamedEntity::name            ), // "Name"
-   TABLE_MODEL_HEADER(Yeast, Laboratory        , PropertyNames::Yeast::laboratory            ), // "Laboratory"
-   TABLE_MODEL_HEADER(Yeast, ProductId         , PropertyNames::Yeast::productId             ), // "Product ID"
-   TABLE_MODEL_HEADER(Yeast, Type              , PropertyNames::Yeast::type                  ), // "Type"
-   TABLE_MODEL_HEADER(Yeast, Form              , PropertyNames::Yeast::form                  ), // "Form"
-   TABLE_MODEL_HEADER(Yeast, TotalInventory    , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
-///   TABLE_MODEL_HEADER(Yeast, TotalInventoryType, PropertyNames::Ingredient::totalInventory   , Yeast::validMeasures), // "Amount Type"
-   TABLE_MODEL_HEADER(Yeast, NumRecipesUsedIn  , PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
+   TABLE_MODEL_HEADER(Yeast, Name            , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Yeast, Laboratory      , PropertyNames::Yeast::laboratory            ), // "Laboratory"
+   TABLE_MODEL_HEADER(Yeast, ProductId       , PropertyNames::Yeast::productId             ), // "Product ID"
+   TABLE_MODEL_HEADER(Yeast, Type            , PropertyNames::Yeast::type                  ), // "Type"
+   TABLE_MODEL_HEADER(Yeast, Form            , PropertyNames::Yeast::form                  ), // "Form"
+   TABLE_MODEL_HEADER(Yeast, TotalInventory  , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
+   TABLE_MODEL_HEADER(Yeast, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :

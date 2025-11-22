@@ -934,9 +934,6 @@ void Testing::testInventory() {
    hopPurchase->setHop(this->pimpl->m_cascade_4pct.get());
    hopPurchase->setAmount(amountOfHop);
    ObjectStoreWrapper::insert(hopPurchase);
-///   bool setOk = this->pimpl->m_cascade_4pct->setProperty(*PropertyNames::Ingredient::totalInventory,
-///                                                         QVariant::fromValue<Measurement::Amount>(amountOfHop));
-///   QVERIFY2(setOk, "Error setting hop inventory property");
    QVariant inventoryRaw = this->pimpl->m_cascade_4pct->property(*PropertyNames::Ingredient::totalInventory);
    QVERIFY2(inventoryRaw.canConvert<Measurement::Amount>(), "Error retrieving hop inventory property");
    Measurement::Amount inventory = inventoryRaw.value<Measurement::Amount>();

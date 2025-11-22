@@ -30,7 +30,9 @@
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::StockPurchaseFermentable { inline BtStringConst const property{#property}; }
-AddPropertyName(fermentable)
+AddPropertyName(color_lovibond)
+AddPropertyName(color_srm     )
+AddPropertyName(fermentable   )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -49,6 +51,15 @@ class StockPurchaseFermentable : public StockPurchase,
    INGREDIENT_AMOUNT_DECL(StockPurchaseFermentable, Fermentable)
    STOCK_PURCHASE_DECL(Fermentable, fermentable)
 
+public:
+    /**
+     * \brief See comment in model/NamedEntity.h
+     *
+     *        (NB: localisedName() is declared in \c StockPurchaseBase)
+     */
+    static QString localisedName_color_lovibond();
+    static QString localisedName_color_srm     ();
+
    //=================================================== PROPERTIES ====================================================
    //! See \c StockPurchaseBase for getters and setters
    Q_PROPERTY(Fermentable *                        fermentable         READ fermentable         WRITE setFermentable   )
@@ -64,6 +75,27 @@ class StockPurchaseFermentable : public StockPurchase,
    Q_PROPERTY(Measurement::Unit const *     unit         READ unit         WRITE setUnit        )
    Q_PROPERTY(Measurement::PhysicalQuantity measure      READ measure      WRITE setMeasure     )
    Q_PROPERTY(bool                          isWeight     READ isWeight     WRITE setIsWeight    )
+
+   /**
+    * \brief See comments in model/StockPurchaseHop.h for why we optionally allow the user to set the color of the
+    *        purchased fermentable.
+    *
+    *        See comments in model/Fermentable.h for why we store in Lovibond, not SRM.
+    */
+   Q_PROPERTY(std::optional<double> color_lovibond   READ color_lovibond   WRITE setColor_lovibond)
+   Q_PROPERTY(std::optional<double> color_srm        READ color_srm        WRITE setColor_srm     )
+
+   //============================================ "GETTER" MEMBER FUNCTIONS ============================================
+   std::optional<double> color_lovibond() const;
+   std::optional<double> color_srm     () const;
+
+   //============================================ "SETTER" MEMBER FUNCTIONS ============================================
+   void setColor_lovibond(std::optional<double> const val);
+   void setColor_srm     (std::optional<double> const val);
+
+private:
+    std::optional<double> m_color_lovibond;
+
 };
 
 #endif

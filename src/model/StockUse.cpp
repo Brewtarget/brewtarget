@@ -100,10 +100,8 @@ StockUse::~StockUse() = default;
 
 std::strong_ordering StockUse::operator<=>(StockUse const & other) const {
    // If two StockUses have the same Date, then we assume the one with the smaller ID is earlier
-   auto const result = Utils::Auto3WayCompare(this->m_date, other.m_date,
+   return Utils::Auto3WayCompare(this->m_date, other.m_date,
                                  this->key()     , other.key());
-///   qDebug() << Q_FUNC_INFO << "LHS:" << *this << result << "RHS:" << other;
-   return result;
 }
 
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================

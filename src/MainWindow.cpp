@@ -1155,9 +1155,6 @@ void MainWindow::restoreSavedState() {
    // If we saved a size the last time we ran, use it
    if (PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry   , *this, BtString::EMPTY_STR)) {
        PersistentSettings::restoreUiState (PersistentSettings::Names::windowState, *this, BtString::EMPTY_STR);
-///   if (PersistentSettings::contains_ck(PersistentSettings::Names::geometry)) {
-///      restoreGeometry(PersistentSettings::value_ck(PersistentSettings::Names::geometry   ).toByteArray());
-///      restoreState   (PersistentSettings::value_ck(PersistentSettings::Names::windowState).toByteArray());
    } else {
       // otherwise, guess a reasonable size at 1/4 of the screen.
       QScreen * screen = this->screen();

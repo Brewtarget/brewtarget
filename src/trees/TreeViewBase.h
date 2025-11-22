@@ -74,7 +74,6 @@ private:
       m_model          {nullptr},
       m_treeSortFilterProxy{nullptr} {
       this->m_treeSortFilterProxy.setSourceModel(&this->m_model);
-///      this->m_treeSortFilterProxy.setDynamicSortFilter(true);
       this->m_treeSortFilterProxy.setDynamicSortFilter(false);
       this->m_treeSortFilterProxy.setRecursiveFilteringEnabled(true);
       // Column numbers start from 0.  First one is the name.

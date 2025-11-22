@@ -50,13 +50,12 @@
 
 COLUMN_INFOS(
    FermentableTableModel,
-   TABLE_MODEL_HEADER(Fermentable, Name              , PropertyNames::NamedEntity::name              ), // "Name"
-   TABLE_MODEL_HEADER(Fermentable, Type              , PropertyNames::Fermentable::type              ), // "Type"
-   TABLE_MODEL_HEADER(Fermentable, Yield             , PropertyNames::Fermentable::fineGrindYield_pct), // "Yield (DBFG) %"
-   TABLE_MODEL_HEADER(Fermentable, Color             , PropertyNames::Fermentable::color_srm         ), // "Color"
-   TABLE_MODEL_HEADER(Fermentable, TotalInventory    , PropertyNames::Ingredient::totalInventory     ), // "Inventory"
-///   TABLE_MODEL_HEADER(Fermentable, TotalInventoryType, PropertyNames::Ingredient::totalInventory     , Fermentable::validMeasures), // "Amount Type"
-   TABLE_MODEL_HEADER(Fermentable, NumRecipesUsedIn  , PropertyNames::NamedEntity::numRecipesUsedIn  ), // "N° Recipes"
+   TABLE_MODEL_HEADER(Fermentable, Name            , PropertyNames::NamedEntity::name              ), // "Name"
+   TABLE_MODEL_HEADER(Fermentable, Type            , PropertyNames::Fermentable::type              ), // "Type"
+   TABLE_MODEL_HEADER(Fermentable, Yield           , PropertyNames::Fermentable::fineGrindYield_pct), // "Yield (DBFG) %"
+   TABLE_MODEL_HEADER(Fermentable, Color           , PropertyNames::Fermentable::color_srm         ), // "Color"
+   TABLE_MODEL_HEADER(Fermentable, TotalInventory  , PropertyNames::Ingredient::totalInventory     ), // "Inventory"
+   TABLE_MODEL_HEADER(Fermentable, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn  ), // "N° Recipes"
 )
 
 //=====================CLASS FermentableTableModel==============================

@@ -98,9 +98,9 @@ void StockPurchaseHopEditor::retranslateUi() {
    this->setWindowTitle(QCoreApplication::translate("StockPurchaseHopEditor", "Hop Stock Purchase Editor", nullptr));
    this->label_ingredient->setText(Hop::localisedName());
 
-   this->label_year   ->setText(Hop::localisedName_year     ());
-   this->label_alpha  ->setText(Hop::localisedName_alpha_pct());
-   this->label_hopForm->setText(Hop::localisedName_form());
+   this->label_year   ->setText(StockPurchaseHop::localisedName_year     ());
+   this->label_alpha  ->setText(StockPurchaseHop::localisedName_alpha_pct());
+   this->label_hopForm->setText(StockPurchaseHop::localisedName_form());
 
    this->Ui::stockPurchaseIngredientEditor::retranslateUi(this);
    return;
