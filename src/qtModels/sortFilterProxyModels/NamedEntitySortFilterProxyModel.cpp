@@ -19,7 +19,13 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
+ =====================================================================================================================*/
+
+#include "model/StockPurchaseFermentable.h"
+#include "model/StockPurchaseHop.h"
+#include "model/StockPurchaseMisc.h"
+#include "model/StockPurchaseSalt.h"
+#include "model/StockPurchaseYeast.h"
 #include "qtModels/sortFilterProxyModels/BoilSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/EquipmentSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/FermentableSortFilterProxyModel.h"

@@ -136,6 +136,11 @@ public:
    //
    using ColumnIndex = typename ColumnIndexHolder<Derived>::ColumnIndex;
 
+   //
+   // This saves us having to have NE as a template parameter for SortFilterProxyModelBase
+   //
+   using UnderlyingItem = NE;
+
 protected:
    TableModelBase() : m_rows{} {
       return;

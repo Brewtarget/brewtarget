@@ -17,6 +17,7 @@
 #define CATALOGS_CATALOGBASE_H
 #pragma once
 
+#include <tuple>
 #include <utility>
 
 #include <QHBoxLayout>
@@ -141,6 +142,11 @@ public:
       m_sortFilterProxy       {new NeSortFilterProxyModel(m_tableWidget,
                                                           true,
                                                           m_neTableModel)} {
+      if constexpr (IsIngredient<NE>) {
+         std::get<QCheckBox *>(this->m_inventoryFilter) = new QCheckBox(&this->derived());
+         std::get<QLabel    *>(this->m_inventoryFilter) = new QLabel   (&this->derived());
+         std::get<QCheckBox *>(this->m_inventoryFilter)->setChecked(false);
+      }
       this->m_sortFilterProxy->setDynamicSortFilter(false);
       this->m_tableWidget->setModel(m_sortFilterProxy);
       this->m_tableWidget->setSortingEnabled(true);
@@ -181,6 +187,11 @@ public:
       this->m_horizontalLayout->addWidget(this->m_searchIcon            );
       this->m_horizontalLayout->addWidget(this->m_lineEdit_searchBox    );
       this->m_horizontalLayout->addItem  (this->m_horizontalSpacer      );
+      if constexpr (IsIngredient<NE>) {
+         this->m_horizontalLayout->addWidget(std::get<QCheckBox *>(this->m_inventoryFilter));
+         this->m_horizontalLayout->addWidget(std::get<QLabel    *>(this->m_inventoryFilter));
+      }
+
       this->m_horizontalLayout->addWidget(this->m_pushButton_addToRecipe);
       this->m_horizontalLayout->addWidget(this->m_pushButton_new        );
       this->m_horizontalLayout->addWidget(this->m_pushButton_edit       );
@@ -194,6 +205,16 @@ public:
       QMetaObject::connectSlotsByName(&this->derived());
 
       this->derived().connect(m_lineEdit_searchBox    , &QLineEdit::textEdited   , &this->derived(), &Derived::filterItems   );
+      if constexpr (IsIngredient<NE>) {
+         this->derived().connect(
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+            std::get<QCheckBox *>(this->m_inventoryFilter), &QCheckBox::checkStateChanged, &this->derived(), &Derived::inventoryFilter
+#else
+            std::get<QCheckBox *>(this->m_inventoryFilter), &QCheckBox::stateChanged     , &this->derived(), &Derived::inventoryFilter
+#endif
+         );
+      }
+
       this->derived().connect(m_pushButton_addToRecipe, &QAbstractButton::clicked, &this->derived(), &Derived::addSelectedToRecipe);
       this->derived().connect(m_pushButton_edit       , &QAbstractButton::clicked, &this->derived(), &Derived::editSelected  );
       this->derived().connect(m_pushButton_delete     , &QAbstractButton::clicked, &this->derived(), &Derived::deleteSelected);
@@ -206,13 +227,6 @@ public:
       // nothing is selected.  Some things (eg new) don't need to be disabled, but it seems neater to me to do all the
       // actions the same way.
       //
-      this->m_action_addToRecipe->setText(Derived::tr("Add %1 to recipe"         ).arg(NE::localisedName()));
-      this->m_action_edit       ->setText(Derived::tr("Edit selected %1"         ).arg(NE::localisedName()));
-      this->m_action_delete     ->setText(Derived::tr("Delete selected %1"       ).arg(NE::localisedName()));
-      this->m_action_new        ->setText(Derived::tr("New %1"                   ).arg(NE::localisedName()));
-      this->m_action_merge      ->setText(Derived::tr("*EXPERIMENTAL* "
-                                                      "Merge selected %1 records").arg(NE::localisedName()));
-
       this->derived().connect(this->m_action_addToRecipe, &QAction::triggered, &this->derived(), &Derived::addSelectedToRecipe);
       this->derived().connect(this->m_action_edit       , &QAction::triggered, &this->derived(), &Derived::editSelected       );
       this->derived().connect(this->m_action_delete     , &QAction::triggered, &this->derived(), &Derived::deleteSelected     );
@@ -238,6 +252,17 @@ public:
 
    void retranslateUi() {
       this->derived().setWindowTitle(QString(QObject::tr("%1 Catalog / Database")).arg(NE::localisedName()));
+
+      this->m_action_addToRecipe->setText(Derived::tr("Add %1 to recipe"         ).arg(NE::localisedName()));
+      this->m_action_edit       ->setText(Derived::tr("Edit selected %1"         ).arg(NE::localisedName()));
+      this->m_action_delete     ->setText(Derived::tr("Delete selected %1"       ).arg(NE::localisedName()));
+      this->m_action_new        ->setText(Derived::tr("New %1"                   ).arg(NE::localisedName()));
+      this->m_action_merge      ->setText(Derived::tr("*EXPERIMENTAL* "
+                                                      "Merge selected %1 records").arg(NE::localisedName()));
+       if constexpr (IsIngredient<NE>) {
+           std::get<QLabel *>(this->m_inventoryFilter)->setText(Derived::tr("Show only non-zero inventory"));
+       }
+
       if constexpr (IsTableModel<NeTableModel>) {
          //
          // We say "add to recipe" for things like hops, fermentables, etc, where there can be more than one in a
@@ -637,8 +662,15 @@ public:
     * \brief Subclass should call this from its \c filterItems slot
     */
    void filter(QString searchExpression) {
-      m_sortFilterProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
-      m_sortFilterProxy->setFilterFixedString(searchExpression);
+      this->m_sortFilterProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+      this->m_sortFilterProxy->setFilterFixedString(searchExpression);
+      return;
+   }
+
+   void doInventoryFilter(bool filterOn) {
+      if constexpr (IsIngredient<NE>) {
+         this->m_sortFilterProxy->setHideZeroInventoryItems(filterOn);
+      }
       return;
    }
 
@@ -702,11 +734,27 @@ public:
    QAction     * m_action_new        ;
    QAction     * m_action_merge      ;
 
+   //
+   // See comment in trees/TreeNodeBase.h for more details of this trick we use to get close to conditional member
+   // variables.  Using a tuple as a nameless struct is a separate trick that works when all the contained types are
+   // different.
+   //
+   struct Empty { };
+   [[no_unique_address]] std::conditional_t<IsIngredient<NE>,
+                                            std::tuple<QCheckBox *, QLabel *>,
+                                            Empty>  m_inventoryFilter;
+
    //! @}
 
    NeTableModel *           m_neTableModel;
    NeSortFilterProxyModel * m_sortFilterProxy;
 };
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+#define CHECK_STATE_TYPE Qt::CheckState
+#else
+#define CHECK_STATE_TYPE int
+#endif
 
 /**
  * \brief Derived classes should include this in their header file, right after Q_OBJECT
@@ -733,6 +781,7 @@ public:
       void newItem();                                                              \
       void mergeSelected();                                                        \
       void filterItems(QString searchExpression);                                  \
+      void inventoryFilter(CHECK_STATE_TYPE state);                                \
       void contextMenu(QPoint const & point);                                      \
                                                                                    \
    protected:                                                                      \
@@ -765,6 +814,10 @@ public:
    void NeName##Catalog::newItem()                             { this->makeNew();                return; } \
    void NeName##Catalog::mergeSelected()                       { this->doMergeSelected();        return; } \
    void NeName##Catalog::filterItems(QString searchExpression) { this->filter(searchExpression); return; } \
+   void NeName##Catalog::inventoryFilter(CHECK_STATE_TYPE state) { \
+      this->doInventoryFilter(Qt::Checked == state);               \
+      return;                                                      \
+   }                                                               \
    void NeName##Catalog::contextMenu(QPoint const & point) { \
       this->doContextMenu(point);                            \
       return;                                                \
