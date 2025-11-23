@@ -395,8 +395,8 @@ bool MashDesigner::initializeMash() {
 
    if (this->m_mash->key() < 0) {
       qDebug() << Q_FUNC_INFO << "Add new Mash to Recipe";
-      ObjectStoreWrapper::insert(*m_mash);
-      this->m_recObs->setMash(m_mash);
+      ObjectStoreWrapper::insert(this->m_mash);
+      this->m_recObs->setMash(this->m_mash);
    }
    return true;
 }

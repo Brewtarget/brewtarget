@@ -23,8 +23,10 @@
 
 #include <memory>
 #include <optional>
+#include <set>
 #include <type_traits>
 #include <variant>
+#include <vector>
 #include <utility>
 
 #include <QDebug>
@@ -42,6 +44,26 @@
 #include "trees/TreeModelChangeGuard.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/TypeTraits.h"
+
+/**
+ * \brief For logging \c std::set
+ *
+ *        This probably belongs somewhere else!
+ */
+template<class S, class T>
+S & operator<<(S & stream, std::set<T> const & val) {
+   QString output;
+   QTextStream outputAsStream{&output};
+   for (T const & item : val) {
+      if (!output.isEmpty()) {
+         outputAsStream << ", ";
+      }
+      outputAsStream << item;
+   }
+   stream << "std::set {" << output << "}";
+   return stream;
+}
+
 
 namespace {
    // This is used as a parameter to findFolder to tell it what to do if it doesn't find the requested folder
@@ -327,7 +349,7 @@ public:
          "Parent" << (parentIndex.isValid() ? "valid" : "invalid");
 
       //
-      // TBD For the moment, we skip most folder handling on Inventory items (which don't have folders).  We still have
+      // TBD For the moment, we skip most folder handling on StockPurchase items (which don't have folders).  We still have
       // to allow the existence of TreeFolderNode for them to have the root node, but we turn off everything else.
       //
       if constexpr (HasNoFolder<NE>) {
@@ -404,7 +426,6 @@ public:
                this->renameFolder(*newFolder, targetFolderPath);
             }
          }
-
       }
 
       return true;
@@ -510,6 +531,14 @@ public:
          this->derived().connect(observed.get(), &NamedEntity::changedName  , &this->derived(), &Derived::elementChanged);
          // .:TBD:. AFAICT nothing emits NamedEntity::changedFolder...
          this->derived().connect(observed.get(), &NamedEntity::changedFolder, &this->derived(), &Derived::folderChanged );
+
+         if constexpr (!IsVoid<SNE>) {
+            // Normally leave this commented out as otherwise it generates too much logging
+//            qDebug() <<
+//               Q_FUNC_INFO << "Connecting ownedItemsChanged signal from" << NE::staticMetaObject.className() << "#" <<
+//               observed->key() << "to" << Derived::staticMetaObject.className();
+            this->derived().connect(observed.get(), &NE::ownedItemsChanged, &this->derived(), &Derived::secondaryElementsChanged);
+         }
       }
       return;
    }
@@ -983,6 +1012,7 @@ private:
 protected:
    void doElementAdded(int itemId) {
       std::shared_ptr<NE> item = ObjectStoreWrapper::getById<NE>(itemId);
+      qDebug() << Q_FUNC_INFO << "Added" << *item;
       this->insertPrimaryItem(item);
       return;
    }
@@ -1001,12 +1031,15 @@ protected:
       }
 
       std::shared_ptr<NE> owner = element->owner();
+      qDebug() << Q_FUNC_INFO << "Added" << *element << "with owner" << owner;
+
       if (!owner) {
          //
          // It is possible for a secondary element to get added to the DB before its "owner" is stored in the DB -- eg
          // see OwnedSet copy constructor.  We'll receive ObjectStoreTyped::signalObjectInserted, but we won't be able
-         // to find the owner in the database.  This is OK: we just bail out here.  If and when the owner to gets added
-         // to the database, we'll get ObjectStoreTyped::signalObjectInserted for that and update the tree accordingly.
+         // to find the owner in the database.  This is OK: we just bail out here.  When the secondary element gets
+         // added to its owner (utlimately via OwnedSet::extend), the owner will emit NamedEntity::changed and
+         // NE::ownedItemsChanged.  We will pick up the latter and call doSecondaryElementsChanged.
          //
          return;
       }
@@ -1022,6 +1055,90 @@ protected:
       }
 
       this->observeElement(element);
+      return;
+   }
+
+   void doSecondaryElementsChanged(QObject * sender) {
+      if constexpr (IsVoid<SNE>) {
+         // It's a coding error if this ever gets called for a tree with no secondary elements!
+         Q_ASSERT(false);
+      } else if constexpr (!std::same_as<NE, Recipe>) {
+         //
+         // For Mash, Boil, Fermentation and StockPurchase subclasses, the logic is the same here
+         //
+         // For Recipe, things are a bit different and thus handled in RecipeTreeModel.
+         //
+         std::shared_ptr<NE> const owner = this->senderToElement(sender);
+         if (!owner) {
+            return;
+         }
+
+         QModelIndex ownerIndex = this->findElement(owner.get());
+         if (!ownerIndex.isValid()) {
+            return;
+         }
+
+         auto ownerNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(ownerIndex));
+
+         QList<TreeNode *> rawChildNodes = ownerNode->rawChildren();
+         QList<std::shared_ptr<SNE>> children = owner->ownedItems();
+//         qDebug() <<
+//            Q_FUNC_INFO << "Num child nodes:" << rawChildNodes.size() << "; num children:" << children.size();
+
+         //
+         // We want to find:
+         //    - child elements that are in the tree and should no longer be, so we can remove them
+         //    - child elements that are not in the tree and should be, so we can add them
+         //
+         // It's probably overkill to use std::set here.  The number of secondary elements owned by any primary element
+         // is typically just a handful, so nested loops would suffice.  However, using the standard library means we
+         // don't have to roll our own algorithm, so, hopefully it's less error-prone.
+         //
+         std::set<int> currentlyInTree;
+         for (TreeNode * rawChildNode : rawChildNodes) {
+            if (rawChildNode->classifier() == TreeNodeClassifier::SecondaryItem) {
+               //
+               // Any child that is no longer in the DB should be removed.  We can't remove it with
+               // doSecondaryElementRemoved because that's for items that are still in the DB.
+               //
+               int const key = rawChildNode->underlyingItemKey();
+               if (key < 0) {
+                  QModelIndex index = this->indexOfNode(rawChildNode);
+                  this->removeItemByIndex(index);
+               } else {
+                  currentlyInTree.insert(key);
+               }
+            }
+         }
+
+//         qDebug() << Q_FUNC_INFO << "currentlyInTree:" << currentlyInTree;
+
+         std::set<int> shouldBeInTree;
+         for (auto const & child : children) {
+            shouldBeInTree.insert(child->key());
+         }
+
+//         qDebug() << Q_FUNC_INFO << "shouldBeInTree:" << shouldBeInTree;
+
+         std::vector<int> toBeCorrected;
+         std::set_symmetric_difference(currentlyInTree.begin(), currentlyInTree.end(),
+                                       shouldBeInTree.begin(),  shouldBeInTree.end(),
+                                       std::back_inserter(toBeCorrected));
+
+//         qDebug() << Q_FUNC_INFO << "toBeCorrected:" << toBeCorrected;
+
+         //
+         // Once we have the IDs, correcting the tree is easy as the hard work is already implemented elsewhere
+         //
+         for (int secondaryElementId : toBeCorrected) {
+            if (currentlyInTree.contains(secondaryElementId)) {
+               this->doSecondaryElementRemoved(secondaryElementId);
+            } else {
+               Q_ASSERT(shouldBeInTree.contains(secondaryElementId));
+               this->doSecondaryElementAdded(secondaryElementId);
+            }
+         }
+      }
       return;
    }
 
@@ -1364,9 +1481,13 @@ private:
       return ObjectStoreWrapper::getSharedFromRaw(elementRaw);
    }
 
-protected:
-   void doElementChanged(QObject * sender) {
-      std::shared_ptr<NE> const element = this->senderToElement(sender);
+private:
+   //
+   // Called from both versions of doElementChanged below.  (The logic for dealing with a changed element is the same
+   // for primary and secondary elements, so we do it all here in a templated function.)
+   //
+   template<class ElementType>
+   void implElementChanged(std::shared_ptr<ElementType> const & element) {
       if (!element) {
          return;
       }
@@ -1386,13 +1507,17 @@ protected:
       return;
    }
 
+protected:
+   void doElementChanged(QObject * sender) {
+      std::shared_ptr<NE> const element = this->senderToElement(sender);
+      this->implElementChanged(element);
+      return;
+   }
+
    void doSecondaryElementChanged(QObject * sender) {
       if constexpr (!IsVoid<SNE>) {
          std::shared_ptr<SNE> const element = this->senderToSecondaryElement(sender);
-         if (!element) {
-            return;
-         }
-
+         this->implElementChanged(element);
       } else {
          // It's a coding error for the function to be called when there is no secondary element
          // Static assert would be best here, but need to wait until we're not supporting Ubuntu 22.04
@@ -1412,14 +1537,16 @@ protected:
                     std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
                                              std::shared_ptr<TreeItemNode<NE>>>) {
          //
-         // The rules for adding subtrees are class-specific.  Eg for Recipes we need to take account of Ancestors.
+         // In principle, the rules for adding subtrees are class-specific.  Eg for Recipes we need to take account of
+         // Ancestors.
+         //
+         // In practice, it's mostly the case that Recipe is the special case, so we can put the generic logic here for
+         // other cases.
          //
          // However, since the logic for MashTreeModel, BoilTreeModel, FermentationTreeModel is the same, we put it here
          // rather than either duplicate it in those three classes or make yet another base class.
          //
-         if constexpr (std::same_as<SNE,         MashStep> ||
-                       std::same_as<SNE,         BoilStep> ||
-                       std::same_as<SNE, FermentationStep>) {
+         if constexpr (!std::same_as<NE, Recipe>) {
             auto secondaries = SNE::ownedBy(element);
             if (!secondaries.empty()) {
                QModelIndex parentIndex = this->findElement(&element);
@@ -1462,7 +1589,6 @@ protected:
          qWarning() << Q_FUNC_INFO << "Could not find element" << element;
          return;
       }
-      auto elementNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(elementIndex));
 
       //
       // Remove the sending item from its current parent folder, which will be the root node if it had no folder.  (In
@@ -1487,17 +1613,28 @@ protected:
                                                     this->m_rootNode.get(),
                                                     IfNotFound::Create,
                                                     &folderIsNewlyCreated);
+
+      TreeNode * parentFolderNode = this->doTreeNode(newParentIndex);
+
       // Root node is TreeFolderNode<NE> so, regardless of whether the item has a folder, so this cast should always be
       // valid.
-      auto parentFolderNode = static_cast<TreeFolderNode<NE> *>(this->doTreeNode(newParentIndex));
-
-      int const numElementsInFolder = parentFolderNode->childCount();
+      int const numElementsInFolder = static_cast<TreeFolderNode<NE> *>(parentFolderNode)->childCount();
       if (!this->insertChild(newParentIndex, numElementsInFolder, element)) {
          qWarning() << Q_FUNC_INFO << "Could not insert row" << numElementsInFolder;
          return;
       }
 
+      //
+      // Now we moved the element it has a new index
+      //
+      QModelIndex newElementIndex = this->findElement(element.get(), parentFolderNode);
+      if (!newElementIndex.isValid()) {
+         qWarning() << Q_FUNC_INFO << "Could not find element" << element << "after moving!";
+         return;
+      }
+
       // If we have brewnotes, set them up here.
+      auto elementNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(newElementIndex));
       this->addSubTreeIfNeeded(*element, *elementNode);
 
       if (folderIsNewlyCreated) {
@@ -1576,6 +1713,7 @@ protected:
       void elementChanged();                                                                \
       TREE_MODEL_COMMON_DECL_SNE(NeName __VA_OPT__(,) __VA_ARGS__)                          \
       void folderChanged ();                                                                \
+      void secondaryElementsChanged();                                                      \
 
 
 //
@@ -1652,6 +1790,6 @@ protected:
    void NeName##TreeModel::elementChanged()              { this->doElementChanged(this->sender()); return; }    \
    TREE_MODEL_COMMON_CODE_SNE(NeName __VA_OPT__(,) __VA_ARGS__)                                                 \
    void NeName##TreeModel::folderChanged ()              { this->doFolderChanged (this->sender()); return; }    \
-
+   void NeName##TreeModel::secondaryElementsChanged()    { this->doSecondaryElementsChanged(this->sender()); return; } \
 
 #endif

@@ -61,8 +61,8 @@ class Instruction : public NamedEntity,
 
    ENUMERATED_COMMON_DECL(Instruction, Recipe)
    // See model/EnumeratedBase.h for info, getters and setters for these properties
-   Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
-   Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
+   Q_PROPERTY(int ownerId          READ ownerId          WRITE setOwnerId       )
+   Q_PROPERTY(int sequenceNumber   READ sequenceNumber   WRITE setSequenceNumber)
 
 public:
    /**

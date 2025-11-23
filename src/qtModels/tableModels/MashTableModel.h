@@ -17,7 +17,7 @@
 #define TABLEMODELS_MASHTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
 #include "model/Mash.h"
 #include "qtModels/tableModels/BtTableModel.h"
@@ -47,7 +47,7 @@ class MashTableModel : public BtTableModel, public TableModelBase<MashTableModel
  * \brief An item delegate for hop tables.
  * \sa MashTableModel
  */
-class MashItemDelegate : public QItemDelegate, public ItemDelegate<MashItemDelegate, MashTableModel> {
+class MashItemDelegate : public QStyledItemDelegate, public ItemDelegate<MashItemDelegate, MashTableModel> {
    Q_OBJECT
    ITEM_DELEGATE_COMMON_DECL(Mash)
 };

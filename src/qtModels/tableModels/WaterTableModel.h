@@ -22,7 +22,7 @@
 
 #include <memory>
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QList>
 #include <QMetaProperty>
 #include <QModelIndex>
@@ -68,7 +68,7 @@ class WaterTableModel : public BtTableModel, public TableModelBase<WaterTableMod
  * \brief An item delegate for Water tables.
  * \sa WaterTableModel.
  */
-class WaterItemDelegate : public QItemDelegate,
+class WaterItemDelegate : public QStyledItemDelegate,
                           public ItemDelegate<WaterItemDelegate, WaterTableModel> {
    Q_OBJECT
 

@@ -38,7 +38,7 @@ QString Style::localisedName_aroma            () { return tr("Aroma"            
 QString Style::localisedName_carbMax_vol      () { return tr("Max Carb"          ); }
 QString Style::localisedName_carbMin_vol      () { return tr("Min Carb"          ); }
 QString Style::localisedName_category         () { return tr("Category"          ); }
-QString Style::localisedName_categoryNumber   () { return tr("Category Number"   ); }
+QString Style::localisedName_categoryNumber   () { return tr("Number"            ); } // Shorter than "Category Number"
 QString Style::localisedName_colorMax_srm     () { return tr("Max Color"         ); }
 QString Style::localisedName_colorMin_srm     () { return tr("Min Color"         ); }
 QString Style::localisedName_examples         () { return tr("Examples"          ); }
@@ -53,8 +53,8 @@ QString Style::localisedName_notes            () { return tr("Notes"            
 QString Style::localisedName_ogMax            () { return tr("Max OG"            ); }
 QString Style::localisedName_ogMin            () { return tr("Min OG"            ); }
 QString Style::localisedName_overallImpression() { return tr("Overall Impression"); }
-QString Style::localisedName_styleGuide       () { return tr("Style Guide"       ); }
-QString Style::localisedName_styleLetter      () { return tr("Style Letter"      ); }
+QString Style::localisedName_styleGuide       () { return tr("Guide"             ); } // Shorter than "Style Guide"
+QString Style::localisedName_styleLetter      () { return tr("Letter"            ); } // Shorter than "Style Letter"
 QString Style::localisedName_type             () { return tr("Type"              ); }
 QString Style::localisedName_typeString       () { return tr("Type String"       ); }
 

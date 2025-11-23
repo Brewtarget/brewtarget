@@ -34,7 +34,7 @@
 
 class MiscCatalog;
 class MiscEditor;
-class InventoryMisc;
+class StockPurchaseMisc;
 class MiscItemDelegate;
 class RecipeAdditionMisc;
 class MiscSortFilterProxyModel;
@@ -115,7 +115,7 @@ public:
    //
    using CatalogClass              = MiscCatalog;
    using EditorClass               = MiscEditor;
-   using InventoryClass            = InventoryMisc;
+   using StockPurchaseClass            = StockPurchaseMisc;
    using ItemDelegateClass         = MiscItemDelegate;
    using RecipeAdditionClass       = RecipeAdditionMisc;
    using SortFilterProxyModelClass = MiscSortFilterProxyModel;
@@ -134,6 +134,7 @@ public:
 
    virtual ~Misc();
 
+   //=================================================== PROPERTIES ====================================================
    //! \brief The \c Type.
    Q_PROPERTY(Type type           READ type        WRITE setType     )
    //! \brief What to use it for.

@@ -20,13 +20,13 @@
 #define TABLEMODELS_MASHSTEPTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
 #include "model/MashStep.h"
 #include "model/Mash.h"
 #include "qtModels/tableModels/BtTableModel.h"
+#include "qtModels/tableModels/EnumeratedItemTableModelBase.h"
 #include "qtModels/tableModels/ItemDelegate.h"
-#include "qtModels/tableModels/StepTableModelBase.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
 // Define the columns on this table
@@ -49,11 +49,11 @@ COLUMN_NAMES(MashStepTableModel, Name        ,
  */
 class MashStepTableModel : public BtTableModel,
                            public TableModelBase<MashStepTableModel, MashStep>,
-                           public StepTableModelBase<MashStepTableModel, MashStep, Mash> {
+                           public EnumeratedItemTableModelBase<MashStepTableModel, MashStep, Mash> {
    Q_OBJECT
 
    TABLE_MODEL_COMMON_DECL(MashStep)
-   STEP_TABLE_MODEL_COMMON_DECL(Mash)
+   ENUMERATED_ITEM_TABLE_MODEL_COMMON_DECL(MashStep, Mash)
 
 };
 
@@ -65,7 +65,7 @@ class MashStepTableModel : public BtTableModel,
  * \brief An item delegate for hop tables.
  * \sa MashStepTableModel
  */
-class MashStepItemDelegate : public QItemDelegate,
+class MashStepItemDelegate : public QStyledItemDelegate,
                              public ItemDelegate<MashStepItemDelegate, MashStepTableModel> {
    Q_OBJECT
 

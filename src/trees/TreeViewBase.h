@@ -30,7 +30,9 @@
 #include <QString>
 #include <QWidget>
 
+#include "model/StockPurchase.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
+#include "utils/WindowDistributor.h"
 #include "trees/NamedEntityTreeSortFilterProxyModel.h"
 
 /**
@@ -72,8 +74,10 @@ private:
       m_model          {nullptr},
       m_treeSortFilterProxy{nullptr} {
       this->m_treeSortFilterProxy.setSourceModel(&this->m_model);
-      this->m_treeSortFilterProxy.setDynamicSortFilter(true);
-      this->m_treeSortFilterProxy.setFilterKeyColumn(1);
+      this->m_treeSortFilterProxy.setDynamicSortFilter(false);
+      this->m_treeSortFilterProxy.setRecursiveFilteringEnabled(true);
+      // Column numbers start from 0.  First one is the name.
+      this->m_treeSortFilterProxy.setFilterKeyColumn(0);
       this->derived().setModel(&this->m_treeSortFilterProxy);
       this->derived().connect(&this->m_model, &NeTreeModel::expandFolder, &this->derived(), &Derived::expandFolder);
 
@@ -103,6 +107,10 @@ public:
       this->m_contextMenu_new.setTitle(Derived::tr("New"));
       this->m_contextMenu_new.addAction(NE::localisedName()  , &this->derived(), &Derived::newItem);
       this->m_contextMenu_new.addAction(Derived::tr("Folder"), &this->derived(), &Derived::newFolder);
+      if constexpr (CanHaveStockPurchase<NE>) {
+         this->m_contextMenu_new.addAction(Derived::tr("%1 Purchase").arg(NE::localisedName()), &this->derived(), &Derived::newStockPurchase);
+      }
+
       this->m_contextMenu.addSeparator();
       // Copy
       this->m_copyAction   = m_contextMenu.addAction(Derived::tr("Copy"  ), &this->derived(), &Derived::copySelected  );
@@ -329,7 +337,7 @@ public:
     *
     * \return \c std::nullopt if the user cancelled the deletion
     */
-   std::optional<QModelIndex> doDeleteItems(QModelIndexList const & selectedViewIndexes) requires (!IsInventory<NE>) {
+   std::optional<QModelIndex> doDeleteItems(QModelIndexList const & selectedViewIndexes) {
       //
       // Later on we're going to want to have the node just before or after the ones we deleted, so we can make it the
       // selected one.  The QModelIndex objects won't be valid after we modify the tree structure, so we want to get the
@@ -370,9 +378,14 @@ public:
          // (or Style, Equipment, Mash, etc) is used in any Recipes.  If so, we want to prevent them from deleting it.
          // TODO: This is similar logic to that in CatalogBase, and we should combine in one place at some point.
          //
-         // But in the case of deleting a Recipe, this is not meaningful (because a Recipe is not used in another
-         // Recipe).  Similarly, there is no special additional text for a secondary item (eg BrewNote), because it is
-         // only used by its parent.
+         // But this is not meaningful in the following cases:
+         //    - deleting a Recipe (because a Recipe is not used in another Recipe);
+         //    - deleting a StockPurchase (because StockPurchase is not used in a Recipe)
+         //    - deleting a secondary item (eg BrewNote), because it is only used by its parent.
+         //
+         // TODO: We should, somewhere, handle the case of a Recipe being deleted that has BrewNotes referred to by a
+         //       StockUse subclass.  For soft delete, we maybe just need to update the UI to not show there is a
+         //       BrewNote for that StockUse.  For hard delete, need to remove the BrewNote ID from the StockUse.
          //
          QString confirmationMessage = Derived::tr("Delete %1 #%2 \"%3\"?").arg(
                                           treeNode->localisedClassName()
@@ -381,7 +394,7 @@ public:
                                        ).arg(
                                           treeNode->name()
                                        );
-         if constexpr (!std::same_as<NE, Recipe>) {
+         if constexpr (!std::same_as<NE, Recipe> && !IsStockPurchase<NE>) {
             if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
                TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
                int const numRecipesUsedIn = primaryTreeNode.underlyingItem()->numRecipesUsedIn();
@@ -442,11 +455,17 @@ public:
    }
 
    /**
-    *
+    * \brief Edit the first of the selected items
     */
-   std::optional<QModelIndex> doDeleteItems(QModelIndexList const & selectedViewIndexes) requires (IsInventory<NE>) {
-      // TODO Placeholder
-      return std::nullopt;
+   void doEditSelected() {
+      QModelIndexList selected = this->derived().selectionModel()->selectedRows();
+      if (selected.size() == 0) {
+         return;
+      }
+
+      this->doActivated(selected.first());
+
+      return;
    }
 
    void doCopySelected() {
@@ -540,10 +559,17 @@ public:
       return this->m_model.folderPath(modelIndex);
    }
 
+   /**
+    * \brief Sometimes when multiple items are selected, we only want the first one
+    */
+   QModelIndex getFirstSelected() {
+      QModelIndexList indexes = this->derived().selectionModel()->selectedRows();
+      return indexes.at(0);
+   }
+
    //! \brief Create a new folder
    void doNewFolder() {
-      QModelIndexList indexes = this->derived().selectionModel()->selectedRows();
-      QModelIndex starter = indexes.at(0);
+      QModelIndex starter = getFirstSelected();
 
       // Where to start from
       QString dPath = this->doFolderName(starter);
@@ -619,6 +645,22 @@ public:
       return;
    }
 
+   void doNewStockPurchase() {
+      if constexpr (CanHaveStockPurchase<NE>) {
+         NE * ingredientRaw = nullptr;
+
+         QModelIndex const selectedIndex = this->getFirstSelected();
+         TreeNode * selectedNode = this->doTreeNode(selectedIndex);
+         if (selectedNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+            TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*selectedNode);
+            ingredientRaw = primaryTreeNode.underlyingItem().get();
+         }
+
+         WindowDistributor::editorForNewStockPurchase(ingredientRaw);
+      }
+      return;
+   }
+
    std::pair<QMenu *, TreeNode *> getContextMenuPair(QModelIndex const & selectedViewIndex) {
       TreeNode * selectedNode = this->doTreeNode(selectedViewIndex);
       if constexpr (!IsVoid<SNE>) {
@@ -637,6 +679,16 @@ public:
    QMenu * doGetContextMenu(QModelIndex const & selectedViewIndex) {
       auto [menu, selectedNode] = this->getContextMenuPair(selectedViewIndex);
       return menu;
+   }
+
+   /**
+    * \brief Does what it says on the tin
+    */
+   void filter(QString searchExpression) {
+      qDebug() << Q_FUNC_INFO << "Setting filter to" << searchExpression;
+      this->m_treeSortFilterProxy.setFilterCaseSensitivity(Qt::CaseInsensitive);
+      this->m_treeSortFilterProxy.setFilterFixedString(searchExpression);
+      return;
    }
 
    //================================================ Member Variables =================================================
@@ -699,6 +751,8 @@ using RecipeEditor = MainWindow;
       void newFolder();                                                               \
       void expandFolder(QModelIndex const & viewIndex);                               \
       void newItem();                                                                 \
+      /* This is a no-op for items not derived from Ingredient */                     \
+      void newStockPurchase();                                                        \
 
 /**
  * \brief Derived classes should include this in their .cpp file
@@ -768,5 +822,6 @@ using RecipeEditor = MainWindow;
       return;                                                                              \
    }                                                                                       \
    void NeName##TreeView::newItem() { this->doNewItem(); return; }                         \
+   void NeName##TreeView::newStockPurchase() { this->doNewStockPurchase(); return; }       \
 
 #endif

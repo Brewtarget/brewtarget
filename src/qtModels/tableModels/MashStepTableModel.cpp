@@ -37,37 +37,30 @@
 
 COLUMN_INFOS(
    MashStepTableModel,
-   TABLE_MODEL_HEADER(MashStep, Name        , tr("Name"         ), PropertyNames::NamedEntity::name               ),
-   TABLE_MODEL_HEADER(MashStep, Type        , tr("Type"         ), PropertyNames::MashStep::type                  ),
-   TABLE_MODEL_HEADER(MashStep, Amount      , tr("Amount"       ), PropertyNames::MashStep::amount_l              ),
-   TABLE_MODEL_HEADER(MashStep, Temp        , tr("Infusion Temp"), PropertyNames::MashStep::infuseTemp_c          ),
-   TABLE_MODEL_HEADER(MashStep, TargetTemp  , tr("Target Temp"  ), PropertyNames::StepBase::startTemp_c           ),
-   TABLE_MODEL_HEADER(MashStep, EndTemp     , tr("End Temp"     ), PropertyNames::Step::endTemp_c                 ),
-   TABLE_MODEL_HEADER(MashStep, RampTime    , tr("Ramp Time"    ), PropertyNames::StepBase::rampTime_mins         ),
-   TABLE_MODEL_HEADER(MashStep, Time        , tr("Time"         ), PropertyNames::StepBase::stepTime_mins         ),
-   TABLE_MODEL_HEADER(MashStep, StartAcidity, tr("Start pH"     ), PropertyNames::Step::startAcidity_pH           ),
-   TABLE_MODEL_HEADER(MashStep,   EndAcidity, tr("End pH"       ), PropertyNames::Step::  endAcidity_pH           ),
-   TABLE_MODEL_HEADER(MashStep, WaterToGrain, tr("Water:Grain"  ), PropertyNames::MashStep::liquorToGristRatio_lKg),
+   TABLE_MODEL_HEADER(MashStep, Name        , PropertyNames::NamedEntity::name               ), // "Name"
+   TABLE_MODEL_HEADER(MashStep, Type        , PropertyNames::MashStep::type                  ), // "Type"
+   TABLE_MODEL_HEADER(MashStep, Amount      , PropertyNames::MashStep::amount_l              ), // "Amount"
+   TABLE_MODEL_HEADER(MashStep, Temp        , PropertyNames::MashStep::infuseTemp_c          ), // "Infusion Temp"
+   TABLE_MODEL_HEADER(MashStep, TargetTemp  , PropertyNames::StepBase::startTemp_c           ), // "Target Temp"
+   TABLE_MODEL_HEADER(MashStep, EndTemp     , PropertyNames::Step::endTemp_c                 ), // "End Temp"
+   TABLE_MODEL_HEADER(MashStep, RampTime    , PropertyNames::StepBase::rampTime_mins         ), // "Ramp Time"
+   TABLE_MODEL_HEADER(MashStep, Time        , PropertyNames::StepBase::stepTime_mins         ), // "Time"
+   TABLE_MODEL_HEADER(MashStep, StartAcidity, PropertyNames::Step::startAcidity_pH           ), // "Start pH"
+   TABLE_MODEL_HEADER(MashStep,   EndAcidity, PropertyNames::Step::  endAcidity_pH           ), // "End pH"
+   TABLE_MODEL_HEADER(MashStep, WaterToGrain, PropertyNames::MashStep::liquorToGristRatio_lKg), // "Water:Grain"
 )
 
 MashStepTableModel::MashStepTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},
    TableModelBase<MashStepTableModel, MashStep>{},
-   StepTableModelBase<MashStepTableModel, MashStep, Mash>{} {
+   EnumeratedItemTableModelBase<MashStepTableModel, MashStep, Mash>{} {
    this->setObjectName("mashStepTableModel");
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &MashStepTableModel::contextMenu);
    //
-   // Whilst, in principle, we could connect to ObjectStoreTyped<MashStep>::getInstance() to listen for signals
-   // &ObjectStoreTyped<MashStep>::signalObjectInserted and &ObjectStoreTyped<MashStep>::signalObjectDeleted, this is
-   // less useful in practice because (a) we get updates about MashSteps in Mashes other than the one we are watching
-   // (so we have to filter them out) and (b) when a new MashStep is created, it doesn't have a Mash, so it's not useful
-   // for us to receive a signal about it until after it has been added to a Mash.  Fortunately, all we have to do is
-   // connect to the Mash we are watching and listen for Mash::mashStepsChanged, which we'll get whenever a MashStep is
-   // added to, or removed from, the Mash, as well as when the MashStep order changes.  We then just reread all the
-   // MashSteps from the Mash which gives us simplicity for a miniscule overhead (because the number of MashSteps in a
-   // Mash is never going to be enormous).
+   // See comment in qtModels/tableModels/BoilStepTableModel.cpp for why we don't listen directly to signals from
+   // ObjectStore.
    //
    return;
 }
@@ -79,7 +72,7 @@ void MashStepTableModel::removed([[maybe_unused]] std::shared_ptr<MashStep> item
 void MashStepTableModel::updateTotals()                                      { return; }
 
 QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->m_stepOwnerObs || !this->indexAndRoleOk(index, role)) {
+   if (!this->m_itemOwnerObs || !this->indexAndRoleOk(index, role)) {
       return QVariant();
    }
 
@@ -95,12 +88,8 @@ QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
    return this->readDataFromModel(index, role);
 }
 
-Qt::ItemFlags MashStepTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<MashStepTableModel>(index, this->m_editable);
-}
-
 bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_itemOwnerObs) {
       return false;
    }
    return this->doSetDataDefault(index, value, role);
@@ -109,7 +98,7 @@ bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & val
 // Insert the boiler-plate stuff that we cannot do in TableModelBase
 TABLE_MODEL_COMMON_CODE(MashStep, mashStep, PropertyNames::Recipe::mashId)
 // Insert the boiler-plate stuff that we cannot do in StepTableModelBase
-STEP_TABLE_MODEL_COMMON_CODE(Mash)
+ENUMERATED_ITEM_TABLE_MODEL_COMMON_CODE(MashStep, Mash)
 //=============================================== CLASS MashStepItemDelegate ================================================
 
 // Insert the boiler-plate stuff that we cannot do in ItemDelegate

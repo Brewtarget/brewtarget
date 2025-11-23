@@ -57,7 +57,7 @@ namespace {
          exit(1);
       }
       Database::instance().unload();
-      PersistentSettings::insert(PersistentSettings::Names::converted, QDate().currentDate().toString());
+      PersistentSettings::insert_ck(PersistentSettings::Names::converted, QDate().currentDate().toString());
       exit(0);
    }
 

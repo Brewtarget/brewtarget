@@ -48,10 +48,10 @@ public:
 
    ~impl() = default;
 
-   SmartAmountSettings &     m_self            ;
-   char const * const        m_editorName      ;
-   char const * const        m_labelOrFieldName;
-   TypeInfo     const &      m_typeInfo        ;
+   SmartAmountSettings & m_self            ;
+   char const * const    m_editorName      ;
+   char const * const    m_labelOrFieldName;
+   TypeInfo     const &  m_typeInfo        ;
    // If m_typeInfo.fieldType is a ChoiceOfPhysicalQuantity (eg Mass_Volume), this is where we store which of
    // the two PhysicalQuantity values (eg Mass or Volume) is currently set.  If m_typeInfo.fieldType is a
    // PhysicalQuantity, then this will just be a copy of it.

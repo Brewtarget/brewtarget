@@ -45,6 +45,24 @@ AddPropertyName(vessel  )
 /**
  * \class FermentationStep is a step in a a fermentation process.
  *
+ *        We get away with having cross-dependencies between the two CRTP classes, but that means we have to be a bit
+ *        careful about what they refer to.
+ *
+ *           StepOwnerBase<Fermentation, FermentationStep>
+ *                             |
+ *              NamedEntity    |     FolderBase<Fermentation>
+ *                       \     |      /
+ *                        \    |     /
+ *                        Fermentation
+ *
+ *           NamedEntity
+ *                   \
+ *                  Step              EnumeratedBase<FermentationStep, Fermentation>
+ *                     \                 /
+ *                StepExtended     StepBase<FermentationStep, Fermentation, FermentationStepOptions>
+ *                       \            /
+ *                      FermentationStep
+ *
  * \brief As a \c MashStep is to a \c Mash, and a \c BoilStep is to a \c Boil, so a \c FermentationStep is to a
  *        \c Fermentation.
  */
@@ -53,8 +71,8 @@ class FermentationStep : public StepExtended, public StepBase<FermentationStep, 
 
    STEP_COMMON_DECL(Fermentation, FermentationStepOptions)
    // See model/EnumeratedBase.h for info, getters and setters for these properties
-   Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
-   Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
+   Q_PROPERTY(int ownerId          READ ownerId          WRITE setOwnerId       )
+   Q_PROPERTY(int sequenceNumber   READ sequenceNumber   WRITE setSequenceNumber)
    // See model/StepBase.h for info, getters and setters for these properties
    Q_PROPERTY(std::optional<double> stepTime_mins   READ stepTime_mins   WRITE setStepTime_mins)
    Q_PROPERTY(std::optional<double> stepTime_days   READ stepTime_days   WRITE setStepTime_days)

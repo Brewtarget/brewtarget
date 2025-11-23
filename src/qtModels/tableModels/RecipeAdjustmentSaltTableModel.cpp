@@ -28,7 +28,7 @@
 
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "model/Inventory.h"
+#include "model/StockPurchase.h"
 #include "model/Mash.h"
 #include "model/Recipe.h"
 
@@ -39,22 +39,22 @@
 
 COLUMN_INFOS(
    RecipeAdjustmentSaltTableModel,
-   // NOTE: Need PropertyNames::RecipeAdjustmentSalt::amountWithUnits not PropertyNames::RecipeAdjustmentSalt::amount below so we
-   //       can handle mass-or-volume generically in TableModelBase.
    //
-   // Note too that, for the purposes of these columns, the "name" of a RecipeAdjustmentSalt is not its "NamedEntity name" but actually its type
-   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, Name          , tr("Name"       ), PropertyPath{{PropertyNames::RecipeAdjustmentSalt::salt,
-                                                                                             PropertyNames::NamedEntity::name         }}),
-   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, Type          , tr("Type"       ), PropertyPath{{PropertyNames::RecipeAdjustmentSalt::salt,
-                                                                                             PropertyNames::Salt::type                 }}),
-   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  ),
-   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, AmountType    , tr("Amount Type"), PropertyNames::IngredientAmount::amount                  , Salt::validMeasures),
-   // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
-   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, TotalInventory, tr("Inventory"  ), PropertyPath{{PropertyNames::RecipeAdjustmentSalt::salt,
-                                                                                             PropertyNames::Ingredient::totalInventory}}),
-   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, AddTo         , tr("Added To"   ), PropertyNames::RecipeAdjustmentSalt::whenToAdd         ),
-   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, PctAcid       , tr("% Acid"     ), PropertyPath{{PropertyNames::RecipeAdjustmentSalt::salt,
-                                                                                             PropertyNames::Salt::percentAcid         }}),
+   // Note that, for the purposes of these columns, the "name" of a RecipeAdjustmentSalt is not its "NamedEntity name"
+   // but actually its type.
+   //
+   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, Name          , PropertyPath{{PropertyNames::RecipeAdjustmentSalt::salt,       // "Name"
+                                                                          PropertyNames::NamedEntity::name         }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, Type          , PropertyPath{{PropertyNames::RecipeAdjustmentSalt::salt,       // "Type"
+                                                                          PropertyNames::Salt::type                }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, Amount        , PropertyNames::IngredientAmount::amount                  ),    // "Amount"
+   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, AmountType    , PropertyNames::IngredientAmount::amount, Salt::validMeasures), // "Amount Type"
+   // Total inventory is read-only, so there is intentionally no TotalInventoryType column
+   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, TotalInventory, PropertyPath{{PropertyNames::RecipeAdjustmentSalt::salt,       // "Inventory"
+                                                                          PropertyNames::Ingredient::totalInventory}, 1}),
+   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, AddTo         , PropertyNames::RecipeAdjustmentSalt::whenToAdd         ),      // "Added To"
+   TABLE_MODEL_HEADER(RecipeAdjustmentSalt, PctAcid       , PropertyPath{{PropertyNames::RecipeAdjustmentSalt::salt,       // "% Acid"
+                                                                          PropertyNames::Salt::percentAcid         }, 1}),
 )
 
 RecipeAdjustmentSaltTableModel::RecipeAdjustmentSaltTableModel(QTableView* parent, bool editable) :
@@ -251,18 +251,6 @@ double RecipeAdjustmentSaltTableModel::totalAcidWeight(Salt::Type type) const {
 
 QVariant RecipeAdjustmentSaltTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags RecipeAdjustmentSaltTableModel::flags(const QModelIndex& index) const {
-   if (index.row() >= this->m_rows.size() ) {
-      return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-
-   auto const row = this->m_rows[index.row()];
-   if (!row->salt()->isAcid() && index.column() == static_cast<int>(RecipeAdjustmentSaltTableModel::ColumnIndex::PctAcid))  {
-      return Qt::NoItemFlags;
-   }
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
 }
 
 bool RecipeAdjustmentSaltTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

@@ -20,7 +20,7 @@
 #include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
 #include "database/ObjectStoreWrapper.h"
-#include "model/InventorySalt.h"
+#include "model/StockPurchaseSalt.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"
@@ -49,9 +49,9 @@ namespace {
 }
 
 QString Salt::localisedName() { return tr("Salt"); }
-QString Salt::localisedName_isAcid     () { return tr("Is Acid"     ); }
-QString Salt::localisedName_percentAcid() { return tr("Percent Acid"); }
-QString Salt::localisedName_type       () { return tr("Type"        ); }
+QString Salt::localisedName_isAcid     () { return tr("Is Acid"); }
+QString Salt::localisedName_percentAcid() { return tr("%% Acid"); }
+QString Salt::localisedName_type       () { return tr("Type"   ); }
 
 EnumStringMapping const Salt::typeStringMapping {
    {Salt::Type::CaCl2         , "CaCl2"         },

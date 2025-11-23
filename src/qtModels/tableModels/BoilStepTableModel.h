@@ -17,12 +17,12 @@
 #define TABLEMODELS_BOILSTEPTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
 #include "model/BoilStep.h"
 #include "qtModels/tableModels/BtTableModel.h"
+#include "qtModels/tableModels/EnumeratedItemTableModelBase.h"
 #include "qtModels/tableModels/ItemDelegate.h"
-#include "qtModels/tableModels/StepTableModelBase.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
 // Define the columns on this table
@@ -44,11 +44,11 @@ COLUMN_NAMES(BoilStepTableModel, Name        ,
  */
 class BoilStepTableModel : public BtTableModel,
                            public TableModelBase<BoilStepTableModel, BoilStep>,
-                           public StepTableModelBase<BoilStepTableModel, BoilStep, Boil> {
+                           public EnumeratedItemTableModelBase<BoilStepTableModel, BoilStep, Boil> {
    Q_OBJECT
 
    TABLE_MODEL_COMMON_DECL(BoilStep)
-   STEP_TABLE_MODEL_COMMON_DECL(Boil)
+   ENUMERATED_ITEM_TABLE_MODEL_COMMON_DECL(BoilStep, Boil)
 };
 
 //============================================ CLASS BoilStepItemDelegate ==============================================
@@ -59,7 +59,7 @@ class BoilStepTableModel : public BtTableModel,
  * \brief An item delegate for hop tables.
  * \sa BoilStepTableModel
  */
-class BoilStepItemDelegate : public QItemDelegate,
+class BoilStepItemDelegate : public QStyledItemDelegate,
                              public ItemDelegate<BoilStepItemDelegate, BoilStepTableModel> {
    Q_OBJECT
 

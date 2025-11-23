@@ -498,42 +498,42 @@ public:
 
       // Backup stuff
       // By default backups go in the same directory as the DB
-      this->input_backupDir.setText(PersistentSettings::value(PersistentSettings::Names::directory,
-                                                              PersistentSettings::getUserDataDir().absolutePath(),
-                                                              PersistentSettings::Sections::backups).toString());
-      this->spinBox_numBackups.setValue(PersistentSettings::value(PersistentSettings::Names::maximum,
-                                                                  10,
-                                                                  PersistentSettings::Sections::backups).toInt());
-      this->spinBox_frequency.setValue(PersistentSettings::value(PersistentSettings::Names::frequency,
-                                                                 4,
-                                                                 PersistentSettings::Sections::backups).toInt());
+      this->input_backupDir.setText(PersistentSettings::value_ck(PersistentSettings::Names::directory,
+                                                                 PersistentSettings::getUserDataDir().absolutePath(),
+                                                                 PersistentSettings::Sections::backups).toString());
+      this->spinBox_numBackups.setValue(PersistentSettings::value_ck(PersistentSettings::Names::maximum,
+                                                                     10,
+                                                                     PersistentSettings::Sections::backups).toInt());
+      this->spinBox_frequency.setValue(PersistentSettings::value_ck(PersistentSettings::Names::frequency,
+                                                                    4,
+                                                                    PersistentSettings::Sections::backups).toInt());
 
       // The IBU modifications. These will all be calculated from a 60 min boil. This is gonna get confusing.
       double amt = Localization::toDouble(
-         PersistentSettings::value(PersistentSettings::Names::mashHopAdjustment, 0).toString(),
+         PersistentSettings::value_ck(PersistentSettings::Names::mashHopAdjustment, 0).toString(),
          Q_FUNC_INFO
       );
       this->m_self.ibuAdjustmentMashHopDoubleSpinBox->setValue(amt * 100);
 
       amt = Localization::toDouble(
-         PersistentSettings::value(PersistentSettings::Names::firstWortHopAdjustment, 1.1).toString(),
+         PersistentSettings::value_ck(PersistentSettings::Names::firstWortHopAdjustment, 1.1).toString(),
          Q_FUNC_INFO
       );
       this->m_self.ibuAdjustmentFirstWortDoubleSpinBox->setValue(amt * 100);
 
       // Database stuff -- this looks weird, but trust me. We want SQLITE to be
       // the default for this field
-      int tmp = PersistentSettings::value(PersistentSettings::Names::dbType,
-                                          static_cast<int>(Database::DbType::SQLITE)).toInt() - 1;
+      int tmp = PersistentSettings::value_ck(PersistentSettings::Names::dbType,
+                                             static_cast<int>(Database::DbType::SQLITE)).toInt() - 1;
       this->m_self.comboBox_engine->setCurrentIndex(tmp);
 
-      this->input_pgHostname.setText(PersistentSettings::value(PersistentSettings::Names::dbHostname, "localhost").toString());
-      this->input_pgPortNum.setText(PersistentSettings::value(PersistentSettings::Names::dbPortnum, "5432").toString());
-      this->input_pgSchema.setText(PersistentSettings::value(PersistentSettings::Names::dbSchema, "public").toString());
-      this->input_pgDbName.setText(PersistentSettings::value(PersistentSettings::Names::dbName, CONFIG_APPLICATION_NAME_LC).toString());
-      this->input_pgUsername.setText(PersistentSettings::value(PersistentSettings::Names::dbUsername, CONFIG_APPLICATION_NAME_LC).toString());
-      this->input_pgPassword.setText(PersistentSettings::value(PersistentSettings::Names::dbPassword, "").toString());
-      this->checkBox_savePgPassword.setChecked(PersistentSettings::contains(PersistentSettings::Names::dbPassword));
+      this->input_pgHostname.setText(PersistentSettings::value_ck(PersistentSettings::Names::dbHostname, "localhost").toString());
+      this->input_pgPortNum .setText(PersistentSettings::value_ck(PersistentSettings::Names::dbPortnum , "5432").toString());
+      this->input_pgSchema  .setText(PersistentSettings::value_ck(PersistentSettings::Names::dbSchema  , "public").toString());
+      this->input_pgDbName  .setText(PersistentSettings::value_ck(PersistentSettings::Names::dbName    , CONFIG_APPLICATION_NAME_LC).toString());
+      this->input_pgUsername.setText(PersistentSettings::value_ck(PersistentSettings::Names::dbUsername, CONFIG_APPLICATION_NAME_LC).toString());
+      this->input_pgPassword.setText(PersistentSettings::value_ck(PersistentSettings::Names::dbPassword, "").toString());
+      this->checkBox_savePgPassword.setChecked(PersistentSettings::contains_ck(PersistentSettings::Names::dbPassword));
 
       this->dbConnectionTestState = NO_CHANGE;
       this->changeColors();
@@ -541,7 +541,7 @@ public:
       if (RecipeHelper::getAutomaticVersioningEnabled()) {
          this->m_self.checkBox_versioning->setCheckState(Qt::Checked);
          this->m_self.groupBox_deleteBehavior->setEnabled(true);
-         switch (PersistentSettings::value(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT).toInt()) {
+         switch (PersistentSettings::value_ck(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT).toInt()) {
             case Recipe::ANCESTOR:
                this->m_self.radioButton_deleteAncestor->setChecked(true);
                break;
@@ -554,7 +554,7 @@ public:
          this->m_self.groupBox_deleteBehavior->setEnabled(false);
       }
 
-      if (PersistentSettings::value(PersistentSettings::Names::showsnapshots, false).toBool()) {
+      if (PersistentSettings::value_ck(PersistentSettings::Names::showsnapshots, false).toBool()) {
          this->m_self.checkBox_alwaysShowSnaps->setCheckState(Qt::Checked);
       } else {
          this->m_self.checkBox_alwaysShowSnaps->setCheckState(Qt::Unchecked);
@@ -564,27 +564,28 @@ public:
       // These default values used to be hard-coded in MainWindow::newRecipe, but we now let users override them
       //
       this->m_self.lineEdit_defaultBatchSize_l->setQuantity(
-         PersistentSettings::value(PersistentSettings::Names::defaultBatchSize_l,
-                                   QVariant::fromValue(18.93)).toDouble()  // 5 gallons
+         PersistentSettings::value_ck(PersistentSettings::Names::defaultBatchSize_l,
+                                      QVariant::fromValue(18.93)).toDouble()  // 5 gallons
       );
       this->m_self.lineEdit_defaultPreBoilSize_l->setQuantity(
-         PersistentSettings::value(PersistentSettings::Names::defaultPreBoilSize_l,
-                                   QVariant::fromValue(23.47)).toDouble()  // 6.2 gallons
+         PersistentSettings::value_ck(PersistentSettings::Names::defaultPreBoilSize_l,
+                                      QVariant::fromValue(23.47)).toDouble()  // 6.2 gallons
       );
       this->m_self.lineEdit_defaultEfficiency->setQuantity(
-         PersistentSettings::value(PersistentSettings::Names::defaultEfficiency, QVariant::fromValue(70.0)).toDouble()
+         PersistentSettings::value_ck(PersistentSettings::Names::defaultEfficiency,
+                                      QVariant::fromValue(70.0)).toDouble()
       );
 
       return;
    }
 
    void saveDefaults() {
-      PersistentSettings::insert(PersistentSettings::Names::defaultBatchSize_l,
-                                 this->m_self.lineEdit_defaultBatchSize_l->getNonOptCanonicalAmt().quantity);
-      PersistentSettings::insert(PersistentSettings::Names::defaultPreBoilSize_l,
-                                 this->m_self.lineEdit_defaultPreBoilSize_l->getNonOptCanonicalAmt().quantity);
-      PersistentSettings::insert(PersistentSettings::Names::defaultEfficiency,
-                                 this->m_self.lineEdit_defaultEfficiency->getNonOptValue<double>());
+      PersistentSettings::insert_ck(PersistentSettings::Names::defaultBatchSize_l,
+                                    this->m_self.lineEdit_defaultBatchSize_l->getNonOptCanonicalAmt().quantity);
+      PersistentSettings::insert_ck(PersistentSettings::Names::defaultPreBoilSize_l,
+                                    this->m_self.lineEdit_defaultPreBoilSize_l->getNonOptCanonicalAmt().quantity);
+      PersistentSettings::insert_ck(PersistentSettings::Names::defaultEfficiency,
+                                    this->m_self.lineEdit_defaultEfficiency->getNonOptValue<double>());
       return;
    }
 
@@ -662,8 +663,8 @@ OptionDialog::OptionDialog(QWidget * parent) :
    comboBox_engine->addItem(tr("PostgreSQL"), QVariant(static_cast<int>(Database::DbType::PGSQL)));
 
    // figure out which database we have
-   int idx = comboBox_engine->findData(PersistentSettings::value(PersistentSettings::Names::dbType,
-                                                                 static_cast<int>(Database::DbType::SQLITE)).toInt());
+   int idx = comboBox_engine->findData(PersistentSettings::value_ck(PersistentSettings::Names::dbType,
+                                                                    static_cast<int>(Database::DbType::SQLITE)).toInt());
    this->pimpl->setDbDialog(static_cast<Database::DbType>(idx));
 
    // connect all the signals
@@ -687,8 +688,8 @@ void OptionDialog::connect_signals() {
    connect(pushButton_testConnection, &QAbstractButton::clicked, this, &OptionDialog::testConnection);
 
    // figure out which database we have
-   int idx = comboBox_engine->findData(PersistentSettings::value(PersistentSettings::Names::dbType,
-                                                                 static_cast<int>(Database::DbType::SQLITE)).toInt());
+   int idx = comboBox_engine->findData(PersistentSettings::value_ck(PersistentSettings::Names::dbType,
+                                                                    static_cast<int>(Database::DbType::SQLITE)).toInt());
    this->pimpl->setDbDialog(static_cast<Database::DbType>(idx));
 
    // Set the signals
@@ -696,19 +697,19 @@ void OptionDialog::connect_signals() {
    connect(this->checkBox_LogFileLocationUseDefault, &QAbstractButton::clicked, this, &OptionDialog::setFileLocationState);
 
    connect(&this->pimpl->input_pgHostname, &QLineEdit::editingFinished, this, &OptionDialog::testRequired);
-   connect(&this->pimpl->input_pgPortNum,  &QLineEdit::editingFinished, this, &OptionDialog::testRequired);
-   connect(&this->pimpl->input_pgSchema,   &QLineEdit::editingFinished, this, &OptionDialog::testRequired);
-   connect(&this->pimpl->input_pgDbName,   &QLineEdit::editingFinished, this, &OptionDialog::testRequired);
+   connect(&this->pimpl->input_pgPortNum , &QLineEdit::editingFinished, this, &OptionDialog::testRequired);
+   connect(&this->pimpl->input_pgSchema  , &QLineEdit::editingFinished, this, &OptionDialog::testRequired);
+   connect(&this->pimpl->input_pgDbName  , &QLineEdit::editingFinished, this, &OptionDialog::testRequired);
    connect(&this->pimpl->input_pgUsername, &QLineEdit::editingFinished, this, &OptionDialog::testRequired);
    connect(&this->pimpl->input_pgPassword, &QLineEdit::editingFinished, this, &OptionDialog::testRequired);
 
-   connect(&this->pimpl->pushButton_browseDataDir, &QAbstractButton::clicked, this, &OptionDialog::setDataDir);
+   connect(&this->pimpl->pushButton_browseDataDir  , &QAbstractButton::clicked, this, &OptionDialog::setDataDir);
    connect(&this->pimpl->pushButton_browseBackupDir, &QAbstractButton::clicked, this, &OptionDialog::setBackupDir);
-   connect(pushButton_resetToDefault, &QAbstractButton::clicked, this, &OptionDialog::resetToDefault);
+   connect(pushButton_resetToDefault       , &QAbstractButton::clicked, this, &OptionDialog::resetToDefault);
    connect(pushButton_LogFileLocationBrowse, &QAbstractButton::clicked, this, &OptionDialog::setLogDir);
    pushButton_testConnection->setEnabled(false);
 
-   connect(checkBox_versioning, &QAbstractButton::clicked, this, &OptionDialog::versioningChanged);
+   connect(checkBox_versioning     , &QAbstractButton::clicked, this, &OptionDialog::versioningChanged);
    connect(checkBox_alwaysShowSnaps, &QAbstractButton::clicked, this, &OptionDialog::signalAncestors);
 
    // Call this here to set up translatable strings.
@@ -719,7 +720,6 @@ void OptionDialog::connect_signals() {
 void OptionDialog::signalAncestors() {
    emit showAllAncestors(checkBox_alwaysShowSnaps->checkState() == Qt::Checked);
 }
-
 
 void OptionDialog::show() {
    this->pimpl->showChanges();
@@ -905,8 +905,8 @@ void OptionDialog::saveFormulae() {
      IbuMethods::formula =   ibuFormulaComboBox->getNonOptValue<  IbuMethods::  IbuFormula>();
    ColorMethods::formula = colorFormulaComboBox->getNonOptValue<ColorMethods::ColorFormula>();
 
-   PersistentSettings::insert(PersistentSettings::Names::mashHopAdjustment, ibuAdjustmentMashHopDoubleSpinBox->value() / 100);
-   PersistentSettings::insert(PersistentSettings::Names::firstWortHopAdjustment, ibuAdjustmentFirstWortDoubleSpinBox->value() / 100);
+   PersistentSettings::insert_ck(PersistentSettings::Names::mashHopAdjustment     , ibuAdjustmentMashHopDoubleSpinBox->value() / 100);
+   PersistentSettings::insert_ck(PersistentSettings::Names::firstWortHopAdjustment, ibuAdjustmentFirstWortDoubleSpinBox->value() / 100);
    return;
 }
 
@@ -927,17 +927,17 @@ void OptionDialog::saveVersioningSettings() {
    if (checkBox_versioning->checkState() == Qt::Checked) {
       RecipeHelper::setAutomaticVersioningEnabled(true);
       if (radioButton_deleteAncestor->isChecked()) {
-         PersistentSettings::insert(PersistentSettings::Names::deletewhat, Recipe::ANCESTOR);
+         PersistentSettings::insert_ck(PersistentSettings::Names::deletewhat, Recipe::ANCESTOR);
       } else {
-         PersistentSettings::insert(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT);
+         PersistentSettings::insert_ck(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT);
       }
    } else {
       // the default when versioning is off is to only delete descendant
       RecipeHelper::setAutomaticVersioningEnabled(false);
-      PersistentSettings::insert(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT);
+      PersistentSettings::insert_ck(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT);
    }
 
-   PersistentSettings::insert(PersistentSettings::Names::showsnapshots, checkBox_alwaysShowSnaps->checkState() == Qt::Checked);
+   PersistentSettings::insert_ck(PersistentSettings::Names::showsnapshots, checkBox_alwaysShowSnaps->checkState() == Qt::Checked);
 
 }
 
@@ -963,9 +963,9 @@ bool OptionDialog::saveDatabaseConfig() {
    }
 
    if (saveDbConfig && this->pimpl->checkBox_savePgPassword.checkState() == Qt::Checked) {
-      PersistentSettings::insert(PersistentSettings::Names::dbPassword, this->pimpl->input_pgPassword.text());
+      PersistentSettings::insert_ck(PersistentSettings::Names::dbPassword, this->pimpl->input_pgPassword.text());
    } else {
-      PersistentSettings::remove(PersistentSettings::Names::dbPassword);
+      PersistentSettings::remove_ck(PersistentSettings::Names::dbPassword);
    }
 
    Database::DbType dbEngine = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
@@ -995,14 +995,14 @@ bool OptionDialog::transferDatabase() {
       }
       // Database engine stuff
       int engine = comboBox_engine->currentData().toInt();
-      PersistentSettings::insert(PersistentSettings::Names::dbType, engine);
+      PersistentSettings::insert_ck(PersistentSettings::Names::dbType, engine);
       // only write these changes when switching TO pgsql
       if (engine == static_cast<int>(Database::DbType::PGSQL)) {
-         PersistentSettings::insert(PersistentSettings::Names::dbHostname, this->pimpl->input_pgHostname.text());
-         PersistentSettings::insert(PersistentSettings::Names::dbPortnum,  this->pimpl->input_pgPortNum.text());
-         PersistentSettings::insert(PersistentSettings::Names::dbSchema,   this->pimpl->input_pgSchema.text());
-         PersistentSettings::insert(PersistentSettings::Names::dbName,     this->pimpl->input_pgDbName.text());
-         PersistentSettings::insert(PersistentSettings::Names::dbUsername, this->pimpl->input_pgUsername.text());
+         PersistentSettings::insert_ck(PersistentSettings::Names::dbHostname, this->pimpl->input_pgHostname.text());
+         PersistentSettings::insert_ck(PersistentSettings::Names::dbPortnum , this->pimpl->input_pgPortNum.text());
+         PersistentSettings::insert_ck(PersistentSettings::Names::dbSchema  , this->pimpl->input_pgSchema.text());
+         PersistentSettings::insert_ck(PersistentSettings::Names::dbName    , this->pimpl->input_pgDbName.text());
+         PersistentSettings::insert_ck(PersistentSettings::Names::dbUsername, this->pimpl->input_pgUsername.text());
       }
       QMessageBox::information(
          this,
@@ -1042,9 +1042,9 @@ void OptionDialog::saveSqliteConfig() {
       );
    }
 
-   PersistentSettings::insert(PersistentSettings::Names::maximum,   this->pimpl->spinBox_numBackups.value(), PersistentSettings::Sections::backups);
-   PersistentSettings::insert(PersistentSettings::Names::frequency, this->pimpl->spinBox_frequency.value(),  PersistentSettings::Sections::backups);
-   PersistentSettings::insert(PersistentSettings::Names::directory, this->pimpl->input_backupDir.text(),     PersistentSettings::Sections::backups);
+   PersistentSettings::insert_ck(PersistentSettings::Names::maximum,   this->pimpl->spinBox_numBackups.value(), PersistentSettings::Sections::backups);
+   PersistentSettings::insert_ck(PersistentSettings::Names::frequency, this->pimpl->spinBox_frequency.value(),  PersistentSettings::Sections::backups);
+   PersistentSettings::insert_ck(PersistentSettings::Names::directory, this->pimpl->input_backupDir.text(),     PersistentSettings::Sections::backups);
 
    return;
 }

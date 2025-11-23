@@ -31,34 +31,34 @@
 
 COLUMN_INFOS(
    BoilStepTableModel,
-   TABLE_MODEL_HEADER(BoilStep, Name        , tr("Name"         ), PropertyNames:: NamedEntity::name           ),
-   TABLE_MODEL_HEADER(BoilStep, StepTime    , tr("Step Time"    ), PropertyNames::    StepBase::stepTime_mins  ),
-   TABLE_MODEL_HEADER(BoilStep, StartTemp   , tr("Start Temp"   ), PropertyNames::    StepBase::startTemp_c    ),
-   TABLE_MODEL_HEADER(BoilStep, RampTime    , tr("Ramp Time"    ), PropertyNames::    StepBase::rampTime_mins  ),
-   TABLE_MODEL_HEADER(BoilStep, EndTemp     , tr("End Temp"     ), PropertyNames::        Step::endTemp_c      ),
-   TABLE_MODEL_HEADER(BoilStep, StartAcidity, tr("Start Acidity"), PropertyNames::        Step::startAcidity_pH),
-   TABLE_MODEL_HEADER(BoilStep, EndAcidity  , tr("End Acidity"  ), PropertyNames::        Step::endAcidity_pH  ),
-   TABLE_MODEL_HEADER(BoilStep, StartGravity, tr("Start Gravity"), PropertyNames::StepExtended::startGravity_sg),
-   TABLE_MODEL_HEADER(BoilStep, EndGravity  , tr("End Gravity"  ), PropertyNames::StepExtended::  endGravity_sg),
-   TABLE_MODEL_HEADER(BoilStep, ChillingType, tr("Chilling Type"), PropertyNames::    BoilStep::chillingType   ),
+   TABLE_MODEL_HEADER(BoilStep, Name        , PropertyNames:: NamedEntity::name           ), // "Name"
+   TABLE_MODEL_HEADER(BoilStep, StepTime    , PropertyNames::    StepBase::stepTime_mins  ), // "Step Time"
+   TABLE_MODEL_HEADER(BoilStep, StartTemp   , PropertyNames::    StepBase::startTemp_c    ), // "Start Temp"
+   TABLE_MODEL_HEADER(BoilStep, RampTime    , PropertyNames::    StepBase::rampTime_mins  ), // "Ramp Time"
+   TABLE_MODEL_HEADER(BoilStep, EndTemp     , PropertyNames::        Step::endTemp_c      ), // "End Temp"
+   TABLE_MODEL_HEADER(BoilStep, StartAcidity, PropertyNames::        Step::startAcidity_pH), // "Start Acidity"
+   TABLE_MODEL_HEADER(BoilStep, EndAcidity  , PropertyNames::        Step::endAcidity_pH  ), // "End Acidity"
+   TABLE_MODEL_HEADER(BoilStep, StartGravity, PropertyNames::StepExtended::startGravity_sg), // "Start Gravity"
+   TABLE_MODEL_HEADER(BoilStep, EndGravity  , PropertyNames::StepExtended::  endGravity_sg), // "End Gravity"
+   TABLE_MODEL_HEADER(BoilStep, ChillingType, PropertyNames::    BoilStep::chillingType   ), // "Chilling Type"
 )
 
 BoilStepTableModel::BoilStepTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},
    TableModelBase<BoilStepTableModel, BoilStep>{},
-   StepTableModelBase<BoilStepTableModel, BoilStep, Boil>{} {
+   EnumeratedItemTableModelBase<BoilStepTableModel, BoilStep, Boil>{} {
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &BoilStepTableModel::contextMenu);
    //
    // Whilst, in principle, we could connect to ObjectStoreTyped<BoilStep>::getInstance() to listen for signals
    // &ObjectStoreTyped<BoilStep>::signalObjectInserted and &ObjectStoreTyped<BoilStep>::signalObjectDeleted, this is
-   // less useful in practice because (a) we get updates about BoilSteps in Boiles other than the one we are watching
+   // less useful in practice because (a) we get updates about BoilSteps in Boils other than the one we are watching
    // (so we have to filter them out) and (b) when a new BoilStep is created, it doesn't have a Boil, so it's not useful
    // for us to receive a signal about it until after it has been added to a Boil.  Fortunately, all we have to do is
    // connect to the Boil we are watching and listen for Boil::mashStepsChanged, which we'll get whenever a BoilStep is
    // added to, or removed from, the Boil, as well as when the BoilStep order changes.  We then just reread all the
-   // BoilSteps from the Boil which gives us simplicity for a miniscule overhead (because the number of BoilSteps in a
+   // BoilSteps from the Boil which gives us simplicity for a minuscule overhead (because the number of BoilSteps in a
    // Boil is never going to be enormous).
    //
    return;
@@ -71,18 +71,14 @@ void BoilStepTableModel::removed([[maybe_unused]] std::shared_ptr<BoilStep> item
 void BoilStepTableModel::updateTotals()                                           { return; }
 
 QVariant BoilStepTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_itemOwnerObs) {
       return QVariant();
    }
    return this->doDataDefault(index, role);
 }
 
-Qt::ItemFlags BoilStepTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<BoilStepTableModel>(index, this->m_editable);
-}
-
 bool BoilStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_itemOwnerObs) {
       return false;
    }
    return this->doSetDataDefault(index, value, role);
@@ -91,7 +87,7 @@ bool BoilStepTableModel::setData(QModelIndex const & index, QVariant const & val
 // Insert the boiler-plate stuff that we cannot do in TableModelBase
 TABLE_MODEL_COMMON_CODE(BoilStep, boilStep, PropertyNames::Recipe::boilId)
 // Insert the boiler-plate stuff that we cannot do in StepTableModelBase
-STEP_TABLE_MODEL_COMMON_CODE(Boil)
+ENUMERATED_ITEM_TABLE_MODEL_COMMON_CODE(BoilStep, Boil)
 //=============================================== CLASS BoilStepItemDelegate ================================================
 
 // Insert the boiler-plate stuff that we cannot do in ItemDelegate

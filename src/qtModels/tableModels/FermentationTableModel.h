@@ -17,7 +17,7 @@
 #define TABLEMODELS_FERMENTATIONTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
 #include "model/Fermentation.h"
 #include "qtModels/tableModels/BtTableModel.h"
@@ -45,7 +45,7 @@ class FermentationTableModel : public BtTableModel, public TableModelBase<Fermen
  * \brief An item delegate for hop tables.
  * \sa FermentationTableModel
  */
-class FermentationItemDelegate : public QItemDelegate, public ItemDelegate<FermentationItemDelegate, FermentationTableModel> {
+class FermentationItemDelegate : public QStyledItemDelegate, public ItemDelegate<FermentationItemDelegate, FermentationTableModel> {
    Q_OBJECT
    ITEM_DELEGATE_COMMON_DECL(Fermentation)
 };

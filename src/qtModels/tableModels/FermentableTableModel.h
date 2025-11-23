@@ -24,7 +24,7 @@
 #include <memory>
 
 #include <QAbstractItemDelegate>
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QList>
 #include <QMetaProperty>
 #include <QModelIndex>
@@ -33,7 +33,6 @@
 
 #include "measurement/Unit.h"
 #include "model/Fermentable.h"
-#include "model/InventoryFermentable.h"
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
@@ -42,13 +41,12 @@ class BtStringConst;
 class Recipe;
 
 // Define the columns on this table
-COLUMN_NAMES(FermentableTableModel, Name              ,
-                                    Type              ,
-                                    Yield             ,
-                                    Color             ,
-                                    TotalInventory    ,
-                                    TotalInventoryType,
-                                    NumRecipesUsedIn  ,)
+COLUMN_NAMES(FermentableTableModel, Name            ,
+                                    Type            ,
+                                    Yield           ,
+                                    Color           ,
+                                    TotalInventory  ,
+                                    NumRecipesUsedIn,)
 
 /*!
  * \class FermentableTableModel
@@ -67,7 +65,7 @@ class FermentableTableModel : public BtTableModel, public TableModelBase<Ferment
  * \brief An item delegate for Fermentable tables.
  * \sa FermentableTableModel.
  */
-class FermentableItemDelegate : public QItemDelegate,
+class FermentableItemDelegate : public QStyledItemDelegate,
                                 public ItemDelegate<FermentableItemDelegate, FermentableTableModel> {
    Q_OBJECT
 

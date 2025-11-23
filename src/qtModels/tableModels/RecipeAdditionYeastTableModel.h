@@ -23,7 +23,7 @@
 #define TABLEMODELS_RECIPEADDITIONYEASTTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaProperty>
 #include <QModelIndex>
 #include <QVariant>
@@ -72,7 +72,7 @@ class RecipeAdditionYeastTableModel : public BtTableModelRecipeObserver,
  *
  * \brief An item delegate for \c RecipeAdditionYeastTableModel
  */
-class RecipeAdditionYeastItemDelegate : public QItemDelegate,
+class RecipeAdditionYeastItemDelegate : public QStyledItemDelegate,
                                         public ItemDelegate<RecipeAdditionYeastItemDelegate, RecipeAdditionYeastTableModel> {
    Q_OBJECT
 

@@ -24,6 +24,8 @@
 #include <QVariant>
 #include <QWidget>
 
+#include "model/StockPurchaseSalt.h"
+
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_SaltTableModel.cpp"
@@ -31,15 +33,11 @@
 
 COLUMN_INFOS(
    SaltTableModel,
-   // NOTE: Need PropertyNames::Salt::amountWithUnits not PropertyNames::Salt::amount below so we
-   //       can handle mass-or-volume generically in TableModelBase.
-   //
-   TABLE_MODEL_HEADER(Salt, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
-   TABLE_MODEL_HEADER(Salt, Type              , tr("Type"       ), PropertyNames::Salt::type                   ),
-   TABLE_MODEL_HEADER(Salt, PctAcid           , tr("% Acid"     ), PropertyNames::Salt::percentAcid            ),
-   TABLE_MODEL_HEADER(Salt, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   ),
-   TABLE_MODEL_HEADER(Salt, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Salt::validMeasures),
-   TABLE_MODEL_HEADER(Salt, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
+   TABLE_MODEL_HEADER(Salt, Name            , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Salt, Type            , PropertyNames::Salt::type                   ), // "Type"
+   TABLE_MODEL_HEADER(Salt, PctAcid         , PropertyNames::Salt::percentAcid            ), // "% Acid"
+   TABLE_MODEL_HEADER(Salt, TotalInventory  , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
+   TABLE_MODEL_HEADER(Salt, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 SaltTableModel::SaltTableModel(QTableView* parent, bool editable) :
@@ -61,19 +59,6 @@ void SaltTableModel::updateTotals()                                       { retu
 
 QVariant SaltTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags SaltTableModel::flags(const QModelIndex& index) const {
-   // Q_UNUSED(index)
-   if (index.row() >= this->m_rows.size() ) {
-      return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-
-   auto const row = this->m_rows[index.row()];
-   if (!row->isAcid() && index.column() == static_cast<int>(SaltTableModel::ColumnIndex::PctAcid))  {
-      return Qt::NoItemFlags;
-   }
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
 }
 
 bool SaltTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

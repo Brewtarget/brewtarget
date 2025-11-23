@@ -67,17 +67,14 @@ public:
 
    //=================================================== PROPERTIES ====================================================
    /**
-    * \brief For the moment, we have a single "total amount" inventory for a given \c Ingredient instance (eg \c Hop etc
-    *        instance).  This property and its associated accessors allow the total to be read and modified without
-    *        directly obtaining an \c Inventory object (eg \c InventoryHop object etc).
+    * \brief It's convenient to have a property that gives us current total inventory for a given \c Ingredient instance
+    *        (eg \c Hop etc instance).  Implementation in \c IngredientBase calls \c getTotalInventory on the relevant
+    *        subclass of \c StockPurchase to do the real work (by summation across \c StockPurchase subclass objects).
     */
-   Q_PROPERTY(Measurement::Amount totalInventory   READ totalInventory   WRITE setTotalInventory)
+   Q_PROPERTY(Measurement::Amount totalInventory   READ totalInventory   STORED false)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    virtual Measurement::Amount totalInventory() const = 0;
-
-   //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   virtual void setTotalInventory(Measurement::Amount const & val) = 0;
 
 };
 

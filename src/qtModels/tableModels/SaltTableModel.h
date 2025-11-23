@@ -20,7 +20,7 @@
 #define TABLEMODELS_SALTTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QList>
 #include <QMetaProperty>
 #include <QModelIndex>
@@ -29,7 +29,6 @@
 #include <QWidget>
 
 #include "measurement/Unit.h"
-#include "model/InventorySalt.h"
 #include "model/Salt.h"
 #include "model/Water.h"
 #include "qtModels/tableModels/BtTableModel.h"
@@ -41,12 +40,11 @@ class Mash;
 class Recipe;
 
 // Define the columns on this table
-COLUMN_NAMES(SaltTableModel, Name              ,
-                             Type              ,
-                             PctAcid           ,
-                             TotalInventory    ,
-                             TotalInventoryType,
-                             NumRecipesUsedIn  ,)
+COLUMN_NAMES(SaltTableModel, Name            ,
+                             Type            ,
+                             PctAcid         ,
+                             TotalInventory  ,
+                             NumRecipesUsedIn,)
 
 /*!
  * \class SaltTableModel
@@ -66,7 +64,7 @@ class SaltTableModel : public BtTableModel, public TableModelBase<SaltTableModel
  * \brief An item delegate for Salt tables.
  * \sa SaltTableModel.
  */
-class SaltItemDelegate : public QItemDelegate,
+class SaltItemDelegate : public QStyledItemDelegate,
                          public ItemDelegate<SaltItemDelegate, SaltTableModel> {
    Q_OBJECT
 

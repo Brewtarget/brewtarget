@@ -140,24 +140,20 @@ namespace ObjectStoreWrapper {
     *        additional coding, in all cases: (i) object intentionally discarded, (ii) object stored, (iii) ghastly
     *        error happens causing exceptions etc.
     */
-   template<class NE> int insert(std::shared_ptr<NE> ne) {
+   template<class NE> int insert(std::shared_ptr<NE> & ne) {
       return ObjectStoreTyped<NE>::getInstance().insert(ne);
    }
 
    /**
-    * \brief Deprecated way of inserting a new object in a store
-    *
-    *        Caller doesn't have a shared_ptr so gives us a reference to the object directly.  The main problem with
-    *        this is that, if the caller doesn't reach the point of storing the object in the object store, then, extra
-    *        hand-rolled code, the object's destructor doesn't get called.  A secondary problem is that, if a caller
-    *        _does_ have a shared_ptr to the object but inadvertently passes us the reference to the object itself then
-    *        the new shared_ptr we create will not know about the caller's shared_ptr, so the object's destructor will
-    *        get called twice and, sooner or later, we'll get a segfault.
+    * \brief We don't want people to insert without having a shared_ptr, because it creates numerous problems:
+    *          - If the caller's object goes out of scope and gets destructed, the object we have in the ObjectStore is
+    *            no longer valid.
+    *          - If a caller _does_ have a shared_ptr to the object but inadvertently passes us the reference to the
+    *            object itself then the new shared_ptr we create will not know about the caller's shared_ptr, so the
+    *            object's destructor will get called twice and, sooner or later, we'll get a segfault.
     */
-   template<class NE> int insert(NE & ne) {
-      qWarning() << Q_FUNC_INFO << "Deprecated function";
-      return ObjectStoreTyped<NE>::getInstance().insert(ne);
-   }
+   template<class NE> int insert(NE & ne) = delete;
+   template<class NE> int insert(NE * ne) = delete;
 
    template<class NE> std::shared_ptr<NE> insertCopyOf(NE const & ne) {
       return ObjectStoreTyped<NE>::getInstance().insertCopyOf(ne);
@@ -288,6 +284,94 @@ namespace ObjectStoreWrapper {
 
       return true;
    }
+
+   /**
+    * \brief Getting the \c Boil, \c Fermentation, etc for a \c Recipe, or the \c BrewNote for a \c StockUse subclass is
+    *        pretty much the same logic, so we template it
+    *
+    * \param getter  The object making the request (eg the \c Recipe that wants the \c Boil)
+    * \param idToGet The primary key of the \c Boil, \c Fermentation, etc being requested.
+    *
+    * NOTE:  In BeerJSON, each of mash, boil and fermentation is optional.  I guess no fermentation is for recipes for
+    *        making hop water etc.  Equally, there are people making beer without boiling -- eg see
+    *        https://byo.com/article/raw-ale/.  In both cases, our current support for "no boil" and/or "no ferment" is
+    *        somewhat limited and untested for now.
+    *
+    * NOTE:  The order of template parameters here matters!  We typically want \c Getter to be deduced automatically
+    *        from the first parameter (whereas \c NE always needs to be specified by the caller).  This means \c Getter
+    *        needs to be the second template parameter.
+    */
+   template<class NE, class Getter>
+   std::shared_ptr<NE> getRelational(Getter const & getter, int const idToGet) {
+      // Normally leave the next line commented out otherwise it generates too much logging
+//      qDebug() << Q_FUNC_INFO << getter << "request for" << NE::staticMetaObject.className() << "#" << idToGet;
+      if (idToGet < 0) {
+         // Negative ID just means there isn't one -- because this is how we store "NULL" for a foreign key
+         // Normally leave the next line commented out otherwise it generates too much logging
+//         qDebug() << Q_FUNC_INFO << "No" << NE::staticMetaObject.className() << "on" << getter;
+         return nullptr;
+      }
+      auto retVal = ObjectStoreWrapper::getById<NE>(idToGet);
+      if (!retVal) {
+         // I would think it's a coding error to have a seemingly valid boil/etc ID that's not in the database, but we
+         // try to recover as best we can.
+         qCritical() <<
+            Q_FUNC_INFO << "Invalid" << NE::staticMetaObject.className() << "ID (" << idToGet << ") on" << getter;
+         return nullptr;
+      }
+      return retVal;
+   }
+
+
+   /**
+    * \brief Called, eg, by \c Recipe, to set \c Mash, \c Boil, \c Fermentation, \c Style, \c Equipment, etc -- ie
+    *        things that the \c Recipe has at most one of.
+    *
+    * \param setter  The object making the request (eg the \c Recipe that wants the \c Boil)
+    * \param val     The Mash/Boil/Fermentation/Style/Equipment to set
+    * \param idVar   Reference to the setter's member variable storing the ID of Mash/Boil/Fermentation/Style/Equipment
+    *
+    * \return \c true if something was changed; \c false otherwise
+    */
+   template<class NE, class Setter>
+   bool setRelational(Setter & setter, std::shared_ptr<NE> val, int & idVar) {
+      if (!val && idVar < 0) {
+         // No change (from "not set" to "not set")
+         return false;
+      }
+
+      if (idVar > 0) {
+         // This comparison is only valid if we have a valid ID, because val might not yet be stored in the DB.
+         if (val && val->key() == idVar) {
+            // No change (same object as we already have)
+            return false;
+         }
+
+         //
+         // We can disconnect signals from the old object here because we don't need to know what they are (or even
+         // whether there were any).  However, it is the caller's responsibility to make any new connections.
+         //
+         std::shared_ptr<NE> oldVal = ObjectStoreWrapper::getById<NE>(idVar);
+         setter.disconnect(oldVal.get(), nullptr, &setter, nullptr);
+      }
+
+      if (!val) {
+         //
+         // Setter changed from having an object to not having one
+         //
+         idVar = -1;
+         return true;
+      }
+
+      if (val->key() < 0) {
+         idVar = ObjectStoreWrapper::insert<NE>(val);
+      } else {
+         idVar = val->key();
+      }
+
+      return true;
+   }
+
 }
 
 #endif

@@ -24,7 +24,12 @@
 #include "model/Fermentation.h"
 #include "model/FermentationStep.h"
 #include "model/Hop.h"
-#include "model/InventoryFermentable.h"
+#include "model/StockUseIngredient.h"
+#include "model/StockPurchaseFermentable.h"
+#include "model/StockPurchaseHop.h"
+#include "model/StockPurchaseMisc.h"
+#include "model/StockPurchaseSalt.h"
+#include "model/StockPurchaseYeast.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
@@ -47,22 +52,58 @@ class FermentableTreeModel : public TreeModel, public TreeModelBase<FermentableT
    TREE_MODEL_COMMON_DECL(Fermentable)
 };
 
-class InventoryFermentableTreeModel : public TreeModel, public TreeModelBase<InventoryFermentableTreeModel, InventoryFermentable> {
+class StockPurchaseFermentableTreeModel : public TreeModel, public TreeModelBase<StockPurchaseFermentableTreeModel,
+                                                                             StockPurchaseFermentable,
+                                                                             StockUseFermentable> {
    Q_OBJECT
-   TREE_MODEL_COMMON_DECL(InventoryFermentable)
+   TREE_MODEL_COMMON_DECL(StockPurchaseFermentable, StockUseFermentable)
 };
 
-class MashTreeModel : public TreeModel, public TreeModelBase<MashTreeModel, Mash, MashStep> {
+class StockPurchaseHopTreeModel : public TreeModel, public TreeModelBase<StockPurchaseHopTreeModel,
+                                                                     StockPurchaseHop,
+                                                                     StockUseHop> {
+   Q_OBJECT
+   TREE_MODEL_COMMON_DECL(StockPurchaseHop, StockUseHop)
+};
+
+class StockPurchaseMiscTreeModel : public TreeModel, public TreeModelBase<StockPurchaseMiscTreeModel,
+                                                                      StockPurchaseMisc,
+                                                                      StockUseMisc> {
+   Q_OBJECT
+   TREE_MODEL_COMMON_DECL(StockPurchaseMisc, StockUseMisc)
+};
+
+class StockPurchaseSaltTreeModel : public TreeModel, public TreeModelBase<StockPurchaseSaltTreeModel,
+                                                                      StockPurchaseSalt,
+                                                                      StockUseSalt> {
+   Q_OBJECT
+   TREE_MODEL_COMMON_DECL(StockPurchaseSalt, StockUseSalt)
+};
+
+class StockPurchaseYeastTreeModel : public TreeModel, public TreeModelBase<StockPurchaseYeastTreeModel,
+                                                                       StockPurchaseYeast,
+                                                                       StockUseYeast> {
+   Q_OBJECT
+   TREE_MODEL_COMMON_DECL(StockPurchaseYeast, StockUseYeast)
+};
+
+class MashTreeModel : public TreeModel, public TreeModelBase<MashTreeModel,
+                                                             Mash,
+                                                             MashStep> {
    Q_OBJECT
    TREE_MODEL_COMMON_DECL(Mash, MashStep)
 };
 
-class BoilTreeModel : public TreeModel, public TreeModelBase<BoilTreeModel, Boil, BoilStep> {
+class BoilTreeModel : public TreeModel, public TreeModelBase<BoilTreeModel,
+                                                             Boil,
+                                                             BoilStep> {
    Q_OBJECT
    TREE_MODEL_COMMON_DECL(Boil, BoilStep)
 };
 
-class FermentationTreeModel : public TreeModel, public TreeModelBase<FermentationTreeModel, Fermentation, FermentationStep> {
+class FermentationTreeModel : public TreeModel, public TreeModelBase<FermentationTreeModel,
+                                                                     Fermentation,
+                                                                     FermentationStep> {
    Q_OBJECT
    TREE_MODEL_COMMON_DECL(Fermentation, FermentationStep)
 };

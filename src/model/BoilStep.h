@@ -52,8 +52,8 @@ class BoilStep : public StepExtended, public StepBase<BoilStep, Boil, BoilStepOp
 
    STEP_COMMON_DECL(Boil, BoilStepOptions)
    // See model/EnumeratedBase.h for info, getters and setters for these properties
-   Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
-   Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
+   Q_PROPERTY(int ownerId          READ ownerId          WRITE setOwnerId       )
+   Q_PROPERTY(int sequenceNumber   READ sequenceNumber   WRITE setSequenceNumber)
    // See model/StepBase.h for info, getters and setters for these properties
    Q_PROPERTY(std::optional<double> stepTime_mins   READ stepTime_mins   WRITE setStepTime_mins)
    Q_PROPERTY(std::optional<double> stepTime_days   READ stepTime_days   WRITE setStepTime_days)

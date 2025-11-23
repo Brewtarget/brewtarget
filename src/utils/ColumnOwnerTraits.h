@@ -19,6 +19,7 @@
 
 #include <vector>
 
+#include "model/Ingredient.h"
 #include "utils/ColumnInfo.h"
 
 /**
@@ -81,7 +82,18 @@ struct ColumnOwnerTraits {
 
    //! \brief Called from, eg, \c BtTableModel::headerData()
    [[nodiscard]] static QVariant getColumnLabel(size_t const columnIndex) {
-      return getColumnInfo(columnIndex).label;
+      //
+      // Mostly we can ask the property path to tell us what label to use for a column.  However, when we have
+      // Measurement::ChoiceOfPhysicalQuantity "extra" info, we need to show "Amount Type" as column heading instead of
+      // "Amount" which, eg, PropertyNames::IngredientAmount::amount would give us.
+      //
+      ColumnInfo const & columnInfo = getColumnInfo(columnIndex);
+      if (columnInfo.extras) {
+         // Can't call IngredientAmount::tr as IngredientAmount is a CRTP class.  Ingredient is close enough to give
+         // translators context though I think.
+         return Ingredient::tr("Amount Type");
+      }
+      return getColumnInfo(columnIndex).propertyPath.getLocalisedName();
    }
 
    // We _could_ use size_t for numColumns, since it's obviously never negative.  However, various Qt functions for
@@ -113,14 +125,14 @@ struct ColumnOwnerTraits {
  * \brief ColumnOwner classes (eg subclasses of \c BtTableModel) should use this to define the \c getColumnInfos member
  *        function.
  */
-#define COLUMN_INFOS(Derived, ...)                                                                 \
+#define COLUMN_INFOS(Derived, ...)                                                               \
    template<> std::vector<ColumnInfo> const & ColumnOwnerTraitsData<Derived>::getColumnInfos() { \
-      /* Meyers singleton */                                                                       \
-      static std::vector<ColumnInfo> const columnInfos {                                           \
-         __VA_ARGS__                                                                               \
-      };                                                                                           \
-      return columnInfos;                                                                          \
-   }                                                                                               \
+      /* Meyers singleton */                                                                     \
+      static std::vector<ColumnInfo> const columnInfos {                                         \
+         __VA_ARGS__                                                                             \
+      };                                                                                         \
+      return columnInfos;                                                                        \
+   }                                                                                             \
 
 
 #endif

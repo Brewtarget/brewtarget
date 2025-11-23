@@ -17,6 +17,8 @@
 #define MODEL_ENUMERATEDBASE_H
 #pragma once
 
+#include <type_traits>
+
 #include "database/ObjectStoreWrapper.h"
 #include "model/NamedParameterBundle.h"
 #include "utils/AutoCompare.h"
@@ -26,8 +28,8 @@
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::EnumeratedBase { inline BtStringConst const property{#property}; }
-AddPropertyName(ownerId   )
-AddPropertyName(stepNumber)
+AddPropertyName(ownerId       )
+AddPropertyName(sequenceNumber)
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -78,14 +80,14 @@ protected:
          // to know whether two different Mash objects are equal, we need, amongst other things, to check whether their
          // owned MashStep objects are equal.
          //
-         AUTO_PROPERTY_COMPARE(this, other, m_stepNumber, PropertyNames::EnumeratedBase::stepNumber, propertiesThatDiffer)
+         AUTO_PROPERTY_COMPARE(this, other, m_sequenceNumber, PropertyNames::EnumeratedBase::sequenceNumber, propertiesThatDiffer)
       );
    }
 
    bool doIsLessThan(EnumeratedBase const & other) const {
       // It is a coding error if we are trying to order items that don't have the same owner
       Q_ASSERT(this->m_ownerId == other.m_ownerId);
-      return this->m_stepNumber < other.m_stepNumber;
+      return this->m_sequenceNumber < other.m_sequenceNumber;
    }
 
    // Normally we'd make the constructors private and allow access to Derived as a friend.  However, we want StepBase
@@ -95,27 +97,26 @@ protected:
    }
 
    EnumeratedBase(NamedParameterBundle const & namedParameterBundle) :
-      SET_REGULAR_FROM_NPB (m_ownerId   , namedParameterBundle, PropertyNames::EnumeratedBase::ownerId   , -1),
-      SET_REGULAR_FROM_NPB (m_stepNumber, namedParameterBundle, PropertyNames::EnumeratedBase::stepNumber, -1) {
+      SET_REGULAR_FROM_NPB (m_ownerId       , namedParameterBundle, PropertyNames::EnumeratedBase::ownerId       , -1),
+      SET_REGULAR_FROM_NPB (m_sequenceNumber, namedParameterBundle, PropertyNames::EnumeratedBase::sequenceNumber, -1) {
       return;
    }
 
    explicit EnumeratedBase(Derived const & other) :
-   m_ownerId   {other.m_ownerId   },
-   m_stepNumber{other.m_stepNumber} {
+   m_ownerId       {other.m_ownerId       },
+   m_sequenceNumber{other.m_sequenceNumber} {
       return;
    }
 
    ~EnumeratedBase() = default;
 
 public:
-   static QString localisedName_ownerId   () { return Derived::tr("Owner ID"   ); }
-   static QString localisedName_stepNumber() { return Derived::tr("Step Number"); }
+   static QString localisedName_ownerId       () { return Derived::tr("Owner ID"); }
+   static QString localisedName_sequenceNumber() { return Derived::tr("Number"  ); }
 
    int ownerId   () const { return this->m_ownerId   ; }
-   // TODO: Merge these two functions
-   int stepNumber() const { return this->m_stepNumber; }
-   int seqNum    () const { return this->m_stepNumber; }
+
+   int sequenceNumber() const { return this->m_sequenceNumber; }
 
    void setOwnerId   (int const val) {
       this->m_ownerId = val;
@@ -129,18 +130,13 @@ public:
     * \param notify Needs to be set to \c false when part-way through swapping two steps, because we don't want
     *               observers to re-read all the steps until we've finished.
     */
-   void setStepNumber(int const val, bool const notify = true) {
+   void setSequenceNumber(int const val, bool const notify = true) {
       if (notify) {
-         this->derived().setAndNotify(PropertyNames::EnumeratedBase::stepNumber, this->m_stepNumber, val);
+         this->derived().setAndNotify(PropertyNames::EnumeratedBase::sequenceNumber, this->m_sequenceNumber, val);
       } else {
-         this->m_stepNumber = val;
-         this->derived().propagatePropertyChange(PropertyNames::EnumeratedBase::stepNumber, false);
+         this->m_sequenceNumber = val;
+         this->derived().propagatePropertyChange(PropertyNames::EnumeratedBase::sequenceNumber, false);
       }
-      return;
-   }
-   // TODO: Merge above and below functions
-   void setSeqNum(int const val, bool const notify = true) {
-      this->setStepNumber(val, notify);
       return;
    }
 
@@ -159,8 +155,8 @@ public:
     * \brief This is similarly needed by \c TreeModelBase
     */
    static QList<std::shared_ptr<Derived>> ownedBy(Owner const & owner) {
-      // We already wrote all the logic in StepOwnerBase.
-      return owner.steps();
+      // We already wrote all the logic in StepOwnerBase and StockPurchaseBase.
+      return owner.ownedItems();
    }
 
    ObjectStore & doGetObjectStoreTypedInstance() const {
@@ -169,17 +165,22 @@ public:
 
    //! \brief Convenience function for logging
    virtual QString toString() const {
-      return QString{"EnumeratedBase (m_ownerId: %1; m_stepNumber: %2)"}.arg(this->m_ownerId).arg(this->m_stepNumber);
+      return QString{"EnumeratedBase (m_ownerId: %1; m_sequenceNumber: %2)"}.arg(this->m_ownerId).arg(this->m_sequenceNumber);
    }
 
 protected:
    //================================================ MEMBER VARIABLES =================================================
    int m_ownerId    = -1;
-   // For historical reasons, step numbers always start from 1, so 0 would also be invalid, but -1 is more obvious
-   int m_stepNumber = -1;
+   // For historical reasons, step (aka sequence) numbers always start from 1, so 0 would also be invalid, but -1 is
+   // more obvious
+   int m_sequenceNumber = -1;
 };
 
-
+//
+// Note that, where child classes also inherit from, eg, NamedEntity, we need to provide a more specific overload of
+// operator<< specifically for the child class (otherwise the compiler won't know whether to use this one or the
+// NamedEntity one).  See model/Instruction.h for an example.
+//
 template<class S, class Derived, class Owner>
 S & operator<<(S & stream, EnumeratedBase<Derived, Owner> const & enumeratedBase) {
    stream << enumeratedBase.toString();
@@ -200,11 +201,11 @@ TypeLookup const EnumeratedBase<Derived, Owner>::typeLookup {
           EnumeratedBase::localisedName_ownerId,
           TypeLookupOf<decltype(EnumeratedBase<Derived, Owner>::m_ownerId)>::value
        )},
-      {&PropertyNames::EnumeratedBase::stepNumber,
-       TypeInfo::construct<decltype(EnumeratedBase<Derived, Owner>::m_stepNumber)>(
-          PropertyNames::EnumeratedBase::stepNumber,
-          EnumeratedBase::localisedName_stepNumber,
-          TypeLookupOf<decltype(EnumeratedBase<Derived, Owner>::m_stepNumber)>::value,
+      {&PropertyNames::EnumeratedBase::sequenceNumber,
+       TypeInfo::construct<decltype(EnumeratedBase<Derived, Owner>::m_sequenceNumber)>(
+          PropertyNames::EnumeratedBase::sequenceNumber,
+          EnumeratedBase::localisedName_sequenceNumber,
+          TypeLookupOf<decltype(EnumeratedBase<Derived, Owner>::m_sequenceNumber)>::value,
           NonPhysicalQuantity::OrdinalNumeral
        )}
    },
@@ -218,14 +219,14 @@ TypeLookup const EnumeratedBase<Derived, Owner>::typeLookup {
  *        following block (see comment in model/StepBase.h for why):
  *
  *           // See model/EnumeratedBase.h for info, getters and setters for these properties
- *           Q_PROPERTY(int ownerId      READ ownerId      WRITE setOwnerId   )
- *           Q_PROPERTY(int stepNumber   READ stepNumber   WRITE setStepNumber)
+ *           Q_PROPERTY(int ownerId          READ ownerId          WRITE setOwnerId       )
+ *           Q_PROPERTY(int sequenceNumber   READ sequenceNumber   WRITE setSequenceNumber)
  *
  *        Comments for these properties:
  *
  *           \c ownerId : ID of the owning object - eg \c Mash, \c Boil, \c Fermentation, \c Recipe
  *
- *           \c stepNumber : The step number (starting from 1) in a sequence of other steps.
+ *           \c sequenceNumber : The number (starting from 1) in a sequence of, eg, steps.
  *
  *        Although we could do more in this macro, we limit it to member functions that are just wrappers around calls
  *        to this base class.
@@ -238,7 +239,7 @@ TypeLookup const EnumeratedBase<Derived, Owner>::typeLookup {
    public:                                                                                    \
       /* This alias makes it easier to template a number of functions */                      \
       /* that are essentially the same for all "stepped" classes.     */                      \
-      using StepOwnerClass = Owner;                                                           \
+      using EnumeratedItemOwnerClass = Owner;                                                           \
       bool operator<(Derived const & other) const;                                            \
                                                                                               \
    protected:                                                                                 \

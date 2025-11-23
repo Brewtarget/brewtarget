@@ -23,6 +23,7 @@
 #endif
 
 QString OwnedByRecipe::localisedName() { return tr("Owned By Recipe"); }
+QString OwnedByRecipe::localisedName_recipe  () { return tr("Recipe"   ); }
 QString OwnedByRecipe::localisedName_recipeId() { return tr("Recipe ID"); }
 
 bool OwnedByRecipe::compareWith([[maybe_unused]] NamedEntity const & other,
@@ -44,6 +45,7 @@ TypeLookup const OwnedByRecipe::typeLookup {
    "OwnedByRecipe",
    {
       PROPERTY_TYPE_LOOKUP_ENTRY(OwnedByRecipe, recipeId, m_recipeId),
+      PROPERTY_TYPE_LOOKUP_NO_MV(OwnedByRecipe, recipe  , recipe    ),
    },
    // Parent class lookup
    {&NamedEntity::typeLookup}

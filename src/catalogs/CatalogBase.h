@@ -40,6 +40,7 @@
 #include "database/ObjectStoreWrapper.h"
 #include "MainWindow.h"
 #include "model/Ingredient.h"
+#include "PersistentSettings.h"
 #include "utils/BtStringStream.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/PropertyHelper.h"
@@ -121,7 +122,7 @@ public:
       m_horizontalLayout      {new QHBoxLayout()                        },
       m_searchIcon            {new QToolButton(&this->derived())        },
 
-      m_lineEdit_searchBox   {new QLineEdit()                          },
+      m_lineEdit_searchBox    {new QLineEdit()                          },
       m_horizontalSpacer      {new QSpacerItem(40,
                                                20,
                                                QSizePolicy::Expanding,
@@ -147,7 +148,6 @@ public:
       this->m_sortFilterProxy->setFilterKeyColumn(1);
 
       this->m_lineEdit_searchBox->setMaxLength(30);
-      this->m_lineEdit_searchBox->setPlaceholderText("Enter filter");
 
       this->m_pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
       this->m_pushButton_new        ->setObjectName(QStringLiteral("pushButton_new"        ));
@@ -175,6 +175,7 @@ public:
       this->m_searchIcon       ->setIcon(QIcon{QStringLiteral(":/images/iconSearch.svg")});
       this->m_pushButton_edit  ->setIcon(QIcon{QStringLiteral(":/images/edit.svg"      )});
       this->m_pushButton_delete->setIcon(QIcon{QStringLiteral(":/images/smallMinus.svg")});
+      this->m_pushButton_new   ->setIcon(QIcon{QStringLiteral(":/images/smallPlus.svg" )});
 
       // The order we add things to m_horizontalLayout determines their left-to-right order in that layout
       this->m_horizontalLayout->addWidget(this->m_searchIcon            );
@@ -187,7 +188,6 @@ public:
       this->m_verticalLayout  ->addWidget(this->m_tableWidget           );
       this->m_verticalLayout  ->addLayout(this->m_horizontalLayout      );
 
-      this->derived().setMinimumSize(800, 300);
       this->derived().setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
       this->retranslateUi();
@@ -266,6 +266,8 @@ public:
       this->m_pushButton_edit  ->setToolTip(QString(QObject::tr("Edit selected %1"  )).arg(NE::localisedName()));
       this->m_pushButton_delete->setToolTip(QString(QObject::tr("Delete selected %1")).arg(NE::localisedName()));
 #endif
+
+      this->m_lineEdit_searchBox->setPlaceholderText(QObject::tr("Enter filter"));
       return;
    }
 
@@ -412,8 +414,8 @@ public:
    void doEditSelected() {
       std::shared_ptr<NE> item = this->getSingleSelected();
       if (item) {
-         m_neEditor->setEditItem(item);
-         m_neEditor->show();
+         this->m_neEditor->setEditItem(item);
+         this->m_neEditor->show();
       }
 
       return;
@@ -590,6 +592,24 @@ public:
                recipeAddition->setIngredientId(firstItem->key());
             }
 
+            //
+            // Now we have to do the same thing for inventory entries.  The code is almost the same because, in both
+            // cases, the class we're dealing with inherits from IngredientAmount, which is the class that holds the
+            // field we care about.
+            //
+            QList<std::shared_ptr<typename NE::StockPurchaseClass>> inventoryEntries =
+               ObjectStoreWrapper::findAllMatching<typename NE::StockPurchaseClass>(
+                  [lastItemKey](std::shared_ptr<typename NE::StockPurchaseClass> inv) {
+                     return inv->ingredientId() == lastItemKey;
+                  }
+               );
+            qInfo() <<
+               Q_FUNC_INFO << "Assigning" << inventoryEntries.size() << "inventory entries for" << lastItem << "to" <<
+               firstItem;
+            for (auto const & inventoryEntry : inventoryEntries) {
+               inventoryEntry->setIngredientId(firstItem->key());
+            }
+
          } else {
             QList<std::shared_ptr<Recipe>> recipes = ObjectStoreWrapper::findAllMatching<Recipe>(
                [&lastItem](std::shared_ptr<Recipe> rec) { return rec->uses(*lastItem); }
@@ -639,6 +659,18 @@ public:
       this->m_action_merge      ->setEnabled(numSelected  > 1);
 
       this->m_contextMenu->exec(this->derived().mapToGlobal(point));
+      return;
+   }
+
+   void saveUiState(BtStringConst const & property,
+                    BtStringConst const & section = PersistentSettings::Sections::MainWindow) const {
+      this->m_neTableModel->saveUiState(property, section);
+      return;
+   }
+
+   void restoreUiState(BtStringConst const & property,
+                       BtStringConst const & section = PersistentSettings::Sections::MainWindow) {
+      this->m_neTableModel->restoreUiState(property, section);
       return;
    }
 

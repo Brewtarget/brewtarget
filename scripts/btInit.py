@@ -36,9 +36,11 @@ import sys
 #-----------------------------------------------------------------------------------------------------------------------
 # Our own modules
 #-----------------------------------------------------------------------------------------------------------------------
-import btUtils
+import btExecute
+import btLogger
+import btFileSystem
 
-log = btUtils.getLogger()
+log = btLogger.getLogger()
 
 
 #
@@ -53,9 +55,9 @@ match platform.system():
       ranUpdate = False
       if (exe_pip is None or exe_pip == ''):
          log.info('Need to install pip')
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
          ranUpdate = True
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'python3-pip']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'python3-pip']))
       # This is a bit clunky, but it's the simplest way to see if setuptools is already installed.  (Alternatively we
       # could run `pip3 list` and search for setuptools in the outpout.)
       foundSetupTools = False
@@ -67,9 +69,9 @@ match platform.system():
          foundSetupTools = True
       if (not foundSetupTools):
          if (not ranUpdate):
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
+            btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
             ranUpdate = True
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'python3-setuptools']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'python3-setuptools']))
       # It's a similar process for ensurepip, which is needed by venv below
       foundEnsurepip = False
       try:
@@ -81,12 +83,12 @@ match platform.system():
          foundEnsurepip = True
       if (not foundEnsurepip):
          if (not ranUpdate):
-            btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
+            btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
             ranUpdate = True
          # Yes, I know it's confusing that we have to install a package called venv to ensure that the venv command
          # below doesn't complain about ensurepip not being present.  We're just doing what the error messages tell us
          # to.
-         btUtils.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'python3-venv']))
+         btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'python3-venv']))
    case 'Windows':
       #
       # In the past, we were able to install pip via Python, with the following code:
@@ -96,7 +98,7 @@ match platform.system():
       #    log.info(
       #       'Attempting to ensure latest version of pip is installed via  ' + sys.executable + ' -m ensurepip --upgrade'
       #    )
-      #    btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'ensurepip', '--upgrade']))
+      #    btExecute.abortOnRunFail(subprocess.run([sys.executable, '-m', 'ensurepip', '--upgrade']))
       #
       # However, as of 2024-11, this gives "error: externally-managed-environment" and a direction "To install Python
       # packages system-wide, try 'pacman -S $MINGW_PACKAGE_PREFIX-python-xyz', where xyz is the package you are trying
@@ -105,7 +107,7 @@ match platform.system():
       # failed to commit transaction (conflicting files)".
       #
       log.info('Install pip (' + os.environ['MINGW_PACKAGE_PREFIX'] + '-python-pip) via pacman')
-      btUtils.abortOnRunFail(
+      btExecute.abortOnRunFail(
          subprocess.run(['pacman', '-S',
                          '--noconfirm',
                          '--overwrite', '*python*',
@@ -118,13 +120,13 @@ match platform.system():
       #    # See comment in scripts/buildTool.py about why we have to run pip via Python rather than just invoking pip
       #    # directly eg via `shutil.which('pip3')`.
       #    log.info('python -m pip install setuptools')
-      #    btUtils.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'setuptools']))
+      #    btExecute.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'setuptools']))
       #
       # But, as of 2024-11, this gives an error "No module named pip.__main__; 'pip' is a package and cannot be directly
       # executed".  So now we install via pacman instead.
       #
       log.info('Install setuptools (' + os.environ['MINGW_PACKAGE_PREFIX'] + '-python-setuptools) via pacman')
-      btUtils.abortOnRunFail(
+      btExecute.abortOnRunFail(
          subprocess.run(['pacman', '-S',
                          '--noconfirm',
 #                         '--overwrite', '*python*',
@@ -136,7 +138,7 @@ match platform.system():
       # it bundles various packages, including pip.  Since Python version 3.12, Homebrew marks itself as package manager
       # for the Python packages it bundles, so it's an error to try to install or update them via Python.
       log.info('Assuming pip is already up-to-date; installing python-setuptools')
-      btUtils.abortOnRunFail(subprocess.run(['brew', 'install', 'python-setuptools']))
+      btExecute.abortOnRunFail(subprocess.run(['brew', 'install', 'python-setuptools']))
 
    case _:
       log.critical('Unrecognised platform: ' + platform.system())
@@ -159,9 +161,9 @@ log.info('sys.version: ' + sys.version + '; exe_python: ' + exe_python + '; ' + 
 # Once running inside the virtual environment, any packages we need there can be installed directly in the venv with
 # Python and Pip.
 #
-dir_venv = btUtils.getBaseDir().joinpath('.venv')
+dir_venv = btFileSystem.getBaseDir().joinpath('.venv')
 log.info('Create new Python virtual environment in ' + dir_venv.as_posix())
-btUtils.abortOnRunFail(
+btExecute.abortOnRunFail(
    subprocess.run([sys.executable, '-m', 'venv', '--clear', dir_venv.as_posix()])
 )
 

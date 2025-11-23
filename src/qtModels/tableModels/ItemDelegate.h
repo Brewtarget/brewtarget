@@ -17,6 +17,7 @@
 #define TABLEMODELS_ITEMDELEGATE_H
 #pragma once
 
+#include <QDateEdit>
 #include <QLineEdit>
 
 #include "measurement/Measurement.h"
@@ -24,6 +25,7 @@
 #include "utils/NoCopy.h"
 #include "widgets/BtComboBoxBool.h"
 #include "widgets/BtComboBoxEnum.h"
+#include "widgets/BtOptionalDateEdit.h"
 #include "qtModels/tableModels/BtTableModel.h"
 
 namespace {
@@ -55,13 +57,13 @@ namespace {
  *                \
  *                ...
  *                  \
- *                  QItemDelegate       ItemDelegate<HopItemDelegate, HopTableModel>
+ *             QStyledItemDelegate     ItemDelegate<HopItemDelegate, HopTableModel>
  *                              \       /
  *                               \     /
  *                           HopItemDelegate
  *
  *        Derived classes (eg \c HopItemDelegate in this example) need to implement the following boilerplate member
- *        functions that override \c QItemDelegate:
+ *        functions that override \c QStyledItemDelegate:
  *           createEditor         -- calls ItemDelegate::getEditWidget
  *           setEditorData        -- calls ItemDelegate::readDataFromModel
  *           setModelData         -- calls ItemDelegate::writeDataToModel
@@ -72,7 +74,9 @@ namespace {
  *
  *          ITEM_DELEGATE_COMMON_CODE(Hop)
  *
- *
+ *        Note that Qt has two similar classes \c QItemDelegate and \c QStyledItemDelegate.  The latter is the
+ *        recommended one to use (per
+ *        https://doc.qt.io/qt-6/qstyleditemdelegate.html#qstyleditemdelegate-vs-qitemdelegate).
  */
 template<class Derived, class NeTableModel>
 class ItemDelegate {
@@ -109,7 +113,7 @@ private:
 public:
 
    /**
-    * \brief Subclass should call this from its override of \c QItemDelegate::createEditor.
+    * \brief Subclass should call this from its override of \c QStyledItemDelegate::createEditor.
     *        Returns the widget used to edit the item specified by index for editing.
     */
    QWidget * getEditWidget(QWidget * parent,
@@ -159,6 +163,17 @@ public:
 
             return boolComboBox;
          }
+
+         if (fieldType == NonPhysicalQuantity::Date) {
+            if (typeInfo.isOptional()) {
+               BtOptionalDateEdit * optionalDateEdit = new BtOptionalDateEdit(parent);
+               return optionalDateEdit;
+            } else {
+               QDateEdit * dateEdit = new QDateEdit(parent);
+               return dateEdit;
+            }
+         }
+
       } else if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) &&
                  columnInfo.extras) {
          //
@@ -189,9 +204,12 @@ public:
    }
 
    /**
-    * \brief Subclass should call this from its override of \c QItemDelegate::setEditorData.
+    * \brief Subclass should call this from its override of \c QStyledItemDelegate::setEditorData.
     *        Sets the data to be displayed and edited by the editor from the data model item specified by the model
     *        index.
+    *
+    * \param editor This will correspond to what we returned from \c getEditWidget
+    * \param index
     */
    void readDataFromModel(QWidget * editor,
                           QModelIndex const & index) const {
@@ -219,6 +237,18 @@ public:
             setComboBoxValue<BtComboBoxBool, bool>(boolComboBox, typeInfo, modelData);
             return;
          }
+
+         if (fieldType == NonPhysicalQuantity::Date) {
+            if (typeInfo.isOptional()) {
+               BtOptionalDateEdit * optionalDateEdit = qobject_cast<BtOptionalDateEdit *>(editor);
+               optionalDateEdit->setFromVariant(modelData);
+            } else {
+               QDateEdit * dateEdit = qobject_cast<QDateEdit *>(editor);
+               dateEdit->setDate(modelData.toDate());
+            }
+            return;
+         }
+
       } else if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) &&
                  columnInfo.extras) {
          // Selector for editable amount that can be more than one physical quantity.  (See comment above in
@@ -238,13 +268,13 @@ public:
    }
 
    /**
-    * \brief Subclass should call this from its override of \c QItemDelegate::setModelData.
+    * \brief Subclass should call this from its override of \c QStyledItemDelegate::setModelData.
     *        Gets data from the editor widget and stores it in the specified model at the item index.
     *
-    * \param editor
-    * \param model This is needed on this function (and \c QItemDelegate::setModelData etc) because the function needs
+    * \param editor This will correspond to what we returned from \c getEditWidget
+    * \param model This is needed on this function (and \c QStyledItemDelegate::setModelData etc) because the function needs
     *              to be able to modify the model, so the \b \c const pointer to \c QAbstractItemModel returned from
-    *              \c index.model() (which is what is used in \c readDataFromModel / \c QItemDelegate::setEditorData) is
+    *              \c index.model() (which is what is used in \c readDataFromModel / \c QStyledItemDelegate::setEditorData) is
     *              not sufficient.
     * \param index
     */
@@ -269,6 +299,17 @@ public:
          if (fieldType == NonPhysicalQuantity::Bool) {
             BtComboBoxBool * boolComboBox = qobject_cast<BtComboBoxBool *>(editor);
             model->setData(index, boolComboBox->getAsVariant(), Qt::EditRole);
+            return;
+         }
+
+         if (fieldType == NonPhysicalQuantity::Date) {
+            if (typeInfo.isOptional()) {
+               BtOptionalDateEdit * optionalDateEdit = qobject_cast<BtOptionalDateEdit *>(editor);
+               model->setData(index, optionalDateEdit->getAsVariant(), Qt::EditRole);
+            } else {
+               QDateEdit * dateEdit = qobject_cast<QDateEdit *>(editor);
+               model->setData(index, dateEdit->date(), Qt::EditRole);
+            }
             return;
          }
 
@@ -334,13 +375,13 @@ public:
       NeName##ItemDelegate(QTableView * parent, NeName##TableModel & tableModel);                                             \
       virtual ~NeName##ItemDelegate();                                                                                        \
                                                                                                                               \
-      /** \brief Reimplemented from QItemDelegate. */                                                                         \
+      /** \brief Reimplemented from QStyledItemDelegate. */                                                                         \
       virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;     \
-      /** \brief Reimplemented from QItemDelegate. */                                                                         \
+      /** \brief Reimplemented from QStyledItemDelegate. */                                                                         \
       virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;                                            \
-      /** \brief Reimplemented from QItemDelegate. */                                                                         \
+      /** \brief Reimplemented from QStyledItemDelegate. */                                                                         \
       virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;                  \
-      /** \brief Reimplemented from QItemDelegate. */                                                                         \
+      /** \brief Reimplemented from QStyledItemDelegate. */                                                                         \
       virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const; \
 
 
@@ -350,7 +391,7 @@ public:
 #define ITEM_DELEGATE_COMMON_CODE(NeName) \
    NeName##ItemDelegate::NeName##ItemDelegate(QTableView * parent,               \
                                               NeName##TableModel & tableModel) : \
-      QItemDelegate(parent),                                               \
+      QStyledItemDelegate(parent),                                               \
       ItemDelegate<NeName##ItemDelegate, NeName##TableModel>(tableModel) { \
       return; \
    }          \
@@ -377,6 +418,5 @@ public:
       editor->setGeometry(option.rect);                                                                \
       return;                                                                                          \
    }                                                                                                   \
-
 
 #endif

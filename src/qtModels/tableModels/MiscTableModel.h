@@ -21,13 +21,12 @@
 #define TABLEMODELS_MISCTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaProperty>
 #include <QModelIndex>
 #include <QVariant>
 #include <QWidget>
 
-#include "model/InventoryMisc.h"
 #include "model/Misc.h"
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
@@ -36,11 +35,10 @@ class BtStringConst;
 class Recipe;
 
 // Define the columns on this table
-COLUMN_NAMES(MiscTableModel, Name              ,
-                             Type              ,
-                             TotalInventory    ,
-                             TotalInventoryType,
-                             NumRecipesUsedIn  ,)
+COLUMN_NAMES(MiscTableModel, Name            ,
+                             Type            ,
+                             TotalInventory  ,
+                             NumRecipesUsedIn,)
 
 /*!
  * \class MiscTableModel
@@ -60,7 +58,7 @@ class MiscTableModel : public BtTableModel, public TableModelBase<MiscTableModel
  * \brief Item delegate for misc tables.
  * \sa MiscTableModel
  */
-class MiscItemDelegate : public QItemDelegate,
+class MiscItemDelegate : public QStyledItemDelegate,
                          public ItemDelegate<MiscItemDelegate, MiscTableModel> {
    Q_OBJECT
 

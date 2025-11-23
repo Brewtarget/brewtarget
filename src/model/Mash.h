@@ -179,11 +179,11 @@ public:
    bool hasSparge() const;
 
 public slots:
-   void acceptStepChange(QMetaProperty, QVariant);
+   void acceptSetMemberChange(QMetaProperty, QVariant);
 
 signals:
    // Emitted when the number of steps change, or when you should call mashSteps() again.
-   void stepsChanged();
+   void ownedItemsChanged();
 
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;

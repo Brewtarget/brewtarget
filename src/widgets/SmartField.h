@@ -80,24 +80,6 @@ struct TypeInfo;
  *        information that is usually in \c SmartLabel but can be held in \c SmartField if there is no \c SmartLabel.
  *        The \c SmartBase class mostly just provides a convenient way to access \c SmartAmountSettings member
  *        functions.
- *
- *        .:TBD:. There is still a certain amount of code duplication between \c SmartLabel and \c SmartField, which it
- *        would be nice to eliminate somehow:
- *              setForcedSystemOfMeasurement
- *              setForcedRelativeScale
- *              getForcedSystemOfMeasurement
- *              getForcedRelativeScale
- *              getScaleInfo
- *
- *              getPhysicalQuantity
- *              selectPhysicalQuantity
- *
- *        ××× SmartWidgetSettings or something.  One is the interface, other is the implementation/storage.  Logic is,
- *        if Field has a Label then ask the Label; otherwise use our own.  The storage is:
- *              TypeInfo const *          m_typeInfo
- *              std::optional<Measurement::PhysicalQuantity> m_currentPhysicalQuantity
- *
- *              Measurement::Unit const * m_fixedDisplayUnit       BUT ONLY IN SMART_fIELD
  */
 class SmartField : public SmartBase<SmartField> {
 public:

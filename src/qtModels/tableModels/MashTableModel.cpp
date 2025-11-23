@@ -30,11 +30,11 @@
 
 COLUMN_INFOS(
    MashTableModel,
-   TABLE_MODEL_HEADER(Mash, Name             , tr("Name"                     ), PropertyNames:: NamedEntity::name            ),
-   TABLE_MODEL_HEADER(Mash, InitialGrainTemp , tr("Initial Grain Temperature"), PropertyNames::        Mash::grainTemp_c     ),
-   TABLE_MODEL_HEADER(Mash, TotalMashWater   , tr("Total Mash Water"         ), PropertyNames::        Mash::totalMashWater_l),
-   TABLE_MODEL_HEADER(Mash, TotalTime        , tr("Total Time"               ), PropertyNames::        Mash::totalTime_mins  ),
-   TABLE_MODEL_HEADER(Mash, NumRecipesUsedIn , tr("N° Recipes"               ), PropertyNames::NamedEntity::numRecipesUsedIn ),
+   TABLE_MODEL_HEADER(Mash, Name             , PropertyNames:: NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Mash, InitialGrainTemp , PropertyNames::        Mash::grainTemp_c     ), // "Initial Grain Temperature"
+   TABLE_MODEL_HEADER(Mash, TotalMashWater   , PropertyNames::        Mash::totalMashWater_l), // "Total Mash Water"
+   TABLE_MODEL_HEADER(Mash, TotalTime        , PropertyNames::        Mash::totalTime_mins  ), // "Total Time"
+   TABLE_MODEL_HEADER(Mash, NumRecipesUsedIn , PropertyNames::NamedEntity::numRecipesUsedIn ), // "N° Recipes"
 )
 
 MashTableModel::MashTableModel(QTableView * parent, bool editable) :
@@ -54,10 +54,6 @@ void MashTableModel::updateTotals()                                       { retu
 
 QVariant MashTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags MashTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<MashTableModel>(index, this->m_editable);
 }
 
 bool MashTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

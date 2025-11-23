@@ -26,7 +26,7 @@
 #include "measurement/PhysicalQuantity.h"
 #include "utils/TypeTraits.h"
 
-// Note that we cannot include utils/TypeLookup.h because it includes this header
+// Note that we cannot include utils/TypeInfo.h because it includes this header
 struct TypeInfo;
 
 /**

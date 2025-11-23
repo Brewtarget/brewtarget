@@ -22,14 +22,13 @@
 #define TABLEMODELS_HOPTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaProperty>
 #include <QModelIndex>
 #include <QVariant>
 #include <QWidget>
 
 #include "model/Hop.h"
-#include "model/InventoryHop.h"
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
 
@@ -37,13 +36,12 @@ class BtStringConst;
 class Recipe;
 
 // Define the columns on this table
-COLUMN_NAMES(HopTableModel, Name              ,
-                            Form              ,
-                            Year              ,
-                            Alpha             ,
-                            TotalInventory    ,
-                            TotalInventoryType,
-                            NumRecipesUsedIn  ,)
+COLUMN_NAMES(HopTableModel, Name            ,
+                            Form            ,
+                            Year            ,
+                            Alpha           ,
+                            TotalInventory  ,
+                            NumRecipesUsedIn,)
 
 /*!
  * \class HopTableModel
@@ -71,8 +69,8 @@ private:
  * \brief An item delegate for hop tables.
  * \sa HopTableModel
  */
-class HopItemDelegate : public QItemDelegate,
-                               public ItemDelegate<HopItemDelegate, HopTableModel> {
+class HopItemDelegate : public QStyledItemDelegate,
+                        public ItemDelegate<HopItemDelegate, HopTableModel> {
    Q_OBJECT
 
    ITEM_DELEGATE_COMMON_DECL(Hop)

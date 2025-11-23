@@ -165,20 +165,20 @@ namespace {
 
    //! \brief Every so often, we need to update the config file itself. This does that.
    void updateConfig() {
-      int cVersion = PersistentSettings::value(PersistentSettings::Names::config_version, QVariant(0)).toInt();
+      int cVersion = PersistentSettings::value_ck(PersistentSettings::Names::config_version, QVariant(0)).toInt();
       while ( cVersion < CONFIG_VERSION ) {
          switch ( ++cVersion ) {
             case 1:
                // Update the dbtype, because I had to increase the NODB value from -1 to 0
                Database::DbType newType =
                   static_cast<Database::DbType>(
-                     PersistentSettings::value(PersistentSettings::Names::dbType,
-                                             static_cast<int>(Database::DbType::NODB)).toInt() + 1
+                     PersistentSettings::value_ck(PersistentSettings::Names::dbType,
+                                                  static_cast<int>(Database::DbType::NODB)).toInt() + 1
                   );
                // Write that back to the config file
-               PersistentSettings::insert(PersistentSettings::Names::dbType, static_cast<int>(newType));
+               PersistentSettings::insert_ck(PersistentSettings::Names::dbType, static_cast<int>(newType));
                // and make sure we don't do it again.
-               PersistentSettings::insert(PersistentSettings::Names::config_version, QVariant(cVersion));
+               PersistentSettings::insert_ck(PersistentSettings::Names::config_version, QVariant(cVersion));
                break;
          }
       }
@@ -433,7 +433,7 @@ void Application::readSystemOptions() {
    updateConfig();
 
    //================Version Checking========================
-   tellUserAboutNewRelease = PersistentSettings::value(PersistentSettings::Names::check_version, QVariant(true)).toBool();
+   tellUserAboutNewRelease = PersistentSettings::value_ck(PersistentSettings::Names::check_version, QVariant(true)).toBool();
    qDebug() << Q_FUNC_INFO << "tellUserAboutNewRelease=" << tellUserAboutNewRelease;
 
    Measurement::loadDisplayScales();
@@ -449,7 +449,7 @@ void Application::readSystemOptions() {
 }
 
 void Application::saveSystemOptions() {
-   PersistentSettings::insert(PersistentSettings::Names::check_version, tellUserAboutNewRelease);
+   PersistentSettings::insert_ck(PersistentSettings::Names::check_version, tellUserAboutNewRelease);
    //setOption("user_data_dir", userDataDir);
 
    Localization::saveSettings();

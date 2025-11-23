@@ -21,10 +21,15 @@
 
 #include <QCheckBox>
 
+#include "utils/PropertyPath.h"
 #include "widgets/BtComboBoxBool.h"
 #include "widgets/BtComboBoxEnum.h"
+#include "widgets/BtComboBoxNamedEntity.h"
+#include "widgets/BtLineEditCurrency.h"
 #include "widgets/BtOptionalDateEdit.h"
+#include "widgets/SmartLineEdit.h"
 #include "widgets/SmartValueDisplay.h"
+
 
 //
 // This is only included from one place -- editors/EditorBase.h -- but I think it's a big enough block that there is
@@ -65,7 +70,7 @@ struct EditorBaseField {
    char const * labelName;
    LabelType * label;
    EditFieldType * editField;
-   BtStringConst const & property;
+   PropertyPath const propertyPath;
    // This field isn't used for all values of EditFieldType, but we don't try to make it conditional for the same
    // reasons as EditorBase::m_liveEditItem below.
    std::optional<int> precision = std::nullopt;
@@ -77,6 +82,9 @@ struct EditorBaseField {
     *
     *        NB: Both \c precision and \c whenToWrite have defaults, but precision is the one that more often needs
     *        something other than default to be specified, so we put it first in the argument list.
+    *
+    *        NOTE here and below that, unlike the other input field classes, \c BtComboBoxObject is an abstract base
+    *        class, hence why we use \c std::derived_from instead of \c std::same_as in the \c requires clauses.
     */
    EditorBaseField([[maybe_unused]] char const * const editorClass,
                    char const * const labelName,
@@ -85,22 +93,24 @@ struct EditorBaseField {
                    [[maybe_unused]] char const * const editFieldName,
                    [[maybe_unused]] char const * const editFieldFqName,
                    EditFieldType * editField,
-                   BtStringConst const & property,
-                   [[maybe_unused]] TypeInfo const & typeInfo,
+                   PropertyPath const propertyPath,
+                   [[maybe_unused]] TypeLookup const & typeLookup,
                    std::optional<int> precision = std::nullopt,
                    WhenToWriteField whenToWrite = WhenToWriteField::Normal)
    requires (// Exclude the cases that have their own constructors below
-             !std::same_as<EditFieldType, SmartLineEdit    > &&
-             !std::same_as<EditFieldType, BtComboBoxEnum   > &&
-             !std::same_as<EditFieldType, BtComboBoxBool   > &&
-             !std::same_as<EditFieldType, QLabel           > &&
-             !std::same_as<EditFieldType, SmartValueDisplay>) :
-      labelName  {labelName  },
-      label      {label      },
-      editField  {editField  },
-      property   {property   },
-      precision  {precision  },
-      whenToWrite{whenToWrite} {
+             !std::same_as     <EditFieldType, SmartLineEdit     > &&
+             !std::same_as     <EditFieldType, BtComboBoxEnum    > &&
+             !std::same_as     <EditFieldType, BtComboBoxBool    > &&
+             !std::derived_from<EditFieldType, BtComboBoxObject  > &&
+             !std::same_as     <EditFieldType, BtLineEditCurrency> &&
+             !std::same_as     <EditFieldType, QLabel            > &&
+             !std::same_as     <EditFieldType, SmartValueDisplay >) :
+      labelName   {labelName  },
+      label       {label      },
+      editField   {editField  },
+      propertyPath{propertyPath},
+      precision   {precision  },
+      whenToWrite {whenToWrite} {
       return;
    }
 
@@ -112,15 +122,15 @@ struct EditorBaseField {
                    char const * const editFieldName,
                    char const * const editFieldFqName,
                    SmartLineEdit * editField,
-                   BtStringConst const & property,
-                   TypeInfo const & typeInfo,
+                   PropertyPath const propertyPath,
+                   TypeLookup const & typeLookup,
                    std::optional<int> precision = std::nullopt,
                    WhenToWriteField whenToWrite = WhenToWriteField::Normal)
    requires (std::same_as<EditFieldType, SmartLineEdit>) :
       labelName  {labelName  },
       label      {label      },
       editField  {editField  },
-      property   {property   },
+      propertyPath{propertyPath},
       precision  {precision  },
       whenToWrite{whenToWrite} {
       SmartAmounts::Init(editorClass,
@@ -130,7 +140,7 @@ struct EditorBaseField {
                          editFieldName,
                          editFieldFqName,
                          *editField,
-                         typeInfo,
+                         propertyPath.getTypeInfo(typeLookup),
                          precision);
       return;
    }
@@ -143,18 +153,18 @@ struct EditorBaseField {
                    char const * const editFieldName,
                    char const * const editFieldFqName,
                    BtComboBoxEnum * editField,
-                   BtStringConst const & property,
-                   TypeInfo const & typeInfo,
+                   PropertyPath const propertyPath,
+                   TypeLookup const & typeLookup,
                    EnumStringMapping const & nameMapping,
                    EnumStringMapping const & displayNameMapping,
                    std::vector<int>  const * restrictTo = nullptr,
-                   SmartLineEdit *           controlledField = nullptr,
+                   std::vector<SmartLineEdit *> controlledFields = {},
                    WhenToWriteField whenToWrite = WhenToWriteField::Normal)
    requires (std::same_as<EditFieldType, BtComboBoxEnum>) :
       labelName  {labelName  },
       label      {label      },
       editField  {editField  },
-      property   {property   },
+      propertyPath{propertyPath},
       precision  {std::nullopt},
       whenToWrite{whenToWrite} {
       editField->init(editorClass,
@@ -162,10 +172,10 @@ struct EditorBaseField {
                       editFieldFqName,
                       nameMapping,
                       displayNameMapping,
-                      typeInfo,
+                      propertyPath.getTypeInfo(typeLookup),
                       restrictTo,
-                      controlledField);
-      if (controlledField) {
+                      controlledFields);
+      if (controlledFields.size() > 0) {
          this->hasControlledField = true;
       }
       return;
@@ -179,8 +189,8 @@ struct EditorBaseField {
                    char const * const editFieldName,
                    char const * const editFieldFqName,
                    BtComboBoxBool * editField,
-                   BtStringConst const & property,
-                   TypeInfo const & typeInfo,
+                   PropertyPath const propertyPath,
+                   TypeLookup const & typeLookup,
                    QString const & unsetDisplay = QObject::tr("No"),
                    QString const & setDisplay   = QObject::tr("Yes"),
                    WhenToWriteField whenToWrite = WhenToWriteField::Normal)
@@ -188,7 +198,7 @@ struct EditorBaseField {
       labelName  {labelName  },
       label      {label      },
       editField  {editField  },
-      property   {property   },
+      propertyPath{propertyPath},
       precision  {std::nullopt},
       whenToWrite{whenToWrite} {
       // We could use BT_COMBO_BOX_BOOL_INIT here, but we'd be repeating a bunch of work we already did in EDITOR_FIELD
@@ -197,7 +207,60 @@ struct EditorBaseField {
                       editFieldFqName,
                       unsetDisplay,
                       setDisplay,
-                      typeInfo);
+                      propertyPath.getTypeInfo(typeLookup));
+      return;
+   }
+
+   //! Constructor for when we have a class derived from BtComboBoxObject
+   EditorBaseField([[maybe_unused]] char const * const editorClass,
+                   char const * const labelName,
+                   [[maybe_unused]] char const * const labelFqName,
+                   LabelType * label,
+                   [[maybe_unused]] char const * const editFieldName,
+                   [[maybe_unused]] char const * const editFieldFqName,
+                   EditFieldType * editField,        // NB: Can't have BtComboBoxObject here as would be narrowing
+                   PropertyPath const propertyPath,
+                   [[maybe_unused]] TypeLookup const & typeLookup,
+                   WhenToWriteField whenToWrite = WhenToWriteField::Normal)
+   requires (std::derived_from<EditFieldType, BtComboBoxObject>) :
+      labelName  {labelName  },
+      label      {label      },
+      editField  {editField  },
+      propertyPath{propertyPath},
+      precision  {std::nullopt},
+      whenToWrite{whenToWrite} {
+      editField->init(/*editorClass,
+                      editFieldName,
+                      editFieldFqName,
+                      unsetDisplay,
+                      setDisplay,
+                      typeInfo*/);
+      return;
+   }
+
+   //! Constructor for when we have a BtLineEditCurrency
+   EditorBaseField(char const * const editorClass,
+                   char const * const labelName,
+                   [[maybe_unused]] char const * const labelFqName,
+                   LabelType * label,
+                   char const * const editFieldName,
+                   char const * const editFieldFqName,
+                   BtLineEditCurrency * editField,
+                   PropertyPath const propertyPath,
+                   TypeLookup const & typeLookup,
+                   WhenToWriteField whenToWrite = WhenToWriteField::Normal)
+   requires (std::same_as<EditFieldType, BtLineEditCurrency>) :
+      labelName  {labelName  },
+      label      {label      },
+      editField  {editField  },
+      propertyPath{propertyPath},
+      precision  {std::nullopt},
+      whenToWrite{whenToWrite} {
+      // We could use BT_COMBO_BOX_BOOL_INIT here, but we'd be repeating a bunch of work we already did in EDITOR_FIELD
+      editField->init(editorClass,
+                      editFieldName,
+                      editFieldFqName,
+                      propertyPath.getTypeInfo(typeLookup));
       return;
    }
 
@@ -209,15 +272,15 @@ struct EditorBaseField {
                    [[maybe_unused]] char const * const editFieldName,
                    [[maybe_unused]] char const * const editFieldFqName,
                    QLabel * editField,
-                   BtStringConst const & property,
-                   [[maybe_unused]] TypeInfo const & typeInfo,
+                   PropertyPath const propertyPath,
+                   [[maybe_unused]] TypeLookup const & typeLookup,
                    std::optional<int> precision = std::nullopt,
                    WhenToWriteField whenToWrite = WhenToWriteField::Never) // NB: "Never" here as read-only
    requires (std::same_as<EditFieldType, QLabel>) :
       labelName  {labelName  },
       label      {label      },
       editField  {editField  },
-      property   {property   },
+      propertyPath{propertyPath},
       precision  {precision  },
       whenToWrite{whenToWrite} {
       return;
@@ -231,15 +294,15 @@ struct EditorBaseField {
                    char const * const editFieldName,
                    char const * const editFieldFqName,
                    SmartValueDisplay * editField,
-                   BtStringConst const & property,
-                   TypeInfo const & typeInfo,
+                   PropertyPath const propertyPath,
+                   TypeLookup const & typeLookup,
                    std::optional<int> precision = std::nullopt,
                    WhenToWriteField whenToWrite = WhenToWriteField::Never) // NB: "Never" here as read-only
    requires (std::same_as<EditFieldType, SmartValueDisplay>) :
       labelName  {labelName  },
       label      {label      },
       editField  {editField  },
-      property   {property   },
+      propertyPath{propertyPath},
       precision  {precision  },
       whenToWrite{whenToWrite} {
       SmartAmounts::Init(editorClass,
@@ -249,7 +312,7 @@ struct EditorBaseField {
                          editFieldName,
                          editFieldFqName,
                          *editField,
-                         typeInfo,
+                         propertyPath.getTypeInfo(typeLookup),
                          precision);
       return;
    }
@@ -294,11 +357,18 @@ struct EditorBaseField {
       context->connect(this->editField, &EditFieldType::optionalDateChanged, context, functor, Qt::AutoConnection);
       return;
    }
+   template <typename Derived, typename Functor>
+   void connectFieldChanged(Derived * context, Functor functor) const
+   requires (std::same_as<EditFieldType, QDateEdit>) {
+      context->connect(this->editField, &EditFieldType::dateChanged, context, functor, Qt::AutoConnection);
+      return;
+   }
 
    //! \c SmartLineEdit uses \c editingFinished itself, and subsequently emits \c textModified after text corrections
    template <typename Derived, typename Functor>
    void connectFieldChanged(Derived * context, Functor functor) const
-   requires (std::same_as<EditFieldType, SmartLineEdit>) {
+   requires (std::same_as<EditFieldType, SmartLineEdit> ||
+             std::same_as<EditFieldType, BtLineEditCurrency>) {
       context->connect(this->editField, &EditFieldType::textModified, context, functor, Qt::AutoConnection);
       return;
    }
@@ -320,8 +390,9 @@ struct EditorBaseField {
    //! Combo boxes are also slightly different
    template <typename Derived, typename Functor>
    void connectFieldChanged(Derived * context, Functor functor) const
-   requires (std::same_as<EditFieldType, BtComboBoxEnum> ||
-             std::same_as<EditFieldType, BtComboBoxBool>) {
+   requires (std::same_as     <EditFieldType, BtComboBoxEnum> ||
+             std::same_as     <EditFieldType, BtComboBoxBool> ||
+             std::derived_from<EditFieldType, BtComboBoxObject>) {
       // QOverload is needed on next line because the signal currentIndexChanged is overloaded in QComboBox - see
       // https://doc.qt.io/qt-5/qcombobox.html#currentIndexChanged
       context->connect(this->editField, QOverload<int>::of(&QComboBox::currentIndexChanged), context, functor, Qt::AutoConnection);
@@ -338,17 +409,23 @@ struct EditorBaseField {
       return this->editField->text();
    }
 
+   QVariant getFieldValue() const requires (std::same_as<EditFieldType, QDateEdit>) {
+      return this->editField->date();
+   }
+
    QVariant getFieldValue() const requires (std::same_as<EditFieldType, QCheckBox>) {
       // We are assuming that we only use checked/unchecked checkboxes (ie that we never use the "tri-state" checkboxes
       // which have an additional "partially checked" state).
       return this->editField->isChecked();
    }
 
-   QVariant getFieldValue() const requires (std::same_as<EditFieldType, SmartLineEdit     > ||
-                                            std::same_as<EditFieldType, BtComboBoxEnum    > ||
-                                            std::same_as<EditFieldType, BtComboBoxBool    > ||
-                                            std::same_as<EditFieldType, BtOptionalDateEdit> ||
-                                            std::same_as<EditFieldType, SmartValueDisplay >) {
+   QVariant getFieldValue() const requires (std::same_as     <EditFieldType, SmartLineEdit     > ||
+                                            std::same_as     <EditFieldType, BtComboBoxEnum    > ||
+                                            std::same_as     <EditFieldType, BtComboBoxBool    > ||
+                                            std::derived_from<EditFieldType, BtComboBoxObject  > ||
+                                            std::same_as     <EditFieldType, BtLineEditCurrency> ||
+                                            std::same_as     <EditFieldType, BtOptionalDateEdit> ||
+                                            std::same_as     <EditFieldType, SmartValueDisplay >) {
       // Through the magic of templates, and naming conventions, one line suffices for all the types
       return this->editField->getAsVariant();
    }
@@ -356,7 +433,7 @@ struct EditorBaseField {
    /**
     * \brief Set property on supplied object from edit field
     */
-   void setPropertyFromEditField(QObject & object) const requires (std::same_as<EditFieldType, BtComboBoxEnum>) {
+   void setPropertyFromEditField(NamedEntity & object) const requires (std::same_as<EditFieldType, BtComboBoxEnum>) {
       //
       // The only "special case" we can't handle with template specialisation is where we have a combo-box that is
       // controlling the physical quantity for another field (eg whether an input field is mass or volume), there is
@@ -364,12 +441,16 @@ struct EditorBaseField {
       // to the object setter).
       //
       if (!this->hasControlledField) {
-         object.setProperty(*property, this->getFieldValue());
+         if (!this->propertyPath.setValue(object, this->getFieldValue())) {
+            qWarning() << Q_FUNC_INFO << "Trying to set" << propertyPath << "failed for" << this->labelName;
+         }
       }
       return;
    }
-   void setPropertyFromEditField(QObject & object) const requires (!std::same_as<EditFieldType, BtComboBoxEnum>) {
-      object.setProperty(*property, this->getFieldValue());
+   void setPropertyFromEditField(NamedEntity & object) const requires (!std::same_as<EditFieldType, BtComboBoxEnum>) {
+      if (!this->propertyPath.setValue(object, this->getFieldValue())) {
+         qWarning() << Q_FUNC_INFO << "Trying to set" << propertyPath << "failed for" << this->labelName;
+      }
       return;
    }
 
@@ -400,11 +481,18 @@ struct EditorBaseField {
       return;
    }
 
-   void setEditField(QVariant const & val) const requires (std::same_as<EditFieldType, SmartLineEdit     > ||
-                                                           std::same_as<EditFieldType, BtComboBoxEnum    > ||
-                                                           std::same_as<EditFieldType, BtComboBoxBool    > ||
-                                                           std::same_as<EditFieldType, BtOptionalDateEdit> ||
-                                                           std::same_as<EditFieldType, SmartValueDisplay >) {
+   void setEditField(QVariant const & val) const requires (std::same_as<EditFieldType, QDateEdit>) {
+      this->editField->setDate(val.toDate());
+      return;
+   }
+
+   void setEditField(QVariant const & val) const requires (std::same_as     <EditFieldType, SmartLineEdit     > ||
+                                                           std::same_as     <EditFieldType, BtComboBoxEnum    > ||
+                                                           std::same_as     <EditFieldType, BtComboBoxBool    > ||
+                                                           std::derived_from<EditFieldType, BtComboBoxObject  > ||
+                                                           std::same_as     <EditFieldType, BtLineEditCurrency> ||
+                                                           std::same_as     <EditFieldType, BtOptionalDateEdit> ||
+                                                           std::same_as     <EditFieldType, SmartValueDisplay >) {
       this->editField->setFromVariant(val);
       return;
    }
@@ -422,10 +510,18 @@ struct EditorBaseField {
       this->editField->setChecked(false);
       return;
    }
-   void clearEditField() const requires (std::same_as<EditFieldType, SmartLineEdit    > ||
-                                         std::same_as<EditFieldType, BtComboBoxEnum   > ||
-                                         std::same_as<EditFieldType, BtComboBoxBool   > ||
-                                         std::same_as<EditFieldType, SmartValueDisplay>) {
+   void clearEditField() const requires (std::same_as<EditFieldType, QDateEdit>) {
+      // Today seems like the best default value for a compulsory date
+      this->editField->setDate(QDate::currentDate());
+      return;
+   }
+
+   void clearEditField() const requires (std::same_as     <EditFieldType, SmartLineEdit     > ||
+                                         std::same_as     <EditFieldType, BtComboBoxEnum    > ||
+                                         std::same_as     <EditFieldType, BtComboBoxBool    > ||
+                                         std::derived_from<EditFieldType, BtComboBoxObject  > ||
+                                         std::same_as     <EditFieldType, BtLineEditCurrency> ||
+                                         std::same_as     <EditFieldType, SmartValueDisplay >) {
       this->editField->setDefault();
       return;
    }
@@ -438,7 +534,7 @@ struct EditorBaseField {
    /**
     * \brief Set edit field from property on supplied object
     */
-   void setEditFieldFromProperty(QObject & object) const requires (std::same_as<EditFieldType, BtComboBoxEnum>) {
+   void setEditFieldFromProperty(NamedEntity & object) const requires (std::same_as<EditFieldType, BtComboBoxEnum>) {
       //
       // Similarly to setPropertyFromEditField, in the case of a combo-box that is controlling the physical quantity for
       // another field, we want to initialise from that controlled field.
@@ -446,12 +542,12 @@ struct EditorBaseField {
       if (this->hasControlledField) {
          this->editField->autoSetFromControlledField();
       } else {
-         this->setEditField(object.property(*property));
+         this->setEditField(this->propertyPath.getValue(object));
       }
       return;
    }
-   void setEditFieldFromProperty(QObject & object) const requires (!std::same_as<EditFieldType, BtComboBoxEnum>) {
-      this->setEditField(object.property(*property));
+   void setEditFieldFromProperty(NamedEntity & object) const requires (!std::same_as<EditFieldType, BtComboBoxEnum>) {
+      this->setEditField(this->propertyPath.getValue(object));
       return;
    }
 
@@ -472,22 +568,33 @@ S & operator<<(S & stream, WhenToWriteField const & val) {
 
 
 using EditorBaseFieldVariant = std::variant<
-   // NB: Not all conceivable permutations are valid
-   EditorBaseField<QLabel    , BtComboBoxBool    >,
-   EditorBaseField<QLabel    , BtComboBoxEnum    >,
-   EditorBaseField<QLabel    , BtOptionalDateEdit>,
-   EditorBaseField<QLabel    , QCheckBox         >,
-   EditorBaseField<QLabel    , QLabel            >, // For read-only fields where "edit" field is actually a QLabel
-   EditorBaseField<QLabel    , QLineEdit         >,
-   EditorBaseField<QLabel    , QPlainTextEdit    >,
-   EditorBaseField<QLabel    , QTextEdit         >,
-   EditorBaseField<QLabel    , SmartLineEdit     >,
-   EditorBaseField<QWidget   , QTextEdit         >, // This is for tabs such as tab_notes containing a single QTextEdit with no separate QLabel
-   EditorBaseField<SmartLabel, BtComboBoxBool    >,
-   EditorBaseField<SmartLabel, BtComboBoxEnum    >,
-   EditorBaseField<SmartLabel, QLineEdit         >,
-   EditorBaseField<SmartLabel, SmartLineEdit     >,
-   EditorBaseField<SmartLabel, SmartValueDisplay >  // Read-only fields where user can control units
+   //
+   // Not all conceivable permutations are valid.  These are the ones it makes sense to use.
+   // Note that we cannot write `EditorBaseField<QLabel, BtComboBoxObject>` as we need the actual subclass of
+   // BtComboBoxObject, henc why we have to list them all here.
+   //
+   EditorBaseField<QLabel    , BtComboBoxBool       >,
+   EditorBaseField<QLabel    , BtComboBoxEnum       >,
+   EditorBaseField<QLabel    , BtComboBoxFermentable>,
+   EditorBaseField<QLabel    , BtComboBoxHop        >,
+   EditorBaseField<QLabel    , BtComboBoxMisc       >,
+   EditorBaseField<QLabel    , BtComboBoxSalt       >,
+   EditorBaseField<QLabel    , BtComboBoxYeast      >,
+   EditorBaseField<QLabel    , BtLineEditCurrency   >,
+   EditorBaseField<QLabel    , BtOptionalDateEdit   >,
+   EditorBaseField<QLabel    , QCheckBox            >,
+   EditorBaseField<QLabel    , QDateEdit            >, // For non-optional dates (eg on StockUse items)
+   EditorBaseField<QLabel    , QLabel               >, // For read-only TEXT fields where "edit" field is actually a QLabel.  See also SmartValueDisplay below.
+   EditorBaseField<QLabel    , QLineEdit            >,
+   EditorBaseField<QLabel    , QPlainTextEdit       >,
+   EditorBaseField<QLabel    , QTextEdit            >,
+   EditorBaseField<QLabel    , SmartLineEdit        >,
+   EditorBaseField<QWidget   , QTextEdit            >, // This is for tabs such as tab_notes containing a single QTextEdit with no separate QLabel
+   EditorBaseField<SmartLabel, BtComboBoxBool       >,
+   EditorBaseField<SmartLabel, BtComboBoxEnum       >,
+   EditorBaseField<SmartLabel, QLineEdit            >,
+   EditorBaseField<SmartLabel, SmartLineEdit        >,
+   EditorBaseField<SmartLabel, SmartValueDisplay    >  // Read-only fields where user can control units
 >;
 
 /**
@@ -528,7 +635,7 @@ using EditorBaseFieldVariant = std::variant<
          #modelClass "Editor->" #editField, \
          editField, \
          PropertyNames::property, \
-         modelClass ::typeLookup.getType(PropertyNames::property)
+         modelClass::typeLookup
 
 #define EDITOR_FIELD_END(...) \
          __VA_OPT__(, __VA_ARGS__) \
@@ -545,12 +652,35 @@ using EditorBaseFieldVariant = std::variant<
    property##DisplayNames   \
    EDITOR_FIELD_END(__VA_ARGS__)
 
-#define EDITOR_FIELD_COPQ(modelClass, label, editField, property, controlledField, ...) \
+#define EDITOR_FIELD_COPQ(modelClass, label, editField, property, controlledFields, ...) \
    EDITOR_FIELD_BEGIN(modelClass, label, editField, property), \
    Measurement::physicalQuantityStringMapping,                 \
    Measurement::physicalQuantityDisplayNames,                  \
    &Measurement::allPossibilitiesAsInt(modelClass::validMeasures), \
-   controlledField \
+   controlledFields \
    EDITOR_FIELD_END(__VA_ARGS__)
+
+/**
+ * \brief This macro allows us to use a \c PropertyPath for a read-only field.  Note two points:
+ *
+ *           - Unlike the macros above, the elements of the property path must each have the \c PropertyNames:: prefix.
+ *           - Because this is a macro, each element of the property path will be a separate macro parameter, so we
+ *             can't accept any parameters _after_ the property path.  (Hence why we use __VA_ARGS__ for the property
+ *             path.)
+ */
+#define EDITOR_FIELD_PATH(modelClass, label, editField, ...) \
+   EditorBaseFieldVariant{ \
+      EditorBaseField<std::remove_pointer<decltype(label)>::type, std::remove_pointer<decltype(editField)>::type>{\
+         #modelClass "Editor", \
+         #label, \
+         #modelClass "Editor->" #label, \
+         label, \
+         #editField, \
+         #modelClass "Editor->" #editField, \
+         editField, \
+         PropertyPath{__VA_ARGS__}, \
+         modelClass::typeLookup \
+      } \
+   }
 
 #endif

@@ -21,12 +21,12 @@ name: Windows
 on:
   push:
     branches:
-      - develop
+      - main
       - "stable/**"
 
   pull_request:
     branches:
-      - develop
+      - main
   schedule:
     - cron: "0 2 * * *"
 

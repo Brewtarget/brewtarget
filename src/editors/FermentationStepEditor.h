@@ -32,7 +32,7 @@
  */
 class FermentationStepEditor : public QDialog,
                                public Ui::fermentationStepEditor,
-                               public StepEditorBase<FermentationStepEditor, FermentationStep>,
+                               public EnumeratedItemEditorBase<FermentationStepEditor, FermentationStep>,
                                public EditorBase<FermentationStepEditor, FermentationStep, FermentationStepEditorOptions> {
    Q_OBJECT
 

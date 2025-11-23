@@ -61,7 +61,9 @@
 #include "model/Recipe.h"
 #include "model/RecipeAdditionFermentable.h"
 #include "model/RecipeAdditionHop.h"
+#include "model/StockPurchaseHop.h"
 #include "PersistentSettings.h"
+#include "unitTests/TestMultiVector.h"
 #include "utils/ErrorCodeToStream.h"
 #include "utils/FileSystemHelpers.h"
 
@@ -439,9 +441,9 @@ void Testing::initTestCase() {
 
       // Setting French locale below forces ',' as decimal separator and '.' as thousands separator.  Hopefully this
       // helps catch cases where we incorrectly assume locale 'C' etc.
-      PersistentSettings::insert(PersistentSettings::Names::color_formula, "morey"  );
-      PersistentSettings::insert(PersistentSettings::Names::ibu_formula  , "tinseth");
-      PersistentSettings::insert(PersistentSettings::Names::forcedLocale , "fr_FR"  );
+      PersistentSettings::insert_ck(PersistentSettings::Names::color_formula, "morey"  );
+      PersistentSettings::insert_ck(PersistentSettings::Names::ibu_formula  , "tinseth");
+      PersistentSettings::insert_ck(PersistentSettings::Names::forcedLocale , "fr_FR"  );
 
       // Tell the application not to require any "user" input on starting
       Application::setInteractive(false);
@@ -836,6 +838,13 @@ void Testing::testTypeLookups() {
             "PropertyNames::Fermentable::grainGroup not optional enum");
    return;
 }
+
+void Testing::testMultiVector() {
+   UnitTests::doTestsForMultiVector();
+   return;
+}
+
+
 void Testing::testLogRotation() {
    qDebug() << Q_FUNC_INFO << "Logging to" << Logging::getDirectory();
 
@@ -921,9 +930,10 @@ void Testing::pstdintTest() {
 void Testing::testInventory() {
    qDebug() << Q_FUNC_INFO << "Starting";
    Measurement::Amount amountOfHop{123.45, Measurement::Units::kilograms};
-   bool setOk = this->pimpl->m_cascade_4pct->setProperty(*PropertyNames::Ingredient::totalInventory,
-                                                         QVariant::fromValue<Measurement::Amount>(amountOfHop));
-   QVERIFY2(setOk, "Error setting hop inventory property");
+   auto hopPurchase = std::make_shared<StockPurchaseHop>("Hop Purchase");
+   hopPurchase->setHop(this->pimpl->m_cascade_4pct.get());
+   hopPurchase->setAmount(amountOfHop);
+   ObjectStoreWrapper::insert(hopPurchase);
    QVariant inventoryRaw = this->pimpl->m_cascade_4pct->property(*PropertyNames::Ingredient::totalInventory);
    QVERIFY2(inventoryRaw.canConvert<Measurement::Amount>(), "Error retrieving hop inventory property");
    Measurement::Amount inventory = inventoryRaw.value<Measurement::Amount>();

@@ -23,13 +23,12 @@
 
 #include <memory>
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaProperty>
 #include <QModelIndex>
 #include <QVariant>
 #include <QWidget>
 
-#include "model/InventoryYeast.h"
 #include "model/Yeast.h"
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
@@ -39,14 +38,13 @@ class BtStringConst;
 class Recipe;
 
 // Define the columns on this table
-COLUMN_NAMES(YeastTableModel, Name              ,
-                              Laboratory        ,
-                              ProductId         ,
-                              Type              ,
-                              Form              ,
-                              TotalInventory    ,
-                              TotalInventoryType,
-                              NumRecipesUsedIn  ,)
+COLUMN_NAMES(YeastTableModel, Name            ,
+                              Laboratory      ,
+                              ProductId       ,
+                              Type            ,
+                              Form            ,
+                              TotalInventory  ,
+                              NumRecipesUsedIn,)
 
 /*!
  * \class YeastTableModel
@@ -67,7 +65,7 @@ class YeastTableModel : public BtTableModel, public TableModelBase<YeastTableMod
  * \brief Item delegate for yeast tables.
  * \sa YeastTableModel
  */
-class YeastItemDelegate : public QItemDelegate,
+class YeastItemDelegate : public QStyledItemDelegate,
                           public ItemDelegate<YeastItemDelegate, YeastTableModel> {
    Q_OBJECT
 

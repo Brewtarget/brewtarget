@@ -7,14 +7,15 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 release timestamp to be a date in the future, and I'm guessing nobody cares about the exact time of day a release
 happens, so I'm now setting it to a slightly arbitrary time early in the morning.
 
-## Forthcoming in v4.3.0
+## Forthcoming in v5.0.1
 
 ### New Features
 * TODO: Additional methods for calculating IBU
 * We'll list other new features here...
 
-## v4.2.2
-Bug fixes and minor enhancements.  Mac packaging should be fixed in this release.
+## v5.0.0
+New inventory management system tracks individual stock purchases and uses
+Mac packaging should be fixed in this release.
 
 ### New Features
 * None

@@ -101,7 +101,7 @@ template <OwnedSetOptions os> concept CONCEPT_FIX_UP IsCopyable   = is_Copyable 
  *        that we send with the \c changed signal is simply the new size of the set.
  * \param itemChangedSlot if not \c nullptr, is a member function slot on \c Owner that can receive
  *        \c NamedEntity::changed signals from \c Item objects in this set.  (Otherwise, if it is \c nullptr,
- *        \c Owner::acceptStepChange will be used.)  Typically that member function just needs to call our
+ *        \c Owner::acceptSetMemberChange will be used.)  Typically that member function just needs to call our
  *        \c acceptItemChange function.  It is simpler to go via \c Owner because the owner object is able to call
  *        \c QObject::sender to get the sender and pass it to us.  (From looking at the Qt source code eg at
  *        https://github.com/qt/qtbase/blob/dev/src/corelib/kernel/qobject.cpp, it seems \c QObject::sender will return
@@ -236,7 +236,7 @@ private:
       if constexpr (itemChangedSlot) {
          this->m_owner.connect(item.get(), &NamedEntity::changed, &this->m_owner, itemChangedSlot);
       } else {
-         this->m_owner.connect(item.get(), &NamedEntity::changed, &this->m_owner, &Owner::acceptStepChange);
+         this->m_owner.connect(item.get(), &NamedEntity::changed, &this->m_owner, &Owner::acceptSetMemberChange);
       }
       return;
    }
@@ -247,7 +247,7 @@ private:
                 [](std::shared_ptr<Item> const lhs, std::shared_ptr<Item> const rhs) {
                    // Per https://en.cppreference.com/w/cpp/algorithm/sort, this function needs to return "returns ​true
                    // if the first argument is less than (i.e. is ordered before) the second".
-                   return lhs->seqNum() < rhs->seqNum();
+                   return lhs->sequenceNumber() < rhs->sequenceNumber();
                 });
       return;
    }
@@ -255,7 +255,7 @@ private:
    void normaliseSeqNums(QList<std::shared_ptr<Item>> & items) const requires (IsEnumerated<ownedSetOptions>) {
       int const ownerId = this->m_owner.key();
       for (int canonicalSeqNum = 1, prevSeqNum = 1; auto item : items) {
-         int const existingSeqNum = item->seqNum();
+         int const existingSeqNum = item->sequenceNumber();
          // Normally leave this debug statement commented out as it generates too much logging, but can be useful for
          // troubleshooting.
 //         qDebug() <<
@@ -279,7 +279,7 @@ private:
             // already in the correct order.  We are just ensuring that all the sequence numbers are sequential and
             // start from 1.  Secondly, if we are calling this as part of a modification to the set, we only want one
             // notification, at the end of whatever modification it is we are doing.
-            item->setSeqNum(canonicalSeqNum, false);
+            item->setSequenceNumber(canonicalSeqNum, false);
          }
          prevSeqNum = existingSeqNum;
          ++canonicalSeqNum;
@@ -390,7 +390,6 @@ public:
       return count;
    }
 
-
 private:
    /**
     * \brief If we changed the set in any way, we call this function to have the owner emit a signal
@@ -405,12 +404,12 @@ private:
       emit this->m_owner.changed(this->m_owner.metaProperty(*propertyName), sizeToEmit);
 
       //
-      // For the moment at least, various things dealing with steps are expecting a specific signal stepsChanged rather
-      // than the generic NamedEntity::changed one, so send that too.  (Non-step owners do not have the stepsChanged
-      // signal though.)
+      // Various things dealing with enumerated items are expecting a specific signal Owner::ownedItemsChanged rather
+      // than the generic NamedEntity::changed one, so send that too.  This is useful in generic code where we don't
+      // have to know the name of the property for which NamedEntity::changed was emitted above.
       //
       if constexpr (IsEnumerated<ownedSetOptions>) {
-         emit this->m_owner.stepsChanged();
+         emit this->m_owner.ownedItemsChanged();
       }
 
       return;
@@ -497,12 +496,12 @@ public:
       // OK (and just gives an empty range.
       for (auto existingItem : std::ranges::drop_view(existingItems, seqNum - 1)) {
          // Don't want to emit a "changed" signal here, as we're still part-way through modifying the sequence
-         existingItem->setSeqNum(existingItem->seqNum() + 1, false);
+         existingItem->setSequenceNumber(existingItem->sequenceNumber() + 1, false);
       }
 
       // Even here is a bit to early to emit a "changed" signal, as the item may need to be inserted in the DB.  The
       // extend member function call below will emit a "changed" signal for the whole set, which should be all we need.
-      item->setSeqNum(seqNum, false);
+      item->setSequenceNumber(seqNum, false);
 
       return this->extend(item);
    }
@@ -526,9 +525,6 @@ public:
       // It's a coding error if we try to remove an item that didn't belong to the owner
       Q_ASSERT(item->ownerId() == this->m_owner.key());
 
-      // Disassociate the Item from its Owner
-      item->setOwnerId(-1);
-
       // As per add(), if we're not yet stored in the database, then we also need to update our list of Items.
       if (this->m_owner.key() < 0) {
          int indexOfItem = this->m_itemIds.indexOf(item->key());
@@ -545,10 +541,17 @@ public:
 
       //
       // Since a Owner owns its Items, we need to remove the Item from the DB when we remove it from the Owner.  It then
-      // makes sense (in the context of undo/redo) to put the Item object back into "new" state, which ObjectStoreTyped
-      // will do for us.
+      // makes sense (in the context of undo/redo) to put the Item object back into "new" state, most of which
+      // ObjectStoreTyped::hardOrSoftDelete will do for us.
       //
       ObjectStoreWrapper::hardDelete(item);
+
+      //
+      // Disassociate the Item from its Owner
+      //
+      // ObjectStore no longer holds a shared pointer to Item, but we do, so this call is OK
+      //
+      item->setOwnerId(-1);
 
       //
       // Note that, in an enumerated set, this call to items() will also call this->normaliseSeqNums(), so item sequence
@@ -606,13 +609,13 @@ public:
       Q_ASSERT(lhs.key() != rhs.key());
 
       qDebug() <<
-         Q_FUNC_INFO << "Swapping items" << lhs.seqNum() << "(#" << lhs.key() << ") and " << rhs.seqNum() << " (#" <<
-         rhs.key() << ")";
+         Q_FUNC_INFO << "Swapping items" << lhs.sequenceNumber() << "(#" << lhs.key() << ") and " <<
+         rhs.sequenceNumber() << " (#" << rhs.key() << ")";
 
       // Make sure we don't send notifications until the end (hence the false parameter on setSeqNum).
-      int temp = lhs.seqNum();
-      lhs.setSeqNum(rhs.seqNum(), false);
-      rhs.setSeqNum(temp, false);
+      int temp = lhs.sequenceNumber();
+      lhs.setSequenceNumber(rhs.sequenceNumber(), false);
+      rhs.setSequenceNumber(temp, false);
 
       //
       // If the owner hasn't yet been put in the DB then we also need to swap things in our local list of item IDs

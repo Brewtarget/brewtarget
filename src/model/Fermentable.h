@@ -43,7 +43,7 @@
 
 class FermentableCatalog;
 class FermentableEditor;
-class InventoryFermentable;
+class StockPurchaseFermentable;
 class FermentableItemDelegate;
 class RecipeAdditionFermentable;
 class FermentableSortFilterProxyModel;
@@ -217,7 +217,7 @@ public:
    //
    using CatalogClass              = FermentableCatalog;
    using EditorClass               = FermentableEditor;
-   using InventoryClass            = InventoryFermentable;
+   using StockPurchaseClass        = StockPurchaseFermentable;
    using ItemDelegateClass         = FermentableItemDelegate;
    using RecipeAdditionClass       = RecipeAdditionFermentable;
    using SortFilterProxyModelClass = FermentableSortFilterProxyModel;

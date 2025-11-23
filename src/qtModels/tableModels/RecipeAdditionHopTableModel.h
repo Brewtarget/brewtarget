@@ -23,7 +23,7 @@
 #define TABLEMODELS_RECIPEADDITIONHOPTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaProperty>
 #include <QModelIndex>
 #include <QVariant>
@@ -79,7 +79,7 @@ private:
  *
  * \brief An item delegate for \c RecipeAdditionHopTableModel
  */
-class RecipeAdditionHopItemDelegate : public QItemDelegate,
+class RecipeAdditionHopItemDelegate : public QStyledItemDelegate,
                                       public ItemDelegate<RecipeAdditionHopItemDelegate, RecipeAdditionHopTableModel> {
    Q_OBJECT
 

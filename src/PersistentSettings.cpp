@@ -163,8 +163,8 @@ void PersistentSettings::initialise(QString customUserDataDir) {
          // Brewken puts it QStandardPaths::AppDataLocation (which, for Brewtarget, would be ~/.local/share/brewtarget/
          // on Linux).  This is a slightly more logical location, but we don't want to change directories for existing
          // Brewtarget users.
-         PersistentSettings::value(PersistentSettings::Names::UserDataDirectory,
-                                   QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation)).toString()
+         PersistentSettings::value_ck(PersistentSettings::Names::UserDataDirectory,
+                                      QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).toString()
       );
    }
 
@@ -192,37 +192,37 @@ QDir PersistentSettings::getUserDataDir() {
 void PersistentSettings::setUserDataDir(QDir newDirectory) {
    Q_ASSERT(initialised);
    userDataDir = newDirectory;
-   PersistentSettings::insert(PersistentSettings::Names::UserDataDirectory, userDataDir.absolutePath());
+   PersistentSettings::insert_ck(PersistentSettings::Names::UserDataDirectory, userDataDir.absolutePath());
    return;
 }
 
-bool PersistentSettings::contains(QString const & key,
-                                  QString const section,
-                                  PersistentSettings::Extension extension) {
+bool PersistentSettings::contains  (QString const & key,
+                                    QString const section,
+                                    PersistentSettings::Extension extension) {
    Q_ASSERT(initialised);
    return qSettings->contains(generateFqKey(key, section, extension));
 }
 
-bool PersistentSettings::contains(BtStringConst const & constKey,
-                                  QString const section,
-                                  PersistentSettings::Extension extension) {
+bool PersistentSettings::contains_ck(BtStringConst const & constKey,
+                                     QString const section,
+                                     PersistentSettings::Extension extension) {
    Q_ASSERT(!constKey.isNull());
    QString key{*constKey};
    return PersistentSettings::contains(key, section, extension);
 }
 
-bool PersistentSettings::contains(BtStringConst const & constKey,
-                                  BtStringConst const & constSection,
-                                  PersistentSettings::Extension extension) {
+bool PersistentSettings::contains_ck(BtStringConst const & constKey,
+                                     BtStringConst const & constSection,
+                                     PersistentSettings::Extension extension) {
    Q_ASSERT(!constSection.isNull());
    QString section{*constSection};
-   return PersistentSettings::contains(constKey, section, extension);
+   return PersistentSettings::contains_ck(constKey, section, extension);
 }
 
-void PersistentSettings::insert(QString const & key,
-                                QVariant value,
-                                QString const section,
-                                PersistentSettings::Extension extension) {
+void PersistentSettings::insert   (QString const & key,
+                                   QVariant value,
+                                   QString const section,
+                                   PersistentSettings::Extension extension) {
    Q_ASSERT(initialised);
    // QSettings is a bit inconsistent here in using setValue() when QMap, QHash etc use insert() for the equivalent
    // functionality
@@ -230,55 +230,55 @@ void PersistentSettings::insert(QString const & key,
    return;
 }
 
-void PersistentSettings::insert(BtStringConst const & constKey,
-                                QVariant value,
-                                QString const section,
-                                PersistentSettings::Extension extension) {
+void PersistentSettings::insert_ck(BtStringConst const & constKey,
+                                   QVariant value,
+                                   QString const section,
+                                   PersistentSettings::Extension extension) {
    Q_ASSERT(!constKey.isNull());
    QString key{*constKey};
    PersistentSettings::insert(key, value, section, extension);
    return;
 }
 
-void PersistentSettings::insert(BtStringConst const & constKey,
-                                QVariant value,
-                                BtStringConst const & constSection,
-                                Extension extension) {
+void PersistentSettings::insert_ck(BtStringConst const & constKey,
+                                   QVariant value,
+                                   BtStringConst const & constSection,
+                                   Extension extension) {
    Q_ASSERT(!constSection.isNull());
    QString section{*constSection};
-   PersistentSettings::insert(constKey, value, section, extension);
+   PersistentSettings::insert_ck(constKey, value, section, extension);
    return;
 }
 
-QVariant PersistentSettings::value(QString const & key,
-                                   QVariant const defaultValue,
-                                   QString const section,
-                                   PersistentSettings::Extension extension) {
+QVariant PersistentSettings::value   (QString const & key,
+                                      QVariant const defaultValue,
+                                      QString const section,
+                                      PersistentSettings::Extension extension) {
    Q_ASSERT(initialised);
    return qSettings->value(generateFqKey(key, section, extension), defaultValue);
 }
 
-QVariant PersistentSettings::value(BtStringConst const & constKey,
-                                   QVariant const defaultValue,
-                                   QString const section,
-                                   PersistentSettings::Extension extension) {
+QVariant PersistentSettings::value_ck(BtStringConst const & constKey,
+                                      QVariant const defaultValue,
+                                      QString const section,
+                                      PersistentSettings::Extension extension) {
    Q_ASSERT(!constKey.isNull());
    QString key{*constKey};
    return PersistentSettings::value(key, defaultValue, section, extension);
 }
 
-QVariant PersistentSettings::value(BtStringConst const & constKey,
-                                   QVariant const defaultValue,
-                                   BtStringConst const & constSection,
-                                   PersistentSettings::Extension extension) {
+QVariant PersistentSettings::value_ck(BtStringConst const & constKey,
+                                      QVariant const defaultValue,
+                                      BtStringConst const & constSection,
+                                      PersistentSettings::Extension extension) {
    Q_ASSERT(!constSection.isNull());
    QString section{*constSection};
-   return PersistentSettings::value(constKey, defaultValue, section, extension);
+   return PersistentSettings::value_ck(constKey, defaultValue, section, extension);
 }
 
-void PersistentSettings::remove(QString const & key,
-                                QString const section,
-                                PersistentSettings::Extension extension) {
+void PersistentSettings::remove   (QString const & key,
+                                   QString const section,
+                                   PersistentSettings::Extension extension) {
    Q_ASSERT(initialised);
    QString fqKey{generateFqKey(key, section, extension)};
 
@@ -290,20 +290,20 @@ void PersistentSettings::remove(QString const & key,
    return;
 }
 
-void PersistentSettings::remove(BtStringConst const & constKey,
-                                QString const section,
-                                PersistentSettings::Extension extension) {
+void PersistentSettings::remove_ck(BtStringConst const & constKey,
+                                   QString const section,
+                                   PersistentSettings::Extension extension) {
    Q_ASSERT(!constKey.isNull());
    QString key{*constKey};
    PersistentSettings::remove(key, section, extension);
    return;
 }
 
-void PersistentSettings::remove(BtStringConst const & constKey,
-                                    BtStringConst const & constSection,
-                                    PersistentSettings::Extension extension) {
+void PersistentSettings::remove_ck(BtStringConst const & constKey,
+                                   BtStringConst const & constSection,
+                                   PersistentSettings::Extension extension) {
    Q_ASSERT(!constSection.isNull());
    QString section{*constSection};
-   PersistentSettings::remove(constKey, section, extension);
+   PersistentSettings::remove_ck(constKey, section, extension);
    return;
 }

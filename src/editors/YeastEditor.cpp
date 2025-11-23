@@ -48,8 +48,7 @@ YeastEditor::YeastEditor(QWidget * parent, QString const editorName) :
          //
          EDITOR_FIELD_NORM(Yeast, label_name          , lineEdit_name             , NamedEntity::name            ),
          EDITOR_FIELD_NORM(Yeast, label_laboratory    , lineEdit_laboratory       , Yeast::laboratory            ),
-         EDITOR_FIELD_NORM(Yeast, label_inventory     , lineEdit_inventory        , Ingredient::totalInventory, 1, WhenToWriteField::Late),
-         EDITOR_FIELD_COPQ(Yeast, label_amountType    , comboBox_amountType       , Ingredient::totalInventory, lineEdit_inventory, WhenToWriteField::Never),
+         EDITOR_FIELD_NORM(Yeast, label_totalInventory, display_totalInventory    , Ingredient::totalInventory, 1, WhenToWriteField::Never),
          EDITOR_FIELD_NORM(Yeast, label_productId     , lineEdit_productId        , Yeast::productId             ),
          EDITOR_FIELD_NORM(Yeast, label_minTemperature, lineEdit_minTemperature   , Yeast::minTemperature_c, 1   ),
          EDITOR_FIELD_NORM(Yeast, label_maxTemperature, lineEdit_maxTemperature   , Yeast::maxTemperature_c, 1   ),

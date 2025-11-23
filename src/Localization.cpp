@@ -132,8 +132,8 @@ namespace {
       // xxxPersistentSettings.conf file:
       //    forcedLocale=fr_FR
       //
-      if (PersistentSettings::contains(PersistentSettings::Names::forcedLocale)) {
-         QString forcedLocaleName = PersistentSettings::value(PersistentSettings::Names::forcedLocale, "").toString();
+      if (PersistentSettings::contains_ck(PersistentSettings::Names::forcedLocale)) {
+         QString forcedLocaleName = PersistentSettings::value_ck(PersistentSettings::Names::forcedLocale, "").toString();
          QLocale forcedLocale{forcedLocaleName};
          qInfo() <<
             Q_FUNC_INFO << "Read config setting" << PersistentSettings::Names::forcedLocale << "=" <<
@@ -244,6 +244,14 @@ QString Localization::displayDateUserFormated(QDate const & date) {
    QString format = Localization::numericToStringDateFormat(dateFormat);
    return date.toString(format);
 }
+
+QString Localization::displayDateUserFormated(std::optional<QDate> const & date) {
+   if (!date) {
+      return "-";
+   }
+   return Localization::displayDateUserFormated(*date);
+}
+
 
 [[nodiscard]] bool Localization::isSupportedLanguage(QString const & twoLetterLanguage) {
    QVector<Localization::LanguageInfo> const & languageInfos {Localization::languageInfo()};
@@ -460,10 +468,10 @@ void Localization::loadTranslations() {
 
 void Localization::loadSettings() {
 
-   if (PersistentSettings::contains(PersistentSettings::Names::language)) {
+   if (PersistentSettings::contains_ck(PersistentSettings::Names::language)) {
       // It can be that the config file contains an empty setting for language ("language="), in which case we should
       // ignore it
-      QString savedLanguage = PersistentSettings::value(PersistentSettings::Names::language, "").toString();
+      QString savedLanguage = PersistentSettings::value_ck(PersistentSettings::Names::language, "").toString();
       if (!savedLanguage.isEmpty()) {
          qInfo() << Q_FUNC_INFO << "Config file requests language as" << savedLanguage;
          Localization::setLanguage(savedLanguage);
@@ -471,13 +479,13 @@ void Localization::loadSettings() {
    }
 
    dateFormat = static_cast<Localization::NumericDateFormat>(
-      PersistentSettings::value(PersistentSettings::Names::date_format, Localization::YearMonthDay).toInt()
+      PersistentSettings::value_ck(PersistentSettings::Names::date_format, Localization::YearMonthDay).toInt()
    );
    return;
 }
 
 void Localization::saveSettings() {
-   PersistentSettings::insert(PersistentSettings::Names::language   , currentTwoLetterLanguageCode);
-   PersistentSettings::insert(PersistentSettings::Names::date_format, dateFormat);
+   PersistentSettings::insert_ck(PersistentSettings::Names::language   , currentTwoLetterLanguageCode);
+   PersistentSettings::insert_ck(PersistentSettings::Names::date_format, dateFormat);
    return;
 }

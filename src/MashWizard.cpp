@@ -473,6 +473,7 @@ void MashWizard::wizardry() {
          waterMass_kg /
          PhysicalConstants::waterSpecificHeat_calGC +
          tempFinal_c;
+      qDebug() << Q_FUNC_INFO << "waterTemp_c:" << waterTemp_c;
 
       if (waterTemp_c > boilingPoint_c) {
          QMessageBox::information(this,
@@ -546,7 +547,7 @@ void MashWizard::wizardry() {
                )
             );
          }
-         emit mash->stepsChanged();
+         emit mash->ownedItemsChanged();
       } else {
          auto newMashStep = std::make_shared<MashStep>(tr("Fly Sparge"));
          newMashStep->setType(MashStep::Type::FlySparge);

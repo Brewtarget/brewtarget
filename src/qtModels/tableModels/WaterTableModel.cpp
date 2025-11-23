@@ -34,14 +34,14 @@
 
 COLUMN_INFOS(
    WaterTableModel,
-   TABLE_MODEL_HEADER(Water, Name            , tr("Name"             ), PropertyNames::NamedEntity::name            ),
-   TABLE_MODEL_HEADER(Water, Calcium         , tr("Calcium (ppm)"    ), PropertyNames::Water::calcium_ppm           ),
-   TABLE_MODEL_HEADER(Water, Bicarbonate     , tr("Bicarbonate (ppm)"), PropertyNames::Water::bicarbonate_ppm       ),
-   TABLE_MODEL_HEADER(Water, Sulfate         , tr("Sulfate (ppm)"    ), PropertyNames::Water::sulfate_ppm           ),
-   TABLE_MODEL_HEADER(Water, Chloride        , tr("Chloride (ppm)"   ), PropertyNames::Water::chloride_ppm          ),
-   TABLE_MODEL_HEADER(Water, Sodium          , tr("Sodium (ppm)"     ), PropertyNames::Water::sodium_ppm            ),
-   TABLE_MODEL_HEADER(Water, Magnesium       , tr("Magnesium (ppm)"  ), PropertyNames::Water::magnesium_ppm         ),
-   TABLE_MODEL_HEADER(Water, NumRecipesUsedIn, tr("N° Recipes"       ), PropertyNames::NamedEntity::numRecipesUsedIn),
+   TABLE_MODEL_HEADER(Water, Name            , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Water, Calcium         , PropertyNames::Water::calcium_ppm           ), // "Calcium (ppm)"
+   TABLE_MODEL_HEADER(Water, Bicarbonate     , PropertyNames::Water::bicarbonate_ppm       ), // "Bicarbonate (ppm)"
+   TABLE_MODEL_HEADER(Water, Sulfate         , PropertyNames::Water::sulfate_ppm           ), // "Sulfate (ppm)"
+   TABLE_MODEL_HEADER(Water, Chloride        , PropertyNames::Water::chloride_ppm          ), // "Chloride (ppm)"
+   TABLE_MODEL_HEADER(Water, Sodium          , PropertyNames::Water::sodium_ppm            ), // "Sodium (ppm)"
+   TABLE_MODEL_HEADER(Water, Magnesium       , PropertyNames::Water::magnesium_ppm         ), // "Magnesium (ppm)"
+   TABLE_MODEL_HEADER(Water, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 WaterTableModel::WaterTableModel(QTableView * parent, bool editable) :
@@ -60,14 +60,6 @@ void WaterTableModel::updateTotals()                                        { re
 
 QVariant WaterTableModel::data(const QModelIndex & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags WaterTableModel::flags(const QModelIndex & index) const {
-   auto const columnIndex = static_cast<WaterTableModel::ColumnIndex>(index.column());
-   if (columnIndex == WaterTableModel::ColumnIndex::Name) {
-      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
 }
 
 bool WaterTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

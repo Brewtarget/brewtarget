@@ -23,7 +23,7 @@
 #define TABLEMODELS_RECIPEADDITIONMISCTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaProperty>
 #include <QModelIndex>
 #include <QVariant>
@@ -77,7 +77,7 @@ private:
  *
  * \brief An item delegate for \c RecipeAdditionMiscTableModel
  */
-class RecipeAdditionMiscItemDelegate : public QItemDelegate,
+class RecipeAdditionMiscItemDelegate : public QStyledItemDelegate,
                                        public ItemDelegate<RecipeAdditionMiscItemDelegate, RecipeAdditionMiscTableModel> {
    Q_OBJECT
 

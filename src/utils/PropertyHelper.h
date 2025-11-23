@@ -32,6 +32,11 @@
 namespace PropertyHelper {
 
    /**
+    * \brief When \c Qt::ItemDataRole is \c Qt::TextAlignmentRole, this returns the appropriate flags.
+    */
+   Qt::AlignmentFlag getAlignment(TypeInfo const & typeInfo);
+
+   /**
     * \brief Given a value returned from \c QObject::property (possibly via \c PropertyPath::getValue), convert it into
     *        something suitable for displaying, editing, sorting etc.
     *

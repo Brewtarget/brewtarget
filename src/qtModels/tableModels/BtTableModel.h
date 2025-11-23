@@ -91,7 +91,7 @@ template<class Derived, class NE> class TableModelBase; // This forward declarat
  *        because, by the magic of template metaprogramming \c TableModelBase "knows" whether its derived class inherits
  *        from \c BtTableModelRecipeObserver or directly from \c BtTableModel, and can therefore adapt accordingly.
  */
-class BtTableModel : public QAbstractTableModel/*, public ColumnOwner*/ {
+class BtTableModel : public QAbstractTableModel {
    Q_OBJECT
 
    // There are quite a few protected members of this class (including many inherited from QAbstractItemModel) that
@@ -132,6 +132,11 @@ public:
     *        override this member function.
     */
    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+   void saveUiState(BtStringConst const & property, BtStringConst const & section) const;
+
+   void restoreUiState(BtStringConst const & property, BtStringConst const & section);
+
 
 public slots:
    /**

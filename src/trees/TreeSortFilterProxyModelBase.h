@@ -28,6 +28,8 @@
  *
  * \brief CRTP base for \c HopTreeSortFilterProxyModel, \c RecipeTreeSortFilterProxyModel, etc.  See comment on
  *        \c TreeModel class for more info.
+ *
+ * \param SNE should be \c void if there is no secondary item
  */
 template<class Derived> class TreeSortFilterProxyModelPhantom;
 template<class Derived, class NeTreeModel, class NE, typename SNE = void>
@@ -89,13 +91,26 @@ protected:
       if constexpr (!IsVoid<SNE>) {
          if (lhs->classifier() == TreeNodeClassifier::SecondaryItem &&
              rhs->classifier() == TreeNodeClassifier::SecondaryItem) {
+
             if (rawColumnNum >= ColumnOwnerTraits<TreeItemNode<SNE>>::numColumns()) {
                return false;
             }
             auto const & lhsNode = static_cast<TreeItemNode<SNE> const &>(*lhs);
             auto const & rhsNode = static_cast<TreeItemNode<SNE> const &>(*rhs);
-            auto const    column = static_cast<TreeItemNode<SNE>::ColumnIndex>(rawColumnNum);
-            return lhsNode.columnIsLessThan(rhsNode, column);
+            //
+            // We could write:
+            //    auto const    column = static_cast<TreeItemNode<SNE>::ColumnIndex>(rawColumnNum);
+            //    return lhsNode.columnIsLessThan(rhsNode, column);
+            // However, we typically _don't_ want the secondary items to be sorted by column as (a) their columns mostly
+            // won't match those of the primary items and (b) it often won't make sense to sort them.  Eg, if you have
+            // a load of StockPurchases sorted by name or by date, you still want their StockUses in date order.
+            //
+            // The code below will still have secondaries "backwards" when a primary column is sorted in reverse order,
+            // but I think we can live with that.
+            //
+            SNE & lhsItem = *lhsNode.underlyingItem();
+            SNE & rhsItem = *rhsNode.underlyingItem();
+            return lhsItem < rhsItem;
          }
       }
 
@@ -122,19 +137,14 @@ protected:
    }
 
    /**
-    * \brief Implements override of \c QSortFilterProxyModel::filterAcceptsRow.
+    * \brief Implements partial override of \c QSortFilterProxyModel::filterAcceptsRow.
     *
     *        Returns \c true if the item in the row indicated by the given \c row and \c parent should be included in
     *        the model; otherwise returns \c false.
     *
-    *        Note: The row and index passed in correspond to the source model
+    *        NOTE: The row and index passed in correspond to the \b source model
     */
-   bool doFilterAcceptsRow(int row, QModelIndex const & parent) const {
-      if (!parent.isValid()) {
-         // If the parent is invalid, it means we're being asked about the root node.  We always want to show this.
-         return true;
-      }
-
+   bool doFilterAcceptsRow(int row, QModelIndex const & parentIndex) const {
       NeTreeModel * treeModel = qobject_cast<NeTreeModel *>(this->derived().sourceModel());
       if (!treeModel) {
          // This shouldn't happen
@@ -142,14 +152,19 @@ protected:
          return false;
       }
 
-      QModelIndex child = treeModel->index(row, 0, parent);
-      if (!child.isValid()) {
+      //
+      // Get the index of the child node to be filtered
+      //
+      QModelIndex childIndex = treeModel->index(row, 0, parentIndex);
+      if (!childIndex.isValid()) {
          // This shouldn't happen
-         qWarning() << Q_FUNC_INFO << "Invalid child";
+         qWarning() << Q_FUNC_INFO << "Invalid childIndex";
          return false;
       }
 
-      TreeNode * childNode = treeModel->doTreeNode(parent);
+      TreeNode * childNode = treeModel->doTreeNode(childIndex);
+
+      // Always show folders
       if (childNode->classifier() == TreeNodeClassifier::Folder) {
          return true;
       }
@@ -164,11 +179,12 @@ protected:
 
       // Hide deleted items
       NamedEntity * underlyingItem = childNode->rawUnderlyingItem();
-      if (underlyingItem) {
-         return !underlyingItem->deleted();
+      if (underlyingItem && underlyingItem->deleted()) {
+         return false;
       }
 
-      return true;
+      // Base class does remaining filtering -- eg for Derived::setFilterFixedString (see TreeViewBase::filter).
+      return this->derived().QSortFilterProxyModel::filterAcceptsRow(row, parentIndex);
    }
 };
 

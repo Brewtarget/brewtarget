@@ -17,7 +17,7 @@
 #define TABLEMODELS_BOILTABLEMODEL_H
 #pragma once
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
 #include "model/Boil.h"
 #include "qtModels/tableModels/BtTableModel.h"
@@ -45,7 +45,7 @@ class BoilTableModel : public BtTableModel, public TableModelBase<BoilTableModel
  * \brief An item delegate for boil tables.
  * \sa BoilTableModel
  */
-class BoilItemDelegate : public QItemDelegate, public ItemDelegate<BoilItemDelegate, BoilTableModel> {
+class BoilItemDelegate : public QStyledItemDelegate, public ItemDelegate<BoilItemDelegate, BoilTableModel> {
    Q_OBJECT
    ITEM_DELEGATE_COMMON_DECL(Boil)
 };

@@ -34,52 +34,55 @@
 #include "model/Recipe.h" // Need to include this this to be able to cast Recipe to QObject
 #include "undoRedo/Undoable.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
+#include "utils/TypeTraits.h"
 
 class StepOwner;
 
 /**
- * \brief Extra base class for \c MashStepEditor, \c BoilStepEditor and \c FermentationStepEditor to inherit from
- *        \b before inheriting from \c EditorBase.  This provides the functionality that, if we are creating a new step,
- *        rather than editing an existing one, then we need to be able to set the owner (ie the \c Mash, \c Boil or
- *        \c Fermentation) when we click \b Save, because the steps have no independent existence without their owner.
+ * \brief Extra base class for \c MashStepEditor, \c BoilStepEditor, \c FermentationStepEditor,
+ *        \c StockUseFermentableEditor, \c StockUseHopEditor, etc to inherit from \b before inheriting
+ *        from \c EditorBase.  This provides the functionality that, if we are creating a new step (or inventory
+ *        change), rather than editing an existing one, then we need to be able to set the owner (ie the \c Mash,
+ *        \c Boil, \c Fermentation, \c StockPurchaseFermentable, \c StockPurchaseHop, etc) when we click \b Save, because the
+ *        steps (or inventory changes) have no independent existence without their owner.
  */
-template<class Derived> class StepEditorPhantom;
+template<class Derived> class EnumeratedItemEditorPhantom;
 template<class Derived, class NE>
-class StepEditorBase : public CuriouslyRecurringTemplateBase<StepEditorPhantom, Derived> {
+class EnumeratedItemEditorBase : public CuriouslyRecurringTemplateBase<EnumeratedItemEditorPhantom, Derived> {
 public:
-   StepEditorBase() :
-      m_stepOwner{nullptr} {
+   EnumeratedItemEditorBase() :
+      m_owner{nullptr} {
       return;
    }
 
-   void setStepOwner(std::shared_ptr<typename NE::OwnerClass> stepOwner) {
-      this->m_stepOwner = stepOwner;
+   void setOwner(std::shared_ptr<typename NE::OwnerClass> owner) {
+      this->m_owner = owner;
       return;
    }
 
    /**
     * \brief If the step being edited is new, then, when save is clicked, this should be called
     */
-   void addStepToStepOwner(std::shared_ptr<NE> step) {
+   void addToOwner(std::shared_ptr<NE> editItem) {
       // It would be a coding error if, when showing MashStepEditor / BoilStepEditor / etc, the relevant
       // MashStep / BoilStep / etc were not set.
-      Q_ASSERT(this->m_stepOwner);
+      Q_ASSERT(this->m_owner);
 
       // It's a coding error if the step already has an owner (ie it's not new)
-      Q_ASSERT(step->ownerId() < 0);
+      Q_ASSERT(editItem->ownerId() < 0);
 
-      // Going via Undoable::addStepToStepOwner makes the action undoable
-      Undoable::addStepToStepOwner(*this->m_stepOwner, step);
+      // Going via Undoable::addEnumeratedItemToOwner makes the action undoable
+      Undoable::addEnumeratedItemToOwner(*this->m_owner, editItem);
       return;
    }
 
    /**
-    * \brief I tried putting this in \c EditorBase and having \c NE::OwnerClass eavluated only when it is valid  (ie
+    * \brief I tried putting this in \c EditorBase and having \c NE::OwnerClass evaluated only when it is valid  (ie
     *        when HasStepOwner<editorBaseOptions> is true), and some replaced with some dummy type otherwise.  This
-    *        seems quite to do.  Eg \c std::conditional requires both its class parameters to be valid.  So an extra
-    *        CRTP base class was born.
+    *        seems quite hard to do.  Eg \c std::conditional requires both its class parameters to be valid.  So an
+    *        extra CRTP base class was born.
     */
-   std::shared_ptr<typename NE::OwnerClass> m_stepOwner;
+   std::shared_ptr<typename NE::OwnerClass> m_owner;
 };
 
 /**
@@ -330,21 +333,42 @@ public:
     */
    void setEditItem(std::shared_ptr<NE> editItem = nullptr) {
       if (this->m_editItem) {
+         // See comment below about editors of Ingredient classes
+         if constexpr (std::is_base_of<Ingredient, NE>::value) {
+            this->derived().disconnect(this->derived().pushButton_addPurchase, nullptr, this->m_editItem.get(), nullptr);
+         }
+
          this->derived().disconnect(this->m_editItem.get(), nullptr, &this->derived(), nullptr);
       }
       this->m_editItem = editItem;
       if (this->m_editItem) {
+         //
+         // Editors of Ingredient classes need to have a QPushButton called pushButton_addPurchase
+         //
+         if constexpr (std::is_base_of<Ingredient, NE>::value) {
+            this->derived().connect(this->derived().pushButton_addPurchase,
+                                    &QAbstractButton::clicked,
+                                    this->m_editItem.get(),
+                                    &NE::newStockPurchase);
+         }
          this->derived().connect(this->m_editItem.get(), &NamedEntity::changed, &this->derived(), &Derived::changed);
          this->readFieldsFromEditItem(std::nullopt);
       }
 
       //
-      // We detect when NE has a member StepClass (which should be a "using" alias) so we can show MashStep items in the
-      // Mash editor, BoilStep items in the Boil editor, etc.  This requires the Derived class to have (via its .ui
-      // file) a suitable subclass of StepsWidget (eg MashStepsWidget, BoilStepsWidget, etc) called stepsWidget.
+      // Classes such as Mash, Boil, StockPurchaseFermentable, StockPurchaseHop, etc have owned sequences (of MashStep,
+      // BoilStep, StockUseFermentable, StockUseHop, etc.  In order to show these owned sequences (eg
+      // show MashStep items in the Mash editor etc), the corresponding editor (MashEditor, BoilEditor,
+      // StockPurchaseFermentableEditor, StockPurchaseHopEditor, etc) needs to have (via its .ui file) a suitable
+      // subclass of EnumeratedItemsWidget (eg MashStepsWidget, BoilStepsWidget, StockUseFermentablesWidget,
+      // StockUseHopsWidget, etc) called enumeratedItemsWidget.
       //
-      if constexpr (std::is_base_of<StepOwner, NE>::value) {
-         this->derived().stepsWidget->setStepOwner(editItem);
+      // (It would be neat to detect the existence of the `enumeratedItemsWidget` member variable directly, eg via
+      // `constexpr (HAS_MEMBER(Derived, enumeratedItemsWidget))` but I haven't managed to get that to work.)
+      //
+      if constexpr (std::is_base_of<StepOwner, NE>::value ||
+                    std::is_base_of<StockPurchase, NE>::value) {
+         this->derived().enumeratedItemsWidget->setOwner(editItem);
       }
 
       this->setLiveEditItem();
@@ -411,16 +435,16 @@ public:
    }
 
    void updateStepOwnerIfNeeded() {
-      if constexpr (std::is_base_of<StepEditorBase<Derived, NE>, Derived>::value) {
+      if constexpr (std::is_base_of<EnumeratedItemEditorBase<Derived, NE>, Derived>::value) {
          if (this->m_editItem->ownerId() > 0) {
             // If the step already has an owner, then there is nothing to do here (and trying to re-add it to its
             // existing owner would be harmful.
             return;
          }
 
-         // The member function we're calling is in StepEditorBase, so we have to access it via Derived (which inherits
-         // from that, whereas EditorBase does not).
-         this->derived().addStepToStepOwner(this->m_editItem);
+         // The member function we're calling is in EnumeratedItemEditorBase, so we have to access it via Derived (which
+         // inherits from that, whereas EditorBase does not).
+         this->derived().addToOwner(this->m_editItem);
       }
       return;
    }
@@ -446,6 +470,15 @@ public:
       }
       this->writeLateFieldsToEditItem();
       this->updateStepOwnerIfNeeded();
+
+      //
+      // On the whole, it's best for NamedEntity subclass objects to have a name.  If no name has been specified, or it
+      // has been deleted, let's set a default one.  If the user doesn't like it s/he can open the editor again and
+      // change it.
+      //
+      if (this->m_editItem->name().trimmed().isEmpty()) {
+         this->m_editItem->setName(NE::tr("%1 #%2").arg(NE::localisedName()).arg(this->m_editItem->key()));
+      }
 
       this->derived().setVisible(false);
       return;
@@ -509,7 +542,8 @@ public:
                [this, &propName, &matched](auto&& fieldInfo) {
                   //
                   // The update rule is simple -- we either update all fields (because no property name is supplied) or
-                  // only the field(s) for the supplied property name.
+                  // only the field(s) for the supplied property name.  NOTE that this will not work with fields that
+                  // have non-trivial property paths -- for the moment we are assuming those are read-only.
                   //
                   // In most cases, there will only be one field per property name.  However, we also have to handle the
                   // case where we have a combo-box that is controlling the physical quantity for another field (eg
@@ -520,9 +554,11 @@ public:
                   //    - We already matched it at least once
                   //    - The current field does not match
                   //
-                  if (!propName || *propName == fieldInfo.property) {
+                  if (!propName || *propName == fieldInfo.propertyPath.asXPath()) {
                      // Normally leave this log statement commented out as it generates too many lines in the log file
-//                     qDebug() << Q_FUNC_INFO << "Reading" << fieldInfo.property;
+//                     qDebug() <<
+//                        Q_FUNC_INFO << "Reading" << fieldInfo.property << "as" <<
+//                        this->m_editItem->property(*fieldInfo.property);
                      fieldInfo.setEditFieldFromProperty(*this->m_editItem);
                      if (propName) {
                         matched = true;

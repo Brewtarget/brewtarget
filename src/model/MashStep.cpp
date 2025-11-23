@@ -33,12 +33,12 @@
 #endif
 
 QString MashStep::localisedName() { return tr("Mash Step"); }
-QString MashStep::localisedName_amount_l              () { return tr("Amount"               ); }
-QString MashStep::localisedName_decoctionAmount_l     () { return tr("Decoction Amount"     ); }
-QString MashStep::localisedName_infuseAmount_l        () { return tr("Infuse Amount"        ); }
-QString MashStep::localisedName_infuseTemp_c          () { return tr("Infuse Temperature"   ); }
-QString MashStep::localisedName_liquorToGristRatio_lKg() { return tr("Liquor To Grist Ratio"); }
-QString MashStep::localisedName_type                  () { return tr("Type"                 ); }
+QString MashStep::localisedName_amount_l              () { return tr("Amount"            ); }
+QString MashStep::localisedName_decoctionAmount_l     () { return tr("Decoction Amount"  ); }
+QString MashStep::localisedName_infuseAmount_l        () { return tr("Infuse Amount"     ); }
+QString MashStep::localisedName_infuseTemp_c          () { return tr("Infuse Temperature"); }
+QString MashStep::localisedName_liquorToGristRatio_lKg() { return tr("Water:Grain"       ); } // Shorter than "Liquor To Grist Ratio"
+QString MashStep::localisedName_type                  () { return tr("Type"              ); }
 
 EnumStringMapping const MashStep::typeStringMapping {
    {MashStep::Type::Infusion   , "infusion"      },

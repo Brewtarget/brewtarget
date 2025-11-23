@@ -91,14 +91,30 @@ public:
     */
    template<class NE> void addIngredientToRecipe(NE & ne);
 
+   /**
+    * \brief Get the \c NamedEntity class's editor instance, eg \c HopEditor for \c Hop, \c StyleEditor for \c Style,
+    *        etc.
+    *
+    *        \c MainWindow owns the editors, except inventory change ones, which are owned by \c InventoryWindow.
+    */
    template<class NE> NE::EditorClass & getEditor() const;
 
    /**
-    * \brief Get the Catalog instance for the selected \c Hop, \c Style, etc.
+    * \brief Get the \c NamedEntity class's catalog instance, eg \c HopCatalog for \c Hop, \c StyleCatalog for \c Style,
+    *        etc.
     *
     *        For better or worse, \c MainWindow owns the catalogs.
     */
    template<class NE> NE::CatalogClass & getCatalog() const;
+
+   /**
+    * \brief Get a window whose instances is owned by \c MainWindow
+    *
+    *        Note that most code should call \c WindowDistributor::get, which knows which class owns each window.
+    *
+    *        (Most windows inherit from \c QDialog, but I think it's confusing to refer to them all as dialogs.)
+    */
+   template<class Win> Win & getWindow() const;
 
    /**
     * \brief Set the \c Style / \c Equipment / \c Mash / \c Boil / \c Fermentation for the current \c Recipe.
@@ -219,11 +235,8 @@ public slots:
    //! \brief makes sure we can do water chemistry before we show the window
    void showWaterProfileAdjustmentTool();
 
-   //! \brief creates a new brewnote
-   void newBrewNote();
    void brewItHelper();
    void brewAgainHelper();
-   void reduceInventory();
    void changeBrewDate();
    void fixBrewNote();
 

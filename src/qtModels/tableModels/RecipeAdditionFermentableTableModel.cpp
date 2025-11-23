@@ -34,7 +34,7 @@
 
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "model/Inventory.h"
+#include "model/StockPurchase.h"
 #include "model/Recipe.h"
 
 #ifdef BUILDING_WITH_CMAKE
@@ -47,23 +47,21 @@ COLUMN_INFOS(
    //
    // Note that for Name, we want the name of the contained Fermentable, not the name of the RecipeAdditionFermentable
    //
-   // Note that we have to use PropertyNames::NamedEntityWithInventory::inventoryWithUnits because
-   // PropertyNames::NamedEntityWithInventory::inventory is not implemented
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Name          , tr("Name"       ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
-                                                                                                   PropertyNames::NamedEntity::name                 }}),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Type          , tr("Type"       ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
-                                                                                                   PropertyNames::Fermentable::type                 }}),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Yield         , tr("Yield"      ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
-                                                                                                   PropertyNames::Fermentable::fineGrindYield_pct   }}),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Color         , tr("Color"      ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
-                                                                                                   PropertyNames::Fermentable::color_srm            }}),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Amount        , tr("Amount"     ), PropertyNames::IngredientAmount::amount                  ),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, AmountType    , tr("Amount Type"), PropertyNames::IngredientAmount::amount                  , Fermentable::validMeasures),
-   // In this table, inventory is read-only, so there is intentionally no TotalInventoryType column
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, TotalInventory, tr("Inventory"  ), PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
-                                                                                                   PropertyNames::Ingredient::totalInventory}}),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Stage         , tr("Stage"      ), PropertyNames::RecipeAddition::stage                     ),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Time          , tr("Time"       ), PropertyNames::RecipeAddition::addAtTime_mins            ),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Name          , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,   // "Name"
+                                                                               PropertyNames::NamedEntity::name                 }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Type          , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,   // "Type"
+                                                                               PropertyNames::Fermentable::type                 }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Yield         , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,   // "Yield"
+                                                                               PropertyNames::Fermentable::fineGrindYield_pct   }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Color         , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,   // "Color"
+                                                                               PropertyNames::Fermentable::color_srm            }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Amount        , PropertyNames::IngredientAmount::amount),                              // "Amount"
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, AmountType    , PropertyNames::IngredientAmount::amount, Fermentable::validMeasures),  // "Amount Type"
+   // Total inventory is read-only, so there is intentionally no TotalInventoryType column
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, TotalInventory, PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable, // "Inventory"
+                                                                               PropertyNames::Ingredient::totalInventory       }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Stage         , PropertyNames::RecipeAddition::stage         ), // "Stage"
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Time          , PropertyNames::RecipeAddition::addAtTime_mins), // "Time"
 )
 
 RecipeAdditionFermentableTableModel::RecipeAdditionFermentableTableModel(QTableView * parent, bool editable) :
@@ -75,7 +73,7 @@ RecipeAdditionFermentableTableModel::RecipeAdditionFermentableTableModel(QTableV
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionFermentableTableModel::contextMenu);
-   connect(&ObjectStoreTyped<InventoryFermentable>::getInstance(), &ObjectStoreTyped<InventoryFermentable>::signalPropertyChanged, this,
+   connect(&ObjectStoreTyped<StockPurchaseFermentable>::getInstance(), &ObjectStoreTyped<StockPurchaseFermentable>::signalPropertyChanged, this,
            &RecipeAdditionFermentableTableModel::changedInventory);
    return;
 }
@@ -125,14 +123,6 @@ QVariant RecipeAdditionFermentableTableModel::headerData(int section, Qt::Orient
    }
 
    return QVariant();
-}
-
-Qt::ItemFlags RecipeAdditionFermentableTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<RecipeAdditionFermentableTableModel>(
-      index,
-      this->m_editable,
-      {{RecipeAdditionFermentableTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEnabled}}
-   );
 }
 
 bool RecipeAdditionFermentableTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

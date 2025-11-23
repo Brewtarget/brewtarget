@@ -66,12 +66,15 @@ namespace Undoable {
       return;
    }
 
-   //! \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).
-   template<class StepOwnerClass, class StepClass>
-   void addStepToStepOwner(StepOwnerClass & stepOwner, std::shared_ptr<StepClass> step);
-   template<class StepOwnerClass, class StepClass>
-   void addStepToStepOwner(std::shared_ptr<StepOwnerClass> stepOwner, std::shared_ptr<StepClass> step) {
-      addStepToStepOwner(*stepOwner, step);
+   /**
+    * \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).  Same for boil steps,
+    *        fermentation steps, inventory changes, etc.
+    */
+   template<class ItemOwnerClass, class ItemClass>
+   void addEnumeratedItemToOwner(ItemOwnerClass & itemOwner, std::shared_ptr<ItemClass> item);
+   template<class ItemOwnerClass, class ItemClass>
+   void addEnumeratedItemToOwner(std::shared_ptr<ItemOwnerClass> itemOwner, std::shared_ptr<ItemClass> item) {
+      addEnumeratedItemToOwner(*itemOwner, item);
       return;
    }
 }

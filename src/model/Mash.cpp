@@ -36,16 +36,16 @@
 #endif
 
 QString Mash::localisedName() { return tr("Mash"); }
-QString Mash::localisedName_equipAdjust              () { return tr("Adjust For Equipment"  ); }
-QString Mash::localisedName_grainTemp_c              () { return tr("Grain Temperature"     ); }
-QString Mash::localisedName_mashTunSpecificHeat_calGC() { return tr("Mash Tun Specific Heat"); }
-QString Mash::localisedName_mashTunWeight_kg         () { return tr("Mash Tun Weight"       ); }
-QString Mash::localisedName_notes                    () { return tr("Notes"                 ); }
-QString Mash::localisedName_ph                       () { return tr("pH"                    ); }
-QString Mash::localisedName_spargeTemp_c             () { return tr("Sparge Temperature"    ); }
-QString Mash::localisedName_totalMashWater_l         () { return tr("Total Mash Water"      ); }
-QString Mash::localisedName_totalTime_mins           () { return tr("Total Time"            ); }
-QString Mash::localisedName_tunTemp_c                () { return tr("Tun Temperature"       ); }
+QString Mash::localisedName_equipAdjust              () { return tr("Adjust For Equipment"     ); }
+QString Mash::localisedName_grainTemp_c              () { return tr("Initial Grain Temperature"); }
+QString Mash::localisedName_mashTunSpecificHeat_calGC() { return tr("Mash Tun Specific Heat"   ); }
+QString Mash::localisedName_mashTunWeight_kg         () { return tr("Mash Tun Weight"          ); }
+QString Mash::localisedName_notes                    () { return tr("Notes"                    ); }
+QString Mash::localisedName_ph                       () { return tr("pH"                       ); }
+QString Mash::localisedName_spargeTemp_c             () { return tr("Sparge Temperature"       ); }
+QString Mash::localisedName_totalMashWater_l         () { return tr("Mash Water"               ); } // Shorter than "Total Mash Water"
+QString Mash::localisedName_totalTime_mins           () { return tr("Total Time"               ); }
+QString Mash::localisedName_tunTemp_c                () { return tr("Tun Temperature"          ); }
 
 bool Mash::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
@@ -112,14 +112,14 @@ Mash::Mash(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity                {namedParameterBundle},
    FolderBase<Mash>{namedParameterBundle},
    StepOwnerBase<Mash, MashStep>{},
-   SET_REGULAR_FROM_NPB (m_grainTemp_c              , namedParameterBundle, PropertyNames::Mash::grainTemp_c              ),
-   SET_REGULAR_FROM_NPB (m_notes                    , namedParameterBundle, PropertyNames::Mash::notes                    , ""),
-   SET_REGULAR_FROM_NPB (m_tunTemp_c                , namedParameterBundle, PropertyNames::Mash::tunTemp_c                ),
-   SET_REGULAR_FROM_NPB (m_spargeTemp_c             , namedParameterBundle, PropertyNames::Mash::spargeTemp_c             ),
-   SET_REGULAR_FROM_NPB (m_ph                       , namedParameterBundle, PropertyNames::Mash::ph                       ),
-   SET_REGULAR_FROM_NPB (m_mashTunWeight_kg         , namedParameterBundle, PropertyNames::Mash::mashTunWeight_kg         ),
-   SET_REGULAR_FROM_NPB (m_mashTunSpecificHeat_calGC, namedParameterBundle, PropertyNames::Mash::mashTunSpecificHeat_calGC),
-   SET_REGULAR_FROM_NPB (m_equipAdjust              , namedParameterBundle, PropertyNames::Mash::equipAdjust              ) {
+   SET_REGULAR_FROM_NPB(m_grainTemp_c              , namedParameterBundle, PropertyNames::Mash::grainTemp_c              ),
+   SET_REGULAR_FROM_NPB(m_notes                    , namedParameterBundle, PropertyNames::Mash::notes                    , ""),
+   SET_REGULAR_FROM_NPB(m_tunTemp_c                , namedParameterBundle, PropertyNames::Mash::tunTemp_c                ),
+   SET_REGULAR_FROM_NPB(m_spargeTemp_c             , namedParameterBundle, PropertyNames::Mash::spargeTemp_c             ),
+   SET_REGULAR_FROM_NPB(m_ph                       , namedParameterBundle, PropertyNames::Mash::ph                       ),
+   SET_REGULAR_FROM_NPB(m_mashTunWeight_kg         , namedParameterBundle, PropertyNames::Mash::mashTunWeight_kg         ),
+   SET_REGULAR_FROM_NPB(m_mashTunSpecificHeat_calGC, namedParameterBundle, PropertyNames::Mash::mashTunSpecificHeat_calGC),
+   SET_REGULAR_FROM_NPB(m_equipAdjust              , namedParameterBundle, PropertyNames::Mash::equipAdjust              ) {
 
    CONSTRUCTOR_END
    return;
@@ -218,10 +218,8 @@ bool Mash::hasSparge() const {
    return false;
 }
 
-void Mash::acceptStepChange(QMetaProperty prop, QVariant val) {
-   // TBD I don't think anything listens for changes to totalMashWater_l or totalTime
-   this->doAcceptStepChange(this->sender(), prop, val, {&PropertyNames::Mash::totalMashWater_l,
-                                                        &PropertyNames::Mash::totalTime_mins  });
+void Mash::acceptSetMemberChange(QMetaProperty prop, QVariant val) {
+   this->doAcceptSetMemberChange(this->sender(), prop, val);
    return;
 }
 

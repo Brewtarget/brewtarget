@@ -18,7 +18,7 @@
 #include <QAbstractTableModel>
 #include <QComboBox>
 #include <QHeaderView>
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QLineEdit>
 #include <QModelIndex>
 #include <QObject>
@@ -50,36 +50,29 @@ COLUMN_INFOS(
    //       the system will convert this to "29 mins", which is almost certainly not what the user means.  Even if
    //       you type "29 day", it will still get converted to "29 mins", which is definitely wrong.
    //
-   TABLE_MODEL_HEADER(FermentationStep, Name        , tr("Name"         ), PropertyNames::     NamedEntity::name           ),
-   TABLE_MODEL_HEADER(FermentationStep, StepTime    , tr("Step Time"    ), PropertyNames::        StepBase::stepTime_mins  ),
-   TABLE_MODEL_HEADER(FermentationStep, StartTemp   , tr("Start Temp"   ), PropertyNames::        StepBase::startTemp_c    ),
-   TABLE_MODEL_HEADER(FermentationStep, EndTemp     , tr("End Temp"     ), PropertyNames::            Step::endTemp_c      ),
-   TABLE_MODEL_HEADER(FermentationStep, StartAcidity, tr("Start Acidity"), PropertyNames::            Step::startAcidity_pH),
-   TABLE_MODEL_HEADER(FermentationStep, EndAcidity  , tr("End Acidity"  ), PropertyNames::            Step::endAcidity_pH  ),
-   TABLE_MODEL_HEADER(FermentationStep, StartGravity, tr("Start Gravity"), PropertyNames::    StepExtended::startGravity_sg),
-   TABLE_MODEL_HEADER(FermentationStep, EndGravity  , tr("End Gravity"  ), PropertyNames::    StepExtended::  endGravity_sg),
-   TABLE_MODEL_HEADER(FermentationStep, FreeRise    , tr("Free Rise"    ), PropertyNames::FermentationStep::freeRise       ),
-   TABLE_MODEL_HEADER(FermentationStep, Vessel      , tr("Vessel"       ), PropertyNames::FermentationStep::vessel         ),
+   TABLE_MODEL_HEADER(FermentationStep, Name        , PropertyNames::     NamedEntity::name           ), // "Name"
+   TABLE_MODEL_HEADER(FermentationStep, StepTime    , PropertyNames::        StepBase::stepTime_mins  ), // "Step Time"
+   TABLE_MODEL_HEADER(FermentationStep, StartTemp   , PropertyNames::        StepBase::startTemp_c    ), // "Start Temp"
+   TABLE_MODEL_HEADER(FermentationStep, EndTemp     , PropertyNames::            Step::endTemp_c      ), // "End Temp"
+   TABLE_MODEL_HEADER(FermentationStep, StartAcidity, PropertyNames::            Step::startAcidity_pH), // "Start Acidity"
+   TABLE_MODEL_HEADER(FermentationStep, EndAcidity  , PropertyNames::            Step::endAcidity_pH  ), // "End Acidity"
+   TABLE_MODEL_HEADER(FermentationStep, StartGravity, PropertyNames::    StepExtended::startGravity_sg), // "Start Gravity"
+   TABLE_MODEL_HEADER(FermentationStep, EndGravity  , PropertyNames::    StepExtended::  endGravity_sg), // "End Gravity"
+   TABLE_MODEL_HEADER(FermentationStep, FreeRise    , PropertyNames::FermentationStep::freeRise       ), // "Free Rise"
+   TABLE_MODEL_HEADER(FermentationStep, Vessel      , PropertyNames::FermentationStep::vessel         ), // "Vessel"
 )
 
 FermentationStepTableModel::FermentationStepTableModel(QTableView * parent, bool editable) :
    BtTableModel{parent, editable},
    TableModelBase<FermentationStepTableModel, FermentationStep>{},
-   StepTableModelBase<FermentationStepTableModel, FermentationStep, Fermentation>{} {
+   EnumeratedItemTableModelBase<FermentationStepTableModel, FermentationStep, Fermentation>{} {
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &FermentationStepTableModel::contextMenu);
 
    //
-   // Whilst, in principle, we could connect to ObjectStoreTyped<FermentationStep>::getInstance() to listen for signals
-   // &ObjectStoreTyped<FermentationStep>::signalObjectInserted and &ObjectStoreTyped<FermentationStep>::signalObjectDeleted, this is
-   // less useful in practice because (a) we get updates about FermentationSteps in Fermentationes other than the one we are watching
-   // (so we have to filter them out) and (b) when a new FermentationStep is created, it doesn't have a Fermentation, so it's not useful
-   // for us to receive a signal about it until after it has been added to a Fermentation.  Fortunately, all we have to do is
-   // connect to the Fermentation we are watching and listen for Fermentation::mashStepsChanged, which we'll get whenever a FermentationStep is
-   // added to, or removed from, the Fermentation, as well as when the FermentationStep order changes.  We then just reread all the
-   // FermentationSteps from the Fermentation which gives us simplicity for a miniscule overhead (because the number of FermentationSteps in a
-   // Fermentation is never going to be enormous).
+   // See comment in qtModels/tableModels/BoilStepTableModel.cpp for why we don't listen directly to signals from
+   // ObjectStore.
    //
    return;
 }
@@ -91,18 +84,14 @@ void FermentationStepTableModel::removed([[maybe_unused]] std::shared_ptr<Fermen
 void FermentationStepTableModel::updateTotals()                                      { return; }
 
 QVariant FermentationStepTableModel::data(QModelIndex const & index, int role) const {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_itemOwnerObs) {
       return QVariant();
    }
    return this->doDataDefault(index, role);
 }
 
-Qt::ItemFlags FermentationStepTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<FermentationStepTableModel>(index, this->m_editable);
-}
-
 bool FermentationStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
-   if (!this->m_stepOwnerObs) {
+   if (!this->m_itemOwnerObs) {
       return false;
    }
    return this->doSetDataDefault(index, value, role);
@@ -113,7 +102,7 @@ bool FermentationStepTableModel::setData(QModelIndex const & index, QVariant con
 // Insert the boiler-plate stuff that we cannot do in TableModelBase
 TABLE_MODEL_COMMON_CODE(FermentationStep, fermentationStep, PropertyNames::Recipe::fermentationId)
 // Insert the boiler-plate stuff that we cannot do in StepTableModelBase
-STEP_TABLE_MODEL_COMMON_CODE(Fermentation)
+ENUMERATED_ITEM_TABLE_MODEL_COMMON_CODE(FermentationStep, Fermentation)
 //========================================= CLASS FermentationStepItemDelegate =========================================
 
 // Insert the boiler-plate stuff that we cannot do in ItemDelegate

@@ -62,15 +62,6 @@ struct ColumnInfo {
    size_t const index;
 
    /**
-    * \brief The localised text to display in this column header
-    *
-    *        TBD: We probably ought to be able to get this from \c typeInfo, but need to check how we're going to handle
-    *             property paths such as {PropertyNames::Recipe::style, PropertyNames::NamedEntity::name} (which we
-    *             would want to show as "Style" rather than "Name").
-    */
-   QString const label;
-
-   /**
     * \brief What type of data is shown in this column
     */
    TypeInfo const & typeInfo;
@@ -95,7 +86,6 @@ struct ColumnInfo {
               char const * const   columnName  ,
               char const * const   columnFqName,
               size_t       const   index       ,
-              QString      const   label       ,
               TypeLookup   const & typeLookup  ,
               PropertyPath         propertyPath,
               Extras       const   extras = std::nullopt);
@@ -141,24 +131,24 @@ struct ColumnInfo {
  * Note too, unlike some other places, because at least one extra non-named parameter is always required, we don't need
  * the `__VA_OPT__(, )` wrapper around __VA_ARGS__.
  */
-#define TABLE_MODEL_HEADER(modelClass, columnName, labelText, ...) \
+#define TABLE_MODEL_HEADER(modelClass, columnName, /* labelText, */ ...) \
    ColumnInfo{#modelClass "TableModel", \
               #columnName, \
               #modelClass "TableModel::ColumnIndex::" #columnName, \
               static_cast<size_t>(modelClass##TableModel::ColumnIndex::columnName), \
-              modelClass::labelText, \
+              /* modelClass::labelText, */ \
               modelClass::typeLookup, \
               __VA_ARGS__}
 
 /**
  * \brief Same as TABLE_MODEL_HEADER but for use with \c TreeNode subclasses rather than \c BtTableModel subclasses
  */
-#define TREE_NODE_HEADER(nodeType, modelClass, columnName, labelText, ...) \
+#define TREE_NODE_HEADER(nodeType, modelClass, columnName, /* labelText, */ ...) \
    ColumnInfo{#nodeType "<" #modelClass ">", \
               #columnName, \
               #nodeType "<" #modelClass ">::ColumnIndex::" #columnName, \
               static_cast<size_t>(nodeType<modelClass>::ColumnIndex::columnName), \
-              modelClass::labelText, \
+              /* modelClass::labelText, */ \
               modelClass::typeLookup, \
               __VA_ARGS__}
 

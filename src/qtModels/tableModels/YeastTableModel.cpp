@@ -28,6 +28,8 @@
 #include <QVariant>
 #include <QWidget>
 
+#include "model/StockPurchaseYeast.h"
+
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_YeastTableModel.cpp"
@@ -35,16 +37,13 @@
 
 COLUMN_INFOS(
    YeastTableModel,
-   // NOTE: Need PropertyNames::Yeast::amountWithUnits not PropertyNames::Yeast::amount below so we
-   //       can handle mass-or-volume generically in TableModelBase.  Same for inventoryWithUnits.
-   TABLE_MODEL_HEADER(Yeast, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
-   TABLE_MODEL_HEADER(Yeast, Laboratory        , tr("Laboratory" ), PropertyNames::Yeast::laboratory            ),
-   TABLE_MODEL_HEADER(Yeast, ProductId         , tr("Product ID" ), PropertyNames::Yeast::productId             ),
-   TABLE_MODEL_HEADER(Yeast, Type              , tr("Type"       ), PropertyNames::Yeast::type                  ),
-   TABLE_MODEL_HEADER(Yeast, Form              , tr("Form"       ), PropertyNames::Yeast::form                  ),
-   TABLE_MODEL_HEADER(Yeast, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   ),
-   TABLE_MODEL_HEADER(Yeast, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Yeast::validMeasures),
-   TABLE_MODEL_HEADER(Yeast, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
+   TABLE_MODEL_HEADER(Yeast, Name            , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Yeast, Laboratory      , PropertyNames::Yeast::laboratory            ), // "Laboratory"
+   TABLE_MODEL_HEADER(Yeast, ProductId       , PropertyNames::Yeast::productId             ), // "Product ID"
+   TABLE_MODEL_HEADER(Yeast, Type            , PropertyNames::Yeast::type                  ), // "Type"
+   TABLE_MODEL_HEADER(Yeast, Form            , PropertyNames::Yeast::form                  ), // "Form"
+   TABLE_MODEL_HEADER(Yeast, TotalInventory  , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
+   TABLE_MODEL_HEADER(Yeast, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
@@ -53,8 +52,8 @@ YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &YeastTableModel::contextMenu);
-   connect(&ObjectStoreTyped<InventoryYeast>::getInstance(),
-           &ObjectStoreTyped<InventoryYeast>::signalPropertyChanged,
+   connect(&ObjectStoreTyped<StockPurchaseYeast>::getInstance(),
+           &ObjectStoreTyped<StockPurchaseYeast>::signalPropertyChanged,
            this,
            &YeastTableModel::changedInventory);
    return;
@@ -68,14 +67,6 @@ void YeastTableModel::updateTotals()                                        { re
 
 QVariant YeastTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags YeastTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<YeastTableModel>(
-      index,
-      this->m_editable,
-      {{YeastTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEditable}}
-   );
 }
 
 bool YeastTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {

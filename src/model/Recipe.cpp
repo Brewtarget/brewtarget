@@ -225,78 +225,23 @@ public:
     *        of.
     *
     * \param val   the Mash/Boil/Fermentation/Style/Equipment to set
-    * \param ourId reference to the Recipe member variable storing the ID of Mash/Boil/Fermentation/Style/Equipment
+    * \param idVar reference to the Recipe member variable storing the ID of Mash/Boil/Fermentation/Style/Equipment
     */
    template<class NE>
-   void set(std::shared_ptr<NE> val, int & ourId) {
-      if (!val && ourId < 0) {
-         // No change (from "not set" to "not set")
+   void set(std::shared_ptr<NE> val, int & idVar) {
+      if (!ObjectStoreWrapper::setRelational(this->m_self, val, idVar) || idVar < 0) {
          return;
-      }
-
-      if (ourId > 0) {
-         // This comparison is only valid if we have a valid ID, because val might not yet be stored in the DB.
-         if (val && val->key() == ourId) {
-            // No change (same object as we already have)
-            return;
-         }
-
-         std::shared_ptr<NE> oldVal = ObjectStoreWrapper::getById<NE>(ourId);
-         disconnect(oldVal.get(), nullptr, &this->m_self, nullptr);
-      }
-
-      if (!val) {
-         ourId = -1;
-         return;
-      }
-
-      if (val->key() < 0) {
-         ourId = ObjectStoreWrapper::insert<NE>(val);
-      } else {
-         ourId = val->key();
       }
 
       BtStringConst const & property = Recipe::propertyNameFor<NE>();
-      qDebug() << Q_FUNC_INFO << "Setting" << property << "to" << ourId;
+      qDebug() << Q_FUNC_INFO << "Setting" << property << "to" << idVar;
       this->m_self.propagatePropertyChange(property);
 
-      connect(val.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
+      this->m_self.connect(val.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
       emit this->m_self.changed(this->m_self.metaProperty(*property), QVariant::fromValue<NE *>(val.get()));
 
       this->m_self.recalcAll();
       return;
-   }
-
-   /**
-    * \brief Getting a recipe's \c Boil, \c Fermentation, etc is pretty much the same logic, so we template it
-    *
-    * \param ourId The primary key of the \c Boil, \c Fermentation, etc.
-    *
-    *        In BeerJSON, each of mash, boil and fermentation is optional.  I guess no fermentation is for recipes for
-    *        making hop water etc.  Equally, there are people making beer without boiling -- eg see
-    *        https://byo.com/article/raw-ale/.  In both cases, our current support for "no boil" and/or "no ferment" is
-    *        somewhat limited and untested for now.
-    */
-   template<class NE>
-   std::shared_ptr<NE> get(int const & ourId) const {
-      // Normally leave the next line commented out otherwise it generates too much logging
-//      qDebug() << Q_FUNC_INFO << "Recipe #" << this->m_self.key() << NE::staticMetaObject.className() << "ID" << ourId;
-      if (ourId < 0) {
-         // Negative ID just means there isn't one -- because this is how we store "NULL" for a foreign key
-         // Normally leave the next line commented out otherwise it generates too much logging
-//         qDebug() << Q_FUNC_INFO << "No" << NE::staticMetaObject.className() << "on Recipe #" << this->m_self.key();
-         return nullptr;
-      }
-      auto retVal = ObjectStoreWrapper::getById<NE>(ourId);
-      if (!retVal) {
-         // I would think it's a coding error to have a seemingly valid boil/etc ID that's not in the database, but we
-         // try to recover as best we can.
-         qCritical() <<
-            Q_FUNC_INFO << "Invalid" << NE::staticMetaObject.className() << "ID (" << ourId << ") on Recipe #" <<
-            this->m_self.key();
-         return nullptr;
-      }
-      return retVal;
    }
 
    QVector<PreInstruction> mashInstructions(double timeRemaining,
@@ -1399,7 +1344,7 @@ QString Recipe::localisedName_mash                   () { return tr("Mash"      
 QString Recipe::localisedName_mashId                 () { return tr("Mash ID"                ); }
 QString Recipe::localisedName_miscAdditions          () { return tr("Misc Additions"         ); }
 QString Recipe::localisedName_notes                  () { return tr("Notes"                  ); }
-QString Recipe::localisedName_numAncestors           () { return tr("Number of Snapshots"    ); }
+QString Recipe::localisedName_numAncestors           () { return tr("Snapshots"              ); } // "Number of Snapshots" is too long, and number is clear from context
 QString Recipe::localisedName_og                     () { return tr("OG"                     ); }
 QString Recipe::localisedName_points                 () { return tr("Points"                 ); }
 QString Recipe::localisedName_postBoilVolume_l       () { return tr("Post Boil Volume"       ); }
@@ -2502,11 +2447,11 @@ double Recipe::points() const {
 
 //=========================Relational Getters=============================
 
-template<> std::shared_ptr<Mash        > Recipe::get<Mash        >() const { return this->pimpl->get<Mash        >(this->m_mashId        ); }
-template<> std::shared_ptr<Boil        > Recipe::get<Boil        >() const { return this->pimpl->get<Boil        >(this->m_boilId        ); }
-template<> std::shared_ptr<Fermentation> Recipe::get<Fermentation>() const { return this->pimpl->get<Fermentation>(this->m_fermentationId); }
-template<> std::shared_ptr<Style       > Recipe::get<Style       >() const { return this->pimpl->get<Style       >(this->m_styleId       ); }
-template<> std::shared_ptr<Equipment   > Recipe::get<Equipment   >() const { return this->pimpl->get<Equipment   >(this->m_equipmentId   ); }
+template<> std::shared_ptr<Mash        > Recipe::get<Mash        >() const { return ObjectStoreWrapper::getRelational<Mash        >(*this, this->m_mashId        ); }
+template<> std::shared_ptr<Boil        > Recipe::get<Boil        >() const { return ObjectStoreWrapper::getRelational<Boil        >(*this, this->m_boilId        ); }
+template<> std::shared_ptr<Fermentation> Recipe::get<Fermentation>() const { return ObjectStoreWrapper::getRelational<Fermentation>(*this, this->m_fermentationId); }
+template<> std::shared_ptr<Style       > Recipe::get<Style       >() const { return ObjectStoreWrapper::getRelational<Style       >(*this, this->m_styleId       ); }
+template<> std::shared_ptr<Equipment   > Recipe::get<Equipment   >() const { return ObjectStoreWrapper::getRelational<Equipment   >(*this, this->m_equipmentId   ); }
 template<> std::shared_ptr<Water       > Recipe::get<Water       >() const {
    // Water is a bit different as there can be more than one
    auto waterUses = this->waterUses();
@@ -2570,7 +2515,7 @@ QList<std::shared_ptr<Instruction              >> Recipe::        instructions()
 int Recipe::getAncestorId() const { return this->m_ancestor_id; }
 int Recipe::numAncestors () const { return this->ancestors().size(); }
 
-//==============================Getters===================================
+//============================== Other Getters ===================================
 Recipe::Type           Recipe::type             () const { return m_type             ; }
 QString                Recipe::brewer           () const { return m_brewer           ; }
 QString                Recipe::asstBrewer       () const { return m_asstBrewer       ; }
@@ -2707,11 +2652,11 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
    auto equipment = this->equipment();
    double ibus = 0.0;
    double fwhAdjust = Localization::toDouble(
-      PersistentSettings::value(PersistentSettings::Names::firstWortHopAdjustment, 1.1).toString(),
+      PersistentSettings::value_ck(PersistentSettings::Names::firstWortHopAdjustment, 1.1).toString(),
       Q_FUNC_INFO
    );
    double mashHopAdjust = Localization::toDouble(
-      PersistentSettings::value(PersistentSettings::Names::mashHopAdjustment, 0).toString(),
+      PersistentSettings::value_ck(PersistentSettings::Names::mashHopAdjustment, 0).toString(),
       Q_FUNC_INFO
    );
 
@@ -3175,7 +3120,7 @@ void RecipeHelper::prepareForPropertyChange(NamedEntity & ne, BtStringConst cons
  * \brief Turn automatic versioning on or off
  */
 void RecipeHelper::setAutomaticVersioningEnabled(bool enabled) {
-   PersistentSettings::insert(PersistentSettings::Names::versioning, enabled);
+   PersistentSettings::insert_ck(PersistentSettings::Names::versioning, enabled);
    return;
 }
 
@@ -3183,7 +3128,7 @@ void RecipeHelper::setAutomaticVersioningEnabled(bool enabled) {
  * \brief Returns \c true if automatic versioning is enabled, \c false otherwise
  */
 bool RecipeHelper::getAutomaticVersioningEnabled() {
-   return PersistentSettings::value(PersistentSettings::Names::versioning, false).toBool();
+   return PersistentSettings::value_ck(PersistentSettings::Names::versioning, false).toBool();
 }
 
 RecipeHelper::SuspendRecipeVersioning::SuspendRecipeVersioning() {

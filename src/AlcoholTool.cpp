@@ -238,9 +238,9 @@ public:
    void restoreSettings() {
       // Whether to show the temperature correction fields -- off by default
       this->enableAdvancedInputs->setChecked(
-         PersistentSettings::value(advancedInputsEnabled,
-                                   false,
-                                   PersistentSettings::Sections::alcoholTool).toBool()
+         PersistentSettings::value_ck(advancedInputsEnabled,
+                                      false,
+                                      PersistentSettings::Sections::alcoholTool).toBool()
       );
 
       // Hydrometer calibration temperature -- default is 20°C, or 68°F in the old money.
@@ -249,21 +249,21 @@ public:
       // Measurement::amountDisplay() take SI unit and convert them to whatever the user has chosen to display.  So you
       // just need SmartLineEdit::setAmount().
       this->input_calibration_temperature->setQuantity(
-         PersistentSettings::value(hydrometerCalibrationTemperatureInC,
-                                    20.0,
-                                    PersistentSettings::Sections::alcoholTool).toDouble()
+         PersistentSettings::value_ck(hydrometerCalibrationTemperatureInC,
+                                      20.0,
+                                      PersistentSettings::Sections::alcoholTool).toDouble()
       );
       return;
    }
 
    // Save any settings that the user is likely to want to have for next time
    void saveSettings() {
-      PersistentSettings::insert(advancedInputsEnabled,
-                                 this->enableAdvancedInputs->isChecked(),
-                                 PersistentSettings::Sections::alcoholTool);
-      PersistentSettings::insert(hydrometerCalibrationTemperatureInC,
-                                 this->input_calibration_temperature->getNonOptCanonicalQty(),
-                                 PersistentSettings::Sections::alcoholTool);
+      PersistentSettings::insert_ck(advancedInputsEnabled,
+                                    this->enableAdvancedInputs->isChecked(),
+                                    PersistentSettings::Sections::alcoholTool);
+      PersistentSettings::insert_ck(hydrometerCalibrationTemperatureInC,
+                                    this->input_calibration_temperature->getNonOptCanonicalQty(),
+                                    PersistentSettings::Sections::alcoholTool);
       return;
    }
 

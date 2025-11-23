@@ -46,8 +46,7 @@ MiscEditor::MiscEditor(QWidget * parent, QString const editorName) :
       // lineEdit_inventory
       //
       EDITOR_FIELD_NORM(Misc, label_name      , lineEdit_name      , NamedEntity::name         ),
-      EDITOR_FIELD_NORM(Misc, label_inventory , lineEdit_inventory , Ingredient::totalInventory, 1, WhenToWriteField::Late),
-      EDITOR_FIELD_COPQ(Misc, label_amountType, comboBox_amountType, Ingredient::totalInventory, lineEdit_inventory, WhenToWriteField::Never),
+      EDITOR_FIELD_NORM(Misc, label_totalInventory, display_totalInventory, Ingredient::totalInventory, 1, WhenToWriteField::Never),
       EDITOR_FIELD_ENUM(Misc, label_type      , comboBox_type      , Misc::type                ),
       EDITOR_FIELD_NORM(Misc, tab_useFor      , textEdit_useFor    , Misc::useFor              ),
       EDITOR_FIELD_NORM(Misc, tab_notes       , textEdit_notes     , Misc::notes               ),

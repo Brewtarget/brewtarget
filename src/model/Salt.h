@@ -32,7 +32,7 @@
 
 class SaltCatalog;
 class SaltEditor;
-class InventorySalt;
+class StockPurchaseSalt;
 class SaltItemDelegate;
 class RecipeAdjustmentSalt;
 class SaltSortFilterProxyModel;
@@ -115,7 +115,7 @@ public:
    //
    using CatalogClass              = SaltCatalog;
    using EditorClass               = SaltEditor;
-   using InventoryClass            = InventorySalt;
+   using StockPurchaseClass        = StockPurchaseSalt;
    using ItemDelegateClass         = SaltItemDelegate;
    using RecipeAdditionClass       = RecipeAdjustmentSalt;
    using SortFilterProxyModelClass = SaltSortFilterProxyModel;

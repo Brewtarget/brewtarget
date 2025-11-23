@@ -155,20 +155,26 @@ public:
    }
 
    QVariant readDataFromModel(ColumnInfo const & columnInfo, int const role) const {
+      TypeInfo const & typeInfo = columnInfo.typeInfo;
+      if (role == Qt::TextAlignmentRole) {
+         return PropertyHelper::getAlignment(typeInfo);
+      }
+
       QVariant modelData = columnInfo.propertyPath.getValue(*this->m_underlyingItem);
       if (!modelData.isValid()) {
          //
          // You might think it's a programming error if we couldn't read a property modelData, but there are
          // circumstances where this is expected -- eg reading "style/name" from a Recipe that does not have style set.
          //
-         qWarning() <<
-            Q_FUNC_INFO <<
-               "Unable to read" << this->derived() << "property" << columnInfo.propertyPath << "(Got" << modelData <<
-               ")";
+         // Therefore normally keep this warning commented out, so we don't spam the logs when we have a bunch of
+         // recipes that, eg, don't yet have a style set.
+         //
+//         qWarning() <<
+//            Q_FUNC_INFO <<
+//               "Unable to read" << this->derived() << "property" << columnInfo.propertyPath << "(Got" << modelData <<
+//               ")";
          return QVariant{};
       }
-
-      TypeInfo const & typeInfo = columnInfo.typeInfo;
 
       // Uncomment this log statement if asserts in PropertyHelper::readDataFromPropertyValue are firing
 //      qDebug() <<
@@ -190,7 +196,6 @@ public:
 
       ColumnInfo const & columnInfo = this->get_ColumnInfo(columnIndex);
       return this->readDataFromModel(columnInfo, role);
-
    }
 
    /**
@@ -229,7 +234,7 @@ public:
 
          case Qt::DisplayRole:
             if (this->m_underlyingItem) {
-               return this->readDataFromModel(columnInfo, Qt::DisplayRole);
+               return this->readDataFromModel(columnInfo, role);
             }
             // Special handling for the root node
             if (!this->rawParent()) {
@@ -247,6 +252,12 @@ public:
          case Qt::DecorationRole:
             if (column == 0 && NodeClassifier == TreeNodeClassifier::Folder) {
                return QIcon(":images/folder.png");
+            }
+            break;
+
+         case Qt::TextAlignmentRole:
+            if (this->m_underlyingItem) {
+               return this->readDataFromModel(columnInfo, role);
             }
             break;
 
@@ -427,11 +438,13 @@ public:
                return childNumber;
             }
          }
+         // Usually it's a coding error if we get here
+         qCritical() <<
+            Q_FUNC_INFO << "Unable to find child" << childToCheck << "of" << this->derived() << "amongst" <<
+            this->m_children.size();
+         qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
       }
 
-      // Usually it's a coding error if we get here
-      qCritical() << Q_FUNC_INFO << "Unable to find child";
-      qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
       return -1;
    }
 
@@ -528,8 +541,31 @@ public:
    }
 };
 
-//==================================================== TreeItemNode ====================================================
+/**
+ * \brief Each tree has one primary type of object that it stores.  However, some trees (eg Recipe, Mash) can hold
+ *        secondary items (eg Recipe tree holds Recipes and BrewNotes owned by those Recipes).  It's useful to have a
+ *        compile-time mapping from object type to show which class belongs in which tree.  The rule here is that things
+ *        belong in their own tree (eg Equipment is in Equipment tree) unless there's a specialisation that says
+ *        otherwise.
+ *
+ *        If a secondary item \c FooBar is omitted from this list, we'll get compile errors along the lines of `invalid
+ *        use of incomplete type ‘struct TreeNodeTraits<FooBar, FooBar>’`.
+ */
+template <class NE> struct TreeTypeDeducer                             { using TreeType = NE                  ; };
+template<>          struct TreeTypeDeducer<BrewNote                  > { using TreeType = Recipe              ; };
+template<>          struct TreeTypeDeducer<MashStep                  > { using TreeType = Mash                ; };
+template<>          struct TreeTypeDeducer<BoilStep                  > { using TreeType = Boil                ; };
+template<>          struct TreeTypeDeducer<FermentationStep          > { using TreeType = Fermentation        ; };
+template<>          struct TreeTypeDeducer<StockUseFermentable> { using TreeType = StockPurchaseFermentable; };
+template<>          struct TreeTypeDeducer<StockUseHop        > { using TreeType = StockPurchaseHop        ; };
+template<>          struct TreeTypeDeducer<StockUseMisc       > { using TreeType = StockPurchaseMisc       ; };
+template<>          struct TreeTypeDeducer<StockUseSalt       > { using TreeType = StockPurchaseSalt       ; };
+template<>          struct TreeTypeDeducer<StockUseYeast      > { using TreeType = StockPurchaseYeast      ; };
 
+//==================================================== TreeItemNode ====================================================
+//
+// NOTE when we add new SecondaryItem nodes, we also have to add a specialisation for TreeTypeDeducer above
+//
 template<class NE>
 class TreeItemNode : public TreeNodeBase<TreeItemNode<NE>, NE, typename TreeTypeDeducer<NE>::TreeType> {
 public:
@@ -543,8 +579,11 @@ public:
       if constexpr (TreeNodeTraits<NE, typename TreeTypeDeducer<NE>::TreeType>::NodeClassifier == TreeNodeClassifier::PrimaryItem) {
          if constexpr (HasNoFolder<NE>) {
             //
-            // For elements that don't support folders (eg Inventory) we just want the root folder, which will also be
+            // For elements that don't support folders (eg StockPurchase) we just want the root folder, which will also be
             // the parent node.
+            //
+            // TBD: This currently doesn't make a huge amount of sense as you can create folders in the inventory tree
+            // but not put anything in them!
             //
             return this->rawParent()->folder();
          } else {
@@ -583,9 +622,9 @@ struct ColumnOwnerTraitsData<TreeFolderNode<NE>> {
    static std::vector<ColumnInfo> const & getColumnInfos() {
       // Meyers singleton
       static std::vector<ColumnInfo> const columnInfos {
-         TREE_NODE_HEADER(TreeFolderNode, Folder, Name    , tr("Name"     ), PropertyNames::NamedEntity::name),
-         TREE_NODE_HEADER(TreeFolderNode, Folder, Path    , tr("Path"     ), PropertyNames::Folder::path    ),
-         TREE_NODE_HEADER(TreeFolderNode, Folder, FullPath, tr("Full Path"), PropertyNames::Folder::fullPath),
+         TREE_NODE_HEADER(TreeFolderNode, Folder, Name    , PropertyNames::NamedEntity::name), // "Name"
+         TREE_NODE_HEADER(TreeFolderNode, Folder, Path    , PropertyNames::Folder::path     ), // "Path"
+         TREE_NODE_HEADER(TreeFolderNode, Folder, FullPath, PropertyNames::Folder::fullPath ), // "Full Path"
       };
       return columnInfos;
    }

@@ -28,6 +28,8 @@
 #include <QVariant>
 #include <QWidget>
 
+#include "model/StockPurchaseMisc.h"
+
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_MiscTableModel.cpp"
@@ -35,13 +37,10 @@
 
 COLUMN_INFOS(
    MiscTableModel,
-   // NOTE: Need PropertyNames::Fermentable::amountWithUnits not PropertyNames::Fermentable::amount below so we
-   //       can handle mass-or-volume generically in TableModelBase.  Same for inventoryWithUnits.
-   TABLE_MODEL_HEADER(Misc, Name              , tr("Name"       ), PropertyNames::NamedEntity::name            ),
-   TABLE_MODEL_HEADER(Misc, Type              , tr("Type"       ), PropertyNames::Misc::type                   ),
-   TABLE_MODEL_HEADER(Misc, TotalInventory    , tr("Inventory"  ), PropertyNames::Ingredient::totalInventory   ),
-   TABLE_MODEL_HEADER(Misc, TotalInventoryType, tr("Amount Type"), PropertyNames::Ingredient::totalInventory   , Misc::validMeasures),
-   TABLE_MODEL_HEADER(Misc, NumRecipesUsedIn  , tr("N° Recipes" ), PropertyNames::NamedEntity::numRecipesUsedIn),
+   TABLE_MODEL_HEADER(Misc, Name            , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Misc, Type            , PropertyNames::Misc::type                   ), // "Type"
+   TABLE_MODEL_HEADER(Misc, TotalInventory  , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
+   TABLE_MODEL_HEADER(Misc, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
@@ -51,8 +50,8 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &MiscTableModel::contextMenu);
-   connect(&ObjectStoreTyped<InventoryMisc>::getInstance(),
-           &ObjectStoreTyped<InventoryMisc>::signalPropertyChanged,
+   connect(&ObjectStoreTyped<StockPurchaseMisc>::getInstance(),
+           &ObjectStoreTyped<StockPurchaseMisc>::signalPropertyChanged,
            this,
            &MiscTableModel::changedInventory);
    return;
@@ -66,14 +65,6 @@ void MiscTableModel::updateTotals()                                       { retu
 
 QVariant MiscTableModel::data(QModelIndex const & index, int role) const {
    return this->doDataDefault(index, role);
-}
-
-Qt::ItemFlags MiscTableModel::flags(QModelIndex const & index) const {
-   return TableModelHelper::doFlags<MiscTableModel>(
-      index,
-      this->m_editable,
-      {{MiscTableModel::ColumnIndex::TotalInventory, Qt::ItemIsEditable}}
-   );
 }
 
 bool MiscTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
