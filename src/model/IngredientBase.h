@@ -39,6 +39,17 @@ protected:
       return Derived::StockPurchaseClass::getTotalInventory(this->derived());
    }
 
+public:
+   /**
+    * \brief This doesn't have to be a property, so we can expose it directly rather than needing to go via a derived
+    *        class member function.
+    *
+    * @return
+    */
+   bool isOnHand() const {
+      return Derived::StockPurchaseClass::isOnHand(this->derived());
+   }
+
 };
 
 template<class Derived>
@@ -48,8 +59,6 @@ TypeLookup const IngredientBase<Derived>::typeLookup {
       //
       // See comment in model/IngredientAmount.h for why we can't use the PROPERTY_TYPE_LOOKUP_ENTRY or
       // PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV macros here.
-      //
-      // See comment in model/Ingredient.cpp for why we can't do PropertyNames::Ingredient::totalInventory there.
       //
       {&PropertyNames::Ingredient::totalInventory,
        TypeInfo::construct<MemberFunctionReturnType_t<&IngredientBase::getTotalInventory>>(

@@ -18,7 +18,7 @@ New inventory management system tracks individual stock purchases and uses
 Mac packaging should be fixed in this release.
 
 ### New Features
-* None
+* Quick Inventory Snapshot [761](https://github.com/Brewtarget/brewtarget/issues/761)
 
 ### Bug Fixes
 * Qt Libs missing in 4.2.0 on MacOS [1022](https://github.com/Brewtarget/brewtarget/issues/1022)

@@ -292,6 +292,28 @@ public:
    }
 
    /**
+    * \brief Similar to \c getTotalInventory, but just tells us whether we have any Inventory (aka Stock)
+    *
+    * @param ingredient
+    */
+   static bool isOnHand(IngredientClass const & ingredient) {
+      //
+      // We don't need all the non-deleted non-zero StockPurchase objects for the supplied ingredient -- just the first
+      // one will do!
+      //
+      int const ingredientKey = ingredient.key();
+      auto purchase = ObjectStoreWrapper::findFirstMatching<Derived>(
+         [ingredientKey](Derived const * sp) {
+            return !sp->deleted() &&
+                   (ingredientKey == sp->ingredientId()) &&
+                   !qFuzzyIsNull(sp->amountRemaining().quantity);
+         }
+      );
+
+      return (purchase != nullptr);
+   }
+
+   /**
     * \brief For a given ingredient, reduce the total amount we have on hand (as a consequence of it being used in a
     *        Recipe).
     *

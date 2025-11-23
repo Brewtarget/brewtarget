@@ -19,6 +19,9 @@
 #pragma once
 
 #include <QDebug>
+#include <QModelIndex>
+
+#include "model/Ingredient.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 
 /**
@@ -42,7 +45,26 @@ public:
     * \param filter If \c true then we only show "displayable" items; if \c false then we show everything
     */
    SortFilterProxyModelBase(bool filter) :
-      m_filter{filter} {
+      m_onlyShowDisplayable{filter} {
+      return;
+   }
+
+   void setHideZeroInventoryItems(bool const val) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+      //
+      // New way, since Qt 6.10
+      //
+      this->derived().beginFilterChange();
+      this->m_hideZeroInventoryItems = val;
+      this->derived().endFilterChange();
+#else
+      //
+      // Old way will be deprecated in Qt 6.13
+      //
+      this->m_hideZeroInventoryItems = val;
+      this->derived().invalidateFilter();
+#endif
+
       return;
    }
 
@@ -82,13 +104,15 @@ protected:
       if (tableModel) {
          QModelIndex index = tableModel->index(source_row, 0, source_parent);
 
-         if (!this->m_filter) {
-            // No filter, so we accept
-            return true;
-         }
-         if (tableModel->getRow(source_row)->deleted()) {
+         if (this->m_onlyShowDisplayable && tableModel->getRow(source_row)->deleted()) {
             // Row deleted, so reject
             return false;
+         }
+
+         if constexpr (IsIngredient<typename NeTableModel::UnderlyingItem>) {
+            if (this->m_hideZeroInventoryItems && !tableModel->getRow(source_row)->isOnHand()) {
+               return false;
+            }
          }
 
          // The filterRegularExpression() member function we call here is inherited from QSortFilterProxyModel
@@ -105,6 +129,10 @@ protected:
             qWarning() << Q_FUNC_INFO << "Non-existent item at row" << source_row;
             return true;
          }
+
+         //
+         // TBD: We should probably have the same logic here as for tablemodel -- maybe template it...?
+         //
 
          return !listItem->deleted();
       }
@@ -176,7 +204,11 @@ protected:
    }
 
 private:
-   bool const m_filter;
+   bool const m_onlyShowDisplayable;
+   /**
+    * \brief This is only meaningful for Ingredients, but it's too much hassle to optimise it out for other types
+    */
+   bool m_hideZeroInventoryItems = false;
 };
 
 
