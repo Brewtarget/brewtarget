@@ -24,11 +24,12 @@
 import glob
 import logging
 import os
+import packaging.version
 import pathlib
 import re
 import shutil
 import subprocess
-import packaging.version
+import tomlkit
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Our own modules
@@ -184,6 +185,15 @@ def findMesonAndGit():
 
    return
 
+def findWget():
+   global exe_wget
+   exe_wget = shutil.which("wget")
+   if (exe_wget is None or exe_wget == ""):
+      log.critical('Cannot find wget')
+      exit(1)
+
+   return
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Ensure git submodules are present
 #
@@ -205,4 +215,13 @@ def ensureSubmodulesPresent():
       log.info('Pulling in submodules in ' + btFileSystem.dir_gitSubmodules.as_posix())
       btExecute.abortOnRunFail(subprocess.run([exe_git, "submodule", "init"], capture_output=False))
       btExecute.abortOnRunFail(subprocess.run([exe_git, "submodule", "update"], capture_output=False))
+   return
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Read config variables exported by the Meson build
+#-----------------------------------------------------------------------------------------------------------------------
+def readBuildConfigFile():
+   global buildConfig
+   with open(btFileSystem.dir_build.joinpath('config.toml').as_posix()) as buildConfigFile:
+      buildConfig = tomlkit.parse(buildConfigFile.read())
    return

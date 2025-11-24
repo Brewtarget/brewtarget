@@ -80,6 +80,8 @@ def setGlobalDirVars():
    global dir_packages
    global dir_packages_platform
    global dir_packages_source
+   global dir_containerized
+   global dir_appImage
 
 #   dir_base          = btFileSystem.getBaseDir()
    dir_base          = getBaseDir()
@@ -92,3 +94,14 @@ def setGlobalDirVars():
    dir_packages          = dir_build.joinpath('packages')
    dir_packages_platform = dir_packages.joinpath(platform.system().lower())   # Platform-specific packaging directory
    dir_packages_source   = dir_packages.joinpath('source')
+   #
+   # App Image has to live somewhere too.  It's morally equivalent to a Linux package, but we create it separately (for
+   # reasons explained in the `bt` script).
+   #
+   # We'll assume we're going to get to Snap and Flatpak too, and put them all in the same top-level directory.  The
+   # best generic name I found for these formats is "Containerized Application Packages", which is too long.  I think
+   # "CAPs" is too short however, especially if we lower-case it all to "caps".  The general idea is that these are
+   # supposed to be self-contained and portable across a lot of distros, so "linux-portable" is the best I came up with.
+   #
+   dir_containerized = dir_base.joinpath('linux-portable')
+   dir_appImage      = dir_containerized.joinpath('appimage')
