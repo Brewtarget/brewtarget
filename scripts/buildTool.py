@@ -57,6 +57,7 @@ import btDependencies
 import btLogger
 import btExecute
 import btFileSystem
+import btAppImage
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Global constants
@@ -123,6 +124,9 @@ parser_setup_all = subparsers_setup.add_parser(
 
 # Parser for 'package'
 parser_package = subparsers.add_parser('package', help='Build a distributable installer')
+
+# Parser for 'appimage'
+parser_appimage = subparsers.add_parser('appimage', help='Build an appimage distributable for Linux')
 
 #
 # Process the arguments for use below
@@ -366,7 +370,7 @@ def doPackage():
    #       invokes Meson
    #    2. Meson installs all the binaries, data files and so on that we need to ship into the packaging directory tree
    #    3. Meson also exports a bunch of build information into a TOML file that we read in.  This saves us duplicating
-   #       too many meseon.build settings in this file.
+   #       too many meson.build settings in this file.
    #
 
    btUtils.findMesonAndGit()
@@ -475,10 +479,8 @@ def doPackage():
    # At the direction of meson.build, Meson should have generated a config.toml file in the build directory that we can
    # read in to get useful settings exported from the build system.
    #
-   global buildConfig
-   with open(btFileSystem.dir_build.joinpath('config.toml').as_posix()) as buildConfigFile:
-      buildConfig = tomlkit.parse(buildConfigFile.read())
-   log.debug('Shared libraries: ' + ', '.join(buildConfig["CONFIG_SHARED_LIBRARY_PATHS"]))
+   btUtils.readBuildConfigFile()
+   log.debug('Shared libraries: ' + ', '.join(btUtils.buildConfig["CONFIG_SHARED_LIBRARY_PATHS"]))
 
    #
    # Note however that there are some things that are (often intentionally) difficult or impossible to import to or
@@ -609,7 +611,7 @@ def doPackage():
          # Make the top-level directory for the deb package and the DEBIAN subdirectory for the package control files
          # etc
          log.debug('Creating debian package top-level directories')
-         debPackageDirName = projectName + '-' + buildConfig['CONFIG_VERSION_STRING'] + '-1_amd64'
+         debPackageDirName = projectName + '-' + btUtils.buildConfig['CONFIG_VERSION_STRING'] + '-1_amd64'
          dir_packages_deb = btFileSystem.dir_packages_platform.joinpath('debbuild').joinpath(debPackageDirName)
          dir_packages_deb_control = dir_packages_deb.joinpath('DEBIAN')
          os.makedirs(dir_packages_deb_control) # This will also automatically create parent directories
@@ -638,10 +640,10 @@ def doPackage():
          # This is done by a shell script because we already wrote that
          #
          log.debug('Generating compressed changelog')
-         os.environ['CONFIG_APPLICATION_NAME_LC'    ] = buildConfig['CONFIG_APPLICATION_NAME_LC'    ]
-         os.environ['CONFIG_CHANGE_LOG_UNCOMPRESSED'] = buildConfig['CONFIG_CHANGE_LOG_UNCOMPRESSED']
+         os.environ['CONFIG_APPLICATION_NAME_LC'    ] = btUtils.buildConfig['CONFIG_APPLICATION_NAME_LC'    ]
+         os.environ['CONFIG_CHANGE_LOG_UNCOMPRESSED'] = btUtils.buildConfig['CONFIG_CHANGE_LOG_UNCOMPRESSED']
          os.environ['CONFIG_CHANGE_LOG_COMPRESSED'  ] = dir_packages_deb_doc.joinpath('changelog.Debian.gz').as_posix()
-         os.environ['CONFIG_PACKAGE_MAINTAINER'     ] = buildConfig['CONFIG_PACKAGE_MAINTAINER'     ]
+         os.environ['CONFIG_PACKAGE_MAINTAINER'     ] = btUtils.buildConfig['CONFIG_PACKAGE_MAINTAINER'     ]
          btExecute.abortOnRunFail(
             subprocess.run([btFileSystem.dir_base.joinpath('packaging').joinpath('generateCompressedChangeLog.sh')],
                            capture_output=False)
@@ -847,7 +849,7 @@ def doPackage():
                   nextVersionNumber = line.removeprefix('## v').replace('\n', '-1\n')
                   log.debug('Extracted version "' + nextVersionNumber.rstrip() + '" from ' + line.rstrip())
                   if (len(changes) > 0):
-                     specFile.write('* ' + releaseDate + ' ' + buildConfig['CONFIG_PACKAGE_MAINTAINER'] + ' - ' +
+                     specFile.write('* ' + releaseDate + ' ' + btUtils.buildConfig['CONFIG_PACKAGE_MAINTAINER'] + ' - ' +
                                     versionNumber)
                      for change in changes:
                         specFile.write('- ' + change)
@@ -880,7 +882,7 @@ def doPackage():
                   continue
             # Once we got to the end of the input, we need to write the last change block
             if (len(changes) > 0):
-               specFile.write('* ' + releaseDate + ' ' + buildConfig['CONFIG_PACKAGE_MAINTAINER'] + ' - ' +
+               specFile.write('* ' + releaseDate + ' ' + btUtils.buildConfig['CONFIG_PACKAGE_MAINTAINER'] + ' - ' +
                               versionNumber)
                for change in changes:
                   specFile.write('- ' + change)
@@ -928,7 +930,7 @@ def doPackage():
 
          # rpmbuild will have put its output in RPMS/x86_64/[projectName]-[versionNumber]-1.x86_64.rpm
          dir_packages_rpm_output = dir_packages_rpm.joinpath('RPMS').joinpath('x86_64')
-         rpmPackageName = projectName + '-' + buildConfig['CONFIG_VERSION_STRING'] + '-1.x86_64.rpm'
+         rpmPackageName = projectName + '-' + btUtils.buildConfig['CONFIG_VERSION_STRING'] + '-1.x86_64.rpm'
 
          #
          # Running rpmlint is the lintian equivalent exercise for RPMs.  Many, but by no means all, of the error and
@@ -1237,7 +1239,7 @@ def doPackage():
          # Note that the name of the installer file is controlled by packaging/windows/NsisInstallerScript.nsi.in, so
          # we have to align here with what that says.
          #
-         winInstallerName = capitalisedProjectName + ' ' + buildConfig['CONFIG_VERSION_STRING'] + ' Windows Installer.exe'
+         winInstallerName = capitalisedProjectName + ' ' + btUtils.buildConfig['CONFIG_VERSION_STRING'] + ' Windows Installer.exe'
          log.info('Generating checksum file for ' + winInstallerName)
          writeSha256sum(btFileSystem.dir_packages_platform, winInstallerName)
 
@@ -1354,7 +1356,7 @@ def doPackage():
          # Make the top-level directories that we're going to copy files into
          #
          log.debug('Creating Mac app bundle top-level directories')
-         macBundleDirName = projectName + '_' + buildConfig['CONFIG_VERSION_STRING'] + '_MacOS.app'
+         macBundleDirName = projectName + '_' + btUtils.buildConfig['CONFIG_VERSION_STRING'] + '_MacOS.app'
          # btFileSystem.dir_packages_platform = mbuild/packages/darwin
          dir_packages_mac = btFileSystem.dir_packages_platform.joinpath(macBundleDirName).joinpath('Contents')
          dir_packages_mac_bin = dir_packages_mac.joinpath('MacOS')
@@ -1948,12 +1950,6 @@ def doPackage():
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
-# .:TBD:.  Let's see if we can do a .deb package
-#-----------------------------------------------------------------------------------------------------------------------
-def doDebianPackage():
-   return
-
-#-----------------------------------------------------------------------------------------------------------------------
 # Act on command line arguments
 #-----------------------------------------------------------------------------------------------------------------------
 # See above for parsing
@@ -1964,6 +1960,9 @@ match args.subCommand:
 
    case 'package':
       doPackage()
+
+   case 'appimage':
+      btAppImage.doAppImage()
 
    # If we get here, it's a coding error as argparse should have already validated the command line arguments
    case _:

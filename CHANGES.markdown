@@ -19,6 +19,7 @@ Mac packaging should be fixed in this release.
 
 ### New Features
 * Quick Inventory Snapshot [761](https://github.com/Brewtarget/brewtarget/issues/761)
+* Provide Linux builds as AppImages [1041](https://github.com/Brewtarget/brewtarget/issues/1041)
 
 ### Bug Fixes
 * Qt Libs missing in 4.2.0 on MacOS [1022](https://github.com/Brewtarget/brewtarget/issues/1022)
