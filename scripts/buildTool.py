@@ -642,7 +642,7 @@ def doPackage():
          btLogger.log.debug('Generating compressed changelog')
          os.environ['CONFIG_APPLICATION_NAME_LC'    ] = btUtils.buildConfig['CONFIG_APPLICATION_NAME_LC'    ]
          os.environ['CONFIG_CHANGE_LOG_UNCOMPRESSED'] = btUtils.buildConfig['CONFIG_CHANGE_LOG_UNCOMPRESSED']
-         os.environ['CONFIG_CHANGE_LOG_COMPRESSED'  ] = dir_packages_deb_doc.joinpath('changebtLogger.log.Debian.gz').as_posix()
+         os.environ['CONFIG_CHANGE_LOG_COMPRESSED'  ] = dir_packages_deb_doc.joinpath('changelog.Debian.gz').as_posix()
          os.environ['CONFIG_PACKAGE_MAINTAINER'     ] = btUtils.buildConfig['CONFIG_PACKAGE_MAINTAINER'     ]
          btExecute.abortOnRunFail(
             subprocess.run([btFileSystem.dir_base.joinpath('packaging').joinpath('generateCompressedChangeLog.sh')],
@@ -650,7 +650,7 @@ def doPackage():
          )
          # Shell script gives wrong permissions on output (which lintian would complain about), so fix them here (from
          # rw-rw-r-- to rw-r--r--).
-         os.chmod(dir_packages_deb_doc.joinpath('changebtLogger.log.Debian.gz'),
+         os.chmod(dir_packages_deb_doc.joinpath('changelog.Debian.gz'),
                   stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
 
          #
