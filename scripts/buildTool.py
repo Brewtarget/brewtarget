@@ -63,7 +63,7 @@ import btContainerApps
 # Global constants
 #-----------------------------------------------------------------------------------------------------------------------
 # There is some inevitable duplication with constants in meson.build, but we try to keep it to a minimum
-projectName = 'brewken'
+projectName = 'brewtarget'
 capitalisedProjectName = projectName.capitalize()
 projectUrl = 'https://github.com/' + capitalisedProjectName + '/' + projectName + '/'
 exe_python = shutil.which('python3')
