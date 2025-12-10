@@ -626,11 +626,11 @@ def installDependencies():
          os.chdir(tmpDirName)
          downloadFile('https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip')
          shutil.unpack_archive('Locate.zip', 'Locate')
-         downloadFile('https://nsis.sourceforge.io/mediawiki/images/7/76/NsisbtLogger.log.zip')
-         shutil.unpack_archive('NsisbtLogger.log.zip', 'Nsislog')
+         downloadFile('https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip')
+         shutil.unpack_archive('Nsislog.zip', 'Nsislog')
          btFileSystem.copyFilesToDir(['Locate/Include/Locate.nsh'], '/mingw32/share/nsis/Include/')
          btFileSystem.copyFilesToDir(['Locate/Plugin/locate.dll',
-                         'Nsislog/plugin/nsisbtLogger.log.dll'],'/mingw32/share/nsis/Plugins/ansi/')
+                         'Nsislog/plugin/Nsislog.dll'],'/mingw32/share/nsis/Plugins/ansi/')
          os.chdir(previousWorkingDirectory)
          shutil.rmtree(tmpDirName, ignore_errors=False)
 
@@ -824,7 +824,7 @@ def installDependencies():
          # TBD: For the moment we hard-code the version of MacPorts, but we should probably find it out from GitHub in
          #      a similar way that we check our own latest releases in the C++ code.
          #
-         macPortsVersion = '2.11.5'
+         macPortsVersion = '2.11.6'
          macPortsName = 'MacPorts-' + macPortsVersion
          #
          # The instructions for binary install at https://guide.macports.org/#installing.macports.binary require user
