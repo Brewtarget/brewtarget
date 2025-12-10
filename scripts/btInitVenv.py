@@ -33,17 +33,17 @@ import btExecute
 #-----------------------------------------------------------------------------------------------------------------------
 # Globals
 #-----------------------------------------------------------------------------------------------------------------------
-log = btLogger.getLogger()
+#log = btLogger.getLogger()
 exe_python = shutil.which('python3')
 
-log.info('sys.version: ' + sys.version + '; exe_python: ' + exe_python + '; ' + sys.executable)
+btLogger.log.info('sys.version: ' + sys.version + '; exe_python: ' + exe_python + '; ' + sys.executable)
 
 # This is long but it can be a useful diagnostic
-log.info('Environment variables vvv')
+btLogger.log.info('Environment variables vvv')
 envVars = dict(os.environ)
 for key, value in envVars.items():
-   log.info('Env: ' + key + '=' + value)
-log.info('Environment variables ^^^')
+   btLogger.log.info('Env: ' + key + '=' + value)
+btLogger.log.info('Environment variables ^^^')
 
 # Since (courtesy of the 'bt' script that invokes us) we're running in a venv, the pip we find should be the one in the
 # venv.  This means that it will install to the venv and not mind about external package managers.
@@ -53,13 +53,13 @@ if (exe_pip is None or exe_pip == ''):
    pathEnvVar = ''
    if ('PATH' in os.environ):
       pathEnvVar = os.environ['PATH']
-   log.critical(
+   btLogger.log.critical(
       'Cannot find pip (PATH=' + pathEnvVar + ') - please see https://pip.pypa.io/en/stable/installation/ for how to ' +
       'install'
    )
    exit(1)
 
-log.info('Found pip at: ' + exe_pip)
+btLogger.log.info('Found pip at: ' + exe_pip)
 
 #
 # Of course, when you run the pip in the venv, it might complain that it is not up-to-date.  So we should ensure that
@@ -70,7 +70,7 @@ log.info('Found pip at: ' + exe_pip)
 # You might think we could use sys.executable instead of exe_python here.  However, on Windows at least, that gives the
 # wrong python executable: the "system" one rather than the venv one.
 #
-log.info('Running ' + exe_python + '-m pip install --upgrade pip')
+btLogger.log.info('Running ' + exe_python + '-m pip install --upgrade pip')
 btExecute.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--upgrade', 'pip']))
 
 #
@@ -82,7 +82,7 @@ btExecute.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--
 # path.  (We could, in principle, add it manually, but it's a bit fiddly and not necessary since we don't use the venv
 # for anything other than running this script.)
 #
-log.info('Initial module search paths:\n   ' + '\n   '.join(sys.path))
+btLogger.log.info('Initial module search paths:\n   ' + '\n   '.join(sys.path))
 
 #
 # Mostly, from here on out we'd be fine to invoke pip directly, eg via:
@@ -107,16 +107,16 @@ log.info('Initial module search paths:\n   ' + '\n   '.join(sys.path))
 # setuptools is now installed by default by Homebrew when it installs Python, so we'd get an error if we try to install
 # it via pip here.  On Windows in MSYS2, packaging and setuptools need to be installed via pacman.)
 #
-log.info('pip install packaging')
+btLogger.log.info('pip install packaging')
 btExecute.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', 'packaging']))
 from packaging import version
-log.info('pip install setuptools')
+btLogger.log.info('pip install setuptools')
 btExecute.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', 'setuptools']))
 import packaging.version
 
 # The requests library (see https://pypi.org/project/requests/) is used for downloading files in a more Pythonic way
 # than invoking wget through the shell.
-log.info('pip install requests')
+btLogger.log.info('pip install requests')
 btExecute.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', 'requests']))
 import requests
 

@@ -388,19 +388,6 @@ namespace {
       // Note that we include a comment here to ensure we don't have multiple mappings for the same strings
       {Misc::Type::Wood       , "Other<!--Wood-->"},
    };
-   // The `use` field of Misc is not part of BeerJSON and becomes an optional value now that we support BeerJSON.
-   // Strictly speaking, in BeerXML, it remains a required field.  That means that, if we export a Misc that has no
-   // value for `use` it will not be "correct" BeerXML.  For the moment, I think this is just something we live with.
-   // However, if it turns out to create a lot of problems in real life then we'll need some special case handling to
-   // force a default value in XML files.
-   EnumStringMapping const BEER_XML_MISC_USE_MAPPER {
-      {RecipeAdditionMisc::Use::Mash     , "Mash"     },
-      {RecipeAdditionMisc::Use::Boil     , "Boil"     },
-      {RecipeAdditionMisc::Use::Primary  , "Primary"  },
-      {RecipeAdditionMisc::Use::Secondary, "Secondary"},
-      {RecipeAdditionMisc::Use::Bottling , "Bottling" },
-   };
-
 
    //
    // The comments above about fields in a <HOP>...</HOP> record apply, in a similar manner, to fields in a
@@ -805,7 +792,7 @@ namespace {
    // internally with the RecipeAdditionHop class.  Broadly speaking, that combines a "hop part" (ie what hop are we
    // adding) with amount and timing parts (ie how much are we adding and when).  In our internal model, the "hop part"
    // is just the ID of the hop we want to add.  In BeerXML, it's all the same fields as in a freestanding hop.  To
-   // square this circle, we use the "Base Record" trick (descibed in serialization/json/JsonRecordDefinition.h, but
+   // square this circle, we use the "Base Record" trick (described in serialization/json/JsonRecordDefinition.h, but
    // equally applicable to XML processing) to treat some of the HOP fields as though they were a separate sub-record.
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    XmlRecordDefinition const BEER_XML_RECORD_DEFN_HOP_IN_RECIPE_ADDITION_HOP {
@@ -870,6 +857,7 @@ namespace {
          {XmlRecordDefinition::FieldType::Bool  , "AMOUNT_IS_WEIGHT" , PropertyNames::IngredientAmount::isWeight     },
          {XmlRecordDefinition::FieldType::Double, "TIME"             , PropertyNames::RecipeAddition::addAtTime_mins },
          {XmlRecordDefinition::FieldType::Record, ""                 , PropertyNames::RecipeAdditionMisc::misc       , &BEER_XML_RECORD_DEFN_MISC_IN_RECIPE_ADDITION_MISC},
+         {XmlRecordDefinition::FieldType::Enum  , "USE"              , PropertyNames::RecipeAdditionMisc::use        , &RecipeAdditionMisc::useStringMapping},
          // ⮜⮜⮜ Following are new fields that BeerJSON adds to BeerXML, so all extension tags in BeerXML ⮞⮞⮞
          {XmlRecordDefinition::FieldType::Unit  , "UNIT"             , PropertyNames::IngredientAmount::unit         , &Measurement::Units::unitStringMapping},
          {XmlRecordDefinition::FieldType::Enum  , "STAGE"            , PropertyNames::RecipeAddition::stage          , &RecipeAddition::stageStringMapping},

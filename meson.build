@@ -212,6 +212,21 @@ project('brewtarget', 'cpp',
 projectName = meson.project_name().to_lower()
 capitalisedProjectName = projectName.substring(0, 1).to_upper() + projectName.substring(1)
 #
+# We use the domain not just for the website URL but also the application ID.  The latter needs to be the reverse of the
+# former, hence all the messing around with arrays here.
+#
+domain = 'brewtarget.beer'
+domainLabels = domain.split('.')
+#
+# From Meson 1.10.0 we will be able to reverse an array simply by writing:
+#    applicationLabels = domainLabels.slice(step : -1)
+#
+# In the meantime, what we do here works as long as domainLabels always has length 2!
+#
+applicationLabels = [domainLabels[1], domainLabels[0]]
+reverseDomain = '.'.join(applicationLabels)
+applicationId = reverseDomain + '.' + capitalisedProjectName
+#
 # Meson writes out a lot of useful info straight away, eg:
 #
 #    The Meson build system
@@ -239,8 +254,8 @@ capitalisedProjectName = projectName.substring(0, 1).to_upper() + projectName.su
 #    Host machine cpu family:           = build_machine.cpu_family()
 #    Host machine cpu:                  = build_machine.cpu()
 #
-message('⭐ Building', projectName, 'version', meson.project_version(), 'for', host_machine.system(),
-        'on', build_machine.system(), '⭐')
+message('⭐ Building', projectName, '(', applicationId, ') version', meson.project_version(), 'for',
+        host_machine.system(), 'on', build_machine.system(), '⭐')
 compiler = meson.get_compiler('cpp')
 
 #
@@ -492,14 +507,15 @@ backtraceDependency = compiler.find_library('backtrace',
 # See https://mesonbuild.com/Reference-manual_returned_dep.html for what info we can pull from a dependency object
 #
 # For BeerXML processing we need Xerces-C++ and Xalan-C++.  Meson can find both of these automatically in a couple of
-# different ways.  The official way is to use `dependency('xerces-c')` and `dependency('xalan-c')`.  However, I don't
-# think this gives us access to the paths of the libraries (which we want to export for the packaging scripts -- see
-# various comments about shared libraries in the `bt` build tool script).  Instead, we can have Meson use CMake's
-# find_package(), as long as (a) CMake is installed(!) and (b) we provide the right library names ('XercesC' per
-# https://cmake.org/cmake/help/latest/module/FindXercesC.html and 'XalanC' per
-# https://cmake.org/cmake/help/latest/module/FindXalanC.html)
+# different ways.  The official way is to use `dependency('xerces-c')` and `dependency('xalan-c')` which results in
+# calling pkg-config.  However, I don't think this gives us access to the paths of the libraries (which we want to
+# export for the packaging scripts -- see various comments about shared libraries in the `bt` build tool script).
+# Instead, we can have Meson use CMake's find_package(), as long as (a) CMake is installed(!) and (b) we provide the
+# right library names ('XercesC' per https://cmake.org/cmake/help/latest/module/FindXercesC.html and 'XalanC' per
+# https://cmake.org/cmake/help/latest/module/FindXalanC.html).
 #
 xercesDependency = dependency('XercesC',
+                              method : 'cmake',
                               version : '>=3.2.2',
                               required : true,
                               static : true)
@@ -508,6 +524,7 @@ message('Xerces Library:', xercesDependency.name(), 'found =', xercesDependency.
         'version =', xercesDependency.version(), 'path(s)=', xercesLibPaths)
 sharedLibraryPaths += xercesLibPaths
 xalanDependency = dependency('XalanC',
+                             method : 'cmake',
                              version : '>=1.11.0',
                              required : true,
                              static : true)
@@ -1161,16 +1178,8 @@ filesToInstall_data = files([
    'data/DefaultContent004-MoreYeasts.json'
 ])
 
-filesToInstall_desktop = files([
-   'linux/' + projectName + '.desktop'
-])
-
 filesToInstall_icons = files([
    'images/' + projectName + '.svg'
-])
-
-filesToInstall_windowsIcon = files([
-   'win/icon.rc'
 ])
 
 filesToInstall_sounds = files([
@@ -1206,13 +1215,18 @@ filesToInstall_sounds = files([
    'data/sounds/stirMash.wav',
 ])
 
-filesToInstall_macPropertyList = files([
-   'mac/Info.plist'
-])
-
-filesToInstall_macIcons = files([
-   'mac/' + capitalisedProjectName + 'Icon.icns'
-])
+if host_machine.system() == 'windows'
+   filesToInstall_windowsIcon = files([
+      'win/icon.rc'
+   ])
+elif host_machine.system() == 'darwin'
+   filesToInstall_macPropertyList = files([
+      'mac/Info.plist'
+   ])
+   filesToInstall_macIcons = files([
+      'mac/' + capitalisedProjectName + 'Icon.icns'
+   ])
+endif
 
 # This has to be a string because we're going to pass it into a script.
 # AFAICT Meson does not provide a way for you to extract, say, full path from a file object
@@ -1253,6 +1267,8 @@ if host_machine.system() == 'linux'
    # https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html#directory_layout for all the
    # details.)
    installSubDir_icons        = 'share/icons'
+   # The MetaInfo file needs to get installed to /usr/share/metainfo/%{id}.metainfo.xml.
+   installSubDir_metaInfo     = 'share/metainfo'
 elif host_machine.system() == 'windows'
    #============================================ Windows Install Directories ===========================================
    installSubDir_data = 'data'
@@ -1412,7 +1428,7 @@ exportedVariables = {
    'CONFIG_LICENSE_TEXT_PATH' : join_paths(meson.current_source_dir(), filesToInstall_license),
 
    # Some installers/package formats want a one-line description
-   'CONFIG_DESCRIPTION_STRING' : 'Open source brewing software',
+   'CONFIG_DESCRIPTION_STRING' : 'Open source beer brewing software',
 
    # Some installers, eg NSIS on Windows, want a brief copyright string
    'CONFIG_COPYRIGHT_STRING' : 'Copyright 2009-2024.  Distributed under the terms of the GNU General Public License (version 3).',
@@ -1422,8 +1438,11 @@ exportedVariables = {
 
    # Similarly, installers often want a URL link.  We also use this in the program, to tell users where to get support.
    'CONFIG_GITHUB_URL' : 'https://github.com/' + capitalisedProjectName + '/' + projectName,
-   'CONFIG_WEBSITE_URL' : 'https://www.brewtarget.beer/',
-   'CONFIG_ORGANIZATION_DOMAIN' : 'brewtarget.beer',
+   'CONFIG_WEBSITE_URL' : 'https://www.' + domain + '/',
+   'CONFIG_ORGANIZATION_DOMAIN' : domain,
+   # We need reverse domain name notation for building flatpaks
+   'CONFIG_ORGANIZATION_REVERSE_DOMAIN' : reverseDomain,
+   'CONFIG_APPLICATION_ID' : applicationId,
 
    #
    # On Windows and Mac, the external packaging step (managed by the `bt` build tool script) needs to know about all the
@@ -1498,6 +1517,28 @@ configure_file(input  : 'packaging/config.toml.in',
 # the right place.  We should do this at some point (and make the corresponding changes to the bt script).
 #
 if host_machine.system() == 'linux'
+   #
+   # Linux: Desktop Entry (.desktop) file (see https://specifications.freedesktop.org/desktop-entry/latest/)
+   #
+   # According to https://specifications.freedesktop.org/desktop-entry/latest/file-naming.html, the name should follow
+   # the "reverse DNS" convention.  A lot of applications do not follow this convention (as you can probably see on your
+   # own system by looking in /usr/share/applications), but it's required for Flatpak, so we might as well get it right.
+   #
+   filesToInstall_desktop = applicationId + '.desktop'
+   configure_file(input  : 'linux/desktop.in',
+                  output : filesToInstall_desktop,
+                  configuration : exportedVariables,
+                  install : true,
+                  install_dir : installSubDir_applications)
+   #
+   # Linux: MetaInfo file -- see https://www.freedesktop.org/software/appstream/docs/chap-Quickstart.html
+   #
+   filesToInstall_metainfo = applicationId + '.metainfo.xml'
+   configure_file(input  : 'linux/metainfo.in.xml',
+                  output : filesToInstall_metainfo,
+                  configuration : exportedVariables,
+                  install : true,
+                  install_dir : installSubDir_metaInfo)
    #
    # Linux: Debian Binary package control file
    #
@@ -1589,15 +1630,12 @@ if host_machine.system() == 'linux'
    # sizes".
    install_data(filesToInstall_icons, install_dir : installSubDir_icons + '/hicolor/scalable/apps/')
 
-   # Install the .desktop file
-   install_data(filesToInstall_desktop, install_dir : installSubDir_applications)
-
    # Install friendly-format change log aka release notes
    # Note that lintian does not like having a file called CHANGES.markdown in the doc directory, as it thinks it is a
    # misnamed changelog.Debian.gz (even when changelog.Debian.gz is also present!) so you get a
    # wrong-name-for-upstream-changelog warning.
-   # The simplest way round this is to rename CHANGES.markdown to RelaseNotes.markdown
-   install_data(filesToInstall_changeLogUncompressed, rename : 'RelaseNotes.markdown', install_dir : installSubDir_doc)
+   # The simplest way round this is to rename CHANGES.markdown to ReleaseNotes.markdown
+   install_data(filesToInstall_changeLogUncompressed, rename : 'ReleaseNotes.markdown', install_dir : installSubDir_doc)
 
    # Debian packages need to have the copyright file in a particular place (/usr/share/doc/PACKAGE/copyright)
    # RPM packages don't like having duplicate files in the same directory (eg copyright and COPYRIGHT with same
@@ -1612,6 +1650,9 @@ endif
 if host_machine.system() == 'darwin'
    # Desktop icon
    install_data(filesToInstall_macIcons, install_dir : installSubDir_data)
+elif host_machine.system() == 'windows'
+   # TBD: Not sure whether this is the right place to put the icon on Windows
+   install_data(filesToInstall_windowsIcon, install_dir : installSubDir_data)
 endif
 
 #=======================================================================================================================

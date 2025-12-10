@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ =======================================================================================================================
+ ⟫ linux/metainfo.in.xml is part of Brewtarget, and is copyright the following authors 2025:
+ ⟫   • Matt Young <mfsy@yahoo.com>
+ ⟫
+ ⟫ Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ ⟫ as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ ⟫ version. (However, note that the licence for this individual file is BSL-1.0.)
+ ⟫
+ ⟫ Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ ⟫ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ ⟫ details.
+ ⟫
+ ⟫ You should have received a copy of the GNU General Public License along with this program.  If not, see
+ ⟫ <http://www.gnu.org/licenses/>.
+ =======================================================================================================================
+
+ This file gets converted to a MetaInfo file by Meson (see configure_file command in meson.build in top-level
+ directory).
+-->
+<component type="desktop-application">
+  <id>@CONFIG_APPLICATION_ID@</id>
+
+  <name>CONFIG_APPLICATION_NAME_UC</name>
+  <summary>Beer brewing software</summary>
+
+  <!--
+   See https://www.freedesktop.org/software/appstream/docs/chap-Quickstart.html#qsr-app-contents for why the metadata
+   license needs to be more permissive than GPL.
+  -->
+  <metadata_license>BSL-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <description>
+    <p>
+      Software for creating beer recipes, managing ingredients and performing related calculations.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">@CONFIG_APPLICATION_ID@.desktop</launchable>
+
+  <url type="homepage">@CONFIG_WEBSITE_URL@</url>
+</component>

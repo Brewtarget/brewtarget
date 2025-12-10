@@ -38,8 +38,6 @@ import btExecute
 import btLogger
 import btFileSystem
 
-log = btLogger.getLogger()
-
 #-----------------------------------------------------------------------------------------------------------------------
 # Helper function for finding and copying extra libraries
 #
@@ -69,20 +67,20 @@ def findAndCopyLibs(pathsToSearch, extraLibs, libExtension, libRegex, targetDire
                matches.append(globMatch)
          numMatches = len(matches)
          if (numMatches > 0):
-            log.debug('Found ' + str(numMatches) + ' match(es) for ' + extraLib + ' in ' + searchDir)
+            btLogger.log.debug('Found ' + str(numMatches) + ' match(es) for ' + extraLib + ' in ' + searchDir)
             if (numMatches > 1):
-               log.warning('Found more matches than expected (' + str(numMatches) + ' ' +
+               btLogger.log.warning('Found more matches than expected (' + str(numMatches) + ' ' +
                            'instead of 1) when searching for library "' + extraLib + '".  This is not an ' +
                            'error, but means we are possibly shipping additional shared libraries that we '+
                            'don\'t need to.')
             for match in matches:
                fullPathOfMatch = pathlib.Path(searchDir).joinpath(match)
-               log.debug('Copying ' + fullPathOfMatch.as_posix() + ' to ' + targetDirectory.as_posix())
+               btLogger.log.debug('Copying ' + fullPathOfMatch.as_posix() + ' to ' + targetDirectory.as_posix())
                shutil.copy2(fullPathOfMatch, targetDirectory)
             found = True
             break;
       if (not found):
-         log.critical('Could not find '+ extraLib + ' library in any of the following directories: ' + ', '.join(pathsToSearch))
+         btLogger.log.critical('Could not find '+ extraLib + ' library in any of the following directories: ' + ', '.join(pathsToSearch))
          exit(1)
    return
 
@@ -125,10 +123,10 @@ def getLinuxDistroInfo():
    #
    lsbResult = subprocess.run(['lsb_release', '-a'], capture_output=True)
    if (lsbResult.returncode != 0):
-      log.info('Ignoring error running lsb_release -a: ' + lsbResult.stderr.decode('UTF-8'))
+      btLogger.log.info('Ignoring error running lsb_release -a: ' + lsbResult.stderr.decode('UTF-8'))
    else:
       lsbOutput = lsbResult.stdout.decode('UTF-8').rstrip()
-      log.info('Output from running lsb_release -a: ' + lsbOutput)
+      btLogger.log.info('Output from running lsb_release -a: ' + lsbOutput)
       #
       # We assume that if `lsb_release -a` ran OK then the other invocations below will too
       #
@@ -165,22 +163,22 @@ def findMesonAndGit():
    global exe_meson
    exe_meson = shutil.which("meson")
    if (exe_meson is None or exe_meson == ""):
-      log.critical('Cannot find meson - please see https://mesonbuild.com/Getting-meson.html for how to install')
+      btLogger.log.critical('Cannot find meson - please see https://mesonbuild.com/Getting-meson.html for how to install')
       exit(1)
 
    global mesonVersion
    rawVersion = btExecute.abortOnRunFail(subprocess.run([exe_meson, '--version'], capture_output=True)).stdout.decode('UTF-8').rstrip()
-   log.debug('Meson version raw: ' + rawVersion)
+   btLogger.log.debug('Meson version raw: ' + rawVersion)
    mesonVersion = packaging.version.parse(rawVersion)
-   log.debug('Meson version parsed: ' + str(mesonVersion))
+   btLogger.log.debug('Meson version parsed: ' + str(mesonVersion))
 
    # Check Git is installed if its magic directory is present
    global exe_git
    exe_git   = shutil.which("git")
    if (btFileSystem.dir_gitInfo.is_dir()):
-      log.debug('Found git information directory:' + btFileSystem.dir_gitInfo.as_posix())
+      btLogger.log.debug('Found git information directory:' + btFileSystem.dir_gitInfo.as_posix())
       if (exe_git is None or exe_git == ""):
-         log.critical('Cannot find git - please see https://git-scm.com/downloads for how to install')
+         btLogger.log.critical('Cannot find git - please see https://git-scm.com/downloads for how to install')
          exit(1)
 
    return
@@ -189,7 +187,7 @@ def findWget():
    global exe_wget
    exe_wget = shutil.which("wget")
    if (exe_wget is None or exe_wget == ""):
-      log.critical('Cannot find wget')
+      btLogger.log.critical('Cannot find wget')
       exit(1)
 
    return
@@ -209,10 +207,10 @@ def findWget():
 def ensureSubmodulesPresent():
    findMesonAndGit()
    if (not btFileSystem.dir_gitSubmodules.is_dir()):
-      log.info('Creating submodules directory: ' + btFileSystem.dir_gitSubmodules.as_posix())
+      btLogger.log.info('Creating submodules directory: ' + btFileSystem.dir_gitSubmodules.as_posix())
       os.makedirs(btFileSystem.dir_gitSubmodules, exist_ok=True)
    if (btFileSystem.numFilesInTree(btFileSystem.dir_gitSubmodules) < btFileSystem.num_gitSubmodules):
-      log.info('Pulling in submodules in ' + btFileSystem.dir_gitSubmodules.as_posix())
+      btLogger.log.info('Pulling in submodules in ' + btFileSystem.dir_gitSubmodules.as_posix())
       btExecute.abortOnRunFail(subprocess.run([exe_git, "submodule", "init"], capture_output=False))
       btExecute.abortOnRunFail(subprocess.run([exe_git, "submodule", "update"], capture_output=False))
    return
