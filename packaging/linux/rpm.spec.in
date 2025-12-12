@@ -106,6 +106,7 @@ makes the process of recipe formulation much easier.
 /usr/share/doc/@CONFIG_APPLICATION_NAME_LC@/*
 /usr/share/icons/hicolor/scalable/apps/*
 /usr/share/man/man1/*
+/usr/share/metainfo/*
 
 #
 # Change log is a required section
