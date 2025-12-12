@@ -27,8 +27,6 @@ import shutil
 #-----------------------------------------------------------------------------------------------------------------------
 import btLogger
 
-log = btLogger.getLogger()
-
 #-----------------------------------------------------------------------------------------------------------------------
 # Helper function to return the 'base' directory (ie the one above the directory in which this file lives).
 #-----------------------------------------------------------------------------------------------------------------------
@@ -44,7 +42,7 @@ def getBaseDir():
 def copyFilesToDir(files, directory):
    os.makedirs(directory, exist_ok=True)
    for currentFile in files:
-      log.debug('Copying ' + currentFile + ' to ' + directory)
+      btLogger.log.debug('Copying ' + currentFile + ' to ' + directory)
       shutil.copy2(currentFile, directory)
    return
 
@@ -66,12 +64,17 @@ def findFirstMatchingFile(fileName, path):
          return os.path.join(root, fileName)
    return ''
 
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Set various global directory locations
 #
 # This is a bit horrible, but works for now
 #-----------------------------------------------------------------------------------------------------------------------
 def setGlobalDirVars():
+
+   #--------------------------------------------------------------------------------------------------------------------
+   # These globals get set in setGlobalDirVars()
+   #--------------------------------------------------------------------------------------------------------------------
    global dir_base
    global dir_gitInfo
    global dir_build
@@ -80,6 +83,10 @@ def setGlobalDirVars():
    global dir_packages
    global dir_packages_platform
    global dir_packages_source
+   global dir_contAppPkgs
+   global dir_appImage
+   global dir_flatpak
+   global dir_snap
 
 #   dir_base          = btFileSystem.getBaseDir()
    dir_base          = getBaseDir()
@@ -92,3 +99,16 @@ def setGlobalDirVars():
    dir_packages          = dir_build.joinpath('packages')
    dir_packages_platform = dir_packages.joinpath(platform.system().lower())   # Platform-specific packaging directory
    dir_packages_source   = dir_packages.joinpath('source')
+   #
+   # App Image has to live somewhere too.  It's morally equivalent to a Linux package, but we create it separately (for
+   # reasons explained in the `bt` script).
+   #
+   # We'll assume we're going to get to Snap and Flatpak too, and put them all in the same top-level directory.  The
+   # best generic name I found for these formats is "Containerized Application Packages", which is too long.  I think
+   # "CAPs" is too short however, especially if we lower-case it all to "caps".  The general idea is that these are
+   # supposed to be self-contained and portable across a lot of distros, so "contAppPkgs" is the best I came up with.
+   #
+   dir_contAppPkgs = dir_base.joinpath('contAppPkgs')
+   dir_appImage    = dir_contAppPkgs.joinpath('appimage')
+   dir_flatpak     = dir_contAppPkgs.joinpath('flatpak')
+   dir_snap        = dir_contAppPkgs.joinpath('snap')

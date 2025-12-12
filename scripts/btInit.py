@@ -40,9 +40,6 @@ import btExecute
 import btLogger
 import btFileSystem
 
-log = btLogger.getLogger()
-
-
 #
 # First step is to ensure we have the minimum-required Python packages, including pip, are installed at system level.
 #
@@ -54,7 +51,7 @@ match platform.system():
       exe_pip = shutil.which('pip3')
       ranUpdate = False
       if (exe_pip is None or exe_pip == ''):
-         log.info('Need to install pip')
+         btLogger.log.info('Need to install pip')
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
          ranUpdate = True
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'python3-pip']))
@@ -64,7 +61,7 @@ match platform.system():
       try:
          import setuptools
       except ImportError:
-         log.info('Need to install setuptools')
+         btLogger.log.info('Need to install setuptools')
       else:
          foundSetupTools = True
       if (not foundSetupTools):
@@ -77,9 +74,9 @@ match platform.system():
       try:
          import ensurepip
       except ImportError:
-         log.info('Need to install ensurepip')
+         btLogger.log.info('Need to install ensurepip')
       else:
-         log.info('Found ensurepip')
+         btLogger.log.info('Found ensurepip')
          foundEnsurepip = True
       if (not foundEnsurepip):
          if (not ranUpdate):
@@ -95,7 +92,7 @@ match platform.system():
       #
       #    # https://docs.python.org/3/library/sys.html#sys.executable says sys.executable is '"the absolute path of the
       #    # executable binary for the Python interpreter, on systems where this makes sense".
-      #    log.info(
+      #    btLogger.log.info(
       #       'Attempting to ensure latest version of pip is installed via  ' + sys.executable + ' -m ensurepip --upgrade'
       #    )
       #    btExecute.abortOnRunFail(subprocess.run([sys.executable, '-m', 'ensurepip', '--upgrade']))
@@ -106,7 +103,7 @@ match platform.system():
       # "mingw-w64-x86_64".)  As in buildTool.py, we need to specify '--overwrite' options otherwise we'll get "error:
       # failed to commit transaction (conflicting files)".
       #
-      log.info('Install pip (' + os.environ['MINGW_PACKAGE_PREFIX'] + '-python-pip) via pacman')
+      btLogger.log.info('Install pip (' + os.environ['MINGW_PACKAGE_PREFIX'] + '-python-pip) via pacman')
       btExecute.abortOnRunFail(
          subprocess.run(['pacman', '-S',
                          '--noconfirm',
@@ -119,13 +116,13 @@ match platform.system():
       #
       #    # See comment in scripts/buildTool.py about why we have to run pip via Python rather than just invoking pip
       #    # directly eg via `shutil.which('pip3')`.
-      #    log.info('python -m pip install setuptools')
+      #    btLogger.log.info('python -m pip install setuptools')
       #    btExecute.abortOnRunFail(subprocess.run([sys.executable, '-m', 'pip', 'install', 'setuptools']))
       #
       # But, as of 2024-11, this gives an error "No module named pip.__main__; 'pip' is a package and cannot be directly
       # executed".  So now we install via pacman instead.
       #
-      log.info('Install setuptools (' + os.environ['MINGW_PACKAGE_PREFIX'] + '-python-setuptools) via pacman')
+      btLogger.log.info('Install setuptools (' + os.environ['MINGW_PACKAGE_PREFIX'] + '-python-setuptools) via pacman')
       btExecute.abortOnRunFail(
          subprocess.run(['pacman', '-S',
                          '--noconfirm',
@@ -137,15 +134,15 @@ match platform.system():
       # Assuming it was Homebrew that installed Python, then, according to https://docs.brew.sh/Homebrew-and-Python,
       # it bundles various packages, including pip.  Since Python version 3.12, Homebrew marks itself as package manager
       # for the Python packages it bundles, so it's an error to try to install or update them via Python.
-      log.info('Assuming pip is already up-to-date; installing python-setuptools')
+      btLogger.log.info('Assuming pip is already up-to-date; installing python-setuptools')
       btExecute.abortOnRunFail(subprocess.run(['brew', 'install', 'python-setuptools']))
 
    case _:
-      log.critical('Unrecognised platform: ' + platform.system())
+      btLogger.log.critical('Unrecognised platform: ' + platform.system())
       exit(1)
 
 exe_python = shutil.which('python3')
-log.info('sys.version: ' + sys.version + '; exe_python: ' + exe_python + '; ' + sys.executable)
+btLogger.log.info('sys.version: ' + sys.version + '; exe_python: ' + exe_python + '; ' + sys.executable)
 
 #
 # At this point we should have enough installed to set up a virtual environment.  In principle, it doesn't matter if the
@@ -162,7 +159,7 @@ log.info('sys.version: ' + sys.version + '; exe_python: ' + exe_python + '; ' + 
 # Python and Pip.
 #
 dir_venv = btFileSystem.getBaseDir().joinpath('.venv')
-log.info('Create new Python virtual environment in ' + dir_venv.as_posix())
+btLogger.log.info('Create new Python virtual environment in ' + dir_venv.as_posix())
 btExecute.abortOnRunFail(
    subprocess.run([sys.executable, '-m', 'venv', '--clear', dir_venv.as_posix()])
 )

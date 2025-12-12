@@ -41,17 +41,15 @@ import btFileSystem
 import btLogger
 import btUtils
 
-log = btLogger.getLogger()
-
 #-----------------------------------------------------------------------------------------------------------------------
 # Helper function for downloading a file
 #-----------------------------------------------------------------------------------------------------------------------
 def downloadFile(url):
    filename = url.split('/')[-1]
-   log.info('Downloading ' + url + ' to ' + filename + ' in directory ' + pathlib.Path.cwd().as_posix())
+   btLogger.log.info('Downloading ' + url + ' to ' + filename + ' in directory ' + pathlib.Path.cwd().as_posix())
    response = requests.get(url)
    if (response.status_code != 200):
-      log.critical('Error code ' + str(response.status_code) + ' while downloading ' + url)
+      btLogger.log.critical('Error code ' + str(response.status_code) + ' while downloading ' + url)
       exit(1)
    with open(filename, 'wb') as fd:
       for chunk in response.iter_content(chunk_size = 128):
@@ -62,7 +60,7 @@ def downloadFile(url):
 # Function to install dependencies -- called if the user runs 'bt setup all'
 #-----------------------------------------------------------------------------------------------------------------------
 def installDependencies():
-   log.info('Checking which dependencies need to be installed')
+   btLogger.log.info('Checking which dependencies need to be installed')
    #
    # I looked at using ConanCenter (https://conan.io/center/) as a source of libraries, so that we could automate
    # installing dependencies, but it does not have all the ones we need.  Eg it has Boost, Qt, Xerces-C and Valijson,
@@ -101,7 +99,7 @@ def installDependencies():
          distroInfo = btUtils.getLinuxDistroInfo()
          distroName = distroInfo["name"]
          distroRelease = distroInfo["release"]
-         log.debug('Linux distro: ' + distroName + ', release: ' + distroRelease + ' (' + str(distroInfo["major"]) +
+         btLogger.log.debug('Linux distro: ' + distroName + ', release: ' + distroRelease + ' (' + str(distroInfo["major"]) +
                    '.' + str(distroInfo["minor"]) + ')')
 
          #
@@ -121,7 +119,7 @@ def installDependencies():
          # fine with the 5.15.13 version of lupdate, so we'll make sure that's installed.  Various other comments below
          # about lupdate are (so far unsuccessful) attempts to get a Qt6 version of lupdate installed.
          #
-         log.info('Ensuring libraries and frameworks are installed')
+         btLogger.log.info('Ensuring libraries and frameworks are installed')
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt-get', 'update']))
 
          qt6svgDevPackage = 'qt6-svg-dev'
@@ -172,13 +170,16 @@ def installDependencies():
             #
             # The following are needed to build the install packages (rather than just install locally)
             #
-            'debhelper', # Needed to build .deb packages for Debian/Ubuntu
-            'lintian'  , # Needed to validate .deb packages
-            'rpm'      , # Needed to build RPMs
-            'rpmlint'    # Needed to validate RPMs
+            'debhelper'      , # Needed to build .deb packages for Debian/Ubuntu
+            'lintian'        , # Needed to validate .deb packages
+            'rpm'            , # Needed to build RPMs
+            'rpmlint'        , # Needed to validate RPMs
+            'flatpak'        ,
+            'flatpak-builder'
+
          ]
          for packageToInstall in installList:
-            log.debug('Installing ' + packageToInstall)
+            btLogger.log.debug('Installing ' + packageToInstall)
             btExecute.abortOnRunFail(
                subprocess.run(
                   ['sudo', 'apt', 'install', '-y', packageToInstall]
@@ -197,14 +198,14 @@ def installDependencies():
          )
          # We only want the first line of the output from `g++ --version`.  The rest is just the copyright notice.
          gppVersionLine = str(gppVersionOutput.stdout).split('\n', 1)[0]
-         log.debug('"g++ --version" returned ' + str(gppVersionOutput.stdout))
+         btLogger.log.debug('"g++ --version" returned ' + str(gppVersionOutput.stdout))
          # The version line will be something along the lines of "g++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0", so we
          # split on spaces and take the last field.
          gppVersionRaw = gppVersionLine.split(' ')[-1]
          gppVersionFound = packaging.version.parse(gppVersionRaw)
-         log.debug('Parsed as ' + str(gppVersionFound) + '.')
+         btLogger.log.debug('Parsed as ' + str(gppVersionFound) + '.')
          if (gppVersionFound < minGppVersion):
-            log.info('Installing gcc/g++ 10 as current version is ' + str(gppVersionFound))
+            btLogger.log.info('Installing gcc/g++ 10 as current version is ' + str(gppVersionFound))
             btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', '-y', 'gcc-10', 'g++-10']))
             #
             # Now we have to tell the system to use the version 10 compiler by default.  This is a little bit high-
@@ -213,7 +214,7 @@ def installDependencies():
             #
             # This is relatively easily reversible for anyone setting up a local build.
             #
-            log.info('Running "update-alternatives" command to set gcc/g++ 10 as default compiler')
+            btLogger.log.info('Running "update-alternatives" command to set gcc/g++ 10 as default compiler')
             btExecute.abortOnRunFail(subprocess.run([
                'sudo', 'update-alternatives', '--install', '/usr/bin/gcc', 'gcc', '/usr/bin/gcc-10', '60', '--slave', '/usr/bin/g++', 'g++', '/usr/bin/g++-10'
             ]))
@@ -252,14 +253,14 @@ def installDependencies():
                      capture_output = True
                   )
                )
-               log.debug('In ' + boostVersionHeader.as_posix() + ' found ' + str(runResult.stdout))
+               btLogger.log.debug('In ' + boostVersionHeader.as_posix() + ' found ' + str(runResult.stdout))
                versionFoundRaw = re.sub(
                   r'^.*BOOST_LIB_VERSION "([0-9_]*)".*$', r'\1', str(runResult.stdout).rstrip()
                ).replace('_', '.')
                versionFound = packaging.version.parse(versionFoundRaw)
                if (versionFound > maxBoostVersionFound):
                   maxBoostVersionFound = versionFound
-               log.debug('Parsed as ' + str(versionFound) + '.  (Highest found = ' + str(maxBoostVersionFound) + ')')
+               btLogger.log.debug('Parsed as ' + str(versionFound) + '.  (Highest found = ' + str(maxBoostVersionFound) + ')')
 
          #
          # The Boost version.hpp configuration header file gives two constants for defining the version of Boost
@@ -276,12 +277,12 @@ def installDependencies():
          #
          # We use BOOST_LIB_VERSION as it's easy to convert it to a version number that Python can understand
          #
-         log.debug(
+         btLogger.log.debug(
             'Max version of Boost found: ' + str(maxBoostVersionFound) + '.  Need >= ' + str(minBoostVersion) +
             ', otherwise will try to install ' + str(boostVersionToInstall)
          )
          if (maxBoostVersionFound < minBoostVersion):
-            log.info(
+            btLogger.log.info(
                'Installing Boost ' + str(boostVersionToInstall) + ' as newest version found was ' +
                str(maxBoostVersionFound)
             )
@@ -332,6 +333,10 @@ def installDependencies():
             #       got to the bottom of.  Since, for now, we only use the following Boost libraries, we use additional
             #       options on the b2 command to limit what it builds:
             #          algorithm
+            #          asio
+            #          beast
+            #          container
+            #          iterator
             #          json
             #          stacktrace
             #
@@ -345,7 +350,7 @@ def installDependencies():
             #              - atomic
             #              - chrono
             #              - cobalt
-            #              - container
+            #              - container           *
             #              - context
             #              - contract
             #              - coroutine
@@ -384,7 +389,7 @@ def installDependencies():
             with tempfile.TemporaryDirectory(ignore_cleanup_errors = True) as tmpDirName:
                previousWorkingDirectory = pathlib.Path.cwd().as_posix()
                os.chdir(tmpDirName)
-               log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
+               btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
                boostBaseName = 'boost-' + str(boostVersionToInstall)
                boostUnderscoreName = 'boost_' + str(boostVersionToInstall).replace('.', '_')
 #               downloadFile(
@@ -395,23 +400,27 @@ def installDependencies():
                   'https://github.com/boostorg/boost/releases/download/' +
                   boostBaseName +  '/' + boostBaseName + '-b2-nodocs.tar.xz'
                )
-               log.debug('Boost download completed')
+               btLogger.log.debug('Boost download completed')
 #               shutil.unpack_archive(boostUnderscoreName + '.tar.bz2')
                shutil.unpack_archive(boostBaseName + '-b2-nodocs.tar.xz')
-               log.debug('Boost archive extracted')
+               btLogger.log.debug('Boost archive extracted')
 #               os.chdir(boostUnderscoreName)
                os.chdir(boostBaseName)
-               log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
+               btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
                btExecute.abortOnRunFail(subprocess.run(['./bootstrap.sh', '--with-python=python3']))
-               log.debug('Boost bootstrap finished')
+               btLogger.log.debug('Boost bootstrap finished')
+               # I didn't manage to get boost.stacktrace.backtrace to build.
                btExecute.abortOnRunFail(subprocess.run(
-                  ['sudo', './b2', '--with-json',
+                  ['sudo', './b2', '--with-container',
+                                   '--with-json',
                                    '--with-stacktrace',
+#                                   'boost.stacktrace.backtrace=on',
+#                                   'boost.stacktrace.from_exception=on',
                                    'install'])
                )
-               log.debug('Boost install finished')
+               btLogger.log.debug('Boost install finished')
                os.chdir(previousWorkingDirectory)
-               log.debug('Working directory now ' + pathlib.Path.cwd().as_posix() + '.  Removing ' + tmpDirName)
+               btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix() + '.  Removing ' + tmpDirName)
                #
                # The only issue with the RAII approach to removing the temporary directory is that some of the files
                # inside it will be owned by root, so there will be a permissions error when Python attempts to delete
@@ -447,7 +456,7 @@ def installDependencies():
          # install.
          #
          if ('Ubuntu' == distroName and Decimal(distroRelease) < Decimal('24.04')):
-            log.info('Installing newer version of Meson the hard way')
+            btLogger.log.info('Installing newer version of Meson the hard way')
             btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'remove', '-y', 'meson']))
             btExecute.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson']))
             #
@@ -460,7 +469,7 @@ def installDependencies():
       #--------------------------------------------- Windows Dependencies ----------------------------------------------
       #-----------------------------------------------------------------------------------------------------------------
       case 'Windows':
-         log.debug('Windows')
+         btLogger.log.debug('Windows')
          #
          # First thing is to detect whether we're in the MSYS2 environment, and, if so, whether we're in the right
          # version of it.
@@ -472,13 +481,13 @@ def installDependencies():
          #
          exe_uname = shutil.which('uname')
          if (exe_uname is None or exe_uname == ''):
-            log.critical('Cannot find uname.  This script needs to be run under MSYS2 - see https://www.msys2.org/')
+            btLogger.log.critical('Cannot find uname.  This script needs to be run under MSYS2 - see https://www.msys2.org/')
             exit(1)
          # We could just run uname without the -a option, but the latter gives some useful diagnostics to log
          unameResult = str(
             btExecute.abortOnRunFail(subprocess.run([exe_uname, '-a'], encoding = "utf-8", capture_output = True)).stdout
          ).rstrip()
-         log.debug('Running uname -a gives ' + unameResult)
+         btLogger.log.debug('Running uname -a gives ' + unameResult)
          # Output from `uname -a` will be of the form
          #    MINGW64_NT-10.0-19044 Matt-Virt-Win 3.4.3.x86_64 2023-01-11 20:20 UTC x86_64 Msys
          # We just need the bit before the first underscore, eg
@@ -492,11 +501,11 @@ def installDependencies():
             #
             # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are
             # no longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
-            log.critical('Running in ' + terminalVersion + ' but need to run in MINGW64 (ie 64-bit build environment)')
+            btLogger.log.critical('Running in ' + terminalVersion + ' but need to run in MINGW64 (ie 64-bit build environment)')
             exit(1)
 
          # Ensure pip is up-to-date.  This is what the error message tells you to run if it's not!
-         log.info('Ensuring Python pip is up-to-date')
+         btLogger.log.info('Ensuring Python pip is up-to-date')
          exe_python = shutil.which('python3')
          btExecute.abortOnRunFail(subprocess.run([exe_python, '-m', 'pip', 'install', '--upgrade', 'pip']))
 
@@ -510,7 +519,7 @@ def installDependencies():
          # Note that the rules for glob expansion are different when invoking a command from Python then when typing it
          # on the command line, hence why the overwrite parameter is '*python*' not '"*python*"'.
          #
-         log.info('Ensuring Python packaging is up-to-date')
+         btLogger.log.info('Ensuring Python packaging is up-to-date')
          btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-i686-python-packaging']))
          btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-x86_64-python-packaging']))
 
@@ -521,7 +530,7 @@ def installDependencies():
          #   pacman -S -y should download a fresh copy of the master package database
          #   pacman -S -u should upgrades all currently-installed packages that are out-of-date
          #
-         log.info('Ensuring required libraries and frameworks are installed')
+         btLogger.log.info('Ensuring required libraries and frameworks are installed')
          btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '-y', '--noconfirm']))
          btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '-u', '--noconfirm']))
 
@@ -589,7 +598,7 @@ def installDependencies():
                         'mingw-w64-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
                         ]
          for packageToInstall in installList:
-            log.debug('Installing ' + packageToInstall)
+            btLogger.log.debug('Installing ' + packageToInstall)
             btExecute.abortOnRunFail(
                subprocess.run(
                   ['pacman', '-S', '--needed', '--noconfirm', '--disable-download-timeout', packageToInstall]
@@ -621,7 +630,7 @@ def installDependencies():
          shutil.unpack_archive('Nsislog.zip', 'Nsislog')
          btFileSystem.copyFilesToDir(['Locate/Include/Locate.nsh'], '/mingw32/share/nsis/Include/')
          btFileSystem.copyFilesToDir(['Locate/Plugin/locate.dll',
-                         'Nsislog/plugin/nsislog.dll'],'/mingw32/share/nsis/Plugins/ansi/')
+                         'Nsislog/plugin/Nsislog.dll'],'/mingw32/share/nsis/Plugins/ansi/')
          os.chdir(previousWorkingDirectory)
          shutil.rmtree(tmpDirName, ignore_errors=False)
 
@@ -629,7 +638,7 @@ def installDependencies():
       #---------------------------------------------- Mac OS Dependencies ----------------------------------------------
       #-----------------------------------------------------------------------------------------------------------------
       case 'Darwin':
-         log.debug('Mac')
+         btLogger.log.debug('Mac')
          #
          # There are one or two things we can't install automatically because Apple won't let us.  Eg, to install Xcode,
          # you either need to "Open the Mac App Store" or to download from
@@ -648,9 +657,9 @@ def installDependencies():
          macOsVersionRaw = btExecute.abortOnRunFail(
             subprocess.run(['sw_vers', '-productVersion'], capture_output=True)
          ).stdout.decode('UTF-8').rstrip()
-         log.debug('MacOS version: ' + macOsVersionRaw)
+         btLogger.log.debug('MacOS version: ' + macOsVersionRaw)
          parsedMacOsVersion = packaging.version.parse(macOsVersionRaw)
-         log.debug('MacOS version parsed: ' + str(parsedMacOsVersion))
+         btLogger.log.debug('MacOS version parsed: ' + str(parsedMacOsVersion))
          #
          # Getting the "release name" (aka "friendly name") is a bit more tricky.  See
          # https://apple.stackexchange.com/questions/333452/how-can-i-find-the-friendly-name-of-the-operating-system-from-the-shell-term
@@ -693,7 +702,7 @@ def installDependencies():
          if (macOsVersion == '10'):
             macOsVersion += '.' + str(parsedMacOsVersion.minor)
          macOsReleaseName = macOsVersionToReleaseName[macOsVersion]
-         log.debug('MacOS ' + macOsVersion + ' release name: ' + macOsReleaseName)
+         btLogger.log.debug('MacOS ' + macOsVersion + ' release name: ' + macOsReleaseName)
 
          #
          # The two main "package management" systems for MacOS are Homebrew (https://brew.sh/), which provides the
@@ -777,15 +786,15 @@ def installDependencies():
             # (https://en.wikipedia.org/wiki/Short-circuit_evaluation) to, at a small legibility cost, do the whole
             # check-and-install, in a single line.  But in Python, it's easier to do it in two steps.
             #
-            log.debug('Checking ' + packageToInstall)
+            btLogger.log.debug('Checking ' + packageToInstall)
             brewListResult = subprocess.run(['brew', 'list', packageToInstall],
                                             stdout = subprocess.DEVNULL,
                                             stderr = subprocess.DEVNULL,
                                             capture_output = False)
             if (brewListResult.returncode == 0):
-               log.debug('Homebrew reports ' + packageToInstall + ' already installed')
+               btLogger.log.debug('Homebrew reports ' + packageToInstall + ' already installed')
             else:
-               log.debug('Installing ' + packageToInstall + ' via Homebrew')
+               btLogger.log.debug('Installing ' + packageToInstall + ' via Homebrew')
                #
                # We specify --formula here because sometimes we want to disambiguate from a "formula" (what Homebrew
                # calls its regular package definitions) and a "cask" (package definitions used in an extension to
@@ -815,14 +824,14 @@ def installDependencies():
          # TBD: For the moment we hard-code the version of MacPorts, but we should probably find it out from GitHub in
          #      a similar way that we check our own latest releases in the C++ code.
          #
-         macPortsVersion = '2.11.5'
+         macPortsVersion = '2.11.6'
          macPortsName = 'MacPorts-' + macPortsVersion
          #
          # The instructions for binary install at https://guide.macports.org/#installing.macports.binary require user
          # interaction ("Double-click the downloaded package installer"), but, with a little research, the steps can be
          # scripted.
          #
-         log.debug('Installing MacPorts from binary')
+         btLogger.log.debug('Installing MacPorts from binary')
          btExecute.abortOnRunFail(subprocess.run(['pwd']))
          btExecute.abortOnRunFail(subprocess.run(['ls', '-l']))
          macPortsPackage = macPortsName + '-' + macOsVersion + '-' + macOsReleaseName + '.pkg'
@@ -834,7 +843,7 @@ def installDependencies():
          #
          # Instructions for source install are at https://guide.macports.org/#installing.macports.source.
          #
-#         log.debug('Installing MacPorts from source')
+#         btLogger.log.debug('Installing MacPorts from source')
 #         btExecute.abortOnRunFail(subprocess.run(['curl', '-L', '-O', 'https://distfiles.macports.org/MacPorts/' + macPortsName + '.tar.bz2']))
 #         btExecute.abortOnRunFail(subprocess.run(['tar', 'xf', macPortsName + '.tar.bz2']))
 #         btExecute.abortOnRunFail(subprocess.run(['cd', macPortsName]))
@@ -851,9 +860,9 @@ def installDependencies():
          # for someone doing this set-up locally...
          #
          macPortsPrefix = '/opt/local'
-         log.debug('Before fix-up, PATH=' + os.environ["PATH"])
+         btLogger.log.debug('Before fix-up, PATH=' + os.environ["PATH"])
          os.environ["PATH"] = macPortsPrefix + '/bin' + os.pathsep + macPortsPrefix + '/sbin' + os.pathsep + os.environ["PATH"]
-         log.debug('After fix-up, PATH=' + os.environ["PATH"])
+         btLogger.log.debug('After fix-up, PATH=' + os.environ["PATH"])
          macPortsDirFile = '/etc/paths.d/90-macPortsPaths'
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'touch'              , macPortsDirFile]))
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'chown', 'root:wheel', macPortsDirFile]))
@@ -868,7 +877,7 @@ def installDependencies():
          #
          if 'GITHUB_PATH' in os.environ:
             githubPathFile = os.environ['GITHUB_PATH']
-            log.debug('GITHUB_PATH=' + githubPathFile)
+            btLogger.log.debug('GITHUB_PATH=' + githubPathFile)
             if githubPathFile:
                with open(githubPathFile, 'a+') as githubPaths:
                   githubPaths.write(macPortsPrefix + '/bin'  + '\n')
@@ -882,7 +891,7 @@ def installDependencies():
          # If there is an error, MacPorts tells you to run again with the -v option to find out why, so we just run with
          # that from the outset, and live with the fact that it generates a lot of logging.
          #
-         log.debug('First run of MacPorts selfupdate')
+         btLogger.log.debug('First run of MacPorts selfupdate')
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', '-v', 'selfupdate']))
 
          #
@@ -893,16 +902,16 @@ def installDependencies():
          # Rather than try to detect this, we just always run selfupdate twice.  If the second time is a no-op then no
          # harm is done.
          #
-         log.debug('Second run of MacPorts selfupdate')
+         btLogger.log.debug('Second run of MacPorts selfupdate')
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', 'selfupdate']))
 
          # Per https://guide.macports.org/#using.port.diagnose this will tell us about "common issues in the user's
          # environment".
-         log.debug('Check environment is OK')
+         btLogger.log.debug('Check environment is OK')
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', 'diagnose', '--quiet']))
 
          # Per https://guide.macports.org/#using.port.installed, this tells us what ports are already installed
-         log.debug('List ports already installed')
+         btLogger.log.debug('List ports already installed')
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', 'installed']))
 
          #
@@ -930,7 +939,7 @@ def installDependencies():
                             'dbus'
                             ]
          for packageToInstall in installListPort:
-            log.debug('Installing ' + packageToInstall + ' via MacPorts')
+            btLogger.log.debug('Installing ' + packageToInstall + ' via MacPorts')
             #
             # Add the '-v' option here for "verbose", which is useful in diagnosing problems with port installs:
             #
@@ -944,7 +953,7 @@ def installDependencies():
          # Sometimes MacPorts prompts you to upgrade already installed ports with the `port upgrade outdated` command.
          # I'm not convinced it is always harmless to do this!  Uncomment the following if we decide it's a good idea.
          #
-#         log.debug('Ensuring installed ports up-to-date')
+#         btLogger.log.debug('Ensuring installed ports up-to-date')
 #         btExecute.abortOnRunFail(subprocess.run(['sudo', 'port', 'upgrade', 'outdated']))
 
          #--------------------------------------------------------------------------------------------------------------
@@ -957,13 +966,13 @@ def installDependencies():
             qtInstalledBy.append('MacPorts')
          if ('qt@6' in installListBrew):
             qtInstalledBy.append('Homebrew')
-         log.debug('Qt installed by ' + ', '.join(qtInstalledBy))
+         btLogger.log.debug('Qt installed by ' + ', '.join(qtInstalledBy))
 
          if ([] == qtInstalledBy):
-            log.error('Did not understand how Qt was installed!')
+            btLogger.log.error('Did not understand how Qt was installed!')
 
          if (len(qtInstalledBy) > 1):
-            log.error('Qt installed twice!')
+            btLogger.log.error('Qt installed twice!')
 
          qtBaseDir = ''
          if ('Homebrew' in qtInstalledBy):
@@ -987,9 +996,9 @@ def installDependencies():
 
             qmakePath = btFileSystem.findFirstMatchingFile('qmake', qtBaseDir)
             if ('' == qmakePath):
-               log.error('Unable to write to find qmake under ' + qtBaseDir)
+               btLogger.log.error('Unable to write to find qmake under ' + qtBaseDir)
             else:
-               log.debug('Found qmake at ' + qmakePath)
+               btLogger.log.debug('Found qmake at ' + qmakePath)
 
             qtBinDir = os.path.dirname(qmakePath)
 
@@ -1023,9 +1032,9 @@ def installDependencies():
             #
             qmakePath = btFileSystem.findFirstMatchingFile('qmake', '/opt')
             if ('' == qmakePath):
-               log.error('Unable to write to find qmake under /opt')
+               btLogger.log.error('Unable to write to find qmake under /opt')
             else:
-               log.debug('Found qmake at ' + qmakePath)
+               btLogger.log.debug('Found qmake at ' + qmakePath)
                #
                # You might think we could just create the symlink directly in Python, eg by running
                # `pathlib.Path('/opt/local/bin/qmake').symlink_to(qmakePath)`.  However, this will give a "Permission
@@ -1063,13 +1072,13 @@ def installDependencies():
          # to set up the mbuild directory, it will give an error about not being able to find Qt tools such as
          # `lupdate`).
          #
-         log.debug('Qt Base Dir: ' + qtBaseDir + ', Bin Dir: ' + qtBinDir)
+         btLogger.log.debug('Qt Base Dir: ' + qtBaseDir + ', Bin Dir: ' + qtBinDir)
          os.environ["PATH"] = qtBinDir + os.pathsep + os.environ["PATH"]
          #
          # Equally, the Qt lib directory is something we need in the path for packaging
          #
          qtLibDir = os.path.normpath(os.path.join(qtBaseDir, "lib"))
-         log.debug('Qt Lib Dir: ' + qtLibDir)
+         btLogger.log.debug('Qt Lib Dir: ' + qtLibDir)
 
          #
          # See
@@ -1085,7 +1094,7 @@ def installDependencies():
          # So we force the ownership back to what it should be before attempting to open the file for writing.
          #
          bashProfilePath = os.path.expanduser('~/.bash_profile')
-         log.debug('Adding Qt Bin and Lib Dirs ' + qtBinDir + '; ' + qtLibDir + ' to PATH in ' + bashProfilePath)
+         btLogger.log.debug('Adding Qt Bin and Lib Dirs ' + qtBinDir + '; ' + qtLibDir + ' to PATH in ' + bashProfilePath)
          btExecute.abortOnRunFail(subprocess.run(['ls', '-l', bashProfilePath], capture_output=False))
          currentUser = getpass.getuser()
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'chown', currentUser, bashProfilePath], capture_output=False))
@@ -1116,7 +1125,7 @@ def installDependencies():
          #
          if 'GITHUB_PATH' in os.environ:
             githubPathFile = os.environ['GITHUB_PATH']
-            log.debug('GITHUB_PATH=' + githubPathFile)
+            btLogger.log.debug('GITHUB_PATH=' + githubPathFile)
             if githubPathFile:
                with open(githubPathFile, 'a+') as githubPaths:
                   githubPaths.write(qtBinDir + '\n')
@@ -1151,7 +1160,7 @@ def installDependencies():
          #      code here is a first stab at Plan C -- building from source ourselves.
          #
 #         xalanCSourceUrl = 'https://github.com/apache/xalan-c/releases/download/Xalan-C_1_12_0/xalan_c-1.12.tar.gz'
-#         log.debug('Downloading Xalan-C++ source from ' + xalanCSourceUrl)
+#         btLogger.log.debug('Downloading Xalan-C++ source from ' + xalanCSourceUrl)
 #         btExecute.abortOnRunFail(subprocess.run([
 #            'wget',
 #            xalanCSourceUrl
@@ -1159,10 +1168,10 @@ def installDependencies():
 #         btExecute.abortOnRunFail(subprocess.run(['tar', 'xf', 'xalan_c-1.12.tar.gz']))
 #
 #         os.chdir('xalan_c-1.12')
-#         log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
+#         btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
 #         os.makedirs('build')
 #         os.chdir('build')
-#         log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
+#         btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
 #         btExecute.abortOnRunFail(subprocess.run([
 #            'cmake',
 #            '-G',
@@ -1172,15 +1181,15 @@ def installDependencies():
 #            '-Dnetwork-accessor=curl',
 #            '..'
 #         ]))
-#         log.debug('Building Xalan-C++')
+#         btLogger.log.debug('Building Xalan-C++')
 #         btExecute.abortOnRunFail(subprocess.run(['ninja']))
-#         log.debug('Running Xalan-C++ tests')
+#         btLogger.log.debug('Running Xalan-C++ tests')
 #         btExecute.abortOnRunFail(subprocess.run(['ctest', '-V', '-j', '8']))
-#         log.debug('Installing Xalan-C++')
+#         btLogger.log.debug('Installing Xalan-C++')
 #         btExecute.abortOnRunFail(subprocess.run(['sudo', 'ninja', 'install']))
 
       case _:
-         log.critical('Unrecognised platform: ' + platform.system())
+         btLogger.log.critical('Unrecognised platform: ' + platform.system())
          exit(1)
 
    #--------------------------------------------------------------------------------------------------------------------
@@ -1192,11 +1201,11 @@ def installDependencies():
    # the easiest approach seems to be to bring it in as a Git submodule and compile from source.
    #
    btUtils.ensureSubmodulesPresent()
-   log.info('Checking libbacktrace is built')
+   btLogger.log.info('Checking libbacktrace is built')
    previousWorkingDirectory = pathlib.Path.cwd().as_posix()
    backtraceDir = btFileSystem.dir_gitSubmodules.joinpath('libbacktrace')
    os.chdir(backtraceDir)
-   log.debug('Run configure and make in ' + backtraceDir.as_posix())
+   btLogger.log.debug('Run configure and make in ' + backtraceDir.as_posix())
    #
    # We only want to configure and compile libbacktrace once, so we do it here rather than in Meson.build
    #
@@ -1215,5 +1224,5 @@ def installDependencies():
    btExecute.abortOnRunFail(subprocess.run(['make']))
    os.chdir(previousWorkingDirectory)
 
-   log.info('*** Finished checking / installing dependencies ***')
+   btLogger.log.info('*** Finished checking / installing dependencies ***')
    return

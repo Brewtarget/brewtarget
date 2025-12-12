@@ -41,3 +41,8 @@ def getLogger(logLevel = logging.INFO):
    # If we don't do this, everything gets printed twice
    log.propagate = False
    return log
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Global logger
+#-----------------------------------------------------------------------------------------------------------------------
+log = getLogger()
