@@ -196,29 +196,6 @@ def copyWithoutCommentsOrFolds(inputPath, outputPath):
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Create fileToDistribute.sha256sum for a given fileToDistribute in a given directory
-#-----------------------------------------------------------------------------------------------------------------------
-def writeSha256sum(directory, fileToDistribute):
-   #
-   # In Python 3.11 we could use the file_digest() function from the hashlib module to do this.  But it's rather
-   # more work to do in Python 3.10, so we just use the `sha256sum` command instead.
-   #
-   # Note however, that `sha256sum` includes the supplied directory path of a file in its output.  We want just the
-   # filename, not its full or partial path on the build machine.  So we change into the directory of the file before
-   # running the `sha256sum` command.
-   #
-   previousWorkingDirectory = pathlib.Path.cwd().as_posix()
-   os.chdir(directory)
-   with open(directory.joinpath(fileToDistribute + '.sha256sum').as_posix(),'w') as sha256File:
-      btExecute.abortOnRunFail(
-         subprocess.run(['sha256sum', fileToDistribute],
-                        capture_output=False,
-                        stdout=sha256File)
-      )
-   os.chdir(previousWorkingDirectory)
-   return
-
-#-----------------------------------------------------------------------------------------------------------------------
 # ./bt setup
 #-----------------------------------------------------------------------------------------------------------------------
 def doSetup(setupOption):
@@ -724,8 +701,7 @@ def doPackage():
          #
          # Make the checksum file
          #
-         btLogger.log.info('Generating checksum file for ' + debPackageName)
-         writeSha256sum(btFileSystem.dir_packages_platform, debPackageName)
+         btUtils.writeSha256sum(btFileSystem.dir_packages_platform, debPackageName)
 
          #--------------------------------------------------------------------------------------------------------------
          #---------------------------------------------- RPM .rpm Package ----------------------------------------------
@@ -1006,8 +982,7 @@ def doPackage():
          #
          # Make the checksum file
          #
-         btLogger.log.info('Generating checksum file for ' + rpmPackageName)
-         writeSha256sum(btFileSystem.dir_packages_platform, rpmPackageName)
+         btUtils.writeSha256sum(btFileSystem.dir_packages_platform, rpmPackageName)
 
       #-----------------------------------------------------------------------------------------------------------------
       #----------------------------------------------- Windows Packaging -----------------------------------------------
@@ -1245,8 +1220,7 @@ def doPackage():
          # we have to align here with what that says.
          #
          winInstallerName = capitalisedProjectName + ' ' + btUtils.buildConfig['CONFIG_VERSION_STRING'] + ' Windows Installer.exe'
-         btLogger.log.info('Generating checksum file for ' + winInstallerName)
-         writeSha256sum(btFileSystem.dir_packages_platform, winInstallerName)
+         btUtils.writeSha256sum(btFileSystem.dir_packages_platform, winInstallerName)
 
          #--------------------------------------------------------------------------------------------------------------
          # Signing Windows binaries is a separate step.  For Brewtarget, it is possible, with the help of SignPath, to
@@ -1937,8 +1911,7 @@ def doPackage():
          #
          # Make the checksum file
          #
-         btLogger.log.info('Generating checksum file for ' + dmgFileName)
-         writeSha256sum(btFileSystem.dir_packages_platform, dmgFileName)
+         btUtils.writeSha256sum(btFileSystem.dir_packages_platform, dmgFileName)
 
          os.chdir(previousWorkingDirectory)
 

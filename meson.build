@@ -256,6 +256,8 @@ applicationId = reverseDomain + '.' + capitalisedProjectName
 #
 message('⭐ Building', projectName, '(', applicationId, ') version', meson.project_version(), 'for',
         host_machine.system(), 'on', build_machine.system(), '⭐')
+message('Build  root:', meson.global_build_root())
+message('Source root:', meson.global_source_root())
 compiler = meson.get_compiler('cpp')
 
 #
@@ -1431,7 +1433,7 @@ exportedVariables = {
    'CONFIG_DESCRIPTION_STRING' : 'Open source beer brewing software',
 
    # Some installers, eg NSIS on Windows, want a brief copyright string
-   'CONFIG_COPYRIGHT_STRING' : 'Copyright 2009-2024.  Distributed under the terms of the GNU General Public License (version 3).',
+   'CONFIG_COPYRIGHT_STRING' : 'Copyright 2009-2025.  Distributed under the terms of the GNU General Public License (version 3).',
 
    # Installers often want the name of the organisation supplying the product, so we need something to put there
    'CONFIG_ORGANIZATION_NAME' : 'The ' + capitalisedProjectName + ' Team',
@@ -1512,9 +1514,9 @@ configure_file(input  : 'packaging/config.toml.in',
 # We also want to inject build-system variables into various platform-specific packaging scripts, control files and so
 # on.
 #
-# .:TODO:.: We ultimately want the generated files inside the 'packaging' subtree of the the build directory.  Currently,
-# that gets done by the bt script, but we could use the subdir('packaging') command here to have Meson put the file in
-# the right place.  We should do this at some point (and make the corresponding changes to the bt script).
+# .:TBD:. We want the generated files inside the 'packaging' subtree of the the build directory.  Currently, that gets
+# done by the bt script.  It would be nice to have Meson put the file in the right place from the get go, but, AFAICT,
+# this is not particularly easy and is a bit "against the grain" of how Meson is designed.
 #
 if host_machine.system() == 'linux'
    #
@@ -1551,6 +1553,13 @@ if host_machine.system() == 'linux'
    #
    configure_file(input  : 'packaging/linux/rpm.spec.in',
                   output : 'rpm.spec',
+                  configuration : exportedVariables,
+                  install : false)
+   #
+   # Linux: Snap project file
+   #
+   configure_file(input  : 'packaging/linux/snapcraft.in.yaml',
+                  output : 'snapcraft.yaml',
                   configuration : exportedVariables,
                   install : false)
 elif host_machine.system() == 'windows'

@@ -19,6 +19,7 @@
 # Python built-in modules we use
 #-----------------------------------------------------------------------------------------------------------------------
 import os
+import getpass
 import pathlib
 import platform
 import shutil
@@ -214,12 +215,16 @@ def doAppImage():
    # environment variable.
    #
    os.environ['ARCH'] = 'x86_64'
+   file_appImage = appDirName + '.AppImage'
    btExecute.abortOnRunFail(
       subprocess.run(
-         [file_appImageTool, '--verbose', dir_appDir.as_posix(), appDirName + '.AppImage'],
+         [file_appImageTool, '--verbose', dir_appDir.as_posix(), file_appImage],
          capture_output=False
       )
    )
+
+   btUtils.writeSha256sum(btFileSystem.dir_appImage, file_appImage)
+
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -232,6 +237,11 @@ def doFlatpak():
    if sysName != 'Linux':
       btLogger.log.critical('Flatpak creation not supported on: ' + sysName)
       exit(1)
+
+   btLogger.log.info('Installing flatpak')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak']))
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak-builder']))
 
    #
    # Read in the variables exported from the Meson build
@@ -361,7 +371,7 @@ def doFlatpak():
    # the manifest, because flatpak-builder is going to copy it and we don't want to be trying to copy a directory tree
    # inside itself.
    #
-   btLogger.log.info('Copy source tree')
+   btLogger.log.info('Copy source tree etc')
    dir_copyOfSource = btFileSystem.dir_flatpak.joinpath('copyOfSource')
    os.makedirs(dir_copyOfSource)
    for directoryToCopy in ['css',
@@ -403,6 +413,8 @@ def doFlatpak():
       btLogger.log.info('Removing existing manifest file ' + file_manifest.as_posix())
       os.remove(file_manifest)
 
+   #
+   # TODO: We should probably have Meson generate this file, and then we just need to copy/rename it here
    #
    # Manifest files can be in either JSON or YAML format.  We use the latter as it's slightly more concise and shares
    # similar "meaningful indentation" rules to Python.
@@ -551,7 +563,8 @@ def doFlatpak():
          # CMakeLists.txt and meson.build.  Using the dir option (see
          # https://docs.flatpak.org/en/latest/module-sources.html#directory-source) allows us to build from local
          # sources.  However, note that "when submitting an application to software stores like Flathub, dir should be
-         # avoided altogether".
+         # avoided altogether".  TODO: We probably need to add an option to build from latest (or specified) GitHub
+         # release.
          #
          '  - name: ' + projectName,
          '    sources:',
@@ -574,14 +587,14 @@ def doFlatpak():
          '    build-options:',
          '      env:',
          '        CMAKE_INCLUDE_PATH: /app/include',
-         '        BOOST_INCLUDEDIR: /app/include',
+         '        BOOST_INCLUDEDIR:   /app/include',
          '        BOOST_LIBRARYDIR: /app/lib',
-         '        BOOST_ROOT: /app',
-         '        LIBRARY_PATH: /app/lib:/app/lib64',
-         '        LD_LIBRARY_PATH: /app/lib:/app/lib64',
-         '        PKG_CONFIG_PATH: /app/lib/pkgconfig:/app/lib64/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig',
-         '        XercesC_ROOT:    /app',
-         '        XalanC_ROOT:    /app',
+         '        BOOST_ROOT:       /app',
+         '        XercesC_ROOT:     /app',
+         '        XalanC_ROOT:      /app',
+         '        LIBRARY_PATH:     /app/lib:/app/lib64',
+         '        LD_LIBRARY_PATH:  /app/lib:/app/lib64',
+         '        PKG_CONFIG_PATH:  /app/lib/pkgconfig:/app/lib64/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig',
          '',
          #
          # This section defines what permissions the containerised environment for our app will have.
@@ -686,6 +699,8 @@ def doFlatpak():
    )
 
    btLogger.log.info('Flatpak single-file bundle ' + file_singleFileBundle)
+
+   btUtils.writeSha256sum(btFileSystem.dir_flatpak, file_singleFileBundle)
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -722,6 +737,209 @@ def doSnap():
    #--------------------------------------------------------------------------------------------------------------------
    #---------------------------------------------------- Build Snap ----------------------------------------------------
    #--------------------------------------------------------------------------------------------------------------------
-   # TODO - Start this!
+   sysName = platform.system()
+   if sysName != 'Linux':
+      btLogger.log.critical('Snap creation not supported on: ' + sysName)
+      exit(1)
+
+   # TODO: Haven't managed to get this working yet.  Meson build keeps hanging.  Next thing might be to try the CMake
+   #       build to see if it gives us more/different diagnostics.
+
+   #
+   # Read in the variables exported from the Meson build
+   #
+   btUtils.readBuildConfigFile()
+   projectName = btUtils.buildConfig["CONFIG_APPLICATION_NAME_LC"]
+   versionString = btUtils.buildConfig["CONFIG_VERSION_STRING"]
+   appDirName = projectName + '-' + versionString
+
+   #
+   # Create the relevant top-level directory and ensure it starts out empty
+   # (NB: Any missing parent directories will automatically get created by os.makedirs.  In particular,
+   # btFileSystem.dir_contAppPkgs and btFileSystem.dir_snap are guaranteed to exist after this.)
+   if btFileSystem.dir_snap.is_dir():
+      btLogger.log.info('Removing existing ' + btFileSystem.dir_snap.as_posix() + ' directory tree')
+      shutil.rmtree(btFileSystem.dir_snap)
+   dir_snapBuild = btFileSystem.dir_snap.joinpath(appDirName)
+   dir_snapBuildSnap = dir_snapBuild.joinpath('snap')
+   btLogger.log.info('Creating directory ' + dir_snapBuildSnap.as_posix())
+   os.makedirs(dir_snapBuildSnap)
+   os.chdir(dir_snapBuild)
+   btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
+
+   #
+   # NOTE: AFAICT in order to build snaps, you need, amongst other things, to enable them to be installed on your
+   # system -- which not everyone necessarily wants.  We therefore only install the snap tools here rather than in
+   # btDependencies.installDependencies.
+   #
+   btLogger.log.info('Installing Snapd')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'snapd']))
+   btLogger.log.info('Installing Snapcraft')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'snap', 'install', '--classic', 'snapcraft']))
+   # See comment below for why we install Multipass
+   btLogger.log.info('Installing Multipass')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'snap', 'install', 'multipass']))
+
+   #
+   # Part of the Snap infrastucture which gets installed with snapd is Canonical's LXD (see https://www.lxdubuntu.com/),
+   # a System Container and Virtual Machine Manager built on top of LXC (Linux Containers).
+   #
+   # The snap build process requires a "build provider".  According to
+   # https://documentation.ubuntu.com/snapcraft/8.9.4/how-to/setup/set-up-snapcraft/, this is "to host an isolated build
+   # environment, like a sandbox [inside which] software can be built and packaged as snaps without making potentially
+   # destructive changes to the host system".
+   #
+   # LXD is the default "build provider" when you run `snapcraft pack`.  For it to work, the current user needs to be
+   # added to the 'lxd' group (which the installation of snapd will have created).  This is a bit fiddly, but is
+   # achievable.  Adding the current user to a group will not take immediate effect.  Normally you need to log out and
+   # log in again.  (In an interactive shell, the `newgrp` command gets around this but that wouldn't help us here: the
+   # script would pause, dump the user out into the new shell, with the group membership, and then only resume, without
+   # the group membership, when the user exited that shell.)  We can get around this by using the `sg` command to invoke
+   # snapcraft.  HOWEVER, when I did all this on my machine I didn't get too far: `snapcraft pack` barfed with an error
+   # about "lxc --project snapcraft launch craft-com.ubuntu.cloud-buildd:core24 ..." failing because "Failed to run:
+   # /snap/lxd/current/sbin/lxd forkstart snapcraft_base-instance-snapcraft-buildd-base-v71--f02c2da881cfba9d7924 ...
+   # exit status 1".  I struggled to get more detailed diagnostics or to find additional useful info on the web.
+   #
+   # So, I switched to the "build provider", Multipass (see https://canonical.com/multipass), which is a simpler tool
+   # for creating VMs on-demand.
+   #
+   # https://documentation.ubuntu.com/snapcraft/stable/how-to/select-a-build-provider/index.html explains the various
+   # ways to set choice of build provider.  (Although the command-line flag would be simpler, there is only '--use-lxd'
+   # and no '--use-multipass'!)
+   #
+   os.environ['SNAPCRAFT_BUILD_ENVIRONMENT'] = 'multipass'
+
+   #
+   # By default, the build VM is assigned 2 CPUs and 2 GB RAM.  I wondered if this might be what was causing the
+   # compilation to hang, so bumped it a bit here, but it seems to hang at the same place regardless.
+   #
+   os.environ['SNAPCRAFT_BUILD_ENVIRONMENT_CPU'] = '4'
+   os.environ['SNAPCRAFT_BUILD_ENVIRONMENT_MEMORY'] = '16G'
+
+   #
+   # The how-to guide tells you to run `snapcraft init` now, but that doesn't so much useful -- just create a 'snap'
+   # subdirectory (which we already did) and put in it a default 'snapcraft.yaml' file (which we would need to modify
+   # anyway, so we might as well just create it ourselves).
+   #
+   file_snapProjectFrom = btFileSystem.dir_build.joinpath('snapcraft.yaml')
+   file_snapProjectTo   = dir_snapBuildSnap.joinpath('snapcraft.yaml')
+   btLogger.log.debug('Copying ' + file_snapProjectFrom.as_posix() + ' to ' + file_snapProjectTo.as_posix())
+   shutil.copy2(file_snapProjectFrom, file_snapProjectTo)
+
+   #
+   # It would be nice at this point to run `snapcraft lint snap/snapcraft.yaml`.  However, this barfs the following
+   # error:
+   #    'snapcraft lint' is not supported with Multipass as the build provider
+   # So, we skip the lint.
+   #
+
+   #
+   # Per comments below, the build VM gets reused, so we want to ensure there isn't stuff from previous builds
+   # cluttering it up.  (This is more important when we're actively working on the snap build process, but feels like
+   # good general practice too.)
+   #
+   btLogger.log.info('Running snapcraft clean in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'clean']))
+
+   #
+   # As with Flatpak, Snap expects us to build everything from source, so we need to copy the source code etc into the
+   # directory tree its build provider has access to.  It helps to understand what the Snapcraft tool does when we run
+   # it.  Per info at https://documentation.ubuntu.com/snapcraft/8.9.3/reference/processes/snap-build-process/,
+   # snapcraft does the following:
+   #    - Starting in the current working directory, it looks for snapcraft.yaml or snap/snapcraft.yaml, and then parses
+   #      its contents to begin the build.
+   #
+   #    - It creates a build VM (via Multipass or LXD) in which to do the build.  This VM will be a "minimal Ubuntu
+   #      install" determined by the 'base' in snapcraft.yaml.  NOTE that the build VM doesn't get recreated from
+   #      scratch if you've run a build before, so, during development, it's helpful to run 'snapcraft clean' between
+   #      builds, otherwise it can get confusing with bits hanging around from earlier builds.
+   #
+   #    - Required packages listed in the snapcraft.yaml file are downloaded and installed into the build VM.  Inside
+   #      this VM, the /root/project directory will hold a copy of everything in the dir_snapBuild directory (from
+   #      outside the VM).
+   #
+   #    - The "Pull" build step is run (on each part).
+   #      Each part has its own directory under /root/parts in the build VM.
+   #      We only have one part, called main-part, in our snap/snapcraft.yaml file.  Because we put 'source: ../project'
+   #      in the 'main-part' section of snap/snapcraft.yaml file, we'll end up with the
+   #      entire contents of the dir_snapBuild directory in /root/parts/main-part/src in the build VM.
+   #
+   #    - The "Build" build step is run (on each part)
+   #      Snapcraft creates /root/parts/main-part/build to do the build, which will be the current working directory
+   #      when the "Build" build step is run.  This is different from our usual set-up -- hence why in our
+   #      snap/snapcraft.yaml file we specify `meson setup . ../src` rather than `meson setup mbuild .`
+   #
+   #    - The "Stage" build step is run (on each part)
+   #
+   #    - The "Prime" build step is run (on each part)
+   #
+   #    - The "Pack" build step is run (on each part)
+   #
+   # Note that because each build step ensures the prior ones have been run, we only _need_ to call 'snapcraft pack'.
+   # However, it is possible to run steps individually, which is a bit slower (because the VM gets fired up and down
+   # more times) but helpful for debugging.  What's even more helpful is that you can drop out into a shell in the VM by
+   # adding '--shell', '--shell-after' or '--debug' to the 'snapcraft' command (see
+   # https://documentation.ubuntu.com/snapcraft/stable/how-to/debugging/debug-a-snap/#inspect-the-snap-s-contents).
+   # Specifically:
+   #
+   #    'snapcraft foobar --shell'       runs all the build steps _prior_ to foobar, then opens a shell into the
+   #                                     environment.
+   #    'snapcraft foobar --shell-after' runs all the build steps up to and _including_ foobar, then opens a shell into
+   #                                     the environment.
+   #    'snapcraft foobar --debug'       runs all the build steps up to and _including_ foobar, then, if there was an
+   #                                     error, opens a shell into the environment.
+   #
+   # NB flags such as '--shell' have to come after the build step -- eg `snacraft --debug build` is wrong; needs to be
+   # `snapcraft build --debug`.
+   #
+   # NOTE that everything in dir_snapBuild EXCEPT the 'snap'
+   # subdirectory (ie dir_snapBuildSnap) ends up under /root/parts/main-part/src/project/ (aka
+   # ${CRAFT_PART_SRC}/project/) in the virtual build environment (where 'main-part' is the part name defined in
+   # snapcraft.yaml).  The 'snap' subdirectory ends up as /root/project/snap/ (aka ${CRAFT_PROJECT_DIR}/snap/).
+   #
+   # What the build
+   #
+   btLogger.log.info('Copy source tree etc')
+   for directoryToCopy in ['css',
+                           'data',
+                           'doc',
+                           'fonts',
+                           'images',
+                           'linux',  # For desktop.in
+                           'packaging',
+                           'third-party',
+                           'schemas',
+                           'src',
+                           'translations',
+                           'ui']:
+      shutil.copytree(btFileSystem.dir_base.joinpath(directoryToCopy), dir_snapBuild.joinpath(directoryToCopy))
+   for fileToCopy in ['CHANGES.markdown',
+                      'CMakeLists.txt',
+                      'configure',
+                      'COPYRIGHT',
+                      'LICENSE',
+                      'meson.build',
+                      'README.md',
+                      'resources.qrc']:
+      shutil.copy(btFileSystem.dir_base.joinpath(fileToCopy), dir_snapBuild)
+
+   #
+   # Provided the contents of snapcraft.yaml are correct, snapcraft supposedly does everything else for us.
+   #
+   # The "finger snap" emoji is to make these lines stand out in the log file!
+   #
+   btLogger.log.info('🫰 Running snapcraft pull in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'pull', '--verbose']))
+   btLogger.log.info('🫰 Running snapcraft build in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'build', '--verbose']))
+   btLogger.log.info('🫰 Running snapcraft stage in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'stage', '--verbose']))
+   btLogger.log.info('🫰 Running snapcraft prime in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'prime', '--verbose']))
+   btLogger.log.info('🫰 Running snapcraft pack in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'pack', '--verbose']))
+
+   # TODO - Finish this!
 
    return

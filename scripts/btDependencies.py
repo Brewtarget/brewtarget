@@ -167,6 +167,7 @@ def installDependencies():
             qt6svgDevPackage,
             'qttools5-dev-tools', # For Qt5 version of lupdate, per comment above
             'qt6-tools-dev-tools',
+            'doxygen',
             #
             # The following are needed to build the install packages (rather than just install locally)
             #
@@ -174,8 +175,6 @@ def installDependencies():
             'lintian'        , # Needed to validate .deb packages
             'rpm'            , # Needed to build RPMs
             'rpmlint'        , # Needed to validate RPMs
-            'flatpak'        ,
-            'flatpak-builder'
 
          ]
          for packageToInstall in installList:
