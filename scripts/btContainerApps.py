@@ -307,28 +307,32 @@ def doFlatpak():
    openJdkVersion = '25.08' # Ditto!
    btLogger.log.info('Installing Flatpak SDK and Runtime')
    btExecute.abortOnRunFail(
+      #
+      # Here and elsewhere, using the '--user' option restricts the installs to the current user (rather than
+      # system-wide), which is sufficient for our needs for the packaging process.
+      #
       subprocess.run(
-         ['flatpak', '--verbose', 'remote-add', '--if-not-exists', 'flathub', 'https://flathub.org/repo/flathub.flatpakrepo'],
+         ['flatpak', '--verbose', '--user', 'remote-add', '--if-not-exists', 'flathub', 'https://flathub.org/repo/flathub.flatpakrepo'],
          capture_output=False
       )
    )
    # TBD: in theory we don't need to install the platform -- it's needed to run the code but not to build it
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion],
+         ['flatpak', '--verbose', '--user', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion],
          capture_output=False
       )
    )
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion],
+         ['flatpak', '--verbose', '--user', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion],
          capture_output=False
       )
    )
    # I'm not totally sure that we need Java, but the Xerces build complains if it's not present
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', 'install', '--assumeyes', 'org.freedesktop.Sdk.Extension.openjdk11//' + openJdkVersion],
+         ['flatpak', '--verbose', '--user', 'install', '--assumeyes', 'org.freedesktop.Sdk.Extension.openjdk11//' + openJdkVersion],
          capture_output=False
       )
    )
@@ -361,7 +365,7 @@ def doFlatpak():
    btLogger.log.info('Installing Flatpak Linter')
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', 'install', '--assumeyes', 'org.flatpak.Builder'],
+         ['flatpak', '--verbose', '--user', 'install', '--assumeyes', 'org.flatpak.Builder'],
          capture_output=False
       )
    )
@@ -414,207 +418,12 @@ def doFlatpak():
       os.remove(file_manifest)
 
    #
-   # TODO: We should probably have Meson generate this file, and then we just need to copy/rename it here
+   # Meson generates our flatpak manifest (from a template in the packaging/linux directory), so we just need to copy
+   # and rename it here.
    #
-   # Manifest files can be in either JSON or YAML format.  We use the latter as it's slightly more concise and shares
-   # similar "meaningful indentation" rules to Python.
-   #
-   with open(file_manifest, 'w') as manifestFile:
-      manifestFile.write('\n'.join((
-         'id: ' + appId,
-         'runtime: org.kde.Platform',   # Using KDE here gives us Qt libraries
-         'runtime-version: "' + runtimeVersion + '"',
-         'sdk: org.kde.Sdk',            # SDK needs to correspond with runtime
-         'sdk-extensions:',
-         '  - org.freedesktop.Sdk.Extension.openjdk11',
-         'command: ' + projectName,     # This is just the executable called to run the application -- in our case the
-                                        # application itself
-         'desktop-file-name-suffix: " (' + versionString + ')"',  # Optional, but useful, to show version number
-         'modules:',
-         '  - name: openjdk',
-         '    buildsystem: simple',
-         '    build-commands:',
-         '      - /usr/lib/sdk/openjdk11/install.sh',
-         '',
-         '  - name: XercesC',
-         '    sources:',
-         '      - type: archive',
-         # There are various locations to download Xerces-C, but this is the official Apache mirror
-         '        url: https://dlcdn.apache.org//xerces/c/3/sources/xerces-c-3.3.0.tar.gz',
-         '        sha256: 9555f1d06f82987fbb4658862705515740414fd34b4db6ad2ed76a2dc08d3bde',
-         '        x-checker-data:',
-         '          type: anitya',
-         # Project ID comes from https://release-monitoring.org/project/5182/
-         '          project-id: 5182',
-         '          url-template: https://dlcdn.apache.org/xerces/c/3/sources/xerces-c-$version.tar.gz',
-         # Per https://bugs.gentoo.org/931105, this patch is required to build XercesC
-         '      - type: patch',
-         '        path: xerces-c-3.2.5-cxx17.patch',
-         '    buildsystem: cmake-ninja',
-         '    builddir: true',
-         # See https://xerces.apache.org/xerces-c/build-3.html for Xerces-C build options
-         '    config-opts:',
-         '      - -DCMAKE_BUILD_TYPE=Release',
-         '      - -DBUILD_SHARED_LIBS=ON',
-         '      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON',
-         '',
-         '  - name: XalanC',
-         '    sources:',
-         '      - type: archive',
-         # There are various locations to download Xerces-C, but this is the official Apache mirror
-         '        url: https://dlcdn.apache.org/xalan/xalan-c/sources/xalan_c-1.12.tar.gz',
-         '        sha512: a9f72f0e8e199ee2cfb4c19ecf390d5007f597aad96a53f55bc475805190302c7e0d800d776b7fb20fe8e2dddb6391e70aa3a8861a2303370135e8b0a5fd15fc',
-         '        x-checker-data:',
-         '          type: anitya',
-         # Project ID comes from https://release-monitoring.org/project/5153/
-         '          project-id: 5153',
-         '          url-template: https://dlcdn.apache.org/xalan/xalan-c/sources/xalan_c-$version.tar.gz',
-         # Per https://bugs.gentoo.org/955386, this patch is required to build XalanC with recent versions of CMake
-         '      - type: patch',
-         '        path: xalan-c-1.12-cmake-4.patch',
-         # Per https://bugs.gentoo.org/936501, this patch is required to build XalanC with recent versions of GCC
-         '      - type: patch',
-         '        path: xalan-c-1.12-gcc-15.patch',
-         # These patches are also listed in Gentoo XalanC build (See
-         # https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/xalan-c/files and
-         # https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/xalan-c/xalan-c-1.12-r4.ebuild.)
-         '      - type: patch',
-         '        path: xalan-c-1.12-fix-lto.patch',
-         '      - type: patch',
-         '        path: xalan-c-1.12-fix-threads.patch',
-         '      - type: patch',
-         '        path: xalan-c-1.12-icu-75.patch',
-         '    buildsystem: cmake-ninja',
-         '    builddir: true',
-         # See https://xerces.apache.org/xerces-c/build-3.html for Xerces-C build options
-         '    config-opts:',
-         '      - -DCMAKE_BUILD_TYPE=Release',
-         '      - -DBUILD_SHARED_LIBS=ON',
-         '      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON',
-         '      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5',
-         '',
-         '  - name: LibBacktrace',
-         '    sources:',
-         '      - type: git',
-         '        url: https://github.com/ianlancetaylor/libbacktrace/',
-         '        commit: b9e40069c0b47a722286b94eb5231f7f05c08713', # 2025-11-06
-         '',
-         '  - name: Boost',
-         '    buildsystem: simple',
-         # You can build Boost with CMake, but, for the moment at least, they still recommend using the B2 build system
-         # (see https://www.boost.org/doc/user-guide/getting-started.html#from-source).  Note that we minimise build time
-         # by only specifying the actual Boost libraries we want to build and install.
-         '    build-commands:',
-         '      - ./bootstrap.sh --prefix=${FLATPAK_DEST} --with-python=python3 --with-libraries=container,json,stacktrace',
-         # Note that we need to specify library-path so that libboost_stacktrace_backtrace can link against the
-         # LibBacktrace mentioned above.
-         '      - ./b2 --with-container --with-json --with-stacktrace boost.stacktrace.backtrace=on -j$FLATPAK_BUILDER_N_JOBS library-path=/app/lib install',
-         '    sources:',
-         '      - type: archive',
-         '        url: https://archives.boost.io/release/1.89.0/source/boost_1_89_0.tar.gz',
-         '        sha256: 9de758db755e8330a01d995b0a24d09798048400ac25c03fc5ea9be364b13c93',
-         '        x-checker-data:',
-         '          type: anitya',
-         # Project ID comes from https://release-monitoring.org/project/6845/
-         '          project-id: 6845',
-         '          stable-only: true',
-         '          url-template: https://archives.boost.io/release/$version/source/boost_${major}_${minor}_${patch}.tar.gz',
-         '    cleanup:',
-         '      - /lib/cmake',
-         '',
-         '  - name: Valijson',
-         '    sources:',
-         '      - type: git',
-         '        url: https://github.com/tristanpenman/valijson',
-         '        commit: 4edda758546436462da479bb8c8514f8a95c35ad', # 2025-05-07 = Valijson v1.0.6
-         '    buildsystem: simple',
-         '    build-commands:',
-         '      - cp -pr include/valijson /app/include/.',
-         ''
-         '  - name: pandoc',
-         '    buildsystem: simple',
-         '    build-commands:',
-         '      - cp -R . /app/',
-         '    sources:',
-         '      - type: archive',
-         '        url: https://github.com/jgm/pandoc/releases/download/3.8.3/pandoc-3.8.3-linux-amd64.tar.gz',
-         '        sha256: c224fab89f827d3623380ecb7c1078c163c769c849a14ac27e8d3bfbb914c9b4',
-         '        only-arches:',
-         '          - x86_64',
-         '        x-checker-data:',
-         '          type: json',
-         '          url: https://api.github.com/repos/jgm/pandoc/releases/latest',
-         '          version-query: .tag_name',
-         '          url-query: .assets[] | select(.name=="pandoc-" + $version + "-linux-amd64.tar.gz") | .browser_download_url',
-         # TODO: Need to do similar elsewhere to support building on ARM -- eg for Raspberry Pi
-         '      - type: archive',
-         '        url: https://github.com/jgm/pandoc/releases/download/3.8.3/pandoc-3.8.3-linux-arm64.tar.gz',
-         '        sha256: 166a5a37387eb10bd4c4f242a8109beef755ac1e8d4eb039c6b5ebd1d918d8d7',
-         '        only-arches:',
-         '          - aarch64',
-         '        x-checker-data:',
-         '          type: json',
-         '          url: https://api.github.com/repos/jgm/pandoc/releases/latest',
-         '          version-query: .tag_name',
-         '          url-query: .assets[] | select(.name=="pandoc-" + $version + "-linux-arm64.tar.gz") | .browser_download_url',
-         '',
-         #
-         # To get the packaging working, we want to be able to tweak things, including build-related stuff such as
-         # CMakeLists.txt and meson.build.  Using the dir option (see
-         # https://docs.flatpak.org/en/latest/module-sources.html#directory-source) allows us to build from local
-         # sources.  However, note that "when submitting an application to software stores like Flathub, dir should be
-         # avoided altogether".  TODO: We probably need to add an option to build from latest (or specified) GitHub
-         # release.
-         #
-         '  - name: ' + projectName,
-         '    sources:',
-         '      - type: dir',
-         '        path: copyOfSource',
-         # Although we're using meson, we can't put 'buildsystem: meson' here, as we need to do a couple of extra steps
-         '    buildsystem: simple',
-         '    build-commands:',
-         '      - mkdir mbuild',
-         '      - meson setup --includedir /app/include --libdir /app/lib:/app/lib64 mbuild .',
-         '      - meson compile -C mbuild --verbose',
-         '      - meson install -C mbuild --destdir /app',
-         # Telling Meson to install to /app gives us a tree of files under /app/usr/local that we now need to  relocate
-         # (and in some cases rename) to the places flatpak expects them to be.  See
-         # https://docs.flatpak.org/en/latest/conventions.html for details of what's expected.
-         '      - mv /app/usr/local/share/applications /app/share/.',
-         '      - mv /app/usr/local/share/icons /app/share/.',
-         '      - mv /app/usr/local/bin/* /app/bin/.',
-         '    builddir: true',
-         '    build-options:',
-         '      env:',
-         '        CMAKE_INCLUDE_PATH: /app/include',
-         '        BOOST_INCLUDEDIR:   /app/include',
-         '        BOOST_LIBRARYDIR: /app/lib',
-         '        BOOST_ROOT:       /app',
-         '        XercesC_ROOT:     /app',
-         '        XalanC_ROOT:      /app',
-         '        LIBRARY_PATH:     /app/lib:/app/lib64',
-         '        LD_LIBRARY_PATH:  /app/lib:/app/lib64',
-         '        PKG_CONFIG_PATH:  /app/lib/pkgconfig:/app/lib64/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig',
-         '',
-         #
-         # This section defines what permissions the containerised environment for our app will have.
-         #
-         # TBD: We start by copying some example ones, but these could doubtless be fine-tuned at some point.
-         #
-         'finish-args:',
-         # X11 + XShm access
-         '  - --share=ipc',
-         '  - --socket=fallback-x11',
-         # Wayland access
-         '  - --socket=wayland',
-         # GPU acceleration if needed
-         '  - --device=dri',
-         # Needs to talk to the network:
-         '  - --share=network',
-         # Needs to save files locally
-         '  - --filesystem=xdg-documents',
-         ''
-      )))
+   file_manifest_ori = btFileSystem.dir_build.joinpath('flatpackManifest.yml')
+   btLogger.log.debug('Copying ' + file_manifest_ori.as_posix() + ' to ' + file_manifest.as_posix())
+   shutil.copy2(file_manifest_ori, file_manifest)
 
    #
    # Before we try to use the manifest, we can run it through the linter to check for errors

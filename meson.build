@@ -1556,6 +1556,13 @@ if host_machine.system() == 'linux'
                   configuration : exportedVariables,
                   install : false)
    #
+   # Linux: Flatpak manifest.  NB: This gets renamed by scripts/btContainerApps.py:doFlatpak()
+   #
+   configure_file(input  : 'packaging/linux/flatpackManifest.in.yml',
+                  output : 'flatpackManifest.yml',
+                  configuration : exportedVariables,
+                  install : false)
+   #
    # Linux: Snap project file
    #
    configure_file(input  : 'packaging/linux/snapcraft.in.yaml',
