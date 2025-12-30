@@ -150,14 +150,14 @@ jobs:
           umask 022
           ../bt package
 
-      - name AppImage
+      - name: AppImage
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
         run: |
           umask 022
           ../bt appimage
 
-      - name Flatpak
+      - name: Flatpak
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
         run: |
