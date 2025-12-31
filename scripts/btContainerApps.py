@@ -312,28 +312,32 @@ def doFlatpak():
       # system-wide), which is sufficient for our needs for the packaging process.  Moreover, this allows us to run
       # inside a GitHub Action (where attempting the default system-wide install of a flatpak gives an error).
       #
+      # NOTE that, if needed, we can add the '--verbose' flag here, and to other invocations of the `flatpak` command.
+      # However, we usually don't because we end up generating too much output, and these "standard installs" are not
+      # typically where we hit problems.
+      #
       subprocess.run(
-         ['flatpak', '--verbose', '--user', 'remote-add', '--if-not-exists', 'flathub', 'https://flathub.org/repo/flathub.flatpakrepo'],
+         ['flatpak', '--user', 'remote-add', '--if-not-exists', 'flathub', 'https://flathub.org/repo/flathub.flatpakrepo'],
          capture_output=False
       )
    )
    # TBD: in theory we don't need to install the platform -- it's needed to run the code but not to build it
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', '--user', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion],
+         ['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion],
          capture_output=False
       )
    )
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', '--user', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion],
+         ['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion],
          capture_output=False
       )
    )
    # I'm not totally sure that we need Java, but the Xerces build complains if it's not present
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', '--user', 'install', '--assumeyes', 'org.freedesktop.Sdk.Extension.openjdk11//' + openJdkVersion],
+         ['flatpak', '--user', 'install', '--assumeyes', 'org.freedesktop.Sdk.Extension.openjdk11//' + openJdkVersion],
          capture_output=False
       )
    )
@@ -366,7 +370,7 @@ def doFlatpak():
    btLogger.log.info('Installing Flatpak Linter')
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', '--user', 'install', '--assumeyes', 'org.flatpak.Builder'],
+         ['flatpak', '--user', 'install', '--assumeyes', 'org.flatpak.Builder'],
          capture_output=False
       )
    )

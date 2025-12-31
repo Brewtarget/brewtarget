@@ -106,9 +106,16 @@ modules:
      # by only specifying the actual Boost libraries we want to build and install.
      build-commands:
        - ./bootstrap.sh --prefix=${FLATPAK_DEST} --with-python=python3 --with-libraries=container,json,stacktrace
+       #
        # Note that we need to specify library-path so that libboost_stacktrace_backtrace can link against the
        # LibBacktrace mentioned above.
-       - ./b2 --with-container --with-json --with-stacktrace boost.stacktrace.backtrace=on -j$FLATPAK_BUILDER_N_JOBS library-path=/app/lib install
+       #
+       # The '-d0' flag here is to "Suppress all informational messages" (per
+       # https://www.boost.org/latest/tools/build/doc/html/index.html#b2.overview.invocation.options).  If we don't do
+       # this, the default build outputs tens of thousands of lines of info, which can make it hard to scroll through
+       # GitHub Action output to get to any subsequent error.
+       #
+       - ./b2 -d0 --with-container --with-json --with-stacktrace boost.stacktrace.backtrace=on -j$FLATPAK_BUILDER_N_JOBS library-path=/app/lib install
      sources:
        - type: archive
          url: https://archives.boost.io/release/1.89.0/source/boost_1_89_0.tar.gz
