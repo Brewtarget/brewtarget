@@ -53,10 +53,13 @@ modules:
      buildsystem: cmake-ninja
      builddir: true
      # See https://xerces.apache.org/xerces-c/build-3.html for Xerces-C build options
+     # We use '-Wno-dev' to suppress compile warnings in the Xerces build.  There are a lot of them, and it overwhelms
+     # the log file when we run in a GitHub Action.
      config-opts:
        - -DCMAKE_BUILD_TYPE=Release
        - -DBUILD_SHARED_LIBS=ON
        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+       - -Wno-dev
 
    - name: XalanC
      sources:
@@ -86,12 +89,15 @@ modules:
          path: xalan-c-1.12-icu-75.patch
      buildsystem: cmake-ninja
      builddir: true
-     # See https://xerces.apache.org/xerces-c/build-3.html for Xerces-C build options
+     # See https://xalan-c.org/build.html#configuration for Xalan-C build options
+     # We use '-Wno-dev' to suppress compile warnings in the Xalan build.  There are a lot of them, and it overwhelms
+     # the log file when we run in a GitHub Action.
      config-opts:
        - -DCMAKE_BUILD_TYPE=Release
        - -DBUILD_SHARED_LIBS=ON
        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
        - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+       - -Wno-dev
 
    - name: LibBacktrace
      sources:
@@ -112,8 +118,8 @@ modules:
        #
        # The '-d0' flag here is to "Suppress all informational messages" (per
        # https://www.boost.org/latest/tools/build/doc/html/index.html#b2.overview.invocation.options).  If we don't do
-       # this, the default build outputs tens of thousands of lines of info, which can make it hard to scroll through
-       # GitHub Action output to get to any subsequent error.
+       # this, the default build several thousand lines of info, which can make it hard to scroll through GitHub Action
+       # output to get to any subsequent error.
        #
        - ./b2 -d0 --with-container --with-json --with-stacktrace boost.stacktrace.backtrace=on -j$FLATPAK_BUILDER_N_JOBS library-path=/app/lib install
      sources:
