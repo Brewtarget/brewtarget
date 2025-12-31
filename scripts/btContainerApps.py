@@ -309,7 +309,8 @@ def doFlatpak():
    btExecute.abortOnRunFail(
       #
       # Here and elsewhere, using the '--user' option restricts the installs to the current user (rather than
-      # system-wide), which is sufficient for our needs for the packaging process.
+      # system-wide), which is sufficient for our needs for the packaging process.  Moreover, this allows us to run
+      # inside a GitHub Action (where attempting the default system-wide install of a flatpak gives an error).
       #
       subprocess.run(
          ['flatpak', '--verbose', '--user', 'remote-add', '--if-not-exists', 'flathub', 'https://flathub.org/repo/flathub.flatpakrepo'],

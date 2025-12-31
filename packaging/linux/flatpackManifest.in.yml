@@ -124,9 +124,12 @@ modules:
 
    - name: Valijson
      sources:
-       - type: git
-         url: https://github.com/tristanpenman/valijson
-         commit: 4edda758546436462da479bb8c8514f8a95c35ad  # 2025-05-07 = Valijson v1.0.6
+       - type: archive
+         url: https://github.com/tristanpenman/valijson/archive/refs/tags/v1.0.6.tar.gz
+         sha256: bf0839de19510ff7792d8a8aca94ea11a288775726b36c4c9a2662651870f8da
+#       - type: git
+#         url: https://github.com/tristanpenman/valijson
+#         commit: 4edda758546436462da479bb8c8514f8a95c35ad  # 2025-05-07 = Valijson v1.0.6
      buildsystem: simple
      build-commands:
        - cp -pr include/valijson /app/include/.
