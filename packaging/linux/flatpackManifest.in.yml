@@ -53,8 +53,8 @@ modules:
      buildsystem: cmake-ninja
      builddir: true
      # See https://xerces.apache.org/xerces-c/build-3.html for Xerces-C build options
-     # We use '-Wno-dev' to suppress compile warnings in the Xerces build.  There are a lot of them, and it overwhelms
-     # the log file when we run in a GitHub Action.
+     # We would like to suppress compile warnings in the Xerces build, as there are a lot of them, and it overwhelms
+     # the log file when we run in a GitHub Action.  I hoped that '-Wno-dev' would do the job, but it does not.
      config-opts:
        - -DCMAKE_BUILD_TYPE=Release
        - -DBUILD_SHARED_LIBS=ON
@@ -90,8 +90,8 @@ modules:
      buildsystem: cmake-ninja
      builddir: true
      # See https://xalan-c.org/build.html#configuration for Xalan-C build options
-     # We use '-Wno-dev' to suppress compile warnings in the Xalan build.  There are a lot of them, and it overwhelms
-     # the log file when we run in a GitHub Action.
+     # We would like to suppress compile warnings in the Xalan build, as there are a lot of them, and it overwhelms
+     # the log file when we run in a GitHub Action.  I hoped that '-Wno-dev' would do the job, but it does not.
      config-opts:
        - -DCMAKE_BUILD_TYPE=Release
        - -DBUILD_SHARED_LIBS=ON

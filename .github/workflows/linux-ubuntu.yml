@@ -157,12 +157,16 @@ jobs:
           umask 022
           ../bt appimage
 
-      - name: Flatpak
-        working-directory: ${{github.workspace}}/mbuild
-        shell: bash
-        run: |
-          umask 022
-          ../bt flatpak
+      #
+      # Can't get this working for the moment on Brewtarget and GitHub Action won't show me enough of the logs to see
+      # the error.  Seems to be working on Brewken though, so hopefully is fixable!
+      #
+#      - name: Flatpak
+#        working-directory: ${{github.workspace}}/mbuild
+#        shell: bash
+#        run: |
+#          umask 022
+#          ../bt flatpak
 
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}

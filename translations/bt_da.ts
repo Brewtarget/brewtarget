@@ -127,11 +127,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Boil.cpp" line="37"/>
-        <source>Boil Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/model/Boil.cpp" line="182"/>
         <source>a recipe</source>
         <translation>en opskrift</translation>
@@ -157,6 +152,11 @@
         <translation>Automatisk generet forkogningstrin for %1</translation>
     </message>
     <message>
+        <location filename="../src/model/Boil.cpp" line="37"/>
+        <source>Time At Boiling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/model/Boil.cpp" line="207"/>
         <source>Automatically-generated boil proper step for %1</source>
         <translation>Automatisk genereret almindeligt kogetrin for %1</translation>
@@ -172,12 +172,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="544"/>
+        <location filename="../src/trees/TreeNode.cpp" line="561"/>
         <source>Boil time (mins)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="414"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="429"/>
         <source>Boil Profiles</source>
         <translation type="unfinished"></translation>
     </message>
@@ -205,7 +205,7 @@
         <translation>I rækkefølge</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="564"/>
+        <location filename="../src/trees/TreeNode.cpp" line="581"/>
         <source>Step time (mins)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -811,7 +811,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="433"/>
+        <location filename="../src/trees/TreeNode.cpp" line="450"/>
         <source>Brew Note #%1 for brew on %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3089,104 +3089,109 @@ Logfil indeholder måske flere detaljer.</translation>
 <context>
     <name>Derived</name>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="108"/>
+        <location filename="../src/trees/TreeViewBase.h" line="107"/>
         <source>New</source>
         <translation type="unfinished">Ny</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="110"/>
+        <location filename="../src/trees/TreeViewBase.h" line="109"/>
         <source>Folder</source>
         <translation type="unfinished">Mappe</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="112"/>
+        <location filename="../src/trees/TreeViewBase.h" line="111"/>
         <source>%1 Purchase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="117"/>
+        <location filename="../src/trees/TreeViewBase.h" line="116"/>
         <source>Copy</source>
         <translation type="unfinished">Kopier</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="119"/>
+        <location filename="../src/trees/TreeViewBase.h" line="118"/>
         <source>Delete</source>
         <translation type="unfinished">Slet</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="122"/>
+        <location filename="../src/trees/TreeViewBase.h" line="121"/>
         <source>Export</source>
         <translation type="unfinished">Eksporter</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="123"/>
+        <location filename="../src/trees/TreeViewBase.h" line="122"/>
         <source>To File (BeerXML or BeerJSON)</source>
         <translation type="unfinished">Til fil (BeerXML eller BeerJSON)</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="126"/>
+        <location filename="../src/trees/TreeViewBase.h" line="125"/>
         <source>Import</source>
         <translation type="unfinished">Importer</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="263"/>
+        <location filename="../src/trees/TreeViewBase.h" line="262"/>
         <source>Copy %1</source>
         <translation type="unfinished">Kopier %1</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="264"/>
+        <location filename="../src/trees/TreeViewBase.h" line="263"/>
         <source>Enter a unique name for the copy of %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="265"/>
+        <location filename="../src/trees/TreeViewBase.h" line="264"/>
         <source>An empty name will skip copying this %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="266"/>
+        <location filename="../src/trees/TreeViewBase.h" line="265"/>
         <source>Cancel All</source>
         <translation type="unfinished">Annuller alt</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="386"/>
+        <location filename="../src/trees/TreeViewBase.h" line="390"/>
         <source>Delete %1 #%2 &quot;%3&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="209"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="256"/>
         <source>Add %1 to recipe</source>
         <translation type="unfinished">Føj %1 til opskrift</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="210"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="257"/>
         <source>Edit selected %1</source>
         <translation type="unfinished">Rediger markeret %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="211"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="258"/>
         <source>Delete selected %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="212"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="259"/>
         <source>New %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="213"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="260"/>
         <source>*EXPERIMENTAL* Merge selected %1 records</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="378"/>
-        <location filename="../src/trees/TreeViewBase.h" line="406"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="263"/>
+        <source>Show only non-zero inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/catalogs/CatalogBase.h" line="403"/>
+        <location filename="../src/trees/TreeViewBase.h" line="410"/>
         <source>%1 in use</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/catalogs/CatalogBase.h" line="379"/>
-        <location filename="../src/trees/TreeViewBase.h" line="407"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="404"/>
+        <location filename="../src/trees/TreeViewBase.h" line="411"/>
         <source>Cannot delete this %1, as it is used in %n recipe(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3194,33 +3199,33 @@ Logfil indeholder måske flere detaljer.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="386"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="411"/>
         <source>Delete %1 #%2 &quot;%3&quot;? (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="398"/>
-        <location filename="../src/trees/TreeViewBase.h" line="421"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="423"/>
+        <location filename="../src/trees/TreeViewBase.h" line="425"/>
         <source>Delete %1</source>
         <translation type="unfinished">Slet %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="451"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="476"/>
         <source>Merge %1 records</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="452"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="477"/>
         <source>Attempt to merge %1 %2 records? (NOTE: &lt;b&gt;This action cannot be undone!&lt;/b&gt;  It is intended for use where the records are identical or as near as makes no difference.  Use on non-identical records risks data loss.)&lt;br&gt;&lt;br&gt;&lt;b&gt;Please make sure you have a backup of your database file before using this function!&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="514"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="539"/>
         <source>%1 records differ</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/catalogs/CatalogBase.h" line="516"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="541"/>
         <source>WARNING: %1 records to be merged have %n difference(s).  Do you want to merge anyway?</source>
         <comment>0</comment>
         <translation type="unfinished">
@@ -3229,7 +3234,7 @@ Logfil indeholder måske flere detaljer.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/catalogs/CatalogBase.h" line="551"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="576"/>
         <source>%n field(s) differ between %1 #%2 and %1 #%3.  If you continue, %1 #%3 will be deleted and all uses of it will be replaced by %1 #%2.  This &lt;b&gt;cannot&lt;/b&gt; be undone.&lt;br&gt;&lt;br&gt;%4</source>
         <comment>0</comment>
         <translation type="unfinished">
@@ -3242,34 +3247,34 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="obsolete">Slet %1 %2?</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="520"/>
-        <location filename="../src/trees/TreeViewBase.h" line="581"/>
+        <location filename="../src/trees/TreeViewBase.h" line="516"/>
+        <location filename="../src/trees/TreeViewBase.h" line="577"/>
         <source>Folder name</source>
         <translation type="unfinished">Mappenavn</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="521"/>
-        <location filename="../src/trees/TreeViewBase.h" line="582"/>
+        <location filename="../src/trees/TreeViewBase.h" line="517"/>
+        <location filename="../src/trees/TreeViewBase.h" line="578"/>
         <source>Folder name:</source>
         <translation type="unfinished">Mappenavn:</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="535"/>
-        <location filename="../src/trees/TreeViewBase.h" line="544"/>
-        <location filename="../src/trees/TreeViewBase.h" line="595"/>
-        <location filename="../src/trees/TreeViewBase.h" line="603"/>
+        <location filename="../src/trees/TreeViewBase.h" line="531"/>
+        <location filename="../src/trees/TreeViewBase.h" line="540"/>
+        <location filename="../src/trees/TreeViewBase.h" line="591"/>
+        <location filename="../src/trees/TreeViewBase.h" line="599"/>
         <source>Bad Name</source>
         <translation type="unfinished">Uanvendeligt navn</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="536"/>
-        <location filename="../src/trees/TreeViewBase.h" line="596"/>
+        <location filename="../src/trees/TreeViewBase.h" line="532"/>
+        <location filename="../src/trees/TreeViewBase.h" line="592"/>
         <source>A folder name must have at least one non-whitespace character in it</source>
         <translation type="unfinished">Et mappenavn skal indeholde mindst et tegn ud over mellemrum</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="545"/>
-        <location filename="../src/trees/TreeViewBase.h" line="604"/>
+        <location filename="../src/trees/TreeViewBase.h" line="541"/>
+        <location filename="../src/trees/TreeViewBase.h" line="600"/>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished">Et mappenavn skal indeholde mindst et tegn ud over bogstaver</translation>
     </message>
@@ -3399,7 +3404,7 @@ Logfil indeholder måske flere detaljer.</translation>
 <context>
     <name>Derived::StockUseClass</name>
     <message>
-        <location filename="../src/model/StockPurchaseBase.h" line="360"/>
+        <location filename="../src/model/StockPurchaseBase.h" line="382"/>
         <source>Use of %1 in %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3503,7 +3508,7 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
     <message>
         <location filename="../src/model/Equipment.cpp" line="52"/>
-        <source>Kettle Boil Size</source>
+        <source>Boil Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3656,12 +3661,12 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation>Kogetid</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="484"/>
+        <location filename="../src/trees/TreeNode.cpp" line="501"/>
         <source>Preboil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="487"/>
+        <location filename="../src/trees/TreeNode.cpp" line="504"/>
         <source>BoilTime</source>
         <translation type="unfinished">Kogetid</translation>
     </message>
@@ -3883,11 +3888,6 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="unfinished">Gærbarhed</translation>
     </message>
     <message>
-        <location filename="../src/model/Fermentable.cpp" line="54"/>
-        <source>FineGrindYield</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/model/Fermentable.cpp" line="55"/>
         <source>Friability</source>
         <translation type="unfinished">Sprødhed</translation>
@@ -3913,8 +3913,13 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/model/Fermentable.cpp" line="54"/>
+        <source>Yield (DBFG) %</source>
+        <translation type="unfinished">Udbytte af ekstrakt med fint kværnet malt (DBFG) %</translation>
+    </message>
+    <message>
         <location filename="../src/model/Fermentable.cpp" line="60"/>
-        <source>Ibu Gal Per Lb</source>
+        <source>IBU Gal Per Lb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4068,19 +4073,19 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
     <message>
         <location filename="../src/model/Fermentable.cpp" line="74"/>
-        <location filename="../src/trees/TreeNode.cpp" line="623"/>
+        <location filename="../src/trees/TreeNode.cpp" line="640"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
         <location filename="../src/model/Fermentable.cpp" line="47"/>
         <location filename="../src/model/Fermentable.cpp" line="48"/>
-        <location filename="../src/trees/TreeNode.cpp" line="626"/>
+        <location filename="../src/trees/TreeNode.cpp" line="643"/>
         <source>Color</source>
         <translation>Farve</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="635"/>
+        <location filename="../src/trees/TreeNode.cpp" line="652"/>
         <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
         <translation type="unfinished">Udbytte af ekstrakt fra finmalet malt (DBFG)</translation>
     </message>
@@ -4090,7 +4095,7 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="unfinished">Gærbare ingredienser</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="206"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="207"/>
         <source>Fermentable Purchases</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4209,12 +4214,12 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
     <message>
         <location filename="../src/model/Fermentation.cpp" line="26"/>
-        <location filename="../src/trees/TreeNode.cpp" line="583"/>
+        <location filename="../src/trees/TreeNode.cpp" line="600"/>
         <source>Description</source>
         <translation type="unfinished">Beskrivelse</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="443"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="458"/>
         <source>Fermentation Profiles</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4247,7 +4252,7 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="602"/>
+        <location filename="../src/trees/TreeNode.cpp" line="619"/>
         <source>Step time (days)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4465,16 +4470,6 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation>Humle</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="39"/>
-        <source>Alpha Acid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/model/Hop.cpp" line="40"/>
-        <source>Beta Acids</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/model/Hop.cpp" line="41"/>
         <source>β-Pinene</source>
         <translation type="unfinished"></translation>
@@ -4620,13 +4615,19 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
     <message>
         <location filename="../src/model/Hop.cpp" line="61"/>
-        <location filename="../src/trees/TreeNode.cpp" line="812"/>
+        <location filename="../src/trees/TreeNode.cpp" line="962"/>
         <source>Type</source>
         <translation>Form</translation>
     </message>
     <message>
+        <location filename="../src/model/Hop.cpp" line="39"/>
         <source>% Alpha</source>
-        <translation type="vanished">% alfa</translation>
+        <translation>% alfa</translation>
+    </message>
+    <message>
+        <location filename="../src/model/Hop.cpp" line="40"/>
+        <source>% Beta</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/model/Hop.cpp" line="54"/>
@@ -4634,18 +4635,18 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation>Oprindelsessted</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="794"/>
+        <location filename="../src/trees/TreeNode.cpp" line="944"/>
         <source>Alpha</source>
         <translation type="unfinished">Alfa</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="798"/>
+        <location filename="../src/trees/TreeNode.cpp" line="948"/>
         <source>Beta</source>
         <translation type="unfinished">Beta</translation>
     </message>
     <message>
         <location filename="../src/model/Hop.cpp" line="45"/>
-        <location filename="../src/trees/TreeNode.cpp" line="807"/>
+        <location filename="../src/trees/TreeNode.cpp" line="957"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4655,7 +4656,7 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="unfinished">Humle</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="242"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="246"/>
         <source>Hop Purchases</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4883,6 +4884,11 @@ Logfil indeholder måske flere detaljer.</translation>
         <source>Total Inventory</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../src/utils/ColumnOwnerTraits.h" line="94"/>
+        <source>Amount Type</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>IngredientInRecipe</name>
@@ -4894,7 +4900,7 @@ Logfil indeholder måske flere detaljer.</translation>
 <context>
     <name>IngredientName</name>
     <message>
-        <location filename="../src/model/StockPurchaseBase.h" line="537"/>
+        <location filename="../src/model/StockPurchaseBase.h" line="561"/>
         <source>Purchase of %1 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -4972,12 +4978,12 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Gem</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1872"/>
+        <location filename="../src/MainWindow.cpp" line="1861"/>
         <source>Equipment request</source>
         <translation>Udstyr forespørgsel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1873"/>
+        <location filename="../src/MainWindow.cpp" line="1862"/>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
         <translation>Ønsker du at sætte volumen af portion, volumen før kogning og varighed til udstyrets værdier?</translation>
     </message>
@@ -5002,38 +5008,38 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Brewtarget database (*.sqlite)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2183"/>
+        <location filename="../src/MainWindow.cpp" line="2172"/>
         <source>Recipe name</source>
         <translation>Opskrift navn</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2183"/>
+        <location filename="../src/MainWindow.cpp" line="2172"/>
         <source>Recipe name:</source>
         <translation>Opskrift navn:</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2294"/>
+        <location filename="../src/MainWindow.cpp" line="2283"/>
         <source>Backup Database</source>
         <translation>Sikkerhedskopier database</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2303"/>
-        <location filename="../src/MainWindow.cpp" line="2321"/>
+        <location filename="../src/MainWindow.cpp" line="2292"/>
+        <location filename="../src/MainWindow.cpp" line="2310"/>
         <source>Oops!</source>
         <translation>Hovsa!</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2303"/>
+        <location filename="../src/MainWindow.cpp" line="2292"/>
         <source>Could not copy the files for some reason.</source>
         <translation>Kan ikke kopiere filer.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2310"/>
+        <location filename="../src/MainWindow.cpp" line="2299"/>
         <source>A Warning</source>
         <translation>Advarsel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2311"/>
+        <location filename="../src/MainWindow.cpp" line="2300"/>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
         <translation>Dette vil destruere det nuværende sæt af opskrifter og ingredienser. Fortsæt?</translation>
     </message>
@@ -5066,7 +5072,7 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Giv din mæsk et navn før du gemmer.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2323"/>
+        <location filename="../src/MainWindow.cpp" line="2312"/>
         <source>Restart</source>
         <translation>Genstart</translation>
     </message>
@@ -5075,42 +5081,42 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Genstart Brewtarget.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2337"/>
+        <location filename="../src/MainWindow.cpp" line="2326"/>
         <source>No equipment</source>
         <translation>Intet udstyr</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2337"/>
+        <location filename="../src/MainWindow.cpp" line="2326"/>
         <source>You must select or define an equipment profile first.</source>
         <translation>Vælg eller definer en udstyrsprofil først.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2347"/>
+        <location filename="../src/MainWindow.cpp" line="2336"/>
         <source>No style</source>
         <translation>Ingen stilart</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2347"/>
+        <location filename="../src/MainWindow.cpp" line="2336"/>
         <source>You must select a style first.</source>
         <translation>Vælg en stilart først.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2317"/>
+        <location filename="../src/MainWindow.cpp" line="2306"/>
         <source>Choose File</source>
         <translation>Vælg fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="551"/>
+        <location filename="../src/MainWindow.cpp" line="550"/>
         <source>Brew Note #%1 for brew on %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="555"/>
+        <location filename="../src/MainWindow.cpp" line="554"/>
         <source>Notes from brew day on %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2317"/>
+        <location filename="../src/MainWindow.cpp" line="2306"/>
         <source>SQLite (*.sqlite)</source>
         <translation>SQLite (*.sqlite)</translation>
     </message>
@@ -5151,12 +5157,12 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Fejl ved kopiering af opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2194"/>
+        <location filename="../src/MainWindow.cpp" line="2183"/>
         <source>An error was returned while creating %1</source>
         <translation>Der opstod en fejl ved dannelse af %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="405"/>
+        <location filename="../src/MainWindow.cpp" line="410"/>
         <source>Add %1 to recipe</source>
         <translation>Føj %1 til opskrift</translation>
     </message>
@@ -5173,12 +5179,12 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Fjern %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="893"/>
+        <location filename="../src/MainWindow.cpp" line="902"/>
         <source>Error Loading Data</source>
         <translation>Fejl ved hentning af data</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="896"/>
+        <location filename="../src/MainWindow.cpp" line="905"/>
         <source>The program may not work if you ignore this error.
 
 See logs for more details.
@@ -5191,18 +5197,18 @@ Se log for flere detaljer.
 Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="926"/>
-        <location filename="../src/MainWindow.cpp" line="927"/>
+        <location filename="../src/MainWindow.cpp" line="935"/>
+        <location filename="../src/MainWindow.cpp" line="936"/>
         <source>About %1</source>
         <translation>Om %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1739"/>
+        <location filename="../src/MainWindow.cpp" line="1728"/>
         <source>Change Recipe Name</source>
         <translation>Ændr opskriftnavn</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1911"/>
+        <location filename="../src/MainWindow.cpp" line="1900"/>
         <source>Change Recipe Style</source>
         <translation>Ændr opskriftens stilart</translation>
     </message>
@@ -5215,128 +5221,128 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Ændr udstyr for opskriften</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1862"/>
+        <location filename="../src/MainWindow.cpp" line="1851"/>
         <source>Change Recipe Kit</source>
         <translation>Ændr opskriftskit</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1867"/>
+        <location filename="../src/MainWindow.cpp" line="1856"/>
         <source>Change Tun Weight</source>
         <translation>Ændr karrets masse</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1868"/>
+        <location filename="../src/MainWindow.cpp" line="1857"/>
         <source>Change Tun Specific Heat</source>
         <translation>Ændr karrets specifikke varmefylde</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1882"/>
-        <location filename="../src/MainWindow.cpp" line="2032"/>
+        <location filename="../src/MainWindow.cpp" line="1871"/>
+        <location filename="../src/MainWindow.cpp" line="2021"/>
         <source>Change Batch Size</source>
         <translation>Ændr volumen af portion</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1885"/>
+        <location filename="../src/MainWindow.cpp" line="1874"/>
         <source>Change Boil Size</source>
         <translation>Ændr kogevolumen</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1887"/>
+        <location filename="../src/MainWindow.cpp" line="1876"/>
         <source>Change Boil Time</source>
         <translation>Ændr varighed af kogning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1935"/>
+        <location filename="../src/MainWindow.cpp" line="1924"/>
         <source>Drop fermentable(s) on a recipe</source>
         <translation>Træk gærbar(e) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1956"/>
+        <location filename="../src/MainWindow.cpp" line="1945"/>
         <source>Drop hop(s) on a recipe</source>
         <translation>Træk humle(r) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1977"/>
+        <location filename="../src/MainWindow.cpp" line="1966"/>
         <source>Drop misc(s) on a recipe</source>
         <translation>Træk diverse ingrediens(er) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1998"/>
+        <location filename="../src/MainWindow.cpp" line="1987"/>
         <source>Drop yeast(s) on a recipe</source>
         <translation>Træk gær til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2019"/>
+        <location filename="../src/MainWindow.cpp" line="2008"/>
         <source>Drop salt(s) on a recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2045"/>
+        <location filename="../src/MainWindow.cpp" line="2034"/>
         <source>Change Recipe Efficiency</source>
         <translation>Ændr effektivitet for opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2123"/>
+        <location filename="../src/MainWindow.cpp" line="2112"/>
         <source>Wrote recipe to file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2125"/>
+        <location filename="../src/MainWindow.cpp" line="2114"/>
         <source>Error writing recipe to file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2139"/>
+        <location filename="../src/MainWindow.cpp" line="2128"/>
         <source>Undo %1</source>
         <translation>Fortryd %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2140"/>
+        <location filename="../src/MainWindow.cpp" line="2129"/>
         <source>Redo %1</source>
         <translation>Gentag %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2193"/>
+        <location filename="../src/MainWindow.cpp" line="2182"/>
         <source>Error creating recipe</source>
         <translation>Fejl ved dannelse af opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2321"/>
+        <location filename="../src/MainWindow.cpp" line="2310"/>
         <source>Operation failed.  See log file for more details.</source>
         <translation>Handlingen mislykkedes. Se detaljer i logfil.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2323"/>
+        <location filename="../src/MainWindow.cpp" line="2312"/>
         <source>Please restart %1.</source>
         <translation>Genstart venligst %1.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2520"/>
+        <location filename="../src/MainWindow.cpp" line="2537"/>
         <source>Nothing to export</source>
         <translation>Intet at eksportere</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2521"/>
+        <location filename="../src/MainWindow.cpp" line="2538"/>
         <source>None of the selected items is exportable</source>
         <translation>Ingen af de markerede kan eksporteres</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2646"/>
+        <location filename="../src/MainWindow.cpp" line="2663"/>
         <source>No Mash</source>
         <translation>Ingen mæskning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2646"/>
+        <location filename="../src/MainWindow.cpp" line="2663"/>
         <source>You must define a mash first.</source>
         <translation>Du skal først definere en mæskning.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2205"/>
+        <location filename="../src/MainWindow.cpp" line="2194"/>
         <source>Automatically-created Boil for %1</source>
         <translation>Automatisk genereret kogning for %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2212"/>
+        <location filename="../src/MainWindow.cpp" line="2201"/>
         <source>Automatically-created Fermentation for %1</source>
         <translation>Automatisk genereret gæring for %1</translation>
     </message>
@@ -5355,8 +5361,8 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
         <location filename="../src/model/Mash.cpp" line="40"/>
-        <source>Grain Temperature</source>
-        <translation type="unfinished"></translation>
+        <source>Initial Grain Temperature</source>
+        <translation type="unfinished">Malttemperatur ved start</translation>
     </message>
     <message>
         <location filename="../src/model/Mash.cpp" line="41"/>
@@ -5385,8 +5391,12 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
         <location filename="../src/model/Mash.cpp" line="46"/>
+        <source>Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Total Mash Water</source>
-        <translation type="unfinished">Samlet volumen vand til mæskning</translation>
+        <translation type="obsolete">Samlet volumen vand til mæskning</translation>
     </message>
     <message>
         <location filename="../src/model/Mash.cpp" line="48"/>
@@ -5413,12 +5423,12 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="unfinished">Samlet varighed</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="506"/>
+        <location filename="../src/trees/TreeNode.cpp" line="523"/>
         <source>Total time (mins)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="378"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="393"/>
         <source>Mash Profiles</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5503,7 +5513,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
         <location filename="../src/model/MashStep.cpp" line="40"/>
-        <source>Liquor To Grist Ratio</source>
+        <source>Water:Grain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5551,7 +5561,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Unavngivet mæskningstrin</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="525"/>
+        <location filename="../src/trees/TreeNode.cpp" line="542"/>
         <source>Step time (mins)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5820,7 +5830,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
         <location filename="../src/model/Misc.cpp" line="41"/>
-        <location filename="../src/trees/TreeNodeTraits.h" line="457"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="472"/>
         <source>Miscellaneous</source>
         <translation>Diverse ingredienser</translation>
     </message>
@@ -5855,12 +5865,12 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
         <location filename="../src/model/Misc.cpp" line="45"/>
-        <location filename="../src/trees/TreeNode.cpp" line="832"/>
+        <location filename="../src/trees/TreeNode.cpp" line="982"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="276"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="284"/>
         <source>Misc Purchases</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6003,23 +6013,8 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation>Uden navn %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1777"/>
+        <location filename="../src/MainWindow.cpp" line="1766"/>
         <source>Change %1 on %2 Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/trees/TreeNodeBase.h" line="625"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/trees/TreeNodeBase.h" line="626"/>
-        <source>Path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/trees/TreeNodeBase.h" line="627"/>
-        <source>Full Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6701,7 +6696,7 @@ Programmet lukkes nu.</translation>
         <translation>Ikke muligt at finde filmønstret %1 i mappen %2</translation>
     </message>
     <message>
-        <location filename="../src/database/ObjectStoreTyped.cpp" line="1070"/>
+        <location filename="../src/database/ObjectStoreTyped.cpp" line="1071"/>
         <source>There were errors loading the following object store(s): %1</source>
         <translation>Der opstod fejl ved hentning af følgende objektsamling(er): %1</translation>
     </message>
@@ -7455,47 +7450,47 @@ Logfil indeholder evt. flere detaljer.</translation>
         <translation>Tredje gæringstrin i %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="240"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="254"/>
         <source>%1 Catalog / Database</source>
         <translation>%1 Katalog / Database</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="248"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="273"/>
         <source>Set for Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="250"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="275"/>
         <source>Add to Recipe</source>
         <translation>Føj til opskrift</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="253"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="278"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="257"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="282"/>
         <source>Filter search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="260"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="285"/>
         <source>Set selected %1 for current recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="262"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="287"/>
         <source>Add selected %1 to current recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="267"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="292"/>
         <source>Delete selected %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="270"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="295"/>
         <location filename="../src/widgets/StockManager.cpp" line="61"/>
         <source>Enter filter</source>
         <translation type="unfinished"></translation>
@@ -7505,12 +7500,12 @@ Logfil indeholder evt. flere detaljer.</translation>
         <translation type="vanished">Føj markeret %1 til opskrift</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="265"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="290"/>
         <source>Create new %1</source>
         <translation>Lav ny %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="266"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="291"/>
         <source>Edit selected %1</source>
         <translation>Rediger markeret %1</translation>
     </message>
@@ -7529,12 +7524,12 @@ Logfil indeholder evt. flere detaljer.</translation>
         <translation>% navn:</translation>
     </message>
     <message>
-        <location filename="../src/editors/EditorBaseField.h" line="206"/>
+        <location filename="../src/editors/EditorBaseField.h" line="194"/>
         <source>No</source>
         <translation>Nej</translation>
     </message>
     <message>
-        <location filename="../src/editors/EditorBaseField.h" line="207"/>
+        <location filename="../src/editors/EditorBaseField.h" line="195"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
@@ -8106,11 +8101,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="1347"/>
-        <source>Number of Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/model/Recipe.cpp" line="1349"/>
         <source>Points</source>
         <translation type="unfinished"></translation>
@@ -8366,8 +8356,9 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Navn</translation>
     </message>
     <message>
+        <location filename="../src/model/Recipe.cpp" line="1347"/>
         <source>Snapshots</source>
-        <translation type="vanished">Oversigter</translation>
+        <translation>Oversigter</translation>
     </message>
     <message>
         <source>Brew Date</source>
@@ -8379,41 +8370,41 @@ The final volume in the primary is %1.</source>
         <translation>Stilart</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="398"/>
+        <location filename="../src/trees/TreeNode.cpp" line="415"/>
         <source>unknown style</source>
         <translation type="unfinished">ukendt stilart</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="399"/>
+        <location filename="../src/trees/TreeNode.cpp" line="416"/>
         <source>N/A</source>
         <translation type="unfinished">Ikke tilgængelig</translation>
     </message>
     <message>
         <location filename="../src/model/Recipe.cpp" line="1348"/>
-        <location filename="../src/trees/TreeNode.cpp" line="404"/>
+        <location filename="../src/trees/TreeNode.cpp" line="421"/>
         <source>OG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/model/Recipe.cpp" line="1332"/>
-        <location filename="../src/trees/TreeNode.cpp" line="407"/>
+        <location filename="../src/trees/TreeNode.cpp" line="424"/>
         <source>FG</source>
         <translation type="unfinished">Slutmassefylde (FG)</translation>
     </message>
     <message>
         <location filename="../src/model/Recipe.cpp" line="1324"/>
-        <location filename="../src/trees/TreeNode.cpp" line="412"/>
+        <location filename="../src/trees/TreeNode.cpp" line="429"/>
         <source>Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/model/Recipe.cpp" line="1338"/>
-        <location filename="../src/trees/TreeNode.cpp" line="416"/>
+        <location filename="../src/trees/TreeNode.cpp" line="433"/>
         <source>IBU</source>
         <translation type="unfinished">IBU</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="421"/>
+        <location filename="../src/trees/TreeNode.cpp" line="438"/>
         <source>ID in DB</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8423,7 +8414,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Opskrifter</translation>
     </message>
     <message>
-        <location filename="../src/qtModels/tableModels/TableModelBase.h" line="378"/>
+        <location filename="../src/qtModels/tableModels/TableModelBase.h" line="383"/>
         <source>Remove %1 from recipe</source>
         <translation type="unfinished">Fjern %1 fra opskrift</translation>
     </message>
@@ -9551,7 +9542,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../src/model/Salt.cpp" line="53"/>
-        <source>Percent Acid</source>
+        <source>%% Acid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9615,17 +9606,17 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../src/model/Salt.cpp" line="54"/>
-        <location filename="../src/trees/TreeNode.cpp" line="851"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1001"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="310"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="322"/>
         <source>Salt Purchases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="492"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="507"/>
         <source>Salts</source>
         <translation type="unfinished">Salte</translation>
     </message>
@@ -9773,7 +9764,7 @@ The final volume in the primary is %1.</source>
     <name>StockPurchase</name>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="28"/>
-        <source>StockPurchase</source>
+        <source>Stock Purchase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9798,34 +9789,48 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="33"/>
-        <source>Quantity Ordered</source>
+        <source>Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="34"/>
-        <source>Purchase Price</source>
+        <source>Quantity Ordered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="35"/>
-        <source>Purchase Tax</source>
+        <source>Purchase Price</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="36"/>
-        <source>Shipping Cost</source>
+        <source>Purchase Tax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="37"/>
+        <source>Shipping Cost</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/model/StockPurchase.cpp" line="38"/>
         <source>Ingredient</source>
         <translation type="unfinished">Ingrediens</translation>
     </message>
 </context>
 <context>
+    <name>StockPurchaseFermentable</name>
+    <message>
+        <location filename="../src/model/StockPurchaseFermentable.cpp" line="23"/>
+        <location filename="../src/model/StockPurchaseFermentable.cpp" line="24"/>
+        <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>StockPurchaseFermentableEditor</name>
     <message>
-        <location filename="../src/editors/StockPurchaseFermentableEditor.cpp" line="63"/>
+        <location filename="../src/editors/StockPurchaseFermentableEditor.cpp" line="74"/>
         <source>Fermentable Stock Purchase Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9851,7 +9856,7 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockPurchaseHopEditor</name>
     <message>
-        <location filename="../src/editors/StockPurchaseHopEditor.cpp" line="69"/>
+        <location filename="../src/editors/StockPurchaseHopEditor.cpp" line="98"/>
         <source>Hop Stock Purchase Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9859,7 +9864,7 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockPurchaseMiscEditor</name>
     <message>
-        <location filename="../src/editors/StockPurchaseMiscEditor.cpp" line="69"/>
+        <location filename="../src/editors/StockPurchaseMiscEditor.cpp" line="70"/>
         <source>Misc Stock Purchase Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9867,7 +9872,7 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockPurchaseSaltEditor</name>
     <message>
-        <location filename="../src/editors/StockPurchaseSaltEditor.cpp" line="69"/>
+        <location filename="../src/editors/StockPurchaseSaltEditor.cpp" line="70"/>
         <source>Salt Stock Purchase Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9875,7 +9880,7 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockPurchaseYeastEditor</name>
     <message>
-        <location filename="../src/editors/StockPurchaseYeastEditor.cpp" line="69"/>
+        <location filename="../src/editors/StockPurchaseYeastEditor.cpp" line="70"/>
         <source>Yeast Stock Purchase Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9884,7 +9889,7 @@ The final volume in the primary is %1.</source>
     <name>StockUse</name>
     <message>
         <location filename="../src/model/StockUse.cpp" line="21"/>
-        <source>StockPurchase Change</source>
+        <source>Stock Use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9941,7 +9946,7 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockUseFermentableEditor</name>
     <message>
-        <location filename="../src/editors/StockUseIngredientEditor.cpp" line="48"/>
+        <location filename="../src/editors/StockUseIngredientEditor.cpp" line="44"/>
         <source>%1 Stock Use Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9949,7 +9954,7 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockUseHopEditor</name>
     <message>
-        <location filename="../src/editors/StockUseIngredientEditor.cpp" line="74"/>
+        <location filename="../src/editors/StockUseIngredientEditor.cpp" line="70"/>
         <source>%1 Stock Use Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9957,7 +9962,7 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockUseMiscEditor</name>
     <message>
-        <location filename="../src/editors/StockUseIngredientEditor.cpp" line="100"/>
+        <location filename="../src/editors/StockUseIngredientEditor.cpp" line="96"/>
         <source>%1 Stock Use Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9965,7 +9970,7 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockUseSaltEditor</name>
     <message>
-        <location filename="../src/editors/StockUseIngredientEditor.cpp" line="126"/>
+        <location filename="../src/editors/StockUseIngredientEditor.cpp" line="122"/>
         <source>%1 Stock Use Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9973,7 +9978,7 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockUseYeastEditor</name>
     <message>
-        <location filename="../src/editors/StockUseIngredientEditor.cpp" line="152"/>
+        <location filename="../src/editors/StockUseIngredientEditor.cpp" line="148"/>
         <source>%1 Stock Use Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10016,9 +10021,8 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Style.cpp" line="41"/>
         <source>Category Number</source>
-        <translation type="unfinished">Kategorinummer</translation>
+        <translation type="obsolete">Kategorinummer</translation>
     </message>
     <message>
         <location filename="../src/model/Style.cpp" line="42"/>
@@ -10091,14 +10095,12 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Helhedsindtryk</translation>
     </message>
     <message>
-        <location filename="../src/model/Style.cpp" line="56"/>
         <source>Style Guide</source>
-        <translation type="unfinished">Stilart guide</translation>
+        <translation type="obsolete">Stilart guide</translation>
     </message>
     <message>
-        <location filename="../src/model/Style.cpp" line="57"/>
         <source>Style Letter</source>
-        <translation type="unfinished">Stilart bogstav</translation>
+        <translation type="obsolete">Stilart bogstav</translation>
     </message>
     <message>
         <location filename="../src/model/Style.cpp" line="59"/>
@@ -10146,36 +10148,39 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../src/model/Style.cpp" line="40"/>
-        <location filename="../src/trees/TreeNode.cpp" line="452"/>
+        <location filename="../src/trees/TreeNode.cpp" line="469"/>
         <source>Category</source>
         <translation>Kategori</translation>
     </message>
     <message>
+        <location filename="../src/model/Style.cpp" line="41"/>
         <source>Number</source>
-        <translation type="vanished">Tal</translation>
+        <translation>Tal</translation>
     </message>
     <message>
+        <location filename="../src/model/Style.cpp" line="57"/>
         <source>Letter</source>
-        <translation type="vanished">Bogstav</translation>
+        <translation>Bogstav</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="461"/>
+        <location filename="../src/model/Style.cpp" line="56"/>
+        <location filename="../src/trees/TreeNode.cpp" line="478"/>
         <source>Guide</source>
         <translation>Guide</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="455"/>
+        <location filename="../src/trees/TreeNode.cpp" line="472"/>
         <source>Code</source>
         <translation type="unfinished">Kode</translation>
     </message>
     <message>
         <location filename="../src/model/Style.cpp" line="58"/>
-        <location filename="../src/trees/TreeNode.cpp" line="464"/>
+        <location filename="../src/trees/TreeNode.cpp" line="481"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="509"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="524"/>
         <source>Styles</source>
         <translation type="unfinished">Stilarter</translation>
     </message>
@@ -10753,7 +10758,7 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Navn</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="907"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1057"/>
         <source>Ca</source>
         <translation>Ca</translation>
     </message>
@@ -10762,17 +10767,17 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">SO₄</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="921"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1071"/>
         <source>Cl</source>
         <translation>Cl</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="917"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1067"/>
         <source>Na</source>
         <translation>Na</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="910"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1060"/>
         <source>Mg</source>
         <translation>Mg</translation>
     </message>
@@ -10782,17 +10787,17 @@ The final volume in the primary is %1.</source>
         <translation>pH</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="914"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1064"/>
         <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="924"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1074"/>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="529"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="544"/>
         <source>Waters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11222,44 +11227,44 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../src/model/Yeast.cpp" line="58"/>
-        <location filename="../src/trees/TreeNode.cpp" line="871"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1021"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
         <location filename="../src/model/Yeast.cpp" line="44"/>
-        <location filename="../src/trees/TreeNode.cpp" line="874"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1024"/>
         <source>Form</source>
         <translation>Tilstandsform</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="878"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1028"/>
         <source>Lab</source>
         <translation type="unfinished">Producent</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="881"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1031"/>
         <source>Attenuation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="886"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1036"/>
         <source>Id</source>
         <translation type="unfinished">Id</translation>
     </message>
     <message>
         <location filename="../src/model/Yeast.cpp" line="43"/>
-        <location filename="../src/trees/TreeNode.cpp" line="889"/>
+        <location filename="../src/trees/TreeNode.cpp" line="1039"/>
         <source>Flocculation</source>
         <translation type="unfinished">Flokkulering</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="345"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="360"/>
         <source>Yeast Purchases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNodeTraits.h" line="476"/>
+        <location filename="../src/trees/TreeNodeTraits.h" line="491"/>
         <source>Yeasts</source>
         <translation type="unfinished">Gær</translation>
     </message>
@@ -15682,125 +15687,130 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../ui/stockPurchaseIngredientEditor.ui" line="76"/>
+        <source>Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="87"/>
         <source>Ordered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="84"/>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="142"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="95"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="153"/>
         <source>Date</source>
         <translation type="unfinished">Dato</translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="94"/>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="152"/>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="248"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="105"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="163"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="259"/>
         <source>dd MMM yyyy</source>
         <translation type="unfinished">dd MMM yyyy</translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="108"/>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="166"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="119"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="177"/>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="121"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="132"/>
         <source>Amount ordered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="133"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="144"/>
         <source>Received</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="179"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="190"/>
         <source>Amount received</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="191"/>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="204"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="202"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="215"/>
         <source>Whether the amount is weight or volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="194"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="205"/>
         <source>Amount Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="212"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="223"/>
         <source>Uses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="227"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="238"/>
         <source>Amount Remaining</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="238"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="249"/>
         <source>Best Before</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="262"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="273"/>
         <source>ID in database</source>
         <translation type="unfinished">ID i database</translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="277"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="288"/>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation type="unfinished">Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="287"/>
-        <source>Extras</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/stockPurchaseIngredientEditor.ui" line="298"/>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="311"/>
-        <source>Purchase Price</source>
+        <source>Extras</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/stockPurchaseIngredientEditor.ui" line="322"/>
         <location filename="../ui/stockPurchaseIngredientEditor.ui" line="335"/>
-        <source>Purchase Tax</source>
+        <source>Purchase Price</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/stockPurchaseIngredientEditor.ui" line="346"/>
         <location filename="../ui/stockPurchaseIngredientEditor.ui" line="359"/>
+        <source>Purchase Tax</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="370"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="383"/>
         <source>Shipping Cost</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="391"/>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="394"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="415"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="418"/>
         <source>New</source>
         <translation type="unfinished">Ny</translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="405"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="429"/>
         <source>Save and close</source>
         <translation type="unfinished">Gem og luk</translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="408"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="432"/>
         <source>Save</source>
         <translation type="unfinished">Gem</translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="419"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="443"/>
         <source>Discard and close</source>
         <translation type="unfinished">Annuller og luk</translation>
     </message>
     <message>
-        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="422"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="446"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuller</translation>
     </message>
@@ -16547,40 +16557,40 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Mængde</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="137"/>
-        <location filename="../ui/yeastEditor.ui" line="147"/>
+        <location filename="../ui/yeastEditor.ui" line="134"/>
+        <location filename="../ui/yeastEditor.ui" line="144"/>
         <source>Lab</source>
         <translation>Producent</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="154"/>
-        <location filename="../ui/yeastEditor.ui" line="164"/>
+        <location filename="../ui/yeastEditor.ui" line="151"/>
+        <location filename="../ui/yeastEditor.ui" line="161"/>
         <source>Product ID</source>
         <translation>Product ID</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="272"/>
+        <location filename="../ui/yeastEditor.ui" line="269"/>
         <source>Min Temp</source>
         <translation>Min. temp.</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="282"/>
+        <location filename="../ui/yeastEditor.ui" line="279"/>
         <source>Min temp</source>
         <translation>Min temp.</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="309"/>
+        <location filename="../ui/yeastEditor.ui" line="306"/>
         <source>Max Temp</source>
         <translation>Maks temp.</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="319"/>
+        <location filename="../ui/yeastEditor.ui" line="316"/>
         <source>Max temp</source>
         <translation>Maks temp.</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="221"/>
-        <location filename="../ui/yeastEditor.ui" line="228"/>
+        <location filename="../ui/yeastEditor.ui" line="218"/>
+        <location filename="../ui/yeastEditor.ui" line="225"/>
         <source>Flocculation</source>
         <translation>Flokkulering</translation>
     </message>
@@ -16593,12 +16603,12 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Antal gange denne gær er blevet genhøstet</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="289"/>
+        <location filename="../ui/yeastEditor.ui" line="286"/>
         <source>Max Recultures</source>
         <translation>Maks genhøstninger</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="299"/>
+        <location filename="../ui/yeastEditor.ui" line="296"/>
         <source>Max recultures</source>
         <translation>Maks genhøstninger</translation>
     </message>
@@ -16612,7 +16622,7 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Total mængde på lager</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="117"/>
+        <location filename="../ui/yeastEditor.ui" line="114"/>
         <source>Total amount in inventory</source>
         <translation>Total mængde på lager</translation>
     </message>
@@ -16625,147 +16635,147 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Mængdeangivelse</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="187"/>
+        <location filename="../ui/yeastEditor.ui" line="184"/>
         <source>ID in database</source>
         <translation>ID i database</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="207"/>
+        <location filename="../ui/yeastEditor.ui" line="204"/>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation>Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="215"/>
+        <location filename="../ui/yeastEditor.ui" line="212"/>
         <source>Extras</source>
         <translation>Mere</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="235"/>
+        <location filename="../ui/yeastEditor.ui" line="232"/>
         <source>Min Attenuation (%)</source>
         <translation>Min forgæring (%)</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="245"/>
+        <location filename="../ui/yeastEditor.ui" line="242"/>
         <source>Minimum apparent attenuation as percentage of OG points</source>
         <translation>Minimal tilsyneladende forgæring som procent af OG-værdien</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="252"/>
+        <location filename="../ui/yeastEditor.ui" line="249"/>
         <source>Max Attenuation (%)</source>
         <translation>Maks forgæring (%)</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="262"/>
+        <location filename="../ui/yeastEditor.ui" line="259"/>
         <source>Maximum apparent attenuation as percentage of OG points</source>
         <translation>Maksimal tilsyneladende forgæring som procent af OG-værdien</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="326"/>
+        <location filename="../ui/yeastEditor.ui" line="323"/>
         <source>Alcohol Tolerance</source>
         <translation>Alkoholtolerance</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="336"/>
+        <location filename="../ui/yeastEditor.ui" line="333"/>
         <source>Recommended limit of ABV by the culture producer before attenuation stops</source>
         <translation>Anbefalet grænse for alkoholprocent i kulturen før forgæring stopper</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="343"/>
+        <location filename="../ui/yeastEditor.ui" line="340"/>
         <source>Phenolic Off-Flavor Positive</source>
         <translation>Phenoliske afvigende dufte positiv</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="350"/>
+        <location filename="../ui/yeastEditor.ui" line="347"/>
         <source>Whether culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts</source>
         <translation>Om gærkulturen er i stand til at danne phenoler, som er en normal særlig egenskab for saison- og brett-gær.</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="357"/>
+        <location filename="../ui/yeastEditor.ui" line="354"/>
         <source>Glucoamylase Positive</source>
         <translation>Glucoamylase-positiv</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="364"/>
+        <location filename="../ui/yeastEditor.ui" line="361"/>
         <source>A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.</source>
         <translation>En glucoamylase-positiv kultur kan frembringe glucoamylase. Dette er enzymet som stammer  fra det diastatiske gen, og som gør det muligt for gær at forgære dekstriner og stivelse. Herved muliggøres en meget lav FG. Dette er ønskværdigt i nogle saison/brett gærtyper såvel som den nye gulo hybrid fra producenten Omega.</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="371"/>
+        <location filename="../ui/yeastEditor.ui" line="368"/>
         <source>K1 Killer</source>
         <translation>K1 dræber</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="378"/>
+        <location filename="../ui/yeastEditor.ui" line="375"/>
         <source>Produces K1 killer toxin</source>
         <translation>Frembringer K1 dræbertoxin</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="385"/>
+        <location filename="../ui/yeastEditor.ui" line="382"/>
         <source>K2 Killer</source>
         <translation>K2 dræber</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="392"/>
+        <location filename="../ui/yeastEditor.ui" line="389"/>
         <source>Produces K2 killer toxin</source>
         <translation>Frembringer K2 dræbertoxin</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="399"/>
+        <location filename="../ui/yeastEditor.ui" line="396"/>
         <source>K28 Killer</source>
         <translation>K28 dræber</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="406"/>
+        <location filename="../ui/yeastEditor.ui" line="403"/>
         <source>Produces K28 killer toxin</source>
         <translation>Frembringer K28 dræbertoxin</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="413"/>
+        <location filename="../ui/yeastEditor.ui" line="410"/>
         <source>Klus Killer</source>
         <translation>Klus dræber</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="420"/>
+        <location filename="../ui/yeastEditor.ui" line="417"/>
         <source>Produces Klus killer toxin</source>
         <translation>Frembringer Klus dræbetoxin</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="427"/>
+        <location filename="../ui/yeastEditor.ui" line="424"/>
         <source>Killer Neutral</source>
         <translation>Dræberneutral</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="434"/>
+        <location filename="../ui/yeastEditor.ui" line="431"/>
         <source>Neutral strains do not produce toxins, nor are they killed by them</source>
         <translation>Neutrale arter frembringer ikke toxiner, og bliver heller ikke dræbt af dem</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="455"/>
+        <location filename="../ui/yeastEditor.ui" line="452"/>
         <source>Best For</source>
         <translation>Bedst til</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="465"/>
+        <location filename="../ui/yeastEditor.ui" line="462"/>
         <source>Notes</source>
         <translation>Notater</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="493"/>
+        <location filename="../ui/yeastEditor.ui" line="490"/>
         <source>New yeast</source>
         <translation>Ny gær</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="507"/>
+        <location filename="../ui/yeastEditor.ui" line="504"/>
         <source>Save and close</source>
         <translation>Gem og luk</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="521"/>
+        <location filename="../ui/yeastEditor.ui" line="518"/>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="496"/>
+        <location filename="../ui/yeastEditor.ui" line="493"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
@@ -16775,22 +16785,22 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="124"/>
+        <location filename="../ui/yeastEditor.ui" line="121"/>
         <source>Add Purchase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="127"/>
+        <location filename="../ui/yeastEditor.ui" line="124"/>
         <source>Create a new stock purchase record for this yeast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="510"/>
+        <location filename="../ui/yeastEditor.ui" line="507"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>
     <message>
-        <location filename="../ui/yeastEditor.ui" line="524"/>
+        <location filename="../ui/yeastEditor.ui" line="521"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
