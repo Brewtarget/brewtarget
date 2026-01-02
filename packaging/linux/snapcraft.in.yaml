@@ -1,0 +1,145 @@
+#-----------------------------------------------------------------------------------------------------------------------
+# packaging/linux/snapcraft.in.yaml is part of Brewtarget, and is copyright the following authors 2025:
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#-----------------------------------------------------------------------------------------------------------------------
+
+#
+# This file is used by meson.build to export build system config into mbuild/snapcraft.yaml for `./bt snap` to use
+#
+# See https://documentation.ubuntu.com/snapcraft/stable/reference/project-file/snapcraft-yaml/ for details of fields
+# below.
+#
+
+# This is registered with the Snap Store by Matt Young
+name: @CONFIG_APPLICATION_NAME_LC@
+
+# NB: Max length of title is 40 characters, ie ⇩
+title: Beer recipe and ingredient manager
+version: @CONFIG_VERSION_STRING@
+license: GPL-3.0+
+# NB: Max length of summary is 78 characters, is end of next line must be before here ⇩
+summary: Desktop application for managing beer recipes, ingredients and calculations
+# Advice is that description should be under 100 words
+description: |
+  @CONFIG_APPLICATION_NAME_UC@ is a calculator for brewing beer. It is a Qt-based program which
+  allows you to create recipes from a database of ingredients. It calculates
+  all the important parameters, helps you with mash temperatures, and just
+  makes the process of recipe formulation much easier.
+type: app
+#
+# Per https://documentation.ubuntu.com/snapcraft/stable/reference/bases/, using core24 here means "built from Ubuntu
+# 24.04 LTS".  (NB that build-base must not be specified unless base is set to 'bare', 'devel' or 'kernel'.)
+#
+base: core24
+
+grade: stable
+# See https://snapcraft.io/docs/snap-confinement for different Snap confinement levels.  Essentially you have to use
+# 'strict' unless you've got a very good reason to need 'classic' (which, per
+# https://snapcraft.io/docs/reviewing-classic-confinement-snaps, we don't).  Using 'devmode' here prevents us from
+# publishing the snap but allows us to debug what interfaces etc we would need to add to use 'strict'.
+confinement: devmode
+source-code: @CONFIG_GITHUB_URL@
+contact: @CONFIG_PACKAGE_MAINTAINER@
+website: @CONFIG_WEBSITE_URL@
+issues: @CONFIG_GITHUB_URL@/issues
+compression: xz
+icon: snap/gui/@CONFIG_APPLICATION_NAME_LC@.svg # TODO: check location!
+
+#
+# These are the dependencies required to build the app.  Should largely follow installList in
+# btDependencies.installDependencies()
+#
+build-packages:
+  - build-essential
+  - cmake # NB: CMake is used by Meson to locate packages
+  - coreutils
+  - git
+  - libgl1
+  - libglx-dev
+  - libgl1-mesa-dev
+  - libqt6gui6  # Qt GUI module -- needed for QColor (per https://doc.qt.io/qt-6.2/qtgui-module.html)
+  - libqt6sql6-psql
+  - libqt6sql6-sqlite
+  - libqt6svg6
+  - libqt6svgwidgets6
+  - libssl-dev  # For OpenSSL headers
+  - libxalan-c-dev
+  - libxerces-c-dev
+  - meson
+  - ninja-build
+  - pandoc
+  - python3
+  - python3-dev
+  - qmake6  # Possibly needed for Qt6 lupdate
+  - qt6-base-dev
+  - qt6-l10n-tools  # Needed for Qt6 lupdate?
+  - qt6-multimedia-dev
+  - qt6-tools-dev
+  - qt6-translations-l10n  # Puts all the *.qm files in /usr/share/qt6/translations
+  - qt6-svg-dev
+  - qttools5-dev-tools # For Qt5 version of lupdate, per comment above
+  - qt6-tools-dev-tools
+  - libboost-dev # This should give us Boost 1.83 on Ubuntu 24.04.
+  - libboost-stacktrace-dev
+  - doxygen
+
+platforms:
+  amd64:
+    build-on:
+      - amd64
+    build-for:
+      - amd64
+  arm64:
+    build-on:
+      - arm64
+    build-for:
+      - arm64
+
+#
+# This is the "map of app names representing entry points to run for the snap"
+#
+# See https://documentation.ubuntu.com/snapcraft/stable/reference/project-file/snapcraft-yaml/#app-keys for field info.
+#
+apps:
+  @CONFIG_APPLICATION_NAME_LC@:
+     command: bin/@CONFIG_APPLICATION_NAME_LC@
+
+#
+# These are "the self-contained software pieces needed to create the final artifact."
+#
+# See https://documentation.ubuntu.com/snapcraft/stable/reference/project-file/snapcraft-yaml/#part-keys for field info.
+#
+# Several environment variables are also available to us.  See
+# https://documentation.ubuntu.com/snapcraft/stable/reference/parts/part-environment-variables/ for details.
+#
+parts:
+  #
+  # See https://documentation.ubuntu.com/snapcraft/latest/common/craft-parts/reference/plugins/meson_plugin/ for
+  # (somewhat limited) info on the Snapcraft Meson plug-in.
+  #
+  main-part:
+    source: ../project
+    source-type: local
+    plugin: meson
+    # The commands to run instead of the default behavior of the build step.
+    # The standard build step actions can be performed by calling craftctl default.
+    # See comments in doSnap() in scripts/btContainerApps.py for more detail on what's going on here
+#    override-build: |
+#      pwd
+#      meson setup . ../src
+#      meson compile
+#      craftctl default
+#    meson-parameters:
+#      - "--verbose"
+#      - "--buildtype=release"

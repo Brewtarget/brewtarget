@@ -223,3 +223,27 @@ def readBuildConfigFile():
    with open(btFileSystem.dir_build.joinpath('config.toml').as_posix()) as buildConfigFile:
       buildConfig = tomlkit.parse(buildConfigFile.read())
    return
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Create fileToDistribute.sha256sum for a given fileToDistribute in a given directory
+#-----------------------------------------------------------------------------------------------------------------------
+def writeSha256sum(directory, fileToDistribute):
+   btLogger.log.info('Generating checksum file for ' + fileToDistribute + ' in ' + directory.as_posix())
+   #
+   # In Python 3.11 we could use the file_digest() function from the hashlib module to do this.  But it's rather
+   # more work to do in Python 3.10, so we just use the `sha256sum` command instead.
+   #
+   # Note however, that `sha256sum` includes the supplied directory path of a file in its output.  We want just the
+   # filename, not its full or partial path on the build machine.  So we change into the directory of the file before
+   # running the `sha256sum` command.
+   #
+   previousWorkingDirectory = pathlib.Path.cwd().as_posix()
+   os.chdir(directory)
+   with open(directory.joinpath(fileToDistribute + '.sha256sum').as_posix(),'w') as sha256File:
+      btExecute.abortOnRunFail(
+         subprocess.run(['sha256sum', fileToDistribute],
+                        capture_output=False,
+                        stdout=sha256File)
+      )
+   os.chdir(previousWorkingDirectory)
+   return

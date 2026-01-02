@@ -549,7 +549,6 @@ namespace {
       // Similarly, BeerJSON adds another couple of mash step types
       {MashStep::Type::SouringMash, "Decoction<!-- Souring Mash -->"},
       {MashStep::Type::SouringWort, "Decoction<!-- Souring Wort -->"},
-
    };
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<MashStep> {
       std::in_place_type_t<MashStep>{},

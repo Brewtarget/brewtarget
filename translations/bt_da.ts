@@ -156,6 +156,11 @@
         <translation>Automatisk generet forkogningstrin for %1</translation>
     </message>
     <message>
+        <location filename="../src/model/Boil.cpp" line="37"/>
+        <source>Time At Boiling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/model/Boil.cpp" line="207"/>
         <source>Automatically-generated boil proper step for %1</source>
         <translation>Automatisk genereret almindeligt kogetrin for %1</translation>
@@ -3179,37 +3184,44 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation>Slet %1 #%2 &quot;%3&quot;?</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="209"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="256"/>
         <source>Add %1 to recipe</source>
         <translation>Føj %1 til opskrift</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="210"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="257"/>
         <source>Edit selected %1</source>
         <translation>Rediger markeret %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="211"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="258"/>
         <source>Delete selected %1</source>
         <translation>Slet markeret %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="212"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="259"/>
         <source>New %1</source>
         <translation>Ny %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="213"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="260"/>
         <source>*EXPERIMENTAL* Merge selected %1 records</source>
         <translation>*PÅ FORSØGSBASIS* Sammenføj markeret %1 post</translation>
     </message>
     <message>
+        <location filename="../src/catalogs/CatalogBase.h" line="263"/>
+        <source>Show only non-zero inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/catalogs/CatalogBase.h" line="403"/>
         <location filename="../src/catalogs/CatalogBase.h" line="378"/>
         <location filename="../src/trees/TreeViewBase.h" line="410"/>
         <source>%1 in use</source>
         <translation>%1 er i brug</translation>
     </message>
     <message numerus="yes">
+        <location filename="../src/catalogs/CatalogBase.h" line="404"/>
         <location filename="../src/catalogs/CatalogBase.h" line="379"/>
         <location filename="../src/trees/TreeViewBase.h" line="411"/>
         <source>Cannot delete this %1, as it is used in %n recipe(s)</source>
@@ -3219,33 +3231,34 @@ Logfil indeholder måske flere detaljer.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="386"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="411"/>
         <source>Delete %1 #%2 &quot;%3&quot;? (%1)</source>
         <translation>Slet %1 #%2 &quot;%3&quot;? (%1)</translation>
     </message>
     <message>
+        <location filename="../src/catalogs/CatalogBase.h" line="423"/>
         <location filename="../src/catalogs/CatalogBase.h" line="398"/>
         <location filename="../src/trees/TreeViewBase.h" line="425"/>
         <source>Delete %1</source>
         <translation>Slet %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="451"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="476"/>
         <source>Merge %1 records</source>
         <translation>Sammenføj %1 poster</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="452"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="477"/>
         <source>Attempt to merge %1 %2 records? (NOTE: &lt;b&gt;This action cannot be undone!&lt;/b&gt;  It is intended for use where the records are identical or as near as makes no difference.  Use on non-identical records risks data loss.)&lt;br&gt;&lt;br&gt;&lt;b&gt;Please make sure you have a backup of your database file before using this function!&lt;/b&gt;</source>
         <translation>Forsøg at sammenføje %1 %2 poster?(BEMÆRK: &lt;b&gt;Dette kan ikke fortrydes!&lt;/b&gt;  Det er beregnet på at anvendes, når posterne er identiske eller så tæt på, at det er uden betydning.  Anvendelse på ikke identiske poster kan betyde datatab&lt;br&gt;&lt;br&gt;&lt;b&gt;Sørg for at have en sikkerhedskopi af databasen, før du bruger denne funktion!&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="514"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="539"/>
         <source>%1 records differ</source>
         <translation>%1 poster er forskellige</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/catalogs/CatalogBase.h" line="516"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="541"/>
         <source>WARNING: %1 records to be merged have %n difference(s).  Do you want to merge anyway?</source>
         <comment>0</comment>
         <translation>
@@ -3254,7 +3267,7 @@ Logfil indeholder måske flere detaljer.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/catalogs/CatalogBase.h" line="551"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="576"/>
         <source>%n field(s) differ between %1 #%2 and %1 #%3.  If you continue, %1 #%3 will be deleted and all uses of it will be replaced by %1 #%2.  This &lt;b&gt;cannot&lt;/b&gt; be undone.&lt;br&gt;&lt;br&gt;%4</source>
         <comment>0</comment>
         <translation>
@@ -3428,7 +3441,7 @@ Logfil indeholder måske flere detaljer.</translation>
 <context>
     <name>Derived::StockUseClass</name>
     <message>
-        <location filename="../src/model/StockPurchaseBase.h" line="360"/>
+        <location filename="../src/model/StockPurchaseBase.h" line="382"/>
         <source>Use of %1 in %2</source>
         <translation>Anvendelse af %1 i %2</translation>
     </message>
@@ -3531,6 +3544,9 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation>Udnyttelse af humle</translation>
     </message>
     <message>
+        <location filename="../src/model/Equipment.cpp" line="52"/>
+        <source>Boil Size</source>
+        <translation type="unfinished"></translation>
         <source>Kettle Boil Size</source>
         <translation type="vanished">Kogekar størrelse</translation>
     </message>
@@ -3949,6 +3965,9 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation>Hårdhed forholdsvis blødt</translation>
     </message>
     <message>
+        <location filename="../src/model/Fermentable.cpp" line="54"/>
+        <source>Yield (DBFG) %</source>
+        <translation type="unfinished">Udbytte af ekstrakt med fint kværnet malt (DBFG) %</translation>
         <source>Ibu Gal Per Lb</source>
         <translation type="vanished">IBU gallons pr lb</translation>
     </message>
@@ -3960,6 +3979,7 @@ Logfil indeholder måske flere detaljer.</translation>
     <message>
         <location filename="../src/model/Fermentable.cpp" line="60"/>
         <source>IBU Gal Per Lb</source>
+        <translation type="unfinished"></translation>
         <translation>IBU Gal pr Lb</translation>
     </message>
     <message>
@@ -4691,6 +4711,7 @@ Logfil indeholder måske flere detaljer.</translation>
     <message>
         <location filename="../src/model/Hop.cpp" line="40"/>
         <source>% Beta</source>
+        <translation type="unfinished"></translation>
         <translation>% beta</translation>
     </message>
     <message>
@@ -4958,6 +4979,11 @@ Antal opskrifter</translation>
         <source>Amount Type</source>
         <translation>Mængdeangivelse</translation>
     </message>
+    <message>
+        <location filename="../src/utils/ColumnOwnerTraits.h" line="94"/>
+        <source>Amount Type</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>IngredientInRecipe</name>
@@ -4973,6 +4999,7 @@ Antal opskrifter</translation>
 <context>
     <name>IngredientName</name>
     <message>
+        <location filename="../src/model/StockPurchaseBase.h" line="561"/>
         <location filename="../src/model/StockPurchaseBase.h" line="539"/>
         <source>Purchase of %1 </source>
         <translation>Køb af %1 </translation>
@@ -5446,6 +5473,9 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation>Tilpas til udstyr</translation>
     </message>
     <message>
+        <location filename="../src/model/Mash.cpp" line="40"/>
+        <source>Initial Grain Temperature</source>
+        <translation type="unfinished">Malttemperatur ved start</translation>
         <source>Grain Temperature</source>
         <translation type="vanished">Malt temperatur</translation>
     </message>
@@ -5482,6 +5512,11 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     <message>
         <location filename="../src/model/Mash.cpp" line="46"/>
         <source>Mash Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Mash Water</source>
+        <translation type="obsolete">Samlet volumen vand til mæskning</translation>
         <translation>Vand til mæskning</translation>
     </message>
     <message>
@@ -5610,6 +5645,9 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation>Infusion temperatur</translation>
     </message>
     <message>
+        <location filename="../src/model/MashStep.cpp" line="40"/>
+        <source>Water:Grain</source>
+        <translation type="unfinished"></translation>
         <source>Liquor To Grist Ratio</source>
         <translation type="vanished">Forhold mellem væske og malt</translation>
     </message>
@@ -6141,6 +6179,11 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <location filename="../src/serialization/NamedEntityRecordBase.h" line="183"/>
         <source>Unnamed %1</source>
         <translation>Uden navn %1</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="1766"/>
+        <source>Change %1 on %2 Recipe</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add %1 step</source>
@@ -7599,47 +7642,47 @@ Logfil indeholder evt. flere detaljer.</translation>
         <translation>Tredje gæringstrin i %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="240"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="254"/>
         <source>%1 Catalog / Database</source>
         <translation>%1 Katalog / Database</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="248"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="273"/>
         <source>Set for Recipe</source>
         <translation>Angiv for opskriften</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="250"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="275"/>
         <source>Add to Recipe</source>
         <translation>Føj til opskrift</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="253"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="278"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="257"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="282"/>
         <source>Filter search</source>
         <translation>Filtrer søgning</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="260"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="285"/>
         <source>Set selected %1 for current recipe</source>
         <translation>Vælg markeret %1 til aktuel opskrift</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="262"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="287"/>
         <source>Add selected %1 to current recipe</source>
         <translation>Tilføj markeret %1 til aktuel opskrift</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="267"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="292"/>
         <source>Delete selected %1</source>
         <translation>Slet markeret %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="270"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="295"/>
         <location filename="../src/widgets/StockManager.cpp" line="61"/>
         <source>Enter filter</source>
         <translation>Angiv filter</translation>
@@ -7649,12 +7692,12 @@ Logfil indeholder evt. flere detaljer.</translation>
         <translation type="vanished">Føj markeret %1 til opskrift</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="265"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="290"/>
         <source>Create new %1</source>
         <translation>Lav ny %1</translation>
     </message>
     <message>
-        <location filename="../src/catalogs/CatalogBase.h" line="266"/>
+        <location filename="../src/catalogs/CatalogBase.h" line="291"/>
         <source>Edit selected %1</source>
         <translation>Rediger markeret %1</translation>
     </message>
@@ -8251,6 +8294,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/model/Recipe.cpp" line="1346"/>
         <source>Notes</source>
+        <translation type="unfinished"></translation>
         <translation>Notater</translation>
     </message>
     <message>
@@ -8511,6 +8555,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/model/Recipe.cpp" line="1347"/>
         <source>Snapshots</source>
+        <translation>Oversigter</translation>
         <translation>Snapshots</translation>
     </message>
     <message>
@@ -8567,7 +8612,7 @@ The final volume in the primary is %1.</source>
         <translation>Opskrifter</translation>
     </message>
     <message>
-        <location filename="../src/qtModels/tableModels/TableModelBase.h" line="378"/>
+        <location filename="../src/qtModels/tableModels/TableModelBase.h" line="383"/>
         <source>Remove %1 from recipe</source>
         <translation>Fjern %1 fra opskrift</translation>
     </message>
@@ -9701,6 +9746,9 @@ The final volume in the primary is %1.</source>
         <translation>Er surt</translation>
     </message>
     <message>
+        <location filename="../src/model/Salt.cpp" line="53"/>
+        <source>%% Acid</source>
+        <translation type="unfinished"></translation>
         <source>Percent Acid</source>
         <translation type="vanished">Masseprocent syre</translation>
     </message>
@@ -9949,6 +9997,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="28"/>
         <source>Stock Purchase</source>
+        <translation type="unfinished"></translation>
         <translation>Lager køb</translation>
     </message>
     <message>
@@ -9974,26 +10023,31 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="33"/>
         <source>Note</source>
+        <translation type="unfinished"></translation>
         <translation>Notat</translation>
     </message>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="34"/>
         <source>Quantity Ordered</source>
+        <translation type="unfinished"></translation>
         <translation>Mængde bestilt</translation>
     </message>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="35"/>
         <source>Purchase Price</source>
+        <translation type="unfinished"></translation>
         <translation>Købspris</translation>
     </message>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="36"/>
         <source>Purchase Tax</source>
+        <translation type="unfinished"></translation>
         <translation>Afgift ved køb</translation>
     </message>
     <message>
         <location filename="../src/model/StockPurchase.cpp" line="37"/>
         <source>Shipping Cost</source>
+        <translation type="unfinished"></translation>
         <translation>Forsendelsesomkostninger</translation>
     </message>
     <message>
@@ -10009,6 +10063,15 @@ The final volume in the primary is %1.</source>
         <location filename="../src/model/StockPurchaseFermentable.cpp" line="24"/>
         <source>Color</source>
         <translation>Farve</translation>
+    </message>
+</context>
+<context>
+    <name>StockPurchaseFermentable</name>
+    <message>
+        <location filename="../src/model/StockPurchaseFermentable.cpp" line="23"/>
+        <location filename="../src/model/StockPurchaseFermentable.cpp" line="24"/>
+        <source>Color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -10074,6 +10137,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/model/StockUse.cpp" line="21"/>
         <source>Stock Use</source>
+        <translation type="unfinished"></translation>
         <translation>Lager anvendelse</translation>
     </message>
     <message>
@@ -10206,6 +10270,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Category Number</source>
+        <translation type="obsolete">Kategorinummer</translation>
         <translation type="vanished">Kategorinummer</translation>
     </message>
     <message>
@@ -10280,6 +10345,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style Guide</source>
+        <translation type="obsolete">Stilart guide</translation>
+    </message>
+    <message>
+        <source>Style Letter</source>
+        <translation type="obsolete">Stilart bogstav</translation>
         <translation type="vanished">Stilart guide</translation>
     </message>
     <message>
@@ -15899,6 +15969,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/stockPurchaseIngredientEditor.ui" line="76"/>
         <source>Note</source>
+        <translation type="unfinished"></translation>
         <translation>Notat</translation>
     </message>
     <message>
@@ -15974,6 +16045,26 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/stockPurchaseIngredientEditor.ui" line="288"/>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished">Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
+    </message>
+    <message>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="298"/>
+        <source>Extras</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="322"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="335"/>
+        <source>Purchase Price</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="346"/>
+        <location filename="../ui/stockPurchaseIngredientEditor.ui" line="359"/>
+        <source>Purchase Tax</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <translation>Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
     </message>
     <message>

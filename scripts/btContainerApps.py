@@ -19,6 +19,7 @@
 # Python built-in modules we use
 #-----------------------------------------------------------------------------------------------------------------------
 import os
+import getpass
 import pathlib
 import platform
 import shutil
@@ -214,12 +215,16 @@ def doAppImage():
    # environment variable.
    #
    os.environ['ARCH'] = 'x86_64'
+   file_appImage = appDirName + '.AppImage'
    btExecute.abortOnRunFail(
       subprocess.run(
-         [file_appImageTool, '--verbose', dir_appDir.as_posix(), appDirName + '.AppImage'],
+         [file_appImageTool, '--verbose', dir_appDir.as_posix(), file_appImage],
          capture_output=False
       )
    )
+
+   btUtils.writeSha256sum(btFileSystem.dir_appImage, file_appImage)
+
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -232,6 +237,11 @@ def doFlatpak():
    if sysName != 'Linux':
       btLogger.log.critical('Flatpak creation not supported on: ' + sysName)
       exit(1)
+
+   btLogger.log.info('Installing flatpak')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak']))
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak-builder']))
 
    #
    # Read in the variables exported from the Meson build
@@ -297,28 +307,37 @@ def doFlatpak():
    openJdkVersion = '25.08' # Ditto!
    btLogger.log.info('Installing Flatpak SDK and Runtime')
    btExecute.abortOnRunFail(
+      #
+      # Here and elsewhere, using the '--user' option restricts the installs to the current user (rather than
+      # system-wide), which is sufficient for our needs for the packaging process.  Moreover, this allows us to run
+      # inside a GitHub Action (where attempting the default system-wide install of a flatpak gives an error).
+      #
+      # NOTE that, if needed, we can add the '--verbose' flag here, and to other invocations of the `flatpak` command.
+      # However, we usually don't because we end up generating too much output, and these "standard installs" are not
+      # typically where we hit problems.
+      #
       subprocess.run(
-         ['flatpak', '--verbose', 'remote-add', '--if-not-exists', 'flathub', 'https://flathub.org/repo/flathub.flatpakrepo'],
+         ['flatpak', '--user', 'remote-add', '--if-not-exists', 'flathub', 'https://flathub.org/repo/flathub.flatpakrepo'],
          capture_output=False
       )
    )
    # TBD: in theory we don't need to install the platform -- it's needed to run the code but not to build it
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion],
+         ['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion],
          capture_output=False
       )
    )
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion],
+         ['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion],
          capture_output=False
       )
    )
    # I'm not totally sure that we need Java, but the Xerces build complains if it's not present
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', 'install', '--assumeyes', 'org.freedesktop.Sdk.Extension.openjdk11//' + openJdkVersion],
+         ['flatpak', '--user', 'install', '--assumeyes', 'org.freedesktop.Sdk.Extension.openjdk11//' + openJdkVersion],
          capture_output=False
       )
    )
@@ -351,7 +370,7 @@ def doFlatpak():
    btLogger.log.info('Installing Flatpak Linter')
    btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--verbose', 'install', '--assumeyes', 'org.flatpak.Builder'],
+         ['flatpak', '--user', 'install', '--assumeyes', 'org.flatpak.Builder'],
          capture_output=False
       )
    )
@@ -361,7 +380,7 @@ def doFlatpak():
    # the manifest, because flatpak-builder is going to copy it and we don't want to be trying to copy a directory tree
    # inside itself.
    #
-   btLogger.log.info('Copy source tree')
+   btLogger.log.info('Copy source tree etc')
    dir_copyOfSource = btFileSystem.dir_flatpak.joinpath('copyOfSource')
    os.makedirs(dir_copyOfSource)
    for directoryToCopy in ['css',
@@ -404,204 +423,12 @@ def doFlatpak():
       os.remove(file_manifest)
 
    #
-   # Manifest files can be in either JSON or YAML format.  We use the latter as it's slightly more concise and shares
-   # similar "meaningful indentation" rules to Python.
+   # Meson generates our flatpak manifest (from a template in the packaging/linux directory), so we just need to copy
+   # and rename it here.
    #
-   with open(file_manifest, 'w') as manifestFile:
-      manifestFile.write('\n'.join((
-         'id: ' + appId,
-         'runtime: org.kde.Platform',   # Using KDE here gives us Qt libraries
-         'runtime-version: "' + runtimeVersion + '"',
-         'sdk: org.kde.Sdk',            # SDK needs to correspond with runtime
-         'sdk-extensions:',
-         '  - org.freedesktop.Sdk.Extension.openjdk11',
-         'command: ' + projectName,     # This is just the executable called to run the application -- in our case the
-                                        # application itself
-         'desktop-file-name-suffix: " (' + versionString + ')"',  # Optional, but useful, to show version number
-         'modules:',
-         '  - name: openjdk',
-         '    buildsystem: simple',
-         '    build-commands:',
-         '      - /usr/lib/sdk/openjdk11/install.sh',
-         '',
-         '  - name: XercesC',
-         '    sources:',
-         '      - type: archive',
-         # There are various locations to download Xerces-C, but this is the official Apache mirror
-         '        url: https://dlcdn.apache.org//xerces/c/3/sources/xerces-c-3.3.0.tar.gz',
-         '        sha256: 9555f1d06f82987fbb4658862705515740414fd34b4db6ad2ed76a2dc08d3bde',
-         '        x-checker-data:',
-         '          type: anitya',
-         # Project ID comes from https://release-monitoring.org/project/5182/
-         '          project-id: 5182',
-         '          url-template: https://dlcdn.apache.org/xerces/c/3/sources/xerces-c-$version.tar.gz',
-         # Per https://bugs.gentoo.org/931105, this patch is required to build XercesC
-         '      - type: patch',
-         '        path: xerces-c-3.2.5-cxx17.patch',
-         '    buildsystem: cmake-ninja',
-         '    builddir: true',
-         # See https://xerces.apache.org/xerces-c/build-3.html for Xerces-C build options
-         '    config-opts:',
-         '      - -DCMAKE_BUILD_TYPE=Release',
-         '      - -DBUILD_SHARED_LIBS=ON',
-         '      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON',
-         '',
-         '  - name: XalanC',
-         '    sources:',
-         '      - type: archive',
-         # There are various locations to download Xerces-C, but this is the official Apache mirror
-         '        url: https://dlcdn.apache.org/xalan/xalan-c/sources/xalan_c-1.12.tar.gz',
-         '        sha512: a9f72f0e8e199ee2cfb4c19ecf390d5007f597aad96a53f55bc475805190302c7e0d800d776b7fb20fe8e2dddb6391e70aa3a8861a2303370135e8b0a5fd15fc',
-         '        x-checker-data:',
-         '          type: anitya',
-         # Project ID comes from https://release-monitoring.org/project/5153/
-         '          project-id: 5153',
-         '          url-template: https://dlcdn.apache.org/xalan/xalan-c/sources/xalan_c-$version.tar.gz',
-         # Per https://bugs.gentoo.org/955386, this patch is required to build XalanC with recent versions of CMake
-         '      - type: patch',
-         '        path: xalan-c-1.12-cmake-4.patch',
-         # Per https://bugs.gentoo.org/936501, this patch is required to build XalanC with recent versions of GCC
-         '      - type: patch',
-         '        path: xalan-c-1.12-gcc-15.patch',
-         # These patches are also listed in Gentoo XalanC build (See
-         # https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/xalan-c/files and
-         # https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/xalan-c/xalan-c-1.12-r4.ebuild.)
-         '      - type: patch',
-         '        path: xalan-c-1.12-fix-lto.patch',
-         '      - type: patch',
-         '        path: xalan-c-1.12-fix-threads.patch',
-         '      - type: patch',
-         '        path: xalan-c-1.12-icu-75.patch',
-         '    buildsystem: cmake-ninja',
-         '    builddir: true',
-         # See https://xerces.apache.org/xerces-c/build-3.html for Xerces-C build options
-         '    config-opts:',
-         '      - -DCMAKE_BUILD_TYPE=Release',
-         '      - -DBUILD_SHARED_LIBS=ON',
-         '      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON',
-         '      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5',
-         '',
-         '  - name: LibBacktrace',
-         '    sources:',
-         '      - type: git',
-         '        url: https://github.com/ianlancetaylor/libbacktrace/',
-         '        commit: b9e40069c0b47a722286b94eb5231f7f05c08713', # 2025-11-06
-         '',
-         '  - name: Boost',
-         '    buildsystem: simple',
-         # You can build Boost with CMake, but, for the moment at least, they still recommend using the B2 build system
-         # (see https://www.boost.org/doc/user-guide/getting-started.html#from-source).  Note that we minimise build time
-         # by only specifying the actual Boost libraries we want to build and install.
-         '    build-commands:',
-         '      - ./bootstrap.sh --prefix=${FLATPAK_DEST} --with-python=python3 --with-libraries=container,json,stacktrace',
-         # Note that we need to specify library-path so that libboost_stacktrace_backtrace can link against the
-         # LibBacktrace mentioned above.
-         '      - ./b2 --with-container --with-json --with-stacktrace boost.stacktrace.backtrace=on -j$FLATPAK_BUILDER_N_JOBS library-path=/app/lib install',
-         '    sources:',
-         '      - type: archive',
-         '        url: https://archives.boost.io/release/1.89.0/source/boost_1_89_0.tar.gz',
-         '        sha256: 9de758db755e8330a01d995b0a24d09798048400ac25c03fc5ea9be364b13c93',
-         '        x-checker-data:',
-         '          type: anitya',
-         # Project ID comes from https://release-monitoring.org/project/6845/
-         '          project-id: 6845',
-         '          stable-only: true',
-         '          url-template: https://archives.boost.io/release/$version/source/boost_${major}_${minor}_${patch}.tar.gz',
-         '    cleanup:',
-         '      - /lib/cmake',
-         '',
-         '  - name: Valijson',
-         '    sources:',
-         '      - type: git',
-         '        url: https://github.com/tristanpenman/valijson',
-         '        commit: 4edda758546436462da479bb8c8514f8a95c35ad', # 2025-05-07 = Valijson v1.0.6
-         '    buildsystem: simple',
-         '    build-commands:',
-         '      - cp -pr include/valijson /app/include/.',
-         ''
-         '  - name: pandoc',
-         '    buildsystem: simple',
-         '    build-commands:',
-         '      - cp -R . /app/',
-         '    sources:',
-         '      - type: archive',
-         '        url: https://github.com/jgm/pandoc/releases/download/3.8.3/pandoc-3.8.3-linux-amd64.tar.gz',
-         '        sha256: c224fab89f827d3623380ecb7c1078c163c769c849a14ac27e8d3bfbb914c9b4',
-         '        only-arches:',
-         '          - x86_64',
-         '        x-checker-data:',
-         '          type: json',
-         '          url: https://api.github.com/repos/jgm/pandoc/releases/latest',
-         '          version-query: .tag_name',
-         '          url-query: .assets[] | select(.name=="pandoc-" + $version + "-linux-amd64.tar.gz") | .browser_download_url',
-         # TODO: Need to do similar elsewhere to support building on ARM -- eg for Raspberry Pi
-         '      - type: archive',
-         '        url: https://github.com/jgm/pandoc/releases/download/3.8.3/pandoc-3.8.3-linux-arm64.tar.gz',
-         '        sha256: 166a5a37387eb10bd4c4f242a8109beef755ac1e8d4eb039c6b5ebd1d918d8d7',
-         '        only-arches:',
-         '          - aarch64',
-         '        x-checker-data:',
-         '          type: json',
-         '          url: https://api.github.com/repos/jgm/pandoc/releases/latest',
-         '          version-query: .tag_name',
-         '          url-query: .assets[] | select(.name=="pandoc-" + $version + "-linux-arm64.tar.gz") | .browser_download_url',
-         '',
-         #
-         # To get the packaging working, we want to be able to tweak things, including build-related stuff such as
-         # CMakeLists.txt and meson.build.  Using the dir option (see
-         # https://docs.flatpak.org/en/latest/module-sources.html#directory-source) allows us to build from local
-         # sources.  However, note that "when submitting an application to software stores like Flathub, dir should be
-         # avoided altogether".
-         #
-         '  - name: ' + projectName,
-         '    sources:',
-         '      - type: dir',
-         '        path: copyOfSource',
-         # Although we're using meson, we can't put 'buildsystem: meson' here, as we need to do a couple of extra steps
-         '    buildsystem: simple',
-         '    build-commands:',
-         '      - mkdir mbuild',
-         '      - meson setup --includedir /app/include --libdir /app/lib:/app/lib64 mbuild .',
-         '      - meson compile -C mbuild --verbose',
-         '      - meson install -C mbuild --destdir /app',
-         # Telling Meson to install to /app gives us a tree of files under /app/usr/local that we now need to  relocate
-         # (and in some cases rename) to the places flatpak expects them to be.  See
-         # https://docs.flatpak.org/en/latest/conventions.html for details of what's expected.
-         '      - mv /app/usr/local/share/applications /app/share/.',
-         '      - mv /app/usr/local/share/icons /app/share/.',
-         '      - mv /app/usr/local/bin/* /app/bin/.',
-         '    builddir: true',
-         '    build-options:',
-         '      env:',
-         '        CMAKE_INCLUDE_PATH: /app/include',
-         '        BOOST_INCLUDEDIR: /app/include',
-         '        BOOST_LIBRARYDIR: /app/lib',
-         '        BOOST_ROOT: /app',
-         '        LIBRARY_PATH: /app/lib:/app/lib64',
-         '        LD_LIBRARY_PATH: /app/lib:/app/lib64',
-         '        PKG_CONFIG_PATH: /app/lib/pkgconfig:/app/lib64/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig',
-         '        XercesC_ROOT:    /app',
-         '        XalanC_ROOT:    /app',
-         '',
-         #
-         # This section defines what permissions the containerised environment for our app will have.
-         #
-         # TBD: We start by copying some example ones, but these could doubtless be fine-tuned at some point.
-         #
-         'finish-args:',
-         # X11 + XShm access
-         '  - --share=ipc',
-         '  - --socket=fallback-x11',
-         # Wayland access
-         '  - --socket=wayland',
-         # GPU acceleration if needed
-         '  - --device=dri',
-         # Needs to talk to the network:
-         '  - --share=network',
-         # Needs to save files locally
-         '  - --filesystem=xdg-documents',
-         ''
-      )))
+   file_manifest_ori = btFileSystem.dir_build.joinpath('flatpackManifest.yml')
+   btLogger.log.debug('Copying ' + file_manifest_ori.as_posix() + ' to ' + file_manifest.as_posix())
+   shutil.copy2(file_manifest_ori, file_manifest)
 
    #
    # Before we try to use the manifest, we can run it through the linter to check for errors
@@ -686,6 +513,8 @@ def doFlatpak():
    )
 
    btLogger.log.info('Flatpak single-file bundle ' + file_singleFileBundle)
+
+   btUtils.writeSha256sum(btFileSystem.dir_flatpak, file_singleFileBundle)
    return
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -722,6 +551,209 @@ def doSnap():
    #--------------------------------------------------------------------------------------------------------------------
    #---------------------------------------------------- Build Snap ----------------------------------------------------
    #--------------------------------------------------------------------------------------------------------------------
-   # TODO - Start this!
+   sysName = platform.system()
+   if sysName != 'Linux':
+      btLogger.log.critical('Snap creation not supported on: ' + sysName)
+      exit(1)
+
+   # TODO: Haven't managed to get this working yet.  Meson build keeps hanging.  Next thing might be to try the CMake
+   #       build to see if it gives us more/different diagnostics.
+
+   #
+   # Read in the variables exported from the Meson build
+   #
+   btUtils.readBuildConfigFile()
+   projectName = btUtils.buildConfig["CONFIG_APPLICATION_NAME_LC"]
+   versionString = btUtils.buildConfig["CONFIG_VERSION_STRING"]
+   appDirName = projectName + '-' + versionString
+
+   #
+   # Create the relevant top-level directory and ensure it starts out empty
+   # (NB: Any missing parent directories will automatically get created by os.makedirs.  In particular,
+   # btFileSystem.dir_contAppPkgs and btFileSystem.dir_snap are guaranteed to exist after this.)
+   if btFileSystem.dir_snap.is_dir():
+      btLogger.log.info('Removing existing ' + btFileSystem.dir_snap.as_posix() + ' directory tree')
+      shutil.rmtree(btFileSystem.dir_snap)
+   dir_snapBuild = btFileSystem.dir_snap.joinpath(appDirName)
+   dir_snapBuildSnap = dir_snapBuild.joinpath('snap')
+   btLogger.log.info('Creating directory ' + dir_snapBuildSnap.as_posix())
+   os.makedirs(dir_snapBuildSnap)
+   os.chdir(dir_snapBuild)
+   btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
+
+   #
+   # NOTE: AFAICT in order to build snaps, you need, amongst other things, to enable them to be installed on your
+   # system -- which not everyone necessarily wants.  We therefore only install the snap tools here rather than in
+   # btDependencies.installDependencies.
+   #
+   btLogger.log.info('Installing Snapd')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'snapd']))
+   btLogger.log.info('Installing Snapcraft')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'snap', 'install', '--classic', 'snapcraft']))
+   # See comment below for why we install Multipass
+   btLogger.log.info('Installing Multipass')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'snap', 'install', 'multipass']))
+
+   #
+   # Part of the Snap infrastucture which gets installed with snapd is Canonical's LXD (see https://www.lxdubuntu.com/),
+   # a System Container and Virtual Machine Manager built on top of LXC (Linux Containers).
+   #
+   # The snap build process requires a "build provider".  According to
+   # https://documentation.ubuntu.com/snapcraft/8.9.4/how-to/setup/set-up-snapcraft/, this is "to host an isolated build
+   # environment, like a sandbox [inside which] software can be built and packaged as snaps without making potentially
+   # destructive changes to the host system".
+   #
+   # LXD is the default "build provider" when you run `snapcraft pack`.  For it to work, the current user needs to be
+   # added to the 'lxd' group (which the installation of snapd will have created).  This is a bit fiddly, but is
+   # achievable.  Adding the current user to a group will not take immediate effect.  Normally you need to log out and
+   # log in again.  (In an interactive shell, the `newgrp` command gets around this but that wouldn't help us here: the
+   # script would pause, dump the user out into the new shell, with the group membership, and then only resume, without
+   # the group membership, when the user exited that shell.)  We can get around this by using the `sg` command to invoke
+   # snapcraft.  HOWEVER, when I did all this on my machine I didn't get too far: `snapcraft pack` barfed with an error
+   # about "lxc --project snapcraft launch craft-com.ubuntu.cloud-buildd:core24 ..." failing because "Failed to run:
+   # /snap/lxd/current/sbin/lxd forkstart snapcraft_base-instance-snapcraft-buildd-base-v71--f02c2da881cfba9d7924 ...
+   # exit status 1".  I struggled to get more detailed diagnostics or to find additional useful info on the web.
+   #
+   # So, I switched to the "build provider", Multipass (see https://canonical.com/multipass), which is a simpler tool
+   # for creating VMs on-demand.
+   #
+   # https://documentation.ubuntu.com/snapcraft/stable/how-to/select-a-build-provider/index.html explains the various
+   # ways to set choice of build provider.  (Although the command-line flag would be simpler, there is only '--use-lxd'
+   # and no '--use-multipass'!)
+   #
+   os.environ['SNAPCRAFT_BUILD_ENVIRONMENT'] = 'multipass'
+
+   #
+   # By default, the build VM is assigned 2 CPUs and 2 GB RAM.  I wondered if this might be what was causing the
+   # compilation to hang, so bumped it a bit here, but it seems to hang at the same place regardless.
+   #
+   os.environ['SNAPCRAFT_BUILD_ENVIRONMENT_CPU'] = '4'
+   os.environ['SNAPCRAFT_BUILD_ENVIRONMENT_MEMORY'] = '16G'
+
+   #
+   # The how-to guide tells you to run `snapcraft init` now, but that doesn't so much useful -- just create a 'snap'
+   # subdirectory (which we already did) and put in it a default 'snapcraft.yaml' file (which we would need to modify
+   # anyway, so we might as well just create it ourselves).
+   #
+   file_snapProjectFrom = btFileSystem.dir_build.joinpath('snapcraft.yaml')
+   file_snapProjectTo   = dir_snapBuildSnap.joinpath('snapcraft.yaml')
+   btLogger.log.debug('Copying ' + file_snapProjectFrom.as_posix() + ' to ' + file_snapProjectTo.as_posix())
+   shutil.copy2(file_snapProjectFrom, file_snapProjectTo)
+
+   #
+   # It would be nice at this point to run `snapcraft lint snap/snapcraft.yaml`.  However, this barfs the following
+   # error:
+   #    'snapcraft lint' is not supported with Multipass as the build provider
+   # So, we skip the lint.
+   #
+
+   #
+   # Per comments below, the build VM gets reused, so we want to ensure there isn't stuff from previous builds
+   # cluttering it up.  (This is more important when we're actively working on the snap build process, but feels like
+   # good general practice too.)
+   #
+   btLogger.log.info('Running snapcraft clean in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'clean']))
+
+   #
+   # As with Flatpak, Snap expects us to build everything from source, so we need to copy the source code etc into the
+   # directory tree its build provider has access to.  It helps to understand what the Snapcraft tool does when we run
+   # it.  Per info at https://documentation.ubuntu.com/snapcraft/8.9.3/reference/processes/snap-build-process/,
+   # snapcraft does the following:
+   #    - Starting in the current working directory, it looks for snapcraft.yaml or snap/snapcraft.yaml, and then parses
+   #      its contents to begin the build.
+   #
+   #    - It creates a build VM (via Multipass or LXD) in which to do the build.  This VM will be a "minimal Ubuntu
+   #      install" determined by the 'base' in snapcraft.yaml.  NOTE that the build VM doesn't get recreated from
+   #      scratch if you've run a build before, so, during development, it's helpful to run 'snapcraft clean' between
+   #      builds, otherwise it can get confusing with bits hanging around from earlier builds.
+   #
+   #    - Required packages listed in the snapcraft.yaml file are downloaded and installed into the build VM.  Inside
+   #      this VM, the /root/project directory will hold a copy of everything in the dir_snapBuild directory (from
+   #      outside the VM).
+   #
+   #    - The "Pull" build step is run (on each part).
+   #      Each part has its own directory under /root/parts in the build VM.
+   #      We only have one part, called main-part, in our snap/snapcraft.yaml file.  Because we put 'source: ../project'
+   #      in the 'main-part' section of snap/snapcraft.yaml file, we'll end up with the
+   #      entire contents of the dir_snapBuild directory in /root/parts/main-part/src in the build VM.
+   #
+   #    - The "Build" build step is run (on each part)
+   #      Snapcraft creates /root/parts/main-part/build to do the build, which will be the current working directory
+   #      when the "Build" build step is run.  This is different from our usual set-up -- hence why in our
+   #      snap/snapcraft.yaml file we specify `meson setup . ../src` rather than `meson setup mbuild .`
+   #
+   #    - The "Stage" build step is run (on each part)
+   #
+   #    - The "Prime" build step is run (on each part)
+   #
+   #    - The "Pack" build step is run (on each part)
+   #
+   # Note that because each build step ensures the prior ones have been run, we only _need_ to call 'snapcraft pack'.
+   # However, it is possible to run steps individually, which is a bit slower (because the VM gets fired up and down
+   # more times) but helpful for debugging.  What's even more helpful is that you can drop out into a shell in the VM by
+   # adding '--shell', '--shell-after' or '--debug' to the 'snapcraft' command (see
+   # https://documentation.ubuntu.com/snapcraft/stable/how-to/debugging/debug-a-snap/#inspect-the-snap-s-contents).
+   # Specifically:
+   #
+   #    'snapcraft foobar --shell'       runs all the build steps _prior_ to foobar, then opens a shell into the
+   #                                     environment.
+   #    'snapcraft foobar --shell-after' runs all the build steps up to and _including_ foobar, then opens a shell into
+   #                                     the environment.
+   #    'snapcraft foobar --debug'       runs all the build steps up to and _including_ foobar, then, if there was an
+   #                                     error, opens a shell into the environment.
+   #
+   # NB flags such as '--shell' have to come after the build step -- eg `snacraft --debug build` is wrong; needs to be
+   # `snapcraft build --debug`.
+   #
+   # NOTE that everything in dir_snapBuild EXCEPT the 'snap'
+   # subdirectory (ie dir_snapBuildSnap) ends up under /root/parts/main-part/src/project/ (aka
+   # ${CRAFT_PART_SRC}/project/) in the virtual build environment (where 'main-part' is the part name defined in
+   # snapcraft.yaml).  The 'snap' subdirectory ends up as /root/project/snap/ (aka ${CRAFT_PROJECT_DIR}/snap/).
+   #
+   # What the build
+   #
+   btLogger.log.info('Copy source tree etc')
+   for directoryToCopy in ['css',
+                           'data',
+                           'doc',
+                           'fonts',
+                           'images',
+                           'linux',  # For desktop.in
+                           'packaging',
+                           'third-party',
+                           'schemas',
+                           'src',
+                           'translations',
+                           'ui']:
+      shutil.copytree(btFileSystem.dir_base.joinpath(directoryToCopy), dir_snapBuild.joinpath(directoryToCopy))
+   for fileToCopy in ['CHANGES.markdown',
+                      'CMakeLists.txt',
+                      'configure',
+                      'COPYRIGHT',
+                      'LICENSE',
+                      'meson.build',
+                      'README.md',
+                      'resources.qrc']:
+      shutil.copy(btFileSystem.dir_base.joinpath(fileToCopy), dir_snapBuild)
+
+   #
+   # Provided the contents of snapcraft.yaml are correct, snapcraft supposedly does everything else for us.
+   #
+   # The "finger snap" emoji is to make these lines stand out in the log file!
+   #
+   btLogger.log.info('🫰 Running snapcraft pull in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'pull', '--verbose']))
+   btLogger.log.info('🫰 Running snapcraft build in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'build', '--verbose']))
+   btLogger.log.info('🫰 Running snapcraft stage in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'stage', '--verbose']))
+   btLogger.log.info('🫰 Running snapcraft prime in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'prime', '--verbose']))
+   btLogger.log.info('🫰 Running snapcraft pack in ' + pathlib.Path.cwd().as_posix())
+   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'pack', '--verbose']))
+
+   # TODO - Finish this!
 
    return

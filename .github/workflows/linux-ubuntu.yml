@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------------------------------------------------
-# .github/workflows/linux-ubuntu.yml is part of Brewtarget, and is copyright the following authors 2021-2024:
+# .github/workflows/linux-ubuntu.yml is part of Brewtarget, and is copyright the following authors 2021-2025:
 #   • Artem Martynov <martynov-a@polyplastic.by>
 #   • Chris Speck <cgspeck@gmail.com>
 #   • Mattias Måhl <mattias@kejsarsten.com>
@@ -150,6 +150,24 @@ jobs:
           umask 022
           ../bt package
 
+      - name: AppImage
+        working-directory: ${{github.workspace}}/mbuild
+        shell: bash
+        run: |
+          umask 022
+          ../bt appimage
+
+      #
+      # Can't get this working for the moment on Brewtarget and GitHub Action won't show me enough of the logs to see
+      # the error.  Seems to be working on Brewken though, so hopefully is fixable!
+      #
+#      - name: Flatpak
+#        working-directory: ${{github.workspace}}/mbuild
+#        shell: bash
+#        run: |
+#          umask 022
+#          ../bt flatpak
+
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}
         uses: actions/upload-artifact@v4
@@ -162,6 +180,10 @@ jobs:
             mbuild/packages/linux/brewtarget*.deb.sha256sum
             mbuild/packages/linux/brewtarget*.rpm
             mbuild/packages/linux/brewtarget*.rpm.sha256sum
+            contAppPkgs/appimage/brewtarget*.AppImage
+            contAppPkgs/appimage/brewtarget*.AppImage.sha256sum
+            contAppPkgs/flatpak/brewtarget*.flatpak
+            contAppPkgs/flatpak/brewtarget*.flatpak.sha256sum
           retention-days: 7
 
       - name: Recover Debris Artifacts (Meson)
