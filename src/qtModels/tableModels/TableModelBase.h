@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/TableModelBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * qtModels/tableModels/TableModelBase.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -93,12 +93,12 @@ template <typename T> concept CONCEPT_FIX_UP DoesNotObserveRecipe = std::negatio
 //       what is going on.
 //
 
-/**
- * This is to allow us to detect at compile time (via \c HAS_MEMBER) whether a table model has a Name column
- */
-CREATE_HAS_MEMBER(Name);
-CREATE_HAS_MEMBER(TotalInventory);
-CREATE_HAS_MEMBER(PctAcid);
+//
+// This is currently the least clunky way for determining at compile-time whether a particular enum member exists
+//
+template <typename E> concept HasMemberName           = requires { E::Name          ; };
+template <typename E> concept HasMemberTotalInventory = requires { E::TotalInventory; };
+template <typename E> concept HasMemberPctAcid        = requires { E::PctAcid       ; };
 
 /**
  * \brief See comment in qtModels/tableModels/BtTableModel.h for more info on inheritance structure
@@ -617,7 +617,14 @@ protected:
    template<class TM>
    void updateStockPurchase(int invKey,
                             BtStringConst const & propertyName) requires IsTableModel<TM> && CanHaveStockPurchase<NE> {
+      //
       // Substantive version
+      //
+      // Find the StockPurchase that we've been notified about; check whether any of our rows relate to the same
+      // ingredient; if so, send out a signal that the "total inventory" column for that row needs updating.
+      //
+      // TBD: I think we need to revisit this to ensure it workes properly for StockUse and for RecipeAddition tables.
+      //
       if (propertyName == PropertyNames::IngredientAmount::amount) {
          auto stockPurchase = ObjectStoreWrapper::getById<typename NE::StockPurchaseClass>(invKey);
          for (int ii = 0; ii < this->m_rows.size(); ++ii) {
@@ -716,34 +723,66 @@ protected:
    }
 
    Qt::ItemFlags doFlags(QModelIndex const & index) const {
+      //
+      // Per https://doc.qt.io/qt-6/qt.html#ItemFlag-enum, Qt::ItemFlag is a combination of one or more of the
+      // following:
+      //
+      //    Qt::NoItemFlags          - No properties set.
+      //    Qt::ItemIsSelectable     - Can be selected.
+      //    Qt::ItemIsEditable       - Can be edited.
+      //    Qt::ItemIsDragEnabled    - Can be dragged.
+      //    Qt::ItemIsDropEnabled    - Can be used as a drop target.
+      //    Qt::ItemIsUserCheckable  - Can be checked or unchecked by the user.
+      //    Qt::ItemIsEnabled        - User can interact with the item.
+      //    Qt::ItemIsAutoTristate   - Item's state depends on state of its children.  Enables automatic management of
+      //                               state of parent items in QTreeWidget (checked if all children are checked,
+      //                               unchecked if all children are unchecked, or partially checked if only some
+      //                               children are checked).
+      //    Qt::ItemNeverHasChildren - Item never has child items.  (Used for optimization purposes only.)
+      //    Qt::ItemIsUserTristate   - User can cycle through three separate states.
+      //
       bool const tableIsEditable = this->derived().m_editable;
       static Qt::ItemFlags const defaults = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
       auto const columnIndex = static_cast<ColumnIndex>(index.column());
 
-      // Not every table has a name column
-      if constexpr (HAS_MEMBER(ColumnIndex, Name)) {
+      // Normally leave this log statement commented out to avoid generating too much logging
+      ColumnInfo const & columnInfo = this->get_ColumnInfo(index);
+//      qDebug() <<
+//         Q_FUNC_INFO << columnInfo.columnFqName << ", propertyPath:" << columnInfo.propertyPath << ", index:" <<
+//         index << ", index.column():" << index.column() << ", columnInfo.typeInfo:" << columnInfo.typeInfo;
+
+      if constexpr (HasMemberName<ColumnIndex>) {
          if (columnIndex == ColumnIndex::Name) {
             return defaults;
          }
       }
       // If there's a TotalInventory column, it's read-only
-      if constexpr (HAS_MEMBER(typename Derived::ColumnIndex, TotalInventory)) {
-         if (columnIndex == Derived::ColumnIndex::TotalInventory) {
+      if constexpr (HasMemberTotalInventory<ColumnIndex>) {
+         if (columnIndex == ColumnIndex::TotalInventory) {
             return defaults /*| Qt::ItemIsEnabled*/;
          }
       }
       // This is only for SaltTableModel and RecipeAdjustmentSaltTableModel, but it's still less work to do a special
       // case here than have each subclass implement its own flags function.
-      if constexpr (HAS_MEMBER(typename Derived::ColumnIndex, PctAcid)) {
-         if (columnIndex == Derived::ColumnIndex::PctAcid &&
-             !this->derived().m_rows[index.row()]->isAcid()) {
-            return Qt::NoItemFlags;
+      if constexpr (HasMemberPctAcid<ColumnIndex>) {
+         if (columnIndex == Derived::ColumnIndex::PctAcid) {
+            bool isAcid;
+            if constexpr (std::same_as<std::remove_cvref_t<NE>, RecipeAdjustmentSalt>) {
+               isAcid = this->derived().m_rows[index.row()]->salt()->isAcid();
+            } else {
+               isAcid = this->derived().m_rows[index.row()]->isAcid();
+            }
+            if (!isAcid) {
+               return Qt::NoItemFlags;
+            }
          }
       }
 
-      ColumnInfo const & columnInfo = this->get_ColumnInfo(index);
+      //
+      // If the underlying property is read-only, then this column should not be editable
+      //
       if (columnInfo.typeInfo.isReadOnly()) {
-         return defaults | Qt::ItemIsEnabled;
+         return defaults /*| Qt::ItemIsEnabled*/;
       }
 
       return defaults | (tableIsEditable ? Qt::ItemIsEditable : Qt::NoItemFlags);

@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * utils/TypeInfo.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * utils/TypeInfo.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -280,11 +280,22 @@ struct TypeInfo {
  */
 //! @{
 template<class S>
+S & operator<<(S & stream, TypeInfo::Access const & access) {
+   switch (access) {
+      case TypeInfo::Access::ReadWrite: stream << "Read/Write"; break;
+      case TypeInfo::Access::ReadOnly : stream << "Read-Only" ; break;
+      case TypeInfo::Access::WriteOnly: stream << "Write-Only"; break;
+      // NB: No default case as we want the compiler to warn us if we missed a possibility above
+   }
+   return stream;
+}
+
+template<class S>
 S & operator<<(S & stream, TypeInfo const & typeInfo) {
    stream <<
       "««« TypeInfo " << (typeInfo.isOptional() ? "optional" : "non-optional") << " \"" << typeInfo.typeIndex.name() <<
-      "\"; fieldType:" << typeInfo.fieldType << "; property name:" << *typeInfo.propertyName << "; typeLookup:" <<
-      typeInfo.typeLookup << "»»»";
+      "\"; fieldType:" << typeInfo.fieldType << " (" << typeInfo.access << "); property name:" <<
+      *typeInfo.propertyName << "; typeLookup:" << typeInfo.typeLookup << "»»»";
    return stream;
 }
 
