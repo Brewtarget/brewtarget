@@ -119,8 +119,8 @@ struct EditorBaseOptions {
     *        as descriptive text (eg "Used in 3 recipes") in a label field called \c label_numRecipesUsing
     *
     *        It would be nice if we could detect directly whether the \c Derived class has a member called
-    *        \c label_numRecipesUsing, but I couldn't get the CREATE_HAS_MEMBER / HAS_MEMBER macros to work on the
-    *        derived class from its CRTP base class.
+    *        \c label_numRecipesUsing, but I couldn't get the usual approach to work on the derived class from its CRTP
+    *        base class.
     */
    bool numRecipesUsing = false;
 };

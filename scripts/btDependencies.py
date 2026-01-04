@@ -663,17 +663,21 @@ def installDependencies():
          # Getting the "release name" (aka "friendly name") is a bit more tricky.  See
          # https://apple.stackexchange.com/questions/333452/how-can-i-find-the-friendly-name-of-the-operating-system-from-the-shell-term
          # for various approaches with varying reliability.  However, in reality, it's simpler to hard-code the info in
-         # this script by copying it from https://en.wikipedia.org/wiki/MacOS#Timeline_of_releases.  We just have to
-         # update the list below whenever a new version of MacOS comes out.
+         # this script by copying it from https://en.wikipedia.org/wiki/MacOS#Timeline_of_releases or
+         # https://en.wikipedia.org/wiki/MacOS_version_history.  We just have to update the list below whenever a new
+         # version of MacOS comes out.
          #
          macOsVersionToReleaseName = {
-            '15'    : 'Sequoia'      ,
-            '14'    : 'Sonoma'       ,
-            # Can't guarantee that other parts of the build/packaging system will work on these older versions, but
-            # doesn't hurt to at least be able to look them up.
-            '13'    : 'Ventura'      ,
-            '12'    : 'Monterey'     ,
-            '11'    : 'Big Sur'      ,
+            '25'    : 'Tahoe'        , # Released 2025-09-15
+            '15'    : 'Sequoia'      , # Released 2024-09-16
+            '14'    : 'Sonoma'       , # Released 2023-09-26
+            #
+            # Can't guarantee that other parts of the build/packaging system will work on these older versions of MacOS,
+            # but doesn't hurt to at least be able to look them up.
+            #
+            '13'    : 'Ventura'      , # Released 2022-10-24; unsupported as of 2025-09-15
+            '12'    : 'Monterey'     , # Released 2021-10-25; unsupported as of 2024-09-16
+            '11'    : 'Big Sur'      , # Released 2020-11-12; unsupported as of 2023-09-26
             '10.15' : 'Catalina'     ,
             '10.14' : 'Mojave'       ,
             '10.13' : 'High Sierra'  ,
