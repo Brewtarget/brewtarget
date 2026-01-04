@@ -7,15 +7,30 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 release timestamp to be a date in the future, and I'm guessing nobody cares about the exact time of day a release
 happens, so I'm now setting it to a slightly arbitrary time early in the morning.
 
-## Forthcoming in v5.0.1
+## Forthcoming in v5.0.2
 
 ### New Features
 * TODO: Additional methods for calculating IBU
+* Shopping Lists
 * We'll list other new features here...
+
+
+## v5.0.1
+Fix for error in previous release.
+
+### New Features
+None
+
+### Bug Fixes
+* After upgrading to 5.0.0, program starts with default Database instead of existing one [1054](https://github.com/Brewtarget/brewtarget/issues/1054)
+
+### Release Timestamp
+Sun, 4 Jan 2026 05:00:01 +0100
 
 ## v5.0.0
 New inventory management system tracks individual stock purchases and uses
 Mac packaging should be fixed in this release.
+AppImage as additional packaging option on Linux
 
 ### New Features
 * Quick Inventory Snapshot [761](https://github.com/Brewtarget/brewtarget/issues/761)
@@ -27,7 +42,7 @@ Mac packaging should be fixed in this release.
 * Linux package .sha256sum files contain incorrect file names (but the actual sha256sums are correct) [1036](https://github.com/Brewtarget/brewtarget/issues/1036)
 
 ### Release Timestamp
-Sat, 6 Sep 2025 04:02:02 +0100
+Sun, 4 Jan 2026 05:00:00 +0100
 
 ## v4.2.1
 Bug fixes and minor enhancements.  Mac packaging is still broken in this release.
