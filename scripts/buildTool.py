@@ -1779,12 +1779,12 @@ def doPackage():
                            )
                      else:
                         otherLibMatch = re.search(r'^\s*(/opt/\S+/)([^/ ]+) ', outputLine, re.MULTILINE)
-                        otherLibAbsPrefix = otherLibMatch[1]
-                        otherLibName      = otherLibMatch[2]
-                        otherLibRelPrefix = '@executable_path/../Frameworks/'
-                        otherLibAbsPath = '' + otherLibAbsPrefix + otherLibName
-                        otherLibRelPath = '' + otherLibRelPrefix + otherLibName
                         if (otherLibMatch):
+                           otherLibAbsPrefix = otherLibMatch[1]
+                           otherLibName      = otherLibMatch[2]
+                           otherLibRelPrefix = '@executable_path/../Frameworks/'
+                           otherLibAbsPath = '' + otherLibAbsPrefix + otherLibName
+                           otherLibRelPath = '' + otherLibRelPrefix + otherLibName
                            btLogger.log.debug(
                               'Running install_name_tool -change ' + otherLibAbsPath + ' ' + otherLibRelPath + ' ' +
                               copiedLibrary.as_posix()
