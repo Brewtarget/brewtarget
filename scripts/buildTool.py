@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #-----------------------------------------------------------------------------------------------------------------------
-# scripts/buildTool.py is part of Brewtarget, and is copyright the following authors 2022-2025:
+# scripts/buildTool.py is part of Brewtarget, and is copyright the following authors 2022-2026:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -1330,6 +1330,13 @@ def doPackage():
          #
          # This will ultimately get bundled up into a disk image (.dmg) file.
          #
+         # NOTE: There are several ways to examine the contents of a MacOS disk image file on other operating systems.
+         #       On Linux, I find it easiest to use 7z:
+         #
+         #       $ sudo apt-get install p7zip-full
+         #       ...
+         #       $ 7z x myImageFile.dmg
+         #
 
          #
          # Make the top-level directories that we're going to copy files into
@@ -1591,6 +1598,25 @@ def doPackage():
          )
 
          #
+         # From https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos, we know we need to ship:
+         #
+         #    - libdbus-1 library
+         #
+         # See https://github.com/orgs/Homebrew/discussions/2823 for problems using macdeployqt with homebrew
+         # installation of Qt
+         #
+         # Various links online talk about LD_LIBRARY_PATH and DYLD_LIBRARY_PATH, but neither of these environment
+         # variables seems to be set in GitHub MacOS actions.
+         #
+         btLogger.log.debug('PATH=' + os.environ['PATH'])
+
+         pathsToSearch = os.environ['PATH'].split(os.pathsep)
+         extraLibs = [
+            'libdbus', # Eg libdbus-1.3.dylib
+         ]
+         btUtils.findAndCopyLibs(pathsToSearch, extraLibs, 'dylib', '.*.dylib', dir_packages_mac_bin)
+
+         #
          # Since moving to Qt6, we also have to do some extra things to avoid the following errors:
          #    - Library not loaded: @rpath/QtDBus.framework/Versions/A/QtDBus
          #    - Library not loaded: @rpath/QtNetwork.framework/Versions/A/QtNetwork
@@ -1659,10 +1685,11 @@ def doPackage():
                   # It is not enough to just copy, eg, QtDBus framework into the app bundle.  We need to fix its
                   # dependencies to point inside the bundle.  Eg after we copy
                   # /opt/homebrew/opt/qt/lib/QtDBus.framework/ to
-                  # [projectName]_[versionNumber]_MacOS.app/Contents/Frameworks/QtDBus.framework/, the other Qt
+                  # [projectName]_[versionNumber]_MacOS.app/Contents/Frameworks/QtDBus.framework/, the other
                   # dependencies of the library inside that framework directory will still be on the "system" paths (eg
-                  # /opt/homebrew/opt/qt/lib/QtCore.framework/ etc).  We need to change them to point inside the app
-                  # bundle (eg [projectName]_[versionNumber]_MacOS.app/Contents/Frameworks/QtCore.framework/ etc).
+                  # /opt/homebrew/opt/qt/lib/QtCore.framework/, /opt/local/lib/, /opt/local/libexec/, etc).  We need to
+                  # change them to point inside the app bundle (eg
+                  # [projectName]_[versionNumber]_MacOS.app/Contents/Frameworks/QtCore.framework/ etc).
                   #
                   # The variable names risk getting a bit confusing here because we are talking about dependencies of
                   # dependency.  Hence why we start referring to dependency as copiedLibrary.
@@ -1684,6 +1711,10 @@ def doPackage():
                      #    /opt/local/libexec/qt6/lib/QtCore.framework/Versions/A/QtCore
                      # we want to change it to the form:
                      #    @executable_path/../Frameworks/QtCore.framework/Versions/A/QtCore
+                     #
+                     # For other dependencies under /opt (eg /opt/local/lib/libdbus-1.3.dylib,
+                     # /opt/local/libexec/libssl.3.dylib, we just need to point to the @executable_path/../Frameworks/
+                     # directory.
                      #
                      qtAbsoluteDependencyMatch = re.search(r'^\s*(/\S+/qt\S+/lib/)(Qt\S+) ', outputLine, re.MULTILINE)
                      if (qtAbsoluteDependencyMatch):
@@ -1746,6 +1777,28 @@ def doPackage():
                                  capture_output=False
                               )
                            )
+                     else:
+                        otherLibMatch = re.search(r'^\s*(/opt/\S+/)([^/ ]+) ', outputLine, re.MULTILINE)
+                        otherLibAbsPrefix = otherLibMatch[1]
+                        otherLibName      = otherLibMatch[2]
+                        otherLibRelPrefix = '@executable_path/../Frameworks/'
+                        otherLibAbsPath = '' + otherLibAbsPrefix + otherLibName
+                        otherLibRelPath = '' + otherLibRelPrefix + otherLibName
+                        if (otherLibMatch):
+                           btLogger.log.debug(
+                              'Running install_name_tool -change ' + otherLibAbsPath + ' ' + otherLibRelPath + ' ' +
+                              copiedLibrary.as_posix()
+                           )
+                           btExecute.abortOnRunFail(
+                              subprocess.run(
+                                 ['install_name_tool',
+                                  '-change',
+                                  otherLibAbsPath,
+                                  otherLibRelPath,
+                                  copiedLibrary.as_posix()],
+                                 capture_output=False
+                              )
+                           )
 
                   otoolOutputCopiedLibrary = btExecute.abortOnRunFail(
                      subprocess.run(['otool',
@@ -1754,25 +1807,6 @@ def doPackage():
                                     capture_output=True)
                   ).stdout.decode('UTF-8')
                   btLogger.log.debug('Output of `otool -L ' + copiedLibrary.as_posix() + '`: ' + otoolOutputCopiedLibrary)
-
-         #
-         # From https://doc.qt.io/qt-6/macos-issues.html#d-bus-and-macos, we know we need to ship:
-         #
-         #    - libdbus-1 library
-         #
-         # See https://github.com/orgs/Homebrew/discussions/2823 for problems using macdeployqt with homebrew
-         # installation of Qt
-         #
-         # Various links online talk about LD_LIBRARY_PATH and DYLD_LIBRARY_PATH, but neither of these environment
-         # variables seems to be set in GitHub MacOS actions.
-         #
-         btLogger.log.debug('PATH=' + os.environ['PATH'])
-
-         pathsToSearch = os.environ['PATH'].split(os.pathsep)
-         extraLibs = [
-            'libdbus'  , # Eg libdbus-1.3.dylib
-         ]
-         btUtils.findAndCopyLibs(pathsToSearch, extraLibs, 'dylib', '.*.dylib', dir_packages_mac_bin)
 
          #
          # Before we try to run macdeployqt, we need to make sure its directory is in the PATH.  (Depending on how Qt
