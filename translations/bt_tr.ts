@@ -6502,11 +6502,11 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
         <translation type="unfinished">Mayalar</translation>
     </message>
     <message>
-        <source>StockPurchase</source>
+        <source>Add %1 to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add %1 to %2</source>
+        <source>Stock Purchases (Inventory)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

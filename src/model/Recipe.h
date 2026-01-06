@@ -887,48 +887,4 @@ private:
 template<> inline Recipe * Recipe::findFirstThatUses([[maybe_unused]] NamedEntity const & var) { return nullptr; }
 
 BT_DECLARE_METATYPES(Recipe)
-
-/**
- * \brief Non-member functions for \c Recipe
- */
-namespace RecipeHelper {
-   /**
-    * \brief Gets the BrewNotes for a Recipe and all its ancestors
-    */
-   QList<std::shared_ptr<BrewNote>> brewNotesForRecipeAndAncestors(Recipe const & recipe);
-
-   /**
-    * \brief Turn automatic versioning on or off
-    */
-   void setAutomaticVersioningEnabled(bool enabled);
-
-   /**
-    * \brief Returns \c true if automatic versioning is enabled, \c false otherwise
-    */
-   bool getAutomaticVersioningEnabled();
-
-   /**
-    * \brief Checks whether an about-to-be-made property change require us to create a new version of a Recipe - eg
-    *        because we are modifying some ingredient or other attribute of the Recipe and automatic versioning is
-    *        enabled.
-    */
-   void prepareForPropertyChange(NamedEntity & ne, BtStringConst const & propertyName);
-
-   /**
-    * \brief Mini RAII class that allows automatic Recipe versioning to be suspended for the time that it's in scope
-    */
-   class SuspendRecipeVersioning {
-   public:
-      SuspendRecipeVersioning();
-      ~SuspendRecipeVersioning();
-   private:
-      bool savedVersioningValue;
-      // RAII class shouldn't be getting copied or moved
-      SuspendRecipeVersioning(SuspendRecipeVersioning const &) = delete;
-      SuspendRecipeVersioning & operator=(SuspendRecipeVersioning const &) = delete;
-      SuspendRecipeVersioning(SuspendRecipeVersioning &&) = delete;
-      SuspendRecipeVersioning & operator=(SuspendRecipeVersioning &&) = delete;
-   };
-
-}
 #endif

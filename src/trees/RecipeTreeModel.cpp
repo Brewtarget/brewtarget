@@ -20,6 +20,7 @@
 #include "AncestorDialog.h"
 #include "OptionDialog.h"
 #include "PersistentSettings.h"
+#include "model/RecipeUtils.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -46,7 +47,7 @@ void RecipeTreeModel::addBrewNoteSubTree(TreeNode & recipeNodeRaw,
                                          int recipeChildNumber,
                                          Recipe const & recipe,
                                          bool recurse) {
-   auto const brewNotes = recurse ? RecipeHelper::brewNotesForRecipeAndAncestors(recipe) : recipe.brewNotes();
+   auto const brewNotes = recurse ? RecipeUtils::brewNotesForRecipeAndAncestors(recipe) : recipe.brewNotes();
 
    // It's a coding error to call this for a non-Recipe node...
    Q_ASSERT(recipeNodeRaw.classifier() == TreeNodeClassifier::PrimaryItem);

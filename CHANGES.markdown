@@ -16,16 +16,17 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 
 
 ## v5.0.1
-Fix for error in previous release.
+Fix for error in previous release, plus further fix for Mac packaging.
 
 ### New Features
 None
 
 ### Bug Fixes
 * After upgrading to 5.0.0, program starts with default Database instead of existing one [1054](https://github.com/Brewtarget/brewtarget/issues/1054)
+* Mac OS 26.2 Not Working [1052](https://github.com/Brewtarget/brewtarget/issues/1052)
 
 ### Release Timestamp
-Sun, 4 Jan 2026 05:00:01 +0100
+Mon, 5 Jan 2026 05:00:01 +0100
 
 ## v5.0.0
 New inventory management system tracks individual stock purchases and uses

@@ -7850,8 +7850,12 @@ Logfil indeholder evt. flere detaljer.</translation>
     </message>
     <message>
         <location filename="../src/StockWindow.cpp" line="77"/>
+        <source>Stock Purchases (Inventory)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>StockPurchase</source>
-        <translation>Lager køb</translation>
+        <translation type="vanished">Lager køb</translation>
     </message>
     <message>
         <location filename="../src/undoRedo/Undoable.cpp" line="64"/>
