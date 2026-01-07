@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * catalogs/CatalogBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * catalogs/CatalogBase.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include "MainWindow.h"
 #include "model/Ingredient.h"
 #include "PersistentSettings.h"
+#include "StockWindow.h"
 #include "utils/BtStringStream.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/PropertyHelper.h"
@@ -119,22 +120,24 @@ public:
                                                20,
                                                QSizePolicy::Expanding,
                                                QSizePolicy::Minimum)    },
-      m_pushButton_newStockPurchase{new QPushButton(&this->derived())        },
-      m_pushButton_addToRecipe     {new QPushButton(&this->derived())        },
-      m_pushButton_new             {new QPushButton(&this->derived())        },
-      m_pushButton_edit            {new QPushButton(&this->derived())        },
-      m_pushButton_delete          {new QPushButton(&this->derived())        },
-      m_contextMenu                {new QMenu      (&this->derived())        },
-      m_action_newStockPurchase    {new QAction    (&this->derived())        },
-      m_action_addToRecipe         {new QAction    (&this->derived())        },
-      m_action_edit                {new QAction    (&this->derived())        },
-      m_action_delete              {new QAction    (&this->derived())        },
-      m_action_new                 {new QAction    (&this->derived())        },
-      m_action_merge               {new QAction    (&this->derived())        },
-      m_neTableModel               {new NeTableModel(m_tableWidget, false)   },
-      m_sortFilterProxy            {new NeSortFilterProxyModel(m_tableWidget,
-                                                               true,
-                                                               m_neTableModel)} {
+      m_pushButton_showStockPurchases{new QPushButton(&this->derived())     },
+      m_pushButton_newStockPurchase  {new QPushButton(&this->derived())     },
+      m_pushButton_addToRecipe       {new QPushButton(&this->derived())     },
+      m_pushButton_new               {new QPushButton(&this->derived())     },
+      m_pushButton_edit              {new QPushButton(&this->derived())     },
+      m_pushButton_delete            {new QPushButton(&this->derived())     },
+      m_contextMenu                  {new QMenu      (&this->derived())     },
+      m_action_showStockPurchases    {new QAction    (&this->derived())     },
+      m_action_newStockPurchase      {new QAction    (&this->derived())     },
+      m_action_addToRecipe           {new QAction    (&this->derived())     },
+      m_action_edit                  {new QAction    (&this->derived())     },
+      m_action_delete                {new QAction    (&this->derived())     },
+      m_action_new                   {new QAction    (&this->derived())     },
+      m_action_merge                 {new QAction    (&this->derived())     },
+      m_neTableModel                 {new NeTableModel(m_tableWidget, false)},
+      m_sortFilterProxy              {new NeSortFilterProxyModel(m_tableWidget,
+                                                                 true,
+                                                                 m_neTableModel)} {
       if constexpr (IsIngredient<NE>) {
          std::get<QCheckBox *>(this->m_inventoryFilter) = new QCheckBox(&this->derived());
          std::get<QLabel    *>(this->m_inventoryFilter) = new QLabel   (&this->derived());
@@ -148,17 +151,20 @@ public:
 
       this->m_lineEdit_searchBox->setMaxLength(30);
 
-      this->m_pushButton_newStockPurchase->setObjectName(QStringLiteral("m_pushButton_newStockPurchase"));
-      this->m_pushButton_addToRecipe     ->setObjectName(QStringLiteral("pushButton_addToRecipe"       ));
-      this->m_pushButton_new             ->setObjectName(QStringLiteral("pushButton_new"               ));
-      this->m_pushButton_edit            ->setObjectName(QStringLiteral("pushButton_edit"              ));
-      this->m_pushButton_delete          ->setObjectName(QStringLiteral("pushButton_delete"            ));
 
-      this->m_pushButton_newStockPurchase->setAutoDefault(false);
-      this->m_pushButton_addToRecipe     ->setAutoDefault(false);
-      this->m_pushButton_new             ->setAutoDefault(false);
-      this->m_pushButton_edit            ->setAutoDefault(false);
-      this->m_pushButton_delete          ->setAutoDefault(false);
+      this->m_pushButton_showStockPurchases->setObjectName(QStringLiteral("m_pushButton_showStockPurchases"));
+      this->m_pushButton_newStockPurchase  ->setObjectName(QStringLiteral("m_pushButton_newStockPurchase"  ));
+      this->m_pushButton_addToRecipe       ->setObjectName(QStringLiteral("pushButton_addToRecipe"         ));
+      this->m_pushButton_new               ->setObjectName(QStringLiteral("pushButton_new"                 ));
+      this->m_pushButton_edit              ->setObjectName(QStringLiteral("pushButton_edit"                ));
+      this->m_pushButton_delete            ->setObjectName(QStringLiteral("pushButton_delete"              ));
+
+      this->m_pushButton_showStockPurchases->setAutoDefault(false);
+      this->m_pushButton_newStockPurchase  ->setAutoDefault(false);
+      this->m_pushButton_addToRecipe       ->setAutoDefault(false);
+      this->m_pushButton_new               ->setAutoDefault(false);
+      this->m_pushButton_edit              ->setAutoDefault(false);
+      this->m_pushButton_delete            ->setAutoDefault(false);
 
       this->m_pushButton_addToRecipe->setDefault(true);
 
@@ -174,10 +180,12 @@ public:
       //
       this->m_searchIcon->setStyleSheet("QToolButton {border-style: outset; border-width: 0px;}");
       this->m_searchIcon                 ->setIcon(QIcon{QStringLiteral(":/images/iconSearch.svg"          )});
-      this->m_pushButton_newStockPurchase->setIcon(QIcon{QStringLiteral(":/images/iconNewStockPurchase.svg")});
-      this->m_pushButton_edit            ->setIcon(QIcon{QStringLiteral(":/images/edit.svg"                )});
-      this->m_pushButton_delete          ->setIcon(QIcon{QStringLiteral(":/images/smallMinus.svg"          )});
-      this->m_pushButton_new             ->setIcon(QIcon{QStringLiteral(":/images/smallPlus.svg"           )});
+
+      this->m_pushButton_showStockPurchases->setIcon(QIcon{QStringLiteral(":/images/iconInventory.svg"       )});
+      this->m_pushButton_newStockPurchase  ->setIcon(QIcon{QStringLiteral(":/images/iconNewStockPurchase.svg")});
+      this->m_pushButton_edit              ->setIcon(QIcon{QStringLiteral(":/images/edit.svg"                )});
+      this->m_pushButton_delete            ->setIcon(QIcon{QStringLiteral(":/images/smallMinus.svg"          )});
+      this->m_pushButton_new               ->setIcon(QIcon{QStringLiteral(":/images/smallPlus.svg"           )});
 
       // The order we add things to m_horizontalLayout determines their left-to-right order in that layout
       this->m_horizontalLayout->addWidget(this->m_searchIcon            );
@@ -189,6 +197,7 @@ public:
       }
 
       if constexpr (CanHaveStockPurchase<NE>) {
+         this->m_horizontalLayout->addWidget(this->m_pushButton_showStockPurchases);
          this->m_horizontalLayout->addWidget(this->m_pushButton_newStockPurchase);
       }
       this->m_horizontalLayout->addWidget(this->m_pushButton_addToRecipe     );
@@ -215,7 +224,8 @@ public:
       }
 
       if constexpr (CanHaveStockPurchase<NE>) {
-         this->derived().connect(m_pushButton_newStockPurchase, &QAbstractButton::clicked, &this->derived(), &Derived::newStockPurchase   );
+         this->derived().connect(m_pushButton_showStockPurchases, &QAbstractButton::clicked, &this->derived(), &Derived::showStockPurchases);
+         this->derived().connect(m_pushButton_newStockPurchase  , &QAbstractButton::clicked, &this->derived(), &Derived::newStockPurchase  );
       }
       this->derived().connect(m_pushButton_addToRecipe, &QAbstractButton::clicked, &this->derived(), &Derived::addSelectedToRecipe);
       this->derived().connect(m_pushButton_edit       , &QAbstractButton::clicked, &this->derived(), &Derived::editSelected  );
@@ -232,7 +242,10 @@ public:
       // TODO: We should align this context menu more closely with the one in trees/TreeViewBase.h
       //
       if constexpr (CanHaveStockPurchase<NE>) {
-         this->derived().connect(this->m_action_newStockPurchase, &QAction::triggered, &this->derived(), &Derived::newStockPurchase   );
+
+
+         this->derived().connect(this->m_action_showStockPurchases, &QAction::triggered, &this->derived(), &Derived::showStockPurchases);
+         this->derived().connect(this->m_action_newStockPurchase  , &QAction::triggered, &this->derived(), &Derived::newStockPurchase  );
       }
       this->derived().connect(this->m_action_addToRecipe, &QAction::triggered, &this->derived(), &Derived::addSelectedToRecipe);
       this->derived().connect(this->m_action_edit       , &QAction::triggered, &this->derived(), &Derived::editSelected       );
@@ -241,7 +254,8 @@ public:
       this->derived().connect(this->m_action_merge      , &QAction::triggered, &this->derived(), &Derived::mergeSelected      );
 
       if constexpr (CanHaveStockPurchase<NE>) {
-         this->m_contextMenu->addAction(this->m_action_newStockPurchase);
+         this->m_contextMenu->addAction(this->m_action_showStockPurchases);
+         this->m_contextMenu->addAction(this->m_action_newStockPurchase  );
       }
       this->m_contextMenu->addAction(this->m_action_addToRecipe);
       this->m_contextMenu->addAction(this->m_action_edit       );
@@ -264,7 +278,8 @@ public:
       this->derived().setWindowTitle(QString(QObject::tr("%1 Catalog / Database")).arg(NE::localisedName()));
 
       if constexpr (CanHaveStockPurchase<NE>) {
-         this->m_action_newStockPurchase->setText(Derived::tr("New stock purchase for selected %1").arg(NE::localisedName()));
+         this->m_action_showStockPurchases->setText(Derived::tr("Show stock purchases for selected %1").arg(NE::localisedName()));
+         this->m_action_newStockPurchase  ->setText(Derived::tr("New stock purchase for selected %1").arg(NE::localisedName()));
       }
       this->m_action_addToRecipe->setText(Derived::tr("Add %1 to recipe"         ).arg(NE::localisedName()));
       this->m_action_edit       ->setText(Derived::tr("Edit selected %1"         ).arg(NE::localisedName()));
@@ -276,7 +291,8 @@ public:
       }
 
       if constexpr (CanHaveStockPurchase<NE>) {
-         this->m_pushButton_newStockPurchase->setText(QString());
+         this->m_pushButton_showStockPurchases->setText(QString());
+         this->m_pushButton_newStockPurchase  ->setText(QString());
       }
       if constexpr (IsTableModel<NeTableModel>) {
          //
@@ -294,9 +310,10 @@ public:
       this->m_pushButton_edit  ->setText(QString());
       this->m_pushButton_delete->setText(QString());
 #ifndef QT_NO_TOOLTIP
-      this->m_searchIcon       ->setToolTip(QString(QObject::tr("Filter search"     )));
+      this->m_searchIcon->setToolTip(QString(QObject::tr("Filter search")));
       if constexpr (CanHaveStockPurchase<NE>) {
-         this->m_pushButton_newStockPurchase->setToolTip(QString(QObject::tr("New stock purchase")));
+         this->m_pushButton_showStockPurchases->setToolTip(QString(QObject::tr("Show stock purchases")));
+         this->m_pushButton_newStockPurchase  ->setToolTip(QString(QObject::tr("New stock purchase")));
       }
       if constexpr (IsTableModel<NeTableModel>) {
          if constexpr (IsOnePerRecipe<catalogBaseOptions>) {
@@ -373,6 +390,19 @@ public:
     */
    int getNumSelected() const {
       return this->getSelectedSourceRowNumbers().size();
+   }
+
+   /**
+    * \brief Subclass should call this from its \c showStockPurchases slot
+    */
+   void doShowStockPurchases() const {
+      if constexpr (CanHaveStockPurchase<NE>) {
+         std::shared_ptr<NE> selected = this->getSingleSelected();
+         // Unlike with doNewStockPurchase, if nothing is selected, we still want to do something: pull up the relevant
+         // window & tab, but with no filter applied.
+         WindowDistributor::get<StockWindow>().showStockPurchasesFor(selected.get());
+      }
+      return;
    }
 
    /**
@@ -753,13 +783,15 @@ public:
    QToolButton * m_searchIcon;
    QLineEdit   * m_lineEdit_searchBox;
    QSpacerItem * m_horizontalSpacer;
-   QPushButton * m_pushButton_newStockPurchase;
-   QPushButton * m_pushButton_addToRecipe;
-   QPushButton * m_pushButton_new;
-   QPushButton * m_pushButton_edit;
-   QPushButton * m_pushButton_delete;
+   QPushButton * m_pushButton_showStockPurchases;
+   QPushButton * m_pushButton_newStockPurchase  ;
+   QPushButton * m_pushButton_addToRecipe       ;
+   QPushButton * m_pushButton_new               ;
+   QPushButton * m_pushButton_edit              ;
+   QPushButton * m_pushButton_delete            ;
 
    QMenu       * m_contextMenu;
+   QAction     * m_action_showStockPurchases;
    QAction     * m_action_newStockPurchase;
    QAction     * m_action_addToRecipe     ;
    QAction     * m_action_edit            ;
@@ -808,6 +840,7 @@ public:
       virtual ~NeName##Catalog();                                                  \
                                                                                    \
    public slots:                                                                   \
+      void showStockPurchases() const;                                             \
       void newStockPurchase() const;                                               \
       void addSelectedToRecipe() const;                                            \
       void deleteSelected();                                                       \
@@ -842,6 +875,7 @@ public:
                                                           \
    NeName##Catalog::~NeName##Catalog() = default;         \
                                                           \
+   void NeName##Catalog::showStockPurchases() const            { this->doShowStockPurchases();   return; } \
    void NeName##Catalog::newStockPurchase() const              { this->doNewStockPurchase();     return; } \
    void NeName##Catalog::addSelectedToRecipe() const           { this->doAddSelectedToRecipe();  return; } \
    void NeName##Catalog::deleteSelected()                      { this->doDeleteSelected();       return; } \
