@@ -748,14 +748,15 @@ namespace {
          // NB: We don't put the "id" field here because it has to be the first one in each TableDefinition
          // (The order of the other fields does not matter.)
 
-         // NB: The "quantity" column for the IngredientAmount::quantity is used to mean "quantity received"
-         //     For this optional StockPurchase::quantityOrdered field, we don't store units as they will be the same as
-         //     IngredientAmount::unit.
-         {ObjectStore::FieldType::Double, {"quantity_ordered"}, PropertyNames::StockPurchase::quantityOrdered}   ,
+         // NB: The "quantity" column for the IngredientAmount::quantity (via INGREDIENT_AMOUNT_COMMON_FIELDS) is used
+         //     to mean "quantity received".  For this optional StockPurchase::quantityOrdered field, we don't store
+         //     units as they will be the same as IngredientAmount::unit.
+         {ObjectStore::FieldType::Double, {"quantity_ordered"}, PropertyNames::StockPurchase::quantityOrdered},
          {ObjectStore::FieldType::Date  , {"date_received"   }, PropertyNames::StockPurchase::dateReceived   },
          {ObjectStore::FieldType::Date  , {"date_ordered"    }, PropertyNames::StockPurchase::dateOrdered    },
          {ObjectStore::FieldType::Date  , {"date_best_before"}, PropertyNames::StockPurchase::dateBestBefore },
          {ObjectStore::FieldType::String, {"supplier"        }, PropertyNames::StockPurchase::supplier       },
+         {ObjectStore::FieldType::String, {"note"            }, PropertyNames::StockPurchase::note           },
          {ObjectStore::FieldType::Money , {"purchase_price_currency",
                                            "purchase_price"  }, PropertyNames::StockPurchase::purchasePrice  },
          // In theory we could try to be clever here and share the currency column between purchasePrice and
