@@ -170,6 +170,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/model/RecipeAdditionYeast.cpp
     ${repoDir}/src/model/RecipeAdjustmentSalt.cpp
     ${repoDir}/src/model/RecipeUseOfWater.cpp
+    ${repoDir}/src/model/RecipeUtils.cpp
     ${repoDir}/src/model/Salt.cpp
     ${repoDir}/src/model/Step.cpp
     ${repoDir}/src/model/StepExtended.cpp

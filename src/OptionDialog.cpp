@@ -50,6 +50,7 @@
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
+#include "model/RecipeUtils.h"
 #include "PersistentSettings.h"
 
 #ifdef BUILDING_WITH_CMAKE
@@ -538,7 +539,7 @@ public:
       this->dbConnectionTestState = NO_CHANGE;
       this->changeColors();
 
-      if (RecipeHelper::getAutomaticVersioningEnabled()) {
+      if (RecipeUtils::getAutomaticVersioningEnabled()) {
          this->m_self.checkBox_versioning->setCheckState(Qt::Checked);
          this->m_self.groupBox_deleteBehavior->setEnabled(true);
          switch (PersistentSettings::value_ck(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT).toInt()) {
@@ -925,7 +926,7 @@ void OptionDialog::saveLoggingSettings() {
 void OptionDialog::saveVersioningSettings() {
    // Save versioning options
    if (checkBox_versioning->checkState() == Qt::Checked) {
-      RecipeHelper::setAutomaticVersioningEnabled(true);
+      RecipeUtils::setAutomaticVersioningEnabled(true);
       if (radioButton_deleteAncestor->isChecked()) {
          PersistentSettings::insert_ck(PersistentSettings::Names::deletewhat, Recipe::ANCESTOR);
       } else {
@@ -933,7 +934,7 @@ void OptionDialog::saveVersioningSettings() {
       }
    } else {
       // the default when versioning is off is to only delete descendant
-      RecipeHelper::setAutomaticVersioningEnabled(false);
+      RecipeUtils::setAutomaticVersioningEnabled(false);
       PersistentSettings::insert_ck(PersistentSettings::Names::deletewhat, Recipe::DESCENDANT);
    }
 

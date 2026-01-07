@@ -189,7 +189,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '5.0.1',
+        version: '5.0.2',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.63.0',
         default_options : ['cpp_std=c++23',
@@ -729,6 +729,7 @@ commonSourceFiles = files([
    'src/model/RecipeAdditionYeast.cpp',
    'src/model/RecipeAdjustmentSalt.cpp',
    'src/model/RecipeUseOfWater.cpp',
+   'src/model/RecipeUtils.cpp',
    'src/model/Salt.cpp',
    'src/model/Step.cpp',
    'src/model/StepExtended.cpp',

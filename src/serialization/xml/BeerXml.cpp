@@ -46,6 +46,7 @@
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
 #include "model/RecipeUseOfWater.h"
+#include "model/RecipeUtils.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -1298,7 +1299,7 @@ bool BeerXML::importFromXML(QString const & filename, QTextStream & userMessage)
    // Recipe we'll end up creating load of versions of it.  The magic of RAII means it's a one-liner to suspend
    // automatic versioning, in an exception-safe way, until the end of this function.
    //
-   RecipeHelper::SuspendRecipeVersioning suspendRecipeVersioning;
+   RecipeUtils::SuspendRecipeVersioning suspendRecipeVersioning;
 
    //
    // Slightly more manually, we also change the cursor to show "busy" while we're doing the import as, for large

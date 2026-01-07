@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * StockWindow.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * StockWindow.cpp is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public:
    ~impl() = default;
 
    void retranslateUi() {
-      this->m_self.setWindowTitle(QObject::tr("StockPurchase"));
+      this->m_self.setWindowTitle(QObject::tr("Stock Purchases (Inventory)"));
       this->m_tabWidget_StockPurchaseTrees->setTabText(0, QObject::tr("Fermentables" ));
       this->m_tabWidget_StockPurchaseTrees->setTabText(1, QObject::tr("Hops"         ));
       this->m_tabWidget_StockPurchaseTrees->setTabText(2, QObject::tr("Miscellaneous"));

@@ -30,28 +30,11 @@
 #include "measurement/ConstrainedAmount.h"
 #include "model/NamedParameterBundle.h"
 
-#include "model/Boil.h"
-#include "model/BoilStep.h"
 #include "model/BrewNote.h"
-#include "model/Equipment.h"
 #include "model/Fermentable.h"
-#include "model/Fermentation.h"
-#include "model/FermentationStep.h"
 #include "model/Hop.h"
-#include "model/Instruction.h"
-#include "model/Mash.h"
-#include "model/MashStep.h"
-#include "model/Misc.h"
-#include "model/RecipeAdditionFermentable.h"
-#include "model/RecipeAdditionHop.h"
-#include "model/RecipeAdditionMisc.h"
-#include "model/RecipeAdditionYeast.h"
 #include "model/Recipe.h"
-#include "model/RecipeUseOfWater.h"
-#include "model/Salt.h"
-#include "model/Style.h"
-#include "model/Water.h"
-#include "model/Yeast.h"
+#include "model/RecipeUtils.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -114,7 +97,7 @@ QString NamedEntity::localisedName() { return tr("Named Entity"); }
 QString NamedEntity::localisedName_deleted         () { return tr("Deleted"   ); }
 QString NamedEntity::localisedName_key             () { return tr("Key"       ); }
 QString NamedEntity::localisedName_name            () { return tr("Name"      ); }
-QString NamedEntity::localisedName_numRecipesUsedIn() { return tr("No Recipes"); }
+QString NamedEntity::localisedName_numRecipesUsedIn() { return tr("N° Recipes"); }
 QString NamedEntity::localisedName_subsidiary      () { return tr("Subsidiary"); }
 
 NamedEntity::NamedEntity(QString t_name) :
@@ -414,7 +397,7 @@ void NamedEntity::prepareForPropertyChange(BtStringConst const & propertyName) {
    //
    auto owningRecipe = this->owningRecipe();
    if (owningRecipe) {
-      RecipeHelper::prepareForPropertyChange(*this, propertyName);
+      RecipeUtils::prepareForPropertyChange(*this, propertyName);
    }
    return;
 }

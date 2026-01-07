@@ -131,8 +131,9 @@
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBox_thickness">
+              <!-- See https://github.com/Brewtarget/brewtarget/issues/1059 for why this is deliberately 3 decimal places -->
               <property name="decimals">
-               <number>1</number>
+               <number>3</number>
               </property>
               <property name="maximum">
                <double>20.000000000000000</double>
