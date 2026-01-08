@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/StockManagerBase.h is part of Brewtarget, and is copyright the following authors 2025:
+ * widgets/StockManagerBase.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -62,7 +62,9 @@ public:
 
       this->m_treeView->init(*this->m_stockPurchaseEditor);
 
-      this->derived().connect(this->derived().m_searchBox_filter, &QLineEdit::textEdited   , &this->derived(), &Derived::filterItems   );
+      // Note that we tie to QLineEdit::textChanged rather than QLineEdit::textEdited here because we want to pick up
+      // when the search filter text is set programmatically as well as when it is edited by the user.
+      this->derived().connect(this->derived().m_searchBox_filter, &QLineEdit::textChanged   , &this->derived(), &Derived::filterItems   );
       this->derived().connect(this->derived().m_button_new      , &QAbstractButton::clicked, &this->derived(), &Derived::newItem       );
       this->derived().connect(this->derived().m_button_edit     , &QAbstractButton::clicked, &this->derived(), &Derived::editSelected  );
       this->derived().connect(this->derived().m_button_delete   , &QAbstractButton::clicked, &this->derived(), &Derived::deleteSelected);

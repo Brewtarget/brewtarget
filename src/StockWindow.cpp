@@ -84,6 +84,11 @@ public:
       return;
    }
 
+   // There are no general cases for these member functions, only specialisations -- which have to be outside the class
+   // definition (see below).
+   template<class Ingrd> void selectTab();
+   template<class Ingrd> StockManager & getStockManager();
+
    //================================================ MEMBER VARIABLES =================================================
    StockWindow & m_self;
 
@@ -102,6 +107,18 @@ public:
    //! @}
 
 };
+
+template<> void StockWindow::impl::selectTab<Fermentable>() { this->m_tabWidget_StockPurchaseTrees->setCurrentIndex(0); return; }
+template<> void StockWindow::impl::selectTab<Hop        >() { this->m_tabWidget_StockPurchaseTrees->setCurrentIndex(1); return; }
+template<> void StockWindow::impl::selectTab<Misc       >() { this->m_tabWidget_StockPurchaseTrees->setCurrentIndex(2); return; }
+template<> void StockWindow::impl::selectTab<Salt       >() { this->m_tabWidget_StockPurchaseTrees->setCurrentIndex(3); return; }
+template<> void StockWindow::impl::selectTab<Yeast      >() { this->m_tabWidget_StockPurchaseTrees->setCurrentIndex(4); return; }
+
+template<> StockManager & StockWindow::impl::getStockManager<Fermentable>() { return *this->m_stockManagerFermentable; }
+template<> StockManager & StockWindow::impl::getStockManager<Hop        >() { return *this->m_stockManagerHop        ; }
+template<> StockManager & StockWindow::impl::getStockManager<Misc       >() { return *this->m_stockManagerMisc       ; }
+template<> StockManager & StockWindow::impl::getStockManager<Salt       >() { return *this->m_stockManagerSalt       ; }
+template<> StockManager & StockWindow::impl::getStockManager<Yeast      >() { return *this->m_stockManagerYeast      ; }
 
 StockWindow::StockWindow(QWidget * parent) :
    QDialog{parent},
@@ -131,6 +148,24 @@ template<> StockUseHopEditor         & StockWindow::getUseEditor<Hop        >() 
 template<> StockUseMiscEditor        & StockWindow::getUseEditor<Misc       >() const { return this->pimpl->m_stockManagerMisc       ->getUseEditor(); }
 template<> StockUseSaltEditor        & StockWindow::getUseEditor<Salt       >() const { return this->pimpl->m_stockManagerSalt       ->getUseEditor(); }
 template<> StockUseYeastEditor       & StockWindow::getUseEditor<Yeast      >() const { return this->pimpl->m_stockManagerYeast      ->getUseEditor(); }
+
+template<class Ingrd> void StockWindow::showStockPurchasesFor(Ingrd const * ingredient) {
+   this->pimpl->selectTab<Ingrd>();
+   this->pimpl->getStockManager<Ingrd>().setSearchFilter(ingredient ? ingredient->name() : "");
+   this->show();
+   this->activateWindow();
+   this->raise();
+   return;
+}
+// Instantiate the above template function for the types that are going to use it
+// (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
+// allows us to access private details in the implementation.)
+template void StockWindow::showStockPurchasesFor(Fermentable const * ingredient);
+template void StockWindow::showStockPurchasesFor(Hop         const * ingredient);
+template void StockWindow::showStockPurchasesFor(Misc        const * ingredient);
+template void StockWindow::showStockPurchasesFor(Salt        const * ingredient);
+template void StockWindow::showStockPurchasesFor(Yeast       const * ingredient);
+
 
 void StockWindow::saveUiState() const {
    static auto const & section = PersistentSettings::Sections::StockWindow;

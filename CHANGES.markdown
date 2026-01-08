@@ -7,13 +7,25 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 release timestamp to be a date in the future, and I'm guessing nobody cares about the exact time of day a release
 happens, so I'm now setting it to a slightly arbitrary time early in the morning.
 
-## Forthcoming in v5.0.2
+## Forthcoming in v5.0.3
 
 ### New Features
 * TODO: Additional methods for calculating IBU
 * Shopping Lists
 * We'll list other new features here...
 
+## v5.0.2
+Bug fixes and minor enhancements.
+
+### New Features
+* More precision on Mash Wizard for mash thickness [1059](https://github.com/Brewtarget/brewtarget/issues/1059)
+* 5.0.1 - Cannot edit inventory quantities from catalog [1057](https://github.com/Brewtarget/brewtarget/issues/1057)
+
+### Bug Fixes
+* Amending "Notes" field of a Stock Purchase record causes an assert when you click save [1061](https://github.com/Brewtarget/brewtarget/issues/1061)
+
+### Release Timestamp
+Wed, 7 Jan 2026 05:00:02 +0100
 
 ## v5.0.1
 Fix for error in previous release, plus further fix for Mac packaging.

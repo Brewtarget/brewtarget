@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * StockWindow.h is part of Brewtarget, and is copyright the following authors 2025:
+ * StockWindow.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -46,6 +46,17 @@ public:
     *        \c StockUseMiscEditor for \c Misc, etc.
     */
    template<class Ingrd> typename Ingrd::StockPurchaseClass::StockUseClass::EditorClass & getUseEditor() const;
+
+   /**
+    * \brief In other parts of the UI, we show Total Inventory for each ingredient.  It's natural for the user to want
+    *        to see the detail behind this, so this function helps with that.  The \c ingredient parameter is used to
+    *        preselect the appropriate tab and prepopulate the search filter.  (This isn't perfect as you might have
+    *        one ingredient whose name is a substring of another one.  But it should be good enough for most people most
+    *        of the time.)
+    *
+    * \param ingredient If null, show stock purchases for \b all ingredients of this type
+    */
+   template<class Ingrd> void showStockPurchasesFor(Ingrd const * ingredient);
 
    void saveUiState() const;
    bool restoreUiState();

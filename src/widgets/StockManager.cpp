@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/StockManager.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * widgets/StockManager.cpp is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -59,5 +59,10 @@ StockManager::~StockManager() = default;
 
 void StockManager::retranslateUi() {
    this->m_searchBox_filter->setPlaceholderText(QObject::tr("Enter filter"));
+   return;
+}
+
+void StockManager::setSearchFilter(QString const & text) {
+   this->m_searchBox_filter->setText(text);
    return;
 }

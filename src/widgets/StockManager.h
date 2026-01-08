@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/StockManager.h is part of Brewtarget, and is copyright the following authors 2025:
+ * widgets/StockManager.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -33,6 +33,8 @@ public:
    ~StockManager();
 
    void retranslateUi();
+
+   void setSearchFilter(QString const & text);
 
 protected:
    //! \name UI Variables
