@@ -1317,15 +1317,15 @@ generatedFromMocForUnitTests = qt.compile_moc(headers : unitTestMocHeaders,
 # Calling qt.compile_translations will do only the latter, so we need to do the former directly
 #
 #
-# NB: In Qt 5, the `lupdate` command line tool is just invoked as `lupdate` on all three of our build platforms.  In
-# Qt 6, it's a bit different.  We still call `lupdate` on Mac, but, on Windows we need to call `lupdate-qt6` (see file
-# list at https://packages.msys2.org/packages/mingw-w64-x86_64-qt6-tools).  This is presumably to allow Qt 5 and Qt 6 to
-# coexist, but we have to take account of it here.
+# NB: From time to time, the name of the `lupdate` command line tool changes.  Normally it is just invoked as `lupdate`
+# on all three of our build platforms.  But when we first moved to Qt 6, we had to call `lupdate-qt6` on Windows (but
+# still `lupdate` on other platforms).  Then in January 2026, the Windows command changed back to `lupdate` (see file
+# list at https://packages.msys2.org/packages/mingw-w64-x86_64-qt6-tools).  Presumably the original change was to allow
+# Qt 5 and Qt 6 to coexist.  Anyway, look out for similar shenanigans if and when Qt 7 arrives.
 #
 lupdate_name = 'lupdate'
 if host_machine.system() == 'windows'
-   lupdate_name = 'lupdate-qt6'
-elif host_machine.system() == 'linux'
+#   lupdate_name = 'lupdate-qt6'
    lupdate_name = 'lupdate'
 endif
 lupdate_executable = find_program(lupdate_name, required : true)
