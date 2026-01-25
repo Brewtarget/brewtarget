@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * trees/TreeView.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * trees/TreeView.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -52,9 +52,6 @@ public:
    //! Called from \c MainWindow::treeActivated
    virtual void activated(QModelIndex const & index) = 0;
 
-   //! \brief returns the context menu associated with the \c selected item
-   virtual QMenu * getContextMenu(QModelIndex const & selectedViewIndex) = 0;
-
    //! \brief Copy the specified items
    virtual void copy(QModelIndexList const & selectedViewIndexes) = 0;
 
@@ -67,16 +64,10 @@ public:
 
    virtual void setSelected(QModelIndex const & index) = 0;
 
-   //! \brief Copy the selected items in this tree
+   //! \brief Copy the selected items in this tree -- called from \c MainWindow::copySelected
    virtual void copySelected() = 0;
-   //! \brief Delete the selected items in this tree
+   //! \brief Delete the selected items in this tree -- called frrom \c MainWindow::deleteSelected
    virtual void deleteSelected() = 0;
-   //! \brief Export the selected items in this tree to BeerXML or BeerJSON
-   void exportSelected() const;
-   //! \brief Import items from BeerXML or BeerJSON
-   void importFiles();
-
-   virtual void renameSelected() = 0;
 
    //! \brief adds a folder to the tree
    virtual void addFolder(QString const & folder) = 0;

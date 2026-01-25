@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/ObjectStoreTyped.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * database/ObjectStoreTyped.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 
 #include "database/ObjectStore.h"
 #include "model/NamedEntity.h"
+#include "utils/CastAndConvert.h"
 
 /**
  * \brief Read, write and cache any subclass of \c NamedEntity in the database
@@ -31,6 +32,15 @@
 template<class NE>
 class ObjectStoreTyped : public ObjectStore {
 public:
+   /**
+    * \brief We use this internally, but it doesn't hurt that it's public.  It's morally equivalent to \c bool, but
+    *        avoids ambiguity.
+    */
+   enum class DeleteType {
+      Soft,
+      Hard,
+   };
+
    /**
     * \brief Constructor sets up mappings but does not read in data from DB.  Private because singleton.
     *
@@ -148,27 +158,91 @@ public:
     */
    QList<std::shared_ptr<NE> > getByIds(QVector<int> const & listOfIds) const {
       // Base class will give us QList<std::shared_ptr<QObject> >, which we convert to QList<std::shared_ptr<NE> >
-      return this->convertShared(this->ObjectStore::getByIds(listOfIds));
+      return CastAndConvert::toShared<NE>(this->ObjectStore::getByIds(listOfIds));
    }
 
    /**
     * \brief Raw pointer version of \c getByIds
     */
    QList<NE *> getByIdsRaw(QVector<int> const & listOfIds) const {
-      return this->convertRaw(this->ObjectStore::getByIds(listOfIds));
+      return CastAndConvert::toRaw<NE>(this->ObjectStore::getByIds(listOfIds));
    }
 
    /**
-    * \brief Mark an object as deleted (including in the database) and but leave it in existence (both in the database
-    *        and in our local in-memory cache.
+    * \brief Do a hard or soft delete
+    *
+    * \param id ID of the object to delete
+    * \tparam deleteType
+    */
+   template<DeleteType deleteType>
+   std::shared_ptr<NE> deleteItem(int id) {
+      qDebug() <<
+         Q_FUNC_INFO << (deleteType == DeleteType::Hard ? "Hard" : "Soft") << "delete " <<
+         NE::staticMetaObject.className() << " #" << id;
+      if (id <= 0 || !this->contains(id)) {
+         // Trying to delete a non-existent object is a coding error, but might be recoverable
+         qWarning() <<
+            Q_FUNC_INFO << "Trying to delete non-existent " << NE::staticMetaObject.className() << " with ID" << id;
+         return std::shared_ptr<NE>{};
+      }
+
+      auto object = this->ObjectStore::getById(id);
+      std::shared_ptr<NE> ne = std::static_pointer_cast<NE>(object);
+      if constexpr (deleteType == DeleteType::Hard) {
+         // If the NamedEntity we are deleting owns any other NamedEntity objects (eg Mash owns its MashSteps) then tell
+         // it to delete those first.
+         ne->hardDeleteOwnedEntities();
+         // Base class does the heavy lifting on removing the NamedEntity from the DB
+         this->ObjectStore::defaultHardDelete(id);
+         // Some related entities can only be deleted after the thing to which they are related has been removed from
+         // the database.  This is the opportunity to do that.
+         ne->hardDeleteOrphanedEntities();
+         // Setting the deleted object's ID to -1 now puts it in the same state as a newly-created object.
+         ne->setKey(-1);
+      } else {
+         // For soft delete, there's still a bit more work to do
+
+         // This marks the in-memory object as deleted and will get pushed down to the DB
+         ne->setDeleted(true);
+
+         // Base class defaultSoftDelete() actually does too much for the soft delete case; we just need to tell any bits
+         // of the UI that need to know that an object was deleted.  (In the hard delete case, this signal will already
+         // have been emitted.)
+         emit this->signalObjectDeleted(id, object);
+      }
+
+      return ne;
+   }
+
+   /**
+    * \brief As above but for multiple items
+    * @param ids
+    * @param hard
+    * @return
+    */
+   template<DeleteType deleteType>
+   QList<std::shared_ptr<NE>> deleteItems(QList<int> const & ids) {
+      QList<std::shared_ptr<NE>> deletedItems{ids.size()};
+      for (int id : ids) {
+         deletedItems.append(this->deleteItem<deleteType>(id));
+      }
+      return deletedItems;
+   }
+
+   /**
+    * \brief Mark an object as deleted (including in the database), but leave it in existence (both in the database and
+    *        in our local in-memory cache.
     *
     *        NB: We do not call down to \c ObjectStore::defaultSoftDelete() from this member function (as that would
     *            remove the object from our local in-memory cache.
     *
     * \param id ID of the object to delete
     */
-   std::shared_ptr<NE> softDelete(int id) {
-      return this->hardOrSoftDelete(id, false);
+   std::shared_ptr<NE> softDelete(int const id) {
+      return this->deleteItem<DeleteType::Soft>(id);
+   }
+   QList<std::shared_ptr<NE>> softDelete(QList<int> const & ids) {
+      return this->deleteItems<DeleteType::Soft>(ids);
    }
 
    /**
@@ -178,8 +252,11 @@ public:
     *
     * \param id ID of the object to delete
     */
-   std::shared_ptr<NE> hardDelete(int id) {
-      return this->hardOrSoftDelete(id, true);
+   std::shared_ptr<NE> hardDelete(int const id) {
+      return this->deleteItem<DeleteType::Hard>(id);
+   }
+   std::shared_ptr<NE> hardDelete(QList<int> const & ids) {
+      return this->deleteItems<DeleteType::Hard>(ids);
    }
 
    /**
@@ -235,17 +312,34 @@ public:
    /**
     * \brief Search the set of all cached objects with a lambda.
     *
-    * \param matchFunction Takes a pointer to an object and returns \c true if the object is a match or \c false
+    * \param matchFunction Takes a const reference to an object and returns \c true if the object is a match or \c false
     *                      otherwise.
     *
     * \return List of shared pointers to all the objects that give a \c true result to \c matchFunction (and thus an
+    *         empty list if none does).
+    */
+   QList<std::shared_ptr<NE>> findAllMatching(
+      std::function<bool(NE const &)> const & matchFunction
+   ) const {
+      // Base class will give us QList<std::shared_ptr<QObject> >, which we convert to QList<std::shared_ptr<NE> >
+      QList<std::shared_ptr<QObject>> const rawResults = this->ObjectStore::findAllMatching(
+         // As per above, we make a wrapper around the supplied lambda to do the necessary casting
+         [matchFunction](std::shared_ptr<QObject> obj) {return matchFunction(static_cast<NE const &>(*obj));}
+      );
+      return CastAndConvert::toShared<NE>(rawResults);
+   }
+
+   /**
+    * \brief Alternate version of \c findAllMatching that uses shared pointers
+    *
+    * \return List of pointers to all the objects that give a \c true result to \c matchFunction (and thus an
     *         empty list if none does).
     */
    QList<std::shared_ptr<NE> > findAllMatching(
       std::function<bool(std::shared_ptr<NE>)> const & matchFunction
    ) const {
       // Base class will give us QList<std::shared_ptr<QObject> >, which we convert to QList<std::shared_ptr<NE> >
-      return this->convertShared(
+      return CastAndConvert::toShared<NE>(
          // As per above, we make a wrapper around the supplied lambda to do the necessary casting
          this->ObjectStore::findAllMatching(
             [matchFunction](std::shared_ptr<QObject> obj) {return matchFunction(std::static_pointer_cast<NE>(obj));}
@@ -260,7 +354,7 @@ public:
     *         empty list if none does).
     */
    QList<NE *> findAllMatching(std::function<bool(NE *)> const & matchFunction) const {
-      return this->convertRaw(
+      return CastAndConvert::toRaw<NE>(
          this->ObjectStore::findAllMatching(
             [matchFunction](std::shared_ptr<QObject> obj) {return matchFunction(static_cast<NE *>(obj.get()));}
          )
@@ -290,13 +384,13 @@ public:
     * \brief Special case of \c findAllMatching that returns a list of all cached objects of a given type
     */
    QList<std::shared_ptr<NE> > getAll() const {
-      return this->convertShared(this->ObjectStore::getAll());
+      return CastAndConvert::toShared<NE>(this->ObjectStore::getAll());
    }
    /**
     * \brief Raw pointer version of \c getAll
     */
    QList<NE *> getAllRaw() const {
-      return this->convertRaw(this->ObjectStore::getAll());
+      return CastAndConvert::toRaw<NE>(this->ObjectStore::getAll());
    }
 
 protected:
@@ -314,81 +408,6 @@ protected:
    }
 
 private:
-   /**
-    * \brief Do a hard or soft delete
-    *
-    * \param id ID of the object to delete
-    * \param hard \c true for hard delete, \c false for soft delete
-    */
-   std::shared_ptr<NE> hardOrSoftDelete(int id, bool hard) {
-      qDebug() <<
-         Q_FUNC_INFO << (hard ? "Hard" : "Soft") << "delete " << NE::staticMetaObject.className() << " #" << id;
-      if (id <= 0 || !this->contains(id)) {
-         // Trying to delete a non-existent object is a coding error, but might be recoverable
-         qWarning() <<
-            Q_FUNC_INFO << "Trying to delete non-existent " << NE::staticMetaObject.className() << " with ID" << id;
-         return std::shared_ptr<NE>{};
-      }
-
-      auto object = this->ObjectStore::getById(id);
-      std::shared_ptr<NE> ne = std::static_pointer_cast<NE>(object);
-      if (hard) {
-         // If the NamedEntity we are deleting owns any other NamedEntity objects (eg Mash owns its MashSteps) then tell
-         // it to delete those first.
-         ne->hardDeleteOwnedEntities();
-         // Base class does the heavy lifting on removing the NamedEntity from the DB
-         this->ObjectStore::defaultHardDelete(id);
-         // Some related entities can only be deleted after the thing to which they are related has been removed from
-         // the database.  This is the opportunity to do that.
-         ne->hardDeleteOrphanedEntities();
-         // Setting the deleted object's ID to -1 now puts it in the same state as a newly-created object.
-         ne->setKey(-1);
-         return ne;
-      }
-
-      // For soft delete, there's still a bit more work to do
-
-      // This marks the in-memory object as deleted and will get pushed down to the DB
-      ne->setDeleted(true);
-
-      // Base class defaultSoftDelete() actually does too much for the soft delete case; we just need to tell any bits
-      // of the UI that need to know that an object was deleted.  (In the hard delete case, this signal will already
-      // have been emitted.)
-      emit this->signalObjectDeleted(id, object);
-
-      return ne;
-   }
-
-   /**
-    * \brief Convert QList<std::shared_ptr<QObject> > to QList<std::shared_ptr<NE> >
-    */
-   QList<std::shared_ptr<NE> > convertShared(QList<std::shared_ptr<QObject> > const results) const {
-      // We can't just cast the resulting QList<std::shared_ptr<QObject> > to QList<std::shared_ptr<NE> >, so we need
-      // to create a new QList of the type we want and copy the elements across.
-      QList<std::shared_ptr<NE> > convertedResults;
-      convertedResults.reserve(results.size());
-      std::transform(results.cbegin(),
-                     results.cend(),
-                     std::back_inserter(convertedResults),
-                     [](auto & sharedPointer) { return std::static_pointer_cast<NE>(sharedPointer); });
-      return convertedResults;
-   }
-
-   /**
-    * \brief Convert QList<std::shared_ptr<QObject> > to QList<NE *>
-    */
-   QList<NE *> convertRaw(QList<std::shared_ptr<QObject> > const results) const {
-      // We can't just cast the resulting QList<std::shared_ptr<QObject> > to QList<std::shared_ptr<NE> >, so we need
-      // to create a new QList of the type we want and copy the elements across.
-      QList<NE *> convertedResults;
-      convertedResults.reserve(results.size());
-      std::transform(results.cbegin(),
-                     results.cend(),
-                     std::back_inserter(convertedResults),
-                     [](auto & sharedPointer) { return static_cast<NE *>(sharedPointer.get()); });
-      return convertedResults;
-   }
-
    //! No copy constructor, as never want anyone, not even our friends, to make copies of a singleton
    ObjectStoreTyped(ObjectStoreTyped const &) = delete;
    //! No copy assignment operator, as never want anyone, not even our friends, to make copies of a singleton.

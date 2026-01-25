@@ -1,5 +1,5 @@
-/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Inventory.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+/*======================================================================================================================
+ * model/StockPurchase.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -196,13 +196,5 @@ protected:
    std::optional<CurrencyAmount> m_purchaseTax    ;
    std::optional<CurrencyAmount> m_shippingCost   ;
 };
-
-/**
- * \brief For templates that require a parameter to be a subclass of \c StockPurchase, this makes the concept
- *        requirement slightly more concise.
- *
- *        See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it).
- */
-template <typename T> concept CONCEPT_FIX_UP IsStockPurchase = std::is_base_of_v<StockPurchase, T>;
 
 #endif

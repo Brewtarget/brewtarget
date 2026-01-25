@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/NamedEntityTreeView.cpp is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * trees/NamedEntityTreeView.cpp is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -14,6 +14,13 @@
  * <http://www.gnu.org/licenses/>.
  =====================================================================================================================*/
 #include "trees/NamedEntityTreeView.h"
+
+#include "model/RecipeAdditionFermentable.h"
+#include "model/RecipeAdditionHop.h"
+#include "model/RecipeAdditionMisc.h"
+#include "model/RecipeAdditionYeast.h"
+#include "model/RecipeAdjustmentSalt.h"
+#include "model/RecipeUseOfWater.h"
 
 TREE_VIEW_COMMON_CODE(Boil                , BoilStep                  )
 TREE_VIEW_COMMON_CODE(Equipment           )

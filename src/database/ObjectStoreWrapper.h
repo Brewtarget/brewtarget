@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/ObjectStoreWrapper.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * database/ObjectStoreWrapper.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -83,7 +83,7 @@ namespace ObjectStoreWrapper {
     */
    template<class NE> QList<std::shared_ptr<NE>> getAllDisplayable() {
       return ObjectStoreTyped<NE>::getInstance().findAllMatching(
-         [](std::shared_ptr<NE> ne) { return !ne->deleted() && !ne->subsidiary(); }
+         [](NE const & ne) { return !ne.deleted() && !ne.subsidiary(); }
       );
    }
 
@@ -174,19 +174,23 @@ namespace ObjectStoreWrapper {
       return;
    }
 
-   template<class NE> std::shared_ptr<NE> softDelete(NE const & ne) {
+   template<class NE> std::shared_ptr<NE> softDelete(NE const & ne) requires (std::is_base_of_v<NamedEntity, NE>) {
       return ObjectStoreTyped<NE>::getInstance().softDelete(ne.key());
+   }
+
+   template<class NE> QList<std::shared_ptr<NE>> softDelete(QList<int> const & ids) {
+      return ObjectStoreTyped<NE>::getInstance().softDelete(ids);
    }
 
    template<class NE> std::shared_ptr<NE> hardDelete(int id) {
       return ObjectStoreTyped<NE>::getInstance().hardDelete(id);
    }
 
-   template<class NE> std::shared_ptr<NE> hardDelete(NE const & ne) {
+   template<class NE> std::shared_ptr<NE> hardDelete(NE const & ne) requires (std::is_base_of_v<NamedEntity, NE>) {
       return ObjectStoreTyped<NE>::getInstance().hardDelete(ne.key());
    }
 
-   template<class NE> std::shared_ptr<NE> hardDelete(std::shared_ptr<NE> ne) {
+   template<class NE> std::shared_ptr<NE> hardDelete(std::shared_ptr<NE> ne) requires (std::is_base_of_v<NamedEntity, NE>) {
       return ObjectStoreTyped<NE>::getInstance().hardDelete(ne->key());
    }
 

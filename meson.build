@@ -1,5 +1,5 @@
 #
-# meson.build is part of Brewtarget, and is copyright the following authors 2022-2025:
+# meson.build is part of Brewtarget, and is copyright the following authors 2022-2026:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -842,6 +842,7 @@ commonSourceFiles = files([
    'src/widgets/BtComboBoxObject.cpp',
    'src/widgets/BtLineEditCurrency.cpp',
    'src/widgets/BtOptionalDateEdit.cpp',
+   'src/widgets/CommonContextMenus.cpp',
    'src/widgets/EnumeratedItemsWidget.cpp',
    'src/widgets/InfoButton.cpp',
    'src/widgets/InfoText.cpp',

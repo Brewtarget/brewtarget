@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/BeerJson.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * serialization/json/BeerJson.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -1341,15 +1341,17 @@ namespace BeerJson {
    // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header,
    // which means, amongst other things, that we can reference the pimpl.)
    //
-   template void Exporter::add(QList<Hop         const *> const & nes);
-   template void Exporter::add(QList<Fermentable const *> const & nes);
-   template void Exporter::add(QList<Yeast       const *> const & nes);
-   template void Exporter::add(QList<Misc        const *> const & nes);
-   template void Exporter::add(QList<Water       const *> const & nes);
-   template void Exporter::add(QList<Style       const *> const & nes);
-   template void Exporter::add(QList<MashStep    const *> const & nes);
-   template void Exporter::add(QList<Mash        const *> const & nes);
-   template void Exporter::add(QList<Equipment   const *> const & nes);
+   template void Exporter::add(QList<Hop          const *> const & nes);
+   template void Exporter::add(QList<Fermentable  const *> const & nes);
+   template void Exporter::add(QList<Yeast        const *> const & nes);
+   template void Exporter::add(QList<Misc         const *> const & nes);
+   template void Exporter::add(QList<Water        const *> const & nes);
+   template void Exporter::add(QList<Style        const *> const & nes);
+   template void Exporter::add(QList<MashStep     const *> const & nes);
+   template void Exporter::add(QList<Mash         const *> const & nes);
+   template void Exporter::add(QList<Fermentation const *> const & nes);
+   template void Exporter::add(QList<Boil         const *> const & nes);
+   template void Exporter::add(QList<Equipment    const *> const & nes);
    // Following two lines are commented out as neither Instruction nor BrewNote is part of BeerJSON.
 //   template void Exporter::add(QList<Instruction const *> const & nes);
 //   template void Exporter::add(QList<BrewNote    const *> const & nes);

@@ -53,6 +53,7 @@ AppImage as additional packaging option on Linux
 * Qt Libs missing in 4.2.0 on MacOS [1022](https://github.com/Brewtarget/brewtarget/issues/1022)
 * Various XML import problems [1032](https://github.com/Brewtarget/brewtarget/issues/1032)
 * Linux package .sha256sum files contain incorrect file names (but the actual sha256sums are correct) [1036](https://github.com/Brewtarget/brewtarget/issues/1036)
+* Missing USE-field when exporting to XML [1049](https://github.com/Brewtarget/brewtarget/issues/1049)
 
 ### Release Timestamp
 Sun, 4 Jan 2026 05:00:00 +0100

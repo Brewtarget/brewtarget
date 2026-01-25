@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------------------------------------------------
-# src/CMakeLists.txt is part of Brewtarget, and is copyright the following authors 2009-2025:
+# src/CMakeLists.txt is part of Brewtarget, and is copyright the following authors 2009-2026:
 #   • Aidan Roberts <aidanr67@gmail.com>
 #   • Daniel Moreno <danielm5@users.noreply.github.com>
 #   • Mark de Wever <koraq@xs4all.nl>
@@ -283,6 +283,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/BtComboBoxObject.cpp
     ${repoDir}/src/widgets/BtLineEditCurrency.cpp
     ${repoDir}/src/widgets/BtOptionalDateEdit.cpp
+    ${repoDir}/src/widgets/CommonContextMenus.cpp
     ${repoDir}/src/widgets/EnumeratedItemsWidget.cpp
     ${repoDir}/src/widgets/InfoButton.cpp
     ${repoDir}/src/widgets/InfoText.cpp

@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/TreeModelBase.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * trees/TreeModelBase.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
@@ -1292,7 +1292,7 @@ public:
       return false;
    }
    //! Substantive version
-   bool renameFolder(Folder & folder, QString newName) requires (!HasNoFolder<NE>) {
+   bool renameFolder(Folder & folder, QString newName) requires (HasFolder<NE>) {
       QModelIndex folderIndex = findFolder(folder.fullPath(), nullptr, IfNotFound::ReturnInvalid);
       if (!folderIndex.isValid()) {
          return false;
@@ -1408,7 +1408,7 @@ public:
             }
          }
 
-         // We want to delete the contents of the folder (and remove it from from the model) before remove the folder
+         // We want to delete the contents of the folder (and remove it from the model) before we remove the folder
          // itself, otherwise the QModelIndex values for the contents will not be valid.
          Q_ASSERT(treeNode->classifier() == TreeNodeClassifier::Folder);
          this->deleteItems(treeNode->rawChildren());

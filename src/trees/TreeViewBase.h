@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/TreeViewBase.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * trees/TreeViewBase.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -33,7 +33,9 @@
 #include "model/StockPurchase.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/WindowDistributor.h"
+#include "StockWindow.h"
 #include "trees/NamedEntityTreeSortFilterProxyModel.h"
+#include "widgets/CommonContextMenus.h"
 
 /**
  * \brief CRTP base for \c TreeView subclasses.  See comment on \c TreeView class for more info.
@@ -72,7 +74,8 @@ private:
     */
    TreeViewBase() :
       m_model          {nullptr},
-      m_treeSortFilterProxy{nullptr} {
+      m_treeSortFilterProxy{nullptr},
+      m_contextMenus   {this->derived()} {
       this->m_treeSortFilterProxy.setSourceModel(&this->m_model);
       this->m_treeSortFilterProxy.setDynamicSortFilter(false);
       this->m_treeSortFilterProxy.setRecursiveFilteringEnabled(true);
@@ -103,29 +106,7 @@ public:
    void init(NeEditor & editor) {
       this->m_editor = &editor;
 
-      this->m_contextMenu.addMenu(&this->m_contextMenu_new);
-      this->m_contextMenu_new.setTitle(Derived::tr("New"));
-      this->m_contextMenu_new.addAction(NE::localisedName()  , &this->derived(), &Derived::newItem);
-      this->m_contextMenu_new.addAction(Derived::tr("Folder"), &this->derived(), &Derived::newFolder);
-      if constexpr (CanHaveStockPurchase<NE>) {
-         this->m_contextMenu_new.addAction(Derived::tr("%1 Purchase").arg(NE::localisedName()), &this->derived(), &Derived::newStockPurchase);
-      }
-
-      this->m_contextMenu.addSeparator();
-      // Copy
-      this->m_copyAction   = m_contextMenu.addAction(Derived::tr("Copy"  ), &this->derived(), &Derived::copySelected  );
-      // m_deleteAction makes it easier to find this later to disable it
-      this->m_deleteAction = m_contextMenu.addAction(Derived::tr("Delete"), &this->derived(), &Derived::deleteSelected);
-      // export and import
-      this->m_contextMenu.addSeparator();
-      this->m_exportMenu.setTitle(Derived::tr("Export"));
-      this->m_exportMenu.addAction(Derived::tr("To File (BeerXML or BeerJSON)"), &this->derived(), &Derived::exportSelected);
-//    this->m_exportMenu.addAction(Derived::tr("To HTML"), &this->derived(), &Derived::exportSelectedHtml());
-      this->m_contextMenu.addMenu(&this->m_exportMenu);
-      this->m_contextMenu.addAction(Derived::tr("Import"), &this->derived(), &Derived::importFiles);
-
       this->derived().connect(&this->derived(), &QAbstractItemView::doubleClicked   , &this->derived(), &Derived::activated  );
-      this->derived().connect(&this->derived(), &QWidget::customContextMenuRequested, &this->derived(), &Derived::contextMenu);
 
       return;
    }
@@ -181,10 +162,22 @@ protected:
          return;
       }
 
-      QMenu * tempMenu = this->derived().getContextMenu(selectedViewIndex);
-      if (tempMenu) {
-         tempMenu->exec(this->derived().mapToGlobal(point));
+      CommonContextMenuHelper::Selected<NE, SNE> selected{
+         .numPrimary = this->getNumSelectedPrimary(),
+      };
+      if constexpr (std::is_same_v<NE, Recipe>) {
+         TreeNode * selectedNode = this->doTreeNode(selectedViewIndex);
+         if (selectedNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+            auto & recipeNode = static_cast<TreeItemNode<Recipe> &>(*selectedNode);
+            auto recipe = recipeNode.underlyingItem();
+            QModelIndex translated = this->m_treeSortFilterProxy.mapToSource(selectedViewIndex);
+            selected.firstPrimary = recipe;
+            selected.fpAncestorsVisible = (recipe->hasAncestors() && this->m_model.showChild(translated));
+
+         }
       }
+      this->m_contextMenus.showContextMenu(this->derived().mapToGlobal(point), selected);
+
       return;
    }
 
@@ -281,9 +274,9 @@ public:
       }
       qDebug() << Q_FUNC_INFO << "New selected index:" << viewIndex;
       this->derived().selectionModel()->select(viewIndex, QItemSelectionModel::Select);
-      TreeNode * treeNode = this->doTreeNode(viewIndex);
-      QModelIndex parentIndex = this->parentIndex(viewIndex);
-      if (treeNode->classifier() == TreeNodeClassifier::Folder && !this->derived().isExpanded(parentIndex)) {
+      TreeNode const * treeNode = this->doTreeNode(viewIndex);
+      if (QModelIndex parentIndex = this->parentIndex(viewIndex);
+          treeNode->classifier() == TreeNodeClassifier::Folder && !this->derived().isExpanded(parentIndex)) {
          this->derived().setExpanded(parentIndex, true);
       }
       this->derived().scrollTo(viewIndex, QAbstractItemView::PositionAtCenter);
@@ -291,18 +284,69 @@ public:
    }
 
    /**
+    * \brief Returns a (possibly empty) list of all the selected Primary items
+    */
+   QList<std::shared_ptr<NE>> getMultipleSelectedPrimary() const {
+      QList<std::shared_ptr<NE>> selectedItems;
+      for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
+         QModelIndex modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+         if (TreeNode * treeNode = this->m_model.treeNode(modelIndex);
+             treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+            TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
+            selectedItems.append(primaryTreeNode.underlyingItem());
+         }
+      }
+      return selectedItems;
+   }
+
+   /**
+    * \brief Returns the first (if any) selected Primary item
+    */
+   std::shared_ptr<NE> getFirstSelectedPrimary() const {
+      for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
+         QModelIndex modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+         if (TreeNode * treeNode = this->m_model.treeNode(modelIndex);
+             treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+            TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
+            return primaryTreeNode.underlyingItem();
+         }
+      }
+      return nullptr;
+   }
+
+   int getNumSelectedPrimary() const {
+      int numSelected = 0;
+      for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
+         QModelIndex modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+         if (this->m_model.treeNode(modelIndex)->classifier() == TreeNodeClassifier::PrimaryItem) {
+            ++numSelected;
+         }
+      }
+      return numSelected;
+   }
+
+   /**
     * \brief Copy selected items
     *
-    *        Note that we only copy primary items.  It doesn't make sense to copy secondary items (because they belong
-    *        to primary items -- eg you wouldn't copy a \c BrewNote or a \c MashStep in the tree view).  We also don't
-    *        support copying folders.  (It could be a future enhancement, but I'm not sure there's much need for it.)
+    *        Note that we only directly copy primary items.  It doesn't make sense to copy secondary items (because they
+    *        belong to primary items -- eg you wouldn't copy an individual \c BrewNote or a \c MashStep in the tree
+    *        view).  We also don't support copying folders.  (It could be a future enhancement, but I'm not sure there's
+    *        much need for it.)
+    *
+    *        Of course, when you copy a primary item, its secondary items are copied too, but that's handled elsewhere.
     */
    void doCopy(QModelIndexList const & selectedViewIndexes) {
       QList<std::pair<QModelIndex, QString>> modelIndexToNewName;
 
+      //
+      // We have to do two loops here -- one to construct the list of items we going to copy and another to copy and
+      // insert them.  This is because, as soon as we insert an item (either directly or in response to a signal from
+      // the relevant ObjectStore), the QModelIndex objects in selectedViewIndexes will be invalidated.
+      //
+      QList<std::pair<TreeNode *, QString>> rawToBeCopied;
       for (QModelIndex viewIndex : selectedViewIndexes) {
          QModelIndex modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
-         TreeNode * treeNode = this->m_model.treeNode(modelIndex);
+         TreeNode const * treeNode = this->m_model.treeNode(modelIndex);
          if (treeNode->classifier() != TreeNodeClassifier::PrimaryItem) {
             // Only support copying primary items, so skip any secondary ones or folders
             continue;
@@ -344,8 +388,8 @@ public:
       // tree node in the loop below.
       //
       QModelIndex newSelectedViewIndex;
-      QModelIndex const & firstToDelete = selectedViewIndexes.constFirst();
-      if (firstToDelete.row() > 0) {
+      if (QModelIndex const & firstToDelete = selectedViewIndexes.constFirst();
+          firstToDelete.row() > 0) {
          newSelectedViewIndex = this->m_treeSortFilterProxy.index(firstToDelete.row() - 1,
                                                                   firstToDelete.column(),
                                                                   firstToDelete.parent());
@@ -394,7 +438,7 @@ public:
                                        ).arg(
                                           treeNode->name()
                                        );
-         if constexpr (!std::same_as<NE, Recipe> && !IsStockPurchase<NE>) {
+         if constexpr (!std::same_as<NE, Recipe> && !std::is_base_of_v<StockPurchase, NE>) {
             if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
                TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
                int const numRecipesUsedIn = primaryTreeNode.underlyingItem()->numRecipesUsedIn();
@@ -468,6 +512,14 @@ public:
       return;
    }
 
+   /**
+    * \brief Subclass should call this from its \c addSelectedToRecipe slot
+    */
+   void doAddSelectedToRecipe() const {
+      this->m_contextMenus.addToOrSetForRecipe(this->getFirstSelectedPrimary());
+      return;
+   }
+
    void doCopySelected() {
       QModelIndexList selected = this->derived().selectionModel()->selectedRows();
       this->doCopy(selected);
@@ -479,8 +531,8 @@ public:
 
       QModelIndex start = selected.first();
       qDebug() << Q_FUNC_INFO << "Delete starting from row" << start.row();
-      std::optional<QModelIndex> newSelected = this->doDeleteItems(selected);
-      if (newSelected && newSelected->isValid()) {
+      if (std::optional<QModelIndex> const newSelected = this->doDeleteItems(selected);
+          newSelected && newSelected->isValid()) {
          TreeNode * node = this->doTreeNode(*newSelected);
          qDebug() << Q_FUNC_INFO << "Row" << newSelected->row() << "(" << *newSelected << ") is" << *node;
          this->doSetSelected(*newSelected);
@@ -491,16 +543,21 @@ public:
 
    void doRenameSelected() {
       // I don't think I can figure out what the behavior will be if you select many items
-      QModelIndexList indexes = this->derived().selectionModel()->selectedRows();
+      QModelIndexList const indexes = this->derived().selectionModel()->selectedRows();
       if (indexes.size() == 0) {
          return;
       }
 
-      QModelIndex startIndex = indexes.at(0);
+      QModelIndex const startIndex = indexes.at(0);
 
       TreeNode * treeNode = this->doTreeNode(startIndex);
       if (!treeNode->rawParent()) {
          // You can't rename the root element
+         return;
+      }
+      if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+         TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
+         this->m_contextMenus.renamePrimaryItem(*primaryTreeNode.underlyingItem());
          return;
       }
 
@@ -614,8 +671,8 @@ public:
 
       if (index.isValid()) {
          qDebug() << Q_FUNC_INFO << "index:" << index;
-         QModelIndex const translatedIndex{this->m_treeSortFilterProxy.mapFromSource(index)};
-         if (translatedIndex.isValid() && !this->derived().isExpanded(translatedIndex)) {
+         if (QModelIndex const translatedIndex{this->m_treeSortFilterProxy.mapFromSource(index)};
+             translatedIndex.isValid() && !this->derived().isExpanded(translatedIndex)) {
             this->derived().expand(translatedIndex);
          }
       }
@@ -645,6 +702,31 @@ public:
       return;
    }
 
+   /**
+    * \brief Subclass should call this from its \c showStockPurchases slot
+    */
+   void doShowStockPurchases() const {
+      if constexpr (CanHaveStockPurchase<NE>) {
+         std::shared_ptr<NE> selected = this->getFirstSelectedPrimary();
+         // Unlike with doNewStockPurchase, if nothing is selected, we still want to do something: pull up the relevant
+         // window & tab, but with no filter applied.
+         WindowDistributor::get<StockWindow>().showStockPurchasesFor(selected.get());
+      }
+      return;
+   }
+
+   /**
+    * \brief Subclass should call this from its \c newStockPurchase slot
+    */
+   void doNewStockPurchase() const {
+      if constexpr (CanHaveStockPurchase<NE>) {
+         if (std::shared_ptr<NE> selected = this->getFirstSelectedPrimary()) {
+            WindowDistributor::editorForNewStockPurchase(selected.get());
+         }
+      }
+      return;
+   }
+
    void doNewStockPurchase() {
       if constexpr (CanHaveStockPurchase<NE>) {
          NE * ingredientRaw = nullptr;
@@ -661,24 +743,36 @@ public:
       return;
    }
 
-   std::pair<QMenu *, TreeNode *> getContextMenuPair(QModelIndex const & selectedViewIndex) {
-      TreeNode * selectedNode = this->doTreeNode(selectedViewIndex);
-      if constexpr (!IsVoid<SNE>) {
-         if (selectedNode->classifier() == TreeNodeClassifier::SecondaryItem) {
-            return std::make_pair(&this->m_secondaryContextMenu, selectedNode);
-         }
-      }
-
-      return std::make_pair(&this->m_contextMenu, selectedNode);
+   /**
+    * \brief Subclass should call this from its \c exportSelected slot
+    */
+   void doExportSelected() const {
+      QList<std::shared_ptr<NE>> selectedItems = this->getMultipleSelectedPrimary();
+      this->m_contextMenus.exportItems(CastAndConvert::toConstRaw(selectedItems));
+      return;
    }
 
    /**
-    * \brief Some subclasses need to override this, but we don't need to make it virtual because we're never calling it
-    *        from a base class pointer/reference.
+    * \brief Subclass should call this from its \c importFiles slot
+    *
+    *        NOTE: We import whatever is in the files, so, if you click "import" from the Fermentables catalog and
+    *              supply a file of Styles and Hops then we'll import those even though you were not in the Styles or
+    *              Hops bit of the UI.  I think that's reasonable behaviour.  If it turns out that being able to
+    *              filter the imports (eg only import Fermentable records from this file) is important to a lot of
+    *              users, then we could have a rethink.
     */
-   QMenu * doGetContextMenu(QModelIndex const & selectedViewIndex) {
-      auto [menu, selectedNode] = this->getContextMenuPair(selectedViewIndex);
-      return menu;
+   void doImportFromFiles() const {
+      ImportExport::importFromFiles();
+      return;
+   }
+
+   /**
+    * \brief Subclass should call this from its \c mergeSelected slot
+    */
+   void doMergeSelected() const {
+      QList<std::shared_ptr<NE>> const selectedItems = this->getMultipleSelectedPrimary();
+      this->m_contextMenus.mergeItems(selectedItems);
+      return;
    }
 
    /**
@@ -695,17 +789,13 @@ public:
    NeTreeModel            m_model;
    NeTreeSortFilterProxyModel m_treeSortFilterProxy;
    NeEditor             * m_editor = nullptr;
-   // These are the common parts of the right-click menu, initialised in init()
-   QMenu   m_contextMenu     = QMenu{};
-   QMenu   m_contextMenu_new = QMenu{};
-   QMenu   m_exportMenu      = QMenu{};
-   QAction * m_copyAction   = nullptr;
-   QAction * m_deleteAction = nullptr;
+
+   CommonContextMenus<Derived, NE, SNE, true> m_contextMenus;
 
    // We use the same trick here as in TreeNodeBase to have a member variable that only exists when there is a secondary
    // item (eg BrewNote in RecipeTreeView or MashStep in MashTreeView).
    struct Empty { };
-   [[no_unique_address]] std::conditional_t<IsVoid<SNE>, Empty, QMenu> m_secondaryContextMenu;
+       [[no_unique_address]] std::conditional_t<IsVoid<SNE>, Empty, QMenu> m_secondaryContextMenu;
 };
 
 class MainWindow;
@@ -732,14 +822,15 @@ using RecipeEditor = MainWindow;
       virtual ~NeName##TreeView();                                                    \
                                                                                       \
       virtual void setSelected(QModelIndex const & index) override;                   \
-      virtual QMenu * getContextMenu(QModelIndex const & selectedViewIndex) override; \
+      /*virtual QMenu * getContextMenu(QModelIndex const & selectedViewIndex) override;*/ \
       virtual TreeModel & treeModel() override;                                       \
       virtual TreeNode * treeNode(QModelIndex const & index) const override;          \
       virtual void copy(QModelIndexList const & selectedViewIndexes) override;        \
       virtual std::optional<QModelIndex> deleteItems(QModelIndexList const & selectedViewIndexes) override; \
       virtual void   copySelected() override;                                         \
       virtual void deleteSelected() override;                                         \
-      virtual void renameSelected() override;                                         \
+      virtual void renameSelected();                                                  \
+      virtual void   editSelected();                                                  \
       virtual void addFolder(QString const & folder) override;                        \
       virtual QString folderName(QModelIndex const & viewIndex) const override;       \
                                                                                       \
@@ -747,12 +838,16 @@ using RecipeEditor = MainWindow;
       virtual void activated(QModelIndex const & viewIndex) override;                 \
       void contextMenu(QPoint const & point);                                         \
                                                                                       \
-   private slots:                                                                     \
+   /*private slots:*/                                                                     \
       void newFolder();                                                               \
       void expandFolder(QModelIndex const & viewIndex);                               \
       void newItem();                                                                 \
-      /* This is a no-op for items not derived from Ingredient */                     \
-      void newStockPurchase();                                                        \
+      void showStockPurchases() const;                                                \
+      void newStockPurchase() const;                                                  \
+      void exportSelected() const;                                                    \
+      void addSelectedToRecipe() const;                                               \
+      void importFromFiles() const;                                                   \
+      void mergeSelected() const;                                                     \
 
 /**
  * \brief Derived classes should include this in their .cpp file
@@ -770,7 +865,6 @@ using RecipeEditor = MainWindow;
                    NeName##TreeSortFilterProxyModel,                                 \
                    NeName##Editor,                                                   \
                    NeName __VA_OPT__(, __VA_ARGS__)>{} {                             \
-         /*this->connectSignalsAndSlots();*/                                         \
          return;                                                                     \
       }                                                                              \
    NeName##TreeView::~NeName##TreeView() = default;                                  \
@@ -778,9 +872,6 @@ using RecipeEditor = MainWindow;
    void NeName##TreeView::setSelected(QModelIndex const & index) {                   \
       this->doSetSelected(index);                                                    \
       return;                                                                        \
-   }                                                                                 \
-   QMenu * NeName##TreeView::getContextMenu(QModelIndex const & selectedViewIndex) { \
-      return this->doGetContextMenu(selectedViewIndex);                              \
    }                                                                                 \
    TreeModel & NeName##TreeView::treeModel() { return this->doTreeModel(); }         \
    TreeNode * NeName##TreeView::treeNode(QModelIndex const & index) const {          \
@@ -796,6 +887,7 @@ using RecipeEditor = MainWindow;
    void NeName##TreeView::  copySelected() { this->  doCopySelected(); return; }     \
    void NeName##TreeView::deleteSelected() { this->doDeleteSelected(); return; }     \
    void NeName##TreeView::renameSelected() { this->doRenameSelected(); return; }     \
+   void NeName##TreeView::  editSelected() { this->  doEditSelected(); return; }     \
    void NeName##TreeView::addFolder(QString const & folder) {                        \
       this->doAddFolder(folder);                                                     \
       return;                                                                        \
@@ -822,6 +914,11 @@ using RecipeEditor = MainWindow;
       return;                                                                              \
    }                                                                                       \
    void NeName##TreeView::newItem() { this->doNewItem(); return; }                         \
-   void NeName##TreeView::newStockPurchase() { this->doNewStockPurchase(); return; }       \
+   void NeName##TreeView::showStockPurchases () const { this->doShowStockPurchases (); return; } \
+   void NeName##TreeView::newStockPurchase   () const { this->doNewStockPurchase   (); return; } \
+   void NeName##TreeView::addSelectedToRecipe() const { this->doAddSelectedToRecipe(); return; } \
+   void NeName##TreeView::exportSelected     () const { this->doExportSelected     (); return; } \
+   void NeName##TreeView::importFromFiles    () const { this->doImportFromFiles    (); return; } \
+   void NeName##TreeView::mergeSelected      () const { this->doMergeSelected      (); return; } \
 
 #endif

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * MainWindow.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * MainWindow.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
@@ -1532,7 +1532,7 @@ void MainWindow::lockRecipe(int state) {
 
    // locked recipes cannot be deleted
    actionDeleteSelected->setEnabled(enabled);
-   treeView_recipe->enableDelete(enabled);
+//   treeView_recipe->enableDelete(enabled); This is handled in CommonContextMenus::exec
 
    treeView_recipe->setDragDropMode( lockIt ? QAbstractItemView::NoDragDrop : QAbstractItemView::DragDrop);
    tabWidget_ingredients->setAcceptDrops( enabled );
@@ -2107,7 +2107,7 @@ void MainWindow::exportRecipe() {
    QList<Recipe const *> recipes;
    recipes.append(this->pimpl->m_recipeObs);
 
-   bool const exportResult = ImportExport::exportToFile(&recipes);
+   bool const exportResult = ImportExport::exportToFile(recipes);
    if (exportResult) {
       this->updateStatus(tr("Wrote recipe to file"));
    } else {
@@ -2540,14 +2540,17 @@ void MainWindow::exportSelected() {
       return;
    }
 
-   ImportExport::exportToFile(&recipes,
-                              &equipments,
-                              &fermentables,
-                              &hops,
-                              &miscs,
-                              &styles,
-                              &waters,
-                              &yeasts);
+   ImportExport::Lists exportLists;
+   exportLists.equipments   = &equipments  ;
+   exportLists.fermentables = &fermentables;
+   exportLists.hops         = &hops        ;
+   exportLists.miscs        = &miscs       ;
+   exportLists.recipes      = &recipes     ;
+   exportLists.styles       = &styles      ;
+   exportLists.waters       = &waters      ;
+   exportLists.yeasts       = &yeasts      ;
+
+   ImportExport::exportToFile(exportLists);
    return;
 }
 

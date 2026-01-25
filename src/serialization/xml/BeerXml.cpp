@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/BeerXml.cpp is part of Brewtarget, and is copyright the following authors 2020-2025:
+ * serialization/xml/BeerXml.cpp is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -59,11 +59,22 @@
 // Variables and constant definitions that we need only in this file
 //
 namespace {
+   //
    // See comment in XmlRecord.cpp about how we slightly abuse propertyName field of FieldDefinition when fieldType is
    // XmlRecord::RequiredConstant.  (This is when a required XML field holds data we don't need (and for which we always
    // write a constant value on output.)  Specifically, in BeerXML, we need to write every version of pretty much every
    // record as "1".
+   //
    BtStringConst const VERSION1{"1"};
+
+   //
+   // In places we create our own records that are completely outside the scope of BeerXML (eg for boils and
+   // fermentations).  This is allowed ("all non-standard tags will be ignored by the importing program.  This allows
+   // programs to store additional information if desired using their own tags.  Any tags not defined as part of this
+   // standard may safely be ignored by the importing program.")  We use a different version number for these records to
+   // signal to human readers of the file that they are not part of the BeerXML standard.
+   //
+   BtStringConst const VERSION2{"2"};
 
    //
    // See comment in serialization/json/BeerJson.cpp on BEER_JSON_RECORD_DEFINITION for why we use templated variable
@@ -604,6 +615,99 @@ namespace {
          {XmlRecordDefinition::FieldType::String          , "DISPLAY_TUN_TEMP"    , BtString::NULL_STR                            }, // Extension tag
          {XmlRecordDefinition::FieldType::String          , "DISPLAY_SPARGE_TEMP" , BtString::NULL_STR                            }, // Extension tag
          {XmlRecordDefinition::FieldType::String          , "DISPLAY_TUN_WEIGHT"  , BtString::NULL_STR                            }, // Extension tag
+      }
+   };
+
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   // Field mappings for <BOIL_STEP>...</BOIL_STEP> BeerXML records
+   //
+   // NOTE: These records are completely outside the scope of BeerXML.  They will likely be ignored by other programs.
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<BoilStep> {
+      std::in_place_type_t<BoilStep>{},
+      "BOIL_STEP", // XML record name
+      XmlRecordDefinition::create<XmlNamedEntityRecord<BoilStep>>,
+      {
+         // Type                                             XPath         Q_PROPERTY                                    Value Decoder
+         {XmlRecordDefinition::FieldType::String          , "NAME"         , PropertyNames:: NamedEntity::name           },
+         {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"      , VERSION2                                    },
+         {XmlRecordDefinition::FieldType::String          , "DESCRIPTION"  , PropertyNames::        Step::description    },
+         {XmlRecordDefinition::FieldType::Double          , "START_TEMP"   , PropertyNames::    StepBase::startTemp_c    },
+         {XmlRecordDefinition::FieldType::Double          , "END_TEMP"     , PropertyNames::        Step::endTemp_c      },
+         {XmlRecordDefinition::FieldType::Double          , "RAMP_TIME"    , PropertyNames::    StepBase::rampTime_mins  },
+         {XmlRecordDefinition::FieldType::Double          , "STEP_TIME"    , PropertyNames::    StepBase::stepTime_mins  },
+         {XmlRecordDefinition::FieldType::Double          , "START_GRAVITY", PropertyNames::StepExtended::startGravity_sg},
+         {XmlRecordDefinition::FieldType::Double          , "END_GRAVITY"  , PropertyNames::StepExtended::  endGravity_sg},
+         {XmlRecordDefinition::FieldType::Double          , "START_PH"     , PropertyNames::        Step::startAcidity_pH},
+         {XmlRecordDefinition::FieldType::Double          , "END_PH"       , PropertyNames::        Step::endAcidity_pH  },
+         {XmlRecordDefinition::FieldType::Enum            , "CHILLING_TYPE", PropertyNames::    BoilStep::chillingType   , &BoilStep::chillingTypeStringMapping},
+      }
+   };
+
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   // Field mappings for <BOIL>...</BOIL> BeerXML records
+   //
+   // NOTE: These records are completely outside the scope of BeerXML.  They will likely be ignored by other programs.
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<Boil> {
+      std::in_place_type_t<Boil>{},
+      "BOIL", // XML record name
+      XmlRecordDefinition::create<XmlNamedEntityRecord<Boil>>,
+      {
+         // Type                                            XPath                   Q_PROPERTY                          Value Decoder
+         {XmlRecordDefinition::FieldType::String          , "NAME"                , PropertyNames::NamedEntity::name  },
+         {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"             , VERSION2                          },
+         {XmlRecordDefinition::FieldType::String          , "DESCRIPTION"         , PropertyNames::Boil::description  },
+         {XmlRecordDefinition::FieldType::String          , "NOTES"               , PropertyNames::Boil::notes        },
+         {XmlRecordDefinition::FieldType::Double          , "PRE_BOIL_SIZE"       , PropertyNames::Boil::preBoilSize_l},
+         {XmlRecordDefinition::FieldType::Double          , "BOIL_TIME"           , PropertyNames::Boil::boilTime_mins},
+         {XmlRecordDefinition::FieldType::ListOfRecords   , "BOIL_STEPS/BOIL_STEP", PropertyNames::StepOwnerBase::steps, &BEER_XML_RECORD_DEFN<BoilStep>},
+      }
+   };
+
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   // Field mappings for <FERMENTATION_STEP>...</FERMENTATION_STEP> BeerXML records
+   //
+   // NOTE: These records are completely outside the scope of BeerXML.  They will likely be ignored by other programs.
+   //
+   // NB: Although FermentationStep inherits (via StepExtended) from Step, the rampTime_mins field is not used and
+   //     should not be stored in the DB or serialised.  See comment in model/Step.h.
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<FermentationStep> {
+      std::in_place_type_t<FermentationStep>{},
+      "FERMENTATION_STEP", // XML record name
+      XmlRecordDefinition::create<XmlNamedEntityRecord<FermentationStep>>,
+      {
+         // Type                                  XPath            Q_PROPERTY                                    Value Decoder
+         {XmlRecordDefinition::FieldType::String, "NAME"         , PropertyNames::NamedEntity::name            },
+         {XmlRecordDefinition::FieldType::String, "DESCRIPTION"  , PropertyNames::Step::description            },
+         {XmlRecordDefinition::FieldType::Double, "START_TEMP"   , PropertyNames::    StepBase::startTemp_c    },
+         {XmlRecordDefinition::FieldType::Double,   "END_TEMP"   , PropertyNames::        Step::  endTemp_c    },
+         {XmlRecordDefinition::FieldType::Double, "STEP_TIME"    , PropertyNames::StepBase::stepTime_mins      },
+         {XmlRecordDefinition::FieldType::Bool  , "FREE_RISE  "  , PropertyNames::FermentationStep::freeRise   },
+         {XmlRecordDefinition::FieldType::Double, "START_GRAVITY", PropertyNames::StepExtended::startGravity_sg},
+         {XmlRecordDefinition::FieldType::Double,   "END_GRAVITY", PropertyNames::StepExtended::  endGravity_sg},
+         {XmlRecordDefinition::FieldType::Double, "START_PH"     , PropertyNames::Step::startAcidity_pH        },
+         {XmlRecordDefinition::FieldType::Double,   "END_PH"     , PropertyNames::Step::  endAcidity_pH        },
+         {XmlRecordDefinition::FieldType::String, "VESSEL"       , PropertyNames::FermentationStep::vessel     },
+      }
+   };
+
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   // Field mappings for <FERMENTATION>...</FERMENTATION> BeerXML records
+   //
+   // NOTE: These records are completely outside the scope of BeerXML.  They will likely be ignored by other programs.
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<Fermentation> {
+      std::in_place_type_t<Fermentation>{},
+      "FERMENTATION", // XML record name
+      XmlRecordDefinition::create<XmlNamedEntityRecord<Fermentation>>,
+      {
+         // Type                                          XPath                 Q_PROPERTY                                      Value Decoder
+         {XmlRecordDefinition::FieldType::String       , "NAME"              , PropertyNames::NamedEntity::name              },
+         {XmlRecordDefinition::FieldType::String       , "DESCRIPTION"       , PropertyNames::Fermentation::description      },
+         {XmlRecordDefinition::FieldType::String       , "NOTES"             , PropertyNames::Fermentation::notes            },
+         {XmlRecordDefinition::FieldType::ListOfRecords, "FERMENTATION_STEPS/FERMENTATION_STEP", PropertyNames::StepOwnerBase::steps, &BEER_XML_RECORD_DEFN<FermentationStep>},
       }
    };
 
