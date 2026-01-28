@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------------------------------------------------
-# scripts/btDependencies.py is part of Brewtarget, and is copyright the following authors 2022-2025:
+# scripts/btDependencies.py is part of Brewtarget, and is copyright the following authors 2022-2026:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -554,8 +554,7 @@ def installDependencies():
          #
          # Eg, when you install mingw-w64-x86_64-qt6-static, you get a message saying mingw-w64-x86_64-clang-libs is an
          # "optional dependency" required for lupdate and qdoc.  Since we need lupdate, we therefore need to install
-         # clang-libs, even though our own compilation is done with GCC.  (In fact, per comments in meson.build, lupdate
-         # also gets a name change to lupdate-qt6, but we don't have to worry about that here!)
+         # clang-libs, even though our own compilation is done with GCC.
          #
          # So, it may be that the list below is not minimal, but it should be sufficient!
          #
@@ -619,6 +618,10 @@ def installDependencies():
          # deleting files or directories that are in use.  So, in the event of the script needing to terminate early,
          # you get loads of errors, up to and including "maximum recursion depth exceeded" which rather mask whatever
          # the original problem was.
+         #
+         # NOTE: If you get 'LookupError: unknown encoding: cp437' from running shutil.unpack_archive, try deleting the
+         #       '.venv' directory and re-running the script.  (Eg if you accidentally copied the '.venv' directory from
+         #       your Linux host to your Windows VM, you will get this error.  Ask me how I know.)
          #
          tmpDirName = tempfile.mkdtemp()
          previousWorkingDirectory = pathlib.Path.cwd().as_posix()

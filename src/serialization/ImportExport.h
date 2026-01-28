@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/ImportExport.h is part of Brewtarget, and is copyright the following authors 2013-2025:
+ * serialization/ImportExport.h is part of Brewtarget, and is copyright the following authors 2013-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -30,8 +30,27 @@ class Recipe;
 class Style;
 class Water;
 class Yeast;
+class Mash;
+class Boil;
+class Fermentation;
 
 namespace ImportExport {
+   /**
+    * Everything we want to export should be in one of these lists
+    */
+   struct Lists {
+      QList<Recipe       const *> const * recipes       = nullptr;
+      QList<Equipment    const *> const * equipments    = nullptr;
+      QList<Fermentable  const *> const * fermentables  = nullptr;
+      QList<Hop          const *> const * hops          = nullptr;
+      QList<Misc         const *> const * miscs         = nullptr;
+      QList<Style        const *> const * styles        = nullptr;
+      QList<Water        const *> const * waters        = nullptr;
+      QList<Yeast        const *> const * yeasts        = nullptr;
+      QList<Mash         const *> const * mashes        = nullptr;
+      QList<Boil         const *> const * boils         = nullptr;
+      QList<Fermentation const *> const * fermentations = nullptr;
+   };
 
    /**
     * \brief Import recipes, hops, equipment, etc from BeerXML or BeerJSON files either specified by the user or in the
@@ -48,7 +67,7 @@ namespace ImportExport {
    bool importFromFiles(std::optional<QStringList> inputFiles = std::nullopt);
 
    /**
-    * \brief Import recipes, hops, equipment, etc to a BeerXML or BeerJSON file specified by the user
+    * \brief Export recipes, hops, equipment, etc to a BeerXML or BeerJSON file specified by the user
     *        (We'll work out whether it's BeerXML or BeerJSON based on the filename extension, so doesn't need to be
     *        specified in advance.)
     *
@@ -66,14 +85,13 @@ namespace ImportExport {
     *
     * \return \c true if succeeded, \c false otherwise
     */
-   bool exportToFile(QList<Recipe      const *> const * recipes,
-                     QList<Equipment   const *> const * equipments   = nullptr,
-                     QList<Fermentable const *> const * fermentables = nullptr,
-                     QList<Hop         const *> const * hops         = nullptr,
-                     QList<Misc        const *> const * miscs        = nullptr,
-                     QList<Style       const *> const * styles       = nullptr,
-                     QList<Water       const *> const * waters       = nullptr,
-                     QList<Yeast       const *> const * yeasts       = nullptr);
+   bool exportToFile(Lists const & exportLists);
+
+   /**
+    * \brief Version for when we know we're only exporting one type of thing
+    *
+    */
+   template<typename NE> bool exportToFile(QList<NE const *> const & items);
 }
 
 #endif

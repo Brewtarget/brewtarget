@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Ingredient.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * model/Ingredient.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -77,14 +77,5 @@ public:
    virtual Measurement::Amount totalInventory() const = 0;
 
 };
-
-/**
- * \brief For templates that require a parameter to be a subclass of \c Ingredient, this makes the concept requirement
- *        slightly more concise.
- *
- *        See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it).
- */
-template <typename T> concept CONCEPT_FIX_UP    IsIngredient = std::is_base_of_v<Ingredient, T>;
-template <typename T> concept CONCEPT_FIX_UP IsNotIngredient = std::negation_v<std::is_base_of<Ingredient, T>>;
 
 #endif

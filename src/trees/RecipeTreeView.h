@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/RecipeTreeView.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * trees/RecipeTreeView.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -47,44 +47,23 @@ public:
 
    //! \brief returns true if the recipe at ndx is showing its ancestors
    bool ancestorsAreShowing(QModelIndex ndx);
-   //! \brief enables or disables the delete action when a recipe is unlocked/locked
-   void enableDelete(bool enable);
-   //! \brief enables or disables showing ancestors
-   void enableShowAncestor(bool enable);
-   //! \brief enables or disables hiding ancestors
-   void enableHideAncestor(bool enable);
-   //! \brief make a recipe its own ancestor
-   void enableOrphan(bool enable);
-   //! \brief do we breed, or not
-   void enableSpawn(bool enable);
 
 public slots:
    void versionedRecipe(Recipe * descendant);
 
-private slots:
    void showAncestors();
    void hideAncestors();
    void revertRecipeToPreviousVersion();
    void orphanRecipe();
    void spawnRecipe();
 
+   void brewItHelper();
+   void brewAgainHelper();
+   void changeBrewDate();
+   void fixBrewNote();
+
 signals:
    void recipeSpawn(Recipe * descendant);
-
-private:
-
-   //! \brief Overrides \c TreeViewBase::doSetSelected
-   void doSetSelected(QModelIndex const & index);
-
-   //! \brief Overrides \c TreeViewBase::doGetContextMenu
-   QMenu * doGetContextMenu(QModelIndex const & selectedViewIndex);
-
-   QMenu m_versionMenu = QMenu{};
-   QAction * m_showAncestorAction = nullptr;
-   QAction * m_hideAncestorAction = nullptr;
-   QAction *       m_orphanAction = nullptr;
-   QAction *        m_spawnAction = nullptr;
-   QAction *       m_brewItAction = nullptr;
 
 };
 

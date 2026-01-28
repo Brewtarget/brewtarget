@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/NamedEntityRecordBase.h is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/NamedEntityRecordBase.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -17,6 +17,7 @@
 #define SERIALIZATION_NAMEDENTITYRECORDBASE_H
 #pragma once
 
+#include "database/ObjectStoreUtils.h"
 #include "serialization/SerializationRecord.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/TypeTraits.h"
@@ -168,53 +169,8 @@ namespace Serialization {
        *        See below for trivial specialisations of this function for classes where names are not unique.
        */
      void doNormaliseName() {
-         QString currentName = this->derived().m_namedEntity->name();
-
-         //
-         // If something doesn't have a name, it's useful to give it a default one.  Eg the BeerXML 1.0 standard says
-         // the NAME tag has to be present, not that it can't be empty
-         //
-         if (currentName.isEmpty()) {
-            qInfo() <<
-               Q_FUNC_INFO << "Setting default name on unnamed" << this->derived().m_recordDefinition.m_recordName <<
-               "record";
-            // Note that tr() is a static member function of QObject.  We do not inherit from QObject, but NE does
-            // (via NamedEntity).
-            currentName = QString{NE::tr("Unnamed %1")}.arg(NE::localisedName());
-            this->derived().m_namedEntity->setName(currentName);
-         }
-
-         //
-         // As above, we don't normalise the names of "owned" objects.  Eg it's OK, and indeed typical, for mash steps
-         // in two different mashes to have the same name.  MashStep names are usually simply descriptive of what the
-         // step is (eg "Mash In", "Mash Out", "Conversion", "Final Batch Sparge").
-         //
-         if constexpr (std::is_base_of<OwnedByRecipe, NE>::value ||
-                       IsBaseClassTemplateOf<EnumeratedBase, NE>) {
-            return;
-         }
-
-         while (
-            //
-            // At the moment, we're pretty strict here and count a name clash even for things that are soft deleted.  If
-            // we wanted to allow clashes with such soft-deleted things then we could add a check against ne->deleted()
-            // as in the isDuplicate() function.
-            //
-            auto matchResult = ObjectStoreTyped<NE>::getInstance().findFirstMatching(
-               [currentName](std::shared_ptr<NE> ne) {return ne->name() == currentName;}
-            )
-         ) {
-            qDebug() << Q_FUNC_INFO << "Found existing " << NE::staticMetaObject.className() << "named" << currentName;
-
-            NamedEntity::modifyClashingName(currentName);
-
-            //
-            // Now the for loop will search again with the new name
-            //
-            qDebug() << Q_FUNC_INFO << "Trying " << currentName;
-         }
-
-         this->derived().m_namedEntity->setName(currentName);
+         QString const currentName = this->derived().m_namedEntity->name();
+         this->derived().m_namedEntity->setName(ObjectStoreUtils::normaliseName<NE>(currentName));
 
          return;
       }

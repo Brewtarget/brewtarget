@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * trees/TreeView.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * trees/TreeView.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -55,19 +55,6 @@ TreeView::TreeView(QWidget * parent) :
    this->setSelectionBehavior(QAbstractItemView::SelectRows);
    this->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-   return;
-}
-
-void TreeView::exportSelected() const {
-   // TODO: This is a bit of a hack just to avoid circular dependencies between TreeViewBase and MainWindow.  We should
-   //       come back and look at this properly at some point.
-   MainWindow::instance().exportSelected();
-   return;
-}
-
-void TreeView::importFiles() {
-   // TODO: This is even more of a hack, since import isn't specific to one tree.
-   MainWindow::instance().importFiles();
    return;
 }
 

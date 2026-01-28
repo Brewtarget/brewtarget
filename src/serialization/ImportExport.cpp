@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/ImportExport.cpp is part of Brewtarget, and is copyright the following authors 2013-2025:
+ * serialization/ImportExport.cpp is part of Brewtarget, and is copyright the following authors 2013-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -293,24 +293,20 @@ bool ImportExport::importFromFiles(std::optional<QStringList> inputFiles) {
    return allSucceeded;
 }
 
-bool ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
-                                QList<Equipment   const *> const * equipments,
-                                QList<Fermentable const *> const * fermentables,
-                                QList<Hop         const *> const * hops,
-                                QList<Misc        const *> const * miscs,
-                                QList<Style       const *> const * styles,
-                                QList<Water       const *> const * waters,
-                                QList<Yeast       const *> const * yeasts) {
+bool ImportExport::exportToFile(ImportExport::Lists const & exportLists) {
    // It's the caller's responsibility to ensure that at least one list is supplied and that at least one of the
    // supplied lists is non-empty
-   Q_ASSERT((recipes      && recipes     ->size() > 0) ||
-            (equipments   && equipments  ->size() > 0) ||
-            (fermentables && fermentables->size() > 0) ||
-            (hops         && hops        ->size() > 0) ||
-            (miscs        && miscs       ->size() > 0) ||
-            (styles       && styles      ->size() > 0) ||
-            (waters       && waters      ->size() > 0) ||
-            (yeasts       && yeasts      ->size() > 0));
+   Q_ASSERT((exportLists.recipes       && exportLists.recipes      ->size() > 0) ||
+            (exportLists.equipments    && exportLists.equipments   ->size() > 0) ||
+            (exportLists.fermentables  && exportLists.fermentables ->size() > 0) ||
+            (exportLists.hops          && exportLists.hops         ->size() > 0) ||
+            (exportLists.miscs         && exportLists.miscs        ->size() > 0) ||
+            (exportLists.styles        && exportLists.styles       ->size() > 0) ||
+            (exportLists.waters        && exportLists.waters       ->size() > 0) ||
+            (exportLists.yeasts        && exportLists.yeasts       ->size() > 0) ||
+            (exportLists.mashes        && exportLists.mashes       ->size() > 0) ||
+            (exportLists.boils         && exportLists.boils        ->size() > 0) ||
+            (exportLists.fermentations && exportLists.fermentations->size() > 0));
 
    auto selectedFiles = selectFiles(ImportOrExport::EXPORT);
    if (!selectedFiles) {
@@ -338,19 +334,22 @@ bool ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
       // includes only partial information about each Hop/Fermentable/etc addition.  This is fine if you already have
       // those ingredients in your database when you're reading a Recipe in, but doesn't work so well when you don't.
       //
-      QSet<Fermentable const *> setOfFermentable = makeSet(fermentables, recipes);
-      QSet<Hop         const *> setOfHop         = makeSet(hops        , recipes);
-      QSet<Misc        const *> setOfMisc        = makeSet(miscs       , recipes);
-      QSet<Yeast       const *> setOfYeast       = makeSet(yeasts      , recipes);
-      QSet<Water       const *> setOfWater       = makeSet(waters      , recipes);
+      QSet<Fermentable const *> setOfFermentable = makeSet(exportLists.fermentables, exportLists.recipes);
+      QSet<Hop         const *> setOfHop         = makeSet(exportLists.hops        , exportLists.recipes);
+      QSet<Misc        const *> setOfMisc        = makeSet(exportLists.miscs       , exportLists.recipes);
+      QSet<Yeast       const *> setOfYeast       = makeSet(exportLists.yeasts      , exportLists.recipes);
+      QSet<Water       const *> setOfWater       = makeSet(exportLists.waters      , exportLists.recipes);
       //
       // Same thing applies for Styles, and we have similar thinking for Equipments.  (Though note that, unlike in
       // BeerXML, Equipment is not part of the Recipe in BeerJSON.)
       //
-      QSet<Style       const *> setOfStyle       = makeSet(styles);
-      QSet<Equipment   const *> setOfEquipment   = makeSet(equipments);
-      if (recipes) {
-         for (Recipe const * recipe : *recipes) {
+      // In contrast, Mashes, Boils and Fermentations are fully defined when they form part of a Recipe, so we don't
+      // have to separately export them.
+      //
+      QSet<Style       const *> setOfStyle       = makeSet(exportLists.styles);
+      QSet<Equipment   const *> setOfEquipment   = makeSet(exportLists.equipments);
+      if (exportLists.recipes) {
+         for (Recipe const * recipe : *exportLists.recipes) {
             auto style     = recipe->style    (); if (style    ) { setOfStyle    .insert(style    .get()); }
             auto equipment = recipe->equipment(); if (equipment) { setOfEquipment.insert(equipment.get()); }
          }
@@ -364,7 +363,10 @@ bool ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
       if (!setOfStyle      .isEmpty()   ) { exporter.add(setOfStyle      .values()); }
       if (!setOfEquipment  .isEmpty()   ) { exporter.add(setOfEquipment  .values()); }
       if (!setOfWater      .isEmpty()   ) { exporter.add(setOfWater      .values()); }
-      if (recipes && recipes->size() > 0) { exporter.add(*recipes                 ); }
+      if (exportLists.mashes        && exportLists.mashes       ->size() > 0) { exporter.add(*exportLists.mashes       ); }
+      if (exportLists.boils         && exportLists.boils        ->size() > 0) { exporter.add(*exportLists.boils        ); }
+      if (exportLists.fermentations && exportLists.fermentations->size() > 0) { exporter.add(*exportLists.fermentations); }
+      if (exportLists.recipes       && exportLists.recipes      ->size() > 0) { exporter.add(*exportLists.recipes      ); }
 
       exporter.close();
       succeeded = true;
@@ -382,19 +384,21 @@ bool ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
       //    MISCS
       //    WATERS
       //    STYLES
-      //    MASH_STEPS
-      //    MASHS
+      //    MASHS [sic] (inside of which are MASH_STEPS)
       //    RECIPES
       //    EQUIPMENTS
       //
-      if (hops         && hops        ->size() > 0) { bxml.toXml(*hops,         outFile); }
-      if (fermentables && fermentables->size() > 0) { bxml.toXml(*fermentables, outFile); }
-      if (yeasts       && yeasts      ->size() > 0) { bxml.toXml(*yeasts,       outFile); }
-      if (miscs        && miscs       ->size() > 0) { bxml.toXml(*miscs,        outFile); }
-      if (waters       && waters      ->size() > 0) { bxml.toXml(*waters,       outFile); }
-      if (styles       && styles      ->size() > 0) { bxml.toXml(*styles,       outFile); }
-      if (recipes      && recipes     ->size() > 0) { bxml.toXml(*recipes,      outFile); }
-      if (equipments   && equipments  ->size() > 0) { bxml.toXml(*equipments,   outFile); }
+      if (exportLists.hops          && exportLists.hops         ->size() > 0) { bxml.toXml(*exportLists.hops        , outFile); }
+      if (exportLists.fermentables  && exportLists.fermentables ->size() > 0) { bxml.toXml(*exportLists.fermentables, outFile); }
+      if (exportLists.yeasts        && exportLists.yeasts       ->size() > 0) { bxml.toXml(*exportLists.yeasts      , outFile); }
+      if (exportLists.miscs         && exportLists.miscs        ->size() > 0) { bxml.toXml(*exportLists.miscs       , outFile); }
+      if (exportLists.waters        && exportLists.waters       ->size() > 0) { bxml.toXml(*exportLists.waters      , outFile); }
+      if (exportLists.styles        && exportLists.styles       ->size() > 0) { bxml.toXml(*exportLists.styles      , outFile); }
+      if (exportLists.mashes        && exportLists.mashes       ->size() > 0) { bxml.toXml(*exportLists.mashes      , outFile); }
+      if (exportLists.boils         && exportLists.boils        ->size() > 0) { bxml.toXml(*exportLists.mashes      , outFile); }
+      if (exportLists.fermentations && exportLists.fermentations->size() > 0) { bxml.toXml(*exportLists.mashes      , outFile); }
+      if (exportLists.recipes       && exportLists.recipes      ->size() > 0) { bxml.toXml(*exportLists.recipes     , outFile); }
+      if (exportLists.equipments    && exportLists.equipments   ->size() > 0) { bxml.toXml(*exportLists.equipments  , outFile); }
 
       succeeded = true;
    } else {
@@ -409,3 +413,18 @@ bool ImportExport::exportToFile(QList<Recipe      const *> const * recipes,
 
    return false;
 }
+
+//
+// This is a bit clunky, but it works!
+//
+template<> bool ImportExport::exportToFile(QList<Recipe       const *> const & items) { Lists exportLists{.recipes       = &items}; return exportToFile(exportLists); }
+template<> bool ImportExport::exportToFile(QList<Equipment    const *> const & items) { Lists exportLists{.equipments    = &items}; return exportToFile(exportLists); }
+template<> bool ImportExport::exportToFile(QList<Fermentable  const *> const & items) { Lists exportLists{.fermentables  = &items}; return exportToFile(exportLists); }
+template<> bool ImportExport::exportToFile(QList<Hop          const *> const & items) { Lists exportLists{.hops          = &items}; return exportToFile(exportLists); }
+template<> bool ImportExport::exportToFile(QList<Misc         const *> const & items) { Lists exportLists{.miscs         = &items}; return exportToFile(exportLists); }
+template<> bool ImportExport::exportToFile(QList<Style        const *> const & items) { Lists exportLists{.styles        = &items}; return exportToFile(exportLists); }
+template<> bool ImportExport::exportToFile(QList<Water        const *> const & items) { Lists exportLists{.waters        = &items}; return exportToFile(exportLists); }
+template<> bool ImportExport::exportToFile(QList<Yeast        const *> const & items) { Lists exportLists{.yeasts        = &items}; return exportToFile(exportLists); }
+template<> bool ImportExport::exportToFile(QList<Mash         const *> const & items) { Lists exportLists{.mashes        = &items}; return exportToFile(exportLists); }
+template<> bool ImportExport::exportToFile(QList<Boil         const *> const & items) { Lists exportLists{.boils         = &items}; return exportToFile(exportLists); }
+template<> bool ImportExport::exportToFile(QList<Fermentation const *> const & items) { Lists exportLists{.fermentations = &items}; return exportToFile(exportLists); }

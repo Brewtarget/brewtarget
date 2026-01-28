@@ -39,8 +39,10 @@ namespace Undoable {
     */
    void doOrRedoUpdate(QUndoCommand * update);
 
-   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
-   //         which suffices for modifications to most individual non-relational attributes.
+   /**
+    * \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version, which
+    *        suffices for modifications to most individual non-relational attributes.
+    */
    template<typename T>
    void doOrRedoUpdate(NamedEntity & updatee,
                        TypeInfo const & typeInfo,

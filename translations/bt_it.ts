@@ -2492,7 +2492,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Importa</translation>
+        <translation type="obsolete">Importa</translation>
     </message>
     <message>
         <source>Copy %1</source>
@@ -2566,31 +2566,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         </translation>
     </message>
     <message>
-        <source>Delete %1 #%2 &quot;%3&quot;? (%1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Invalid!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add %1 to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete selected %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>*EXPERIMENTAL* Merge selected %1 records</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2698,11 +2674,95 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 Purchase</source>
+        <source>Show only non-zero inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show only non-zero inventory</source>
+        <source>Stock Purchase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set for recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show stock purchases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import (from BeerXML or BeerJSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Birrifica!</translation>
+    </message>
+    <message>
+        <source>Brew again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Cambia Data</translation>
+    </message>
+    <message>
+        <source>Recalculate efficiency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Succeeded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change %1 Name</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4541,6 +4601,10 @@ If you need help, please open an issue at %1</source>
         <source>Notes from brew day on %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Change Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -5110,10 +5174,6 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unnamed %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change %1 on %2 Recipe</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5145,11 +5205,18 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished">Nome</translation>
     </message>
     <message>
-        <source>No Recipes</source>
+        <source>Subsidiary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Subsidiary</source>
+        <source>N° Recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ObjectStoreUtils::NE</name>
+    <message>
+        <source>Unnamed %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5999,7 +6066,7 @@ Error message:
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nuovo</translation>
+        <translation type="obsolete">Nuovo</translation>
     </message>
     <message>
         <source>Failed to update the database.
@@ -6286,10 +6353,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Create new %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6406,10 +6469,6 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set for Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Mosher&apos;s approximation</source>
         <translation type="unfinished">Approssimazione di Mosher</translation>
     </message>
@@ -6519,6 +6578,14 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Stock Purchases (Inventory)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show stock purchases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New stock purchase</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7836,44 +7903,24 @@ Il Volume finale del primo è %1.</translation>
 <context>
     <name>RecipeTreeView</name>
     <message>
-        <source>Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Detach Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshot Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Birrifica!</translation>
+        <translation type="obsolete">Birrifica!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Producila ancora</translation>
+        <translation type="obsolete">Producila ancora</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Cambia Data</translation>
+        <translation type="obsolete">Cambia Data</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished">Ricalcola Eff</translation>
+        <translation type="obsolete">Ricalcola Eff</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Elimina</translation>
+        <translation type="obsolete">Elimina</translation>
     </message>
 </context>
 <context>
