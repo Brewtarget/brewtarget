@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * MainWindow.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * MainWindow.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Dan Cavanagh <dan@dancavanagh.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
@@ -135,7 +135,7 @@ public:
 public slots:
 
    //! \brief Accepts Recipe changes, and takes appropriate action to show the changes.
-   void changed(QMetaProperty,QVariant);
+   void recipeChanged(QMetaProperty prop, QVariant value);
 
    //! \brief View the given recipe.
    void setRecipe(Recipe* recipe);
@@ -164,6 +164,13 @@ public slots:
 
    //! \brief Close a brewnote tab if we must (because of the BrewNote being deleted)
    void brewNoteDeleted(int brewNoteId, std::shared_ptr<QObject> object);
+
+   /**
+    * \brief Mostly the display of BrewNotes is handled by \c BrewNoteWidget.  However, \c MainWindow is responsible for
+    *        the tabs containing BrewNoteWidgets.  The tab text is the BrewNote's brew date, so we have to know if that
+    *        changes.
+    */
+   void brewNoteChanged(QMetaProperty prop, QVariant value) const;
 
    void setBrewNoteByIndex(QModelIndex const & index);
 

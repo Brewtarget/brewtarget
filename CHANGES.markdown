@@ -23,9 +23,10 @@ Bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Amending "Notes" field of a Stock Purchase record causes an assert when you click save [1061](https://github.com/Brewtarget/brewtarget/issues/1061)
+* Can't export Mashes, Boils or Fermentations to BeerJSON or BeerXML [1064](https://github.com/Brewtarget/brewtarget/issues/1064)
 
 ### Release Timestamp
-Wed, 7 Jan 2026 05:00:02 +0100
+Mon, 26 Jan 2026 05:00:02 +0100
 
 ## v5.0.1
 Fix for error in previous release, plus further fix for Mac packaging.

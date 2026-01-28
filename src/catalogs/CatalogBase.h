@@ -489,7 +489,10 @@ public:
 
       this->m_contextMenus.showContextMenu(
          this->derived().mapToGlobal(point),
-         CommonContextMenuHelper::Selected<NE>{.numPrimary = this->getNumSelected()}
+         CommonContextMenuHelper::Selected<NE>{
+            .numPrimary = this->getNumSelected(),
+            .firstPrimary = this->getFirstSelected()
+         }
       );
       return;
    }

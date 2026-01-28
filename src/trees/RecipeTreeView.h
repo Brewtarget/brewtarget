@@ -65,11 +65,6 @@ public slots:
 signals:
    void recipeSpawn(Recipe * descendant);
 
-private:
-
-   //! \brief Overrides \c TreeViewBase::doSetSelected
-   void doSetSelected(QModelIndex const & index);
-
 };
 
 #endif

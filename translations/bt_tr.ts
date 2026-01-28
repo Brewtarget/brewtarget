@@ -4471,6 +4471,10 @@ If you need help, please open an issue at %1</source>
         <source>Notes from brew day on %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Change Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>

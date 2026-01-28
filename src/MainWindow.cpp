@@ -533,9 +533,9 @@ public:
       for (int ii = 0; ii < this->m_self.tabWidget_recipeView->count(); ++ii) {
          if (this->m_self.tabWidget_recipeView->widget(ii)->objectName() ==
              BrewNoteWidget::staticMetaObject.className()) {
-            BrewNoteWidget* ni = qobject_cast<BrewNoteWidget*>(this->m_self.tabWidget_recipeView->widget(ii));
-            if (&brewNote == ni->brewNote()) {
-               return ni;
+            BrewNoteWidget* bnw = qobject_cast<BrewNoteWidget*>(this->m_self.tabWidget_recipeView->widget(ii));
+            if (&brewNote == bnw->brewNote()) {
+               return bnw;
             }
          }
       }
@@ -573,6 +573,8 @@ public:
       }
 
       qDebug() << Q_FUNC_INFO << "Closing tab for BrewNote" << brewNote;
+
+      this->m_self.disconnect(&brewNote, &NamedEntity::changed, &this->m_self, nullptr);
       auto const tabIndex = this->m_self.tabWidget_recipeView->indexOf(widget);
       this->m_self.tabWidget_recipeView->removeTab(tabIndex);
 
@@ -589,7 +591,13 @@ public:
       int const maxTabNum = this->m_self.tabWidget_recipeView->count() - 1;
       for (int ii = maxTabNum; ii > 0; --ii) {
          if (this->m_self.tabWidget_recipeView->widget(ii)->objectName() ==
-            BrewNoteWidget::staticMetaObject.className()) {
+             BrewNoteWidget::staticMetaObject.className()) {
+
+            BrewNoteWidget const * bnw = qobject_cast<BrewNoteWidget*>(this->m_self.tabWidget_recipeView->widget(ii));
+            if (bnw) {
+               this->m_self.disconnect(bnw->brewNote(), &NamedEntity::changed, &this->m_self, nullptr);
+            }
+
             this->m_self.tabWidget_recipeView->removeTab(ii);
          }
       }
@@ -602,6 +610,7 @@ public:
          widget = new BrewNoteWidget(this->m_self.tabWidget_recipeView);
          widget->setBrewNote(&brewNote);
          this->m_self.tabWidget_recipeView->addTab(widget, brewNote.brewDate_short());
+         this->m_self.connect(&brewNote, &NamedEntity::changed, &this->m_self, &MainWindow::brewNoteChanged);
       }
 
       this->updateBrewNoteTabText(brewNote, widget);
@@ -973,10 +982,10 @@ void MainWindow::initialiseAndMakeVisible() {
    // set up the drag/drop parts
    this->setupDrops();
 
-   // No connections from the database yet? Oh FSM, that probably means I'm
-   // doing it wrong again.
-   // .:TODO:. Change this so we use the newer deleted signal!
-   connect(&ObjectStoreTyped<BrewNote>::getInstance(), &ObjectStoreTyped<BrewNote>::signalObjectDeleted, this, &MainWindow::brewNoteDeleted);
+   connect(&ObjectStoreTyped<BrewNote>::getInstance(),
+           &ObjectStoreTyped<BrewNote>::signalObjectDeleted,
+           this,
+           &MainWindow::brewNoteDeleted);
 
    //
    // Read in any new ingredients, styles, example recipes etc
@@ -1404,13 +1413,19 @@ void MainWindow::setAncestor() {
 
 // Can handle null recipes.
 void MainWindow::setRecipe(Recipe * recipe) {
-   // Don't like void pointers.
    if (!recipe) {
+      // This is a coding error, but we can recover by bailing out here
+      qWarning() << Q_FUNC_INFO << "Null Recipe!";
+      qWarning().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
+      return;
+   }
+
+   if (recipe == this->pimpl->m_recipeObs) {
+      qDebug() << Q_FUNC_INFO << "Recipe " << recipe << "already set";
       return;
    }
 
    qDebug() << Q_FUNC_INFO << "Recipe #" << recipe->key() << ":" << recipe->name();
-
 
    // Make sure this MainWindow is paying attention...
    if (this->pimpl->m_recipeObs) {
@@ -1487,15 +1502,14 @@ void MainWindow::setRecipe(Recipe * recipe) {
    // If you don't connect this late, every previous set of an attribute
    // causes this signal to be slotted, which then causes showChanges() to be
    // called.
-   connect(this->pimpl->m_recipeObs, &NamedEntity::changed, this, &MainWindow::changed);
+   connect(this->pimpl->m_recipeObs, &NamedEntity::changed, this, &MainWindow::recipeChanged);
    auto boil = this->pimpl->m_recipeObs->boil();
    if (boil) {
-      connect(boil.get(), &NamedEntity::changed, this, &MainWindow::changed);
+      connect(boil.get(), &NamedEntity::changed, this, &MainWindow::recipeChanged);
    }
 
-   // TBD: Had some problems with this that we should come back to once rework of TreeView etc is complete
-//   QModelIndex rIdx = treeView_recipe->findElement(this->pimpl->m_recipeObs);
-//   setTreeSelection(rIdx);
+   QModelIndex rIdx = treeView_recipe->findElement(this->pimpl->m_recipeObs);
+   this->setTreeSelection(rIdx);
 
    this->showChanges();
    return;
@@ -1575,9 +1589,9 @@ void MainWindow::lockRecipe(int state) {
    return;
 }
 
-void MainWindow::changed(QMetaProperty prop, [[maybe_unused]] QVariant val) {
-   QObject * sender = this->sender();
-   QString propName(prop.name());
+void MainWindow::recipeChanged(QMetaProperty prop, [[maybe_unused]] QVariant val) {
+   QObject const * sender = this->sender();
+   QString const propName(prop.name());
    qDebug() << Q_FUNC_INFO << "sender:" << sender << "; propName:" << propName;
 
    if (propName == PropertyNames::Recipe::equipment) {
@@ -2574,9 +2588,8 @@ void MainWindow::showPitchDialog() {
 }
 
 void MainWindow::changeBrewDate() {
-   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
-
-   for (QModelIndex selected : indexes) {
+   for (QModelIndexList const indexes = treeView_recipe->selectionModel()->selectedRows();
+        QModelIndex selected : indexes) {
       auto brewNote = treeView_recipe->getItem<BrewNote>(selected);
 
       // No idea how this could happen, but I've seen stranger things
@@ -2586,9 +2599,11 @@ void MainWindow::changeBrewDate() {
 
       // Pop the calendar, get the date.
       if (this->pimpl->m_btDatePopup->exec() == QDialog::Accepted) {
-         QDate newDate = this->pimpl->m_btDatePopup->selectedDate();
-         brewNote->setBrewDate(newDate);
-         this->pimpl->updateBrewNoteTabText(*brewNote);
+         QDate const newDate = this->pimpl->m_btDatePopup->selectedDate();
+         Undoable::doOrRedoUpdate(*brewNote,
+                                  TYPE_INFO(BrewNote, brewDate),
+                                  newDate,
+                                  tr("Change Brew Date"));
       }
    }
    return;
@@ -2645,6 +2660,27 @@ void MainWindow::brewNoteDeleted([[maybe_unused]] int brewNoteId, std::shared_pt
    }
 
    this->pimpl->closeBrewNoteTab(*deletedBrewNote);
+
+   return;
+}
+
+void MainWindow::brewNoteChanged(QMetaProperty prop, [[maybe_unused]] QVariant value) const {
+   QObject const * sender = this->sender();
+   QString const propName(prop.name());
+   qDebug() << Q_FUNC_INFO << "sender:" << sender << "; propName:" << propName;
+
+   if (propName != PropertyNames::BrewNote::brewDate) {
+      return;
+   }
+
+   BrewNote const * brewNote = qobject_cast<BrewNote const *>(sender);
+   if (brewNote) {
+      //
+      // We don't have to check here whether we actually have a tab open for this BrewNote as updateBrewNoteTabText()
+      // will do that for us.
+      //
+      this->pimpl->updateBrewNoteTabText(*brewNote);
+   }
 
    return;
 }

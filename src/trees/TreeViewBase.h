@@ -162,9 +162,7 @@ protected:
          return;
       }
 
-      CommonContextMenuHelper::Selected<NE, SNE> selected{
-         .numPrimary = this->getNumSelectedPrimary(),
-      };
+      CommonContextMenuHelper::Selected<NE, SNE> selected = this->getNumSelected();
       if constexpr (std::is_same_v<NE, Recipe>) {
          TreeNode * selectedNode = this->doTreeNode(selectedViewIndex);
          if (selectedNode->classifier() == TreeNodeClassifier::PrimaryItem) {
@@ -173,7 +171,12 @@ protected:
             QModelIndex translated = this->m_treeSortFilterProxy.mapToSource(selectedViewIndex);
             selected.firstPrimary = recipe;
             selected.fpAncestorsVisible = (recipe->hasAncestors() && this->m_model.showChild(translated));
-
+         } else if (selectedNode->classifier() == TreeNodeClassifier::SecondaryItem) {
+            auto & brewNoteNode = static_cast<TreeItemNode<BrewNote> &>(*selectedNode);
+            auto brewNote = brewNoteNode.underlyingItem();
+            selected.firstSecondary = brewNote;
+         } else {
+            selected.firstPrimary = this->getFirstSelectedPrimary();
          }
       }
       this->m_contextMenus.showContextMenu(this->derived().mapToGlobal(point), selected);
@@ -314,15 +317,18 @@ public:
       return nullptr;
    }
 
-   int getNumSelectedPrimary() const {
-      int numSelected = 0;
+   CommonContextMenuHelper::Selected<NE, SNE> getNumSelected() const {
+      CommonContextMenuHelper::Selected<NE, SNE> selected;
       for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
          QModelIndex modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
-         if (this->m_model.treeNode(modelIndex)->classifier() == TreeNodeClassifier::PrimaryItem) {
-            ++numSelected;
+         switch (this->m_model.treeNode(modelIndex)->classifier()) {
+            case TreeNodeClassifier::PrimaryItem  : ++selected.numPrimary  ; break;
+            case TreeNodeClassifier::SecondaryItem: ++selected.numSecondary; break;
+            case TreeNodeClassifier::Folder       : ++selected.numFolders  ; break;
+            // No default as we want the compiler to warn us if we missed an option above
          }
       }
-      return numSelected;
+      return selected;
    }
 
    /**

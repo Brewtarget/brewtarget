@@ -250,73 +250,105 @@ public:
     * @param selected
     */
    QAction * showContextMenu(QPoint const & point, CommonContextMenuHelper::Selected<NE, SNE> const & selected) {
-      if constexpr (std::same_as<NE, Recipe>) {
-         // You cannot delete a locked recipe
-         auto const & recipe{selected.firstPrimary};
-         this->m_action_delete.setEnabled(!recipe->locked() && selected.numPrimary >= 1);
-      } else {
-         this->m_action_delete.setEnabled(selected.numPrimary >= 1);
-      }
-
       //
-      // If you have more than one type of thing enabled, we'll give precedence to primary items over secondary items
-      // over folders.
+      // In principle there are three different menus we could show, depending on whether we want actions for primary
+      // item, secondary item or folders.  In practice, for the moment at least, we have the same menu for primary items
+      // and folders (with slightly different things enabled) so it's a choice of two.
       //
-      if constexpr (std::same_as<NE, Recipe>) {
-         if (selected.numPrimary > 0) {
-            auto const & recipe{selected.firstPrimary};
+      // Strictly, the first check here is not necessary when SNE is void, but adding a compile-time check for that
+      // would, in this instance, make things more complicated.
+      //
+      QMenu * menuToShow;
+      if (selected.numPrimary == 0 && selected.numFolders == 0 && selected.numSecondary > 0) {
+         // It's a coding error if we managed to select any secondary items that aren't part of the model!
+         Q_ASSERT(!IsVoid<SNE>);
 
-            // if we have ancestors and are showing them but are not an actual
-            // ancestor, then enable hide
-            this->m_action_hideAncestors.setEnabled(recipe->hasAncestors() && selected.fpAncestorsVisible);
-            // if we have ancestors and are not showing them, enable showAncestors
-            this->m_action_showAncestors.setEnabled(recipe->hasAncestors() && !selected.fpAncestorsVisible);
-            // If we have ancestors and are not locked, then we are a leaf node and allow orphaning
-            this->m_action_orphanRecipe.setEnabled(recipe->hasAncestors() && !recipe->locked());
-            // We don't want to be able to spawn ancestors directly.
-            this->m_action_spawnRecipe.setEnabled(!recipe->hasDescendants());
-            // If user has clicked the top-level Item 'Recipes' Once this menu Item will be forever disabled if we don't enable it.
-            this->m_menu_export.setEnabled(true);
-            this->m_action_copy.setEnabled(true);
-            this->m_action_brewIt.setEnabled(true);
-         } else if (selected.numFolders > 0) {
-            this->m_action_hideAncestors.setEnabled(false);
-            this->m_action_showAncestors.setEnabled(false);
-            this->m_action_orphanRecipe.setEnabled(false);
-            this->m_action_spawnRecipe.setEnabled(false);
-            this->m_menu_export.setEnabled(false);
-            this->m_action_copy.setEnabled(false);
-            this->m_action_brewIt.setEnabled(false);
+         // We don't want to try to compile the code for handling secondary items in instances where there aren't any
+         if constexpr (!IsVoid<SNE>) {
+            menuToShow = &this->m_menu_secondary;
+
+            // It's also a coding error if we didn't say what the first selected secondary item is
+            Q_ASSERT(selected.firstSecondary);
+
+            if constexpr (std::same_as<NE, Recipe>) {
+               static_assert(std::same_as<SNE, BrewNote>);
+               this->m_action_brewAgain       .setEnabled(1 == selected.numSecondary);
+               this->m_action_changeBrewDate  .setEnabled(1 == selected.numSecondary);
+               this->m_action_recalcEfficiency.setEnabled(1 == selected.numSecondary);
+            }
          }
-      }
+      } else {
+         menuToShow =  &this->m_menu_primary;
 
-      //
-      // TBD: For the moment, we don't allow multiple selections either to be deleted or to be added to the recipe.  But
-      //      it would not be huge work to fix that if there is user demand for it.
-      //
-      if constexpr (!std::is_same_v<NE, Recipe>) {
-         this->m_action_addToRecipe.setEnabled(selected.numPrimary == 1);
-         this->m_action_edit       .setEnabled(selected.numPrimary == 1);
-      }
-      if constexpr (!std::disjunction_v<std::is_same<NE, Recipe>, std::is_base_of<StockPurchase, NE>>) {
-         this->m_action_merge      .setEnabled(selected.numPrimary  > 1);
-      }
+         if constexpr (std::same_as<NE, Recipe>) {
+            // You cannot delete a locked recipe
+            auto const & recipe{selected.firstPrimary};
+            this->m_action_delete.setEnabled(!recipe->locked() && selected.numPrimary >= 1);
+         } else {
+            this->m_action_delete.setEnabled(selected.numPrimary >= 1);
+         }
 
-      if constexpr (std::derived_from<NE, Ingredient>) {
          //
-         // Doesn't make sense to offer option to show stock purchases unless we have exactly one item selected.  (This
-         // is because we just do a text filtering based on the selected item's name.  We'd need a different approach if
-         // we wanted to, eg, show the stock purchases for N selected items.)
+         // If you have more than one type of thing enabled, we'll give precedence to primary items over secondary items
+         // over folders.
          //
-         // We deliberately do not try to disable this option just because there are no stock purchases, as it will not
-         // be obvious to the user -- eg an item could have stock purchases and current zero inventory.
+         if constexpr (std::same_as<NE, Recipe>) {
+            if (selected.numPrimary > 0) {
+               auto const & recipe{selected.firstPrimary};
+
+               // if we have ancestors and are showing them but are not an actual
+               // ancestor, then enable hide
+               this->m_action_hideAncestors.setEnabled(recipe->hasAncestors() && selected.fpAncestorsVisible);
+               // if we have ancestors and are not showing them, enable showAncestors
+               this->m_action_showAncestors.setEnabled(recipe->hasAncestors() && !selected.fpAncestorsVisible);
+               // If we have ancestors and are not locked, then we are a leaf node and allow orphaning
+               this->m_action_orphanRecipe.setEnabled(recipe->hasAncestors() && !recipe->locked());
+               // We don't want to be able to spawn ancestors directly.
+               this->m_action_spawnRecipe.setEnabled(!recipe->hasDescendants());
+               // If user has clicked the top-level Item 'Recipes' Once this menu Item will be forever disabled if we don't enable it.
+               this->m_menu_export.setEnabled(true);
+               this->m_action_copy.setEnabled(true);
+               this->m_action_brewIt.setEnabled(true);
+            } else if (selected.numFolders > 0) {
+               this->m_action_hideAncestors.setEnabled(false);
+               this->m_action_showAncestors.setEnabled(false);
+               this->m_action_orphanRecipe.setEnabled(false);
+               this->m_action_spawnRecipe.setEnabled(false);
+               this->m_menu_export.setEnabled(false);
+               this->m_action_copy.setEnabled(false);
+               this->m_action_brewIt.setEnabled(false);
+            }
+         }
+
          //
-         this->m_action_showStockPurchases.setEnabled(selected.numPrimary == 1);
+         // TBD: For the moment, we don't allow multiple selections either to be deleted or to be added to the recipe.  But
+         //      it would not be huge work to fix that if there is user demand for it.
+         //
+         if constexpr (!std::is_same_v<NE, Recipe>) {
+            this->m_action_addToRecipe.setEnabled(selected.numPrimary == 1);
+            this->m_action_edit       .setEnabled(selected.numPrimary == 1);
+         }
+         if constexpr (!std::disjunction_v<std::is_same<NE, Recipe>, std::is_base_of<StockPurchase, NE>>) {
+            this->m_action_merge      .setEnabled(selected.numPrimary  > 1);
+         }
+
+         if constexpr (std::derived_from<NE, Ingredient>) {
+            //
+            // Doesn't make sense to offer option to show stock purchases unless we have exactly one item selected.  (This
+            // is because we just do a text filtering based on the selected item's name.  We'd need a different approach if
+            // we wanted to, eg, show the stock purchases for N selected items.)
+            //
+            // We deliberately do not try to disable this option just because there are no stock purchases, as it will not
+            // be obvious to the user -- eg an item could have stock purchases and current zero inventory.
+            //
+            this->m_action_showStockPurchases.setEnabled(selected.numPrimary == 1);
+         }
+
+         this->m_action_rename.setEnabled(selected.numPrimary == 1);
+
       }
 
-      this->m_action_rename.setEnabled(selected.numPrimary == 1);
-
-      QAction * result = this->m_menu_primary.exec(point);
+      QAction * result = menuToShow->exec(point);
       qDebug() << Q_FUNC_INFO << "Result was:" << result;
       return result;
    }

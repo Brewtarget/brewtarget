@@ -3153,32 +3153,32 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Importer</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="255"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="345"/>
+        <location filename="../src/trees/TreeViewBase.h" line="258"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="377"/>
         <source>Copy %1</source>
         <translation>Kopier %1</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="256"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="346"/>
+        <location filename="../src/trees/TreeViewBase.h" line="259"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="378"/>
         <source>Enter a unique name for the copy of %1.</source>
         <translation>Indtast et unikt navn for kopien af %1.</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="257"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="347"/>
+        <location filename="../src/trees/TreeViewBase.h" line="260"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="379"/>
         <source>An empty name will skip copying this %1.</source>
         <translation>Tomt navnefelt vil springe over kopieringen af %1.</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="258"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="348"/>
+        <location filename="../src/trees/TreeViewBase.h" line="261"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="380"/>
         <source>Cancel All</source>
         <translation>Annuller alt</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="434"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="452"/>
+        <location filename="../src/trees/TreeViewBase.h" line="440"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="484"/>
         <source>Delete %1 #%2 &quot;%3&quot;?</source>
         <translation>Slet %1 #%2 &quot;%3&quot;?</translation>
     </message>
@@ -3208,14 +3208,14 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="454"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="463"/>
+        <location filename="../src/trees/TreeViewBase.h" line="460"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="495"/>
         <source>%1 in use</source>
         <translation>%1 er i brug</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/trees/TreeViewBase.h" line="455"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="464"/>
+        <location filename="../src/trees/TreeViewBase.h" line="461"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="496"/>
         <source>Cannot delete this %1, as it is used in %n recipe(s)</source>
         <translation>
             <numerusform>Kan ikke slette %1, da den anvendes i %n opskrift(er)</numerusform>
@@ -3227,8 +3227,8 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Slet %1 #%2 &quot;%3&quot;? (%1)</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="469"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="481"/>
+        <location filename="../src/trees/TreeViewBase.h" line="475"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="513"/>
         <source>Delete %1</source>
         <translation>Slet %1</translation>
     </message>
@@ -3318,47 +3318,47 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="424"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="456"/>
         <source>Export Succeeded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="424"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="456"/>
         <source>Export Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="513"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="545"/>
         <source>%1 name</source>
         <translation type="unfinished">%1 navn</translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="514"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="546"/>
         <source>%1 name:</source>
         <translation type="unfinished">% navn:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="524"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="556"/>
         <source>Change %1 Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="545"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="577"/>
         <source>Merge %1 records</source>
         <translation>Sammenføj %1 poster</translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="546"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="578"/>
         <source>Attempt to merge %1 %2 records? (NOTE: &lt;b&gt;This action cannot be undone!&lt;/b&gt;  It is intended for use where the records are identical or as near as makes no difference.  Use on non-identical records risks data loss.)&lt;br&gt;&lt;br&gt;&lt;b&gt;Please make sure you have a backup of your database file before using this function!&lt;/b&gt;</source>
         <translation>Forsøg at sammenføje %1 %2 poster?(BEMÆRK: &lt;b&gt;Dette kan ikke fortrydes!&lt;/b&gt;  Det er beregnet på at anvendes, når posterne er identiske eller så tæt på, at det er uden betydning.  Anvendelse på ikke identiske poster kan betyde datatab&lt;br&gt;&lt;br&gt;&lt;b&gt;Sørg for at have en sikkerhedskopi af databasen, før du bruger denne funktion!&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="607"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="639"/>
         <source>%1 records differ</source>
         <translation>%1 poster er forskellige</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/widgets/CommonContextMenus.h" line="609"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="641"/>
         <source>WARNING: %1 records to be merged have %n difference(s).  Do you want to merge anyway?</source>
         <comment>0</comment>
         <translation>
@@ -3367,7 +3367,7 @@ Logfil indeholder måske flere detaljer.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/widgets/CommonContextMenus.h" line="644"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="676"/>
         <source>%n field(s) differ between %1 #%2 and %1 #%3.  If you continue, %1 #%3 will be deleted and all uses of it will be replaced by %1 #%2.  This &lt;b&gt;cannot&lt;/b&gt; be undone.&lt;br&gt;&lt;br&gt;%4</source>
         <comment>0</comment>
         <translation>
@@ -3380,34 +3380,34 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="obsolete">Slet %1 %2?</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="573"/>
-        <location filename="../src/trees/TreeViewBase.h" line="634"/>
+        <location filename="../src/trees/TreeViewBase.h" line="579"/>
+        <location filename="../src/trees/TreeViewBase.h" line="640"/>
         <source>Folder name</source>
         <translation>Mappenavn</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="574"/>
-        <location filename="../src/trees/TreeViewBase.h" line="635"/>
+        <location filename="../src/trees/TreeViewBase.h" line="580"/>
+        <location filename="../src/trees/TreeViewBase.h" line="641"/>
         <source>Folder name:</source>
         <translation>Mappenavn:</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="588"/>
-        <location filename="../src/trees/TreeViewBase.h" line="597"/>
-        <location filename="../src/trees/TreeViewBase.h" line="648"/>
-        <location filename="../src/trees/TreeViewBase.h" line="656"/>
+        <location filename="../src/trees/TreeViewBase.h" line="594"/>
+        <location filename="../src/trees/TreeViewBase.h" line="603"/>
+        <location filename="../src/trees/TreeViewBase.h" line="654"/>
+        <location filename="../src/trees/TreeViewBase.h" line="662"/>
         <source>Bad Name</source>
         <translation>Uanvendeligt navn</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="589"/>
-        <location filename="../src/trees/TreeViewBase.h" line="649"/>
+        <location filename="../src/trees/TreeViewBase.h" line="595"/>
+        <location filename="../src/trees/TreeViewBase.h" line="655"/>
         <source>A folder name must have at least one non-whitespace character in it</source>
         <translation>Et mappenavn skal indeholde mindst et tegn ud over mellemrum</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeViewBase.h" line="598"/>
-        <location filename="../src/trees/TreeViewBase.h" line="657"/>
+        <location filename="../src/trees/TreeViewBase.h" line="604"/>
+        <location filename="../src/trees/TreeViewBase.h" line="663"/>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation>Et mappenavn skal indeholde mindst et tegn ud over bogstaver</translation>
     </message>
@@ -5160,12 +5160,12 @@ Antal opskrifter</translation>
         <translation type="vanished">Gem</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1861"/>
+        <location filename="../src/MainWindow.cpp" line="1875"/>
         <source>Equipment request</source>
         <translation>Udstyr forespørgsel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1862"/>
+        <location filename="../src/MainWindow.cpp" line="1876"/>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
         <translation>Ønsker du at sætte volumen af portion, volumen før kogning og varighed til udstyrets værdier?</translation>
     </message>
@@ -5190,38 +5190,38 @@ Antal opskrifter</translation>
         <translation type="vanished">Brewtarget database (*.sqlite)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2172"/>
+        <location filename="../src/MainWindow.cpp" line="2186"/>
         <source>Recipe name</source>
         <translation>Opskrift navn</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2172"/>
+        <location filename="../src/MainWindow.cpp" line="2186"/>
         <source>Recipe name:</source>
         <translation>Opskrift navn:</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2283"/>
+        <location filename="../src/MainWindow.cpp" line="2297"/>
         <source>Backup Database</source>
         <translation>Sikkerhedskopier database</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2292"/>
-        <location filename="../src/MainWindow.cpp" line="2310"/>
+        <location filename="../src/MainWindow.cpp" line="2306"/>
+        <location filename="../src/MainWindow.cpp" line="2324"/>
         <source>Oops!</source>
         <translation>Hovsa!</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2292"/>
+        <location filename="../src/MainWindow.cpp" line="2306"/>
         <source>Could not copy the files for some reason.</source>
         <translation>Kan ikke kopiere filer.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2299"/>
+        <location filename="../src/MainWindow.cpp" line="2313"/>
         <source>A Warning</source>
         <translation>Advarsel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2300"/>
+        <location filename="../src/MainWindow.cpp" line="2314"/>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
         <translation>Dette vil destruere det nuværende sæt af opskrifter og ingredienser. Fortsæt?</translation>
     </message>
@@ -5254,7 +5254,7 @@ Antal opskrifter</translation>
         <translation type="vanished">Giv din mæsk et navn før du gemmer.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2312"/>
+        <location filename="../src/MainWindow.cpp" line="2326"/>
         <source>Restart</source>
         <translation>Genstart</translation>
     </message>
@@ -5263,27 +5263,27 @@ Antal opskrifter</translation>
         <translation type="vanished">Genstart Brewtarget.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2326"/>
+        <location filename="../src/MainWindow.cpp" line="2340"/>
         <source>No equipment</source>
         <translation>Intet udstyr</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2326"/>
+        <location filename="../src/MainWindow.cpp" line="2340"/>
         <source>You must select or define an equipment profile first.</source>
         <translation>Vælg eller definer en udstyrsprofil først.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2336"/>
+        <location filename="../src/MainWindow.cpp" line="2350"/>
         <source>No style</source>
         <translation>Ingen stilart</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2336"/>
+        <location filename="../src/MainWindow.cpp" line="2350"/>
         <source>You must select a style first.</source>
         <translation>Vælg en stilart først.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2306"/>
+        <location filename="../src/MainWindow.cpp" line="2320"/>
         <source>Choose File</source>
         <translation>Vælg fil</translation>
     </message>
@@ -5310,7 +5310,7 @@ Antal opskrifter</translation>
         <translation type="vanished">Ændr opskriftens gæringsprofil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2306"/>
+        <location filename="../src/MainWindow.cpp" line="2320"/>
         <source>SQLite (*.sqlite)</source>
         <translation>SQLite (*.sqlite)</translation>
     </message>
@@ -5351,7 +5351,7 @@ Antal opskrifter</translation>
         <translation type="vanished">Fejl ved kopiering af opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2183"/>
+        <location filename="../src/MainWindow.cpp" line="2197"/>
         <source>An error was returned while creating %1</source>
         <translation>Der opstod en fejl ved dannelse af %1</translation>
     </message>
@@ -5373,12 +5373,12 @@ Antal opskrifter</translation>
         <translation type="vanished">Fjern %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="902"/>
+        <location filename="../src/MainWindow.cpp" line="911"/>
         <source>Error Loading Data</source>
         <translation>Fejl ved hentning af data</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="905"/>
+        <location filename="../src/MainWindow.cpp" line="914"/>
         <source>The program may not work if you ignore this error.
 
 See logs for more details.
@@ -5391,13 +5391,13 @@ Se log for flere detaljer.
 Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="935"/>
-        <location filename="../src/MainWindow.cpp" line="936"/>
+        <location filename="../src/MainWindow.cpp" line="944"/>
+        <location filename="../src/MainWindow.cpp" line="945"/>
         <source>About %1</source>
         <translation>Om %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1728"/>
+        <location filename="../src/MainWindow.cpp" line="1742"/>
         <source>Change Recipe Name</source>
         <translation>Ændr opskriftnavn</translation>
     </message>
@@ -5406,7 +5406,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Ændr %1 for opskrift %2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1900"/>
+        <location filename="../src/MainWindow.cpp" line="1914"/>
         <source>Change Recipe Style</source>
         <translation>Ændr opskriftens stilart</translation>
     </message>
@@ -5419,128 +5419,133 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Ændr udstyr for opskriften</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1851"/>
+        <location filename="../src/MainWindow.cpp" line="1865"/>
         <source>Change Recipe Kit</source>
         <translation>Ændr opskriftskit</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1856"/>
+        <location filename="../src/MainWindow.cpp" line="1870"/>
         <source>Change Tun Weight</source>
         <translation>Ændr karrets masse</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1857"/>
+        <location filename="../src/MainWindow.cpp" line="1871"/>
         <source>Change Tun Specific Heat</source>
         <translation>Ændr karrets specifikke varmefylde</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1871"/>
-        <location filename="../src/MainWindow.cpp" line="2021"/>
+        <location filename="../src/MainWindow.cpp" line="1885"/>
+        <location filename="../src/MainWindow.cpp" line="2035"/>
         <source>Change Batch Size</source>
         <translation>Ændr volumen af portion</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1874"/>
+        <location filename="../src/MainWindow.cpp" line="1888"/>
         <source>Change Boil Size</source>
         <translation>Ændr kogevolumen</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1876"/>
+        <location filename="../src/MainWindow.cpp" line="1890"/>
         <source>Change Boil Time</source>
         <translation>Ændr varighed af kogning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1924"/>
+        <location filename="../src/MainWindow.cpp" line="1938"/>
         <source>Drop fermentable(s) on a recipe</source>
         <translation>Træk gærbar(e) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1945"/>
+        <location filename="../src/MainWindow.cpp" line="1959"/>
         <source>Drop hop(s) on a recipe</source>
         <translation>Træk humle(r) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1966"/>
+        <location filename="../src/MainWindow.cpp" line="1980"/>
         <source>Drop misc(s) on a recipe</source>
         <translation>Træk diverse ingrediens(er) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1987"/>
+        <location filename="../src/MainWindow.cpp" line="2001"/>
         <source>Drop yeast(s) on a recipe</source>
         <translation>Træk gær til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2008"/>
+        <location filename="../src/MainWindow.cpp" line="2022"/>
         <source>Drop salt(s) on a recipe</source>
         <translation>Træk salt(e) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2034"/>
+        <location filename="../src/MainWindow.cpp" line="2048"/>
         <source>Change Recipe Efficiency</source>
         <translation>Ændr effektivitet for opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2112"/>
+        <location filename="../src/MainWindow.cpp" line="2126"/>
         <source>Wrote recipe to file</source>
         <translation>Opskriften blev skrevet til fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2114"/>
+        <location filename="../src/MainWindow.cpp" line="2128"/>
         <source>Error writing recipe to file</source>
         <translation>Fejl ved skrivning af opskrift til fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2128"/>
+        <location filename="../src/MainWindow.cpp" line="2142"/>
         <source>Undo %1</source>
         <translation>Fortryd %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2129"/>
+        <location filename="../src/MainWindow.cpp" line="2143"/>
         <source>Redo %1</source>
         <translation>Gentag %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2182"/>
+        <location filename="../src/MainWindow.cpp" line="2196"/>
         <source>Error creating recipe</source>
         <translation>Fejl ved dannelse af opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2310"/>
+        <location filename="../src/MainWindow.cpp" line="2324"/>
         <source>Operation failed.  See log file for more details.</source>
         <translation>Handlingen mislykkedes. Se detaljer i logfil.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2312"/>
+        <location filename="../src/MainWindow.cpp" line="2326"/>
         <source>Please restart %1.</source>
         <translation>Genstart venligst %1.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2537"/>
+        <location filename="../src/MainWindow.cpp" line="2551"/>
         <source>Nothing to export</source>
         <translation>Intet at eksportere</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2538"/>
+        <location filename="../src/MainWindow.cpp" line="2552"/>
         <source>None of the selected items is exportable</source>
         <translation>Ingen af de markerede kan eksporteres</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2666"/>
+        <location filename="../src/MainWindow.cpp" line="2606"/>
+        <source>Change Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="2702"/>
         <source>No Mash</source>
         <translation>Ingen mæskning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2666"/>
+        <location filename="../src/MainWindow.cpp" line="2702"/>
         <source>You must define a mash first.</source>
         <translation>Du skal først definere en mæskning.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2194"/>
+        <location filename="../src/MainWindow.cpp" line="2208"/>
         <source>Automatically-created Boil for %1</source>
         <translation>Automatisk genereret kogning for %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2201"/>
+        <location filename="../src/MainWindow.cpp" line="2215"/>
         <source>Automatically-created Fermentation for %1</source>
         <translation>Automatisk genereret gæring for %1</translation>
     </message>
@@ -6254,7 +6259,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Uden navn %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1766"/>
+        <location filename="../src/MainWindow.cpp" line="1780"/>
         <source>Change %1 on %2 Recipe</source>
         <translation type="unfinished">Ændr %1 for opskrift %2</translation>
     </message>

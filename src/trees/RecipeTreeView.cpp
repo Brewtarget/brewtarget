@@ -31,13 +31,6 @@ void RecipeTreeView::init(AncestorDialog & ancestorDialog, OptionDialog & option
    return;
 }
 
-void RecipeTreeView::doSetSelected(QModelIndex const & index) {
-   this->TreeViewBase::doSetSelected(index);
-   auto recipe = this->getItem<Recipe>(index);
-   MainWindow::instance().setRecipe(recipe.get());
-   return;
-}
-
 bool RecipeTreeView::ancestorsAreShowing(QModelIndex ndx) {
    QModelIndex translated = m_treeSortFilterProxy.mapToSource(ndx);
    return this->m_model.showChild(translated);
