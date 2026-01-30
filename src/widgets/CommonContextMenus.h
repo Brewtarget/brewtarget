@@ -282,8 +282,7 @@ public:
 
          if constexpr (std::same_as<NE, Recipe>) {
             // You cannot delete a locked recipe
-            auto const & recipe{selected.firstPrimary};
-            this->m_action_delete.setEnabled(!recipe->locked() && selected.numPrimary >= 1);
+            this->m_action_delete.setEnabled(selected.numPrimary >= 1 && !selected.firstPrimary->locked());
          } else {
             this->m_action_delete.setEnabled(selected.numPrimary >= 1);
          }
