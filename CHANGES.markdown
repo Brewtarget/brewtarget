@@ -24,8 +24,8 @@ None
 * Right-clicking on a folder causes a segmentation fault [1066](https://github.com/Brewtarget/brewtarget/issues/1066)
 
 ### Release Timestamp
-Wed, 28 Jan 2026 05:00:02 +0100
-==
+Fri, 30 Jan 2026 05:00:03 +0100
+
 ## v5.0.2
 Bug fixes and minor enhancements.
 
