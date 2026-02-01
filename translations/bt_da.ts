@@ -3154,31 +3154,31 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
     <message>
         <location filename="../src/trees/TreeViewBase.h" line="258"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="377"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="376"/>
         <source>Copy %1</source>
         <translation>Kopier %1</translation>
     </message>
     <message>
         <location filename="../src/trees/TreeViewBase.h" line="259"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="378"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="377"/>
         <source>Enter a unique name for the copy of %1.</source>
         <translation>Indtast et unikt navn for kopien af %1.</translation>
     </message>
     <message>
         <location filename="../src/trees/TreeViewBase.h" line="260"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="379"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="378"/>
         <source>An empty name will skip copying this %1.</source>
         <translation>Tomt navnefelt vil springe over kopieringen af %1.</translation>
     </message>
     <message>
         <location filename="../src/trees/TreeViewBase.h" line="261"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="380"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="379"/>
         <source>Cancel All</source>
         <translation>Annuller alt</translation>
     </message>
     <message>
         <location filename="../src/trees/TreeViewBase.h" line="440"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="484"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="483"/>
         <source>Delete %1 #%2 &quot;%3&quot;?</source>
         <translation>Slet %1 #%2 &quot;%3&quot;?</translation>
     </message>
@@ -3209,13 +3209,13 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
     <message>
         <location filename="../src/trees/TreeViewBase.h" line="460"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="495"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="494"/>
         <source>%1 in use</source>
         <translation>%1 er i brug</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/trees/TreeViewBase.h" line="461"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="496"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="495"/>
         <source>Cannot delete this %1, as it is used in %n recipe(s)</source>
         <translation>
             <numerusform>Kan ikke slette %1, da den anvendes i %n opskrift(er)</numerusform>
@@ -3228,7 +3228,7 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
     <message>
         <location filename="../src/trees/TreeViewBase.h" line="475"/>
-        <location filename="../src/widgets/CommonContextMenus.h" line="513"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="512"/>
         <source>Delete %1</source>
         <translation>Slet %1</translation>
     </message>
@@ -3318,47 +3318,47 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="456"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="455"/>
         <source>Export Succeeded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="456"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="455"/>
         <source>Export Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="545"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="544"/>
         <source>%1 name</source>
         <translation type="unfinished">%1 navn</translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="546"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="545"/>
         <source>%1 name:</source>
         <translation type="unfinished">% navn:</translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="556"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="555"/>
         <source>Change %1 Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="577"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="576"/>
         <source>Merge %1 records</source>
         <translation>Sammenføj %1 poster</translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="578"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="577"/>
         <source>Attempt to merge %1 %2 records? (NOTE: &lt;b&gt;This action cannot be undone!&lt;/b&gt;  It is intended for use where the records are identical or as near as makes no difference.  Use on non-identical records risks data loss.)&lt;br&gt;&lt;br&gt;&lt;b&gt;Please make sure you have a backup of your database file before using this function!&lt;/b&gt;</source>
         <translation>Forsøg at sammenføje %1 %2 poster?(BEMÆRK: &lt;b&gt;Dette kan ikke fortrydes!&lt;/b&gt;  Det er beregnet på at anvendes, når posterne er identiske eller så tæt på, at det er uden betydning.  Anvendelse på ikke identiske poster kan betyde datatab&lt;br&gt;&lt;br&gt;&lt;b&gt;Sørg for at have en sikkerhedskopi af databasen, før du bruger denne funktion!&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/CommonContextMenus.h" line="639"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="638"/>
         <source>%1 records differ</source>
         <translation>%1 poster er forskellige</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/widgets/CommonContextMenus.h" line="641"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="640"/>
         <source>WARNING: %1 records to be merged have %n difference(s).  Do you want to merge anyway?</source>
         <comment>0</comment>
         <translation>
@@ -3367,7 +3367,7 @@ Logfil indeholder måske flere detaljer.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/widgets/CommonContextMenus.h" line="676"/>
+        <location filename="../src/widgets/CommonContextMenus.h" line="675"/>
         <source>%n field(s) differ between %1 #%2 and %1 #%3.  If you continue, %1 #%3 will be deleted and all uses of it will be replaced by %1 #%2.  This &lt;b&gt;cannot&lt;/b&gt; be undone.&lt;br&gt;&lt;br&gt;%4</source>
         <comment>0</comment>
         <translation>
