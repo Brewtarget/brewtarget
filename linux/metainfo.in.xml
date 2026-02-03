@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  =======================================================================================================================
- ⟫ linux/metainfo.in.xml is part of Brewtarget, and is copyright the following authors 2025:
+ ⟫ linux/metainfo.in.xml is part of Brewtarget, and is copyright the following authors 2025-2026:
  ⟫   • Matt Young <mfsy@yahoo.com>
  ⟫
  ⟫ Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -41,4 +41,18 @@
   <launchable type="desktop-id">@CONFIG_APPLICATION_ID@.desktop</launchable>
 
   <url type="homepage">@CONFIG_WEBSITE_URL@</url>
+
+  <developer id="@CONFIG_ORGANIZATION_REVERSE_DOMAIN@">
+    <name>@CONFIG_ORGANIZATION_NAME@</name>
+  </developer>
+
+  <!--
+   This rating generated with the help of https://hughsie.github.io/oars/.  It's somewhat stating the obvious that a
+   Beer recipe tool and ingredient manager would refer to alcohol, but the content_rating tag is required to avoid
+   warnings when we generate an AppImage.
+  -->
+  <content_rating type="oars-1.1">
+    <content_attribute id="drugs-alcohol">moderate</content_attribute>
+  </content_rating>
+
 </component>

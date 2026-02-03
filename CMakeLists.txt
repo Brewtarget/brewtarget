@@ -1,5 +1,5 @@
 #╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-# CMakeLists.txt is part of Brewtarget, and is Copyright the following authors 2009-2024
+# CMakeLists.txt is part of Brewtarget, and is Copyright the following authors 2009-2026:
 #  - Chris Pavetto <chrispavetto@gmail.com>
 #  - Dan Cavanagh <dan@dancavanagh.com>
 #  - Daniel Moreno <danielm5@users.noreply.github.com>
@@ -1110,7 +1110,7 @@ if(APPLE)
 
    # Sets the NSHumanReadableCopyright bundle property key, which is "a human-readable copyright notice for the bundle".
    set(MACOSX_BUNDLE_COPYRIGHT
-       "Copyright 2009-2024.  Distributed under the terms of the GNU General Public License (version 3).")
+       "Copyright 2009-2026.  Distributed under the terms of the GNU General Public License (version 3).")
 
 else()
    add_executable(${fileName_executable}
