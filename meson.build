@@ -1435,7 +1435,7 @@ exportedVariables = {
    'CONFIG_DESCRIPTION_STRING' : 'Open source beer brewing software',
 
    # Some installers, eg NSIS on Windows, want a brief copyright string
-   'CONFIG_COPYRIGHT_STRING' : 'Copyright 2009-2025.  Distributed under the terms of the GNU General Public License (version 3).',
+   'CONFIG_COPYRIGHT_STRING' : 'Copyright 2009-2026.  Distributed under the terms of the GNU General Public License (version 3).',
 
    # Installers often want the name of the organisation supplying the product, so we need something to put there
    'CONFIG_ORGANIZATION_NAME' : 'The ' + capitalisedProjectName + ' Team',

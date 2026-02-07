@@ -22,6 +22,7 @@ None
 
 ### Bug Fixes
 * Right-clicking on a folder causes a segmentation fault [1066](https://github.com/Brewtarget/brewtarget/issues/1066)
+* AppImage versions fail to run - execv error: No such file or directory [1071](https://github.com/Brewtarget/brewtarget/issues/1071)
 
 ### Release Timestamp
 Fri, 30 Jan 2026 05:00:03 +0100
