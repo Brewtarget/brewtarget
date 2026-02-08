@@ -14,6 +14,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Shopping Lists
 * We'll list other new features here...
 
+## v5.0.4
+Bug fixes and minor enhancements.
+
+### New Features
+None
+
+### Bug Fixes
+None
+
+### Release Timestamp
+Sun, 8 Feb 2026 05:00:04 +0100
+
 ## v5.0.3
 Bug fixes and minor enhancements.
 
@@ -25,7 +37,7 @@ None
 * AppImage versions fail to run - execv error: No such file or directory [1071](https://github.com/Brewtarget/brewtarget/issues/1071)
 
 ### Release Timestamp
-Fri, 30 Jan 2026 05:00:03 +0100
+Sun, 8 Feb 2026 05:00:03 +0100
 
 ## v5.0.2
 Bug fixes and minor enhancements.

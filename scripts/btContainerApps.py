@@ -137,7 +137,7 @@ def doAppImage():
    #
    #    [projectName]-[version]   <── dir_appDir
    #    ├── AppRun ❇   <── Shell script that acts as the entry point for the AppImage
-   #    ├── [reverseDomain].[projectName].desktop = SYMLINK to file in share/applications  ❇
+   #    ├── [reverseDomain].[projectName].desktop = SYMLINK to file in usr/share/applications  ❇
    #    └── usr
    #        ├── bin
    #        │   └── [projectName] ✅   <── the executable
