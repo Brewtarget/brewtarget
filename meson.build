@@ -1770,34 +1770,21 @@ if host_machine.system() == 'darwin'
    runpath = '@executable_path/../Frameworks'
 elif host_machine.system() == 'linux'
    #
-   # On Linux, we also want to set the install_rpath parameter in order to make the application relocatable -- ie able
-   # to load its shared libraries relative to its main binary, rather than just hardcoded absolute paths (such as
-   # /usr/lib and subdirectories thereof).  This is needed for AppImage packaging.
+   # On Linux we need different settings for RUNPATH, depending on the packaging.  Specifially AppImage needs it set to
+   # a relative path, but Debian package require RPATH and RUNPATH not to be set, otherwise you'll get a
+   # relative-library-search-path error (see https://lintian.debian.org/tags/relative-library-search-path.html).
    #
-   # RPATH (aka DT_RPATH) and RUNPATH (aka DT_RUNPATH) are ELF (Executable and Linkable Format) attributes embedded in
-   # binaries or shared libraries that specify the directory/directories the dynamic linker/loader should search for
-   # dependencies (eg shared libraries that need to be loaded).
+   # So, instead of trying to set the install_rpath parameter here, we leave things at the default (which is fine for
+   # most things) and then modify it post-build for AppImages -- see scripts/btContainerApps.py
    #
-   # RPATH path is an older setting than RUNPATH, and generally the latter should be used.  (The difference is simply
-   # RPATH takes precedence over the LD_LIBRARY_PATH environment variable, which is bad, whereas RUNPATH does not.)  In
-   # various places -- eg parameters to patchelf -- you will see `rpath` used in parameter names where it is actually
-   # RUNPATH being displayed/modified, but you generally don't have to worry about this.  (Specifically, per
-   # https://twdev.blog/2024/08/rpath/, RUNPATH is available if you specify `--enable-new-dtags` when linking.  This
-   # enables the generation of so called “new tags”.  Once enabled, requests to populate RPATH will in fact populate
-   # RUNPATH.)
+   # As an aside, to note if we ever do need to set install_rpath on Linux, NOTE that Meson does things in two stages
+   # when you specify install_rpath:
+   #    - After running `meson compile`, the executable in the build directory will have a placeholder
+   #      RUNPATH ('XXXXXXXXXXXXXXXXX' or similar)
+   #    - After running `meson install`, in the installed executable, this placeholder value will be
+   #      replaced by the actual value you specified
    #
-   # You can see values (if specified) for RPATH and RUNPATH for an existing binary by running `readelf -d [binary]` or
-   # `patchelf --print-rpath [binary]`.
-   #
-   # NOTE that if RUNPATH is not specified or a needed library is not found in the RUNPATH directories, the dynamic
-   # linker/loader will look in the system-wide directories (eg under /usr/lib), so it is generally OK for us to add
-   # paths to RUNPATH that are needed in AppImage but not in other packages.
-   #
-   # Inside an RPATH/RUNPATH, "$ORIGIN" means the directory containing the executable (or shared library if that's what
-   # you're building).
-   #
-   platformSpecificArgs = {'install_rpath': '$ORIGIN/../libs'}
-   runpath = '"$ORIGIN/../libs"'
+   platformSpecificArgs = {}
 else
    platformSpecificArgs = {}
 endif
@@ -1828,8 +1815,7 @@ mainExecutable = executable(mainExecutableTargetName,
                             include_directories : includeDirs,
                             dependencies : mainExeDependencies,
                             link_with : commonCodeStaticLib,
-                            install_rpath : runpath,
-#                            kwargs : platformSpecificArgs,
+                            kwargs : platformSpecificArgs,
                             install : true,
                             win_subsystem : 'windows')
 
