@@ -82,8 +82,11 @@ def doAppImage():
    os.makedirs(dir_appDir)
 
    #
-   # As for when we are doing "regular" packaging, we get Meson to put most of the files we need (bar shared libaries)
+   # As for when we are doing "regular" packaging, we get Meson to put most of the files we need (bar shared libraries)
    # in a tree where we can get them.  NB: We need to be in the mbuild directory to run Meson.
+   #
+   # NOTE, per comments in meson.build, this also sets our desired RUNPATH attribute in the ELF section of the
+   # executable.
    #
    btUtils.findMesonAndGit()
    btLogger.log.info('Running meson install with --destdir option')
@@ -215,15 +218,34 @@ def doAppImage():
    # We can ignore lines not of this format, and also assume they will have fewer fields, eg:
    #    linux-vdso.so.1 (0x000074b99346f000)
    #
-   #
    dir_appDir_lib = dir_appDir.joinpath('usr').joinpath('lib')
    os.makedirs(dir_appDir_lib)
    for lddOutputLine in lddOutput.splitlines():
       fields = lddOutputLine.strip().split()
       if len(fields) == 4:
          libPath = fields[2]
-         btLogger.log.debug('Copying ' + libPath + ' to ' + dir_appDir_lib.as_posix())
-         shutil.copy2(libPath, dir_appDir_lib)
+         newLibPath = dir_appDir_lib.joinpath(os.path.basename(libPath))
+         btLogger.log.debug('Copying ' + libPath + ' to ' + newLibPath.as_posix())
+         shutil.copy2(libPath, newLibPath)
+         #
+         # There's one more thing we need to do here.  Although (courtesy of RUNPATH fixups in meson.build) the
+         # executable will look in this directory for its shared libraries, the shared libraries themselves will not.
+         # Thus, if a shared library in this directory depends on another shared library in this directory, it won't
+         # find it.
+         #
+         # So, we need to fix RUNPATH on all the shared libraries -- just as we did on the executable (via install_rpath
+         # in meson.build).
+         #
+         btExecute.abortOnRunFail(
+            subprocess.run(
+               #
+               # Note that we don't want $ORIGIN interpreted as a shell variable, so extra quotes needed
+               #
+               ["patchelf", "--add-rpath", "'$ORIGIN/../lib'", newLibPath.as_posix()]
+            )
+         )
+
+
       else:
          btLogger.log.debug('Skipping "' + lddOutputLine + '"')
    btLogger.log.info('Libraries to ship (in ' + dir_appDir_lib.as_posix() + '):')

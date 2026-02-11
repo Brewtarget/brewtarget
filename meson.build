@@ -189,7 +189,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '5.0.4',
+        version: '5.0.3',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.63.0',
         default_options : ['cpp_std=c++23',
@@ -1754,17 +1754,50 @@ endif
 #========================================== Linker-specific settings & flags ===========================================
 #=======================================================================================================================
 #
-# On MacOS, there are some extra linker flags to tell the OS where to look for shared libraries that we ship in the app
-# bundle.  These are passed in via the install_rpath parameter on Meson's `executable` function.  We don't want to pass
-# this parameter on Windows or Linux.  (I think it's harmless on Windows but might have some undesirable effect on
-# Linux.)  Fortunately we can put additional arguments in a platform-specific dictionary that can be passed to any
-# Meson function via the special 'kwargs' argument (provided there is no overlap between arguments specified directly in
-# the function call and those included in the dictionary).
+# We can put additional arguments in a platform-specific dictionary that can be passed to any Meson function via the
+# special 'kwargs' argument (provided there is no overlap between arguments specified directly in the function call and
+# those included in the dictionary).
 #
-# See comments in the `bt` build tool script for more on where/how MacOS searches for shared libraries.
-#
+runpath = ''
 if host_machine.system() == 'darwin'
+   #
+   # On MacOS, there are some extra linker flags to tell the OS where to look for shared libraries that we ship in the
+   # app bundle.  These are passed in via the install_rpath parameter on Meson's `executable` function.
+   #
+   # See comments in the `bt` build tool script for more on where/how MacOS searches for shared libraries.
+   #
    platformSpecificArgs = {'install_rpath': '@executable_path/../Frameworks'}
+   runpath = '@executable_path/../Frameworks'
+elif host_machine.system() == 'linux'
+   #
+   # On Linux, we also want to set the install_rpath parameter in order to make the application relocatable -- ie able
+   # to load its shared libraries relative to its main binary, rather than just hardcoded absolute paths (such as
+   # /usr/lib and subdirectories thereof).  This is needed for AppImage packaging.
+   #
+   # RPATH (aka DT_RPATH) and RUNPATH (aka DT_RUNPATH) are ELF (Executable and Linkable Format) attributes embedded in
+   # binaries or shared libraries that specify the directory/directories the dynamic linker/loader should search for
+   # dependencies (eg shared libraries that need to be loaded).
+   #
+   # RPATH path is an older setting than RUNPATH, and generally the latter should be used.  (The difference is simply
+   # RPATH takes precedence over the LD_LIBRARY_PATH environment variable, which is bad, whereas RUNPATH does not.)  In
+   # various places -- eg parameters to patchelf -- you will see `rpath` used in parameter names where it is actually
+   # RUNPATH being displayed/modified, but you generally don't have to worry about this.  (Specifically, per
+   # https://twdev.blog/2024/08/rpath/, RUNPATH is available if you specify `--enable-new-dtags` when linking.  This
+   # enables the generation of so called “new tags”.  Once enabled, requests to populate RPATH will in fact populate
+   # RUNPATH.)
+   #
+   # You can see values (if specified) for RPATH and RUNPATH for an existing binary by running `readelf -d [binary]` or
+   # `patchelf --print-rpath [binary]`.
+   #
+   # NOTE that if RUNPATH is not specified or a needed library is not found in the RUNPATH directories, the dynamic
+   # linker/loader will look in the system-wide directories (eg under /usr/lib), so it is generally OK for us to add
+   # paths to RUNPATH that are needed in AppImage but not in other packages.
+   #
+   # Inside an RPATH/RUNPATH, "$ORIGIN" means the directory containing the executable (or shared library if that's what
+   # you're building).
+   #
+   platformSpecificArgs = {'install_rpath': '$ORIGIN/../libs'}
+   runpath = '"$ORIGIN/../libs"'
 else
    platformSpecificArgs = {}
 endif
@@ -1795,7 +1828,8 @@ mainExecutable = executable(mainExecutableTargetName,
                             include_directories : includeDirs,
                             dependencies : mainExeDependencies,
                             link_with : commonCodeStaticLib,
-                            kwargs : platformSpecificArgs,
+                            install_rpath : runpath,
+#                            kwargs : platformSpecificArgs,
                             install : true,
                             win_subsystem : 'windows')
 
