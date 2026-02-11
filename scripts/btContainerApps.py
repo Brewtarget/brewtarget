@@ -82,8 +82,11 @@ def doAppImage():
    os.makedirs(dir_appDir)
 
    #
-   # As for when we are doing "regular" packaging, we get Meson to put most of the files we need (bar shared libaries)
+   # As for when we are doing "regular" packaging, we get Meson to put most of the files we need (bar shared libraries)
    # in a tree where we can get them.  NB: We need to be in the mbuild directory to run Meson.
+   #
+   # NOTE, per comments in meson.build, this also sets our desired RUNPATH attribute in the ELF section of the
+   # executable.
    #
    btUtils.findMesonAndGit()
    btLogger.log.info('Running meson install with --destdir option')
@@ -195,17 +198,49 @@ def doAppImage():
    os.chmod(file_appRun, stat_appRun.st_mode | stat.S_IEXEC)
 
    #
+   # AppImage requires the application to be relocatable -- ie able to load its shared libraries relative to its main
+   # binary, rather than just hardcoded absolute paths (such as /usr/lib and subdirectories thereof).
+   #
+   # RPATH (aka DT_RPATH) and RUNPATH (aka DT_RUNPATH) are ELF (Executable and Linkable Format) attributes embedded in
+   # binaries or shared libraries.  They specify the directory/directories the dynamic linker/loader should search for
+   # dependencies (eg shared libraries that need to be loaded).
+   #
+   # RPATH path is an older setting than RUNPATH, and generally the latter should be used.  (The difference is simply
+   # RPATH takes precedence over the LD_LIBRARY_PATH environment variable, which is bad, whereas RUNPATH does not.)  In
+   # various places -- eg parameters to patchelf -- you will see `rpath` used in parameter names where it is actually
+   # RUNPATH being displayed/modified, but you generally don't have to worry about this.  (Specifically, per
+   # https://twdev.blog/2024/08/rpath/, RUNPATH is available if you specify `--enable-new-dtags` when linking.  This
+   # enables the generation of so called “new tags”.  Once enabled, requests to populate RPATH will in fact populate
+   # RUNPATH.)
+   #
+   # You can see values (if specified) for RPATH and RUNPATH for an existing binary by running `readelf -d [binary]` or
+   # `patchelf --print-rpath [binary]`.
+   #
+   # Inside an RPATH/RUNPATH, "$ORIGIN" means the directory containing the executable (or shared library if that's what
+   # you're building).
+   #
+   #
+   executableFullPath = dir_appDir.joinpath('usr').joinpath('bin').joinpath(projectName).as_posix()
+   btExecute.abortOnRunFail(
+      subprocess.run(
+         #
+         # Note that we don't want $ORIGIN interpreted as a shell variable, so extra quotes needed
+         #
+         ["patchelf", "--add-rpath", "'$ORIGIN/../lib'", executableFullPath]
+      )
+   )
+
+   #
    # Now we need to copy the shared libraries on which we depend.  There are various ways to obtain the list of these
    # dependencies.  Using ldd is simplest, because it handles recursion.
    #
-   executablePath = dir_appDir.joinpath('usr').joinpath('bin').joinpath(projectName).as_posix()
    lddOutput = btExecute.abortOnRunFail(
       subprocess.run(
-         ['ldd', executablePath],
+         ['ldd', executableFullPath],
          capture_output=True
       )
    ).stdout.decode('UTF-8')
-   btLogger.log.debug('Output of `ldd ' + executablePath + '`: ' + lddOutput)
+   btLogger.log.debug('Output of `ldd ' + executableFullPath + '`: ' + lddOutput)
 
    #
    # Most of the output of ldd will be of the form:
@@ -215,15 +250,31 @@ def doAppImage():
    # We can ignore lines not of this format, and also assume they will have fewer fields, eg:
    #    linux-vdso.so.1 (0x000074b99346f000)
    #
-   #
    dir_appDir_lib = dir_appDir.joinpath('usr').joinpath('lib')
    os.makedirs(dir_appDir_lib)
    for lddOutputLine in lddOutput.splitlines():
       fields = lddOutputLine.strip().split()
       if len(fields) == 4:
          libPath = fields[2]
-         btLogger.log.debug('Copying ' + libPath + ' to ' + dir_appDir_lib.as_posix())
-         shutil.copy2(libPath, dir_appDir_lib)
+         newLibPath = dir_appDir_lib.joinpath(os.path.basename(libPath))
+         btLogger.log.debug('Copying ' + libPath + ' to ' + newLibPath.as_posix())
+         shutil.copy2(libPath, newLibPath)
+         #
+         # There's one more thing we need to do here.  Although (courtesy of invoking patchelf above) the executable
+         # will look in this directory for its shared libraries, the shared libraries themselves will not.  Thus, if a
+         # shared library in this directory depends on another shared library in this directory, it won't find it.
+         #
+         # So, we need to fix RUNPATH on all the shared libraries -- just as we did on the executable (via install_rpath
+         # in meson.build).
+         #
+         btExecute.abortOnRunFail(
+            subprocess.run(
+               #
+               # Note that we don't want $ORIGIN interpreted as a shell variable, so extra quotes needed
+               #
+               ["patchelf", "--add-rpath", "'$ORIGIN/../lib'", newLibPath.as_posix()]
+            )
+         )
       else:
          btLogger.log.debug('Skipping "' + lddOutputLine + '"')
    btLogger.log.info('Libraries to ship (in ' + dir_appDir_lib.as_posix() + '):')

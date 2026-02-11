@@ -189,7 +189,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '5.0.4',
+        version: '5.0.3',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.63.0',
         default_options : ['cpp_std=c++23',
@@ -1754,17 +1754,37 @@ endif
 #========================================== Linker-specific settings & flags ===========================================
 #=======================================================================================================================
 #
-# On MacOS, there are some extra linker flags to tell the OS where to look for shared libraries that we ship in the app
-# bundle.  These are passed in via the install_rpath parameter on Meson's `executable` function.  We don't want to pass
-# this parameter on Windows or Linux.  (I think it's harmless on Windows but might have some undesirable effect on
-# Linux.)  Fortunately we can put additional arguments in a platform-specific dictionary that can be passed to any
-# Meson function via the special 'kwargs' argument (provided there is no overlap between arguments specified directly in
-# the function call and those included in the dictionary).
+# We can put additional arguments in a platform-specific dictionary that can be passed to any Meson function via the
+# special 'kwargs' argument (provided there is no overlap between arguments specified directly in the function call and
+# those included in the dictionary).
 #
-# See comments in the `bt` build tool script for more on where/how MacOS searches for shared libraries.
-#
+runpath = ''
 if host_machine.system() == 'darwin'
+   #
+   # On MacOS, there are some extra linker flags to tell the OS where to look for shared libraries that we ship in the
+   # app bundle.  These are passed in via the install_rpath parameter on Meson's `executable` function.
+   #
+   # See comments in the `bt` build tool script for more on where/how MacOS searches for shared libraries.
+   #
    platformSpecificArgs = {'install_rpath': '@executable_path/../Frameworks'}
+   runpath = '@executable_path/../Frameworks'
+elif host_machine.system() == 'linux'
+   #
+   # On Linux we need different settings for RUNPATH, depending on the packaging.  Specifially AppImage needs it set to
+   # a relative path, but Debian package require RPATH and RUNPATH not to be set, otherwise you'll get a
+   # relative-library-search-path error (see https://lintian.debian.org/tags/relative-library-search-path.html).
+   #
+   # So, instead of trying to set the install_rpath parameter here, we leave things at the default (which is fine for
+   # most things) and then modify it post-build for AppImages -- see scripts/btContainerApps.py
+   #
+   # As an aside, to note if we ever do need to set install_rpath on Linux, NOTE that Meson does things in two stages
+   # when you specify install_rpath:
+   #    - After running `meson compile`, the executable in the build directory will have a placeholder
+   #      RUNPATH ('XXXXXXXXXXXXXXXXX' or similar)
+   #    - After running `meson install`, in the installed executable, this placeholder value will be
+   #      replaced by the actual value you specified
+   #
+   platformSpecificArgs = {}
 else
    platformSpecificArgs = {}
 endif
