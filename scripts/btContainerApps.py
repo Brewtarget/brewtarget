@@ -224,9 +224,10 @@ def doAppImage():
    btExecute.abortOnRunFail(
       subprocess.run(
          #
-         # Note that we don't want $ORIGIN interpreted as a shell variable, so extra quotes needed
+         # Note that, unlike running from the command line, we don't need to add extra quotes here to prevent $ORIGIN
+         # being interpreted as a shell variable.
          #
-         ["patchelf", "--add-rpath", "'$ORIGIN/../lib'", executableFullPath]
+         ["patchelf", "--add-rpath", "$ORIGIN/../lib", executableFullPath]
       )
    )
 
@@ -269,10 +270,7 @@ def doAppImage():
          #
          btExecute.abortOnRunFail(
             subprocess.run(
-               #
-               # Note that we don't want $ORIGIN interpreted as a shell variable, so extra quotes needed
-               #
-               ["patchelf", "--add-rpath", "'$ORIGIN/../lib'", newLibPath.as_posix()]
+               ["patchelf", "--add-rpath", "$ORIGIN/../lib", newLibPath.as_posix()]
             )
          )
       else:
