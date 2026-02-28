@@ -146,6 +146,8 @@ def doAppImage():
    #        │   └── [projectName] ✅   <── the executable
    #        ├── lib   <── dir_appDir_lib
    #        │   └── [All the libraries needed by the application] ❇
+   #        ├── plugins   <── dir_appDir_plugins
+   #        │   └── [All the plugins needed by the application] ❇
    #        └── share
    #            ├── applications   <── dir_applications
    #            │   └── [reverseDomain].[projectName].desktop ✅
@@ -191,7 +193,15 @@ def doAppImage():
    # Create the AppRun shell script...
    file_appRun = dir_appDir.joinpath('AppRun')
    with open(file_appRun, 'w') as appRunFile:
+      #
+      # Because (see below) we set the RUNPATH ELF attribute in the executable, you might think we don't need to set
+      # LD_LIBRARY_PATH.  However, we need to ensure that shared libraries look for their own dependencies inside the
+      # AppImage first.  Per the discussion athttps://github.com/AppImage/AppImageKit/issues/126, we also allow anything
+      # in APPIMAGE_LIBRARY_PATH to take precedence.  (I'm not sure how widely used this is, but it does no harm to
+      # support it.)
+      #
       appRunFile.write('#!/bin/bash\n')
+      appRunFile.write('export LD_LIBRARY_PATH="${APPIMAGE_LIBRARY_PATH}:${APPDIR}/usr/lib:${LD_LIBRARY_PATH}"\n')
       appRunFile.write('exec $APPDIR/usr/bin/' + projectName + '\n')
    # ...and make it executable
    stat_appRun = os.stat(file_appRun)
@@ -210,7 +220,7 @@ def doAppImage():
    # various places -- eg parameters to patchelf -- you will see `rpath` used in parameter names where it is actually
    # RUNPATH being displayed/modified, but you generally don't have to worry about this.  (Specifically, per
    # https://twdev.blog/2024/08/rpath/, RUNPATH is available if you specify `--enable-new-dtags` when linking.  This
-   # enables the generation of so called “new tags”.  Once enabled, requests to populate RPATH will in fact populate
+   # enables the generation of so-called “new tags”.  Once enabled, requests to populate RPATH will in fact populate
    # RUNPATH.)
    #
    # You can see values (if specified) for RPATH and RUNPATH for an existing binary by running `readelf -d [binary]` or
@@ -219,8 +229,8 @@ def doAppImage():
    # Inside an RPATH/RUNPATH, "$ORIGIN" means the directory containing the executable (or shared library if that's what
    # you're building).
    #
-   #
-   executableFullPath = dir_appDir.joinpath('usr').joinpath('bin').joinpath(projectName).as_posix()
+   dir_bin = dir_appDir.joinpath('usr').joinpath('bin')
+   executableFullPath = dir_bin.joinpath(projectName).as_posix()
    btExecute.abortOnRunFail(
       subprocess.run(
          #
@@ -235,14 +245,210 @@ def doAppImage():
    # Now we need to copy the shared libraries on which we depend.  There are various ways to obtain the list of these
    # dependencies.  Using ldd is simplest, because it handles recursion.
    #
-   lddOutput = btExecute.abortOnRunFail(
+   # We start here by gathering the direct dependencies of the executable.  When we deal with plug-ins, we'll then add
+   # their dependencies.
+   #
+   lddOutputExecutable = btExecute.abortOnRunFail(
       subprocess.run(
          ['ldd', executableFullPath],
          capture_output=True
       )
    ).stdout.decode('UTF-8')
-   btLogger.log.debug('Output of `ldd ' + executableFullPath + '`: ' + lddOutput)
+   btLogger.log.debug('Output of `ldd ' + executableFullPath + '`: ' + lddOutputExecutable)
 
+   allLddOutputs = [lddOutputExecutable]
+
+   #
+   # There are certain libraries we depend on that we do _not_ want to include, because the user's local system will
+   # have a more appropriate version (and shipping the version from the build machine will likely cause breakage).
+   #
+   librariesNotToInclude = [
+      'libc.so.6',      # Core glibc
+      'libm.so.6',      # Core glibc
+      'libresolv.so.2', # Core glibc
+      'libgcc_s.so.1',  # gcc runtime, tightly coupled to the system
+   ]
+
+   #
+   # As with shared libraries (see below), we need to include Qt plug-ins we depend on.  We do this before the shared
+   # libraries because we'll also need to bundle the shared libraries that the plug-ins themselves depend on.
+   #
+   # First, we ask Qt (via qmake) where its plug-ins live.  NB we need the Qt6 ones.  (Build machine may have both Qt5
+   # and Qt6 installed, so we have to be explicit.)
+   #
+   qtPlugInsDirRaw = btExecute.abortOnRunFail(
+      subprocess.run(
+         ['qmake6', '-query', 'QT_INSTALL_PLUGINS'],
+         capture_output=True
+      )
+   ).stdout.decode('UTF-8').rstrip()
+   btLogger.log.debug('Output of `qmake6 -query QT_INSTALL_PLUGINS`: ' + qtPlugInsDirRaw)
+   qtPlugInsDir = pathlib.Path(qtPlugInsDirRaw)
+
+   #
+   # Plugins (aka plug-ins) are just shared libraries where all the loading and function calling is handled dynamically
+   # at runtime.
+   #
+   # With a regular shared library, the linker records all the dependencies at compile-time.  Then, the dynamic linker
+   # (ld.so) loads the library automatically when the program runs, and our code can call functions in it directly by
+   # name.
+   #
+   # With a plugin, there is no build-time linking.  Typically, the application doesn't even know which specific plugins
+   # exist until it looks in a directory.  A plugin library is loaded explicitly at runtime using dlopen() (eg via Qt's
+   # QPluginLoader) and there is an API for finding symbols etc.
+   #
+   # All this means that it's a bit harder to determine at build time which Qt plug-ins are used by an executable.  At
+   # runtime, you can run strace on the executable to get a list of plug-ins being loaded, eg:
+   #
+   #    strace -e trace=openat ./our_binary 2>&1 | grep -i plugin
+   #
+   # As of Feb 2026, on Qt 6.4.2, we have the following 68 Qt plug-ins in 20 directories (courtesy of running
+   # `tree /usr/lib/x86_64-linux-gnu/qt6/plugins` on Ubuntu 24.04), of which those marked ☀️ are the ones we think we
+   # need to ship:
+   #    plugins
+   #    ├── designer
+   #    │   └── libqquickwidget.so
+   #    ├── egldeviceintegrations
+   #    │   ├── libqeglfs-emu-integration.so
+   #    │   ├── libqeglfs-kms-egldevice-integration.so
+   #    │   ├── libqeglfs-kms-integration.so
+   #    │   └── libqeglfs-x11-integration.so
+   #    ├── generic
+   #    │   ├── libqevdevkeyboardplugin.so
+   #    │   ├── libqevdevmouseplugin.so
+   #    │   ├── libqevdevtabletplugin.so
+   #    │   ├── libqevdevtouchplugin.so
+   #    │   ├── libqlibinputplugin.so
+   #    │   ├── libqtslibplugin.so
+   #    │   └── libqtuiotouchplugin.so
+   #    ├── iconengines
+   #    │   └── libqsvgicon.so  ☀️
+   #    ├── imageformats
+   #    │   ├── libqgif.so    ☀️
+   #    │   ├── libqicns.so   ☀️
+   #    │   ├── libqico.so    ☀️
+   #    │   ├── libqjpeg.so   ☀️
+   #    │   ├── libqmng.so    ☀️
+   #    │   ├── libqsvg.so    ☀️
+   #    │   ├── libqtga.so    ☀️
+   #    │   ├── libqtiff.so   ☀️
+   #    │   ├── libqwbmp.so   ☀️
+   #    │   └── libqwebp.so   ☀️
+   #    ├── multimedia
+   #    │   ├── libffmpegmediaplugin.so
+   #    │   └── libgstreamermediaplugin.so
+   #    ├── networkinformation
+   #    │   ├── libqglib.so
+   #    │   └── libqnetworkmanager.so
+   #    ├── platforminputcontexts
+   #    │   ├── libcomposeplatforminputcontextplugin.so     ☀️
+   #    │   ├── libfcitx5platforminputcontextplugin.so      ☀️
+   #    │   ├── libfcitxplatforminputcontextplugin-qt6.so   ☀️
+   #    │   └── libibusplatforminputcontextplugin.so        ☀️
+   #    ├── platforms
+   #    │   ├── libqeglfs.so            ☀️
+   #    │   ├── libqlinuxfb.so          ☀️
+   #    │   ├── libqminimalegl.so       ☀️
+   #    │   ├── libqminimal.so          ☀️
+   #    │   ├── libqoffscreen.so        ☀️
+   #    │   ├── libqvkkhrdisplay.so     ☀️
+   #    │   ├── libqvnc.so              ☀️
+   #    │   ├── libqwayland-egl.so      ☀️
+   #    │   ├── libqwayland-generic.so  ☀️
+   #    │   └── libqxcb.so              ☀️
+   #    ├── platformthemes
+   #    │   └── libqgtk3.so   ☀️
+   #    ├── printsupport
+   #    │   └── libcupsprintersupport.so   ☀️
+   #    ├── PyQt6
+   #    │   └── libpyqt6qmlplugin.so
+   #    ├── sqldrivers
+   #    │   ├── libqsqlite.so    ☀️
+   #    │   └── libqsqlpsql.so   ☀️
+   #    ├── tls
+   #    │   ├── libqcertonlybackend.so
+   #    │   └── libqopensslbackend.so
+   #    ├── wayland-decoration-client
+   #    │   └── libbradient.so
+   #    ├── wayland-graphics-integration-client
+   #    │   ├── libdmabuf-server.so
+   #    │   ├── libdrm-egl-server.so
+   #    │   ├── libqt-plugin-wayland-egl.so
+   #    │   ├── libshm-emulation-server.so
+   #    │   └── libvulkan-server.so
+   #    ├── wayland-graphics-integration-server
+   #    │   ├── libqt-wayland-compositor-dmabuf-server-buffer.so
+   #    │   ├── libqt-wayland-compositor-drm-egl-server-buffer.so
+   #    │   ├── libqt-wayland-compositor-linux-dmabuf-unstable-v1.so
+   #    │   ├── libqt-wayland-compositor-shm-emulation-server.so
+   #    │   ├── libqt-wayland-compositor-vulkan-server.so
+   #    │   ├── libqt-wayland-compositor-wayland-egl.so
+   #    │   └── libqt-wayland-compositor-wayland-eglstream-controller.so
+   #    ├── wayland-shell-integration
+   #    │   ├── libfullscreen-shell-v1.so
+   #    │   ├── libivi-shell.so
+   #    │   ├── libqt-shell.so
+   #    │   ├── libwl-shell-plugin.so
+   #    │   └── libxdg-shell.so
+   #    └── xcbglintegrations
+   #        ├── libqxcb-egl-integration.so
+   #        └── libqxcb-glx-integration.so
+   #
+   #    20 directories, 68 files
+   #
+   # TLDR, I think we just need to grab some of the plugin directories
+   #
+   qtPlugInDirsToCopy = [
+      'iconengines',
+      'imageformats',
+      'platforminputcontexts',
+      'platforms',
+      'platformthemes',
+      'printsupport',
+      'sqldrivers'
+   ]
+   dir_appDir_plugins = dir_appDir.joinpath('usr').joinpath('plugins')
+   os.makedirs(dir_appDir_plugins)
+   for plugInSubDir in qtPlugInDirsToCopy:
+      copyFrom = qtPlugInsDir.joinpath(plugInSubDir)
+      copyTo = dir_appDir_plugins.joinpath(plugInSubDir)
+      btLogger.log.debug('Copying ' + copyFrom.as_posix() + ' to ' + copyTo.as_posix())
+      shutil.copytree(copyFrom, copyTo)
+      #
+      # Now we need to get the dependencies for each plug-in in the directory we just copied
+      #
+      plugins = os.listdir(copyFrom)
+      for plugin in plugins:
+         pluginFullPath = copyFrom.joinpath(plugin).as_posix()
+         lddOutputForPlugIn = btExecute.abortOnRunFail(
+            subprocess.run(
+               ['ldd', pluginFullPath],
+               capture_output=True
+            )
+         ).stdout.decode('UTF-8')
+         btLogger.log.debug('Initial output of `ldd ' + pluginFullPath + '`: ' + lddOutputForPlugIn)
+
+         allLddOutputs.append(lddOutputForPlugIn)
+
+   #
+   # We need Qt to know where to look for the plug-ins when the AppImage is run.  The cleanest way to do this is via a
+   # qt.conf file in the same directory as the executable (see https://doc.qt.io/qt-6/qt-conf.html).
+   #
+   file_qtConf = dir_bin.joinpath('qt.conf')
+   with open(file_qtConf, 'w') as qtConfFile:
+      #
+      # The qt.conf file is an INI text file
+      #
+      # All paths are relative to the Prefix. On Windows and X11, the Prefix is relative to the directory containing the
+      # application executable (QCoreApplication::applicationDirPath()). On macOS, the Prefix is relative to the
+      # Contents in the application bundle.
+      #
+      qtConfFile.write('[Paths]\n')
+      qtConfFile.write('Prefix = ..\n')
+      qtConfFile.write('Plugins = plugins\n')  # Not strictly necessary as this is the default value
+
+   #
+   # Now we are ready to parse the ldd output and bundle all the dependencies in it.
    #
    # Most of the output of ldd will be of the form:
    #
@@ -253,26 +459,31 @@ def doAppImage():
    #
    dir_appDir_lib = dir_appDir.joinpath('usr').joinpath('lib')
    os.makedirs(dir_appDir_lib)
+   lddOutput = '\n'.join(allLddOutputs)
    for lddOutputLine in lddOutput.splitlines():
       fields = lddOutputLine.strip().split()
       if len(fields) == 4:
-         libPath = fields[2]
-         newLibPath = dir_appDir_lib.joinpath(os.path.basename(libPath))
-         btLogger.log.debug('Copying ' + libPath + ' to ' + newLibPath.as_posix())
-         shutil.copy2(libPath, newLibPath)
-         #
-         # There's one more thing we need to do here.  Although (courtesy of invoking patchelf above) the executable
-         # will look in this directory for its shared libraries, the shared libraries themselves will not.  Thus, if a
-         # shared library in this directory depends on another shared library in this directory, it won't find it.
-         #
-         # So, we need to fix RUNPATH on all the shared libraries -- just as we did on the executable (via install_rpath
-         # in meson.build).
-         #
-         btExecute.abortOnRunFail(
-            subprocess.run(
-               ["patchelf", "--add-rpath", "$ORIGIN/../lib", newLibPath.as_posix()]
+         libName = fields[0]
+         if libName in librariesNotToInclude:
+            btLogger.log.debug('Not bundling ' + libName)
+         else:
+            libPath = fields[2]
+            newLibPath = dir_appDir_lib.joinpath(os.path.basename(libPath))
+            btLogger.log.debug('Copying ' + libPath + ' to ' + newLibPath.as_posix())
+            shutil.copy2(libPath, newLibPath)
+            #
+            # There's one more thing we need to do here.  Although (courtesy of invoking patchelf above) the executable
+            # will look in this directory for its shared libraries, the shared libraries themselves will not.  Thus, if a
+            # shared library in this directory depends on another shared library in this directory, it won't find it.
+            #
+            # So, we need to fix RUNPATH on all the shared libraries -- just as we did on the executable (via install_rpath
+            # in meson.build).
+            #
+            btExecute.abortOnRunFail(
+               subprocess.run(
+                  ["patchelf", "--add-rpath", "$ORIGIN/../lib", newLibPath.as_posix()]
+               )
             )
-         )
       else:
          btLogger.log.debug('Skipping "' + lddOutputLine + '"')
    btLogger.log.info('Libraries to ship (in ' + dir_appDir_lib.as_posix() + '):')
