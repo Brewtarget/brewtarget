@@ -1899,7 +1899,7 @@ def doPackage():
          #
          # The result of specifying the `-dmg' flag should be a [projectName]_[versionNumber].dmg file
          #
-         btLogger.log.debug('Directory tree after running macdeployqt')
+         btLogger.log.debug('Directory tree under ' + os.getcwd() + ' after running macdeployqt')
          btExecute.abortOnRunFail(subprocess.run(['tree', '-sh'], capture_output=False))
          dmgFileName = macBundleDirName.replace('.app', '.dmg')
 

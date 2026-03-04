@@ -517,10 +517,17 @@ def doFlatpak():
       btLogger.log.critical('Flatpak creation not supported on: ' + sysName)
       exit(1)
 
-   btLogger.log.info('Installing flatpak')
-   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
-   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak']))
-   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak-builder']))
+   exe_flatpak = shutil.which('flatpak')
+   if exe_flatpak is None or exe_flatpak == '':
+      btLogger.log.info('Installing flatpak')
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak']))
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak-builder']))
+      exe_flatpak = shutil.which('flatpak')
+
+   if exe_flatpak is None or exe_flatpak == '':
+      btLogger.log.error('Cannot find flatpak.  PATH=' + os.environ['PATH'])
+      exit(1)
 
    #
    # Read in the variables exported from the Meson build
@@ -563,6 +570,9 @@ def doFlatpak():
    # for the bits where you can rely on other Flatpak modules.   See
    # https://docs.flatpak.org/en/latest/under-the-hood.html and https://docs.flathub.org/docs/for-app-authors/submission
    # for more on this.
+   #
+   # It is also useful to understand that Flatpaks run, and are built, inside a "sandboxed" environment (distinct from
+   # but akin to chroot, Docker, LXD).
    #
 
    #
@@ -613,38 +623,13 @@ def doFlatpak():
          capture_output=False
       )
    )
-   # I'm not totally sure that we need Java, but the Xerces build complains if it's not present
-   btExecute.abortOnRunFail(
-      subprocess.run(
-         ['flatpak', '--user', 'install', '--assumeyes', 'org.freedesktop.Sdk.Extension.openjdk11//' + openJdkVersion],
-         capture_output=False
-      )
-   )
-   # We do, however, definitely need this patch for XercesC
-   btLogger.log.info('Downloading Xerces patch')
-   btExecute.abortOnRunFail(
-      subprocess.run(
-         ['wget',
-          '--output-document=' + btFileSystem.dir_flatpak.joinpath('xerces-c-3.2.5-cxx17.patch').as_posix(),
-          'https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/xerces-c/files/xerces-c-3.2.5-cxx17.patch'],
-         capture_output=False
-      )
-   )
-   # Various patches needed to build XalanC
-   btLogger.log.info('Downloading Xalan patches')
-   for xalanPatch in ['xalan-c-1.12-cmake-4.patch',
-                      'xalan-c-1.12-gcc-15.patch',
-                      'xalan-c-1.12-fix-lto.patch',
-                      'xalan-c-1.12-fix-threads.patch',
-                      'xalan-c-1.12-icu-75.patch']:
-      btExecute.abortOnRunFail(
-         subprocess.run(
-            ['wget',
-             '--output-document=' + btFileSystem.dir_flatpak.joinpath(xalanPatch).as_posix(),
-             'https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/xalan-c/files/' + xalanPatch],
-            capture_output=False
-         )
-      )
+###   # I'm not totally sure that we need Java, but the Xerces build complains if it's not present
+###   btExecute.abortOnRunFail(
+###      subprocess.run(
+###         ['flatpak', '--user', 'install', '--assumeyes', 'org.freedesktop.Sdk.Extension.openjdk11//' + openJdkVersion],
+###         capture_output=False
+###      )
+###   )
 
    btLogger.log.info('Installing Flatpak Linter')
    btExecute.abortOnRunFail(
@@ -730,10 +715,10 @@ def doFlatpak():
    # (3) Build the binary
    #
    # In theory, we have a choice here.  Using `flatpak-builder` is a manifest-driven wrapper around various
-   # `flatkpak build` commands, so we could run those commands directly.  However, this would be going against the grain
-   # of how flatpaks are supposed to be submitted to flathub, etc.  So we should bite the bullet and get the manifest
-   # working.  Nonetheless, it helps to understand what flatpak-builder is doing under the hood.  Specifically, the
-   # manifest file defines how flatpak-builder should:
+   # `flatkpak build` commands, so we could run those commands individually.  However, this would be going against the
+   # grain of how flatpaks are supposed to be submitted to flathub, etc.  So we should bite the bullet and get the
+   # manifest working.  Nonetheless, it helps to understand what flatpak-builder is doing under the hood.  Specifically,
+   # the manifest file defines how flatpak-builder should:
    #
    #     Download all sources
    #
@@ -768,6 +753,9 @@ def doFlatpak():
    # (4) Turn what was built into a single-file bundle
    #
    # See https://unix.stackexchange.com/questions/695934/how-do-i-build-a-flatpak-package-file-from-a-flatpak-manifest
+   #
+   # Inside the build tree, the `files` directory contains what is seen as `/app` inside the flatpak's sandbox
+   # environment.
    #
    btExecute.abortOnRunFail(
       subprocess.run(
