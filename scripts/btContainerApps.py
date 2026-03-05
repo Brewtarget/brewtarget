@@ -523,6 +523,7 @@ def doFlatpak():
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak']))
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak-builder']))
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'appstream-compose']))
       exe_flatpak = shutil.which('flatpak')
 
    if exe_flatpak is None or exe_flatpak == '':
