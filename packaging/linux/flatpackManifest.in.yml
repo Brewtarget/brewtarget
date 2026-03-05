@@ -25,8 +25,8 @@ id:  @CONFIG_APPLICATION_ID@
 runtime: org.kde.Platform   # Using KDE here gives us Qt libraries
 runtime-version: "6.10"     # Should match runtimeVersion in scripts/btContainerApps.py
 sdk: org.kde.Sdk            # SDK needs to correspond with runtime
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.openjdk11
+###sdk-extensions:
+###  - org.freedesktop.Sdk.Extension.openjdk11
 command: @CONFIG_APPLICATION_NAME_LC@     # This is just the executable called to run the application -- in our case the
                                           # application itself
 desktop-file-name-suffix: "@CONFIG_VERSION_STRING@"  # Optional, but useful, to show version number

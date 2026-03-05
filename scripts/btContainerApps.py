@@ -590,10 +590,11 @@ def doFlatpak():
    #
    # NOTE that, for KDE SDKs and Runtimes, there isn't a version marked "latest", so you have to explicitly specify the
    # one you want.  (If you don't specify which version you want, you'll get an interactive prompt listing all available
-   # versions and inviting ou to select one.)
+   # versions and inviting ou to select one.  Finding this list on the web is a bit hard.  So far, the easiest way to
+   # get the current version seems to be to go to https://discuss.kde.org/ and search for 'org.kde.sdk'.)
    #
    runtimeVersion = '6.10'  # As of 2025-11-29, this is the "current" version
-   openJdkVersion = '25.08' # Ditto!
+   ###openJdkVersion = '25.08' # Ditto!
    btLogger.log.info('Installing Flatpak SDK and Runtime')
    btExecute.abortOnRunFail(
       #
