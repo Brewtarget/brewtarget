@@ -31,10 +31,10 @@ command: @CONFIG_APPLICATION_NAME_LC@     # This is just the executable called t
                                           # application itself
 desktop-file-name-suffix: "@CONFIG_VERSION_STRING@"  # Optional, but useful, to show version number
 modules:
-   - name: openjdk
-     buildsystem: simple
-     build-commands:
-       - /usr/lib/sdk/openjdk11/install.sh
+###   - name: openjdk
+###     buildsystem: simple
+###     build-commands:
+###       - /usr/lib/sdk/openjdk11/install.sh
 
    #
    # Previously we used to pull Xerces-C and Xalan-C from the official Apache mirror and then apply the Gentoo patches
