@@ -523,12 +523,30 @@ def doFlatpak():
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak']))
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak-builder']))
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'appstream']))
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'appstream-compose']))
       exe_flatpak = shutil.which('flatpak')
 
    if exe_flatpak is None or exe_flatpak == '':
       btLogger.log.error('Cannot find flatpak.  PATH=' + os.environ['PATH'])
       exit(1)
+
+   #
+   # On Ubuntu 22.04, we get problems running appstream-compose:
+   #
+   #    Running appstream-compose
+   #    FB: Running: flatpak build ...
+   #    bwrap: execvp appstream-compose: No such file or directory
+   #    Error: ERROR: appstream-compose failed: Child process exited with code 1
+   #
+   # This hacky workaround is suggested by ChatGPT!
+   #
+   exe_appStreamCompose = shutil.which('appstream-compose')
+   if exe_appStreamCompose is None or exe_appStreamCompose == '':
+      btLogger.log.error('Cannot find appstream-compose.  Soft-linking to appstreamcli')
+      btExecute.abortOnRunFail(
+         subprocess.run(['sudo', 'ln', '-s', '/usr/bin/appstreamcli', '/usr/local/bin/appstream-compose'])
+      )
 
    #
    # Read in the variables exported from the Meson build
