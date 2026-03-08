@@ -522,7 +522,7 @@ def doFlatpak():
       btLogger.log.info('Installing flatpak')
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak']))
-      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak-builder']))
+      # We deliberately don't apt install flatpak-builder here -- see comment below
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'appstream']))
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'appstream-compose']))
       exe_flatpak = shutil.which('flatpak')
@@ -530,23 +530,6 @@ def doFlatpak():
    if exe_flatpak is None or exe_flatpak == '':
       btLogger.log.error('Cannot find flatpak.  PATH=' + os.environ['PATH'])
       exit(1)
-
-   #
-   # On Ubuntu 22.04, we get problems running appstream-compose:
-   #
-   #    Running appstream-compose
-   #    FB: Running: flatpak build ...
-   #    bwrap: execvp appstream-compose: No such file or directory
-   #    Error: ERROR: appstream-compose failed: Child process exited with code 1
-   #
-   # This hacky workaround is suggested by ChatGPT!
-   #
-   exe_appStreamCompose = shutil.which('appstream-compose')
-   if exe_appStreamCompose is None or exe_appStreamCompose == '':
-      btLogger.log.error('Cannot find appstream-compose.  Soft-linking to appstreamcli')
-      btExecute.abortOnRunFail(
-         subprocess.run(['sudo', 'ln', '-s', '/usr/bin/appstreamcli', '/usr/local/bin/appstream-compose'])
-      )
 
    #
    # Read in the variables exported from the Meson build
@@ -613,7 +596,6 @@ def doFlatpak():
    # get the current version seems to be to go to https://discuss.kde.org/ and search for 'org.kde.sdk'.)
    #
    runtimeVersion = '6.10'  # As of 2025-11-29, this is the "current" version
-   ###openJdkVersion = '25.08' # Ditto!
    btLogger.log.info('Installing Flatpak SDK and Runtime')
    btExecute.abortOnRunFail(
       #
@@ -630,6 +612,12 @@ def doFlatpak():
          capture_output=False
       )
    )
+   #
+   # In theory, we could install flatpak builder using `sudo apt install flatpak-builder`.  However, on Ubuntu 22.04,
+   # this installs too old a version.  Instead, we install via flatpak itself, which gives us a more recent one.
+   #
+   btExecute.abortOnRunFail(subprocess.run(['flatpak', '--user', 'install', 'flathub', 'org.flatpak.Builder']))
+
    # TBD: in theory we don't need to install the platform -- it's needed to run the code but not to build it
    btExecute.abortOnRunFail(
       subprocess.run(
@@ -643,13 +631,6 @@ def doFlatpak():
          capture_output=False
       )
    )
-###   # I'm not totally sure that we need Java, but the Xerces build complains if it's not present
-###   btExecute.abortOnRunFail(
-###      subprocess.run(
-###         ['flatpak', '--user', 'install', '--assumeyes', 'org.freedesktop.Sdk.Extension.openjdk11//' + openJdkVersion],
-###         capture_output=False
-###      )
-###   )
 
    btLogger.log.info('Installing Flatpak Linter')
    btExecute.abortOnRunFail(
@@ -758,8 +739,14 @@ def doFlatpak():
    #
    btLogger.log.info('Running Flatpak Builder')
    btExecute.abortOnRunFail(
+      #
+      # Note that we invoke 'flatpak run org.flatpak.Builder' here rather than directly call 'flatpak-builder' because
+      # we want to ensure we are running the recent version of flatpak-builder (installed via flatpak above).
+      #
       subprocess.run(
-         ['flatpak-builder',
+         ['flatpak',
+          'run',
+          'org.flatpak.Builder',
           '--verbose',
           dir_flatpakBuild.as_posix(),
           file_manifest.as_posix()],
