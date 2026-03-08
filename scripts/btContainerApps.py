@@ -612,25 +612,21 @@ def doFlatpak():
          capture_output=False
       )
    )
-   #
-   # In theory, we could install flatpak builder using `sudo apt install flatpak-builder`.  However, on Ubuntu 22.04,
-   # this installs too old a version.  Instead, we install via flatpak itself, which gives us a more recent one.
-   #
-   btExecute.abortOnRunFail(subprocess.run(['flatpak', '--user', 'install', 'flathub', 'org.flatpak.Builder']))
 
    # TBD: in theory we don't need to install the platform -- it's needed to run the code but not to build it
    btExecute.abortOnRunFail(
-      subprocess.run(
-         ['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion],
-         capture_output=False
-      )
+      subprocess.run(['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion])
    )
    btExecute.abortOnRunFail(
-      subprocess.run(
-         ['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion],
-         capture_output=False
-      )
+      subprocess.run(['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion])
    )
+
+   #
+   # In theory, we could install flatpak builder using `sudo apt install flatpak-builder` (above where we install
+   # flatpak itself).  However, on Ubuntu 22.04, this installs too old a version.  Instead, we install via flatpak
+   # which gives us a more recent one.  Note, however, that we need to have installed the Platform and Sdk first.
+   #
+   btExecute.abortOnRunFail(subprocess.run(['flatpak', '--user', 'install', 'flathub', 'org.flatpak.Builder']))
 
    btLogger.log.info('Installing Flatpak Linter')
    btExecute.abortOnRunFail(
