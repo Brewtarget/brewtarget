@@ -596,7 +596,7 @@ def doFlatpak():
    # get the current version seems to be to go to https://discuss.kde.org/ and search for 'org.kde.sdk'.)
    #
    runtimeVersion = '6.10'  # As of 2025-11-29, this is the "current" version
-   btLogger.log.info('Installing Flatpak SDK and Runtime')
+   btLogger.log.info('Add Flathub Repo')
    btExecute.abortOnRunFail(
       #
       # Here and elsewhere, using the '--user' option restricts the installs to the current user (rather than
@@ -614,9 +614,11 @@ def doFlatpak():
    )
 
    # TBD: in theory we don't need to install the platform -- it's needed to run the code but not to build it
+   btLogger.log.info('Installing Flatpak Platform')
    btExecute.abortOnRunFail(
       subprocess.run(['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion])
    )
+   btLogger.log.info('Installing Flatpak SDK')
    btExecute.abortOnRunFail(
       subprocess.run(['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion])
    )
@@ -626,15 +628,10 @@ def doFlatpak():
    # flatpak itself).  However, on Ubuntu 22.04, this installs too old a version.  Instead, we install via flatpak
    # which gives us a more recent one.  Note, however, that we need to have installed the Platform and Sdk first.
    #
-   btExecute.abortOnRunFail(subprocess.run(['flatpak', '--user', 'install', 'flathub', 'org.flatpak.Builder']))
-
-   btLogger.log.info('Installing Flatpak Linter')
-   btExecute.abortOnRunFail(
-      subprocess.run(
-         ['flatpak', '--user', 'install', '--assumeyes', 'org.flatpak.Builder'],
-         capture_output=False
-      )
-   )
+   # Note that Flatpak Linter (flatpak-builder-lint) is included in Flatpak Builder
+   #
+   btLogger.log.info('Installing Flatpak Builder')
+   btExecute.abortOnRunFail(subprocess.run(['flatpak', '--user', 'install', 'flathub', '--assumeyes', 'org.flatpak.Builder']))
 
    #
    # Since we have to rebuild everything, we need the source code.  We want this in a subdirectory of the one holding
