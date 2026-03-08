@@ -22,6 +22,7 @@ import os
 import getpass
 import pathlib
 import platform
+import re
 import shutil
 import stat
 import subprocess
@@ -577,25 +578,6 @@ def doFlatpak():
    # but akin to chroot, Docker, LXD).
    #
 
-   #
-   # (1) Install the necessary Flatpak SDK and Runtime for your application
-   #     We obtain these from the common flatpak repository, Flathub
-   #
-   # Flatpak allows architectures and versions to be specified using an object’s identifier triple. This takes the form
-   # of name/architecture/branch, such as com.company.App/i386/stable. (Branch is the term used to refer to versions of
-   # the same object.) The first part of the triple is the ID, the second part is the architecture, and the third part
-   # is the branch.
-   #
-   # Identifier triples can also be used to specify just the architecture or the branch, by leaving part of the triple
-   # blank. For example, com.company.App//stable would just specify the branch, and com.company.App/i386// just
-   # specifies the architecture.
-   #
-   # NOTE that, for KDE SDKs and Runtimes, there isn't a version marked "latest", so you have to explicitly specify the
-   # one you want.  (If you don't specify which version you want, you'll get an interactive prompt listing all available
-   # versions and inviting ou to select one.  Finding this list on the web is a bit hard.  So far, the easiest way to
-   # get the current version seems to be to go to https://discuss.kde.org/ and search for 'org.kde.sdk'.)
-   #
-   runtimeVersion = '6.10'  # As of 2025-11-29, this is the "current" version
    btLogger.log.info('Add Flathub Repo')
    btExecute.abortOnRunFail(
       #
@@ -612,6 +594,58 @@ def doFlatpak():
          capture_output=False
       )
    )
+
+   #
+   # (1) Install the necessary Flatpak SDK and Runtime for your application
+   #     We obtain these from the common flatpak repository, Flathub
+   #
+   # Flatpak allows architectures and versions to be specified using an object’s identifier triple. This takes the form
+   # of name/architecture/branch, such as com.company.App/i386/stable. (Branch is the term used to refer to versions of
+   # the same object.) The first part of the triple is the ID, the second part is the architecture, and the third part
+   # is the branch.
+   #
+   # Identifier triples can also be used to specify just the architecture or the branch, by leaving part of the triple
+   # blank. For example, com.company.App//stable would just specify the branch, and com.company.App/i386// just
+   # specifies the architecture.
+   #
+   # There isn't a "Qt" runtime, but the KDE one gives us what we need (because KDE is based on Qt).
+   #
+   # NOTE that, for KDE SDKs and Runtimes, there isn't a version marked "latest", so you have to explicitly specify the
+   # one you want.  (If you don't specify which version you want, you'll get an interactive prompt listing all available
+   # versions and inviting ou to select one.)
+   #
+   # So, the first thing we do is, via flatpak, ask for all the runtimes (of which there are over 2000), and then filter
+   # and sort to find the latest.
+   #
+   btLogger.log.info('Getting list of runtimes')
+   runtimesList = btExecute.abortOnRunFail(
+      subprocess.run(
+         ['flatpak', '--user', 'remote-ls', 'flathub', '--runtime', '--columns=ref'],
+         capture_output=True
+      )
+   ).stdout.decode('UTF-8')
+
+   versions = []
+   for line in runtimesList.splitlines():
+      # Match lines like: runtime/org.kde.Sdk/x86_64/6.8
+      match = re.search(r'^runtime/org\.kde\.Sdk/[^/]+/(\d+\.\d+)$', line.strip())
+      if match:
+         versions.append(match.group(1))
+
+   if not versions:
+      btLogger.log.critical('No org.kde.Sdk versions found on Flathub')
+      exit(1)
+
+   # Sort by version number (not lexicographically)
+   latest = sorted(versions, key=lambda v: tuple(int(x) for x in v.split('.')))[-1]
+   btLogger.log.info('Latest available KDE SDK version: ' + latest)
+
+   #runtimeVersion = '6.10'  # As of 2025-11-29, this is the "current" version
+   runtimeVersion = latest
+   #
+   # TODO: For the moment, the runtime version is hardcoded in the manifest (see runtime-version in
+   #       packaging/linux/flatpackManifest.in.yml), but we could fix that...
+   #
 
    # TBD: in theory we don't need to install the platform -- it's needed to run the code but not to build it
    btLogger.log.info('Installing Flatpak Platform')
