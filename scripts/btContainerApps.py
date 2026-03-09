@@ -729,6 +729,7 @@ def doFlatpak():
    btExecute.abortOnRunFail(
       subprocess.run(
          ['flatpak',
+               '--user',
                '--verbose',
                'run',
                '--command=flatpak-builder-lint',
@@ -772,9 +773,10 @@ def doFlatpak():
       #
       subprocess.run(
          ['flatpak',
+          '--user',
+          '--verbose',
           'run',
           'org.flatpak.Builder',
-          '--verbose',
           dir_flatpakBuild.as_posix(),
           file_manifest.as_posix()],
          capture_output=False
