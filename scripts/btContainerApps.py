@@ -657,6 +657,14 @@ def doFlatpak():
       subprocess.run(['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion])
    )
 
+   installedRuntimes = btExecute.abortOnRunFail(
+         subprocess.run(
+         ['flatpak', '--user', 'list', '--runtime', '--columns=ref'],
+         capture_output=True, text=True, check=True
+      )
+   ).stdout.decode('UTF-8')
+   btLogger.log.info('Installed runtimes: ' + installedRuntimes)
+
    #
    # In theory, we could install flatpak builder using `sudo apt install flatpak-builder` (above where we install
    # flatpak itself).  However, on Ubuntu 22.04, this installs too old a version.  Instead, we install via flatpak
