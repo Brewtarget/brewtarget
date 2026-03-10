@@ -660,7 +660,7 @@ def doFlatpak():
    installedRuntimes = btExecute.abortOnRunFail(
          subprocess.run(
          ['flatpak', '--user', 'list', '--runtime', '--columns=ref'],
-         capture_output=True, text=True, check=True
+         capture_output=True
       )
    ).stdout.decode('UTF-8')
    btLogger.log.info('Installed runtimes: ' + installedRuntimes)
