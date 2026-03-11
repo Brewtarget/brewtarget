@@ -800,12 +800,23 @@ def doFlatpak():
       # Note that we invoke 'flatpak run org.flatpak.Builder' here rather than directly call 'flatpak-builder' because
       # we want to ensure we are running the recent version of flatpak-builder (installed via flatpak above).
       #
+      # So, we have to pay attention that there are separate options to the 'flatpak' command and to the
+      # 'org.flatpak.Builder' app it is invoking.  Eg this is why we see '--user' and '--verbose' twice below.
+      #
       subprocess.run(
+         #
+         # See https://docs.flatpak.org/en/latest/flatpak-builder-command-reference.html for flatpak-builder command
+         # reference.
+         #
          ['flatpak',
           '--user',
           '--verbose',
           'run',
           'org.flatpak.Builder',
+          '--user',
+          '--verbose',
+          '--install-deps-from=flathub', # In theory we already installed the dependencies above, but, in practice, we
+                                         # seem to need some more when we're running as a GitHub action.
           dir_flatpakBuild.as_posix(),
           file_manifest.as_posix()],
          capture_output=False
