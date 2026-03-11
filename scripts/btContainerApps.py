@@ -518,6 +518,8 @@ def doFlatpak():
       btLogger.log.critical('Flatpak creation not supported on: ' + sysName)
       exit(1)
 
+   btLogger.log.info('XDG_DATA_HOME: ' + os.environ.get('XDG_DATA_HOME', ''))
+
    exe_flatpak = shutil.which('flatpak')
    if exe_flatpak is None or exe_flatpak == '':
       btLogger.log.info('Installing flatpak')
@@ -665,15 +667,34 @@ def doFlatpak():
    # Note that Flatpak Linter (flatpak-builder-lint) is included in Flatpak Builder
    #
    btLogger.log.info('Installing Flatpak Builder')
-   btExecute.abortOnRunFail(subprocess.run(['flatpak', '--user', 'install', 'flathub', '--assumeyes', 'org.flatpak.Builder']))
+   btExecute.abortOnRunFail(
+#      subprocess.run(['flatpak', '--user', 'install', 'flathub', '--assumeyes', 'org.flatpak.Builder'])
+      subprocess.run(['flatpak', '--user', 'install', '--assumeyes', 'org.flatpak.Builder'])
+   )
 
-   installedFlatpaks = btExecute.abortOnRunFail(
+   builderInfo = btExecute.abortOnRunFail(
+      subprocess.run(
+         ['flatpak', '--user', 'info', 'org.flatpak.Builder'],
+         capture_output=True
+      )
+   ).stdout.decode('UTF-8')
+   btLogger.log.info('Flatpak Builder Info:\n' + builderInfo)
+
+   installedFlatpakRuntimes = btExecute.abortOnRunFail(
       subprocess.run(
          ['flatpak', '--user', 'list', '--runtime', '--columns=ref'],
          capture_output=True
       )
    ).stdout.decode('UTF-8')
-   btLogger.log.info('Installed Flatpaks: \n' + installedFlatpaks)
+   btLogger.log.info('Installed Flatpak Runtimes:\n' + installedFlatpakRuntimes)
+
+   installedFlatpakApps = btExecute.abortOnRunFail(
+      subprocess.run(
+         ['flatpak', '--user', 'list', '--app', '--columns=ref'],
+         capture_output=True
+      )
+   ).stdout.decode('UTF-8')
+   btLogger.log.info('Installed Flatpak Apps:\n' + installedFlatpakApps)
 
    #
    # Since we have to rebuild everything, we need the source code.  We want this in a subdirectory of the one holding
