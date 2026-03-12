@@ -22,6 +22,7 @@ import os
 import getpass
 import pathlib
 import platform
+import re
 import shutil
 import stat
 import subprocess
@@ -517,10 +518,21 @@ def doFlatpak():
       btLogger.log.critical('Flatpak creation not supported on: ' + sysName)
       exit(1)
 
-   btLogger.log.info('Installing flatpak')
-   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
-   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak']))
-   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak-builder']))
+   btLogger.log.info('XDG_DATA_HOME: ' + os.environ.get('XDG_DATA_HOME', ''))
+
+   exe_flatpak = shutil.which('flatpak')
+   if exe_flatpak is None or exe_flatpak == '':
+      btLogger.log.info('Installing flatpak')
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak']))
+      # We deliberately don't apt install flatpak-builder here -- see comment below
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'appstream']))
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'appstream-compose']))
+      exe_flatpak = shutil.which('flatpak')
+
+   if exe_flatpak is None or exe_flatpak == '':
+      btLogger.log.error('Cannot find flatpak.  PATH=' + os.environ['PATH'])
+      exit(1)
 
    #
    # Read in the variables exported from the Meson build
@@ -564,27 +576,11 @@ def doFlatpak():
    # https://docs.flatpak.org/en/latest/under-the-hood.html and https://docs.flathub.org/docs/for-app-authors/submission
    # for more on this.
    #
+   # It is also useful to understand that Flatpaks run, and are built, inside a "sandboxed" environment (distinct from
+   # but akin to chroot, Docker, LXD).
+   #
 
-   #
-   # (1) Install the necessary Flatpak SDK and Runtime for your application
-   #     We obtain these from the common flatpak repository, Flathub
-   #
-   # Flatpak allows architectures and versions to be specified using an object’s identifier triple. This takes the form
-   # of name/architecture/branch, such as com.company.App/i386/stable. (Branch is the term used to refer to versions of
-   # the same object.) The first part of the triple is the ID, the second part is the architecture, and the third part
-   # is the branch.
-   #
-   # Identifier triples can also be used to specify just the architecture or the branch, by leaving part of the triple
-   # blank. For example, com.company.App//stable would just specify the branch, and com.company.App/i386// just
-   # specifies the architecture.
-   #
-   # NOTE that, for KDE SDKs and Runtimes, there isn't a version marked "latest", so you have to explicitly specify the
-   # one you want.  (If you don't specify which version you want, you'll get an interactive prompt listing all available
-   # versions and inviting ou to select one.)
-   #
-   runtimeVersion = '6.10'  # As of 2025-11-29, this is the "current" version
-   openJdkVersion = '25.08' # Ditto!
-   btLogger.log.info('Installing Flatpak SDK and Runtime')
+   btLogger.log.info('Add Flathub Repo')
    btExecute.abortOnRunFail(
       #
       # Here and elsewhere, using the '--user' option restricts the installs to the current user (rather than
@@ -600,59 +596,105 @@ def doFlatpak():
          capture_output=False
       )
    )
-   # TBD: in theory we don't need to install the platform -- it's needed to run the code but not to build it
-   btExecute.abortOnRunFail(
-      subprocess.run(
-         ['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion],
-         capture_output=False
-      )
-   )
-   btExecute.abortOnRunFail(
-      subprocess.run(
-         ['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion],
-         capture_output=False
-      )
-   )
-   # I'm not totally sure that we need Java, but the Xerces build complains if it's not present
-   btExecute.abortOnRunFail(
-      subprocess.run(
-         ['flatpak', '--user', 'install', '--assumeyes', 'org.freedesktop.Sdk.Extension.openjdk11//' + openJdkVersion],
-         capture_output=False
-      )
-   )
-   # We do, however, definitely need this patch for XercesC
-   btLogger.log.info('Downloading Xerces patch')
-   btExecute.abortOnRunFail(
-      subprocess.run(
-         ['wget',
-          '--output-document=' + btFileSystem.dir_flatpak.joinpath('xerces-c-3.2.5-cxx17.patch').as_posix(),
-          'https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/xerces-c/files/xerces-c-3.2.5-cxx17.patch'],
-         capture_output=False
-      )
-   )
-   # Various patches needed to build XalanC
-   btLogger.log.info('Downloading Xalan patches')
-   for xalanPatch in ['xalan-c-1.12-cmake-4.patch',
-                      'xalan-c-1.12-gcc-15.patch',
-                      'xalan-c-1.12-fix-lto.patch',
-                      'xalan-c-1.12-fix-threads.patch',
-                      'xalan-c-1.12-icu-75.patch']:
-      btExecute.abortOnRunFail(
-         subprocess.run(
-            ['wget',
-             '--output-document=' + btFileSystem.dir_flatpak.joinpath(xalanPatch).as_posix(),
-             'https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/xalan-c/files/' + xalanPatch],
-            capture_output=False
-         )
-      )
 
-   btLogger.log.info('Installing Flatpak Linter')
-   btExecute.abortOnRunFail(
+   #
+   # (1) Install the necessary Flatpak SDK and Runtime for your application
+   #     We obtain these from the common flatpak repository, Flathub
+   #
+   # Flatpak allows architectures and versions to be specified using an object’s identifier triple. This takes the form
+   # of name/architecture/branch, such as com.company.App/i386/stable. (Branch is the term used to refer to versions of
+   # the same object.) The first part of the triple is the ID, the second part is the architecture, and the third part
+   # is the branch.
+   #
+   # Identifier triples can also be used to specify just the architecture or the branch, by leaving part of the triple
+   # blank. For example, com.company.App//stable would just specify the branch, and com.company.App/i386// just
+   # specifies the architecture.
+   #
+   # There isn't a "Qt" runtime, but the KDE one gives us what we need (because KDE is based on Qt).
+   #
+   # NOTE that, for KDE SDKs and Runtimes, there isn't a version marked "latest", so you have to explicitly specify the
+   # one you want.  (If you don't specify which version you want, you'll get an interactive prompt listing all available
+   # versions and inviting ou to select one.)
+   #
+   # So, the first thing we do is, via flatpak, ask for all the runtimes (of which there are over 2000), and then filter
+   # and sort to find the latest.
+   #
+   btLogger.log.info('Getting list of runtimes')
+   runtimesList = btExecute.abortOnRunFail(
       subprocess.run(
-         ['flatpak', '--user', 'install', '--assumeyes', 'org.flatpak.Builder'],
-         capture_output=False
+         ['flatpak', '--user', 'remote-ls', 'flathub', '--runtime', '--columns=ref'],
+         capture_output=True
       )
+   ).stdout.decode('UTF-8')
+
+   versions = []
+   for line in runtimesList.splitlines():
+      # Match lines like: runtime/org.kde.Sdk/x86_64/6.8
+      match = re.search(r'^runtime/org\.kde\.Sdk/[^/]+/(\d+\.\d+)$', line.strip())
+      if match:
+         versions.append(match.group(1))
+
+   if not versions:
+      btLogger.log.critical('No org.kde.Sdk versions found on Flathub')
+      exit(1)
+
+   # Sort by version number (not lexicographically)
+   latest = sorted(versions, key=lambda v: tuple(int(x) for x in v.split('.')))[-1]
+   btLogger.log.info('Latest available KDE SDK version: ' + latest)
+
+   #runtimeVersion = '6.10'  # As of 2025-11-29, this is the "current" version
+   runtimeVersion = latest
+   #
+   # TODO: For the moment, the runtime version is hardcoded in the manifest (see runtime-version in
+   #       packaging/linux/flatpackManifest.in.yml), but we could fix that...
+   #
+
+   # TBD: in theory we don't need to install the platform -- it's needed to run the code but not to build it
+   btLogger.log.info('Installing Flatpak Platform')
+   btExecute.abortOnRunFail(
+      subprocess.run(['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Platform//' + runtimeVersion])
    )
+   btLogger.log.info('Installing Flatpak SDK')
+   btExecute.abortOnRunFail(
+      subprocess.run(['flatpak', '--user', 'install', '--assumeyes', 'org.kde.Sdk//' + runtimeVersion])
+   )
+
+   #
+   # In theory, we could install flatpak builder using `sudo apt install flatpak-builder` (above where we install
+   # flatpak itself).  However, on Ubuntu 22.04, this installs too old a version.  Instead, we install via flatpak
+   # which gives us a more recent one.  Note, however, that we need to have installed the Platform and Sdk first.
+   #
+   # Note that Flatpak Linter (flatpak-builder-lint) is included in Flatpak Builder
+   #
+   btLogger.log.info('Installing Flatpak Builder')
+   btExecute.abortOnRunFail(
+#      subprocess.run(['flatpak', '--user', 'install', 'flathub', '--assumeyes', 'org.flatpak.Builder'])
+      subprocess.run(['flatpak', '--user', 'install', '--assumeyes', 'org.flatpak.Builder'])
+   )
+
+   builderInfo = btExecute.abortOnRunFail(
+      subprocess.run(
+         ['flatpak', '--user', 'info', 'org.flatpak.Builder'],
+         capture_output=True
+      )
+   ).stdout.decode('UTF-8')
+   btLogger.log.info('Flatpak Builder Info:\n' + builderInfo)
+
+   installedFlatpakRuntimes = btExecute.abortOnRunFail(
+      subprocess.run(
+         ['flatpak', '--user', 'list', '--runtime', '--columns=ref'],
+         capture_output=True
+      )
+   ).stdout.decode('UTF-8')
+   btLogger.log.info('Installed Flatpak Runtimes:\n' + installedFlatpakRuntimes)
+
+   installedFlatpakApps = btExecute.abortOnRunFail(
+      subprocess.run(
+         ['flatpak', '--user', 'list', '--app', '--columns=ref'],
+         capture_output=True
+      )
+   ).stdout.decode('UTF-8')
+   btLogger.log.info('Installed Flatpak Apps:\n' + installedFlatpakApps)
 
    #
    # Since we have to rebuild everything, we need the source code.  We want this in a subdirectory of the one holding
@@ -716,6 +758,7 @@ def doFlatpak():
    btExecute.abortOnRunFail(
       subprocess.run(
          ['flatpak',
+               '--user',
                '--verbose',
                'run',
                '--command=flatpak-builder-lint',
@@ -730,10 +773,10 @@ def doFlatpak():
    # (3) Build the binary
    #
    # In theory, we have a choice here.  Using `flatpak-builder` is a manifest-driven wrapper around various
-   # `flatkpak build` commands, so we could run those commands directly.  However, this would be going against the grain
-   # of how flatpaks are supposed to be submitted to flathub, etc.  So we should bite the bullet and get the manifest
-   # working.  Nonetheless, it helps to understand what flatpak-builder is doing under the hood.  Specifically, the
-   # manifest file defines how flatpak-builder should:
+   # `flatkpak build` commands, so we could run those commands individually.  However, this would be going against the
+   # grain of how flatpaks are supposed to be submitted to flathub, etc.  So we should bite the bullet and get the
+   # manifest working.  Nonetheless, it helps to understand what flatpak-builder is doing under the hood.  Specifically,
+   # the manifest file defines how flatpak-builder should:
    #
    #     Download all sources
    #
@@ -753,9 +796,46 @@ def doFlatpak():
    #
    btLogger.log.info('Running Flatpak Builder')
    btExecute.abortOnRunFail(
+      #
+      # Because we needed to get a more recent version of Flatpak Builder than is in the Ubuntu 22.04 repositories, we
+      # install Flatpak Builder from a Flatpak (see above).  This means we need to invoke
+      # 'flatpak run org.flatpak.Builder' here rather than directly call 'flatpak-builder'.  As a result, we need to
+      # take care that there are separate options to the 'flatpak' command and to the
+      # 'org.flatpak.Builder' app it is invoking.  Eg this is why we see '--user' and '--verbose' twice below.
+      #
+      # However, there is a bit more pain/complexity to deal with:
+      #    (1) Because we are running Flatpak Builder as a Flatpak, it is somewhat isolated from the rest of the system.
+      #        Eg it cannot see org.kde.Sdk that we installed above.  The way we get around this is to tell Builder to
+      #        install any dependencies it needs (inside its own sandbox presumably) -- hence the
+      #        '--install-deps-from=flathub' option.
+      #    (2) In a GitHub Action, the install-deps-from option causes Flatpak Builder will fail with an error along the
+      #        lines of "Error installing deps: running flatpak --user install -y --noninteractive flathub
+      #        org.kde.Sdk/x86_64/6.10: Cannot autolaunch D-Bus without X11 $DISPLAY".  We get around this by running
+      #        Flatpak builder inside an isolated D-Bus instance -- hence the 'dbus-run-session --' wrapper.
+      #
+      # TBD: In 2026, when we get to a point where we are no longer supporting Ubuntu 22.04, we can probably switch to
+      #      using the apt repository version of flatpak-builder, which will then mean this call can be simplified down
+      #      to ['flatpak-builder',
+      #          '--user',
+      #          '--verbose'
+      #          dir_flatpakBuild.as_posix(),
+      #          file_manifest.as_posix()].
+      #
       subprocess.run(
-         ['flatpak-builder',
+         #
+         # See https://docs.flatpak.org/en/latest/flatpak-builder-command-reference.html for flatpak-builder command
+         # reference.
+         #
+         ['dbus-run-session', '--',
+            'flatpak',
+          '--user',
           '--verbose',
+          'run',
+          'org.flatpak.Builder',
+          '--user',
+          '--verbose',
+          '--install-deps-from=flathub', # In theory we already installed the dependencies above, but, in practice, we
+                                         # seem to need some more when we're running as a GitHub action.
           dir_flatpakBuild.as_posix(),
           file_manifest.as_posix()],
          capture_output=False
@@ -768,6 +848,9 @@ def doFlatpak():
    # (4) Turn what was built into a single-file bundle
    #
    # See https://unix.stackexchange.com/questions/695934/how-do-i-build-a-flatpak-package-file-from-a-flatpak-manifest
+   #
+   # Inside the build tree, the `files` directory contains what is seen as `/app` inside the flatpak's sandbox
+   # environment.
    #
    btExecute.abortOnRunFail(
       subprocess.run(

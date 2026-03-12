@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------------------------------------------------
-# packaging/linux/flatpakManifest.in.yml is part of Brewtarget, and is copyright the following authors 2025:
+# packaging/linux/flatpakManifest.in.yml is part of Brewtarget, and is copyright the following authors 2025-2026:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -25,31 +25,21 @@ id:  @CONFIG_APPLICATION_ID@
 runtime: org.kde.Platform   # Using KDE here gives us Qt libraries
 runtime-version: "6.10"     # Should match runtimeVersion in scripts/btContainerApps.py
 sdk: org.kde.Sdk            # SDK needs to correspond with runtime
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.openjdk11
 command: @CONFIG_APPLICATION_NAME_LC@     # This is just the executable called to run the application -- in our case the
                                           # application itself
 desktop-file-name-suffix: "@CONFIG_VERSION_STRING@"  # Optional, but useful, to show version number
 modules:
-   - name: openjdk
-     buildsystem: simple
-     build-commands:
-       - /usr/lib/sdk/openjdk11/install.sh
 
+   #
+   # Previously we used to pull Xerces-C and Xalan-C from the official Apache mirror and then apply the Gentoo patches
+   # to them.  However, the Gentoo servers can be a bit flaky, so it's simpler to have everything on GitHub.  Hence, we
+   # fork the projects and apply to patches to our forked versions.
+   #
    - name: XercesC
      sources:
-       - type: archive
-         # There are various locations to download Xerces-C, but this is the official Apache mirror
-         url: https://dlcdn.apache.org//xerces/c/3/sources/xerces-c-3.3.0.tar.gz
-         sha256: 9555f1d06f82987fbb4658862705515740414fd34b4db6ad2ed76a2dc08d3bde
-         x-checker-data:
-           type: anitya
-           # Project ID comes from https://release-monitoring.org/project/5182/
-           project-id: 5182
-           url-template: https://dlcdn.apache.org/xerces/c/3/sources/xerces-c-$version.tar.gz
-       # Per https://bugs.gentoo.org/931105, this patch is required to build XercesC
-       - type: patch
-         path: xerces-c-3.2.5-cxx17.patch
+       - type: git
+         url: https://github.com/Brewken/xerces-c/
+         commit: 7fa658d0fa8e23ea62747fb34f4ac16bb6d8a197  # 2026-03-03
      buildsystem: cmake-ninja
      builddir: true
      # See https://xerces.apache.org/xerces-c/build-3.html for Xerces-C build options
@@ -59,34 +49,15 @@ modules:
        - -DCMAKE_BUILD_TYPE=Release
        - -DBUILD_SHARED_LIBS=ON
        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+       - -DCMAKE_INSTALL_PREFIX=/app
+       - -DCMAKE_INSTALL_LIBDIR=/app/lib
        - -Wno-dev
 
    - name: XalanC
      sources:
-       - type: archive
-         # There are various locations to download Xerces-C, but this is the official Apache mirror
-         url: https://dlcdn.apache.org/xalan/xalan-c/sources/xalan_c-1.12.tar.gz
-         sha512: a9f72f0e8e199ee2cfb4c19ecf390d5007f597aad96a53f55bc475805190302c7e0d800d776b7fb20fe8e2dddb6391e70aa3a8861a2303370135e8b0a5fd15fc
-         x-checker-data:
-           type: anitya
-           # Project ID comes from https://release-monitoring.org/project/5153/
-           project-id: 5153
-           url-template: https://dlcdn.apache.org/xalan/xalan-c/sources/xalan_c-$version.tar.gz
-       # Per https://bugs.gentoo.org/955386, this patch is required to build XalanC with recent versions of CMake
-       - type: patch
-         path: xalan-c-1.12-cmake-4.patch
-       # Per https://bugs.gentoo.org/936501, this patch is required to build XalanC with recent versions of GCC
-       - type: patch
-         path: xalan-c-1.12-gcc-15.patch
-       # These patches are also listed in Gentoo XalanC build (See
-       # https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/xalan-c/files and
-       # https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/xalan-c/xalan-c-1.12-r4.ebuild.)
-       - type: patch
-         path: xalan-c-1.12-fix-lto.patch
-       - type: patch
-         path: xalan-c-1.12-fix-threads.patch
-       - type: patch
-         path: xalan-c-1.12-icu-75.patch
+       - type: git
+         url: https://github.com/Brewken/xalan-c/
+         commit: 5863eaf743c8eff44d5c563fe86bdd71fc2a6a63  # 2026-03-04
      buildsystem: cmake-ninja
      builddir: true
      # See https://xalan-c.org/build.html#configuration for Xalan-C build options
@@ -97,6 +68,8 @@ modules:
        - -DBUILD_SHARED_LIBS=ON
        - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
        - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+       - -DCMAKE_INSTALL_PREFIX=/app
+       - -DCMAKE_INSTALL_LIBDIR=/app/lib
        - -Wno-dev
 
    - name: LibBacktrace
@@ -193,12 +166,15 @@ modules:
        - meson setup --includedir /app/include --libdir /app/lib:/app/lib64 mbuild .
        - meson compile -C mbuild --verbose
        - meson install -C mbuild --destdir /app
-       # Telling Meson to install to /app gives us a tree of files under /app/usr/local that we now need to  relocate
+       # Telling Meson to install to /app gives us a tree of files under /app/usr/local that we now need to relocate
        # (and in some cases rename) to the places flatpak expects them to be.  See
-       # https://docs.flatpak.org/en/latest/conventions.html for details of what s expected.
-       - mv /app/usr/local/share/applications /app/share/.
-       - mv /app/usr/local/share/icons /app/share/.
-       - mv /app/usr/local/bin/* /app/bin/.
+       # https://docs.flatpak.org/en/latest/conventions.html for details of what is expected.
+       #
+       # Normally to do the tree merge here (ie moving the contents of /app/usr/local/ to /app/ without clobbering
+       # anything), we'd use rsync, but that's not available inside the flatpak environment, so we do it in two steps
+       # with cp and rm instead.
+       - cp -p --recursive --update=none --verbose /app/usr/local/. /app/.
+       - rm -r /app/usr/local/
      builddir: true
      build-options:
        env:
@@ -229,3 +205,5 @@ finish-args:
    - --share=network
    # Needs to save files locally
    - --filesystem=xdg-documents
+   # Prevent a (harmless) warning (Gtk-Message: Failed to load module "xapp-gtk3-module")
+   - --unset-env=GTK_MODULES
