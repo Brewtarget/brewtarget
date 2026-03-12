@@ -808,7 +808,8 @@ def doFlatpak():
          # See https://docs.flatpak.org/en/latest/flatpak-builder-command-reference.html for flatpak-builder command
          # reference.
          #
-         ['flatpak',
+         ['dbus-run-session', '--', #<---¥¥¥
+            'flatpak',
           '--user',
           '--verbose',
           'run',
