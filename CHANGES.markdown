@@ -21,10 +21,12 @@ Bug fixes and minor enhancements.
 None
 
 ### Bug Fixes
-None
+* AppImage 5.0.3 fails to run - symbol lookup error [1077](https://github.com/Brewtarget/brewtarget/issues/1077)
+* AppImage 5.0.3 doesn't include libqsqlite.so [1081](https://github.com/Brewtarget/brewtarget/issues/1081)
+* Windows 5.03 Hop Boil Times [1082](https://github.com/Brewtarget/brewtarget/issues/1082)
 
 ### Release Timestamp
-Sun, 8 Feb 2026 05:00:04 +0100
+Sun, 15 Mar 2026 05:00:04 +0100
 
 ## v5.0.3
 Bug fixes and minor enhancements.
