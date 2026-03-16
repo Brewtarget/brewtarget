@@ -6665,23 +6665,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation>Lägg i %1 %2 i koket vid %3.</translation>
+        <translation type="vanished">Lägg i %1 %2 i koket vid %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation>Lägg i %1 %2 i jäskaret vid %3.</translation>
+        <translation type="vanished">Lägg i %1 %2 i jäskaret vid %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>Lägg i %1 %2 i primären vid %3.</translation>
+        <translation type="vanished">Lägg i %1 %2 i primären vid %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>Lägg i %1 %2 i mäsken vid %3.</translation>
+        <translation type="vanished">Lägg i %1 %2 i mäsken vid %3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation>Stöp %1 %2 in mäsken vid %3.</translation>
+        <translation type="vanished">Stöp %1 %2 in mäsken vid %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3</source>
@@ -6693,23 +6693,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation>Används %1 %2 vid buteljering med %3.</translation>
+        <translation type="vanished">Används %1 %2 vid buteljering med %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>Tillsätt %1 %2 till primären vid %3.</translation>
+        <translation type="vanished">Tillsätt %1 %2 till primären vid %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation>Tillsätt %1 %2 till sekundären vid %3.</translation>
+        <translation type="vanished">Tillsätt %1 %2 till sekundären vid %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
-        <translation>Använd %1 %2 till %3.</translation>
+        <translation type="vanished">Använd %1 %2 till %3.</translation>
     </message>
     <message>
         <source>Misc addition</source>
-        <translation>Övrig tillsats</translation>
+        <translation type="vanished">Övrig tillsats</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
@@ -6863,10 +6863,6 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source> into the %1 water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into packaging for %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7189,6 +7185,34 @@ Primärens slutgiltiga volym är %1.</translation>
         <source>Snapshots</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into first wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steep %1 %2 in wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into fermenter%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into packaging%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -7235,6 +7259,34 @@ Primärens slutgiltiga volym är %1.</translation>
     <message>
         <source>Duration</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into primary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into secondary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use %1 %2 at bottling%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc addition</source>
+        <translation type="unfinished">Övrig tillsats</translation>
     </message>
 </context>
 <context>

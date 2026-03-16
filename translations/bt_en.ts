@@ -4984,47 +4984,7 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Put %1 %2 into boil for %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into fermenter for %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into first wort for %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into mash for %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Steep %1 %2 in wort for %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Hop addition</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use %1 %2 at bottling for %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into primary for %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into secondary for %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use %1 %2 for %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Misc addition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5172,10 +5132,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source> into the %1 water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into packaging for %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5490,6 +5446,34 @@ The final volume in the primary is %1.</source>
         <source>Snapshots</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into first wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steep %1 %2 in wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into fermenter%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into packaging%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -5535,6 +5519,34 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into primary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into secondary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use %1 %2 at bottling%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc addition</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

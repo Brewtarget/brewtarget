@@ -6629,23 +6629,23 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation>%3 için %1 %2 kaynamaya ekleyin.</translation>
+        <translation type="vanished">%3 için %1 %2 kaynamaya ekleyin.</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation>%3 için %1 %2 mayalayıcıya ekleyin.</translation>
+        <translation type="vanished">%3 için %1 %2 mayalayıcıya ekleyin.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>%3 için %1 %2 ilk şıraya ekleyin.</translation>
+        <translation type="vanished">%3 için %1 %2 ilk şıraya ekleyin.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>%3 için %1 %2 mayşeye ekleyin.</translation>
+        <translation type="vanished">%3 için %1 %2 mayşeye ekleyin.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation>%1 ve %2 ürünlerini şıra içinde %3 süresince demleyin.</translation>
+        <translation type="vanished">%1 ve %2 ürünlerini şıra içinde %3 süresince demleyin.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3</source>
@@ -6657,23 +6657,23 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation>%3 için şişelemede %1 %2 kullanın.</translation>
+        <translation type="vanished">%3 için şişelemede %1 %2 kullanın.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>%3 için mayalanma esnasında %1 %2 ürünlerini ilk mayalama bidonuna dökün.</translation>
+        <translation type="vanished">%3 için mayalanma esnasında %1 %2 ürünlerini ilk mayalama bidonuna dökün.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation>%3 için mayalanma esnasında %1 %2 ürünlerini ikincil mayalama bidonuna dökün.</translation>
+        <translation type="vanished">%3 için mayalanma esnasında %1 %2 ürünlerini ikincil mayalama bidonuna dökün.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
-        <translation>%3 için %1 %2 kullanın.</translation>
+        <translation type="vanished">%3 için %1 %2 kullanın.</translation>
     </message>
     <message>
         <source>Misc addition</source>
-        <translation>Diğer ilaveler</translation>
+        <translation type="vanished">Diğer ilaveler</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
@@ -6828,10 +6828,6 @@ The final volume in the primary is %1.</source>
     <message>
         <source> into the %1 water</source>
         <translation> %1 suya yapılmalıdır</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into packaging for %3.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 %2</source>
@@ -7149,6 +7145,34 @@ The final volume in the primary is %1.</source>
         <source>Yes</source>
         <translation type="unfinished">Evet</translation>
     </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into first wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steep %1 %2 in wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into fermenter%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into packaging%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -7195,6 +7219,34 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Duration</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into primary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into secondary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use %1 %2 at bottling%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc addition</source>
+        <translation type="unfinished">Diğer ilaveler</translation>
     </message>
 </context>
 <context>

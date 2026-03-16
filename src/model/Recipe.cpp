@@ -2145,8 +2145,11 @@ int Recipe::numRecipesUsing(IngredientType const & ingredient) requires (std::is
    //
    boost::container::flat_set<int> matchingRecipeIds;
    return ObjectStoreWrapper::numMatching<typename IngredientType::RecipeAdditionClass>(
-      [&](IngredientType::RecipeAdditionClass const * addition) {
-         if (addition->ingredientId() == ingredient.key()) {
+      [&](typename IngredientType::RecipeAdditionClass const * addition) {
+         // Note that we want to exclude deleted RecipeAdditions and deleted Recipes.
+         if (!addition->deleted() &&
+             !addition->recipe()->deleted() &&
+             addition->ingredientId() == ingredient.key()) {
             // Emplace returns std::pair<iterator, bool>.  The bool component of this is true if and only if the
             // insertion took place (ie the item wasn't already in the set).
             return matchingRecipeIds.emplace(addition->recipeId()).second;
@@ -2168,7 +2171,12 @@ int Recipe::numRecipesUsing(T const & var) requires (!std::is_base_of_v<Ingredie
    //
    // This implementation is used for things that a Recipe only has at most one of, so this implementation is fine.
    //
-   return ObjectStoreWrapper::numMatching<Recipe>( [& var](Recipe const * rec) {return rec->uses(var);} );
+   return ObjectStoreWrapper::numMatching<Recipe>(
+      [& var](Recipe const * rec) {
+         // Note that we want to exclude deleted recipes from the count
+         return !rec->deleted() && rec->uses(var);
+      }
+   );
 }
 template int Recipe::numRecipesUsing(Equipment    const & var);
 template int Recipe::numRecipesUsing(Style        const & var);

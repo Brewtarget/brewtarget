@@ -6411,23 +6411,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation>Dodaj %1 %2 do gotowania przez %3.</translation>
+        <translation type="vanished">Dodaj %1 %2 do gotowania przez %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation>Dodaj %1 %2 do fermentora dla %3.</translation>
+        <translation type="vanished">Dodaj %1 %2 do fermentora dla %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>Dodaj %1 %2 do brzeczki przedniej przez %3.</translation>
+        <translation type="vanished">Dodaj %1 %2 do brzeczki przedniej przez %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>Dodaj %1 %2 do zacieru dla  %3.</translation>
+        <translation type="vanished">Dodaj %1 %2 do zacieru dla  %3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation>Ekstrahuj %1 %2 do brzeczki dla %3.</translation>
+        <translation type="vanished">Ekstrahuj %1 %2 do brzeczki dla %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3</source>
@@ -6439,23 +6439,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation>Użyj %1 %2 do butelkowania dla %3.</translation>
+        <translation type="vanished">Użyj %1 %2 do butelkowania dla %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>Dodaj %1 %2 do fermentacji burzliwej dla  %3.</translation>
+        <translation type="vanished">Dodaj %1 %2 do fermentacji burzliwej dla  %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation>Dodaj %1 %2 do fermentacji cichej dla %3.</translation>
+        <translation type="vanished">Dodaj %1 %2 do fermentacji cichej dla %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
-        <translation>Użyj %1 %2 dla %3.</translation>
+        <translation type="vanished">Użyj %1 %2 dla %3.</translation>
     </message>
     <message>
         <source>Misc addition</source>
-        <translation>Użycie dodatków</translation>
+        <translation type="vanished">Użycie dodatków</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
@@ -6609,10 +6609,6 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source> into the %1 water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into packaging for %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6931,6 +6927,34 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <source>Snapshots</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into first wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steep %1 %2 in wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into fermenter%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into packaging%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -6977,6 +7001,34 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <source>Duration</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into primary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into secondary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use %1 %2 at bottling%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc addition</source>
+        <translation type="unfinished">Użycie dodatków</translation>
     </message>
 </context>
 <context>

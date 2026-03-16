@@ -6521,23 +6521,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation>Nechte %1 %2 vařit po dobu %3.</translation>
+        <translation type="vanished">Nechte %1 %2 vařit po dobu %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation>Nechte %1 %2 v kvasné nádobě po dobu %3.</translation>
+        <translation type="vanished">Nechte %1 %2 v kvasné nádobě po dobu %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>Přidejte %1 %2 do díla při scezování na %3.</translation>
+        <translation type="vanished">Přidejte %1 %2 do díla při scezování na %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>Přidejte %1 %2 do vystírky po dobu %3.</translation>
+        <translation type="vanished">Přidejte %1 %2 do vystírky po dobu %3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation>Nechte %1 %2 máčet ve rmutu po dobu %3.</translation>
+        <translation type="vanished">Nechte %1 %2 máčet ve rmutu po dobu %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3</source>
@@ -6549,23 +6549,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation>Použijte %1 %2 při lahvování po dobu %3.</translation>
+        <translation type="vanished">Použijte %1 %2 při lahvování po dobu %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>Dejte %1 %2 do hlavního kvašení na %3.</translation>
+        <translation type="vanished">Dejte %1 %2 do hlavního kvašení na %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation>Dejte %1 %2 do dokvašování na %3.</translation>
+        <translation type="vanished">Dejte %1 %2 do dokvašování na %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
-        <translation>Použijte %1 %2 na %3.</translation>
+        <translation type="vanished">Použijte %1 %2 na %3.</translation>
     </message>
     <message>
         <source>Misc addition</source>
-        <translation>Přídávání přípravků</translation>
+        <translation type="vanished">Přídávání přípravků</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
@@ -6719,10 +6719,6 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source> into the %1 water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into packaging for %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7045,6 +7041,34 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Snapshots</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into first wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steep %1 %2 in wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into fermenter%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into packaging%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -7091,6 +7115,34 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <source>Duration</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into primary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into secondary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use %1 %2 at bottling%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc addition</source>
+        <translation type="unfinished">Přídávání přípravků</translation>
     </message>
 </context>
 <context>

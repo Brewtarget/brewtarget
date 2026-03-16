@@ -6554,23 +6554,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation>Legg %1 %2 i kokekaret i %3.</translation>
+        <translation type="vanished">Legg %1 %2 i kokekaret i %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation>Legg %1 %2 i gjæringskaret i %3.</translation>
+        <translation type="vanished">Legg %1 %2 i gjæringskaret i %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>Legg %1 %2 i første vørter i %3.</translation>
+        <translation type="vanished">Legg %1 %2 i første vørter i %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>Legg %1 %2 i meskekaret i %3.</translation>
+        <translation type="vanished">Legg %1 %2 i meskekaret i %3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation>Legg %1 %2 i vørterkaret i %3.</translation>
+        <translation type="vanished">Legg %1 %2 i vørterkaret i %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3</source>
@@ -6582,23 +6582,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation>Bruk %1 %2 ved flasking i %3.</translation>
+        <translation type="vanished">Bruk %1 %2 ved flasking i %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>Legg %1 %2 i steg en i %3.</translation>
+        <translation type="vanished">Legg %1 %2 i steg en i %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation>Legg %1 %2 i steg to i %3.</translation>
+        <translation type="vanished">Legg %1 %2 i steg to i %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
-        <translation>Bruk %1 %2 i %3.</translation>
+        <translation type="vanished">Bruk %1 %2 i %3.</translation>
     </message>
     <message>
         <source>Misc addition</source>
-        <translation>Diverse tillegg</translation>
+        <translation type="vanished">Diverse tillegg</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
@@ -6752,10 +6752,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source> into the %1 water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into packaging for %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7078,6 +7074,34 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Snapshots</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into first wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steep %1 %2 in wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into fermenter%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into packaging%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -7124,6 +7148,34 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>Duration</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into primary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into secondary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use %1 %2 at bottling%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc addition</source>
+        <translation type="unfinished">Diverse tillegg</translation>
     </message>
 </context>
 <context>
