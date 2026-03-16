@@ -6586,23 +6586,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation>Öntsd össze %1 és %2 részeket, majd forrald %3</translation>
+        <translation type="vanished">Öntsd össze %1 és %2 részeket, majd forrald %3</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation>Erjesztő edénybe fejteni %1 %2 elérendő érték %3</translation>
+        <translation type="vanished">Erjesztő edénybe fejteni %1 %2 elérendő érték %3</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>Színlébe önteni %1 %2 elérendő érték %3</translation>
+        <translation type="vanished">Színlébe önteni %1 %2 elérendő érték %3</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>Cefrébe önteni %1 %2 elérendő érték %3</translation>
+        <translation type="vanished">Cefrébe önteni %1 %2 elérendő érték %3</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation>Máslani %1 %2 elérendő érték %3</translation>
+        <translation type="vanished">Máslani %1 %2 elérendő érték %3</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3</source>
@@ -6614,23 +6614,23 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation>Használni %1 %2 palackozni %3 értéken</translation>
+        <translation type="vanished">Használni %1 %2 palackozni %3 értéken</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>Hozzáadni  %1 %2 az elsődleges erjesztőbe, elérendő érték %3</translation>
+        <translation type="vanished">Hozzáadni  %1 %2 az elsődleges erjesztőbe, elérendő érték %3</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation>Hozzáadni  %1 %2 a másodlagos erjesztőbe, elérendő érték %3</translation>
+        <translation type="vanished">Hozzáadni  %1 %2 a másodlagos erjesztőbe, elérendő érték %3</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
-        <translation>Használni %1 %2 elérendő érték %3</translation>
+        <translation type="vanished">Használni %1 %2 elérendő érték %3</translation>
     </message>
     <message>
         <source>Misc addition</source>
-        <translation>Egyéb összetevő adagolása</translation>
+        <translation type="vanished">Egyéb összetevő adagolása</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
@@ -6784,10 +6784,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source> into the %1 water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into packaging for %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7110,6 +7106,34 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <source>Snapshots</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into first wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steep %1 %2 in wort%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into fermenter%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into packaging%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RecipeAddition</name>
@@ -7156,6 +7180,34 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     <message>
         <source>Duration</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into mash%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into boil%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into primary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into secondary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use %1 %2 at bottling%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc addition</source>
+        <translation type="unfinished">Egyéb összetevő adagolása</translation>
     </message>
 </context>
 <context>
