@@ -120,8 +120,8 @@ public:
                                            20,
                                            QSizePolicy::Expanding,
                                            QSizePolicy::Minimum) },
-      m_pushButton_showStockPurchases{new QPushButton(&this->derived())},
-      m_pushButton_newStockPurchase  {new QPushButton(&this->derived())},
+      m_pushButton_showStockPurchases{CanHaveStockPurchase<NE> ? new QPushButton(&this->derived()) : nullptr},
+      m_pushButton_newStockPurchase  {CanHaveStockPurchase<NE> ? new QPushButton(&this->derived()) : nullptr},
       m_pushButton_addToRecipe       {new QPushButton(&this->derived())},
       m_pushButton_new               {new QPushButton(&this->derived())},
       m_pushButton_edit              {new QPushButton(&this->derived())},
@@ -144,15 +144,19 @@ public:
 
       this->m_lineEdit_searchBox->setMaxLength(30);
 
-      this->m_pushButton_showStockPurchases->setObjectName(QStringLiteral("m_pushButton_showStockPurchases"));
-      this->m_pushButton_newStockPurchase  ->setObjectName(QStringLiteral("m_pushButton_newStockPurchase"  ));
+      if constexpr (CanHaveStockPurchase<NE>) {
+         this->m_pushButton_showStockPurchases->setObjectName(QStringLiteral("m_pushButton_showStockPurchases"));
+         this->m_pushButton_newStockPurchase  ->setObjectName(QStringLiteral("m_pushButton_newStockPurchase"  ));
+      }
       this->m_pushButton_addToRecipe       ->setObjectName(QStringLiteral("pushButton_addToRecipe"         ));
       this->m_pushButton_new               ->setObjectName(QStringLiteral("pushButton_new"                 ));
       this->m_pushButton_edit              ->setObjectName(QStringLiteral("pushButton_edit"                ));
       this->m_pushButton_delete            ->setObjectName(QStringLiteral("pushButton_delete"              ));
 
-      this->m_pushButton_showStockPurchases->setAutoDefault(false);
-      this->m_pushButton_newStockPurchase  ->setAutoDefault(false);
+      if constexpr (CanHaveStockPurchase<NE>) {
+         this->m_pushButton_showStockPurchases->setAutoDefault(false);
+         this->m_pushButton_newStockPurchase  ->setAutoDefault(false);
+      }
       this->m_pushButton_addToRecipe       ->setAutoDefault(false);
       this->m_pushButton_new               ->setAutoDefault(false);
       this->m_pushButton_edit              ->setAutoDefault(false);
@@ -173,8 +177,10 @@ public:
       this->m_searchIcon->setStyleSheet("QToolButton {border-style: outset; border-width: 0px;}");
       this->m_searchIcon                 ->setIcon(QIcon{QStringLiteral(":/images/iconSearch.svg"          )});
 
-      this->m_pushButton_showStockPurchases->setIcon(QIcon{QStringLiteral(":/images/iconInventory.svg"       )});
-      this->m_pushButton_newStockPurchase  ->setIcon(QIcon{QStringLiteral(":/images/iconNewStockPurchase.svg")});
+      if constexpr (CanHaveStockPurchase<NE>) {
+         this->m_pushButton_showStockPurchases->setIcon(QIcon{QStringLiteral(":/images/iconInventory.svg"       )});
+         this->m_pushButton_newStockPurchase  ->setIcon(QIcon{QStringLiteral(":/images/iconNewStockPurchase.svg")});
+      }
       this->m_pushButton_edit              ->setIcon(QIcon{QStringLiteral(":/images/edit.svg"                )});
       this->m_pushButton_delete            ->setIcon(QIcon{QStringLiteral(":/images/smallMinus.svg"          )});
       this->m_pushButton_new               ->setIcon(QIcon{QStringLiteral(":/images/smallPlus.svg"           )});
@@ -202,9 +208,6 @@ public:
       this->derived().setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
       this->retranslateUi();
-
-      // Not sure why this is called?
-//      QMetaObject::connectSlotsByName(&this->derived());
 
       this->derived().connect(m_lineEdit_searchBox    , &QLineEdit::textEdited   , &this->derived(), &Derived::filterItems   );
       if constexpr (std::is_base_of_v<Ingredient, NE>) {
