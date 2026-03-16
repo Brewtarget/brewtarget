@@ -25,6 +25,7 @@ None
 * AppImage 5.0.3 doesn't include libqsqlite.so [1081](https://github.com/Brewtarget/brewtarget/issues/1081)
 * Windows 5.03 Hop Boil Times [1082](https://github.com/Brewtarget/brewtarget/issues/1082)
 * Deleting recipe locks associated linked processes from deletion [1085](https://github.com/Brewtarget/brewtarget/issues/1085)
+* Stock Purchase button showing on incorrect catalog pages [1086](https://github.com/Brewtarget/brewtarget/issues/1086)
 
 ### Release Timestamp
 Sun, 15 Mar 2026 05:00:04 +0100
