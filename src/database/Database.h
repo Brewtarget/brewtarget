@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/Database.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * database/Database.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
@@ -57,11 +57,13 @@ public:
    //! \brief Supported databases. I am not 100% sure I'm digging this
    //  solution, but this is more extensible than what I was doing previously
    enum class DbType {
-      NODB = 0,  // Popularity was over rated
-      SQLITE,    // compact, fast and a little loose
-      PGSQL,     // big, powerful, uptight and a little stodgy
-      ALLDB      // Keep this one the last one, or bad things will happen
+      NODB = 0,  // No Database -- a problem!
+      SQLITE,    // SQLite -- https://sqlite.org/
+      PGSQL,     // PostgreSQL -- https://www.postgresql.org/
    };
+
+   //! The file name we use for our SQLite DB
+   static QString const sqliteDbFileName;
 
    /*!
     * \brief This should be the ONLY way you get an instance.
@@ -118,7 +120,7 @@ public:
     *
     *  \returns false iff the copy is unsuccessful.
     */
-   static bool copyDataFiles(const QDir newPath);
+   static bool copyDataFiles(QDir const & newPath);
 
    static char const * getDefaultBackupFileName();
 
@@ -211,7 +213,7 @@ public:
     *
     * \param connection The connection you used to do the manual inserts
     * \param tableName  The table you inserted into
-    * \param columName  The primary key column on that table
+    * \param columnName  The primary key column on that table
     *
     * \return \c false if there was an error, \c true otherwise
     */
@@ -225,7 +227,7 @@ private:
    std::unique_ptr<impl> pimpl;
 
    //! Hidden constructor.
-   Database(DbType dbType);
+   explicit Database(DbType dbType);
    //! Destructor hidden.
    ~Database();
 

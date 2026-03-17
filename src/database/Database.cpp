@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/Database.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * database/Database.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
@@ -68,10 +68,9 @@
 
 namespace {
    EnumStringMapping const dbTypeToName {
-      {Database::DbType::NODB  , Database::tr("NODB"  )},
-      {Database::DbType::SQLITE, Database::tr("SQLITE")},
-      {Database::DbType::PGSQL , Database::tr("PGSQL" )},
-      {Database::DbType::ALLDB , Database::tr("ALLDB" )},
+      {Database::DbType::NODB  , Database::tr("No Database")},
+      {Database::DbType::SQLITE, Database::tr("SQLite"     )},
+      {Database::DbType::PGSQL , Database::tr("PosgreSQL"  )},
    };
 
    //
@@ -631,6 +630,8 @@ public:
    QString dbPassword;
 };
 
+QString const Database::sqliteDbFileName = QStringLiteral("database.sqlite");
+
 
 Database::Database(Database::DbType dbType) : pimpl{std::make_unique<impl>(dbType)} {
    return;
@@ -825,29 +826,46 @@ void Database::checkForNewDefaultData() {
    return;
 }
 
-bool Database::createBlank(QString const& filename) {
+bool Database::createBlank(QString const & fileName) {
+   //
+   // It's simplest and safest if the supplied file does not exist.  That way, QSqlDatabase::setDatabaseName will create
+   // the file for us, and we know the SQLite database it contains is genuinely empty.
+   //
+   // If the file already exists then it might either not be a DB file or it might contain some of the tables we're
+   // about to try to create in it, both of which would cause errors.  So we bail in this event.
+   //
+   if (QFileInfo const fileInfo(fileName);
+       fileInfo.exists()) {
+      qWarning() << Q_FUNC_INFO << tr("Cannot create new DB schema in file '%1'.  File already exists!").arg(fileName);
+      return false;
+   }
    {
+
       QSqlDatabase sqldb = QSqlDatabase::addDatabase("QSQLITE", "blank");
-      sqldb.setDatabaseName(filename);
-      bool dbIsOpen = sqldb.open();
-      if (! dbIsOpen )
-      {
-         qWarning() << QString("Database::createBlank(): could not open '%1'").arg(filename);
+      sqldb.setDatabaseName(fileName);
+      if (!sqldb.open()) {
+         qWarning() << Q_FUNC_INFO << "Could not open '" << fileName << "'";
          return false;
       }
 
-      DatabaseSchemaHelper::create(Database::instance(Database::DbType::SQLITE), sqldb);
+      if (!DatabaseSchemaHelper::create(Database::instance(Database::DbType::SQLITE), sqldb)) {
+         qWarning() << Q_FUNC_INFO << "Error creating DB tables in '" << fileName << "'";
+         return false;
+      }
 
+      // Strictly we don't need the next line as the destructor will call QSqlDatabase::close when sqldb goes out of
+      // scope.
       sqldb.close();
-   } // sqldb gets destroyed as it goes out of scope before removeDatabase()
+   }
 
+   // By this point, sqldb went out of scope, so it's OK to call removeDatabase()
    QSqlDatabase::removeDatabase( "blank" );
    return true;
 }
 
-bool Database::copyDataFiles(const QDir newPath) {
-   QString dbFileName = "database.sqlite";
-   return QFile::copy(PersistentSettings::getUserDataDir().filePath(dbFileName), newPath.filePath(dbFileName));
+bool Database::copyDataFiles(QDir const & newPath) {
+   return QFile::copy(PersistentSettings::getUserDataDir().filePath(Database::sqliteDbFileName),
+                      newPath.filePath(Database::sqliteDbFileName));
 }
 
 
@@ -1108,7 +1126,7 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
             break;
          default:
             // .:TBD:. Feels like we should have filePath passed in rather than coming from PersistentSettings
-            QString filePath = PersistentSettings::getUserDataDir().filePath("database.sqlite");
+            QString const filePath = PersistentSettings::getUserDataDir().filePath(Database::sqliteDbFileName);
             connectionNew = openSQLite(filePath);
       }
 
