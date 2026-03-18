@@ -21,16 +21,18 @@ Bug fixes and minor enhancements.
 None
 
 ### Bug Fixes
+* AppImage versions fail to run - execv error: No such file or directory [1071](https://github.com/Brewtarget/brewtarget/issues/1071)
 * AppImage 5.0.3 fails to run - symbol lookup error [1077](https://github.com/Brewtarget/brewtarget/issues/1077)
 * AppImage 5.0.3 doesn't include libqsqlite.so [1081](https://github.com/Brewtarget/brewtarget/issues/1081)
 * Windows 5.03 Hop Boil Times [1082](https://github.com/Brewtarget/brewtarget/issues/1082)
+* Always forced to pre-populate database [1084](https://github.com/Brewtarget/brewtarget/issues/1084)
 * Deleting recipe locks associated linked processes from deletion [1085](https://github.com/Brewtarget/brewtarget/issues/1085)
 * Stock Purchase button showing on incorrect catalog pages [1086](https://github.com/Brewtarget/brewtarget/issues/1086)
 * --create-blank cli option exits with segfault [1088](https://github.com/Brewtarget/brewtarget/issues/1088)
 * Right clicking on sub-item in tree view causes assertion crash [1092](https://github.com/Brewtarget/brewtarget/issues/1092)
 
 ### Release Timestamp
-Tue, 17 Mar 2026 05:00:04 +0100
+Wed, 18 Mar 2026 05:00:04 +0100
 
 ## v5.0.3
 Bug fixes and minor enhancements.
