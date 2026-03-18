@@ -162,22 +162,24 @@ protected:
          return;
       }
 
-      CommonContextMenuHelper::Selected<NE, SNE> selected = this->getNumSelected();
-      if constexpr (std::is_same_v<NE, Recipe>) {
-         TreeNode * selectedNode = this->doTreeNode(selectedViewIndex);
-         if (selectedNode->classifier() == TreeNodeClassifier::PrimaryItem) {
-            auto & recipeNode = static_cast<TreeItemNode<Recipe> &>(*selectedNode);
-            auto recipe = recipeNode.underlyingItem();
-            QModelIndex translated = this->m_treeSortFilterProxy.mapToSource(selectedViewIndex);
-            selected.firstPrimary = recipe;
-            selected.fpAncestorsVisible = (recipe->hasAncestors() && this->m_model.showChild(translated));
-         } else if (selectedNode->classifier() == TreeNodeClassifier::SecondaryItem) {
-            auto & brewNoteNode = static_cast<TreeItemNode<BrewNote> &>(*selectedNode);
-            auto brewNote = brewNoteNode.underlyingItem();
-            selected.firstSecondary = brewNote;
-         } else {
-            selected.firstPrimary = this->getFirstSelectedPrimary();
+      CommonContextMenuHelper::Selected<NE, SNE> selected = this->getNumbersSelected();
+      TreeNode * selectedNode = this->doTreeNode(selectedViewIndex);
+      if (selectedNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+         auto const & primaryNode = static_cast<TreeItemNode<NE> &>(*selectedNode);
+         auto primaryItem = primaryNode.underlyingItem();
+         QModelIndex translated = this->m_treeSortFilterProxy.mapToSource(selectedViewIndex);
+         selected.firstPrimary = primaryItem;
+         if constexpr (std::is_same_v<NE, Recipe>) {
+            selected.fpAncestorsVisible = (primaryItem->hasAncestors() && this->m_model.showChild(translated));
          }
+      } else if (selectedNode->classifier() == TreeNodeClassifier::SecondaryItem) {
+         if constexpr (!IsVoid<SNE>) {
+            auto const & secondaryNode = static_cast<TreeItemNode<SNE> &>(*selectedNode);
+            auto secondaryItem = secondaryNode.underlyingItem();
+            selected.firstSecondary = secondaryItem;
+         }
+      } else {
+         selected.firstPrimary = this->getFirstSelectedPrimary();
       }
       this->m_contextMenus.showContextMenu(this->derived().mapToGlobal(point), selected);
 
@@ -317,10 +319,10 @@ public:
       return nullptr;
    }
 
-   CommonContextMenuHelper::Selected<NE, SNE> getNumSelected() const {
+   CommonContextMenuHelper::Selected<NE, SNE> getNumbersSelected() const {
       CommonContextMenuHelper::Selected<NE, SNE> selected;
       for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
-         QModelIndex modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+         QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
          switch (this->m_model.treeNode(modelIndex)->classifier()) {
             case TreeNodeClassifier::PrimaryItem  : ++selected.numPrimary  ; break;
             case TreeNodeClassifier::SecondaryItem: ++selected.numSecondary; break;
@@ -632,7 +634,7 @@ public:
 
    //! \brief Create a new folder
    void doNewFolder() {
-      QModelIndex starter = getFirstSelected();
+      QModelIndex const starter = getFirstSelected();
 
       // Where to start from
       QString dPath = this->doFolderName(starter);

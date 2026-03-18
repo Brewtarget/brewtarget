@@ -27,6 +27,7 @@ None
 * Deleting recipe locks associated linked processes from deletion [1085](https://github.com/Brewtarget/brewtarget/issues/1085)
 * Stock Purchase button showing on incorrect catalog pages [1086](https://github.com/Brewtarget/brewtarget/issues/1086)
 * --create-blank cli option exits with segfault [1088](https://github.com/Brewtarget/brewtarget/issues/1088)
+* Right clicking on sub-item in tree view causes assertion crash [1092](https://github.com/Brewtarget/brewtarget/issues/1092)
 
 ### Release Timestamp
 Tue, 17 Mar 2026 05:00:04 +0100
