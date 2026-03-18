@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * main.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * main.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -42,30 +42,6 @@
 #include "utils/MetaTypes.h"
 
 namespace {
-
-   /*!
-    * \brief Imports the content of an xml file to the database.
-    *
-    * Use at your own risk.
-    */
-   void importFromXml(const QString & filename) {
-
-      QString errorMessage;
-      QTextStream errorMessageAsStream{&errorMessage};
-      if (!BeerXML::getInstance().importFromXML(filename, errorMessageAsStream)) {
-         qCritical() << "Unable to import" << filename << "Error: " << errorMessage;
-         exit(1);
-      }
-      Database::instance().unload();
-      PersistentSettings::insert_ck(PersistentSettings::Names::converted, QDate().currentDate().toString());
-      exit(0);
-   }
-
-   //! \brief Creates a blank database using the given filename.
-   void createBlankDb(const QString & filename) {
-      Database::instance().createBlank(filename);
-      exit(0);
-   }
 
    /**
     * \brief Uncaught exceptions in a Qt application will terminate the program with a generic error message that does
@@ -233,8 +209,55 @@ int main(int argc, char **argv) {
       }
    }
 
-   if (parser.isSet(importFromXmlOption)) importFromXml(parser.value(importFromXmlOption));
-   if (parser.isSet(createBlankDBOption)) createBlankDb(parser.value(createBlankDBOption));
+   if (parser.isSet(importFromXmlOption)) {
+      //
+      // With this option specified, we attempt to import the content of an XML file to the database, then exit
+      //
+      QString const fileName = parser.value(importFromXmlOption);
+
+      QString errorMessage;
+      if (QTextStream errorMessageAsStream{&errorMessage};
+          !BeerXML::getInstance().importFromXML(fileName, errorMessageAsStream)) {
+         qCritical() << "Unable to import" << fileName << "Error: " << errorMessage;
+         return 1;
+      }
+      Database::instance().unload();
+      PersistentSettings::insert_ck(PersistentSettings::Names::converted, QDate().currentDate().toString());
+
+      return 0;
+   }
+
+   if (parser.isSet(createBlankDBOption)) {
+      //
+      // With this option specified, we create a blank SQLite DB file, then exit
+      //
+      QString const fileName = parser.value(createBlankDBOption);
+      bool const success = Database::instance().createBlank(fileName);
+
+
+      qInfo() <<
+         Q_FUNC_INFO <<
+         QApplication::tr("Creation of empty Database file '%1' %2.").arg(fileName).arg(
+            success ? QApplication::tr("succeeded") : QApplication::tr("failed")
+         );
+
+      if (success) {
+         // It doesn't hurt to let the user know what to do if they want the program to use the newly-created file
+         qInfo() <<
+            Q_FUNC_INFO <<
+               QApplication::tr("To use the newly-created file, rename it to '%1' and move it to directory %2.").arg(
+                  Database::sqliteDbFileName
+               ).arg(
+                  PersistentSettings::getUserDataDir().absolutePath()
+               );
+      }
+
+      // TODO: When we exit here we get:
+      //       "Warning: Destructor on Database object object for SQLite called before unload()"
+      //       We should fix this at some point.
+
+      return success ? 0 : 1;
+   }
 
    try {
       qInfo() <<
@@ -253,7 +276,7 @@ int main(int argc, char **argv) {
 
       registerMetaTypes();
 
-      auto mainAppReturnValue = Application::run();
+      auto const mainAppReturnValue = Application::run();
 
       //
       // Clean exit of Xerces XML tools
