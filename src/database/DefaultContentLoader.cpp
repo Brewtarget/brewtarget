@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/DefaultContentLoader.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * database/DefaultContentLoader.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -95,17 +95,20 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
    }
 
    qInfo() <<
-      Q_FUNC_INFO << "availableContentVersion:" << DefaultContentLoader::availableContentVersion << ", defaultContentAlreadyLoaded:" <<
-      defaultContentAlreadyLoaded;
+      Q_FUNC_INFO << "availableContentVersion:" << DefaultContentLoader::availableContentVersion <<
+      ", defaultContentAlreadyLoaded:" << defaultContentAlreadyLoaded;
 
-   bool succeeded = true;
-   if (defaultContentAlreadyLoaded < DefaultContentLoader::availableContentVersion &&
-       Application::isInteractive() &&
-       QMessageBox::question(nullptr,
+   if (!Application::isInteractive() ||
+       defaultContentAlreadyLoaded >= DefaultContentLoader::availableContentVersion) {
+      return DefaultContentLoader::UpdateResult::NothingToDo;
+   }
+
+   if (QMessageBox::question(nullptr,
                              QObject::tr("Merge Database"),
                              QObject::tr("New ingredients etc are available. Would you like to add them to your database?"),
                              QMessageBox::Yes | QMessageBox::No,
                              QMessageBox::Yes) == QMessageBox::Yes) {
+      bool succeeded = true;
 
       QStringList inputFiles;
       QDir const dir = Application::getResourceDir();
@@ -178,6 +181,44 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
       // further with the user here.
       //
       return succeeded ? DefaultContentLoader::UpdateResult::Succeeded : DefaultContentLoader::UpdateResult::Failed;
+   }
+
+   //
+   // The user didn't want to load the new content.  Some users will never want this content, so we should allow
+   // them not to have to get asked about it every time they run the application.
+   //
+   // This is akin to what we do in Application::checkAgainstLatestRelease
+   //
+   if (QMessageBox::question(nullptr,
+                             QObject::tr("New Data"),
+                             QObject::tr("Stop bothering you about new data?"),
+                             QMessageBox::Yes | QMessageBox::No,
+                             QMessageBox::Yes) == QMessageBox::Yes) {
+      //
+      // The easiest way to stop further reminders about loading the new data is simply to pretend we already loaded it.
+      //
+      // As with Application::checkAgainstLatestRelease, this will suppress the reminders until newer data is available.
+      // However, unlike with an upgrade, we won't "catch up" on the skipped data if the user later loads a newer set of
+      // default data.  (This shouldn't matter as (a) the default data sets are independent and (b) the data sets can be
+      // loaded manually.)
+      //
+      // For example, suppose defaultContentAlreadyLoaded is 2 and DefaultContentLoader::availableContentVersion is 3,
+      // and the user doesn't want to take default data set #3.  We set defaultContentAlreadyLoaded to 3 and there are
+      // no more reminders, until a later date when DefaultContentLoader::availableContentVersion becomes 4.  At that
+      // point, starting the application will again give a prompt about loading in new default data.  The user can
+      // refuse (and optionally suppress the reminders in the same way as before) or accept, in which case default data
+      // set #4 will be loaded.  But data set #3 will not have been loaded (and never will be by this function).
+      //
+      //
+      bool const succeeded = DatabaseSchemaHelper::setDefaultContentVersionFromDb(
+         db,
+         DefaultContentLoader::availableContentVersion
+      );
+      if (!succeeded) {
+         // Not a lot we can do here, but at least log a message so the user can know why their request to suppress
+         // "Do you want new data" messages was not honoured.
+         qCritical() << Q_FUNC_INFO << "Could not update default content version";
+      }
    }
 
    return DefaultContentLoader::UpdateResult::NothingToDo;
