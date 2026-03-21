@@ -437,7 +437,7 @@ public:
                   )
             };
 
-            str = str.arg(Measurement::displayAmount(hopAddition->amount()))
+            str = str.arg(Measurement::displayAmount(hopAddition->amount(), 1))
                      .arg(hopAddition->hop()->name())
                      .arg(durationString);
 
@@ -507,7 +507,7 @@ public:
                   )
             };
 
-            str = str.arg(Measurement::displayAmount(miscAddition->amount()))
+            str = str.arg(Measurement::displayAmount(miscAddition->amount(), 1))
                      .arg(miscAddition->misc()->name())
                      .arg(durationString);
 
@@ -622,8 +622,9 @@ public:
          auto const salt      = saltAddition->salt();
          QString tmp;
 
+         // TBD: For the moment I'm leaving the salt additions at 3 decimal places, but this is maybe too much
          if (whenToAdd == wanted || whenToAdd == RecipeAdjustmentSalt::WhenToAdd::Equal) {
-            tmp = tr("%1 %2").arg(Measurement::displayAmount(saltAddition->amount())).arg(salt->name());
+            tmp = tr("%1 %2").arg(Measurement::displayAmount(saltAddition->amount())).arg(salt->name(), 3);
          } else if (whenToAdd == RecipeAdjustmentSalt::WhenToAdd::Ratio) {
             double ratio = 1.0;
             if (wanted == RecipeAdjustmentSalt::WhenToAdd::Sparge) {
@@ -632,7 +633,7 @@ public:
 
             auto adjustedAmount = saltAddition->amount();
             adjustedAmount.quantity *= ratio;
-            tmp = tr("%1 %2").arg(Measurement::displayAmount(adjustedAmount)).arg(salt->name());
+            tmp = tr("%1 %2").arg(Measurement::displayAmount(adjustedAmount)).arg(salt->name(), 3);
          } else {
             continue;
          }
@@ -800,15 +801,15 @@ public:
 
       double wortInBoil_l = this->m_self.wortFromMash_l() - equipment->getLauteringDeadspaceLoss_l();
       QString str = tr("You should now have %1 wort.")
-                  .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters}));
+                  .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters}, 1));
       if (!equipment->topUpKettle_l() || *equipment->topUpKettle_l() == 0.0) {
          return;
       }
 
       wortInBoil_l += *equipment->topUpKettle_l();
       str += tr(" Add %1 water to the kettle, bringing pre-boil volume to %2.")
-                  .arg(Measurement::displayAmount(Measurement::Amount{*equipment->topUpKettle_l(), Measurement::Units::liters}))
-                  .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters}));
+                  .arg(Measurement::displayAmount(Measurement::Amount{*equipment->topUpKettle_l(), Measurement::Units::liters}, 1))
+                  .arg(Measurement::displayAmount(Measurement::Amount{wortInBoil_l, Measurement::Units::liters}, 1));
 
       preInstructions.push_back(
          PreInstruction(RecipeAddition::Stage::Boil,
@@ -2154,7 +2155,7 @@ QString Recipe::nextAddToBoil(double & time) {
       double const addAtTime_mins = *hopAddition->addAtTime_mins();
       if (addAtTime_mins < time && addAtTime_mins > max) {
          ret = tr("Add %1 %2 to boil at %3.")
-               .arg(Measurement::displayAmount(hopAddition->amount()))
+               .arg(Measurement::displayAmount(hopAddition->amount(), 1))
                .arg(hopAddition->hop()->name())
                .arg(Measurement::displayAmount(Measurement::Amount{addAtTime_mins, Measurement::Units::minutes}, 0));
 
@@ -2174,7 +2175,7 @@ QString Recipe::nextAddToBoil(double & time) {
       double const addAtTime_mins = *miscAddition->addAtTime_mins();
       if (addAtTime_mins < time && addAtTime_mins > max) {
          ret = tr("Add %1 %2 to boil at %3.");
-         ret = ret.arg(Measurement::displayAmount(miscAddition->amount()));
+         ret = ret.arg(Measurement::displayAmount(miscAddition->amount(), 1));
          ret = ret.arg(miscAddition->misc()->name());
          ret = ret.arg(Measurement::displayAmount(Measurement::Amount{addAtTime_mins, Measurement::Units::minutes}, 0));
          max = addAtTime_mins;
@@ -3002,7 +3003,7 @@ QList<QString> Recipe::getReagents(QList<std::shared_ptr<RecipeAdditionFermentab
             format = ", %1 %2";
          }
          reagents.append(
-            format.arg(Measurement::displayAmount(fermentableAddition->amount()))
+            format.arg(Measurement::displayAmount(fermentableAddition->amount(), 1))
                   .arg(fermentableAddition->fermentable()->name())
          );
       }
@@ -3017,7 +3018,7 @@ QList<QString> Recipe::getReagents(QList<std::shared_ptr<RecipeAdditionHop>> hop
    for (auto hopAddition : hopAdditions) {
       if (firstWort && (hopAddition->isFirstWort())) {
          QString tmp = QString("%1 %2,")
-               .arg(Measurement::displayAmount(hopAddition->amount()))
+               .arg(Measurement::displayAmount(hopAddition->amount(), 1))
                .arg(hopAddition->hop()->name());
          reagents.append(tmp);
       }
@@ -3036,7 +3037,7 @@ QList<QString> Recipe::getReagents(QList< std::shared_ptr<MashStep> > msteps) {
       bool const commaNeeded {ii + 1 < msteps.size()};
       reagents.append(
          tr(commaNeeded ? "%1 water to %2, " : "%1 water to %2 ").arg(
-            Measurement::displayAmount(Measurement::Amount{msteps[ii]->amount_l(), Measurement::Units::liters})
+            Measurement::displayAmount(Measurement::Amount{msteps[ii]->amount_l(), Measurement::Units::liters}, 1)
          ).arg(
             Measurement::displayAmount(Measurement::Amount{msteps[ii]->infuseTemp_c().value_or(msteps[ii]->startTemp_c()), Measurement::Units::celsius}, 1)
          )
