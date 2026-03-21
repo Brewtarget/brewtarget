@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAddition.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/RecipeAddition.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -45,11 +45,15 @@ EnumStringMapping const RecipeAddition::stageStringMapping {
    {RecipeAddition::Stage::Packaging   , "add_to_package"     },
 };
 
+//
+// In the past, we had these names as "Add to Mash", "Add to Boil", etc, but I think that's considerably less flexible
+// than just having the translated stage names.
+//
 EnumStringMapping const RecipeAddition::stageDisplayNames {
-   {RecipeAddition::Stage::Mash        , tr("Add to Mash"        ) },
-   {RecipeAddition::Stage::Boil        , tr("Add to Boil"        ) },
-   {RecipeAddition::Stage::Fermentation, tr("Add to Fermentation") },
-   {RecipeAddition::Stage::Packaging   , tr("Add to Package"     ) },
+   {RecipeAddition::Stage::Mash        , tr("Mash"        ) },
+   {RecipeAddition::Stage::Boil        , tr("Boil"        ) },
+   {RecipeAddition::Stage::Fermentation, tr("Fermentation") },
+   {RecipeAddition::Stage::Packaging   , tr("Package"     ) },
 };
 
 bool RecipeAddition::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
