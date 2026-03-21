@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Recipe.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Recipe.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
@@ -550,12 +550,12 @@ public:
    double  tasteRating       () const;
    double  og                () const;
    double  fg                () const;
-   int     fermentationStages() const;
-   double  primaryAge_days   () const;
-   double  secondaryAge_days () const;
-   double  secondaryTemp_c   () const;
-   double  tertiaryAge_days  () const;
-   double  tertiaryTemp_c    () const;
+///   int     fermentationStages() const;
+///   double  primaryAge_days   () const;
+///   double  secondaryAge_days () const;
+///   double  secondaryTemp_c   () const;
+///   double  tertiaryAge_days  () const;
+///   double  tertiaryTemp_c    () const;
    std::optional<double>  age_days          () const;
    std::optional<double>  ageTemp_c         () const;
    std::optional<QDate>   date              () const;
@@ -736,7 +736,7 @@ public:
    void setTasteRating       (double  const   val);
    void setOg                (double  const   val);
    void setFg                (double  const   val);
-   void setFermentationStages(int     const   val);
+///   void setFermentationStages(int     const   val);
    void setAge_days          (std::optional<double>  const   val);
    void setAgeTemp_c         (std::optional<double>  const   val);
    void setDate              (std::optional<QDate>   const   val);
