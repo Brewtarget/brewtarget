@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/FermentableEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * editors/FermentableEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Kregg Kemper <gigatropolis@yahoo.com>
@@ -50,11 +50,11 @@ FermentableEditor::FermentableEditor(QWidget* parent, QString const editorName) 
       EDITOR_FIELD_NORM(Fermentable, tab_notes                   , textEdit_notes                 , Fermentable::notes                    ),
       EDITOR_FIELD_NORM(Fermentable, label_color                 , lineEdit_color                 , Fermentable::color_srm             , 0),
       EDITOR_FIELD_NORM(Fermentable, label_diastaticPower        , lineEdit_diastaticPower        , Fermentable::diastaticPower_lintner   ),
-      EDITOR_FIELD_NORM(Fermentable, label_coarseFineDiff        , lineEdit_coarseFineDiff        , Fermentable::coarseFineDiff_pct    , 0),
+      EDITOR_FIELD_NORM(Fermentable, label_coarseFineDiff        , lineEdit_coarseFineDiff        , Fermentable::coarseFineDiff_pct    , 1),
       EDITOR_FIELD_NORM(Fermentable, label_ibuGalPerLb           , lineEdit_ibuGalPerLb           , Fermentable::ibuGalPerLb           , 0),
-      EDITOR_FIELD_NORM(Fermentable, label_maxInBatch            , lineEdit_maxInBatch            , Fermentable::maxInBatch_pct        , 0),
-      EDITOR_FIELD_NORM(Fermentable, label_moisture              , lineEdit_moisture              , Fermentable::moisture_pct          , 0),
-      EDITOR_FIELD_NORM(Fermentable, label_protein               , lineEdit_protein               , Fermentable::protein_pct           , 0),
+      EDITOR_FIELD_NORM(Fermentable, label_maxInBatch            , lineEdit_maxInBatch            , Fermentable::maxInBatch_pct        , 1),
+      EDITOR_FIELD_NORM(Fermentable, label_moisture              , lineEdit_moisture              , Fermentable::moisture_pct          , 1),
+      EDITOR_FIELD_NORM(Fermentable, label_protein               , lineEdit_protein               , Fermentable::protein_pct           , 1),
       EDITOR_FIELD_NORM(Fermentable, label_totalInventory        , display_totalInventory         , Ingredient::totalInventory         , 1, WhenToWriteField::Never),
       EDITOR_FIELD_NORM(Fermentable, label_origin                , lineEdit_origin                , Fermentable::origin                   ),
       EDITOR_FIELD_NORM(Fermentable, label_supplier              , lineEdit_supplier              , Fermentable::supplier                 ),

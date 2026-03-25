@@ -29,10 +29,11 @@ None
 * Deleting recipe locks associated linked processes from deletion [1085](https://github.com/Brewtarget/brewtarget/issues/1085)
 * Stock Purchase button showing on incorrect catalog pages [1086](https://github.com/Brewtarget/brewtarget/issues/1086)
 * --create-blank cli option exits with segfault [1088](https://github.com/Brewtarget/brewtarget/issues/1088)
+* Fermentables percentage fields won't allow floats [1090](https://github.com/Brewtarget/brewtarget/issues/1090)
 * Right clicking on sub-item in tree view causes assertion crash [1092](https://github.com/Brewtarget/brewtarget/issues/1092)
 
 ### Release Timestamp
-Wed, 18 Mar 2026 05:00:04 +0100
+Wed, 25 Mar 2026 05:00:04 +0100
 
 ## v5.0.3
 Bug fixes and minor enhancements.
