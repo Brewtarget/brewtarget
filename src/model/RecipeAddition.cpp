@@ -178,7 +178,37 @@ void RecipeAddition::setAddAtGravity_sg(std::optional<double> const val) { SET_A
 void RecipeAddition::setAddAtAcidity_pH(std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::RecipeAddition::addAtAcidity_pH, this->m_addAtAcidity_pH, val); return; }
 void RecipeAddition::setDuration_mins  (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::RecipeAddition::duration_mins  , this->m_duration_mins  , val); return; }
 
-
 QString RecipeAddition::extraLogInfo() const {
    return QString("Stage: %1").arg(RecipeAddition::stageStringMapping[this->m_stage]);
+}
+
+std::optional<double> RecipeAddition::addAfterStart_mins(std::optional<double> stepLength_mins) const {
+   //
+   // Boil is the stage we measure from the end
+   //
+   if (RecipeAddition::Stage::Boil == this->m_stage) {
+      if (stepLength_mins.has_value() && this->m_addAtTime_mins.has_value()) {
+         return *stepLength_mins - *this->m_addAtTime_mins;
+      }
+      return std::nullopt;
+   }
+
+   //
+   // Other stages we measure from the start
+   //
+   return this->m_addAtTime_mins;
+}
+
+std::optional<double> RecipeAddition::addBeforeEnd_mins(std::optional<double> stepLength_mins) const {
+   //
+   // This is essentially the reverse of \c RecipeAddition::addAfterStart_mins
+   //
+   if (RecipeAddition::Stage::Boil != this->m_stage) {
+      if (stepLength_mins.has_value() && this->m_addAtTime_mins.has_value()) {
+         return *stepLength_mins - *this->m_addAtTime_mins;
+      }
+      return std::nullopt;
+   }
+
+   return this->m_addAtTime_mins;
 }

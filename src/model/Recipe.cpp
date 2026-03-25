@@ -370,6 +370,113 @@ public:
       return;
    }
 
+   template<typename AdditionType, RecipeAddition::Stage stage>
+   void instructionsForRecipeAddition(AdditionType const & addition, QVector<PreInstruction> & preInstructions) const {
+      if (addition->stage() == stage) {
+         std::optional<int> const step = addition->step();
+         std::optional<double> stepLength_mins = std::nullopt;
+         if (step) {
+            // stepTime_mins() will return either double or std::optional<double> depending on whether it's a required
+            // field for that step type (eg yes for Mash, no for Boil).
+            //
+            // TBD: We could probably do some sort of templating here to avoid this clunky if/else
+            if constexpr (RecipeAddition::Stage::Mash == stage) {
+               if (auto const mash = this->m_self.mash();
+                   mash && *step <= static_cast<int>(mash->numSteps())) {
+                  stepLength_mins = mash->stepAt(*step)->stepTime_mins();
+               }
+            } else if constexpr (RecipeAddition::Stage::Boil == stage) {
+               if (auto const boil = this->m_self.boil();
+                   boil && *step <= static_cast<int>(boil->numSteps())) {
+                  stepLength_mins = boil->stepAt(*step)->stepTime_mins();
+               }
+            } else if constexpr (RecipeAddition::Stage::Fermentation == stage) {
+               if (auto const fermentation = this->m_self.fermentation();
+                   fermentation && *step <= static_cast<int>(fermentation->numSteps())) {
+                  stepLength_mins = fermentation->stepAt(*step)->stepTime_mins();
+               }
+            } else if constexpr (RecipeAddition::Stage::Packaging == stage) {
+               // We don't yet fully support packaging
+               stepLength_mins = std::nullopt;
+            }
+         }
+         double const additionDuration_mins{
+            // If we have a duration, this will take precedence over the calculated one
+            addition->duration_mins().value_or(
+               // If addAtTime_mins is not set, we assume addition happens at the start of the stage
+               this->stageLength_mins<stage>() - addition->addAfterStart_mins(stepLength_mins).value_or(0.0)
+            )
+         };
+         //
+         // When the duration is 0 -- either because we're adding something at the end of the stage or because we
+         // don't have a length for the stage, we want to show "at end of [stage name]" rather than "for 0 minutes",
+         // hence the extra layer of indirection below in string construction.
+         //
+         // We take advantage of compile-time string literal concatenation to make things a bit more readable in the
+         // source code.
+         //
+         // TODO: This next block is common with instructionsForMiscAdditions, so we should factor it out into a
+         //       separate function.
+         //
+         QString str;
+         switch (stage) {
+            case RecipeAddition::Stage::Mash:
+               str = tr("Put %1 %2 into mash" "%3.");
+               break;
+            case RecipeAddition::Stage::Boil:
+               if constexpr (std::same_as<AdditionType, RecipeAdditionHop>) {
+                  if (addition->isFirstWort()) {
+                     str = tr("Put %1 %2 into first wort" "%3.");
+                  } else if (addition->isAroma()) {
+                     str = tr("Steep %1 %2 in wort" "%3.");
+                  } else {
+                     str = tr("Put %1 %2 into boil" "%3.");
+                  }
+               } else {
+                  str = tr("Put %1 %2 into boil" "%3.");
+               }
+               break;
+            case RecipeAddition::Stage::Fermentation:
+               if constexpr (std::same_as<AdditionType, RecipeAdditionHop>) {
+                  str = tr("Put %1 %2 into fermenter" "%3.");
+               } else {
+                  if (step == 1) {
+                     str = tr("Put %1 %2 into primary" "%3.");
+                  } else {
+                     str = tr("Put %1 %2 into secondary" "%3.");
+                  }
+               }
+               break;
+            case RecipeAddition::Stage::Packaging:
+               str = tr("Use %1 %2 at bottling" "%3.");
+               break;
+            // NB: No default case as we want compiler to warn us if we missed a value above
+         }
+         QString const durationString{
+            qFuzzyIsNull(additionDuration_mins) ?
+               tr(" at end of %1").arg(RecipeAddition::stageDisplayNames[stage]) :
+               tr(" for %1").arg(
+                  Measurement::displayAmount(Measurement::Amount{additionDuration_mins,
+                                                                 Measurement::Units::minutes}, 0)
+               )
+         };
+
+         str = str.arg(Measurement::displayAmount(addition->amount(), 1))
+                  .arg(addition->ingredientRaw()->name())
+                  .arg(durationString);
+
+         preInstructions.push_back(
+            PreInstruction(addition->stage(),
+                           addition->step(),
+                           additionDuration_mins,
+                           // localisedName() gives tr("Hop"), tr("Misc"), etc
+                           tr("%1 addition").arg(addition->ingredientRaw()->localisedName()),
+                           str)
+         );
+      }
+      return;
+   }
+
    /**
     * @brief Generate the (pre-)instructions for Hop additions for the given Recipe stage.
     *
@@ -379,76 +486,15 @@ public:
    void instructionsForHopAdditions(QVector<PreInstruction> & preInstructions) const {
       //
       // Recipe additions have two time fields: addAtTime_mins and duration_mins.  The latter is often unset, signifying
-      // that the addition remains for the duration (eg until the end of the boil).  For recipe instructions, it is
-      // mostly standard to express the addition point as "time before the end of the boil" etc -- eg Hop X added Y
-      // minutes before the end of the boil.  We express this as "Add Hop X for Y minutes".
+      // that the addition remains for the duration (eg until the end of the boil).  Per the comments in
+      // \c RecipeAddition.h, for additions to the boil, addAtTime_mins is measured backwards from the end of the
+      // boil -- ie "time before the end of the boil" etc.  We express this in the instructions as "Add Hop X for Y
+      // minutes".
       //
 
       // TBD: What about hopAddition->addAtTime_mins()?
       for (auto const & hopAddition : m_self.hopAdditions()) {
-         if (hopAddition->stage() == stage) {
-            double const additionDuration_mins{
-               // If we have a duration, this will take precedence over the calculated one
-               hopAddition->duration_mins().value_or(
-                  // If addAtTime_mins is not set, we assume addition happens at the start of the stage
-                  this->stageLength_mins<stage>() - hopAddition->addAtTime_mins().value_or(0.0)
-               )
-            };
-            //
-            // When the duration is 0 -- either because we're adding something at the end of the stage or because we
-            // don't have a length for the stage, we want to show "at end of [stage name]" rather than "for 0 minutes",
-            // hence the extra layer of indirection below in string construction.
-            //
-            // We take advantage of compile-time string literal concatenation to make things a bit more readable in the
-            // source code.
-            //
-            // TODO: This next block is common with instructionsForMiscAdditions, so we should factor it out into a
-            //       separate function.
-            //
-            QString str;
-            switch (stage) {
-               case RecipeAddition::Stage::Mash:
-                  str = tr("Put %1 %2 into mash" "%3.");
-                  break;
-               case RecipeAddition::Stage::Boil:
-                  if (hopAddition->isFirstWort()) {
-                     str = tr("Put %1 %2 into first wort" "%3.");
-                  } else if (hopAddition->isAroma()) {
-                     str = tr("Steep %1 %2 in wort" "%3.");
-                  } else {
-                     str = tr("Put %1 %2 into boil" "%3.");
-                  }
-                  break;
-               case RecipeAddition::Stage::Fermentation:
-                  str = tr("Put %1 %2 into fermenter" "%3.");
-                  break;
-               case RecipeAddition::Stage::Packaging:
-                  // We don't really support this yet, but best to say something if we read in a recipe that has this
-                  str = tr("Put %1 %2 into packaging" "%3.");
-                  break;
-               // NB: No default case as we want compiler to warn us if we missed a value above
-            }
-            QString const durationString{
-               qFuzzyIsNull(additionDuration_mins) ?
-                  tr(" at end of %1").arg(RecipeAddition::stageDisplayNames[stage]) :
-                  tr(" for %1").arg(
-                     Measurement::displayAmount(Measurement::Amount{additionDuration_mins,
-                                                                    Measurement::Units::minutes}, 0)
-                  )
-            };
-
-            str = str.arg(Measurement::displayAmount(hopAddition->amount(), 1))
-                     .arg(hopAddition->hop()->name())
-                     .arg(durationString);
-
-            preInstructions.push_back(
-               PreInstruction(hopAddition->stage(),
-                              hopAddition->step(),
-                              additionDuration_mins,
-                              tr("Hop addition"),
-                              str)
-            );
-         }
+         this->instructionsForRecipeAddition<decltype(hopAddition), stage>(hopAddition, preInstructions);
       }
       return;
    }
@@ -461,64 +507,10 @@ public:
     *
     * @param preInstructions OUT
     */
-   template<RecipeAddition::Stage stage, int step = 0>
+   template<RecipeAddition::Stage stage>
    void instructionsForMiscAdditions(QVector<PreInstruction> & preInstructions) const {
       for (auto const & miscAddition : m_self.miscAdditions()) {
-         //
-         // See comments above in instructionsForHopAdditions() about duration.
-         //
-         // TBD: We should probably pull this logic out into a common function.
-         //
-         if (miscAddition->stage() == stage) {
-            QString str;
-            double const additionDuration_mins{
-               // If we have a duration, this will take precedence over the calculated one
-               miscAddition->duration_mins().value_or(
-                  // If addAtTime_mins is not set, we assume addition happens at the start of the stage
-                  this->stageLength_mins<stage>() - miscAddition->addAtTime_mins().value_or(0.0)
-               )
-            };
-            switch (stage) {
-               case RecipeAddition::Stage::Mash:
-                  str = tr("Put %1 %2 into mash" "%3.");
-                  break;
-               case RecipeAddition::Stage::Boil:
-                  str = tr("Put %1 %2 into boil" "%3.");
-                  break;
-               case RecipeAddition::Stage::Fermentation:
-                  if (step == 1) {
-                     str = tr("Put %1 %2 into primary" "%3.");
-                  } else {
-                     str = tr("Put %1 %2 into secondary" "%3.");
-                  }
-                  break;
-               case RecipeAddition::Stage::Packaging:
-                  str = tr("Use %1 %2 at bottling" "%3.");
-                  break;
-               // No default case as we want the compiler to warn us if we missed a case above
-            }
-            QString const durationString{
-               qFuzzyIsNull(additionDuration_mins) ?
-                  tr(" at end of %1").arg(RecipeAddition::stageDisplayNames[stage]) :
-                  tr(" for %1").arg(
-                     Measurement::displayAmount(Measurement::Amount{additionDuration_mins,
-                                                                    Measurement::Units::minutes},
-                                                0)
-                  )
-            };
-
-            str = str.arg(Measurement::displayAmount(miscAddition->amount(), 1))
-                     .arg(miscAddition->misc()->name())
-                     .arg(durationString);
-
-            preInstructions.push_back(
-               PreInstruction(miscAddition->stage(),
-                              miscAddition->step(),
-                              additionDuration_mins,
-                              tr("Misc addition"),
-                              str)
-            );
-         }
+         this->instructionsForRecipeAddition<decltype(miscAddition), stage>(miscAddition, preInstructions);
       }
       return;
    }
@@ -2089,8 +2081,8 @@ void Recipe::generateInstructions() {
 
       /*** End primary yeast ***/
 
-      /*** Primary misc ***/
-      this->pimpl->instructionsForMiscAdditions<RecipeAddition::Stage::Fermentation, 1>(preInstructions);
+      /*** Primary & Secondary misc ***/
+      this->pimpl->instructionsForMiscAdditions<RecipeAddition::Stage::Fermentation>(preInstructions);
 
       preInstructions.push_back(
          PreInstruction(RecipeAddition::Stage::Fermentation,
@@ -2112,8 +2104,8 @@ void Recipe::generateInstructions() {
          );
       }
 
-      /*** Secondary misc ***/
-      this->pimpl->instructionsForMiscAdditions<RecipeAddition::Stage::Fermentation, 2>(preInstructions);
+///      /*** Secondary misc ***/
+///      this->pimpl->instructionsForMiscAdditions<RecipeAddition::Stage::Fermentation, 2>(preInstructions);
 
       /*** Dry hopping ***/
       this->pimpl->instructionsForHopAdditions<RecipeAddition::Stage::Fermentation>(preInstructions);
