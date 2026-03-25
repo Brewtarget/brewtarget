@@ -101,7 +101,8 @@ public:
    static QString localisedName_duration_mins  ();
 
    /**
-    * Note that we rely on these values being in "chronological" order for \c lessThanByTime
+    * Note that we rely on these values being in "chronological" order for \c lessThanByTime and for sorting of
+    * \c PreInstruction
     */
    enum class Stage {Mash        ,
                      Boil        ,
@@ -166,10 +167,31 @@ public:
    Q_PROPERTY(std::optional<int> step READ step WRITE setStep)
 
    /**
-    * \brief If set, tells us how long after the start of the step (or stage if step is not set) to make the addition.
+    * \brief This corresponds to the BeerJSON TimingType::time field, which is described in the documentation as "What
+    *        time during a process step is added, eg a value of 2 days for a dry hop addition would be added 2 days into
+    *        the fermentation step."
     *
-    *        For boil additions, we typically show the reverse of this number in the UI -- ie
-    *        "boilLength_min - addAfter_min"
+    *        HOWEVER, there is more to it than this.  In pretty much any beer recipe, the timing of hop additions to the
+    *        boil is given in minutes before the end of the boil, not minutes after the start.  Moreover, measuring from
+    *        the start and from the end are not interchangeable.  Eg if we have a recipe with a 75-minute boil and a hop
+    *        addition 60 minutes before the end of the boil, changing the length of the boil to 90 minutes should not
+    *        affect the length of time the hops are in the boil.
+    *
+    *        If you look at the example/test BeerJSON files at https://github.com/beerjson/beerjson/tree/master/tests,
+    *        it is clear that, in almost all cases:
+    *           - for additions to the boil, this is really time before the end of the boil
+    *           - for additions to the fermentation, this is time after the start of the fermentation
+    *           - where the time is not specified, we may take it as meaning the addition happens at the start of the
+    *             step.
+    *        We assume that it is _only_ additions during the boil where time is counted backwards -- ie that it is
+    *        counted forwards for Mash, Fermentation and Packaging (though I can't personally think of a time when I
+    *        needed to add something to the Mash other than at the start).
+    *
+    *        (If we were designing a new system from scratch, we might make this a signed field and have positive values
+    *        represent "time after start of the step" and negative ones represent "time before end of step", with
+    *        \c std::nullopt meaning "at the start of the step" and 0.0 meaning "at the end".  But I'm not sure the
+    *        world is ready for yet another beer recipe serialisation format.)
+    *
     */
    Q_PROPERTY(std::optional<double> addAtTime_mins   READ addAtTime_mins   WRITE setAddAtTime_mins)
 
@@ -218,6 +240,16 @@ public:
    void setDuration_mins  (std::optional<double> const val);
 
    virtual QString extraLogInfo() const override;
+
+   /**
+    * \brief Converts \c addAtTime_mins to something that's always measured from the start of the step
+    */
+   std::optional<double> addAfterStart_mins(std::optional<double> stepLength_mins) const;
+
+   /**
+    * \brief Converts \c addAtTime_mins to something that's always measured from the end of the step
+    */
+   std::optional<double> addBeforeEnd_mins(std::optional<double> stepLength_mins) const;
 
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
