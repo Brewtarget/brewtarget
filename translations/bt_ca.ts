@@ -2387,22 +2387,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>NODB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SQLITE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PGSQL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ALLDB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unable to back up database before upgrading</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2453,6 +2437,22 @@ Log file may contain more details.</source>
 
 Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SQLite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PosgreSQL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot create new DB schema in file &apos;%1&apos;.  File already exists!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5503,6 +5503,22 @@ Error message:
         <source>The application encountered a fatal error.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Creation of empty Database file &apos;%1&apos; %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>succeeded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To use the newly-created file, rename it to &apos;%1&apos; and move it to directory %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -6608,6 +6624,14 @@ Log file may contain more details.</source>
         <source>New stock purchase</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>New Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop bothering you about new data?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -6621,7 +6645,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>to the mash tun.</source>
-        <translation>al macerador.</translation>
+        <translation type="vanished">al macerador.</translation>
     </message>
     <message>
         <source>Heat water</source>
@@ -6681,7 +6705,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Hop addition</source>
-        <translation>Afegiu el llúpol</translation>
+        <translation type="vanished">Afegiu el llúpol</translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
@@ -6767,11 +6791,11 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation>Temps d&apos;ebullició</translation>
+        <translation type="vanished">Temps d&apos;ebullició</translation>
     </message>
     <message>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation>No heu configurat cap equip (com hauríeu d&apos;haver fet), així que cal que digueu ara el temps d&apos;ebullició.</translation>
+        <translation type="vanished">No heu configurat cap equip (com hauríeu d&apos;haver fet), així que cal que digueu ara el temps d&apos;ebullició.</translation>
     </message>
     <message>
         <source>Bring the wort to a boil and hold for %1.</source>
@@ -7198,11 +7222,31 @@ El volum final al primari és de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Put %1 %2 into packaging%3.</source>
+        <source> for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source> for %1</source>
+        <source>Put %1 %2 into primary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into secondary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use %1 %2 at bottling%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> at end of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 addition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> to the mash tun.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7213,20 +7257,8 @@ El volum final al primari és de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add to Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add to Boil</source>
-        <translation type="unfinished">Afegir al bullir</translation>
-    </message>
-    <message>
-        <source>Add to Fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add to Package</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Afegir al bullir</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -7253,32 +7285,24 @@ El volum final al primari és de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Put %1 %2 into mash%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into boil%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into primary%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into secondary%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use %1 %2 at bottling%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> for %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Misc addition</source>
-        <translation type="unfinished">Afegiu ingredients extres</translation>
+        <translation type="obsolete">Afegiu ingredients extres</translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished">Maceració</translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Package</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

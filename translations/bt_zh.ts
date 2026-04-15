@@ -2234,22 +2234,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>NODB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SQLITE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PGSQL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ALLDB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unable to back up database before upgrading</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2300,6 +2284,22 @@ Log file may contain more details.</source>
 
 Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SQLite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PosgreSQL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot create new DB schema in file &apos;%1&apos;.  File already exists!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5091,6 +5091,22 @@ Error message:
         <source>The application encountered a fatal error.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Creation of empty Database file &apos;%1&apos; %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>succeeded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To use the newly-created file, rename it to &apos;%1&apos; and move it to directory %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -6168,6 +6184,14 @@ Log file may contain more details.</source>
         <source>New stock purchase</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>New Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop bothering you about new data?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -6181,7 +6205,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>to the mash tun.</source>
-        <translation>to the mash tun.到糖化锅。</translation>
+        <translation type="vanished">to the mash tun.到糖化锅。</translation>
     </message>
     <message>
         <source>Heat water</source>
@@ -6238,10 +6262,6 @@ Log file may contain more details.</source>
     <message>
         <source>Use %1 %2 for %3</source>
         <translation type="vanished">Use %1 %2 for %3</translation>
-    </message>
-    <message>
-        <source>Hop addition</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
@@ -6327,11 +6347,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil time</source>
-        <translation>煮沸时间Boil time</translation>
+        <translation type="vanished">煮沸时间Boil time</translation>
     </message>
     <message>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation>你没有配置设备（你真的应该），所以告诉我熬时间。You did not configure an equipment (which you really should), so tell me the boil time.</translation>
+        <translation type="vanished">你没有配置设备（你真的应该），所以告诉我熬时间。You did not configure an equipment (which you really should), so tell me the boil time.</translation>
     </message>
     <message>
         <source>Bring the wort to a boil and hold for %1.</source>
@@ -6754,11 +6774,31 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Put %1 %2 into packaging%3.</source>
+        <source> for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source> for %1</source>
+        <source>Put %1 %2 into primary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into secondary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use %1 %2 at bottling%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> at end of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 addition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> to the mash tun.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6769,20 +6809,8 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add to Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add to Boil</source>
-        <translation type="unfinished">添加煮Add to Boil</translation>
-    </message>
-    <message>
-        <source>Add to Fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add to Package</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">添加煮Add to Boil</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -6809,32 +6837,24 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Put %1 %2 into mash%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into boil%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into primary%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into secondary%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use %1 %2 at bottling%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> for %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Misc addition</source>
-        <translation type="unfinished">Misc addition把% 1% 2成煮% 3。</translation>
+        <translation type="obsolete">Misc addition把% 1% 2成煮% 3。</translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Package</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

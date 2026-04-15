@@ -2232,8 +2232,13 @@ int Recipe::numRecipesUsing(IngredientType const & ingredient) requires (std::is
    boost::container::flat_set<int> matchingRecipeIds;
    return ObjectStoreWrapper::numMatching<typename IngredientType::RecipeAdditionClass>(
       [&](typename IngredientType::RecipeAdditionClass const * addition) {
+         //
          // Note that we want to exclude deleted RecipeAdditions and deleted Recipes.
+         // In theory a recipe addition should always have a recipe, but in practice it's possible for unowned recipe
+         // additions to exist in the database :-/ so we filter them out.
+         //
          if (!addition->deleted() &&
+             addition->recipeId() > 0 &&
              !addition->recipe()->deleted() &&
              addition->ingredientId() == ingredient.key()) {
             // Emplace returns std::pair<iterator, bool>.  The bool component of this is true if and only if the
