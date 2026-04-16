@@ -14,17 +14,17 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Shopping Lists
 * We'll list other new features here...
 
-## v5.0.4
+## v5.0.5
 Bug fixes and minor enhancements.
 
 ### New Features
 None
 
 ### Bug Fixes
-None
+* 5.0.4: Crash at startup [1102](https://github.com/Brewtarget/brewtarget/issues/1102)
 
 ### Release Timestamp
-Fri, 10 Apr 2026 05:00:05 +0100
+Thu, 16 Apr 2026 05:00:05 +0100
 
 ## v5.0.4
 Bug fixes and minor enhancements.
