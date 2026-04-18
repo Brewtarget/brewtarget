@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Hop.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Hop.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Kregg Kemper <gigatropolis@yahoo.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -189,8 +189,9 @@ TypeLookup const Hop::typeLookup {
 };
 static_assert(std::is_base_of<Ingredient, Hop>::value);
 
-Hop::Hop(QString name) :
+Hop::Hop(QString const & name) :
    Ingredient{name},
+   FolderPropertyBase  {},
    m_alpha_pct         {0.0         },
    m_form              {std::nullopt},
    m_beta_pct          {std::nullopt},
@@ -223,7 +224,8 @@ Hop::Hop(QString name) :
 }
 
 Hop::Hop(NamedParameterBundle const & namedParameterBundle) :
-   Ingredient{namedParameterBundle},
+   Ingredient           {namedParameterBundle},
+   FolderPropertyBase   {namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_alpha_pct         , namedParameterBundle, PropertyNames::Hop::alpha_pct         ),
    SET_OPT_ENUM_FROM_NPB(m_form   , Hop::Form, namedParameterBundle, PropertyNames::Hop::form              ),
    SET_REGULAR_FROM_NPB (m_beta_pct          , namedParameterBundle, PropertyNames::Hop::beta_pct          , std::nullopt),
@@ -256,7 +258,8 @@ Hop::Hop(NamedParameterBundle const & namedParameterBundle) :
 }
 
 Hop::Hop(Hop const & other) :
-   Ingredient          {other                     },
+   Ingredient          {other},
+   FolderPropertyBase  {other},
    m_alpha_pct         {other.m_alpha_pct         },
    m_form              {other.m_form              },
    m_beta_pct          {other.m_beta_pct          },
@@ -353,5 +356,8 @@ void Hop::setYear                 (QString                  const & val) { SET_A
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Hop)
 
-// Insert the boiler-plate stuff for inventory
+// Insert the boilerplate stuff for inventory
 INGREDIENT_BASE_COMMON_CODE(Hop)
+
+// Boilerplate code for FolderPropertyBase
+FOLDER_BASE_COMMON_CODE(Hop)

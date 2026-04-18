@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * trees/TreeNode.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * trees/TreeNode.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -60,15 +60,15 @@ template<class S> S & operator<<(S & stream, TreeNodeClassifier const treeNodeCl
 
 class TreeNode {
 protected:
-   TreeNode(TreeModel & model);
+   explicit TreeNode(TreeModel & model);
 
 public:
-   ~TreeNode();
+   virtual ~TreeNode();
 
    /**
     * \brief Returns total number of nodes of specified type in this node's subtree.
     */
-   int nodeCount(TreeNodeClassifier const classifier) const;
+   [[nodiscard]] int nodeCount(TreeNodeClassifier const classifier) const;
 
    /**
     * \brief Returns a string representation of this node's subtree, useful for logging/debugging.
@@ -77,7 +77,7 @@ public:
     * \param indent A string of spaces and "│" characters to indent the current node in the output
     * \param prefix The characters to prefix the node with (blank for root node, "├──", "└──"
     */
-   QString subTreeToString(QString const indent = "", QString const prefix = "") const;
+   [[nodiscard]] QString subTreeToString(QString const indent = "", QString const prefix = "") const;
 
    /**
     * \brief Used by \c subTreeToString.  Saves us creating lots of QTextStream objects when we're ultimately sending
@@ -89,64 +89,56 @@ public:
     * \brief Derived classes implement this function, which then makes it easy for us to cast from TreeNode * to the
     *        actual type.
     */
-   virtual TreeNodeClassifier classifier() const = 0;
+   [[nodiscard]] virtual TreeNodeClassifier classifier() const = 0;
 
    /**
     * \brief Called from \c TreeModelBase::doData to obtain what to show in the specified column for the given role
     *
     *        See https://doc.qt.io/qt-6/qt.html#ItemDataRole-enum for possible values for \c role
     */
-   virtual QVariant data(int const column, int const role) const = 0;
+   [[nodiscard]] virtual QVariant data(int const column, int const role) const = 0;
 
-   virtual int childCount() const = 0;
+   [[nodiscard]] virtual int childCount() const = 0;
 
-   virtual TreeNode * rawChild(int number) const = 0;
+   [[nodiscard]] virtual TreeNode * rawChild(int number) const = 0;
 
-   virtual QList<TreeNode *> rawChildren() const = 0;
+   [[nodiscard]] virtual QList<TreeNode *> rawChildren() const = 0;
 
-   virtual TreeNode * rawParent() const = 0;
+   [[nodiscard]] virtual TreeNode * rawParent() const = 0;
 
    /**
     * \brief NOTE that this is not currently supported if the underlying item is a \c Folder
     */
-   virtual NamedEntity * rawUnderlyingItem() const = 0;
+   [[nodiscard]] virtual NamedEntity * rawUnderlyingItem() const = 0;
 
-   virtual int numberOfChild(TreeNode const * childToCheck) const = 0;
+   [[nodiscard]] virtual int numberOfChild(TreeNode const * childToCheck) const = 0;
 
-   virtual int childNumber() const = 0;
+   [[nodiscard]] virtual int childNumber() const = 0;
 
    virtual bool removeChildren(int position, int count) = 0;
 
    /**
     * \brief Class name of whatever type of object is stored in this node (eg "Recipe", "Hop, etc)
     */
-   virtual QString className() const = 0;
+   [[nodiscard]] virtual QString className() const = 0;
 
    /**
     * \brief Localised name of whatever type of object is stored in this node (eg
     *        "Recipe" -> "Recette" / "Rezept" / "Receta" / etc)
     */
-   virtual QString localisedClassName() const = 0;
+   [[nodiscard]] virtual QString localisedClassName() const = 0;
 
    //! \brief Name of individual object stored in this node (eg "Oatmeal Stout")
-   virtual QString name() const = 0;
+   [[nodiscard]] virtual QString name() const = 0;
 
    //! \brief ID of individual object stored in this node.  NB: Will currently return 0 for a \c Folder
-   virtual int underlyingItemKey() const = 0;
-
-   virtual QString dragAndDropMimeType() const = 0;
-
-   /**
-    * \brief For a \c TreeFolderNode, this should return the folder held by the node.
-    *        For a \c TreeItemNode, this should return the closest containing folder, or \c nullptr otherwise.
-    */
-   virtual std::shared_ptr<Folder> folder() const = 0;
+   [[nodiscard]] virtual int underlyingItemKey() const = 0;
 
    //! \brief flag this node to override display() or not
    void setShowMe(bool val);
 
    //! \brief does the node want to be shown regardless of display()
-   bool showMe() const;
+   [[nodiscard]] bool showMe() const;
 
 protected:
    /**

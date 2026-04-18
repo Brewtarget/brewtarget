@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Water.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Water.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -146,13 +146,13 @@ TypeLookup const Water::typeLookup {
    },
    // Parent classes lookup
    {&OutlineableNamedEntity::typeLookup,
-    std::addressof(FolderBase<Water>::typeLookup)}
+    std::addressof(FolderPropertyBase<Water>::typeLookup)}
 };
-static_assert(std::is_base_of<FolderBase<Water>, Water>::value);
+static_assert(std::is_base_of<FolderPropertyBase<Water>, Water>::value);
 
 Water::Water(QString name) :
    OutlineableNamedEntity{name},
-   FolderBase<Water>{},
+   FolderPropertyBase<Water>{},
    m_calcium_ppm        {0.0         },
    m_bicarbonate_ppm    {0.0         },
    m_sulfate_ppm        {0.0         },
@@ -180,7 +180,7 @@ Water::Water(QString name) :
 
 Water::Water(NamedParameterBundle const & namedParameterBundle) :
    OutlineableNamedEntity{namedParameterBundle},
-   FolderBase<Water>{namedParameterBundle},
+   FolderPropertyBase<Water>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_calcium_ppm       , namedParameterBundle, PropertyNames::Water::calcium_ppm     ),
    SET_REGULAR_FROM_NPB (m_bicarbonate_ppm   , namedParameterBundle, PropertyNames::Water::bicarbonate_ppm ),
    SET_REGULAR_FROM_NPB (m_sulfate_ppm       , namedParameterBundle, PropertyNames::Water::sulfate_ppm     ),
@@ -208,7 +208,7 @@ Water::Water(NamedParameterBundle const & namedParameterBundle) :
 
 Water::Water(Water const& other) :
    OutlineableNamedEntity{other},
-   FolderBase<Water>{other},
+   FolderPropertyBase<Water>{other},
    m_calcium_ppm        {other.m_calcium_ppm       },
    m_bicarbonate_ppm    {other.m_bicarbonate_ppm   },
    m_sulfate_ppm        {other.m_sulfate_ppm       },
@@ -370,5 +370,5 @@ double Water::ppm(Water::Ion const ion) const {
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Water)
 
-// Boilerplate code for FolderBase
+// Boilerplate code for FolderPropertyBase
 FOLDER_BASE_COMMON_CODE(Water)

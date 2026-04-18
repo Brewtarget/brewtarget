@@ -68,8 +68,8 @@ private:
    /**
     * \brief Constructor
     *
-    *        Note that we pass nullptr as parent to m_model and m_treeSortFilterProxy constructors because they are value
-    *        members of this class and we do not want them put in the QObject tree (which would try to call their
+    *        Note that we pass nullptr as parent to m_model and m_treeSortFilterProxy constructors because they are
+    *        value members of this class, and we do not want them put in the QObject tree (which would try to call their
     *        destructors when parent is destroyed).
     */
    TreeViewBase() :
@@ -319,11 +319,21 @@ public:
       return nullptr;
    }
 
+   std::shared_ptr<Folder<NE>> getCurrentFolder() const requires (HasFolder<NE>) {
+      for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
+         QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+         if (auto folder = this->m_model.folder(modelIndex)) {
+            return folder;
+         }
+      }
+      return nullptr;
+   }
+
    CommonContextMenuHelper::Selected<NE, SNE> getNumbersSelected() const {
       CommonContextMenuHelper::Selected<NE, SNE> selected;
       for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
-         QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
-         switch (this->m_model.treeNode(modelIndex)->classifier()) {
+         switch (QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+                 this->m_model.treeNode(modelIndex)->classifier()) {
             case TreeNodeClassifier::PrimaryItem  : ++selected.numPrimary  ; break;
             case TreeNodeClassifier::SecondaryItem: ++selected.numSecondary; break;
             case TreeNodeClassifier::Folder       : ++selected.numFolders  ; break;
@@ -552,7 +562,7 @@ public:
    void doRenameSelected() {
       // I don't think I can figure out what the behavior will be if you select many items
       QModelIndexList const indexes = this->derived().selectionModel()->selectedRows();
-      if (indexes.size() == 0) {
+      if (indexes.empty()) {
          return;
       }
 
@@ -577,95 +587,131 @@ public:
       TreeFolderNode<NE> & treeFolderNode = static_cast<TreeFolderNode<NE> &>(*treeNode);
 
       auto folder = treeFolderNode.underlyingItem();
-      QString newName = QInputDialog::getText(&this->derived(),
-                                              Derived::tr("Folder name"),
-                                              Derived::tr("Folder name:"),
-                                              QLineEdit::Normal,
-                                              folder->name());
 
-      // User clicks cancel
-      if (newName.isEmpty()) {
-         return;
+      //
+      // The while loop here is to allow the user to correct things if their new name fails validation.  We start with
+      // the current name in the edit box, but leave the user's edit next time if validation fails.
+      //
+      QString newName = folder->name();
+      bool requestNewName = true;
+      while (requestNewName) {
+         bool clickedOk = false;
+         newName = QInputDialog::getText(&this->derived(),
+                                         Derived::tr("Folder name"),
+                                         Derived::tr("Folder name:"),
+                                         QLineEdit::Normal,
+                                         newName,
+                                         &clickedOk);
+         if (!clickedOk) {
+            // User clicked cancel
+            return;
+         }
+
+         //
+         // Where we can, we simply correct the user's input:
+         //
+         //   - Since we use '/' as a delimiter in folder paths, it would be confusing to allow it in folder names.
+         //     Rather than issue an error of a name has a '/', we just remove those characters.
+         //
+         //   - Extraneous whitespace in names if often a source of confusion.  QString::simplified() removes whitespace
+         //     from the start and the end of the string and replaces each sequence of internal whitespace (including
+         //     tabs, newlines, etc) with a single space
+         //
+         // Note that the order of these operations is significant (and eg means "a / b" becomes "a b" not "a  b".
+         //
+         newName.remove('/');
+         newName = newName.simplified();
+
+         if (newName.isEmpty()) {
+            QMessageBox messageBox;
+            messageBox.setIcon(QMessageBox::Critical);
+            messageBox.setWindowTitle(Derived::tr("Invalid Name"));
+            messageBox.setText(Derived::tr("Folder name cannot be blank (and cannot contain '/')"));
+            messageBox.exec();
+            continue;
+         }
+
+         requestNewName = false;
       }
-      // Do some input validation here.
 
-      // Nice little builtin to collapse leading and following white space
-      newName = newName.simplified();
-      if (newName.isEmpty()) {
-         QMessageBox::critical(&this->derived(),
-                               Derived::tr("Bad Name"),
-                               Derived::tr("A folder name must have at least one non-whitespace character in it"));
-         return;
-      }
-
-      Qt::SplitBehaviorFlags const skip = Qt::SkipEmptyParts;
-
-      if (newName.split("/", skip).isEmpty()) {
-         QMessageBox::critical(&this->derived(),
-                               Derived::tr("Bad Name"),
-                               Derived::tr("A folder name must have at least one non-/ character in it"));
-         return;
-      }
-      newName = folder->path() % "/" % newName;
-
-      // Delegate this work to the tree.
-      this->m_model.renameFolder(*folder, newName);
+      qDebug() << Q_FUNC_INFO << "Renaming folder" << folder->fullPath() << "to" << newName;
+      folder->setName(newName);
 
       return;
    }
 
-   void doAddFolder(QString const & folder) {
-      this->m_model.addFolder(folder);
-      return;
-   }
-
-   QString doFolderName(QModelIndex const & viewIndex) const {
+   /**
+    * \brief Gets the folder (or containing folder), if any, for the supplied index -- via \c TreeModelBase::folder
+    */
+   Folder<NE> const * folderRaw(QModelIndex const & viewIndex) const requires (HasFolder<NE>) {
       QModelIndex const modelIndex{this->m_treeSortFilterProxy.mapToSource(viewIndex)};
-      return this->m_model.folderPath(modelIndex);
+      return this->m_model.folderRaw(modelIndex);
    }
 
    /**
     * \brief Sometimes when multiple items are selected, we only want the first one
     */
    QModelIndex getFirstSelected() {
-      QModelIndexList indexes = this->derived().selectionModel()->selectedRows();
+      QModelIndexList const indexes = this->derived().selectionModel()->selectedRows();
       return indexes.at(0);
    }
 
-   //! \brief Create a new folder
-   void doNewFolder() {
-      QModelIndex const starter = getFirstSelected();
+   //! \brief Create a new folder - No-op version
+   void doNewFolder() requires (HasNoFolder<NE>) {
+      return;
+   }
 
-      // Where to start from
-      QString dPath = this->doFolderName(starter);
-      QString name = QInputDialog::getText(&this->derived(),
-                                           Derived::tr("Folder name"),
-                                           Derived::tr("Folder name:"),
-                                           QLineEdit::Normal,
-                                           dPath);
-      // User clicks cancel
-      if (name.isEmpty()) {
+   //! \brief Create a new folder - substantive version
+   void doNewFolder() requires (HasFolder<NE>) {
+      //
+      // In previous versions of the code, we pre-populated this dialogue box with the folder path of the
+      // currently-selected element.  This has the mild advantage that you can create paths outside the one you're in
+      // (eg if current selected element is in folder /foo/bar, you can create /hum/bug which gives folder "bug" inside
+      // root folder "hum").  However, I think on balance it's the wrong approach because it's different from how most
+      // file system GUIs work.  Instead, we take it as given that whatever folder(s) you specify are created inside the
+      // current folder.  If that turns out not to be what you wanted then you can delete them or drag them to the right
+      // place.
+      //
+      QString pathToCreate = QInputDialog::getText(&this->derived(),
+                                                   Derived::tr("Folder name"),
+                                                   Derived::tr("Folder name:"),
+                                                   QLineEdit::Normal);
+      // Bail out if the user clicks cancel or does not specify a name
+      if (pathToCreate.isEmpty()) {
          return;
       }
+
       // Do some input validation here.
 
       // Nice little builtin to collapse leading and following white space
-      name = name.simplified();
-      if (name.isEmpty()) {
+      pathToCreate = pathToCreate.simplified();
+      if (pathToCreate.isEmpty()) {
          QMessageBox::critical(&this->derived(),
                                Derived::tr("Bad Name"),
                                Derived::tr("A folder name must have at least one non-whitespace character in it"));
          return;
       }
 
-      Qt::SplitBehaviorFlags const skip = Qt::SkipEmptyParts;
-      if (name.split("/", skip).isEmpty()) {
+      //
+      // We allow the user to make a chain of nested folders using the '/' separator.  Not sure whether this is hugely
+      // important, but it's existing functionality so default approach is to leave it in place.
+      //
+      auto const names = pathToCreate.split("/", Qt::SkipEmptyParts);
+      if (names.isEmpty()) {
          QMessageBox::critical(&this->derived(),
                                Derived::tr("Bad Name"),
                                Derived::tr("A folder name must have at least one non-/ character in it"));
          return;
       }
-      this->doAddFolder(name);
+
+      auto currentFolder = this->getCurrentFolder();
+      for (auto const & name : names) {
+         auto newFolder = std::make_shared<Folder<NE>>(name);
+         newFolder->setContainedInFolderId(currentFolder->key());
+         ObjectStoreWrapper::insert(newFolder);
+         currentFolder = newFolder;
+      }
+
       return;
    }
 
@@ -688,25 +734,29 @@ public:
       return;
    }
 
-   void doNewItem(QString const & folderPath) {
+   void doNewItem(Folder<NE> const * folder) requires (HasFolder<NE>) {
       if constexpr (std::same_as<NE, Recipe>) {
          // MainWindow::newRecipeInFolder
-         this->m_editor->newRecipeInFolder(folderPath);
+         this->m_editor->newRecipeInFolder(folder);
       } else {
-         this->m_editor->newEditItem(folderPath);
+         this->m_editor->newEditItem(folder);
       }
       return;
    }
 
    void doNewItem() {
-      QModelIndexList const indexes = this->derived().selectionModel()->selectedRows();
-      // This is a little weird. There is an edge case where nothing is selected and you click the big blue + button.
-      QString folderPath;
-      if (indexes.size() > 0) {
-         folderPath = this->doFolderName(indexes.at(0));
+      if constexpr (HasFolder<NE>) {
+         Folder<NE> const * folder = nullptr;
+         // This is a little weird. There is an edge case where nothing is selected and you click the big blue + button.
+         if (QModelIndexList const indexes = this->derived().selectionModel()->selectedRows();
+             !indexes.empty()) {
+            folder = this->folderRaw(indexes.at(0));
+         }
+         this->doNewItem(folder);
+      } else {
+         this->m_editor->newEditItem();
       }
 
-      this->doNewItem(folderPath);
       return;
    }
 
@@ -826,11 +876,10 @@ using RecipeEditor = MainWindow;
                              NeName __VA_OPT__(, __VA_ARGS__)>;                       \
                                                                                       \
    public:                                                                            \
-      NeName##TreeView(QWidget * parent = nullptr);                                   \
+      explicit NeName##TreeView(QWidget * parent = nullptr);                          \
       virtual ~NeName##TreeView();                                                    \
                                                                                       \
       virtual void setSelected(QModelIndex const & index) override;                   \
-      /*virtual QMenu * getContextMenu(QModelIndex const & selectedViewIndex) override;*/ \
       virtual TreeModel & treeModel() override;                                       \
       virtual TreeNode * treeNode(QModelIndex const & index) const override;          \
       virtual void copy(QModelIndexList const & selectedViewIndexes) override;        \
@@ -839,14 +888,10 @@ using RecipeEditor = MainWindow;
       virtual void deleteSelected() override;                                         \
       virtual void renameSelected();                                                  \
       virtual void   editSelected();                                                  \
-      virtual void addFolder(QString const & folder) override;                        \
-      virtual QString folderName(QModelIndex const & viewIndex) const override;       \
                                                                                       \
    public slots:                                                                      \
       virtual void activated(QModelIndex const & viewIndex) override;                 \
       void contextMenu(QPoint const & point);                                         \
-                                                                                      \
-   /*private slots:*/                                                                     \
       void newFolder();                                                               \
       void expandFolder(QModelIndex const & viewIndex);                               \
       void newItem();                                                                 \
@@ -896,13 +941,6 @@ using RecipeEditor = MainWindow;
    void NeName##TreeView::deleteSelected() { this->doDeleteSelected(); return; }     \
    void NeName##TreeView::renameSelected() { this->doRenameSelected(); return; }     \
    void NeName##TreeView::  editSelected() { this->  doEditSelected(); return; }     \
-   void NeName##TreeView::addFolder(QString const & folder) {                        \
-      this->doAddFolder(folder);                                                     \
-      return;                                                                        \
-      }                                                                              \
-   QString NeName##TreeView::folderName(QModelIndex const & viewIndex) const {       \
-      return this->doFolderName(viewIndex);                                          \
-   }                                                                                 \
                                                                                      \
    void NeName##TreeView::activated(QModelIndex const & viewIndex) {                 \
       this->doActivated(viewIndex);                                                  \

@@ -95,6 +95,10 @@ public:
    Q_PROPERTY(bool           hasTimer          READ hasTimer           WRITE setHasTimer     )
    Q_PROPERTY(QString        timerValue        READ timerValue         WRITE setTimerValue   )
    Q_PROPERTY(bool           completed         READ completed          WRITE setCompleted    )
+   /**
+    * I think this is time before end of stage -- eg for adding a Hop 15 mins after the start of a 75 min boil, this
+    * would be 60.
+    */
    Q_PROPERTY(double         interval_mins     READ interval_mins      WRITE setInterval_mins)
    Q_PROPERTY(QList<QString> reagents          READ reagents           STORED false          )
 

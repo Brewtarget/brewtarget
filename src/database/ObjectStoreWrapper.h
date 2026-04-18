@@ -102,13 +102,13 @@ namespace ObjectStoreWrapper {
     * \param obj  Pointer to the object, which (a) must not be null and (b) must already be stored in the ObjectStore
     */
    template<class NE> std::shared_ptr<NE> getSharedFromRaw(NE * const ne) {
-      int id = ne->key();
-      ObjectStoreTyped<NE> & objectStore = ObjectStoreTyped<NE>::getInstance();
-      if (id > 0 && objectStore.contains(id)) {
+      int const id = ne->key();
+      if (ObjectStoreTyped<NE> & objectStore = ObjectStoreTyped<NE>::getInstance();
+          id > 0 && objectStore.contains(id)) {
          return objectStore.getById(id);
       }
       // If the object isn't stored in the DB then we can create a shared pointer for it, but this is dangerous as there
-      // might already be another shared pointer to it.  At minimum we should log a warning.  In the long run we should
+      // might already be another shared pointer to it.  At minimum, we should log a warning.  In the long run we should
       // Q_ASSERT(false) here.
       qWarning() <<
          Q_FUNC_INFO << "Creating new shared_ptr for unstored" << ne->metaObject()->className() << "#" << id << " :" <<
@@ -134,11 +134,13 @@ namespace ObjectStoreWrapper {
    /**
     * \brief Preferred way of inserting a new object in a store.
     *
-    *        Caller creates a new object in a shared_ptr and, if and when it caller decides we want to keep (rather than
-    *        discard) this new object, calls this function, which will store data in DB and make a copy of the
-    *        shared_ptr inside the the ObjectStore.   This means the object will be properly destroyed, without
+    *        Caller creates a new object in a shared_ptr and, if and when the caller decides we want to keep (rather
+    *        than discard) this new object, calls this function, which will store data in DB and make a copy of the
+    *        shared_ptr inside the ObjectStore.   This means the object will be properly destroyed, without
     *        additional coding, in all cases: (i) object intentionally discarded, (ii) object stored, (iii) ghastly
     *        error happens causing exceptions etc.
+    *
+    * \return The ID of what was inserted
     */
    template<class NE> int insert(std::shared_ptr<NE> & ne) {
       return ObjectStoreTyped<NE>::getInstance().insert(ne);

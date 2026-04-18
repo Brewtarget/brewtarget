@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Water.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Water.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -25,7 +25,7 @@
 #include <QString>
 #include <QSqlRecord>
 
-#include "model/FolderBase.h"
+#include "model/FolderPropertyBase.h"
 #include "model/OutlineableNamedEntity.h"
 #include "utils/EnumStringMapping.h"
 
@@ -73,11 +73,11 @@ class RecipeUseOfWater;
  *        Note that we do not support the BeerJSON "producer" field on water as it is not clear what it means!
  */
 class Water : public OutlineableNamedEntity,
-              public FolderBase<Water> {
+              public FolderPropertyBase<Water> {
    Q_OBJECT
    FOLDER_BASE_DECL(Water)
-   // See model/FolderBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
 
 public:
    /**

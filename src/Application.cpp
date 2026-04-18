@@ -202,8 +202,10 @@ namespace {
       //   (1) Assume that binary is in /usr/bin and resources are in /usr/share/[application name].  This should be
       //       right most of the time, because it's what most of the big distros do.  But it could be a problem, eg,
       //       someone compiling from source might want to use:
-      //         - /usr/local/bin and /usr/local/share/[application name], or
-      //         - $HOME/.local/bin and $HOME/.local/share/[application name]
+      //          - /usr/local/bin and /usr/local/share/[application name], or
+      //          - $HOME/.local/bin and $HOME/.local/share/[application name]
+      //       Moreover, in container packages, things can have very different paths, eg /app/bin is standard inside a
+      //       Flatpak container.
       //   (2) Get the directory at run-time from Qt.  If Qt is able to read from the /proc pseudo file system then the
       //       info will be spot on as it comes from the kernel.  AFAICT the warning in the Qt doco is only because,
       //       technically, we can't guarantee that /proc will always be mounted in every instance of every Linux
@@ -238,7 +240,7 @@ namespace {
 #if defined(Q_OS_LINUX)
          // === Linux ===
          // We'll assume the return value from QCoreApplication::applicationDirPath is invalid if it does not end in
-         // /bin (because there's no way it would make sense for us to be in an sbin directory
+         // /bin (because there's no way it would make sense for us to be in an /sbin directory
          if (path.endsWith("/bin/")) {
             path += QString{"../share/%1/"}.arg(CONFIG_APPLICATION_NAME_LC);
          } else {

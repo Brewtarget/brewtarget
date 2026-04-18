@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/BtSqlQuery.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * database/BtSqlQuery.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -40,7 +40,9 @@ void BtSqlQuery::reallyPrepare() {
    if (!this->bt_boundValues) {
       this->bt_boundValues = true;
       if (!this->QSqlQuery::prepare(this->bt_query)) {
-         qCritical() << Q_FUNC_INFO << "Call to QSqlQuery::prepare() failed: " << this->lastError().text();
+         qCritical() <<
+               Q_FUNC_INFO << "For query" << this->bt_query << ", call to QSqlQuery::prepare() failed: " <<
+               this->lastError().text();
          qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
          throw std::runtime_error(this->lastError().text().toStdString());
       }

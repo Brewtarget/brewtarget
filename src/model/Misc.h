@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Misc.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Misc.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -59,10 +59,15 @@ AddPropertyName(useFor   )
  *
  * \brief Model for a misc record in the database.
  */
-class Misc : public Ingredient, public IngredientBase<Misc> {
+class Misc : public Ingredient,
+             public IngredientBase<Misc>,
+             public FolderPropertyBase<Misc> {
    Q_OBJECT
 
    INGREDIENT_BASE_DECL(Misc)
+   FOLDER_BASE_DECL(Misc)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
 
 public:
    /**
@@ -128,11 +133,11 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   Misc(QString name = "");
-   Misc(NamedParameterBundle const & namedParameterBundle);
+   explicit Misc(QString const & name = "");
+   explicit Misc(NamedParameterBundle const & namedParameterBundle);
    Misc(Misc const & other);
 
-   virtual ~Misc();
+   ~Misc() override;
 
    //=================================================== PROPERTIES ====================================================
    //! \brief The \c Type.

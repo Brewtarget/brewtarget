@@ -24,8 +24,6 @@
 
 #include "utils/MultiVector.h"
 
-
-
 #include <QObject>
 #include <QSqlDatabase>
 #include <QString>

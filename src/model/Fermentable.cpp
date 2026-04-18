@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Fermentable.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Fermentable.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Blair Bonnett <blair.bonnett@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Kregg Kemper <gigatropolis@yahoo.com>
@@ -227,9 +227,11 @@ TypeLookup const Fermentable::typeLookup {
     &IngredientBase<Fermentable>::typeLookup}
 };
 static_assert(std::is_base_of<Ingredient, Fermentable>::value);
+static_assert(std::is_base_of<FolderPropertyBase<Fermentable>, Fermentable>::value);
 
-Fermentable::Fermentable(QString name) :
+Fermentable::Fermentable(QString const & name) :
    Ingredient                 {name},
+   FolderPropertyBase         {},
    m_type                     {Fermentable::Type::Grain},
    m_color_lovibond           {0.0                     },
    m_origin                   {""                      },
@@ -270,6 +272,7 @@ Fermentable::Fermentable(QString name) :
 
 Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
    Ingredient   {namedParameterBundle},
+   FolderPropertyBase{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_type                               , namedParameterBundle, PropertyNames::Fermentable::type                             ),
    // See constructor body for initialisation of m_color_lovibond
    SET_REGULAR_FROM_NPB (m_origin                             , namedParameterBundle, PropertyNames::Fermentable::origin                , QString()),
@@ -319,7 +322,8 @@ Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
 }
 
 Fermentable::Fermentable(Fermentable const & other) :
-   Ingredient              {other                         },
+   Ingredient              {other},
+   FolderPropertyBase      {other},
    m_type                  {other.m_type                  },
    m_color_lovibond        {other.m_color_lovibond        },
    m_origin                {other.m_origin                },
@@ -453,5 +457,8 @@ void Fermentable::setBetaGlucan_ppm           (std::optional<double>     const  
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Fermentable)
 
-// Insert the boiler-plate stuff for inventory
+// Insert the boilerplate stuff for inventory
 INGREDIENT_BASE_COMMON_CODE(Fermentable)
+
+// Boilerplate code for FolderPropertyBase
+FOLDER_BASE_COMMON_CODE(Fermentable)

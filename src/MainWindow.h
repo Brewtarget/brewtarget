@@ -215,9 +215,14 @@ public slots:
    void editRecipeBoil();
    void editRecipeFermentation();
 
-   //! \brief Create a new recipe in the database.
+   /**
+    * \brief Create a new recipe in the database.
+    *
+    *        Note that this cannot have a parameter (even a defaultable one), otherwise we won't be able to connect
+    *        \c actionNewRecipe to it.
+    */
    std::shared_ptr<Recipe> newRecipe();
-   void newRecipeInFolder(QString folderPath);
+   std::shared_ptr<Recipe> newRecipeInFolder(Folder<Recipe> const * folder);
    //! \brief Export current recipe to BeerXML or BeerJSON.
    void exportRecipe();
    //! \brief Display file selection dialog and import BeerXML/BeerJSON files.
@@ -231,8 +236,8 @@ public slots:
    TreeView * getActiveTreeView() const;
 
    void deleteSelected();
-   void copySelected();
-   void exportSelected();
+   void copySelected() const;
+   void exportSelected() const;
 
    //! \brief Backup the database.
    void backup();

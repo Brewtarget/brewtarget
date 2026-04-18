@@ -1609,7 +1609,7 @@ bool Recipe::compareWith(NamedEntity const & other, QList<BtStringConst const *>
       //
       // Parent classes have to match too.
       //
-      this->FolderBase<Recipe>::doCompareWith(rhs, propertiesThatDiffer)
+      this->FolderPropertyBase<Recipe>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
 
@@ -1685,13 +1685,13 @@ TypeLookup const Recipe::typeLookup {
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
-    std::addressof(FolderBase<Recipe>::typeLookup)}
+    std::addressof(FolderPropertyBase<Recipe>::typeLookup)}
 };
-static_assert(std::is_base_of<FolderBase<Recipe>, Recipe>::value);
+static_assert(std::is_base_of<FolderPropertyBase<Recipe>, Recipe>::value);
 
 Recipe::Recipe(QString name) :
    NamedEntity              {name},
-   FolderBase<Recipe>       {},
+   FolderPropertyBase<Recipe>       {},
    pimpl                    {std::make_unique<impl>(*this)},
    m_type                   {Recipe::Type::AllGrain       },
    m_brewer                 {""                           },
@@ -1742,7 +1742,7 @@ Recipe::Recipe(QString name) :
 
 Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity          {namedParameterBundle},
-   FolderBase<Recipe>   {namedParameterBundle},
+   FolderPropertyBase<Recipe>   {namedParameterBundle},
    pimpl                {std::make_unique<impl>(*this, namedParameterBundle)},
    SET_REGULAR_FROM_NPB (m_type                   , namedParameterBundle, PropertyNames::Recipe::type                   ),
    SET_REGULAR_FROM_NPB (m_brewer                 , namedParameterBundle, PropertyNames::Recipe::brewer                 , ""),
@@ -1800,7 +1800,7 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
 
 Recipe::Recipe(Recipe const & other) :
    NamedEntity{other},
-   FolderBase<Recipe>{other},
+   FolderPropertyBase<Recipe>{other},
    // The impl copy constructor calls the OwnedSet copy constructor for each type of recipe addition etc which, in turn
    // does a deep copy of the corresonding additions
    pimpl{std::make_unique<impl>(*this, other)},
@@ -2103,9 +2103,6 @@ void Recipe::generateInstructions() {
                            tr("Transfer beer to secondary."))
          );
       }
-
-///      /*** Secondary misc ***/
-///      this->pimpl->instructionsForMiscAdditions<RecipeAddition::Stage::Fermentation, 2>(preInstructions);
 
       /*** Dry hopping ***/
       this->pimpl->instructionsForHopAdditions<RecipeAddition::Stage::Fermentation>(preInstructions);
@@ -3246,5 +3243,5 @@ void Recipe::hardDeleteOrphanedEntities() {
    return;
 }
 
-// Boilerplate code for FolderBase
+// Boilerplate code for FolderPropertyBase
 FOLDER_BASE_COMMON_CODE(Recipe)

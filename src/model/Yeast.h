@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Yeast.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Yeast.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -77,10 +77,15 @@ AddPropertyName(type                     )
  *        Since BeerJSON, this is expanded to include other microbes used in brewing.   For the moment, we retain the
  *        name Yeast however.
  */
-class Yeast : public Ingredient, public IngredientBase<Yeast> {
+class Yeast : public Ingredient,
+              public IngredientBase<Yeast>,
+              public FolderPropertyBase<Yeast> {
    Q_OBJECT
 
    INGREDIENT_BASE_DECL(Yeast)
+   FOLDER_BASE_DECL(Yeast)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
 
 public:
    /**
@@ -227,11 +232,11 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   Yeast(QString name = "");
-   Yeast(NamedParameterBundle const & namedParameterBundle);
+   explicit Yeast(QString const & name = "");
+   explicit Yeast(NamedParameterBundle const & namedParameterBundle);
    Yeast(Yeast const & other);
 
-   virtual ~Yeast();
+   ~Yeast() override;
 
    //! \brief The \c Type.
    Q_PROPERTY(Type                   type                      READ type                      WRITE setType                     )

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/EditorBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * editors/EditorBase.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -30,8 +30,9 @@
 #include "BtHorizontalTabs.h"
 #include "database/ObjectStoreWrapper.h"
 #include "editors/EditorBaseField.h"
+#include "model/Folder.h"
 #include "model/NamedEntity.h"
-#include "model/Recipe.h" // Need to include this this to be able to cast Recipe to QObject
+#include "model/Recipe.h" // Need to include this to be able to cast Recipe to QObject
 #include "undoRedo/Undoable.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/TypeTraits.h"
@@ -77,7 +78,7 @@ public:
    }
 
    /**
-    * \brief I tried putting this in \c EditorBase and having \c NE::OwnerClass evaluated only when it is valid  (ie
+    * \brief I tried putting this in \c EditorBase and having \c NE::OwnerClass evaluated only when it is valid (ie
     *        when HasStepOwner<editorBaseOptions> is true), and some replaced with some dummy type otherwise.  This
     *        seems quite hard to do.  Eg \c std::conditional requires both its class parameters to be valid.  So an
     *        extra CRTP base class was born.
@@ -393,14 +394,24 @@ public:
     */
    template <typename D> void setEditItem(D) = delete;
 
-   void setFolderPath(std::shared_ptr<NE> ne, QString const & folderPath) requires HasFolder<NE> {
-      if (!folderPath.isEmpty()) {
-         ne->setFolderPath(folderPath);
-      }
+   static void setFolder(std::shared_ptr<NE> ne, Folder<NE> const * folder) requires HasFolder<NE> {
+      ne->setContainedInFolder(folder);
       return;
    }
 
-   void setFolderPath([[maybe_unused]] std::shared_ptr<NE> ne, [[maybe_unused]] QString const & folderPath) requires HasNoFolder<NE> {
+   static void setFolder([[maybe_unused]] std::shared_ptr<NE> ne, [[maybe_unused]] Folder<NE> const * folder) requires HasNoFolder<NE> {
+      return;
+   }
+
+   QString promptForName() {
+      return QInputDialog::getText(&this->derived(),
+                                   QString(QObject::tr("%1 name")).arg(NE::staticMetaObject.className()),
+                                   QString(QObject::tr("%1 name:")).arg(NE::staticMetaObject.className()));
+   }
+
+   void setEditItemAndShow(std::shared_ptr<NE> ne) {
+      this->setEditItem(ne);
+      this->derived().show();
       return;
    }
 
@@ -409,19 +420,26 @@ public:
     *
     *        This is also called from \c TreeView::newNamedEntity.
     */
-   void newEditItem(QString folderPath = "") {
-      QString name = QInputDialog::getText(&this->derived(),
-                                           QString(QObject::tr("%1 name")).arg(NE::staticMetaObject.className()),
-                                           QString(QObject::tr("%1 name:")).arg(NE::staticMetaObject.className()));
+   void newEditItem(Folder<NE> const * folder = nullptr) requires (HasFolder<NE>) {
+      // TBD Do we need to force a name to be set before we show the editor?
+      QString const name = this->promptForName();
       if (name.isEmpty()) {
          return;
       }
 
       auto ne = std::make_shared<NE>(name);
-      this->setFolderPath(ne, folderPath);
+      this->setFolder(ne, folder);
+      this->setEditItemAndShow(ne);
+      return;
+   }
 
-      this->setEditItem(ne);
-      this->derived().show();
+   void newEditItem() requires (HasNoFolder<NE>) {
+      QString const name = this->promptForName();
+      if (name.isEmpty()) {
+         return;
+      }
+      auto ne = std::make_shared<NE>(name);
+      this->setEditItemAndShow(ne);
       return;
    }
 

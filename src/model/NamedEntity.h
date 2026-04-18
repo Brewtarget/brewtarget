@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/NamedEntity.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/NamedEntity.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -34,12 +34,13 @@
 #include <QRegularExpression>
 #include <QVariant>
 
-#include "model/FolderBase.h"
+#include "model/FolderPropertyBase.h"
 #include "model/NamedEntityCasters.h"
 #include "utils/BtStringConst.h"
 #include "utils/MetaTypes.h"
 #include "utils/TypeLookup.h"
 
+template<class Derived, IsFolder DerivedIsFolder> class FolderPropertyBase;
 class NamedEntity;
 class NamedParameterBundle;
 class ObjectStore;
@@ -149,6 +150,15 @@ public:
    };
 
    /**
+    * By default, this returns metaobject()->classname().  We need subclasses to be able to override this for cases
+    * where a subclass does not contain a Q_OBJECT declaration.  Eg metaObject()->className() wouldn't give us Folder,
+    * which is a template class, but would give its parent (FolderCommon) instead.
+    *
+    * @return
+    */
+   [[nodiscard]] virtual QString className() const;
+
+   /**
     * \brief Subclasses should provide their localised (ie translated) name via this static member function, so that
     *        templated functions can use it.  Note that translations are obtained at run-time (not least because it is
     *        possible to change language at run-time), which is one reason this needs to be a function rather than a
@@ -252,7 +262,11 @@ public:
    // Everything that inherits from NamedEntity has these properties
    Q_PROPERTY(QString name         READ name         WRITE setName   )
    Q_PROPERTY(bool    deleted      READ deleted      WRITE setDeleted)
-   //! Key (ID) in the table we are stored in
+   /**
+    * Key (ID) in the table we are stored in
+    *
+    * TODO: One day we should rename this to id as that matches the database column names
+    */
    Q_PROPERTY(int     key          READ key          WRITE setKey    )
    /**
     * \brief Whether this object is a "subsidiary" item.  This is used by the \c Recipe class to indicate that a recipe
@@ -341,7 +355,7 @@ public:
     *
     *        NOTE too that Independent (and Semi-Independent) items have folders unless they are owned by another item
     *        (eg \c Mash has a folder but \c MashStep does not).  Dependent items do not have folders (because they are
-    *        owned by \c Recipe).  See model/FolderBase.h for more.
+    *        owned by \c Recipe).  See model/FolderPropertyBase.h for more.
     *
     *        The following pseudo-inheritance diagram shows which \c NamedEntity classes are Dependent, Independent and
     *        Semi-Independent.  (The class \c OwnedByRecipe exists, but \c IndependentOfRecipe does not.)
@@ -418,7 +432,7 @@ public:
     * \brief Subclasses can override this to include extra info in the logging of a class instance.  (This saves them
     *        having to re-implement all the operator<< stuff below.
     */
-   virtual QString extraLogInfo() const;
+   [[nodiscard]] virtual QString extraLogInfo() const;
 
    /**
     * \brief Given a name that is a duplicate of an existing one, modify it to a potential alternative.
@@ -437,13 +451,11 @@ signals:
    /*!
     * \brief Passes the meta property that has changed about this object.
     *
-    * NOTE: When subclassing, be \em extra careful not to create a member function with the same signature.
-    *       Otherwise, everything will silently break.  If this were a virtual member function, we could add the final
-    *       keyword here to enforce this, but it isn't so we can't.
+    * NOTE: When subclassing, be \em extra careful NOT to create a member function with the same signature.
+    *       Otherwise, everything will silently break.  If this were a virtual member function, we could add the
+    *       \c final keyword here to enforce this, but it isn't so we can't.
     */
    void changed(QMetaProperty, QVariant value = QVariant()) const;
-   void changedFolder(QString);
-   void changedName(QString);
 
 protected:
    /**
@@ -711,7 +723,7 @@ private:
 template<class S>
 S & operator<<(S & stream, NamedEntity const & namedEntity) {
    stream <<
-      namedEntity.metaObject()->className() << " #" << namedEntity.key() << " (" << namedEntity.name() << ")" <<
+      namedEntity.className() << " #" << namedEntity.key() << " (" << namedEntity.name() << ")" <<
       namedEntity.extraLogInfo();
    return stream;
 }
@@ -727,7 +739,7 @@ S & operator<<(S & stream, NamedEntity const * namedEntity) {
 }
 
 template<class S>
-S & operator<<(S & stream, std::shared_ptr<NamedEntity> namedEntity) {
+S & operator<<(S & stream, std::shared_ptr<NamedEntity> const namedEntity) {
    stream << namedEntity.get();
    return stream;
 }
@@ -743,7 +755,7 @@ S & operator<<(S & stream, std::shared_ptr<NamedEntity> namedEntity) {
  *        .:TODO:. This isn't quite working yet!
  */
 template<class S, class NE,
-         std::enable_if_t<std::is_base_of<NamedEntity, NE>::value> >
+         std::enable_if_t<std::is_base_of_v<NamedEntity, NE>>>
 S & operator<<(S & stream, NE const * namedEntity) {
    if (namedEntity) {
       stream << *namedEntity;
@@ -801,7 +813,7 @@ template<typename T> constexpr bool IsAbstract(T const *) { return std::is_abstr
  *
  *        See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it).
  */
-template <typename T> concept CONCEPT_FIX_UP HasFolder   = std::is_base_of_v<FolderBase<T>, T>;
-template <typename T> concept CONCEPT_FIX_UP HasNoFolder = std::negation_v<std::is_base_of<FolderBase<T>, T>>;
+template <typename T> concept CONCEPT_FIX_UP HasFolder   = std::is_base_of_v<FolderPropertyBase<T>, T>;
+template <typename T> concept CONCEPT_FIX_UP HasNoFolder = std::negation_v<std::is_base_of<FolderPropertyBase<T>, T>>;
 
 #endif

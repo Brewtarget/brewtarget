@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Style.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Style.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -147,15 +147,15 @@ TypeLookup const Style::typeLookup {
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
-    std::addressof(FolderBase<Style>::typeLookup)}
+    std::addressof(FolderPropertyBase<Style>::typeLookup)}
 };
-static_assert(std::is_base_of<FolderBase<Style>, Style>::value);
+static_assert(std::is_base_of<FolderPropertyBase<Style>, Style>::value);
 
 //====== Constructors =========
 
 Style::Style(QString name) :
    NamedEntity        {name},
-   FolderBase<Style>  {},
+   FolderPropertyBase<Style>  {},
    m_category         {""               },
    m_categoryNumber   {""               },
    m_styleLetter      {""               },
@@ -189,7 +189,7 @@ Style::Style(QString name) :
 
 Style::Style(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity{namedParameterBundle},
-   FolderBase<Style>{namedParameterBundle},
+   FolderPropertyBase<Style>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_category         , namedParameterBundle, PropertyNames::Style::category         ),
    SET_REGULAR_FROM_NPB (m_categoryNumber   , namedParameterBundle, PropertyNames::Style::categoryNumber   ),
    SET_REGULAR_FROM_NPB (m_styleLetter      , namedParameterBundle, PropertyNames::Style::styleLetter      ),
@@ -223,7 +223,7 @@ Style::Style(NamedParameterBundle const & namedParameterBundle) :
 
 Style::Style(Style const & other) :
    NamedEntity{other},
-   FolderBase<Style>{other},
+   FolderPropertyBase<Style>{other},
    m_category         {other.m_category         },
    m_categoryNumber   {other.m_categoryNumber   },
    m_styleLetter      {other.m_styleLetter      },
@@ -318,5 +318,5 @@ void Style::setOverallImpression(QString               const & val) { SET_AND_NO
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Style)
 
-// Boilerplate code for FolderBase
+// Boilerplate code for FolderPropertyBase
 FOLDER_BASE_COMMON_CODE(Style)
