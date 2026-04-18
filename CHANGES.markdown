@@ -14,6 +14,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Shopping Lists
 * We'll list other new features here...
 
+## v5.0.5
+Bug fixes and minor enhancements.
+
+### New Features
+None
+
+### Bug Fixes
+* 5.0.4: Crash at startup [1102](https://github.com/Brewtarget/brewtarget/issues/1102)
+
+### Release Timestamp
+Thu, 16 Apr 2026 05:00:05 +0100
+
 ## v5.0.4
 Bug fixes and minor enhancements.
 
@@ -23,6 +35,7 @@ None
 ### Bug Fixes
 * AppImage versions fail to run - execv error: No such file or directory [1071](https://github.com/Brewtarget/brewtarget/issues/1071)
 * AppImage 5.0.3 fails to run - symbol lookup error [1077](https://github.com/Brewtarget/brewtarget/issues/1077)
+* Flatpak 5.0.3 fails to run - error while loading shared libraries [1078](https://github.com/Brewtarget/brewtarget/issues/1078)
 * AppImage 5.0.3 doesn't include libqsqlite.so [1081](https://github.com/Brewtarget/brewtarget/issues/1081)
 * Windows 5.03 Hop Boil Times [1082](https://github.com/Brewtarget/brewtarget/issues/1082)
 * Always forced to pre-populate database [1084](https://github.com/Brewtarget/brewtarget/issues/1084)

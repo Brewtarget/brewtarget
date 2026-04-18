@@ -2387,22 +2387,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>NODB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SQLITE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PGSQL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ALLDB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unable to back up database before upgrading</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2453,6 +2437,22 @@ Log file may contain more details.</source>
 
 Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SQLite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PosgreSQL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot create new DB schema in file &apos;%1&apos;.  File already exists!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5507,6 +5507,22 @@ Error message:
         <source>The application encountered a fatal error.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Creation of empty Database file &apos;%1&apos; %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>succeeded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To use the newly-created file, rename it to &apos;%1&apos; and move it to directory %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -6612,6 +6628,14 @@ Log file may contain more details.</source>
         <source>New stock purchase</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>New Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop bothering you about new data?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -6625,7 +6649,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>to the mash tun.</source>
-        <translation>à la cuve matière.</translation>
+        <translation type="vanished">à la cuve matière.</translation>
     </message>
     <message>
         <source>Heat water</source>
@@ -6685,7 +6709,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Hop addition</source>
-        <translation>Ajout de houblon</translation>
+        <translation type="vanished">Ajout de houblon</translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
@@ -6771,11 +6795,11 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation>Durée d&apos;ébullition</translation>
+        <translation type="vanished">Durée d&apos;ébullition</translation>
     </message>
     <message>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation>Vous n&apos;avez pas configuré votre équipement(ce que vous devriez faire). Merci d&apos;indiquer la durée d&apos;ébullition.</translation>
+        <translation type="vanished">Vous n&apos;avez pas configuré votre équipement(ce que vous devriez faire). Merci d&apos;indiquer la durée d&apos;ébullition.</translation>
     </message>
     <message>
         <source>Bring the wort to a boil and hold for %1.</source>
@@ -7198,11 +7222,31 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Put %1 %2 into packaging%3.</source>
+        <source> for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source> for %1</source>
+        <source>Put %1 %2 into primary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into secondary%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use %1 %2 at bottling%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> at end of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 addition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> to the mash tun.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7213,20 +7257,8 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add to Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add to Boil</source>
-        <translation type="unfinished">Ajouter à l&apos;ébullition</translation>
-    </message>
-    <message>
-        <source>Add to Fermentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add to Package</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Ajouter à l&apos;ébullition</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -7253,32 +7285,24 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Put %1 %2 into mash%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into boil%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into primary%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into secondary%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use %1 %2 at bottling%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> for %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Misc addition</source>
-        <translation type="unfinished">Ajout d&apos;ingrédients divers</translation>
+        <translation type="obsolete">Ajout d&apos;ingrédients divers</translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished">Empâtage</translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Package</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
