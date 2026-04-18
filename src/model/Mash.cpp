@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Mash.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Mash.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -59,7 +59,7 @@ bool Mash::compareWith(NamedEntity const & other, QList<BtStringConst const *> *
       AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunWeight_kg         , PropertyNames::Mash::mashTunWeight_kg         , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunSpecificHeat_calGC, PropertyNames::Mash::mashTunSpecificHeat_calGC, propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->FolderBase<Mash>             ::doCompareWith(rhs, propertiesThatDiffer) &&
+      this->FolderPropertyBase<Mash>             ::doCompareWith(rhs, propertiesThatDiffer) &&
       this->StepOwnerBase<Mash, MashStep>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
@@ -84,16 +84,16 @@ TypeLookup const Mash::typeLookup {
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
-    std::addressof(FolderBase<Mash>::typeLookup),
+    std::addressof(FolderPropertyBase<Mash>::typeLookup),
     std::addressof(StepOwnerBase<Mash, MashStep>::typeLookup)}
 };
-static_assert(std::is_base_of<FolderBase<Mash>, Mash>::value);
+static_assert(std::is_base_of<FolderPropertyBase<Mash>, Mash>::value);
 
 //==================================================== CONSTRUCTORS ====================================================
 
 Mash::Mash(QString name) :
    NamedEntity{name},
-   FolderBase<Mash>{},
+   FolderPropertyBase<Mash>{},
    StepOwnerBase<Mash, MashStep>{},
    m_grainTemp_c              {0.0 },
    m_notes                    {""  },
@@ -110,7 +110,7 @@ Mash::Mash(QString name) :
 
 Mash::Mash(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity                {namedParameterBundle},
-   FolderBase<Mash>{namedParameterBundle},
+   FolderPropertyBase<Mash>{namedParameterBundle},
    StepOwnerBase<Mash, MashStep>{},
    SET_REGULAR_FROM_NPB(m_grainTemp_c              , namedParameterBundle, PropertyNames::Mash::grainTemp_c              ),
    SET_REGULAR_FROM_NPB(m_notes                    , namedParameterBundle, PropertyNames::Mash::notes                    , ""),
@@ -127,7 +127,7 @@ Mash::Mash(NamedParameterBundle const & namedParameterBundle) :
 
 Mash::Mash(Mash const & other) :
    NamedEntity{other},
-   FolderBase<Mash>{other},
+   FolderPropertyBase<Mash>{other},
    StepOwnerBase<Mash, MashStep>{other},
    m_grainTemp_c              {other.m_grainTemp_c              },
    m_notes                    {other.m_notes                    },
@@ -226,7 +226,7 @@ void Mash::acceptSetMemberChange(QMetaProperty prop, QVariant val) {
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Mash)
 
-// Boilerplate code for FolderBase
+// Boilerplate code for FolderPropertyBase
 FOLDER_BASE_COMMON_CODE(Mash)
 
 // Insert boiler-plate wrapper functions that call down to StepOwnerBase

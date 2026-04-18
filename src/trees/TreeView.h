@@ -69,12 +69,6 @@ public:
    //! \brief Delete the selected items in this tree -- called frrom \c MainWindow::deleteSelected
    virtual void deleteSelected() = 0;
 
-   //! \brief adds a folder to the tree
-   virtual void addFolder(QString const & folder) = 0;
-
-   virtual QString folderName(QModelIndex const & viewIndex) const = 0;
-
-public:
    //! \return the classifier of the item at \c index, or \c nullopt if \c index is invalid
    std::optional<TreeNodeClassifier> classifier(QModelIndex const & index) const;
 

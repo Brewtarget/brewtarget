@@ -111,7 +111,7 @@ public:
    void unload();
 
    //! \brief Create a blank database in the given file
-   bool createBlank(QString const& filename);
+   bool createBlank(QString const& fileName);
 
    /*!
     *  \brief Copies the SQLite database file to another directory.

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Fermentation.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/Fermentation.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 #include <QVariant>
 
 #include "model/FermentationStep.h"
-#include "model/FolderBase.h"
+#include "model/FolderPropertyBase.h"
 #include "model/NamedEntity.h"
 #include "model/StepOwnerBase.h"
 
@@ -53,13 +53,13 @@ AddPropertyName(tertiary   )
  *        introduced as part of BeerJSON.  It shares a number of characteristics with \c Mash and \c Boil
  */
 class Fermentation : public NamedEntity,
-                     public FolderBase<Fermentation>,
+                     public FolderPropertyBase<Fermentation>,
                      public StepOwnerBase<Fermentation, FermentationStep> {
    Q_OBJECT
    FOLDER_BASE_DECL(Fermentation)
    STEP_OWNER_COMMON_DECL(Fermentation, fermentation)
-   // See model/FolderBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
    // See model/StepOwnerBase.h for info, getters and setters for these properties
    Q_PROPERTY(QList<std::shared_ptr<FermentationStep>> steps   READ steps   WRITE setSteps   STORED false)
    Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)

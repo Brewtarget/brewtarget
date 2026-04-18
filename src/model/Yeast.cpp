@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Yeast.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Yeast.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -206,8 +206,9 @@ static_assert(std::is_base_of<Ingredient, Yeast>::value);
 
 //============================CONSTRUCTORS======================================
 
-Yeast::Yeast(QString name) :
+Yeast::Yeast(QString const & name) :
    Ingredient{name},
+   FolderPropertyBase{},
    m_type                     {Yeast::Type::Ale},
    m_form                     {Yeast::Form::Liquid},
    m_laboratory               {""},
@@ -235,7 +236,8 @@ Yeast::Yeast(QString name) :
 }
 
 Yeast::Yeast(NamedParameterBundle const & namedParameterBundle) :
-   Ingredient{namedParameterBundle},
+   Ingredient        {namedParameterBundle},
+   FolderPropertyBase{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_type                             , namedParameterBundle, PropertyNames::Yeast::type                     ),
    SET_REGULAR_FROM_NPB (m_form                             , namedParameterBundle, PropertyNames::Yeast::form                     ),
    SET_REGULAR_FROM_NPB (m_laboratory                       , namedParameterBundle, PropertyNames::Yeast::laboratory               ),
@@ -269,7 +271,8 @@ Yeast::Yeast(NamedParameterBundle const & namedParameterBundle) :
 }
 
 Yeast::Yeast(Yeast const & other) :
-   Ingredient{other                        },
+   Ingredient        {other},
+   FolderPropertyBase{other},
    m_type                     {other.m_type                     },
    m_form                     {other.m_form                     },
    m_laboratory               {other.m_laboratory               },
@@ -356,5 +359,8 @@ double Yeast::attenuationTypical_pct() const {
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Yeast)
 
-// Insert the boiler-plate stuff for inventory
+// Insert the boilerplate stuff for inventory
 INGREDIENT_BASE_COMMON_CODE(Yeast)
+
+// Boilerplate code for FolderPropertyBase
+FOLDER_BASE_COMMON_CODE(Yeast)

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Equipment.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Equipment.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -165,14 +165,14 @@ TypeLookup const Equipment::typeLookup {
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
-    std::addressof(FolderBase<Equipment>::typeLookup)}
+    std::addressof(FolderPropertyBase<Equipment>::typeLookup)}
 };
-static_assert(std::is_base_of<FolderBase<Equipment>, Equipment>::value);
+static_assert(std::is_base_of<FolderPropertyBase<Equipment>, Equipment>::value);
 
 //=============================CONSTRUCTORS=====================================
 Equipment::Equipment(QString name) :
    NamedEntity{name},
-   FolderBase<Equipment>{},
+   FolderPropertyBase<Equipment>{},
    m_kettleBoilSize_l           {22.927      },
    m_fermenterBatchSize_l       {18.927      },
    m_mashTunVolume_l            {0.0         },
@@ -237,7 +237,7 @@ Equipment::Equipment(QString name) :
 //
 Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity{namedParameterBundle},
-   FolderBase<Equipment>{namedParameterBundle},
+   FolderPropertyBase<Equipment>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_kettleBoilSize_l           , namedParameterBundle, PropertyNames::Equipment::kettleBoilSize_l           ),
    SET_REGULAR_FROM_NPB (m_fermenterBatchSize_l       , namedParameterBundle, PropertyNames::Equipment::fermenterBatchSize_l       ),
    SET_REGULAR_FROM_NPB (m_mashTunVolume_l            , namedParameterBundle, PropertyNames::Equipment::mashTunVolume_l            ),
@@ -294,7 +294,7 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
 
 Equipment::Equipment(Equipment const & other) :
    NamedEntity          {other},
-   FolderBase<Equipment>{other},
+   FolderPropertyBase<Equipment>{other},
    m_kettleBoilSize_l           {other.m_kettleBoilSize_l           },
    m_fermenterBatchSize_l       {other.m_fermenterBatchSize_l       },
    m_mashTunVolume_l            {other.m_mashTunVolume_l            },
@@ -516,5 +516,5 @@ double Equipment::wortEndOfBoil_l( double kettleWort_l ) const {
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Equipment)
 
-// Boilerplate code for FolderBase
+// Boilerplate code for FolderPropertyBase
 FOLDER_BASE_COMMON_CODE(Equipment)

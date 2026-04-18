@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Style.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Style.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -26,7 +26,7 @@
 #include <QStringList>
 #include <QSqlRecord>
 
-#include "model/FolderBase.h"
+#include "model/FolderPropertyBase.h"
 #include "model/NamedEntity.h"
 #include "utils/EnumStringMapping.h"
 
@@ -77,11 +77,11 @@ AddPropertyName(typeString       )
  * \brief Model for style records in the database.
  */
 class Style : public NamedEntity,
-              public FolderBase<Style> {
+              public FolderPropertyBase<Style> {
    Q_OBJECT
    FOLDER_BASE_DECL(Style)
-   // See model/FolderBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
 
 public:
    /**
@@ -211,7 +211,7 @@ public:
    Q_PROPERTY(double colorMin_srm                    READ colorMin_srm       WRITE setColorMin_srm     )
    //! \brief The maximum color in SRM.
    Q_PROPERTY(double colorMax_srm                    READ colorMax_srm       WRITE setColorMax_srm     )
-   //! \brief The mininum carbonation in volumes at STP.   ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
+   //! \brief The minimum carbonation in volumes at STP.   ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
    Q_PROPERTY(std::optional<double> carbMin_vol      READ carbMin_vol        WRITE setCarbMin_vol      )
    //! \brief The maximum carbonation in volumes at STP.   ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
    Q_PROPERTY(std::optional<double> carbMax_vol      READ carbMax_vol        WRITE setCarbMax_vol      )

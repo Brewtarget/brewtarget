@@ -17,7 +17,7 @@
 #define MODEL_INGREDIENT_H
 #pragma once
 
-#include "model/FolderBase.h"
+#include "model/FolderPropertyBase.h"
 #include "model/OutlineableNamedEntity.h"
 #include "utils/EnumStringMapping.h"
 #include "utils/TypeTraits.h"
@@ -33,18 +33,13 @@ AddPropertyName(totalInventory)
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
 
-
 /**
  * \brief Subclasses of this class are actual ingredients in a recipe (eg \c Hop, \c Fermentable).
  *
  *        Ingredients are the objects for which we keep inventory.
  */
-class Ingredient : public OutlineableNamedEntity,
-                   public FolderBase<Ingredient> {
+class Ingredient : public OutlineableNamedEntity {
    Q_OBJECT
-   FOLDER_BASE_DECL(Ingredient)
-   // See model/FolderBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
 
 public:
    /**
@@ -59,11 +54,11 @@ public:
     */
    static TypeLookup const typeLookup;
 
-   Ingredient(QString name = "");
-   Ingredient(NamedParameterBundle const & namedParameterBundle);
+   explicit Ingredient(QString const & name = "");
+   explicit Ingredient(NamedParameterBundle const & namedParameterBundle);
    Ingredient(Ingredient const & other);
 
-   virtual ~Ingredient();
+   ~Ingredient() override;
 
    //=================================================== PROPERTIES ====================================================
    /**
@@ -74,8 +69,7 @@ public:
    Q_PROPERTY(Measurement::Amount totalInventory   READ totalInventory   STORED false)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   virtual Measurement::Amount totalInventory() const = 0;
-
+   [[nodiscard]] virtual Measurement::Amount totalInventory() const = 0;
 };
 
 #endif

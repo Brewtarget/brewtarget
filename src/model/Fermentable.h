@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Fermentable.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Fermentable.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Blair Bonnett <blair.bonnett@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
@@ -96,10 +96,15 @@ AddPropertyName(viscosity_cP          )
  *
  * \brief Model for a fermentable record in the database.
  */
-class Fermentable : public Ingredient, public IngredientBase<Fermentable> {
+class Fermentable : public Ingredient,
+                    public IngredientBase<Fermentable>,
+                    public FolderPropertyBase<Fermentable> {
    Q_OBJECT
 
    INGREDIENT_BASE_DECL(Fermentable)
+   FOLDER_BASE_DECL(Fermentable)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
 
 public:
    /**
@@ -230,11 +235,11 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   Fermentable(QString name = "");
-   Fermentable(NamedParameterBundle const & namedParameterBundle);
+   explicit Fermentable(QString const & name = "");
+   explicit Fermentable(NamedParameterBundle const & namedParameterBundle);
    Fermentable(Fermentable const & other);
 
-   virtual ~Fermentable();
+   ~Fermentable() override;
 
    //=================================================== PROPERTIES ====================================================
    //! \brief The \c Type.

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Mash.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Mash.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Kregg Kemper <gigatropolis@yahoo.com>
@@ -32,7 +32,7 @@
 #include <QVariant>
 #include <QVector>
 
-#include "model/FolderBase.h"
+#include "model/FolderPropertyBase.h"
 #include "model/NamedEntity.h"
 #include "model/MashStep.h"
 #include "model/StepOwnerBase.h"
@@ -70,13 +70,13 @@ AddPropertyName(tunTemp_c                )
  *        not currently enforce them having non-empty names.
  */
 class Mash : public NamedEntity,
-             public FolderBase<Mash>,
+             public FolderPropertyBase<Mash>,
              public StepOwnerBase<Mash, MashStep> {
    Q_OBJECT
    FOLDER_BASE_DECL(Mash)
    STEP_OWNER_COMMON_DECL(Mash, mash)
-   // See model/FolderBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
    // See model/StepOwnerBase.h for info, getters and setters for these properties
    Q_PROPERTY(QList<std::shared_ptr<MashStep>> steps   READ steps   WRITE setSteps   STORED false)
    Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)

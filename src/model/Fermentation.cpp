@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Fermentation.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/Fermentation.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ bool Fermentation::compareWith(NamedEntity const & other, QList<BtStringConst co
       AUTO_PROPERTY_COMPARE(this, rhs, m_description, PropertyNames::Fermentation::description, propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_notes      , PropertyNames::Fermentation::notes      , propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->FolderBase<Fermentation>                     ::doCompareWith(rhs, propertiesThatDiffer) &&
+      this->FolderPropertyBase<Fermentation>                     ::doCompareWith(rhs, propertiesThatDiffer) &&
       this->StepOwnerBase<Fermentation, FermentationStep>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
@@ -57,17 +57,17 @@ TypeLookup const Fermentation::typeLookup {
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
-    std::addressof(FolderBase<Fermentation>::typeLookup),
+    std::addressof(FolderPropertyBase<Fermentation>::typeLookup),
     std::addressof(StepOwnerBase<Fermentation, FermentationStep>::typeLookup)
    }
 };
-static_assert(std::is_base_of<FolderBase<Fermentation>, Fermentation>::value);
+static_assert(std::is_base_of<FolderPropertyBase<Fermentation>, Fermentation>::value);
 
 //==================================================== CONSTRUCTORS ====================================================
 
 Fermentation::Fermentation(QString name) :
    NamedEntity{name},
-   FolderBase<Fermentation>{},
+   FolderPropertyBase<Fermentation>{},
    StepOwnerBase<Fermentation, FermentationStep>{},
    m_description  {""},
    m_notes        {""} {
@@ -78,7 +78,7 @@ Fermentation::Fermentation(QString name) :
 
 Fermentation::Fermentation(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity             {namedParameterBundle},
-   FolderBase<Fermentation>{namedParameterBundle},
+   FolderPropertyBase<Fermentation>{namedParameterBundle},
    StepOwnerBase<Fermentation, FermentationStep>{},
    SET_REGULAR_FROM_NPB (m_description, namedParameterBundle, PropertyNames::Fermentation::description),
    SET_REGULAR_FROM_NPB (m_notes      , namedParameterBundle, PropertyNames::Fermentation::notes      ) {
@@ -89,7 +89,7 @@ Fermentation::Fermentation(NamedParameterBundle const & namedParameterBundle) :
 
 Fermentation::Fermentation(Fermentation const & other) :
    NamedEntity{other},
-   FolderBase<Fermentation>{other},
+   FolderPropertyBase<Fermentation>{other},
    StepOwnerBase<Fermentation, FermentationStep>{other},
    m_description  {other.m_description},
    m_notes        {other.m_notes      } {
@@ -123,7 +123,7 @@ void Fermentation::acceptSetMemberChange(QMetaProperty prop, QVariant val) {
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Fermentation)
 
-// Boilerplate code for FolderBase
+// Boilerplate code for FolderPropertyBase
 FOLDER_BASE_COMMON_CODE(Fermentation)
 
 // Insert fermentationer-plate wrapper functions that call down to StepOwnerBase

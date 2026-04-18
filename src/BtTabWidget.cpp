@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtTabWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * BtTabWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -40,12 +40,17 @@ BtTabWidget::BtTabWidget(QWidget* parent) :
    return;
 }
 
-void BtTabWidget::dragEnterEvent(QDragEnterEvent *event) {
-   if (this->acceptMime.size() == 0) {
-      this->acceptMime = property("mimeAccepted").toString();
-      qDebug() << Q_FUNC_INFO << "this->acceptMime:" << this->acceptMime;
-   }
+QString BtTabWidget::mimeAccepted() const {
+   return this->acceptMime;
+}
 
+void BtTabWidget::setMimeAccepted(QString const & val) {
+   this->acceptMime = val;
+   qDebug() << Q_FUNC_INFO << "this->acceptMime:" << this->acceptMime;
+   return;
+}
+
+void BtTabWidget::dragEnterEvent(QDragEnterEvent *event) {
    if (event->mimeData()->hasFormat(this->acceptMime) ) {
       event->acceptProposedAction();
    }
@@ -90,11 +95,6 @@ bool BtTabWidget::appendItemIfMatch(QString const & itemClassName, int const id,
 void BtTabWidget::dropEvent(QDropEvent *event) {
    qDebug() << Q_FUNC_INFO;
 
-   if (this->acceptMime.size() == 0) {
-      this->acceptMime = property("mimeAccepted").toString();
-      qDebug() << Q_FUNC_INFO << "this->acceptMime:" << this->acceptMime;
-   }
-
    if (!event->mimeData()->hasFormat(this->acceptMime)) {
       return;
    }
@@ -112,8 +112,6 @@ void BtTabWidget::dropEvent(QDropEvent *event) {
    //
    // TBD: In future, it would be kind of neat to allow drag-and-drop of BeerXML and BeerJSON files (possibly in both
    // directions).
-   //
-   //
    //
    QMimeData const * mData = event->mimeData();
    QByteArray itemData = mData->data(this->acceptMime);

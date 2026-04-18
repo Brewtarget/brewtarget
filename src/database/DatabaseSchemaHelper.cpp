@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/DatabaseSchemaHelper.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * database/DatabaseSchemaHelper.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jonatan Pålsson <jonatan.p@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -23,6 +23,7 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include <QSqlDriver>
 #include <QSqlError>
 #include <QSqlField>
 #include <QSqlRecord>
@@ -37,7 +38,7 @@
 #include "database/ObjectStoreTyped.h"
 #include "model/Salt.h"
 
-int constexpr DatabaseSchemaHelper::latestVersion = 19;
+int constexpr DatabaseSchemaHelper::latestVersion = 20;
 
 // Default namespace hides functions from everything outside this file.
 namespace {
@@ -47,6 +48,70 @@ namespace {
       QVector<QVariant> bindValues = {};
       bool onlyRunIfPriorQueryHadResults = false;
    };
+
+   /**
+    * \brief Execute a single supplied query
+    *
+    * @param q
+    * @param sql
+    * @param bindValues
+    * @return \c true if query ran OK; \c false otherwise
+    */
+   bool executeQuery(BtSqlQuery & q, QString const & sql, QVector<QVariant> const & bindValues) {
+      q.prepare(sql);
+      for (auto & bv : bindValues) {
+         q.addBindValue(bv);
+      }
+      if (!q.exec()) {
+         qCritical() <<
+            Q_FUNC_INFO << "Error executing database upgrade/set-up query " << sql << ": " <<
+            q.lastError().text();
+         return false;
+      }
+      qDebug() << Q_FUNC_INFO << q.numRowsAffected() << "rows affected";
+      return true;
+   }
+
+   /**
+    * \brief Execute the supplied queries on the supplied query object.
+    *
+    * @param q
+    * @param queries
+    * @return \b true if all queries ran OK; \b false otherwise
+    */
+   bool executeSqlQueries(BtSqlQuery & q, QVector<QueryAndParameters> const & queries) {
+      //
+      // Sometimes, whether or not we want to run a query depends on what data is in the database.  Eg, if we're trying
+      // to insert into a table based on the results of a sub-query, we need to handle the case where the sub-query
+      // returns no results.  This can be painful to do in SQL, so it's simpler to do a dummy-run of the sub-query (or
+      // some adapted version of it) first, and then make running the real query dependent on whether the dummy-run
+      // returned any results.
+      //
+      bool priorQueryHadResults = false;
+      QString priorQuerySql = "N/A";
+
+      for (const auto & [sql, bindValues, onlyRunIfPriorQueryHadResults] : queries) {
+         if (onlyRunIfPriorQueryHadResults && !priorQueryHadResults) {
+            qInfo() <<
+               Q_FUNC_INFO << "Skipping upgrade query \"" << sql << "\" as was dependent on prior upgrade "
+               "query (\"" << priorQuerySql << "\") returning results, and it didn't";
+            // We deliberately don't update priorQueryHadResults or priorQuerySql in this case, as it allows more than
+            // one query in a row to be dependent on a single "dummy-run" query
+            continue;
+         }
+         qDebug() << Q_FUNC_INFO << sql;
+
+         if (!executeQuery(q, sql, bindValues)) {
+            // If we get an error, we want to stop processing as otherwise you get "false" errors if subsequent queries
+            // fail as a result of assuming that all prior queries have run OK.
+            return false;
+         }
+
+         priorQueryHadResults = q.next();
+         priorQuerySql = sql;
+      }
+      return true;
+   }
 
    //
    // These migrate_to_Xyz functions are deliberately hard-coded.  Because we're migrating from version N to version
@@ -59,46 +124,6 @@ namespace {
    // differing ways they handle booleans ("DEFAULT true" in PostgreSQL has to be "DEFAULT 1" in SQLite etc, which is a
    // bit tedious).
    //
-   bool executeSqlQueries(BtSqlQuery & q, QVector<QueryAndParameters> const & queries) {
-      //
-      // Sometimes whether or not we want to run a query depends on what data is in the database.  Eg, if we're trying
-      // to insert into a table based on the results of a sub-query, we need to handle the case where the sub-query
-      // returns no results.  This can be painful to do in SQL, so it's simpler to do a dummy-run of the sub-query (or
-      // some adapted version of it) first, and then make running the real query dependent on whether the dummy-run
-      // returned any results.
-      //
-      bool priorQueryHadResults = false;
-      QString priorQuerySql = "N/A";
-
-      for (auto & query : queries) {
-         if (query.onlyRunIfPriorQueryHadResults && !priorQueryHadResults) {
-            qInfo() <<
-               Q_FUNC_INFO << "Skipping upgrade query \"" << query.sql << "\" as was dependent on prior upgrade "
-               "query (\"" << priorQuerySql << "\") returning results, and it didn't";
-            // We deliberately don't update priorQueryHadResults or priorQuerySql in this case, as it allows more than
-            // one query in a row to be dependent on a single "dummy-run" query
-            continue;
-         }
-         qDebug() << Q_FUNC_INFO << query.sql;
-
-         q.prepare(query.sql);
-         for (auto & bv : query.bindValues) {
-            q.addBindValue(bv);
-         }
-         if (!q.exec()) {
-            // If we get an error, we want to stop processing as otherwise you get "false" errors if subsequent queries
-            // fail as a result of assuming that all prior queries have run OK.
-            qCritical() <<
-               Q_FUNC_INFO << "Error executing database upgrade/set-up query " << query.sql << ": " <<
-               q.lastError().text();
-            return false;
-         }
-         qDebug() << Q_FUNC_INFO << q.numRowsAffected() << "rows affected";
-         priorQueryHadResults = q.next();
-         priorQuerySql = query.sql;
-      }
-      return true;
-   }
 
    // This is when we first defined the settings table, and defined the version as a string.
    // In the new world, this will create the settings table and define the version as an int.
@@ -2121,9 +2146,10 @@ namespace {
                            db.getDbNativeTypeName<double >(),
                            db.getDbNativeTypeName<QString>())},
          //
-         // As part of removing code duplication in the model classes, we introduced FolderBase for classes that live in
-         // folders, and removed the folder attribute from BrewNote.  (A BrewNote belongs to a Recipe.  The Recipe has a
-         // folder, but it does not make sense for the BrewNote to have its own folder.)
+         // As part of removing code duplication in the model classes, we introduced FolderBase (subsequently renamed to
+         // FolderPropertyBase) for classes that live in folders, and removed the folder attribute from BrewNote.  (A
+         // BrewNote belongs to a Recipe.  The Recipe has a folder, but it does not make sense for the BrewNote to have
+         // its own folder.)
          //
          {QString("ALTER TABLE brewnote DROP COLUMN folder")},
          //
@@ -2737,6 +2763,259 @@ namespace {
 
       return executeSqlQueries(q, migrationQueries);
    }
+   /**
+    * \brief New Folder tables
+    */
+   bool migrate_to_20([[maybe_unused]] Database & db, BtSqlQuery & q) {
+      QVector<QueryAndParameters> migrationQueries{};
+      //
+      // We are migrating from folders only existing as strings to being true objects
+      //
+      // This is all a bit repetitive, but holds true to the design principle that each folder only holds one type of
+      // thing -- eg you can't put Hops in a Fermentable folder.
+      //
+      std::vector<char const *> const baseTables{"recipe",
+                                                 "style",
+                                                 "equipment",
+                                                 "mash",
+                                                 "boil",
+                                                 "fermentation",
+                                                 "fermentable",
+                                                 "hop",
+                                                 "misc",
+                                                 "salt",
+                                                 "water",
+                                                 "yeast"};
+      for (char const * baseTable : baseTables) {
+         //
+         // The easy bit is creating the new tables...
+         //
+         QString createNewTableSql;
+         QTextStream createNewTableSqlStream(&createNewTableSql);
+         QString const folderTable = QString("folder_for_%1").arg(baseTable);
+         createNewTableSqlStream <<
+            "CREATE TABLE " << folderTable << " ("
+               "id"                     " " << db.getDbNativePrimaryKeyDeclaration() << ", " <<
+               "name"                   " " << db.getDbNativeTypeName<QString>()     << ", " <<
+               "deleted"                " " << db.getDbNativeTypeName<bool>()        << ", " <<
+               "contained_in_folder_id" " " << db.getDbNativeTypeName<int>()         << ", " <<
+               "FOREIGN KEY(contained_in_folder_id) REFERENCES " << folderTable << "(id) "
+            ");";
+         migrationQueries.append({createNewTableSql});
+
+         //
+         // ...and adding a foreign key to reference them
+         //
+         migrationQueries.append({QString(db.getSqlToAddColumnAsForeignKey()).arg(baseTable,
+                                                                                  "contained_in_folder_id",
+                                                                                  folderTable,
+                                                                                  "id")});
+
+         //
+         // The harder bit is take all the existing path strings and create true folders from them.
+         //
+         // First, as belt-and-braces, we need to normalise names.  Usually in the DB a root-level folder is just
+         // referred to by its name (eg "myFolder") rather than its path ("/myFolder"), but it will make life easier
+         // below if we enforce this.
+         //
+         migrationQueries.append(
+            {QString("UPDATE %1 SET folder = SUBSTR(folder, 2) WHERE folder LIKE '/%'").arg(baseTable)}
+         );
+
+         //
+         // Now we'll create unique folders for each unique folder path.  This means creating folders with paths as
+         // names -- eg "myFolder/mySubfolder".  Later on, we'll then need to rename "myFolder/mySubfolder" to
+         // "mySubfolder" and set its parent to be "myFolder".
+         //
+         // NB: folder_id is the ID of the folder (if any) that contains this one.  (We could call it parent_id, but
+         //     it's more consistent to use the same column name as everywhere else -- eg recipe.folder_id is the folder
+         //     (if any) that contains this recipe etc.
+         //
+         migrationQueries.append({QString(
+            "INSERT INTO %1 (name, deleted, contained_in_folder_id) "
+            "SELECT DISTINCT folder, false, NULL FROM %2 "
+            "WHERE folder IS NOT NULL AND folder != '' "
+            "ORDER BY folder"
+         ).arg(folderTable, baseTable)});
+
+         //
+         // Having created the folders, we need to reference them
+         //
+         migrationQueries.append({QString(
+         "UPDATE %1 "
+            "SET contained_in_folder_id = ("
+               "SELECT id "
+               "FROM %2 "
+               "WHERE %1.folder = %2.name"
+            ") "
+            "WHERE folder IS NOT NULL AND folder != '' "
+         ).arg(baseTable, folderTable)});
+
+         //
+         // Now we have foreign keys into the folder table, we don't need the path string
+         //
+         migrationQueries.append({QString("ALTER TABLE %1 DROP COLUMN folder").arg(baseTable)});
+
+         //
+         // The remaining work is IMHO too hard to do purely in SQL so we do it procedurally below
+         //
+      }
+
+      //
+      // Get all the above updates done first
+      //
+      if (!executeSqlQueries(q, migrationQueries)) {
+         return false;
+      }
+
+      //
+      // As above, it's the same logic for each type of folder, so we loop through every type
+      //
+      for (char const * baseTable : baseTables) {
+         QString const folderTable = QString("folder_for_%1").arg(baseTable);
+
+         //
+         // I _think_ it's simplest to do several loop "tasks" in succession.
+         //
+         // The first task is to read all the "non-empty" folders in from the DB.  (We call folders that only contain
+         // other folders "empty folders", and the other ones -- ie that contain Recipes, Hops, etc -- "non-empty
+         // folders".  This is a bit of a misnomer, but a useful shorthand.  Prior to this update it is not possible to
+         // represent a truly empty folder in the DB, so there should be no confusion!)
+         //
+         // For each folder, we map from its full path (eg "foo/bar/hum") to the info in the struct below.
+         //
+         QString const nonEmptyFoldersSql = QString("SELECT id, name AS fullPath "
+                                                    "FROM %1 ").arg(folderTable);
+         if (!executeQuery(q, nonEmptyFoldersSql, {})) {
+            // executeQuery will already have logged an error in this instance
+            return false;
+         }
+
+         struct FolderInfo {
+            int id = -1;
+            QString name = "";
+            QString path = ""; // AKA parentFullPath
+         };
+         QHash<QString, FolderInfo> existingFolders{};
+         while (q.next()) {
+            FolderInfo folderInfo{
+               .id = q.value("id").toInt(),
+            };
+            QString const fullPath = q.value("fullPath").toString();
+            if (qsizetype const lastSlash = fullPath.lastIndexOf('/', -1); lastSlash >= 0) {
+               // It's a coding error if any folder name currently starts with '/' as we fixed that above
+               Q_ASSERT(0 != lastSlash);
+
+               //
+               // Suppose fullPath is initially "foo/bar/hum".
+               //                                01234567890
+               // lastSlash = 7
+               // fullPath.sliced(8) = "hum"
+               // fullPath.first(7) = "foo/bar"
+               //
+               folderInfo.name = fullPath.sliced(lastSlash + 1);
+               folderInfo.path = fullPath.first(lastSlash);
+            }
+            qDebug() <<
+               Q_FUNC_INFO << "For" << baseTable << ", folder" << folderInfo.name << "has path" << folderInfo.path <<
+               "and ID" << folderInfo.id;
+            existingFolders.insert(fullPath, folderInfo);
+         }
+
+         //
+         // The next task is to create entries for empty folders.
+         //
+         // Suppose we have found folder with path "foo/bar/hum/bug" but have not previously found a folder with path
+         // "foo" or "foo/bar/hum".  It means that folder "foo" and "foo/bar/hum" are empty (ie not directly
+         // referenced by an entry in baseTable) and need creating.
+         //
+         // Note that we need a separate place to store the newly created entries for empty folders as we don't want
+         // to invalidate iterators on the existingFolders hash map.  (Once we're done with this loop, we merge
+         // everything below.)
+         //
+         QHash<QString, FolderInfo> emptyFolders{};
+         for (auto const & [key, value] : existingFolders.asKeyValueRange()) {
+            // We make a copy of the folder's full path because we're going to chop up the string to get the parent
+            // folders.
+            QString folderFullPath = key;
+            for (qsizetype lastSlash = folderFullPath.lastIndexOf('/', -1);
+                 lastSlash >= 0;
+                 lastSlash = folderFullPath.lastIndexOf('/', -1)) {
+               QString const parentPath = folderFullPath.first(lastSlash);
+               if (!existingFolders.contains(parentPath) && !emptyFolders.contains(parentPath)) {
+                  //
+                  // We found an empty folder that we didn't previously know about.  Make a note of it and create a
+                  // DB entry for it.
+                  //
+                  FolderInfo emptyFolderInfo;
+                  if (qsizetype const parentLastSlash = parentPath.lastIndexOf('/', -1); parentLastSlash >= 0) {
+                     emptyFolderInfo.name = parentPath.sliced(parentLastSlash + 1);
+                     emptyFolderInfo.path = parentPath.first(parentLastSlash);
+                  } else {
+                     emptyFolderInfo.name = parentPath;
+                     emptyFolderInfo.path = "";
+                  };
+
+                  //
+                  // We'll insert with the full path here to keep names unique until we have all the IDs.
+                  //
+                  QString const insertFolderSql = QString("INSERT INTO %1 (name, deleted, contained_in_folder_id) "
+                                                          "VALUES (?, false, NULL)").arg(folderTable);
+                  if (!executeQuery(q, insertFolderSql, {parentPath})) {
+                     // executeQuery will already have logged an error in this instance
+                     return false;
+                  }
+                  // See comment in insertObjectInDb in ObjectStore.cpp for why we do this assert
+                  Q_ASSERT(q.driver()->hasFeature(QSqlDriver::LastInsertId));
+                  QVariant rawPrimaryKey = q.lastInsertId();
+                  Q_ASSERT(rawPrimaryKey.canConvert<int>());
+                  emptyFolderInfo.id = rawPrimaryKey.toInt();
+
+                  emptyFolders.insert(parentPath, emptyFolderInfo);
+               }
+               // Recurse up the path
+               folderFullPath = parentPath;
+            }
+         }
+
+         //
+         // Now that all folders exist and are on an equal footing we can merge the lists and then update the DB:
+         //    - Give non-root folders their parent IDs
+         //    - Replace full path (eg "foo/bar/hum") with folder name (eg "hum") because the path can now be
+         //      constructed by chaining back the parent IDs.
+         //
+         existingFolders.insert(emptyFolders);
+         for (auto const & [folderFullPath, folderInfo] : existingFolders.asKeyValueRange()) {
+            //
+            // We only need to update folders that have parents.  For the others, name = path and parentId remains
+            // NULL.
+            //
+            if (!folderInfo.path.isEmpty()) {
+               auto const parentFolderInfo = existingFolders.find(folderInfo.path);
+               if (parentFolderInfo == existingFolders.end()) {
+                  qCritical() <<
+                     Q_FUNC_INFO << "Could not find parent folder (" << folderInfo.path << ") for folder " <<
+                     folderInfo.name;
+                  return false;
+               }
+               qDebug() <<
+                  Q_FUNC_INFO << "Updating folder #" << folderInfo.id << "(parent &" << parentFolderInfo->id <<
+                  ") to have name" << folderInfo.name;
+               QString const updateFolderSql = QString("UPDATE %1 "
+                                                       "SET name = ?, "
+                                                           "contained_in_folder_id = ? "
+                                                       "WHERE id = ?").arg(folderTable);
+               if (!executeQuery(q, updateFolderSql, {folderInfo.name, parentFolderInfo->id, folderInfo.id})) {
+                  // executeQuery will already have logged an error in this instance
+                  return false;
+               }
+            }
+         }
+      }
+
+      // If we made it this far, there weren't any errors!
+      return true;
+   }
 
    //
    // Next time - maybe fix remaining issues listed in ObjectStore legacyBadTypes
@@ -2771,6 +3050,7 @@ namespace {
          case 16: ret &= migrate_to_17 (database, sqlQuery); break;
          case 17: ret &= migrate_to_18 (database, sqlQuery); break;
          case 18: ret &= migrate_to_19 (database, sqlQuery); break;
+         case 19: ret &= migrate_to_20 (database, sqlQuery); break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);
             return false;

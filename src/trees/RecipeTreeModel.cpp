@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/RecipeTreeModel.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * trees/RecipeTreeModel.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -74,7 +74,7 @@ void RecipeTreeModel::addBrewNoteSubTree(TreeNode & recipeNodeRaw,
          qWarning() << Q_FUNC_INFO << "BrewNote insert failed";
          continue;
       }
-      this->observeElement(brewNote);
+      this->observe(brewNote);
       ++childNum;
    }
    return;
@@ -108,7 +108,7 @@ void RecipeTreeModel::addAncestoralTree(TreeNode & recipeNodeRaw,
 
       // finally, add this ancestor's brewnotes but do not recurse
       this->addBrewNoteSubTree(*ancestorNode, childNum, *ancestor, false);
-      this->observeElement(ancestor);
+      this->observe(ancestor);
       ++childNum;
    }
    return;
@@ -120,11 +120,11 @@ void RecipeTreeModel::addSubTree(Recipe const & recipe,
 
    bool const showSnapshots = PersistentSettings::value_ck(PersistentSettings::Names::showsnapshots, false).toBool();
 
-   QModelIndex recipeNodeIndex = this->indexOfNode(&recipeNode);
-   TreeNode * recipeParent = recipeNode.rawParent();
+   QModelIndex const recipeNodeIndex = this->indexOfNode(&recipeNode);
+   TreeNode const * recipeParent = recipeNode.rawParent();
    qDebug() <<
       Q_FUNC_INFO << "recipe:" << recipe << ", recipeNode:" << recipeNode << ", recipeParent:" << recipeParent;
-   QModelIndex recipeParentIndex = this->derived().parent(recipeNodeIndex);
+   QModelIndex const recipeParentIndex = this->derived().parent(recipeNodeIndex);
 
    int const childNumber = recipeNode.childNumber();
    if (showSnapshots && recipe.hasAncestors()) {
@@ -139,7 +139,7 @@ void RecipeTreeModel::addSubTree(Recipe const & recipe,
 }
 
 bool RecipeTreeModel::showChild(QModelIndex child) const {
-   TreeNode * node = this->treeNode(child);
+   TreeNode const * node = this->treeNode(child);
    return node->showMe();
 }
 

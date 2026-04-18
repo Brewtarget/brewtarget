@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/TreeNodeBase.h is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * trees/TreeNodeBase.h is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -93,11 +93,10 @@ public:
    static constexpr TreeNodeClassifier NodeClassifier  = TreeNodeTraits<NE, TreeType>::NodeClassifier;
    using ParentPtrTypes     = typename TreeNodeTraits<NE, TreeType>::ParentPtrTypes;
    using ChildPtrTypes      = typename TreeNodeTraits<NE, TreeType>::ChildPtrTypes;
-   static constexpr char const *       DragNDropMimeType = TreeNodeTraits<NE, TreeType>::DragNDropMimeType;
 
-   TreeNodeBase(TreeModel & model,
-                ParentPtrTypes parent = nullptr,
-                std::shared_ptr<NE> underlyingItem = nullptr) :
+   explicit TreeNodeBase(TreeModel & model,
+                         ParentPtrTypes parent = nullptr,
+                         std::shared_ptr<NE> underlyingItem = nullptr) :
       TreeNode{model},
       m_parent{parent},
       m_underlyingItem{underlyingItem} {
@@ -141,9 +140,9 @@ public:
       m_underlyingItem{underlyingItem} {
       return;
    }
-   virtual ~TreeNodeBase() = default;
+   ~TreeNodeBase() override = default;
 
-   virtual TreeNodeClassifier classifier() const override {
+   [[nodiscard]] TreeNodeClassifier classifier() const override {
       return NodeClassifier;
    }
 
@@ -295,14 +294,7 @@ public:
    }
 
    virtual NamedEntity * rawUnderlyingItem() const override {
-      if constexpr (std::same_as<NE, Folder>) {
-         // This function is not currently supported on Folder nodes, for the simple reason that Folder does not (yet)
-         // inherit from NamedEntity.
-         Q_ASSERT(false);
-         return nullptr;
-      } else {
-         return this->m_underlyingItem.get();
-      }
+      return this->m_underlyingItem.get();
    }
 
    void setUnderlyingItem(std::shared_ptr<NE> val) {
@@ -452,7 +444,7 @@ public:
     * \brief returns the index of the item in its parent's list.  This is needed for constructing \c QModelIndex
     *        objects.
     */
-   virtual int childNumber() const override {
+   [[nodiscard]] int childNumber() const override {
       TreeNode * rawParent = this->rawParent();
       if (!rawParent) {
          return 0;
@@ -461,42 +453,42 @@ public:
       return rawParent->numberOfChild(this);
    }
 
-   virtual QString className() const override {
+   [[nodiscard]] QString className() const override {
       return NE::staticMetaObject.className();
    }
 
-   virtual QString localisedClassName() const override {
+   [[nodiscard]] QString localisedClassName() const override {
       return NE::localisedName();
    }
 
-   virtual QString name() const override {
+   [[nodiscard]] QString name() const override {
       if (!this->m_underlyingItem) {
          return QObject::tr("None!");
       }
       return this->m_underlyingItem->name();
    }
 
-   virtual int underlyingItemKey() const override {
-      //
-      // For the moment, Folders don't have IDs, so return 0
-      //
-      if constexpr (NodeClassifier == TreeNodeClassifier::Folder) {
-         return 0;
-      } else {
-         // We need this code inside the else so that the compiler doesn't try to call m_underlyingItem->key() on Folder
-         if (!this->m_underlyingItem) {
-            //
-            // I don't think we ever have things in the tree that aren't in the DB (ie with ID -1), but we might as well
-            // return a different negative number for "null pointer" (which should also be rare-to-never).
-            //
-            return -2;
-         }
-         return this->m_underlyingItem->key();
+   [[nodiscard]] int underlyingItemKey() const override {
+      if (!this->m_underlyingItem) {
+         //
+         // I don't think we ever have things in the tree that aren't in the DB (ie with ID -1), but we might as well
+         // return a different negative number for "null pointer" (which should also be rare-to-never).
+         //
+         return -2;
       }
+      return this->m_underlyingItem->key();
    }
 
-   virtual QString dragAndDropMimeType() const override {
-      return QString{DragNDropMimeType};
+   [[nodiscard]] static QString dragAndDropMimeType() {
+      if constexpr (std::is_base_of_v<FolderCommon, NE> && HasNoFolder<NE>) {
+         //
+         // Per comment in TreeModelBase, we need TreeFolderNode for the root node, even for classes for which Folder
+         // does not exist.  But in such cases, there are no real folders and no drag-and-drop of them
+         //
+         return "NotImplemented";
+      } else {
+         return TreeNodeTraits<NE, TreeType>::getDragNDropMimeType();
+      }
    }
 
    //================================================ Member variables =================================================
@@ -525,18 +517,18 @@ public:
  *        FermentableTreeItem, HopTreeItem, etc).
  */
 template<class NE>
-class TreeFolderNode : public TreeNodeBase<TreeFolderNode<NE>, Folder, NE> {
+class TreeFolderNode : public TreeNodeBase<TreeFolderNode<NE>, Folder<NE>, NE> {
 public:
-   using TreeNodeBase<TreeFolderNode<NE>, Folder, NE>::TreeNodeBase;
+   using TreeNodeBase<TreeFolderNode<NE>, Folder<NE>, NE>::TreeNodeBase;
    ~TreeFolderNode() = default;
 
-   // Have to override the version in \c TreeNodeBase as that will give Folder::staticMetaObject.className() rather
-   // than NE::staticMetaObject.className()
-   virtual QString className() const override {
+   // Have to override the version in \c TreeNodeBase as that will give FolderCommon::staticMetaObject.className()
+   // rather than NE::staticMetaObject.className()
+   [[nodiscard]] QString className() const override {
       return NE::staticMetaObject.className();
    }
 
-   virtual std::shared_ptr<Folder> folder() const override {
+   [[nodiscard]] std::shared_ptr<Folder<NE>> folder() const {
       return this->underlyingItem();
    }
 };
@@ -551,11 +543,11 @@ public:
  *        If a secondary item \c FooBar is omitted from this list, we'll get compile errors along the lines of `invalid
  *        use of incomplete type ‘struct TreeNodeTraits<FooBar, FooBar>’`.
  */
-template <class NE> struct TreeTypeDeducer                             { using TreeType = NE                  ; };
-template<>          struct TreeTypeDeducer<BrewNote                  > { using TreeType = Recipe              ; };
-template<>          struct TreeTypeDeducer<MashStep                  > { using TreeType = Mash                ; };
-template<>          struct TreeTypeDeducer<BoilStep                  > { using TreeType = Boil                ; };
-template<>          struct TreeTypeDeducer<FermentationStep          > { using TreeType = Fermentation        ; };
+template <class NE> struct TreeTypeDeducer                      { using TreeType = NE                      ; };
+template<>          struct TreeTypeDeducer<BrewNote           > { using TreeType = Recipe                  ; };
+template<>          struct TreeTypeDeducer<MashStep           > { using TreeType = Mash                    ; };
+template<>          struct TreeTypeDeducer<BoilStep           > { using TreeType = Boil                    ; };
+template<>          struct TreeTypeDeducer<FermentationStep   > { using TreeType = Fermentation            ; };
 template<>          struct TreeTypeDeducer<StockUseFermentable> { using TreeType = StockPurchaseFermentable; };
 template<>          struct TreeTypeDeducer<StockUseHop        > { using TreeType = StockPurchaseHop        ; };
 template<>          struct TreeTypeDeducer<StockUseMisc       > { using TreeType = StockPurchaseMisc       ; };
@@ -570,17 +562,18 @@ template<class NE>
 class TreeItemNode : public TreeNodeBase<TreeItemNode<NE>, NE, typename TreeTypeDeducer<NE>::TreeType> {
 public:
    using TreeNodeBase<TreeItemNode<NE>, NE, typename TreeTypeDeducer<NE>::TreeType>::TreeNodeBase;
-   virtual ~TreeItemNode() = default;
+   ~TreeItemNode() override = default;
 
-   QString getToolTip() const;
+   [[nodiscard]] QString getToolTip() const;
 
-   virtual std::shared_ptr<Folder> folder() const override {
+   std::shared_ptr<Folder<NE>> folder() const {
 
-      if constexpr (TreeNodeTraits<NE, typename TreeTypeDeducer<NE>::TreeType>::NodeClassifier == TreeNodeClassifier::PrimaryItem) {
+      if constexpr (TreeNodeTraits<NE, typename TreeTypeDeducer<NE>::TreeType>::NodeClassifier ==
+                    TreeNodeClassifier::PrimaryItem) {
          if constexpr (HasNoFolder<NE>) {
             //
-            // For elements that don't support folders (eg StockPurchase) we just want the root folder, which will also be
-            // the parent node.
+            // For elements that don't support folders (eg StockPurchase) we just want the root folder, which will also
+            // be the parent node.
             //
             // TBD: This currently doesn't make a huge amount of sense as you can create folders in the inventory tree
             // but not put anything in them!
@@ -590,16 +583,14 @@ public:
             //
             // It's quicker to get the folder directly than chase up the node tree to try to find a TreeFolderNode.
             //
-            // TODO: This is a temporary hack to return a Folder object!
-            return std::make_shared<Folder>(this->underlyingItem()->folderPath());
+            return this->underlyingItem()->folder();
          }
-
-
       } else {
          //
          // For a SecondaryItem node, it must, by definition, have a parent node, so we just defer to that.
          //
-         static_assert (TreeNodeTraits<NE, typename TreeTypeDeducer<NE>::TreeType>::NodeClassifier == TreeNodeClassifier::SecondaryItem);
+         static_assert (TreeNodeTraits<NE, typename TreeTypeDeducer<NE>::TreeType>::NodeClassifier ==
+                        TreeNodeClassifier::SecondaryItem);
          return this->rawParent()->folder();
       }
    }
@@ -622,13 +613,12 @@ struct ColumnOwnerTraitsData<TreeFolderNode<NE>> {
    static std::vector<ColumnInfo> const & getColumnInfos() {
       // Meyers singleton
       static std::vector<ColumnInfo> const columnInfos {
-         TREE_NODE_HEADER(TreeFolderNode, Folder, Name    , PropertyNames::NamedEntity::name), // "Name"
-         TREE_NODE_HEADER(TreeFolderNode, Folder, Path    , PropertyNames::Folder::path     ), // "Path"
-         TREE_NODE_HEADER(TreeFolderNode, Folder, FullPath, PropertyNames::Folder::fullPath ), // "Full Path"
+         TREE_NODE_HEADER(TreeFolderNode, Folder<NE>, Name    , PropertyNames::NamedEntity::name), // "Name"
+         TREE_NODE_HEADER(TreeFolderNode, Folder<NE>, Path    , PropertyNames::FolderCommon::path     ), // "Path"
+         TREE_NODE_HEADER(TreeFolderNode, Folder<NE>, FullPath, PropertyNames::FolderCommon::fullPath ), // "Full Path"
       };
       return columnInfos;
    }
 };
-
 
 #endif

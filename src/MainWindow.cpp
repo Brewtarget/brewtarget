@@ -1374,6 +1374,8 @@ void MainWindow::setupLabels() {
 // anything with a BtTabWidget::set* signal should go in here
 void MainWindow::setupDrops() {
    // drag and drop. maybe
+   this->tabWidget_recipeView ->setMimeAccepted(DEF_CONFIG_MIME_PREFIX "-Recipe");
+   this->tabWidget_ingredients->setMimeAccepted(DEF_CONFIG_MIME_PREFIX "-Ingredient");
    connect(this->tabWidget_recipeView,  &BtTabWidget::setRecipe,       this, &MainWindow::setRecipe);
    connect(this->tabWidget_recipeView,  &BtTabWidget::setEquipment,    this, &MainWindow::droppedRecipeEquipment);
    connect(this->tabWidget_recipeView,  &BtTabWidget::setStyle,        this, &MainWindow::droppedRecipeStyle);
@@ -2241,14 +2243,10 @@ std::shared_ptr<Recipe>  MainWindow::newRecipe() {
    return newRec;
 }
 
-void MainWindow::newRecipeInFolder(QString folderPath) {
+std::shared_ptr<Recipe> MainWindow::newRecipeInFolder(Folder<Recipe> const * folder) {
    auto newRec = this->newRecipe();
-
-   if (!folderPath.isEmpty()) {
-      newRec->setFolderPath(folderPath);
-   }
-
-   return;
+   newRec->setContainedInFolder(folder);
+   return newRec;
 }
 
 void MainWindow::setTreeSelection(QModelIndex index) {
@@ -2438,15 +2436,14 @@ TreeView * MainWindow::getActiveTreeView() const {
    return activeTreeView;
 }
 
-void MainWindow::copySelected() {
-   TreeView * activeTreeView = this->getActiveTreeView();
-   if (activeTreeView) {
+void MainWindow::copySelected() const {
+   if (TreeView * activeTreeView = this->getActiveTreeView()) {
       activeTreeView->copySelected();
    }
    return;
 }
 
-void MainWindow::exportSelected() {
+void MainWindow::exportSelected() const {
    TreeView * activeTreeView = this->getActiveTreeView();
    if (!activeTreeView) {
       qDebug() << Q_FUNC_INFO << "No active tree so can't get a selection";
@@ -2534,7 +2531,7 @@ void MainWindow::exportSelected() {
                yeasts.append(item.get());
                ++count;
             }
-         } else if (nodeClass == Folder::staticMetaObject.className()) {
+         } else if (nodeClass.startsWith("Folder<")) {
             qDebug() << Q_FUNC_INFO << "Can't export selected Folder to XML as BeerXML does not support it";
          } else if (nodeClass == BrewNote::staticMetaObject.className()) {
             qDebug() << Q_FUNC_INFO << "Can't export selected BrewNote to XML as BeerXML does not support it";
