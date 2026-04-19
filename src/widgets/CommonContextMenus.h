@@ -33,7 +33,7 @@
 #include "utils/BtStringStream.h"
 #include "utils/PropertyHelper.h"
 
-class BrewNote;
+class BrewLog;
 class Ingredient;
 class Salt;
 class StockPurchase;
@@ -64,7 +64,7 @@ namespace CommonContextMenuHelper {
  *
  * @tparam Derived The GUI class using this context menu -- eg \c FermentationTreeView, \c StyleCatalog
  * @tparam NE  The main type of NamedEntity being shown in this tree or catalog -- eg \c Equipment, \c Recipe, \c Hop.
- * @tparam SNE If not \c void then the secondary type of NamedEntity being shown in this tree -- eg \c BrewNote,
+ * @tparam SNE If not \c void then the secondary type of NamedEntity being shown in this tree -- eg \c BrewLog,
  *             \c MashStep.
  * @tparam showFolderOptions Whether to show options such as "new folder".  Essentially the same as
  *                           \c std::derived_from<Derived, TreeView> but we can't use that as \c Derived is not a
@@ -142,10 +142,10 @@ struct CommonContextMenus {
       }
 
       if constexpr (!IsVoid<SNE>) {
-         if constexpr (std::is_same_v<SNE, BrewNote>) {
+         if constexpr (std::is_same_v<SNE, BrewLog>) {
             this->addAndConnect(this->m_menu_secondary, this->m_action_brewAgain       , &Derived::brewAgainHelper);
             this->addAndConnect(this->m_menu_secondary, this->m_action_changeBrewDate  , &Derived::changeBrewDate );
-            this->addAndConnect(this->m_menu_secondary, this->m_action_recalcEfficiency, &Derived::fixBrewNote    );
+            this->addAndConnect(this->m_menu_secondary, this->m_action_recalcEfficiency, &Derived::fixBrewLog    );
          }
          this->addAndConnect(this->m_menu_secondary, this->m_action_deleteSecondary    , &Derived::deleteSelected);
       }
@@ -231,7 +231,7 @@ public:
       }
 
       if constexpr (!IsVoid<SNE>) {
-         if constexpr (std::is_same_v<SNE, BrewNote>) {
+         if constexpr (std::is_same_v<SNE, BrewLog>) {
             this->m_action_brewAgain       .setText(Derived::tr("Brew again"            ));
             this->m_action_changeBrewDate  .setText(Derived::tr("Change date"           ));
             this->m_action_recalcEfficiency.setText(Derived::tr("Recalculate efficiency"));
@@ -270,7 +270,7 @@ public:
             Q_ASSERT(selected.firstSecondary);
 
             if constexpr (std::same_as<NE, Recipe>) {
-               static_assert(std::same_as<SNE, BrewNote>);
+               static_assert(std::same_as<SNE, BrewLog>);
                this->m_action_brewAgain       .setEnabled(1 == selected.numSecondary);
                this->m_action_changeBrewDate  .setEnabled(1 == selected.numSecondary);
                this->m_action_recalcEfficiency.setEnabled(1 == selected.numSecondary);
@@ -474,7 +474,7 @@ public:
          // We dont need to check this in the following cases:
          //    - deleting a Recipe (because a Recipe is not used in another Recipe);
          //    - deleting a StockPurchase (because StockPurchase is not used in a Recipe)
-         //    - deleting a secondary item (eg BrewNote), because it is only used by its parent.
+         //    - deleting a secondary item (eg BrewLog), because it is only used by its parent.
          //
          // TODO: We have similar logic in TreeViewBase which we should ideally unify somewhere.
          //
@@ -794,9 +794,9 @@ public:
    [[no_unique_address]] std::conditional_t<!std::is_same_v<NE, Recipe>, Empty, QAction> m_action_brewIt;
 
    [[no_unique_address]] std::conditional_t<IsVoid<SNE>, Empty, QMenu> m_menu_secondary;
-   [[no_unique_address]] std::conditional_t<!std::is_same_v<SNE, BrewNote>, Empty, QAction> m_action_brewAgain;
-   [[no_unique_address]] std::conditional_t<!std::is_same_v<SNE, BrewNote>, Empty, QAction> m_action_changeBrewDate;
-   [[no_unique_address]] std::conditional_t<!std::is_same_v<SNE, BrewNote>, Empty, QAction> m_action_recalcEfficiency;
+   [[no_unique_address]] std::conditional_t<!std::is_same_v<SNE, BrewLog>, Empty, QAction> m_action_brewAgain;
+   [[no_unique_address]] std::conditional_t<!std::is_same_v<SNE, BrewLog>, Empty, QAction> m_action_changeBrewDate;
+   [[no_unique_address]] std::conditional_t<!std::is_same_v<SNE, BrewLog>, Empty, QAction> m_action_recalcEfficiency;
    [[no_unique_address]] std::conditional_t<IsVoid<SNE>, Empty, QAction> m_action_deleteSecondary;
 
 };

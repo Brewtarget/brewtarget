@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RecipeFormatter.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * RecipeFormatter.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Greenaae <ggreenaae@gmail.com>
@@ -40,7 +40,7 @@
 #include "measurement/IbuMethods.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Hop.h"
@@ -234,7 +234,7 @@ public:
       pDoc += this->buildMashTableHtml();
       pDoc += this->buildNotesHtml();
       pDoc += this->buildInstructionTableHtml();
-      pDoc += this->buildBrewNotesHtml();
+      pDoc += this->buildBrewLogsHtml();
 
       pDoc += this->buildHtmlFooter();
 
@@ -986,25 +986,25 @@ public:
    QString buildSaltTableTxt();
    */
 
-   QString buildBrewNotesHtml() {
+   QString buildBrewLogsHtml() {
       if (this->rec == nullptr) {
          return "";
       }
 
       QString bnTable = "";
-      auto const brewNotes = rec->brewNotes();
-      int size = brewNotes.size();
+      auto const brewLogs = rec->brewLogs();
+      int size = brewLogs.size();
       if ( size < 1 ) {
          return bnTable;
       }
 
       for(int ii = 0; ii < size; ++ii) {
-         auto note = brewNotes[ii];
+         auto note = brewLogs[ii];
 
          bnTable += QString("<h2>%1 %2</h2>").arg(tr("Brew Date")).arg(note->brewDate_short());
 
          // PREBOIL, done two-by-two
-         bnTable += "<table id=\"brewnote\">";
+         bnTable += "<table id=\"brewLog\">";
          bnTable += QString("<caption>%1</caption>").arg(tr("Preboil"));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("SG"))
@@ -1030,7 +1030,7 @@ public:
          bnTable += "</table>";
 
          // POSTBOIL
-         bnTable += "<table id=\"brewnote\">";
+         bnTable += "<table id=\"brewLog\">";
          bnTable += QString("<caption>%1</caption>").arg(tr("Postboil"));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("OG"))
@@ -1051,7 +1051,7 @@ public:
 
 
          // POSTFERMENT
-         bnTable += "<table id=\"brewnote\">";
+         bnTable += "<table id=\"brewLog\">";
          bnTable += QString("<caption>%1</caption>").arg(tr("Postferment"));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("FG"))
@@ -1121,7 +1121,7 @@ QString RecipeFormatter::getHtmlFormat(QList<Recipe*> recipes) {
       hDoc += this->pimpl->buildMashTableHtml();
       hDoc += this->pimpl->buildNotesHtml();
       hDoc += this->pimpl->buildInstructionTableHtml();
-      hDoc += this->pimpl->buildBrewNotesHtml();
+      hDoc += this->pimpl->buildBrewLogsHtml();
       hDoc += "<p></p>";
    }
    hDoc += this->pimpl->buildHtmlFooter();
@@ -1139,7 +1139,7 @@ QString RecipeFormatter::getHtmlFormat() {
    pDoc += this->pimpl->buildYeastTableHtml();
    pDoc += this->pimpl->buildMashTableHtml();
    pDoc += this->pimpl->buildNotesHtml();
-   pDoc += this->pimpl->buildBrewNotesHtml();
+   pDoc += this->pimpl->buildBrewLogsHtml();
    pDoc += this->pimpl->buildHtmlFooter();
 
    return pDoc;

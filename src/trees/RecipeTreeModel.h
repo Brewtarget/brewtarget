@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/RecipeTreeModel.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * trees/RecipeTreeModel.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -20,7 +20,7 @@
 
 #include <QMenu>
 
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Recipe.h"
 #include "trees/TreeModel.h"
 #include "trees/TreeModelBase.h"
@@ -29,9 +29,9 @@ class AncestorDialog;
 class OptionDialog;
 
 class RecipeTreeModel : public TreeModel,
-                        public TreeModelBase<RecipeTreeModel, Recipe, BrewNote> {
+                        public TreeModelBase<RecipeTreeModel, Recipe, BrewLog> {
    Q_OBJECT
-   TREE_MODEL_COMMON_DECL(Recipe, BrewNote)
+   TREE_MODEL_COMMON_DECL(Recipe, BrewLog)
 
 public:
 
@@ -64,8 +64,8 @@ private:
    //! \b flip the switch to show descendants
    void setShowChild(QModelIndex child, bool val);
 
-   //! \brief convenience function to add brewnotes to a recipe as a subtree
-   void addBrewNoteSubTree(TreeNode & recipeNodeRaw,
+   //! \brief convenience function to add brewLogs to a recipe as a subtree
+   void addBrewLogSubTree(TreeNode & recipeNodeRaw,
                            int recipeChildNumber,
                            Recipe const & recipe,
                            bool recurse = true);
@@ -75,7 +75,7 @@ private:
                           Recipe const & recipe);
 
    /**
-    * \brief Add BrewNotes and ancestors to a recipe as a sub-tree
+    * \brief Add BrewLogs and ancestors to a recipe as a sub-tree
     * \param recurse
     */
    void addSubTree(Recipe const & recipe,

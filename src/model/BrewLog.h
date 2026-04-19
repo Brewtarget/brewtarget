@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/BrewNote.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/BrewLog.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Jonatan Pålsson <jonatan.p@gmail.com>
@@ -17,9 +17,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef MODEL_BREWNOTE_H
-#define MODEL_BREWNOTE_H
+ =====================================================================================================================*/
+#ifndef MODEL_BREWLOG_H
+#define MODEL_BREWLOG_H
 #pragma once
 
 #include <QDate>
@@ -34,7 +34,7 @@
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
-#define AddPropertyName(property) namespace PropertyNames::BrewNote { inline BtStringConst const property{#property}; }
+#define AddPropertyName(property) namespace PropertyNames::BrewLog { inline BtStringConst const property{#property}; }
 AddPropertyName(abv              )
 AddPropertyName(attenuation      )
 AddPropertyName(boilOff_l        )
@@ -73,14 +73,18 @@ AddPropertyName(volumeIntoFerm_l )
 class Recipe;
 
 /*!
- * \class BrewNote
+ * \class BrewLog
  *
- * \brief Model for a brewnote record, which records what you did on brewday.
+ * \brief Model for a brew log, which records what you did on brewday.
  *
- *        NOTE that \c BrewNote is not part of the official BeerXML or BeerJSON standards.  We add it in to our BeerXML
+ *        The "name" of a BrewLog is used as "batch number" in the UI -- ie the brewer's own unique identifier for this
+ *        brew.  It can contain numbers and/or letters and/or symbols, so, "number" might seem a bit of a misnomer;
+ *        nonetheless, it is the standard term for such an identifying code.
+ *
+ *        NOTE that \c BrewLog is not part of the official BeerXML or BeerJSON standards.  We add it in to our BeerXML
  *             files, because we can, but TBD whether this is possible with BeerJSON.
  */
-class BrewNote : public OwnedByRecipe {
+class BrewLog : public OwnedByRecipe {
    Q_OBJECT
 
 public:
@@ -126,18 +130,18 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   BrewNote(QString name = "");
-   BrewNote(Recipe const & recipe);
-   BrewNote(QDate dateNow, QString const & name = "");
-   BrewNote(NamedParameterBundle const & namedParameterBundle);
-   BrewNote(BrewNote const & other);
+   explicit BrewLog(QString name = "");
+   explicit BrewLog(Recipe const & recipe);
+   explicit BrewLog(QDate dateNow, QString const & name = "");
+   explicit BrewLog(NamedParameterBundle const & namedParameterBundle);
+   BrewLog(BrewLog const & other);
 
-   virtual ~BrewNote();
+   ~BrewLog() override;
 
    /**
-    * \brief BrewNote instances are ordered by date rather than name, so we have to override \c NamedEntity ordering
+    * \brief BrewLog instances are ordered by date rather than name, so we have to override \c NamedEntity ordering
     */
-   std::strong_ordering operator<=>(BrewNote const & other) const;
+   std::strong_ordering operator<=>(BrewLog const & other) const;
 
    //=================================================== PROPERTIES ====================================================
    Q_PROPERTY(QDate   brewDate            READ brewDate            WRITE setBrewDate         )
@@ -210,9 +214,9 @@ public:
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setABV              (double var);
    void setAttenuation      (double var);
-   void setBrewDate         (QDate const& date = QDate::currentDate());
-   void setFermentDate      (QDate const& date);
-   void setNotes            (const QString& var);
+   void setBrewDate         (QDate   const & var = QDate::currentDate());
+   void setFermentDate      (QDate   const & var);
+   void setNotes            (QString const & var);
    void setSg               (double var);
    void setVolumeIntoBK_l   (double var);
    void setBrewhouseEff_pct (double var);
@@ -256,7 +260,7 @@ public:
    double calculateAttenuation_pct();
 
    //! Needed by \c TreeModelBase
-   static QList<std::shared_ptr<BrewNote>> ownedBy(Recipe const & recipe);
+   static QList<std::shared_ptr<BrewLog>> ownedBy(Recipe const & recipe);
 
 signals:
    void brewDateChanged(QDate const &);
@@ -301,6 +305,6 @@ private:
    double  m_projAtten        ;
 };
 
-BT_DECLARE_METATYPES(BrewNote)
+BT_DECLARE_METATYPES(BrewLog)
 
 #endif

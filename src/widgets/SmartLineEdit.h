@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartLineEdit.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * widgets/SmartLineEdit.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -59,7 +59,7 @@ class SmartLabel;
  *
  *        Previously we had a class called \c BtLineEdit (on which this class is based) and used mostly trivial
  *        subclassing to determine the class behaviour.  This was a sort of trick to pass in a constructor parameter.
- *        Classes \c BtStringEdit, \c BtPercentageEdit, would all inherit from \c BtLnneEdit and all do no more than
+ *        Classes \c BtStringEdit, \c BtPercentageEdit, would all inherit from \c BtLineEdit and all do no more than
  *        pass different parameters to the \c BtLineEdit constructor.  This sort of worked when we had relatively few
  *        \c Measurement::UnitSystem classes but was starting to get unwieldy when those were expanded in anticipation
  *        of lots of new field types for BeerJSON.  Also, it had the disadvantage that you had to think about field
@@ -69,13 +69,13 @@ class SmartLineEdit : public QLineEdit, public SmartField {
    Q_OBJECT
 
 public:
-   SmartLineEdit(QWidget* parent = nullptr);
-   virtual ~SmartLineEdit();
+   explicit SmartLineEdit(QWidget* parent = nullptr);
+   ~SmartLineEdit() override;
 
-   virtual QString getRawText() const;
-   virtual void setRawText(QString const & text);
-   virtual void connectSmartLabelSignal(SmartLabel & smartLabel);
-   virtual void doPostInitWork();
+   virtual QString getRawText() const override;
+   virtual void setRawText(QString const & text) override;
+   virtual void connectSmartLabelSignal(SmartLabel & smartLabel) override;
+   virtual void doPostInitWork() override;
 
    /**
     * \brief This combines \c QLineEdit::setText and \c QLineEdit::setCursorPosition

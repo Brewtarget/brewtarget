@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/OwnedSet.h is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * model/OwnedSet.h is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ struct OwnedSetOptions {
     *        set containing copies of each item in the original set.  This is what \c copyable being \c true means.
     *
     *        The only other option is that, when the owning object is copied, the set is not copied at all, and the set
-    *        on the newly-created copy is empty.  This is, for instance, what we do with any \c BrewNote objects on a
+    *        on the newly-created copy is empty.  This is, for instance, what we do with any \c BrewLog objects on a
     *        \c Recipe.  This is what \c copyable being \c false means.
     *
     *        Note that it can never be possible to do a shallow copy of an \c OwnedSet, since an item in such a set

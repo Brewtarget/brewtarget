@@ -32,7 +32,7 @@
 #include "RecipeFormatter.h"
 #include "config.h"
 #include "measurement/Measurement.h"
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Folder.h"
 #include "model/Recipe.h"
 #include "utils/EnumStringMapping.h"
@@ -153,7 +153,7 @@ protected:
     * \brief The model to which this node belongs.
     *
     *        Every \c TreeNode object belongs to a \c TreeModel object.  Eg \c TreeFolderNode<Recipe>,
-    *        \c TreeItemNode<Recipe> and \c TreeItemNode<BrewNote> belong to \c RecipeTreeModel.  Strictly speaking, we
+    *        \c TreeItemNode<Recipe> and \c TreeItemNode<BrewLog> belong to \c RecipeTreeModel.  Strictly speaking, we
     *        do not need to store a reference to the model here because it can be determined from the type of the node.
     *        (There is only one \c RecipeTreeModel object, and all \c TreeItemNode<Recipe> nodes belong to it, etc.)
     *        However, for the moment, it is convenient to have the reference to hand.  And no tree is going to have

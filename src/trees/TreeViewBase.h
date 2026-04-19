@@ -48,11 +48,11 @@
  *                   \c Recipe (for which no separate editor exists), in which case this type should be \c MainWindow.
  * \param NE - The primary \c NamedEntity subclass (besides \c Folder) shown in this tree (eg \c Recipe for
  *             \c RecipeTreeView)
- * \param SNE - The optional secondary \c NamedEntity subclass shown in this tree (eg \c BrewNote for
+ * \param SNE - The optional secondary \c NamedEntity subclass shown in this tree (eg \c BrewLog for
  *               \c RecipeTreeView, or \c MashStep for \c MashTreeView).  This class must have:
- *                 • an \c owner() member function that does the obvious thing (eg \c BrewNote::owner() returns a
+ *                 • an \c owner() member function that does the obvious thing (eg \c BrewLog::owner() returns a
  *                   \c Recipe; \c MashStep::owner returns a \c Mash);
- *                 • a static \c ownedBy() member function that returns all the \c BrewNote objects owned by a given
+ *                 • a static \c ownedBy() member function that returns all the \c BrewLog objects owned by a given
  *                   \c Recipe or all the \c MashStep objects owned by a given \c Mash, etc.
  */
 template<class Derived> class TreeViewPhantom;
@@ -136,7 +136,7 @@ protected:
 
       if constexpr (std::same_as<NE, Recipe>) {
          //
-         // Recipe trees can hold Recipes and BrewNotes
+         // Recipe trees can hold Recipes and BrewLogs
          //
          if (node->classifier() == TreeNodeClassifier::PrimaryItem) {
             auto recipe = this->getItem<Recipe>(viewIndex);
@@ -144,7 +144,7 @@ protected:
             this->derived().setCurrentIndex(viewIndex);
          } else {
             Q_ASSERT(node->classifier() == TreeNodeClassifier::SecondaryItem);
-            this->m_editor->setBrewNoteByIndex(viewIndex);
+            this->m_editor->setBrewLogByIndex(viewIndex);
          }
       } else {
          auto item = this->getItem<NE>(viewIndex);
@@ -347,7 +347,7 @@ public:
     * \brief Copy selected items
     *
     *        Note that we only directly copy primary items.  It doesn't make sense to copy secondary items (because they
-    *        belong to primary items -- eg you wouldn't copy an individual \c BrewNote or a \c MashStep in the tree
+    *        belong to primary items -- eg you wouldn't copy an individual \c BrewLog or a \c MashStep in the tree
     *        view).  We also don't support copying folders.  (It could be a future enhancement, but I'm not sure there's
     *        much need for it.)
     *
@@ -443,11 +443,11 @@ public:
          // But this is not meaningful in the following cases:
          //    - deleting a Recipe (because a Recipe is not used in another Recipe);
          //    - deleting a StockPurchase (because StockPurchase is not used in a Recipe)
-         //    - deleting a secondary item (eg BrewNote), because it is only used by its parent.
+         //    - deleting a secondary item (eg BrewLog), because it is only used by its parent.
          //
-         // TODO: We should, somewhere, handle the case of a Recipe being deleted that has BrewNotes referred to by a
+         // TODO: We should, somewhere, handle the case of a Recipe being deleted that has BrewLogs referred to by a
          //       StockUse subclass.  For soft delete, we maybe just need to update the UI to not show there is a
-         //       BrewNote for that StockUse.  For hard delete, need to remove the BrewNote ID from the StockUse.
+         //       BrewLog for that StockUse.  For hard delete, need to remove the BrewLog ID from the StockUse.
          //
          QString confirmationMessage = Derived::tr("Delete %1 #%2 \"%3\"?").arg(
                                           treeNode->localisedClassName()
@@ -851,7 +851,7 @@ public:
    CommonContextMenus<Derived, NE, SNE, true> m_contextMenus;
 
    // We use the same trick here as in TreeNodeBase to have a member variable that only exists when there is a secondary
-   // item (eg BrewNote in RecipeTreeView or MashStep in MashTreeView).
+   // item (eg BrewLog in RecipeTreeView or MashStep in MashTreeView).
    struct Empty { };
        [[no_unique_address]] std::conditional_t<IsVoid<SNE>, Empty, QMenu> m_secondaryContextMenu;
 };

@@ -292,7 +292,7 @@ namespace ObjectStoreWrapper {
    }
 
    /**
-    * \brief Getting the \c Boil, \c Fermentation, etc for a \c Recipe, or the \c BrewNote for a \c StockUse subclass is
+    * \brief Getting the \c Boil, \c Fermentation, etc for a \c Recipe, or the \c BrewLog for a \c StockUse subclass is
     *        pretty much the same logic, so we template it
     *
     * \param getter  The object making the request (eg the \c Recipe that wants the \c Boil)

@@ -333,7 +333,7 @@ public:
     *
     *        Broadly speaking, there are three categories of \c NamedEntity:
     *
-    *         - Dependent items such as \c BrewNote, \c Instruction and \c RecipeAdditionHop which \b always belong to
+    *         - Dependent items such as \c BrewLog, \c Instruction and \c RecipeAdditionHop which \b always belong to
     *           exactly one \c Recipe and which get deleted if that \c Recipe is deleted.  A change to one of these
     *           items is treated as a change to the \c Recipe.
     *
@@ -361,7 +361,7 @@ public:
     *        Semi-Independent.  (The class \c OwnedByRecipe exists, but \c IndependentOfRecipe does not.)
     *
     *           OwnedByRecipe                          IndependentOfRecipe († = semi-independent)
-    *             ├── BrewNote                           ├── Boil †
+    *             ├── BrewLog                           ├── Boil †
     *             ├── Instruction                        ├── Equipment
     *             ├── RecipeAddition                     ├── Fermentation †
     *             │    ├── RecipeAdditionFermentable     ├── Ingredient

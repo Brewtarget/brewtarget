@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * model/StockUse.h is part of Brewtarget, and is copyright the following authors 2025:
+ * model/StockUse.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 #include <QDate>
 #include <QString>
 
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/NamedEntity.h"
 #include "model/NamedParameterBundle.h"
 #include "utils/EnumStringMapping.h"
@@ -29,8 +29,8 @@
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::StockUse { inline BtStringConst const property{#property}; }
-AddPropertyName(brewNote    )
-AddPropertyName(brewNoteId  )
+AddPropertyName(brewLog    )
+AddPropertyName(brewLogId  )
 AddPropertyName(comment     )
 AddPropertyName(date        )
 AddPropertyName(ownerId     )
@@ -56,8 +56,8 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
-   static QString localisedName_brewNote    ();
-   static QString localisedName_brewNoteId  ();
+   static QString localisedName_brewLog    ();
+   static QString localisedName_brewLogId  ();
    static QString localisedName_comment     ();
    static QString localisedName_date        ();
    static QString localisedName_ownerId     ();
@@ -141,24 +141,24 @@ public:
    Q_PROPERTY(QString comment READ comment  WRITE setComment)
 
    //! If the use was in a Recipe, this is the relevant brew of that recipe
-   Q_PROPERTY(std::shared_ptr<BrewNote> brewNote      READ brewNote      WRITE setBrewNote     STORED false)
-   Q_PROPERTY(int                       brewNoteId    READ brewNoteId    WRITE setBrewNoteId)
+   Q_PROPERTY(std::shared_ptr<BrewLog> brewLog      READ brewLog      WRITE setBrewLog     STORED false)
+   Q_PROPERTY(int                       brewLogId    READ brewLogId    WRITE setBrewLogId)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    QDate                     date        () const;
    Reason                    reason      () const;
    double                    quantityUsed() const;
    QString                   comment     () const;
-   std::shared_ptr<BrewNote> brewNote    () const;
-   int                       brewNoteId  () const;
+   std::shared_ptr<BrewLog> brewLog    () const;
+   int                       brewLogId  () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setDate        (QDate                     const   val);
    void setReason      (Reason                    const   val);
    void setQuantityUsed(double                    const   val);
    void setComment     (QString                   const & val);
-   void setBrewNote    (std::shared_ptr<BrewNote> const   val);
-   void setBrewNoteId  (int                       const   val);
+   void setBrewLog    (std::shared_ptr<BrewLog> const   val);
+   void setBrewLogId  (int                       const   val);
 
 protected:
    virtual bool compareWith(NamedEntity const & other,
@@ -168,7 +168,7 @@ protected:
    Reason  m_reason           ;
    double  m_quantityUsed     ;
    QString m_comment          ;
-   int     m_brewNoteId       ;
+   int     m_brewLogId       ;
 };
 
 #endif

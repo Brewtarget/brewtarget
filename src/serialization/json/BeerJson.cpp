@@ -38,6 +38,8 @@
 #include "model/Fermentation.h"
 #include "model/FermentationStep.h"
 #include "model/Hop.h"
+#include "model/Mash.h"
+#include "model/MashStep.h"
 #include "model/Misc.h"
 #include "model/Recipe.h"
 #include "model/RecipeAdditionFermentable.h"
@@ -1352,9 +1354,9 @@ namespace BeerJson {
    template void Exporter::add(QList<Fermentation const *> const & nes);
    template void Exporter::add(QList<Boil         const *> const & nes);
    template void Exporter::add(QList<Equipment    const *> const & nes);
-   // Following two lines are commented out as neither Instruction nor BrewNote is part of BeerJSON.
+   // Following two lines are commented out as neither Instruction nor BrewLog is part of BeerJSON.
 //   template void Exporter::add(QList<Instruction const *> const & nes);
-//   template void Exporter::add(QList<BrewNote    const *> const & nes);
+//   template void Exporter::add(QList<BrewLog    const *> const & nes);
    template void Exporter::add(QList<Recipe      const *> const & nes);
 
    void Exporter::close() {

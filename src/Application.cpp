@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Application.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * Application.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Chris Pavetto <chrispavetto@gmail.com>
@@ -55,7 +55,7 @@
 #include "measurement/ColorMethods.h"
 #include "measurement/IbuMethods.h"
 #include "measurement/Measurement.h"
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Hop.h"
@@ -288,7 +288,7 @@ bool Application::initialize() {
    qRegisterMetaType<Mash      *>();
    qRegisterMetaType<Style     *>();
    qRegisterMetaType<Salt      *>();
-   qRegisterMetaType<QList<BrewNote    *>>();
+   qRegisterMetaType<QList<BrewLog    *>>();
    qRegisterMetaType<QList<Hop         *>>();
    qRegisterMetaType<QList<Instruction *>>();
    qRegisterMetaType<QList<Fermentable *>>();

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/ObjectStore.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * database/ObjectStore.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -459,7 +459,7 @@ signals:
     * \brief Signal emitted when a new object is inserted in the database.  Parts of the UI that need to display all
     *        objects of this type should connect this signal to a slot.  NB: Replaces the following signals:
     *
-    *            void Database::newBrewNoteSignal(BrewNote*);        /  void Database::createdSignal(BrewNote*);
+    *            void Database::newBrewLogSignal(BrewLog*);        /  void Database::createdSignal(BrewLog*);
     *            void Database::newEquipmentSignal(Equipment*);      /  void Database::createdSignal(Equipment*);
     *            void Database::newFermentableSignal(Fermentable*);  /  void Database::createdSignal(Fermentable*);
     *            void Database::newHopSignal(Hop*);                  /  void Database::createdSignal(Hop*);
@@ -510,7 +510,7 @@ signals:
     *            void Database::deletedSignal(Water*);
     *            void Database::deletedSignal(Salt*);
     *            void Database::deletedSignal(Yeast*);
-    *            void Database::deletedSignal(BrewNote*);
+    *            void Database::deletedSignal(BrewLog*);
     *            void Database::deletedSignal(MashStep*);
     *
     * \param id The primary key of the deleted object.  (For the moment we assume all primary keys are integers.

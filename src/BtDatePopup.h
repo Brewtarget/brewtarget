@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtDatePopup.h is part of Brewtarget, and is copyright the following authors 2009-2021:
+ * BtDatePopup.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -29,9 +29,8 @@
 /*!
  * \class BtDatePopup
  *
- * \brief Gives us a calendar popup so that we can redate a brewnote. A lot of
- * setup needs to be done to make this behave, so it is easier to do it as a
- * separate class.
+ * \brief Gives us a calendar popup so that we can redate a brewLog. A lot of setup needs to be done to make this
+ *        behave, so it is easier to do it as a separate class.
  *
  * This is largely taken from jordenysp's example on stackoverflow
  * http://stackoverflow.com/questions/1352334/qcalendarwidget-as-pop-up-not-as-new-window
@@ -40,14 +39,14 @@ class BtDatePopup : public QDialog {
    Q_OBJECT
 
 public:
-      BtDatePopup(QWidget* parent=0);
-      QDate selectedDate() const;
+   explicit BtDatePopup(QWidget * parent = nullptr);
+   QDate selectedDate() const;
 
 private:
-      QWidget* widget;
-      QCalendarWidget* calendar;
-      QDialogButtonBox* buttonbox;
-      QVBoxLayout* vertical;
+   QWidget *          m_widget;
+   QCalendarWidget *  m_calendar;
+   QDialogButtonBox * m_buttonbox;
+   QVBoxLayout *      m_vertical;
 };
 
 #endif

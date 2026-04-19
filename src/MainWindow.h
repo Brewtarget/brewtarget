@@ -162,17 +162,17 @@ public slots:
    //! \brief Update the main window's statusbar.
    void updateStatus(QString const status);
 
-   //! \brief Close a brewnote tab if we must (because of the BrewNote being deleted)
-   void brewNoteDeleted(int brewNoteId, std::shared_ptr<QObject> object);
+   //! \brief Close a brewLog tab if we must (because of the BrewLog being deleted)
+   void brewLogDeleted(int brewLogId, std::shared_ptr<QObject> object);
 
    /**
-    * \brief Mostly the display of BrewNotes is handled by \c BrewNoteWidget.  However, \c MainWindow is responsible for
-    *        the tabs containing BrewNoteWidgets.  The tab text is the BrewNote's brew date, so we have to know if that
+    * \brief Mostly the display of BrewLogs is handled by \c BrewLogWidget.  However, \c MainWindow is responsible for
+    *        the tabs containing BrewLogWidgets.  The tab text is the BrewLog's brew date, so we have to know if that
     *        changes.
     */
-   void brewNoteChanged(QMetaProperty prop, QVariant value) const;
+   void brewLogChanged(QMetaProperty prop, QVariant value) const;
 
-   void setBrewNoteByIndex(QModelIndex const & index);
+   void setBrewLogByIndex(QModelIndex const & index);
 
    //! \brief Remove selected Fermentable(s) from the Recipe.
    void removeSelectedFermentableAddition();
@@ -250,7 +250,7 @@ public slots:
    void brewItHelper();
    void brewAgainHelper();
    void changeBrewDate();
-   void fixBrewNote();
+   void fixBrewLog();
 
    void redisplayLabel();
 

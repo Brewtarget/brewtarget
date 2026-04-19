@@ -512,13 +512,9 @@
     </message>
 </context>
 <context>
-    <name>BrewNote</name>
+    <name>BrewLog</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note #%1 for brew on %2</source>
+        <source>Brew Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -640,6 +636,33 @@
     <message>
         <source>Volume Into Fermentor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BrewNote</name>
+    <message>
+        <source>Attenuation</source>
+        <translation type="obsolete">Vergärungsgrad</translation>
+    </message>
+    <message>
+        <source>FG</source>
+        <translation type="obsolete">FG</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="obsolete">Geplanter Alkoholgehalt</translation>
+    </message>
+    <message>
+        <source>Projected OG</source>
+        <translation type="obsolete">Geplante Stammwürze</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="obsolete">SG</translation>
     </message>
 </context>
 <context>
@@ -2741,6 +2764,22 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Change %1 Name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Contained in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contained in Folder ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder name cannot be blank (and cannot contain &apos;/&apos;)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Derived::StockUseClass</name>
@@ -3653,6 +3692,13 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Folder</source>
+        <translation type="obsolete">Ordner</translation>
+    </message>
+</context>
+<context>
+    <name>FolderCommon</name>
+    <message>
+        <source>Folder</source>
         <translation type="unfinished">Ordner</translation>
     </message>
     <message>
@@ -4550,15 +4596,15 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note #%1 for brew on %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes from brew day on %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log for brew on %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6966,10 +7012,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished">Brauer</translation>
     </message>
     <message>
-        <source>Brew Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Calculations Enabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6999,7 +7041,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation type="obsolete">Datum</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -7183,6 +7225,14 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source> to the mash tun.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8287,14 +8337,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
 <context>
     <name>StockUse</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8328,6 +8370,14 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Stock Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log ID</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9816,22 +9866,26 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
 </context>
 <context>
-    <name>brewNoteWidget</name>
+    <name>brewLogWidget</name>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Preboil</source>
-        <translation>Vorkochen</translation>
+        <translation type="unfinished">Vorkochen</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>SG</translation>
+        <translation type="unfinished">SG</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation>Pfannevollwürzekonzentration</translation>
+        <translation type="unfinished">Pfannevollwürzekonzentration</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volumen</translation>
+        <translation type="unfinished">Volumen</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
@@ -9839,102 +9893,70 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Einmaischtemperatur</translation>
-    </message>
-    <message>
-        <source>Final Temp</source>
-        <translation>Endtemperatur</translation>
-    </message>
-    <message>
-        <source>Temperature of mash before mash out</source>
-        <translation>Temperatur der Maische vorm Abmaischen</translation>
-    </message>
-    <message>
-        <source>Postboil</source>
-        <translation>Nachkochen</translation>
-    </message>
-    <message>
-        <source>OG</source>
-        <translation>Stammwürze</translation>
-    </message>
-    <message>
-        <source>Post boil gravity</source>
-        <translation>Stammwürzegehalt</translation>
-    </message>
-    <message>
-        <source>Postboil Volume</source>
-        <translation>Nachkochvolumen</translation>
-    </message>
-    <message>
-        <source>Volume of wort in BK after boil</source>
-        <translation>Volumen der Würze in der Sudpfanne nach dem Kochen</translation>
-    </message>
-    <message>
-        <source>Volume of wort transferred to fermenter</source>
-        <translation>Menge der Würze in den Gärbehälter</translation>
-    </message>
-    <message>
-        <source>Volume into fermenter</source>
-        <translation>Volumen im Fermenter</translation>
-    </message>
-    <message>
-        <source> Pitch Temp</source>
-        <translation> Anstelltemperatur</translation>
-    </message>
-    <message>
-        <source>Temperature of wort when yeast is pitched</source>
-        <translation>Temperatur der Würze wenn die Hefe zugegeben wird</translation>
-    </message>
-    <message>
-        <source>Postferment</source>
-        <translation>Nachgärung</translation>
-    </message>
-    <message>
-        <source>Final gravity</source>
-        <translation>Restextrakt</translation>
-    </message>
-    <message>
-        <source>Volume of beer into serving keg/bottles</source>
-        <translation>Volumen an Bier in Ausschank-Fass/Flasche</translation>
-    </message>
-    <message>
-        <source>Projected OG</source>
-        <translation>Geplante Stammwürze</translation>
-    </message>
-    <message>
-        <source>Brewhouse efficiency</source>
-        <translation>Sudhausausbeute</translation>
-    </message>
-    <message>
-        <source>Brewhouse Eff</source>
-        <translation type="vanished">Sudhausausbeute</translation>
-    </message>
-    <message>
-        <source>Expected ABV based on OG</source>
-        <translation type="vanished">Erwarteter Alkoholgehalt (ABV) basierend auf der Stammwürze (OG)</translation>
-    </message>
-    <message>
-        <source>Projected ABV</source>
-        <translation>Geplanter Alkoholgehalt</translation>
-    </message>
-    <message>
-        <source>ABV based on FG</source>
-        <translation type="vanished">ABV basierend auf FG</translation>
-    </message>
-    <message>
-        <source>ABV</source>
-        <translation>ABV</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>Notizen</translation>
-    </message>
-    <message>
-        <source>yyyy-dd-MM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Einmaischtemperatur</translation>
     </message>
     <message>
         <source>Temperature of strike water before dough in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="unfinished">Endtemperatur</translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="unfinished">Temperatur der Maische vorm Abmaischen</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="unfinished">Nachkochen</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="unfinished">Stammwürzegehalt</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="unfinished">Nachkochvolumen</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="unfinished">Volumen der Würze in der Sudpfanne nach dem Kochen</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="unfinished">Menge der Würze in den Gärbehälter</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="unfinished">Volumen im Fermenter</translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="unfinished"> Anstelltemperatur</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="unfinished">Temperatur der Würze wenn die Hefe zugegeben wird</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="unfinished">Nachgärung</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="unfinished">Restextrakt</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="unfinished">Volumen an Bier in Ausschank-Fass/Flasche</translation>
+    </message>
+    <message>
+        <source>yyyy-dd-MM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9950,11 +9972,27 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Projected OG</source>
+        <translation type="unfinished">Geplante Stammwürze</translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="unfinished">Sudhausausbeute</translation>
+    </message>
+    <message>
         <source>Expected ABV based on recipe OG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Projected ABV</source>
+        <translation type="unfinished">Geplanter Alkoholgehalt</translation>
+    </message>
+    <message>
         <source>ABV based on user-reported FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9974,8 +10012,127 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note</source>
+        <source>Brew Date</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>brewNoteWidget</name>
+    <message>
+        <source>Preboil</source>
+        <translation type="vanished">Vorkochen</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="vanished">SG</translation>
+    </message>
+    <message>
+        <source>Preboil gravity</source>
+        <translation type="vanished">Pfannevollwürzekonzentration</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="vanished">Volumen</translation>
+    </message>
+    <message>
+        <source>Strike Temp</source>
+        <translation type="vanished">Einmaischtemperatur</translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="vanished">Endtemperatur</translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="vanished">Temperatur der Maische vorm Abmaischen</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="vanished">Nachkochen</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="vanished">Stammwürze</translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="vanished">Stammwürzegehalt</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="vanished">Nachkochvolumen</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="vanished">Volumen der Würze in der Sudpfanne nach dem Kochen</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="vanished">Menge der Würze in den Gärbehälter</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="vanished">Volumen im Fermenter</translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="vanished"> Anstelltemperatur</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="vanished">Temperatur der Würze wenn die Hefe zugegeben wird</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="vanished">Nachgärung</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="vanished">Restextrakt</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="vanished">Volumen an Bier in Ausschank-Fass/Flasche</translation>
+    </message>
+    <message>
+        <source>Projected OG</source>
+        <translation type="vanished">Geplante Stammwürze</translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="vanished">Sudhausausbeute</translation>
+    </message>
+    <message>
+        <source>Brewhouse Eff</source>
+        <translation type="vanished">Sudhausausbeute</translation>
+    </message>
+    <message>
+        <source>Expected ABV based on OG</source>
+        <translation type="vanished">Erwarteter Alkoholgehalt (ABV) basierend auf der Stammwürze (OG)</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="vanished">Geplanter Alkoholgehalt</translation>
+    </message>
+    <message>
+        <source>ABV based on FG</source>
+        <translation type="vanished">ABV basierend auf FG</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="vanished">ABV</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="vanished">Notizen</translation>
     </message>
 </context>
 <context>

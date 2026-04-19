@@ -30,7 +30,7 @@
 #include "measurement/ConstrainedAmount.h"
 #include "model/NamedParameterBundle.h"
 
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Fermentable.h"
 #include "model/Hop.h"
 #include "model/Recipe.h"
@@ -119,7 +119,7 @@ NamedEntity::NamedEntity(QString t_name) :
 // The "key", "display" and "deleted" properties are optional because they will be set if we're creating from a DB
 // record, but not if we're creating from an XML record.
 //
-// The "name" property has to be optional because not all subclasses have them.  (BrewNote is the subclass without a
+// The "name" property has to be optional because not all subclasses have them.  (BrewLog is the subclass without a
 // name, and, yes, I know the existence of a NamedEntity without a name calls into question our class naming! :->)
 //
 NamedEntity::NamedEntity(NamedParameterBundle const & namedParameterBundle) :

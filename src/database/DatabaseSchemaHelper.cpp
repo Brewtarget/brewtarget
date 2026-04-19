@@ -2764,7 +2764,7 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
    /**
-    * \brief New Folder tables
+    * \brief Main change is new Folder tables.  But we also add batch number to BrewNote.
     */
    bool migrate_to_20([[maybe_unused]] Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> migrationQueries{};
@@ -3013,8 +3013,22 @@ namespace {
          }
       }
 
-      // If we made it this far, there weren't any errors!
-      return true;
+      //
+      // Now a much simpler change: renaming BrewNote to BrewLog, since "brew log" is a more widely-used term that
+      // "brew note" for the record of a brew day.
+      //
+      migrationQueries = {
+         {QString("ALTER TABLE brewnote RENAME TO brew_log")},
+      };
+      for (char const * baseName : {"fermentable", "hop", "misc", "salt", "yeast"}) {
+         QString modifyTableSql;
+         QTextStream modifyTableSqlStream(&modifyTableSql);
+         modifyTableSqlStream << "ALTER TABLE " << baseName << "_stock_use  RENAME COLUMN brewnote_id to brew_log_id";
+         migrationQueries.append({modifyTableSql});
+      }
+
+      return executeSqlQueries(q, migrationQueries);
+
    }
 
    //

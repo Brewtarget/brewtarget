@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlRecipeRecord.cpp is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/xml/XmlRecipeRecord.cpp is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -19,10 +19,12 @@
 #include <functional>
 
 #include "model/Boil.h"
+#include "model/BrewLog.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
 #include "model/Hop.h"
+#include "model/Instruction.h"
 #include "model/Misc.h"
 #include "model/Style.h"
 #include "model/Yeast.h"
@@ -212,7 +214,7 @@ bool XmlRecipeRecord::childrenToXml(XmlRecordDefinition::FieldDefinition const &
                                     XmlRecord const & subRecord,
                                     Recipe const & recipe,
                                     QTextStream & out,
-                                    int indentLevel,
+                                    int const indentLevel,
                                     char const * const indentString,
                                     BtStringConst const & propertyNameForGetter,
                                     RecipeChildGetter getter) const {
@@ -248,7 +250,7 @@ void XmlRecipeRecord::subRecordToXml(XmlRecordDefinition::FieldDefinition const 
    if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::yeastAdditions      , &Recipe::yeastAdditions      )) { return; }
    if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::waterUses           , &Recipe::waterUses           )) { return; }
    if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::instructions        , &Recipe::instructions        )) { return; }
-   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::brewNotes           , &Recipe::brewNotes           )) { return; }
+   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::brewLogs            , &Recipe::brewLogs            )) { return; }
 
    // It's a coding error if we get here
    qCritical() << Q_FUNC_INFO << "Don't know how to export Recipe property " << fieldDefinition.propertyPath.asXPath();

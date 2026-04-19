@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonNamedEntityRecord.h is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/json/JsonNamedEntityRecord.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -18,14 +18,8 @@
 #pragma once
 
 #include <QDebug>
-#include <QString>
-#include <QList>
 
 #include "database/ObjectStoreWrapper.h"
-#include "model/BrewNote.h"
-#include "model/Instruction.h"
-#include "model/Mash.h"
-#include "model/MashStep.h"
 #include "model/NamedEntity.h"
 #include "model/Recipe.h"
 #include "serialization/json/JsonRecord.h"
@@ -46,7 +40,7 @@ public:
    JsonNamedEntityRecord(JsonCoding const & jsonCoding,
                          boost::json::value & recordData,
                          JsonRecordDefinition const & recordDefinition) :
-      JsonRecord{jsonCoding, recordData, recordDefinition /*, NE::staticMetaObject.className()*/},
+      JsonRecord{jsonCoding, recordData, recordDefinition},
       Serialization::NamedEntityRecordBase<JsonNamedEntityRecord<NE>, NE>{} {
       return;
    }

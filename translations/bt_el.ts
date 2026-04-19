@@ -494,13 +494,9 @@
     </message>
 </context>
 <context>
-    <name>BrewNote</name>
+    <name>BrewLog</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note #%1 for brew on %2</source>
+        <source>Brew Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -622,6 +618,53 @@
     <message>
         <source>Volume Into Fermentor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BrewNote</name>
+    <message>
+        <source>ABV</source>
+        <translation type="obsolete">ABV</translation>
+    </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="obsolete">αραίωση</translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="obsolete">Ημέρα Ζυθοποίησης</translation>
+    </message>
+    <message>
+        <source>FG</source>
+        <translation type="obsolete">FG</translation>
+    </message>
+    <message>
+        <source>Final Volume</source>
+        <translation type="obsolete">Τελικός όγκος</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="obsolete">Σημειώσεις</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="obsolete">OG</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="obsolete">Προβλεπόμενοι ABV</translation>
+    </message>
+    <message>
+        <source>Projected OG</source>
+        <translation type="obsolete">Προβλεπόμενη OG</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="obsolete">SG</translation>
     </message>
 </context>
 <context>
@@ -2684,6 +2727,22 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Change %1 Name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Contained in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contained in Folder ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder name cannot be blank (and cannot contain &apos;/&apos;)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Derived::StockUseClass</name>
@@ -3556,6 +3615,13 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>FULLPATH</source>
         <translation type="obsolete">Πλήρης διαδρομή</translation>
     </message>
+    <message>
+        <source>Folder</source>
+        <translation type="obsolete">Φάκελος</translation>
+    </message>
+</context>
+<context>
+    <name>FolderCommon</name>
     <message>
         <source>Folder</source>
         <translation type="unfinished">Φάκελος</translation>
@@ -4440,15 +4506,15 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note #%1 for brew on %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes from brew day on %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log for brew on %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6829,10 +6895,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Ζυθοποιός</translation>
     </message>
     <message>
-        <source>Brew Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Calculations Enabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6862,7 +6924,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Ημερομηνία</translation>
+        <translation type="obsolete">Ημερομηνία</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -7046,6 +7108,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source> to the mash tun.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8100,14 +8170,6 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockUse</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8141,6 +8203,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Stock Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log ID</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9636,141 +9706,97 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
-    <name>brewNoteWidget</name>
+    <name>brewLogWidget</name>
     <message>
-        <source>Preboil</source>
-        <translation>Πριν τον βρασμό</translation>
-    </message>
-    <message>
-        <source>SG</source>
-        <translation>SG</translation>
-    </message>
-    <message>
-        <source>Preboil gravity</source>
-        <translation>Πυκνότητα πριν το βρασμό</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Όγκος</translation>
-    </message>
-    <message>
-        <source>Volume of wort collected</source>
-        <translation>Όγκος γλεύκους που συλλέχτηκε</translation>
-    </message>
-    <message>
-        <source>Strike Temp</source>
-        <translation>Strike Temp</translation>
-    </message>
-    <message>
-        <source>Temperature of mash after dough in</source>
-        <translation type="vanished">Θερμοκρασία της σακχαροποίησης μετά την εισαγωγή των σιτηρών</translation>
-    </message>
-    <message>
-        <source>Final Temp</source>
-        <translation>Τελική Θερμοκρασία</translation>
-    </message>
-    <message>
-        <source>Temperature of mash before mash out</source>
-        <translation>Θερμοκρασία σακχαροποίησης πριν το τέλος</translation>
-    </message>
-    <message>
-        <source>Postboil</source>
-        <translation>μετά τον βρασμό</translation>
-    </message>
-    <message>
-        <source>OG</source>
-        <translation>OG</translation>
-    </message>
-    <message>
-        <source>Post boil gravity</source>
-        <translation>πυκνότητα μετά τον βρασμό</translation>
-    </message>
-    <message>
-        <source>Postboil Volume</source>
-        <translation>Όγκος μετά τον βρασμό</translation>
-    </message>
-    <message>
-        <source>Volume of wort in BK after boil</source>
-        <translation>Όγκος στο καζάνι μετά τον βρασμό</translation>
-    </message>
-    <message>
-        <source>Volume of wort transferred to fermenter</source>
-        <translation>Όγκος γλεύκους που μεταφέρθηκε στον κάδο ζύμωσης</translation>
-    </message>
-    <message>
-        <source>Volume into fermenter</source>
-        <translation>Όγκος στον κάδο ζύμωσης</translation>
-    </message>
-    <message>
-        <source> Pitch Temp</source>
-        <translation> Θερμοκρασία ρίψης της μαγιάς</translation>
-    </message>
-    <message>
-        <source>Temperature of wort when yeast is pitched</source>
-        <translation>Θερμοκρασία του γλέυκους κατά την ρίψη της μαγιάς</translation>
-    </message>
-    <message>
-        <source>Postferment</source>
-        <translation>Μετά την ζύμωση</translation>
-    </message>
-    <message>
-        <source>Final gravity</source>
-        <translation>Τελική πυκνότητα</translation>
-    </message>
-    <message>
-        <source>Volume of beer into serving keg/bottles</source>
-        <translation>Όγκος μπύρας σε μποτίλιες</translation>
-    </message>
-    <message>
-        <source>percent efficiency into boil kettle</source>
-        <translation type="vanished">ποσοστό απόδοσης στην μαρμίτα</translation>
-    </message>
-    <message>
-        <source>Eff into BK</source>
-        <translation type="vanished">απόδ. στην μαρμίτα</translation>
-    </message>
-    <message>
-        <source>Expected OG, based on measure fg</source>
-        <translation type="vanished">Αναμενόμενη OG βασισμένη στην μέτρηση της FG</translation>
-    </message>
-    <message>
-        <source>Projected OG</source>
-        <translation>Προβλεπόμενη OG</translation>
-    </message>
-    <message>
-        <source>Brewhouse efficiency</source>
-        <translation>Απόδοση εξοπλισμού</translation>
-    </message>
-    <message>
-        <source>Brewhouse Eff</source>
-        <translation type="vanished">Απόδ. εξοπλισμού</translation>
-    </message>
-    <message>
-        <source>Expected ABV based on OG</source>
-        <translation type="vanished">Αναμενόμενη ABV  με βάση την OG</translation>
-    </message>
-    <message>
-        <source>Projected ABV</source>
-        <translation>Προβλεπόμενοι ABV</translation>
-    </message>
-    <message>
-        <source>ABV based on FG</source>
-        <translation type="vanished">ABV με βάση την FG</translation>
-    </message>
-    <message>
-        <source>ABV</source>
-        <translation>ABV</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>Σημειώσεις</translation>
-    </message>
-    <message>
-        <source>yyyy-dd-MM</source>
+        <source>Brew Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Preboil</source>
+        <translation type="unfinished">Πριν τον βρασμό</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="unfinished">SG</translation>
+    </message>
+    <message>
+        <source>Preboil gravity</source>
+        <translation type="unfinished">Πυκνότητα πριν το βρασμό</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Όγκος</translation>
+    </message>
+    <message>
+        <source>Volume of wort collected</source>
+        <translation type="unfinished">Όγκος γλεύκους που συλλέχτηκε</translation>
+    </message>
+    <message>
+        <source>Strike Temp</source>
+        <translation type="unfinished">Strike Temp</translation>
+    </message>
+    <message>
         <source>Temperature of strike water before dough in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="unfinished">Τελική Θερμοκρασία</translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="unfinished">Θερμοκρασία σακχαροποίησης πριν το τέλος</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="unfinished">μετά τον βρασμό</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="unfinished">OG</translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="unfinished">πυκνότητα μετά τον βρασμό</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="unfinished">Όγκος μετά τον βρασμό</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="unfinished">Όγκος στο καζάνι μετά τον βρασμό</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="unfinished">Όγκος γλεύκους που μεταφέρθηκε στον κάδο ζύμωσης</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="unfinished">Όγκος στον κάδο ζύμωσης</translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="unfinished"> Θερμοκρασία ρίψης της μαγιάς</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="unfinished">Θερμοκρασία του γλέυκους κατά την ρίψη της μαγιάς</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="unfinished">Μετά την ζύμωση</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="unfinished">Τελική πυκνότητα</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="unfinished">Όγκος μπύρας σε μποτίλιες</translation>
+    </message>
+    <message>
+        <source>yyyy-dd-MM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9786,12 +9812,28 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Projected OG</source>
+        <translation type="unfinished">Προβλεπόμενη OG</translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="unfinished">Απόδοση εξοπλισμού</translation>
+    </message>
+    <message>
         <source>Expected ABV based on recipe OG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Projected ABV</source>
+        <translation type="unfinished">Προβλεπόμενοι ABV</translation>
+    </message>
+    <message>
         <source>ABV based on user-reported FG</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>Yeast attenuation based on yeast specified in recipe</source>
@@ -9810,8 +9852,147 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note</source>
+        <source>Brew Date</source>
+        <translation type="unfinished">Ημέρα Ζυθοποίησης</translation>
+    </message>
+    <message>
+        <source>Batch Number</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Σημειώσεις</translation>
+    </message>
+</context>
+<context>
+    <name>brewNoteWidget</name>
+    <message>
+        <source>Preboil</source>
+        <translation type="vanished">Πριν τον βρασμό</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="vanished">SG</translation>
+    </message>
+    <message>
+        <source>Preboil gravity</source>
+        <translation type="vanished">Πυκνότητα πριν το βρασμό</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="vanished">Όγκος</translation>
+    </message>
+    <message>
+        <source>Volume of wort collected</source>
+        <translation type="vanished">Όγκος γλεύκους που συλλέχτηκε</translation>
+    </message>
+    <message>
+        <source>Strike Temp</source>
+        <translation type="vanished">Strike Temp</translation>
+    </message>
+    <message>
+        <source>Temperature of mash after dough in</source>
+        <translation type="vanished">Θερμοκρασία της σακχαροποίησης μετά την εισαγωγή των σιτηρών</translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="vanished">Τελική Θερμοκρασία</translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="vanished">Θερμοκρασία σακχαροποίησης πριν το τέλος</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="vanished">μετά τον βρασμό</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="vanished">OG</translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="vanished">πυκνότητα μετά τον βρασμό</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="vanished">Όγκος μετά τον βρασμό</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="vanished">Όγκος στο καζάνι μετά τον βρασμό</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="vanished">Όγκος γλεύκους που μεταφέρθηκε στον κάδο ζύμωσης</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="vanished">Όγκος στον κάδο ζύμωσης</translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="vanished"> Θερμοκρασία ρίψης της μαγιάς</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="vanished">Θερμοκρασία του γλέυκους κατά την ρίψη της μαγιάς</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="vanished">Μετά την ζύμωση</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="vanished">Τελική πυκνότητα</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="vanished">Όγκος μπύρας σε μποτίλιες</translation>
+    </message>
+    <message>
+        <source>percent efficiency into boil kettle</source>
+        <translation type="vanished">ποσοστό απόδοσης στην μαρμίτα</translation>
+    </message>
+    <message>
+        <source>Eff into BK</source>
+        <translation type="vanished">απόδ. στην μαρμίτα</translation>
+    </message>
+    <message>
+        <source>Expected OG, based on measure fg</source>
+        <translation type="vanished">Αναμενόμενη OG βασισμένη στην μέτρηση της FG</translation>
+    </message>
+    <message>
+        <source>Projected OG</source>
+        <translation type="vanished">Προβλεπόμενη OG</translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="vanished">Απόδοση εξοπλισμού</translation>
+    </message>
+    <message>
+        <source>Brewhouse Eff</source>
+        <translation type="vanished">Απόδ. εξοπλισμού</translation>
+    </message>
+    <message>
+        <source>Expected ABV based on OG</source>
+        <translation type="vanished">Αναμενόμενη ABV  με βάση την OG</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="vanished">Προβλεπόμενοι ABV</translation>
+    </message>
+    <message>
+        <source>ABV based on FG</source>
+        <translation type="vanished">ABV με βάση την FG</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="vanished">ABV</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="vanished">Σημειώσεις</translation>
     </message>
 </context>
 <context>

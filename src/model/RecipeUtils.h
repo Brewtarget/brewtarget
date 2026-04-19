@@ -19,7 +19,7 @@
 
 #include <QList>
 
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Recipe.h"
 
 /**
@@ -27,9 +27,9 @@
  */
 namespace RecipeUtils {
    /**
-    * \brief Gets the BrewNotes for a Recipe and all its ancestors
+    * \brief Gets the BrewLogs for a Recipe and all its ancestors
     */
-   QList<std::shared_ptr<BrewNote>> brewNotesForRecipeAndAncestors(Recipe const & recipe);
+   QList<std::shared_ptr<BrewLog>> brewLogsForRecipeAndAncestors(Recipe const & recipe);
 
    /**
     * \brief Turn automatic versioning on or off

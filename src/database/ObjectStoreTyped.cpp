@@ -22,7 +22,7 @@
 #include "measurement/Unit.h"
 #include "model/Boil.h"
 #include "model/BoilStep.h"
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
@@ -57,7 +57,7 @@ namespace {
    // By the magic of templated variables and template specialisation, we have below all the constructor parameters for
    // each type of ObjectStoreTyped.
    //
-   // The only wrinkle here is that the order of definitions matters, eg the definition of PRIMARY_TABLE<BrewNote>
+   // The only wrinkle here is that the order of definitions matters, eg the definition of PRIMARY_TABLE<BrewLog>
    // needs to appear after that of PRIMARY_TABLE<Recipe>, as the address of the latter is used in the former (to show
    // foreign key references).  However, as long as we don't want circular foreign key references in the database,
    // there should always be an order that works!
@@ -301,7 +301,7 @@ namespace {
       },
       {&NAMED_ENTITY_COMMON_FIELDS}
    };
-   // Mashes don't have children, and the link with their MashSteps is stored in the MashStep (as between Recipe and BrewNotes)
+   // Mashes don't have children, and the link with their MashSteps is stored in the MashStep (as between Recipe and BrewLogs)
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Mash> {};
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
@@ -349,7 +349,7 @@ namespace {
       },
       {&NAMED_ENTITY_COMMON_FIELDS}
    };
-   // Boils don't have children, and the link with their BoilSteps is stored in the BoilStep (as between Recipe and BrewNotes)
+   // Boils don't have children, and the link with their BoilSteps is stored in the BoilStep (as between Recipe and BrewLogs)
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Boil> {};
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
@@ -392,7 +392,7 @@ namespace {
       },
       {&NAMED_ENTITY_COMMON_FIELDS}
    };
-   // Fermentations don't have children, and the link with their FermentationSteps is stored in the FermentationStep (as between Recipe and BrewNotes)
+   // Fermentations don't have children, and the link with their FermentationSteps is stored in the FermentationStep (as between Recipe and BrewLogs)
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Fermentation> {};
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
@@ -717,52 +717,51 @@ namespace {
    };
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   // Database field mappings for BrewNote
+   // Database field mappings for BrewLog
    //
-   // Although we don't (currently) use the "name" field on BrewNote, it's better that it exists on this table for
-   // consistency with all other subclasses of NamedEntity.
+   // Note that the "name" of a BrewLog is shown as "batch number" in the UI.
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   template<> ObjectStore::TableDefinition const PRIMARY_TABLE<BrewNote> {
-      "brewnote",
+   template<> ObjectStore::TableDefinition const PRIMARY_TABLE<BrewLog> {
+      "brew_log",
       {
-         {ObjectStore::FieldType::Int   , {"id"                     }, PropertyNames::NamedEntity::key           },
-         // NB: BrewNotes don't have folders, as each one is owned by a Recipe
-         {ObjectStore::FieldType::Double, {"abv"                    }, PropertyNames::BrewNote::abv              },
-         {ObjectStore::FieldType::Double, {"attenuation"            }, PropertyNames::BrewNote::attenuation      },
-         {ObjectStore::FieldType::Double, {"boil_off"               }, PropertyNames::BrewNote::boilOff_l        },
-         {ObjectStore::FieldType::Date  , {"brewdate"               }, PropertyNames::BrewNote::brewDate         },
-         {ObjectStore::FieldType::Double, {"brewhouse_eff"          }, PropertyNames::BrewNote::brewhouseEff_pct },
-         {ObjectStore::FieldType::Double, {"eff_into_bk"            }, PropertyNames::BrewNote::effIntoBK_pct    },
-         {ObjectStore::FieldType::Date  , {"fermentdate"            }, PropertyNames::BrewNote::fermentDate      },
-         {ObjectStore::FieldType::Double, {"fg"                     }, PropertyNames::BrewNote::fg               },
-         {ObjectStore::FieldType::Double, {"final_volume"           }, PropertyNames::BrewNote::finalVolume_l    },
-         {ObjectStore::FieldType::Double, {"mash_final_temp"        }, PropertyNames::BrewNote::mashFinTemp_c    },
-         {ObjectStore::FieldType::String, {"notes"                  }, PropertyNames::BrewNote::notes            },
-         {ObjectStore::FieldType::Double, {"og"                     }, PropertyNames::BrewNote::og               },
-         {ObjectStore::FieldType::Double, {"pitch_temp"             }, PropertyNames::BrewNote::pitchTemp_c      },
-         {ObjectStore::FieldType::Double, {"post_boil_volume"       }, PropertyNames::BrewNote::postBoilVolume_l },
-         {ObjectStore::FieldType::Double, {"projected_abv"          }, PropertyNames::BrewNote::projABV_pct      },
-         {ObjectStore::FieldType::Double, {"projected_atten"        }, PropertyNames::BrewNote::projAtten        },
-         {ObjectStore::FieldType::Double, {"projected_boil_grav"    }, PropertyNames::BrewNote::projBoilGrav     },
-         {ObjectStore::FieldType::Double, {"projected_eff"          }, PropertyNames::BrewNote::projEff_pct      },
-         {ObjectStore::FieldType::Double, {"projected_ferm_points"  }, PropertyNames::BrewNote::projFermPoints   },
-         {ObjectStore::FieldType::Double, {"projected_fg"           }, PropertyNames::BrewNote::projFg           },
-         {ObjectStore::FieldType::Double, {"projected_mash_fin_temp"}, PropertyNames::BrewNote::projMashFinTemp_c},
-         {ObjectStore::FieldType::Double, {"projected_og"           }, PropertyNames::BrewNote::projOg           },
-         {ObjectStore::FieldType::Double, {"projected_points"       }, PropertyNames::BrewNote::projPoints       },
-         {ObjectStore::FieldType::Double, {"projected_strike_temp"  }, PropertyNames::BrewNote::projStrikeTemp_c },
-         {ObjectStore::FieldType::Double, {"projected_vol_into_bk"  }, PropertyNames::BrewNote::projVolIntoBK_l  },
-         {ObjectStore::FieldType::Double, {"projected_vol_into_ferm"}, PropertyNames::BrewNote::projVolIntoFerm_l},
-         {ObjectStore::FieldType::Double, {"sg"                     }, PropertyNames::BrewNote::sg               },
-         {ObjectStore::FieldType::Double, {"strike_temp"            }, PropertyNames::BrewNote::strikeTemp_c     },
-         {ObjectStore::FieldType::Double, {"volume_into_bk"         }, PropertyNames::BrewNote::volumeIntoBK_l   },
-         {ObjectStore::FieldType::Double, {"volume_into_fermenter"  }, PropertyNames::BrewNote::volumeIntoFerm_l },
+         {ObjectStore::FieldType::Int   , {"id"                     }, PropertyNames::NamedEntity::key          },
+         // NB: BrewLogs don't have folders, as each one is owned by a Recipe
+         {ObjectStore::FieldType::Double, {"abv"                    }, PropertyNames::BrewLog::abv              },
+         {ObjectStore::FieldType::Double, {"attenuation"            }, PropertyNames::BrewLog::attenuation      },
+         {ObjectStore::FieldType::Double, {"boil_off"               }, PropertyNames::BrewLog::boilOff_l        },
+         {ObjectStore::FieldType::Date  , {"brewdate"               }, PropertyNames::BrewLog::brewDate         },
+         {ObjectStore::FieldType::Double, {"brewhouse_eff"          }, PropertyNames::BrewLog::brewhouseEff_pct },
+         {ObjectStore::FieldType::Double, {"eff_into_bk"            }, PropertyNames::BrewLog::effIntoBK_pct    },
+         {ObjectStore::FieldType::Date  , {"fermentdate"            }, PropertyNames::BrewLog::fermentDate      },
+         {ObjectStore::FieldType::Double, {"fg"                     }, PropertyNames::BrewLog::fg               },
+         {ObjectStore::FieldType::Double, {"final_volume"           }, PropertyNames::BrewLog::finalVolume_l    },
+         {ObjectStore::FieldType::Double, {"mash_final_temp"        }, PropertyNames::BrewLog::mashFinTemp_c    },
+         {ObjectStore::FieldType::String, {"notes"                  }, PropertyNames::BrewLog::notes            },
+         {ObjectStore::FieldType::Double, {"og"                     }, PropertyNames::BrewLog::og               },
+         {ObjectStore::FieldType::Double, {"pitch_temp"             }, PropertyNames::BrewLog::pitchTemp_c      },
+         {ObjectStore::FieldType::Double, {"post_boil_volume"       }, PropertyNames::BrewLog::postBoilVolume_l },
+         {ObjectStore::FieldType::Double, {"projected_abv"          }, PropertyNames::BrewLog::projABV_pct      },
+         {ObjectStore::FieldType::Double, {"projected_atten"        }, PropertyNames::BrewLog::projAtten        },
+         {ObjectStore::FieldType::Double, {"projected_boil_grav"    }, PropertyNames::BrewLog::projBoilGrav     },
+         {ObjectStore::FieldType::Double, {"projected_eff"          }, PropertyNames::BrewLog::projEff_pct      },
+         {ObjectStore::FieldType::Double, {"projected_ferm_points"  }, PropertyNames::BrewLog::projFermPoints   },
+         {ObjectStore::FieldType::Double, {"projected_fg"           }, PropertyNames::BrewLog::projFg           },
+         {ObjectStore::FieldType::Double, {"projected_mash_fin_temp"}, PropertyNames::BrewLog::projMashFinTemp_c},
+         {ObjectStore::FieldType::Double, {"projected_og"           }, PropertyNames::BrewLog::projOg           },
+         {ObjectStore::FieldType::Double, {"projected_points"       }, PropertyNames::BrewLog::projPoints       },
+         {ObjectStore::FieldType::Double, {"projected_strike_temp"  }, PropertyNames::BrewLog::projStrikeTemp_c },
+         {ObjectStore::FieldType::Double, {"projected_vol_into_bk"  }, PropertyNames::BrewLog::projVolIntoBK_l  },
+         {ObjectStore::FieldType::Double, {"projected_vol_into_ferm"}, PropertyNames::BrewLog::projVolIntoFerm_l},
+         {ObjectStore::FieldType::Double, {"sg"                     }, PropertyNames::BrewLog::sg               },
+         {ObjectStore::FieldType::Double, {"strike_temp"            }, PropertyNames::BrewLog::strikeTemp_c     },
+         {ObjectStore::FieldType::Double, {"volume_into_bk"         }, PropertyNames::BrewLog::volumeIntoBK_l   },
+         {ObjectStore::FieldType::Double, {"volume_into_fermenter"  }, PropertyNames::BrewLog::volumeIntoFerm_l },
          {ObjectStore::FieldType::Int   , {"recipe_id"              }, PropertyNames::OwnedByRecipe::recipeId    , &PRIMARY_TABLE<Recipe>},
       },
       {&NAMED_ENTITY_COMMON_FIELDS}
    };
-   // BrewNotes don't have children
-   template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<BrewNote> {};
+   // BrewLogs don't have children
+   template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<BrewLog> {};
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Instruction
@@ -893,7 +892,7 @@ namespace {
          {ObjectStore::FieldType::Enum  , {"reason"         }, PropertyNames::StockUse::reason       , &StockUse::reasonStringMapping},
          {ObjectStore::FieldType::String, {"comment"        }, PropertyNames::StockUse::comment      },
          {ObjectStore::FieldType::Double, {"quantity_used"  }, PropertyNames::StockUse::quantityUsed },
-         {ObjectStore::FieldType::Int   , {"brewnote_id"    }, PropertyNames::StockUse::brewNoteId   , &PRIMARY_TABLE<BrewNote>},
+         {ObjectStore::FieldType::Int   , {"brew_log_id"    }, PropertyNames::StockUse::brewLogId    , &PRIMARY_TABLE<BrewLog>},
       }
    };
 
@@ -903,7 +902,7 @@ namespace {
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<StockUseFermentable> {
       "fermentable_stock_use",
       {
-         {ObjectStore::FieldType::Int, {"id"                }, PropertyNames::NamedEntity::key       },
+         {ObjectStore::FieldType::Int, {"id"                     }, PropertyNames::NamedEntity::key       },
          {ObjectStore::FieldType::Int, {"fermentable_purchase_id"}, PropertyNames::EnumeratedBase::ownerId, &PRIMARY_TABLE<StockPurchaseFermentable>},
       },
       {&NAMED_ENTITY_COMMON_FIELDS, &STOCK_USE_COMMON_FIELDS}
@@ -916,7 +915,7 @@ namespace {
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<StockUseHop> {
       "hop_stock_use",
       {
-         {ObjectStore::FieldType::Int, {"id"        }, PropertyNames::NamedEntity::key       },
+         {ObjectStore::FieldType::Int, {"id"             }, PropertyNames::NamedEntity::key       },
          {ObjectStore::FieldType::Int, {"hop_purchase_id"}, PropertyNames::EnumeratedBase::ownerId, &PRIMARY_TABLE<StockPurchaseHop>},
       },
       {&NAMED_ENTITY_COMMON_FIELDS, &STOCK_USE_COMMON_FIELDS}
@@ -1026,7 +1025,7 @@ namespace {
 //
 template ObjectStoreTyped<Boil                     > & ObjectStoreTyped<Boil                     >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<BoilStep                 > & ObjectStoreTyped<BoilStep                 >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<BrewNote                 > & ObjectStoreTyped<BrewNote                 >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<BrewLog                  > & ObjectStoreTyped<BrewLog                  >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Equipment                > & ObjectStoreTyped<Equipment                >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Fermentable              > & ObjectStoreTyped<Fermentable              >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Fermentation             > & ObjectStoreTyped<Fermentation             >::getInstance(Database * database = nullptr);
@@ -1077,7 +1076,7 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    // NOTE: This is the 2nd of 4 places we need to add any new ObjectStoreTyped
    if (ObjectStoreTyped<Boil                     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Boil"                     ; }
    if (ObjectStoreTyped<BoilStep                 >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "BoilStep"                 ; }
-   if (ObjectStoreTyped<BrewNote                 >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "BrewNote"                 ; }
+   if (ObjectStoreTyped<BrewLog                 >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "BrewLog"                 ; }
    if (ObjectStoreTyped<Equipment                >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Equipment"                ; }
    if (ObjectStoreTyped<Fermentable              >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Fermentable"              ; }
    if (ObjectStoreTyped<Fermentation             >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Fermentation"             ; }
@@ -1140,7 +1139,7 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    // NOTE: This is the 3rd of 4 places we need to add any new ObjectStoreTyped
    postLoadInit(ObjectStoreTyped<Boil                      >::getInstance());
    postLoadInit(ObjectStoreTyped<BoilStep                  >::getInstance());
-   postLoadInit(ObjectStoreTyped<BrewNote                  >::getInstance());
+   postLoadInit(ObjectStoreTyped<BrewLog                  >::getInstance());
    postLoadInit(ObjectStoreTyped<Equipment                 >::getInstance());
    postLoadInit(ObjectStoreTyped<Fermentable               >::getInstance());
    postLoadInit(ObjectStoreTyped<Fermentation              >::getInstance());
@@ -1193,7 +1192,7 @@ namespace {
       static QVector<ObjectStore const *> allObjectStores {
          &ObjectStoreTyped<Boil                      >::getInstance(database),
          &ObjectStoreTyped<BoilStep                  >::getInstance(database),
-         &ObjectStoreTyped<BrewNote                  >::getInstance(database),
+         &ObjectStoreTyped<BrewLog                  >::getInstance(database),
          &ObjectStoreTyped<Equipment                 >::getInstance(database),
          &ObjectStoreTyped<Fermentable               >::getInstance(database),
          &ObjectStoreTyped<Fermentation              >::getInstance(database),

@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/NamedEntityTreeSortFilterProxyModel.h is part of Brewtarget, and is copyright the following authors 2025:
+ * trees/NamedEntityTreeSortFilterProxyModel.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -152,9 +152,9 @@ class YeastTreeSortFilterProxyModel :
 
 class RecipeTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
-   public TreeSortFilterProxyModelBase<RecipeTreeSortFilterProxyModel, RecipeTreeModel, Recipe, BrewNote> {
+   public TreeSortFilterProxyModelBase<RecipeTreeSortFilterProxyModel, RecipeTreeModel, Recipe, BrewLog> {
    Q_OBJECT
-   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Recipe, BrewNote)
+   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Recipe, BrewLog)
 };
 
 #endif

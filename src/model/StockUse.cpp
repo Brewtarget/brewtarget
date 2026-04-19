@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * model/StockUse.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * model/StockUse.cpp is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -19,8 +19,8 @@
 #include "utils/AutoCompare.h"
 
 QString StockUse::localisedName() { return tr("Stock Use"); }
-QString StockUse::localisedName_brewNote    () { return tr("Brew Note"    ); }
-QString StockUse::localisedName_brewNoteId  () { return tr("Brew Note ID" ); }
+QString StockUse::localisedName_brewLog     () { return tr("Brew Log"     ); }
+QString StockUse::localisedName_brewLogId   () { return tr("Brew Log ID"  ); }
 QString StockUse::localisedName_comment     () { return tr("Comment"      ); }
 QString StockUse::localisedName_date        () { return tr("Date"         ); }
 QString StockUse::localisedName_ownerId     () { return tr("Owner ID"     ); }
@@ -48,7 +48,7 @@ bool StockUse::compareWith(NamedEntity const & other, QList<BtStringConst const 
       AUTO_PROPERTY_COMPARE(this, rhs, m_reason      , PropertyNames::StockUse::reason      , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_quantityUsed, PropertyNames::StockUse::quantityUsed, propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_comment     , PropertyNames::StockUse::comment     , propertiesThatDiffer) &&
-      AUTO_PROPERTY_COMPARE(this, rhs, m_brewNoteId  , PropertyNames::StockUse::brewNoteId  , propertiesThatDiffer)
+      AUTO_PROPERTY_COMPARE(this, rhs, m_brewLogId   , PropertyNames::StockUse::brewLogId   , propertiesThatDiffer)
    );
 }
 
@@ -59,8 +59,8 @@ TypeLookup const StockUse::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, reason      , m_reason      , ENUM_INFO(StockUse::reason)),
       PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, quantityUsed, m_quantityUsed, NonPhysicalQuantity::Dimensionless),
       PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, comment     , m_comment     , NonPhysicalQuantity::String       ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, brewNoteId  , m_brewNoteId  ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(StockUse, brewNote    , brewNote      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(StockUse, brewLogId  , m_brewLogId  ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(StockUse, brewLog    , brewLog      ),
    },
    {&NamedEntity::typeLookup}
 };
@@ -71,7 +71,7 @@ StockUse::StockUse(QString name) :
    m_reason           {StockUse::Reason::Used},
    m_quantityUsed     {0.0},
    m_comment          {""},
-   m_brewNoteId       {-1} {
+   m_brewLogId       {-1} {
    return;
 }
 
@@ -81,7 +81,7 @@ StockUse::StockUse(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB(m_reason      , namedParameterBundle, PropertyNames::StockUse::reason      ),
    SET_REGULAR_FROM_NPB(m_quantityUsed, namedParameterBundle, PropertyNames::StockUse::quantityUsed),
    SET_REGULAR_FROM_NPB(m_comment     , namedParameterBundle, PropertyNames::StockUse::comment     ),
-   SET_REGULAR_FROM_NPB(m_brewNoteId  , namedParameterBundle, PropertyNames::StockUse::brewNoteId  ) {
+   SET_REGULAR_FROM_NPB(m_brewLogId  , namedParameterBundle, PropertyNames::StockUse::brewLogId  ) {
    return;
 }
 
@@ -92,7 +92,7 @@ StockUse::StockUse(StockUse const & other) :
    m_reason      {other.m_reason      },
    m_quantityUsed{other.m_quantityUsed},
    m_comment     {other.m_comment     },
-   m_brewNoteId  {other.m_brewNoteId  } {
+   m_brewLogId  {other.m_brewLogId  } {
    return;
 }
 
@@ -109,10 +109,10 @@ QDate            StockUse::date        () const { return this->m_date        ;}
 StockUse::Reason StockUse::reason      () const { return this->m_reason      ;}
 double           StockUse::quantityUsed() const { return this->m_quantityUsed;}
 QString          StockUse::comment     () const { return this->m_comment     ;}
-int              StockUse::brewNoteId  () const { return this->m_brewNoteId  ;}
+int              StockUse::brewLogId  () const { return this->m_brewLogId  ;}
 
-std::shared_ptr<BrewNote> StockUse::brewNote() const {
-   return ObjectStoreWrapper::getRelational<BrewNote>(*this, this->m_brewNoteId);
+std::shared_ptr<BrewLog> StockUse::brewLog() const {
+   return ObjectStoreWrapper::getRelational<BrewLog>(*this, this->m_brewLogId);
 }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
@@ -120,10 +120,10 @@ void StockUse::setDate        (QDate            const   val) { SET_AND_NOTIFY( P
 void StockUse::setReason      (StockUse::Reason const   val) { SET_AND_NOTIFY( PropertyNames::StockUse::reason      , this->m_reason      , val); }
 void StockUse::setQuantityUsed(double           const   val) { SET_AND_NOTIFY( PropertyNames::StockUse::quantityUsed, this->m_quantityUsed, val); }
 void StockUse::setComment     (QString          const & val) { SET_AND_NOTIFY( PropertyNames::StockUse::comment     , this->m_comment     , val); }
-void StockUse::setBrewNoteId  (int              const   val) { SET_AND_NOTIFY( PropertyNames::StockUse::brewNoteId  , this->m_brewNoteId  , val); }
+void StockUse::setBrewLogId  (int              const   val) { SET_AND_NOTIFY( PropertyNames::StockUse::brewLogId  , this->m_brewLogId  , val); }
 
-void StockUse::setBrewNote(std::shared_ptr<BrewNote> const val) {
-   // For now at least we don't care about the return value as we don't listen for any signals from the BrewNote
-   ObjectStoreWrapper::setRelational(*this, val, this->m_brewNoteId);
+void StockUse::setBrewLog(std::shared_ptr<BrewLog> const val) {
+   // For now at least we don't care about the return value as we don't listen for any signals from the BrewLog
+   ObjectStoreWrapper::setRelational(*this, val, this->m_brewLogId);
    return;
 }

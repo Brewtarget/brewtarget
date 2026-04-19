@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * trees/TreeNode.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * trees/TreeNode.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -35,7 +35,7 @@
 #include "measurement/ColorMethods.h"
 #include "measurement/IbuMethods.h"
 #include "measurement/Measurement.h"
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Folder.h"
@@ -166,14 +166,15 @@ COLUMN_INFOS(
    TreeItemNode<Recipe>,
    TREE_NODE_HEADER(TreeItemNode, Recipe, Name             , PropertyNames::NamedEntity::name        ), // "Name"
    TREE_NODE_HEADER(TreeItemNode, Recipe, NumberOfAncestors, PropertyNames::Recipe     ::numAncestors), // "Snapshots"
-   TREE_NODE_HEADER(TreeItemNode, Recipe, BrewDate         , PropertyNames::Recipe     ::date        ), // "Date"
+   TREE_NODE_HEADER(TreeItemNode, Recipe, DateCreated      , PropertyNames::Recipe     ::date        ), // "Date Created"
    TREE_NODE_HEADER(TreeItemNode, Recipe, Style            , PropertyPath{{PropertyNames::Recipe::style,             // "Style"
                                                                            PropertyNames::NamedEntity::name}, 0} ),
 )
 
 COLUMN_INFOS(
-   TreeItemNode<BrewNote>,
-   TREE_NODE_HEADER(TreeItemNode, BrewNote, BrewDate, PropertyNames::BrewNote::brewDate), // "Date"
+   TreeItemNode<BrewLog>,
+   TREE_NODE_HEADER(TreeItemNode, BrewLog, BrewDate   , PropertyNames::BrewLog::brewDate), // "Brew Date"
+   TREE_NODE_HEADER(TreeItemNode, BrewLog, BatchNumber, PropertyNames::NamedEntity::name), // "Batch Number"
 )
 
 COLUMN_INFOS(
@@ -254,7 +255,7 @@ COLUMN_INFOS(
    TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Reason         , PropertyNames::StockUse::reason),
    TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Date           , PropertyNames::StockUse::date  ),
    TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Comment        , PropertyNames::StockUse::comment),
-   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
+   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
                                                                                       PropertyNames::OwnedByRecipe::recipe,
                                                                                       PropertyNames::NamedEntity::name}, 1}),
    TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
@@ -278,7 +279,7 @@ COLUMN_INFOS(
    TREE_NODE_HEADER(TreeItemNode, StockUseHop, Reason         , PropertyNames::StockUse::reason),
    TREE_NODE_HEADER(TreeItemNode, StockUseHop, Date           , PropertyNames::StockUse::date  ),
    TREE_NODE_HEADER(TreeItemNode, StockUseHop, Comment        , PropertyNames::StockUse::comment),
-   TREE_NODE_HEADER(TreeItemNode, StockUseHop, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
+   TREE_NODE_HEADER(TreeItemNode, StockUseHop, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
                                                                               PropertyNames::OwnedByRecipe::recipe,
                                                                               PropertyNames::NamedEntity::name}, 1}),
    TREE_NODE_HEADER(TreeItemNode, StockUseHop, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
@@ -302,7 +303,7 @@ COLUMN_INFOS(
    TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Reason         , PropertyNames::StockUse::reason),
    TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Date           , PropertyNames::StockUse::date  ),
    TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Comment        , PropertyNames::StockUse::comment),
-   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
+   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
                                                                                PropertyNames::OwnedByRecipe::recipe,
                                                                                PropertyNames::NamedEntity::name}, 1}),
    TREE_NODE_HEADER(TreeItemNode, StockUseMisc, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
@@ -326,7 +327,7 @@ COLUMN_INFOS(
    TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Reason         , PropertyNames::StockUse::reason),
    TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Date           , PropertyNames::StockUse::date  ),
    TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Comment        , PropertyNames::StockUse::comment),
-   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
+   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
                                                                                PropertyNames::OwnedByRecipe::recipe,
                                                                                PropertyNames::NamedEntity::name}, 1}),
    TREE_NODE_HEADER(TreeItemNode, StockUseSalt, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
@@ -350,7 +351,7 @@ COLUMN_INFOS(
    TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Reason         , PropertyNames::StockUse::reason),
    TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Date           , PropertyNames::StockUse::date  ),
    TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Comment        , PropertyNames::StockUse::comment),
-   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
+   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
                                                                                 PropertyNames::OwnedByRecipe::recipe,
                                                                                 PropertyNames::NamedEntity::name}, 1}),
    TREE_NODE_HEADER(TreeItemNode, StockUseYeast, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
@@ -444,10 +445,10 @@ template<> QString TreeItemNode<Recipe>::getToolTip() const {
    return header + body;
 }
 
-template<> QString TreeItemNode<BrewNote>::getToolTip() const {
+template<> QString TreeItemNode<BrewLog>::getToolTip() const {
    QString const header = getHeader();
    QString body = "<body>";
-   body += BrewNote::tr("Brew Note #%1 for brew on %2").arg(
+   body += BrewLog::tr("Brew Log #%1 for brew on %2").arg(
       this->m_underlyingItem->key()
    ).arg(
       Localization::displayDate(this->m_underlyingItem->brewDate())

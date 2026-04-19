@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlNamedEntityRecord.h is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/xml/XmlNamedEntityRecord.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -18,17 +18,10 @@
 #pragma once
 
 #include <QDebug>
-#include <QString>
-#include <QList>
 
 #include "database/ObjectStoreWrapper.h"
-#include "model/BrewNote.h"
-#include "model/Instruction.h"
-#include "model/Mash.h"
-#include "model/MashStep.h"
 #include "model/NamedEntity.h"
 #include "model/Recipe.h"
-#include "utils/TypeLookup.h"
 #include "serialization/NamedEntityRecordBase.h"
 #include "serialization/xml/XmlRecord.h"
 #include "serialization/xml/XQString.h"

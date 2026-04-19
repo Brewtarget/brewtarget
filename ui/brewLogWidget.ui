@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>brewNoteWidget</class>
- <widget class="QWidget" name="brewNoteWidget">
+ <class>brewLogWidget</class>
+ <widget class="QWidget" name="brewLogWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Brew Note</string>
+   <string>Brew Log</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
@@ -39,7 +39,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QToolBox" name="toolBox_brewnote">
+          <widget class="QToolBox" name="toolBox_brewLog">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -347,7 +347,7 @@
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="SmartLabel" name="label_fermentDate">
+              <widget class="QLabel" name="label_fermentDate">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -355,12 +355,12 @@
                 <string notr="true">Date</string>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_fermentDate</cstring>
+                <cstring>dateEdit_fermentDate</cstring>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QDateTimeEdit" name="lineEdit_fermentDate">
+              <widget class="QDateTimeEdit" name="dateEdit_fermentDate">
                <property name="displayFormat">
                 <string>yyyy-dd-MM</string>
                </property>
@@ -509,26 +509,67 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="title">
-          <string>Notes</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="BtTextEdit" name="btTextEdit_brewNotes">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="mouseTracking">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+        <layout class="QGridLayout" name="gridLayout_right">
+         <item row="1" column="1">
+          <widget class="QLabel" name="label_brewDate">
+           <property name="text">
+            <string>Brew Date</string>
+           </property>
+           <property name="buddy">
+            <cstring>dateEdit_brewDate</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QDateTimeEdit" name="dateEdit_brewDate">
+           <property name="displayFormat">
+            <string>yyyy-dd-MM</string>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLabel" name="label_batchNumber">
+           <property name="text">
+            <string>Batch Number</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_batchNumber</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="3">
+          <widget class="SmartLineEdit" name="lineEdit_batchNumber">
+           <property name="toolTip">
+            <string>Batch Number</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1" colspan="3">
+          <widget class="QGroupBox" name="groupBox_4">
+           <property name="title">
+            <string>Notes</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="BtTextEdit" name="btTextEdit_brewLogs">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="mouseTracking">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

@@ -48,7 +48,7 @@
 #include "measurement/Unit.h"
 #include "model/Boil.h"
 #include "model/BoilStep.h"
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
@@ -1470,7 +1470,7 @@ template<> auto & Recipe::ownedSetFor<RecipeAdditionMisc       >() const { retur
 template<> auto & Recipe::ownedSetFor<RecipeAdditionYeast      >() const { return this->m_yeastAdditions      ; }
 template<> auto & Recipe::ownedSetFor<RecipeAdjustmentSalt     >() const { return this->m_saltAdjustments     ; }
 template<> auto & Recipe::ownedSetFor<RecipeUseOfWater         >() const { return this->m_waterUses           ; }
-template<> auto & Recipe::ownedSetFor<BrewNote                 >() const { return this->m_brewNotes           ; }
+template<> auto & Recipe::ownedSetFor<BrewLog                 >() const { return this->m_brewLogs           ; }
 template<> auto & Recipe::ownedSetFor<Instruction              >() const { return this->m_instructions        ; }
 //
 // Maybe there is a clever way to do these non-const versions without the copy-and-paste repetition, but the auto
@@ -1482,7 +1482,7 @@ template<> auto & Recipe::ownedSetFor<RecipeAdditionMisc       >() { return this
 template<> auto & Recipe::ownedSetFor<RecipeAdditionYeast      >() { return this->m_yeastAdditions      ; }
 template<> auto & Recipe::ownedSetFor<RecipeAdjustmentSalt     >() { return this->m_saltAdjustments     ; }
 template<> auto & Recipe::ownedSetFor<RecipeUseOfWater         >() { return this->m_waterUses           ; }
-template<> auto & Recipe::ownedSetFor<BrewNote                 >() { return this->m_brewNotes           ; }
+template<> auto & Recipe::ownedSetFor<BrewLog                 >() { return this->m_brewLogs           ; }
 template<> auto & Recipe::ownedSetFor<Instruction              >() { return this->m_instructions        ; }
 
 
@@ -1500,7 +1500,7 @@ QString Recipe::localisedName_boilGrav               () { return tr("Boil Gravit
 QString Recipe::localisedName_boilId                 () { return tr("Boil ID"                ); }
 QString Recipe::localisedName_boilVolume_l           () { return tr("Boil Volume"            ); }
 QString Recipe::localisedName_brewer                 () { return tr("Brewer"                 ); }
-QString Recipe::localisedName_brewNotes              () { return tr("Brew Notes"             ); }
+QString Recipe::localisedName_brewLogs               () { return tr("Brew Logs"              ); }
 QString Recipe::localisedName_calcsEnabled           () { return tr("Calculations Enabled"   ); }
 QString Recipe::localisedName_caloriesPer33cl        () { return tr("Calories Per 33cl"      ); }
 QString Recipe::localisedName_caloriesPerLiter       () { return tr("Calories Per Liter"     ); }
@@ -1509,7 +1509,7 @@ QString Recipe::localisedName_caloriesPerUsPint      () { return tr("Calories Pe
 QString Recipe::localisedName_carbonationTemp_c      () { return tr("Carbonation Temperature"); }
 QString Recipe::localisedName_carbonation_vols       () { return tr("Carbonation"            ); }
 QString Recipe::localisedName_color_srm              () { return tr("Color"                  ); }
-QString Recipe::localisedName_date                   () { return tr("Date"                   ); }
+QString Recipe::localisedName_date                   () { return tr("Date Created"           ); }
 QString Recipe::localisedName_efficiency_pct         () { return tr("Efficiency"             ); }
 QString Recipe::localisedName_equipment              () { return tr("Equipment"              ); }
 QString Recipe::localisedName_equipmentId            () { return tr("Equipment ID"           ); }
@@ -1592,7 +1592,7 @@ bool Recipe::compareWith(NamedEntity const & other, QList<BtStringConst const *>
       //
       // We don't include any of the following in the equality test:
       //    - Calculated values such as m_og and m_fg, since, if everything else is the same, they should match
-      //    - BrewNotes as those are records of actually brewing a Recipe and shouldn't form part of determining whether
+      //    - BrewLogs as those are records of actually brewing a Recipe and shouldn't form part of determining whether
       //      two Recipes are identical.
       //    - Instructions, since these are generated from the Recipe
       //    - Equipment, as you could brew the same recipe on different sets of equipment
@@ -1673,7 +1673,7 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, boil             , boil                ),
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, fermentation     , fermentation        ),
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, equipment        , equipment           ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, brewNotes        , brewNotes           ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, brewLogs        , brewLogs           ),
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, fermentableAdditions, fermentableAdditions),
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, hopAdditions        , hopAdditions        ),
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, miscAdditions       , miscAdditions       ),
@@ -1723,7 +1723,7 @@ Recipe::Recipe(QString name) :
    m_yeastAdditions         {*this               },
    m_saltAdjustments        {*this               },
    m_waterUses              {*this               },
-   m_brewNotes              {*this               },
+   m_brewLogs              {*this               },
    m_instructions           {*this               },
    m_og                     {1.0                 },
    m_fg                     {1.0                 },
@@ -1776,7 +1776,7 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    m_yeastAdditions      {*this},
    m_saltAdjustments     {*this},
    m_waterUses           {*this},
-   m_brewNotes           {*this},
+   m_brewLogs           {*this},
    m_instructions        {*this},
    // Note that, although we read them in here, the OG and FG are going to get recalculated when someone first tries to
    // access them.
@@ -1837,7 +1837,7 @@ Recipe::Recipe(Recipe const & other) :
    m_yeastAdditions         {*this, other.m_yeastAdditions      },
    m_saltAdjustments        {*this, other.m_saltAdjustments     },
    m_waterUses              {*this, other.m_waterUses           },
-   m_brewNotes              {*this, other.m_brewNotes           },
+   m_brewLogs              {*this, other.m_brewLogs           },
    m_instructions           {*this, other.m_instructions        },
    m_og                     {other.m_og                },
    m_fg                     {other.m_fg                },
@@ -1887,7 +1887,7 @@ void Recipe::setKey(int key) {
    this->m_yeastAdditions      .doSetKey(key);
    this->m_saltAdjustments     .doSetKey(key);
    this->m_waterUses           .doSetKey(key);
-   this->m_brewNotes           .doSetKey(key);
+   this->m_brewLogs           .doSetKey(key);
    this->m_instructions        .doSetKey(key);
 
    // By convention, a new Recipe with no ancestor should have itself as its own ancestor.  So we need to check whether
@@ -2341,7 +2341,7 @@ void Recipe::setMiscAdditions       (QList<std::shared_ptr<RecipeAdditionMisc   
 void Recipe::setYeastAdditions      (QList<std::shared_ptr<RecipeAdditionYeast      >> val) { this->setAdditions(val); return; }
 void Recipe::setSaltAdjustments     (QList<std::shared_ptr<RecipeAdjustmentSalt     >> val) { this->setAdditions(val); return; }
 void Recipe::setWaterUses           (QList<std::shared_ptr<RecipeUseOfWater         >> val) { this->setAdditions(val); return; }
-void Recipe::setBrewNotes           (QList<std::shared_ptr<BrewNote                 >> val) { this->setAdditions(val); return; }
+void Recipe::setBrewLogs           (QList<std::shared_ptr<BrewLog                 >> val) { this->setAdditions(val); return; }
 void Recipe::setInstructions        (QList<std::shared_ptr<Instruction              >> val) { this->setAdditions(val); return; }
 
 // Note that, because these setBlahId member functions are supposed only to be used by by ObjectStore, and are not
@@ -2689,6 +2689,7 @@ std::shared_ptr<Style       > Recipe::style       () const { return this->get<St
 std::shared_ptr<Equipment   > Recipe::equipment   () const { return this->get<Equipment   >(); }
 
 std::shared_ptr<Boil        > Recipe::nonOptBoil        () { return this->pimpl->nonOptionalItem<Boil        >(this->m_boilId        ); }
+std::shared_ptr<Mash        > Recipe::nonOptMash        () { return this->pimpl->nonOptionalItem<Mash        >(this->m_mashId        ); }
 std::shared_ptr<Fermentation> Recipe::nonOptFermentation() { return this->pimpl->nonOptionalItem<Fermentation>(this->m_fermentationId); }
 
 int Recipe::getStyleId       () const { return this->m_styleId       ; }
@@ -2718,7 +2719,7 @@ template QList<std::shared_ptr<RecipeAdditionMisc       >> Recipe::allOwned<Reci
 template QList<std::shared_ptr<RecipeAdditionYeast      >> Recipe::allOwned<RecipeAdditionYeast      >() const;
 template QList<std::shared_ptr<RecipeAdjustmentSalt     >> Recipe::allOwned<RecipeAdjustmentSalt     >() const;
 template QList<std::shared_ptr<RecipeUseOfWater         >> Recipe::allOwned<RecipeUseOfWater         >() const;
-template QList<std::shared_ptr<BrewNote                 >> Recipe::allOwned<BrewNote                 >() const;
+template QList<std::shared_ptr<BrewLog                 >> Recipe::allOwned<BrewLog                 >() const;
 template QList<std::shared_ptr<Instruction              >> Recipe::allOwned<Instruction              >() const;
 
 QList<std::shared_ptr<RecipeAdditionFermentable>> Recipe::fermentableAdditions() const { return this->allOwned<RecipeAdditionFermentable>(); }
@@ -2727,7 +2728,7 @@ QList<std::shared_ptr<RecipeAdditionMisc       >> Recipe::       miscAdditions()
 QList<std::shared_ptr<RecipeAdditionYeast      >> Recipe::      yeastAdditions() const { return this->allOwned<RecipeAdditionYeast      >(); }
 QList<std::shared_ptr<RecipeAdjustmentSalt     >> Recipe::     saltAdjustments() const { return this->allOwned<RecipeAdjustmentSalt     >(); }
 QList<std::shared_ptr<RecipeUseOfWater         >> Recipe::           waterUses() const { return this->allOwned<RecipeUseOfWater         >(); }
-QList<std::shared_ptr<BrewNote                 >> Recipe::           brewNotes() const { return this->allOwned<BrewNote                 >(); }
+QList<std::shared_ptr<BrewLog                 >> Recipe::           brewLogs() const { return this->allOwned<BrewLog                 >(); }
 QList<std::shared_ptr<Instruction              >> Recipe::        instructions() const { return this->allOwned<Instruction              >(); }
 
 int Recipe::getAncestorId() const { return this->m_ancestor_id; }
@@ -3103,7 +3104,7 @@ void Recipe::acceptChangeToRecipeAdditionMisc       (QMetaProperty prop, QVarian
 void Recipe::acceptChangeToRecipeAdditionYeast      (QMetaProperty prop, QVariant val) { this->acceptChange<RecipeAdditionYeast      >(prop, val); return; }
 void Recipe::acceptChangeToRecipeAdjustmentSalt     (QMetaProperty prop, QVariant val) { this->acceptChange<RecipeAdjustmentSalt     >(prop, val); return; }
 void Recipe::acceptChangeToRecipeUseOfWater         (QMetaProperty prop, QVariant val) { this->acceptChange<RecipeUseOfWater         >(prop, val); return; }
-void Recipe::acceptChangeToBrewNote                 (QMetaProperty prop, QVariant val) { this->acceptChange<BrewNote                 >(prop, val); return; }
+void Recipe::acceptChangeToBrewLog                 (QMetaProperty prop, QVariant val) { this->acceptChange<BrewLog                 >(prop, val); return; }
 void Recipe::acceptChangeToInstruction              (QMetaProperty prop, QVariant val) { this->acceptChange<Instruction              >(prop, val); return; }
 
 double Recipe::postMashAdditionVolume_l() const {
@@ -3216,7 +3217,7 @@ void Recipe::hardDeleteOwnedEntities() {
    this->m_yeastAdditions      .doHardDeleteOwnedEntities();
    this->m_saltAdjustments     .doHardDeleteOwnedEntities();
    this->m_waterUses           .doHardDeleteOwnedEntities();
-   this->m_brewNotes           .doHardDeleteOwnedEntities();
+   this->m_brewLogs           .doHardDeleteOwnedEntities();
    this->m_instructions        .doHardDeleteOwnedEntities();
 
    return;

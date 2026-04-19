@@ -1,6 +1,7 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtDatePopup.cpp is part of Brewtarget, and is copyright the following authors 2009-2014:
+ * BtDatePopup.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Mitch Lillie <mitch@mitchlillie.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -26,38 +27,40 @@
 #endif
 
 //! \brief set up the popup window.
-BtDatePopup::BtDatePopup(QWidget* parent) : QDialog(parent, Qt::Popup)
-{
+BtDatePopup::BtDatePopup(QWidget * parent) :
+   QDialog(parent, Qt::Popup) {
    // No resizing a dialog
-   setSizeGripEnabled(false);
-   resize(260,230);
+   this->setSizeGripEnabled(false);
+   this->resize(260, 230);
 
-   widget = new QWidget(this);
-   widget->setObjectName(QString("btDatePopup_widget"));
-   widget->setGeometry(QRect(0,10,258,215));
+   this->m_widget = new QWidget(this);
+   this->m_widget->setObjectName(QString("btDatePopup_widget"));
+   this->m_widget->setGeometry(QRect(0,10,258,215));
 
-   calendar = new QCalendarWidget(widget);
-   calendar->setObjectName(QString("btDatePopup_calendar"));
-   calendar->setNavigationBarVisible(true);
-   calendar->setSelectedDate(QDate::currentDate());
+   this->m_calendar = new QCalendarWidget(this->m_widget);
+   this->m_calendar->setObjectName(QString("btDatePopup_calendar"));
+   this->m_calendar->setNavigationBarVisible(true);
+   this->m_calendar->setSelectedDate(QDate::currentDate());
 
 
-   buttonbox = new QDialogButtonBox(widget);
-   buttonbox->setObjectName(QString("btDatePopup_buttonbox"));
-   buttonbox->setOrientation(Qt::Horizontal);
-   buttonbox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+   this->m_buttonbox = new QDialogButtonBox(this->m_widget);
+   this->m_buttonbox->setObjectName(QString("btDatePopup_buttonbox"));
+   this->m_buttonbox->setOrientation(Qt::Horizontal);
+   this->m_buttonbox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
 
-   vertical = new QVBoxLayout(widget);
-   vertical->setObjectName(QString("btDatePopup_verticalbox"));
-   vertical->setContentsMargins(0,0,0,0);
+   this->m_vertical = new QVBoxLayout(this->m_widget);
+   this->m_vertical->setObjectName(QString("btDatePopup_verticalbox"));
+   this->m_vertical->setContentsMargins(0,0,0,0);
 
-   vertical->addWidget(calendar);
-   vertical->addWidget(buttonbox);
+   this->m_vertical->addWidget(this->m_calendar);
+   this->m_vertical->addWidget(this->m_buttonbox);
 
-   connect(buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-   connect(buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+   connect(this->m_buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+   connect(this->m_buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+   return;
 }
 
 QDate BtDatePopup::selectedDate() const {
-   return calendar->selectedDate();
+   return this->m_calendar->selectedDate();
 }

@@ -52,7 +52,7 @@
  *           TreeFolderNode<Recipe>
  *             ├── TreeFolderNode<Recipe>
  *             │   ├── TreeItemNode<Recipe>
- *             │   │   └── TreeItemNode<BrewNote>
+ *             │   │   └── TreeItemNode<BrewLog>
  *             │   └── TreeItemNode<Recipe>
  *             ├── TreeFolderNode<Recipe>
  *             │   └── TreeItemNode<Recipe>
@@ -64,8 +64,8 @@
  *
  *        In a Recipe tree it's a bit more complicated:
  *           - A Folder node can contain only Recipe nodes or other Recipe Folder nodes
- *           - A Recipe node can contain only BrewNote nodes or Recipe nodes (when using ancestor versioning)
- *           - A BrewNote node cannot contain other nodes
+ *           - A Recipe node can contain only BrewLog nodes or Recipe nodes (when using ancestor versioning)
+ *           - A BrewLog node cannot contain other nodes
  *
  *        So, in general, depending on the type of node, it can contain:
  *           - No other nodes
@@ -80,7 +80,7 @@
  *        And, similarly, in a given tree, there are either two or three types of node:
  *           - Folders
  *           - Primary item - eg Recipe - which is also the type of the tree
- *           - Secondary item - eg BrewNote in the Recipe tree, but not present in the Hop tree
+ *           - Secondary item - eg BrewLog in the Recipe tree, but not present in the Hop tree
  *        This is a helpful classification for code that is traversing or manipulating the tree, so we have an enum for
  *        it: NodeClassifier
  *
@@ -132,7 +132,7 @@ public:
                }
             } else {
                static_assert(NodeClassifier == TreeNodeClassifier::SecondaryItem);
-               // Secondary Item (eg BrewNote) can only have primary item (eg Recipe) as parent
+               // Secondary Item (eg BrewLog) can only have primary item (eg Recipe) as parent
                return static_cast<TreeItemNode<TreeType> *>(parent);
             }
          }()
@@ -535,7 +535,7 @@ public:
 
 /**
  * \brief Each tree has one primary type of object that it stores.  However, some trees (eg Recipe, Mash) can hold
- *        secondary items (eg Recipe tree holds Recipes and BrewNotes owned by those Recipes).  It's useful to have a
+ *        secondary items (eg Recipe tree holds Recipes and BrewLogs owned by those Recipes).  It's useful to have a
  *        compile-time mapping from object type to show which class belongs in which tree.  The rule here is that things
  *        belong in their own tree (eg Equipment is in Equipment tree) unless there's a specialisation that says
  *        otherwise.
@@ -544,7 +544,7 @@ public:
  *        use of incomplete type ‘struct TreeNodeTraits<FooBar, FooBar>’`.
  */
 template <class NE> struct TreeTypeDeducer                      { using TreeType = NE                      ; };
-template<>          struct TreeTypeDeducer<BrewNote           > { using TreeType = Recipe                  ; };
+template<>          struct TreeTypeDeducer<BrewLog           > { using TreeType = Recipe                  ; };
 template<>          struct TreeTypeDeducer<MashStep           > { using TreeType = Mash                    ; };
 template<>          struct TreeTypeDeducer<BoilStep           > { using TreeType = Boil                    ; };
 template<>          struct TreeTypeDeducer<FermentationStep   > { using TreeType = Fermentation            ; };

@@ -508,13 +508,9 @@
     </message>
 </context>
 <context>
-    <name>BrewNote</name>
+    <name>BrewLog</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note #%1 for brew on %2</source>
+        <source>Brew Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -636,6 +632,41 @@
     <message>
         <source>Volume Into Fermentor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BrewNote</name>
+    <message>
+        <source>ABV</source>
+        <translation type="obsolete">ABV (%)</translation>
+    </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="obsolete">Vergisting</translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="obsolete">Brouwdatum</translation>
+    </message>
+    <message>
+        <source>Final Volume</source>
+        <translation type="obsolete">Eind SG</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="obsolete">Geschatte ABV</translation>
+    </message>
+    <message>
+        <source>Projected OG</source>
+        <translation type="obsolete">Geschatte OG</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="obsolete">SG</translation>
     </message>
 </context>
 <context>
@@ -2773,6 +2804,22 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Change %1 Name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Contained in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contained in Folder ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder name cannot be blank (and cannot contain &apos;/&apos;)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Derived::StockUseClass</name>
@@ -3689,6 +3736,13 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Folder</source>
+        <translation type="obsolete">Map</translation>
+    </message>
+</context>
+<context>
+    <name>FolderCommon</name>
+    <message>
+        <source>Folder</source>
         <translation type="unfinished">Map</translation>
     </message>
     <message>
@@ -4602,15 +4656,15 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note #%1 for brew on %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes from brew day on %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log for brew on %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7068,10 +7122,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation type="unfinished">Brouwer</translation>
     </message>
     <message>
-        <source>Brew Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Calculations Enabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7101,7 +7151,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation type="obsolete">Datum</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -7285,6 +7335,14 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source> to the mash tun.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8409,14 +8467,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
 <context>
     <name>StockUse</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8450,6 +8500,14 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Stock Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log ID</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9953,146 +10011,98 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
 </context>
 <context>
-    <name>brewNoteWidget</name>
+    <name>brewLogWidget</name>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Preboil</source>
-        <translation>Voor het koken</translation>
+        <translation type="unfinished">Voor het koken</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>SG</translation>
+        <translation type="unfinished">SG</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation>SG voor het koken</translation>
+        <translation type="unfinished">SG voor het koken</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation type="unfinished">Volume</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
-        <translation>Verzamelde wort volume</translation>
+        <translation type="unfinished">Verzamelde wort volume</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Maisch water start temperatuur</translation>
-    </message>
-    <message>
-        <source>Temperature of mash after dough in</source>
-        <translation type="vanished">Temperatuur van de maisch na inmaischen</translation>
-    </message>
-    <message>
-        <source>Final Temp</source>
-        <translation>Eind Temp</translation>
-    </message>
-    <message>
-        <source>Temperature of mash before mash out</source>
-        <translation>Maisch temperatuur voor het uitmaischen</translation>
-    </message>
-    <message>
-        <source>Postboil</source>
-        <translation>Na het koken</translation>
-    </message>
-    <message>
-        <source>OG</source>
-        <translation>Oorspronkelijk SG</translation>
-    </message>
-    <message>
-        <source>Post boil gravity</source>
-        <translation>SG na het koken</translation>
-    </message>
-    <message>
-        <source>Postboil Volume</source>
-        <translation>Volume na het koken</translation>
-    </message>
-    <message>
-        <source>Volume of wort in BK after boil</source>
-        <translation>Wortvolume in kook ketel na het koken</translation>
-    </message>
-    <message>
-        <source>Volume of wort transferred to fermenter</source>
-        <translation>Hoeveelheid wort overgeheveld naar de vergister</translation>
-    </message>
-    <message>
-        <source>Volume into fermenter</source>
-        <translation>Volume in het vergistingsvat</translation>
-    </message>
-    <message>
-        <source> Pitch Temp</source>
-        <translation> Gistgift temp</translation>
-    </message>
-    <message>
-        <source>Temperature of wort when yeast is pitched</source>
-        <translation>Wort temperatuur tijdens de gistgift</translation>
-    </message>
-    <message>
-        <source>Postferment</source>
-        <translation>Na het vergisten</translation>
-    </message>
-    <message>
-        <source>Final gravity</source>
-        <translation>Eind SG</translation>
-    </message>
-    <message>
-        <source>Volume of beer into serving keg/bottles</source>
-        <translation>Biervolume naar vat/flessen</translation>
-    </message>
-    <message>
-        <source>percent efficiency into boil kettle</source>
-        <translation type="vanished">rendement naar kook ketel</translation>
-    </message>
-    <message>
-        <source>Eff into BK</source>
-        <translation type="vanished">Rndmnt naar kook</translation>
-    </message>
-    <message>
-        <source>Expected OG, based on measure fg</source>
-        <translation type="vanished">Verwachtte OG, gebaseerd op gemeten FG</translation>
-    </message>
-    <message>
-        <source>Projected OG</source>
-        <translation>Geschatte OG</translation>
-    </message>
-    <message>
-        <source>Brewhouse efficiency</source>
-        <translation>Brouwerij rendement</translation>
-    </message>
-    <message>
-        <source>Brewhouse Eff</source>
-        <translation type="vanished">Brouwerij Rndmnt</translation>
-    </message>
-    <message>
-        <source>Expected ABV based on OG</source>
-        <translation type="vanished">Verwachtte ABV gebaseerd op OG</translation>
-    </message>
-    <message>
-        <source>Projected ABV</source>
-        <translation>Geschatte ABV</translation>
-    </message>
-    <message>
-        <source>ABV based on FG</source>
-        <translation type="vanished">ABV gebaseerd op de FG</translation>
-    </message>
-    <message>
-        <source>ABV</source>
-        <translation>ABV (%)</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>Aantekeningen</translation>
-    </message>
-    <message>
-        <source>brewNote</source>
-        <translation type="vanished">brewNote</translation>
-    </message>
-    <message>
-        <source>yyyy-dd-MM</source>
-        <translation>jjjj-dd-MM</translation>
+        <translation type="unfinished">Maisch water start temperatuur</translation>
     </message>
     <message>
         <source>Temperature of strike water before dough in</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="unfinished">Maisch temperatuur voor het uitmaischen</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="unfinished">Na het koken</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="unfinished">SG na het koken</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="unfinished">Volume na het koken</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="unfinished">Wortvolume in kook ketel na het koken</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="unfinished">Hoeveelheid wort overgeheveld naar de vergister</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="unfinished">Volume in het vergistingsvat</translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="unfinished"> Gistgift temp</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="unfinished">Wort temperatuur tijdens de gistgift</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="unfinished">Na het vergisten</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="unfinished">Eind SG</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="unfinished">Biervolume naar vat/flessen</translation>
+    </message>
+    <message>
+        <source>yyyy-dd-MM</source>
+        <translation type="unfinished">jjjj-dd-MM</translation>
     </message>
     <message>
         <source>Percent efficiency into boil kettle</source>
@@ -10107,12 +10117,28 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Projected OG</source>
+        <translation type="unfinished">Geschatte OG</translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="unfinished">Brouwerij rendement</translation>
+    </message>
+    <message>
         <source>Expected ABV based on recipe OG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Projected ABV</source>
+        <translation type="unfinished">Geschatte ABV</translation>
+    </message>
+    <message>
         <source>ABV based on user-reported FG</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="unfinished">ABV (%)</translation>
     </message>
     <message>
         <source>Yeast attenuation based on yeast specified in recipe</source>
@@ -10131,8 +10157,155 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note</source>
+        <source>Brew Date</source>
+        <translation type="unfinished">Brouwdatum</translation>
+    </message>
+    <message>
+        <source>Batch Number</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>brewNoteWidget</name>
+    <message>
+        <source>Preboil</source>
+        <translation type="vanished">Voor het koken</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="vanished">SG</translation>
+    </message>
+    <message>
+        <source>Preboil gravity</source>
+        <translation type="vanished">SG voor het koken</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="vanished">Volume</translation>
+    </message>
+    <message>
+        <source>Volume of wort collected</source>
+        <translation type="vanished">Verzamelde wort volume</translation>
+    </message>
+    <message>
+        <source>Strike Temp</source>
+        <translation type="vanished">Maisch water start temperatuur</translation>
+    </message>
+    <message>
+        <source>Temperature of mash after dough in</source>
+        <translation type="vanished">Temperatuur van de maisch na inmaischen</translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="vanished">Eind Temp</translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="vanished">Maisch temperatuur voor het uitmaischen</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="vanished">Na het koken</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="vanished">Oorspronkelijk SG</translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="vanished">SG na het koken</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="vanished">Volume na het koken</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="vanished">Wortvolume in kook ketel na het koken</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="vanished">Hoeveelheid wort overgeheveld naar de vergister</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="vanished">Volume in het vergistingsvat</translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="vanished"> Gistgift temp</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="vanished">Wort temperatuur tijdens de gistgift</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="vanished">Na het vergisten</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="vanished">Eind SG</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="vanished">Biervolume naar vat/flessen</translation>
+    </message>
+    <message>
+        <source>percent efficiency into boil kettle</source>
+        <translation type="vanished">rendement naar kook ketel</translation>
+    </message>
+    <message>
+        <source>Eff into BK</source>
+        <translation type="vanished">Rndmnt naar kook</translation>
+    </message>
+    <message>
+        <source>Expected OG, based on measure fg</source>
+        <translation type="vanished">Verwachtte OG, gebaseerd op gemeten FG</translation>
+    </message>
+    <message>
+        <source>Projected OG</source>
+        <translation type="vanished">Geschatte OG</translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="vanished">Brouwerij rendement</translation>
+    </message>
+    <message>
+        <source>Brewhouse Eff</source>
+        <translation type="vanished">Brouwerij Rndmnt</translation>
+    </message>
+    <message>
+        <source>Expected ABV based on OG</source>
+        <translation type="vanished">Verwachtte ABV gebaseerd op OG</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="vanished">Geschatte ABV</translation>
+    </message>
+    <message>
+        <source>ABV based on FG</source>
+        <translation type="vanished">ABV gebaseerd op de FG</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="vanished">ABV (%)</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="vanished">Aantekeningen</translation>
+    </message>
+    <message>
+        <source>brewNote</source>
+        <translation type="vanished">brewNote</translation>
+    </message>
+    <message>
+        <source>yyyy-dd-MM</source>
+        <translation type="vanished">jjjj-dd-MM</translation>
     </message>
 </context>
 <context>

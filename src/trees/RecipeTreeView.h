@@ -21,7 +21,7 @@
 #include <QAction>
 #include <QMenu>
 
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Recipe.h"
 #include "trees/NamedEntityTreeSortFilterProxyModel.h"
 #include "trees/RecipeTreeModel.h"
@@ -37,9 +37,9 @@ class RecipeTreeView : public TreeView,
                                            RecipeTreeSortFilterProxyModel,
                                            MainWindow,  // This is in place of RecipeEditor
                                            Recipe,
-                                           BrewNote> {
+                                           BrewLog> {
    Q_OBJECT
-   TREE_VIEW_COMMON_DECL(Recipe, BrewNote)
+   TREE_VIEW_COMMON_DECL(Recipe, BrewLog)
 
 public:
    using TreeViewBase::init;
@@ -60,7 +60,7 @@ public slots:
    void brewItHelper();
    void brewAgainHelper();
    void changeBrewDate();
-   void fixBrewNote();
+   void fixBrewLog();
 
 signals:
    void recipeSpawn(Recipe * descendant);

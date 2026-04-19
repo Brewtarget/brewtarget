@@ -59,14 +59,14 @@
  *                                          - Folders will be handled by themselves
  *                                          - Most other things get dropped on the ingredients pane
  *                                          - TBD what to do about Water
- *                                          - BrewNotes can't be dropped anywhere
+ *                                          - BrewLogs can't be dropped anywhere
  *
  *        We use smart pointers for children and raw pointers for parents because parents own their children (and not
  *        vice versa).  We use std::variant even in trees where all nodes have a single parent type because it
  *        simplifies the generic code.
  *
  * \param NE
- * \param TreeType When NE is a secondary item (eg BrewNote) this will be the primary item (eg Recipe)
+ * \param TreeType When NE is a secondary item (eg BrewLog) this will be the primary item (eg Recipe)
  */
 template<class NE, class TreeType>
 struct TreeNodeTraits;
@@ -104,29 +104,30 @@ template<> inline char const * TreeNodeTraits<Folder<Style       >, Style       
 template<> inline char const * TreeNodeTraits<Folder<Water       >, Water       >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Water"       ; }
 template<> inline char const * TreeNodeTraits<Folder<Yeast       >, Yeast       >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Yeast"       ; }
 
-template<> struct TreeNodeTraits<BrewNote, Recipe> {
+template<> struct TreeNodeTraits<BrewLog, Recipe> {
    enum class ColumnIndex {
       BrewDate,
+      BatchNumber
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::SecondaryItem;
 
    using ParentPtrTypes = std::variant<TreeItemNode<Recipe> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
-   // BrewNotes can't be dropped anywhere, so there isn't anywhere in the program that accepts drops with this MIME type
-   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-BrewNote"; }
+   // BrewLogs can't be dropped anywhere, so there isn't anywhere in the program that accepts drops with this MIME type
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-BrewLog"; }
 };
 
 template<> struct TreeNodeTraits<Recipe, Recipe> {
    enum class ColumnIndex {
       Name             ,
       NumberOfAncestors,
-      BrewDate         ,
+      DateCreated      ,
       Style            ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Recipe> *, TreeItemNode<Recipe> *>;
-   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<BrewNote>>, std::shared_ptr<TreeItemNode<Recipe>>>;
+   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<BrewLog>>, std::shared_ptr<TreeItemNode<Recipe>>>;
    static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Recipe"; }
 
    static QString getRootName() { return Recipe::tr("Recipes"); }
@@ -138,7 +139,7 @@ template<> struct TreeNodeTraits<Equipment, Equipment> {
       BoilSize ,
       BatchSize,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Equipment> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -159,7 +160,7 @@ template<> struct TreeNodeTraits<Fermentable, Fermentable> {
       Type ,
       Color,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Fermentable> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -176,7 +177,7 @@ template<> struct TreeNodeTraits<Hop, Hop> {
       AlphaPct, // % Alpha Acid
       Origin  , // Country of origin
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Hop> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -212,7 +213,7 @@ template<> struct TreeNodeTraits<StockPurchaseFermentable, StockPurchaseFermenta
       AmountRemaining,
       Note           ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    // We have to support folder node for the root node
    using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseFermentable> *>;
@@ -233,7 +234,7 @@ template<> struct TreeNodeTraits<StockUseHop, StockPurchaseHop> {
       AmountUsed     ,
       AmountRemaining,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::SecondaryItem;
 
    using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseHop> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -251,7 +252,7 @@ template<> struct TreeNodeTraits<StockPurchaseHop, StockPurchaseHop> {
       AmountRemaining,
       Note           ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    // We have to support folder node for the root node
    using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseHop> *>;
@@ -271,7 +272,7 @@ template<> struct TreeNodeTraits<StockUseMisc, StockPurchaseMisc> {
       AmountUsed     ,
       AmountRemaining,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::SecondaryItem;
 
    using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseMisc> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -289,7 +290,7 @@ template<> struct TreeNodeTraits<StockPurchaseMisc, StockPurchaseMisc> {
       AmountRemaining,
       Note           ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    // We have to support folder node for the root node
    using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseMisc> *>;
@@ -309,7 +310,7 @@ template<> struct TreeNodeTraits<StockUseSalt, StockPurchaseSalt> {
       AmountUsed     ,
       AmountRemaining,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::SecondaryItem;
 
    using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseSalt> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -327,7 +328,7 @@ template<> struct TreeNodeTraits<StockPurchaseSalt, StockPurchaseSalt> {
       AmountRemaining,
       Note           ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    // We have to support folder node for the root node
    using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseSalt> *>;
@@ -347,7 +348,7 @@ template<> struct TreeNodeTraits<StockUseYeast, StockPurchaseYeast> {
       AmountUsed     ,
       AmountRemaining,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::SecondaryItem;
 
    using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseYeast> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -365,7 +366,7 @@ template<> struct TreeNodeTraits<StockPurchaseYeast, StockPurchaseYeast> {
       AmountRemaining,
       Note           ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    // We have to support folder node for the root node
    using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseYeast> *>;
@@ -386,7 +387,7 @@ template<> struct TreeNodeTraits<MashStep, Mash> {
 //      InfusionTemp,
 //      TargetTemp  ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::SecondaryItem;
 
    using ParentPtrTypes = std::variant<TreeItemNode<Mash> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -400,7 +401,7 @@ template<> struct TreeNodeTraits<Mash, Mash> {
       TotalWater,
       TotalTime ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Mash> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<MashStep>>>;
@@ -422,7 +423,7 @@ template<> struct TreeNodeTraits<BoilStep, Boil> {
 //      EndGravity  ,
 //      ChillingType,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::SecondaryItem;
 
    using ParentPtrTypes = std::variant<TreeItemNode<Boil> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -436,7 +437,7 @@ template<> struct TreeNodeTraits<Boil, Boil> {
       PreBoilSize       ,
       LengthOfBoilProper,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Boil> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<BoilStep>>>;
@@ -452,7 +453,7 @@ template<> struct TreeNodeTraits<FermentationStep, Fermentation> {
 //      StartTemp,
 //      EndTemp  ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::SecondaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::SecondaryItem;
 
    using ParentPtrTypes = std::variant<TreeItemNode<Fermentation> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -465,7 +466,7 @@ template<> struct TreeNodeTraits<Fermentation, Fermentation> {
       Name       ,
       Description,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Fermentation> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<FermentationStep>>>;
@@ -479,7 +480,7 @@ template<> struct TreeNodeTraits<Misc, Misc> {
       Name,
       Type,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Misc> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -498,7 +499,7 @@ template<> struct TreeNodeTraits<Yeast, Yeast> {
       Type,
       Form,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Yeast> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -514,7 +515,7 @@ template<> struct TreeNodeTraits<Salt, Salt> {
       IsAcid     ,
       PercentAcid,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Salt> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -531,7 +532,7 @@ template<> struct TreeNodeTraits<Style, Style> {
       StyleLetter   ,
       StyleGuide    ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Style> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
@@ -551,7 +552,7 @@ template<> struct TreeNodeTraits<Water, Water> {
       Magnesium  ,
       pH         ,
    };
-   static constexpr TreeNodeClassifier NodeClassifier = TreeNodeClassifier::PrimaryItem;
+   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Water> *>;
    using ChildPtrTypes = std::variant<std::monostate>;

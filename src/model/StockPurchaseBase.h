@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * model/StockPurchaseBase.h is part of Brewtarget, and is copyright the following authors 2025:
+ * model/StockPurchaseBase.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 #include <QtNumeric>
 
 #include "utils/CuriouslyRecurringTemplateBase.h"
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/OwnedSet.h"
 #include "model/Recipe.h"
 #include "model/StockUse.h"     // For StockUse::Reason
@@ -321,11 +321,11 @@ public:
     *
     * \param ingredient
     * \param amountUsed
-    * \param brewNote
+    * \param brewLog
     */
    static void reduceTotalInventory(IngredientClass const & ingredient,
                                     Measurement::Amount amountUsed,
-                                    BrewNote const & brewNote) {
+                                    BrewLog const & brewLog) {
       //
       // Get all the non-deleted StockPurchase objects for the supplied ingredient
       //
@@ -376,12 +376,12 @@ public:
 
          auto stockUse = std::make_shared<typename Derived::StockUseClass>();
          stockUse->setDate(QDate::currentDate());
-         stockUse->setBrewNoteId(brewNote.key());
+         stockUse->setBrewLogId(brewLog.key());
          stockUse->setReason(StockUse::Reason::Used);
          stockUse->setName(
             Derived::StockUseClass::tr(
                "Use of %1 in %2"
-            ).arg(purchase->ingredientRaw()->localisedName()).arg(brewNote.recipe()->name())
+            ).arg(purchase->ingredientRaw()->localisedName()).arg(brewLog.recipe()->name())
          );
 
          if (remaining >= amountUsed) {

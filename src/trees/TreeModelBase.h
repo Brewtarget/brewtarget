@@ -85,11 +85,11 @@ concept HasNodeClassifier = requires {
  * \param Derived - The derived class
  * \param NE  - The primary \c NamedEntity subclass (besides \c Folder) shown in this tree (eg \c Recipe for
  *              \c RecipeTreeModel)
- * \param SNE - The optional secondary \c NamedEntity subclass shown in this tree (eg \c BrewNote for
+ * \param SNE - The optional secondary \c NamedEntity subclass shown in this tree (eg \c BrewLog for
  *              \c RecipeTreeModel, or \c MashStep for \c MashTreeModel).  This class must have:
- *                 • an \c owner() member function that does the obvious thing (eg \c BrewNote::owner() returns a
+ *                 • an \c owner() member function that does the obvious thing (eg \c BrewLog::owner() returns a
  *                   \c Recipe; \c MashStep::owner returns a \c Mash);
- *                 • a static \c ownedBy() member function that returns all the \c BrewNote objects owned by a given
+ *                 • a static \c ownedBy() member function that returns all the \c BrewLog objects owned by a given
  *                   \c Recipe or all the \c MashStep objects owned by a given \c Mash, etc.
  */
 template<class Derived> class TreeModelPhantom;
@@ -284,7 +284,7 @@ public:
       QStringList mimeTypesWeAccept;
       //
       // We only accept the primary items stored in this tree and folders.  (It doesn't make sense to allow drag and
-      // drop of secondary items such as BrewNotes or MashSteps.)
+      // drop of secondary items such as BrewLogs or MashSteps.)
       //
       mimeTypesWeAccept << TreeItemNode<NE>::dragAndDropMimeType();
       if constexpr (HasFolder<NE>) {
@@ -546,7 +546,7 @@ public:
       // We know what we just inserted, so this should be a safe cast
       auto & itemNode = static_cast<TreeItemNode<NE> &>(*itemRawNode);
 
-      // Depending on the tree type, there might be secondary items (eg BrewNote items on RecipeTreeModel) or other
+      // Depending on the tree type, there might be secondary items (eg BrewLog items on RecipeTreeModel) or other
       // primary items (eg ancestor Recipes on RecipeTreeModel) under this one.
       this->addSubTreeIfNeeded(*item, itemNode);
 
@@ -611,9 +611,9 @@ public:
 
    void observe(std::shared_ptr<SNE> observed) requires (!IsVoid<SNE>) {
       if (observed) {
-         if constexpr (std::same_as<NE, BrewNote>) {
-            // For a BrewNote, it's the date, not the name, that we're interested in
-            this->derived().connect(observed.get(), &BrewNote::brewDateChanged, &this->derived(), &Derived::secondaryElementChanged);
+         if constexpr (std::same_as<NE, BrewLog>) {
+            // For a BrewLog, it's the date, not the name, that we're interested in
+            this->derived().connect(observed.get(), &BrewLog::brewDateChanged, &this->derived(), &Derived::secondaryElementChanged);
          } else {
             this->derived().connect(observed.get(), &NamedEntity::changed, &this->derived(), &Derived::secondaryElementChanged);
          }
@@ -777,7 +777,7 @@ public:
    QModelIndex findElement(SNE const * sne) requires (!IsVoid<SNE>) {
       Q_ASSERT(sne);
       //
-      // Secondary elements are owned by primary ones -- eg BrewNotes are owned by Recipes.  (If they weren't they'd
+      // Secondary elements are owned by primary ones -- eg BrewLogs are owned by Recipes.  (If they weren't they'd
       // have their own tree -- eg Mash has separate tree from Recipe because Mash is not owned by Recipe.)
       // So, first we find the owner of the supplied element.
       //
@@ -785,8 +785,8 @@ public:
 
       QModelIndex const ownerIndex = this->findElement(owner.get());
       //
-      // Secondary elements can only be stored inside of primary ones (eg BrewNote cannot live directly in a folder or
-      // in another BrewNote), so this cast is safe.
+      // Secondary elements can only be stored inside of primary ones (eg BrewLog cannot live directly in a folder or
+      // in another BrewLog), so this cast is safe.
       //
       auto ownerNode = static_cast<TreeItemNode<NE> *>(this->doTreeNode(ownerIndex));
       for (int ii = 0; ii < ownerNode->childCount(); ++ii) {
@@ -1004,7 +1004,7 @@ public:
 //      qDebug() << Q_FUNC_INFO << "Inserting new node " << *childNode << "as child #" << row << "of" << parentNode;
 
       // Parent node can only be one of two types. (It cannot be SecondaryItem because, although we allow Recipes to
-      // contain Recipes -- for Recipe versioning -- we don't allow BrewNotes to contain BrewNotes etc.)
+      // contain Recipes -- for Recipe versioning -- we don't allow BrewLogs to contain BrewLogs etc.)
       bool succeeded;
       if constexpr (ParentNodeType::NodeClassifier == TreeNodeClassifier::Folder) {
          auto & parentFolderNode = static_cast<TreeFolderNode<NE> &>(parentNode);
@@ -1328,7 +1328,7 @@ public:
       parentNodeToDelete.removeChildren(nodeToDelete.childNumber(), 1);
 
       if constexpr (!IsVoid<SNE>) {
-         // For a secondary item (eg BrewNote, MashStep), we don't delete the item itself because it is owned by a
+         // For a secondary item (eg BrewLog, MashStep), we don't delete the item itself because it is owned by a
          // primary item (Recipe, Mash), which will take care of the deletion itself.
          if (nodeToDelete.classifier() != TreeNodeClassifier::SecondaryItem) {
             return true;
@@ -1547,7 +1547,7 @@ public:
             // called.  So the new item will already be in our tree.
             //
          } else {
-            // It's a coding error if we ask this function to copy either a folder or a secondary item (eg BrewNote or
+            // It's a coding error if we ask this function to copy either a folder or a secondary item (eg BrewLog or
             // MashStep).  However, we can recover by just not doing the copy.
             qWarning() << Q_FUNC_INFO << "Unexpected item type" << static_cast<int>(treeNode->classifier());
          }
@@ -1799,7 +1799,7 @@ private:
       if constexpr (!std::is_base_of_v<FolderCommon, ElementType>) {
          //
          // For a primary element (eg Recipe), addSubTreeIfNeeded() will handle both secondary element children (eg
-         // BrewNotes) and primary element ones (eg ancestor Recipes).
+         // BrewLogs) and primary element ones (eg ancestor Recipes).
          //
          auto elementNode = static_cast<TreeItemNode<ElementType> *>(this->doTreeNode(newElementIndex));
          this->addSubTreeIfNeeded(*element, *elementNode);

@@ -7,24 +7,28 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 release timestamp to be a date in the future, and I'm guessing nobody cares about the exact time of day a release
 happens, so I'm now setting it to a slightly arbitrary time early in the morning.
 
-## Forthcoming in v5.1.0
+## Forthcoming in v5.2.0
 
 ### New Features
 * TODO: Additional methods for calculating IBU
 * Shopping Lists
 * We'll list other new features here...
 
-## v5.0.5
-Bug fixes and minor enhancements.
+## v5.1.0
+Improvements to Folders, plus bug fixes and minor enhancements.
 
 ### New Features
-None
+* Folders are now first-class entities and thus can be renamed and moved
+* Edit folder names [10](https://github.com/Brewtarget/brewtarget/issues/10)
+* Add Batch Number to brew day record [1105](https://github.com/Brewtarget/brewtarget/issues/1105)
 
 ### Bug Fixes
+* Can't drag a folder inside another folder [1067](https://github.com/Brewtarget/brewtarget/issues/1067)
 * 5.0.4: Crash at startup [1102](https://github.com/Brewtarget/brewtarget/issues/1102)
+* Mouse-over date label on brew log tab causes assert [1107](https://github.com/Brewtarget/brewtarget/issues/1107)
 
 ### Release Timestamp
-Thu, 16 Apr 2026 05:00:05 +0100
+Sat, 18 Apr 2026 05:00:05 +0100
 
 ## v5.0.4
 Bug fixes and minor enhancements.

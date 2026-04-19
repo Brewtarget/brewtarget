@@ -17,12 +17,12 @@
 
 #include "PersistentSettings.h"
 
-QList<std::shared_ptr<BrewNote>> RecipeUtils::brewNotesForRecipeAndAncestors(Recipe const & recipe) {
-   QList<std::shared_ptr<BrewNote>> brewNotes = recipe.brewNotes();
+QList<std::shared_ptr<BrewLog>> RecipeUtils::brewLogsForRecipeAndAncestors(Recipe const & recipe) {
+   QList<std::shared_ptr<BrewLog>> brewLogs = recipe.brewLogs();
    for (auto ancestor : recipe.ancestors()) {
-      brewNotes.append(ancestor->brewNotes());
+      brewLogs.append(ancestor->brewLogs());
    }
-   return brewNotes;
+   return brewLogs;
 }
 
 void RecipeUtils::prepareForPropertyChange(NamedEntity & ne, BtStringConst const & propertyName) {
@@ -54,7 +54,7 @@ void RecipeUtils::prepareForPropertyChange(NamedEntity & ne, BtStringConst const
    // Automatic versioning means that, once a recipe is brewed, it is "soft locked" and the first change should spawn a
    // new version.  Any subsequent change should not spawn a new version until it is brewed again.
    //
-   if (owningRecipe->brewNotes().empty()) {
+   if (owningRecipe->brewLogs().empty()) {
       // Recipe hasn't been brewed
       return;
    }
@@ -90,7 +90,7 @@ void RecipeUtils::prepareForPropertyChange(NamedEntity & ne, BtStringConst const
 
    // We assert that the newly created version of the recipe has not yet been brewed (and therefore will not get
    // automatically versioned on subsequent changes before it is brewed).
-   Q_ASSERT(spawn->brewNotes().empty());
+   Q_ASSERT(spawn->brewLogs().empty());
 
    //
    // By default, copying a Recipe does not copy all its ancestry.  Here, we want the copy to become our ancestor (ie
