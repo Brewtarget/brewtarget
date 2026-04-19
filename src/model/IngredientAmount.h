@@ -345,7 +345,7 @@ TypeLookup const IngredientAmount<Derived, IngredientClass>::typeLookup {
       //
       // We can't use the PROPERTY_TYPE_LOOKUP_ENTRY or PROPERTY_TYPE_LOOKUP_ENTRY_NO_MV macros here, because macros
       // don't know how to handle templated references such as `IngredientAmount<Derived, IngredientClass>::m_quantity`
-      // and try to treat them as two macro parameters).  So we have to put the raw code instead.
+      // and try to treat them as two macro parameters.  So we have to put the raw code instead.
       //
       // (We can't get around this by writing `using IngredientAmountType = IngredientAmount<Derived, IngredientClass>`
       // because Derived and IngredientClass aren't defined until the template is instantiated.)

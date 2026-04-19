@@ -234,7 +234,6 @@ int main(int argc, char **argv) {
       QString const fileName = parser.value(createBlankDBOption);
       bool const success = Database::instance().createBlank(fileName);
 
-
       qInfo() <<
          Q_FUNC_INFO <<
          QApplication::tr("Creation of empty Database file '%1' %2.").arg(fileName).arg(

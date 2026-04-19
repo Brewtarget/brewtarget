@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Ingredient.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/Ingredient.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -15,6 +15,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "model/Ingredient.h"
 
+#include "database/ObjectStoreWrapper.h" // Needed by FOLDER_BASE_COMMON_CODE
 #include "model/NamedParameterBundle.h"
 
 #ifdef BUILDING_WITH_CMAKE
@@ -34,36 +35,29 @@ TypeLookup const Ingredient::typeLookup {
    },
    // Parent classes lookup
    {&OutlineableNamedEntity::typeLookup,
-    std::addressof(FolderBase<Ingredient>::typeLookup)}
+    std::addressof(FolderPropertyBase<Ingredient>::typeLookup)}
 };
 static_assert(std::is_base_of<OutlineableNamedEntity, Ingredient>::value);
-static_assert(std::is_base_of<FolderBase<Ingredient>, Ingredient>::value);
 
-Ingredient::Ingredient(QString name) :
-   OutlineableNamedEntity{name},
-   FolderBase<Ingredient>{} {
+Ingredient::Ingredient(QString const & name) :
+   OutlineableNamedEntity{name} {
 
    CONSTRUCTOR_END
    return;
 }
 
 Ingredient::Ingredient(NamedParameterBundle const & namedParameterBundle) :
-   OutlineableNamedEntity{namedParameterBundle},
-   FolderBase<Ingredient>{namedParameterBundle} {
+   OutlineableNamedEntity{namedParameterBundle} {
 
    CONSTRUCTOR_END
    return;
 }
 
 Ingredient::Ingredient(Ingredient const & other) :
-   OutlineableNamedEntity{other},
-   FolderBase<Ingredient>{other} {
+   OutlineableNamedEntity{other} {
 
    CONSTRUCTOR_END
    return;
 }
 
 Ingredient::~Ingredient() = default;
-
-// Boilerplate code for FolderBase
-FOLDER_BASE_COMMON_CODE(Ingredient)

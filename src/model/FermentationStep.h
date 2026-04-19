@@ -43,14 +43,14 @@ AddPropertyName(vessel  )
  */
 #define FermentationStepOptions StepBaseOptions{.stepTimeRequired = false, .startTempRequired = false, .rampTimeSupported = false}
 /**
- * \class FermentationStep is a step in a a fermentation process.
+ * \class FermentationStep is a step in a fermentation process.
  *
  *        We get away with having cross-dependencies between the two CRTP classes, but that means we have to be a bit
  *        careful about what they refer to.
  *
  *           StepOwnerBase<Fermentation, FermentationStep>
  *                             |
- *              NamedEntity    |     FolderBase<Fermentation>
+ *              NamedEntity    |     FolderPropertyBase<Fermentation>
  *                       \     |      /
  *                        \    |     /
  *                        Fermentation

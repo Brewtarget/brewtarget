@@ -24,7 +24,7 @@
 #include <QString>
 
 #include "model/BoilStep.h"
-#include "model/FolderBase.h"
+#include "model/FolderPropertyBase.h"
 #include "model/NamedEntity.h"
 #include "model/StepOwnerBase.h"
 
@@ -69,14 +69,14 @@ AddPropertyName(boilTime_mins)
  *             steps" to "empty list of boil steps".
  */
 class Boil : public NamedEntity,
-             public FolderBase<Boil>,
+             public FolderPropertyBase<Boil>,
              public StepOwnerBase<Boil, BoilStep> {
    Q_OBJECT
 
    FOLDER_BASE_DECL(Boil)
    STEP_OWNER_COMMON_DECL(Boil, boil)
-   // See model/FolderBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
    // See model/StepOwnerBase.h for info, getters and setters for these properties
    Q_PROPERTY(QList<std::shared_ptr<BoilStep>> steps   READ steps   WRITE setSteps   STORED false)
    Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)

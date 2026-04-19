@@ -22,7 +22,7 @@
 #include <QString>
 
 #include "database/ObjectStoreWrapper.h"
-#include "model/FolderBase.h"
+#include "model/FolderPropertyBase.h"
 #include "model/NamedEntity.h"
 
 //======================================================================================================================

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Folder.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * model/Folder.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -21,7 +21,19 @@
 #include <QString>
 
 #include "database/ObjectStoreWrapper.h"
+#include "model/Boil.h"
+#include "model/Equipment.h"
+#include "model/Fermentable.h"
+#include "model/Fermentation.h"
+#include "model/Hop.h"
 #include "model/NamedParameterBundle.h"
+#include "model/Mash.h"
+#include "model/Misc.h"
+#include "model/Recipe.h"
+#include "model/Salt.h"
+#include "model/Style.h"
+#include "model/Water.h"
+#include "model/Yeast.h"
 #include "utils/AutoCompare.h"
 
 #ifdef BUILDING_WITH_CMAKE
@@ -29,82 +41,49 @@
    #include "moc_Folder.cpp"
 #endif
 
-QString Folder::localisedName() { return tr("Folder"); }
-QString Folder::localisedName_path()     { return tr("Path"     ); }
-QString Folder::localisedName_fullPath() { return tr("Full Path"); }
+QString FolderCommon::localisedName()          { return tr("Folder"); }
+QString FolderCommon::localisedName_path()     { return tr("Path"     ); }
+QString FolderCommon::localisedName_fullPath() { return tr("Full Path"); }
 
 
-bool Folder::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
+bool FolderCommon::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
-   Folder const & rhs = static_cast<Folder const &>(other);
+   FolderCommon const & rhs = static_cast<FolderCommon const &>(other);
    // Base class will already have ensured names are equal
    return (
-      AUTO_PROPERTY_COMPARE(this, rhs, m_path  , PropertyNames::Folder::path, propertiesThatDiffer)
+      AUTO_PROPERTY_COMPARE_FN(this, rhs, fullPath, PropertyNames::FolderCommon::fullPath, propertiesThatDiffer)
    );
 }
 
-ObjectStore & Folder::getObjectStoreTypedInstance() const {
-   return ObjectStoreTyped<Folder>::getInstance();
-}
-
-TypeLookup const Folder::typeLookup {
-   "Folder",
+TypeLookup const FolderCommon::typeLookup {
+   "FolderCommon",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(Folder, path    , m_path  , NonPhysicalQuantity::String),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Folder, fullPath, fullPath, NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_NO_MV(FolderCommon, path    , path      , NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_NO_MV(FolderCommon, fullPath, fullPath  , NonPhysicalQuantity::String),
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup}
 };
 
-Folder::Folder(QString const & fullPath) :
-   NamedEntity{""} {
-   this->setFullPath(fullPath);
-   setObjectName("Folder");
+FolderCommon::FolderCommon(QString const & name) :
+   NamedEntity{name} {
 
    CONSTRUCTOR_END
    return;
 }
 
-Folder::Folder(NamedParameterBundle const & namedParameterBundle) :
-   NamedEntity{namedParameterBundle},
-   SET_REGULAR_FROM_NPB (m_path, namedParameterBundle, PropertyNames::Folder::path) {
-   setObjectName("Folder");
+FolderCommon::FolderCommon(NamedParameterBundle const & namedParameterBundle) :
+   NamedEntity{namedParameterBundle} {
 
    CONSTRUCTOR_END
    return;
 }
 
-Folder::Folder(Folder const & other) :
-   NamedEntity{other},
-   m_path    {other.m_path    } {
-   setObjectName("Folder");
+FolderCommon::FolderCommon(FolderCommon const & other) :
+   NamedEntity{other} {
 
    CONSTRUCTOR_END
    return;
 }
 
-Folder::~Folder() = default;
-
-QString Folder::path() const { return m_path; }
-QString Folder::fullPath() const { return QString{"%1/%2"}.arg(this->m_path).arg(this->name()); }
-
-void Folder::setPath(QString var) {
-   m_path = var;
-   return;
-}
-
-// changing the full path necessarily changes the name and the path
-void Folder::setFullPath(QString var) {
-   QStringList pieces = var.split("/", Qt::SkipEmptyParts);
-
-   if (!pieces.isEmpty()) {
-      this->setName(pieces.last());
-      pieces.removeLast();
-      this->setPath(pieces.join("/"));
-   } else {
-      this->setName(var);
-      this->setPath(var);
-   }
-   return;
-}
+FolderCommon::~FolderCommon() = default;

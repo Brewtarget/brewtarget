@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Boil.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/Boil.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ bool Boil::compareWith(NamedEntity const & other, QList<BtStringConst const *> *
       AUTO_PROPERTY_COMPARE(this, rhs, m_notes        , PropertyNames::Boil::notes        , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_preBoilSize_l, PropertyNames::Boil::preBoilSize_l, propertiesThatDiffer) &&
       // Parent classes have to be equal too
-      this->FolderBase<Boil>             ::doCompareWith(rhs, propertiesThatDiffer) &&
+      this->FolderPropertyBase<Boil>             ::doCompareWith(rhs, propertiesThatDiffer) &&
       this->StepOwnerBase<Boil, BoilStep>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
@@ -64,16 +64,16 @@ TypeLookup const Boil::typeLookup {
    },
    // Parent classes lookup
    {&NamedEntity::typeLookup,
-    std::addressof(FolderBase<Boil>::typeLookup),
+    std::addressof(FolderPropertyBase<Boil>::typeLookup),
     std::addressof(StepOwnerBase<Boil, BoilStep>::typeLookup)}
 };
-static_assert(std::is_base_of<FolderBase<Boil>, Boil>::value);
+static_assert(std::is_base_of<FolderPropertyBase<Boil>, Boil>::value);
 
 //==================================================== CONSTRUCTORS ====================================================
 
 Boil::Boil(QString name) :
    NamedEntity{name},
-   FolderBase<Boil>{},
+   FolderPropertyBase<Boil>{},
    StepOwnerBase<Boil, BoilStep>{},
    m_description  {""          },
    m_notes        {""          },
@@ -85,7 +85,7 @@ Boil::Boil(QString name) :
 
 Boil::Boil(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity     {namedParameterBundle},
-   FolderBase<Boil>{namedParameterBundle},
+   FolderPropertyBase<Boil>{namedParameterBundle},
    StepOwnerBase<Boil, BoilStep>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_description  , namedParameterBundle, PropertyNames::Boil::description  ),
    SET_REGULAR_FROM_NPB (m_notes        , namedParameterBundle, PropertyNames::Boil::notes        ),
@@ -100,7 +100,7 @@ Boil::Boil(NamedParameterBundle const & namedParameterBundle) :
 
 Boil::Boil(Boil const & other) :
    NamedEntity{other},
-   FolderBase<Boil>{other},
+   FolderPropertyBase<Boil>{other},
    StepOwnerBase<Boil, BoilStep>{other},
    m_description  {other.m_description  },
    m_notes        {other.m_notes        },
@@ -233,7 +233,7 @@ void Boil::ensureStandardProfile() {
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Boil)
 
-// Boilerplate code for FolderBase
+// Boilerplate code for FolderPropertyBase
 FOLDER_BASE_COMMON_CODE(Boil)
 
 // Insert boiler-plate wrapper functions that call down to StepOwnerBase

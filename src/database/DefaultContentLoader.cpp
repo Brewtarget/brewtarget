@@ -25,6 +25,7 @@
 #include "config.h"
 #include "database/DatabaseSchemaHelper.h"
 #include "database/ObjectStoreWrapper.h"
+#include "model/Folder.h"
 #include "model/Recipe.h"
 #include "serialization/ImportExport.h"
 
@@ -162,7 +163,8 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
             // TODO: It would be neat, at some point, to to have a mechanism for setting a property on multiple objects
             //       of the same type, so that we could do it in a single DB update.
             for (auto recipe : newlyImportedRecipes) {
-               recipe->setFolderPath(FOLDER_PATH_FOR_SUPPLIED_RECIPES);
+               Folder<Recipe> const * folder = Folder<Recipe>::createFromPath(FOLDER_PATH_FOR_SUPPLIED_RECIPES);
+               recipe->setContainedInFolderId(folder->key());
             }
 
             //

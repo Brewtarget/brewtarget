@@ -23,6 +23,7 @@
 #include "database/ObjectStore.h"
 #include "model/NamedEntity.h"
 #include "utils/CastAndConvert.h"
+#include "utils/TypeLookup.h"
 
 /**
  * \brief Read, write and cache any subclass of \c NamedEntity in the database
@@ -53,7 +54,7 @@ public:
       return;
    }
 
-   ~ObjectStoreTyped() = default;
+   ~ObjectStoreTyped() override = default;
 
 public:
 
@@ -69,6 +70,8 @@ public:
 
    /**
     * \brief Insert a new object in the DB (and in our cache list)
+    *
+    * \return The ID of what was inserted
     */
    virtual int insert(std::shared_ptr<NE> ne) {
       // If we are re-inserting something that was previously marked deleted, then we don't want it to be marked deleted
@@ -142,7 +145,10 @@ public:
     *        This overrides the base-class function of the same name, enabling us (by virtue of the fact that these
     *        particular functions do NOT need to be virtual) to template the return type.
     */
-   std::shared_ptr<NE> getById(int id) const {
+   std::shared_ptr<NE> getById(int const id) const {
+      if (id < 0) {
+         return nullptr;
+      }
       if (!this->contains(id)) {
          qDebug() << Q_FUNC_INFO << "ID" << id << "not found amongst" << this->size() << "objects";
          // Uncomment the following to track down errors where we're looking for an object that is not in the DB.

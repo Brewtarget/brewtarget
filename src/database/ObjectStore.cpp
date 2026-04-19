@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/ObjectStore.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * database/ObjectStore.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -412,7 +412,7 @@ namespace {
       //                      (r2_valA, r2_valB, ..., r2_valN),
       //                      ...,
       //                      (rm_valA, rm_valB, ..., rm_valN);
-      // However, we DON"T do this.  The variable binding is more complicated/error-prone than when just doing
+      // However, we DON'T do this.  The variable binding is more complicated/error-prone than when just doing
       // individual inserts.  (Even with BtSqlQuery::execBatch(), we'd have to loop to construct the lists of bind
       // parameters.)  And there's likely no noticeable performance benefit given that we're typically inserting only
       // a handful of rows at a time (eg all the Hops in a Recipe).
@@ -491,7 +491,7 @@ namespace {
          // type is QList<QVariant> (aka QVariantList) or QStringList.  If your QVariant contains some other list-like
          // structure then toList() will just return an empty list.
          //
-         if (!propertyValuesWrapper.canConvert< QVector<int> >()) {
+         if (!propertyValuesWrapper.canConvert<QVector<int>>()) {
             qCritical() <<
                Q_FUNC_INFO << "Can't convert QVariant of" << propertyValuesWrapper.typeName() << "to QVector<int>";
             Q_ASSERT(false); // Stop here on debug builds
@@ -916,15 +916,15 @@ public:
       // current coding error, or some manual edit of the DB.  Either way we at least want to log a warning.
       //
       if (!propertyValue.isNull()) {
-         auto expectedTypes = getExpectedTypes(fieldDefn.fieldType, columnNumber);
+         auto const expectedTypes = getExpectedTypes(fieldDefn.fieldType, columnNumber);
 
          int const propertyType = propertyValue.typeId();
          if (!expectedTypes.contains(propertyType)) {
-            TableColumnAndType tableColumnAndType{*primaryTable.tableName,
-                                                  *fieldDefn.columnNames[columnNumber],
-                                                  fieldDefn.fieldType};
+            TableColumnAndType const tableColumnAndType{*primaryTable.tableName,
+                                                        *fieldDefn.columnNames[columnNumber],
+                                                        fieldDefn.fieldType};
             if (legacyBadTypes.contains(tableColumnAndType) &&
-               legacyBadTypes.value(tableColumnAndType).contains(propertyType)) {
+                legacyBadTypes.value(tableColumnAndType).contains(propertyType)) {
                // It's technically wrong but we know about it and it works, so just log it.  If this logging is
                // uncommented, you can get a list of all the things we need to fix with:
                //   grep "known ugliness" *.log | sed 's/^.*property /Property /; s/This is a known ugliness .*$//' | sort -u
@@ -943,7 +943,7 @@ public:
                //    - If we are expecting an double and we got an int then we can just upcast it.
                //
                bool recovered = false;
-               QVariant readPropertyValue = propertyValue;
+               QVariant const readPropertyValue = propertyValue;
                if (propertyType == QMetaType::QString && fieldDefn.fieldType == ObjectStore::FieldType::Bool) {
                   // We'll take any reasonable string representation of true/false.  For the moment, at least, I'm not
                   // worrying about optional fields here.  I think it's pretty rare, if ever, that we'd want an optional
@@ -1395,7 +1395,7 @@ public:
          // PostgreSQL drivers both support this, so it would likely only be a problem if a new type of DB were
          // introduced.)
          //
-         // It is important to be aware that this feature may not return a meaningful result in the case that we,
+         // It is important to be aware that this feature may not return a meaningful result in the case that we
          // explicitly wrote the ID.  (Eg in PostgreSQL there will be a sequence for generating IDs that needs to get
          // reset after you've done one or more inserts with explicitly set IDs.  Asking for the last insert ID gets the
          // current state of the sequence and so only works when the sequence was used to generate the ID.)

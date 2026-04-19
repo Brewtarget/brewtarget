@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Salt.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Salt.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -110,8 +110,9 @@ TypeLookup const Salt::typeLookup {
 };
 static_assert(std::is_base_of<Ingredient, Salt>::value);
 
-Salt::Salt(QString name) :
+Salt::Salt(QString const & name) :
    Ingredient    {name},
+   FolderPropertyBase{},
    m_type        {Salt::Type::CaCl2},
    m_percentAcid{std::nullopt} {
 
@@ -120,7 +121,8 @@ Salt::Salt(QString name) :
 }
 
 Salt::Salt(NamedParameterBundle const & namedParameterBundle) :
-   Ingredient       {namedParameterBundle},
+   Ingredient        {namedParameterBundle},
+   FolderPropertyBase{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_type        , namedParameterBundle, PropertyNames::Salt::type       ),
    SET_REGULAR_FROM_NPB (m_percentAcid, namedParameterBundle, PropertyNames::Salt::percentAcid) {
 
@@ -129,7 +131,8 @@ Salt::Salt(NamedParameterBundle const & namedParameterBundle) :
 }
 
 Salt::Salt(Salt const & other) :
-   Ingredient    {other               },
+   Ingredient        {other},
+   FolderPropertyBase{other},
    m_type        {other.m_type        },
    m_percentAcid{other.m_percentAcid} {
 
@@ -380,5 +383,8 @@ double Salt::massConcPpm_SO4_perGramPerLiter() const {
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Salt)
 
-// Insert the boiler-plate stuff for inventory
+// Insert the boilerplate stuff for inventory
 INGREDIENT_BASE_COMMON_CODE(Salt)
+
+// Boilerplate code for FolderPropertyBase
+FOLDER_BASE_COMMON_CODE(Salt)

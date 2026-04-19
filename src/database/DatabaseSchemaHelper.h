@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/DatabaseSchemaHelper.h is part of Brewtarget, and is copyright the following authors 2009-2021:
+ * database/DatabaseSchemaHelper.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jonatan Pålsson <jonatan.p@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -42,8 +42,10 @@ namespace DatabaseSchemaHelper {
 
    /*!
     * \brief Create a blank database whose schema version is \c dbVersion
+    *
+    * \return \c true if succeeded, \c false otherwise
     */
-   bool create(Database & database, QSqlDatabase db);
+   bool create(Database & database, QSqlDatabase connection);
 
    /*!
     * \brief Migrate schema from \c oldVersion to \c newVersion

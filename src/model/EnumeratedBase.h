@@ -172,7 +172,8 @@ protected:
    //================================================ MEMBER VARIABLES =================================================
    int m_ownerId    = -1;
    // For historical reasons, step (aka sequence) numbers always start from 1, so 0 would also be invalid, but -1 is
-   // more obvious
+   // more obvious.  (It turns out it suits us for other reasons that sequence numbers start from 1, as this is how the
+   // numbering works in BeerJSON too.)
    int m_sequenceNumber = -1;
 };
 

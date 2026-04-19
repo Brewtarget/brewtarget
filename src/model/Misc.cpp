@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Misc.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Misc.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -112,8 +112,9 @@ static_assert(std::is_base_of<Ingredient, Misc>::value);
 
 //============================CONSTRUCTORS======================================
 
-Misc::Misc(QString name) :
-   Ingredient{name},
+Misc::Misc(QString const & name) :
+   Ingredient        {name},
+   FolderPropertyBase{},
    m_type     {Misc::Type::Spice},
    m_useFor   {""               },
    m_notes    {""               },
@@ -126,7 +127,8 @@ Misc::Misc(QString name) :
 }
 
 Misc::Misc(NamedParameterBundle const & namedParameterBundle) :
-   Ingredient{namedParameterBundle},
+   Ingredient        {namedParameterBundle},
+   FolderPropertyBase{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_type     , namedParameterBundle, PropertyNames::Misc::type     ),
    SET_REGULAR_FROM_NPB (m_useFor   , namedParameterBundle, PropertyNames::Misc::useFor   ),
    SET_REGULAR_FROM_NPB (m_notes    , namedParameterBundle, PropertyNames::Misc::notes    ),
@@ -139,7 +141,8 @@ Misc::Misc(NamedParameterBundle const & namedParameterBundle) :
 }
 
 Misc::Misc(Misc const & other) :
-   Ingredient{other             },
+   Ingredient        {other},
+   FolderPropertyBase{other},
    m_type     {other.m_type     },
    m_useFor   {other.m_useFor   },
    m_notes    {other.m_notes    },
@@ -174,5 +177,8 @@ void Misc::setProductId(QString const & val) { SET_AND_NOTIFY(PropertyNames::Mis
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Misc)
 
-// Insert the boiler-plate stuff for inventory
+// Insert the boilerplate stuff for inventory
 INGREDIENT_BASE_COMMON_CODE(Misc)
+
+// Boilerplate code for FolderPropertyBase
+FOLDER_BASE_COMMON_CODE(Misc)

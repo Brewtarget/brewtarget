@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/TreeNodeTraits.h is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * trees/TreeNodeTraits.h is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -51,14 +51,16 @@
  *           - \c ParentPtrTypes     = std::variant of raw pointers to valid parent types
  *           - \c ChildPtrTypes      = std::variant of shared_ptrs to valid child types (or
  *                                     std::variant<std::monostate> if no children are allowed).
- *           - \c DragNDropMimeType  = used with drag-and-drop to determine which things can be dropped where.  See
- *                                     \c mimeAccepted properties in \c ui/mainWindow.ui.  Note that this type
- *                                     determines where a dragged item can be dropped.  Broadly:
- *                                       - Recipes, equipment and styles get dropped on the recipe pane
- *                                       - Folders will be handled by themselves
- *                                       - Most other things get dropped on the ingredients pane
- *                                       - TBD what to do about Water
- *                                       - BrewNotes can't be dropped anywhere
+ *           - \c getDragNDropMimeType  = used with drag-and-drop to determine which things can be dropped where.  See
+ *                                        \c mimeAccepted property in \c BtTabWidget referenced in
+ *                                        \c MainWindow::setupDrops.  Note that this type determines where a dragged
+ *                                        item can be dropped.  Broadly:
+ *                                          - Recipes, equipment and styles get dropped on the recipe pane
+ *                                          - Folders will be handled by themselves
+ *                                          - Most other things get dropped on the ingredients pane
+ *                                          - TBD what to do about Water
+ *                                          - BrewNotes can't be dropped anywhere
+ *
  *        We use smart pointers for children and raw pointers for parents because parents own their children (and not
  *        vice versa).  We use std::variant even in trees where all nodes have a single parent type because it
  *        simplifies the generic code.
@@ -76,7 +78,7 @@ struct TreeNodeTraits;
 template<class NE> class TreeFolderNode;
 template<class NE> class TreeItemNode;
 
-template <class NE> struct TreeNodeTraits<Folder, NE> {
+template <class NE> struct TreeNodeTraits<Folder<NE>, NE> {
    enum class ColumnIndex {
       // TBD: Not sure we need all these columns!
       Name    ,
@@ -87,8 +89,20 @@ template <class NE> struct TreeNodeTraits<Folder, NE> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<NE> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeFolderNode<NE>>, std::shared_ptr<TreeItemNode<NE>>>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-folder";
+   static char const * getDragNDropMimeType();
 };
+template<> inline char const * TreeNodeTraits<Folder<Boil        >, Boil        >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Boil"        ; }
+template<> inline char const * TreeNodeTraits<Folder<Equipment   >, Equipment   >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Equipment"   ; }
+template<> inline char const * TreeNodeTraits<Folder<Fermentable >, Fermentable >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Fermentable" ; }
+template<> inline char const * TreeNodeTraits<Folder<Fermentation>, Fermentation>::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Fermentation"; }
+template<> inline char const * TreeNodeTraits<Folder<Hop         >, Hop         >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Hop"         ; }
+template<> inline char const * TreeNodeTraits<Folder<Mash        >, Mash        >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Mash"        ; }
+template<> inline char const * TreeNodeTraits<Folder<Misc        >, Misc        >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Misc"        ; }
+template<> inline char const * TreeNodeTraits<Folder<Recipe      >, Recipe      >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Recipe"      ; }
+template<> inline char const * TreeNodeTraits<Folder<Salt        >, Salt        >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Salt"        ; }
+template<> inline char const * TreeNodeTraits<Folder<Style       >, Style       >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Style"       ; }
+template<> inline char const * TreeNodeTraits<Folder<Water       >, Water       >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Water"       ; }
+template<> inline char const * TreeNodeTraits<Folder<Yeast       >, Yeast       >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Yeast"       ; }
 
 template<> struct TreeNodeTraits<BrewNote, Recipe> {
    enum class ColumnIndex {
@@ -99,7 +113,7 @@ template<> struct TreeNodeTraits<BrewNote, Recipe> {
    using ParentPtrTypes = std::variant<TreeItemNode<Recipe> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
    // BrewNotes can't be dropped anywhere, so there isn't anywhere in the program that accepts drops with this MIME type
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-brewnote";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-BrewNote"; }
 };
 
 template<> struct TreeNodeTraits<Recipe, Recipe> {
@@ -113,7 +127,7 @@ template<> struct TreeNodeTraits<Recipe, Recipe> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Recipe> *, TreeItemNode<Recipe> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<BrewNote>>, std::shared_ptr<TreeItemNode<Recipe>>>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-recipe";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Recipe"; }
 
    static QString getRootName() { return Recipe::tr("Recipes"); }
 };
@@ -132,7 +146,9 @@ template<> struct TreeNodeTraits<Equipment, Equipment> {
    // Although it seems odd for Equipment to have a drag-and-drop MIME type of recipe, it is intentional.  This means an
    // Equipment can be dropped on the recipe pane (MainWindow::tabWidget_recipeView).
    //
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-recipe";
+   // TBD: We should probably revisit this at some point, as it could otherwise one day be a source of bugs.
+   //
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Recipe"; }
 
    static QString getRootName() { return Equipment::tr("Equipments"); }
 };
@@ -148,7 +164,7 @@ template<> struct TreeNodeTraits<Fermentable, Fermentable> {
    using ParentPtrTypes = std::variant<TreeFolderNode<Fermentable> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
    // Fermentables and other ingredients can be dropped on MainWindow::tabWidget_ingredients
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-ingredient";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Ingredient"; }
 
    static QString getRootName() { return Fermentable::tr("Fermentables"); }
 };
@@ -164,7 +180,7 @@ template<> struct TreeNodeTraits<Hop, Hop> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Hop> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-ingredient";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Ingredient"; }
 
    static QString getRootName() { return Hop::tr("Hops"); }
 };
@@ -183,7 +199,7 @@ template<> struct TreeNodeTraits<StockUseFermentable, StockPurchaseFermentable> 
    using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseFermentable> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
    // StockUseFermentables cannot be dropped anywhere
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventoryChange";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockUse"; }
 };
 
 template<> struct TreeNodeTraits<StockPurchaseFermentable, StockPurchaseFermentable> {
@@ -202,7 +218,7 @@ template<> struct TreeNodeTraits<StockPurchaseFermentable, StockPurchaseFermenta
    using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseFermentable> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseFermentable>>>;
    // StockPurchaseFermentables cannot be dropped anywhere except folders
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventory";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockPurchase"; }
 
    static QString getRootName() { return Fermentable::tr("Fermentable Purchases"); }
 };
@@ -222,7 +238,7 @@ template<> struct TreeNodeTraits<StockUseHop, StockPurchaseHop> {
    using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseHop> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
    // StockUseHops cannot be dropped anywhere
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventoryChange";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockUse"; }
 };
 
 template<> struct TreeNodeTraits<StockPurchaseHop, StockPurchaseHop> {
@@ -241,7 +257,7 @@ template<> struct TreeNodeTraits<StockPurchaseHop, StockPurchaseHop> {
    using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseHop> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseHop>>>;
    // StockPurchaseHops cannot be dropped anywhere except folders
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventory";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockPurchase"; }
 
    static QString getRootName() { return Hop::tr("Hop Purchases"); }
 };
@@ -260,7 +276,7 @@ template<> struct TreeNodeTraits<StockUseMisc, StockPurchaseMisc> {
    using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseMisc> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
    // StockUseMiscs cannot be dropped anywhere
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventoryChange";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockUse"; }
 };
 
 template<> struct TreeNodeTraits<StockPurchaseMisc, StockPurchaseMisc> {
@@ -279,7 +295,7 @@ template<> struct TreeNodeTraits<StockPurchaseMisc, StockPurchaseMisc> {
    using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseMisc> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseMisc>>>;
    // StockPurchaseMiscs cannot be dropped anywhere except folders
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventory";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockPurchase"; }
 
    static QString getRootName() { return Misc::tr("Misc Purchases"); }
 };
@@ -298,7 +314,7 @@ template<> struct TreeNodeTraits<StockUseSalt, StockPurchaseSalt> {
    using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseSalt> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
    // StockUseSalts cannot be dropped anywhere
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventoryChange";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockUse"; }
 };
 
 template<> struct TreeNodeTraits<StockPurchaseSalt, StockPurchaseSalt> {
@@ -317,7 +333,7 @@ template<> struct TreeNodeTraits<StockPurchaseSalt, StockPurchaseSalt> {
    using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseSalt> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseSalt>>>;
    // StockPurchaseSalts cannot be dropped anywhere except folders
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventory";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockPurchase"; }
 
    static QString getRootName() { return Salt::tr("Salt Purchases"); }
 };
@@ -336,7 +352,7 @@ template<> struct TreeNodeTraits<StockUseYeast, StockPurchaseYeast> {
    using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseYeast> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
    // StockUseYeasts cannot be dropped anywhere
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventoryChange";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockUse"; }
 };
 
 template<> struct TreeNodeTraits<StockPurchaseYeast, StockPurchaseYeast> {
@@ -355,7 +371,7 @@ template<> struct TreeNodeTraits<StockPurchaseYeast, StockPurchaseYeast> {
    using ParentPtrTypes = std::variant<TreeFolderNode<StockPurchaseYeast> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseYeast>>>;
    // StockPurchaseYeasts cannot be dropped anywhere except folders
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-inventory";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockPurchase"; }
 
    static QString getRootName() { return Yeast::tr("Yeast Purchases"); }
 };
@@ -375,7 +391,7 @@ template<> struct TreeNodeTraits<MashStep, Mash> {
    using ParentPtrTypes = std::variant<TreeItemNode<Mash> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
    // MashSteps can't be dropped anywhere, so there isn't anywhere in the program that accepts drops with this MIME type
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-MashStep";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-MashStep"; }
 };
 
 template<> struct TreeNodeTraits<Mash, Mash> {
@@ -388,7 +404,7 @@ template<> struct TreeNodeTraits<Mash, Mash> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Mash> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<MashStep>>>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-mash";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Mash"; }
 
    static QString getRootName() { return Mash::tr("Mash Profiles"); }
 };
@@ -411,7 +427,7 @@ template<> struct TreeNodeTraits<BoilStep, Boil> {
    using ParentPtrTypes = std::variant<TreeItemNode<Boil> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
    // BoilSteps can't be dropped anywhere, so there isn't anywhere in the program that accepts drops with this MIME type
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-BoilStep";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-BoilStep"; }
 };
 
 template<> struct TreeNodeTraits<Boil, Boil> {
@@ -424,7 +440,7 @@ template<> struct TreeNodeTraits<Boil, Boil> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Boil> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<BoilStep>>>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-boil";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Boil"; }
 
    static QString getRootName() { return Boil::tr("Boil Profiles"); }
 };
@@ -441,7 +457,7 @@ template<> struct TreeNodeTraits<FermentationStep, Fermentation> {
    using ParentPtrTypes = std::variant<TreeItemNode<Fermentation> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
    // FermentationSteps can't be dropped anywhere, so there isn't anywhere in the program that accepts drops with this MIME type
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-FermentationStep";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-FermentationStep"; }
 };
 
 template<> struct TreeNodeTraits<Fermentation, Fermentation> {
@@ -453,7 +469,7 @@ template<> struct TreeNodeTraits<Fermentation, Fermentation> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Fermentation> *>;
    using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<FermentationStep>>>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-fermentation";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Fermentation"; }
 
    static QString getRootName() { return Fermentation::tr("Fermentation Profiles"); }
 };
@@ -467,7 +483,7 @@ template<> struct TreeNodeTraits<Misc, Misc> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Misc> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-ingredient";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Ingredient"; }
 
    static QString getRootName() { return Misc::tr("Miscellaneous"); }
 };
@@ -486,7 +502,7 @@ template<> struct TreeNodeTraits<Yeast, Yeast> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Yeast> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-ingredient";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Ingredient"; }
 
    static QString getRootName() { return Yeast::tr("Yeasts"); }
 };
@@ -502,7 +518,7 @@ template<> struct TreeNodeTraits<Salt, Salt> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Salt> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-recipe";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Ingredient"; }
 
    static QString getRootName() { return Salt::tr("Salts"); }
 };
@@ -519,7 +535,7 @@ template<> struct TreeNodeTraits<Style, Style> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Style> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-recipe";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Recipe"; }
 
    static QString getRootName() { return Style::tr("Styles"); }
 };
@@ -539,7 +555,7 @@ template<> struct TreeNodeTraits<Water, Water> {
 
    using ParentPtrTypes = std::variant<TreeFolderNode<Water> *>;
    using ChildPtrTypes = std::variant<std::monostate>;
-   static constexpr char const * DragNDropMimeType = DEF_CONFIG_MIME_PREFIX "-ingredient";
+   static constexpr char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Ingredient"; }
 
    static QString getRootName() { return Water::tr("Waters"); }
 };

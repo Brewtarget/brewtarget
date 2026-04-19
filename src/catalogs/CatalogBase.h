@@ -428,11 +428,9 @@ public:
     *        parameter here, whereas direct callers can specify a folder.
     *
     *        \c makeNew is not the greatest name, but `new` is a reserved word and `create` is already taken by QWidget
-    *
-    * \param folderPath
     */
-   void makeNew(QString folderPath = "") {
-      this->m_neEditor->newEditItem(folderPath);
+   void makeNew() {
+      this->m_neEditor->newEditItem(nullptr);
       return;
    }
 

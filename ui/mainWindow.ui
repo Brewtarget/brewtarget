@@ -353,9 +353,6 @@
             <property name="currentIndex">
              <number>0</number>
             </property>
-            <property name="mimeAccepted" stdset="0">
-             <string notr="true">application/x-brewtarget-recipe</string>
-            </property>
             <widget class="QWidget" name="tab_recipe">
              <property name="acceptDrops">
               <bool>true</bool>
@@ -1043,9 +1040,6 @@
             </property>
             <property name="currentIndex">
              <number>0</number>
-            </property>
-            <property name="mimeAccepted" stdset="0">
-             <string notr="true">application/x-brewtarget-ingredient</string>
             </property>
 
             <widget class="QWidget" name="recipeFermentableTab">

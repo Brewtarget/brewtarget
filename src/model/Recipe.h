@@ -38,7 +38,7 @@
 
 #include "database/ObjectStoreWrapper.h"
 #include "model/Ingredient.h"
-#include "model/FolderBase.h"
+#include "model/FolderPropertyBase.h"
 #include "model/NamedEntity.h"
 #include "model/OwnedSet.h"
 
@@ -137,12 +137,12 @@ class Yeast;
  * \brief Model class for recipe records in the database.
  */
 class Recipe : public NamedEntity,
-               public FolderBase<Recipe> {
+               public FolderPropertyBase<Recipe> {
    Q_OBJECT
    FOLDER_BASE_DECL(Recipe)
 
-   // See model/FolderBase.h for info, getters and setters for these properties
-   Q_PROPERTY(QString folderPath        READ folderPath        WRITE setFolderPath)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
 
    /**
     * \brief \c MainWindow is a friend so it can access \c Recipe::recalcAll() and \c Recipe::recalcIfNeeded()
@@ -550,12 +550,6 @@ public:
    double  tasteRating       () const;
    double  og                () const;
    double  fg                () const;
-///   int     fermentationStages() const;
-///   double  primaryAge_days   () const;
-///   double  secondaryAge_days () const;
-///   double  secondaryTemp_c   () const;
-///   double  tertiaryAge_days  () const;
-///   double  tertiaryTemp_c    () const;
    std::optional<double>  age_days          () const;
    std::optional<double>  ageTemp_c         () const;
    std::optional<QDate>   date              () const;
@@ -736,7 +730,6 @@ public:
    void setTasteRating       (double  const   val);
    void setOg                (double  const   val);
    void setFg                (double  const   val);
-///   void setFermentationStages(int     const   val);
    void setAge_days          (std::optional<double>  const   val);
    void setAgeTemp_c         (std::optional<double>  const   val);
    void setDate              (std::optional<QDate>   const   val);

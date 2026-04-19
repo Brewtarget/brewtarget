@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/NamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/NamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Kregg Kemper <gigatropolis@yahoo.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -92,6 +92,8 @@ namespace {
       return true;
    }
 }
+
+QString NamedEntity::className() const { return this->metaObject()->className(); }
 
 QString NamedEntity::localisedName() { return tr("Named Entity"); }
 QString NamedEntity::localisedName_deleted         () { return tr("Deleted"   ); }

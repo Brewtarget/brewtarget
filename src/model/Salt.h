@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Salt.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Salt.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -61,10 +61,15 @@ AddPropertyName(type       )
  *        NOTE that, unlike most of the other \c NamedEntity classes, \c Salt is not included anywhere in either BeerXML
  *        or BeerJSON.
  */
-class Salt : public Ingredient, public IngredientBase<Salt> {
+class Salt : public Ingredient,
+             public IngredientBase<Salt>,
+             public FolderPropertyBase<Salt> {
    Q_OBJECT
 
    INGREDIENT_BASE_DECL(Salt)
+   FOLDER_BASE_DECL(Salt)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
 
 public:
    /**
@@ -128,11 +133,11 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   Salt(QString name = "");
-   Salt(NamedParameterBundle const & namedParameterBundle);
+   explicit Salt(QString const & name = "");
+   explicit Salt(NamedParameterBundle const & namedParameterBundle);
    Salt(Salt const & other);
 
-   virtual ~Salt();
+   ~Salt() override;
 
    static Measurement::PhysicalQuantity suggestedMeasureFor(Salt::Type const type);
 

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BtTabWidget.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * BtTabWidget.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -49,6 +49,12 @@ class BtTabWidget : public QTabWidget {
 
 public:
    BtTabWidget(QWidget* parent = nullptr);
+
+   //=================================================== PROPERTIES ====================================================
+   Q_PROPERTY(QString   mimeAccepted   READ mimeAccepted   WRITE setMimeAccepted)
+
+   QString mimeAccepted() const;
+   void setMimeAccepted(QString const & val);
 
 signals:
    void setRecipe(Recipe* rec);

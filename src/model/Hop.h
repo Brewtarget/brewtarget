@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Hop.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Hop.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -85,13 +85,16 @@ AddPropertyName(year              )
  *           > A general type of Hop - eg "East Kent Goldings", which will have an alpha acid range
  *           > A specific form and harvest - eg "Pellet 2020 harvest", which will have a single alpha acid value eg 6.0%
  *        Probably we should do this via StockPurchase.
- *
- * TODO TODO TODO TODO TODO TODO TODO TODO TODO Sort out inventory!
  */
-class Hop : public Ingredient, public IngredientBase<Hop> {
+class Hop : public Ingredient,
+            public IngredientBase<Hop>,
+            public FolderPropertyBase<Hop> {
    Q_OBJECT
 
    INGREDIENT_BASE_DECL(Hop)
+   FOLDER_BASE_DECL(Hop)
+   // See model/FolderPropertyBase.h for info, getters and setters for these properties
+   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
 
 public:
    /**
@@ -207,11 +210,11 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   Hop(QString name = "");
-   Hop(NamedParameterBundle const & namedParameterBundle);
+   explicit Hop(QString const & name = "");
+   explicit Hop(NamedParameterBundle const & namedParameterBundle);
    Hop(Hop const & other);
 
-   virtual ~Hop();
+   ~Hop() override;
 
    //=================================================== PROPERTIES ====================================================
    //! \brief Typical percent alpha acid for this type of hop.  ⮜⮜⮜ Required in BeerJSON and BeerXML ⮞⮞⮞
