@@ -2992,7 +2992,14 @@ namespace {
          //      constructed by chaining back the parent IDs.
          //
          existingFolders.insert(emptyFolders);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
          for (auto const & [folderFullPath, folderInfo] : existingFolders.asKeyValueRange()) {
+#else
+         // This is the old way, that we still need on Ubuntu 22.04 as we don't have Qt 6.4 there
+         for (auto it = existingFolders.keyValueBegin(); it != existingFolders.keyValueEnd(); ++it) {
+            auto const & folderFullPath = it->first;
+            auto const & folderInfo = it->second;
+#endif
             //
             // We only need to update folders that have parents.  For the others, name = path and parentId remains
             // NULL.
@@ -3012,9 +3019,10 @@ namespace {
                                                        "SET name = ?, "
                                                            "contained_in_folder_id = ? "
                                                        "WHERE id = ?").arg(folderTable);
-               if (!executeQuery(q, updateFolderSql, {QVariant::fromValue(folderInfo.name),
-                                                      QVariant::fromValue(parentFolderInfo->id),
-                                                      QVariant::fromValue(folderInfo.id)})) {
+               QVector<QVariant> const parameters{QVariant{folderInfo.name},
+                                                  QVariant{parentFolderInfo->id},
+                                                  QVariant{folderInfo.id}};
+               if (!executeQuery(q, updateFolderSql, parameters)) {
                   // executeQuery will already have logged an error in this instance
                   return false;
                }
