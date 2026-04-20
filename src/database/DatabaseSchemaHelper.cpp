@@ -2934,7 +2934,14 @@ namespace {
          // everything below.)
          //
          QHash<QString, FolderInfo> emptyFolders{};
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
          for (auto const & [key, value] : existingFolders.asKeyValueRange()) {
+#else
+         // This is the old way, that we still need on Ubuntu 22.04 as we don't have Qt 6.4 there
+         for (auto it = existingFolders.keyValueBegin(); it != existingFolders.keyValueEnd(); ++it) {
+            auto const & key = it.key();
+            auto const & value = it.value();
+#endif
             // We make a copy of the folder's full path because we're going to chop up the string to get the parent
             // folders.
             QString folderFullPath = key;
@@ -3005,7 +3012,9 @@ namespace {
                                                        "SET name = ?, "
                                                            "contained_in_folder_id = ? "
                                                        "WHERE id = ?").arg(folderTable);
-               if (!executeQuery(q, updateFolderSql, {folderInfo.name, parentFolderInfo->id, folderInfo.id})) {
+               if (!executeQuery(q, updateFolderSql, {QVariant{folderInfo.name},
+                                                      QVariant{parentFolderInfo->id},
+                                                      QVariant{folderInfo.id}})) {
                   // executeQuery will already have logged an error in this instance
                   return false;
                }
