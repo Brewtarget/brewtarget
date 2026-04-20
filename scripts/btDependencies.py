@@ -463,7 +463,7 @@ def installDependencies():
          if ('Ubuntu' == distroName and Decimal(distroRelease) < Decimal('24.04')):
             btLogger.log.info('Installing newer version of Meson the hard way')
             btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'remove', '-y', 'meson']))
-            btExecute.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson']))
+            btExecute.abortOnRunFail(subprocess.run(['sudo', 'pip3', 'install', 'meson==1.10.2'])) # Temporary workaround for https://github.com/mesonbuild/meson/issues/15705
             #
             # Now fix lupdate
             #

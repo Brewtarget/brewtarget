@@ -1190,12 +1190,13 @@ protected:
     *
     * @param itemId
     */
-   void doFolderAdded(int const folderId) {
-      if constexpr (HasFolder<NE>) {
-         auto folder = ObjectStoreWrapper::getByIdRaw<Folder<NE>>(folderId);
-         qDebug() << Q_FUNC_INFO << "Added" << *folder;
-         this->findFolder(folder, IfNotFound::Create);
-      }
+   void doFolderAdded([[maybe_unused]] int const folderId) requires (HasNoFolder<NE>) {
+      return;
+   }
+   void doFolderAdded(int const folderId) requires (HasFolder<NE>) {
+      auto folder = ObjectStoreWrapper::getByIdRaw<Folder<NE>>(folderId);
+      qDebug() << Q_FUNC_INFO << "Added" << *folder;
+      this->findFolder(folder, IfNotFound::Create);
       return;
    }
 

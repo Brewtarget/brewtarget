@@ -257,7 +257,7 @@ public:
       // Strictly, the first check here is not necessary when SNE is void, but adding a compile-time check for that
       // would, in this instance, make things more complicated.
       //
-      QMenu * menuToShow;
+      QMenu * menuToShow = &this->m_menu_primary;
       if (selected.numPrimary == 0 && selected.numFolders == 0 && selected.numSecondary > 0) {
          // It's a coding error if we managed to select any secondary items that aren't part of the model!
          Q_ASSERT(!IsVoid<SNE>);
@@ -277,7 +277,6 @@ public:
             }
          }
       } else {
-         menuToShow =  &this->m_menu_primary;
 
          if constexpr (std::same_as<NE, Recipe>) {
             // You cannot delete a locked recipe
