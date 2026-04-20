@@ -2939,8 +2939,8 @@ namespace {
 #else
          // This is the old way, that we still need on Ubuntu 22.04 as we don't have Qt 6.4 there
          for (auto it = existingFolders.keyValueBegin(); it != existingFolders.keyValueEnd(); ++it) {
-            auto const & key = it.key();
-            auto const & value = it.value();
+            auto const & key = it->first;
+            auto const & value = it->second;
 #endif
             // We make a copy of the folder's full path because we're going to chop up the string to get the parent
             // folders.
@@ -3012,9 +3012,9 @@ namespace {
                                                        "SET name = ?, "
                                                            "contained_in_folder_id = ? "
                                                        "WHERE id = ?").arg(folderTable);
-               if (!executeQuery(q, updateFolderSql, {QVariant{folderInfo.name},
-                                                      QVariant{parentFolderInfo->id},
-                                                      QVariant{folderInfo.id}})) {
+               if (!executeQuery(q, updateFolderSql, {QVariant::fromValue(folderInfo.name),
+                                                      QVariant::fromValue(parentFolderInfo->id),
+                                                      QVariant::fromValue(folderInfo.id)})) {
                   // executeQuery will already have logged an error in this instance
                   return false;
                }
