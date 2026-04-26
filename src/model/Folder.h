@@ -90,6 +90,8 @@ protected:
 
 template<class NE>
 class Folder : public FolderCommon, public FolderPropertyBase<Folder<NE>, IsFolder::Yes> {
+   static_assert(HasFolder<NE>);
+
    //×××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××
    // We can't use the Q_OBJECT or Q_PROPERTY macros in this class (as it's a template).  Nor can we use the
    // FOLDER_BASE_DECL or FOLDER_BASE_COMMON_CODE macros (because template classes don't have the same declaration /

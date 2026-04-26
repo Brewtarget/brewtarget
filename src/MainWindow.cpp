@@ -1525,9 +1525,9 @@ void MainWindow::setRecipe(Recipe * recipe) {
 
 // When a recipe is locked, many fields need to be disabled.
 #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
-void MainWindow::lockRecipe(Qt::CheckState state) {
+void MainWindow::lockRecipe(Qt::CheckState const state) {
 #else
-void MainWindow::lockRecipe(int state) {
+void MainWindow::lockRecipe(int const state) {
 #endif
    if (!this->pimpl->m_recipeObs) {
       return;
@@ -1556,7 +1556,17 @@ void MainWindow::lockRecipe(int state) {
    actionDeleteSelected->setEnabled(enabled);
 //   treeView_recipe->enableDelete(enabled); This is handled in CommonContextMenus::exec
 
-   treeView_recipe->setDragDropMode( lockIt ? QAbstractItemView::NoDragDrop : QAbstractItemView::DragDrop);
+   //
+   // In the past we have made the following call here:
+   //
+   //    treeView_recipe->setDragDropMode(lockIt ? QAbstractItemView::NoDragDrop : QAbstractItemView::DragDrop);
+   //
+   // However, this prevents any recipe being dragged anywhere, including moving a (non-locked) recipe from one folder
+   // to another, which can be confusing.
+   //
+   // TODO: Check locked recipes cannot be updated (at the model level) and find a better way to show that in the UI.
+   //
+
    tabWidget_ingredients->setAcceptDrops( enabled );
 
    // Onto the tables. Four lines each to disable edits, drag/drop and deletes

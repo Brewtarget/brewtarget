@@ -43,13 +43,15 @@ class TreeModel;
 
 //! \brief See comment in \c trees/TreeNodeBase.h for explanation of this
 enum class TreeNodeClassifier {
-   Folder        = 0,
-   PrimaryItem   = 1,
-   SecondaryItem = 2,
+   Root          ,
+   Folder        ,
+   PrimaryItem   ,
+   SecondaryItem ,
 };
 //! \brief Convenience function for logging
 template<class S> S & operator<<(S & stream, TreeNodeClassifier const treeNodeClassifier) {
    switch (treeNodeClassifier) {
+      case TreeNodeClassifier::Root         : stream << "Root"         ; break;
       case TreeNodeClassifier::Folder       : stream << "Folder"       ; break;
       case TreeNodeClassifier::PrimaryItem  : stream << "PrimaryItem"  ; break;
       case TreeNodeClassifier::SecondaryItem: stream << "SecondaryItem"; break;

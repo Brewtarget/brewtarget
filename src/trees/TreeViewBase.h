@@ -122,15 +122,22 @@ protected:
    }
 
    void doActivated(QModelIndex const & viewIndex) {
-      TreeNode * node = this->m_model.treeNode(this->m_treeSortFilterProxy.mapToSource(viewIndex));
+      TreeNode const * node = this->m_model.treeNode(this->m_treeSortFilterProxy.mapToSource(viewIndex));
       if (!node) {
          qWarning() << Q_FUNC_INFO << "No node at viewIndex" << viewIndex;
          return;
       }
 
-      if (node->classifier() == TreeNodeClassifier::Folder) {
+      auto const nodeType = node->classifier();
+
+      if (nodeType == TreeNodeClassifier::Folder) {
          // default behavior is fine, but no warning
          qDebug() << Q_FUNC_INFO << "Folder";
+         return;
+      }
+
+      if (nodeType == TreeNodeClassifier::Root) {
+         qDebug() << Q_FUNC_INFO << "Root";
          return;
       }
 
@@ -138,17 +145,16 @@ protected:
          //
          // Recipe trees can hold Recipes and BrewLogs
          //
-         if (node->classifier() == TreeNodeClassifier::PrimaryItem) {
+         if (nodeType == TreeNodeClassifier::PrimaryItem) {
             auto recipe = this->getItem<Recipe>(viewIndex);
             this->m_editor->setRecipe(recipe.get());
             this->derived().setCurrentIndex(viewIndex);
          } else {
-            Q_ASSERT(node->classifier() == TreeNodeClassifier::SecondaryItem);
+            Q_ASSERT(nodeType == TreeNodeClassifier::SecondaryItem);
             this->m_editor->setBrewLogByIndex(viewIndex);
          }
       } else {
-         auto item = this->getItem<NE>(viewIndex);
-         if (item) {
+         if (auto item = this->getItem<NE>(viewIndex)) {
             this->m_editor->setEditItem(item);
             this->m_editor->show();
          }
@@ -193,18 +199,21 @@ public:
          return nullptr;
       }
       TreeNode * treeNode = this->doTreeNode(viewIndex);
-      if (treeNode->classifier() == TreeNodeClassifier::Folder) {
+      auto const nodeType = treeNode->classifier();
+      // Should be impossible for treeNode to be root, as otherwise viewIdex above would be invalid
+      Q_ASSERT(nodeType != TreeNodeClassifier::Root);
+      if (nodeType == TreeNodeClassifier::Folder) {
          return nullptr;
       }
       if constexpr (std::same_as<NE, T>) {
-         if (treeNode->classifier() != TreeNodeClassifier::PrimaryItem) {
+         if (nodeType != TreeNodeClassifier::PrimaryItem) {
             return nullptr;
          }
          TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
          return primaryTreeNode.underlyingItem();
       } else if constexpr (!IsVoid<SNE>) {
          static_assert(std::same_as<SNE, T>);
-         if (treeNode->classifier() != TreeNodeClassifier::SecondaryItem) {
+         if (nodeType != TreeNodeClassifier::SecondaryItem) {
             return nullptr;
          }
          TreeItemNode<SNE> const & primaryTreeNode = static_cast<TreeItemNode<SNE> &>(*treeNode);
@@ -337,6 +346,9 @@ public:
             case TreeNodeClassifier::PrimaryItem  : ++selected.numPrimary  ; break;
             case TreeNodeClassifier::SecondaryItem: ++selected.numSecondary; break;
             case TreeNodeClassifier::Folder       : ++selected.numFolders  ; break;
+            case TreeNodeClassifier::Root         :
+               // I think this should be impossible, but OK to ignore if happens
+               break;
             // No default as we want the compiler to warn us if we missed an option above
          }
       }
@@ -573,69 +585,75 @@ public:
          // You can't rename the root element
          return;
       }
-      if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+      auto const nodeType = treeNode->classifier();
+      if (nodeType == TreeNodeClassifier::PrimaryItem) {
          TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
          this->m_contextMenus.renamePrimaryItem(*primaryTreeNode.underlyingItem());
          return;
       }
 
       // Don't rename anything other than a folder
-      if (treeNode->classifier() != TreeNodeClassifier::Folder) {
+      if (nodeType != TreeNodeClassifier::Folder) {
          return;
       }
 
-      TreeFolderNode<NE> & treeFolderNode = static_cast<TreeFolderNode<NE> &>(*treeNode);
-
-      auto folder = treeFolderNode.underlyingItem();
-
       //
-      // The while loop here is to allow the user to correct things if their new name fails validation.  We start with
-      // the current name in the edit box, but leave the user's edit next time if validation fails.
+      // Don't try to compile code for renaming folders if they aren't supported on this tree!
       //
-      QString newName = folder->name();
-      bool requestNewName = true;
-      while (requestNewName) {
-         bool clickedOk = false;
-         newName = QInputDialog::getText(&this->derived(),
-                                         Derived::tr("Folder name"),
-                                         Derived::tr("Folder name:"),
-                                         QLineEdit::Normal,
-                                         newName,
-                                         &clickedOk);
-         if (!clickedOk) {
-            // User clicked cancel
-            return;
+      if constexpr (HasFolder<NE>) {
+         TreeFolderNode<NE> & treeFolderNode = static_cast<TreeFolderNode<NE> &>(*treeNode);
+
+         auto folder = treeFolderNode.underlyingItem();
+
+         //
+         // The while loop here is to allow the user to correct things if their new name fails validation.  We start with
+         // the current name in the edit box, but leave the user's edit next time if validation fails.
+         //
+         QString newName = folder->name();
+         bool requestNewName = true;
+         while (requestNewName) {
+            bool clickedOk = false;
+            newName = QInputDialog::getText(&this->derived(),
+                                            Derived::tr("Folder name"),
+                                            Derived::tr("Folder name:"),
+                                            QLineEdit::Normal,
+                                            newName,
+                                            &clickedOk);
+            if (!clickedOk) {
+               // User clicked cancel
+               return;
+            }
+
+            //
+            // Where we can, we simply correct the user's input:
+            //
+            //   - Since we use '/' as a delimiter in folder paths, it would be confusing to allow it in folder names.
+            //     Rather than issue an error of a name has a '/', we just remove those characters.
+            //
+            //   - Extraneous whitespace in names if often a source of confusion.  QString::simplified() removes whitespace
+            //     from the start and the end of the string and replaces each sequence of internal whitespace (including
+            //     tabs, newlines, etc) with a single space
+            //
+            // Note that the order of these operations is significant (and eg means "a / b" becomes "a b" not "a  b".
+            //
+            newName.remove('/');
+            newName = newName.simplified();
+
+            if (newName.isEmpty()) {
+               QMessageBox messageBox;
+               messageBox.setIcon(QMessageBox::Critical);
+               messageBox.setWindowTitle(Derived::tr("Invalid Name"));
+               messageBox.setText(Derived::tr("Folder name cannot be blank (and cannot contain '/')"));
+               messageBox.exec();
+               continue;
+            }
+
+            requestNewName = false;
          }
 
-         //
-         // Where we can, we simply correct the user's input:
-         //
-         //   - Since we use '/' as a delimiter in folder paths, it would be confusing to allow it in folder names.
-         //     Rather than issue an error of a name has a '/', we just remove those characters.
-         //
-         //   - Extraneous whitespace in names if often a source of confusion.  QString::simplified() removes whitespace
-         //     from the start and the end of the string and replaces each sequence of internal whitespace (including
-         //     tabs, newlines, etc) with a single space
-         //
-         // Note that the order of these operations is significant (and eg means "a / b" becomes "a b" not "a  b".
-         //
-         newName.remove('/');
-         newName = newName.simplified();
-
-         if (newName.isEmpty()) {
-            QMessageBox messageBox;
-            messageBox.setIcon(QMessageBox::Critical);
-            messageBox.setWindowTitle(Derived::tr("Invalid Name"));
-            messageBox.setText(Derived::tr("Folder name cannot be blank (and cannot contain '/')"));
-            messageBox.exec();
-            continue;
-         }
-
-         requestNewName = false;
+         qDebug() << Q_FUNC_INFO << "Renaming folder" << folder->fullPath() << "to" << newName;
+         folder->setName(newName);
       }
-
-      qDebug() << Q_FUNC_INFO << "Renaming folder" << folder->fullPath() << "to" << newName;
-      folder->setName(newName);
 
       return;
    }
@@ -707,9 +725,8 @@ public:
       auto currentFolder = this->getCurrentFolder();
       for (auto const & name : names) {
          auto newFolder = std::make_shared<Folder<NE>>(name);
-         newFolder->setContainedInFolderId(currentFolder->key());
+         newFolder->setContainedInFolder(currentFolder);
          ObjectStoreWrapper::insert(newFolder);
-         currentFolder = newFolder;
       }
 
       return;

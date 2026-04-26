@@ -107,6 +107,7 @@ void TreeNode::subTreeToStream(QTextStream & outputStream, QString const & inden
    outputStream << "  " << indent << prefix;
    switch (this->classifier()) {
       // Apart from folder, these symbols are a bit arbitrary, but they have the merit of brevity
+      case TreeNodeClassifier::Root         : // Use same symbol as folder, so fall-through
       case TreeNodeClassifier::Folder       : outputStream << "📁"; break;
       case TreeNodeClassifier::PrimaryItem  : outputStream << "🗎"; break;
       case TreeNodeClassifier::SecondaryItem: outputStream << "§"; break;
@@ -404,7 +405,7 @@ COLUMN_INFOS(
 
 
 template<> QString TreeItemNode<Recipe>::getToolTip() const {
-   auto style = this->m_underlyingItem->style();
+   auto const style = this->m_underlyingItem->style();
 
    QString const header = getHeader();
 
