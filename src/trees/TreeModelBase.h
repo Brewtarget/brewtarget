@@ -1141,7 +1141,7 @@ public:
       // before!
       Q_ASSERT(parentNode.childCount() == numChildrenBeforeInsert + 1);
 
-      return true;
+      return succeeded;
    }
 
    /**

@@ -505,7 +505,7 @@ public:
  * \brief Besides other folders of the same type, a given type of folder can only contain one type of thing (eg
  *        FermentableTreeItem, HopTreeItem, etc).
  */
-template<class NE>
+template<NonFolderClass NE>
 class TreeFolderNode : public TreeNodeBase<TreeFolderNode<NE>, Folder<NE>, NE> {
 public:
    using TreeNodeBase<TreeFolderNode<NE>, Folder<NE>, NE>::TreeNodeBase;
@@ -547,7 +547,7 @@ template<>          struct TreeTypeDeducer<StockUseYeast      > { using TreeType
 //
 // NOTE when we add new SecondaryItem nodes, we also have to add a specialisation for TreeTypeDeducer above
 //
-template<class NE>
+template<NonFolderClass NE>
 class TreeItemNode : public TreeNodeBase<TreeItemNode<NE>, NE, typename TreeTypeDeducer<NE>::TreeType> {
 public:
    using TreeNodeBase<TreeItemNode<NE>, NE, typename TreeTypeDeducer<NE>::TreeType>::TreeNodeBase;
@@ -588,7 +588,7 @@ public:
 
 //==================================================== TreeRootNode ====================================================
 
-template<class NE>
+template<NonFolderClass NE>
 class TreeRootNode : public TreeNodeBase<TreeRootNode<NE>, RootMarkerFor<NE>, NE> {
 public:
    using TreeNodeBase<TreeRootNode<NE>, RootMarkerFor<NE>, NE>::TreeNodeBase;

@@ -45,6 +45,7 @@ class NamedEntity;
 class NamedParameterBundle;
 class ObjectStore;
 class Recipe;
+class FolderCommon;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -815,5 +816,11 @@ template<typename T> constexpr bool IsAbstract(T const *) { return std::is_abstr
  */
 template <typename T> concept CONCEPT_FIX_UP HasFolder   = std::is_base_of_v<FolderPropertyBase<T>, T>;
 template <typename T> concept CONCEPT_FIX_UP HasNoFolder = std::negation_v<std::is_base_of<FolderPropertyBase<T>, T>>;
+
+/**
+ *\brief Similarly it is useful to be able to constrain some template parameters as to whether or not they are folders.
+ */
+template <typename T> concept CONCEPT_FIX_UP FolderClass    = std::is_base_of_v<FolderCommon, T>;
+template <typename T> concept CONCEPT_FIX_UP NonFolderClass = std::negation_v<std::is_base_of<FolderCommon, T>>;
 
 #endif

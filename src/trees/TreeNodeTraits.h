@@ -98,9 +98,9 @@ struct TreeNodeTraits;
 // NOTE that the ColumnIndex enums below need to correspond with the COLUMN_INFOS definitions in TreeNode.cpp
 //
 
-template<class NE> class TreeFolderNode;
-template<class NE> class TreeItemNode;
-template<class NE> class TreeRootNode;
+template<NonFolderClass NE> class TreeFolderNode;
+template<NonFolderClass NE> class TreeItemNode;
+template<NonFolderClass NE> class TreeRootNode;
 
 template <class NE> struct TreeNodeTraits<Folder<NE>, NE> {
    enum class ColumnIndex {
