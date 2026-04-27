@@ -612,9 +612,9 @@ struct ColumnOwnerTraitsData<TreeFolderNode<NE>> {
    static std::vector<ColumnInfo> const & getColumnInfos() {
       // Meyers singleton
       static std::vector<ColumnInfo> const columnInfos {
-         TREE_NODE_HEADER(TreeFolderNode, Folder<NE>, Name    , PropertyNames::NamedEntity::name), // "Name"
-         TREE_NODE_HEADER(TreeFolderNode, Folder<NE>, Path    , PropertyNames::FolderCommon::path     ), // "Path"
-         TREE_NODE_HEADER(TreeFolderNode, Folder<NE>, FullPath, PropertyNames::FolderCommon::fullPath ), // "Full Path"
+         TREE_NODE_HEADER(TreeFolderNode, NE, Name    , PropertyNames::NamedEntity::name), // "Name"
+         TREE_NODE_HEADER(TreeFolderNode, NE, Path    , PropertyNames::FolderCommon::path     ), // "Path"
+         TREE_NODE_HEADER(TreeFolderNode, NE, FullPath, PropertyNames::FolderCommon::fullPath ), // "Full Path"
       };
       return columnInfos;
    }
