@@ -199,7 +199,7 @@ public:
 
    /**
     * \brief If one of the items in our set changes, we receive its "changed" signal and emit a "changed" signal for the
-    *        the set.
+    *        set.
     *
     *        TBD: At the moment we emit the same signal for "number of items in the set changed" and "a property of one
     *             of the items in the set changed".  In future, we could do something more sophisticated here if need
@@ -233,7 +233,7 @@ private:
     *        to any other \c OwnedSet, and Qt will do the disconnection itself when \c item is destroyed.
     */
    void connectItemChangedSignal(std::shared_ptr<Item> item) {
-      if constexpr (itemChangedSlot) {
+      if constexpr (itemChangedSlot != nullptr) {
          this->m_owner.connect(item.get(), &NamedEntity::changed, &this->m_owner, itemChangedSlot);
       } else {
          this->m_owner.connect(item.get(), &NamedEntity::changed, &this->m_owner, &Owner::acceptSetMemberChange);
@@ -245,7 +245,7 @@ private:
       std::sort(items.begin(),
                 items.end(),
                 [](std::shared_ptr<Item> const lhs, std::shared_ptr<Item> const rhs) {
-                   // Per https://en.cppreference.com/w/cpp/algorithm/sort, this function needs to return "returns ​true
+                   // Per https://en.cppreference.com/w/cpp/algorithm/sort, this function needs to return "returns true
                    // if the first argument is less than (i.e. is ordered before) the second".
                    return lhs->sequenceNumber() < rhs->sequenceNumber();
                 });

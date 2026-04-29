@@ -352,7 +352,8 @@ public:
       if constexpr (HasFolder<NE>) {
          mimeTypesWeAccept << TreeFolderNode<NE>::dragAndDropMimeType();
       }
-      qDebug() << Q_FUNC_INFO << mimeTypesWeAccept;
+      // Normally leave the next line commented out otherwise it generates too much logging
+//      qDebug() << Q_FUNC_INFO << mimeTypesWeAccept;
       return mimeTypesWeAccept;
    }
 
@@ -928,20 +929,20 @@ public:
       while (!queue.isEmpty()) {
          auto nodeToSearchIn = queue.dequeue();
 
-         // We should only be looking inside folders
-         Q_ASSERT(nodeToSearchIn->classifier() == TreeNodeClassifier::Folder);
-         auto & folderNodeToSearchIn = static_cast<TreeFolderNode<NE> &>(*nodeToSearchIn);
-         for (int childNumInFolder = 0; childNumInFolder < folderNodeToSearchIn.childCount(); ++childNumInFolder) {
-            if (auto child = folderNodeToSearchIn.child(childNumInFolder);
-                std::holds_alternative<std::shared_ptr<TreeFolderNode<NE>>>(child)) {
+         // We should only be looking inside folders or the root node
+         auto const nodeToSearchInType = nodeToSearchIn->classifier();
+         Q_ASSERT(nodeToSearchInType == TreeNodeClassifier::Root || nodeToSearchInType == TreeNodeClassifier::Folder);
+         for (int childNumInFolder = 0; childNumInFolder < nodeToSearchIn->childCount(); ++childNumInFolder) {
+            if (auto child = nodeToSearchIn->rawChild(childNumInFolder);
+                child->classifier() == TreeNodeClassifier::Folder) {
 
-               auto folderNode = std::get<std::shared_ptr<TreeFolderNode<NE>>>(child);
+               auto folderNode = static_cast<TreeFolderNode<NE> *>(child);
                if (folderNode->underlyingItem().get() == const_cast<Folder<NE> *>(folder)) {
                   // We found what we were looking for
-                  return this->derived().createIndex(childNumInFolder, 0, folderNode.get());
+                  return this->derived().createIndex(childNumInFolder, 0, folderNode);
                }
                // Add the folder we just found to the list of folders to search in
-               queue.enqueue(folderNode.get());
+               queue.enqueue(folderNode);
             }
          }
 

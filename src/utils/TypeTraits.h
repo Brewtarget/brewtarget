@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/TypeTraits.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * utils/TypeTraits.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ template <typename T> struct is_optional_enum<std::optional<T>> : public std::is
 template <typename T> struct is_non_optional_enum : public std::is_enum<T>{};
 
 //
-// This bit requires C++20 or later.  It makes the specialisations of TypeInfo::construct() below a bit less clunky
+// This bit requires C++20 or later.  It makes the specialisations of TypeInfo::construct() below a bit less clunky.
 // Older versions of GCC (eg as shipped with Ubuntu 20.04 LTS) have a sort of pre-release support for concepts so we
 // have to use non-standard syntax there.
 //
@@ -82,8 +82,8 @@ template <typename T> struct is_non_optional_enum : public std::is_enum<T>{};
 #endif
 
 template <typename T> concept CONCEPT_FIX_UP IsOptional      = is_optional<T>::value;
-template <typename T> concept CONCEPT_FIX_UP IsRequiredEnum  = std::is_enum<T>::value;
-template <typename T> concept CONCEPT_FIX_UP IsRequiredOther = !std::is_enum<T>::value && !is_optional<T>::value;
+template <typename T> concept CONCEPT_FIX_UP IsRequiredEnum  = std::is_enum_v<T>;
+template <typename T> concept CONCEPT_FIX_UP IsRequiredOther = !std::is_enum_v<T> && !is_optional<T>::value;
 template <typename T> concept CONCEPT_FIX_UP IsOptionalEnum  = is_optional_enum<T>::value;
 template <typename T> concept CONCEPT_FIX_UP IsOptionalOther = !is_optional_enum<T>::value && is_optional<T>::value;
 
@@ -95,7 +95,7 @@ template <typename T> concept CONCEPT_FIX_UP IsOptionalOther = !is_optional_enum
 template <typename T> struct is_shared_ptr : public std::false_type{};
 template <typename T> struct is_shared_ptr<std::shared_ptr<T>> : public std::true_type{};
 
-template <typename T> concept CONCEPT_FIX_UP IsRawPointer    = std::is_pointer<T>::value;
+template <typename T> concept CONCEPT_FIX_UP IsRawPointer    = std::is_pointer_v<T>;
 template <typename T> concept CONCEPT_FIX_UP IsSharedPointer = is_shared_ptr  <T>::value;
 
 //
@@ -140,7 +140,7 @@ concept CONCEPT_FIX_UP IsBaseClassTemplateOf = is_base_class_template_of<BaseCla
 // Where we have optional template parameters (eg TreeModelBase) which default to void, it's useful to tell whether a
 // type is void.
 //
-template <typename T> concept CONCEPT_FIX_UP IsVoid  = std::is_void<T>::value;
+template <typename T> concept CONCEPT_FIX_UP IsVoid  = std::is_void_v<T>;
 
 //
 // TODO: Sometimes, inside some template code, we want to know (at compile-time) whether a class has a particular member

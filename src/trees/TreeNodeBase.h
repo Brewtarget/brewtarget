@@ -27,7 +27,7 @@
 #include "utils/PropertyHelper.h"
 
 /**
- * \class TreeNodeBase Curiously Recurring Template Base for NewTreeNode subclasses
+ * \brief \c TreeNodeBase provides Curiously Recurring Template Base for NewTreeNode subclasses
  *
  *        NOTE: This is still mostly an idea at the moment - would require a rework of TreeView and TreeModel to be
  *              useful.  For now, we just use ColumnIndex and Info.
@@ -612,9 +612,9 @@ struct ColumnOwnerTraitsData<TreeFolderNode<NE>> {
    static std::vector<ColumnInfo> const & getColumnInfos() {
       // Meyers singleton
       static std::vector<ColumnInfo> const columnInfos {
-         TREE_NODE_HEADER(TreeFolderNode, NE, Name    , PropertyNames::NamedEntity::name), // "Name"
-         TREE_NODE_HEADER(TreeFolderNode, NE, Path    , PropertyNames::FolderCommon::path     ), // "Path"
-         TREE_NODE_HEADER(TreeFolderNode, NE, FullPath, PropertyNames::FolderCommon::fullPath ), // "Full Path"
+         COLINFO_TREE_FOLDER_NODE(NE, Name    , PropertyNames::NamedEntity::name), // "Name"
+         COLINFO_TREE_FOLDER_NODE(NE, Path    , PropertyNames::FolderCommon::path     ), // "Path"
+         COLINFO_TREE_FOLDER_NODE(NE, FullPath, PropertyNames::FolderCommon::fullPath ), // "Full Path"
       };
       return columnInfos;
    }
@@ -631,7 +631,7 @@ struct ColumnOwnerTraitsData<TreeRootNode<NE>> {
       static std::vector<ColumnInfo> const columnInfos {
          // This isn't actually correct.  If we ever needed to display this info, we'd need to change this to add the
          // localised class name as a property.
-         TREE_NODE_HEADER(TreeRootNode, NE, TreeName, PropertyNames::NamedEntity::name),
+         COLINFO_TREE_ROOT_NODE(NE, TreeName, PropertyNames::NamedEntity::name),
       };
       return columnInfos;
    }

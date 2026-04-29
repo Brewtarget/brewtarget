@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * AncestorDialog.h is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * AncestorDialog.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@fastmail.com>
  *
@@ -28,8 +28,6 @@
 #include "model/Recipe.h"
 #include "ui_ancestorDialog.h"
 
-class MainWindow;
-
 /*!
  * \class AncestorDialog
  *
@@ -39,8 +37,8 @@ class AncestorDialog : public QDialog, public Ui::ancestorDialog {
    Q_OBJECT
 
 public:
-   AncestorDialog(QWidget * parent = nullptr);
-   virtual ~AncestorDialog();
+   explicit AncestorDialog(QWidget * parent = nullptr);
+   ~AncestorDialog() override;
 
    void setAncestor(Recipe * anc);
 
@@ -50,14 +48,12 @@ public slots:
    void ancestorSelected(int ndx);
 
 signals:
-   void ancestoryChanged(Recipe * ancestor, Recipe * descendant);
+   void ancestryChanged(Recipe * ancestor, Recipe * descendant);
 
 private:
-   MainWindow * mainWindow;
-
    void buildAncestorBox();
    void buildDescendantBox(Recipe * ignore);
-   static bool recipeLessThan(Recipe * right, Recipe * left);
+   static bool recipeLessThan(Recipe const * right, Recipe const * left);
 };
 
 #endif

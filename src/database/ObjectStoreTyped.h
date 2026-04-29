@@ -403,7 +403,7 @@ protected:
    /**
     * \brief Create a new object of the type we are handling, using the parameters read from the DB
     */
-   virtual std::shared_ptr<QObject> createNewObject(NamedParameterBundle & namedParameterBundle) {
+   virtual std::shared_ptr<QObject> createNewObject(NamedParameterBundle & namedParameterBundle) override {
       //
       // NB: std::static_pointer_cast actually creates a new instance of std::shared_ptr (whose stored pointer is
       // obtained from its parameter's stored pointer using a cast expression).  So there is no point creating a

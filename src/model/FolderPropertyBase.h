@@ -26,7 +26,6 @@
 #include "utils/TypeLookup.h"
 
 template<class NE> class Folder;
-class FolderCommon;
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -40,6 +39,11 @@ AddPropertyName(containedInFolderRaw)
 //======================================================================================================================
 
 /**
+ * \brief This is a minimal enum to make the second template parameter of \c FolderPropertyBase more self-describing.
+ */
+enum class IsFolder { Yes, No };
+
+/**
  * \brief Adds "containedInFolder" and "containedInFolderId" properties to a class.  Typically, this is used only on
  *        classes that are not dependent on others (see comments in model/NamedEntity.h).
  *
@@ -50,7 +54,6 @@ AddPropertyName(containedInFolderRaw)
  *        if folder \c bar is inside folder \c foo then bar.containedInFolderId() == foo.key().
  */
 template<class Derived> class FolderPropertyBasePhantom;
-enum class IsFolder { Yes, No };
 template<class Derived, IsFolder DerivedIsFolder = IsFolder::No>
 class FolderPropertyBase : public CuriouslyRecurringTemplateBase<FolderPropertyBasePhantom, Derived> {
    /**
@@ -157,6 +160,36 @@ TypeLookup const FolderPropertyBase<Derived, DerivedIsFolder>::typeLookup {
    // Parent class lookup: none as we are at the top of this branch of the inheritance tree
    {}
 };
+
+
+// Forward declaration for concepts below
+class FolderCommon;
+
+/**
+ *\brief It is useful to be able to constrain some template parameters as to whether or not they are folders.
+ */
+template <typename T> concept CONCEPT_FIX_UP FolderClass    = std::is_base_of_v<FolderCommon, T>;
+template <typename T> concept CONCEPT_FIX_UP NonFolderClass = std::negation_v<std::is_base_of<FolderCommon, T>>;
+
+/**
+ * \brief For some templated functions, it's useful at compile time to have one version for NE classes with folders and
+ *        one for those without.  We need to put the concepts here in the base class for them to be accessible.
+ *
+ *        See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it).
+ */
+template <typename T> concept CONCEPT_FIX_UP HasFolder   = (
+   std::is_base_of_v<FolderCommon, T> || std::is_base_of_v<FolderPropertyBase<T>, T>
+);
+template <typename T> concept CONCEPT_FIX_UP HasNoFolder = (
+   std::negation_v<std::is_base_of<FolderCommon, T>> && std::negation_v<std::is_base_of<FolderPropertyBase<T, IsFolder::No>, T>>
+);
+
+
+/**
+ * \brief We sometimes need to combine these concepts
+ */
+template <typename T> concept CONCEPT_FIX_UP ValidFolderType = (HasFolder<T> && NonFolderClass<T>);
+
 
 /**
  * \brief Except for Folder classes themselves, concrete derived classes should (either directly or via inclusion in an

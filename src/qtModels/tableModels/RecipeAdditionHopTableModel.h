@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * qtModels/tableModels/RecipeAdditionHopTableModel.h is part of Brewtarget, and is copyright the following authors
- * 2009-2025:
+ * 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Markus Mårtensson <mackan.90@gmail.com>
@@ -66,7 +66,7 @@ public:
    void setShowIBUs(bool var);
 
    //! \brief Reimplemented from QAbstractTableModel.
-   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 private:
    bool showIBUs; // True if you want to show the IBU contributions in the table rows.

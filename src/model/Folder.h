@@ -23,7 +23,6 @@
 #include <QString>
 
 #include "database/ObjectStoreWrapper.h"
-#include "model/NamedEntity.h"
 #include "model/FolderPropertyBase.h"
 
 //======================================================================================================================
@@ -88,9 +87,25 @@ protected:
 };
 
 
+/**
+ * \brief Folder
+ *
+ * @tparam NE  Ideally we would constrain this to not itself be a Folder (eg so that Folder<Folder<FooBar>> is invalid).
+ *             However, this is a bit tricky to do, as we need to be able to forward declare Folder classes in the
+ *             FolderPropertyBase header.  Suppose, in that header, we were to write the following:
+ *
+ *                template<class NE, std::enable_if_t<!std::is_base_of_v<FolderCommon, NE>, bool> = true> class Folder;
+ *
+ *             Then we would get compiler errors because Recipe needs to inherit from FolderPropertyBase<Recipe> and
+ *             therefore needs the forward declaration of Folder<Recipe>, but std::is_base_of_v<FolderCommon, Recipe>
+ *             cannot be determined before Recipe has been defined.
+ *
+ *             So, for now at least, the best we can do is the static asserts below.
+ */
 template<class NE>
 class Folder : public FolderCommon, public FolderPropertyBase<Folder<NE>, IsFolder::Yes> {
    static_assert(HasFolder<NE>);
+   static_assert(!std::is_base_of_v<FolderCommon, NE>);
 
    //×××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××
    // We can't use the Q_OBJECT or Q_PROPERTY macros in this class (as it's a template).  Nor can we use the

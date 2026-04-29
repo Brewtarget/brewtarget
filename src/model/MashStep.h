@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/MashStep.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/MashStep.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -148,11 +148,11 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   MashStep(QString name = "");
-   MashStep(NamedParameterBundle const & namedParameterBundle);
+   explicit MashStep(QString name = "");
+   explicit MashStep(NamedParameterBundle const & namedParameterBundle);
    MashStep(MashStep const & other);
 
-   virtual ~MashStep();
+   ~MashStep() override;
 
    //=================================================== PROPERTIES ====================================================
    //! \brief The \c Type.
@@ -201,31 +201,31 @@ public:
    Q_PROPERTY(std::optional<double> liquorToGristRatio_lKg READ liquorToGristRatio_lKg WRITE setLiquorToGristRatio_lKg          )
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   Type type() const;
-   double                amount_l              () const; // ⮜⮜⮜ Added, to replace infuseAmount_l & decoctionAmount_l, for BeerJSON support ⮞⮞⮞
-   [[deprecated]] double infuseAmount_l        () const;
-   [[deprecated]] double decoctionAmount_l     () const;
-   std::optional<double> infuseTemp_c          () const;
+   [[nodiscard]] Type type() const;
+   [[nodiscard]] double                amount_l              () const; // ⮜⮜⮜ Added, to replace infuseAmount_l & decoctionAmount_l, for BeerJSON support ⮞⮞⮞
+   [[deprecated]] [[nodiscard]] double infuseAmount_l        () const;
+   [[deprecated]] [[nodiscard]] double decoctionAmount_l     () const;
+   [[nodiscard]] std::optional<double> infuseTemp_c          () const;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   std::optional<double> liquorToGristRatio_lKg() const;
+   [[nodiscard]] std::optional<double> liquorToGristRatio_lKg() const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setType                  (Type                  const   val);
-   void setAmount_l              (double                const   val); // ⮜⮜⮜ Added, to replace setInfuseAmount_l & setDecoctionAmount_l, for BeerJSON support ⮞⮞⮞
-   void setInfuseTemp_c          (std::optional<double> const   val);
+   void setType                  (Type                  val);
+   void setAmount_l              (double                val); // ⮜⮜⮜ Added, to replace setInfuseAmount_l & setDecoctionAmount_l, for BeerJSON support ⮞⮞⮞
+   void setInfuseTemp_c          (std::optional<double> val);
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   void setLiquorToGristRatio_lKg(std::optional<double> const   val);
+   void setLiquorToGristRatio_lKg(std::optional<double> val);
 
    //! some convenience methods
-   bool isInfusion() const;
-   bool isSparge() const;
-   bool isTemperature() const;
-   bool isDecoction() const;
+   [[nodiscard]] bool isInfusion   () const;
+   [[nodiscard]] bool isSparge     () const;
+   [[nodiscard]] bool isTemperature() const;
+   [[nodiscard]] bool isDecoction  () const;
 
 signals:
 
 protected:
-   virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
+   bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 
    /**
     * \brief Because \c MashStep inherits from multiple bases, more than one of which has a match for \c operator<<, we
