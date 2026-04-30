@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/PropertyPath.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * utils/PropertyPath.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ public:
     *        Using an \c initializer_list of \c reference_wrapper just saves the caller from having to prefix everything
     *        with '&'.
     *
-    * \param
+    * \param listOfProperties
     * \param indexOfName
     */
    PropertyPath(std::initializer_list<std::reference_wrapper<BtStringConst const>> listOfProperties,
@@ -139,7 +139,7 @@ private:
     * \brief For a non-trivial path, this determines which path element should be used for titles/labels/etc.  This can
     *        differ from the last element, which we use for all other \c TypeInfo requests. Eg for
     *        {PropertyNames::Recipe::style, PropertyNames::NamedEntity::name} we would want to show "Style" rather than
-    *        "Name" as the heading.  For {PropertyNames::StockUse::brewNote, PropertyNames::OwnedByRecipe::recipe,
+    *        "Name" as the heading.  For {PropertyNames::StockUse::brewLog, PropertyNames::OwnedByRecipe::recipe,
     *        PropertyNames::NamedEntity::name}, we'd want to show "Recipe".
     */
    int m_indexOfName;

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonRecord.cpp is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/json/JsonRecord.cpp is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -1161,7 +1161,7 @@ bool JsonRecord::toJson(NamedEntity const & namedEntityToExport) {
             //
             // We have to be careful about how we get the list of objects we want to write out.  Accessing lists of
             // objects via the Qt Property system, we'd get a bunch of different things inside the returned QVariant
-            // (QList<std::shared_ptr<BrewNote>>, QList<std::shared_ptr<RecipeAdditionHop>> etc) that have no common
+            // (QList<std::shared_ptr<BrewLog>>, QList<std::shared_ptr<RecipeAdditionHop>> etc) that have no common
             // base class.  So we would not normally be able to easily extract from the QVariant in generic code here.
             // However, we have a pointer to the relevant instantiation of NamedEntity::downcastListFromVariant, which
             // will correctly convert the QVariant to QList<std::shared_ptr<NamedEntity>>.

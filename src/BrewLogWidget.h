@@ -1,5 +1,5 @@
-/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BrewNoteWidget.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+/*======================================================================================================================
+ * BrewLogWidget.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -15,9 +15,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef BREWNOTEWIDGET_H
-#define BREWNOTEWIDGET_H
+ =====================================================================================================================*/
+#ifndef BREWLOGWIDGET_H
+#define BREWLOGWIDGET_H
 #pragma once
 
 #include <QDate>
@@ -26,31 +26,32 @@
 #include <QMetaProperty>
 #include <QVariant>
 #include <QWidget>
-#include "ui_brewNoteWidget.h"
+#include "ui_brewLogWidget.h"
 
 // Forward declarations.
-class BrewNote;
+class BrewLog;
 
 /*!
- * \class BrewNoteWidget
+ * \class BrewLogWidget
  *
- * \brief View/controller widget that edits BrewNotes.
- *
- *
+ * \brief View/controller widget that edits BrewLogs.
  */
-class BrewNoteWidget : public QWidget, public Ui::brewNoteWidget {
+class BrewLogWidget : public QWidget, public Ui::brewLogWidget {
     Q_OBJECT
 
 public:
-   BrewNoteWidget(QWidget *parent = nullptr);
-   virtual ~BrewNoteWidget();
+    explicit BrewLogWidget(QWidget *parent = nullptr);
+    ~BrewLogWidget() override;
 
-   void setBrewNote(BrewNote * bNote);
-   BrewNote * brewNote() const;
+   void setBrewLog(BrewLog * bNote);
+   BrewLog * brewLog() const;
 
-   void focusOutEvent(QFocusEvent *e);
+protected:
+   void focusOutEvent(QFocusEvent *e) override;
 
 public slots:
+   void updateBrewDate(QDate const & datetime);
+   void updateName();
    void updateSG();
    void updateVolumeIntoBK_l();
    void updateStrikeTemp_c();
@@ -83,7 +84,7 @@ public slots:
    void updateProjOg();
 
 private:
-   BrewNote * m_brewNote = nullptr;
+   BrewLog * m_brewLog = nullptr;
 };
 
 #endif

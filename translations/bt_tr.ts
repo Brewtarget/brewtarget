@@ -472,13 +472,9 @@
     </message>
 </context>
 <context>
-    <name>BrewNote</name>
+    <name>BrewLog</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note #%1 for brew on %2</source>
+        <source>Brew Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -600,6 +596,45 @@
     <message>
         <source>Volume Into Fermentor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BrewNote</name>
+    <message>
+        <source>ABV</source>
+        <translation type="obsolete">ABV</translation>
+    </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="obsolete">Sindirme</translation>
+    </message>
+    <message>
+        <source>Final Volume</source>
+        <translation type="obsolete">Son Hacim</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="obsolete">Notlar</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="obsolete">OG</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="obsolete">Öngörülen ABV</translation>
+    </message>
+    <message>
+        <source>Projected OG</source>
+        <translation type="obsolete">Öngörülen OG</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="obsolete">SG</translation>
     </message>
 </context>
 <context>
@@ -2647,6 +2682,22 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Change %1 Name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Contained in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contained in Folder ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder name cannot be blank (and cannot contain &apos;/&apos;)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Derived::StockUseClass</name>
@@ -3457,6 +3508,13 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>FULLPATH</source>
         <translation type="obsolete">TAM KONUM</translation>
     </message>
+    <message>
+        <source>Folder</source>
+        <translation type="obsolete">Klasör</translation>
+    </message>
+</context>
+<context>
+    <name>FolderCommon</name>
     <message>
         <source>Folder</source>
         <translation type="unfinished">Klasör</translation>
@@ -4464,15 +4522,15 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note #%1 for brew on %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes from brew day on %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log for brew on %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7002,10 +7060,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Bira Üreticisi</translation>
     </message>
     <message>
-        <source>Brew Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Calculations Enabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7035,7 +7089,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Tarih</translation>
+        <translation type="obsolete">Tarih</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -7215,6 +7269,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source> to the mash tun.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8403,14 +8465,6 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockUse</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8444,6 +8498,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Stock Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log ID</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10004,106 +10066,265 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
-    <name>brewNoteWidget</name>
+    <name>brewLogWidget</name>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Preboil</source>
-        <translation>Kaynatma öncesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>SG</translation>
+        <translation type="unfinished">SG</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation>Kaynatma öncesi ağırlık</translation>
+        <translation type="unfinished">Kaynatma öncesi ağırlık</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Hacim</translation>
+        <translation type="unfinished">Hacim</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
-        <translation>Toplanan şıranın hacmi</translation>
+        <translation type="unfinished">Toplanan şıranın hacmi</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Daldırma için İlk Su Sıcaklığı</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature of strike water before dough in</source>
+        <translation type="unfinished">Tahıl dökülmeden önceki daldırma suyunun sıcaklığı</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation>Son Sıcaklık</translation>
+        <translation type="unfinished">Son Sıcaklık</translation>
     </message>
     <message>
         <source>Temperature of mash before mash out</source>
-        <translation>Mayşeleme bitimi öncesi sıcaklık</translation>
+        <translation type="unfinished">Mayşeleme bitimi öncesi sıcaklık</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation>Kaynatma sonrası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>OG</source>
-        <translation>OG</translation>
+        <translation type="unfinished">OG</translation>
     </message>
     <message>
         <source>Post boil gravity</source>
-        <translation>Kaynatma sonrası ağırlık</translation>
+        <translation type="unfinished">Kaynatma sonrası ağırlık</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation>Kaynatma Sonrası Hacim</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
-        <translation>Kaynatma sonrası kazandaki şıranın hacmi</translation>
+        <translation type="unfinished">Kaynatma sonrası kazandaki şıranın hacmi</translation>
     </message>
     <message>
         <source>Volume of wort transferred to fermenter</source>
-        <translation>Mayalayıcıya taşınan şıranın hacmi</translation>
+        <translation type="unfinished">Mayalayıcıya taşınan şıranın hacmi</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation>Mayalayıcıya giden hacim</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source> Pitch Temp</source>
-        <translation> Serpme Sıcaklığı</translation>
+        <translation type="unfinished"> Serpme Sıcaklığı</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation>Maya serpildiğinde şıranın sıcaklığı</translation>
+        <translation type="unfinished">Maya serpildiğinde şıranın sıcaklığı</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation>Mayalanma sonrası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Final gravity</source>
-        <translation>Son ağırlık</translation>
+        <translation type="unfinished">Son ağırlık</translation>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
-        <translation>Keg ve şişelere giren biranın hacmi</translation>
+        <translation type="unfinished">Keg ve şişelere giren biranın hacmi</translation>
+    </message>
+    <message>
+        <source>yyyy-dd-MM</source>
+        <translation type="unfinished">yyyy-gg-AA</translation>
+    </message>
+    <message>
+        <source>Percent efficiency into boil kettle</source>
+        <translation type="unfinished">Kaynatma kazanında verimlilik yüzdeliği</translation>
+    </message>
+    <message>
+        <source>Efficiency into boil kettle</source>
+        <translation type="unfinished">Kaynatma kazanında verimlilik</translation>
+    </message>
+    <message>
+        <source>Expected OG, based on measured FG</source>
+        <translation type="unfinished">Ölçülen FG&apos;ye göre beklenen OG</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>Öngörülen OG</translation>
+        <translation type="unfinished">Öngörülen OG</translation>
     </message>
     <message>
         <source>Brewhouse efficiency</source>
-        <translation>Bira evi verimliliği</translation>
+        <translation type="unfinished">Bira evi verimliliği</translation>
+    </message>
+    <message>
+        <source>Expected ABV based on recipe OG</source>
+        <translation type="unfinished">Tarifteki OG&apos;ye göre beklenen ABV</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation>Öngörülen ABV</translation>
+        <translation type="unfinished">Öngörülen ABV</translation>
+    </message>
+    <message>
+        <source>ABV based on user-reported FG</source>
+        <translation type="unfinished">Kullanıcının belirttiği FG&apos;ye göre ABV</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>ABV</translation>
+        <translation type="unfinished">ABV</translation>
+    </message>
+    <message>
+        <source>Yeast attenuation based on yeast specified in recipe</source>
+        <translation type="unfinished">Tarifte belirtilen mayanın sindirimi</translation>
+    </message>
+    <message>
+        <source>Projected yeast attenuation</source>
+        <translation type="unfinished">Öngörülen maya sindirimi</translation>
+    </message>
+    <message>
+        <source>Yeast attentuation based on user-reported OG and FG</source>
+        <translation type="unfinished">Kullanıcının belirttiği OG ve FG&apos;ye göre maya sindirimi</translation>
+    </message>
+    <message>
+        <source>Measured yeast attenuation</source>
+        <translation type="unfinished">Ölçülen maya sindirimi</translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Number</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notlar</translation>
+        <translation type="unfinished">Notlar</translation>
+    </message>
+</context>
+<context>
+    <name>brewNoteWidget</name>
+    <message>
+        <source>Preboil</source>
+        <translation type="vanished">Kaynatma öncesi</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="vanished">SG</translation>
+    </message>
+    <message>
+        <source>Preboil gravity</source>
+        <translation type="vanished">Kaynatma öncesi ağırlık</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="vanished">Hacim</translation>
+    </message>
+    <message>
+        <source>Volume of wort collected</source>
+        <translation type="vanished">Toplanan şıranın hacmi</translation>
+    </message>
+    <message>
+        <source>Strike Temp</source>
+        <translation type="vanished">Daldırma için İlk Su Sıcaklığı</translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="vanished">Son Sıcaklık</translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="vanished">Mayşeleme bitimi öncesi sıcaklık</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="vanished">Kaynatma sonrası</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="vanished">OG</translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="vanished">Kaynatma sonrası ağırlık</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="vanished">Kaynatma Sonrası Hacim</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="vanished">Kaynatma sonrası kazandaki şıranın hacmi</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="vanished">Mayalayıcıya taşınan şıranın hacmi</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="vanished">Mayalayıcıya giden hacim</translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="vanished"> Serpme Sıcaklığı</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="vanished">Maya serpildiğinde şıranın sıcaklığı</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="vanished">Mayalanma sonrası</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="vanished">Son ağırlık</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="vanished">Keg ve şişelere giren biranın hacmi</translation>
+    </message>
+    <message>
+        <source>Projected OG</source>
+        <translation type="vanished">Öngörülen OG</translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="vanished">Bira evi verimliliği</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="vanished">Öngörülen ABV</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="vanished">ABV</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="vanished">Notlar</translation>
     </message>
     <message>
         <source>brewNote</source>
@@ -10111,51 +10332,47 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>yyyy-dd-MM</source>
-        <translation>yyyy-gg-AA</translation>
+        <translation type="vanished">yyyy-gg-AA</translation>
     </message>
     <message>
         <source>Temperature of strike water before dough in</source>
-        <translation>Tahıl dökülmeden önceki daldırma suyunun sıcaklığı</translation>
+        <translation type="vanished">Tahıl dökülmeden önceki daldırma suyunun sıcaklığı</translation>
     </message>
     <message>
         <source>Percent efficiency into boil kettle</source>
-        <translation>Kaynatma kazanında verimlilik yüzdeliği</translation>
+        <translation type="vanished">Kaynatma kazanında verimlilik yüzdeliği</translation>
     </message>
     <message>
         <source>Efficiency into boil kettle</source>
-        <translation>Kaynatma kazanında verimlilik</translation>
+        <translation type="vanished">Kaynatma kazanında verimlilik</translation>
     </message>
     <message>
         <source>Expected OG, based on measured FG</source>
-        <translation>Ölçülen FG&apos;ye göre beklenen OG</translation>
+        <translation type="vanished">Ölçülen FG&apos;ye göre beklenen OG</translation>
     </message>
     <message>
         <source>Expected ABV based on recipe OG</source>
-        <translation>Tarifteki OG&apos;ye göre beklenen ABV</translation>
+        <translation type="vanished">Tarifteki OG&apos;ye göre beklenen ABV</translation>
     </message>
     <message>
         <source>ABV based on user-reported FG</source>
-        <translation>Kullanıcının belirttiği FG&apos;ye göre ABV</translation>
+        <translation type="vanished">Kullanıcının belirttiği FG&apos;ye göre ABV</translation>
     </message>
     <message>
         <source>Yeast attenuation based on yeast specified in recipe</source>
-        <translation>Tarifte belirtilen mayanın sindirimi</translation>
+        <translation type="vanished">Tarifte belirtilen mayanın sindirimi</translation>
     </message>
     <message>
         <source>Projected yeast attenuation</source>
-        <translation>Öngörülen maya sindirimi</translation>
+        <translation type="vanished">Öngörülen maya sindirimi</translation>
     </message>
     <message>
         <source>Yeast attentuation based on user-reported OG and FG</source>
-        <translation>Kullanıcının belirttiği OG ve FG&apos;ye göre maya sindirimi</translation>
+        <translation type="vanished">Kullanıcının belirttiği OG ve FG&apos;ye göre maya sindirimi</translation>
     </message>
     <message>
         <source>Measured yeast attenuation</source>
-        <translation>Ölçülen maya sindirimi</translation>
-    </message>
-    <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Ölçülen maya sindirimi</translation>
     </message>
 </context>
 <context>

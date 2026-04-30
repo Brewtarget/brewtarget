@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * editors/StockUseIngredientEditor.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * editors/StockUseIngredientEditor.cpp is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ StockUseFermentableEditor::StockUseFermentableEditor(QWidget* parent, QString co
       EDITOR_FIELD_ENUM(StockUseFermentable, label_reason    , comboBox_reason    , StockUse::reason),
       EDITOR_FIELD_NORM(StockUseFermentable, label_amountUsed, lineEdit_amountUsed, StockUseBase::amountUsed, 1),
       EDITOR_FIELD_NORM(StockUseFermentable, label_comment   , lineEdit_comment   , StockUse::comment),
-      EDITOR_FIELD_PATH(StockUseFermentable, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewNote,
+      EDITOR_FIELD_PATH(StockUseFermentable, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewLog,
                                                                                      PropertyNames::OwnedByRecipe::recipe,
                                                                                      PropertyNames::NamedEntity::name}, 1),
    });
@@ -59,7 +59,7 @@ StockUseHopEditor::StockUseHopEditor(QWidget* parent, QString const editorName) 
       EDITOR_FIELD_ENUM(StockUseHop, label_reason    , comboBox_reason    , StockUse::reason),
       EDITOR_FIELD_NORM(StockUseHop, label_amountUsed, lineEdit_amountUsed, StockUseBase::amountUsed, 1),
       EDITOR_FIELD_NORM(StockUseHop, label_comment   , lineEdit_comment   , StockUse::comment),
-      EDITOR_FIELD_PATH(StockUseHop, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewNote,
+      EDITOR_FIELD_PATH(StockUseHop, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewLog,
                                                                              PropertyNames::OwnedByRecipe::recipe,
                                                                              PropertyNames::NamedEntity::name}, 1),
    });
@@ -85,7 +85,7 @@ StockUseMiscEditor::StockUseMiscEditor(QWidget* parent, QString const editorName
       EDITOR_FIELD_ENUM(StockUseMisc, label_reason    , comboBox_reason    , StockUse::reason),
       EDITOR_FIELD_NORM(StockUseMisc, label_amountUsed, lineEdit_amountUsed, StockUseBase::amountUsed, 1),
       EDITOR_FIELD_NORM(StockUseMisc, label_comment   , lineEdit_comment   , StockUse::comment),
-      EDITOR_FIELD_PATH(StockUseMisc, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewNote,
+      EDITOR_FIELD_PATH(StockUseMisc, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewLog,
                                                                               PropertyNames::OwnedByRecipe::recipe,
                                                                               PropertyNames::NamedEntity::name}, 1),
    });
@@ -111,7 +111,7 @@ StockUseSaltEditor::StockUseSaltEditor(QWidget* parent, QString const editorName
       EDITOR_FIELD_ENUM(StockUseSalt, label_reason    , comboBox_reason    , StockUse::reason),
       EDITOR_FIELD_NORM(StockUseSalt, label_amountUsed, lineEdit_amountUsed, StockUseBase::amountUsed, 1),
       EDITOR_FIELD_NORM(StockUseSalt, label_comment   , lineEdit_comment   , StockUse::comment),
-      EDITOR_FIELD_PATH(StockUseSalt, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewNote,
+      EDITOR_FIELD_PATH(StockUseSalt, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewLog,
                                                                               PropertyNames::OwnedByRecipe::recipe,
                                                                               PropertyNames::NamedEntity::name}, 1),
    });
@@ -137,7 +137,7 @@ StockUseYeastEditor::StockUseYeastEditor(QWidget* parent, QString const editorNa
       EDITOR_FIELD_ENUM(StockUseYeast, label_reason    , comboBox_reason    , StockUse::reason),
       EDITOR_FIELD_NORM(StockUseYeast, label_amountUsed, lineEdit_amountUsed, StockUseBase::amountUsed, 1),
       EDITOR_FIELD_NORM(StockUseYeast, label_comment   , lineEdit_comment   , StockUse::comment),
-      EDITOR_FIELD_PATH(StockUseYeast, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewNote,
+      EDITOR_FIELD_PATH(StockUseYeast, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewLog,
                                                                                PropertyNames::OwnedByRecipe::recipe,
                                                                                PropertyNames::NamedEntity::name}, 1),
    });

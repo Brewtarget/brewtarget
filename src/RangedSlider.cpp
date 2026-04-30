@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RangedSlider.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * RangedSlider.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -39,34 +39,34 @@
    #include "moc_RangedSlider.cpp"
 #endif
 
-RangedSlider::RangedSlider(QWidget* parent)
-   : QWidget(parent),
-     m_min(0.0),
-     m_max(1.0),
-     m_prefMin(0.25),
-     m_prefMax(0.75),
-     m_val(0.5),
-     m_valText("0.500"),
-     m_prec(3),
-     m_tickInterval(0),
-     m_secondaryTicks(1),
-     m_tooltipText(""),
-     m_bgBrush(QColor(255,255,255)),
-     m_prefRangeBrush(QColor(0,0,0)),
-     m_prefRangePen(Qt::NoPen),
-     m_markerBrush(QColor(255,255,255)),
-     m_markerTextIsValue(false),
-     m_valueTextFont("Arial",
-                     14,             // QFonts are specified in point size, so the hard-coded number is fine here.
-                     QFont::Black),  // Note that QFont::Black is a weight (more bold than ExtraBold), not a colour.
-     m_indicatorTextFont("Arial",
-                         10,
-                         QFont::Normal) // Previously we just did the indicator text in 'default' font
-{
+RangedSlider::RangedSlider(QWidget* parent) :
+   QWidget{parent},
+   m_min              {0.0    },
+   m_max              {1.0    },
+   m_prefMin          {0.25   },
+   m_prefMax          {0.75   },
+   m_val              {0.5    },
+   m_valText          {"0.500"},
+   m_prec             {3      },
+   m_tickInterval     {0      },
+   m_secondaryTicks   {1      },
+   m_tooltipText      {""     },
+   m_bgBrush          {QColor(255,255,255)},
+   m_prefRangeBrush   {QColor(0,0,0)      },
+   m_prefRangePen     {Qt::NoPen          },
+   m_markerBrush      {QColor(255,255,255)},
+   m_markerTextIsValue{false},
+   m_valueTextFont    {"Arial",
+                       14,             // QFonts are specified in point size, so the hard-coded number is fine here.
+                       QFont::Black},  // Note that QFont::Black is a weight (more bold than ExtraBold), not a colour.
+   m_indicatorTextFont{"Arial",
+                       10,
+                       // Previously we just did the indicator text in 'default' font
+                       QFont::Normal} {
    // Ensure this->m_heightInPixels is properly initialised
    this->recalculateHeightInPixels();
 
-   // In principle we want to set our min/max sizes etc here.  However, if, say, a maximumSize property has been set
+   // In principle, we want to set our min/max sizes etc here.  However, if, say, a maximumSize property has been set
    // for this object in a Designer UI File (eg ui/mainWindow.ui) then that setting will override this one, because it
    // will be applied later (in fact pretty much straight after this constructor returns).  So we also make this call
    // inside setValue(), which will be invoked m_afterm_ the setter calls that were auto-generated from the Designer UI
@@ -82,39 +82,39 @@ RangedSlider::RangedSlider(QWidget* parent)
 
 double RangedSlider::value() const { return m_val; }
 
-void RangedSlider::setPreferredRange(double min, double max) {
-   m_prefMin = min;
-   m_prefMax = max;
+void RangedSlider::setPreferredRange(double const min, double const max) {
+   this->m_prefMin = min;
+   this->m_prefMax = max;
 
    // Only show tooltips if the range has nonzero size.
    setMouseTracking(min < max);
 
-   m_tooltipText = QString("%1 - %2").arg(min, 0, 'f', m_prec).arg(max, 0, 'f', m_prec);
+   this->m_tooltipText = QString("%1 - %2").arg(min, 0, 'f', this->m_prec).arg(max, 0, 'f', this->m_prec);
 
-   update();
+   this->update();
    return;
 }
 
-void RangedSlider::setPreferredRange(QPair<double,double> minmax) {
-   setPreferredRange( minmax.first, minmax.second );
+void RangedSlider::setPreferredRange(QPair<double,double> const minmax) {
+   this->setPreferredRange( minmax.first, minmax.second );
    return;
 }
 
-void RangedSlider::setRange(double min, double max) {
-   m_min = min;
-   m_max = max;
-   update();
+void RangedSlider::setRange(double const min, double const max) {
+   this->m_min = min;
+   this->m_max = max;
+   this->update();
    return;
 }
 
 void RangedSlider::setRange(QPair<double,double> minmax) {
-   setRange( minmax.first, minmax.second );
+   this->setRange(minmax.first, minmax.second);
    return;
 }
 
-void RangedSlider::setValue(double value) {
-   m_val = value;
-   m_valText = QString("%1").arg(m_val, 0, 'f', m_prec);
+void RangedSlider::setValue(double const value) {
+   this->m_val = value;
+   this->m_valText = QString("%1").arg(this->m_val, 0, 'f', this->m_prec);
    update();
 
    // See comment in constructor for why we call this here
@@ -122,53 +122,53 @@ void RangedSlider::setValue(double value) {
    return;
 }
 
-void RangedSlider::setPrecision(int precision) {
-   m_prec = precision;
-   update();
+void RangedSlider::setPrecision(int const precision) {
+   this->m_prec = precision;
+   this->update();
    return;
 }
 
 void RangedSlider::setBackgroundBrush(QBrush const & brush) {
-   m_bgBrush = brush;
-   update();
+   this->m_bgBrush = brush;
+   this->update();
    return;
 }
 
 void RangedSlider::setPreferredRangeBrush(QBrush const & brush) {
-   m_prefRangeBrush = brush;
-   update();
+   this->m_prefRangeBrush = brush;
+   this->update();
    return;
 }
 
 void RangedSlider::setPreferredRangePen(QPen const & pen) {
-   m_prefRangePen = pen;
-   update();
+   this->m_prefRangePen = pen;
+   this->update();
    return;
 }
 
 void RangedSlider::setMarkerBrush(QBrush const & brush) {
-   m_markerBrush = brush;
-   update();
+   this->m_markerBrush = brush;
+   this->update();
    return;
 }
 
 void RangedSlider::setMarkerText(QString const & text) {
-   m_markerText = text;
-   update();
+   this->m_markerText = text;
+   this->update();
    return;
 }
 
-void RangedSlider::setMarkerTextIsValue(bool val) {
-   m_markerTextIsValue = val;
-   update();
+void RangedSlider::setMarkerTextIsValue(bool const val) {
+   this->m_markerTextIsValue = val;
+   this->update();
    return;
 }
 
-void RangedSlider::setTickMarks(double primaryInterval, int secondaryTicks) {
-   m_secondaryTicks = (secondaryTicks<1)? 1 : secondaryTicks;
-   m_tickInterval = primaryInterval/m_secondaryTicks;
+void RangedSlider::setTickMarks(double const primaryInterval, int const secondaryTicks) {
+   this->m_secondaryTicks = (secondaryTicks<1)? 1 : secondaryTicks;
+   this->m_tickInterval = primaryInterval/this->m_secondaryTicks;
 
-   update();
+   this->update();
    return;
 }
 
@@ -216,8 +216,8 @@ void RangedSlider::recalculateHeightInPixels() const {
    // assumptions about space below the baseline are locale-specific, so, say, using ascent() instead of lineSpacing()
    // could end up painting us into a corner.
    //
-   QFontMetrics indicatorTextFontMetrics(this->m_indicatorTextFont);
-   QFontMetrics valueTextFontMetrics(this->m_valueTextFont);
+   QFontMetrics const indicatorTextFontMetrics(this->m_indicatorTextFont);
+   QFontMetrics const valueTextFontMetrics(this->m_valueTextFont);
    this->m_heightInPixels = indicatorTextFontMetrics.lineSpacing() + valueTextFontMetrics.lineSpacing();
    return;
 }
@@ -244,8 +244,8 @@ QSize RangedSlider::sizeHint() const {
 void RangedSlider::mouseMoveEvent(QMouseEvent* event) {
    event->accept();
 
-   QPoint tipPoint( mapToGlobal(QPoint(0,0)) );
-   QToolTip::showText( tipPoint, m_tooltipText, this );
+   QPoint const tipPoint( mapToGlobal(QPoint(0,0)) );
+   QToolTip::showText( tipPoint, this->m_tooltipText, this );
    return;
 }
 
@@ -285,12 +285,12 @@ void RangedSlider::paintEvent([[maybe_unused]] QPaintEvent * event) {
    // The value text also shows this->m_valText.
    //
 
-   QFontMetrics indicatorTextFontMetrics(this->m_indicatorTextFont);
-   int indicatorTextHeight = indicatorTextFontMetrics.lineSpacing();
+   QFontMetrics const indicatorTextFontMetrics(this->m_indicatorTextFont);
+   int const indicatorTextHeight = indicatorTextFontMetrics.lineSpacing();
 
    // The heights of the slider graphic and the value text are usually the same, but we calculate them differently in
    // case, in future, we want to squeeze things up a bit.
-   QFontMetrics valueTextFontMetrics(this->m_valueTextFont);
+   QFontMetrics const valueTextFontMetrics(this->m_valueTextFont);
    int const valueTextHeight = valueTextFontMetrics.lineSpacing();
 
    int const graphicalAreaHeight = this->height() - indicatorTextHeight;
@@ -300,10 +300,10 @@ void RangedSlider::paintEvent([[maybe_unused]] QPaintEvent * event) {
    int const rectangleCornerRadius = graphicalAreaHeight / 4;
 
    static const QPalette palette(QApplication::palette());
-   static const int indicatorLineWidth   = 4;
-   static const QColor fgRectColor(0,127,0);
-   static const QColor indicatorTextColor(0,0,0);
-   static const QColor valueTextColor(0,127,0);
+   static constexpr int indicatorLineWidth   = 4;
+//   static constexpr QColor fgRectColor(0,127,0);
+   static constexpr QColor indicatorTextColor(0,0,0);
+   static constexpr QColor valueTextColor(0,127,0);
 
    // We need to allow for the width of the text that displays to the right of the slider showing the current value.
    // If there were just one slider, we might ask Qt for the width of this text with the following call:
@@ -312,12 +312,12 @@ void RangedSlider::paintEvent([[maybe_unused]] QPaintEvent * event) {
    // width of.  We assume that all sliders show no more than 4 digits and a decimal point, and then add a space to
    // ensure a gap between the value text and the graphical area.  (Note that digits are all the same width in the font
    // we are using.
-   int valueTextWidth = valueTextFontMetrics.horizontalAdvance(" 1.000");
+   int const valueTextWidth = valueTextFontMetrics.horizontalAdvance(" 1.000");
 
    QLinearGradient glassGrad( QPointF(0, 0), QPointF(0, graphicalAreaHeight) );
    glassGrad.setColorAt(0, QColor(255, 255, 255, 127));
    glassGrad.setColorAt(1, QColor(255, 255, 255,   0));
-   QBrush glassBrush(glassGrad);
+   QBrush const glassBrush(glassGrad);
 
    // Per https://doc.qt.io/qt-5/highdpi.html, for best High DPI display support, we need to:
    //  • Always use the qreal versions of the QPainter drawing API

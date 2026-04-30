@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/SerializationRecord.h is part of Brewtarget, and is copyright the following authors 2020-2023:
+ * serialization/SerializationRecord.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -449,7 +449,7 @@ protected:
 
    /**
     * \brief If the \b NamedEntity for this record needs to know about its containing entity (because it is owned by
-    *        that containing entity), this function should set it - eg this is where a \b BrewNote gets its \b Recipe
+    *        that containing entity), this function should set it - eg this is where a \b BrewLog gets its \b Recipe
     *        set.  For other classes, this function is a no-op.
     */
    virtual void setContainingEntity([[maybe_unused]] std::shared_ptr<NamedEntity> containingEntity) {

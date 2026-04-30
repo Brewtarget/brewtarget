@@ -141,7 +141,7 @@ public:
 
 
    /**
-    * \brief Of course we want to be able to deduce some of the parameters to the constructor rather than laboriously
+    * \brief Of course, we want to be able to deduce some of the parameters to the constructor rather than laboriously
     *        specify "the same but for this model class" each time.  The trick is that we must have one constructor
     *        parameter that depends on the type.  This is what std::in_place_type_t does for us.
     */

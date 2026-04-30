@@ -494,13 +494,9 @@
     </message>
 </context>
 <context>
-    <name>BrewNote</name>
+    <name>BrewLog</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note #%1 for brew on %2</source>
+        <source>Brew Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -622,6 +618,29 @@
     <message>
         <source>Volume Into Fermentor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BrewNote</name>
+    <message>
+        <source>Attenuation</source>
+        <translation type="obsolete">Rozcieńczenie</translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="obsolete">Data warzenia</translation>
+    </message>
+    <message>
+        <source>Final Volume</source>
+        <translation type="obsolete">Końcowa objętość</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="obsolete">Notatki</translation>
     </message>
 </context>
 <context>
@@ -2683,6 +2702,22 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Change %1 Name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Contained in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contained in Folder ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder name cannot be blank (and cannot contain &apos;/&apos;)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Derived::StockUseClass</name>
@@ -3543,6 +3578,9 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>FULLPATH</source>
         <translation type="obsolete">Pełna Ścieżka</translation>
     </message>
+</context>
+<context>
+    <name>FolderCommon</name>
     <message>
         <source>Folder</source>
         <translation type="unfinished"></translation>
@@ -4411,15 +4449,15 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note #%1 for brew on %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes from brew day on %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log for brew on %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6780,10 +6818,6 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <translation type="unfinished">Piwowar</translation>
     </message>
     <message>
-        <source>Brew Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Calculations Enabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6813,7 +6847,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation type="obsolete">Data</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -6997,6 +7031,14 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source> to the mash tun.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8035,14 +8077,6 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
 <context>
     <name>StockUse</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8076,6 +8110,14 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Stock Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log ID</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9536,141 +9578,97 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
 </context>
 <context>
-    <name>brewNoteWidget</name>
+    <name>brewLogWidget</name>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Preboil</source>
-        <translation>Przed gotowaniem</translation>
+        <translation type="unfinished">Przed gotowaniem</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>Gęstość (SG)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation>Gęstość przed gotowaniem</translation>
+        <translation type="unfinished">Gęstość przed gotowaniem</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Objętość</translation>
+        <translation type="unfinished">Objętość</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
-        <translation>Temperatura brzeczki</translation>
+        <translation type="unfinished">Temperatura brzeczki</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Temperatura</translation>
-    </message>
-    <message>
-        <source>Temperature of mash after dough in</source>
-        <translation type="vanished">Temperatura zacieru po dodaniu słodów</translation>
-    </message>
-    <message>
-        <source>Final Temp</source>
-        <translation>Docelowa temp.</translation>
-    </message>
-    <message>
-        <source>Temperature of mash before mash out</source>
-        <translation>Temperatura zacieru przed wygrzewaniem</translation>
-    </message>
-    <message>
-        <source>Postboil</source>
-        <translation>Po gotowaniu</translation>
-    </message>
-    <message>
-        <source>OG</source>
-        <translation>Gęstość (OG)</translation>
-    </message>
-    <message>
-        <source>Post boil gravity</source>
-        <translation>Gęstość po gotowaniu</translation>
-    </message>
-    <message>
-        <source>Postboil Volume</source>
-        <translation>Objętość po gotowaniu</translation>
-    </message>
-    <message>
-        <source>Volume of wort in BK after boil</source>
-        <translation>Objętość brzeczki w kadzi</translation>
-    </message>
-    <message>
-        <source>Volume of wort transferred to fermenter</source>
-        <translation>Objętość brzeczki po przelaniu do fermentora</translation>
-    </message>
-    <message>
-        <source>Volume into fermenter</source>
-        <translation>Obj.w fermentorze</translation>
-    </message>
-    <message>
-        <source> Pitch Temp</source>
-        <translation> Temp. zadania drożdży</translation>
-    </message>
-    <message>
-        <source>Temperature of wort when yeast is pitched</source>
-        <translation>Temperatura brzeczki podczas zadania drożdży</translation>
-    </message>
-    <message>
-        <source>Postferment</source>
-        <translation>Po fermentacji</translation>
-    </message>
-    <message>
-        <source>Final gravity</source>
-        <translation>Końcowa gęstość (FG)</translation>
-    </message>
-    <message>
-        <source>Volume of beer into serving keg/bottles</source>
-        <translation>Objętość piwa w KEGach/butelkach</translation>
-    </message>
-    <message>
-        <source>percent efficiency into boil kettle</source>
-        <translation type="vanished">procent wydajności w kadzi warzelnej</translation>
-    </message>
-    <message>
-        <source>Eff into BK</source>
-        <translation type="vanished">Wydajność w kadzi warzelnej</translation>
-    </message>
-    <message>
-        <source>Expected OG, based on measure fg</source>
-        <translation type="vanished">Oczekiwana gęstość początkowa, oparta na pomiarze gęstości końcowej</translation>
-    </message>
-    <message>
-        <source>Projected OG</source>
-        <translation>Oczekiwana gęstość (OG)</translation>
-    </message>
-    <message>
-        <source>Brewhouse efficiency</source>
-        <translation>Wydajność browaru</translation>
-    </message>
-    <message>
-        <source>Brewhouse Eff</source>
-        <translation type="vanished">Wydajność browaru</translation>
-    </message>
-    <message>
-        <source>Expected ABV based on OG</source>
-        <translation type="vanished">Oczekiwana zawartość alkoholu, oparta na gęstości początkowej</translation>
-    </message>
-    <message>
-        <source>Projected ABV</source>
-        <translation>Projektowana zaw. alk.</translation>
-    </message>
-    <message>
-        <source>ABV based on FG</source>
-        <translation type="vanished">Zawartość alkoholu w oparciu o gęstość końcową</translation>
-    </message>
-    <message>
-        <source>ABV</source>
-        <translation>Faktyczna zaw. alk.</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>Notatki</translation>
-    </message>
-    <message>
-        <source>yyyy-dd-MM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Temperature of strike water before dough in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="unfinished">Temperatura zacieru przed wygrzewaniem</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="unfinished">Po gotowaniu</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="unfinished">Gęstość po gotowaniu</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="unfinished">Objętość po gotowaniu</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="unfinished">Objętość brzeczki w kadzi</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="unfinished">Objętość brzeczki po przelaniu do fermentora</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="unfinished"> Temp. zadania drożdży</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="unfinished">Temperatura brzeczki podczas zadania drożdży</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="unfinished">Po fermentacji</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="unfinished">Końcowa gęstość (FG)</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="unfinished">Objętość piwa w KEGach/butelkach</translation>
+    </message>
+    <message>
+        <source>yyyy-dd-MM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9686,11 +9684,27 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Projected OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="unfinished">Wydajność browaru</translation>
+    </message>
+    <message>
         <source>Expected ABV based on recipe OG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Projected ABV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>ABV based on user-reported FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9710,8 +9724,147 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note</source>
+        <source>Brew Date</source>
+        <translation type="unfinished">Data warzenia</translation>
+    </message>
+    <message>
+        <source>Batch Number</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notatki</translation>
+    </message>
+</context>
+<context>
+    <name>brewNoteWidget</name>
+    <message>
+        <source>Preboil</source>
+        <translation type="vanished">Przed gotowaniem</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="vanished">Gęstość (SG)</translation>
+    </message>
+    <message>
+        <source>Preboil gravity</source>
+        <translation type="vanished">Gęstość przed gotowaniem</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="vanished">Objętość</translation>
+    </message>
+    <message>
+        <source>Volume of wort collected</source>
+        <translation type="vanished">Temperatura brzeczki</translation>
+    </message>
+    <message>
+        <source>Strike Temp</source>
+        <translation type="vanished">Temperatura</translation>
+    </message>
+    <message>
+        <source>Temperature of mash after dough in</source>
+        <translation type="vanished">Temperatura zacieru po dodaniu słodów</translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="vanished">Docelowa temp.</translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="vanished">Temperatura zacieru przed wygrzewaniem</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="vanished">Po gotowaniu</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="vanished">Gęstość (OG)</translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="vanished">Gęstość po gotowaniu</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="vanished">Objętość po gotowaniu</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="vanished">Objętość brzeczki w kadzi</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="vanished">Objętość brzeczki po przelaniu do fermentora</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="vanished">Obj.w fermentorze</translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="vanished"> Temp. zadania drożdży</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="vanished">Temperatura brzeczki podczas zadania drożdży</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="vanished">Po fermentacji</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="vanished">Końcowa gęstość (FG)</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="vanished">Objętość piwa w KEGach/butelkach</translation>
+    </message>
+    <message>
+        <source>percent efficiency into boil kettle</source>
+        <translation type="vanished">procent wydajności w kadzi warzelnej</translation>
+    </message>
+    <message>
+        <source>Eff into BK</source>
+        <translation type="vanished">Wydajność w kadzi warzelnej</translation>
+    </message>
+    <message>
+        <source>Expected OG, based on measure fg</source>
+        <translation type="vanished">Oczekiwana gęstość początkowa, oparta na pomiarze gęstości końcowej</translation>
+    </message>
+    <message>
+        <source>Projected OG</source>
+        <translation type="vanished">Oczekiwana gęstość (OG)</translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="vanished">Wydajność browaru</translation>
+    </message>
+    <message>
+        <source>Brewhouse Eff</source>
+        <translation type="vanished">Wydajność browaru</translation>
+    </message>
+    <message>
+        <source>Expected ABV based on OG</source>
+        <translation type="vanished">Oczekiwana zawartość alkoholu, oparta na gęstości początkowej</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="vanished">Projektowana zaw. alk.</translation>
+    </message>
+    <message>
+        <source>ABV based on FG</source>
+        <translation type="vanished">Zawartość alkoholu w oparciu o gęstość końcową</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="vanished">Faktyczna zaw. alk.</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="vanished">Notatki</translation>
     </message>
 </context>
 <context>

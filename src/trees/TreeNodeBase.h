@@ -27,10 +27,10 @@
 #include "utils/PropertyHelper.h"
 
 /**
- * \class TreeNodeBase Curiously Recurring Template Base for NewTreeNode subclasses
+ * \brief \c TreeNodeBase provides Curiously Recurring Template Base for NewTreeNode subclasses
  *
  *        NOTE: This is still mostly an idea at the moment - would require a rework of TreeView and TreeModel to be
- *              useful.  For now we just use ColumnIndex and Info.
+ *              useful.  For now, we just use ColumnIndex and Info.
  *
  *        Class structure:
  *        ----------------
@@ -49,10 +49,10 @@
  *
  *           TreeModel<Recipe>
  *             │
- *           TreeFolderNode<Recipe>
+ *           TreeRootNode<Recipe>
  *             ├── TreeFolderNode<Recipe>
  *             │   ├── TreeItemNode<Recipe>
- *             │   │   └── TreeItemNode<BrewNote>
+ *             │   │   └── TreeItemNode<BrewLog>
  *             │   └── TreeItemNode<Recipe>
  *             ├── TreeFolderNode<Recipe>
  *             │   └── TreeItemNode<Recipe>
@@ -64,8 +64,8 @@
  *
  *        In a Recipe tree it's a bit more complicated:
  *           - A Folder node can contain only Recipe nodes or other Recipe Folder nodes
- *           - A Recipe node can contain only BrewNote nodes or Recipe nodes (when using ancestor versioning)
- *           - A BrewNote node cannot contain other nodes
+ *           - A Recipe node can contain only BrewLog nodes or Recipe nodes (when using ancestor versioning)
+ *           - A BrewLog node cannot contain other nodes
  *
  *        So, in general, depending on the type of node, it can contain:
  *           - No other nodes
@@ -80,7 +80,7 @@
  *        And, similarly, in a given tree, there are either two or three types of node:
  *           - Folders
  *           - Primary item - eg Recipe - which is also the type of the tree
- *           - Secondary item - eg BrewNote in the Recipe tree, but not present in the Hop tree
+ *           - Secondary item - eg BrewLog in the Recipe tree, but not present in the Hop tree
  *        This is a helpful classification for code that is traversing or manipulating the tree, so we have an enum for
  *        it: NodeClassifier
  *
@@ -95,48 +95,10 @@ public:
    using ChildPtrTypes      = typename TreeNodeTraits<NE, TreeType>::ChildPtrTypes;
 
    explicit TreeNodeBase(TreeModel & model,
-                         ParentPtrTypes parent = nullptr,
+                         ParentPtrTypes parent = {},
                          std::shared_ptr<NE> underlyingItem = nullptr) :
       TreeNode{model},
       m_parent{parent},
-      m_underlyingItem{underlyingItem} {
-      return;
-   }
-   TreeNodeBase(TreeModel & model,
-                TreeNode * parent,
-                std::shared_ptr<NE> underlyingItem) :
-      TreeNode{model},
-      m_parent{
-         [parent]() -> ParentPtrTypes {
-            //
-            // Because we've made everything strongly typed (yay), there are some things we _have_ to do at compile time
-            // to avoid asking the compiler to generate meaningless code.
-            //
-            if constexpr (NodeClassifier == TreeNodeClassifier::Folder) {
-               // Folder can only have folder as parent
-               return static_cast<TreeFolderNode<TreeType> *>(parent);
-            } else if constexpr (NodeClassifier == TreeNodeClassifier::PrimaryItem) {
-               if constexpr (std::variant_size_v<ParentPtrTypes> == 1) {
-                  // If there's only one possibility for parent type, then it will be folder
-                  return static_cast<TreeFolderNode<TreeType> *>(parent);
-               } else {
-                  //
-                  // This is the only case where we have to decide at run-time -- ie where a primary item could have either
-                  // a folder or another primary item as parent.  At the moment, it's only needed in the Recipe tree (to
-                  // handle Recipe versioning).
-                  //
-                  if (!parent || parent->classifier() == TreeNodeClassifier::Folder) {
-                     return static_cast<TreeFolderNode<TreeType> *>(parent);
-                  }
-                  return static_cast<TreeItemNode<TreeType> *>(parent);
-               }
-            } else {
-               static_assert(NodeClassifier == TreeNodeClassifier::SecondaryItem);
-               // Secondary Item (eg BrewNote) can only have primary item (eg Recipe) as parent
-               return static_cast<TreeItemNode<TreeType> *>(parent);
-            }
-         }()
-      },
       m_underlyingItem{underlyingItem} {
       return;
    }
@@ -159,33 +121,39 @@ public:
          return PropertyHelper::getAlignment(typeInfo);
       }
 
-      QVariant modelData = columnInfo.propertyPath.getValue(*this->m_underlyingItem);
-      if (!modelData.isValid()) {
-         //
-         // You might think it's a programming error if we couldn't read a property modelData, but there are
-         // circumstances where this is expected -- eg reading "style/name" from a Recipe that does not have style set.
-         //
-         // Therefore normally keep this warning commented out, so we don't spam the logs when we have a bunch of
-         // recipes that, eg, don't yet have a style set.
-         //
-//         qWarning() <<
-//            Q_FUNC_INFO <<
-//               "Unable to read" << this->derived() << "property" << columnInfo.propertyPath << "(Got" << modelData <<
-//               ")";
-         return QVariant{};
+      // There's no data for the root node
+      if constexpr (NodeClassifier == TreeNodeClassifier::Root) {
+         return {};
+      } else {
+         QVariant const modelData = columnInfo.propertyPath.getValue(*this->m_underlyingItem);
+         if (!modelData.isValid()) {
+            //
+            // You might think it's a programming error if we couldn't read a property modelData, but there are
+            // circumstances where this is expected -- eg reading "style/name" from a Recipe that does not have style set.
+            //
+            // Therefore normally keep this warning commented out, so we don't spam the logs when we have a bunch of
+            // recipes that, eg, don't yet have a style set.
+            //
+            //         qWarning() <<
+            //            Q_FUNC_INFO <<
+            //               "Unable to read" << this->derived() << "property" << columnInfo.propertyPath << "(Got" << modelData <<
+            //               ")";
+            return QVariant{};
+         }
+
+         // Uncomment this log statement if asserts in PropertyHelper::readDataFromPropertyValue are firing
+         //      qDebug() <<
+         //         Q_FUNC_INFO << columnInfo.columnFqName << ", propertyPath:" << columnInfo.propertyPath << "TypeInfo:" <<
+         //         typeInfo << ", modelData:" << modelData;
+
+         return PropertyHelper::readDataFromPropertyValue(modelData,
+                                                          typeInfo,
+                                                          role,
+                                                          columnInfo.extras.has_value(),
+                                                          columnInfo.getForcedSystemOfMeasurement(),
+                                                          columnInfo.getForcedRelativeScale());
       }
 
-      // Uncomment this log statement if asserts in PropertyHelper::readDataFromPropertyValue are firing
-//      qDebug() <<
-//         Q_FUNC_INFO << columnInfo.columnFqName << ", propertyPath:" << columnInfo.propertyPath << "TypeInfo:" <<
-//         typeInfo << ", modelData:" << modelData;
-
-      return PropertyHelper::readDataFromPropertyValue(modelData,
-                                                       typeInfo,
-                                                       role,
-                                                       columnInfo.extras.has_value(),
-                                                       columnInfo.getForcedSystemOfMeasurement(),
-                                                       columnInfo.getForcedRelativeScale());
    }
 
    /**
@@ -225,6 +193,10 @@ public:
                   // We only ever care about this for primary items where, by definition, the tree type is the same as
                   // the primary item type.
                   return QVariant(TreeNodeTraits<TreeType, TreeType>::getRootName());
+               } else if constexpr (NodeClassifier == TreeNodeClassifier::Root) {
+                  // This shouldn't be possible, but I think we are OK to ignore it if it happens
+                  qWarning() << Q_FUNC_INFO << "Root!";
+                  return {};
                } else {
                   return this->derived().getToolTip();
                }
@@ -238,9 +210,8 @@ public:
             // Special handling for the root node
             if (!this->rawParent()) {
                // For the root node, we display the name of the tree in the first column
-               // Root node is always a folder
-               if constexpr (NodeClassifier == TreeNodeClassifier::Folder) {
-                  if (columnIndex == ColumnIndex::Name) {
+               if constexpr (NodeClassifier == TreeNodeClassifier::Root) {
+                  if (columnIndex == ColumnIndex::TreeName) {
                      return QVariant(TreeNodeTraits<TreeType, TreeType>::getRootName());
                   }
                }
@@ -294,7 +265,11 @@ public:
    }
 
    virtual NamedEntity * rawUnderlyingItem() const override {
-      return this->m_underlyingItem.get();
+      if constexpr (NodeClassifier == TreeNodeClassifier::Root) {
+         return nullptr;
+      } else {
+         return this->m_underlyingItem.get();
+      }
    }
 
    void setUnderlyingItem(std::shared_ptr<NE> val) {
@@ -445,7 +420,7 @@ public:
     *        objects.
     */
    [[nodiscard]] int childNumber() const override {
-      TreeNode * rawParent = this->rawParent();
+      TreeNode const * rawParent = this->rawParent();
       if (!rawParent) {
          return 0;
       }
@@ -454,7 +429,12 @@ public:
    }
 
    [[nodiscard]] QString className() const override {
-      return NE::staticMetaObject.className();
+      if constexpr (NodeClassifier == TreeNodeClassifier::Root) {
+         // RootMarkerFor doesn't have staticMetaObject
+         return NE::className();
+      } else {
+         return NE::staticMetaObject.className();
+      }
    }
 
    [[nodiscard]] QString localisedClassName() const override {
@@ -462,28 +442,37 @@ public:
    }
 
    [[nodiscard]] QString name() const override {
-      if (!this->m_underlyingItem) {
-         return QObject::tr("None!");
+      if constexpr (NodeClassifier == TreeNodeClassifier::Root) {
+         // Shouldn't normally be called for root node, as it doesn't have a real underlying item
+         return "-";
+      } else {
+         if (!this->m_underlyingItem) {
+            return QObject::tr("None!");
+         }
+         return this->m_underlyingItem->name();
       }
-      return this->m_underlyingItem->name();
    }
 
    [[nodiscard]] int underlyingItemKey() const override {
-      if (!this->m_underlyingItem) {
-         //
-         // I don't think we ever have things in the tree that aren't in the DB (ie with ID -1), but we might as well
-         // return a different negative number for "null pointer" (which should also be rare-to-never).
-         //
-         return -2;
+      if constexpr (NodeClassifier == TreeNodeClassifier::Root) {
+         // Shouldn't normally be called for root node, as it doesn't have a real underlying item
+         return -1;
+      } else {
+         if (!this->m_underlyingItem) {
+            //
+            // I don't think we ever have things in the tree that aren't in the DB (ie with ID -1), but we might as well
+            // return a different negative number for "null pointer" (which should also be rare-to-never).
+            //
+            return -2;
+         }
+         return this->m_underlyingItem->key();
       }
-      return this->m_underlyingItem->key();
    }
 
-   [[nodiscard]] static QString dragAndDropMimeType() {
-      if constexpr (std::is_base_of_v<FolderCommon, NE> && HasNoFolder<NE>) {
+   [[nodiscard]] static constexpr QString dragAndDropMimeType() {
+      if constexpr (NodeClassifier == TreeNodeClassifier::Root) {
          //
-         // Per comment in TreeModelBase, we need TreeFolderNode for the root node, even for classes for which Folder
-         // does not exist.  But in such cases, there are no real folders and no drag-and-drop of them
+         // Root node cannot be dragged or dropped
          //
          return "NotImplemented";
       } else {
@@ -513,14 +502,14 @@ public:
 //=================================================== TreeFolderNode ===================================================
 
 /**
- * \brief Besides other folders of the same type, a given type of folders can only only contain one type of thing (eg
+ * \brief Besides other folders of the same type, a given type of folder can only contain one type of thing (eg
  *        FermentableTreeItem, HopTreeItem, etc).
  */
-template<class NE>
+template<NonFolderClass NE>
 class TreeFolderNode : public TreeNodeBase<TreeFolderNode<NE>, Folder<NE>, NE> {
 public:
    using TreeNodeBase<TreeFolderNode<NE>, Folder<NE>, NE>::TreeNodeBase;
-   ~TreeFolderNode() = default;
+   ~TreeFolderNode() override = default;
 
    // Have to override the version in \c TreeNodeBase as that will give FolderCommon::staticMetaObject.className()
    // rather than NE::staticMetaObject.className()
@@ -528,14 +517,14 @@ public:
       return NE::staticMetaObject.className();
    }
 
-   [[nodiscard]] std::shared_ptr<Folder<NE>> folder() const {
+   [[nodiscard]] std::shared_ptr<Folder<NE>> folder() const requires HasFolder<NE> {
       return this->underlyingItem();
    }
 };
 
 /**
  * \brief Each tree has one primary type of object that it stores.  However, some trees (eg Recipe, Mash) can hold
- *        secondary items (eg Recipe tree holds Recipes and BrewNotes owned by those Recipes).  It's useful to have a
+ *        secondary items (eg Recipe tree holds Recipes and BrewLogs owned by those Recipes).  It's useful to have a
  *        compile-time mapping from object type to show which class belongs in which tree.  The rule here is that things
  *        belong in their own tree (eg Equipment is in Equipment tree) unless there's a specialisation that says
  *        otherwise.
@@ -544,7 +533,7 @@ public:
  *        use of incomplete type ‘struct TreeNodeTraits<FooBar, FooBar>’`.
  */
 template <class NE> struct TreeTypeDeducer                      { using TreeType = NE                      ; };
-template<>          struct TreeTypeDeducer<BrewNote           > { using TreeType = Recipe                  ; };
+template<>          struct TreeTypeDeducer<BrewLog            > { using TreeType = Recipe                  ; };
 template<>          struct TreeTypeDeducer<MashStep           > { using TreeType = Mash                    ; };
 template<>          struct TreeTypeDeducer<BoilStep           > { using TreeType = Boil                    ; };
 template<>          struct TreeTypeDeducer<FermentationStep   > { using TreeType = Fermentation            ; };
@@ -558,7 +547,7 @@ template<>          struct TreeTypeDeducer<StockUseYeast      > { using TreeType
 //
 // NOTE when we add new SecondaryItem nodes, we also have to add a specialisation for TreeTypeDeducer above
 //
-template<class NE>
+template<NonFolderClass NE>
 class TreeItemNode : public TreeNodeBase<TreeItemNode<NE>, NE, typename TreeTypeDeducer<NE>::TreeType> {
 public:
    using TreeNodeBase<TreeItemNode<NE>, NE, typename TreeTypeDeducer<NE>::TreeType>::TreeNodeBase;
@@ -597,6 +586,16 @@ public:
 
 };
 
+//==================================================== TreeRootNode ====================================================
+
+template<NonFolderClass NE>
+class TreeRootNode : public TreeNodeBase<TreeRootNode<NE>, RootMarkerFor<NE>, NE> {
+public:
+   using TreeNodeBase<TreeRootNode<NE>, RootMarkerFor<NE>, NE>::TreeNodeBase;
+   ~TreeRootNode() override = default;
+};
+
+
 //
 // Check the concepts we use above are working as we intend
 //
@@ -613,9 +612,26 @@ struct ColumnOwnerTraitsData<TreeFolderNode<NE>> {
    static std::vector<ColumnInfo> const & getColumnInfos() {
       // Meyers singleton
       static std::vector<ColumnInfo> const columnInfos {
-         TREE_NODE_HEADER(TreeFolderNode, Folder<NE>, Name    , PropertyNames::NamedEntity::name), // "Name"
-         TREE_NODE_HEADER(TreeFolderNode, Folder<NE>, Path    , PropertyNames::FolderCommon::path     ), // "Path"
-         TREE_NODE_HEADER(TreeFolderNode, Folder<NE>, FullPath, PropertyNames::FolderCommon::fullPath ), // "Full Path"
+         COLINFO_TREE_FOLDER_NODE(NE, Name    , PropertyNames::NamedEntity::name), // "Name"
+         COLINFO_TREE_FOLDER_NODE(NE, Path    , PropertyNames::FolderCommon::path     ), // "Path"
+         COLINFO_TREE_FOLDER_NODE(NE, FullPath, PropertyNames::FolderCommon::fullPath ), // "Full Path"
+      };
+      return columnInfos;
+   }
+};
+
+//
+// Same approach for root nodes.  We actually don't need column info for root nodes because it is never displayed
+// anywhere.  For the moment, at least, we have this dummy info to make things compile.
+//
+template<class NE>
+struct ColumnOwnerTraitsData<TreeRootNode<NE>> {
+   static std::vector<ColumnInfo> const & getColumnInfos() {
+      // Meyers singleton
+      static std::vector<ColumnInfo> const columnInfos {
+         // This isn't actually correct.  If we ever needed to display this info, we'd need to change this to add the
+         // localised class name as a property.
+         COLINFO_TREE_ROOT_NODE(NE, TreeName, PropertyNames::NamedEntity::name),
       };
       return columnInfos;
    }

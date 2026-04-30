@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/NamedEntityTreeSortFilterProxyModel.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * trees/NamedEntityTreeSortFilterProxyModel.cpp is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ TREE_SORT_FILTER_PROXY_MODEL_COMMON_CODE(StockPurchaseSalt       )
 TREE_SORT_FILTER_PROXY_MODEL_COMMON_CODE(StockPurchaseYeast      )
 TREE_SORT_FILTER_PROXY_MODEL_COMMON_CODE(Mash                )
 TREE_SORT_FILTER_PROXY_MODEL_COMMON_CODE(Misc                )
-TREE_SORT_FILTER_PROXY_MODEL_COMMON_CODE(Recipe              , BrewNote)
+TREE_SORT_FILTER_PROXY_MODEL_COMMON_CODE(Recipe              , BrewLog)
 TREE_SORT_FILTER_PROXY_MODEL_COMMON_CODE(Salt                )
 TREE_SORT_FILTER_PROXY_MODEL_COMMON_CODE(Style               )
 TREE_SORT_FILTER_PROXY_MODEL_COMMON_CODE(Water               )

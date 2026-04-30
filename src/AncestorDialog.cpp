@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * AncestorDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * AncestorDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@fastmail.com>
  *
@@ -63,7 +63,7 @@ AncestorDialog::AncestorDialog(QWidget * parent) : QDialog(parent) {
 
 AncestorDialog::~AncestorDialog() = default;
 
-bool AncestorDialog::recipeLessThan(Recipe * right, Recipe * left) {
+bool AncestorDialog::recipeLessThan(Recipe const * right, Recipe const * left) {
    if (right->name() == left->name()) {
       return right->key() < left->key();
    }
@@ -115,7 +115,7 @@ void AncestorDialog::connectDescendant() {
    if (! descendant->isMyAncestor(*ancestor)) {
       descendant->setAncestor(*ancestor);
 
-      emit ancestoryChanged(ancestor, descendant);
+      emit ancestryChanged(ancestor, descendant);
    }
 
    // disable the apply button

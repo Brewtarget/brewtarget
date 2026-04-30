@@ -48,7 +48,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/BeerColorWidget.cpp
     ${repoDir}/src/BrewDayFormatter.cpp
     ${repoDir}/src/BrewDayScrollWidget.cpp
-    ${repoDir}/src/BrewNoteWidget.cpp
+    ${repoDir}/src/BrewLogWidget.cpp
     ${repoDir}/src/BtColor.cpp
     ${repoDir}/src/BtDatePopup.cpp
     ${repoDir}/src/BtHorizontalTabs.cpp
@@ -146,7 +146,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/measurement/UnitSystem.cpp
     ${repoDir}/src/model/Boil.cpp
     ${repoDir}/src/model/BoilStep.cpp
-    ${repoDir}/src/model/BrewNote.cpp
+    ${repoDir}/src/model/BrewLog.cpp
     ${repoDir}/src/model/Equipment.cpp
     ${repoDir}/src/model/Fermentable.cpp
     ${repoDir}/src/model/Fermentation.cpp

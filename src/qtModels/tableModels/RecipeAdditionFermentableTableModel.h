@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * qtModels/tableModels/RecipeAdditionFermentableTableModel.h is part of Brewtarget, and is copyright the following authors
- * 2009-2025:
+ * 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Markus Mårtensson <mackan.90@gmail.com>
@@ -67,11 +67,11 @@ public:
    void setDisplayPercentages(bool var);
 
    //! \brief Reimplemented from QAbstractTableModel.
-   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 private:
-   //! \brief Recalculate the total amount of grains in the model.
-   void updateTotalGrains();
+   //! \brief Recalculate the total amount of grains in the model.  TBD: Not implemented -- do we need this?
+//   void updateTotalGrains();
 
 private:
    bool displayPercentages;

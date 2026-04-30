@@ -75,9 +75,11 @@ namespace {
 // separators etc.  So, we always convert everything to double first and then, if needed, convert the double
 // to an int / unsigned int, as this will give the behaviour we want.
 //
-template<typename T> [[nodiscard]] T Measurement::extractRawFromString(QString const & input, bool * ok) {
+template<typename T> [[nodiscard]] T Measurement::extractRawFromString([[maybe_unused]] QString const & input,
+                                                                       [[maybe_unused]] bool * ok) {
    // This compile-time assert relies on the fact that no type has size 0
    static_assert(sizeof(T) == 0, "Only specializations of stringTo() can be used");
+   return T{}; // We should never compile this line -- see static assert above -- but it keeps the linter quiet.
 }
 template<> [[nodiscard]] int          Measurement::extractRawFromString<int>         (QString const & input, bool * ok) { return static_cast<int         >(Measurement::Unit::splitAmountString(input, ok).first); }
 template<> [[nodiscard]] unsigned int Measurement::extractRawFromString<unsigned int>(QString const & input, bool * ok) { return static_cast<unsigned int>(Measurement::Unit::splitAmountString(input, ok).first); }

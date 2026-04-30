@@ -30,7 +30,7 @@
 
 #include "config.h" // For CONFIG_VERSION_STRING
 #include "model/Boil.h" // But NB model/BoilStep.h is not needed
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h" // But NB model/FermentationStep.h is not needed
@@ -813,43 +813,45 @@ namespace {
    // changes to BeerXml.xsd), at the cost of creating files that would not be readable by old versions of those
    // programs.  But it seems small bother to leave it be.
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<BrewNote> {
-      std::in_place_type_t<BrewNote>{},
-      "BREWNOTE",            // XML record name
-      XmlRecordDefinition::create<XmlNamedEntityRecord<BrewNote>>,
+   template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<BrewLog> {
+      std::in_place_type_t<BrewLog>{},
+      "BREWNOTE",  // XML record name.  Note that, for historical reasons, this is different from the classname
+      XmlRecordDefinition::create<XmlNamedEntityRecord<BrewLog>>,
       {
          // Type                                            XPath                      Q_PROPERTY                                  Value Decoder
-         {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"                , VERSION1                                  },
-         {XmlRecordDefinition::FieldType::Date            , "BREWDATE"               , PropertyNames::BrewNote::brewDate         },
-         {XmlRecordDefinition::FieldType::Date            , "DATE_FERMENTED_OUT"     , PropertyNames::BrewNote::fermentDate      },
-         {XmlRecordDefinition::FieldType::String          , "NOTES"                  , PropertyNames::BrewNote::notes            },
-         {XmlRecordDefinition::FieldType::Double          , "SG"                     , PropertyNames::BrewNote::sg               },
-         {XmlRecordDefinition::FieldType::Double          , "ACTUAL_ABV"             , PropertyNames::BrewNote::abv              },
-         {XmlRecordDefinition::FieldType::Double          , "EFF_INTO_BK"            , PropertyNames::BrewNote::effIntoBK_pct    },
-         {XmlRecordDefinition::FieldType::Double          , "BREWHOUSE_EFF"          , PropertyNames::BrewNote::brewhouseEff_pct },
-         {XmlRecordDefinition::FieldType::Double          , "VOLUME_INTO_BK"         , PropertyNames::BrewNote::volumeIntoBK_l   },
-         {XmlRecordDefinition::FieldType::Double          , "STRIKE_TEMP"            , PropertyNames::BrewNote::strikeTemp_c     },
-         {XmlRecordDefinition::FieldType::Double          , "MASH_FINAL_TEMP"        , PropertyNames::BrewNote::mashFinTemp_c    },
-         {XmlRecordDefinition::FieldType::Double          , "OG"                     , PropertyNames::BrewNote::og               },
-         {XmlRecordDefinition::FieldType::Double          , "POST_BOIL_VOLUME"       , PropertyNames::BrewNote::postBoilVolume_l },
-         {XmlRecordDefinition::FieldType::Double          , "VOLUME_INTO_FERMENTER"  , PropertyNames::BrewNote::volumeIntoFerm_l },
-         {XmlRecordDefinition::FieldType::Double          , "PITCH_TEMP"             , PropertyNames::BrewNote::pitchTemp_c      },
-         {XmlRecordDefinition::FieldType::Double          , "FG"                     , PropertyNames::BrewNote::fg               },
-         {XmlRecordDefinition::FieldType::Double          , "ATTENUATION"            , PropertyNames::BrewNote::attenuation      },
-         {XmlRecordDefinition::FieldType::Double          , "FINAL_VOLUME"           , PropertyNames::BrewNote::finalVolume_l    },
-         {XmlRecordDefinition::FieldType::Double          , "BOIL_OFF"               , PropertyNames::BrewNote::boilOff_l        },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_BOIL_GRAV"    , PropertyNames::BrewNote::projBoilGrav     },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_VOL_INTO_BK"  , PropertyNames::BrewNote::projVolIntoBK_l  },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_STRIKE_TEMP"  , PropertyNames::BrewNote::projStrikeTemp_c },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_MASH_FIN_TEMP", PropertyNames::BrewNote::projMashFinTemp_c},
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_OG"           , PropertyNames::BrewNote::projOg           },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_VOL_INTO_FERM", PropertyNames::BrewNote::projVolIntoFerm_l},
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_FG"           , PropertyNames::BrewNote::projFg           },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_EFF"          , PropertyNames::BrewNote::projEff_pct      },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_ABV"          , PropertyNames::BrewNote::projABV_pct      },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_POINTS"       , PropertyNames::BrewNote::projPoints       },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_FERM_POINTS"  , PropertyNames::BrewNote::projFermPoints   },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_ATTEN"        , PropertyNames::BrewNote::projAtten        },
+         // NB: We use name to store batch number
+         {XmlRecordDefinition::FieldType::String          , "BATCH_NUMBER"           , PropertyNames::NamedEntity::name         },
+         {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"                , VERSION1                                 },
+         {XmlRecordDefinition::FieldType::Date            , "BREWDATE"               , PropertyNames::BrewLog::brewDate         },
+         {XmlRecordDefinition::FieldType::Date            , "DATE_FERMENTED_OUT"     , PropertyNames::BrewLog::fermentDate      },
+         {XmlRecordDefinition::FieldType::String          , "NOTES"                  , PropertyNames::BrewLog::notes            },
+         {XmlRecordDefinition::FieldType::Double          , "SG"                     , PropertyNames::BrewLog::sg               },
+         {XmlRecordDefinition::FieldType::Double          , "ACTUAL_ABV"             , PropertyNames::BrewLog::abv              },
+         {XmlRecordDefinition::FieldType::Double          , "EFF_INTO_BK"            , PropertyNames::BrewLog::effIntoBK_pct    },
+         {XmlRecordDefinition::FieldType::Double          , "BREWHOUSE_EFF"          , PropertyNames::BrewLog::brewhouseEff_pct },
+         {XmlRecordDefinition::FieldType::Double          , "VOLUME_INTO_BK"         , PropertyNames::BrewLog::volumeIntoBK_l   },
+         {XmlRecordDefinition::FieldType::Double          , "STRIKE_TEMP"            , PropertyNames::BrewLog::strikeTemp_c     },
+         {XmlRecordDefinition::FieldType::Double          , "MASH_FINAL_TEMP"        , PropertyNames::BrewLog::mashFinTemp_c    },
+         {XmlRecordDefinition::FieldType::Double          , "OG"                     , PropertyNames::BrewLog::og               },
+         {XmlRecordDefinition::FieldType::Double          , "POST_BOIL_VOLUME"       , PropertyNames::BrewLog::postBoilVolume_l },
+         {XmlRecordDefinition::FieldType::Double          , "VOLUME_INTO_FERMENTER"  , PropertyNames::BrewLog::volumeIntoFerm_l },
+         {XmlRecordDefinition::FieldType::Double          , "PITCH_TEMP"             , PropertyNames::BrewLog::pitchTemp_c      },
+         {XmlRecordDefinition::FieldType::Double          , "FG"                     , PropertyNames::BrewLog::fg               },
+         {XmlRecordDefinition::FieldType::Double          , "ATTENUATION"            , PropertyNames::BrewLog::attenuation      },
+         {XmlRecordDefinition::FieldType::Double          , "FINAL_VOLUME"           , PropertyNames::BrewLog::finalVolume_l    },
+         {XmlRecordDefinition::FieldType::Double          , "BOIL_OFF"               , PropertyNames::BrewLog::boilOff_l        },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_BOIL_GRAV"    , PropertyNames::BrewLog::projBoilGrav     },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_VOL_INTO_BK"  , PropertyNames::BrewLog::projVolIntoBK_l  },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_STRIKE_TEMP"  , PropertyNames::BrewLog::projStrikeTemp_c },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_MASH_FIN_TEMP", PropertyNames::BrewLog::projMashFinTemp_c},
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_OG"           , PropertyNames::BrewLog::projOg           },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_VOL_INTO_FERM", PropertyNames::BrewLog::projVolIntoFerm_l},
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_FG"           , PropertyNames::BrewLog::projFg           },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_EFF"          , PropertyNames::BrewLog::projEff_pct      },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_ABV"          , PropertyNames::BrewLog::projABV_pct      },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_POINTS"       , PropertyNames::BrewLog::projPoints       },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_FERM_POINTS"  , PropertyNames::BrewLog::projFermPoints   },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_ATTEN"        , PropertyNames::BrewLog::projAtten        },
       }
    };
 
@@ -1086,7 +1088,7 @@ namespace {
          {XmlRecordDefinition::FieldType::ListOfRecords   , "WATERS/WATER"            , PropertyNames::Recipe::waterUses         , &BEER_XML_RECORD_DEFN<RecipeUseOfWater>   }, // Additional logic for "WATERS" is handled in xml/XmlRecipeRecord.cpp
          {XmlRecordDefinition::FieldType::Record          , "MASH"                    , PropertyNames::Recipe::mash              , &BEER_XML_RECORD_DEFN<Mash>             },
          {XmlRecordDefinition::FieldType::ListOfRecords   , "INSTRUCTIONS/INSTRUCTION", PropertyNames::Recipe::instructions      , &BEER_XML_RECORD_DEFN<Instruction>      }, // Additional logic for "INSTRUCTIONS" is handled in xml/XmlNamedEntityRecord.h
-         {XmlRecordDefinition::FieldType::ListOfRecords   , "BREWNOTES/BREWNOTE"      , PropertyNames::Recipe::brewNotes         , &BEER_XML_RECORD_DEFN<BrewNote>         }, // Additional logic for "BREWNOTES" is handled in xml/XmlNamedEntityRecord.h
+         {XmlRecordDefinition::FieldType::ListOfRecords   , "BREWNOTES/BREWNOTE"      , PropertyNames::Recipe::brewLogs          , &BEER_XML_RECORD_DEFN<BrewLog>          }, // Additional logic for "BREWNOTES" is handled in xml/XmlNamedEntityRecord.h
          {XmlRecordDefinition::FieldType::String          , "NOTES"                   , PropertyNames::Recipe::notes             },
          {XmlRecordDefinition::FieldType::String          , "TASTE_NOTES"             , PropertyNames::Recipe::tasteNotes        },
          {XmlRecordDefinition::FieldType::Double          , "TASTE_RATING"            , PropertyNames::Recipe::tasteRating       },
@@ -1171,7 +1173,7 @@ namespace {
          {XmlRecordDefinition::FieldType::ListOfRecords, "MASHS/MASH"              , BtString::NULL_STR  , &BEER_XML_RECORD_DEFN<Mash       >},
          {XmlRecordDefinition::FieldType::ListOfRecords, "EQUIPMENTS/EQUIPMENT"    , BtString::NULL_STR  , &BEER_XML_RECORD_DEFN<Equipment  >},
          {XmlRecordDefinition::FieldType::ListOfRecords, "INSTRUCTIONS/INSTRUCTION", BtString::NULL_STR  , &BEER_XML_RECORD_DEFN<Instruction>},
-         {XmlRecordDefinition::FieldType::ListOfRecords, "BREWNOTES/BREWNOTE"      , BtString::NULL_STR  , &BEER_XML_RECORD_DEFN<BrewNote   >},
+         {XmlRecordDefinition::FieldType::ListOfRecords, "BREWNOTES/BREWNOTE"      , BtString::NULL_STR  , &BEER_XML_RECORD_DEFN<BrewLog    >},
          {XmlRecordDefinition::FieldType::ListOfRecords, "RECIPES/RECIPE"          , BtString::NULL_STR  , &BEER_XML_RECORD_DEFN<Recipe     >},
       }
    };
@@ -1393,7 +1395,7 @@ template void BeerXML::toXml(QList<MashStep    const *> const & nes, QFile & out
 template void BeerXML::toXml(QList<Mash        const *> const & nes, QFile & outFile) const;
 template void BeerXML::toXml(QList<Equipment   const *> const & nes, QFile & outFile) const;
 template void BeerXML::toXml(QList<Instruction const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<BrewNote    const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QList<BrewLog    const *> const & nes, QFile & outFile) const;
 template void BeerXML::toXml(QList<Recipe      const *> const & nes, QFile & outFile) const;
 
 // fromXml ====================================================================

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * trees/TreeModel.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * trees/TreeModel.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -117,9 +117,8 @@ class TreeModel : public QAbstractItemModel {
    friend class TreeModelChangeGuard;
 
 public:
-
-   TreeModel(TreeView * parent = nullptr);
-   virtual ~TreeModel();
+   explicit TreeModel(TreeView * parent = nullptr);
+   ~TreeModel() override;
 
    virtual TreeNode * treeNode(QModelIndex const & index) const = 0;
 
@@ -151,8 +150,11 @@ public:
    //! \brief Reimplemented from QAbstractItemModel
    virtual QStringList mimeTypes() const override = 0;
 
-   //! \return the classifier of the item at \c index, or \c nullopt if \c index is invalid
-   std::optional<TreeNodeClassifier> classifier(QModelIndex const & index) const;
+   bool canDropMimeData(QMimeData const * data,
+                        Qt::DropAction action,
+                        int row,
+                        int column,
+                        QModelIndex const & parent) const override = 0;
 
 signals:
    void expandFolder(/*TreeModel::TypeMasks kindofThing, */QModelIndex fIdx);

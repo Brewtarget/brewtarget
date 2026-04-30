@@ -27,7 +27,7 @@
 // This private implementation class holds all private non-virtual members of StockWindow
 class StockWindow::impl {
 public:
-   impl(StockWindow & self) :
+   explicit impl(StockWindow & self) :
       m_self{self},
       m_vLayout_Outermost            {new QVBoxLayout(&m_self)},
       m_tabWidget_StockPurchaseTrees {new QTabWidget (&m_self)},
@@ -179,11 +179,10 @@ void StockWindow::saveUiState() const {
 
 bool StockWindow::restoreUiState() {
    static auto const & section = PersistentSettings::Sections::StockWindow;
-   bool restored =
-      this->pimpl->m_stockManagerFermentable->restoreUiState(PersistentSettings::Names::uiState_stockManagerFermentable, section) |
-      this->pimpl->m_stockManagerHop        ->restoreUiState(PersistentSettings::Names::uiState_stockManagerHop        , section) |
-      this->pimpl->m_stockManagerMisc       ->restoreUiState(PersistentSettings::Names::uiState_stockManagerMisc       , section) |
-      this->pimpl->m_stockManagerSalt       ->restoreUiState(PersistentSettings::Names::uiState_stockManagerSalt       , section) |
-      this->pimpl->m_stockManagerYeast      ->restoreUiState(PersistentSettings::Names::uiState_stockManagerYeast      , section);
-   return restored;
+   bool const aa = this->pimpl->m_stockManagerFermentable->restoreUiState(PersistentSettings::Names::uiState_stockManagerFermentable, section);
+   bool const bb = this->pimpl->m_stockManagerHop        ->restoreUiState(PersistentSettings::Names::uiState_stockManagerHop        , section);
+   bool const cc = this->pimpl->m_stockManagerMisc       ->restoreUiState(PersistentSettings::Names::uiState_stockManagerMisc       , section);
+   bool const dd = this->pimpl->m_stockManagerSalt       ->restoreUiState(PersistentSettings::Names::uiState_stockManagerSalt       , section);
+   bool const ee = this->pimpl->m_stockManagerYeast      ->restoreUiState(PersistentSettings::Names::uiState_stockManagerYeast      , section);
+   return aa && bb && cc && dd && ee;
 }

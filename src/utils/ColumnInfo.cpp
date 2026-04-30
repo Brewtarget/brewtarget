@@ -21,7 +21,6 @@ ColumnInfo::ColumnInfo(char const * const   modelName   ,
                        char const * const   columnName  ,
                        char const * const   columnFqName,
                        size_t       const   index       ,
-//                       QString      const   label       ,
                        TypeLookup   const & typeLookup  ,
                        PropertyPath         propertyPath,
                        Extras       const   extras      ) :

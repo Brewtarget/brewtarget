@@ -90,14 +90,14 @@ namespace {
     */
    char const * getDatabaseNativeTypeName(Database const & database, BaseFieldType const baseFieldType) {
       switch (baseFieldType) {
-         case BaseFieldType::Bool  : return {database.getDbNativeTypeName<bool        >()};
-         case BaseFieldType::Int   : return {database.getDbNativeTypeName<int         >()};
-         case BaseFieldType::UInt  : return {database.getDbNativeTypeName<unsigned int>()};
-         case BaseFieldType::Double: return {database.getDbNativeTypeName<double      >()};
-         case BaseFieldType::String: return {database.getDbNativeTypeName<QString     >()};
-         case BaseFieldType::Date  : return {database.getDbNativeTypeName<QDate       >()};
-         case BaseFieldType::Enum  : return {database.getDbNativeTypeName<QString     >()};
-         case BaseFieldType::Unit  : return {database.getDbNativeTypeName<QString     >()};
+         case BaseFieldType::Bool  : { return database.getDbNativeTypeName<bool        >(); }
+         case BaseFieldType::Int   : { return database.getDbNativeTypeName<int         >(); }
+         case BaseFieldType::UInt  : { return database.getDbNativeTypeName<unsigned int>(); }
+         case BaseFieldType::Double: { return database.getDbNativeTypeName<double      >(); }
+         case BaseFieldType::String: { return database.getDbNativeTypeName<QString     >(); }
+         case BaseFieldType::Date  : { return database.getDbNativeTypeName<QDate       >(); }
+         case BaseFieldType::Enum  : { return database.getDbNativeTypeName<QString     >(); }
+         case BaseFieldType::Unit  : { return database.getDbNativeTypeName<QString     >(); }
          // No default case needed as compiler should warn us if any options covered above
       }
       // It should be impossible to get here

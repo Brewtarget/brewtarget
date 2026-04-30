@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Algorithms.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * Algorithms.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Eric Tamme <etamme@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -38,7 +38,7 @@ namespace {
     * \brief returns base^pow for the special case when pow is a positive integer
     *        (The more general case is already covered by pow() in the standard library.)
     */
-   double intPow(double base, unsigned int pow) {
+   double intPow(double const base, unsigned int pow) {
       double ret = 1;
       for(; pow > 0; pow--) {
          ret *= base;
@@ -72,7 +72,7 @@ namespace {
     *
     *        See comment in \c Algorithms::abvFromOgAndFg for the difference.
     */
-   double specificGravityToExcessGravity(double sg) {
+   double specificGravityToExcessGravity(double const sg) {
       return (sg - 1.0) * 1000;
    }
 
@@ -116,17 +116,17 @@ namespace {
     */
    template<class ForwardIt, class T, class GetFrom, class GetTo>
    double interpolatedConversion(ForwardIt first,
-                                    ForwardIt last,
-                                    T const & value,
-                                    GetFrom getFrom,
-                                    GetTo getTo,
-                                    char const * const whatFrom,
-                                    char const * const whatTo) {
+                                 ForwardIt last,
+                                 T const & value,
+                                 GetFrom getFrom,
+                                 GetTo getTo,
+                                 char const * const whatFrom,
+                                 char const * const whatTo) {
       auto const firstLarger = std::lower_bound(
          first,
          last + 1,
          value,
-         [& getFrom, & getTo](T const & lhs, T const & rhs) {return getFrom(lhs) < getFrom(rhs);}
+         [& getFrom](T const & lhs, T const & rhs) {return getFrom(lhs) < getFrom(rhs);}
       );
 
       if (firstLarger == last + 1) {

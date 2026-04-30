@@ -40,7 +40,7 @@ class TreeView : public QTreeView {
    Q_OBJECT
 public:
    //! \brief The standard constructor
-   TreeView(QWidget * parent = nullptr);
+   explicit TreeView(QWidget * parent = nullptr);
    /**
     * \brief returns the \c TreeModel associated with this tree.  Note that this bypasses the \c QSortFilterProxyModel
     *        that maps between view and model (and which would be returned by a call to \c QTreeView::model).

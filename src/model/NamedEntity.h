@@ -34,13 +34,11 @@
 #include <QRegularExpression>
 #include <QVariant>
 
-#include "model/FolderPropertyBase.h"
 #include "model/NamedEntityCasters.h"
 #include "utils/BtStringConst.h"
 #include "utils/MetaTypes.h"
 #include "utils/TypeLookup.h"
 
-template<class Derived, IsFolder DerivedIsFolder> class FolderPropertyBase;
 class NamedEntity;
 class NamedParameterBundle;
 class ObjectStore;
@@ -196,15 +194,15 @@ public:
    // other classes override (so this is the one place the override keyword is not valid.
    inline virtual TypeLookup const & getTypeLookup() const { return typeLookup; }
 
-   NamedEntity(QString t_name);
+   explicit NamedEntity(QString t_name);
    explicit NamedEntity(NamedEntity const & other);
 
-   NamedEntity(NamedParameterBundle const & namedParameterBundle);
+   explicit NamedEntity(NamedParameterBundle const & namedParameterBundle);
 
    // Our destructor needs to be virtual because we sometimes point to an instance of a derived class through a pointer
    // to this class -- ie NamedEntity * namedEntity = new Hop() and suchlike.  We do already get a virtual destructor by
    // virtue of inheriting from QObject, but this declaration does no harm.
-   virtual ~NamedEntity();
+   ~NamedEntity() override;
 
 protected:
    /**
@@ -300,7 +298,7 @@ public:
     * \brief Returns a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to
     *        prevent name clashes.  It will also "capture" n to allow you to extract it.
     */
-   static QRegularExpression const & getDuplicateNameNumberMatcher();
+///   static QRegularExpression const & getDuplicateNameNumberMatcher();
 
    void setName(QString const & var);
    void setDeleted(bool const var);
@@ -333,7 +331,7 @@ public:
     *
     *        Broadly speaking, there are three categories of \c NamedEntity:
     *
-    *         - Dependent items such as \c BrewNote, \c Instruction and \c RecipeAdditionHop which \b always belong to
+    *         - Dependent items such as \c BrewLog, \c Instruction and \c RecipeAdditionHop which \b always belong to
     *           exactly one \c Recipe and which get deleted if that \c Recipe is deleted.  A change to one of these
     *           items is treated as a change to the \c Recipe.
     *
@@ -361,29 +359,29 @@ public:
     *        Semi-Independent.  (The class \c OwnedByRecipe exists, but \c IndependentOfRecipe does not.)
     *
     *           OwnedByRecipe                          IndependentOfRecipe († = semi-independent)
-    *             ├── BrewNote                           ├── Boil †
-    *             ├── Instruction                        ├── Equipment
-    *             ├── RecipeAddition                     ├── Fermentation †
-    *             │    ├── RecipeAdditionFermentable     ├── Ingredient
-    *             │    ├── RecipeAdditionHop             │    ├── Fermentable
-    *             │    ├── RecipeAdditionMisc            │    ├── Hop
-    *             │    ├── RecipeAdjustmentSalt          │    ├── Misc
-    *             │    └── RecipeAdditionYeast           │    ├── Salt
-    *             └── RecipeUseOfWater                   │    └── Yeast
-    *                                                    ├── StockPurchase
-    *                                                    │    ├── StockPurchaseFermentable (owned by its Fermentable)
-    *                                                    │    ├── StockPurchaseHop         (owned by its Hop        )
-    *                                                    │    ├── StockPurchaseMisc        (owned by its Misc       )
-    *                                                    │    └── StockPurchaseYeast       (owned by its Yeast      )
-    *                                                    ├── Mash †
-    *                                                    ├── Recipe (but owns itself for the purpose of changes)
-    *                                                    ├── Step
-    *                                                    │    ├── MashStep † (owned by its Mash)
-    *                                                    │    └── StepExtended
-    *                                                    │         ├── BoilStep † (owned by its Boil)
-    *                                                    │         └── FermentationStep † (owned by its Fermentation)
-    *                                                    ├── Style
-    *                                                    └── Water
+    *             ├── BrewLog                           ├── Boil †
+    *             ├── Instruction                       ├── Equipment
+    *             ├── RecipeAddition                    ├── Fermentation †
+    *             │    ├── RecipeAdditionFermentable    ├── Ingredient
+    *             │    ├── RecipeAdditionHop            │    ├── Fermentable
+    *             │    ├── RecipeAdditionMisc           │    ├── Hop
+    *             │    ├── RecipeAdjustmentSalt         │    ├── Misc
+    *             │    └── RecipeAdditionYeast          │    ├── Salt
+    *             └── RecipeUseOfWater                  │    └── Yeast
+    *                                                   ├── StockPurchase
+    *                                                   │    ├── StockPurchaseFermentable (owned by its Fermentable)
+    *                                                   │    ├── StockPurchaseHop         (owned by its Hop        )
+    *                                                   │    ├── StockPurchaseMisc        (owned by its Misc       )
+    *                                                   │    └── StockPurchaseYeast       (owned by its Yeast      )
+    *                                                   ├── Mash †
+    *                                                   ├── Recipe (but owns itself for the purpose of changes)
+    *                                                   ├── Step
+    *                                                   │    ├── MashStep † (owned by its Mash)
+    *                                                   │    └── StepExtended
+    *                                                   │         ├── BoilStep † (owned by its Boil)
+    *                                                   │         └── FermentationStep † (owned by its Fermentation)
+    *                                                   ├── Style
+    *                                                   └── Water
     *
     *        HOWEVER, even aside from the case of semi-independent items, we want run-time determination of whether an
     *        object has an owning \c Recipe to make it easy to determine whether a change to a base class property
@@ -704,7 +702,7 @@ using IsOptionalFnPtr = bool (*)(BtStringConst const &);
  */
 class NamedEntityModifyingMarker {
 public:
-   NamedEntityModifyingMarker(NamedEntity & namedEntity);
+   explicit NamedEntityModifyingMarker(NamedEntity & namedEntity);
    ~NamedEntityModifyingMarker();
 private:
    NamedEntity & namedEntity;
@@ -775,7 +773,7 @@ Q_DECLARE_METATYPE(std::shared_ptr<NamedEntity>)
  */
 #define SET_AND_NOTIFY(...) this->setAndNotify(__VA_ARGS__)
 
-template<typename T> constexpr bool IsAbstract(T const *) { return std::is_abstract<T>::value; }
+template<typename T> constexpr bool IsAbstract(T const *) { return std::is_abstract_v<T>; }
 
 /**
  * \brief Subclasses should include this macro at the end of \b all of their constructors.  See comment on
@@ -806,14 +804,5 @@ template<typename T> constexpr bool IsAbstract(T const *) { return std::is_abstr
  */
 #define IMPLEMENT_NUM_RECIPES_USED_IN(className) \
    int className::numRecipesUsedIn() const { return Recipe::numRecipesUsing(*this); }
-
-/**
- * \brief For some templated functions, it's useful at compile time to have one version for NE classes with folders and
- *        one for those without.  We need to put the concepts here in the base class for them to be accessible.
- *
- *        See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it).
- */
-template <typename T> concept CONCEPT_FIX_UP HasFolder   = std::is_base_of_v<FolderPropertyBase<T>, T>;
-template <typename T> concept CONCEPT_FIX_UP HasNoFolder = std::negation_v<std::is_base_of<FolderPropertyBase<T>, T>>;
 
 #endif

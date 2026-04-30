@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlRecord.cpp is part of Brewtarget, and is copyright the following authors 2020-2025:
+ * serialization/xml/XmlRecord.cpp is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -719,7 +719,7 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
          } else {
             //
             // In theory we could get a list of the contained records via the Qt Property system.  However, the
-            // different things we would get back inside the QVariant (QList<BrewNote *>, QList<Hop *> etc) have no
+            // different things we would get back inside the QVariant (QList<BrewLog *>, QList<Hop *> etc) have no
             // common base class, so we can't safely treat them as, or upcast them to, QList<NamedEntity *>.
             //
             // Instead, we get the subclass of this class (eg XmlRecipeRecord) to do the work

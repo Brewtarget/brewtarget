@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * utils/ColumnInfo.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * utils/ColumnInfo.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -82,13 +82,13 @@ struct ColumnInfo {
    using Extras = std::optional<Measurement::ChoiceOfPhysicalQuantity>;
    Extras extras;
 
-   ColumnInfo(char const * const   modelName   ,
-              char const * const   columnName  ,
-              char const * const   columnFqName,
-              size_t       const   index       ,
-              TypeLookup   const & typeLookup  ,
-              PropertyPath         propertyPath,
-              Extras       const   extras = std::nullopt);
+   ColumnInfo(char const *       modelName   ,
+              char const *       columnName  ,
+              char const *       columnFqName,
+              size_t             index       ,
+              TypeLookup const & typeLookup  ,
+              PropertyPath       propertyPath,
+              Extras             extras = std::nullopt);
    ~ColumnInfo();
 
    // Stuff for setting display units and scales -- per column
@@ -136,19 +136,34 @@ struct ColumnInfo {
               #columnName, \
               #modelClass "TableModel::ColumnIndex::" #columnName, \
               static_cast<size_t>(modelClass##TableModel::ColumnIndex::columnName), \
-              /* modelClass::labelText, */ \
               modelClass::typeLookup, \
               __VA_ARGS__}
 
 /**
  * \brief Same as TABLE_MODEL_HEADER but for use with \c TreeNode subclasses rather than \c BtTableModel subclasses
  */
-#define TREE_NODE_HEADER(nodeType, modelClass, columnName, /* labelText, */ ...) \
-   ColumnInfo{#nodeType "<" #modelClass ">", \
+#define COLINFO_TREE_ITEM_NODE(modelClass, columnName, ...) \
+   ColumnInfo{"TreeItemNode<" #modelClass ">", \
               #columnName, \
-              #nodeType "<" #modelClass ">::ColumnIndex::" #columnName, \
-              static_cast<size_t>(nodeType<modelClass>::ColumnIndex::columnName), \
-              /* modelClass::labelText, */ \
+              "TreeItemNode<" #modelClass ">::ColumnIndex::" #columnName, \
+              static_cast<size_t>(TreeItemNode<modelClass>::ColumnIndex::columnName), \
+              modelClass::typeLookup, \
+              __VA_ARGS__}
+
+#define COLINFO_TREE_FOLDER_NODE(modelClass, columnName, ...) \
+   ColumnInfo{"TreeFolderNode<" #modelClass ">", \
+              #columnName, \
+              "TreeFolderNode<" #modelClass ">::ColumnIndex::" #columnName, \
+              static_cast<size_t>(TreeFolderNode<modelClass>::ColumnIndex::columnName), \
+              /* Folder is template class so not in Qt property system.  FolderCommon has its properties. */ \
+              FolderCommon::typeLookup, \
+              __VA_ARGS__}
+
+#define COLINFO_TREE_ROOT_NODE(modelClass, columnName, ...) \
+   ColumnInfo{"TreeRootNode<" #modelClass ">", \
+              #columnName, \
+              "TreeRootNode<" #modelClass ">::ColumnIndex::" #columnName, \
+              static_cast<size_t>(TreeRootNode<modelClass>::ColumnIndex::columnName), \
               modelClass::typeLookup, \
               __VA_ARGS__}
 

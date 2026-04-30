@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * trees/TreeNode.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * trees/TreeNode.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -35,7 +35,7 @@
 #include "measurement/ColorMethods.h"
 #include "measurement/IbuMethods.h"
 #include "measurement/Measurement.h"
-#include "model/BrewNote.h"
+#include "model/BrewLog.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Folder.h"
@@ -107,6 +107,7 @@ void TreeNode::subTreeToStream(QTextStream & outputStream, QString const & inden
    outputStream << "  " << indent << prefix;
    switch (this->classifier()) {
       // Apart from folder, these symbols are a bit arbitrary, but they have the merit of brevity
+      case TreeNodeClassifier::Root         : // Use same symbol as folder, so fall-through
       case TreeNodeClassifier::Folder       : outputStream << "📁"; break;
       case TreeNodeClassifier::PrimaryItem  : outputStream << "🗎"; break;
       case TreeNodeClassifier::SecondaryItem: outputStream << "§"; break;
@@ -164,246 +165,247 @@ bool TreeNode::showMe() const {
 
 COLUMN_INFOS(
    TreeItemNode<Recipe>,
-   TREE_NODE_HEADER(TreeItemNode, Recipe, Name             , PropertyNames::NamedEntity::name        ), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, Recipe, NumberOfAncestors, PropertyNames::Recipe     ::numAncestors), // "Snapshots"
-   TREE_NODE_HEADER(TreeItemNode, Recipe, BrewDate         , PropertyNames::Recipe     ::date        ), // "Date"
-   TREE_NODE_HEADER(TreeItemNode, Recipe, Style            , PropertyPath{{PropertyNames::Recipe::style,             // "Style"
-                                                                           PropertyNames::NamedEntity::name}, 0} ),
+   COLINFO_TREE_ITEM_NODE(Recipe, Name             , PropertyNames::NamedEntity::name        ), // "Name"
+   COLINFO_TREE_ITEM_NODE(Recipe, NumberOfAncestors, PropertyNames::Recipe     ::numAncestors), // "Snapshots"
+   COLINFO_TREE_ITEM_NODE(Recipe, DateCreated      , PropertyNames::Recipe     ::date        ), // "Date Created"
+   COLINFO_TREE_ITEM_NODE(Recipe, Style            , PropertyPath{{PropertyNames::Recipe::style,             // "Style"
+                                                                   PropertyNames::NamedEntity::name}, 0} ),
 )
 
 COLUMN_INFOS(
-   TreeItemNode<BrewNote>,
-   TREE_NODE_HEADER(TreeItemNode, BrewNote, BrewDate, PropertyNames::BrewNote::brewDate), // "Date"
+   TreeItemNode<BrewLog>,
+   COLINFO_TREE_ITEM_NODE(BrewLog, BrewDate   , PropertyNames::BrewLog::brewDate), // "Brew Date"
+   COLINFO_TREE_ITEM_NODE(BrewLog, BatchNumber, PropertyNames::NamedEntity::name), // "Batch Number"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Equipment>,
-   TREE_NODE_HEADER(TreeItemNode, Equipment, Name     , PropertyNames::NamedEntity::name              ), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, Equipment, BoilSize , PropertyNames::Equipment::kettleBoilSize_l    ), // "Boil Size"
-   TREE_NODE_HEADER(TreeItemNode, Equipment, BatchSize, PropertyNames::Equipment::fermenterBatchSize_l), // "Batch Size"
+   COLINFO_TREE_ITEM_NODE(Equipment, Name     , PropertyNames::NamedEntity::name              ), // "Name"
+   COLINFO_TREE_ITEM_NODE(Equipment, BoilSize , PropertyNames::Equipment::kettleBoilSize_l    ), // "Boil Size"
+   COLINFO_TREE_ITEM_NODE(Equipment, BatchSize, PropertyNames::Equipment::fermenterBatchSize_l), // "Batch Size"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Mash>,
-   TREE_NODE_HEADER(TreeItemNode, Mash, Name      , PropertyNames::NamedEntity::name     ), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, Mash, TotalWater, PropertyNames::Mash::totalMashWater_l), // "Total Water"
-   TREE_NODE_HEADER(TreeItemNode, Mash, TotalTime , PropertyNames::Mash::totalTime_mins  ), // "Total Time"
+   COLINFO_TREE_ITEM_NODE(Mash, Name      , PropertyNames::NamedEntity::name     ), // "Name"
+   COLINFO_TREE_ITEM_NODE(Mash, TotalWater, PropertyNames::Mash::totalMashWater_l), // "Total Water"
+   COLINFO_TREE_ITEM_NODE(Mash, TotalTime , PropertyNames::Mash::totalTime_mins  ), // "Total Time"
 )
 
 COLUMN_INFOS(
    TreeItemNode<MashStep>,
-   TREE_NODE_HEADER(TreeItemNode, MashStep, Name    , PropertyNames::NamedEntity::name      ), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, MashStep, Volume  , PropertyNames::MashStep::amount_l     ), // "Volume"
-   TREE_NODE_HEADER(TreeItemNode, MashStep, StepTime, PropertyNames::StepBase::stepTime_mins), // "Step Time"
+   COLINFO_TREE_ITEM_NODE(MashStep, Name    , PropertyNames::NamedEntity::name      ), // "Name"
+   COLINFO_TREE_ITEM_NODE(MashStep, Volume  , PropertyNames::MashStep::amount_l     ), // "Volume"
+   COLINFO_TREE_ITEM_NODE(MashStep, StepTime, PropertyNames::StepBase::stepTime_mins), // "Step Time"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Boil>,
-   TREE_NODE_HEADER(TreeItemNode, Boil, Name              , PropertyNames::NamedEntity::name  ), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, Boil, PreBoilSize       , PropertyNames::Boil::preBoilSize_l), // "Pre-Boil Size"
-   TREE_NODE_HEADER(TreeItemNode, Boil, LengthOfBoilProper, PropertyNames::Boil::boilTime_mins), // "Time At Boiling"
+   COLINFO_TREE_ITEM_NODE(Boil, Name              , PropertyNames::NamedEntity::name  ), // "Name"
+   COLINFO_TREE_ITEM_NODE(Boil, PreBoilSize       , PropertyNames::Boil::preBoilSize_l), // "Pre-Boil Size"
+   COLINFO_TREE_ITEM_NODE(Boil, LengthOfBoilProper, PropertyNames::Boil::boilTime_mins), // "Time At Boiling"
 )
 
 COLUMN_INFOS(
    TreeItemNode<BoilStep>,
-   TREE_NODE_HEADER(TreeItemNode, BoilStep, Name    , PropertyNames::NamedEntity::name      ), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, BoilStep, StepTime, PropertyNames::StepBase::stepTime_mins), // "Step Time"
+   COLINFO_TREE_ITEM_NODE(BoilStep, Name    , PropertyNames::NamedEntity::name      ), // "Name"
+   COLINFO_TREE_ITEM_NODE(BoilStep, StepTime, PropertyNames::StepBase::stepTime_mins), // "Step Time"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Fermentation>,
-   TREE_NODE_HEADER(TreeItemNode, Fermentation, Name       , PropertyNames::NamedEntity::name        ),
-   TREE_NODE_HEADER(TreeItemNode, Fermentation, Description, PropertyNames::Fermentation::description),
+   COLINFO_TREE_ITEM_NODE(Fermentation, Name       , PropertyNames::NamedEntity::name        ),
+   COLINFO_TREE_ITEM_NODE(Fermentation, Description, PropertyNames::Fermentation::description),
 )
 
 COLUMN_INFOS(
    TreeItemNode<FermentationStep>,
-   TREE_NODE_HEADER(TreeItemNode, FermentationStep, Name    , PropertyNames::NamedEntity::name      ),
-   TREE_NODE_HEADER(TreeItemNode, FermentationStep, StepTime, PropertyNames::StepBase::stepTime_days), // NB Days not Mins for fermentation steps
+   COLINFO_TREE_ITEM_NODE(FermentationStep, Name    , PropertyNames::NamedEntity::name      ),
+   COLINFO_TREE_ITEM_NODE(FermentationStep, StepTime, PropertyNames::StepBase::stepTime_days), // NB Days not Mins for fermentation steps
 )
 
 COLUMN_INFOS(
    TreeItemNode<Fermentable>,
-   TREE_NODE_HEADER(TreeItemNode, Fermentable, Name , PropertyNames::NamedEntity::name     ), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, Fermentable, Type , PropertyNames::Fermentable::type     ), // "Type"
-   TREE_NODE_HEADER(TreeItemNode, Fermentable, Color, PropertyNames::Fermentable::color_srm), // "Color"
+   COLINFO_TREE_ITEM_NODE(Fermentable, Name , PropertyNames::NamedEntity::name     ), // "Name"
+   COLINFO_TREE_ITEM_NODE(Fermentable, Type , PropertyNames::Fermentable::type     ), // "Type"
+   COLINFO_TREE_ITEM_NODE(Fermentable, Color, PropertyNames::Fermentable::color_srm), // "Color"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Hop>,
-   TREE_NODE_HEADER(TreeItemNode, Hop, Name    , PropertyNames::NamedEntity::name), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, Hop, Form    , PropertyNames::Hop::form        ), // "Type"
-   TREE_NODE_HEADER(TreeItemNode, Hop, AlphaPct, PropertyNames::Hop::alpha_pct   ), // "% Alpha"
-   TREE_NODE_HEADER(TreeItemNode, Hop, Origin  , PropertyNames::Hop::origin      ), // "Origin"
+   COLINFO_TREE_ITEM_NODE(Hop, Name    , PropertyNames::NamedEntity::name), // "Name"
+   COLINFO_TREE_ITEM_NODE(Hop, Form    , PropertyNames::Hop::form        ), // "Type"
+   COLINFO_TREE_ITEM_NODE(Hop, AlphaPct, PropertyNames::Hop::alpha_pct   ), // "% Alpha"
+   COLINFO_TREE_ITEM_NODE(Hop, Origin  , PropertyNames::Hop::origin      ), // "Origin"
 )
 
 COLUMN_INFOS(
    TreeItemNode<StockPurchaseFermentable>,
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, Name           , PropertyPath{{PropertyNames::StockPurchaseFermentable::fermentable,
-                                                                                           PropertyNames::NamedEntity::name}, 1}),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, Supplier       , PropertyNames::StockPurchase::supplier    ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, DateReceived   , PropertyNames::StockPurchase::dateReceived),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseFermentable, Note           , PropertyNames::StockPurchase::note        ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseFermentable, Name           , PropertyPath{{PropertyNames::StockPurchaseFermentable::fermentable,
+                                                                                   PropertyNames::NamedEntity::name}, 1}),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseFermentable, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseFermentable, Supplier       , PropertyNames::StockPurchase::supplier    ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseFermentable, DateReceived   , PropertyNames::StockPurchase::dateReceived),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseFermentable, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseFermentable, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseFermentable, Note           , PropertyNames::StockPurchase::note        ),
 )
 
 COLUMN_INFOS(
    TreeItemNode<StockUseFermentable>,
-   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Reason         , PropertyNames::StockUse::reason),
-   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Date           , PropertyNames::StockUse::date  ),
-   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Comment        , PropertyNames::StockUse::comment),
-   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
-                                                                                      PropertyNames::OwnedByRecipe::recipe,
-                                                                                      PropertyNames::NamedEntity::name}, 1}),
-   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
-   TREE_NODE_HEADER(TreeItemNode, StockUseFermentable, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
+   COLINFO_TREE_ITEM_NODE(StockUseFermentable, Reason         , PropertyNames::StockUse::reason),
+   COLINFO_TREE_ITEM_NODE(StockUseFermentable, Date           , PropertyNames::StockUse::date  ),
+   COLINFO_TREE_ITEM_NODE(StockUseFermentable, Comment        , PropertyNames::StockUse::comment),
+   COLINFO_TREE_ITEM_NODE(StockUseFermentable, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
+                                                                              PropertyNames::OwnedByRecipe::recipe,
+                                                                              PropertyNames::NamedEntity::name}, 1}),
+   COLINFO_TREE_ITEM_NODE(StockUseFermentable, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
+   COLINFO_TREE_ITEM_NODE(StockUseFermentable, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
 )
 
 COLUMN_INFOS(
    TreeItemNode<StockPurchaseHop>,
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, Name           , PropertyPath{{PropertyNames::StockPurchaseHop::hop,
-                                                                                   PropertyNames::NamedEntity::name}, 1}),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, Supplier       , PropertyNames::StockPurchase::supplier    ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, DateReceived   , PropertyNames::StockPurchase::dateReceived),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseHop, Note           , PropertyNames::StockPurchase::note        ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseHop, Name           , PropertyPath{{PropertyNames::StockPurchaseHop::hop,
+                                                                           PropertyNames::NamedEntity::name}, 1}),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseHop, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseHop, Supplier       , PropertyNames::StockPurchase::supplier    ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseHop, DateReceived   , PropertyNames::StockPurchase::dateReceived),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseHop, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseHop, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseHop, Note           , PropertyNames::StockPurchase::note        ),
 )
 
 COLUMN_INFOS(
    TreeItemNode<StockUseHop>,
-   TREE_NODE_HEADER(TreeItemNode, StockUseHop, Reason         , PropertyNames::StockUse::reason),
-   TREE_NODE_HEADER(TreeItemNode, StockUseHop, Date           , PropertyNames::StockUse::date  ),
-   TREE_NODE_HEADER(TreeItemNode, StockUseHop, Comment        , PropertyNames::StockUse::comment),
-   TREE_NODE_HEADER(TreeItemNode, StockUseHop, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
-                                                                              PropertyNames::OwnedByRecipe::recipe,
-                                                                              PropertyNames::NamedEntity::name}, 1}),
-   TREE_NODE_HEADER(TreeItemNode, StockUseHop, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
-   TREE_NODE_HEADER(TreeItemNode, StockUseHop, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
+   COLINFO_TREE_ITEM_NODE(StockUseHop, Reason         , PropertyNames::StockUse::reason),
+   COLINFO_TREE_ITEM_NODE(StockUseHop, Date           , PropertyNames::StockUse::date  ),
+   COLINFO_TREE_ITEM_NODE(StockUseHop, Comment        , PropertyNames::StockUse::comment),
+   COLINFO_TREE_ITEM_NODE(StockUseHop, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
+                                                                      PropertyNames::OwnedByRecipe::recipe,
+                                                                      PropertyNames::NamedEntity::name}, 1}),
+   COLINFO_TREE_ITEM_NODE(StockUseHop, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
+   COLINFO_TREE_ITEM_NODE(StockUseHop, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
 )
 
 COLUMN_INFOS(
    TreeItemNode<StockPurchaseMisc>,
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, Name           , PropertyPath{{PropertyNames::StockPurchaseMisc::misc,
-                                                                                    PropertyNames::NamedEntity::name}, 1}),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, Supplier       , PropertyNames::StockPurchase::supplier    ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, DateReceived   , PropertyNames::StockPurchase::dateReceived),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseMisc, Note           , PropertyNames::StockPurchase::note        ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseMisc, Name           , PropertyPath{{PropertyNames::StockPurchaseMisc::misc,
+                                                                            PropertyNames::NamedEntity::name}, 1}),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseMisc, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseMisc, Supplier       , PropertyNames::StockPurchase::supplier    ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseMisc, DateReceived   , PropertyNames::StockPurchase::dateReceived),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseMisc, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseMisc, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseMisc, Note           , PropertyNames::StockPurchase::note        ),
 )
 
 COLUMN_INFOS(
    TreeItemNode<StockUseMisc>,
-   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Reason         , PropertyNames::StockUse::reason),
-   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Date           , PropertyNames::StockUse::date  ),
-   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Comment        , PropertyNames::StockUse::comment),
-   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
-                                                                               PropertyNames::OwnedByRecipe::recipe,
-                                                                               PropertyNames::NamedEntity::name}, 1}),
-   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
-   TREE_NODE_HEADER(TreeItemNode, StockUseMisc, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
+   COLINFO_TREE_ITEM_NODE(StockUseMisc, Reason         , PropertyNames::StockUse::reason),
+   COLINFO_TREE_ITEM_NODE(StockUseMisc, Date           , PropertyNames::StockUse::date  ),
+   COLINFO_TREE_ITEM_NODE(StockUseMisc, Comment        , PropertyNames::StockUse::comment),
+   COLINFO_TREE_ITEM_NODE(StockUseMisc, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
+                                                                       PropertyNames::OwnedByRecipe::recipe,
+                                                                       PropertyNames::NamedEntity::name}, 1}),
+   COLINFO_TREE_ITEM_NODE(StockUseMisc, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
+   COLINFO_TREE_ITEM_NODE(StockUseMisc, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
 )
 
 COLUMN_INFOS(
    TreeItemNode<StockPurchaseSalt>,
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, Name           , PropertyPath{{PropertyNames::StockPurchaseSalt::salt,
-                                                                                    PropertyNames::NamedEntity::name}, 1}),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, Supplier       , PropertyNames::StockPurchase::supplier    ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, DateReceived   , PropertyNames::StockPurchase::dateReceived),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseSalt, Note           , PropertyNames::StockPurchase::note        ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, Name           , PropertyPath{{PropertyNames::StockPurchaseSalt::salt,
+                                                                            PropertyNames::NamedEntity::name}, 1}),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, Supplier       , PropertyNames::StockPurchase::supplier    ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, DateReceived   , PropertyNames::StockPurchase::dateReceived),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, Note           , PropertyNames::StockPurchase::note        ),
 )
 
 COLUMN_INFOS(
    TreeItemNode<StockUseSalt>,
-   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Reason         , PropertyNames::StockUse::reason),
-   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Date           , PropertyNames::StockUse::date  ),
-   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Comment        , PropertyNames::StockUse::comment),
-   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
-                                                                               PropertyNames::OwnedByRecipe::recipe,
-                                                                               PropertyNames::NamedEntity::name}, 1}),
-   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
-   TREE_NODE_HEADER(TreeItemNode, StockUseSalt, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
+   COLINFO_TREE_ITEM_NODE(StockUseSalt, Reason         , PropertyNames::StockUse::reason),
+   COLINFO_TREE_ITEM_NODE(StockUseSalt, Date           , PropertyNames::StockUse::date  ),
+   COLINFO_TREE_ITEM_NODE(StockUseSalt, Comment        , PropertyNames::StockUse::comment),
+   COLINFO_TREE_ITEM_NODE(StockUseSalt, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
+                                                                       PropertyNames::OwnedByRecipe::recipe,
+                                                                       PropertyNames::NamedEntity::name}, 1}),
+   COLINFO_TREE_ITEM_NODE(StockUseSalt, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
+   COLINFO_TREE_ITEM_NODE(StockUseSalt, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
 )
 
 COLUMN_INFOS(
    TreeItemNode<StockPurchaseYeast>,
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, Name           , PropertyPath{{PropertyNames::StockPurchaseYeast::yeast,
-                                                                                     PropertyNames::NamedEntity::name}, 1}),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, Supplier       , PropertyNames::StockPurchase::supplier    ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, DateReceived   , PropertyNames::StockPurchase::dateReceived),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
-   TREE_NODE_HEADER(TreeItemNode, StockPurchaseYeast, Note           , PropertyNames::StockPurchase::note        ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseYeast, Name           , PropertyPath{{PropertyNames::StockPurchaseYeast::yeast,
+                                                                             PropertyNames::NamedEntity::name}, 1}),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseYeast, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseYeast, Supplier       , PropertyNames::StockPurchase::supplier    ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseYeast, DateReceived   , PropertyNames::StockPurchase::dateReceived),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseYeast, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseYeast, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
+   COLINFO_TREE_ITEM_NODE(StockPurchaseYeast, Note           , PropertyNames::StockPurchase::note        ),
 )
 
 COLUMN_INFOS(
    TreeItemNode<StockUseYeast>,
-   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Reason         , PropertyNames::StockUse::reason),
-   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Date           , PropertyNames::StockUse::date  ),
-   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Comment        , PropertyNames::StockUse::comment),
-   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, Recipe         , PropertyPath{{PropertyNames::StockUse::brewNote,
-                                                                                PropertyNames::OwnedByRecipe::recipe,
-                                                                                PropertyNames::NamedEntity::name}, 1}),
-   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
-   TREE_NODE_HEADER(TreeItemNode, StockUseYeast, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
+   COLINFO_TREE_ITEM_NODE(StockUseYeast, Reason         , PropertyNames::StockUse::reason),
+   COLINFO_TREE_ITEM_NODE(StockUseYeast, Date           , PropertyNames::StockUse::date  ),
+   COLINFO_TREE_ITEM_NODE(StockUseYeast, Comment        , PropertyNames::StockUse::comment),
+   COLINFO_TREE_ITEM_NODE(StockUseYeast, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
+                                                                        PropertyNames::OwnedByRecipe::recipe,
+                                                                        PropertyNames::NamedEntity::name}, 1}),
+   COLINFO_TREE_ITEM_NODE(StockUseYeast, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
+   COLINFO_TREE_ITEM_NODE(StockUseYeast, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
 )
 
 COLUMN_INFOS(
    TreeItemNode<Misc>,
-   TREE_NODE_HEADER(TreeItemNode, Misc, Name, PropertyNames::NamedEntity::name),
-   TREE_NODE_HEADER(TreeItemNode, Misc, Type, PropertyNames::Misc::type       ),
+   COLINFO_TREE_ITEM_NODE(Misc, Name, PropertyNames::NamedEntity::name),
+   COLINFO_TREE_ITEM_NODE(Misc, Type, PropertyNames::Misc::type       ),
 )
 
 COLUMN_INFOS(
    TreeItemNode<Salt>,
-   TREE_NODE_HEADER(TreeItemNode, Salt, Name       , PropertyNames::NamedEntity::name),
-   TREE_NODE_HEADER(TreeItemNode, Salt, Type       , PropertyNames::Salt::type       ),
-   TREE_NODE_HEADER(TreeItemNode, Salt, IsAcid     , PropertyNames::Salt::isAcid     ),
-   TREE_NODE_HEADER(TreeItemNode, Salt, PercentAcid, PropertyNames::Salt::percentAcid),
+   COLINFO_TREE_ITEM_NODE(Salt, Name       , PropertyNames::NamedEntity::name),
+   COLINFO_TREE_ITEM_NODE(Salt, Type       , PropertyNames::Salt::type       ),
+   COLINFO_TREE_ITEM_NODE(Salt, IsAcid     , PropertyNames::Salt::isAcid     ),
+   COLINFO_TREE_ITEM_NODE(Salt, PercentAcid, PropertyNames::Salt::percentAcid),
 )
 
 COLUMN_INFOS(
    TreeItemNode<Yeast>,
-   TREE_NODE_HEADER(TreeItemNode, Yeast, Name      , PropertyNames::NamedEntity::name), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, Yeast, Laboratory, PropertyNames::Yeast::laboratory), // "Laboratory"
-   TREE_NODE_HEADER(TreeItemNode, Yeast, ProductId , PropertyNames::Yeast::productId ), // "Product ID"
-   TREE_NODE_HEADER(TreeItemNode, Yeast, Type      , PropertyNames::Yeast::type      ), // "Type"
-   TREE_NODE_HEADER(TreeItemNode, Yeast, Form      , PropertyNames::Yeast::form      ), // "Form"
+   COLINFO_TREE_ITEM_NODE(Yeast, Name      , PropertyNames::NamedEntity::name), // "Name"
+   COLINFO_TREE_ITEM_NODE(Yeast, Laboratory, PropertyNames::Yeast::laboratory), // "Laboratory"
+   COLINFO_TREE_ITEM_NODE(Yeast, ProductId , PropertyNames::Yeast::productId ), // "Product ID"
+   COLINFO_TREE_ITEM_NODE(Yeast, Type      , PropertyNames::Yeast::type      ), // "Type"
+   COLINFO_TREE_ITEM_NODE(Yeast, Form      , PropertyNames::Yeast::form      ), // "Form"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Style>,
-   TREE_NODE_HEADER(TreeItemNode, Style, Name          , PropertyNames::NamedEntity::name    ), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, Style, Category      , PropertyNames::Style::category      ), // "Category"
-   TREE_NODE_HEADER(TreeItemNode, Style, CategoryNumber, PropertyNames::Style::categoryNumber), // "Number"
-   TREE_NODE_HEADER(TreeItemNode, Style, StyleLetter   , PropertyNames::Style::styleLetter   ), // "Letter"
-   TREE_NODE_HEADER(TreeItemNode, Style, StyleGuide    , PropertyNames::Style::styleGuide    ), // "Guide"
+   COLINFO_TREE_ITEM_NODE(Style, Name          , PropertyNames::NamedEntity::name    ), // "Name"
+   COLINFO_TREE_ITEM_NODE(Style, Category      , PropertyNames::Style::category      ), // "Category"
+   COLINFO_TREE_ITEM_NODE(Style, CategoryNumber, PropertyNames::Style::categoryNumber), // "Number"
+   COLINFO_TREE_ITEM_NODE(Style, StyleLetter   , PropertyNames::Style::styleLetter   ), // "Letter"
+   COLINFO_TREE_ITEM_NODE(Style, StyleGuide    , PropertyNames::Style::styleGuide    ), // "Guide"
 )
 
 COLUMN_INFOS(
    TreeItemNode<Water>,
-   TREE_NODE_HEADER(TreeItemNode, Water, Name       , PropertyNames::NamedEntity::name     ), // "Name"
-   TREE_NODE_HEADER(TreeItemNode, Water, Calcium    , PropertyNames::Water::calcium_ppm    ), // "Ca"
-   TREE_NODE_HEADER(TreeItemNode, Water, Bicarbonate, PropertyNames::Water::bicarbonate_ppm), // "HCO3"
-   TREE_NODE_HEADER(TreeItemNode, Water, Sulfate    , PropertyNames::Water::sulfate_ppm    ), // "SO4"
-   TREE_NODE_HEADER(TreeItemNode, Water, Chloride   , PropertyNames::Water::chloride_ppm   ), // "Cl"
-   TREE_NODE_HEADER(TreeItemNode, Water, Sodium     , PropertyNames::Water::sodium_ppm     ), // "Na"
-   TREE_NODE_HEADER(TreeItemNode, Water, Magnesium  , PropertyNames::Water::magnesium_ppm  ), // "Mg"
-   TREE_NODE_HEADER(TreeItemNode, Water, pH         , PropertyNames::Water::ph             ), // "pH"
+   COLINFO_TREE_ITEM_NODE(Water, Name       , PropertyNames::NamedEntity::name     ), // "Name"
+   COLINFO_TREE_ITEM_NODE(Water, Calcium    , PropertyNames::Water::calcium_ppm    ), // "Ca"
+   COLINFO_TREE_ITEM_NODE(Water, Bicarbonate, PropertyNames::Water::bicarbonate_ppm), // "HCO3"
+   COLINFO_TREE_ITEM_NODE(Water, Sulfate    , PropertyNames::Water::sulfate_ppm    ), // "SO4"
+   COLINFO_TREE_ITEM_NODE(Water, Chloride   , PropertyNames::Water::chloride_ppm   ), // "Cl"
+   COLINFO_TREE_ITEM_NODE(Water, Sodium     , PropertyNames::Water::sodium_ppm     ), // "Na"
+   COLINFO_TREE_ITEM_NODE(Water, Magnesium  , PropertyNames::Water::magnesium_ppm  ), // "Mg"
+   COLINFO_TREE_ITEM_NODE(Water, pH         , PropertyNames::Water::ph             ), // "pH"
 )
 
 
 template<> QString TreeItemNode<Recipe>::getToolTip() const {
-   auto style = this->m_underlyingItem->style();
+   auto const style = this->m_underlyingItem->style();
 
    QString const header = getHeader();
 
@@ -444,10 +446,10 @@ template<> QString TreeItemNode<Recipe>::getToolTip() const {
    return header + body;
 }
 
-template<> QString TreeItemNode<BrewNote>::getToolTip() const {
+template<> QString TreeItemNode<BrewLog>::getToolTip() const {
    QString const header = getHeader();
    QString body = "<body>";
-   body += BrewNote::tr("Brew Note #%1 for brew on %2").arg(
+   body += BrewLog::tr("Brew Log #%1 for brew on %2").arg(
       this->m_underlyingItem->key()
    ).arg(
       Localization::displayDate(this->m_underlyingItem->brewDate())

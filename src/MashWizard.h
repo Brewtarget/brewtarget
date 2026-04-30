@@ -34,7 +34,7 @@
 class MashWizard : public QDialog, public Ui::mashWizard {
    Q_OBJECT
 public:
-   MashWizard(QWidget * parent = nullptr);
+   explicit MashWizard(QWidget * parent = nullptr);
    //! Set the recipe to do mash wizardry on.
    void setRecipe(Recipe* rec);
 

@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/TreeSortFilterProxyModelBase.h is part of Brewtarget, and is copyright the following authors 2025:
+ * trees/TreeSortFilterProxyModelBase.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -66,15 +66,17 @@ protected:
 
       // If the two node types are the same then we can leave the comparison to the overloaded functions in TreeNode.h /
       // TreeNode.cpp
-      if (lhs->classifier() == TreeNodeClassifier::Folder &&
-          rhs->classifier() == TreeNodeClassifier::Folder) {
-         if (rawColumnNum >= ColumnOwnerTraits<TreeFolderNode<NE>>::numColumns()) {
-            return false;
+      if constexpr (HasFolder<NE>) {
+         if (lhs->classifier() == TreeNodeClassifier::Folder &&
+             rhs->classifier() == TreeNodeClassifier::Folder) {
+            if (rawColumnNum >= ColumnOwnerTraits<TreeFolderNode<NE>>::numColumns()) {
+               return false;
+            }
+            auto const & lhsFolder = static_cast<TreeFolderNode<NE> const &>(*lhs);
+            auto const & rhsFolder = static_cast<TreeFolderNode<NE> const &>(*rhs);
+            auto const      column = static_cast<TreeFolderNode<NE>::ColumnIndex>(rawColumnNum);
+            return lhsFolder.columnIsLessThan(rhsFolder, column);
          }
-         auto const & lhsFolder = static_cast<TreeFolderNode<NE> const &>(*lhs);
-         auto const & rhsFolder = static_cast<TreeFolderNode<NE> const &>(*rhs);
-         auto const      column = static_cast<TreeFolderNode<NE>::ColumnIndex>(rawColumnNum);
-         return lhsFolder.columnIsLessThan(rhsFolder, column);
       }
 
       if (lhs->classifier() == TreeNodeClassifier::PrimaryItem &&

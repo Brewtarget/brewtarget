@@ -494,13 +494,9 @@
     </message>
 </context>
 <context>
-    <name>BrewNote</name>
+    <name>BrewLog</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note #%1 for brew on %2</source>
+        <source>Brew Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -622,6 +618,45 @@
     <message>
         <source>Volume Into Fermentor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BrewNote</name>
+    <message>
+        <source>ABV</source>
+        <translation type="obsolete">ABV</translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="obsolete">酿造日期</translation>
+    </message>
+    <message>
+        <source>FG</source>
+        <translation type="obsolete">FG</translation>
+    </message>
+    <message>
+        <source>Final Volume</source>
+        <translation type="obsolete">最终成交量</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="obsolete">说明Notes</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="obsolete">OG</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="obsolete">预计ABVProjected ABV</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="obsolete">SG</translation>
     </message>
 </context>
 <context>
@@ -2593,6 +2628,22 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Change %1 Name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Contained in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contained in Folder ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder name cannot be blank (and cannot contain &apos;/&apos;)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Derived::StockUseClass</name>
@@ -3452,7 +3503,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
 </context>
 <context>
-    <name>Folder</name>
+    <name>FolderCommon</name>
     <message>
         <source>Folder</source>
         <translation type="unfinished"></translation>
@@ -4277,15 +4328,15 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note #%1 for brew on %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes from brew day on %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log #%1 for brew on %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log for brew on %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6582,10 +6633,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">布鲁尔Brewer</translation>
     </message>
     <message>
-        <source>Brew Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Calculations Enabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6615,7 +6662,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">日期</translation>
+        <translation type="obsolete">日期</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -6799,6 +6846,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source> to the mash tun.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7750,14 +7805,6 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockUse</name>
     <message>
-        <source>Brew Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Note ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7791,6 +7838,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Stock Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log ID</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9213,137 +9268,97 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
-    <name>brewNoteWidget</name>
+    <name>brewLogWidget</name>
     <message>
-        <source>Preboil</source>
-        <translation>Preboil</translation>
-    </message>
-    <message>
-        <source>SG</source>
-        <translation>SG</translation>
-    </message>
-    <message>
-        <source>Preboil gravity</source>
-        <translation>Preboil重力Preboil gravity</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>量体积体积Volume</translation>
-    </message>
-    <message>
-        <source>Volume of wort collected</source>
-        <translation>收集的麦芽汁的体积</translation>
-    </message>
-    <message>
-        <source>Strike Temp</source>
-        <translation>行使温度Strike Temp</translation>
-    </message>
-    <message>
-        <source>Temperature of mash after dough in</source>
-        <translation type="vanished">糖化温度后的面团Temperature of mash after dough in</translation>
-    </message>
-    <message>
-        <source>Final Temp</source>
-        <translation>最终温度Final Temp</translation>
-    </message>
-    <message>
-        <source>Temperature of mash before mash out</source>
-        <translation>混搭出前醪温度</translation>
-    </message>
-    <message>
-        <source>Postboil</source>
-        <translation>Postboil</translation>
-    </message>
-    <message>
-        <source>OG</source>
-        <translation>OG</translation>
-    </message>
-    <message>
-        <source>Post boil gravity</source>
-        <translation>烧开后重力Post boil gravity</translation>
-    </message>
-    <message>
-        <source>Postboil Volume</source>
-        <translation>Postboil体积Postboil Volume</translation>
-    </message>
-    <message>
-        <source>Volume of wort in BK after boil</source>
-        <translation>在BK卷麦汁煮沸后Volume of wort in BK after boil</translation>
-    </message>
-    <message>
-        <source>Volume of wort transferred to fermenter</source>
-        <translation>麦汁量转移到发酵Volume of wort transferred to fermenter</translation>
-    </message>
-    <message>
-        <source>Volume into fermenter</source>
-        <translation>进入发酵罐的体积Volume into fermenter</translation>
-    </message>
-    <message>
-        <source> Pitch Temp</source>
-        <translation> 间距温度 Pitch Temp</translation>
-    </message>
-    <message>
-        <source>Temperature of wort when yeast is pitched</source>
-        <translation>麦汁温度时，酵母投Temperature of wort when yeast is pitched</translation>
-    </message>
-    <message>
-        <source>Postferment</source>
-        <translation>Postferment</translation>
-    </message>
-    <message>
-        <source>Final gravity</source>
-        <translation>最后重力</translation>
-    </message>
-    <message>
-        <source>Volume of beer into serving keg/bottles</source>
-        <translation>服成桶/瓶啤酒量</translation>
-    </message>
-    <message>
-        <source>Eff into BK</source>
-        <translation type="vanished">BK效率成Eff into BK</translation>
-    </message>
-    <message>
-        <source>Expected OG, based on measure fg</source>
-        <translation type="vanished">预计OG，根据措施FG</translation>
-    </message>
-    <message>
-        <source>Projected OG</source>
-        <translation>预计OG</translation>
-    </message>
-    <message>
-        <source>Brewhouse efficiency</source>
-        <translation>啤酒厂效率</translation>
-    </message>
-    <message>
-        <source>Brewhouse Eff</source>
-        <translation type="vanished">啤酒厂效率Brewhouse Eff</translation>
-    </message>
-    <message>
-        <source>Expected ABV based on OG</source>
-        <translation type="vanished">根据OG预期ABV</translation>
-    </message>
-    <message>
-        <source>Projected ABV</source>
-        <translation>预计ABVProjected ABV</translation>
-    </message>
-    <message>
-        <source>ABV based on FG</source>
-        <translation type="vanished">ABV基于FGABV based on FG</translation>
-    </message>
-    <message>
-        <source>ABV</source>
-        <translation>ABV</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>说明Notes</translation>
-    </message>
-    <message>
-        <source>yyyy-dd-MM</source>
+        <source>Brew Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Preboil</source>
+        <translation type="unfinished">Preboil</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="unfinished">SG</translation>
+    </message>
+    <message>
+        <source>Preboil gravity</source>
+        <translation type="unfinished">Preboil重力Preboil gravity</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume of wort collected</source>
+        <translation type="unfinished">收集的麦芽汁的体积</translation>
+    </message>
+    <message>
+        <source>Strike Temp</source>
+        <translation type="unfinished">行使温度Strike Temp</translation>
+    </message>
+    <message>
         <source>Temperature of strike water before dough in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="unfinished">最终温度Final Temp</translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="unfinished">混搭出前醪温度</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="unfinished">Postboil</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="unfinished">OG</translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="unfinished">烧开后重力Post boil gravity</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="unfinished">Postboil体积Postboil Volume</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="unfinished">在BK卷麦汁煮沸后Volume of wort in BK after boil</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="unfinished">麦汁量转移到发酵Volume of wort transferred to fermenter</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="unfinished">进入发酵罐的体积Volume into fermenter</translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="unfinished"> 间距温度 Pitch Temp</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="unfinished">麦汁温度时，酵母投Temperature of wort when yeast is pitched</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="unfinished">Postferment</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="unfinished">最后重力</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="unfinished">服成桶/瓶啤酒量</translation>
+    </message>
+    <message>
+        <source>yyyy-dd-MM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9359,12 +9374,28 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Projected OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="unfinished">啤酒厂效率</translation>
+    </message>
+    <message>
         <source>Expected ABV based on recipe OG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Projected ABV</source>
+        <translation type="unfinished">预计ABVProjected ABV</translation>
+    </message>
+    <message>
         <source>ABV based on user-reported FG</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>Yeast attenuation based on yeast specified in recipe</source>
@@ -9383,8 +9414,143 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Note</source>
+        <source>Brew Date</source>
+        <translation type="unfinished">酿造日期</translation>
+    </message>
+    <message>
+        <source>Batch Number</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">说明Notes</translation>
+    </message>
+</context>
+<context>
+    <name>brewNoteWidget</name>
+    <message>
+        <source>Preboil</source>
+        <translation type="vanished">Preboil</translation>
+    </message>
+    <message>
+        <source>SG</source>
+        <translation type="vanished">SG</translation>
+    </message>
+    <message>
+        <source>Preboil gravity</source>
+        <translation type="vanished">Preboil重力Preboil gravity</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="vanished">量体积体积Volume</translation>
+    </message>
+    <message>
+        <source>Volume of wort collected</source>
+        <translation type="vanished">收集的麦芽汁的体积</translation>
+    </message>
+    <message>
+        <source>Strike Temp</source>
+        <translation type="vanished">行使温度Strike Temp</translation>
+    </message>
+    <message>
+        <source>Temperature of mash after dough in</source>
+        <translation type="vanished">糖化温度后的面团Temperature of mash after dough in</translation>
+    </message>
+    <message>
+        <source>Final Temp</source>
+        <translation type="vanished">最终温度Final Temp</translation>
+    </message>
+    <message>
+        <source>Temperature of mash before mash out</source>
+        <translation type="vanished">混搭出前醪温度</translation>
+    </message>
+    <message>
+        <source>Postboil</source>
+        <translation type="vanished">Postboil</translation>
+    </message>
+    <message>
+        <source>OG</source>
+        <translation type="vanished">OG</translation>
+    </message>
+    <message>
+        <source>Post boil gravity</source>
+        <translation type="vanished">烧开后重力Post boil gravity</translation>
+    </message>
+    <message>
+        <source>Postboil Volume</source>
+        <translation type="vanished">Postboil体积Postboil Volume</translation>
+    </message>
+    <message>
+        <source>Volume of wort in BK after boil</source>
+        <translation type="vanished">在BK卷麦汁煮沸后Volume of wort in BK after boil</translation>
+    </message>
+    <message>
+        <source>Volume of wort transferred to fermenter</source>
+        <translation type="vanished">麦汁量转移到发酵Volume of wort transferred to fermenter</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="vanished">进入发酵罐的体积Volume into fermenter</translation>
+    </message>
+    <message>
+        <source> Pitch Temp</source>
+        <translation type="vanished"> 间距温度 Pitch Temp</translation>
+    </message>
+    <message>
+        <source>Temperature of wort when yeast is pitched</source>
+        <translation type="vanished">麦汁温度时，酵母投Temperature of wort when yeast is pitched</translation>
+    </message>
+    <message>
+        <source>Postferment</source>
+        <translation type="vanished">Postferment</translation>
+    </message>
+    <message>
+        <source>Final gravity</source>
+        <translation type="vanished">最后重力</translation>
+    </message>
+    <message>
+        <source>Volume of beer into serving keg/bottles</source>
+        <translation type="vanished">服成桶/瓶啤酒量</translation>
+    </message>
+    <message>
+        <source>Eff into BK</source>
+        <translation type="vanished">BK效率成Eff into BK</translation>
+    </message>
+    <message>
+        <source>Expected OG, based on measure fg</source>
+        <translation type="vanished">预计OG，根据措施FG</translation>
+    </message>
+    <message>
+        <source>Projected OG</source>
+        <translation type="vanished">预计OG</translation>
+    </message>
+    <message>
+        <source>Brewhouse efficiency</source>
+        <translation type="vanished">啤酒厂效率</translation>
+    </message>
+    <message>
+        <source>Brewhouse Eff</source>
+        <translation type="vanished">啤酒厂效率Brewhouse Eff</translation>
+    </message>
+    <message>
+        <source>Expected ABV based on OG</source>
+        <translation type="vanished">根据OG预期ABV</translation>
+    </message>
+    <message>
+        <source>Projected ABV</source>
+        <translation type="vanished">预计ABVProjected ABV</translation>
+    </message>
+    <message>
+        <source>ABV based on FG</source>
+        <translation type="vanished">ABV基于FGABV based on FG</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="vanished">ABV</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="vanished">说明Notes</translation>
     </message>
 </context>
 <context>
