@@ -45,7 +45,7 @@ public:
     *        how to (correctly) convert the newValue argument to a \c QVariant.
     *
     * \param updatee The entity (eg recipe) we are updating
-    * \param propertyName Which property we are updating - needs to have been declared as a Q_PROPERTY in the class header file
+    * \param typeInfo Info on the property we are updating
     * \param newValue The new value to assign
     * \param description Short text we can show on undo/redo menu to describe this update eg "Change Recipe Name"
     * \param parent This is for grouping updates together.  We don't currently use it.

@@ -136,7 +136,6 @@ struct ColumnInfo {
               #columnName, \
               #modelClass "TableModel::ColumnIndex::" #columnName, \
               static_cast<size_t>(modelClass##TableModel::ColumnIndex::columnName), \
-              /* modelClass::labelText, */ \
               modelClass::typeLookup, \
               __VA_ARGS__}
 
@@ -144,7 +143,7 @@ struct ColumnInfo {
  * \brief Same as TABLE_MODEL_HEADER but for use with \c TreeNode subclasses rather than \c BtTableModel subclasses
  */
 #define COLINFO_TREE_ITEM_NODE(modelClass, columnName, ...) \
-   ColumnInfo{ "TreeItemNode<" #modelClass ">", \
+   ColumnInfo{"TreeItemNode<" #modelClass ">", \
               #columnName, \
               "TreeItemNode<" #modelClass ">::ColumnIndex::" #columnName, \
               static_cast<size_t>(TreeItemNode<modelClass>::ColumnIndex::columnName), \
@@ -153,18 +152,19 @@ struct ColumnInfo {
 
 #define COLINFO_TREE_FOLDER_NODE(modelClass, columnName, ...) \
    ColumnInfo{"TreeFolderNode<" #modelClass ">", \
-   #columnName, \
-   "TreeFolderNode<" #modelClass ">::ColumnIndex::" #columnName, \
-   static_cast<size_t>(TreeFolderNode<modelClass>::ColumnIndex::columnName), \
-   Folder<modelClass>::typeLookup, \
-   __VA_ARGS__}
+              #columnName, \
+              "TreeFolderNode<" #modelClass ">::ColumnIndex::" #columnName, \
+              static_cast<size_t>(TreeFolderNode<modelClass>::ColumnIndex::columnName), \
+              /* Folder is template class so not in Qt property system.  FolderCommon has its properties. */ \
+              FolderCommon::typeLookup, \
+              __VA_ARGS__}
 
 #define COLINFO_TREE_ROOT_NODE(modelClass, columnName, ...) \
-ColumnInfo{"TreeRootNode<" #modelClass ">", \
-#columnName, \
-"TreeRootNode<" #modelClass ">::ColumnIndex::" #columnName, \
-static_cast<size_t>(TreeRootNode<modelClass>::ColumnIndex::columnName), \
-modelClass::typeLookup, \
-__VA_ARGS__}
+   ColumnInfo{"TreeRootNode<" #modelClass ">", \
+              #columnName, \
+              "TreeRootNode<" #modelClass ">::ColumnIndex::" #columnName, \
+              static_cast<size_t>(TreeRootNode<modelClass>::ColumnIndex::columnName), \
+              modelClass::typeLookup, \
+              __VA_ARGS__}
 
 #endif

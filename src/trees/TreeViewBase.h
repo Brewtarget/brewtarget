@@ -471,8 +471,8 @@ public:
          if constexpr (!std::same_as<NE, Recipe> && !std::is_base_of_v<StockPurchase, NE>) {
             if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
                TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
-               int const numRecipesUsedIn = primaryTreeNode.underlyingItem()->numRecipesUsedIn();
-               if (0 == numRecipesUsedIn) {
+               if (int const numRecipesUsedIn = primaryTreeNode.underlyingItem()->numRecipesUsedIn();
+                   0 == numRecipesUsedIn) {
                   //
                   // When the item is not used in any recipes, we show that as reassurance
                   //

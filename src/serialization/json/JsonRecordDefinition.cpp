@@ -37,10 +37,10 @@ namespace {
    };
 }
 
-JsonRecordDefinition::FieldDefinition::FieldDefinition(FieldType type,
-                                                       JsonXPath xPath,
-                                                       PropertyPath propertyPath,
-                                                       ValueDecoder valueDecoder) :
+JsonRecordDefinition::FieldDefinition::FieldDefinition(FieldType    const type,
+                                                       JsonXPath    const xPath,
+                                                       PropertyPath const propertyPath,
+                                                       ValueDecoder const valueDecoder) :
    type{type},
    xPath{xPath},
    propertyPath{propertyPath},

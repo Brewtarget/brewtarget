@@ -835,11 +835,10 @@ public:
          auto const nodeType = nodeToSearchIn->classifier();
          Q_ASSERT(nodeType == TreeNodeClassifier::Root ||
                   nodeType == TreeNodeClassifier::Folder);
-         auto & folderNodeToSearchIn = static_cast<TreeFolderNode<NE> &>(*nodeToSearchIn);
-         for (int childNumInFolder = 0; childNumInFolder < folderNodeToSearchIn.childCount(); ++childNumInFolder) {
-            auto child = folderNodeToSearchIn.child(childNumInFolder);
-            if (std::holds_alternative<std::shared_ptr<TreeItemNode<NE>>>(child)) {
-               auto itemNode = std::get<std::shared_ptr<TreeItemNode<NE>>>(child);
+         for (int childNumInFolder = 0; childNumInFolder < nodeToSearchIn->childCount(); ++childNumInFolder) {
+            if (auto child = nodeToSearchIn->rawChild(childNumInFolder);
+                child->classifier() == TreeNodeClassifier::PrimaryItem) {
+               auto itemNode = static_cast<TreeItemNode<NE> *>(child);
                // Normally leave the next line commented out as it generates quite a bit of logging
 //               qDebug() <<
 //                  Q_FUNC_INFO << "itemNode:" << *itemNode << "(at " <<
@@ -847,19 +846,23 @@ public:
                if (itemNode->underlyingItem().get() == const_cast<NE *>(ne)) {
                   // We found what we were looking for
 //                  qDebug() << Q_FUNC_INFO << "Found as child #" << childNumInFolder << "of" << folderNodeToSearchIn;
-                  return this->derived().createIndex(childNumInFolder, 0, itemNode.get());
+                  return this->derived().createIndex(childNumInFolder, 0, itemNode);
                }
                if constexpr (std::is_constructible_v<typename TreeItemNode<NE>::ChildPtrTypes,
                                                      std::shared_ptr<TreeItemNode<NE>>>) {
                   // We're in a tree where primary items can contain other primary items, and the child primary item
                   // wasn't a match, so throw it on the queue.
-                  queue.enqueue(itemNode.get());
+                  queue.enqueue(itemNode);
                }
-            } else if (std::holds_alternative<std::shared_ptr<TreeFolderNode<NE>>>(child)) {
-               // We found another folder to look in.  Add it to the list.
-               auto folderNode = std::get<std::shared_ptr<TreeFolderNode<NE>>>(child);
-//               qDebug() << Q_FUNC_INFO << "folderNode:" << *folderNode;
-               queue.enqueue(folderNode.get());
+            } else if (child->classifier() == TreeNodeClassifier::Folder) {
+               if constexpr (HasNoFolder<NE>) {
+                  // This should be impossible
+                  qCritical() << Q_FUNC_INFO << "Folder node found in tree that does not support them!";
+               } else {
+                  // We found another folder to look in.  Add it to the list.
+                  auto folderNode = static_cast<TreeFolderNode<NE> *>(child);
+                  queue.enqueue(folderNode);
+               }
             } else {
                // It should be impossible to get here, as folders only contain either primary items or other folders
                Q_ASSERT(false);
@@ -1251,16 +1254,20 @@ public:
       }
 
       //
-      // Parent node is usually a folder, though in Recipe tree it can also be a primary item (ie Recipe).  It can never
-      // be a secondary item.
+      // Parent node is usually root node or (in trees that support them) a folder, though in Recipe tree it can also be
+      // a primary item (ie Recipe).  It can never be a secondary item.
       //
       auto const parentNodeType = parentNode->classifier();
-      if (parentNodeType == TreeNodeClassifier::Root ||
-          parentNodeType == TreeNodeClassifier::Folder) {
-         return this->removeChildren(row, count, parentIndex, static_cast<TreeFolderNode<NE> &>(*parentNode));
+      if (parentNodeType == TreeNodeClassifier::Root) {
+         return this->removeChildren(row, count, parentIndex, static_cast<TreeRootNode<NE> &>(*parentNode));
+      }
+      if constexpr (HasFolder<NE>) {
+         if (parentNodeType == TreeNodeClassifier::Folder) {
+            return this->removeChildren(row, count, parentIndex, static_cast<TreeFolderNode<NE> &>(*parentNode));
+         }
       }
       Q_ASSERT(parentNode->classifier() == TreeNodeClassifier::PrimaryItem);
-      return this->removeChildren(row, count, parentIndex, static_cast<TreeItemNode<NE>   &>(*parentNode));
+      return this->removeChildren(row, count, parentIndex, static_cast<TreeItemNode<NE> &>(*parentNode));
    }
 
 protected:

@@ -35,10 +35,10 @@ namespace {
    };
 }
 
-XmlRecordDefinition::FieldDefinition::FieldDefinition(FieldType    type,
-                                                      XQString     xPath,
-                                                      PropertyPath propertyPath,
-                                                      ValueDecoder valueDecoder) :
+XmlRecordDefinition::FieldDefinition::FieldDefinition(FieldType    const type,
+                                                      XQString     const xPath,
+                                                      PropertyPath const propertyPath,
+                                                      ValueDecoder const valueDecoder) :
    type{type},
    xPath{xPath},
    propertyPath{propertyPath},

@@ -45,7 +45,7 @@ namespace {
    double constexpr molarMass_MgSO4  = 120.366     ; // https://en.wikipedia.org/wiki/Magnesium_sulfate (anhydrous form)
    double constexpr molarMass_NaCl   =  58.443     ; // https://en.wikipedia.org/wiki/Sodium_chloride
    double constexpr molarMass_NaHCO3 =  84.0066    ; // https://en.wikipedia.org/wiki/Sodium_bicarbonate
-   double constexpr molarMass_H3PO4  =  97.994     ; // https://en.wikipedia.org/wiki/Phosphoric_acid
+//   double constexpr molarMass_H3PO4  =  97.994     ; // https://en.wikipedia.org/wiki/Phosphoric_acid
 }
 
 QString Salt::localisedName() { return tr("Salt"); }

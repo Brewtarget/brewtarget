@@ -61,7 +61,7 @@ public:
     *        Using an \c initializer_list of \c reference_wrapper just saves the caller from having to prefix everything
     *        with '&'.
     *
-    * \param
+    * \param listOfProperties
     * \param indexOfName
     */
    PropertyPath(std::initializer_list<std::reference_wrapper<BtStringConst const>> listOfProperties,

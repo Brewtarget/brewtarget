@@ -95,8 +95,8 @@ struct EditorBaseField {
                    EditFieldType * editField,
                    PropertyPath const propertyPath,
                    [[maybe_unused]] TypeLookup const & typeLookup,
-                   std::optional<int> precision = std::nullopt,
-                   WhenToWriteField whenToWrite = WhenToWriteField::Normal)
+                   std::optional<int> const precision = std::nullopt,
+                   WhenToWriteField const whenToWrite = WhenToWriteField::Normal)
    requires (// Exclude the cases that have their own constructors below
              !std::same_as     <EditFieldType, SmartLineEdit     > &&
              !std::same_as     <EditFieldType, BtComboBoxEnum    > &&
@@ -125,14 +125,14 @@ struct EditorBaseField {
                    PropertyPath const propertyPath,
                    TypeLookup const & typeLookup,
                    std::optional<int> precision = std::nullopt,
-                   WhenToWriteField whenToWrite = WhenToWriteField::Normal)
+                   WhenToWriteField const whenToWrite = WhenToWriteField::Normal)
    requires (std::same_as<EditFieldType, SmartLineEdit>) :
-      labelName  {labelName  },
-      label      {label      },
-      editField  {editField  },
+      labelName   {labelName  },
+      label       {label      },
+      editField   {editField  },
       propertyPath{propertyPath},
-      precision  {precision  },
-      whenToWrite{whenToWrite} {
+      precision   {precision  },
+      whenToWrite {whenToWrite} {
       SmartAmounts::Init(editorClass,
                          labelName,
                          labelFqName,
@@ -159,14 +159,14 @@ struct EditorBaseField {
                    EnumStringMapping const & displayNameMapping,
                    std::vector<int>  const * restrictTo = nullptr,
                    std::vector<SmartLineEdit *> controlledFields = {},
-                   WhenToWriteField whenToWrite = WhenToWriteField::Normal)
+                   WhenToWriteField const whenToWrite = WhenToWriteField::Normal)
    requires (std::same_as<EditFieldType, BtComboBoxEnum>) :
-      labelName  {labelName  },
-      label      {label      },
-      editField  {editField  },
+      labelName   {labelName  },
+      label       {label      },
+      editField   {editField  },
       propertyPath{propertyPath},
-      precision  {std::nullopt},
-      whenToWrite{whenToWrite} {
+      precision   {std::nullopt},
+      whenToWrite {whenToWrite} {
       editField->init(editorClass,
                       editFieldName,
                       editFieldFqName,
@@ -193,14 +193,14 @@ struct EditorBaseField {
                    TypeLookup const & typeLookup,
                    QString const & unsetDisplay = QObject::tr("No"),
                    QString const & setDisplay   = QObject::tr("Yes"),
-                   WhenToWriteField whenToWrite = WhenToWriteField::Normal)
+                   WhenToWriteField const whenToWrite = WhenToWriteField::Normal)
    requires (std::same_as<EditFieldType, BtComboBoxBool>) :
-      labelName  {labelName  },
-      label      {label      },
-      editField  {editField  },
+      labelName   {labelName  },
+      label       {label      },
+      editField   {editField  },
       propertyPath{propertyPath},
-      precision  {std::nullopt},
-      whenToWrite{whenToWrite} {
+      precision   {std::nullopt},
+      whenToWrite {whenToWrite} {
       // We could use BT_COMBO_BOX_BOOL_INIT here, but we'd be repeating a bunch of work we already did in EDITOR_FIELD
       editField->init(editorClass,
                       editFieldName,
@@ -221,14 +221,14 @@ struct EditorBaseField {
                    EditFieldType * editField,        // NB: Can't have BtComboBoxObject here as would be narrowing
                    PropertyPath const propertyPath,
                    [[maybe_unused]] TypeLookup const & typeLookup,
-                   WhenToWriteField whenToWrite = WhenToWriteField::Normal)
+                   WhenToWriteField const whenToWrite = WhenToWriteField::Normal)
    requires (std::derived_from<EditFieldType, BtComboBoxObject>) :
-      labelName  {labelName  },
-      label      {label      },
-      editField  {editField  },
+      labelName   {labelName  },
+      label       {label      },
+      editField   {editField  },
       propertyPath{propertyPath},
-      precision  {std::nullopt},
-      whenToWrite{whenToWrite} {
+      precision   {std::nullopt},
+      whenToWrite {whenToWrite} {
       editField->init(/*editorClass,
                       editFieldName,
                       editFieldFqName,
@@ -248,14 +248,14 @@ struct EditorBaseField {
                    BtLineEditCurrency * editField,
                    PropertyPath const propertyPath,
                    TypeLookup const & typeLookup,
-                   WhenToWriteField whenToWrite = WhenToWriteField::Normal)
+                   WhenToWriteField const whenToWrite = WhenToWriteField::Normal)
    requires (std::same_as<EditFieldType, BtLineEditCurrency>) :
-      labelName  {labelName  },
-      label      {label      },
-      editField  {editField  },
+      labelName   {labelName  },
+      label       {label      },
+      editField   {editField  },
       propertyPath{propertyPath},
-      precision  {std::nullopt},
-      whenToWrite{whenToWrite} {
+      precision   {std::nullopt},
+      whenToWrite {whenToWrite} {
       // We could use BT_COMBO_BOX_BOOL_INIT here, but we'd be repeating a bunch of work we already did in EDITOR_FIELD
       editField->init(editorClass,
                       editFieldName,
@@ -274,15 +274,15 @@ struct EditorBaseField {
                    QLabel * editField,
                    PropertyPath const propertyPath,
                    [[maybe_unused]] TypeLookup const & typeLookup,
-                   std::optional<int> precision = std::nullopt,
-                   WhenToWriteField whenToWrite = WhenToWriteField::Never) // NB: "Never" here as read-only
+                   std::optional<int> const precision = std::nullopt,
+                   WhenToWriteField const whenToWrite = WhenToWriteField::Never) // NB: "Never" here as read-only
    requires (std::same_as<EditFieldType, QLabel>) :
-      labelName  {labelName  },
-      label      {label      },
-      editField  {editField  },
+      labelName   {labelName  },
+      label       {label      },
+      editField   {editField  },
       propertyPath{propertyPath},
-      precision  {precision  },
-      whenToWrite{whenToWrite} {
+      precision   {precision  },
+      whenToWrite {whenToWrite} {
       return;
    }
 
@@ -296,15 +296,15 @@ struct EditorBaseField {
                    SmartValueDisplay * editField,
                    PropertyPath const propertyPath,
                    TypeLookup const & typeLookup,
-                   std::optional<int> precision = std::nullopt,
-                   WhenToWriteField whenToWrite = WhenToWriteField::Never) // NB: "Never" here as read-only
+                   std::optional<int> const precision = std::nullopt,
+                   WhenToWriteField const whenToWrite = WhenToWriteField::Never) // NB: "Never" here as read-only
    requires (std::same_as<EditFieldType, SmartValueDisplay>) :
-      labelName  {labelName  },
-      label      {label      },
-      editField  {editField  },
+      labelName   {labelName  },
+      label       {label      },
+      editField   {editField  },
       propertyPath{propertyPath},
-      precision  {precision  },
-      whenToWrite{whenToWrite} {
+      precision   {precision  },
+      whenToWrite {whenToWrite} {
       SmartAmounts::Init(editorClass,
                          labelName,
                          labelFqName,
