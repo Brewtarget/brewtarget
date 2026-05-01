@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * WaterProfileAdjustmentTool.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * tools/WaterProfileAdjustmentTool.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
@@ -16,8 +16,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "WaterProfileAdjustmentTool.h"
+ =====================================================================================================================*/
+#include "tools/WaterProfileAdjustmentTool.h"
 
 #include <limits>
 
@@ -56,7 +56,7 @@
 
 
 //
-// All of the pH calculations are taken from the work done by Kai Troester and published at
+// All the pH calculations are taken from the work done by Kai Troester and published at
 // http://braukaiser.com/wiki/index.php/Beer_color_to_mash_pH_(v2.0) with additional information being gleaned from the
 // spreadsheet associated with that link.
 //
@@ -103,7 +103,7 @@ public:
    /**
     * Constructor
     */
-   impl(WaterProfileAdjustmentTool & self) :
+   explicit impl(WaterProfileAdjustmentTool & self) :
       m_self {self},
       m_saltAdditionsVeriTable{},
       m_waterIonDisplays{

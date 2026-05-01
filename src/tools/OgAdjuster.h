@@ -1,5 +1,6 @@
-/*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * OgAdjuster.h is part of Brewtarget, and is copyright the following authors 2009-2014:
+/*======================================================================================================================
+ * tools/OgAdjuster.h is part of Brewtarget, and is copyright the following authors 2009-2026:
+ *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -12,9 +13,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef OGADJUSTER_H
-#define OGADJUSTER_H
+ =====================================================================================================================*/
+#ifndef TOOLS_OGADJUSTER_H
+#define TOOLS_OGADJUSTER_H
 #pragma once
 
 #include <QDialog>
@@ -28,12 +29,11 @@
  *
  * \brief View/controller dialog that helps you correct your OG on brew day.
  */
-class OgAdjuster : public QDialog, public Ui::ogAdjuster
-{
+class OgAdjuster : public QDialog, public Ui::ogAdjuster {
    Q_OBJECT
 
 public:
-   OgAdjuster( QWidget* parent = 0 );
+   explicit OgAdjuster( QWidget* parent = 0 );
    //! Set the recipe whose OG to correct.
    void setRecipe( Recipe* rec );
 

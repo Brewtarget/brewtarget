@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * ScaleRecipeTool.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * tools/ScaleRecipeTool.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "ScaleRecipeTool.h"
+ =====================================================================================================================*/
+#include "tools/ScaleRecipeTool.h"
 
 #include <QMessageBox>
 #include <QButtonGroup>
@@ -56,12 +56,12 @@ ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) :
 
 void ScaleRecipeTool::accept() {
 
-   int equipmentId = this->field("m_equipComboBox").toInt();
+   int const equipmentId = this->field("m_equipComboBox").toInt();
    if (equipmentId < 0) {
       return;
    }
    Equipment* selectedEquipment = ObjectStoreWrapper::getByIdRaw<Equipment>(equipmentId);
-   double newEfficiency = this->field("m_efficiencyLineEdit").toString().toDouble();
+   double const newEfficiency = this->field("m_efficiencyLineEdit").toString().toDouble();
    this->scale(selectedEquipment, newEfficiency);
 
    QWizard::accept();

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * OgAdjuster.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * tools/OgAdjuster.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Eric Tamme <etamme@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -17,8 +17,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "OgAdjuster.h"
+ =====================================================================================================================*/
+#include "tools/OgAdjuster.h"
 
 #include "Algorithms.h"
 #include "measurement/Measurement.h"
@@ -50,7 +50,7 @@ OgAdjuster::OgAdjuster( QWidget* parent ) :
 }
 
 
-void OgAdjuster::setRecipe(Recipe* rec) {
+void OgAdjuster::setRecipe(Recipe * rec) {
    if (rec && rec != recObs) {
       recObs = rec;
    }
@@ -79,7 +79,7 @@ void OgAdjuster::calculate() {
       return;
    }
 
-   if (recObs == 0 || recObs->equipment() == 0) {
+   if (recObs == nullptr || recObs->equipment() == nullptr) {
       return;
    }
 
@@ -120,8 +120,8 @@ void OgAdjuster::calculate() {
    // postBoilWater_kg = batchSize - topUpWater;
    // postBoilSugar_kg = Algorithms::SG_20C20C_toPlato( recObs->getOG() ) / 100.0 * batchSize * recObs->getOG() * Algorithms::getWaterDensity_kgL(20);
    // finalPlato = 100 * postBoilSugar_kg / ( postBoilSugar_kg + postBoilWater_kg );
-   double waterToAdd_kg = (double)100 * sugar_kg / finalPlato - sugar_kg - finalWater_kg;
-   double waterToAdd_l = waterToAdd_kg / Algorithms::getWaterDensity_kgL(20);
+   double const waterToAdd_kg = (double)100 * sugar_kg / finalPlato - sugar_kg - finalWater_kg;
+   double const waterToAdd_l = waterToAdd_kg / Algorithms::getWaterDensity_kgL(20);
 
    // Calculate final batch size.
    finalVolume_l += waterToAdd_l;

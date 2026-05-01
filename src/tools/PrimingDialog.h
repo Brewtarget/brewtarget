@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * PrimingDialog.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * tools/PrimingDialog.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -13,9 +13,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef PRIMINGDIALOG_H
-#define PRIMINGDIALOG_H
+ =====================================================================================================================*/
+#ifndef TOOLS_PRIMINGDIALOG_H
+#define TOOLS_PRIMINGDIALOG_H
 #pragma once
 
 #include <QDialog>
@@ -30,16 +30,16 @@ class QWidget;
  * \brief Dialog to calculate priming sugar amounts
  */
 class PrimingDialog : public QDialog, public Ui::primingDialog {
-Q_OBJECT
+   Q_OBJECT
 public:
-   PrimingDialog(QWidget* parent = nullptr);
-   virtual ~PrimingDialog();
+   explicit PrimingDialog(QWidget * parent = nullptr);
+   ~PrimingDialog() override;
 
 public slots:
    void calculate();
 
 private:
-   QButtonGroup* sugarGroup;
+   QButtonGroup * sugarGroup;
 };
 
 #endif

@@ -1,6 +1,7 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * StrikeWaterDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * tools/StrikeWaterDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -15,8 +16,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "StrikeWaterDialog.h"
+ =====================================================================================================================*/
+#include "tools/StrikeWaterDialog.h"
 
 #include <limits>
 
@@ -30,12 +31,12 @@
 namespace {
    // From Northern Brewer ~0.38 but Jon Palmer suggest 0.41
    // to compensate for the lost to the tun even if the tun is pre-heated
-   double const specificHeatBarley = 0.41;
+   double constexpr specificHeatBarley = 0.41;
 
    /**
     * \brief
     */
-   double initialInfusionSi(double grainTemp, double targetTemp, double waterToGrain) {
+   double initialInfusionSi(double const grainTemp, double const targetTemp, double const waterToGrain) {
       if (waterToGrain == 0.0) {
          return 0.0;
       }
@@ -45,11 +46,11 @@ namespace {
    /**
     * \brief
     */
-   double mashInfusionSi(double initialTemp,
-                         double targetTemp,
-                         double grainWeight,
-                         double infusionWater,
-                         double mashVolume) {
+   double mashInfusionSi(double const initialTemp,
+                         double const targetTemp,
+                         double const grainWeight,
+                         double const infusionWater,
+                         double const mashVolume) {
       if (infusionWater - targetTemp == 0.0) {
          return 0.0;
       }
@@ -82,8 +83,8 @@ StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 StrikeWaterDialog::~StrikeWaterDialog() = default;
 
 void StrikeWaterDialog::calculate() {
-  double strikeWaterTemp = computeInitialInfusion();
-  double volumeToAdd     = computeMashInfusion();
+  double const strikeWaterTemp = computeInitialInfusion();
+  double const volumeToAdd     = computeMashInfusion();
 
   this->initialResultTxt->setQuantity(strikeWaterTemp);
   this->mashResultTxt   ->setQuantity(volumeToAdd);
@@ -91,10 +92,10 @@ void StrikeWaterDialog::calculate() {
 }
 
 double StrikeWaterDialog::computeInitialInfusion() {
-   double grainTemp   = this->grainTempVal      ->getNonOptCanonicalQty();
-   double targetMash  = this->targetMashVal     ->getNonOptCanonicalQty();
-   double waterVolume = this->waterVolumeVal    ->getNonOptCanonicalQty();
-   double grainWeight = this->grainWeightInitVal->getNonOptCanonicalQty();
+   double const grainTemp   = this->grainTempVal      ->getNonOptCanonicalQty();
+   double const targetMash  = this->targetMashVal     ->getNonOptCanonicalQty();
+   double const waterVolume = this->waterVolumeVal    ->getNonOptCanonicalQty();
+   double const grainWeight = this->grainWeightInitVal->getNonOptCanonicalQty();
 
    if (grainWeight == 0.0) {
       return 0.0;
@@ -103,12 +104,12 @@ double StrikeWaterDialog::computeInitialInfusion() {
    return initialInfusionSi(grainTemp, targetMash, waterVolume / grainWeight);
 }
 
-double StrikeWaterDialog::computeMashInfusion() {
-   double mashVol       = this->mashVolVal      ->getNonOptCanonicalQty();
-   double grainWeight   = this->grainWeightVal  ->getNonOptCanonicalQty();
-   double actualMash    = this->actualMashVal   ->getNonOptCanonicalQty();
-   double targetMashInf = this->targetMashInfVal->getNonOptCanonicalQty();
-   double infusionWater = this->infusionWaterVal->getNonOptCanonicalQty();
+double StrikeWaterDialog::computeMashInfusion() const {
+   double const mashVol       = this->mashVolVal      ->getNonOptCanonicalQty();
+   double const grainWeight   = this->grainWeightVal  ->getNonOptCanonicalQty();
+   double const actualMash    = this->actualMashVal   ->getNonOptCanonicalQty();
+   double const targetMashInf = this->targetMashInfVal->getNonOptCanonicalQty();
+   double const infusionWater = this->infusionWaterVal->getNonOptCanonicalQty();
 
    return mashInfusionSi(actualMash, targetMashInf, grainWeight, infusionWater, mashVol);
 }

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * TimerMainDialog.h is part of Brewtarget, and is copyright the following authors 2009-2022:
+ * tools/TimerMainDialog.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -14,9 +14,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef TIMERMAINDIALOG_H
-#define TIMERMAINDIALOG_H
+ =====================================================================================================================*/
+#ifndef TOOLS_TIMERMAINDIALOG_H
+#define TOOLS_TIMERMAINDIALOG_H
 #pragma once
 
 #include "ui_timerMainDialog.h"
@@ -69,7 +69,7 @@ private:
    void removeAllTimers();
    void resetTimers();
    void updateTime();
-   QString timeToString(int t);
+   static QString timeToString(int t);
    void setRingLimits(bool l, unsigned int a);
    void sortTimers();
    TimerWidget* createNewTimer();

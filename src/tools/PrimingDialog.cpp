@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * PrimingDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * tools/PrimingDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -16,8 +16,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "PrimingDialog.h"
+ =====================================================================================================================*/
+#include "tools/PrimingDialog.h"
 
 #include <cmath>
 
@@ -69,24 +69,24 @@ void PrimingDialog::calculate() {
    double const co2_mol = co2_l / 22.4; // Mols of CO2 we need.
 
    double sugar_mol;
-   double sugar_g;
+   double sugar_g = 0.0;
 
    //
    // The calculation depends on which type of sugar is selected, via a set of radio buttons.
    //
-   QAbstractButton* button = sugarGroup->checkedButton();
-   if (button == radioButton_glucMono) {
-      sugar_mol = co2_mol / 2;
-      sugar_g = sugar_mol * 198; // Glucose monohydrate is 198 g/mol.
+   if (QAbstractButton const * button = sugarGroup->checkedButton();
+       button == radioButton_glucMono) {
+      sugar_mol = co2_mol / 2.0;
+      sugar_g = sugar_mol * 198.0; // Glucose monohydrate is 198 g/mol.
    } else if (button == radioButton_gluc) {
-      sugar_mol = co2_mol / 2;
-      sugar_g = sugar_mol * 180; // Glucose is 180g/mol.
+      sugar_mol = co2_mol / 2.0;
+      sugar_g = sugar_mol * 180.0; // Glucose is 180g/mol.
    } else if (button == radioButton_sucrose) {
-      sugar_mol = co2_mol / 4;
-      sugar_g = sugar_mol * 342; // Sucrose is 342 g/mol.
+      sugar_mol = co2_mol / 4.0;
+      sugar_g = sugar_mol * 342.0; // Sucrose is 342 g/mol.
    } else if (button == radioButton_dme) {
-      sugar_mol = co2_mol / 2;
-      sugar_g = sugar_mol * 180 / 0.60; // DME is equivalently about 60% glucose.
+      sugar_mol = co2_mol / 2.0;
+      sugar_g = sugar_mol * 180.0 / 0.60; // DME is equivalently about 60% glucose.
    } else {
       // If no radio button is set, then we can't do the calculation
       qDebug() << Q_FUNC_INFO << "No sugar type selected";
@@ -95,7 +95,7 @@ void PrimingDialog::calculate() {
 
    // The amount have to be set in default unit to SmartLineEdit.
    // We should find a better solution, but until it is not, we must do it this way.
-   lineEdit_output->setQuantity(sugar_g/1000);
+   lineEdit_output->setQuantity(sugar_g / 1000.0);
 
    return;
 }

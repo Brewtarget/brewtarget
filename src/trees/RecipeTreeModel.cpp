@@ -16,11 +16,11 @@
  =====================================================================================================================*/
 #include "trees/RecipeTreeModel.h"
 
-#include "model/BrewLog.h"
-#include "AncestorDialog.h"
 #include "OptionDialog.h"
 #include "PersistentSettings.h"
+#include "model/BrewLog.h"
 #include "model/RecipeUtils.h"
+#include "tools/AncestorDialog.h"
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake

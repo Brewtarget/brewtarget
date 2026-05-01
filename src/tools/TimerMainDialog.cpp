@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * TimerMainDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * tools/TimerMainDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "TimerMainDialog.h"
+ =====================================================================================================================*/
+#include "tools/TimerMainDialog.h"
 
 #include <QMessageBox>
 #include <QToolTip>
@@ -155,9 +155,8 @@ void TimerMainDialog::on_setBoilTimeBox_valueChanged(int t) {
 }
 
 void TimerMainDialog::decrementTimer() {
-   // Main timer uses boilTimer which decrements then
-   // triigers this function, so there is nothing to
-   // do here but show the change.
+   // Main timer uses boilTimer which decrements then triggers this function, so there is nothing to do here but show
+   // the change.
    this->updateTime();
    return;
 }
@@ -168,7 +167,7 @@ void TimerMainDialog::updateTime() {
    return;
 }
 
-QString TimerMainDialog::timeToString(int t) {
+QString TimerMainDialog::timeToString(int const t) {
    if (t == 0) {
       return "00:00:00";
    }

@@ -1,8 +1,9 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * TimerWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2022:
+ * tools/TimerWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Julein <j2bweb@gmail.com>
+ *   • Matt Young <mfsy@yahoo.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -33,7 +34,7 @@
 #include <QVBoxLayout>
 
 #include "Application.h"
-#include "TimerMainDialog.h"
+#include "tools/TimerMainDialog.h"
 #include "utils/TimerUtils.h"
 
 #ifdef BUILDING_WITH_CMAKE
@@ -133,7 +134,7 @@ int TimerWidget::getTime() {
    return this->boilTime->getTime() - this->time;
 }
 
-QString TimerWidget::getNote() {
+QString TimerWidget::getNote() const {
    return this->noteEdit->text();
 }
 
@@ -247,7 +248,7 @@ void TimerWidget::reset() {
    return;
 }
 
-void TimerWidget::startAlarm(bool loop) {
+void TimerWidget::startAlarm(bool const loop) {
    qDebug() <<
       Q_FUNC_INFO << "About to play" << this->soundPlayer->source() << "alarm" << (loop ? "in loop" : "once") <<
       ".  Sound player status is" << static_cast<int>(this->soundPlayer->status());
@@ -255,7 +256,8 @@ void TimerWidget::startAlarm(bool loop) {
    this->soundPlayer->play();
    if (this->soundPlayer->status() == QSoundEffect::Error || this->soundPlayer->status() == QSoundEffect::Null) {
       qWarning() <<
-         Q_FUNC_INFO << "Unable to play timer alarm sound.  Sound player status = " << static_cast<int>(this->soundPlayer->status());
+         Q_FUNC_INFO << "Unable to play timer alarm sound.  Sound player status = " <<
+         static_cast<int>(this->soundPlayer->status());
    }
 
    if (loop) {
@@ -294,7 +296,7 @@ void TimerWidget::on_playButton_clicked() {
    return;
 }
 
-void TimerWidget::setAlarmLimits(bool l, unsigned int a) {
+void TimerWidget::setAlarmLimits(bool const l, unsigned int const a) {
    this->limitAlarmRing = l;
    this->alarmRingLimit = a;
    return;
