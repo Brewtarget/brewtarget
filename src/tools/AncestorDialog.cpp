@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * AncestorDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
+ * tools/AncestorDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@fastmail.com>
  *
@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "AncestorDialog.h"
+ =====================================================================================================================*/
+#include "tools/AncestorDialog.h"
 
 #include <algorithm>
 
@@ -75,7 +75,7 @@ void AncestorDialog::buildAncestorBox() {
    QList<Recipe *> recipes = ObjectStoreWrapper::getAllRaw<Recipe>();
    std::sort(recipes.begin(), recipes.end(), AncestorDialog::recipeLessThan);
 
-   for (auto recipe : recipes) {
+   for (auto const recipe : recipes) {
       if (!recipe->deleted()) {
          comboBox_ancestor->addItem(recipe->name(), recipe->key());
       }
@@ -84,7 +84,7 @@ void AncestorDialog::buildAncestorBox() {
    return;
 }
 
-void AncestorDialog::buildDescendantBox(Recipe * ignore) {
+void AncestorDialog::buildDescendantBox(Recipe const * ignore) {
    QList<Recipe *> recipes = ObjectStoreWrapper::getAllRaw<Recipe>();
    std::sort(recipes.begin(), recipes.end(), recipeLessThan);
 

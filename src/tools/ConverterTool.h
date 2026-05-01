@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * ConverterTool.h is part of Brewtarget, and is copyright the following authors 2009-2015:
+ * tools/ConverterTool.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -13,9 +13,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef CONVERTERTOOL_H
-#define CONVERTERTOOL_H
+ =====================================================================================================================*/
+#ifndef TOOLS_CONVERTERTOOL_H
+#define TOOLS_CONVERTERTOOL_H
 #pragma once
 
 #include <QDialog>
@@ -31,7 +31,7 @@
 class ConverterTool : public QDialog {
    Q_OBJECT
 public:
-   ConverterTool(QWidget * parent = nullptr);
+   explicit ConverterTool(QWidget * parent = nullptr);
 
    //! \name Public UI Variables
    //! @{
@@ -48,8 +48,7 @@ public slots:
    void convert();
 
 protected:
-
-   virtual void changeEvent(QEvent* event);
+   void changeEvent(QEvent* event) override;
 
 private:
 

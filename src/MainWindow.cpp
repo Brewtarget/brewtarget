@@ -69,36 +69,23 @@
 #include <QWidget>
 
 #include "AboutDialog.h"
-#include "AlcoholTool.h"
 #include "Algorithms.h"
-#include "AncestorDialog.h"
 #include "Application.h"
 #include "BrewLogWidget.h"
 #include "BtDatePopup.h"
-#include "model/Folder.h"
 #include "BtHorizontalTabs.h"
 #include "BtTabWidget.h"
-#include "ConverterTool.h"
 #include "HelpDialog.h"
 #include "Html.h"
-#include "HydrometerTool.h"
-#include "StockFormatter.h"
-#include "StockWindow.h"
 #include "MashDesigner.h"
 #include "MashWizard.h"
-#include "OgAdjuster.h"
 #include "OptionDialog.h"
 #include "PersistentSettings.h"
-#include "PitchDialog.h"
-#include "PrimingDialog.h"
 #include "PrintAndPreviewDialog.h"
 #include "RangedSlider.h"
 #include "RecipeFormatter.h"
-#include "RefractoDialog.h"
-#include "ScaleRecipeTool.h"
-#include "StrikeWaterDialog.h"
-#include "TimerMainDialog.h"
-#include "WaterProfileAdjustmentTool.h"
+#include "StockFormatter.h"
+#include "StockWindow.h"
 #include "catalogs/BoilCatalog.h"
 #include "catalogs/EquipmentCatalog.h"
 #include "catalogs/FermentableCatalog.h"
@@ -135,13 +122,13 @@
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
+#include "model/Folder.h"
 #include "model/Mash.h"
 #include "model/Recipe.h"
 #include "model/RecipeAdditionYeast.h"
 #include "model/RecipeAdjustmentSalt.h"
 #include "model/Style.h"
 #include "model/Yeast.h"
-#include "serialization/ImportExport.h"
 #include "qtModels/sortFilterProxyModels/FermentableSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/RecipeAdditionFermentableSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.h"
@@ -158,6 +145,19 @@
 #include "qtModels/tableModels/RecipeAdditionMiscTableModel.h"
 #include "qtModels/tableModels/RecipeAdditionYeastTableModel.h"
 #include "qtModels/tableModels/RecipeAdjustmentSaltTableModel.h"
+#include "serialization/ImportExport.h"
+#include "tools/AlcoholTool.h"
+#include "tools/AncestorDialog.h"
+#include "tools/ConverterTool.h"
+#include "tools/HydrometerTool.h"
+#include "tools/OgAdjuster.h"
+#include "tools/PitchDialog.h"
+#include "tools/PrimingDialog.h"
+#include "tools/RefractoDialog.h"
+#include "tools/ScaleRecipeTool.h"
+#include "tools/StrikeWaterDialog.h"
+#include "tools/TimerMainDialog.h"
+#include "tools/WaterProfileAdjustmentTool.h"
 #include "undoRedo/RelationalUndoableUpdate.h"
 #include "undoRedo/Undoable.h"
 #include "undoRedo/UndoableAddOrRemove.h"
@@ -1260,8 +1260,10 @@ void MainWindow::setupTriggers() {
    connect(actionNewRecipe                 , &QAction::triggered, this                                      , &MainWindow::newRecipe             ); // > File > New Recipe
    connect(actionImportFromXml             , &QAction::triggered, this                                      , &MainWindow::importFiles           ); // > File > Import Recipes
    connect(actionExportToXml               , &QAction::triggered, this                                      , &MainWindow::exportRecipe          ); // > File > Export Recipes
+   connect(actionCopySelected              , &QAction::triggered, this                                      , &MainWindow::copySelected          ); // > Edit > Copy Selected
    connect(actionUndo                      , &QAction::triggered, this                                      , &MainWindow::editUndo              ); // > Edit > Undo
    connect(actionRedo                      , &QAction::triggered, this                                      , &MainWindow::editRedo              ); // > Edit > Redo
+   connect(actionOptions                   , &QAction::triggered, this->pimpl->m_optionDialog.get()         , &OptionDialog::show                ); // > Edit > Options
    this->setUndoRedoEnable();
    connect(actionEquipments                , &QAction::triggered, this->pimpl->m_equipmentCatalog.get()     , &QWidget::show                     ); // > View > Equipments
    connect(actionMashes                    , &QAction::triggered, this->pimpl->m_mashCatalog.get()          , &QWidget::show                     ); // > View > Mash Profiles
@@ -1269,14 +1271,13 @@ void MainWindow::setupTriggers() {
    connect(actionFermentations             , &QAction::triggered, this->pimpl->m_fermentationCatalog.get()  , &QWidget::show                     ); // > View > Fermentation Profiles
 
    connect(actionStyles                    , &QAction::triggered, this->pimpl->m_styleCatalog.get()         , &QWidget::show                     ); // > View > Styles
-   connect(actionFermentables              , &QAction::triggered, this->pimpl->m_fermentableCatalog.get()          , &QWidget::show                     ); // > View > Fermentables
+   connect(actionFermentables              , &QAction::triggered, this->pimpl->m_fermentableCatalog.get()   , &QWidget::show                     ); // > View > Fermentables
    connect(actionHops                      , &QAction::triggered, this->pimpl->m_hopCatalog.get()           , &QWidget::show                     ); // > View > Hops
    connect(actionMiscs                     , &QAction::triggered, this->pimpl->m_miscCatalog.get()          , &QWidget::show                     ); // > View > Miscs
    connect(actionYeasts                    , &QAction::triggered, this->pimpl->m_yeastCatalog.get()         , &QWidget::show                     ); // > View > Yeasts
    connect(actionSalts                     , &QAction::triggered, this->pimpl->m_saltCatalog.get()          , &QWidget::show                     ); // > View > Salts
    connect(actionWaters                    , &QAction::triggered, this->pimpl->m_waterCatalog.get()         , &QWidget::show                     ); // > View > Waters
    connect(actionInventory                 , &QAction::triggered, this->pimpl->m_stockWindow.get()      , &QWidget::show                     ); // > View > Inventory
-   connect(actionOptions                   , &QAction::triggered, this->pimpl->m_optionDialog.get()         , &OptionDialog::show                ); // > Tools > Options
 //   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual);                                               // > About > Manual
    connect(actionScale_Recipe              , &QAction::triggered, this->pimpl->m_recipeScaler.get()         , &QWidget::show                     ); // > Tools > Scale Recipe
    connect(action_recipeToTextClipboard    , &QAction::triggered, this->pimpl->m_recipeFormatter.get()      , &RecipeFormatter::toTextClipboard  ); // > Tools > Recipe to Clipboard as Text
@@ -1284,15 +1285,14 @@ void MainWindow::setupTriggers() {
    connect(actionHydrometer_Temp_Adjustment, &QAction::triggered, this->pimpl->m_hydrometerTool.get()       , &QWidget::show                     ); // > Tools > Hydrometer Temp Adjustment
    connect(actionAlcohol_Percentage_Tool   , &QAction::triggered, this->pimpl->m_alcoholTool.get()          , &QWidget::show                     ); // > Tools > Alcohol
    connect(actionOG_Correction_Help        , &QAction::triggered, this->pimpl->m_ogAdjuster.get()           , &QWidget::show                     ); // > Tools > OG Correction Help
-   connect(actionCopySelected              , &QAction::triggered, this                                      , &MainWindow::copySelected          ); // > File > Copy Selected
    connect(actionPriming_Calculator        , &QAction::triggered, this->pimpl->m_primingDialog.get()        , &QWidget::show                     ); // > Tools > Priming Calculator
    connect(actionStrikeWater_Calculator    , &QAction::triggered, this->pimpl->m_strikeWaterDialog.get()    , &QWidget::show                     ); // > Tools > Strike Water Calculator
    connect(actionRefractometer_Tools       , &QAction::triggered, this->pimpl->m_refractoDialog.get()       , &QWidget::show                     ); // > Tools > Refractometer Tools
    connect(actionPitch_Rate_Calculator     , &QAction::triggered, this                                      , &MainWindow::showPitchDialog       ); // > Tools > Pitch Rate Calculator
    connect(actionTimers                    , &QAction::triggered, this->pimpl->m_timerMainDialog.get()      , &QWidget::show                     ); // > Tools > Timers
-   connect(actionDeleteSelected            , &QAction::triggered, this                                      , &MainWindow::deleteSelected        );
    connect(actionWaterProfileAdjustmentTool, &QAction::triggered, this                                      , &MainWindow::showWaterProfileAdjustmentTool); // > Tools > Water Chemistry
    connect(actionAncestors                 , &QAction::triggered, this                                      , &MainWindow::setAncestor           ); // > Tools > Ancestors
+   connect(actionDeleteSelected            , &QAction::triggered, this                                      , &MainWindow::deleteSelected        );
    connect(action_brewit                   , &QAction::triggered, this                                      , &MainWindow::brewItHelper          );
    //One Dialog to rule them all, at least all printing and export.
    connect(actionPrint                     , &QAction::triggered, this->pimpl->m_printAndPreviewDialog.get(), &QWidget::show                     ); // > File > Print and Preview

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * PitchDialog.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * tools/PitchDialog.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -15,9 +15,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef PITCHDIALOG_H
-#define PITCHDIALOG_H
+ =====================================================================================================================*/
+#ifndef TOOLS_PITCHDIALOG_H
+#define TOOLS_PITCHDIALOG_H
 #pragma once
 
 #include <QDialog>
@@ -35,8 +35,8 @@ class PitchDialog : public QDialog, public Ui::pitchDialog {
    Q_OBJECT
 
 public:
-   PitchDialog(QWidget* parent = nullptr);
-   ~PitchDialog();
+   explicit PitchDialog(QWidget* parent = nullptr);
+   ~PitchDialog() override;
 
    //! \brief Set the wort volume in liters.
    void setWortVolume_l(double volume);

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * StrikeWaterDialog.h is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * tools/StrikeWaterDialog.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -14,9 +14,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef STRIKEWATERDIALOG_H
-#define STRIKEWATERDIALOG_H
+ =====================================================================================================================*/
+#ifndef TOOLS_STRIKEWATERDIALOG_H
+#define TOOLS_STRIKEWATERDIALOG_H
 #pragma once
 
 #include <QDialog>
@@ -35,8 +35,8 @@
 class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog {
    Q_OBJECT
 public:
-   StrikeWaterDialog(QWidget* parent = 0);
-   ~StrikeWaterDialog();
+   explicit StrikeWaterDialog(QWidget* parent = 0);
+   ~StrikeWaterDialog() override;
 
 public slots:
    void calculate();
@@ -50,7 +50,7 @@ private:
    /**
     * \brief
     */
-   double computeMashInfusion();
+   double computeMashInfusion() const;
 };
 
 #endif

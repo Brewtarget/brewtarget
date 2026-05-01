@@ -41,9 +41,7 @@
 #
 set(filesToCompile_cpp
     ${repoDir}/src/AboutDialog.cpp
-    ${repoDir}/src/AlcoholTool.cpp
     ${repoDir}/src/Algorithms.cpp
-    ${repoDir}/src/AncestorDialog.cpp
     ${repoDir}/src/Application.cpp
     ${repoDir}/src/BeerColorWidget.cpp
     ${repoDir}/src/BrewDayFormatter.cpp
@@ -55,10 +53,8 @@ set(filesToCompile_cpp
     ${repoDir}/src/BtSplashScreen.cpp
     ${repoDir}/src/BtTabWidget.cpp
     ${repoDir}/src/BtTextEdit.cpp
-    ${repoDir}/src/ConverterTool.cpp
     ${repoDir}/src/HelpDialog.cpp
     ${repoDir}/src/Html.cpp
-    ${repoDir}/src/HydrometerTool.cpp
     ${repoDir}/src/IbuGuSlider.cpp
     ${repoDir}/src/LatestReleaseFinder.cpp
     ${repoDir}/src/Localization.cpp
@@ -66,26 +62,18 @@ set(filesToCompile_cpp
     ${repoDir}/src/MainWindow.cpp
     ${repoDir}/src/MashDesigner.cpp
     ${repoDir}/src/MashWizard.cpp
-    ${repoDir}/src/OgAdjuster.cpp
     ${repoDir}/src/OptionDialog.cpp
     ${repoDir}/src/PersistentSettings.cpp
-    ${repoDir}/src/PitchDialog.cpp
-    ${repoDir}/src/PrimingDialog.cpp
     ${repoDir}/src/PrintAndPreviewDialog.cpp
     ${repoDir}/src/RadarChart.cpp
     ${repoDir}/src/RangedSlider.cpp
     ${repoDir}/src/RecipeExtrasWidget.cpp
     ${repoDir}/src/RecipeFormatter.cpp
-    ${repoDir}/src/RefractoDialog.cpp
-    ${repoDir}/src/ScaleRecipeTool.cpp
     ${repoDir}/src/StockFormatter.cpp
     ${repoDir}/src/StockWindow.cpp
-    ${repoDir}/src/StrikeWaterDialog.cpp
     ${repoDir}/src/StyleRangeWidget.cpp
     ${repoDir}/src/TimerListDialog.cpp
-    ${repoDir}/src/TimerMainDialog.cpp
     ${repoDir}/src/TimerWidget.cpp
-    ${repoDir}/src/WaterProfileAdjustmentTool.cpp
     ${repoDir}/src/boiltime.cpp
     ${repoDir}/src/buttons/BoilButton.cpp
     ${repoDir}/src/buttons/EquipmentButton.cpp
@@ -247,6 +235,18 @@ set(filesToCompile_cpp
     ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp
+    ${repoDir}/src/tools/AlcoholTool.cpp
+    ${repoDir}/src/tools/AncestorDialog.cpp
+    ${repoDir}/src/tools/ConverterTool.cpp
+    ${repoDir}/src/tools/HydrometerTool.cpp
+    ${repoDir}/src/tools/OgAdjuster.cpp
+    ${repoDir}/src/tools/PitchDialog.cpp
+    ${repoDir}/src/tools/PrimingDialog.cpp
+    ${repoDir}/src/tools/RefractoDialog.cpp
+    ${repoDir}/src/tools/ScaleRecipeTool.cpp
+    ${repoDir}/src/tools/StrikeWaterDialog.cpp
+    ${repoDir}/src/tools/TimerMainDialog.cpp
+    ${repoDir}/src/tools/WaterProfileAdjustmentTool.cpp
     ${repoDir}/src/trees/NamedEntityTreeModel.cpp
     ${repoDir}/src/trees/NamedEntityTreeSortFilterProxyModel.cpp
     ${repoDir}/src/trees/NamedEntityTreeView.cpp

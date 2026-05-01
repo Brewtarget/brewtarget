@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * WaterProfileAdjustmentTool.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * tools/WaterProfileAdjustmentTool.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -15,9 +15,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef WATERPROFILEADJUSTMENTTOOL_H
-#define WATERPROFILEADJUSTMENTTOOL_H
+ =====================================================================================================================*/
+#ifndef TOOLS_WATERPROFILEADJUSTMENTTOOL_H
+#define TOOLS_WATERPROFILEADJUSTMENTTOOL_H
 #pragma once
 
 #include <memory> // For PImpl
@@ -41,8 +41,8 @@ class WaterProfileAdjustmentTool : public QDialog, public Ui::waterProfileAdjust
    Q_OBJECT
 
 public:
-   WaterProfileAdjustmentTool(QWidget * parent = nullptr);
-   ~WaterProfileAdjustmentTool();
+   explicit WaterProfileAdjustmentTool(QWidget * parent = nullptr);
+   ~WaterProfileAdjustmentTool() override;
 
    void setRecipe(Recipe * rec);
 

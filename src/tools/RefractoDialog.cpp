@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RefractoDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * tools/RefractoDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Eric Tamme <etamme@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -17,8 +17,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "RefractoDialog.h"
+ =====================================================================================================================*/
+#include "tools/RefractoDialog.h"
 
 #include <cmath>
 
@@ -75,7 +75,7 @@ void RefractoDialog::calculate() {
       return;
    }
 
-   double ri = Algorithms::refractiveIndex(currentPlato);
+   double const ri = Algorithms::refractiveIndex(currentPlato);
    this->lineEdit_ri->setText(Measurement::displayQuantity(ri, 3));
 
    if (!haveOG && haveOP) {
@@ -89,7 +89,7 @@ void RefractoDialog::calculate() {
       return; // Can't do much if we don't have OG or OP.
    }
 
-   double og = Algorithms::PlatoToSG_20C20C( originalPlato );
+   double const og = Algorithms::PlatoToSG_20C20C( originalPlato );
    double sg = 0;
    if (originalPlato != currentPlato) {
      sg = Algorithms::sgByStartingPlato( originalPlato, currentPlato );
@@ -97,12 +97,12 @@ void RefractoDialog::calculate() {
      sg = og;
    }
 
-   double re  = Algorithms::realExtract    (sg, currentPlato);
-   double abv = Algorithms::getABVBySGPlato(sg, currentPlato);
-   double abw = Algorithms::getABWBySGPlato(sg, currentPlato);
+   double const re  = Algorithms::realExtract    (sg, currentPlato);
+   double const abv = Algorithms::getABVBySGPlato(sg, currentPlato);
+   double const abw = Algorithms::getABWBySGPlato(sg, currentPlato);
 
    // Warn the user if the inputOG and calculated og don't match.
-   if( qAbs(og - inputOG) > 0.002 ) {
+   if ( qAbs(og - inputOG) > 0.002 ) {
       QMessageBox::warning(
          this,
          tr("OG Mismatch"),

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * ScaleRecipeTool.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * tools/ScaleRecipeTool.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -14,9 +14,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef SCALE_RECIPE_TOOL_H
-#define SCALE_RECIPE_TOOL_H
+ =====================================================================================================================*/
+#ifndef TOOLS_SCALERECIPETOOL_H
+#define TOOLS_SCALERECIPETOOL_H
 #pragma once
 
 #include <QButtonGroup>
@@ -41,12 +41,12 @@ class ScaleRecipeTool : public QWizard {
    Q_OBJECT
 
 public:
-   ScaleRecipeTool(QWidget* parent = nullptr);
+   explicit ScaleRecipeTool(QWidget* parent = nullptr);
    //! \brief Set the observed \c Recipe
    void setRecipe(Recipe* rec);
 
-private slots:
-   void accept() Q_DECL_OVERRIDE;
+public slots:
+   void accept() override;
 
 private:
    //! \brief Scale the observed recipe for the new \c equip
@@ -65,14 +65,14 @@ class ScaleRecipeIntroPage : public QWizardPage {
    Q_OBJECT
 
 public:
-   ScaleRecipeIntroPage(QWidget* parent = nullptr);
+   explicit ScaleRecipeIntroPage(QWidget* parent = nullptr);
 
 public slots:
    void doLayout();
    void retranslateUi();
 
 protected:
-   virtual void changeEvent(QEvent* event);
+   void changeEvent(QEvent* event) override;
 
 private:
    QVBoxLayout* layout;
@@ -89,15 +89,14 @@ class ScaleRecipeEquipmentPage : public QWizardPage {
    Q_OBJECT
 
 public:
-   ScaleRecipeEquipmentPage(QWidget* parent = 0);
+   explicit ScaleRecipeEquipmentPage(QWidget* parent = nullptr);
 
 public slots:
    void doLayout();
    void retranslateUi();
 
 protected:
-
-   virtual void changeEvent(QEvent* event);
+   void changeEvent(QEvent* event) override;
 
 private:
 

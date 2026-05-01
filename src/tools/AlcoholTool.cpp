@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * AlcoholTool.cpp is is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * tools/AlcoholTool.cpp is is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Ryan Hoobler <rhoob@yahoo.com>
  *
@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "AlcoholTool.h"
+ =====================================================================================================================*/
+#include "tools/AlcoholTool.h"
 
 #include <QEvent>
 #include <QGridLayout>
@@ -51,7 +51,7 @@ public:
    /**
     * Constructor
     */
-   impl(AlcoholTool & self) :
+   explicit impl(AlcoholTool & self) :
       self                         {self},
       label_reading                {new QLabel       (&self)},
       label_temperature            {new SmartLabel   (&self)},
@@ -176,7 +176,7 @@ public:
       }
 
       if (og != 0.0 && fg != 0.0 && og >= fg) {
-         double abv = Algorithms::abvFromOgAndFg(og, fg);
+         double const abv = Algorithms::abvFromOgAndFg(og, fg);
          //
          // We want to show two decimal places so that the user has the choice about rounding.  In the UK, for instance,
          // for tax purposes, it is acceptable to truncate (rather than round) ABV to 1 decimal place, eg if your ABV is
@@ -209,7 +209,7 @@ public:
       return;
    }
 
-   void retranslateUi() {
+   void retranslateUi() const {
       self.setWindowTitle(tr("Alcohol Tool"));
       this->label_og                     ->setText(tr("Original Gravity (OG)"));
       this->label_result                 ->setText(tr("ABV"));
@@ -315,7 +315,7 @@ void AlcoholTool::changeEvent(QEvent* event) {
    return;
 }
 
-void AlcoholTool::done(int r) {
+void AlcoholTool::done(int const r) {
    this->pimpl->saveSettings();
    // Let base class do its work too
    this->QDialog::done(r);

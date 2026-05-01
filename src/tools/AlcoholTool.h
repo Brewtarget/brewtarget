@@ -1,6 +1,7 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RefractoDialog.h is part of Brewtarget, and is copyright the following authors 2009-2014:
- *   • Philip Greggory Lee <rocketman768@gmail.com>
+ * tools/AlcoholTool.h is is part of Brewtarget, and is copyright the following authors 2009-2026:
+ *   • Matt Young <mfsy@yahoo.com>
+ *   • Ryan Hoobler <rhoob@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
@@ -12,32 +13,47 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef REFRACTODIALOG_H
-#define REFRACTODIALOG_H
+ =====================================================================================================================*/
+#ifndef TOOLS_ALCOHOLTOOL_H
+#define TOOLS_ALCOHOLTOOL_H
 #pragma once
 
+#include <memory> // For PImpl
+
 #include <QDialog>
-#include <QWidget>
-#include "ui_refractoDialog.h"
+
+class QWidget;
+class QEvent;
 
 /*!
- * \class RefractoDialog
- *
- * \brief Dialog for calculating refractometer stuff.
+ * \brief Dialog to calculate ABV from OG and FG readings - optionally with:
+ *         - temperature correction.
  */
-class RefractoDialog : public QDialog, public Ui::refractoDialog
-{
+class AlcoholTool : public QDialog {
    Q_OBJECT
-public:
-   RefractoDialog(QWidget* parent = 0);
-   ~RefractoDialog();
 
-private slots:
+public:
+   explicit AlcoholTool(QWidget* parent = nullptr);
+   ~AlcoholTool() override;
+
+public slots:
    void calculate();
 
+   /**
+    * \brief Turn the advanced controls (temperature correction) on or off
+    */
+   void toggleAdvancedControls();
+
+   //! (Overrides QDialog::done.) Called when the user closes the tool
+   void done(int r) override;
+
+protected:
+   void changeEvent(QEvent* event) override;
+
 private:
-   void clearOutputFields();
+   // Private implementation details - see https://herbsutter.com/gotw/_100/
+   class impl;
+   std::unique_ptr<impl> pimpl;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * AncestorDialog.h is part of Brewtarget, and is copyright the following authors 2021-2026:
+ * tools/AncestorDialog.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@fastmail.com>
  *
@@ -13,9 +13,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef ANCESTORDIALOG_H
-#define ANCESTORDIALOG_H
+ =====================================================================================================================*/
+#ifndef TOOLS_ANCESTORDIALOG_H
+#define TOOLS_ANCESTORDIALOG_H
 #pragma once
 
 #include <QtCore/QVariant>
@@ -52,7 +52,7 @@ signals:
 
 private:
    void buildAncestorBox();
-   void buildDescendantBox(Recipe * ignore);
+   void buildDescendantBox(Recipe const * ignore);
    static bool recipeLessThan(Recipe const * right, Recipe const * left);
 };
 

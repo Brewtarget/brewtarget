@@ -1656,16 +1656,7 @@
      <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuAbout">
-    <property name="title">
-     <string>&amp;About</string>
-    </property>
-    <addaction name="actionManual"/>
-    <addaction name="separator"/>
-    <addaction name="actionHelp"/>
-    <addaction name="separator"/>
-    <addaction name="actionAbout"/>
-   </widget>
+   <!-- We don't _have_ to define these menus in the same order they are displayed, but it seems sensible to do so. -->
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>&amp;File</string>
@@ -1692,6 +1683,19 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionCopySelected"/>
+    <addaction name="action_recipeToTextClipboard"/>
+    <addaction name="separator"/>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionOptions"/>
+   </widget>
+
    <widget class="QMenu" name="menuView">
     <property name="title">
      <string>&amp;View</string>
@@ -1721,7 +1725,6 @@
     <addaction name="actionOG_Correction_Help"/>
     <addaction name="actionPitch_Rate_Calculator"/>
     <addaction name="actionPriming_Calculator"/>
-    <addaction name="action_recipeToTextClipboard"/>
     <addaction name="actionRefractometer_Tools"/>
     <addaction name="actionScale_Recipe"/>
     <addaction name="actionHydrometer_Temp_Adjustment"/>
@@ -1730,18 +1733,18 @@
     <addaction name="actionWaterProfileAdjustmentTool"/>
     <addaction name="actionAncestors"/>
     <addaction name="actionTimers"/>
-    <addaction name="separator"/>
-    <addaction name="actionOptions"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
+   <widget class="QMenu" name="menuAbout">
     <property name="title">
-     <string>Edit</string>
+     <string>&amp;About</string>
     </property>
-    <addaction name="actionCopySelected"/>
+    <addaction name="actionManual"/>
     <addaction name="separator"/>
-    <addaction name="actionUndo"/>
-    <addaction name="actionRedo"/>
+    <addaction name="actionHelp"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
    </widget>
+   <!-- This is the bit that determines the order of the top level menus in the main menu bar. -->
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
@@ -1770,6 +1773,8 @@
    <addaction name="actionNewRecipe"/>
    <addaction name="actionDeleteSelected"/>
    <addaction name="separator"/>
+   <addaction name="action_recipeToTextClipboard"/>
+   <addaction name="separator"/>
    <addaction name="actionEquipments"/>
    <addaction name="actionMashes"/>
    <addaction name="actionBoils"/>
@@ -1788,7 +1793,6 @@
    <addaction name="actionInventory"/>
    <addaction name="separator"/>
    <addaction name="actionTimers"/>
-   <addaction name="action_recipeToTextClipboard"/>
    <addaction name="actionPitch_Rate_Calculator"/>
    <addaction name="actionRefractometer_Tools"/>
    <addaction name="separator"/>

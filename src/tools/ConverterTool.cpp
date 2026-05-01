@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * ConverterTool.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * tools/ConverterTool.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "ConverterTool.h"
+ =====================================================================================================================*/
+#include "tools/ConverterTool.h"
 
 #include <QFormLayout>
 #include <QHBoxLayout>
@@ -29,7 +29,7 @@
    #include "moc_ConverterTool.cpp"
 #endif
 
-ConverterTool::ConverterTool(QWidget* parent) : QDialog(parent) {
+ConverterTool::ConverterTool(QWidget * parent) : QDialog(parent) {
    this->doLayout();
 
    connect(pushButton_convert, &QAbstractButton::clicked, this, &ConverterTool::convert);
@@ -37,7 +37,9 @@ ConverterTool::ConverterTool(QWidget* parent) : QDialog(parent) {
 }
 
 void ConverterTool::convert() {
-   this->outputLineEdit->setText(Measurement::Unit::convertWithoutContext(inputLineEdit->text(), outputUnitsLineEdit->text()));
+   this->outputLineEdit->setText(
+      Measurement::Unit::convertWithoutContext(inputLineEdit->text(), outputUnitsLineEdit->text())
+   );
    return;
 }
 
@@ -51,8 +53,8 @@ void ConverterTool::changeEvent(QEvent* event) {
 
 void ConverterTool::doLayout() {
    this->resize(279, 96);
-   QHBoxLayout* hLayout = new QHBoxLayout(this);
-      QFormLayout* formLayout = new QFormLayout();
+   QHBoxLayout * hLayout = new QHBoxLayout(this);
+      QFormLayout * formLayout = new QFormLayout();
          inputLabel = new QLabel(this);
          inputLineEdit = new QLineEdit(this);
             inputLineEdit->setMinimumSize(QSize(100, 0));
@@ -73,12 +75,12 @@ void ConverterTool::doLayout() {
          formLayout->setWidget(2, QFormLayout::LabelRole, outputLabel);
          formLayout->setWidget(2, QFormLayout::FieldRole, outputLineEdit);
          formLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
-      QVBoxLayout* vLayout = new QVBoxLayout();
-         QSpacerItem* verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+      QVBoxLayout * vLayout = new QVBoxLayout();
+         QSpacerItem * verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
          pushButton_convert = new QPushButton(this);
             pushButton_convert->setAutoDefault(false);
             pushButton_convert->setDefault(true);
-         QSpacerItem* verticalSpacer2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+         QSpacerItem * verticalSpacer2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
          vLayout->addItem(verticalSpacer);
          vLayout->addWidget(pushButton_convert);
          vLayout->addItem(verticalSpacer2);
