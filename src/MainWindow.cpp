@@ -148,7 +148,7 @@
 #include "serialization/ImportExport.h"
 #include "tools/AlcoholTool.h"
 #include "tools/AncestorDialog.h"
-#include "tools/ConverterTool.h"
+#include "tools/UnitConversionTool.h"
 #include "tools/HydrometerTool.h"
 #include "tools/OgAdjuster.h"
 #include "tools/PitchDialog.h"
@@ -362,7 +362,7 @@ public:
       m_recipeFormatter            = std::make_unique<RecipeFormatter           >(&m_self);
       m_printAndPreviewDialog      = std::make_unique<PrintAndPreviewDialog     >(&m_self);
       m_ogAdjuster                 = std::make_unique<OgAdjuster                >(&m_self);
-      m_converterTool              = std::make_unique<ConverterTool             >(&m_self);
+      m_unitConversionTool              = std::make_unique<UnitConversionTool             >(&m_self);
       m_hydrometerTool             = std::make_unique<HydrometerTool            >(&m_self);
       m_alcoholTool                = std::make_unique<AlcoholTool               >(&m_self);
       m_timerMainDialog            = std::make_unique<TimerMainDialog           >(&m_self);
@@ -827,7 +827,7 @@ public:
    std::unique_ptr<AlcoholTool               > m_alcoholTool           ;
    std::unique_ptr<AncestorDialog            > m_ancestorDialog        ;
    std::unique_ptr<BtDatePopup               > m_btDatePopup           ;
-   std::unique_ptr<ConverterTool             > m_converterTool         ;
+   std::unique_ptr<UnitConversionTool        > m_unitConversionTool    ;
    std::unique_ptr<HelpDialog                > m_helpDialog            ;
    std::unique_ptr<HydrometerTool            > m_hydrometerTool        ;
    std::unique_ptr<MashDesigner              > m_mashDesigner          ;
@@ -1281,10 +1281,10 @@ void MainWindow::setupTriggers() {
 //   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual);                                               // > About > Manual
    connect(actionScale_Recipe              , &QAction::triggered, this->pimpl->m_recipeScaler.get()         , &QWidget::show                     ); // > Tools > Scale Recipe
    connect(action_recipeToTextClipboard    , &QAction::triggered, this->pimpl->m_recipeFormatter.get()      , &RecipeFormatter::toTextClipboard  ); // > Tools > Recipe to Clipboard as Text
-   connect(actionConvert_Units             , &QAction::triggered, this->pimpl->m_converterTool.get()        , &QWidget::show                     ); // > Tools > Convert Units
+   connect(actionUnitConversionTool        , &QAction::triggered, this->pimpl->m_unitConversionTool.get()        , &QWidget::show                     ); // > Tools > Unit Conversion Tool
    connect(actionHydrometer_Temp_Adjustment, &QAction::triggered, this->pimpl->m_hydrometerTool.get()       , &QWidget::show                     ); // > Tools > Hydrometer Temp Adjustment
    connect(actionAlcohol_Percentage_Tool   , &QAction::triggered, this->pimpl->m_alcoholTool.get()          , &QWidget::show                     ); // > Tools > Alcohol
-   connect(actionOG_Correction_Help        , &QAction::triggered, this->pimpl->m_ogAdjuster.get()           , &QWidget::show                     ); // > Tools > OG Correction Help
+   connect(actionOriginalGravityCorrectionTool, &QAction::triggered, this->pimpl->m_ogAdjuster.get()           , &QWidget::show                     ); // > Tools > Original Gravity Correction Tool
    connect(actionPriming_Calculator        , &QAction::triggered, this->pimpl->m_primingDialog.get()        , &QWidget::show                     ); // > Tools > Priming Calculator
    connect(actionStrikeWater_Calculator    , &QAction::triggered, this->pimpl->m_strikeWaterDialog.get()    , &QWidget::show                     ); // > Tools > Strike Water Calculator
    connect(actionRefractometer_Tools       , &QAction::triggered, this->pimpl->m_refractoDialog.get()       , &QWidget::show                     ); // > Tools > Refractometer Tools

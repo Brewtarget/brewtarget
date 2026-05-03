@@ -164,8 +164,8 @@ void ScaleRecipeIntroPage::doLayout() {
 
 void ScaleRecipeIntroPage::retranslateUi() {
    setTitle(tr("Scale Recipe"));
-   label->setText(tr("This wizard will help you scale a recipe to another size or efficiency."
-                     "Select another equipment with the new batch size and/or efficiency and"
+   label->setText(tr("This wizard will help you scale a recipe to another size or efficiency.  "
+                     "Select another equipment with the new batch size and/or efficiency and "
                      "the wizard will scale the recipe ingredients automatically."));
    return;
 }

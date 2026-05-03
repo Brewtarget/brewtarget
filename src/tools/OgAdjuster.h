@@ -22,26 +22,33 @@
 
 #include "ui_ogAdjuster.h"
 
-#include "model/Recipe.h"
+class Recipe;
 
 /*!
  * \class OgAdjuster
  *
- * \brief View/controller dialog that helps you correct your OG on brew day.
+ * \brief The Gravity Correction Tool helps you correct your OG on brew day, as follows:
+ *           - If your gravity is too high you can add water to the boil.
+ *           - If it is too low you can either add sugar or boil for longer.
+ *
+ *        Of course, if things have gone wrong, then correcting the gravity won't guarantee to get you the taste you
+ *        were aiming for, but it might help.
  */
 class OgAdjuster : public QDialog, public Ui::ogAdjuster {
    Q_OBJECT
 
 public:
-   explicit OgAdjuster( QWidget* parent = 0 );
+   explicit OgAdjuster(QWidget * parent = nullptr);
+   ~OgAdjuster() override;
+
    //! Set the recipe whose OG to correct.
-   void setRecipe( Recipe* rec );
+   void setRecipe(Recipe * rec);
 
 public slots:
    void calculate();
 
 private:
-   Recipe* recObs;
+   Recipe * recObs = nullptr;
 };
 
 #endif

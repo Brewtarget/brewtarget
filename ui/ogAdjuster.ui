@@ -11,8 +11,37 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Adjust Volume to Hit OG</string>
+   <string>Original Gravity Correction Tool</string>
   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_1">
+   <item>
+    <!-- New -->
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="1">
+      <widget class="InfoButton" name="infoButton_instructions"></widget>
+     </item>
+     <item row="13" column="1">
+      <widget class="QLabel" name="label_instructions">
+       <property name="text">
+        <string>Enter data below then click button (TODO - rewrite this!)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="1" colspan="5">
+      <widget class="InfoText" name="infoText_instructions">
+       <property name="buddy">
+        <cstring>infoButton_instructions</cstring>
+       </property>
+       <property name="text">
+        <string>Some more detailed text.</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+
+  <!-- Old -->
   <layout class="QHBoxLayout" name="horizontalLayout_11">
    <item>
     <widget class="QGroupBox" name="groupBox_input">
@@ -338,7 +367,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
-           <widget class="QLabel" name="label_og">
+           <widget class="SmartLabel" name="label_og">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -351,30 +380,9 @@
            </widget>
           </item>
           <item>
-           <widget class="SmartLineEdit" name="lineEdit_og">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>16777215</height>
-             </size>
-            </property>
+           <widget class="SmartValueDisplay" name="value_og">
             <property name="toolTip">
              <string>OG if you boil as planned</string>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -547,8 +555,22 @@
     </layout>
    </item>
   </layout>
+
+   </item>
+  </layout>
+
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
+  </customwidget>
   <customwidget>
    <class>SmartLabel</class>
    <extends>QLabel</extends>
@@ -564,6 +586,11 @@
    <slots>
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>SmartValueDisplay</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartValueDisplay.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

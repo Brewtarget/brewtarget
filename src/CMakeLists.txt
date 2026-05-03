@@ -237,7 +237,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp
     ${repoDir}/src/tools/AlcoholTool.cpp
     ${repoDir}/src/tools/AncestorDialog.cpp
-    ${repoDir}/src/tools/ConverterTool.cpp
+    ${repoDir}/src/tools/UnitConversionTool.cpp
     ${repoDir}/src/tools/HydrometerTool.cpp
     ${repoDir}/src/tools/OgAdjuster.cpp
     ${repoDir}/src/tools/PitchDialog.cpp

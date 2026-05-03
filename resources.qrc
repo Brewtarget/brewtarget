@@ -81,6 +81,7 @@
       <file alias="images/grain2glass.svg"           >images/grain2glass.svg</file>
       <file alias="images/help-contents.png"         >images/help-contents.png</file>
       <file alias="images/hydrometer.svg"            >images/hydrometer.svg</file>
+      <file alias="images/iconAlcoholPct.svg"        >images/iconAlcoholPct.svg</file>
       <file alias="images/iconBoil.svg"              >images/iconBoil.svg</file>
       <file alias="images/iconFermentation.svg"      >images/iconFermentation.svg</file>
       <file alias="images/iconInventory.svg"         >images/iconInventory.svg</file>
