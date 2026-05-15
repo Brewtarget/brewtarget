@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/IbuMethods.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * measurement/IbuMethods.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -87,6 +87,9 @@ namespace {
       double const boilTimeFactor = (1.0 - exp(-0.04 * timeInBoil_minutes)) / 4.15;
       double const bignessFactor  = 1.65 * pow(0.000125, (wortGravity_sg - 1.0));
       double const decimalAlphaAcidUtilization = bignessFactor * boilTimeFactor;
+      qDebug() <<
+         Q_FUNC_INFO << "boilTimeFactor:" << boilTimeFactor << "; bignessFactor:" << bignessFactor <<
+         "; decimalAlphaAcidUtilization" << decimalAlphaAcidUtilization;
       return decimalAlphaAcidUtilization;
    }
 
@@ -94,11 +97,56 @@ namespace {
     * \brief Calculates the IBU by Tinseth's formula, as described at http://www.realbeer.com/hops/research.html
     */
    double tinseth(IbuMethods::IbuCalculationParms const & parms) {
+      //
+      // Tinseth's formula is:
+      //
+      //    IBUs = decimal alpha acid utilization * mg/l of added alpha acids
+      //
+      // where:
+      //
+      //    mg/l of added alpha acids = decimal AA rating * grams hops * 1000
+      //                                -------------------------------------
+      //                                  volume of finished beer in liters
+      //
+      // and either:
+      //
+      //    decimal alpha acid utilization comes from look-up table
+      //
+      // or:
+      //
+      //    decimal alpha acid utilization = Bigness factor * Boil Time factor
+      //
+      // where:
+      //
+      //    Bigness factor = 1.65 * 0.000125^(wort gravity - 1)
+      //
+      //       "The Bigness factor accounts for reduced utilization due to higher wort gravities.  Use an average
+      //       gravity value for the entire boil to account for changes in the wort volume."
+      //
+      // and:
+      //
+      //    Boil Time factor = 1 - e^(-0.04 * time in mins)
+      //                       ----------------------------
+      //                                   4.15
+      //
+      // Tinseth comments:
+      //       "The numbers 1.65 and 0.000125 are empirically derived to fit my data.  The number 0.04 controls the
+      //    shape of the utilization vs. time curve.  The factor 4.15 controls the maximum utilization value--make it
+      //    smaller if your kettle utilization is higher than mine.
+      //       "I'd suggest fiddling with 4.15 if necessary to match your system; only play with the other three if you
+      //    like to muck around. I make no guarantees if you do.
+      //       "The really cool thing about these new equations is that they are easily customizable.  I believe the
+      //    basic form is correct; by playing with the different factors, different brewers should be able to make them
+      //    fit their breweries perfectly."
+      //
       double const mgPerLiterOfAddedAlphaAcids = (parms.AArating * parms.hops_grams * 1000) / parms.postBoilVolume_liters;
       double const decimalAlphaAcidUtilization = calculateDecimalAlphaAcidUtilization(parms.wortGravity_sg,
                                                                                       parms.timeInBoil_minutes);
-      return decimalAlphaAcidUtilization * mgPerLiterOfAddedAlphaAcids;
-///      return ((AArating * hops_grams * 1000) / postBoilVolume_liters) * ((1.0 - exp(-0.04 * timeInBoil_minutes)) / 4.15) * (1.65 * pow(0.000125, (wortGravity_sg - 1)));
+      double const result = decimalAlphaAcidUtilization * mgPerLiterOfAddedAlphaAcids;
+      qDebug() <<
+         Q_FUNC_INFO << "mgPerLiterOfAddedAlphaAcids: " << mgPerLiterOfAddedAlphaAcids <<
+         "; decimalAlphaAcidUtilization" << decimalAlphaAcidUtilization << " = " << result;
+      return result;
    }
 
    double rager(IbuMethods::IbuCalculationParms const & parms) {
@@ -258,6 +306,7 @@ QString IbuMethods::formulaName() {
 }
 
 double IbuMethods::getIbus(IbuMethods::IbuCalculationParms const & parms) {
+   qDebug() << Q_FUNC_INFO << "Using" << formulaDisplayNames[formula] << "with" << parms;
    switch(IbuMethods::formula) {
       case IbuMethods::IbuFormula::Tinseth: return tinseth(parms);
       case IbuMethods::IbuFormula::Rager  : return rager  (parms);

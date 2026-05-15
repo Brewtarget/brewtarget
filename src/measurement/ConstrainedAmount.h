@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/ConstrainedAmount.h is part of Brewtarget, and is copyright the following authors 2022-2023:
+ * measurement/ConstrainedAmount.h is part of Brewtarget, and is copyright the following authors 2022-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -47,13 +47,13 @@ namespace Measurement {
       ~ConstrainedAmount() = default;
 
       //! Regular constructor
-      ConstrainedAmount(double quantity, Measurement::Unit const & unit) : Measurement::Amount{quantity, unit} {
+      ConstrainedAmount(double const quantity, Measurement::Unit const & unit) : Measurement::Amount{quantity, unit} {
          checkConstructAssignOrMoveOK("construct");
          return;
       }
 
       //! Copy constructor
-      ConstrainedAmount(Measurement::Amount const & other) : Measurement::Amount{other} {
+      explicit ConstrainedAmount(Measurement::Amount const & other) : Measurement::Amount{other} {
          checkConstructAssignOrMoveOK("construct");
          return;
       }
@@ -66,7 +66,7 @@ namespace Measurement {
       }
 
       //! Move constructor.
-      ConstrainedAmount(Measurement::Amount && other)  : Measurement::Amount{other} {
+      explicit ConstrainedAmount(Measurement::Amount && other)  : Measurement::Amount{other} {
          checkConstructAssignOrMoveOK("construct");
          return;
       }
@@ -100,7 +100,7 @@ namespace Measurement {
          if (!Measurement::isValid<PQT, pqt>(currentPhysicalQuantity)) {
             qCritical() <<
                Q_FUNC_INFO << "Trying to" << operation << "ConstrainedAmount<" << pqt << "> with " <<
-               this->unit->name << "which is" << currentPhysicalQuantity;
+               this->unit->getDisplayAbbreviation() << "which is" << currentPhysicalQuantity;
             Q_ASSERT(false);
          }
          return;

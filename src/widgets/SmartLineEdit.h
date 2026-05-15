@@ -85,6 +85,11 @@ public:
     */
    void setTextCursor(QString const & text, int cursorPosition = 0);
 
+   /**
+    * @return \c true if the input is empty (or just whitespace)
+    */
+   bool isBlank() const;
+
 public slots:
    /**
     * \brief This slot receives the \c QLineEdit::editingFinished signal

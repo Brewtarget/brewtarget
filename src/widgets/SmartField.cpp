@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartField.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * widgets/SmartField.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -39,7 +39,7 @@
 // This private implementation class holds all private non-virtual members of SmartField
 class SmartField::impl {
 public:
-   impl(SmartField & self) :
+   explicit impl(SmartField & self) :
       m_self                   {self},
       m_initialised            {false},
       m_fieldFqName            {"Uninitialised m_fieldFqName!"},
@@ -137,7 +137,7 @@ public:
     */
    Measurement::Amount toCanonical(QString const & enteredText,
                                    SmartAmounts::ScaleInfo previousScaleInfo,
-                                   bool * const ok = nullptr) {
+                                   bool * const ok = nullptr) const {
       Q_ASSERT(this->m_initialised);
 
       // It's a coding error to call this for a NonPhysicalQuantity.  (Instead call getNonOptValueAs<double> or
@@ -148,7 +148,7 @@ public:
          Q_FUNC_INFO << "enteredText:" << enteredText <<  ", old SystemOfMeasurement:" <<
          previousScaleInfo.systemOfMeasurement << ", old RelativeScale: " << previousScaleInfo.relativeScale;
 
-      auto physicalQuantity{this->m_self.settings().getPhysicalQuantity()};
+      auto const physicalQuantity{this->m_self.settings().getPhysicalQuantity()};
       Measurement::UnitSystem const & unitSystem{
          Measurement::UnitSystem::getInstance(previousScaleInfo.systemOfMeasurement, physicalQuantity)
       };
@@ -514,7 +514,7 @@ void SmartField::setPrecision(unsigned int const precision) {
    return this->pimpl->m_precision;
 }
 
-Measurement::Amount SmartField::getNonOptCanonicalAmt() const {
+Measurement::Amount SmartField::getNonOptCanonicalAmt(bool * const ok) const {
    // Uncomment this if asserts below are firing
 //   qDebug().noquote() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << ":" << Logging::getStackTrace();
    Q_ASSERT(this->pimpl->m_initialised);
@@ -522,7 +522,7 @@ Measurement::Amount SmartField::getNonOptCanonicalAmt() const {
    Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType));
    // It's a coding error to call this for an optional value
    Q_ASSERT(!this->getTypeInfo().isOptional());
-   return this->pimpl->toCanonical(this->getRawText(), this->getScaleInfo());
+   return this->pimpl->toCanonical(this->getRawText(), this->getScaleInfo(), ok);
 }
 
 std::optional<Measurement::Amount> SmartField::getOptCanonicalAmt() const {
@@ -540,8 +540,8 @@ std::optional<Measurement::Amount> SmartField::getOptCanonicalAmt() const {
    return this->pimpl->toCanonical(rawText, this->getScaleInfo());
 }
 
-double SmartField::getNonOptCanonicalQty() const {
-   return this->getNonOptCanonicalAmt().quantity;
+double SmartField::getNonOptCanonicalQty(bool * const ok) const {
+   return this->getNonOptCanonicalAmt(ok).quantity;
 }
 
 std::optional<double> SmartField::getOptCanonicalQty() const {
@@ -620,7 +620,7 @@ template std::optional<int         > SmartField::getOptValue<int         >(bool 
 template std::optional<unsigned int> SmartField::getOptValue<unsigned int>(bool * const ok) const;
 template std::optional<double      > SmartField::getOptValue<double      >(bool * const ok) const;
 
-void SmartField::correctEnteredText(SmartAmounts::ScaleInfo previousScaleInfo) {
+void SmartField::correctEnteredText(SmartAmounts::ScaleInfo const previousScaleInfo) {
    Q_ASSERT(this->pimpl->m_initialised);
 
    // It's a coding error to call this version of correctEnteredText with a NonPhysicalQuantity
@@ -637,6 +637,7 @@ void SmartField::correctEnteredText(SmartAmounts::ScaleInfo previousScaleInfo) {
    // The idea here is we need to first translate the field into a known
    // amount (aka to SI) and then into the unit we want.
    Measurement::Amount amountAsCanonical = this->pimpl->toCanonical(enteredText, previousScaleInfo);
+   amountAsCanonical.sanitise();
 
    QString const correctedText = this->displayQuantity(amountAsCanonical.quantity, this->pimpl->m_precision);
    qDebug() <<

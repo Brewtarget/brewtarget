@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/UnitSystem.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * measurement/UnitSystem.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -110,7 +110,7 @@ public:
     * \return
     */
    std::pair<double, QString> displayableAmount(Measurement::Amount const & amount,
-                                                std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) const {
+                                                std::optional<Measurement::UnitSystem::RelativeScale> const forcedScale) const {
       // Special cases
       if (amount.unit->getPhysicalQuantity() != this->physicalQuantity) {
          return std::pair(amount.quantity, "");
@@ -121,7 +121,7 @@ public:
       // If there is only one unit in this unit system, then the scale to unit mapping will be empty as there's nothing
       // to choose from
       if (this->scaleToUnit.size() == 0) {
-         return std::pair(this->defaultUnit->fromCanonical(siAmount.quantity), this->defaultUnit->name);
+         return std::pair(this->defaultUnit->fromCanonical(siAmount.quantity), this->defaultUnit->getDisplayAbbreviation());
       }
 
       // Conversely, if we have a non-empty mapping then it's a coding error if it only has one entry!
@@ -132,7 +132,7 @@ public:
          // It's a coding error to specify a forced scale that is not in the UnitSystem
          Q_ASSERT(this->scaleToUnit.contains(*forcedScale));
          Measurement::Unit const * bb = this->scaleToUnit.value(*forcedScale);
-         return std::pair(bb->fromCanonical(siAmount.quantity), bb->name);
+         return std::pair(bb->fromCanonical(siAmount.quantity), bb->getDisplayAbbreviation());
       }
 
       //
@@ -143,7 +143,7 @@ public:
       // fermentation times.
       //
       if (qFuzzyIsNull(siAmount.quantity)) {
-         return std::pair(this->defaultUnit->fromCanonical(siAmount.quantity), this->defaultUnit->name);
+         return std::pair(this->defaultUnit->fromCanonical(siAmount.quantity), this->defaultUnit->getDisplayAbbreviation());
       }
 
       // Search for the smallest measure in this system that's not too big to show the supplied value
@@ -171,7 +171,7 @@ public:
       }
 
       // It is a programming error if the map was empty (ie we didn't go through the loop at all)
-      return std::pair(last->fromCanonical(siAmount.quantity), last->name);
+      return std::pair(last->fromCanonical(siAmount.quantity), last->getDisplayAbbreviation());
    }
 
    //============================================ Member variables for impl ============================================

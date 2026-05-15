@@ -239,7 +239,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/tools/AncestorDialog.cpp
     ${repoDir}/src/tools/UnitConversionTool.cpp
     ${repoDir}/src/tools/HydrometerTool.cpp
-    ${repoDir}/src/tools/OgAdjuster.cpp
+    ${repoDir}/src/tools/OgCorrectionTool.cpp
     ${repoDir}/src/tools/PitchDialog.cpp
     ${repoDir}/src/tools/PrimingDialog.cpp
     ${repoDir}/src/tools/RefractoDialog.cpp

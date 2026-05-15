@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * widgets/SmartBase.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public:
    }
    virtual ~SmartBase() = default;
 
-   //! Name-hiding means we cannot call this settings(), so we choose a different name
+   //! Name-hiding means we cannot call this->settings(), so we choose a different name
    SmartAmountSettings & mutableSettings() {
       // It's always safe to cast this _to_ const
       Derived const & constSelf{const_cast<Derived const &>(this->derived())};

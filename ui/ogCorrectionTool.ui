@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ogCorrectionTool</class>
+ <widget class="QDialog" name="ogCorrectionTool">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>638</width>
+    <height>181</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Gravity Correction Tool</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_1">
+   <item>
+    <!-- New -->
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="InfoButton" name="infoButton_instructions"/>
+     </item>
+     <item row="1" column="1" colspan="5">
+      <widget class="QLabel" name="label_instructions">
+       <property name="text">
+        <string>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="5">
+      <widget class="InfoText" name="infoText_instructions">
+       <property name="buddy">
+        <cstring>infoButton_instructions</cstring>
+       </property>
+       <property name="text">
+        <string>NB: this tool makes the assumption that you are not going to add any water post boil.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+
+     <item row="3" column="1">
+      <widget class="SmartLabel" name="label_targetOg">
+       <property name="text">
+        <string>Target OG</string>
+       </property>
+       <property name="buddy">
+        <cstring>value_targetOg</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="SmartValueDisplay" name="value_targetOg">
+       <property name="toolTip">
+        <string>From current recipe</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="5" column="1">
+      <widget class="SmartLabel" name="label_measuredSg">
+       <property name="text">
+        <string>Measured Gravity</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_measuredSg</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="SmartLineEdit" name="lineEdit_measuredSg">
+       <property name="toolTip">
+        <string>A value in Plato will be used as-is.  An SG value can be corrected for actual vs calibrated temperature.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="3">
+      <widget class="SmartLabel" name="label_measuredTemp">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>@ temperature</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_measuredTemp</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="4">
+      <widget class="SmartLineEdit" name="lineEdit_measuredTemp">
+       <property name="toolTip">
+        <string>Temperature of SG reading</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="7" column="3">
+      <widget class="SmartLabel" name="label_calTemp">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>Calibrated at</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_calTemp</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="4">
+      <widget class="SmartLineEdit" name="lineEdit_calTemp">
+       <property name="toolTip">
+        <string>Temperature to which the hydrometer is calibrated</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="9" column="3">
+      <widget class="QLabel" name="label_actualSg">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>Actual SG</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="4">
+      <widget class="SmartValueDisplay" name="value_actualSg">
+       <property name="toolTip">
+        <string>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</string>
+       </property>
+       <property name="forcedSystemOfMeasurement" stdset="0">
+        <string notr="true">SpecificGravity</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="11" column="1">
+      <widget class="SmartLabel" name="label_preBoilVolume">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>Pre-Boil Volume</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_preBoilVolume</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="2">
+      <widget class="SmartLineEdit" name="lineEdit_preBoilVolume">
+       <property name="toolTip">
+        <string>Measured pre-boil volume</string>
+       </property>
+      </widget>
+     </item>
+
+     <item row="13" column="4">
+      <widget class="QPushButton" name="pushButton_calculate">
+       <property name="toolTip">
+        <string>Calculate</string>
+       </property>
+       <property name="text">
+        <string>Calculate</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+
+     <item row="15" column="1">
+      <widget class="SmartLabel" name="label_noActionOg">
+       <property name="text">
+        <string>Predicted OG</string>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="2">
+      <widget class="SmartValueDisplay" name="value_noActionOg">
+       <property name="toolTip">
+        <string>OG if you take no action, ie boil as originally planned</string>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="3">
+      <widget class="QLabel" name="label_noActionOgComment">
+      </widget>
+     </item>
+
+     <item row="17" column="1" colspan="4">
+      <widget class="QGroupBox" name="groupBox_changeBoilVolume">
+       <!-- This title is overridden in the code -->
+       <property name="title">
+        <string>Remedy: Add Water To Boil</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_changeBoilVolume">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_changeBoilVolume1">
+          <item>
+           <widget class="SmartLabel" name="label_changeBoilVolume">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="text">
+             <!-- This text is overridden in the code -->
+             <string>Amount to Add</string>
+            </property>
+            <property name="buddy">
+             <cstring>value_changeBoilVolume</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="SmartValueDisplay" name="value_changeBoilVolume">
+            <property name="toolTip">
+             <!-- This text is overridden in the code -->
+             <string>Amount of water you need to add to hit planned OG</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_changeBoilVolume2">
+          <item>
+           <widget class="SmartLabel" name="label_finalBatchSize">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="text">
+             <string>Final Batch Size</string>
+            </property>
+            <property name="buddy">
+             <cstring>value_finalBatchSize</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="SmartValueDisplay" name="value_finalBatchSize">
+            <property name="toolTip">
+             <string>Estimated batch size after correction</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+
+      </widget>
+     </item>
+
+     <item row="19" column="1" colspan="4">
+      <widget class="QLabel" name="label_remediesSeparator">
+       <property name="text">
+        <string>-- OR --</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+
+     <item row="21" column="1" colspan="4">
+      <widget class="QGroupBox" name="groupBox_addSugarOrDme">
+       <property name="title">
+        <string>Remedy: Add Sugar or DME</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_addSugarOrDme1">
+        <item>
+         <widget class="SmartLabel" name="label_addSugarOrDme">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
+          <property name="text">
+           <string>Amount To Add</string>
+          </property>
+          <property name="buddy">
+           <cstring>value_addSugarOrDme</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="SmartValueDisplay" name="value_addSugarOrDme">
+          <property name="toolTip">
+           <string>Amount of Sugar or DME to add to the boil</string>
+          </property>
+         </widget>
+        </item>
+
+       </layout>
+      </widget>
+
+     </item>
+
+
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SmartLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartLabel.h</header>
+   <slots>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>SmartLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/SmartLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(PreviousScaleInfo)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>SmartValueDisplay</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartValueDisplay.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+</ui>

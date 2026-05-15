@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartLineEdit.cpp is part of Brewtarget, and is copyright the following authors 2009-2023:
+ * widgets/SmartLineEdit.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Mattias Måhl <mattias@kejsarsten.com>
@@ -50,7 +50,7 @@ namespace {
 // This private implementation class holds all private non-virtual members of SmartLineEdit
 class SmartLineEdit::impl {
 public:
-   impl(SmartLineEdit & self) :
+   explicit impl(SmartLineEdit & self) :
       m_self{self},
       m_desiredWidthInPixels{0} {
       return;
@@ -156,6 +156,11 @@ void SmartLineEdit::setTextCursor(QString const & text, int cursorPosition) {
    this->QLineEdit::setText(text);
    this->QLineEdit::setCursorPosition(cursorPosition);
    return;
+}
+
+bool SmartLineEdit::isBlank() const {
+   QString const rawTextTrimmed = this->text().trimmed();
+   return rawTextTrimmed.isEmpty();
 }
 
 void SmartLineEdit::onLineChanged() {

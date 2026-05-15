@@ -322,7 +322,7 @@ public:
 
    //! \returns true if \c item is successfully found and removed.
    bool remove(std::shared_ptr<NE> item) {
-      int rowNum = this->m_rows.indexOf(item);
+      int const rowNum = this->m_rows.indexOf(item);
       if (rowNum >= 0)  {
          this->derived().beginRemoveRows(QModelIndex(), rowNum, rowNum);
          this->derived().disconnect(item.get(), nullptr, &this->derived(), nullptr);
@@ -360,10 +360,10 @@ public:
     */
    template<class Proxy>
    void removeSelectedIngredients(QTableView & tableView, Proxy & proxy) {
-      QModelIndexList selected = tableView.selectionModel()->selectedIndexes();
+      QModelIndexList const selected = tableView.selectionModel()->selectedIndexes();
       QList<std::shared_ptr<NE>> itemsToRemove;
 
-      int size = selected.size();
+      int const size = selected.size();
       if (size == 0) {
          return;
       }

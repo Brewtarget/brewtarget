@@ -182,7 +182,7 @@ QString RecipeAddition::extraLogInfo() const {
    return QString("Stage: %1").arg(RecipeAddition::stageStringMapping[this->m_stage]);
 }
 
-std::optional<double> RecipeAddition::addAfterStart_mins(std::optional<double> stepLength_mins) const {
+std::optional<double> RecipeAddition::addAfterStart_mins(std::optional<double> const stepLength_mins) const {
    //
    // Boil is the stage we measure from the end
    //
@@ -199,7 +199,7 @@ std::optional<double> RecipeAddition::addAfterStart_mins(std::optional<double> s
    return this->m_addAtTime_mins;
 }
 
-std::optional<double> RecipeAddition::addBeforeEnd_mins(std::optional<double> stepLength_mins) const {
+std::optional<double> RecipeAddition::addBeforeEnd_mins(std::optional<double> const stepLength_mins) const {
    //
    // This is essentially the reverse of \c RecipeAddition::addAfterStart_mins
    //

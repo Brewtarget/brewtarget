@@ -45,9 +45,9 @@ struct OwnedSetOptions {
     *
     *        In a non-enumerated set, the \c OwnedSet class does not manage the order of the items and returns them in
     *        arbitrary order.  (Typically there may be a weak ordering -- eg addition time for a \c RecipeAddition
-    *        subclass or brew date for a \c BrewnNote -- but it is not managed inside of \c OwnedSet.
+    *        subclass or brew date for a \c BrewLog -- but it is not managed inside \c OwnedSet.
     *
-    *        Note that \c setSeqNum has to take an optional second parmeter \c bool \c const \c notify (which should
+    *        Note that \c setSeqNum has to take an optional second parameter \c bool \c const \c notify (which should
     *        default to \c true).  This is because, in an enumerated set, we need to be very careful and controlled
     *        about when we (either directly or indirectly) emit signals from our member functions.
     *           If we are part way through modifying a sequence of steps (eg to swap two steps or insert a new one) then
@@ -101,7 +101,7 @@ template <OwnedSetOptions os> concept CONCEPT_FIX_UP IsCopyable   = is_Copyable 
  *        that we send with the \c changed signal is simply the new size of the set.
  * \param itemChangedSlot if not \c nullptr, is a member function slot on \c Owner that can receive
  *        \c NamedEntity::changed signals from \c Item objects in this set.  (Otherwise, if it is \c nullptr,
- *        \c Owner::acceptSetMemberChange will be used.)  Typically that member function just needs to call our
+ *        \c Owner::acceptSetMemberChange will be used.)  Typically, that member function just needs to call our
  *        \c acceptItemChange function.  It is simpler to go via \c Owner because the owner object is able to call
  *        \c QObject::sender to get the sender and pass it to us.  (From looking at the Qt source code eg at
  *        https://github.com/qt/qtbase/blob/dev/src/corelib/kernel/qobject.cpp, it seems \c QObject::sender will return
@@ -131,13 +131,13 @@ public:
     * \brief Minimal constructor.  Note that the reason we do not just initialise everything here is that the object
     *        stores on which we depend might not yet themselves be initialised when this constructor is called.
     *
-    * \param owner should be a subclass of \c NamedEntity and we should be being called from its constructor
+    * \param owner should be a subclass of \c NamedEntity, and we should be being called from its constructor
     */
    OwnedSet(Owner & owner) :
       m_owner{owner} {
       //
       // Note that it is always correct in this constructor for m_itemIds to start out as an empty set.  It is only used
-      // when adding items to an owner that has not yet been stored in the DB.  Either a brand new owner is just being
+      // when adding items to an owner that has not yet been stored in the DB.  Either a brand-new owner is just being
       // created, so it doesn't yet have any items in this OwnedSet, or we just read it out of the DB (in which case
       // we'll be able, in due course, to get the owned items from the relevant object store (once that has been
       // populated from the DB) so we don't need a list of item IDs.
@@ -185,7 +185,7 @@ public:
 
    /**
     * \brief We have to delete the default copy constructor that the compiler would generate because that would copy
-    *        m_owner, which we don't want.  Instead we need to force callers to provide the new owner as a parameter
+    *        m_owner, which we don't want.  Instead, we need to force callers to provide the new owner as a parameter
     *        (via the constructor above).
     */
    OwnedSet(OwnedSet const & other) = delete;
@@ -523,12 +523,15 @@ public:
     */
    std::shared_ptr<Item> remove(std::shared_ptr<Item> item) {
       // It's a coding error if we try to remove an item that didn't belong to the owner
-      Q_ASSERT(item->ownerId() == this->m_owner.key());
+//      Q_ASSERT(item->ownerId() == this->m_owner.key());
+      qCritical() << Q_FUNC_INFO << "Mismatch trying to remove" << item << "from set owned by" << this->m_owner;
+      qCritical().noquote() << Q_FUNC_INFO << "Stack trace:" << Logging::getStackTrace();
+      Q_ASSERT(false);
 
       // As per add(), if we're not yet stored in the database, then we also need to update our list of Items.
       if (this->m_owner.key() < 0) {
-         int indexOfItem = this->m_itemIds.indexOf(item->key());
-         if (indexOfItem < 0 ) {
+         if (int const indexOfItem = this->m_itemIds.indexOf(item->key());
+             indexOfItem < 0 ) {
             // This shouldn't happen, but it doesn't inherently break anything, so just log a warning and carry on
             qWarning() <<
                Q_FUNC_INFO << "Tried to remove" << Item::staticMetaObject.className() << "#" << item->key() <<

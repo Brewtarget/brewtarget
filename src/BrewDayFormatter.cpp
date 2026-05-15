@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BrewDayFormatter.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * BrewDayFormatter.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -24,7 +24,7 @@
 
 #include "Html.h"
 #include "measurement/Measurement.h"
-#include "model/Equipment.h"
+#include "model/Boil.h"
 #include "model/Instruction.h"
 #include "model/Mash.h"
 #include "model/Style.h"
@@ -68,7 +68,7 @@ QString BrewDayFormatter::buildTitleHtml(bool includeImage) {
    body += QString("<tr><td class=\"left\">%1</td>")
            .arg(tr("Style"));
    body += QString("<td class=\"value\">%1</td>")
-           .arg((recObs->style()) ? recObs->style()->name() : "unknown");
+           .arg((recObs->style()) ? recObs->style()->name() : tr("unknown"));
    body += QString("<td class=\"right\">%1</td>")
            .arg(tr("Date"));
    body += QString("<td class=\"value\">%1</td></tr>")
@@ -78,8 +78,8 @@ QString BrewDayFormatter::buildTitleHtml(bool includeImage) {
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Boil Time"))
            .arg(
-              recObs->equipment() ? Measurement::displayAmount(Measurement::Amount{recObs->equipment()->boilTime_min().value_or(Equipment::default_boilTime_mins),
-                                                                                   Measurement::Units::minutes}) : "unknown"
+              recObs->boil() ? Measurement::displayAmount(Measurement::Amount{valueOr(recObs->boil()->boilTime_mins(), Boil::default_boilTime_mins),
+                                                                              Measurement::Units::minutes}) : tr("unknown")
            )
            .arg(tr("Efficiency"))
            .arg(Measurement::displayQuantity(recObs->efficiency_pct(), 0));
@@ -130,7 +130,7 @@ QList<QStringList> BrewDayFormatter::buildTitleList() {
    QString body = "";
    QStringList row;
    row.append(tr("Style"));
-   row.append((recObs->style()) ? recObs->style()->name() : "unknown");
+   row.append((recObs->style()) ? recObs->style()->name() : tr("unknown"));
    row.append(tr("Date"));
    row.append(QDate::currentDate().toString());
    ret.append(row);
@@ -139,8 +139,8 @@ QList<QStringList> BrewDayFormatter::buildTitleList() {
    // second row:  boil time and efficiency.
    row.append(tr("Boil Time"));
    row.append(
-      recObs->equipment() ? Measurement::displayAmount(Measurement::Amount{recObs->equipment()->boilTime_min().value_or(Equipment::default_boilTime_mins),
-                                                                           Measurement::Units::minutes}) : "unknown"
+      recObs->boil() ? Measurement::displayAmount(Measurement::Amount{valueOr(recObs->boil()->boilTime_mins(), Boil::default_boilTime_mins),
+                                                                      Measurement::Units::minutes}) : tr("unknown")
    );
    row.append(tr("Efficiency"));
    row.append(Measurement::displayQuantity(recObs->efficiency_pct(), 0));

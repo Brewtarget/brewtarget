@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartField.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * widgets/SmartField.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -133,7 +133,7 @@ public:
    template<class LabelType>
    void init(char const *                const   editorName,
              char const *                const   fieldName,
-             char const *                const   fieldlFqName,
+             char const *                const   fieldFqName,
              LabelType                         & buddyLabel,
              TypeInfo                    const & typeInfo,
              std::optional<unsigned int> const   precision = std::nullopt,
@@ -147,7 +147,7 @@ public:
     */
    void initFixed(char const *                const   editorName,
                   char const *                const   fieldName,
-                  char const *                const   fieldlFqName,
+                  char const *                const   fieldFqName,
                   QLabel                            & buddyLabel,
                   TypeInfo                    const & typeInfo,
                   Measurement::Unit           const & fixedDisplayUnit,
@@ -272,8 +272,11 @@ public:
     * \brief If our field type is \b not \c NonPhysicalQuantity, then this returns the field converted to canonical
     *        units for the relevant \c Measurement::PhysicalQuantity.  (It is a coding error to call this function if
     *        our field type \c is \c NonPhysicalQuantity.)
+    *
+    * \param ok If set, used to return \c true if parsing of raw text went OK and \c false otherwise (in which case,
+    *           function return value will be 0).
     */
-   Measurement::Amount getNonOptCanonicalAmt() const;
+   Measurement::Amount getNonOptCanonicalAmt(bool * ok = nullptr) const;
 
    /**
     * \brief As \c getNonOptCanonicalAmt but for optional fields
@@ -282,8 +285,11 @@ public:
 
    /**
     * \brief Same as calling \c quantity() on the result of \c getNonOptCanonicalAmt().
+   *
+    * \param ok If set, used to return \c true if parsing of raw text went OK and \c false otherwise (in which case,
+    *           function return value will be 0).
     */
-   double getNonOptCanonicalQty() const;
+   double getNonOptCanonicalQty(bool * ok = nullptr) const;
 
    /**
     * \brief As \c getNonOptCanonicalQty but (with the obvious changes) for optional fields
@@ -292,7 +298,7 @@ public:
 
 
    /**
-    * \brief Use this when you want to get the text as a number (and ignore any units or other trailling letters or
+    * \brief Use this when you want to get the text as a number (and ignore any units or other trailing letters or
     *        symbols).
     *
     *        NOTE: If the field holds a \c PhysicalQuantity or \c PhysicalQuantities then this will return the same
@@ -305,7 +311,7 @@ public:
     * \param ok If set, used to return \c true if parsing of raw text went OK and \c false otherwise (in which case,
     *           function return value will be 0).
     */
-   template<typename T> T getNonOptValue(bool * const ok = nullptr) const;
+   template<typename T> T getNonOptValue(bool * ok = nullptr) const;
 
    /**
     * \brief As \c getNonOptValue but for std::optional values

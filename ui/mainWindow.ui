@@ -2019,10 +2019,10 @@
   <action name="actionOriginalGravityCorrectionTool">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/images/hydrometer.svg</normaloff>:/images/hydrometer.svg</iconset>
+     <normaloff>:/images/iconGravityCorrection.svg</normaloff>:/images/iconGravityCorrection.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Original Gravity Correction Tool</string>
+    <string>&amp;Gravity Correction Tool</string>
    </property>
   </action>
   <action name="actionUnitConversionTool">

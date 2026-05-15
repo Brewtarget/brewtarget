@@ -26,6 +26,7 @@ Improvements to Folders, plus bug fixes and minor enhancements.
 * Can't drag a folder inside another folder [1067](https://github.com/Brewtarget/brewtarget/issues/1067)
 * 5.0.4: Crash at startup [1102](https://github.com/Brewtarget/brewtarget/issues/1102)
 * Mouse-over date label on brew log tab causes assert [1107](https://github.com/Brewtarget/brewtarget/issues/1107)
+* Hop Addition in Recipe Builder [1112](https://github.com/Brewtarget/brewtarget/issues/1112)
 
 ### Release Timestamp
 Sat, 18 Apr 2026 05:00:05 +0100

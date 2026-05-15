@@ -44,9 +44,7 @@ AddPropertyName(agingVesselLoss_l          )
 AddPropertyName(agingVesselNotes           )
 AddPropertyName(agingVesselType            )
 AddPropertyName(agingVesselVolume_l        )
-AddPropertyName(boilTime_min               )
 AddPropertyName(boilingPoint_c             )
-AddPropertyName(calcBoilVolume             )
 AddPropertyName(evapRate_pctHr             )
 AddPropertyName(fermenterBatchSize_l       )
 AddPropertyName(fermenterLoss_l            )
@@ -143,9 +141,7 @@ public:
    static QString localisedName_agingVesselNotes           ();
    static QString localisedName_agingVesselType            ();
    static QString localisedName_agingVesselVolume_l        ();
-   static QString localisedName_boilTime_min               ();
    static QString localisedName_boilingPoint_c             ();
-   static QString localisedName_calcBoilVolume             ();
    static QString localisedName_evapRate_pctHr             ();
    static QString localisedName_fermenterBatchSize_l       ();
    static QString localisedName_fermenterLoss_l            ();
@@ -204,17 +200,17 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   Equipment(QString name = "");
-   Equipment(NamedParameterBundle const & namedParameterBundle);
+   explicit Equipment(QString name = "");
+   explicit Equipment(NamedParameterBundle const & namedParameterBundle);
    Equipment(Equipment const & other);
 
-   virtual ~Equipment();
+   ~Equipment() override;
 
    /**
-    * \brief Some default values we use in calculations when no value is set in this record
+    * \brief Some default values we use in calculations when no value is set in this record (or it this record is itself
+    *        not present)
     */
    //! @{
-   static constexpr double default_boilTime_mins              = 60.0;
    static constexpr double default_hopUtilization_pct         = 100.0;
    static constexpr double default_kettleEvaporationPerHour_l = 4.0;
    static constexpr double default_mashTunGrainAbsorption_LKg = 1.086; // See also PhysicalConstants::grainAbsorption_Lkg
@@ -227,10 +223,8 @@ public:
    //=================================================== PROPERTIES ====================================================
    /**
     * \brief The boil size in liters: the pre-boil volume used in this particular instance for this equipment setup.
-    *        Note that this may be a calculated value depending on the calcBoilVolume property.
     *
-    *        In BeerJSON, there is no record of whether this is a calculated value, it is just the maxiumum_volume of
-    *        the "Brew Kettle".
+    *        In BeerJSON this just the maxiumum_volume of the "Brew Kettle".
     */
    Q_PROPERTY(double kettleBoilSize_l       READ kettleBoilSize_l       WRITE setKettleBoilSize_l    ) // Required in BeerJSON (when Brew Kettle record present)
    /**
@@ -296,20 +290,6 @@ public:
     */
    Q_PROPERTY(std::optional<double> kettleEvaporationPerHour_l          READ kettleEvaporationPerHour_l          WRITE setKettleEvaporationPerHour_l          )
    /**
-    * \brief The boil time in minutes: the normal amount of time one boils for this equipment setup.  This can be used
-    *        with the evaporation rate to calculate the evaporation loss.         ⮜⮜⮜ Optional in BeerXML.  Not supported in BeerJSON. ⮞⮞⮞
-    *
-    *        This is not stored in BeerJSON.
-    *
-    *        .:TBD:. MY 2023-06-17 I don't see that boil time is really an attribute of equipment.  It seems more like a
-    *                per-recipe field.
-    */
-   Q_PROPERTY(std::optional<double> boilTime_min          READ boilTime_min          WRITE setBoilTime_min          )
-   /**
-    * \brief Whether you want the boil volume to be automatically calculated.    ⮜⮜⮜ Optional in BeerXML.  Not supported in BeerJSON. ⮞⮞⮞
-    */
-   Q_PROPERTY(bool calcBoilVolume        READ calcBoilVolume        WRITE setCalcBoilVolume          )
-   /**
     * \brief The lauter tun's deadspace in liters.                              ⮜⮜⮜ Optional in BeerXML but required in BeerJSON ⮞⮞⮞
     *        Amount lost to the lauter tun and equipment associated with the lautering process.
     *
@@ -326,6 +306,7 @@ public:
    Q_PROPERTY(std::optional<double>  topUpKettle_l         READ topUpKettle_l         WRITE setTopUpKettle_l         )
    /**
     * \brief The hop utilization factor. I do not believe this is used.         ⮜⮜⮜ Optional in BeerXML.  Not supported in BeerJSON. ⮞⮞⮞
+    *
     *        Large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher
     *        (200% or more) for very large batch equipment.
     */
@@ -347,6 +328,9 @@ public:
    Q_PROPERTY(std::optional<double> mashTunGrainAbsorption_LKg   READ mashTunGrainAbsorption_LKg   WRITE setMashTunGrainAbsorption_LKg   )
    /**
     * \brief The boiling point of water in Celsius.  NB: Not part of BeerXML or BeerJSON
+    *
+    *        TODO: Again, this doesn't really belong on Equipment.  It's a function of the brewer's location rather than
+    *              the equipment itself.  We should move it to Options.
     */
    Q_PROPERTY(double boilingPoint_c        READ boilingPoint_c        WRITE setBoilingPoint_c        )
 
@@ -424,8 +408,6 @@ public:
    double                kettleTrubChillerLoss_l    () const;
    std::optional<double> evapRate_pctHr             () const;
    std::optional<double> kettleEvaporationPerHour_l () const;
-   std::optional<double> boilTime_min               () const;
-   bool                  calcBoilVolume             () const;
    double                lauterTunDeadspaceLoss_l   () const;
    std::optional<double> topUpKettle_l              () const;
    std::optional<double> hopUtilization_pct         () const;
@@ -475,9 +457,7 @@ public:
    void setKettleTrubChillerLoss_l    (double                const   val);
    void setEvapRate_pctHr             (std::optional<double> const   val);
    void setKettleEvaporationPerHour_l (std::optional<double> const   val);
-   void setBoilTime_min               (std::optional<double> const   val);
-   void setCalcBoilVolume             (bool                  const   val);
-   void setLauterTunDeadspaceLoss_l      (double                const   val);
+   void setLauterTunDeadspaceLoss_l   (double                const   val);
    void setTopUpKettle_l              (std::optional<double> const   val);
    void setHopUtilization_pct         (std::optional<double> const   val);
    void setKettleNotes                (QString               const & val);
@@ -522,8 +502,13 @@ public:
     */
    double getLauteringDeadspaceLoss_l() const;
 
-   //! \brief Calculate how much wort is left immediately at knockout.
-   double wortEndOfBoil_l( double kettleWort_l ) const;
+   /**
+    * \brief Calculate how much wort is left immediately at knockout.
+    *
+    * \param kettleWort_l
+    * \param boilTime_mins
+    */
+   double wortEndOfBoil_l(double kettleWort_l, double boilTime_mins) const;
 
 signals:
 
@@ -541,8 +526,6 @@ private:
    double                m_kettleTrubChillerLoss_l   ;
    std::optional<double> m_evapRate_pctHr            ;
    std::optional<double> m_kettleEvaporationPerHour_l;
-   std::optional<double> m_boilTime_min              ;
-   bool                  m_calcBoilVolume            ;
    double                m_lauterTunDeadspaceLoss_l  ;
    std::optional<double> m_topUpKettle_l             ;
    std::optional<double> m_hopUtilization_pct        ;
@@ -582,8 +565,6 @@ private:
    QString               m_agingVesselNotes           ;
    QString               m_packagingVesselNotes       ;
 
-   // Calculate the boil size.
-   void doCalculations();
 };
 
 BT_DECLARE_METATYPES(Equipment)

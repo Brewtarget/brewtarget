@@ -3049,7 +3049,9 @@ namespace {
    }
 
    //
-   // Next time - maybe fix remaining issues listed in ObjectStore legacyBadTypes
+   // Next time (_21):
+   //   - Drop equipment.boil_time and equipment.calc_boil_volume columns
+   //   - maybe fix remaining issues listed in ObjectStore legacyBadTypes
    //
 
    /*!

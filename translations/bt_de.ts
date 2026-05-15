@@ -292,6 +292,10 @@
         <source>Volume into fermenter</source>
         <translation type="unfinished">Volumen im Fermenter</translation>
     </message>
+    <message>
+        <source>unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayScrollWidget</name>
@@ -413,6 +417,14 @@
     </message>
     <message>
         <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>n/a</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1074,35 +1086,35 @@
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation>Einheitenrechner</translation>
+        <translation type="vanished">Einheitenrechner</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Eingabe</translation>
+        <translation type="vanished">Eingabe</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation>Ausgabeeinheiten</translation>
+        <translation type="vanished">Ausgabeeinheiten</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Ausgabe</translation>
+        <translation type="vanished">Ausgabe</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation>Umwandeln</translation>
+        <translation type="vanished">Umwandeln</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation>Zahl und Einheit zur Umrechnung</translation>
+        <translation type="vanished">Zahl und Einheit zur Umrechnung</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation>Zu dieser Einheit konvertieren</translation>
+        <translation type="vanished">Zu dieser Einheit konvertieren</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation>Umgerechnete Zahl und Einheit</translation>
+        <translation type="vanished">Umgerechnete Zahl und Einheit</translation>
     </message>
 </context>
 <context>
@@ -2799,10 +2811,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="obsolete">Name</translation>
     </message>
     <message>
-        <source>Boil Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Equipments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2812,7 +2820,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>BoilTime</source>
-        <translation type="unfinished">Kochzeit</translation>
+        <translation type="obsolete">Kochzeit</translation>
     </message>
     <message>
         <source>Aging Vessel Loss</source>
@@ -2832,10 +2840,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Boiling Point</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate Boil Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3001,6 +3005,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <message>
         <source>Boil Size</source>
         <translation type="unfinished">Kochgröße</translation>
+    </message>
+    <message>
+        <source>Kettle Boil Size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4496,10 +4504,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Boil Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Recipe Efficiency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5219,6 +5223,81 @@ If you need help, please open an issue at %1</source>
     <name>ObjectStoreUtils::NE</name>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>OgCorrectionTool</name>
+    <message>
+        <source>No Recipe Selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to have a recipe open in the main window before you can use this tool.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Equipment on Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe &quot;%1&quot; has no equipment.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Boil on Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe &quot;%1&quot; has no boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Need a valid value for Measured Gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Need a valid value for Wort Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>- On Target -</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↑ Above Target ↑</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↓ Below Target ↓</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Add Water To Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount to Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of water you need to add to hit planned OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Boil Down To Reduce Wort Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount to Boil Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extra wort you need to boil off to hit planned OG</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6616,6 +6695,14 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Stop bothering you about new data?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>°C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>°F</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8162,7 +8249,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation>Rezept skalieren</translation>
     </message>
     <message>
-        <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
+        <source>This wizard will help you scale a recipe to another size or efficiency.  Select another equipment with the new batch size and/or efficiency and the wizard will scale the recipe ingredients automatically.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8935,6 +9022,41 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <message>
         <source>Default</source>
         <translation type="unfinished">Standard</translation>
+    </message>
+</context>
+<context>
+    <name>UnitConversionTool</name>
+    <message>
+        <source>Converter Tool</source>
+        <translation type="unfinished">Einheitenrechner</translation>
+    </message>
+    <message>
+        <source>Input</source>
+        <translation type="unfinished">Eingabe</translation>
+    </message>
+    <message>
+        <source>Output Units</source>
+        <translation type="unfinished">Ausgabeeinheiten</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation type="unfinished">Ausgabe</translation>
+    </message>
+    <message>
+        <source>Convert</source>
+        <translation type="unfinished">Umwandeln</translation>
+    </message>
+    <message>
+        <source>Amount and units to convert</source>
+        <translation type="unfinished">Zahl und Einheit zur Umrechnung</translation>
+    </message>
+    <message>
+        <source>Unit you want to convert to</source>
+        <translation type="unfinished">Zu dieser Einheit konvertieren</translation>
+    </message>
+    <message>
+        <source>Output conversion</source>
+        <translation type="unfinished">Umgerechnete Zahl und Einheit</translation>
     </message>
 </context>
 <context>
@@ -10198,7 +10320,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation type="unfinished">Berechne Pfannevollwürzekonzentration</translation>
+        <translation type="obsolete">Berechne Pfannevollwürzekonzentration</translation>
     </message>
     <message>
         <source>Boil time</source>
@@ -10446,6 +10568,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjustment factor for large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11642,7 +11768,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>&amp;Recipe</source>
-        <translation type="vanished">/Rezept</translation>
+        <translation>/Rezept</translation>
     </message>
     <message>
         <source>&amp;Database</source>
@@ -11750,11 +11876,11 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation>Stammwürze K&amp;orrekturhilfe</translation>
+        <translation type="vanished">Stammwürze K&amp;orrekturhilfe</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation>Einheiten umre&amp;chnen</translation>
+        <translation type="vanished">Einheiten umre&amp;chnen</translation>
     </message>
     <message>
         <source>Backup Database</source>
@@ -12070,6 +12196,14 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>W&amp;aters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Gravity Correction Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Unit Conversion Tool</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -12707,87 +12841,194 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
-        <translation>Volumen anpassen um Stammwürze zu erreichen</translation>
+        <translation type="vanished">Volumen anpassen um Stammwürze zu erreichen</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Eingabe</translation>
+        <translation type="vanished">Eingabe</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>SG</translation>
+        <translation type="vanished">SG</translation>
     </message>
     <message>
         <source>Measured gravity pre-boil</source>
-        <translation>Gemessene Pfannevollwürzekonzentration</translation>
+        <translation type="vanished">Gemessene Pfannevollwürzekonzentration</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Temp.</translation>
+        <translation type="vanished">Temp.</translation>
+    </message>
+    <message>
+        <source>Calibration Temp</source>
+        <translation type="vanished">Kalibrierte Temperatur</translation>
+    </message>
+    <message>
+        <source>Temp to which the hydrometer is calibrated</source>
+        <translation type="vanished">Temperatur, bei welcher das Hydrometer kalibriert ist.</translation>
+    </message>
+    <message>
+        <source>-or-</source>
+        <translation type="vanished">-oder-</translation>
+    </message>
+    <message>
+        <source>Plato</source>
+        <translation type="vanished">Plato</translation>
+    </message>
+    <message>
+        <source>Plato (percent by mass of equivalent sucrose)</source>
+        <translation type="vanished">Plato (Prozent der Masse bei entsrechender Saccharose)</translation>
+    </message>
+    <message>
+        <source>Pre-Boil Volume</source>
+        <translation type="vanished">Vorkochvolumen</translation>
+    </message>
+    <message>
+        <source>Measured pre-boil volume</source>
+        <translation type="vanished">Gemessenes Pfannevollwürzevolumen</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation type="vanished">Ausgabe</translation>
+    </message>
+    <message>
+        <source>OG w/o Correction</source>
+        <translation type="vanished">Stammwürze ohne Korrektur</translation>
+    </message>
+    <message>
+        <source>OG if you boil as planned</source>
+        <translation type="vanished">Stammwürze wenn Sie wie geplant kochen</translation>
+    </message>
+    <message>
+        <source>Add to Boil</source>
+        <translation type="vanished">Dem Sud hinzufügen</translation>
+    </message>
+    <message>
+        <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
+        <translation type="vanished">Menge an Wasser welches Sie hinzufügen müssen um die geplante Stammwürzekonzentration zu erreichen (oder verkochen müssen wenn negativ)</translation>
+    </message>
+    <message>
+        <source>Final Batch Size</source>
+        <translation type="vanished">Brauziel</translation>
+    </message>
+    <message>
+        <source>Estimated batch size after correction</source>
+        <translation type="vanished">Geschätzte Auschlagmenge nach Korrektur</translation>
+    </message>
+    <message>
+        <source>Calculate</source>
+        <translation type="vanished">Berechne</translation>
+    </message>
+</context>
+<context>
+    <name>ogCorrectionTool</name>
+    <message>
+        <source>Gravity Correction Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NB: this tool makes the assumption that you are not going to add any water post boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From current recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured Gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A value in Plato will be used as-is.  An SG value can be corrected for actual vs calibrated temperature.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>@ temperature</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Calibration Temp</source>
-        <translation>Kalibrierte Temperatur</translation>
+        <source>Calibrated at</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Temp to which the hydrometer is calibrated</source>
-        <translation>Temperatur, bei welcher das Hydrometer kalibriert ist.</translation>
+        <source>Temperature to which the hydrometer is calibrated</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>-or-</source>
-        <translation>-oder-</translation>
+        <source>Actual SG</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plato</source>
-        <translation>Plato</translation>
-    </message>
-    <message>
-        <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation>Plato (Prozent der Masse bei entsrechender Saccharose)</translation>
+        <source>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
-        <translation>Vorkochvolumen</translation>
+        <translation type="unfinished">Vorkochvolumen</translation>
     </message>
     <message>
         <source>Measured pre-boil volume</source>
-        <translation>Gemessenes Pfannevollwürzevolumen</translation>
-    </message>
-    <message>
-        <source>Output</source>
-        <translation>Ausgabe</translation>
-    </message>
-    <message>
-        <source>OG w/o Correction</source>
-        <translation>Stammwürze ohne Korrektur</translation>
-    </message>
-    <message>
-        <source>OG if you boil as planned</source>
-        <translation>Stammwürze wenn Sie wie geplant kochen</translation>
-    </message>
-    <message>
-        <source>Add to Boil</source>
-        <translation>Dem Sud hinzufügen</translation>
-    </message>
-    <message>
-        <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
-        <translation>Menge an Wasser welches Sie hinzufügen müssen um die geplante Stammwürzekonzentration zu erreichen (oder verkochen müssen wenn negativ)</translation>
-    </message>
-    <message>
-        <source>Final Batch Size</source>
-        <translation>Brauziel</translation>
-    </message>
-    <message>
-        <source>Estimated batch size after correction</source>
-        <translation>Geschätzte Auschlagmenge nach Korrektur</translation>
+        <translation type="unfinished">Gemessenes Pfannevollwürzevolumen</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Berechne</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Predicted OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OG if you take no action, ie boil as originally planned</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Add Water To Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount to Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of water you need to add to hit planned OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Batch Size</source>
+        <translation type="unfinished">Brauziel</translation>
+    </message>
+    <message>
+        <source>Estimated batch size after correction</source>
+        <translation type="unfinished">Geschätzte Auschlagmenge nach Korrektur</translation>
+    </message>
+    <message>
+        <source>-- OR --</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Add Sugar or DME</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount To Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of Sugar or DME to add to the boil</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13140,6 +13381,14 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Default efficiency to set on new recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default boil time to set on new recipes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

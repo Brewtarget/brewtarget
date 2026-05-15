@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BrewDayScrollWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * BrewDayScrollWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Carles Muñoz Gorriz <carlesmu@internautas.org>
  *   • Daniel Pettersson <pettson81@gmail.com>
@@ -33,7 +33,7 @@
 #include "Html.h"
 #include "measurement/Measurement.h"
 #include "measurement/UnitSystem.h"
-#include "model/Equipment.h"
+#include "model/Boil.h"
 #include "model/Instruction.h"
 #include "model/Mash.h"
 #include "model/Style.h"
@@ -48,18 +48,18 @@
 namespace {
    QString styleName(Style const * style) {
       if (!style) {
-         return "unknown";
+         return BrewDayScrollWidget::tr("not set");
       }
 
       return style->name();
    }
 
-   QString boilTime(Equipment const * equipment) {
-      if (!equipment) {
-         return "unknown";
+   QString boilTime(Boil const * boil) {
+      if (!boil) {
+         return BrewDayScrollWidget::tr("n/a");
       }
 
-      return Measurement::displayAmount(Measurement::Amount{equipment->boilTime_min().value_or(Equipment::default_boilTime_mins), Measurement::Units::minutes});
+      return Measurement::displayAmount(Measurement::Amount{valueOr(boil->boilTime_mins(), Boil::default_boilTime_mins), Measurement::Units::minutes});
    }
 }
 
@@ -393,7 +393,7 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage) {
    // second row:  boil time and efficiency.
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Boil Time"))
-            .arg(boilTime(m_recObs->equipment().get()))
+            .arg(boilTime(m_recObs->boil().get()))
             .arg(tr("Efficiency"))
             .arg(Measurement::displayQuantity(m_recObs->efficiency_pct(), 0));
 

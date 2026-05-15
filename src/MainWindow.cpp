@@ -150,7 +150,7 @@
 #include "tools/AncestorDialog.h"
 #include "tools/UnitConversionTool.h"
 #include "tools/HydrometerTool.h"
-#include "tools/OgAdjuster.h"
+#include "tools/OgCorrectionTool.h"
 #include "tools/PitchDialog.h"
 #include "tools/PrimingDialog.h"
 #include "tools/RefractoDialog.h"
@@ -361,8 +361,8 @@ public:
       m_recipeScaler               = std::make_unique<ScaleRecipeTool           >(&m_self);
       m_recipeFormatter            = std::make_unique<RecipeFormatter           >(&m_self);
       m_printAndPreviewDialog      = std::make_unique<PrintAndPreviewDialog     >(&m_self);
-      m_ogAdjuster                 = std::make_unique<OgAdjuster                >(&m_self);
-      m_unitConversionTool              = std::make_unique<UnitConversionTool             >(&m_self);
+      m_ogCorrectionTool           = std::make_unique<OgCorrectionTool          >(&m_self);
+      m_unitConversionTool         = std::make_unique<UnitConversionTool        >(&m_self);
       m_hydrometerTool             = std::make_unique<HydrometerTool            >(&m_self);
       m_alcoholTool                = std::make_unique<AlcoholTool               >(&m_self);
       m_timerMainDialog            = std::make_unique<TimerMainDialog           >(&m_self);
@@ -832,7 +832,7 @@ public:
    std::unique_ptr<HydrometerTool            > m_hydrometerTool        ;
    std::unique_ptr<MashDesigner              > m_mashDesigner          ;
    std::unique_ptr<MashWizard                > m_mashWizard            ;
-   std::unique_ptr<OgAdjuster                > m_ogAdjuster            ;
+   std::unique_ptr<OgCorrectionTool          > m_ogCorrectionTool      ;
    std::unique_ptr<OptionDialog              > m_optionDialog          ;
    std::unique_ptr<PitchDialog               > m_pitchDialog           ;
    std::unique_ptr<PrimingDialog             > m_primingDialog         ;
@@ -1277,14 +1277,14 @@ void MainWindow::setupTriggers() {
    connect(actionYeasts                    , &QAction::triggered, this->pimpl->m_yeastCatalog.get()         , &QWidget::show                     ); // > View > Yeasts
    connect(actionSalts                     , &QAction::triggered, this->pimpl->m_saltCatalog.get()          , &QWidget::show                     ); // > View > Salts
    connect(actionWaters                    , &QAction::triggered, this->pimpl->m_waterCatalog.get()         , &QWidget::show                     ); // > View > Waters
-   connect(actionInventory                 , &QAction::triggered, this->pimpl->m_stockWindow.get()      , &QWidget::show                     ); // > View > Inventory
+   connect(actionInventory                 , &QAction::triggered, this->pimpl->m_stockWindow.get()          , &QWidget::show                     ); // > View > Inventory
 //   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual);                                               // > About > Manual
    connect(actionScale_Recipe              , &QAction::triggered, this->pimpl->m_recipeScaler.get()         , &QWidget::show                     ); // > Tools > Scale Recipe
    connect(action_recipeToTextClipboard    , &QAction::triggered, this->pimpl->m_recipeFormatter.get()      , &RecipeFormatter::toTextClipboard  ); // > Tools > Recipe to Clipboard as Text
-   connect(actionUnitConversionTool        , &QAction::triggered, this->pimpl->m_unitConversionTool.get()        , &QWidget::show                     ); // > Tools > Unit Conversion Tool
+   connect(actionUnitConversionTool        , &QAction::triggered, this->pimpl->m_unitConversionTool.get()   , &QWidget::show                     ); // > Tools > Unit Conversion Tool
    connect(actionHydrometer_Temp_Adjustment, &QAction::triggered, this->pimpl->m_hydrometerTool.get()       , &QWidget::show                     ); // > Tools > Hydrometer Temp Adjustment
    connect(actionAlcohol_Percentage_Tool   , &QAction::triggered, this->pimpl->m_alcoholTool.get()          , &QWidget::show                     ); // > Tools > Alcohol
-   connect(actionOriginalGravityCorrectionTool, &QAction::triggered, this->pimpl->m_ogAdjuster.get()           , &QWidget::show                     ); // > Tools > Original Gravity Correction Tool
+   connect(actionOriginalGravityCorrectionTool, &QAction::triggered, this->pimpl->m_ogCorrectionTool.get()  , &QWidget::show                     ); // > Tools > Original Gravity Correction Tool
    connect(actionPriming_Calculator        , &QAction::triggered, this->pimpl->m_primingDialog.get()        , &QWidget::show                     ); // > Tools > Priming Calculator
    connect(actionStrikeWater_Calculator    , &QAction::triggered, this->pimpl->m_strikeWaterDialog.get()    , &QWidget::show                     ); // > Tools > Strike Water Calculator
    connect(actionRefractometer_Tools       , &QAction::triggered, this->pimpl->m_refractoDialog.get()       , &QWidget::show                     ); // > Tools > Refractometer Tools
@@ -1422,7 +1422,7 @@ void MainWindow::setAncestor() {
 // Can handle null recipes.
 void MainWindow::setRecipe(Recipe * recipe) {
    if (!recipe) {
-      // This is a coding error, but we can recover by bailing out here
+      // This is a coding error (unless maybe there are no recipes), but we can recover by bailing out here
       qWarning() << Q_FUNC_INFO << "Null Recipe!";
       qWarning().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
       return;
@@ -1438,7 +1438,7 @@ void MainWindow::setRecipe(Recipe * recipe) {
    // Make sure this MainWindow is paying attention...
    if (this->pimpl->m_recipeObs) {
       disconnect(this->pimpl->m_recipeObs, nullptr, this, nullptr);
-      auto boil = this->pimpl->m_recipeObs->boil();
+      auto const boil = this->pimpl->m_recipeObs->boil();
       if (boil) {
          disconnect(boil.get(), nullptr, this, nullptr);
       }
@@ -1460,7 +1460,7 @@ void MainWindow::setRecipe(Recipe * recipe) {
    this->pimpl->m_mashWizard->setRecipe(recipe);
    brewDayScrollWidget->setRecipe(recipe);
    this->pimpl->m_recipeFormatter->setRecipe(recipe);
-   this->pimpl->m_ogAdjuster->setRecipe(recipe);
+   this->pimpl->m_ogCorrectionTool->setRecipe(recipe);
    recipeExtrasWidget->setRecipe(recipe);
    this->pimpl->m_mashDesigner->setRecipe(recipe);
    this->equipmentButton->setRecipe(recipe);
@@ -1511,15 +1511,18 @@ void MainWindow::setRecipe(Recipe * recipe) {
    // causes this signal to be slotted, which then causes showChanges() to be
    // called.
    connect(this->pimpl->m_recipeObs, &NamedEntity::changed, this, &MainWindow::recipeChanged);
-   auto boil = this->pimpl->m_recipeObs->boil();
+   auto const boil = this->pimpl->m_recipeObs->boil();
    if (boil) {
       connect(boil.get(), &NamedEntity::changed, this, &MainWindow::recipeChanged);
    }
 
-   QModelIndex rIdx = treeView_recipe->findElement(this->pimpl->m_recipeObs);
+   QModelIndex const rIdx = treeView_recipe->findElement(this->pimpl->m_recipeObs);
    this->setTreeSelection(rIdx);
 
    this->showChanges();
+
+   emit newRecipeSelected();
+
    return;
 }
 
@@ -1902,11 +1905,8 @@ void MainWindow::droppedRecipeEquipment(Equipment * kitRaw) {
       // setMashTunSpecificHeat_calGC() on the mash.)
       new SimpleUndoableUpdate(*this->pimpl->m_recipeObs, TYPE_INFO(Recipe, batchSize_l), kit->fermenterBatchSize_l(), tr("Change Batch Size"), equipmentUpdate);
 
-      auto boil = this->pimpl->m_recipeObs->nonOptBoil();
+      auto const boil = this->pimpl->m_recipeObs->nonOptBoil();
       new SimpleUndoableUpdate(*boil, TYPE_INFO(Boil, preBoilSize_l), kit->kettleBoilSize_l(), tr("Change Boil Size"), equipmentUpdate);
-      if (kit->boilTime_min()) {
-         new SimpleUndoableUpdate(*boil, TYPE_INFO(Boil, boilTime_mins), *kit->boilTime_min(), tr("Change Boil Time"), equipmentUpdate);
-      }
    }
 
    // This will do the equipment update and any related updates - see above
@@ -2236,20 +2236,19 @@ std::shared_ptr<Recipe>  MainWindow::newRecipe() {
 
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
-   newRec ->setBatchSize_l   (PersistentSettings::value_ck(PersistentSettings::Names::defaultBatchSize_l  , 18.93).toDouble());
-   newBoil->setPreBoilSize_l (PersistentSettings::value_ck(PersistentSettings::Names::defaultPreBoilSize_l, 23.47).toDouble());
-   newRec ->setEfficiency_pct(PersistentSettings::value_ck(PersistentSettings::Names::defaultEfficiency   , 70.0 ).toDouble());
+   newRec ->setBatchSize_l   (PersistentSettings::value_ck(PersistentSettings::Names::defaultBatchSize_l   , Recipe::default_batchSize_l).toDouble());
+   newBoil->setPreBoilSize_l (PersistentSettings::value_ck(PersistentSettings::Names::defaultPreBoilSize_l , Boil::default_preBoilSize_l).toDouble());
+   newRec ->setEfficiency_pct(PersistentSettings::value_ck(PersistentSettings::Names::defaultEfficiency_pct, Recipe::default_efficiency_pct).toDouble());
+   newBoil->setBoilTime_mins (PersistentSettings::value_ck(PersistentSettings::Names::defaultBoilTime_mins , Boil::default_boilTime_mins).toDouble());
 
    // We need a valid key, so insert the recipe before we add equipment
-   QVariant const defEquipKey = PersistentSettings::value_ck(PersistentSettings::Names::defaultEquipmentKey, -1);
-   if (defEquipKey != -1) {
-      auto equipment = ObjectStoreWrapper::getById<Equipment>(defEquipKey.toInt());
+   if (QVariant const defEquipKey = PersistentSettings::value_ck(PersistentSettings::Names::defaultEquipmentKey, -1);
+       defEquipKey != -1) {
       // I really want to do this before we've written the object to the
       // database
-      if ( equipment ) {
+      if (auto const equipment = ObjectStoreWrapper::getById<Equipment>(defEquipKey.toInt())) {
          newRec->setBatchSize_l( equipment->fermenterBatchSize_l() );
          newBoil->setPreBoilSize_l( equipment->kettleBoilSize_l() );
-         newBoil->setBoilTime_mins( equipment->boilTime_min().value_or(Equipment::default_boilTime_mins) );
          newRec->setEquipment(equipment);
       }
    }

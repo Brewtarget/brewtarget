@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/EquipmentEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * editors/EquipmentEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • A.J. Drobnich <aj.drobnich@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • David Grundberg <individ@acc.umu.se>
@@ -62,10 +62,6 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
       EDITOR_FIELD_NORM(Equipment, label_hopUtilization          , lineEdit_hopUtilization          , Equipment::hopUtilization_pct       , 0),
       EDITOR_FIELD_NORM(Equipment, label_mashTunWeight           , lineEdit_mashTunWeight           , Equipment::mashTunWeight_kg            ),
       EDITOR_FIELD_NORM(Equipment, label_boilingPoint            , lineEdit_boilingPoint            , Equipment::boilingPoint_c           , 1),
-      EDITOR_FIELD_NORM(Equipment, label_boilTime                , lineEdit_boilTime                , Equipment::boilTime_min                ),
-
-      EDITOR_FIELD_NORM(Equipment, label_calcBoilVolume          , checkBox_calcBoilVolume          , Equipment::calcBoilVolume              ),
-
       EDITOR_FIELD_NORM(Equipment, label_fermenterBatchSize      , lineEdit_fermenterBatchSize      , Equipment::fermenterBatchSize_l        ),
       EDITOR_FIELD_NORM(Equipment, label_kettleBoilSize          , lineEdit_kettleBoilSize          , Equipment::kettleBoilSize_l            ),
       EDITOR_FIELD_NORM(Equipment, label_kettleEvaporationPerHour, lineEdit_kettleEvaporationPerHour, Equipment::kettleEvaporationPerHour_l  ),
@@ -109,20 +105,13 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
    connect(this->checkBox_showAgingVessel          , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_showPackagingVessel      , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_defaultEquipment         , &QCheckBox::checkStateChanged, this, &EquipmentEditor::updateDefaultEquipment   );
-   connect(this->checkBox_calcBoilVolume           , &QCheckBox::checkStateChanged, this, &EquipmentEditor::updateCalcBoilVolume     );
 #else
    connect(this->checkBox_showHlt                  , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_showLauterTun            , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_showAgingVessel          , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_showPackagingVessel      , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_defaultEquipment         , &QCheckBox::stateChanged     , this, &EquipmentEditor::updateDefaultEquipment   );
-   connect(this->checkBox_calcBoilVolume           , &QCheckBox::stateChanged     , this, &EquipmentEditor::updateCalcBoilVolume     );
 #endif
-   connect(this->lineEdit_boilTime                 , &SmartLineEdit::textModified , this, &EquipmentEditor::updateCalcBoilVolume     );
-   connect(this->lineEdit_kettleEvaporationPerHour , &SmartLineEdit::textModified , this, &EquipmentEditor::updateCalcBoilVolume     );
-   connect(this->lineEdit_topUpWater               , &SmartLineEdit::textModified , this, &EquipmentEditor::updateCalcBoilVolume     );
-   connect(this->lineEdit_kettleTrubChillerLoss    , &SmartLineEdit::textModified , this, &EquipmentEditor::updateCalcBoilVolume     );
-   connect(this->lineEdit_fermenterBatchSize       , &SmartLineEdit::textModified , this, &EquipmentEditor::updateCalcBoilVolume     );
    connect(this->pushButton_absorption             , &QAbstractButton::clicked    , this, &EquipmentEditor::resetAbsorption          );
 
    return;
@@ -286,27 +275,6 @@ void EquipmentEditor::hideOrShowOptionalVessels() {
    return;
 }
 
-void EquipmentEditor::updateCalcBoilVolume() {
-   if (this->checkBox_calcBoilVolume->isChecked()) {
-      this->lineEdit_kettleBoilSize->setQuantity(this->calcBatchSize());
-      this->lineEdit_kettleBoilSize->setEnabled(false);
-   } else {
-      this->lineEdit_kettleBoilSize->setQuantity(this->lineEdit_fermenterBatchSize->getNonOptCanonicalQty());
-      this->lineEdit_kettleBoilSize->setEnabled(true);
-   }
-   return;
-}
-
-double EquipmentEditor::calcBatchSize() {
-   double size     = lineEdit_fermenterBatchSize      ->getNonOptCanonicalQty();
-   double topUp    = lineEdit_topUpWater              ->getOptCanonicalQty().value_or(Equipment::default_topUpWater_l);
-   double trubLoss = lineEdit_kettleTrubChillerLoss   ->getNonOptCanonicalQty();
-   double evapRate = lineEdit_kettleEvaporationPerHour->getOptCanonicalQty().value_or(Equipment::default_kettleEvaporationPerHour_l);
-   double time     = lineEdit_boilTime                ->getOptCanonicalQty().value_or(Equipment::default_boilTime_mins);
-
-   return size - topUp + trubLoss + (time/60.0)*evapRate;
-}
-
 void EquipmentEditor::resetAbsorption() {
    if (!m_editItem) {
       return;
@@ -326,12 +294,12 @@ void EquipmentEditor::updateDefaultEquipment() {
       return;
    }
 
-   QVariant currentDefault = PersistentSettings::value_ck(PersistentSettings::Names::defaultEquipmentKey, -1);
+   QVariant const currentDefault = PersistentSettings::value_ck(PersistentSettings::Names::defaultEquipmentKey, -1);
    if (currentDefault == m_editItem->key()) {
       PersistentSettings::insert_ck(PersistentSettings::Names::defaultEquipmentKey, -1);
    }
    return;
 }
 
-// Insert the boiler-plate stuff that we cannot do in EditorBase
+// Insert the boilerplate stuff that we cannot do in EditorBase
 EDITOR_COMMON_CODE(Equipment)

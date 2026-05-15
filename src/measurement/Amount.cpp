@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Amount.cpp is part of Brewtarget, and is copyright the following authors 2022-2025:
+ * measurement/Amount.cpp is part of Brewtarget, and is copyright the following authors 2022-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -101,10 +101,16 @@ namespace Measurement {
       return this->unit->toCanonical(this->quantity);
    }
 
+   void Amount::sanitise() {
+      this->quantity = this->unit->sanitise(this->quantity);
+      return;
+   }
+
    Amount Amount::operator+(Amount const & other) const {
       PhysicalQuantity const physicalQuantity = this->unit->getPhysicalQuantity();
       if (physicalQuantity != other.unit->getPhysicalQuantity()) {
-         qWarning() << Q_FUNC_INFO << "Meaninless to add" << *this << "to" << other << "as physical quantities differ!";
+         qWarning() <<
+            Q_FUNC_INFO << "Meaningless to add" << *this << "to" << other << "as physical quantities differ!";
       }
       return Amount{physicalQuantity, this->toCanonical().quantity + other.toCanonical().quantity};
    }
@@ -115,7 +121,7 @@ template<class S>
 S & operator<<(S & stream, Measurement::Amount const & amount) {
    // QDebug puts extra spaces around each thing you output but QTextStream does not (I think), so, to get the right gap
    // between the quantity and the unit, we need to be a bit heavy-handed.
-   stream << QString("%1 %2").arg(amount.quantity).arg(amount.unit->name);
+   stream << QString("%1 %2").arg(amount.quantity).arg(amount.unit->getDisplayAbbreviation());
    return stream;
 }
 

@@ -1,5 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/RecipeAdditionHopTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * qtModels/tableModels/RecipeAdditionHopTableModel.cpp is part of Brewtarget, and is copyright the following authors
+ * 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Luke Vincent <luke.r.vincent@gmail.com>
@@ -63,7 +64,7 @@ COLUMN_INFOS(
    TABLE_MODEL_HEADER(RecipeAdditionHop, Time          , PropertyNames::RecipeAddition::addAtTime_mins            ),    // "Time"
 )
 
-RecipeAdditionHopTableModel::RecipeAdditionHopTableModel(QTableView * parent, bool editable) :
+RecipeAdditionHopTableModel::RecipeAdditionHopTableModel(QTableView * parent, bool const editable) :
    BtTableModelRecipeObserver{parent, editable},
    TableModelBase<RecipeAdditionHopTableModel, RecipeAdditionHop>{},
    showIBUs(false) {
@@ -82,16 +83,18 @@ void RecipeAdditionHopTableModel::added  ([[maybe_unused]] std::shared_ptr<Recip
 void RecipeAdditionHopTableModel::removed([[maybe_unused]] std::shared_ptr<RecipeAdditionHop> item) { return; }
 void RecipeAdditionHopTableModel::updateTotals()                                                    { return; }
 
-void RecipeAdditionHopTableModel::setShowIBUs(bool var) {
+void RecipeAdditionHopTableModel::setShowIBUs(bool const var) {
    showIBUs = var;
    return;
 }
 
-QVariant RecipeAdditionHopTableModel::data(QModelIndex const & index, int role) const {
+QVariant RecipeAdditionHopTableModel::data(QModelIndex const & index, int const role) const {
    return this->doDataDefault(index, role);
 }
 
-QVariant RecipeAdditionHopTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant RecipeAdditionHopTableModel::headerData(int const section,
+                                                 Qt::Orientation const orientation,
+                                                 int const role) const {
    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
       return ColumnOwnerTraits<RecipeAdditionHopTableModel>::getColumnLabel(section);
    }

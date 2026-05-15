@@ -282,7 +282,7 @@ void BrewLog::populateNote(Recipe * parent) {
    this->setFinalVolume_l    (parent->finalVolume_l());
 
    if (auto const equip = parent->equipment()) {
-      double const boilTime_mins = parent->boil() ? parent->boil()->boilTime_mins() : Equipment::default_boilTime_mins;
+      double const boilTime_mins = parent->boil() ? parent->boil()->boilTime_mins() : Boil::default_boilTime_mins;
       this->setBoilOff_l(
          equip->kettleEvaporationPerHour_l().value_or(Equipment::default_kettleEvaporationPerHour_l) * (boilTime_mins/60.0)
       );

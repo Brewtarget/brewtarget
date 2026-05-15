@@ -716,6 +716,25 @@ namespace {
    //
    // Fields marked ‡ are non-standard, in that they are not part of BeerXML 1.0, so likely will not be recognised by
    // other programs.
+   //
+   // NOTE that we no longer support the optional BeerXML fields BOIL_TIME and CALC_BOIL_VOLUME, described in the
+   // standard as:
+   //
+   //    BOIL_TIME (Normal boil time) = The normal amount of time one boils for this equipment setup.  This can be used
+   //                                   with the evaporation rate to calculate the evaporation loss.
+   //
+   //    CALC_BOIL_VOLUME (Boolean) = Flag denoting that the program should calculate the boil size.  Flag may be TRUE
+   //                                 or FALSE.  If TRUE, then
+   //                                    BOIL_SIZE = (BATCH_SIZE – TOP_UP_WATER – TRUB_CHILLER_LOSS) * (1+BOIL_TIME * EVAP_RATE )
+   //                                 If set then the boil size should match this value.
+   //
+   // Whilst we generally endeavour to support as much of BeerXML and BeerJSON as we can, it seems fundamentally
+   // incorrect that "normal boil time" should be an attribute of Equipment.  Moreover, since Recipe now supports Boil
+   // objects, it is confusing to also be trying to specify boil length on Equipment.
+   //
+   // Dropping this support should not impede the use of BeerXML, as we retain support for the mandatory BOIL_TIME field
+   // on RECIPE records (which maps to Boil::boilTime_mins).
+   //
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<Equipment> {
       std::in_place_type_t<Equipment>{},
@@ -733,8 +752,6 @@ namespace {
          {XmlRecordDefinition::FieldType::Double          , "TOP_UP_WATER"                  , PropertyNames::Equipment::topUpWater_l               },
          {XmlRecordDefinition::FieldType::Double          , "TRUB_CHILLER_LOSS"             , PropertyNames::Equipment::kettleTrubChillerLoss_l    },
          {XmlRecordDefinition::FieldType::Double          , "EVAP_RATE"                     , PropertyNames::Equipment::evapRate_pctHr             },
-         {XmlRecordDefinition::FieldType::Double          , "BOIL_TIME"                     , PropertyNames::Equipment::boilTime_min               },
-         {XmlRecordDefinition::FieldType::Bool            , "CALC_BOIL_VOLUME"              , PropertyNames::Equipment::calcBoilVolume             },
          {XmlRecordDefinition::FieldType::Double          , "LAUTER_DEADSPACE"              , PropertyNames::Equipment::lauterTunDeadspaceLoss_l   },
          {XmlRecordDefinition::FieldType::Double          , "TOP_UP_KETTLE"                 , PropertyNames::Equipment::topUpKettle_l              },
          {XmlRecordDefinition::FieldType::Double          , "HOP_UTILIZATION"               , PropertyNames::Equipment::hopUtilization_pct         },

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Algorithms.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * Algorithms.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Eric Tamme <etamme@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
@@ -34,8 +34,7 @@
  * .:TBD:. At somme point consider replacing this with
  * https://www.boost.org/doc/libs/1_76_0/libs/math/doc/html/math_toolkit/polynomials.html
  */
-class Polynomial
-{
+class Polynomial {
 public:
    //! \brief Default constructor
    Polynomial();
@@ -86,23 +85,8 @@ private:
 namespace Algorithms {
 
    //===========================Generic stuff==================================
-
-   //! \brief Cross-platform NaN checker.
-   bool isNan(double d);
-
-   //! \brief Cross-platform Inf checker.
-   template<typename T> bool isInf(T var)
-   {
-      return
-      (
-         std::numeric_limits<T>::has_infinity &&
-         var == std::numeric_limits<T>::infinity()
-         //(var < std::numeric_limits<T>::min() || var > std::numeric_limits<T>::max())
-      );
-   }
-
-   //! \brief Cross-platform rounding.
-   double round(double d);
+   //! Round a number to a given number of decimal places (precision)
+   double round(double value, int precision);
 
    //===================Beer-related stuff=====================
 
@@ -132,8 +116,6 @@ namespace Algorithms {
     * \param wort_l liters of wort
     */
    double getPlato( double sugar_kg, double wort_l );
-   //! \brief Converts FG to plato, given the OG.
-   double ogFgToPlato( double og, double fg );
    //! \brief Gets ABV by using current gravity reading and brix reading.
    double getABVBySGPlato( double sg, double plato );
    //! \brief Gets ABW from current gravity and plato.
@@ -147,7 +129,7 @@ namespace Algorithms {
    //! \brief Calculate ABV from OG and FG
    double abvFromOgAndFg(double og, double fg);
    //! \brief Correct specific gravity reading for the temperature at which it was taken
-   double correctSgForTemperature(double measuredSg, double readingTempInC, double calibrationTempInC);
+   double correctSgForTemperature(double measuredGravity_sg, double readingTemp_c, double calibrationTemp_c);
 
 }
 

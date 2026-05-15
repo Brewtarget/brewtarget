@@ -73,58 +73,56 @@ void ScaleRecipeTool::setRecipe(Recipe* rec) {
    return;
 }
 
-void ScaleRecipeTool::scale(Equipment* equip, double newEff) {
+void ScaleRecipeTool::scale(Equipment* equip, double const newEff) {
    if (!this->m_recObs || !equip) {
       return;
    }
 
-   auto equipment = ObjectStoreWrapper::getSharedFromRaw(equip);
+   auto const equipment = ObjectStoreWrapper::getSharedFromRaw(equip);
 
    // Calculate volume ratio
-   double currentBatchSize_l = m_recObs->batchSize_l();
-   double newBatchSize_l = equipment->fermenterBatchSize_l();
-   double volRatio = newBatchSize_l / currentBatchSize_l;
+   double const currentBatchSize_l = m_recObs->batchSize_l();
+   double const newBatchSize_l = equipment->fermenterBatchSize_l();
+   double const volRatio = newBatchSize_l / currentBatchSize_l;
 
    // Calculate efficiency ratio
-   double oldEfficiency = m_recObs->efficiency_pct();
-   double effRatio = oldEfficiency / newEff;
+   double const oldEfficiency = m_recObs->efficiency_pct();
+   double const effRatio = oldEfficiency / newEff;
 
    this->m_recObs->setEquipment(equipment);
    this->m_recObs->setBatchSize_l(newBatchSize_l);
    this->m_recObs->nonOptBoil()->setPreBoilSize_l(equipment->kettleBoilSize_l());
    this->m_recObs->setEfficiency_pct(newEff);
-   if (this->m_recObs->boil()) {
-      this->m_recObs->boil()->setBoilTime_mins(equipment->boilTime_min().value_or(Equipment::default_boilTime_mins));
-   }
 
-   for (auto fermAddition : this->m_recObs->fermentableAdditions()) {
+   // We assume boil time remains unchanged
+
+   for (auto const & fermentableAddition : this->m_recObs->fermentableAdditions()) {
       // We assume volumes and masses get scaled the same way
-      if (!fermAddition->fermentable()->isSugar() && !fermAddition->fermentable()->isExtract()) {
-         fermAddition->setQuantity(fermAddition->quantity() * effRatio * volRatio);
+      if (!fermentableAddition->fermentable()->isSugar() && !fermentableAddition->fermentable()->isExtract()) {
+         fermentableAddition->setQuantity(fermentableAddition->quantity() * effRatio * volRatio);
       } else {
-         fermAddition->setQuantity(fermAddition->quantity() * volRatio);
+         fermentableAddition->setQuantity(fermentableAddition->quantity() * volRatio);
       }
    }
 
-   for (auto hopAddition : this->m_recObs->hopAdditions()) {
+   for (auto const & hopAddition : this->m_recObs->hopAdditions()) {
       // We assume volumes and masses get scaled the same way
       hopAddition->setQuantity(hopAddition->quantity() * volRatio);
    }
 
-   for (auto miscAddition : this->m_recObs->miscAdditions()) {
+   for (auto const & miscAddition : this->m_recObs->miscAdditions()) {
       // We assume volumes and masses get scaled the same way
       miscAddition->setQuantity(miscAddition->quantity() * volRatio);
    }
 
-   for (auto waterUse : this->m_recObs->waterUses()) {
+   for (auto const & waterUse : this->m_recObs->waterUses()) {
       waterUse->setVolume_l(waterUse->volume_l() * volRatio);
    }
 
-   auto mash = this->m_recObs->mash();
-   if (mash) {
+   if (auto const mash = this->m_recObs->mash()) {
       // Reset all these to zero so that the user
       // will know to re-run the mash wizard.
-      for (auto step : mash->mashSteps()) {
+      for (auto const & step : mash->mashSteps()) {
          step->setAmount_l(0);
       }
    }
@@ -201,7 +199,7 @@ void ScaleRecipeEquipmentPage::doLayout() {
 
    layout->addRow(m_equipLabel, m_equipComboBox);
    layout->addRow(m_efficiencyLabel, m_efficiencyLineEdit);
-   m_efficiencyLineEdit->setText(PersistentSettings::value_ck(PersistentSettings::Names::defaultEfficiency, 70.0).toString());
+   m_efficiencyLineEdit->setText(PersistentSettings::value_ck(PersistentSettings::Names::defaultEfficiency_pct, Recipe::default_efficiency_pct).toString());
    setLayout(layout);
    return;
 }

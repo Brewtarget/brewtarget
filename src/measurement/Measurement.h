@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Measurement.h is part of Brewtarget, and is copyright the following authors 2010-2025:
+ * measurement/Measurement.h is part of Brewtarget, and is copyright the following authors 2010-2026:
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -111,13 +111,13 @@ namespace Measurement {
     * \param qstr The string to convert - typically an amount typed in by the user
     * \param physicalQuantity Caller will already know whether the amount is a mass, volume, temperature etc, so they
     *                         should tell us via this parameter.  (We should always know this at compile-time, so we
-    *                         could make it a template parameter, but I'm not sure it's worth the bother.)
-    * \param forcedSystemOfMeasurement if supplied, which which system of measurement to use, otherwise use the relevant
+    *                         could make it a template parameter, but I'm not sure that it's worth the bother.)
+    * \param forcedSystemOfMeasurement if supplied, which system of measurement to use, otherwise use the relevant
     *                                  system default
     * \param forcedScale if supplied, which scale to use, otherwise we use the largest scale that generates a value > 1
     *                      the user is entering
     */
-   Measurement::Amount qStringToSI(QString qstr,
+   Measurement::Amount qStringToSI(QString const & qstr,
                                    Measurement::PhysicalQuantity const physicalQuantity,
                                    std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement = std::nullopt,
                                    std::optional<Measurement::UnitSystem::RelativeScale> forcedScale = std::nullopt);

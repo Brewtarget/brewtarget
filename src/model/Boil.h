@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Boil.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/Boil.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -108,11 +108,21 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   Boil(QString name = "");
-   Boil(NamedParameterBundle const & namedParameterBundle);
+   explicit Boil(QString name = "");
+   explicit Boil(NamedParameterBundle const & namedParameterBundle);
    Boil(Boil const & other);
 
-   virtual ~Boil();
+   ~Boil() override;
+
+   /**
+    * \brief Some default values we use in calculations when no value is set in this record (or it this record is itself
+    *        not present)
+    */
+   //! @{
+   static constexpr double default_boilTime_mins = 60.0; // See also PersistentSettings::Names::defaultBoilTime_mins
+   static constexpr double default_coolTime_mins = 30.0;
+   static constexpr double default_preBoilSize_l = 23.47; // 6.2 gallons See also PersistentSettings::Names::defaultPreBoilSize_l
+   //! @}
 
    /**
     * \brief In some parts of the code, we need to know if a particular part of the recipe counts as part of the boil

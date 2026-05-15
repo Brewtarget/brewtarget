@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/IbuMethods.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * measurement/IbuMethods.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -129,7 +129,7 @@ namespace IbuMethods {
       double hops_grams;
       double postBoilVolume_liters;
       double wortGravity_sg;
-      double timeInBoil_minutes;
+      double timeInBoil_minutes;   // Seems unlikely in reality that there would be fractions of a minute
       std::optional<double> coolTime_minutes          = std::nullopt;
       std::optional<double> kettleInternalDiameter_cm = std::nullopt;
       std::optional<double> kettleOpeningDiameter_cm  = std::nullopt;
@@ -139,6 +139,16 @@ namespace IbuMethods {
     * \return IBUs according to selected algorithm.
     */
    double getIbus(IbuCalculationParms const & parms);
+}
+
+//! \brief Convenience function for logging
+template<class S> S & operator<<(S & stream, IbuMethods::IbuCalculationParms const & parms) {
+   stream <<
+      "[AA Rating:" << parms.AArating << "; Hops (g):" << parms.hops_grams << "Post-boil volume (l):" <<
+      parms.postBoilVolume_liters << "; Wort Gravity (SG):" << parms.wortGravity_sg << "; Time in Boil (mins):" <<
+      parms.timeInBoil_minutes << "; Cool Time (mins):" << parms.coolTime_minutes << "; Kettle Int Diameter (cm):" <<
+      parms.kettleInternalDiameter_cm << "; Kettle Opening (cm):" << parms.kettleOpeningDiameter_cm << "]";
+   return stream;
 }
 
 #endif

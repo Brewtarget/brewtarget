@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Measurement.cpp is part of Brewtarget, and is copyright the following authors 2010-2025:
+ * measurement/Measurement.cpp is part of Brewtarget, and is copyright the following authors 2010-2026:
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -18,6 +18,8 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "measurement/Measurement.h"
 
+#include <cmath> // For std::isnan and std::isinf
+
 #include <QDebug>
 #include <QMap>
 #include <QString>
@@ -35,8 +37,8 @@
 
 namespace {
 
-   int const fieldWidth = 0;
-   char const format = 'f';
+   int constexpr fieldWidth = 0;
+   char constexpr format = 'f';
 
    /**
     * \brief Stores the current \c Measurement::UnitSystem being used for \b input and \b display for each
@@ -141,7 +143,7 @@ void Measurement::saveDisplayScales() {
    return;
 }
 
-void Measurement::setDisplayUnitSystem(Measurement::PhysicalQuantity physicalQuantity,
+void Measurement::setDisplayUnitSystem(Measurement::PhysicalQuantity const physicalQuantity,
                                        Measurement::UnitSystem const & unitSystem) {
    // It's a coding error if we try to store a UnitSystem against a PhysicalQuantity to which it does not relate!
    Q_ASSERT(physicalQuantity == unitSystem.getPhysicalQuantity());
@@ -183,7 +185,7 @@ QString Measurement::displayAmount(Measurement::Amount const & amount,
                                    std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
                                    std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) {
    // Check for insane values.
-   if (Algorithms::isNan(amount.quantity) || Algorithms::isInf(amount.quantity)) {
+   if (std::isnan(amount.quantity) || std::isinf(amount.quantity)) {
       return "-";
    }
 
@@ -201,7 +203,7 @@ double Measurement::amountDisplay(Measurement::Amount const & amount,
                                   std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) {
 
    // Check for insane values.
-   if (Algorithms::isNan(amount.quantity) || Algorithms::isInf(amount.quantity)) {
+   if (std::isnan(amount.quantity) || std::isinf(amount.quantity)) {
       return -1.0;
    }
 
@@ -221,26 +223,24 @@ void Measurement::getThicknessUnits(Unit const ** volumeUnit, Unit const ** weig
    return;
 }
 
-QString Measurement::displayThickness( double thick_lkg, bool showUnits ) {
-   int fieldWidth = 0;
-   char format = 'f';
-   int precision = 2;
+QString Measurement::displayThickness(double const thick_lkg, bool const showUnits) {
+   int constexpr precision = 2;
 
    Measurement::Unit const * volUnit;
    Measurement::Unit const * weightUnit;
    Measurement::getThicknessUnits(&volUnit, &weightUnit);
 
-   double num = volUnit->fromCanonical(thick_lkg);
-   double den = weightUnit->fromCanonical(1.0);
+   double const num = volUnit->fromCanonical(thick_lkg);
+   double const den = weightUnit->fromCanonical(1.0);
 
    if (showUnits) {
-      return QString("%L1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->name).arg(weightUnit->name);
+      return QString("%L1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->getDisplayAbbreviation()).arg(weightUnit->getDisplayAbbreviation());
    }
 
-   return QString("%L1").arg(num/den, fieldWidth, format, precision).arg(volUnit->name).arg(weightUnit->name);
+   return QString("%L1").arg(num/den, fieldWidth, format, precision).arg(volUnit->getDisplayAbbreviation()).arg(weightUnit->getDisplayAbbreviation());
 }
 
-Measurement::Amount Measurement::qStringToSI(QString qstr,
+Measurement::Amount Measurement::qStringToSI(QString const & qstr,
                                              Measurement::PhysicalQuantity const physicalQuantity,
                                              std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
                                              std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) {
@@ -252,7 +252,7 @@ Measurement::Amount Measurement::qStringToSI(QString qstr,
    //
    // If the caller told us that the SystemOfMeasurement and/or RelativeScale on the input (qstr) are "forced" then that
    // information can be used to interpret a case where no (valid) unit is supplied in the input (ie it's just a number
-   // rather than number plus units) or where the supplied unit is ambiguous (eg US pints are different than Imperial
+   // rather than number plus units) or where the supplied unit is ambiguous (eg US pints are different from Imperial
    // pints).  Otherwise, just otherwise get whatever UnitSystem we're using generally for related physical property.
    //
    Measurement::UnitSystem const & displayUnitSystem {

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * unitTests/Testing.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * unitTests/Testing.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -464,7 +464,7 @@ void Testing::initTestCase() {
       this->pimpl->m_equipFiveGalNoLoss->setTopUpWater_l(0);
       this->pimpl->m_equipFiveGalNoLoss->setKettleTrubChillerLoss_l(0);
       this->pimpl->m_equipFiveGalNoLoss->setKettleEvaporationPerHour_l(4.0);
-      this->pimpl->m_equipFiveGalNoLoss->setBoilTime_min(60);
+///      this->pimpl->m_equipFiveGalNoLoss->setBoilTime_min(60);
       this->pimpl->m_equipFiveGalNoLoss->setMashTunLoss_l(0); // This is lautering deadspace loss as no separate lautering tun
       this->pimpl->m_equipFiveGalNoLoss->setTopUpKettle_l(0);
       this->pimpl->m_equipFiveGalNoLoss->setHopUtilization_pct(100);

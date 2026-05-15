@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Unit.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * measurement/Unit.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -35,7 +35,7 @@
 #include "measurement/PhysicalQuantity.h"
 #include "utils/ObjectAddressStringMapping.h"
 
-// TODO: implement ppm, percent, ibuGalPerLb,
+// TODO: implement ibuGalPerLb,
 
 namespace Measurement {
    class UnitSystem;
@@ -57,10 +57,19 @@ namespace Measurement {
        *                   \c PhysicalQuantity this \c Unit relates to.  (See comment in
        *                   \c measurement/PhysicalQuantity.h for more details on the relationship between classes in the
        *                   \c Measurement namespace.)
-       * \param unitName This is singular of the commonly used abbreviation for this unit, eg, in English, "kg" for
-       *                 kilograms, "tsp" for teaspoons. Note that this needs to be unique within the \c UnitSystem to
-       *                 which this \c Unit belongs but is \c not necessarily globally unique, eg "qt" refers to both
-       *                 Imperial quarts and US Customary quarts; "L" refers to liters and Lintner.
+       * \param abbreviations A list of one or more commonly used abbreviation for this unit, eg, in English, "kg" for
+       *                      kilograms, "tsp" for teaspoons.  The first item in the list is the one we will use for
+       *                      display.  The others are all accepted for input (with case-insensitive matching).  Thus,
+       *                      {"°C", "C"} means we will display 17 degrees Celsius as "17 °C" but we will also accept
+       *                      "17 C" and "17 c" (in both cases with or without the space) for the same value.
+       *
+       *                      Note that each abbreviation needs to be unique within the \c UnitSystem to which this
+       *                      \c Unit belongs.  However, abbreviations do \b not need to be globally unique, eg "qt"
+       *                      refers to both Imperial quarts and US Customary quarts; "L" refers to liters and Lintner.
+       * \param sanitiser This is used to correct common input errors and shortcuts.  Eg, if a user enters "1023" for
+       *                  Specific Gravity, we know they really meant "1.023" (or "1,023" in locales with ',' as the
+       *                  decimal separator), so we should just make the correction rather than store 1023,000 as the
+       *                  value.
        * \param multiplierToCanonical Factor by which to multiply a quantity of this \c Unit to convert it to a quantity
        *                              of \c canonical \c Unit
        * \param boundaryValue Threshold below which a smaller unit (of the same type) should be used \see \c boundary
@@ -76,7 +85,8 @@ namespace Measurement {
        *          either a list of valid alternatives or, possibly, a list of regular expressions.
        */
       Unit(UnitSystem const & unitSystem,
-           QString const unitName,
+           std::initializer_list<QString> const abbreviations,
+           std::function<double(double)> const & sanitiser,
            double const multiplierToCanonical = 1.0,
            Unit const * canonical = nullptr,
            double const boundaryValue = 1.0);
@@ -90,9 +100,10 @@ namespace Measurement {
        * \param convertFromCanonical  Converts a quantity of \c canonical \c Unit to a quantity of this \c Unit
        */
       Unit(UnitSystem const & unitSystem,
-           QString const unitName,
-           std::function<double(double)> convertToCanonical,
-           std::function<double(double)> convertFromCanonical,
+           std::initializer_list<QString> const abbreviations,
+           std::function<double(double)> const & sanitiser,
+           std::function<double(double)> const & convertToCanonical,
+           std::function<double(double)> const & convertFromCanonical,
            Unit const * canonical,
            double const boundaryValue = 1.0);
 
@@ -127,7 +138,10 @@ namespace Measurement {
       /**
        * \brief The unit name will be the singular of the commonly used abbreviation.
        */
-      QString const name;
+      QString getDisplayAbbreviation() const;
+
+      //! \return \c true if the Unit has the supplied abbreviation
+      bool hasAbbreviation(QString const & abbreviation) const;
 
       /**
        * \brief Returns details that can be output by \c operator<< (see below).  We can't implement this in the header
@@ -152,6 +166,11 @@ namespace Measurement {
        *        or other metric measure)
        */
       Measurement::Amount toCanonical(double quantity) const;
+
+      /**
+       * \brief Convert a quantity of this unit to the specified other unit
+       */
+      double convertTo(Unit const & unit, double quantity) const;
 
       /**
        * \brief Convert a quantity of this unit from its canonical system of measurement (usually, but not always, an SI
@@ -188,7 +207,7 @@ namespace Measurement {
        * \param name
        * \param physicalQuantity Caller supplies this to help with disambiguation (eg between Liters and Lintner, both
        *                         of which have name/abbreviation "L").
-       * \param caseInensitiveMatching If \c true (the default), this means we'll do a case-insensitive search.  Eg,
+       * \param caseInsensitiveMatching If \c true (the default), this means we'll do a case-insensitive search.  Eg,
        *                               we'll match "ml" for milliliters, even though the correct name is "mL".  This
        *                               should always be safe to do, as AFAICT there are no current or foreseeable units
        *                               that _we_ use whose names only differ by case.
@@ -197,7 +216,7 @@ namespace Measurement {
        */
       static Unit const * getUnit(QString const & name,
                                   Measurement::PhysicalQuantity const & physicalQuantity,
-                                  bool const caseInensitiveMatching = true);
+                                  bool const caseInsensitiveMatching = true);
 
       /**
        * \brief Try to find a Unit by name in the supplied UnitSystem.  If no unit is found, search against the
@@ -232,6 +251,11 @@ namespace Measurement {
        *        to kilograms etc.
        */
       static QString convertWithoutContext(QString const & qstr, QString const & toUnitName);
+
+      /**
+       *
+       */
+      double sanitise(double const quantity) const;
 
    private:
       // Private implementation details - see https://herbsutter.com/gotw/_100/

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/UnitAndScalePopUpMenu.cpp is part of Brewtarget, and is copyright the following authors 2012-2024:
+ * widgets/UnitAndScalePopUpMenu.cpp is part of Brewtarget, and is copyright the following authors 2012-2026:
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -182,7 +182,7 @@ std::unique_ptr<QMenu> UnitAndScalePopUpMenu::create(QWidget * parent,
                      actionGroup);
       for (auto scale : relativeScales) {
          generateAction(subMenu,
-                        unitSystem.scaleUnit(scale)->name,
+                        unitSystem.scaleUnit(scale)->getDisplayAbbreviation(),
                         std::optional<Measurement::UnitSystem::RelativeScale>{scale},
                         forcedRelativeScale,
                         actionGroup);
