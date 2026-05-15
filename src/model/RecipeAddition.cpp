@@ -31,7 +31,9 @@
 QString RecipeAddition::localisedName() { return tr("Recipe Addition"); }
 QString RecipeAddition::localisedName_stage          () { return tr("Stage"         ); }
 QString RecipeAddition::localisedName_step           () { return tr("Step"          ); }
-QString RecipeAddition::localisedName_addAtTime_mins () { return tr("Add At Time"   ); }
+// Note that we deliberately don't call this "Add At Time" because that would be confusing for Boil additions (where
+// the time is measured backwards from the end of the boil).
+QString RecipeAddition::localisedName_addAtTime_mins () { return tr("Time"          ); }
 QString RecipeAddition::localisedName_addAtGravity_sg() { return tr("Add At Gravity"); }
 QString RecipeAddition::localisedName_addAtAcidity_pH() { return tr("Add At Acidity"); }
 QString RecipeAddition::localisedName_duration_mins  () { return tr("Duration"      ); }
