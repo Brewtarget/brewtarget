@@ -32,7 +32,7 @@
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-   #include "moc_ogCorrectionTool.cpp"
+   #include "moc_OgCorrectionTool.cpp"
 #endif
 
 namespace {
@@ -75,6 +75,7 @@ void OgCorrectionTool::setRecipe(Recipe * rec) {
    if (rec && rec != this->m_recObs) {
       this->m_recObs = rec;
       this->value_targetOg->setQuantity(this->m_recObs->og());
+      this->hideOutputs();
    }
    return;
 }
@@ -309,6 +310,9 @@ void OgCorrectionTool::hideOutputs() const {
    this->groupBox_changeBoilVolume->setVisible(false);
    this->label_remediesSeparator  ->setVisible(false);
    this->groupBox_addSugarOrDme   ->setVisible(false);
+
+   this->value_noActionOg->setRawText("");
+   this->label_noActionOgComment->setText("");
 
    return;
 }
