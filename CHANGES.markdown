@@ -38,6 +38,7 @@ Improvements to Folders, plus bug fixes and minor enhancements.  In particular:
 * Folders are now first-class entities and thus can be renamed and moved
 * Edit folder names [10](https://github.com/Brewtarget/brewtarget/issues/10)
 * Add Batch Number to brew day record [1105](https://github.com/Brewtarget/brewtarget/issues/1105)
+* Enhancements to Gravity Correction Tool [1104](https://github.com/Brewtarget/brewtarget/issues/1104)
 
 ### Bug Fixes
 * Can't drag a folder inside another folder [1067](https://github.com/Brewtarget/brewtarget/issues/1067)
