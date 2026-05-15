@@ -601,7 +601,8 @@ double BrewLog::calculateABV_pct() {
 }
 
 double BrewLog::calculateActualABV_pct() {
-   double const abv_pct = Algorithms::abvFromOgAndFg(this->m_og, this->m_fg);
+   double const abv_pct = this->m_og > this->m_fg ?
+      Algorithms::abvFromOgAndFg(this->m_og, this->m_fg) : std::numeric_limits<double>::quiet_NaN();
    this->setABV(abv_pct);
    return abv_pct;
 }
