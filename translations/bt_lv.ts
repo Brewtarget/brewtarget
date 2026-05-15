@@ -5992,10 +5992,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Solis</translation>
     </message>
     <message>
-        <source>Add At Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add At Gravity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6022,6 +6018,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Package</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Laiks</translation>
     </message>
 </context>
 <context>
@@ -8390,7 +8390,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation type="obsolete">Laiks</translation>
     </message>
     <message>
         <source>Kettle to Fermenter Loss</source>
@@ -8462,10 +8462,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Attributes of &quot;optional&quot; vessels will not be saved if their volumes are set to 0.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default boil time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

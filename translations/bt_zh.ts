@@ -6963,10 +6963,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">步驟</translation>
     </message>
     <message>
-        <source>Add At Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add At Gravity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6997,6 +6993,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Package</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">时间Time</translation>
     </message>
 </context>
 <context>
@@ -9734,7 +9734,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">时间Time</translation>
+        <translation type="obsolete">时间Time</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
@@ -9826,10 +9826,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Attributes of &quot;optional&quot; vessels will not be saved if their volumes are set to 0.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default boil time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

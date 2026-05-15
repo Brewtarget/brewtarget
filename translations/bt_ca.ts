@@ -7418,10 +7418,6 @@ El volum final al primari és de %1.</translation>
         <translation type="unfinished">Pas</translation>
     </message>
     <message>
-        <source>Add At Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add At Gravity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7452,6 +7448,10 @@ El volum final al primari és de %1.</translation>
     <message>
         <source>Package</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Temps</translation>
     </message>
 </context>
 <context>
@@ -10471,7 +10471,7 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Temps</translation>
+        <translation type="obsolete">Temps</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
@@ -10563,10 +10563,6 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Attributes of &quot;optional&quot; vessels will not be saved if their volumes are set to 0.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default boil time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

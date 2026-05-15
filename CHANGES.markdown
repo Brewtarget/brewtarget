@@ -14,6 +14,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Shopping Lists
 * We'll list other new features here...
 
+## v5.1.1
+Bug fixes and minor enhancements.
+
+### New Features
+None
+
+### Bug Fixes
+None
+
+### Release Timestamp
+Fri, 15 May 2026 05:01:01 +0100
+
 ## v5.1.0
 Improvements to Folders, plus bug fixes and minor enhancements.  In particular:
 * "Options" and "Recipe to Clipboard as Text" moved from "Tools" to "Edit" menu
@@ -33,6 +45,7 @@ Improvements to Folders, plus bug fixes and minor enhancements.  In particular:
 * 5.0.4: Crash at startup [1102](https://github.com/Brewtarget/brewtarget/issues/1102)
 * Mouse-over date label on brew log tab causes assert [1107](https://github.com/Brewtarget/brewtarget/issues/1107)
 * Hop Addition in Recipe Builder [1112](https://github.com/Brewtarget/brewtarget/issues/1112)
+* Clarify "Add At Time" label for Hop additions etc [1114](https://github.com/Brewtarget/brewtarget/issues/1114)
 * Brew-It button on toolbar not working [1115](https://github.com/Brewtarget/brewtarget/issues/1115)
 
 ### Release Timestamp

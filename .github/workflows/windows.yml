@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------------------------------------------------
-# .github/workflows/windows.yml is part of Brewtarget, and is copyright the following authors 2021-2024:
+# .github/workflows/windows.yml is part of Brewtarget, and is copyright the following authors 2021-2026:
 #   • Artem Martynov <martynov-a@polyplastic.by>
 #   • Chris Speck <cgspeck@gmail.com>
 #   • Mattias Måhl <mattias@kejsarsten.com>
@@ -23,7 +23,6 @@ on:
     branches:
       - main
       - "stable/**"
-
   pull_request:
     branches:
       - main
@@ -72,7 +71,7 @@ jobs:
         ]
     steps:
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           path: temp
           fetch-depth: 0
@@ -258,7 +257,7 @@ jobs:
       - name: Upload unsigned Windows binaries (installers)
         id: upload-unsigned-artifact
         if: ${{ success()}}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: brewtarget-dev-${{ matrix.msystem }}
           path: |
@@ -358,7 +357,7 @@ jobs:
       #
       - name: Upload signed Windows binaries (installers)
         if: ${{ success() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: brewtarget-dev-${{ matrix.msystem }}-signed
           # Hopefully the same relative path we use in the signing step works here
@@ -368,7 +367,7 @@ jobs:
 
       - name: Upload CMake error info from failed build
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.msystem }}-build-windows
           path: C:/_/build/
@@ -376,7 +375,7 @@ jobs:
 
       - name: Upload Meson error info from failed build
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.msystem }}-mbuild-windows
           path: C:/_/mbuild/

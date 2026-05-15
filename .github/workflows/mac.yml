@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------------------------------------------------
-# .github/workflows/mac.yml is part of Brewtarget, and is copyright the following authors 2021-2025:
+# .github/workflows/mac.yml is part of Brewtarget, and is copyright the following authors 2021-2026:
 #   • Artem Martynov <martynov-a@polyplastic.by>
 #   • Mattias Måhl <mattias@kejsarsten.com>
 #   • Matt Young <mfsy@yahoo.com>
@@ -36,7 +36,7 @@ jobs:
   build-mac:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -149,7 +149,7 @@ jobs:
 
       - name: Upload Mac Packages (Installers)
         if: ${{ success() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: brewtarget-dev-mac
           path: |
@@ -177,7 +177,7 @@ jobs:
 
       - name: Recover Debris Artifacts (aka build output) - CMake
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-results-mac
           path: ${{github.workspace}}/build
@@ -185,7 +185,7 @@ jobs:
 
       - name: Recover Debris Artifacts (aka build output) - Meson
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: mbuild-results-mac
           path: ${{github.workspace}}/mbuild
@@ -193,7 +193,7 @@ jobs:
 
       - name: Recover DiagnosticReports (if any)
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: DiagnosticReports-mac
           path: /Library/Logs/DiagnosticReports
@@ -201,7 +201,7 @@ jobs:
 
       - name: Recover Cores (if any)
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cores-mac
           path: /cores
