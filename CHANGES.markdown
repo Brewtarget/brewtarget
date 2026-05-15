@@ -15,7 +15,12 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * We'll list other new features here...
 
 ## v5.1.0
-Improvements to Folders, plus bug fixes and minor enhancements.
+Improvements to Folders, plus bug fixes and minor enhancements.  In particular:
+* "Options" and "Recipe to Clipboard as Text" moved from "Tools" to "Edit" menu
+* Tools that were only accessible via the Tools menu are now also on the Toolbar
+* Tools that shared the same icon now each have their own icon
+* Default Boil length is no longer an attribute of Equipment
+* You can set a global default boil length via Edit > Options > Default Values
 
 ### New Features
 * Folders are now first-class entities and thus can be renamed and moved
@@ -24,12 +29,14 @@ Improvements to Folders, plus bug fixes and minor enhancements.
 
 ### Bug Fixes
 * Can't drag a folder inside another folder [1067](https://github.com/Brewtarget/brewtarget/issues/1067)
+* On the brew-it tab (with the date), if you enter FG > OG, the program terminates with an assert [1069](https://github.com/Brewtarget/brewtarget/issues/1069)
 * 5.0.4: Crash at startup [1102](https://github.com/Brewtarget/brewtarget/issues/1102)
 * Mouse-over date label on brew log tab causes assert [1107](https://github.com/Brewtarget/brewtarget/issues/1107)
 * Hop Addition in Recipe Builder [1112](https://github.com/Brewtarget/brewtarget/issues/1112)
+* Brew-It button on toolbar not working [1115](https://github.com/Brewtarget/brewtarget/issues/1115)
 
 ### Release Timestamp
-Sat, 18 Apr 2026 05:00:05 +0100
+Fri, 15 May 2026 05:01:00 +0100
 
 ## v5.0.4
 Bug fixes and minor enhancements.

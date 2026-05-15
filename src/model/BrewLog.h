@@ -254,8 +254,13 @@ public:
    double calculateBrewHouseEff_pct();
    //! Projected ABV after fermentation.
    double calculateABV_pct();
-   //! Actual ABV after we have measured og/fg.
+   /**
+    * Actual ABV after we have measured og/fg.
+    *
+    * NB: Since if the user enters an FG that is larger than OG, this will return NaN
+    */
    double calculateActualABV_pct();
+
    //! Actual attenuation, based on measured og/fg
    double calculateAttenuation_pct();
 

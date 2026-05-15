@@ -653,8 +653,7 @@ public:
     */
    std::shared_ptr<Recipe> getSelectedRecipe() {
       for (QModelIndex selected : this->m_self.treeView_recipe->selectionModel()->selectedRows()) {
-         auto recipe   = this->m_self.treeView_recipe->getItem<Recipe  >(selected);
-         if (recipe) {
+         if (auto recipe = this->m_self.treeView_recipe->getItem<Recipe>(selected)) {
             return recipe;
          }
       }
@@ -668,7 +667,7 @@ public:
       for (QModelIndex selected : this->m_self.treeView_recipe->selectionModel()->selectedRows()) {
          QModelIndex parent = this->m_self.treeView_recipe->parentIndex(selected);
          auto brewLog = this->m_self.treeView_recipe->getItem<BrewLog>(selected);
-         auto recipe   = this->m_self.treeView_recipe->getItem<Recipe  >(parent  );
+         auto recipe  = this->m_self.treeView_recipe->getItem<Recipe  >(parent  );
          if (brewLog && recipe) {
             return {brewLog, recipe};
          }
@@ -699,21 +698,29 @@ public:
    }
 
    /**
-    * \brief creates a new brewLog
+    * \brief Creates a new BrewLog.  Called from MainWindow::brewItHelper().
     */
    BrewLog * createBrewLog() {
-      auto recipe = this->getSelectedRecipe();
+      //
+      // Note that we can be invoked in two ways:
+      //    - If the user right-clicks on the Recipe tree and selects "Brew It" then we first need to set the current
+      //      Recipe to the one chosen in the tree
+      //    - If the user clicks on the "Grain 2 Glass" icon, we just use the current recipe
+      //
+      Recipe * recipe = this->getSelectedRecipe().get();
       if (!recipe) {
+         recipe = this->m_recipeObs;
+      } else if (recipe != this->m_recipeObs) {
+         this->m_self.setRecipe(recipe);
+      }
+
+      if (!recipe) {
+         // I think this is only possible if there are no Recipes at all, but we might as well cover al the bases.
          return nullptr;
       }
 
-      // Make sure everything is properly set and selected
-      if (recipe.get() != this->m_recipeObs) {
-         this->m_self.setRecipe(recipe.get());
-      }
-
       auto brewLog = std::make_shared<BrewLog>(*recipe);
-      brewLog->populateNote(recipe.get());
+      brewLog->populateNote(recipe);
       brewLog->setBrewDate();
       ObjectStoreWrapper::insert(brewLog);
 
