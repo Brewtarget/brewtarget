@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/EquipmentEditor.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * editors/EquipmentEditor.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • David Grundberg <individ@acc.umu.se>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
@@ -48,7 +48,6 @@ class EquipmentEditor : public QDialog,
 
 public slots:
    void hideOrShowOptionalVessels();
-   void updateCalcBoilVolume();
    void resetAbsorption();
    void updateDefaultEquipment();
 
@@ -57,7 +56,6 @@ public:
 
 private:
    void postReadFieldsFromEditItem(std::optional<QString> propName);
-   double calcBatchSize();
 };
 
 #endif

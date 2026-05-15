@@ -57,7 +57,7 @@ enum class WhenToWriteField {
  *        we'd get errors about "invalid use of incomplete type ‘class EditorBase<Derived, NE>’".
  *
  *        We template on both label and edit field types.  This is partly so we call the right overload of
- *        \c SmartAmounts::Init, partly because \c QLineEdit and \c QTextEdit don't have a useful common base class, and
+ *        \c SmartAmounts::init, partly because \c QLineEdit and \c QTextEdit don't have a useful common base class, and
  *        partly because we want to access member functions of \c SmartLineEdit that don't exist on \c QLineEdit or
  *        \c QTextEdit.
  *
@@ -133,7 +133,7 @@ struct EditorBaseField {
       propertyPath{propertyPath},
       precision   {precision  },
       whenToWrite {whenToWrite} {
-      SmartAmounts::Init(editorClass,
+      SmartAmounts::init(editorClass,
                          labelName,
                          labelFqName,
                          *label,
@@ -305,7 +305,7 @@ struct EditorBaseField {
       propertyPath{propertyPath},
       precision   {precision  },
       whenToWrite {whenToWrite} {
-      SmartAmounts::Init(editorClass,
+      SmartAmounts::init(editorClass,
                          labelName,
                          labelFqName,
                          *label,

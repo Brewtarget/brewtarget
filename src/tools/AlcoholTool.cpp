@@ -135,7 +135,7 @@ public:
    }
 
    void showOrHideAdvancedControls() {
-      bool visible = this->enableAdvancedInputs->isChecked();
+      bool const visible = this->enableAdvancedInputs->isChecked();
       this->label_temperature            ->setVisible(visible);
       this->label_corrected              ->setVisible(visible);
       this->input_og_temperature         ->setVisible(visible);
@@ -156,22 +156,22 @@ public:
       double fg = this->input_fg->getNonOptCanonicalQty();
       if (this->enableAdvancedInputs->isChecked()) {
          // User wants temperature correction
-         double calibrationTempInC = this->input_calibration_temperature->getNonOptCanonicalQty();
-         double ogReadTempInC          = this->input_og_temperature->getNonOptCanonicalQty();
-         double fgReadTempInC          = this->input_fg_temperature->getNonOptCanonicalQty();
+         double const calibrationTempInC = this->input_calibration_temperature->getNonOptCanonicalQty();
+         double const ogReadTempInC      = this->input_og_temperature->getNonOptCanonicalQty();
+         double const fgReadTempInC      = this->input_fg_temperature->getNonOptCanonicalQty();
          if (0.0 == calibrationTempInC || 0.0 == ogReadTempInC) {
             og = 0.0;
             this->corrected_og->setText("? sg");
          } else {
             og = Algorithms::correctSgForTemperature(og, ogReadTempInC, calibrationTempInC);
-            this->corrected_og->setText(Localization::getLocale().toString(og, 'f', 3).append(" sg"));
+            this->corrected_og->setText(Localization::getLocale().toString(og, 'f', 3).append(" sg")); //¥¥¥ Measurement::displayQuantity()
          }
          if (0.0 == calibrationTempInC || 0.0 == fgReadTempInC) {
             fg = 0.0;
             this->corrected_fg->setText("? sg");
          } else {
             fg = Algorithms::correctSgForTemperature(fg, fgReadTempInC, calibrationTempInC);
-            this->corrected_fg->setText(Localization::getLocale().toString(fg, 'f', 3).append(" sg"));
+            this->corrected_fg->setText(Localization::getLocale().toString(fg, 'f', 3).append(" sg")); //¥¥¥ Measurement::displayQuantity()
          }
       }
 

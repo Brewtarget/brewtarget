@@ -36,11 +36,9 @@ namespace SmartAmounts {
     *        there are additional \c SmartField buddies, then this function should be called multiple times.
     *
     *        See comment in \c widgets/SmartLabel.h for more details.
-    *
-    *        TODO: Init should be init in this function name and the following two
     */
    template<class LabelType>
-   void Init(char const * const editorName,
+   void init(char const * const editorName,
              char const * const labelName,
              char const * const labelFqName,
              LabelType &        label,
@@ -52,9 +50,9 @@ namespace SmartAmounts {
              QString                     const & maximalDisplayString = "100.000 srm");
 
    /**
-    * \brief Alternate version of \c SmartAmounts::Init for when there is a \c SmartLabel but no \c SmartField
+    * \brief Alternate version of \c SmartAmounts::init for when there is a \c SmartLabel but no \c SmartField
     */
-   void InitNoSf(char const * const editorName,
+   void initNoSf(char const * const editorName,
                  char const * const labelName,
                  char const * const labelFqName,
                  SmartLabel &       label,
@@ -63,10 +61,10 @@ namespace SmartAmounts {
                  QString                     const & maximalDisplayString = "100.000 srm");
 
    /**
-    * \brief Alternate version of \c SmartAmounts::Init for when units are fixed.  (Note that this implies label is
-    *        \c QLabel, not \c SmartLabel.)
+    * \brief Alternate version of \c SmartAmounts::init for when units are fixed.  (Note that this implies label is
+    *        \c QLabel, not \c SmartLabel -- see static_assert in \c SMART_FIELD_INIT_FIXED below.)
     */
-   void InitFixed(char const * const editorName,
+   void initFixed(char const * const editorName,
                   QLabel &           label,
                   char const * const fieldName,
                   char const * const fieldFqName,
@@ -192,7 +190,7 @@ namespace SmartAmounts {
  *             Note that the introduction of __VA_OPT__ in C++20 makes our lives easier here.
  */
 #define SMART_FIELD_INIT(editorClass, labelName, fieldName, modelClass, propertyName, ...) \
-   SmartAmounts::Init(#editorClass, \
+   SmartAmounts::init(#editorClass, \
                       #labelName, \
                       SFI_FQ_NAME(editorClass, labelName), \
                       *this->labelName, \
@@ -206,7 +204,7 @@ namespace SmartAmounts {
  *  \brief Alternate version of \c SMART_FIELD_INIT for when there is no \c SmartField
  */
 #define SMART_FIELD_INIT_NO_SF(editorClass, labelName, modelClass, propertyName, ...) \
-   SmartAmounts::InitNoSf(#editorClass, \
+   SmartAmounts::initNoSf(#editorClass, \
                           #labelName, \
                           SFI_FQ_NAME(editorClass, labelName), \
                           *this->labelName, \
@@ -251,7 +249,7 @@ namespace SmartAmounts {
                                       nullptr,                         \
                                       TypeInfo::Access::ReadWrite,     \
                                       quantityFieldType);              \
-   SmartAmounts::Init(#editorClass,                        \
+   SmartAmounts::init(#editorClass,                        \
                       #labelName,                          \
                       SFI_FQ_NAME(editorClass, labelName), \
                       *this->labelName,                    \
@@ -274,13 +272,15 @@ namespace SmartAmounts {
                                       nullptr,                          \
                                       TypeInfo::Access::ReadWrite,      \
                                       fixedUnit.getPhysicalQuantity()); \
-   SmartAmounts::InitFixed(#editorClass,                        \
+   SmartAmounts::initFixed(#editorClass,                        \
                            *this->labelName,                    \
                            #fieldName,                          \
                            SFI_FQ_NAME(editorClass, fieldName), \
                            *this->fieldName,                    \
                            typeInfoFor_##fieldName,             \
                            fixedUnit                            \
-                           __VA_OPT__(, __VA_ARGS__))
+                           __VA_OPT__(, __VA_ARGS__));          \
+   /* Where display units are fixed, label should be "dumb" not "smart", as InitFixed won't initialise it */ \
+   static_assert(std::is_same_v<decltype(labelName), QLabel *>)
 
 #endif

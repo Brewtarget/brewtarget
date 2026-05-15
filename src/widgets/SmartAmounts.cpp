@@ -23,7 +23,7 @@
 #include "widgets/SmartLabel.h"
 #include "widgets/SmartField.h"
 
-template<> void SmartAmounts::Init<SmartLabel>(char const * const editorName,
+template<> void SmartAmounts::init<SmartLabel>(char const * const editorName,
                                                char const * const labelName,
                                                char const * const labelFqName,
                                                SmartLabel &       label,
@@ -38,7 +38,7 @@ template<> void SmartAmounts::Init<SmartLabel>(char const * const editorName,
    return;
 }
 
-template<> void SmartAmounts::Init<QLabel    >(char const * const editorName,
+template<> void SmartAmounts::init<QLabel    >(char const * const editorName,
                                                [[maybe_unused]] char const * const labelName,
                                                [[maybe_unused]] char const * const labelFqName,
                                                QLabel &           label,
@@ -54,7 +54,7 @@ template<> void SmartAmounts::Init<QLabel    >(char const * const editorName,
 
 // .:TBD:. I think it is unnecessary to have precision and maximalDisplayString when there is no SmartField, but leaving
 // them in for the moment, until I'm 100% sure.
-void SmartAmounts::InitNoSf(char const * const   editorName,
+void SmartAmounts::initNoSf(char const * const   editorName,
                             char const * const   labelName,
                             char const * const   labelFqName,
                             SmartLabel &         label,
@@ -65,7 +65,7 @@ void SmartAmounts::InitNoSf(char const * const   editorName,
    return;
 }
 
-void SmartAmounts::InitFixed(char const * const editorName,
+void SmartAmounts::initFixed(char const * const editorName,
                              QLabel &           label,
                              char const * const fieldName,
                              char const * const fieldFqName,

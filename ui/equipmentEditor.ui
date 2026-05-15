@@ -73,7 +73,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="5">
+       <item row="1" column="1" colspan="6">
         <widget class="InfoText" name="infoText_name">
          <property name="buddy">
           <cstring>infoButton_name</cstring>
@@ -121,39 +121,13 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="1" colspan="5">
+       <item row="7" column="1" colspan="6">
         <widget class="InfoText" name="infoText_optionalVessels">
          <property name="buddy">
           <cstring>infoButton_optionalVessels</cstring>
          </property>
          <property name="text">
           <string>Attributes of "optional" vessels will not be saved if their volumes are set to 0.</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
-        <widget class="SmartLabel" name="label_boilTime">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Default boil time</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_boilTime</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_boilTime">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Time</string>
          </property>
         </widget>
        </item>
@@ -204,6 +178,10 @@
         <widget class="SmartLineEdit" name="lineEdit_topUpKettle">
         </widget>
        </item>
+
+       <item row="11" column="0">
+        <widget class="InfoButton" name="infoButton_hopUtilization"></widget>
+       </item>
        <item row="11" column="1">
         <widget class="QLabel" name="label_hopUtilization">
          <property name="text">
@@ -236,6 +214,16 @@
        </item>
        <item row="11" column="6">
         <widget class="SmartLineEdit" name="lineEdit_boilingPoint">
+        </widget>
+       </item>
+       <item row="12" column="1" colspan="2">
+        <widget class="InfoText" name="infoText_hopUtilization">
+         <property name="buddy">
+          <cstring>infoButton_hopUtilization</cstring>
+         </property>
+         <property name="text">
+          <string>Adjustment factor for large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.</string>
+         </property>
         </widget>
        </item>
        <item row="12" column="5" colspan="2">
@@ -729,20 +717,6 @@
         <widget class="SmartLineEdit" name="lineEdit_kettleBoilSize">
         </widget>
        </item>
-       <item row="1" column="3">
-        <widget class="QLabel" name="label_calcBoilVolume">
-         <property name="text">
-          <string>Calculate pre-boil volume</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="4">
-        <widget class="QCheckBox" name="checkBox_calcBoilVolume">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="SmartLabel" name="label_kettleEvaporationPerHour">
          <property name="contextMenuPolicy">
@@ -1216,8 +1190,6 @@
   <tabstop>lineEdit_name</tabstop>
   <tabstop>lineEdit_fermenterBatchSize</tabstop>
   <tabstop>lineEdit_kettleBoilSize</tabstop>
-  <tabstop>checkBox_calcBoilVolume</tabstop>
-  <tabstop>lineEdit_boilTime</tabstop>
   <tabstop>lineEdit_kettleTrubChillerLoss</tabstop>
   <tabstop>lineEdit_topUpKettle</tabstop>
   <tabstop>lineEdit_topUpWater</tabstop>

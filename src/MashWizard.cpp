@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * MashWizard.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * MashWizard.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Adam Hawes <ach@hawes.net.au>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • David Grundberg <individ@acc.umu.se>
@@ -99,7 +99,9 @@ void MashWizard::show() {
    }
 
    Measurement::getThicknessUnits(&this->m_volumeUnit, &this->m_weightUnit);
-   this->label_mashThickness->setText(tr("Mash thickness (%1/%2)").arg(m_volumeUnit->name, m_weightUnit->name));
+   this->label_mashThickness->setText(
+      tr("Mash thickness (%1/%2)").arg(m_volumeUnit->getDisplayAbbreviation(), m_weightUnit->getDisplayAbbreviation())
+   );
 
    auto firstStep = m_recObs->mash()->mashSteps().first();
    auto lastStep  = m_recObs->mash()->mashSteps().last();

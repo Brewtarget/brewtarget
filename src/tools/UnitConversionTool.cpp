@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  =====================================================================================================================*/
-#include "tools/ConverterTool.h"
+#include "tools/UnitConversionTool.h"
 
 #include <QFormLayout>
 #include <QHBoxLayout>
@@ -26,24 +26,24 @@
 
 #ifdef BUILDING_WITH_CMAKE
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-   #include "moc_ConverterTool.cpp"
+   #include "moc_UnitConversionTool.cpp"
 #endif
 
-ConverterTool::ConverterTool(QWidget * parent) : QDialog(parent) {
+UnitConversionTool::UnitConversionTool(QWidget * parent) : QDialog(parent) {
    this->doLayout();
 
-   connect(pushButton_convert, &QAbstractButton::clicked, this, &ConverterTool::convert);
+   connect(pushButton_convert, &QAbstractButton::clicked, this, &UnitConversionTool::convert);
    return;
 }
 
-void ConverterTool::convert() {
+void UnitConversionTool::convert() {
    this->outputLineEdit->setText(
       Measurement::Unit::convertWithoutContext(inputLineEdit->text(), outputUnitsLineEdit->text())
    );
    return;
 }
 
-void ConverterTool::changeEvent(QEvent* event) {
+void UnitConversionTool::changeEvent(QEvent* event) {
    if (event->type() == QEvent::LanguageChange) {
       this->retranslateUi();
    }
@@ -51,7 +51,7 @@ void ConverterTool::changeEvent(QEvent* event) {
    return;
 }
 
-void ConverterTool::doLayout() {
+void UnitConversionTool::doLayout() {
    this->resize(279, 96);
    QHBoxLayout * hLayout = new QHBoxLayout(this);
       QFormLayout * formLayout = new QFormLayout();
@@ -91,7 +91,7 @@ void ConverterTool::doLayout() {
    return;
 }
 
-void ConverterTool::retranslateUi() {
+void UnitConversionTool::retranslateUi() {
    this->setWindowTitle(tr("Converter Tool"));
    this->inputLabel->setText(tr("Input"));
    this->outputUnitsLabel->setText(tr("Output Units"));

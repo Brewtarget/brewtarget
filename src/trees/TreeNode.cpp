@@ -503,8 +503,8 @@ template<> QString TreeItemNode<Equipment>::getToolTip() const {
            .arg(Equipment::tr("Preboil"))
            .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->kettleBoilSize_l(), Measurement::Units::liters}) );
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
-           .arg(Equipment::tr("BoilTime"))
-           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->boilTime_min().value_or(Equipment::default_boilTime_mins), Measurement::Units::minutes}) );
+           .arg(Equipment::tr("Kettle Boil Size"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->kettleBoilSize_l(), Measurement::Units::liters}) );
 
    body += "</table></body></html>";
 

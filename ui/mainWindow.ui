@@ -1721,8 +1721,8 @@
     <property name="title">
      <string>&amp;Tools</string>
     </property>
-    <addaction name="actionConvert_Units"/>
-    <addaction name="actionOG_Correction_Help"/>
+    <addaction name="actionUnitConversionTool"/>
+    <addaction name="actionOriginalGravityCorrectionTool"/>
     <addaction name="actionPitch_Rate_Calculator"/>
     <addaction name="actionPriming_Calculator"/>
     <addaction name="actionRefractometer_Tools"/>
@@ -1733,6 +1733,12 @@
     <addaction name="actionWaterProfileAdjustmentTool"/>
     <addaction name="actionAncestors"/>
     <addaction name="actionTimers"/>
+   </widget>
+   <widget class="QMenu" name="menuRecipe">
+    <property name="title">
+     <string>&amp;Recipe</string>
+    </property>
+    <addaction name="action_brewit"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -1775,6 +1781,7 @@
    <addaction name="separator"/>
    <addaction name="action_recipeToTextClipboard"/>
    <addaction name="separator"/>
+   <!-- Same actions as on View menu -->
    <addaction name="actionEquipments"/>
    <addaction name="actionMashes"/>
    <addaction name="actionBoils"/>
@@ -1792,10 +1799,21 @@
    <addaction name="separator"/>
    <addaction name="actionInventory"/>
    <addaction name="separator"/>
-   <addaction name="actionTimers"/>
+   <!-- Same actions as on Tools menu -->
+   <addaction name="actionUnitConversionTool"/>
+   <addaction name="actionOriginalGravityCorrectionTool"/>
    <addaction name="actionPitch_Rate_Calculator"/>
+   <addaction name="actionPriming_Calculator"/>
    <addaction name="actionRefractometer_Tools"/>
+   <addaction name="actionScale_Recipe"/>
+   <addaction name="actionHydrometer_Temp_Adjustment"/>
+   <addaction name="actionAlcohol_Percentage_Tool"/>
+   <addaction name="actionStrikeWater_Calculator"/>
+   <addaction name="actionWaterProfileAdjustmentTool"/>
+   <addaction name="actionAncestors"/>
+   <addaction name="actionTimers"/>
    <addaction name="separator"/>
+   <!-- Same actions as on Recipe menu -->
    <addaction name="action_brewit"/>
   </widget>
 
@@ -1998,22 +2016,22 @@
     <string>Recipe to Clipboard as &amp;Text</string>
    </property>
   </action>
-  <action name="actionOG_Correction_Help">
+  <action name="actionOriginalGravityCorrectionTool">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/images/hydrometer.svg</normaloff>:/images/hydrometer.svg</iconset>
+     <normaloff>:/images/iconGravityCorrection.svg</normaloff>:/images/iconGravityCorrection.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;OG Correction Help</string>
+    <string>&amp;Gravity Correction Tool</string>
    </property>
   </action>
-  <action name="actionConvert_Units">
+  <action name="actionUnitConversionTool">
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/images/convert.svg</normaloff>:/images/convert.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Convert Units</string>
+    <string>&amp;Unit Conversion Tool</string>
    </property>
   </action>
   <action name="actionBackup_Database_old">
@@ -2200,6 +2218,10 @@
    </property>
   </action>
   <action name="actionAlcohol_Percentage_Tool">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/iconAlcoholPct.svg</normaloff>:/images/iconAlcoholPct.svg</iconset>
+   </property>
    <property name="text">
     <string>Alcohol Percentage Tool</string>
    </property>

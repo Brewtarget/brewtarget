@@ -24,7 +24,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "model/Recipe.h"
 
-#include <cmath> // For pow/log
+#include <cmath> // For pow/log and std::isnan
 #include <compare>
 #include <tuple>
 
@@ -76,6 +76,28 @@
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_Recipe.cpp"
 #endif
+
+/**
+ * \brief We are often in the position where we have an optional \c Recipe attribute that itself has an optional
+ *        attribute.  Eg the \c Recipe could have an \c Equipment, and if it does, the \c Equipment could have a
+ *        \c hopUtilization_pct value.  If either the recipe's attribute (eg Equipment) or the attribute's attribute (eg
+ *        Equipment::hopUtilization_pct) is unset, we want to use some default value.  This templated function does the
+ *        "defaulting" logic to save us repeating the same boilerplate everywhere.
+ *
+ * @tparam NE
+ * @tparam MemberFunction
+ * @tparam defaultValue
+ * @param ne
+ * @return
+ */
+template <class NE, auto MemberFunction, double defaultValue>
+double getValueOrDefault(NE const * ne) {
+   if (ne) {
+      auto const value = std::invoke(MemberFunction, ne);
+      return value.value_or(defaultValue);
+   }
+   return defaultValue;
+}
 
 namespace {
    /**
@@ -399,7 +421,11 @@ public:
                // We don't yet fully support packaging
                stepLength_mins = std::nullopt;
             }
+         } else {
+            // If step is not specified, we use the whole stage length instead
+            stepLength_mins = this->stageLength_mins<stage>();
          }
+
          double const additionDuration_mins{
             // If we have a duration, this will take precedence over the calculated one
             addition->duration_mins().value_or(
@@ -414,9 +440,6 @@ public:
          //
          // We take advantage of compile-time string literal concatenation to make things a bit more readable in the
          // source code.
-         //
-         // TODO: This next block is common with instructionsForMiscAdditions, so we should factor it out into a
-         //       separate function.
          //
          QString str;
          switch (stage) {
@@ -674,6 +697,11 @@ public:
          return;
       }
 
+      auto const boil = this->m_self.boil();
+      if (!boil) {
+         return;
+      }
+
       double wortInBoil_l = this->m_self.wortFromMash_l() - equipment->getLauteringDeadspaceLoss_l();
       wortInBoil_l += equipment->topUpKettle_l().value_or(Equipment::default_topUpKettle_l);
 
@@ -681,7 +709,7 @@ public:
       // TODO: We need to handle RecipeUseOfWater properly here (and in similar places) as well as in the UI
       //
 
-      double wort_l = equipment->wortEndOfBoil_l(wortInBoil_l);
+      double wort_l = equipment->wortEndOfBoil_l(wortInBoil_l, boil->boilTime_mins());
       QString str = tr("You should have %1 wort post-boil.")
                   .arg(Measurement::displayAmount(Measurement::Amount{wort_l, Measurement::Units::liters}, 1));
       str += tr("\nYou anticipate losing %1 to trub and chiller loss.").arg(
@@ -951,6 +979,14 @@ public:
 
       double const calculatedBoilVolume_l = tmp;
 
+      // postBoilVolume_l ===========================
+
+      auto const boil = this->m_self.boil();
+      double const calculatedPostBoilVolume_l {
+         (equipment && boil) ? equipment->wortEndOfBoil_l(calculatedBoilVolume_l, boil->boilTime_mins()) :
+                     this->m_self.batchSize_l() // Give up.
+      };
+
       // finalVolume_l ==============================
 
       // NOTE: the following figure is not based on the other volume estimates
@@ -960,20 +996,13 @@ public:
       if (equipment) {
          //_finalVolumeNoLosses_l = equipment->wortEndOfBoil_l(calculatedBoilVolume_l) + equipment->topUpWater_l();
          calculatedFinalVolume_l =
-            equipment->wortEndOfBoil_l(calculatedBoilVolume_l) +
+            calculatedPostBoilVolume_l +
             equipment->topUpWater_l().value_or(Equipment::default_topUpWater_l) -
             equipment->kettleTrubChillerLoss_l();
       } else {
          this->m_finalVolume_l = calculatedBoilVolume_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
          //_finalVolumeNoLosses_l = _finalVolume_l;
       }
-
-      // postBoilVolume_l ===========================
-
-      double const calculatedPostBoilVolume_l{
-         equipment ? equipment->wortEndOfBoil_l(calculatedBoilVolume_l) :
-                     this->m_self.batchSize_l() // Give up.
-      };
 
       if (!qFuzzyCompare(calculatedWortFromMash_l, this->m_wortFromMash_l)) {
 //         qDebug() <<
@@ -1110,17 +1139,18 @@ public:
 //         ", nonFermentableSugars_kg:" << nonFermentableSugars_kg;
 
       // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
-      auto equipment = this->m_self.equipment();
-      if (equipment) {
+      auto const equipment = this->m_self.equipment();
+      auto const boil      = this->m_self.boil();
+      if (equipment && boil) {
          double const kettleWort_l = (this->m_wortFromMash_l - equipment->getLauteringDeadspaceLoss_l()) +
                                      equipment->topUpKettle_l().value_or(Equipment::default_topUpKettle_l);
-         double const postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l);
+         double const postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l, boil->boilTime_mins());
          double ratio = (postBoilWort_l - equipment->kettleTrubChillerLoss_l()) / postBoilWort_l;
          if (ratio > 1.0) { // Usually happens when we don't have a mash yet.
             ratio = 1.0;
          } else if (ratio < 0.0) {
             ratio = 0.0;
-         } else if (Algorithms::isNan(ratio)) {
+         } else if (std::isnan(ratio)) {
             ratio = 1.0;
          }
          // Ignore this again since it should be included in efficiency.
@@ -1247,18 +1277,18 @@ public:
     */
    void recalcBoilGrav() {
       auto const sugars = this->m_self.calcTotalPoints();
-      double sugar_kg                  = sugars.sugar_kg;
-      double sugar_kg_ignoreEfficiency = sugars.sugar_kg_ignoreEfficiency;
-      double lateAddition_kg           = sugars.lateAddition_kg;
-      double lateAddition_kg_ignoreEff = sugars.lateAddition_kg_ignoreEff;
+      double sugar_kg                        = sugars.sugar_kg;
+      double const sugar_kg_ignoreEfficiency = sugars.sugar_kg_ignoreEfficiency;
+      double const lateAddition_kg           = sugars.lateAddition_kg;
+      double const lateAddition_kg_ignoreEff = sugars.lateAddition_kg_ignoreEff;
 
       // Since the efficiency refers to how much sugar we get into the fermenter,
       // we need to adjust for that here.
       sugar_kg = (this->m_self.efficiency_pct() / 100.0 * (sugar_kg - lateAddition_kg) + sugar_kg_ignoreEfficiency -
                   lateAddition_kg_ignoreEff);
 
-      double calculatedBoilGrav = Algorithms::PlatoToSG_20C20C(Algorithms::getPlato(sugar_kg,
-                                                                                    this->boilSizeInLitersOr(0.0)));
+      double const calculatedBoilGrav =
+         Algorithms::PlatoToSG_20C20C(Algorithms::getPlato(sugar_kg, this->boilSizeInLitersOr(0.0)));
       if (! qFuzzyCompare(calculatedBoilGrav, this->m_boilGrav)) {
          qDebug() <<
             Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
@@ -1285,7 +1315,7 @@ public:
       // (because the hop additions aren't going to change while we look at them) and it gets rid of a compiler warning.
       this->m_ibus.clear();
       for (auto const & hopAddition : this->m_self.hopAdditions()) {
-         double tmp = this->m_self.ibuFromHopAddition(*hopAddition);
+         double const tmp = this->m_self.ibuFromHopAddition(*hopAddition);
          qDebug() << Q_FUNC_INFO << *hopAddition << "gave IBU" << tmp;
          this->m_ibus.append(tmp);
          calculatedIbu += tmp;
@@ -1470,7 +1500,7 @@ template<> auto & Recipe::ownedSetFor<RecipeAdditionMisc       >() const { retur
 template<> auto & Recipe::ownedSetFor<RecipeAdditionYeast      >() const { return this->m_yeastAdditions      ; }
 template<> auto & Recipe::ownedSetFor<RecipeAdjustmentSalt     >() const { return this->m_saltAdjustments     ; }
 template<> auto & Recipe::ownedSetFor<RecipeUseOfWater         >() const { return this->m_waterUses           ; }
-template<> auto & Recipe::ownedSetFor<BrewLog                 >() const { return this->m_brewLogs           ; }
+template<> auto & Recipe::ownedSetFor<BrewLog                  >() const { return this->m_brewLogs           ; }
 template<> auto & Recipe::ownedSetFor<Instruction              >() const { return this->m_instructions        ; }
 //
 // Maybe there is a clever way to do these non-const versions without the copy-and-paste repetition, but the auto
@@ -1723,7 +1753,7 @@ Recipe::Recipe(QString name) :
    m_yeastAdditions         {*this               },
    m_saltAdjustments        {*this               },
    m_waterUses              {*this               },
-   m_brewLogs              {*this               },
+   m_brewLogs               {*this               },
    m_instructions           {*this               },
    m_og                     {1.0                 },
    m_fg                     {1.0                 },
@@ -1776,7 +1806,7 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    m_yeastAdditions      {*this},
    m_saltAdjustments     {*this},
    m_waterUses           {*this},
-   m_brewLogs           {*this},
+   m_brewLogs            {*this},
    m_instructions        {*this},
    // Note that, although we read them in here, the OG and FG are going to get recalculated when someone first tries to
    // access them.
@@ -1837,7 +1867,7 @@ Recipe::Recipe(Recipe const & other) :
    m_yeastAdditions         {*this, other.m_yeastAdditions      },
    m_saltAdjustments        {*this, other.m_saltAdjustments     },
    m_waterUses              {*this, other.m_waterUses           },
-   m_brewLogs              {*this, other.m_brewLogs           },
+   m_brewLogs               {*this, other.m_brewLogs           },
    m_instructions           {*this, other.m_instructions        },
    m_og                     {other.m_og                },
    m_fg                     {other.m_fg                },
@@ -1887,7 +1917,7 @@ void Recipe::setKey(int key) {
    this->m_yeastAdditions      .doSetKey(key);
    this->m_saltAdjustments     .doSetKey(key);
    this->m_waterUses           .doSetKey(key);
-   this->m_brewLogs           .doSetKey(key);
+   this->m_brewLogs            .doSetKey(key);
    this->m_instructions        .doSetKey(key);
 
    // By convention, a new Recipe with no ancestor should have itself as its own ancestor.  So we need to check whether
@@ -2128,13 +2158,13 @@ void Recipe::add(std::shared_ptr<Instruction> instruction) {
 }
 
 
-QString Recipe::nextAddToBoil(double & time) {
+QString Recipe::nextAddToBoil(double & time) const {
    double max = 0;
    bool foundSomething = false;
    QString ret;
 
    // Search hop additions
-   for (auto hopAddition : this->hopAdditions()) {
+   for (auto const & hopAddition : this->hopAdditions()) {
       if (hopAddition->stage() != RecipeAddition::Stage::Boil) {
          continue;
       }
@@ -2154,7 +2184,7 @@ QString Recipe::nextAddToBoil(double & time) {
    }
 
    // Search misc additions
-   for (auto miscAddition : this->miscAdditions()) {
+   for (auto const & miscAddition : this->miscAdditions()) {
       if (miscAddition->stage() != RecipeAddition::Stage::Boil) {
          continue;
       }
@@ -2867,14 +2897,14 @@ Recipe::Sugars Recipe::calcTotalPoints() {
 
 //====================================Helpers===========================================
 
-double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
-   auto equipment = this->equipment();
+double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) const {
+   auto const equipment = this->equipment();
    double ibus = 0.0;
-   double fwhAdjust = Localization::toDouble(
+   double const fwhAdjust = Localization::toDouble(
       PersistentSettings::value_ck(PersistentSettings::Names::firstWortHopAdjustment, 1.1).toString(),
       Q_FUNC_INFO
    );
-   double mashHopAdjust = Localization::toDouble(
+   double const mashHopAdjust = Localization::toDouble(
       PersistentSettings::value_ck(PersistentSettings::Names::mashHopAdjustment, 0).toString(),
       Q_FUNC_INFO
    );
@@ -2896,12 +2926,8 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
    if (!hopAddition.amountIsWeight()) {
       qCritical() << Q_FUNC_INFO << "Using Hop volume as weight - THIS IS PROBABLY WRONG!";
    }
-   double grams = hopAddition.quantity() * 1000.0;
-   double hopTimeInBoil_mins = hopAddition.addAtTime_mins().value_or(0.0);
-   // Assume 100% utilization until further notice
-   double hopUtilization = 1.0;
-   // Assume 60 min boil until further notice
-   double boilTime_mins = 60.0;
+   double const grams = hopAddition.quantity() * 1000.0;
+   double const hopTimeInBoil_mins = hopAddition.addAtTime_mins().value_or(0.0);
 
    // NOTE: we used to carefully calculate the average boil gravity and use it in the
    // IBU calculations. However, due to John Palmer
@@ -2909,21 +2935,22 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
    // it seems more appropriate to just use the OG directly, since it is the total
    // amount of break material that truly affects the IBUs.
 
-   if (equipment) {
-      hopUtilization = equipment->hopUtilization_pct().value_or(Equipment::default_hopUtilization_pct) / 100.0;
-      boilTime_mins = static_cast<int>(equipment->boilTime_min().value_or(Equipment::default_boilTime_mins));
-   }
+   double const hopUtilization_pct = getValueOrDefault<Equipment,
+                                                       &Equipment::hopUtilization_pct,
+                                                       Equipment::default_hopUtilization_pct>(equipment.get());
+   double hopUtilization = hopUtilization_pct / 100.0;
 
-   // Assume 30 min cool time if boil is not set
-   double coolTime_mins = 30.0;
+   auto const boil = this->boil();
 
-   auto boil = this->boil();
-   if (boil) {
-      boilTime_mins = boil->boilTime_mins();
-      if (boil->coolTime_mins()) {
-         coolTime_mins = *boil->coolTime_mins();
-      }
-   }
+   // This looks a bit complicated, but is really just saying:
+   //    - If we have a Boil, that can tell us the boil time
+   //    - If we don't have a Boil but do have Equipment, use the Equipment's boil time, if it is set
+   //    - Otherwise, use the default time
+   double const boilTime_mins = boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
+
+   double const coolTime_mins = getValueOrDefault<Boil,
+                                                  &Boil::coolTime_mins,
+                                                  Boil::default_coolTime_mins>(boil.get());
 
    qDebug() <<
       Q_FUNC_INFO << "Equipment" << (equipment ? "set" : "not set") << ", Boil" << (boil ? "present" : "not present") <<
@@ -2934,9 +2961,13 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) {
    IbuMethods::IbuCalculationParms parms = {
       .AArating              = AArating,
       .hops_grams            = grams,
-      .postBoilVolume_liters = this->pimpl->m_finalVolumeNoLosses_l,
-      .wortGravity_sg        = m_og,
-      .timeInBoil_minutes    = boilTime_mins,  // Seems unlikely in reality that there would be fractions of a minute
+      // For Tinseth this needs to be "volume of finished beer in liters", hence this->m_batchSize_l rather than
+      // this->pimpl->m_finalVolumeNoLosses_l
+      .postBoilVolume_liters = this->m_batchSize_l,
+      // For Tinseth (and I think other methods) we want "the average gravity value for the entire boil to account for
+      // changes in the wort volume".
+      .wortGravity_sg        = this->pimpl->m_boilGrav,
+      .timeInBoil_minutes    = boilTime_mins, // But see below
       .coolTime_minutes      = coolTime_mins,
    };
    if (equipment) {
@@ -3060,8 +3091,7 @@ void Recipe::acceptChangeToContainedObject(QMetaProperty prop, QVariant val) {
    //
    // If it's the equipment that changed then we have some extra stuff to do...
    //
-   Equipment * equipment = qobject_cast<Equipment *>(signalSender);
-   if (equipment) {
+   if (Equipment const * equipment = qobject_cast<Equipment *>(signalSender)) {
       qDebug() << Q_FUNC_INFO << "Equipment #" << equipment->key() << "(ours=" << this->m_equipmentId << ")";
       Q_ASSERT(equipment->key() == this->m_equipmentId);
       if (propName == *PropertyNames::Equipment::kettleBoilSize_l) {
@@ -3069,11 +3099,6 @@ void Recipe::acceptChangeToContainedObject(QMetaProperty prop, QVariant val) {
          qDebug() << Q_FUNC_INFO << "We" << (this->boil() ? "have" : "don't have") << "a boil";
          if (this->boil()) {
             this->boil()->setPreBoilSize_l(val.value<double>());
-         }
-      } else if (propName == PropertyNames::Equipment::boilTime_min) {
-         Q_ASSERT(val.canConvert<double>());
-         if (this->boil()) {
-            this->boil()->setBoilTime_mins(val.value<double>());
          }
       }
    }
@@ -3104,7 +3129,7 @@ void Recipe::acceptChangeToRecipeAdditionMisc       (QMetaProperty prop, QVarian
 void Recipe::acceptChangeToRecipeAdditionYeast      (QMetaProperty prop, QVariant val) { this->acceptChange<RecipeAdditionYeast      >(prop, val); return; }
 void Recipe::acceptChangeToRecipeAdjustmentSalt     (QMetaProperty prop, QVariant val) { this->acceptChange<RecipeAdjustmentSalt     >(prop, val); return; }
 void Recipe::acceptChangeToRecipeUseOfWater         (QMetaProperty prop, QVariant val) { this->acceptChange<RecipeUseOfWater         >(prop, val); return; }
-void Recipe::acceptChangeToBrewLog                 (QMetaProperty prop, QVariant val) { this->acceptChange<BrewLog                 >(prop, val); return; }
+void Recipe::acceptChangeToBrewLog                  (QMetaProperty prop, QVariant val) { this->acceptChange<BrewLog                  >(prop, val); return; }
 void Recipe::acceptChangeToInstruction              (QMetaProperty prop, QVariant val) { this->acceptChange<Instruction              >(prop, val); return; }
 
 double Recipe::postMashAdditionVolume_l() const {
@@ -3217,7 +3242,7 @@ void Recipe::hardDeleteOwnedEntities() {
    this->m_yeastAdditions      .doHardDeleteOwnedEntities();
    this->m_saltAdjustments     .doHardDeleteOwnedEntities();
    this->m_waterUses           .doHardDeleteOwnedEntities();
-   this->m_brewLogs           .doHardDeleteOwnedEntities();
+   this->m_brewLogs            .doHardDeleteOwnedEntities();
    this->m_instructions        .doHardDeleteOwnedEntities();
 
    return;

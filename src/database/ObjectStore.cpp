@@ -1476,7 +1476,7 @@ ObjectStore::ObjectStore(char const *             const   className,
                          TableDefinition          const & primaryTable,
                          JunctionTableDefinitions const & junctionTables) :
    pimpl{ std::make_unique<impl>(className, typeLookup, primaryTable, junctionTables) } {
-   qDebug() << Q_FUNC_INFO << "Construct of object store for primary table" << this->pimpl->primaryTable.tableName;
+   qDebug() << Q_FUNC_INFO << "Constructing object store for primary table" << this->pimpl->primaryTable.tableName;
    // We have seen a circumstance where primaryTable.tableName is null, which shouldn't be possible.  This is some
    // diagnostic to try to find out why.
    if (this->pimpl->primaryTable.tableName.isNull()) {

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/ColorMethods.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * measurement/ColorMethods.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -102,16 +102,8 @@ double ColorMethods::mcuToSrm(double mcu) {
    Q_UNREACHABLE();
 }
 
-QColor ColorMethods::srmToDisplayColor(double srm) {
+QColor ColorMethods::srmToDisplayColor(double const srm) {
    QColor ret;
-
-   //==========My approximation from a photo and spreadsheet===========
-   //double red = 232.9 * pow( (double)0.93, srm );
-   //double green = (double)-106.25 * log(srm) + 280.9;
-   //
-   //int r = (int)Algorithms::round(red);
-   //int g = (int)Algorithms::round(green);
-   //int b = 0;
 
    // Philip Lee's approximation from a color swatch and curve fitting.
    int r = 0.5 + (272.098 - 5.80255*srm); if( r > 253.0 ) r = 253.0;

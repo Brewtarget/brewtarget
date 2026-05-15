@@ -34,9 +34,7 @@ QString Equipment::localisedName_agingVesselLoss_l          () { return tr("Agin
 QString Equipment::localisedName_agingVesselNotes           () { return tr("Aging Vessel Notes"         ); }
 QString Equipment::localisedName_agingVesselType            () { return tr("Aging Vessel Type"          ); }
 QString Equipment::localisedName_agingVesselVolume_l        () { return tr("Aging Vessel Volume"        ); }
-QString Equipment::localisedName_boilTime_min               () { return tr("Boil Time"                  ); }
 QString Equipment::localisedName_boilingPoint_c             () { return tr("Boiling Point"              ); }
-QString Equipment::localisedName_calcBoilVolume             () { return tr("Calculate Boil Volume"      ); }
 QString Equipment::localisedName_evapRate_pctHr             () { return tr("Evaporation Rate"           ); }
 QString Equipment::localisedName_fermenterBatchSize_l       () { return tr("Fermenter Batch Size"       ); }
 QString Equipment::localisedName_fermenterLoss_l            () { return tr("Fermenter Loss"             ); }
@@ -93,8 +91,6 @@ bool Equipment::compareWith(NamedEntity const & other, QList<BtStringConst const
       AUTO_PROPERTY_COMPARE(this, rhs, m_kettleTrubChillerLoss_l   , PropertyNames::Equipment::kettleTrubChillerLoss_l   , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_evapRate_pctHr            , PropertyNames::Equipment::evapRate_pctHr            , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_kettleEvaporationPerHour_l, PropertyNames::Equipment::kettleEvaporationPerHour_l, propertiesThatDiffer) &&
-      AUTO_PROPERTY_COMPARE(this, rhs, m_boilTime_min              , PropertyNames::Equipment::boilTime_min              , propertiesThatDiffer) &&
-      AUTO_PROPERTY_COMPARE(this, rhs, m_calcBoilVolume            , PropertyNames::Equipment::calcBoilVolume            , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_lauterTunDeadspaceLoss_l  , PropertyNames::Equipment::lauterTunDeadspaceLoss_l  , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_topUpKettle_l             , PropertyNames::Equipment::topUpKettle_l             , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_hopUtilization_pct        , PropertyNames::Equipment::hopUtilization_pct        , propertiesThatDiffer) &&
@@ -122,8 +118,6 @@ TypeLookup const Equipment::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleTrubChillerLoss_l    , m_kettleTrubChillerLoss_l    , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, evapRate_pctHr             , m_evapRate_pctHr             ,           NonPhysicalQuantity::Percentage          ), // The "per hour" bit is fixed, so we simplify
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleEvaporationPerHour_l , m_kettleEvaporationPerHour_l , Measurement::PhysicalQuantity::Volume              ), // The "per hour" bit is fixed, so we simplify
-      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, boilTime_min               , m_boilTime_min               , Measurement::PhysicalQuantity::Time                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, calcBoilVolume             , m_calcBoilVolume             ,           NonPhysicalQuantity::Bool                ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, lauterTunDeadspaceLoss_l   , m_lauterTunDeadspaceLoss_l   , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, topUpKettle_l              , m_topUpKettle_l              , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hopUtilization_pct         , m_hopUtilization_pct         ,           NonPhysicalQuantity::Percentage          ),
@@ -132,7 +126,7 @@ TypeLookup const Equipment::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, boilingPoint_c             , m_boilingPoint_c             , Measurement::PhysicalQuantity::Temperature         ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleInternalDiameter_cm  , m_kettleInternalDiameter_cm  , Measurement::PhysicalQuantity::Length              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleOpeningDiameter_cm   , m_kettleOpeningDiameter_cm   , Measurement::PhysicalQuantity::Length              ),
-      // ⮜⮜⮜ All below added for t ⮞⮞⮞
+      // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hltType                    , m_hltType                    ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunType                , m_mashTunType                ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, lauterTunType              , m_lauterTunType              ,           NonPhysicalQuantity::String              ),
@@ -182,8 +176,6 @@ Equipment::Equipment(QString name) :
    m_kettleTrubChillerLoss_l    {1.0         },
    m_evapRate_pctHr             {0.0         },
    m_kettleEvaporationPerHour_l {std::nullopt}, // Previously 4.0
-   m_boilTime_min               {std::nullopt}, // Previously 60.0
-   m_calcBoilVolume             {true        },
    m_lauterTunDeadspaceLoss_l   {0.0         },
    m_topUpKettle_l              {std::nullopt},
    m_hopUtilization_pct         {std::nullopt}, // Previously 100.0
@@ -247,8 +239,6 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_kettleTrubChillerLoss_l    , namedParameterBundle, PropertyNames::Equipment::kettleTrubChillerLoss_l    ),
    SET_REGULAR_FROM_NPB (m_evapRate_pctHr             , namedParameterBundle, PropertyNames::Equipment::evapRate_pctHr             ),
    SET_REGULAR_FROM_NPB (m_kettleEvaporationPerHour_l , namedParameterBundle, PropertyNames::Equipment::kettleEvaporationPerHour_l , std::nullopt),
-   SET_REGULAR_FROM_NPB (m_boilTime_min               , namedParameterBundle, PropertyNames::Equipment::boilTime_min               , std::nullopt),
-   SET_REGULAR_FROM_NPB (m_calcBoilVolume             , namedParameterBundle, PropertyNames::Equipment::calcBoilVolume             ),
    SET_REGULAR_FROM_NPB (m_lauterTunDeadspaceLoss_l   , namedParameterBundle, PropertyNames::Equipment::lauterTunDeadspaceLoss_l   ),
    SET_REGULAR_FROM_NPB (m_topUpKettle_l              , namedParameterBundle, PropertyNames::Equipment::topUpKettle_l              , std::nullopt),
    SET_REGULAR_FROM_NPB (m_hopUtilization_pct         , namedParameterBundle, PropertyNames::Equipment::hopUtilization_pct         , std::nullopt),
@@ -304,8 +294,6 @@ Equipment::Equipment(Equipment const & other) :
    m_kettleTrubChillerLoss_l    {other.m_kettleTrubChillerLoss_l    },
    m_evapRate_pctHr             {other.m_evapRate_pctHr             },
    m_kettleEvaporationPerHour_l {other.m_kettleEvaporationPerHour_l },
-   m_boilTime_min               {other.m_boilTime_min               },
-   m_calcBoilVolume             {other.m_calcBoilVolume             },
    m_lauterTunDeadspaceLoss_l   {other.m_lauterTunDeadspaceLoss_l   },
    m_topUpKettle_l              {other.m_topUpKettle_l              },
    m_hopUtilization_pct         {other.m_hopUtilization_pct         },
@@ -362,8 +350,6 @@ std::optional<double> Equipment::topUpWater_l               () const { return m_
 double                Equipment::kettleTrubChillerLoss_l    () const { return m_kettleTrubChillerLoss_l    ; }
 std::optional<double> Equipment::evapRate_pctHr             () const { return m_evapRate_pctHr             ; }
 std::optional<double> Equipment::kettleEvaporationPerHour_l () const { return m_kettleEvaporationPerHour_l ; }
-std::optional<double> Equipment::boilTime_min               () const { return m_boilTime_min               ; }
-bool                  Equipment::calcBoilVolume             () const { return m_calcBoilVolume             ; }
 double                Equipment::lauterTunDeadspaceLoss_l   () const { return m_lauterTunDeadspaceLoss_l   ; }
 std::optional<double> Equipment::topUpKettle_l              () const { return m_topUpKettle_l              ; }
 std::optional<double> Equipment::hopUtilization_pct         () const { return m_hopUtilization_pct         ; }
@@ -408,12 +394,12 @@ QString               Equipment::packagingVesselNotes       () const { return m_
 // The logic through here is similar to what's in Hop. Unfortunately, the additional signals don't allow quite the
 // compactness.
 void Equipment::setKettleBoilSize_l         (double                const val) { SET_AND_NOTIFY(PropertyNames::Equipment::kettleBoilSize_l         , this->m_kettleBoilSize_l         , this->enforceMin(val, "boil size"        )); }
-void Equipment::setFermenterBatchSize_l     (double                const val) { SET_AND_NOTIFY(PropertyNames::Equipment::fermenterBatchSize_l     , this->m_fermenterBatchSize_l     , this->enforceMin(val, "batch size"       )); if (this->key() > 0) { doCalculations(); } }
+void Equipment::setFermenterBatchSize_l     (double                const val) { SET_AND_NOTIFY(PropertyNames::Equipment::fermenterBatchSize_l     , this->m_fermenterBatchSize_l     , this->enforceMin(val, "batch size"       )); }
 void Equipment::setMashTunVolume_l          (double                const val) { SET_AND_NOTIFY(PropertyNames::Equipment::mashTunVolume_l          , this->m_mashTunVolume_l          , this->enforceMin(val, "tun volume"       )); }
 void Equipment::setMashTunWeight_kg         (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Equipment::mashTunWeight_kg         , this->m_mashTunWeight_kg         , this->enforceMin(val, "tun weight"       )); }
 void Equipment::setMashTunSpecificHeat_calGC(std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Equipment::mashTunSpecificHeat_calGC, this->m_mashTunSpecificHeat_calGC, this->enforceMin(val, "tun specific heat")); }
-void Equipment::setTopUpWater_l             (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Equipment::topUpWater_l             , this->m_topUpWater_l             , this->enforceMin(val, "top-up water"     )); if (this->key() > 0) { doCalculations(); } }
-void Equipment::setKettleTrubChillerLoss_l  (double                const val) { SET_AND_NOTIFY(PropertyNames::Equipment::kettleTrubChillerLoss_l  , this->m_kettleTrubChillerLoss_l  , this->enforceMin(val, "trub chiller loss")); if (this->key() > 0) { doCalculations(); } }
+void Equipment::setTopUpWater_l             (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Equipment::topUpWater_l             , this->m_topUpWater_l             , this->enforceMin(val, "top-up water"     )); }
+void Equipment::setKettleTrubChillerLoss_l  (double                const val) { SET_AND_NOTIFY(PropertyNames::Equipment::kettleTrubChillerLoss_l  , this->m_kettleTrubChillerLoss_l  , this->enforceMin(val, "trub chiller loss")); }
 
 void Equipment::setEvapRate_pctHr(std::optional<double> const val) {
    // NOTE: We never use evapRate_pctHr, but we do use kettleEvaporationPerHour_l. So keep them
@@ -439,14 +425,9 @@ void Equipment::setKettleEvaporationPerHour_l(std::optional<double> const val) {
    }
    this->propagatePropertyChange(PropertyNames::Equipment::kettleEvaporationPerHour_l);
    this->propagatePropertyChange(PropertyNames::Equipment::evapRate_pctHr);
-
-   // Right now, I am claiming this needs to happen regardless of whether we're yet stored in the database.
-   // I could be wrong
-   doCalculations();
+   return;
 }
 
-void Equipment::setBoilTime_min               (std::optional<double> const   val) { if (SET_AND_NOTIFY(PropertyNames::Equipment::boilTime_min              , this->m_boilTime_min              , this->enforceMin(val, "boil time"))) {       doCalculations();    }    return; }
-void Equipment::setCalcBoilVolume             (bool                  const   val) {     SET_AND_NOTIFY(PropertyNames::Equipment::calcBoilVolume            , this->m_calcBoilVolume            , val);    if ( val ) {       doCalculations();    } }
 void Equipment::setLauterTunDeadspaceLoss_l   (double                const   val) {     SET_AND_NOTIFY(PropertyNames::Equipment::lauterTunDeadspaceLoss_l     , this->m_lauterTunDeadspaceLoss_l         , this->enforceMin(val, "deadspace")); }
 void Equipment::setTopUpKettle_l              (std::optional<double> const   val) {     SET_AND_NOTIFY(PropertyNames::Equipment::topUpKettle_l             , this->m_topUpKettle_l             , this->enforceMin(val, "top-up kettle")); }
 void Equipment::setHopUtilization_pct         (std::optional<double> const   val) {     SET_AND_NOTIFY(PropertyNames::Equipment::hopUtilization_pct        , this->m_hopUtilization_pct        , this->enforceMin(val, "hop utilization")); }
@@ -486,31 +467,14 @@ void Equipment::setFermenterNotes             (QString               const & val
 void Equipment::setAgingVesselNotes           (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::agingVesselNotes           , this->m_agingVesselNotes           , val); }
 void Equipment::setPackagingVesselNotes       (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::packagingVesselNotes       , this->m_packagingVesselNotes       , val); }
 
-
-void Equipment::doCalculations() {
-   // Only do the calculation if we're asked to.
-   if (!this->calcBoilVolume()) {
-      return;
-   }
-
-   this->setKettleBoilSize_l(
-      this->fermenterBatchSize_l() -
-      this->topUpWater_l().value_or(Equipment::default_topUpWater_l) +
-      this->kettleTrubChillerLoss_l() +
-      (this->boilTime_min().value_or(Equipment::default_boilTime_mins) / 60.0) *
-       this->kettleEvaporationPerHour_l().value_or(Equipment::default_kettleEvaporationPerHour_l)
-   );
-   return;
-}
-
 double Equipment::getLauteringDeadspaceLoss_l() const {
    return this->m_mashTunLoss_l + (this->m_lauterTunVolume_l > 0 ? this->m_lauterTunDeadspaceLoss_l : 0.0);
 }
 
-double Equipment::wortEndOfBoil_l( double kettleWort_l ) const {
+double Equipment::wortEndOfBoil_l(double const kettleWort_l, double const boilTime_mins) const {
    //return kettleWort_l * (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
 
-   return kettleWort_l - (boilTime_min().value_or(Equipment::default_boilTime_mins)/(double)60)*kettleEvaporationPerHour_l().value_or(Equipment::default_kettleEvaporationPerHour_l);
+   return kettleWort_l - (boilTime_mins / 60.0) * kettleEvaporationPerHour_l().value_or(Equipment::default_kettleEvaporationPerHour_l);
 }
 
 // This class supports NamedEntity::numRecipesUsedIn

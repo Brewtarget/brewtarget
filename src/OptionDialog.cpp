@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * OptionDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * OptionDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Greg Meess <Daedalus12@gmail.com>
@@ -566,15 +566,19 @@ public:
       //
       this->m_self.lineEdit_defaultBatchSize_l->setQuantity(
          PersistentSettings::value_ck(PersistentSettings::Names::defaultBatchSize_l,
-                                      QVariant::fromValue(18.93)).toDouble()  // 5 gallons
+                                      QVariant::fromValue(Recipe::default_batchSize_l)).toDouble()
       );
       this->m_self.lineEdit_defaultPreBoilSize_l->setQuantity(
          PersistentSettings::value_ck(PersistentSettings::Names::defaultPreBoilSize_l,
-                                      QVariant::fromValue(23.47)).toDouble()  // 6.2 gallons
+                                      QVariant::fromValue(Boil::default_preBoilSize_l)).toDouble()
+      );
+      this->m_self.lineEdit_defaultBoilTime->setQuantity(
+         PersistentSettings::value_ck(PersistentSettings::Names::defaultBoilTime_mins,
+                                      QVariant::fromValue(Boil::default_boilTime_mins)).toDouble()
       );
       this->m_self.lineEdit_defaultEfficiency->setQuantity(
-         PersistentSettings::value_ck(PersistentSettings::Names::defaultEfficiency,
-                                      QVariant::fromValue(70.0)).toDouble()
+         PersistentSettings::value_ck(PersistentSettings::Names::defaultEfficiency_pct,
+                                      QVariant::fromValue(Recipe::default_efficiency_pct)).toDouble()
       );
 
       return;
@@ -585,7 +589,9 @@ public:
                                     this->m_self.lineEdit_defaultBatchSize_l->getNonOptCanonicalAmt().quantity);
       PersistentSettings::insert_ck(PersistentSettings::Names::defaultPreBoilSize_l,
                                     this->m_self.lineEdit_defaultPreBoilSize_l->getNonOptCanonicalAmt().quantity);
-      PersistentSettings::insert_ck(PersistentSettings::Names::defaultEfficiency,
+      PersistentSettings::insert_ck(PersistentSettings::Names::defaultBoilTime_mins,
+                                    this->m_self.lineEdit_defaultBoilTime->getNonOptCanonicalAmt().quantity);
+      PersistentSettings::insert_ck(PersistentSettings::Names::defaultEfficiency_pct,
                                     this->m_self.lineEdit_defaultEfficiency->getNonOptValue<double>());
       return;
    }
@@ -652,6 +658,7 @@ OptionDialog::OptionDialog(QWidget * parent) :
    // Set up other smart fields
    SMART_FIELD_INIT_FS(OptionDialog, label_defaultBatchSize_l  , lineEdit_defaultBatchSize_l  , double, Measurement::PhysicalQuantity::Volume, 2);
    SMART_FIELD_INIT_FS(OptionDialog, label_defaultPreBoilSize_l, lineEdit_defaultPreBoilSize_l, double, Measurement::PhysicalQuantity::Volume, 2);
+   SMART_FIELD_INIT_FS(OptionDialog, label_defaultBoilTime     , lineEdit_defaultBoilTime     , double, Measurement::PhysicalQuantity::Time  , 0);
    SMART_FIELD_INIT_FS(OptionDialog, label_defaultEfficiency   , lineEdit_defaultEfficiency   , double, NonPhysicalQuantity::Percentage      , 1);
 
    this->pimpl->configure_formulaCombos();

@@ -1,6 +1,6 @@
 <!DOCTYPE RCC>
 <!--
- * resources.qrc is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * resources.qrc is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Idar Lund <idarlund@gmail.com>
  *   • Mark de Wever <koraq@xs4all.nl>
@@ -81,8 +81,10 @@
       <file alias="images/grain2glass.svg"           >images/grain2glass.svg</file>
       <file alias="images/help-contents.png"         >images/help-contents.png</file>
       <file alias="images/hydrometer.svg"            >images/hydrometer.svg</file>
+      <file alias="images/iconAlcoholPct.svg"        >images/iconAlcoholPct.svg</file>
       <file alias="images/iconBoil.svg"              >images/iconBoil.svg</file>
       <file alias="images/iconFermentation.svg"      >images/iconFermentation.svg</file>
+      <file alias="images/iconGravityCorrection.svg" >images/iconGravityCorrection.svg</file>
       <file alias="images/iconInventory.svg"         >images/iconInventory.svg</file>
       <file alias="images/iconMash.svg"              >images/iconMash.svg</file>
       <file alias="images/iconNewStockPurchase.svg"  >images/iconNewStockPurchase.svg</file>

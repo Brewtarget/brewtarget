@@ -17,7 +17,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "Algorithms.h"
 
-#include <algorithm> // Of course we stand on the shoulders of the standard library, rather than reinvent the wheel
+#include <algorithm> // Of course, we stand on the shoulders of the standard library, rather than reinvent the wheel
 #include <cmath>
 
 #include <QDebug>
@@ -46,7 +46,7 @@ namespace {
       return ret;
    }
 
-   // This is the cubic fit to get Plato from specific gravity, measured at 20C
+   // This is the cubic fit to get Plato from specific gravity, measured at 20°C
    // relative to density of water at 20C.
    // P = -616.868 + 1111.14(SG) - 630.272(SG)^2 + 135.997(SG)^3
    Polynomial const platoFromSG_20C20C {
@@ -62,7 +62,7 @@ namespace {
 
    // Polynomial in degrees Celsius that gives the additive hydrometer
    // correction for a 15C hydrometer when read at a temperature other
-   // than 15C.
+   // than 15°C.
    Polynomial const hydroCorrection15CPoly {
       Polynomial() << -0.911045 << -16.2853e-3 << 5.84346e-3 << -15.3243e-6
    };
@@ -249,16 +249,9 @@ double Polynomial::rootFind( double x0, double x1 ) const {
 
 //======================================================================================================================
 
-bool Algorithms::isNan(double d) {
-   // If using IEEE floating points, all comparisons with a NaN
-   // are false, so the following should be true only if we have
-   // a NaN.
-   return (d != d);
-}
-
-double Algorithms::round(double d)
-{
-   return floor(d+0.5);
+double Algorithms::round(double const value, int const precision) {
+   double const powerOfTen = std::pow(10, precision);
+   return std::round(value * powerOfTen) / powerOfTen;
 }
 
 double Algorithms::hydrometer15CCorrection( double celsius )
@@ -356,8 +349,7 @@ double Algorithms::BrixToSgAt20C(double brix) {
    // only found indirect reference to that at https://www.brewersfriend.com/brix-converter/
    // The same formula is offered at https://brucrafter.com/convert-brix-to-sg/
    //
-   // We could use an approximate method to find the roots of the "best fit" cubic function, as is done in
-   // Algorithms::ogFgToPlato.  Code would be:
+   // We could use an approximate method to find the roots of the "best fit" cubic function:
    //
    //    Polynomial sgToBrixFormula {
    //       Polynomial() << -669.5622 << 1262.7794 << -775.6821 << 182.4601
@@ -415,31 +407,18 @@ double Algorithms::getABWBySGPlato(double sg, double plato) {
    return 1017.5596 - 277.4*sg + ri*(937.8135*ri - 1805.1228);
 }
 
-double Algorithms::sgByStartingPlato(double startingPlato, double currentPlato) {
+double Algorithms::sgByStartingPlato(double const startingPlato, double const currentPlato) {
    // Implements the method found at:
    // http://primetab.com/formulas.html
 
-   double sp2 = startingPlato*startingPlato;
-   double sp3 = sp2*startingPlato;
+   double const sp2 = startingPlato * startingPlato;
+   double const sp3 = sp2 * startingPlato;
 
-   double cp2 = currentPlato*currentPlato;
-   double cp3 = cp2*currentPlato;
+   double const cp2 = currentPlato * currentPlato;
+   double const cp3 = cp2 * currentPlato;
 
-   return 1.001843 - 0.002318474*startingPlato - 0.000007775*sp2 - 0.000000034*sp3
-          + 0.00574*currentPlato + 0.00003344*cp2 + 0.000000086*cp3;
-
-}
-
-double Algorithms::ogFgToPlato(double og, double fg) {
-   double sp = SG_20C20C_toPlato( og );
-
-   Polynomial poly(
-      Polynomial()
-         << 1.001843 - 0.002318474*sp - 0.000007775*sp*sp - 0.000000034*sp*sp*sp - fg
-         << 0.00574 << 0.00003344 << 0.000000086
-   );
-
-   return poly.rootFind(3, 5);
+   return 1.001843 - 0.002318474 * startingPlato - 0.000007775 * sp2 - 0.000000034 * sp3 + 0.00574 * currentPlato +
+          0.00003344 * cp2 + 0.000000086 * cp3;
 }
 
 double Algorithms::refractiveIndex(double plato) {
@@ -493,8 +472,8 @@ double Algorithms::abvFromOgAndFg(double og, double fg) {
    // First convert our OG and FG from specific gravity to excess gravity, then take the the difference and round it to
    // one decimal place.  Except do everything ×10 because it makes the subsequent look-up easier.
    //
-   int excessGravityDiffx10 = round(10.0 * (specificGravityToExcessGravity(og) - specificGravityToExcessGravity(fg)));
-   double excessGravityDiff = excessGravityDiffx10 / 10.0;
+   int excessGravityDiffx10 = std::round(10.0 * (specificGravityToExcessGravity(og) - specificGravityToExcessGravity(fg)));
+   double const excessGravityDiff = excessGravityDiffx10 / 10.0;
    qDebug() <<
       Q_FUNC_INFO << "OG (as SG) =" << og << ", FG (as SG) =" << fg << ", excess gravity diff =" << excessGravityDiff <<
       "(×10 =" << excessGravityDiffx10 << ")";
@@ -504,7 +483,7 @@ double Algorithms::abvFromOgAndFg(double og, double fg) {
    // difference, which makes everything simple for this lookup, and means we don't have to think about floating point
    // rounding errors.
    //
-   auto matchingGravityDifferenceRec = std::find_if(
+   auto const matchingGravityDifferenceRec = std::find_if(
       gravityDifferenceFactors.cbegin(),
       gravityDifferenceFactors.cend(),
       [excessGravityDiffx10](AbvFactorForGravityDifference const & rec) {
@@ -551,7 +530,9 @@ double Algorithms::abvFromOgAndFg(double og, double fg) {
    return abvByHmrcMethod;
 }
 
-double Algorithms::correctSgForTemperature(double measuredSg, double readingTempInC, double calibrationTempInC) {
+double Algorithms::correctSgForTemperature(double const measuredGravity_sg,
+                                           double const readingTemp_c,
+                                           double const calibrationTemp_c) {
    //
    // Typically older hydrometers are calibrated to 15°C and newer ones to 20°C
    //
@@ -572,19 +553,18 @@ double Algorithms::correctSgForTemperature(double measuredSg, double readingTemp
    // https://onlinelibrary.wiley.com/doi/pdf/10.1002/j.2050-0416.1970.tb03327.x for a rather old example.)  Hence the
    // use of non-SI units -- because the people in question were working in Fahrenheit.
    //
-   double tr = Measurement::Units::fahrenheit.fromCanonical(readingTempInC);
-   double tc = Measurement::Units::fahrenheit.fromCanonical(calibrationTempInC);
+   double const tr = Measurement::Units::fahrenheit.fromCanonical(readingTemp_c);
+   double const tc = Measurement::Units::fahrenheit.fromCanonical(calibrationTemp_c);
 
-   double correctedSg = measuredSg * (
+   double const correctedGravity_sg = measuredGravity_sg * (
       (1.00130346 - 0.000134722124 * tr + 0.00000204052596 * intPow(tr,2) - 0.00000000232820948 * intPow(tr,3)) /
       (1.00130346 - 0.000134722124 * tc + 0.00000204052596 * intPow(tc,2) - 0.00000000232820948 * intPow(tc,3))
    );
 
    qDebug() <<
-     Q_FUNC_INFO << measuredSg << "SG measured @" << readingTempInC << "°C (" << tr << "°F) "
-     "on hydrometer calibrated at" << calibrationTempInC << "°C (" << tc << "°F) is corrected to" << correctedSg <<
-     "SG";
+     Q_FUNC_INFO << measuredGravity_sg << "SG measured @" << readingTemp_c << "°C (" << tr << "°F) "
+     "on hydrometer calibrated at" << calibrationTemp_c << "°C (" << tc << "°F) is corrected to" <<
+     correctedGravity_sg << "SG";
 
-   return correctedSg;
-
+   return correctedGravity_sg;
 }

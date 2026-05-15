@@ -320,7 +320,7 @@ public:
                      "<td class=\"value\">%2</td>")
             .arg(tr("Boil Time"))
             .arg(Measurement::displayAmount(Measurement::Amount{
-                                               rec->equipment() == nullptr ? 0.0 : rec->equipment()->boilTime_min().value_or(Equipment::default_boilTime_mins),
+                                               rec->boil() == nullptr ? 0.0 : valueOr(rec->boil()->boilTime_mins(), Boil::default_boilTime_mins),
                                                Measurement::Units::minutes
                                             }));
       body += QString("<td align=\"right\" class=\"right\">%1</td>"
@@ -374,7 +374,7 @@ public:
    }
 
    QString buildStatTableTxt() {
-      const int nbLines = 9;
+      int constexpr nbLines = 9;
 
       if (this->rec == nullptr) {
          return "";
@@ -391,7 +391,7 @@ public:
       entry.append(tr("Boil Time"));
       value.append(
          QString("%1").arg(
-            Measurement::displayAmount(Measurement::Amount{rec->equipment() == nullptr ? 0.0 : rec->equipment()->boilTime_min().value_or(Equipment::default_boilTime_mins),
+            Measurement::displayAmount(Measurement::Amount{rec->boil() == nullptr ? 0.0 : valueOr(rec->boil()->boilTime_mins(), Boil::default_boilTime_mins),
                                                            Measurement::Units::minutes})
          )
       );
@@ -418,7 +418,7 @@ public:
       padAllToMaxLength(value);
 
       QString ret = "";
-      for(int ii = 0; ii < nbLines; ++ii) {
+      for (int ii = 0; ii < nbLines; ++ii) {
          ret += entry.at(ii) + value.at(ii) + "\n";
       }
 

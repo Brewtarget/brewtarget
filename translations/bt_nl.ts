@@ -292,6 +292,10 @@
         <source>Volume into fermenter</source>
         <translation type="unfinished">Volume in het vergistingsvat</translation>
     </message>
+    <message>
+        <source>unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayScrollWidget</name>
@@ -409,6 +413,14 @@
     </message>
     <message>
         <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>n/a</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1114,35 +1126,35 @@
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation>Conversie Gereedschap</translation>
+        <translation type="vanished">Conversie Gereedschap</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Invoer</translation>
+        <translation type="vanished">Invoer</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation>Uitvoer Eenheden</translation>
+        <translation type="vanished">Uitvoer Eenheden</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Uitvoer</translation>
+        <translation type="vanished">Uitvoer</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation>Converteer</translation>
+        <translation type="vanished">Converteer</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation>Hoeveelheden en Eenheden om te converteren</translation>
+        <translation type="vanished">Hoeveelheden en Eenheden om te converteren</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation>Eenheid waar u naar toe wilt converteren</translation>
+        <translation type="vanished">Eenheid waar u naar toe wilt converteren</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation>Uitvoer conversie</translation>
+        <translation type="vanished">Uitvoer conversie</translation>
     </message>
 </context>
 <context>
@@ -2839,10 +2851,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="obsolete">Naam</translation>
     </message>
     <message>
-        <source>Boil Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Equipments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2852,7 +2860,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>BoilTime</source>
-        <translation type="unfinished">Kook Tijd</translation>
+        <translation type="obsolete">Kook Tijd</translation>
     </message>
     <message>
         <source>Aging Vessel Loss</source>
@@ -2872,10 +2880,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Boiling Point</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate Boil Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3041,6 +3045,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <message>
         <source>Boil Size</source>
         <translation type="unfinished">Kook Volume</translation>
+    </message>
+    <message>
+        <source>Kettle Boil Size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4556,10 +4564,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Boil Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change Recipe Efficiency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5283,6 +5287,81 @@ If you need help, please open an issue at %1</source>
     <name>ObjectStoreUtils::NE</name>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>OgCorrectionTool</name>
+    <message>
+        <source>No Recipe Selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to have a recipe open in the main window before you can use this tool.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Equipment on Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe &quot;%1&quot; has no equipment.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Boil on Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe &quot;%1&quot; has no boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Need a valid value for Measured Gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Need a valid value for Wort Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>- On Target -</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↑ Above Target ↑</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↓ Below Target ↓</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Add Water To Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount to Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of water you need to add to hit planned OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Boil Down To Reduce Wort Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount to Boil Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extra wort you need to boil off to hit planned OG</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6722,6 +6801,14 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Stop bothering you about new data?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>°C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>°F</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8293,7 +8380,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
-        <translation>Deze wizard zal u helpen met schalen van het recept naar een aandere grootte of rendement. Selecteer andere apparatuur met de nieuwe batch grootte en/of rendement, de wizard zal dan de ingredienten automatisch aanpassen.</translation>
+        <translation type="vanished">Deze wizard zal u helpen met schalen van het recept naar een aandere grootte of rendement. Selecteer andere apparatuur met de nieuwe batch grootte en/of rendement, de wizard zal dan de ingredienten automatisch aanpassen.</translation>
+    </message>
+    <message>
+        <source>This wizard will help you scale a recipe to another size or efficiency.  Select another equipment with the new batch size and/or efficiency and the wizard will scale the recipe ingredients automatically.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9076,6 +9167,41 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>Default</source>
         <translation type="unfinished">Standaard</translation>
+    </message>
+</context>
+<context>
+    <name>UnitConversionTool</name>
+    <message>
+        <source>Converter Tool</source>
+        <translation type="unfinished">Conversie Gereedschap</translation>
+    </message>
+    <message>
+        <source>Input</source>
+        <translation type="unfinished">Invoer</translation>
+    </message>
+    <message>
+        <source>Output Units</source>
+        <translation type="unfinished">Uitvoer Eenheden</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation type="unfinished">Uitvoer</translation>
+    </message>
+    <message>
+        <source>Convert</source>
+        <translation type="unfinished">Converteer</translation>
+    </message>
+    <message>
+        <source>Amount and units to convert</source>
+        <translation type="unfinished">Hoeveelheden en Eenheden om te converteren</translation>
+    </message>
+    <message>
+        <source>Unit you want to convert to</source>
+        <translation type="unfinished">Eenheid waar u naar toe wilt converteren</translation>
+    </message>
+    <message>
+        <source>Output conversion</source>
+        <translation type="unfinished">Uitvoer conversie</translation>
     </message>
 </context>
 <context>
@@ -10375,7 +10501,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation type="unfinished">Bereken volume voor het koken</translation>
+        <translation type="obsolete">Bereken volume voor het koken</translation>
     </message>
     <message>
         <source>Boil time</source>
@@ -10631,6 +10757,10 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjustment factor for large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11795,7 +11925,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>&amp;Recipe</source>
-        <translation type="vanished">&amp;Recept</translation>
+        <translation>&amp;Recept</translation>
     </message>
     <message>
         <source>&amp;Database</source>
@@ -11891,11 +12021,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation>Hulp bij correctie &amp;oorspronkelijk SG</translation>
+        <translation type="vanished">Hulp bij correctie &amp;oorspronkelijk SG</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation>&amp;Conversie Eenheden</translation>
+        <translation type="vanished">&amp;Conversie Eenheden</translation>
     </message>
     <message>
         <source>Backup Database</source>
@@ -12219,6 +12349,14 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>W&amp;aters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Gravity Correction Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Unit Conversion Tool</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -12844,91 +12982,202 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
-        <translation>Corrigeer volume om met OG samen te komen</translation>
+        <translation type="vanished">Corrigeer volume om met OG samen te komen</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Invoer</translation>
+        <translation type="vanished">Invoer</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>SG</translation>
+        <translation type="vanished">SG</translation>
     </message>
     <message>
         <source>Measured gravity pre-boil</source>
-        <translation>Gemeten SG voor het koken</translation>
+        <translation type="vanished">Gemeten SG voor het koken</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Temp</translation>
+        <translation type="vanished">Temp</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
-        <translation>Temperatuur van het afgelezen SG</translation>
+        <translation type="vanished">Temperatuur van het afgelezen SG</translation>
     </message>
     <message>
         <source>Calibration Temp</source>
-        <translation>Calibratie Temp</translation>
+        <translation type="vanished">Calibratie Temp</translation>
     </message>
     <message>
         <source>Temp to which the hydrometer is calibrated</source>
-        <translation>Temp waar op de hydrometer is gecaibreerd</translation>
+        <translation type="vanished">Temp waar op de hydrometer is gecaibreerd</translation>
     </message>
     <message>
         <source>-or-</source>
-        <translation>-of-</translation>
+        <translation type="vanished">-of-</translation>
     </message>
     <message>
         <source>Plato</source>
-        <translation>Plato</translation>
+        <translation type="vanished">Plato</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation>Plato (massa percentage van sucrose equivalent)</translation>
+        <translation type="vanished">Plato (massa percentage van sucrose equivalent)</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
-        <translation>Volume voor het koken</translation>
+        <translation type="vanished">Volume voor het koken</translation>
     </message>
     <message>
         <source>Measured pre-boil volume</source>
-        <translation>Gemeten volume voor het koken</translation>
+        <translation type="vanished">Gemeten volume voor het koken</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Uitvoer</translation>
+        <translation type="vanished">Uitvoer</translation>
     </message>
     <message>
         <source>OG w/o Correction</source>
-        <translation>Oorspronkelijk SG zonder correctie</translation>
+        <translation type="vanished">Oorspronkelijk SG zonder correctie</translation>
     </message>
     <message>
         <source>OG if you boil as planned</source>
-        <translation>Oorspronkelijk SG bij koken volgens planning</translation>
+        <translation type="vanished">Oorspronkelijk SG bij koken volgens planning</translation>
     </message>
     <message>
         <source>Add to Boil</source>
-        <translation>Toevoegen bij het koken</translation>
+        <translation type="vanished">Toevoegen bij het koken</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
-        <translation>Benodigde hoeveelheid water om toe te voegen om eht geplande oorspronkelijk SG te halen (of verdampen indien negatief)</translation>
+        <translation type="vanished">Benodigde hoeveelheid water om toe te voegen om eht geplande oorspronkelijk SG te halen (of verdampen indien negatief)</translation>
     </message>
     <message>
         <source>Final Batch Size</source>
-        <translation>Uiteindelijke Batch Grootte</translation>
+        <translation type="vanished">Uiteindelijke Batch Grootte</translation>
     </message>
     <message>
         <source>Estimated batch size after correction</source>
-        <translation>Geschatte batch grootte na correctie</translation>
+        <translation type="vanished">Geschatte batch grootte na correctie</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Bereken</translation>
+        <translation type="vanished">Bereken</translation>
     </message>
     <message>
         <source>ogAdjuster</source>
         <translation type="vanished">ogAdjuster</translation>
+    </message>
+</context>
+<context>
+    <name>ogCorrectionTool</name>
+    <message>
+        <source>Gravity Correction Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NB: this tool makes the assumption that you are not going to add any water post boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From current recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured Gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A value in Plato will be used as-is.  An SG value can be corrected for actual vs calibrated temperature.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>@ temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature of SG reading</source>
+        <translation type="unfinished">Temperatuur van het afgelezen SG</translation>
+    </message>
+    <message>
+        <source>Calibrated at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature to which the hydrometer is calibrated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Actual SG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-Boil Volume</source>
+        <translation type="unfinished">Volume voor het koken</translation>
+    </message>
+    <message>
+        <source>Measured pre-boil volume</source>
+        <translation type="unfinished">Gemeten volume voor het koken</translation>
+    </message>
+    <message>
+        <source>Calculate</source>
+        <translation type="unfinished">Bereken</translation>
+    </message>
+    <message>
+        <source>Predicted OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OG if you take no action, ie boil as originally planned</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Add Water To Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount to Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of water you need to add to hit planned OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Batch Size</source>
+        <translation type="unfinished">Uiteindelijke Batch Grootte</translation>
+    </message>
+    <message>
+        <source>Estimated batch size after correction</source>
+        <translation type="unfinished">Geschatte batch grootte na correctie</translation>
+    </message>
+    <message>
+        <source>-- OR --</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Add Sugar or DME</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount To Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of Sugar or DME to add to the boil</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13205,6 +13454,14 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Default efficiency to set on new recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default boil time to set on new recipes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

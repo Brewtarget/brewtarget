@@ -296,6 +296,10 @@
         <source>Volume into fermenter</source>
         <translation>Mayalayıcıya giren hacim</translation>
     </message>
+    <message>
+        <source>unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayScrollWidget</name>
@@ -417,6 +421,14 @@
     </message>
     <message>
         <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>n/a</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -987,35 +999,35 @@
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation>Dönüştürme Aracı</translation>
+        <translation type="vanished">Dönüştürme Aracı</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Girdi</translation>
+        <translation type="vanished">Girdi</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation>Çıktı Birimleri</translation>
+        <translation type="vanished">Çıktı Birimleri</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Çıktı</translation>
+        <translation type="vanished">Çıktı</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation>Dönüştür</translation>
+        <translation type="vanished">Dönüştür</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation>Dönüştürülecek miktar ve birimler</translation>
+        <translation type="vanished">Dönüştürülecek miktar ve birimler</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation>Dönüştürmek istediğiniz birim</translation>
+        <translation type="vanished">Dönüştürmek istediğiniz birim</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation>Çıktı dönüşümü</translation>
+        <translation type="vanished">Çıktı dönüşümü</translation>
     </message>
 </context>
 <context>
@@ -2718,7 +2730,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Kaynama Süresi</translation>
+        <translation type="obsolete">Kaynama Süresi</translation>
     </message>
     <message>
         <source>Equipments</source>
@@ -2730,7 +2742,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>BoilTime</source>
-        <translation type="unfinished">KaynamaSüresi</translation>
+        <translation type="obsolete">KaynamaSüresi</translation>
     </message>
     <message>
         <source>Aging Vessel Loss</source>
@@ -2750,10 +2762,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Boiling Point</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate Boil Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2919,6 +2927,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <message>
         <source>Boil Size</source>
         <translation type="unfinished">Kaynama Boyutu</translation>
+    </message>
+    <message>
+        <source>Kettle Boil Size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4367,7 +4379,7 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>Change Boil Time</source>
-        <translation>Kaynama Süresini Değiştir</translation>
+        <translation type="vanished">Kaynama Süresini Değiştir</translation>
     </message>
     <message>
         <source>Drop fermentables on a recipe</source>
@@ -5205,6 +5217,81 @@ If you need help, please open an issue at %1</source>
     <name>ObjectStoreUtils::NE</name>
     <message>
         <source>Unnamed %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>OgCorrectionTool</name>
+    <message>
+        <source>No Recipe Selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to have a recipe open in the main window before you can use this tool.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Equipment on Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe &quot;%1&quot; has no equipment.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Boil on Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe &quot;%1&quot; has no boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Need a valid value for Measured Gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Need a valid value for Wort Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>- On Target -</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↑ Above Target ↑</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>↓ Below Target ↓</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Add Water To Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount to Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of water you need to add to hit planned OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Boil Down To Reduce Wort Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount to Boil Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extra wort you need to boil off to hit planned OG</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6660,6 +6747,14 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>Stop bothering you about new data?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>°C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>°F</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8291,7 +8386,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
-        <translation>Bu sihirbaz,ı tarifinizi boyutlandırmak veya verimliliği değiştirmek için kullanabilirsiniz.</translation>
+        <translation type="vanished">Bu sihirbaz,ı tarifinizi boyutlandırmak veya verimliliği değiştirmek için kullanabilirsiniz.</translation>
+    </message>
+    <message>
+        <source>This wizard will help you scale a recipe to another size or efficiency.  Select another equipment with the new batch size and/or efficiency and the wizard will scale the recipe ingredients automatically.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9116,6 +9215,41 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Default</source>
         <translation>Varsayılan</translation>
+    </message>
+</context>
+<context>
+    <name>UnitConversionTool</name>
+    <message>
+        <source>Converter Tool</source>
+        <translation type="unfinished">Dönüştürme Aracı</translation>
+    </message>
+    <message>
+        <source>Input</source>
+        <translation type="unfinished">Girdi</translation>
+    </message>
+    <message>
+        <source>Output Units</source>
+        <translation type="unfinished">Çıktı Birimleri</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation type="unfinished">Çıktı</translation>
+    </message>
+    <message>
+        <source>Convert</source>
+        <translation type="unfinished">Dönüştür</translation>
+    </message>
+    <message>
+        <source>Amount and units to convert</source>
+        <translation type="unfinished">Dönüştürülecek miktar ve birimler</translation>
+    </message>
+    <message>
+        <source>Unit you want to convert to</source>
+        <translation type="unfinished">Dönüştürmek istediğiniz birim</translation>
+    </message>
+    <message>
+        <source>Output conversion</source>
+        <translation type="unfinished">Çıktı dönüşümü</translation>
     </message>
 </context>
 <context>
@@ -10434,7 +10568,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation>Kaynama öncesi hacmi hesapla</translation>
+        <translation type="vanished">Kaynama öncesi hacmi hesapla</translation>
     </message>
     <message>
         <source>Boil time</source>
@@ -10714,6 +10848,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjustment factor for large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11898,11 +12036,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation>&amp;OG Düzeltme Yardımı</translation>
+        <translation type="vanished">&amp;OG Düzeltme Yardımı</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation>Birimleri Çe&amp;vir</translation>
+        <translation type="vanished">Birimleri Çe&amp;vir</translation>
     </message>
     <message>
         <source>Backup Database</source>
@@ -12194,6 +12332,18 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>W&amp;aters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Gravity Correction Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Unit Conversion Tool</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -12815,87 +12965,190 @@ The final volume in the primary is %1.</source>
     <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
-        <translation>OG&apos;yi yakalamak için Hacmi Ayarla</translation>
+        <translation type="vanished">OG&apos;yi yakalamak için Hacmi Ayarla</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Girdi</translation>
-    </message>
-    <message>
-        <source>SG</source>
-        <translation></translation>
+        <translation type="vanished">Girdi</translation>
     </message>
     <message>
         <source>Measured gravity pre-boil</source>
-        <translation>Kaynama öncesi ölçülen ağırlık</translation>
+        <translation type="vanished">Kaynama öncesi ölçülen ağırlık</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Sıcaklık</translation>
+        <translation type="vanished">Sıcaklık</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
-        <translation>SG okumasındaki sıcaklık</translation>
+        <translation type="vanished">SG okumasındaki sıcaklık</translation>
     </message>
     <message>
         <source>Calibration Temp</source>
-        <translation>Kalibrasyon Sıcaklığı</translation>
+        <translation type="vanished">Kalibrasyon Sıcaklığı</translation>
     </message>
     <message>
         <source>Temp to which the hydrometer is calibrated</source>
-        <translation>Hidrometrenin kalibre edildiği sıcaklık</translation>
+        <translation type="vanished">Hidrometrenin kalibre edildiği sıcaklık</translation>
     </message>
     <message>
         <source>-or-</source>
-        <translation>-veya-</translation>
-    </message>
-    <message>
-        <source>Plato</source>
-        <translation></translation>
+        <translation type="vanished">-veya-</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation>Plato (kütlesel yüzdesi şekere eşittir)</translation>
+        <translation type="vanished">Plato (kütlesel yüzdesi şekere eşittir)</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
-        <translation>Kaynatma Öncesi Hacim</translation>
+        <translation type="vanished">Kaynatma Öncesi Hacim</translation>
     </message>
     <message>
         <source>Measured pre-boil volume</source>
-        <translation>Kaynama öncesi ölçülen hacim</translation>
+        <translation type="vanished">Kaynama öncesi ölçülen hacim</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Çıktı</translation>
+        <translation type="vanished">Çıktı</translation>
     </message>
     <message>
         <source>OG w/o Correction</source>
-        <translation>Düzeltilmemiş OG</translation>
+        <translation type="vanished">Düzeltilmemiş OG</translation>
     </message>
     <message>
         <source>OG if you boil as planned</source>
-        <translation>Planladığınız gibi kaynatınca çıkacak OG</translation>
+        <translation type="vanished">Planladığınız gibi kaynatınca çıkacak OG</translation>
     </message>
     <message>
         <source>Add to Boil</source>
-        <translation>Kaynatmaya Ekle</translation>
+        <translation type="vanished">Kaynatmaya Ekle</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
-        <translation>Planlanan OG&apos;ye ulaşmak için eklemeniz gereken su miktarı.(negatifse kaynatıp buharlaştırmanız gerekir)</translation>
+        <translation type="vanished">Planlanan OG&apos;ye ulaşmak için eklemeniz gereken su miktarı.(negatifse kaynatıp buharlaştırmanız gerekir)</translation>
     </message>
     <message>
         <source>Final Batch Size</source>
-        <translation>Şıranın Son Boyutu</translation>
+        <translation type="vanished">Şıranın Son Boyutu</translation>
     </message>
     <message>
         <source>Estimated batch size after correction</source>
-        <translation>Düzeltme sonrası tahmini şıra boyutu</translation>
+        <translation type="vanished">Düzeltme sonrası tahmini şıra boyutu</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Hesapla</translation>
+        <translation type="vanished">Hesapla</translation>
+    </message>
+</context>
+<context>
+    <name>ogCorrectionTool</name>
+    <message>
+        <source>Gravity Correction Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NB: this tool makes the assumption that you are not going to add any water post boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From current recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured Gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A value in Plato will be used as-is.  An SG value can be corrected for actual vs calibrated temperature.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>@ temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature of SG reading</source>
+        <translation type="unfinished">SG okumasındaki sıcaklık</translation>
+    </message>
+    <message>
+        <source>Calibrated at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature to which the hydrometer is calibrated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Actual SG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-Boil Volume</source>
+        <translation type="unfinished">Kaynatma Öncesi Hacim</translation>
+    </message>
+    <message>
+        <source>Measured pre-boil volume</source>
+        <translation type="unfinished">Kaynama öncesi ölçülen hacim</translation>
+    </message>
+    <message>
+        <source>Calculate</source>
+        <translation type="unfinished">Hesapla</translation>
+    </message>
+    <message>
+        <source>Predicted OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OG if you take no action, ie boil as originally planned</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Add Water To Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount to Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of water you need to add to hit planned OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Final Batch Size</source>
+        <translation type="unfinished">Şıranın Son Boyutu</translation>
+    </message>
+    <message>
+        <source>Estimated batch size after correction</source>
+        <translation type="unfinished">Düzeltme sonrası tahmini şıra boyutu</translation>
+    </message>
+    <message>
+        <source>-- OR --</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remedy: Add Sugar or DME</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount To Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of Sugar or DME to add to the boil</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13176,6 +13429,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Default efficiency to set on new recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished">Kaynama Süresi</translation>
+    </message>
+    <message>
+        <source>Default boil time to set on new recipes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

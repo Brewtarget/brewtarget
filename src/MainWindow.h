@@ -56,8 +56,8 @@ class MainWindow : public QMainWindow, public Ui::mainWindow {
    Q_OBJECT
 
 public:
-   MainWindow(QWidget* parent=nullptr);
-   virtual ~MainWindow();
+   explicit MainWindow(QWidget * parent = nullptr);
+   ~MainWindow() override;
 
    //! \brief Accessor to obtain \c MainWindow singleton
    static MainWindow & instance();
@@ -77,7 +77,7 @@ public:
    void initialiseAndMakeVisible();
 
    //! \brief Get the currently observed recipe.
-   Recipe* currentRecipe();
+   Recipe * currentRecipe();
 
    //! \brief Set whether undo / redo commands are enabled
    void setUndoRedoEnable();
@@ -323,6 +323,9 @@ signals:
     *        the software is available.
     */
    void initialisedAndVisible();
+
+   //! \brief Emitted when \c MainWindow::setRecipe is called (with a different recipe than is currently selected)
+   void newRecipeSelected();
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

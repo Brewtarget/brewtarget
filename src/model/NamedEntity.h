@@ -294,12 +294,6 @@ public:
    virtual bool subsidiary() const;
    virtual int numRecipesUsedIn() const;
 
-   /**
-    * \brief Returns a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to
-    *        prevent name clashes.  It will also "capture" n to allow you to extract it.
-    */
-///   static QRegularExpression const & getDuplicateNameNumberMatcher();
-
    void setName(QString const & var);
    void setDeleted(bool const var);
 
@@ -773,6 +767,32 @@ Q_DECLARE_METATYPE(std::shared_ptr<NamedEntity>)
  */
 #define SET_AND_NOTIFY(...) this->setAndNotify(__VA_ARGS__)
 
+/**
+ * For non-optional fields where zero means "not set", this is a helper function to allow use of a "default if unset"
+ * value -- similar to std::optional<T>::value_or.
+ *
+ * @param val
+ * @param defaultValue
+ * @return
+ */
+inline double valueOr(double const val, double const defaultValue) {
+   //
+   // Although you would normally use qFuzzyIsNull() or similar to check whether a double is zero, in this case it is
+   // intentional that we compare exactly with 0.0.  We are using true zero as a sort of sentinel value rather than
+   // checking whether the result of some calculation is "close enough to zero as makes no difference".
+   //
+   if (0.0 == val) {
+      return defaultValue;
+   }
+   return val;
+}
+
+
+/**
+ *
+ * @tparam T
+ * @return
+ */
 template<typename T> constexpr bool IsAbstract(T const *) { return std::is_abstract_v<T>; }
 
 /**

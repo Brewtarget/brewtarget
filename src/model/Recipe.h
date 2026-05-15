@@ -232,6 +232,14 @@ public:
 
    ~Recipe() override;
 
+   /**
+    * \brief Some default values we use in calculations when no value is set
+    */
+   //! @{
+   static constexpr double default_efficiency_pct = 70.0; // See also PersistentSettings::Names::defaultEfficiency_pct
+   static constexpr double default_batchSize_l    = 18.93; // 5 gallons See also PersistentSettings::Names::defaultBatchSize_l
+   //! @}
+
     //! \brief the user can select what delete means
    enum delOptions {
       ANCESTOR,   // delete the recipe and all its ancestors
@@ -360,9 +368,17 @@ public:
    //
    // Same goes for ABV_pct, IBU, color_srm below (which are optional BeerJSON fields but not part of BeerXML)
    //
-   //! \brief The calculated OG
+   /**
+    * \brief The calculated OG
+    *
+    *        In BeerXML, this is "The measured original (pre-fermentation) specific gravity of the beer."
+    */
    Q_PROPERTY(double  og                 READ og                 WRITE setOg)
-   //! \brief The calculated FG
+   /**
+    * \brief The calculated FG
+    *
+    *        In BeerXML, this is "The measured final gravity of the finished beer."
+    */
    Q_PROPERTY(double  fg                 READ fg                 WRITE setFg)
 
    //========================================= CALCULATED UNSTORED PROPERTIES ==========================================
@@ -374,7 +390,7 @@ public:
    Q_PROPERTY(double  ABV_pct             READ ABV_pct             STORED false)
   //! \brief The calculated color in SRM.  Derived from \c color_mcu via \c ColorMethods::mcuToSrm.
    Q_PROPERTY(double  color_srm           READ color_srm           STORED false)
-   //! \brief The calculated boil gravity. .:TBD:. This should perhaps be renamed boilSg for consistency
+   //! \brief The calculated boil gravity.   TODO This should be renamed boilSg or boilGravity_sg or boilDensity_sg for consistency
    Q_PROPERTY(double  boilGrav            READ boilGrav            STORED false)
    //! \brief The calculated IBUs.
    Q_PROPERTY(double  IBU                 READ IBU                 STORED false)
@@ -520,7 +536,7 @@ public:
     * ingredient, or if none are found, -1. Returns a string
     * in the form "Add %1 to %2 at %3".
     */
-   QString nextAddToBoil(double & time);
+   QString nextAddToBoil(double & time) const;
 
    /**
     * \brief Because we don't want prior versions (aka snapshots aka ancestors) of a recipe to show in the top level
@@ -700,7 +716,7 @@ public:
 
    // Helpers
    //! \brief Get the IBUs from a given \c hop addition.
-   double ibuFromHopAddition(RecipeAdditionHop const & hop);
+   double ibuFromHopAddition(RecipeAdditionHop const & hopAddition) const;
    // .:TBD:. Not sure reagents is the best word here...
    //! \brief Formats the fermentable additions for instructions
    QList<QString> getReagents(QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions);

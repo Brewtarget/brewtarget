@@ -149,8 +149,8 @@ namespace {
          {ObjectStore::FieldType::Double, {"fermenter_batch_size_l"        }, PropertyNames::Equipment::fermenterBatchSize_l        },
          {ObjectStore::FieldType::Double, {"boiling_point"                 }, PropertyNames::Equipment::boilingPoint_c              },
          {ObjectStore::FieldType::Double, {"kettle_boil_size_l"            }, PropertyNames::Equipment::kettleBoilSize_l            },
-         {ObjectStore::FieldType::Double, {"boil_time"                     }, PropertyNames::Equipment::boilTime_min                },
-         {ObjectStore::FieldType::Bool  , {"calc_boil_volume"              }, PropertyNames::Equipment::calcBoilVolume              },
+//         {ObjectStore::FieldType::Double, {"boil_time"                     }, PropertyNames::Equipment::boilTime_min                }, // Boil & BoilStep objects now supersede this
+//         {ObjectStore::FieldType::Bool  , {"calc_boil_volume"              }, PropertyNames::Equipment::calcBoilVolume              },
          {ObjectStore::FieldType::Double, {"kettle_evaporation_per_hour_l" }, PropertyNames::Equipment::kettleEvaporationPerHour_l  },
          {ObjectStore::FieldType::Double, {"evap_rate"                     }, PropertyNames::Equipment::evapRate_pctHr              },
          {ObjectStore::FieldType::Double, {"mash_tun_grain_absorption_lkg" }, PropertyNames::Equipment::mashTunGrainAbsorption_LKg  },

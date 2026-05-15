@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/Amount.h is part of Brewtarget, and is copyright the following authors 2022-2025:
+ * measurement/Amount.h is part of Brewtarget, and is copyright the following authors 2022-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -94,6 +94,9 @@ namespace Measurement {
 
       //! Convenience function for converting this Amount to canonical units (via \c Unit::toCanonical)
       Amount toCanonical() const;
+
+      //! Convenience function for sanitising \c quantity via \c unit->sanitise.  NB Not const!
+      void sanitise();
 
       /**
        * \brief We allow addition of two Amounts.  The result will be in canonical units.
