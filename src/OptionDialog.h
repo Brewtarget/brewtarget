@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * OptionDialog.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * OptionDialog.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Greg Meess <Daedalus12@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -39,15 +39,15 @@ class OptionDialog : public QDialog, public Ui::optionsDialog {
 
 public:
    //! \brief Default constructor.
-   OptionDialog(QWidget * parent = 0);
-   ~OptionDialog();
+   explicit OptionDialog(QWidget * parent = nullptr);
+   ~OptionDialog() override;
 
 signals:
-   void showAllAncestors(bool showem);
+   void ancestorsAlwaysShown(bool shown);
 
 public slots:
    //! \brief Show the dialog.
-   void show();
+   void display();
    //! \brief Save the options and close the dialog.
    void saveAndClose();
    //! \brief Close dialog without saving options.
@@ -76,7 +76,7 @@ public slots:
 protected:
 
    //! \brief Reimplemented from QWidget.
-   virtual void changeEvent(QEvent * e);
+   void changeEvent(QEvent * e) override;
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

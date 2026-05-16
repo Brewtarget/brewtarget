@@ -106,8 +106,8 @@ class FermentationStepsWidget : public EnumeratedItemsWidget,
 #include "qtModels/tableModels/StockUseFermentableTableModel.h"
 
 class StockUseFermentablesWidget : public EnumeratedItemsWidget,
-                                          public EnumeratedItemsWidgetBase<StockUseFermentablesWidget,
-                                                                           StockUseFermentable> {
+                                   public EnumeratedItemsWidgetBase<StockUseFermentablesWidget,
+                                                                    StockUseFermentable> {
    Q_OBJECT
 
    ENUMERATED_ITEMS_WIDGET_COMMON_DECL(StockUseFermentable)
@@ -117,8 +117,8 @@ class StockUseFermentablesWidget : public EnumeratedItemsWidget,
 #include "qtModels/tableModels/StockUseHopTableModel.h"
 
 class StockUseHopsWidget : public EnumeratedItemsWidget,
-                                  public EnumeratedItemsWidgetBase<StockUseHopsWidget,
-                                                                   StockUseHop> {
+                           public EnumeratedItemsWidgetBase<StockUseHopsWidget,
+                                                            StockUseHop> {
    Q_OBJECT
 
    ENUMERATED_ITEMS_WIDGET_COMMON_DECL(StockUseHop)
@@ -127,8 +127,8 @@ class StockUseHopsWidget : public EnumeratedItemsWidget,
 #include "qtModels/tableModels/StockUseMiscTableModel.h"
 
 class StockUseMiscsWidget : public EnumeratedItemsWidget,
-                                   public EnumeratedItemsWidgetBase<StockUseMiscsWidget,
-                                                                    StockUseMisc> {
+                            public EnumeratedItemsWidgetBase<StockUseMiscsWidget,
+                                                             StockUseMisc> {
    Q_OBJECT
 
    ENUMERATED_ITEMS_WIDGET_COMMON_DECL(StockUseMisc)
@@ -137,8 +137,8 @@ class StockUseMiscsWidget : public EnumeratedItemsWidget,
 #include "qtModels/tableModels/StockUseSaltTableModel.h"
 
 class StockUseSaltsWidget : public EnumeratedItemsWidget,
-                                   public EnumeratedItemsWidgetBase<StockUseSaltsWidget,
-                                                                    StockUseSalt> {
+                            public EnumeratedItemsWidgetBase<StockUseSaltsWidget,
+                                                             StockUseSalt> {
    Q_OBJECT
 
    ENUMERATED_ITEMS_WIDGET_COMMON_DECL(StockUseSalt)
@@ -147,8 +147,8 @@ class StockUseSaltsWidget : public EnumeratedItemsWidget,
 #include "qtModels/tableModels/StockUseYeastTableModel.h"
 
 class StockUseYeastsWidget : public EnumeratedItemsWidget,
-                                    public EnumeratedItemsWidgetBase<StockUseYeastsWidget,
-                                                                     StockUseYeast> {
+                             public EnumeratedItemsWidgetBase<StockUseYeastsWidget,
+                                                              StockUseYeast> {
    Q_OBJECT
 
    ENUMERATED_ITEMS_WIDGET_COMMON_DECL(StockUseYeast)

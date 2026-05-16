@@ -442,9 +442,9 @@
                     </item>
                     <item row="2" column="1" colspan="2">
                      <widget class="QWidget" name="qWidget_styleBox" native="true">
-                      <layout class="QVBoxLayout" name="styleSubLayout">
+                      <layout class="QHBoxLayout" name="styleSubLayout">
                        <item>
-                        <widget class="StyleButton" name="styleButton">
+                        <widget class="BtComboBoxStyle" name="styleComboBox">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                            <horstretch>0</horstretch>
@@ -460,18 +460,13 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="BtComboBoxStyle" name="styleComboBox">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
+                        <widget class="QPushButton" name="pushButton_editStyle">
+                         <property name="toolTip">
+                          <string>Edit this style</string>
                          </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>128</width>
-                           <height>0</height>
-                          </size>
+                         <property name="icon">
+                          <iconset resource="../resources.qrc">
+                           <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
                          </property>
                         </widget>
                        </item>
@@ -490,9 +485,9 @@
                     </item>
                     <item row="3" column="1" colspan="2">
                      <widget class="QWidget" name="qWidget_equipmentBox" native="true">
-                      <layout class="QVBoxLayout" name="equipmentSubLayout">
+                      <layout class="QHBoxLayout" name="equipmentSubLayout">
                        <item>
-                        <widget class="EquipmentButton" name="equipmentButton">
+                        <widget class="BtComboBoxEquipment" name="equipmentComboBox">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                            <horstretch>0</horstretch>
@@ -508,18 +503,16 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="BtComboBoxEquipment" name="equipmentComboBox">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
+                        <widget class="QPushButton" name="pushButton_editEquipment">
+                         <property name="toolTip">
+                          <string>Edit this equipment</string>
                          </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>128</width>
-                           <height>0</height>
-                          </size>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="../resources.qrc">
+                           <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
                          </property>
                         </widget>
                        </item>
@@ -552,7 +545,7 @@
                     <item row="5" column="0">
                      <widget class="QLabel" name="label_efficiency">
                       <property name="text">
-                       <string>&amp;Efficiency (%)</string>
+                       <string>Efficienc&amp;y (%)</string>
                       </property>
                       <property name="buddy">
                        <cstring>lineEdit_efficiency</cstring>
@@ -717,12 +710,6 @@
                        <size>
                         <width>128</width>
                         <height>0</height>
-                       </size>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>16777215</width>
-                        <height>16777215</height>
                        </size>
                       </property>
                      </widget>
@@ -1470,7 +1457,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="MashButton" name="mashButton">
+                 <widget class="QPushButton" name="pushButton_editMash">
+                  <property name="toolTip">
+                   <string>Edit this mash</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../resources.qrc">
+                    <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -1552,7 +1546,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="BoilButton" name="boilButton">
+                 <widget class="QPushButton" name="pushButton_editBoil">
+                  <property name="toolTip">
+                   <string>Edit this boil</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../resources.qrc">
+                    <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -1617,7 +1618,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="FermentationButton" name="fermentationButton">
+                 <widget class="QPushButton" name="pushButton_editFermentation">
+                  <property name="toolTip">
+                   <string>Edit this fermentation</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../resources.qrc">
+                    <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -1685,7 +1693,7 @@
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
-     <string>Edit</string>
+     <string>&amp;Edit</string>
     </property>
     <addaction name="actionCopySelected"/>
     <addaction name="action_recipeToTextClipboard"/>
@@ -2369,11 +2377,6 @@
    <header>widgets/BtComboBoxNamedEntity.h</header>
   </customwidget>
   <customwidget>
-   <class>EquipmentButton</class>
-   <extends>QPushButton</extends>
-   <header>buttons/EquipmentButton.h</header>
-  </customwidget>
-  <customwidget>
    <class>RecipeTreeView</class>
    <extends>QTreeView</extends>
    <header>trees/RecipeTreeView.h</header>
@@ -2397,26 +2400,6 @@
    <class>YeastTreeView</class>
    <extends>QTreeView</extends>
    <header>trees/NamedEntityTreeView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>StyleButton</class>
-   <extends>QPushButton</extends>
-   <header>buttons/StyleButton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BoilButton</class>
-   <extends>QPushButton</extends>
-   <header>buttons/BoilButton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>FermentationButton</class>
-   <extends>QPushButton</extends>
-   <header>buttons/FermentationButton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>MashButton</class>
-   <extends>QPushButton</extends>
-   <header>buttons/MashButton.h</header>
   </customwidget>
   <customwidget>
    <class>SaltTreeView</class>
@@ -2467,10 +2450,10 @@
   <tabstop>scrollArea_tabs</tabstop>
   <tabstop>tabWidget_recipeView</tabstop>
   <tabstop>lineEdit_name</tabstop>
-  <tabstop>styleButton</tabstop>
   <tabstop>styleComboBox</tabstop>
-  <tabstop>equipmentButton</tabstop>
+  <tabstop>pushButton_editStyle</tabstop>
   <tabstop>equipmentComboBox</tabstop>
+  <tabstop>pushButton_editEquipment</tabstop>
   <tabstop>lineEdit_batchSize</tabstop>
   <tabstop>value_targetBoilSize</tabstop>
   <tabstop>lineEdit_efficiency</tabstop>
@@ -2498,13 +2481,14 @@
   <tabstop>pushButton_removeSalt</tabstop>
   <tabstop>pushButton_editSalt</tabstop>
   <tabstop>mashStepsWidget</tabstop>
-  <tabstop>mashButton</tabstop>
-  <tabstop>boilButton</tabstop>
-  <tabstop>fermentationButton</tabstop>
+  <tabstop>mashComboBox</tabstop>
+  <tabstop>pushButton_editMash</tabstop>
   <tabstop>pushButton_mashDesigner</tabstop>
   <tabstop>pushButton_mashWizard</tabstop>
-  <tabstop>mashButton</tabstop>
-  <tabstop>mashComboBox</tabstop>
+  <tabstop>boilComboBox</tabstop>
+  <tabstop>pushButton_editBoil</tabstop>
+  <tabstop>fermentationComboBox</tabstop>
+  <tabstop>pushButton_editFermentation</tabstop>
  </tabstops>
  <resources>
   <include location="../resources.qrc"/>

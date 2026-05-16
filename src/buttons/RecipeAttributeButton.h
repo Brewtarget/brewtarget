@@ -35,6 +35,8 @@
  *
  *        Subclasses must also inherit from the CRTP class \c RecipeAttributeButtonBase (see below) which provides the
  *        substance.   (This class just declares Qt slots etc.)
+ *
+ *        TODO: I think we can delete all these buttons now as they are no longer used...
  */
 class RecipeAttributeButton : public QPushButton {
    Q_OBJECT
