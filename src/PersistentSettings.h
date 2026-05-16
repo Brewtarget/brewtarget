@@ -80,7 +80,8 @@ AddSettingName(geometry_saltCatalog        )  // MainWindow section
 AddSettingName(geometry_styleCatalog       )  // MainWindow section
 AddSettingName(geometry_waterCatalog       )  // MainWindow section
 AddSettingName(geometry_yeastCatalog       )  // MainWindow section
-AddSettingName(geometry_stockWindow) // MainWindow section
+AddSettingName(geometry_stockWindow  ) // MainWindow section
+AddSettingName(geometry_optionsDialog) // MainWindow section
 AddSettingName(ibu_formula)
 AddSettingName(language)
 AddSettingName(last_db_merge_req)

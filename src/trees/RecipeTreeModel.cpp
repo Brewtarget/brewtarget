@@ -37,8 +37,8 @@ void RecipeTreeModel::init(AncestorDialog & ancestorDialog, OptionDialog & optio
            this,
            &RecipeTreeModel::recipePropertyChanged);
 
-   connect(&ancestorDialog, &AncestorDialog::ancestryChanged, this, &RecipeTreeModel::versionedRecipe);
-   connect(&optionDialog  ,   &OptionDialog::showAllAncestors, this, &RecipeTreeModel::showOrHideAllAncestors );
+   connect(&ancestorDialog, &AncestorDialog::ancestryChanged     , this, &RecipeTreeModel::versionedRecipe);
+   connect(&optionDialog  ,   &OptionDialog::ancestorsAlwaysShown, this, &RecipeTreeModel::showOrHideAllAncestors );
 
    return;
 }

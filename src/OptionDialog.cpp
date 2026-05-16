@@ -454,8 +454,8 @@ public:
     */
    void showChanges() {
       // Set the right language
-      int index = this->m_self.comboBox_lang->findData(Localization::getCurrentLanguage());
-      if (index >= 0) {
+      if (int const index = this->m_self.comboBox_lang->findData(Localization::getCurrentLanguage());
+          index >= 0) {
          this->m_self.comboBox_lang->setCurrentIndex(index);
       }
 
@@ -524,8 +524,8 @@ public:
 
       // Database stuff -- this looks weird, but trust me. We want SQLITE to be
       // the default for this field
-      int tmp = PersistentSettings::value_ck(PersistentSettings::Names::dbType,
-                                             static_cast<int>(Database::DbType::SQLITE)).toInt() - 1;
+      int const tmp = PersistentSettings::value_ck(PersistentSettings::Names::dbType,
+                                                   static_cast<int>(Database::DbType::SQLITE)).toInt() - 1;
       this->m_self.comboBox_engine->setCurrentIndex(tmp);
 
       this->input_pgHostname.setText(PersistentSettings::value_ck(PersistentSettings::Names::dbHostname, "localhost").toString());
@@ -726,10 +726,11 @@ void OptionDialog::connect_signals() {
 }
 
 void OptionDialog::signalAncestors() {
-   emit showAllAncestors(checkBox_alwaysShowSnaps->checkState() == Qt::Checked);
+   emit ancestorsAlwaysShown(checkBox_alwaysShowSnaps->checkState() == Qt::Checked);
+   return;
 }
 
-void OptionDialog::show() {
+void OptionDialog::display() {
    this->pimpl->showChanges();
    this->setVisible(true);
    return;
@@ -763,8 +764,8 @@ void OptionDialog::setLogDir() {
 }
 
 void OptionDialog::resetToDefault() {
-   Database::DbType engine = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
-   if (engine == Database::DbType::PGSQL) {
+   if (auto const engine = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
+       engine == Database::DbType::PGSQL) {
       this->pimpl->input_pgHostname.setText(QString("localhost"));
       this->pimpl->input_pgPortNum.setText(QString("5432"));
       this->pimpl->input_pgSchema.setText(QString("public"));
@@ -802,8 +803,8 @@ void OptionDialog::changeEvent(QEvent * e) {
 
 void OptionDialog::setEngine([[maybe_unused]] int selected) {
 
-   QVariant data = comboBox_engine->currentData();
-   Database::DbType newEngine = static_cast<Database::DbType>(data.toInt());
+   QVariant const data = comboBox_engine->currentData();
+   auto const newEngine = static_cast<Database::DbType>(data.toInt());
 
    this->pimpl->setDbDialog(newEngine);
    this->testRequired();
@@ -811,30 +812,31 @@ void OptionDialog::setEngine([[maybe_unused]] int selected) {
 }
 
 void OptionDialog::testConnection() {
-   bool success;
-   QString hostname, schema, database, username, password;
-   int port;
-
-   Database::DbType newType = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
+   auto const newType = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
    // Do nothing if nothing is required.
    if (this->pimpl->dbConnectionTestState == NO_CHANGE || this->pimpl->dbConnectionTestState == TEST_PASSED) {
       return;
    }
 
+   bool success;
    switch (newType) {
       case Database::DbType::PGSQL:
-         hostname = this->pimpl->input_pgHostname.text();
-         schema   = this->pimpl->input_pgSchema.text();
-         database = this->pimpl->input_pgDbName.text();
-         username = this->pimpl->input_pgUsername.text();
-         password = this->pimpl->input_pgPassword.text();
-         port     = this->pimpl->input_pgPortNum.text().toInt();
+         {
+            QString const hostname = this->pimpl->input_pgHostname.text();
+            QString const schema   = this->pimpl->input_pgSchema.text();
+            QString const database = this->pimpl->input_pgDbName.text();
+            QString const username = this->pimpl->input_pgUsername.text();
+            QString const password = this->pimpl->input_pgPassword.text();
+            int     const port     = this->pimpl->input_pgPortNum.text().toInt();
 
-         success = Database::verifyDbConnection(newType, hostname, port, schema, database, username, password);
+            success = Database::verifyDbConnection(newType, hostname, port, schema, database, username, password);
+         }
          break;
       default:
-         hostname = QString("%1/%2").arg(this->pimpl->input_userDataDir.text()).arg("database.sqlite");
-         success = Database::verifyDbConnection(newType, hostname);
+         {
+            QString const hostname = QString("%1/%2").arg(this->pimpl->input_userDataDir.text()).arg("database.sqlite");
+            success = Database::verifyDbConnection(newType, hostname);
+         }
    }
 
    if (success) {

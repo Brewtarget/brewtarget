@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/EnumeratedItemsWidgetBase.h is part of Brewtarget, and is copyright the following authors 2025:
+ * widgets/EnumeratedItemsWidgetBase.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -41,11 +41,11 @@ public:
    using ItemEditorClass     = Item::EditorClass;
 
    EnumeratedItemsWidgetBase() {
-      this->derived().m_pushButton_addItem     ->setToolTip(Owner::tr("Add %1 item"               ).arg(Owner::localisedName()));
-      this->derived().m_pushButton_removeItem  ->setToolTip(Owner::tr("Remove selected %1 item"   ).arg(Owner::localisedName()));
-      this->derived().m_pushButton_moveItemUp  ->setToolTip(Owner::tr("Move selected %1 item up"  ).arg(Owner::localisedName()));
-      this->derived().m_pushButton_moveItemDown->setToolTip(Owner::tr("Move selected %1 item down").arg(Owner::localisedName()));
-      this->derived().m_pushButton_editItem    ->setToolTip(Owner::tr("Edit selected %1 item"     ).arg(Owner::localisedName()));
+      this->derived().m_pushButton_addItem     ->setToolTip(Item::tr("Add %1"               ).arg(Item::localisedName()));
+      this->derived().m_pushButton_removeItem  ->setToolTip(Item::tr("Remove selected %1"   ).arg(Item::localisedName()));
+      this->derived().m_pushButton_moveItemUp  ->setToolTip(Item::tr("Move selected %1 up"  ).arg(Item::localisedName()));
+      this->derived().m_pushButton_moveItemDown->setToolTip(Item::tr("Move selected %1 down").arg(Item::localisedName()));
+      this->derived().m_pushButton_editItem    ->setToolTip(Item::tr("Edit selected %1"     ).arg(Item::localisedName()));
 
       this->m_itemTableModel = std::make_unique<NeTableModelClass>(this->derived().m_tableView_items.get());
       this->derived().m_tableView_items->setItemDelegate(
