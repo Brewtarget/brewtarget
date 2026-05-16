@@ -7414,10 +7414,6 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <translation type="unfinished">Étape</translation>
     </message>
     <message>
-        <source>Add At Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add At Gravity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7447,6 +7443,10 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Package</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10444,10 +10444,6 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Calculate pre-boil volume</source>
         <translation type="obsolete">Volume pré-ébullition calculé</translation>
     </message>
@@ -10537,10 +10533,6 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Attributes of &quot;optional&quot; vessels will not be saved if their volumes are set to 0.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default boil time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

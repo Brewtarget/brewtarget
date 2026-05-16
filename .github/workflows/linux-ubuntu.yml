@@ -45,7 +45,7 @@ jobs:
         #
         os: [ubuntu-22.04, ubuntu-24.04]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -63,7 +63,7 @@ jobs:
       # have only Python 3.6.7 and Ubuntu 20.04 only have Python 3.8.2.  However Ubuntu 22.04 has Python 3.10.6.)  There
       # are ways to get around this, but, in this context, it's simplest to use a canned GitHub action.
       #
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.10'
       - name: Install Frameworks and Libraries, and set up Meson build environment
@@ -157,10 +157,6 @@ jobs:
           umask 022
           ../bt -v appimage
 
-      #
-      # Can't get this working for the moment on Brewtarget and GitHub Action won't show me enough of the logs to see
-      # the error.  Seems to be working on Brewken though, so hopefully is fixable!
-      #
       - name: Flatpak
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
@@ -170,7 +166,7 @@ jobs:
 
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: brewtarget-${{matrix.os}}
           path: |
@@ -188,7 +184,7 @@ jobs:
 
       - name: Recover Debris Artifacts (Meson)
         if: ${{ failure() && (steps.meson-build.conclusion == 'failure' || steps.meson-test.conclusion == 'failure') }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: mbuild-results-${{matrix.os}}
           path: mbuild
@@ -196,7 +192,7 @@ jobs:
 
       - name: Recover Debris Artifacts (CMake)
         if: ${{ failure() && (steps.cmake-build.conclusion == 'failure' || steps.cmake-test.conclusion == 'failure') }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-results-${{matrix.os}}
           path: build

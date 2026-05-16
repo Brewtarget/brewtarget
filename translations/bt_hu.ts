@@ -7355,10 +7355,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <translation type="unfinished">Lépés</translation>
     </message>
     <message>
-        <source>Add At Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add At Gravity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7389,6 +7385,10 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     <message>
         <source>Package</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Idõ</translation>
     </message>
 </context>
 <context>
@@ -10351,7 +10351,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Idõ</translation>
+        <translation type="obsolete">Idõ</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
@@ -10443,10 +10443,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Attributes of &quot;optional&quot; vessels will not be saved if their volumes are set to 0.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default boil time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
