@@ -2,29 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="nl">
 <context>
-    <name></name>
-    <message>
-        <source>Add %1 item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected %1 item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Move selected %1 item up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Move selected %1 item down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected %1 item</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>AboutDialog</name>
     <message>
         <source>About Brewtarget</source>
@@ -4359,6 +4336,29 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <message>
         <source>Type</source>
         <translation type="obsolete">Type</translation>
+    </message>
+</context>
+<context>
+    <name>Item</name>
+    <message>
+        <source>Add %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12200,20 +12200,12 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Efficiency (%)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Batch Size</source>
         <translation type="unfinished">Batch Grootte</translation>
     </message>
     <message>
         <source>Boil Size</source>
         <translation type="unfinished">Kook Volume</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Export to File</source>
@@ -12353,6 +12345,34 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>&amp;Unit Conversion Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit this style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit this equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Efficienc&amp;y (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit this mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit this boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit this fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

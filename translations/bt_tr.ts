@@ -2,29 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="tr">
 <context>
-    <name></name>
-    <message>
-        <source>Add %1 item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected %1 item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Move selected %1 item up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Move selected %1 item down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit selected %1 item</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>AboutDialog</name>
     <message>
         <source>About Brewtarget</source>
@@ -4161,6 +4138,29 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <message>
         <source>Type</source>
         <translation type="obsolete">Tür</translation>
+    </message>
+</context>
+<context>
+    <name>Item</name>
+    <message>
+        <source>Add %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move selected %1 down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12156,7 +12156,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>&amp;Efficiency (%)</source>
-        <translation>V&amp;erimlilik (%)</translation>
+        <translation type="vanished">V&amp;erimlilik (%)</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -12168,7 +12168,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Düzenle</translation>
+        <translation type="vanished">Düzenle</translation>
     </message>
     <message>
         <source>&amp;Export to File</source>
@@ -12340,6 +12340,34 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>&amp;Unit Conversion Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit this style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit this equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Efficienc&amp;y (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit this mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit this boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit this fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
