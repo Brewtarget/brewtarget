@@ -523,10 +523,13 @@ public:
     */
    std::shared_ptr<Item> remove(std::shared_ptr<Item> item) {
       // It's a coding error if we try to remove an item that didn't belong to the owner
-//      Q_ASSERT(item->ownerId() == this->m_owner.key());
-      qCritical() << Q_FUNC_INFO << "Mismatch trying to remove" << item << "from set owned by" << this->m_owner;
-      qCritical().noquote() << Q_FUNC_INFO << "Stack trace:" << Logging::getStackTrace();
-      Q_ASSERT(false);
+      if (item->ownerId() != this->m_owner.key()) {
+         qCritical() <<
+            Q_FUNC_INFO << "Mismatch trying to remove" << item << "owned by" << Owner::staticMetaObject.className() <<
+            "#" << item->ownerId() << "from set owned by" << this->m_owner;
+         qCritical().noquote() << Q_FUNC_INFO << "Stack trace:" << Logging::getStackTrace();
+         Q_ASSERT(false);
+      }
 
       // As per add(), if we're not yet stored in the database, then we also need to update our list of Items.
       if (this->m_owner.key() < 0) {

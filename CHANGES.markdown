@@ -22,6 +22,7 @@ None
 
 ### Bug Fixes
 * Options dialog does not remember its size [1118](https://github.com/Brewtarget/brewtarget/issues/1118)
+* Mash wizard crashes every time now. version 5.1.0 [1123](https://github.com/Brewtarget/brewtarget/issues/1123)
 
 ### Release Timestamp
 Fri, 15 May 2026 05:01:01 +0100

@@ -110,7 +110,7 @@ public:
    /**
     * Constructor
     */
-   impl(OptionDialog & self) :
+   explicit impl(OptionDialog & self) :
       m_self                     {self},
       qFileDialog                {&self},
       label_pgHostname           {self.groupBox_dbConfig},
@@ -143,7 +143,7 @@ public:
       this->qFileDialog.setOptions(
          QFileDialog::ShowDirsOnly |        // <- Only show directories in the dialog
          QFileDialog::DontUseNativeDialog | // <- Use the Qt dialog for selecting directories as it's usually better at
-         //    respecting all the other settings than the native dialog
+                                            //    respecting all the other settings than the native dialog
          QFileDialog::HideNameFilterDetails // <- Don't have the file-types selector active, as it serves no purpose
       );                                    //    for selecting a directory
       this->qFileDialog.setFilter(QDir::AllDirs | QDir::Hidden); // <- We don't hide any directories from the user
