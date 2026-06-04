@@ -783,6 +783,7 @@ def installDependencies():
                             'tree',
                             'dylibbundler',
                             'qt@6',
+                            'qtmultimedia',
                             'openssl@3', # OpenSSL headers and library
 #                            'xalan-c',
 #                            'xerces-c'
