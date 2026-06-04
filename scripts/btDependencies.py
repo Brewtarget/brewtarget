@@ -782,8 +782,9 @@ def installDependencies():
 #                            'pandoc',
                             'tree',
                             'dylibbundler',
-                            'qt@6',
+                            'qt',
                             'qtmultimedia',
+                            'qtnetworkauth',
                             'openssl@3', # OpenSSL headers and library
 #                            'xalan-c',
 #                            'xerces-c'
