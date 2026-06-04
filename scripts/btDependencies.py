@@ -979,7 +979,7 @@ def installDependencies():
          qtInstalledBy = []
          if ('qt6' in installListPort):
             qtInstalledBy.append('MacPorts')
-         if ('qt@6' in installListBrew):
+         if ('qt' in installListBrew):
             qtInstalledBy.append('Homebrew')
          btLogger.log.debug('Qt installed by ' + ', '.join(qtInstalledBy))
 
