@@ -1642,10 +1642,7 @@ def doPackage():
             # otool output from earlier:
             #    /opt/homebrew/opt/qt/lib/QtMultimedia.framework/Versions/A/QtMultimedia
             #
-            # We want to change QtMultimedia to QtNetwork and then copy the whole of the .framework directory:
-            #    /opt/homebrew/opt/qt/lib/QtNetwork.framework
-            #
-            frameworkMatch = re.search(r'^\s*(/\S+/' + framework + '.framework)', otoolOutputExe, re.MULTILINE)
+            frameworkMatch = re.search(r'^\s*(/\S+/' + framework + r'.framework/\S*)', otoolOutputExe, re.MULTILINE)
             if (frameworkMatch):
                frameworkPath = frameworkMatch[1]
                btLogger.log.debug('Doing extra dependencies for ' + frameworkPath)
