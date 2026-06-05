@@ -1642,10 +1642,7 @@ def doPackage():
             # otool output from earlier:
             #    /opt/homebrew/opt/qt/lib/QtMultimedia.framework/Versions/A/QtMultimedia
             #
-            # We want to change QtMultimedia to QtNetwork and then copy the whole of the .framework directory:
-            #    /opt/homebrew/opt/qt/lib/QtNetwork.framework
-            #
-            frameworkMatch = re.search(r'^\s*(/\S+/' + framework + '.framework)', otoolOutputExe, re.MULTILINE)
+            frameworkMatch = re.search(r'^\s*(/\S+/' + framework + r'.framework/\S*)', otoolOutputExe, re.MULTILINE)
             if (frameworkMatch):
                frameworkPath = frameworkMatch[1]
                btLogger.log.debug('Doing extra dependencies for ' + frameworkPath)
@@ -1654,159 +1651,174 @@ def doPackage():
                if (not qtFrameworksDir):
                   qtFrameworksDir = os.path.dirname(frameworkPath)
 
+               #
+               # We used to assume the dependency path takes the same form as the framework that requires it.  Eg
+               # QtMultimedia -> QtNetwork meant we transformed
+               #    /opt/homebrew/opt/qt/lib/QtMultimedia.framework/Versions/A/QtMultimedia
+               # to:
+               #    /opt/homebrew/opt/qt/lib/QtNetwork.framework/Versions/A/QtNetwork
+               #
+               # However, at some point, Homebrew started putting different bits of Qt into different subdirectories.
+               # So now, we need to run otool to get the actual path of the dependency.
+               #
+               btLogger.log.debug('Running otool -L on ' + frameworkPath)
+               otoolOutputFramework = btExecute.abortOnRunFail(
+                  subprocess.run(['otool',
+                                  '-L',
+                                  frameworkPath],
+                                 capture_output=True)
+               ).stdout.decode('UTF-8')
+               btLogger.log.debug('Output of `otool -L ' + frameworkPath + '`: ' + otoolOutputFramework)
                for dependency in dependencies:
-                  #
-                  # We assume the dependency path takes the same form as the framework that requires it.  Eg
-                  # QtMultimedia -> QtNetwork means we transform
-                  #    /opt/homebrew/opt/qt/lib/QtMultimedia.framework/Versions/A/QtMultimedia
-                  # to:
-                  #    /opt/homebrew/opt/qt/lib/QtNetwork.framework/Versions/A/QtNetwork
-                  #
-                  dependencyPath = frameworkPath.replace(framework, dependency)
-                  dependencyTarget = dir_packages_mac_frm.joinpath(dependency + '.framework')
-                  #
-                  # It seems there are problems when we copy the framework trees.  Users trying to install the app who
-                  # run `codesign` get an error "bundle format is ambiguous (could be app or framework)".  We suspect
-                  # this may be related to the way we handle symlinks when we copy the tree, so this diagnostic is to
-                  # list in detail all the files in the tree before we copy it.
-                  #
-                  # Looks like symlinks are all relative and point inside the tree we are copying, so it's safe to copy
-                  # them _as_ symlinks below.
-                  #
-                  btExecute.abortOnRunFail(
-                     subprocess.run(
-                        ['find', dependencyPath, '-exec', 'ls', '-ld', '{}', '+'],
-                        capture_output=False
+                  dependencyMatch = re.search(r'^\s*(/\S+/' + dependency + '.framework)', otoolOutputFramework, re.MULTILINE)
+                  if not dependencyMatch:
+                     btLogger.log.error('Could not find dependency info for ' + dependency)
+                  else:
+                     dependencyPath = dependencyMatch[1]
+                     dependencyTarget = dir_packages_mac_frm.joinpath(dependency + '.framework')
+                     #
+                     # It seems there are problems when we copy the framework trees.  Users trying to install the app who
+                     # run `codesign` get an error "bundle format is ambiguous (could be app or framework)".  We suspect
+                     # this may be related to the way we handle symlinks when we copy the tree, so this diagnostic is to
+                     # list in detail all the files in the tree before we copy it.
+                     #
+                     # Looks like symlinks are all relative and point inside the tree we are copying, so it's safe to copy
+                     # them _as_ symlinks below.
+                     #
+                     btExecute.abortOnRunFail(
+                        subprocess.run(
+                           ['find', dependencyPath, '-exec', 'ls', '-ld', '{}', '+'],
+                           capture_output=False
+                        )
                      )
-                  )
-                  btLogger.log.debug('Copying tree ' + dependencyPath + ' to ' + dependencyTarget.as_posix())
-                  shutil.copytree(dependencyPath, dependencyTarget.as_posix(), symlinks=True)
-                  #
-                  # It is not enough to just copy, eg, QtDBus framework into the app bundle.  We need to fix its
-                  # dependencies to point inside the bundle.  Eg after we copy
-                  # /opt/homebrew/opt/qt/lib/QtDBus.framework/ to
-                  # [projectName]_[versionNumber]_MacOS.app/Contents/Frameworks/QtDBus.framework/, the other
-                  # dependencies of the library inside that framework directory will still be on the "system" paths (eg
-                  # /opt/homebrew/opt/qt/lib/QtCore.framework/, /opt/local/lib/, /opt/local/libexec/, etc).  We need to
-                  # change them to point inside the app bundle (eg
-                  # [projectName]_[versionNumber]_MacOS.app/Contents/Frameworks/QtCore.framework/ etc).
-                  #
-                  # The variable names risk getting a bit confusing here because we are talking about dependencies of
-                  # dependency.  Hence why we start referring to dependency as copiedLibrary.
-                  #
-                  copiedLibrary = dependencyTarget.joinpath('Versions', 'Current', dependency)
-                  btLogger.log.debug('Fixing absolute dependencies for ' + dependency + ' (at' + copiedLibrary.as_posix() + ')')
+                     btLogger.log.debug('Copying tree ' + dependencyPath + ' to ' + dependencyTarget.as_posix())
+                     shutil.copytree(dependencyPath, dependencyTarget.as_posix(), symlinks=True)
+                     #
+                     # It is not enough to just copy, eg, QtDBus framework into the app bundle.  We need to fix its
+                     # dependencies to point inside the bundle.  Eg after we copy
+                     # /opt/homebrew/opt/qt/lib/QtDBus.framework/ to
+                     # [projectName]_[versionNumber]_MacOS.app/Contents/Frameworks/QtDBus.framework/, the other
+                     # dependencies of the library inside that framework directory will still be on the "system" paths (eg
+                     # /opt/homebrew/opt/qt/lib/QtCore.framework/, /opt/local/lib/, /opt/local/libexec/, etc).  We need to
+                     # change them to point inside the app bundle (eg
+                     # [projectName]_[versionNumber]_MacOS.app/Contents/Frameworks/QtCore.framework/ etc).
+                     #
+                     # The variable names risk getting a bit confusing here because we are talking about dependencies of
+                     # dependency.  Hence why we start referring to dependency as copiedLibrary.
+                     #
+                     copiedLibrary = dependencyTarget.joinpath('Versions', 'Current', dependency)
+                     btLogger.log.debug('Fixing absolute dependencies for ' + dependency + ' (at' + copiedLibrary.as_posix() + ')')
 
-                  otoolOutputCopiedLibrary = btExecute.abortOnRunFail(
-                     subprocess.run(['otool',
-                                    '-L',
+                     otoolOutputCopiedLibrary = btExecute.abortOnRunFail(
+                        subprocess.run(['otool',
+                                       '-L',
+                                       copiedLibrary.as_posix()],
+                                       capture_output=True)
+                     ).stdout.decode('UTF-8')
+                     btLogger.log.debug('Output of `otool -L ' + copiedLibrary.as_posix() + '`: ' + otoolOutputCopiedLibrary)
+
+                     for outputLine in otoolOutputCopiedLibrary.splitlines():
+                        #
+                        # If we find a dependency of the form:
+                        #    /opt/local/libexec/qt6/lib/QtCore.framework/Versions/A/QtCore
+                        # we want to change it to the form:
+                        #    @executable_path/../Frameworks/QtCore.framework/Versions/A/QtCore
+                        #
+                        # For other dependencies under /opt (eg /opt/local/lib/libdbus-1.3.dylib,
+                        # /opt/local/libexec/libssl.3.dylib, we just need to point to the @executable_path/../Frameworks/
+                        # directory.
+                        #
+                        qtAbsoluteDependencyMatch = re.search(r'^\s*(/\S+/qt\S+/lib/)(Qt\S+) ', outputLine, re.MULTILINE)
+                        if (qtAbsoluteDependencyMatch):
+                           qtDepAbsPrefix = qtAbsoluteDependencyMatch[1]
+                           qtDepFramework = qtAbsoluteDependencyMatch[2]
+                           qtDepRelPrefix = '@executable_path/../Frameworks/'
+                           qtDepAbsPath = '' + qtDepAbsPrefix + qtDepFramework
+                           qtDepRelPath = '' + qtDepRelPrefix + qtDepFramework
+                           #
+                           # Per https://www.unix.com/man_page/osx/1/install_name_tool/, "install_name_tool changes the
+                           # dynamic shared library install names and or adds, changes or deletes the rpaths recorded in a
+                           # Mach-O binary".
+                           #
+                           # Specifically:
+                           #
+                           #    -id name
+                           #          Changes the shared library identification name of a dynamic shared library to name
+                           #
+                           #    -change old new
+                           #          Changes the dependent shared library install name old to new in the specified Mach-O
+                           #          binary.
+                           #
+                           # We need the -id option to change the path the shared library thinks it lives in (which is the
+                           # first line of output of otool -L).
+                           #
+                           # We need the -change option to change where the shared library looks for other shared libraries
+                           # on which it depends.
+                           #
+                           # We rely here on the different library names being sufficiently different that none contains
+                           # the name of another -- ie there is no library name (eg QtFoo) that is contained in another (eg
+                           # QtFooQtBar).
+                           #
+                           if (qtDepFramework == dependency):
+                              btLogger.log.debug(
+                                 'Running install_name_tool -id ' + qtDepRelPath + ' ' + copiedLibrary.as_posix()
+                              )
+
+                              btExecute.abortOnRunFail(
+                                 subprocess.run(
+                                    ['install_name_tool',
+                                    '-id',
+                                    qtDepRelPath,
                                     copiedLibrary.as_posix()],
-                                    capture_output=True)
-                  ).stdout.decode('UTF-8')
-                  btLogger.log.debug('Output of `otool -L ' + copiedLibrary.as_posix() + '`: ' + otoolOutputCopiedLibrary)
-
-                  for outputLine in otoolOutputCopiedLibrary.splitlines():
-                     #
-                     # If we find a dependency of the form:
-                     #    /opt/local/libexec/qt6/lib/QtCore.framework/Versions/A/QtCore
-                     # we want to change it to the form:
-                     #    @executable_path/../Frameworks/QtCore.framework/Versions/A/QtCore
-                     #
-                     # For other dependencies under /opt (eg /opt/local/lib/libdbus-1.3.dylib,
-                     # /opt/local/libexec/libssl.3.dylib, we just need to point to the @executable_path/../Frameworks/
-                     # directory.
-                     #
-                     qtAbsoluteDependencyMatch = re.search(r'^\s*(/\S+/qt\S+/lib/)(Qt\S+) ', outputLine, re.MULTILINE)
-                     if (qtAbsoluteDependencyMatch):
-                        qtDepAbsPrefix = qtAbsoluteDependencyMatch[1]
-                        qtDepFramework = qtAbsoluteDependencyMatch[2]
-                        qtDepRelPrefix = '@executable_path/../Frameworks/'
-                        qtDepAbsPath = '' + qtDepAbsPrefix + qtDepFramework
-                        qtDepRelPath = '' + qtDepRelPrefix + qtDepFramework
-                        #
-                        # Per https://www.unix.com/man_page/osx/1/install_name_tool/, "install_name_tool changes the
-                        # dynamic shared library install names and or adds, changes or deletes the rpaths recorded in a
-                        # Mach-O binary".
-                        #
-                        # Specifically:
-                        #
-                        #    -id name
-                        #          Changes the shared library identification name of a dynamic shared library to name
-                        #
-                        #    -change old new
-                        #          Changes the dependent shared library install name old to new in the specified Mach-O
-                        #          binary.
-                        #
-                        # We need the -id option to change the path the shared library thinks it lives in (which is the
-                        # first line of output of otool -L).
-                        #
-                        # We need the -change option to change where the shared library looks for other shared libraries
-                        # on which it depends.
-                        #
-                        # We rely here on the different library names being sufficiently different that none contains
-                        # the name of another -- ie there is no library name (eg QtFoo) that is contained in another (eg
-                        # QtFooQtBar).
-                        #
-                        if (qtDepFramework == dependency):
-                           btLogger.log.debug(
-                              'Running install_name_tool -id ' + qtDepRelPath + ' ' + copiedLibrary.as_posix()
-                           )
-
-                           btExecute.abortOnRunFail(
-                              subprocess.run(
-                                 ['install_name_tool',
-                                 '-id',
-                                 qtDepRelPath,
-                                 copiedLibrary.as_posix()],
-                                 capture_output=False
+                                    capture_output=False
+                                 )
                               )
-                           )
+                           else:
+                              btLogger.log.debug(
+                                 'Running install_name_tool -change ' + qtDepAbsPath + ' ' + qtDepRelPath + ' ' +
+                                 copiedLibrary.as_posix()
+                              )
+
+                              btExecute.abortOnRunFail(
+                                 subprocess.run(
+                                    ['install_name_tool',
+                                    '-change',
+                                    qtDepAbsPath,
+                                    qtDepRelPath,
+                                    copiedLibrary.as_posix()],
+                                    capture_output=False
+                                 )
+                              )
                         else:
-                           btLogger.log.debug(
-                              'Running install_name_tool -change ' + qtDepAbsPath + ' ' + qtDepRelPath + ' ' +
-                              copiedLibrary.as_posix()
-                           )
-
-                           btExecute.abortOnRunFail(
-                              subprocess.run(
-                                 ['install_name_tool',
-                                 '-change',
-                                 qtDepAbsPath,
-                                 qtDepRelPath,
-                                 copiedLibrary.as_posix()],
-                                 capture_output=False
+                           otherLibMatch = re.search(r'^\s*(/opt/\S+/)([^/ ]+) ', outputLine, re.MULTILINE)
+                           if (otherLibMatch):
+                              otherLibAbsPrefix = otherLibMatch[1]
+                              otherLibName      = otherLibMatch[2]
+                              otherLibRelPrefix = '@executable_path/../Frameworks/'
+                              otherLibAbsPath = '' + otherLibAbsPrefix + otherLibName
+                              otherLibRelPath = '' + otherLibRelPrefix + otherLibName
+                              btLogger.log.debug(
+                                 'Running install_name_tool -change ' + otherLibAbsPath + ' ' + otherLibRelPath + ' ' +
+                                 copiedLibrary.as_posix()
                               )
-                           )
-                     else:
-                        otherLibMatch = re.search(r'^\s*(/opt/\S+/)([^/ ]+) ', outputLine, re.MULTILINE)
-                        if (otherLibMatch):
-                           otherLibAbsPrefix = otherLibMatch[1]
-                           otherLibName      = otherLibMatch[2]
-                           otherLibRelPrefix = '@executable_path/../Frameworks/'
-                           otherLibAbsPath = '' + otherLibAbsPrefix + otherLibName
-                           otherLibRelPath = '' + otherLibRelPrefix + otherLibName
-                           btLogger.log.debug(
-                              'Running install_name_tool -change ' + otherLibAbsPath + ' ' + otherLibRelPath + ' ' +
-                              copiedLibrary.as_posix()
-                           )
-                           btExecute.abortOnRunFail(
-                              subprocess.run(
-                                 ['install_name_tool',
-                                  '-change',
-                                  otherLibAbsPath,
-                                  otherLibRelPath,
-                                  copiedLibrary.as_posix()],
-                                 capture_output=False
+                              btExecute.abortOnRunFail(
+                                 subprocess.run(
+                                    ['install_name_tool',
+                                     '-change',
+                                     otherLibAbsPath,
+                                     otherLibRelPath,
+                                     copiedLibrary.as_posix()],
+                                    capture_output=False
+                                 )
                               )
-                           )
 
-                  otoolOutputCopiedLibrary = btExecute.abortOnRunFail(
-                     subprocess.run(['otool',
-                                    '-L',
-                                    copiedLibrary],
-                                    capture_output=True)
-                  ).stdout.decode('UTF-8')
-                  btLogger.log.debug('Output of `otool -L ' + copiedLibrary.as_posix() + '`: ' + otoolOutputCopiedLibrary)
+                     otoolOutputCopiedLibrary = btExecute.abortOnRunFail(
+                        subprocess.run(['otool',
+                                       '-L',
+                                       copiedLibrary],
+                                       capture_output=True)
+                     ).stdout.decode('UTF-8')
+                     btLogger.log.debug('Output of `otool -L ' + copiedLibrary.as_posix() + '`: ' + otoolOutputCopiedLibrary)
 
          #
          # Before we try to run macdeployqt, we need to make sure its directory is in the PATH.  (Depending on how Qt

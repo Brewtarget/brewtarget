@@ -678,7 +678,7 @@ def installDependencies():
          # version of MacOS comes out.
          #
          macOsVersionToReleaseName = {
-            '25'    : 'Tahoe'        , # Released 2025-09-15
+            '26'    : 'Tahoe'        , # Released 2025-09-15
             '15'    : 'Sequoia'      , # Released 2024-09-16
             '14'    : 'Sonoma'       , # Released 2023-09-26
             #
@@ -725,7 +725,7 @@ def installDependencies():
          # current user and does not require sudo.  This means they install things to different locations:
          #    - Homebrew packages are installed under /usr/local/Cellar/ with symlinks in /usr/local/opt/
          #    - MacPorts packages are installed under /opt/local
-         # Note too that package names can vary slightly between HomeBrew and MacPorts.
+         # Note too, that package names can vary slightly between HomeBrew and MacPorts.
          #
          # Unfortunately, the different approaches mean there are limits on the extent to which you can mix-and-match
          # between the two systems.
@@ -782,7 +782,9 @@ def installDependencies():
 #                            'pandoc',
                             'tree',
                             'dylibbundler',
-#                            'qt@6',
+                            'qt',
+                            'qtmultimedia',
+                            'qtnetworkauth',
                             'openssl@3', # OpenSSL headers and library
 #                            'xalan-c',
 #                            'xerces-c'
@@ -947,8 +949,8 @@ def installDependencies():
                             'pandoc',
                             'xercesc3',
                             'xalanc',
-                            'qt6',
-                            'qt6-qttranslations',
+#                            'qt6',
+#                            'qt6-qttranslations',
                             'dbus'
                             ]
          for packageToInstall in installListPort:
@@ -977,7 +979,7 @@ def installDependencies():
          qtInstalledBy = []
          if ('qt6' in installListPort):
             qtInstalledBy.append('MacPorts')
-         if ('qt@6' in installListBrew):
+         if ('qt' in installListBrew):
             qtInstalledBy.append('Homebrew')
          btLogger.log.debug('Qt installed by ' + ', '.join(qtInstalledBy))
 

@@ -25,7 +25,7 @@ None
 * Mash wizard crashes every time now. version 5.1.0 [1123](https://github.com/Brewtarget/brewtarget/issues/1123)
 
 ### Release Timestamp
-Fri, 15 May 2026 05:01:01 +0100
+Thu, 4 Jun 2026 05:01:01 +0100
 
 ## v5.1.0
 Improvements to Folders, plus bug fixes and minor enhancements.  In particular:
