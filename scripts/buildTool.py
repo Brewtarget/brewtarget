@@ -1656,13 +1656,20 @@ def doPackage():
 
                for dependency in dependencies:
                   #
-                  # We assume the dependency path takes the same form as the framework that requires it.  Eg
-                  # QtMultimedia -> QtNetwork means we transform
+                  # We used to assume the dependency path takes the same form as the framework that requires it.  Eg
+                  # QtMultimedia -> QtNetwork meant we transformed
                   #    /opt/homebrew/opt/qt/lib/QtMultimedia.framework/Versions/A/QtMultimedia
                   # to:
                   #    /opt/homebrew/opt/qt/lib/QtNetwork.framework/Versions/A/QtNetwork
                   #
+                  # However, at some point, Homebrew started putting different bits of Qt into different subdirectories.
+                  # So now, we need to do two substitutions to transform
+                  #    /opt/homebrew/opt/qtmultimedia/lib/QtMultimedia.framework/Versions/A/QtMultimedia
+                  # to:
+                  #    /opt/homebrew/opt/qtnetwork/lib/QtNetwork.framework/Versions/A/QtNetwork
+                  #
                   dependencyPath = frameworkPath.replace(framework, dependency)
+                  dependencyPath = dependencyPath.replace(framework.lower(), dependency.lower())
                   dependencyTarget = dir_packages_mac_frm.joinpath(dependency + '.framework')
                   #
                   # It seems there are problems when we copy the framework trees.  Users trying to install the app who
