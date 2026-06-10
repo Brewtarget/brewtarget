@@ -2365,18 +2365,15 @@ namespace {
                   "(?, ?, ?, '', 10.0, ?)"
             ),
             {
-               QVariant{Salt::typeDisplayNames[Salt::Type::CaCl2 ]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::CaCl2 ]},
-               QVariant{Salt::typeDisplayNames[Salt::Type::CaCO3 ]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::CaCO3 ]},
-               QVariant{Salt::typeDisplayNames[Salt::Type::CaSO4 ]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::CaSO4 ]},
-               QVariant{Salt::typeDisplayNames[Salt::Type::MgSO4 ]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::MgSO4 ]},
-               QVariant{Salt::typeDisplayNames[Salt::Type::NaCl  ]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::NaCl  ]},
-               QVariant{Salt::typeDisplayNames[Salt::Type::NaHCO3]}, QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::NaHCO3]},
-               QVariant{QString{"%1 %2"}.arg(Salt::typeDisplayNames[Salt::Type::LacticAcid]).arg("80%")},
-                  QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::LacticAcid]},
-               QVariant{QString{"%1 %2"}.arg(Salt::typeDisplayNames[Salt::Type::H3PO4]).arg("75%")},
-                  QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::H3PO4]},
-               QVariant{QString{"%1 %2"}.arg(Salt::typeDisplayNames[Salt::Type::H3PO4]).arg("10%")},
-                  QVariant{false}, QVariant{true}, QVariant{Salt::typeStringMapping[Salt::Type::H3PO4]},
+               QVariant{"CaCl2 (Calcium chloride)"   }, QVariant{false}, QVariant{true}, QVariant{"CaCl2"     },
+               QVariant{"CaCO3 (Calcium carbonate)"  }, QVariant{false}, QVariant{true}, QVariant{"CaCO3"     },
+               QVariant{"CaSO4 (Calcium sulfate)"    }, QVariant{false}, QVariant{true}, QVariant{"CaSO4"     },
+               QVariant{"MgSO4 (Magnesium sulfate)"  }, QVariant{false}, QVariant{true}, QVariant{"MgSO4"     },
+               QVariant{"NaCl (Sodium chloride)"     }, QVariant{false}, QVariant{true}, QVariant{"NaCl"      },
+               QVariant{"NaHCO3 (Sodium bicarbonate)"}, QVariant{false}, QVariant{true}, QVariant{"NaHCO3"    },
+               QVariant{"Lactic Acid (C3H6O3) 80%"   }, QVariant{false}, QVariant{true}, QVariant{"LacticAcid"},
+               QVariant{"H3PO4 (Phosphoric acid) 75%"}, QVariant{false}, QVariant{true}, QVariant{"H3PO4"     },
+               QVariant{"H3PO4 (Phosphoric acid) 10%"}, QVariant{false}, QVariant{true}, QVariant{"H3PO4"     },
             }
          }
       };
@@ -2763,6 +2760,7 @@ namespace {
 
       return executeSqlQueries(q, migrationQueries);
    }
+
    /**
     * \brief Main change is new Folder tables.  But we also add batch number to BrewNote.
     */
@@ -2832,8 +2830,16 @@ namespace {
          //     (if any) that contains this recipe etc.
          //
          migrationQueries.append({QString(
+            //
+            // Note that, when we are selecting a constant as a "dummy column", it's good practice to give it a name.
+            // And when we are selecting NULL as the value for such a column, it's good practice to give it a type, eg
+            // via CAST().  You can get away without this on SQLite, but PostgreSQL is often more fussy, giving an
+            // error along the lines of:
+            //
+            //    column "contained_in_folder_id" is of type integer but expression is of type text
+            //
             "INSERT INTO %1 (name, deleted, contained_in_folder_id) "
-            "SELECT DISTINCT folder, false, NULL FROM %2 "
+            "SELECT DISTINCT folder, false AS deleted, CAST(NULL AS integer) AS contained_in_folder_id FROM %2 "
             "WHERE folder IS NOT NULL AND folder != '' "
             "ORDER BY folder"
          ).arg(folderTable, baseTable)});
@@ -2967,7 +2973,7 @@ namespace {
                   // We'll insert with the full path here to keep names unique until we have all the IDs.
                   //
                   QString const insertFolderSql = QString("INSERT INTO %1 (name, deleted, contained_in_folder_id) "
-                                                          "VALUES (?, false, NULL)").arg(folderTable);
+                                                          "VALUES (?, false, CAST(NULL AS integer))").arg(folderTable);
                   if (!executeQuery(q, insertFolderSql, {parentPath})) {
                      // executeQuery will already have logged an error in this instance
                      return false;
