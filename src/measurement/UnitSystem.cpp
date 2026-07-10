@@ -502,17 +502,22 @@ namespace Measurement::UnitSystems {
                                    "color_Lovibond",
                                    Measurement::SystemOfMeasurement::Lovibond};
 
-   UnitSystem const density_SpecificGravity{PhysicalQuantity::Density,
+   UnitSystem const density_SpecificGravity{PhysicalQuantity::Gravity,
                                             &Measurement::Units::specificGravity,
                                             "density_SpecificGravity",
                                             Measurement::SystemOfMeasurement::SpecificGravity};
 
-   UnitSystem const density_Plato{PhysicalQuantity::Density,
+   UnitSystem const density_GravityPoints{PhysicalQuantity::Gravity,
+                                          &Measurement::Units::gravityPoints,
+                                          "density_GravityPoints",
+                                          Measurement::SystemOfMeasurement::GravityPoints};
+
+   UnitSystem const density_Plato{PhysicalQuantity::Gravity,
                                   &Measurement::Units::plato,
                                   "density_Plato",
                                   Measurement::SystemOfMeasurement::Plato};
 
-   UnitSystem const density_Brix{PhysicalQuantity::Density,
+   UnitSystem const density_Brix{PhysicalQuantity::Gravity,
                                   &Measurement::Units::brix,
                                   "density_Brix",
                                   Measurement::SystemOfMeasurement::Brix};
@@ -546,7 +551,7 @@ namespace Measurement::UnitSystems {
                                               "carbonation_MassPerVolume",
                                               Measurement::SystemOfMeasurement::CarbonationMassPerVolume};
 
-   UnitSystem const massFractionOrConc_Brewing{PhysicalQuantity::MassFractionOrConc,
+   UnitSystem const massFractionOrConc_Brewing{PhysicalQuantity::MassFractionOrConcentration,
                                                &Measurement::Units::partsPerMillionMass,
                                                "massFractionOrConc_Brewing",
                                                Measurement::SystemOfMeasurement::BrewingConcentration,

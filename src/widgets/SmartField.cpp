@@ -144,9 +144,9 @@ public:
       // similar.)
       Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->m_self.getTypeInfo().fieldType));
 
-      qDebug() <<
-         Q_FUNC_INFO << "enteredText:" << enteredText <<  ", old SystemOfMeasurement:" <<
-         previousScaleInfo.systemOfMeasurement << ", old RelativeScale: " << previousScaleInfo.relativeScale;
+//      qDebug() <<
+//         Q_FUNC_INFO << "enteredText:" << enteredText <<  ", old SystemOfMeasurement:" <<
+//         previousScaleInfo.systemOfMeasurement << ", old RelativeScale: " << previousScaleInfo.relativeScale;
 
       auto const physicalQuantity{this->m_self.settings().getPhysicalQuantity()};
       Measurement::UnitSystem const & unitSystem{

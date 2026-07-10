@@ -42,29 +42,41 @@ template<class Derived, class NeTableModel, class NeListModel>
 class SortFilterProxyModelBase : public CuriouslyRecurringTemplateBase<SortFilterProxyModelPhantom, Derived> {
 public:
    /**
-    * \param filter If \c true then we only show "displayable" items; if \c false then we show everything
+    * \param onlyShowDisplayable If \c true then we only show "displayable" items; if \c false then we show everything
     */
-   SortFilterProxyModelBase(bool filter) :
-      m_onlyShowDisplayable{filter} {
+   explicit SortFilterProxyModelBase(bool const onlyShowDisplayable) :
+      m_onlyShowDisplayable{onlyShowDisplayable} {
       return;
    }
 
    void setHideZeroInventoryItems(bool const val) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
-      //
       // New way, since Qt 6.10
-      //
       this->derived().beginFilterChange();
       this->m_hideZeroInventoryItems = val;
       this->derived().endFilterChange();
 #else
-      //
       // Old way will be deprecated in Qt 6.13
-      //
       this->m_hideZeroInventoryItems = val;
       this->derived().invalidateFilter();
 #endif
 
+      return;
+   }
+
+   void setAdditionalFilter(
+      std::optional<std::function<bool(typename NeTableModel::UnderlyingItem const & underlyingItem)>> additionalFilter
+   ) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+      // New way, since Qt 6.10
+      this->derived().beginFilterChange();
+      this->m_additionalFilter = additionalFilter;
+      this->derived().endFilterChange();
+#else
+      // Old way will be deprecated in Qt 6.13
+      this->m_additionalFilter = additionalFilter;
+      this->derived().invalidateFilter();
+#endif
       return;
    }
 
@@ -100,45 +112,49 @@ protected:
       // does all the work, this is actually almost no overhead.  The obvious alternative, of creating a common base
       // class from which ListModelBase and TableModelBase inherit, seems a fair bit of work in comparison!
       //
-      NeTableModel * tableModel = qobject_cast<NeTableModel *>(this->derived().sourceModel());
-      if (tableModel) {
-         QModelIndex index = tableModel->index(source_row, 0, source_parent);
 
-         if (this->m_onlyShowDisplayable && tableModel->getRow(source_row)->deleted()) {
-            // Row deleted, so reject
+      typename NeTableModel::UnderlyingItem const * underlyingItem = nullptr;
+      QString dataAsString = "";
+      if (NeTableModel * tableModel = qobject_cast<NeTableModel *>(this->derived().sourceModel())) {
+         underlyingItem = tableModel->getRow(source_row).get();
+         QModelIndex const index = tableModel->index(source_row, 0, source_parent);
+         dataAsString = tableModel->data(index).toString();
+
+      } else if (NeListModel* listModel = qobject_cast<NeListModel*>(this->derived().sourceModel())) {
+         underlyingItem = listModel->at(source_row);
+         QModelIndex const index = listModel->index(source_row, 0);
+         dataAsString = listModel->data(index).toString();
+
+      } else {
+         // It's a coding error if we get here!
+         qCritical() << Q_FUNC_INFO << "Unrecognised source model";
+         return true;
+      }
+
+      if (!underlyingItem) {
+         qWarning() << Q_FUNC_INFO << "Non-existent item at row" << source_row;
+         return true;
+      }
+
+      if (this->m_onlyShowDisplayable && underlyingItem->deleted()) {
+         // Row deleted, so reject
+         return false;
+      }
+
+      if constexpr (std::is_base_of_v<Ingredient, typename NeTableModel::UnderlyingItem>) {
+         if (this->m_hideZeroInventoryItems && !underlyingItem->isOnHand()) {
             return false;
          }
-
-         if constexpr (std::is_base_of_v<Ingredient, typename NeTableModel::UnderlyingItem>) {
-            if (this->m_hideZeroInventoryItems && !tableModel->getRow(source_row)->isOnHand()) {
-               return false;
-            }
-         }
-
-         // The filterRegularExpression() member function we call here is inherited from QSortFilterProxyModel
-         QRegularExpression const filterRegExp {this->derived().filterRegularExpression()};
-         QString const dataAsString {tableModel->data(index).toString()};
-         QRegularExpressionMatch const match {filterRegExp.match(dataAsString)};
-         return match.hasMatch();
       }
 
-      NeListModel* listModel = qobject_cast<NeListModel*>(this->derived().sourceModel());
-      if (listModel) {
-         auto listItem = listModel->at(source_row);
-         if (!listItem) {
-            qWarning() << Q_FUNC_INFO << "Non-existent item at row" << source_row;
-            return true;
-         }
-
-         //
-         // TBD: We should probably have the same logic here as for tablemodel -- maybe template it...?
-         //
-
-         return !listItem->deleted();
+      if (this->m_additionalFilter && !(*this->m_additionalFilter)(*underlyingItem)) {
+         return false;
       }
 
-      qWarning() << Q_FUNC_INFO << "Unrecognised source model";
-      return true;
+      // The filterRegularExpression() member function we call here is inherited from QSortFilterProxyModel
+      QRegularExpression const filterRegExp {this->derived().filterRegularExpression()};
+      QRegularExpressionMatch const match {filterRegExp.match(dataAsString)};
+      return match.hasMatch();
    }
 
    /**
@@ -147,15 +163,13 @@ protected:
     *      source model.
     */
    bool doLessThan(QModelIndex const & sourceLeft, QModelIndex const & sourceRight) const {
-      NeTableModel * tableModel = qobject_cast<NeTableModel *>(this->derived().sourceModel());
-      if (tableModel) {
+      if (NeTableModel * tableModel = qobject_cast<NeTableModel *>(this->derived().sourceModel())) {
          return tableModel->isLessThan(sourceLeft, sourceRight);
       }
-      NeListModel* listModel = qobject_cast<NeListModel*>(this->derived().sourceModel());
-      if (listModel) {
+      if (NeListModel* listModel = qobject_cast<NeListModel*>(this->derived().sourceModel())) {
          // List model is for a single column -- eg a combo box -- and we assume it's always a string
-         QVariant  leftItem = this->derived().data( sourceLeft);
-         QVariant rightItem = this->derived().data(sourceRight);
+         QVariant const  leftItem = this->derived().data( sourceLeft);
+         QVariant const rightItem = this->derived().data(sourceRight);
          return leftItem.toString() < rightItem.toString();
       }
       qWarning() << Q_FUNC_INFO << "Unrecognised source model";
@@ -209,6 +223,10 @@ private:
     * \brief This is only meaningful for Ingredients, but it's too much hassle to optimise it out for other types
     */
    bool m_hideZeroInventoryItems = false;
+
+   std::optional<
+      std::function<bool(typename NeTableModel::UnderlyingItem const & underlyingItem)>
+   > m_additionalFilter = std::nullopt;
 };
 
 

@@ -37,6 +37,7 @@
 #include <QString>
 
 #include "config.h"
+#include "utils/EnumStringMapping.h"
 #include "utils/NoCopy.h"
 
 class BtStringConst;
@@ -57,10 +58,21 @@ public:
    //! \brief Supported databases. I am not 100% sure I'm digging this
    //  solution, but this is more extensible than what I was doing previously
    enum class DbType {
-      NODB = 0,  // No Database -- a problem!
-      SQLITE,    // SQLite -- https://sqlite.org/
-      PGSQL,     // PostgreSQL -- https://www.postgresql.org/
+      // TODO: We should fix places in the code that rely on the actual values of this enum.  (Config file.)
+      None      = 0,  // No Database -- a problem!
+      SQLite    ,     // SQLite -- https://sqlite.org/
+      PostgreSQL,     // PostgreSQL -- https://www.postgresql.org/
    };
+
+   /*!
+    * \brief Mapping between \c Database::DbType and string values suitable for serialisation
+    */
+   static EnumStringMapping const dbTypeStringMapping;
+
+   /*!
+    * \brief Localised names of \c Database::DbType values suitable for displaying to the end user
+    */
+   static EnumStringMapping const dbTypeDisplayNames;
 
    //! The file name we use for our SQLite DB
    static QString const sqliteDbFileName;
@@ -68,10 +80,10 @@ public:
    /*!
     * \brief This should be the ONLY way you get an instance.
     *
-    * \param dbType Which type of database object you want to get.  If not specified (or set to Database::DbType::NODB) then
-    *               the default configured type will be returned
+    * \param dbType Which type of database object you want to get.  If not specified (or set to Database::DbType::None)
+    *               then the default configured type will be returned
     */
-   static Database& instance(Database::DbType dbType = Database::DbType::NODB);
+   static Database& instance(Database::DbType dbType = Database::DbType::None);
 
    /**
     * \brief Check for new default ingredients etc.  NB: This should be called \b after calling
@@ -148,11 +160,18 @@ public:
     */
    bool loadSuccessful();
 
-   //! \brief Figures out what databases we are copying to and from, opens what
-   //   needs opens and then calls the appropriate workhorse to get it done.
-   void convertDatabase(QString const& Hostname, QString const& DbName,
-                        QString const& Username, QString const& Password,
-                        int Portnum, Database::DbType newType);
+   /**
+    * \brief Figures out what databases we are copying to and from, opens what needs opens and then calls the
+    *        appropriate workhorse to get it done.
+    *
+    * \return \c true if succeeded, \c false if an error was encountered
+    */
+   [[nodiscard]] bool convertDatabase(QString const & hostname,
+                                      QString const & dbName,
+                                      QString const & username,
+                                      QString const & password,
+                                      int portNumber,
+                                      Database::DbType newType);
 
    /*!
     * \brief If we are supporting multiple databases, we need some way to
@@ -165,8 +184,12 @@ public:
    /**
     * \brief Turn foreign key constraints on or off.  Typically, turning them off is only required during copying the
     *        contents of one DB to another.
+    *
+    * \return \c true if succeeded, \c false if an error was encountered
     */
-   void setForeignKeysEnabled(bool enabled, QSqlDatabase connection, Database::DbType whichDb = Database::DbType::NODB);
+   [[nodiscard]] bool setForeignKeysEnabled(bool enabled,
+                                            QSqlDatabase connection,
+                                            Database::DbType whichDb = Database::DbType::None);
 
    /**
     * \brief For a given base type, return the typename to use for the corresponding columns when creating tables.
@@ -199,6 +222,14 @@ public:
     *           • foreign key column name as argument 4
     */
    char const * getSqlToAddColumnAsForeignKey() const;
+
+   /**
+    * \brief Returns either "" or "CASCADE" depending on whether the current database supports it.  (PostgreSQL does
+    *        and SQLite does not.)
+    *
+    *        This is needed in DatabaseSchemaHelper where we delete a table that has a foreign key to itself.
+    */
+   char const * getCascade() const;
 
    /**
     * \brief Returns a displayable set of name-value pairs for the connection details for the current database,

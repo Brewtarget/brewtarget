@@ -57,7 +57,7 @@ if (exe_pip is None or exe_pip == ''):
       'Cannot find pip (PATH=' + pathEnvVar + ') - please see https://pip.pypa.io/en/stable/installation/ for how to ' +
       'install'
    )
-   exit(1)
+   sys.exit(1)
 
 btLogger.log.info('Found pip at: ' + exe_pip)
 

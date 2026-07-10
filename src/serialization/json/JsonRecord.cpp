@@ -158,7 +158,7 @@ namespace {
       // as an enum of "EBC", "Lovi" and "SRM", schema validation will accept "srm" as valid.  AFAIK, it doesn't matter
       // if the case is "wrong" because there are no enums where members differ only by case.
       //
-      auto mapper = std::get<JsonMeasureableUnitsMapping const *>(fieldDefinition.valueDecoder);
+      auto const mapper = std::get<JsonMeasureableUnitsMapping const *>(fieldDefinition.valueDecoder);
       if (!mapper->containsUnit(unitName, JsonMeasureableUnitsMapping::MatchType::CaseInsensitive)) {
          qCritical() << Q_FUNC_INFO << "Unexpected unit name:" << std::string(unitName).c_str();
          // Stop here on debug build
@@ -805,11 +805,27 @@ void JsonRecord::insertValue(JsonRecordDefinition::FieldDefinition const & field
          // that is not specified.  But we keep the logic consistent here anyway.
          if (Optional::removeOptionalWrapperIfPresent<QString>(value, propertyIsOptional)) {
 
-            std::string valueAsString = value.toString().toStdString();
+            //
             // You might think there's no benefit in writing out a field for which we don't have a value.  However, some
             // string fields are required in the BeerJSON schema, which means a file won't validate if they are not
-            // present.
-            recordDataAsObject.emplace(key, valueAsString);
+            // present.  So, this is the default behaviour.  However, we sometimes need to override this (where an empty
+            // field should not be present) or do other validation.
+            //
+            // Note that valueDecoder is usually not set for String fields, but, if it is set, it's a coding error for
+            // it to be anything other than JsonRecordDefinition::StringOutputValidator.
+            //
+            std::optional<QString> valueAsQString = value.toString().trimmed();
+            if (!std::holds_alternative<std::monostate>(fieldDefinition.valueDecoder)) {
+               Q_ASSERT(std::holds_alternative<JsonRecordDefinition::StringOutputValidator>(fieldDefinition.valueDecoder));
+               auto const stringOutputValidator = std::get<JsonRecordDefinition::StringOutputValidator>(fieldDefinition.valueDecoder);
+               valueAsQString = stringOutputValidator(*valueAsQString);
+            }
+
+            if (valueAsQString) {
+               std::string valueAsStdString = valueAsQString->toStdString();
+               recordDataAsObject.emplace(key, valueAsStdString);
+            }
+
          }
          break;
 
@@ -819,7 +835,7 @@ void JsonRecord::insertValue(JsonRecordDefinition::FieldDefinition const & field
          // A non-optional enum should always be convertible to an int; and we always ensure that an optional one is
          // returned as std::optional<int> when accessed via the Qt property system.
          if (Optional::removeOptionalWrapperIfPresent<int>(value, propertyIsOptional)) {
-            auto match =
+            auto const match =
                std::get<EnumStringMapping const *>(fieldDefinition.valueDecoder)->enumAsIntToValue(value.toInt());
             // It's a coding error if we couldn't find a string representation for the enum
             Q_ASSERT(match);

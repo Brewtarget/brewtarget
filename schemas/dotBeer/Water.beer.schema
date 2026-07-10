@@ -1,0 +1,131 @@
+//======================================================================================================================
+// schema/Water.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+//   • Mark Price <shadowchao99@gmail.com>
+//   • Matt Young <mfsy@yahoo.com>
+//   • Ricardo Rosa <rmsrosa@gmail.com>
+//   • Yuriy Krutilin <y.krutilin@gmail.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/Water.beer.schema",
+  "type": "object",
+  "description": "Full definition of a water profile.",
+  "allOf": [
+    {
+      "$ref": "#/$defs/WaterBase"
+    },
+    {
+      "properties": {
+        "pH": {
+          "description": "Acidity of the water profile",
+          "$ref": "Measurement.beer.schema#/$defs/Acidity"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "MineralIonConcentrations": {
+      "type": "object",
+      "description": "Concentrations of various mineral ions of interest to brewers.",
+      "properties": {
+        "bicarbonate": {
+          "description": "Bicarbonate (HCO₃⁻) content of the water profile",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "calcium": {
+          "description": "Calcium (Ca²⁺) content of the water profile.  Calcium is by far the most influential mineral in the brewing process.  It is instrumental to many yeast, enzyme, and protein reactions, both in the mash and in the boil.  Yeast flocculation is improved by calcium; most yeast strains require at least 50 mg/L Ca²⁺ ions for good flocculation.  Calcium reacts with phosphates, forming precipitates that involve the release of hydrogen ions, in turn lowering the pH of the mash. ",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "carbonate": {
+          "description": "Carbonate (CO₃²⁻) content of the water profile.  Carbonate raises pH and can result in less fermentable worts (a higher dextrin/maltose ratio), unacceptable wort color values, difficulties in wort filtration, and less efficient separation of protein and protein-tannin elements during the hot and cold breaks.  High carbonate waters can affect hop flavor too: hop bitterness becomes increasingly harsher.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "chloride": {
+          "description": "Chloride (Cl⁻) content of the water profile.  Common in most water supplies, chloride ions contribute to the mellow, palate-full character of a beer.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "copper": {
+          "description": "Copper (Cu²⁺) content of the water profile.  In concentrations as low as 0.1 mg/L, copper ions can act as catalysts of oxidants, leading to irreversible beer haze.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "fluoride": {
+          "description": "Fluoride (F⁻) content of the water profile",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "iron": {
+          "description": "Iron (Fe²⁺) content of the water profile.  In large amounts, iron can contribute negative flavor characters (eg metallic and astringent) to beer.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "magnesium": {
+          "description": "Magnesium (Mg²⁺) content of the water profile.  Magnesium ions react similarly to calcium ions and malt phytins, but since magnesium salts are much more soluble, the effect on wort pH is not as great.  Magnesium is most important for its benefit to yeast metabolism during fermentation.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "manganese": {
+          "description": "Manganese (Mn²⁺) content of the water profile.  Manganese is important for proper enzyme action and has a positive action on protein solubilization and yeast.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "nitrate": {
+          "description": "Nitrate (NO₃⁻) content of the water profile.  Nitrate in and of itself, is not a problem; it has no effect on beer flavor or brewing reactions.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "nitrite": {
+          "description": "Nitrite (NO₂⁻) content of the water profile.  High nitrite levels may reduce the fermentation rate, dampen the rate of pH reduction, and give rise to higher levels of vicinal diketones.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "phosphate": {
+          "description": "Phosphate (PO₄³⁻) content of the water profile.  Phosphate compounds are important pH buffers in brewing and useful for reducing the pH in mashing and during the boil.  There are usually regulatory limits on the concentration of phosphates in potable water.  Most of the phosphate in beer is derived from malt, although phosphoric acid or acid phosphate salts may be used to adjust the pH or to release carbon dioxide from bicarbonate-rich waters.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "potassium": {
+          "description": "Potassium (K⁺) content of the water profile.  Like sodium, potassium can create a “salty” flavor effect.  It is required for yeast growth and inhibits certain mash enzymes at concentrations above 10 mg/L.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "sodium": {
+          "description": "Sodium (Na⁺) content of the water profile.  Although it has no chemical effect, sodium contributes to the perceived flavor of beer.  Levels from 75 to 150 mg/L give a round smoothness and accentuate sweetness, which is most pleasant when paired with chloride ions than when associated with sulfate ions.  In the presence of sulfate, sodium creates an unpleasant harshness, so the rule of thumb is that the more sulfate in the water, the less sodium there should be (and vice versa).",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "sulfate": {
+          "description": "Sulfate (SO₄²⁻) content of the water profile.  Sulfates positively affect protein and starch degradation, which favors mash filtration and trub sedimentation.  However, if levels are too high, it can cause poor hop utilization (bitterness will not easily be extracted).  In moderation, sulfates can lend a dry, crisp palate to the finished beer.  If used in excess, the finished beer will have a harsh, salty, and laxative character.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "zinc": {
+          "description": "Zinc (Zn²⁺) content of the water profile.  Zinc plays an important role in fermentation and has a positive action on protein synthesis and yeast growth.  It also affects flocculation and stabilizes foam (promoting lacing).",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        }
+      },
+      "required": [
+        "bicarbonate",
+        "calcium",
+        "chloride",
+        "magnesium",
+        "sodium",
+        "sulfate"
+      ]
+    },
+    "WaterBase": {
+      "type": "object",
+      "description": "Provides unique properties to identify individual records of brewing water.  NOTE that water is handled differently from other ingredients.  We don't model inventory of water, it doesn't have producers or product IDs, and the amounts needed in a recipe are already defined in its mash steps rather than by RecipeAddition amounts.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/MineralIonConcentrations"
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -79,6 +79,5 @@ void RecipeTreeView::spawnRecipe() {
 void RecipeTreeView::brewItHelper   () { MainWindow::instance().brewItHelper   (); return; }
 void RecipeTreeView::brewAgainHelper() { MainWindow::instance().brewAgainHelper(); return; }
 void RecipeTreeView::changeBrewDate () { MainWindow::instance().changeBrewDate (); return; }
-void RecipeTreeView::fixBrewLog    () { MainWindow::instance().fixBrewLog    (); return; }
 
 TREE_VIEW_COMMON_CODE(Recipe, BrewLog)

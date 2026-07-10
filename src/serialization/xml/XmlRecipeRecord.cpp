@@ -32,7 +32,6 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
-#include "model/RecipeUseOfWater.h"
 
 namespace {
    /**
@@ -248,7 +247,6 @@ void XmlRecipeRecord::subRecordToXml(XmlRecordDefinition::FieldDefinition const 
    if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::fermentableAdditions, &Recipe::fermentableAdditions)) { return; }
    if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::miscAdditions       , &Recipe::miscAdditions       )) { return; }
    if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::yeastAdditions      , &Recipe::yeastAdditions      )) { return; }
-   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::waterUses           , &Recipe::waterUses           )) { return; }
    if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::instructions        , &Recipe::instructions        )) { return; }
    if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::brewLogs            , &Recipe::brewLogs            )) { return; }
 

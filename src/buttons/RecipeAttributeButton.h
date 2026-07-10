@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * buttons/RecipeAttributeButton.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * buttons/RecipeAttributeButton.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -24,7 +24,6 @@
 #include <QVariant>
 
 #include "model/Recipe.h"
-#include "model/RecipeUseOfWater.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 
 //=============================================== RecipeAttributeButton ================================================

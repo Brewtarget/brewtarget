@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * qtModels/tableModels/StockUseYeastTableModel.h is part of Brewtarget, and is copyright the following authors 2025:
+ * qtModels/tableModels/StockUseYeastTableModel.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -13,8 +13,8 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  =====================================================================================================================*/
-#ifndef TABLEMODELS_INVENTORYCHANGEYEASTTABLEMODEL_H
-#define TABLEMODELS_INVENTORYCHANGEYEASTTABLEMODEL_H
+#ifndef TABLEMODELS_STOCKUSEYEASTTABLEMODEL_H
+#define TABLEMODELS_STOCKUSEYEASTTABLEMODEL_H
 #pragma once
 
 #include <QStyledItemDelegate>

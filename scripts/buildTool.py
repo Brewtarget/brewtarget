@@ -1049,7 +1049,7 @@ def doPackage():
             btLogger.log.critical(
                'Cannot find bin subdirectory of ' + btFileSystem.dir_packages_platform.as_posix() + ' packaging directory'
             )
-            exit(1)
+            sys.exit(1)
          if (len(packageBinDirList) > 1):
             btLogger.log.warning(
                'Found more than one bin subdirectory of ' + btFileSystem.dir_packages_platform.as_posix() +
@@ -1963,7 +1963,7 @@ def doPackage():
 
       case _:
          btLogger.log.critical('Unrecognised platform: ' + platform.system())
-         exit(1)
+         sys.exit(1)
 
    # If we got this far, everything must have worked
    print()
@@ -1997,4 +1997,4 @@ match args.subCommand:
    # If we get here, it's a coding error as argparse should have already validated the command line arguments
    case _:
       btLogger.log.error('Unrecognised command "' + command + '"')
-      exit(1)
+      sys.exit(1)

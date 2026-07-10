@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/BeerJson.h is part of Brewtarget, and is copyright the following authors 2021-2022:
+ * serialization/json/beerJson/BeerJson.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -12,9 +12,9 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef SERIALIZATION_JSON_BEERJSON_H
-#define SERIALIZATION_JSON_BEERJSON_H
+ =====================================================================================================================*/
+#ifndef SERIALIZATION_JSON_BEERJSON_BEERJSON_H
+#define SERIALIZATION_JSON_BEERJSON_BEERJSON_H
 #pragma once
 
 #include <memory> // For PImpl

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/SystemOfMeasurement.h is part of Brewtarget, and is copyright the following authors 2022-2025:
+ * measurement/SystemOfMeasurement.h is part of Brewtarget, and is copyright the following authors 2022-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -103,8 +103,14 @@ namespace Measurement {
       EuropeanBreweryConvention,
       Lovibond,
 
+      //
       // Density
+      //
+      // In the past, we did not support gravity points in the UI.  However, it's used in a few places in the
+      // calculations, so there seems no harm in treating it on a par with specific gravity.
+      //
       SpecificGravity,
+      GravityPoints,
       Plato,
       Brix,
 

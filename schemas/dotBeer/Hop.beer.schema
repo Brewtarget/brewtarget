@@ -1,0 +1,169 @@
+//======================================================================================================================
+// schema/Hop.beer.schema is part of DotBeer and is copyright the following authors 2018-2026:
+//   • John Jenkman <45741477+johnjenkman@users.noreply.github.com>
+//   • Mark Price <shadowchao99@gmail.com>
+//   • Matt Young <mfsy@yahoo.com>
+//   • Pierre Smits <pierre.smits@somonar.com>
+//   • Roman Eremin <roman.eremin@gmail.com> <roman.eremin@devexpress.com>
+//   • Yuriy Krutilin <y.krutilin@gmail.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/Hop.beer.schema",
+  "type": "object",
+  "title": "Hop",
+  "description": "Full definition of a hop variety.",
+  "allOf": [
+    {
+      "$ref": "#/$defs/HopBase"
+    },
+    {
+      "properties": {
+        "type": {
+          "enum": [
+            "aroma",
+            "bittering",
+            "flavor",
+            "aroma/bittering",
+            "bittering/flavor",
+            "aroma/flavor",
+            "aroma/bittering/flavor"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        },
+        "six_month_alpha_loss": {
+          "description": " Defined as the percentage of hop alpha lost in 6 months of storage.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "substitutes": {
+          "type": "string",
+          "description": "Alternate hop varieties that can be used in place of this hop variety"
+        },
+        "oil_content": {
+          "$ref": "#/$defs/OilContent"
+        },
+        "inventory": {
+          "$ref": "#/$defs/HopInventory"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "HopBase": {
+      "type": "object",
+      "title": "Base Hop Record",
+      "description": "Minimal properties to identify individual records of a hop variety.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "producer": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string",
+          "description": "Country of origin for the hop variety"
+        },
+        "year": {
+          "type": "string"
+        },
+        "form": {
+          "enum": [
+            "extract",
+            "leaf",
+            "leaf (wet)",
+            "pellet",
+            "powder",
+            "plug"
+          ]
+        },
+        "alpha_acid": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "beta_acid": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        }
+      },
+      "required": [
+        "name",
+        "alpha_acid"
+      ]
+    },
+    "HopInventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "oneOf": [
+            {
+              "$ref": "Measurement.beer.schema#/$defs/Volume"
+            },
+            {
+              "$ref": "Measurement.beer.schema#/$defs/Mass"
+            }
+          ]
+        }
+      }
+    },
+    "OilContent": {
+      "type": "object",
+      "description": "Collects all information of a hop variety pertaining to oil content, polyphenols, and thiols. Each individual compound is expressed as a percent of the total oil measurement.",
+      "properties": {
+        "total_oil_ml_per_100g": {
+          "description": "The total amount of oil, including hydrocarbons, esters, and terpene alcohols in units of ml of oil per 100g of hop mass.",
+          "type": "number"
+        },
+        "humulene": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "caryophyllene": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "cohumulone": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "myrcene": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "farnesene": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "geraniol": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "b_pinene": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "linalool": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "limonene": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "nerol": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "pinene": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "polyphenols": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "xanthohumol": {
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAdditionYeast.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/RecipeAdditionYeast.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -81,11 +81,11 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   RecipeAdditionYeast(QString name = "", int const recipeId = -1, int const ingredientId = -1);
-   RecipeAdditionYeast(NamedParameterBundle const & namedParameterBundle);
+   explicit RecipeAdditionYeast(QString name = "", int const recipeId = -1, int const ingredientId = -1);
+   explicit RecipeAdditionYeast(NamedParameterBundle const & namedParameterBundle);
    RecipeAdditionYeast(RecipeAdditionYeast const & other);
 
-   virtual ~RecipeAdditionYeast();
+   ~RecipeAdditionYeast() override;
 
    //=================================================== PROPERTIES ====================================================
    //! See \c RecipeAdditionBase for getter and setter

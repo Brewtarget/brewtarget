@@ -51,13 +51,13 @@ OgCorrectionTool::OgCorrectionTool(QWidget * parent) :
    QDialog{parent} {
    setupUi(this);
 
-   SMART_FIELD_INIT_FS   (OgCorrectionTool, label_targetOg        , value_targetOg        , double, Measurement::PhysicalQuantity::Density    , 3);
-   SMART_FIELD_INIT_FS   (OgCorrectionTool, label_measuredSg      , lineEdit_measuredSg   , double, Measurement::PhysicalQuantity::Density    , 3);
+   SMART_FIELD_INIT_FS   (OgCorrectionTool, label_targetOg        , value_targetOg        , double, Measurement::PhysicalQuantity::Gravity    , 3);
+   SMART_FIELD_INIT_FS   (OgCorrectionTool, label_measuredSg      , lineEdit_measuredSg   , double, Measurement::PhysicalQuantity::Gravity    , 3);
    SMART_FIELD_INIT_FS   (OgCorrectionTool, label_measuredTemp    , lineEdit_measuredTemp , double, Measurement::PhysicalQuantity::Temperature, 1);
    SMART_FIELD_INIT_FS   (OgCorrectionTool, label_calTemp         , lineEdit_calTemp      , double, Measurement::PhysicalQuantity::Temperature, 1);
    SMART_FIELD_INIT_FIXED(OgCorrectionTool, label_actualSg        , value_actualSg        , double, Measurement::Units::specificGravity       , 3);
    SMART_FIELD_INIT_FS   (OgCorrectionTool, label_preBoilVolume   , lineEdit_preBoilVolume, double, Measurement::PhysicalQuantity::Volume        );
-   SMART_FIELD_INIT_FS   (OgCorrectionTool, label_noActionOg      , value_noActionOg      , double, Measurement::PhysicalQuantity::Density    , 3);
+   SMART_FIELD_INIT_FS   (OgCorrectionTool, label_noActionOg      , value_noActionOg      , double, Measurement::PhysicalQuantity::Gravity    , 3);
    SMART_FIELD_INIT_FS   (OgCorrectionTool, label_changeBoilVolume, value_changeBoilVolume, double, Measurement::PhysicalQuantity::Volume        );
    SMART_FIELD_INIT_FS   (OgCorrectionTool, label_finalBatchSize  , value_finalBatchSize  , double, Measurement::PhysicalQuantity::Volume        );
    SMART_FIELD_INIT_FS   (OgCorrectionTool, label_addSugarOrDme   , value_addSugarOrDme   , double, Measurement::PhysicalQuantity::Mass       , 1);

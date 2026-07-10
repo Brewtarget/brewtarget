@@ -204,11 +204,6 @@ public slots:
    //! \brief Edit the Yeast in the selected Yeast addition.
    void editYeastOfSelectedYeastAddition();
 
-   //! \brief Remove selected Salt addition(s) from the Recipe.
-   void removeSelectedSaltAddition();
-   //! \brief Edit the Salt in the selected Salt addition.
-   void editSaltOfSelectedSaltAddition();
-
    void editRecipeEquipment();
    void editRecipeStyle();
    void editRecipeMash();
@@ -244,13 +239,9 @@ public slots:
    //! \brief Restore the database.
    void restoreFromBackup();
 
-   //! \brief makes sure we can do water chemistry before we show the window
-   void showWaterProfileAdjustmentTool();
-
    void brewItHelper();
    void brewAgainHelper();
    void changeBrewDate();
-   void fixBrewLog();
 
    void redisplayLabel();
 
@@ -261,7 +252,6 @@ public slots:
    void droppedRecipeHop        (QList<Hop         *> hops  );
    void droppedRecipeMisc       (QList<Misc        *> miscs );
    void droppedRecipeYeast      (QList<Yeast       *> yeasts);
-   void droppedRecipeSalt       (QList<Salt        *> miscs );
 
    void versionedRecipe(Recipe* descendant);
 

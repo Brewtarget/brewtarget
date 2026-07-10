@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/SmartValueDisplay.h is part of Brewtarget, and is copyright the following authors 2025:
+ * widgets/SmartValueDisplay.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -39,9 +39,8 @@ class SmartValueDisplay : public QLabel, public SmartField {
    Q_OBJECT
 
 public:
-
-   SmartValueDisplay(QWidget * parent);
-   virtual ~SmartValueDisplay();
+   explicit SmartValueDisplay(QWidget * parent);
+   ~SmartValueDisplay() override;
 
    virtual QString getRawText() const override;
    virtual void setRawText(QString const & text) override;

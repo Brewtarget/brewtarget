@@ -330,16 +330,20 @@ namespace ObjectStoreWrapper {
 
 
    /**
-    * \brief Called, eg, by \c Recipe, to set \c Mash, \c Boil, \c Fermentation, \c Style, \c Equipment, etc -- ie
-    *        things that the \c Recipe has at most one of.
+    * \brief Called, eg, by \c Recipe, to set \c Mash, \c Boil, \c Fermentation, \c Style, \c Equipment, etc.  These are
+    *        mostly things that the \c Recipe has at most one of.  However, we also have to deal with the case of
+    *        \c Water, where the \c Recipe has two of them.
     *
     * \param setter  The object making the request (eg the \c Recipe that wants the \c Boil)
     * \param val     The Mash/Boil/Fermentation/Style/Equipment to set
     * \param idVar   Reference to the setter's member variable storing the ID of Mash/Boil/Fermentation/Style/Equipment
     *
+    * \tparam OtherIdGetters  A list of pointers to getter functions for setter's other member variables that store IDs
+    *                         of \c NE objects.
+    *
     * \return \c true if something was changed; \c false otherwise
     */
-   template<class NE, class Setter>
+   template<class NE, class Setter, auto... OtherIdGetters>
    bool setRelational(Setter & setter, std::shared_ptr<NE> val, int & idVar) {
       if (!val && idVar < 0) {
          // No change (from "not set" to "not set")
@@ -357,8 +361,18 @@ namespace ObjectStoreWrapper {
          // We can disconnect signals from the old object here because we don't need to know what they are (or even
          // whether there were any).  However, it is the caller's responsibility to make any new connections.
          //
-         std::shared_ptr<NE> oldVal = ObjectStoreWrapper::getById<NE>(idVar);
-         setter.disconnect(oldVal.get(), nullptr, &setter, nullptr);
+         // Where the caller has more than one object of type NE (eg as in the case of Recipe with baseWater and
+         // targetWater), then we need to check the other member variables before we disconnect.
+         //
+         // The fold expression here just expands over all the OtherIdGetters.  Because we're using ||, the value of an
+         // empty pack is false, which is what we want.
+         //
+         bool const stillInUse = (((setter.*OtherIdGetters)() == idVar) || ...);
+         if (!stillInUse) {
+            std::shared_ptr<NE> oldVal = ObjectStoreWrapper::getById<NE>(idVar);
+            setter.disconnect(oldVal.get(), nullptr, &setter, nullptr);
+         }
+
       }
 
       if (!val) {

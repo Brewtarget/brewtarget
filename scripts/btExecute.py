@@ -21,6 +21,7 @@
 import logging
 import os
 import subprocess
+import sys
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Helper function for checking result of running external commands
@@ -45,6 +46,6 @@ def abortOnRunFail(runResult: subprocess.CompletedProcess):
          log.critical('Error running ' + commandName + ' (' + ' '.join(str(ii) for ii in runResult.args) + ')')
       if runResult.stderr:
          log.critical('stderr: ' + runResult.stderr.decode('UTF-8'))
-      exit(runResult.returncode)
+      sys.exit(runResult.returncode)
 
    return runResult

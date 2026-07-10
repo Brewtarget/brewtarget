@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/DbTransaction.h is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * database/DbTransaction.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ public:
     */
    DbTransaction(Database & database,
                  QSqlDatabase & connection,
-                 QString const nameForLogging = "???",
+                 QString const & nameForLogging = "???",
                  SpecialBehaviours specialBehaviours = NONE);
 
    /**

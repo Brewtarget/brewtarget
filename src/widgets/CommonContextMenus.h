@@ -35,7 +35,6 @@
 
 class BrewLog;
 class Ingredient;
-class Salt;
 class StockPurchase;
 class TreeView;
 
@@ -110,17 +109,6 @@ struct CommonContextMenus {
          this->addAndConnect(this->m_menu_primary, this->m_action_showStockPurchases, &Derived::showStockPurchases);
       }
 
-      if constexpr (!std::is_same_v<NE, Salt>) {
-         this->m_menu_primary.addSeparator();
-
-         // TBD: Export is sub-menu because we used to have export to HTML as an option.  We should look at whether/when
-         //      to bring that back.  Perhaps add export to PDF too?  Obvious link with printing...
-         this->m_menu_primary.addMenu(&this->m_menu_export);
-         this->addAndConnect(this->m_menu_export, this->m_action_exportToXmlOrJson, &Derived::exportSelected);
-
-         this->addAndConnect(this->m_menu_primary, this->m_action_import, &Derived::importFromFiles);
-      }
-
       //
       // Although "merge" logically belongs with New/Copy/Edit/Delete, it's a bit of an edge case (mostly for people
       // migrating from old versions of the software), so we put it at the bottom.
@@ -145,7 +133,6 @@ struct CommonContextMenus {
          if constexpr (std::is_same_v<SNE, BrewLog>) {
             this->addAndConnect(this->m_menu_secondary, this->m_action_brewAgain       , &Derived::brewAgainHelper);
             this->addAndConnect(this->m_menu_secondary, this->m_action_changeBrewDate  , &Derived::changeBrewDate );
-            this->addAndConnect(this->m_menu_secondary, this->m_action_recalcEfficiency, &Derived::fixBrewLog    );
          }
          this->addAndConnect(this->m_menu_secondary, this->m_action_deleteSecondary    , &Derived::deleteSelected);
       }
@@ -209,11 +196,6 @@ public:
          this->m_action_showStockPurchases.setText(Derived::tr("Show stock purchases"));
       }
 
-      if constexpr (!std::is_same_v<NE, Salt>) {
-         this->m_menu_export.setTitle(Derived::tr("Export"));
-         this->m_action_exportToXmlOrJson.setText(Derived::tr("To File (BeerXML or BeerJSON)"));
-      }
-
       this->m_action_import.setText(Derived::tr("Import (from BeerXML or BeerJSON)"));
 
       if constexpr (!std::disjunction_v<std::is_same<NE, Recipe>, std::is_base_of<StockPurchase, NE>>) {
@@ -234,7 +216,6 @@ public:
          if constexpr (std::is_same_v<SNE, BrewLog>) {
             this->m_action_brewAgain       .setText(Derived::tr("Brew again"            ));
             this->m_action_changeBrewDate  .setText(Derived::tr("Change date"           ));
-            this->m_action_recalcEfficiency.setText(Derived::tr("Recalculate efficiency"));
          }
          this->m_action_deleteSecondary.setText(Derived::tr("Delete"));
       }
@@ -273,7 +254,6 @@ public:
                static_assert(std::same_as<SNE, BrewLog>);
                this->m_action_brewAgain       .setEnabled(1 == selected.numSecondary);
                this->m_action_changeBrewDate  .setEnabled(1 == selected.numSecondary);
-               this->m_action_recalcEfficiency.setEnabled(1 == selected.numSecondary);
             }
          }
       } else {
@@ -442,15 +422,24 @@ public:
     * @param items
     */
    void exportItems(QList<NE const *> const & items) const {
+      if (items.empty()) {
+         // Ideally we should have greyed out export if there was nothing to export, but this is belt-and-braces
+         QMessageBox nothingSelectedMessageBox;
+         nothingSelectedMessageBox.setIcon(QMessageBox::Warning);
+         nothingSelectedMessageBox.setWindowTitle(Derived::tr("Nothing to Export"));
+         nothingSelectedMessageBox.setText(Derived::tr("Nothing is selected or none of the selected things can be exported"));
+         nothingSelectedMessageBox.exec();
+         return;
+      }
       //
-      // Neither salts nor inventory records form any part of BeerXML or BeerJSON
+      // Neither water adjustments nor inventory records form any part of BeerXML or BeerJSON
       //
-      if constexpr (!std::disjunction_v<std::is_same<NE, Salt>, std::is_base_of<StockPurchase, NE>>) {
+      // TODO: We should allow them to export to DotBeer files though
+      //
+      if constexpr (!std::is_base_of_v<StockPurchase, NE>) {
          bool const success = ImportExport::exportToFile(items);
-         QMessageBox messageBox;
-         messageBox.setIcon(success ? QMessageBox::Information : QMessageBox::Warning);
-         messageBox.setWindowTitle(success ? Derived::tr("Export Succeeded") : Derived::tr("Export Failed"));
-         messageBox.exec();
+         // We don't need a message box here, as ImportExport will already have shown one
+         qDebug() << Q_FUNC_INFO << "Export result:" << success;
       }
       return;
    }
@@ -776,8 +765,7 @@ public:
    [[no_unique_address]] std::conditional_t<std::is_same_v<NE, Recipe>, Empty, QAction> m_action_addToRecipe;
 
    QMenu m_menu_export;
-   // Salts aren't part of the BeerXML or BeerJSON standards, so they are the one ingredient you can't export
-   [[no_unique_address]] std::conditional_t<std::is_same_v<NE, Salt>, Empty, QAction> m_action_exportToXmlOrJson;
+   QAction m_action_exportToXmlOrJson;
 
    QAction m_action_import;
    [[no_unique_address]] std::conditional_t<
@@ -795,7 +783,6 @@ public:
    [[no_unique_address]] std::conditional_t<IsVoid<SNE>, Empty, QMenu> m_menu_secondary;
    [[no_unique_address]] std::conditional_t<!std::is_same_v<SNE, BrewLog>, Empty, QAction> m_action_brewAgain;
    [[no_unique_address]] std::conditional_t<!std::is_same_v<SNE, BrewLog>, Empty, QAction> m_action_changeBrewDate;
-   [[no_unique_address]] std::conditional_t<!std::is_same_v<SNE, BrewLog>, Empty, QAction> m_action_recalcEfficiency;
    [[no_unique_address]] std::conditional_t<IsVoid<SNE>, Empty, QAction> m_action_deleteSecondary;
 
 };

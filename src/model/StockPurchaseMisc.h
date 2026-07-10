@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * model/StockPurchaseMisc.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/StockPurchaseMisc.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -42,8 +42,8 @@ class StockPurchaseMiscEditor;
  * \brief StockPurchase of \c Misc
  */
 class StockPurchaseMisc : public StockPurchase,
-                      public IngredientAmount<StockPurchaseMisc, Misc>,
-                      public StockPurchaseBase   <StockPurchaseMisc, Misc, StockUseMisc> {
+                          public IngredientAmount<StockPurchaseMisc, Misc>,
+                          public StockPurchaseBase<StockPurchaseMisc, Misc, StockUseMisc> {
    Q_OBJECT
 
    INGREDIENT_AMOUNT_DECL(StockPurchaseMisc, Misc)

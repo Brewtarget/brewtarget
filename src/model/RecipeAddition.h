@@ -81,9 +81,8 @@ AddPropertyName(duration_mins  )
  *                             Hop                                RecipeAdditionHop
  *
  *        NOTE: We handle \c Water differently than other ingredients / additions because it has a lot less in common
- *              with them.  There is no stage/step/time/etc info (because that is implied by the mash schedule).  A
- *              \c Water addition in a \c Recipe essentially just says how much water of a particular profile that
- *              recipe uses.  Hence we have \c RecipeUseOfWater not \c RecipeAdditionWater.
+ *              with them.  There is no stage/step/time/etc info (because that is implied by the mash schedule).  And it
+ *              is rare that a brewer would want to use multiple different water profiles in the same recipe.
  */
 class RecipeAddition : public OwnedByRecipe {
    Q_OBJECT

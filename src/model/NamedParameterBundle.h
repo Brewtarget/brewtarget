@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/NamedParameterBundle.h is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * model/NamedParameterBundle.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -130,7 +130,7 @@ public:
     * \param defaultValue  What to return if the parameter is not present in the bundle
     */
    template <class T> T val(BtStringConst const & propertyName, T const & defaultValue) const {
-      // Of course it's a coding error to request a parameter without a name!
+      // Of course, it's a coding error to request a parameter without a name!
       Q_ASSERT(!propertyName.isNull());
       if (!this->m_parameters.contains(*propertyName)) {
          return defaultValue;
@@ -148,7 +148,7 @@ private:
    // they always return a copy of the contained value, which we especially don't want to do for m_containedBundles.
    // The C++ standard library counterparts, std::map and std::unordered_map, are preferable for our use here as they
    // return objects by reference (and the references stay valid provided the entries to which they refer are not
-   // removed from the map.
+   // removed from the map).
    //
    // I haven't done the profiling, but, for the relatively small number of entries we're storing (a few dozen at most),
    // I'd imagine there's not a huge overall performance difference between std::map and std::unordered_map.  We can

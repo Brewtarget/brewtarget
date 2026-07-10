@@ -1,0 +1,78 @@
+//======================================================================================================================
+// schema/Boil.beer.schema is part of DotBeer and is copyright the following authors 2018-2026:
+//   • Mark Price <shadowchao99@gmail.com>
+//   • Matt Young <mfsy@yahoo.com>
+//   • Yuriy Krutilin <y.krutilin@gmail.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/Boil.beer.schema",
+  "type": "object",
+  "description": "A boil procedure, which can be used by multiple recipes.  A boil procedure with no steps is the same as a standard single step boil.",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "boil_description": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "pre_boil_size": {
+      "$ref": "Measurement.beer.schema#/$defs/Volume"
+    },
+    "boil_time": {
+      "$ref": "Measurement.beer.schema#/$defs/Time"
+    },
+    "boil_steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/BoilStep"
+      }
+    }
+  },
+  "required": [
+    "boil_time"
+  ],
+  "$defs": {
+    "BoilStep": {
+      "type": "object",
+      "description": "Individual step of a boil, including preboil steps, non-boiling pasteurization steps, boiling, whirlpool steps, and chilling.",
+      "allOf": [
+        {
+          "$ref": "StepCommon.beer.schema#/$defs/StepBase"
+        },
+        {
+          "$ref": "StepCommon.beer.schema#/$defs/StepWithRampTime"
+        },
+        {
+          "$ref": "StepCommon.beer.schema#/$defs/StepWithGravity"
+        },
+        {
+          "properties": {
+            "chilling_type": {
+              "description": "Chilling type separates batch chilling, eg immersion chillers, where the entire volume of wort is brought down in temperature as a whole, vs inline chilling where the wort is chilled while it is being drained, which can leave a significant amount of hop isomerization occurring in the boil kettle.",
+              "type": "string",
+              "enum": [
+                "batch",
+                "inline"
+              ]
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false, // NB: Best to use this rather than additionalProperties when composing with allOf
+      "required": [
+        "name"
+      ]
+    }
+  }
+}

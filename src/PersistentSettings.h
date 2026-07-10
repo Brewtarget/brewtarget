@@ -76,7 +76,6 @@ AddSettingName(geometry_fermentationCatalog)  // MainWindow section
 AddSettingName(geometry_hopCatalog         )  // MainWindow section
 AddSettingName(geometry_mashCatalog        )  // MainWindow section
 AddSettingName(geometry_miscCatalog        )  // MainWindow section
-AddSettingName(geometry_saltCatalog        )  // MainWindow section
 AddSettingName(geometry_styleCatalog       )  // MainWindow section
 AddSettingName(geometry_waterCatalog       )  // MainWindow section
 AddSettingName(geometry_yeastCatalog       )  // MainWindow section
@@ -111,15 +110,13 @@ AddSettingName(uiState_fermentationCatalog)  // MainWindow section
 AddSettingName(uiState_hopCatalog         )  // MainWindow section
 AddSettingName(uiState_mashCatalog        )  // MainWindow section
 AddSettingName(uiState_miscCatalog        )  // MainWindow section
-AddSettingName(uiState_saltCatalog        )  // MainWindow section
 AddSettingName(uiState_styleCatalog       )  // MainWindow section
 AddSettingName(uiState_waterCatalog       )  // MainWindow section
 AddSettingName(uiState_yeastCatalog       )  // MainWindow section
-AddSettingName(uiState_stockManagerFermentable) // StockWindow section
-AddSettingName(uiState_stockManagerHop        ) // StockWindow section
-AddSettingName(uiState_stockManagerMisc       ) // StockWindow section
-AddSettingName(uiState_stockManagerSalt       ) // StockWindow section
-AddSettingName(uiState_stockManagerYeast      ) // StockWindow section
+AddSettingName(uiState_stockManagerFermentable    ) // StockWindow section
+AddSettingName(uiState_stockManagerHop            ) // StockWindow section
+AddSettingName(uiState_stockManagerMisc           ) // StockWindow section
+AddSettingName(uiState_stockManagerYeast          ) // StockWindow section
 AddSettingName(UserDataDirectory)
 AddSettingName(versioning)
 AddSettingName(windowState)
@@ -136,7 +133,6 @@ AddSettingSection(MainWindow)
 AddSettingSection(mashStepTableModel)
 AddSettingSection(miscTable)
 AddSettingSection(miscTableModel)
-AddSettingSection(saltTable)
 AddSettingSection(yeastTable)
 AddSettingSection(yeastTableModel)
 AddSettingSection(StockWindow)
@@ -160,6 +156,8 @@ AddSettingSection(StockWindow)
  *        PersistentSettings::Names::foobar etc above
  */
 namespace PersistentSettings {
+
+   int constexpr latestConfigVersion = 1;
 
    /**
     * \brief Sets up where persistent settings are stored.  This needs to be called \b after calls to

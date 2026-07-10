@@ -70,12 +70,11 @@ template<class Derived, class NE> class TableModelBase; // This forward declarat
  *                            /      MashStepTableModel      /
  *                           /         MiscTableModel       /
  *                          /         YeastTableModel      /
- *                         /           SaltTableModel     /
- *                        /           WaterTableModel    /
- *                       /                              /
- *              BtTableModelRecipeObserver             /
- *                                    \               /
- *                                     \             /
+ *                         /           WaterTableModel    /
+ *                        /                              /
+ *              BtTableModelRecipeObserver              /
+ *                                    \                /
+ *                                     \              /
  *                     RecipeAdditionFermentableTableModel
  *                        RecipeAdditionHopTableModel
  *                        RecipeAdditionMiscTableModel

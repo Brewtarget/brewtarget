@@ -35,10 +35,10 @@ namespace DatabaseSchemaHelper {
    extern int const latestVersion;
 
    //! \brief Get where we are up to with default content files
-   int getDefaultContentVersionFromDb(QSqlDatabase & db);
+   int getDefaultContentVersionFromDb(QSqlDatabase const & db);
 
    //! \brief Set where we are up to with default content files
-   bool setDefaultContentVersionFromDb(QSqlDatabase & db, int val);
+   bool setDefaultContentVersionFromDb(QSqlDatabase const & db, int val);
 
    /*!
     * \brief Create a blank database whose schema version is \c dbVersion
@@ -55,8 +55,12 @@ namespace DatabaseSchemaHelper {
    //! \brief Current schema version of the given database
    int schemaVersion(QSqlDatabase & db);
 
-   //! \brief does the heavy lifting to copy the contents from one db to the next
-   bool copyToNewDatabase(Database & newDatabase, QSqlDatabase & connectionNew);
+   /**
+    * \brief does the heavy lifting to copy the contents from one db to the next
+    *
+    * \return \c true if succeeded, \c false if an error was encountered
+    */
+   [[nodiscard]] bool copyToNewDatabase(Database & newDatabase, QSqlDatabase & connectionNew);
 }
 
 #endif

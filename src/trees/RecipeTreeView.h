@@ -60,7 +60,6 @@ public slots:
    void brewItHelper();
    void brewAgainHelper();
    void changeBrewDate();
-   void fixBrewLog();
 
 signals:
    void recipeSpawn(Recipe * descendant);

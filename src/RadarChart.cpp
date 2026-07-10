@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RadarChart.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * RadarChart.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -26,8 +26,9 @@
 
 // Internal constants
 namespace {
-   struct ColorAndObject{
+   struct LineStyleAndObject{
       QColor color;
+      Qt::PenStyle penStyle;
       NamedEntity const * object;
    };
 
@@ -35,9 +36,9 @@ namespace {
    //
    // For <cmath> functions, angles are all in radians, and the "natural" coordinate system measures anti-clockwise
    // starting from 3 o'clock as 0rad.  There are 2π radians in a circle.
-   double const RadiansInACircle = 2 * std::numbers::pi;
+   double constexpr RadiansInACircle = 2 * std::numbers::pi;
 
-   double const StartingAngleInRadians = RadiansInACircle / 4;
+   double constexpr StartingAngleInRadians = RadiansInACircle / 4;
 
    // QFonts are specified in point size, so the hard-coded numbers are fine here, even on HDPI displays
    // Note that if QFont::Black is specified as third parameter to QFont constructor, it is a weight (beyond ExtraBold)
@@ -54,7 +55,7 @@ namespace {
 
    // The colors differ for different series, but the other pen attributes are the same
    QBrush const allSeriesBrush{Qt::SolidPattern};
-   const int allSeriesLineWidth   = 4;
+   int constexpr allSeriesLineWidth = 4;
    QPen const allSeriesPen{allSeriesBrush, allSeriesLineWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin};
 }
 
@@ -65,7 +66,7 @@ public:
    /**
     * Constructor
     */
-   impl() : variableNames{}, allSeries{} {
+   impl() {
       return;
    }
 
@@ -79,30 +80,30 @@ public:
     */
    void updateMaxAxisValue() {
       double maxInAllSeries = 0.0;
-      for (auto const & currSeries : std::as_const(this->allSeries)) {
+      for (auto const & currSeries : std::as_const(this->m_allSeries)) {
          // It's a coding error if we have a series with a null pointer.  (If the object has gone away, we should remove
          // the series.)
          Q_ASSERT(currSeries.object);
-         auto maxVariableInThisSeries = std::max_element(
-            this->variableNames.begin(),
-            this->variableNames.end(),
-            [currSeries] (RadarChart::VariableName const lhs, RadarChart::VariableName const rhs) {
+         auto const maxVariableInThisSeries = std::ranges::max_element(
+            this->m_variableNames,
+            [currSeries] (RadarChart::VariableName const & lhs, RadarChart::VariableName const & rhs) {
                return (currSeries.object->property(*lhs.propertyName).toDouble() <
-                       currSeries.object->property(*rhs.propertyName).toDouble());
+                  currSeries.object->property(*rhs.propertyName).toDouble());
             }
          );
 
-         maxInAllSeries = std::max(maxInAllSeries,
-                                   currSeries.object->property(*maxVariableInThisSeries->propertyName).toDouble());
+         double const maxValueInThisSeries =
+            currSeries.object->property(*maxVariableInThisSeries->propertyName).toDouble();
+         maxInAllSeries = std::max(maxInAllSeries, maxValueInThisSeries);
       }
 
       // Now round up maxInAllSeries to the nearest multiple of this->axisMarkInterval.  If the result is zero (because
       // maxInAllSeries was zero), then set this->maxAxisValue to this->axisMarkInterval
-      this->maxAxisValue =
-         std::max(ceil(maxInAllSeries / this->axisMarkInterval) * this->axisMarkInterval, this->axisMarkInterval);
+      this->m_maxAxisValue =
+         std::max(ceil(maxInAllSeries / this->m_axisMarkInterval) * this->m_axisMarkInterval, this->m_axisMarkInterval);
 
       // It's a programming error if we haven't managed to set a positive max axis value
-      Q_ASSERT(this->maxAxisValue > 0);
+      Q_ASSERT(this->m_maxAxisValue > 0);
       return;
    }
 
@@ -110,7 +111,7 @@ public:
     * @brief Convert canonical polar coordinates to Qt Cartesian coordinates (which NB are upside-down from canonical
     *        Cartesian coordinates: in Qt, the x-axis grows to the right and the y-axis grows downwards).
     */
-   QPointF polarToQtCartesian(double radial, double angular) {
+   static QPointF polarToQtCartesian(double const radial, double const angular) {
       return QPointF(radial * cos(angular), -radial * sin(angular));
    }
 
@@ -121,18 +122,19 @@ public:
       return 360.0 * radians / RadiansInACircle;
    }
 
-   QString unitsName;
-   double axisMarkInterval;
-   QVector<RadarChart::VariableName> variableNames;
-   QHash<QString, ColorAndObject > allSeries;
+   //============================================== impl member variables ==============================================
+   QString m_unitsName = "";
+   double  m_axisMarkInterval = 0.0;
+   QVector<RadarChart::VariableName> m_variableNames;
+   QHash<QString, LineStyleAndObject > m_allSeries;
 
    // Angle in radians between the radii (aka spokes aka axes)
    // Calculated in RadarChart::init()
-   double angleInRadiansBetweenAxes;
+   double m_angleInRadiansBetweenAxes = 0.0;
 
    // The smallest multiple of axisMarkInterval that is greater than or equal to the maximum value of any point on the
    // graph.  Used to size/scale the axes (aka radii aka spokes)
-   double maxAxisValue;
+   double m_maxAxisValue = 0.0;
 
 };
 
@@ -146,13 +148,13 @@ RadarChart::RadarChart(QWidget * parent) : QWidget(parent),
 RadarChart::~RadarChart() = default;
 
 
-void RadarChart::init(QString const unitsName,
-                      double axisMarkInterval,
+void RadarChart::init(QString const & unitsName,
+                      double const axisMarkInterval,
                       QVector<RadarChart::VariableName> const variableNames) {
-   this->pimpl->unitsName = unitsName;
-   this->pimpl->axisMarkInterval = axisMarkInterval;
-   this->pimpl->maxAxisValue     = axisMarkInterval; // Starting assumption before we have any data
-   this->pimpl->variableNames = variableNames;
+   this->pimpl->m_unitsName = unitsName;
+   this->pimpl->m_axisMarkInterval = axisMarkInterval;
+   this->pimpl->m_maxAxisValue     = axisMarkInterval; // Starting assumption before we have any data
+   this->pimpl->m_variableNames = variableNames;
 
    // It's a programming error to supply a zero or negative axis interval
    Q_ASSERT(axisMarkInterval > 0);
@@ -160,19 +162,22 @@ void RadarChart::init(QString const unitsName,
    // It's a programming error to supply an empty vector to this function
    Q_ASSERT(variableNames.size() > 0);
 
-   this->pimpl->angleInRadiansBetweenAxes = RadiansInACircle / variableNames.size();
+   this->pimpl->m_angleInRadiansBetweenAxes = RadiansInACircle / variableNames.size();
 
    qDebug() <<
-      Q_FUNC_INFO << "axisMarkInterval:" << this->pimpl->axisMarkInterval << "; maxAxisValue:" <<
-      this->pimpl->maxAxisValue;
+      Q_FUNC_INFO << "axisMarkInterval:" << this->pimpl->m_axisMarkInterval << "; maxAxisValue:" <<
+      this->pimpl->m_maxAxisValue;
    return;
 }
 
-void RadarChart::addSeries(QString name, QColor color, NamedEntity const & object) {
+void RadarChart::addSeries(QString const & name,
+                           NamedEntity const & object,
+                           QColor const color,
+                           Qt::PenStyle const penStyle) {
 
    // Can't store an object or a reference in a hash, but we can store a pointer
    // (Still good to have the object passed in by reference as it saves having to check/assert for null pointers.)
-   this->pimpl->allSeries.insert(name, {color, &object});
+   this->pimpl->m_allSeries.insert(name, {color, penStyle, &object});
    qDebug() <<
       Q_FUNC_INFO << "Added" << name << object.metaObject()->className() << "#" << object.key() << ":" << object.name();
    // We deliberately don't replot here because the caller might need to make further calls before it is OK to redraw
@@ -180,9 +185,9 @@ void RadarChart::addSeries(QString name, QColor color, NamedEntity const & objec
    return;
 }
 
-void RadarChart::removeSeries(QString name) {
+void RadarChart::removeSeries(QString const & name) {
    // It doesn't matter if the series is not present - QHash remove will just return false, but nothing bad happens
-   this->pimpl->allSeries.remove(name);
+   this->pimpl->m_allSeries.remove(name);
    qDebug() << Q_FUNC_INFO << "Removed" << name;
    // We deliberately don't replot here because the caller might need to make further calls before it is OK to redraw
    // the graph.
@@ -203,7 +208,7 @@ void RadarChart::paintEvent(QPaintEvent *event) {
 
    // This is a bit of a rule of thumb.  Allowing the exact space for the chart and its axis labels would be a hard
    // sum.  This works for short labels.
-   double axisLengthInPixels = std::min(this->width(), this->height()) / 3;
+   double const axisLengthInPixels = std::min(this->width(), this->height()) / 3;
 
    QPainter painter(this);
    painter.setRenderHint(QPainter::Antialiasing);
@@ -212,12 +217,12 @@ void RadarChart::paintEvent(QPaintEvent *event) {
    //
    // Draw and label the axes lines
    //
-   QPointF origin{};
+   QPointF constexpr origin{};
    painter.setFont(axisLabelFont);
    painter.setPen(axisPen);
-   for (int ii = 0; ii < this->pimpl->variableNames.size(); ++ii) {
+   for (int ii = 0; ii < this->pimpl->m_variableNames.size(); ++ii) {
       // The <cmath> functions won't mind the angle being more than 2π
-      double angleInRadians = StartingAngleInRadians + ii * this->pimpl->angleInRadiansBetweenAxes;
+      double const angleInRadians = StartingAngleInRadians + ii * this->pimpl->m_angleInRadiansBetweenAxes;
 
       QPointF axisEnd = this->pimpl->polarToQtCartesian(axisLengthInPixels, angleInRadians);
       painter.drawLine(origin, axisEnd);
@@ -242,13 +247,13 @@ void RadarChart::paintEvent(QPaintEvent *event) {
       // Get a rectangle of the size necessary to contain the label text
       QRectF axisLabelRect = painter.boundingRect(QRectF(),
                                                   alignFlags,
-                                                  this->pimpl->variableNames[ii].displayName);
+                                                  this->pimpl->m_variableNames[ii].displayName);
       // If we're in the bottom-right quadrant, then the coordinates of the axis end are also good for the text
       // rectangle.  If not, it needs correcting.
-      double labelX = axisEnd.x() - (axisEnd.x() <  0 ? axisLabelRect.width() : 0);
-      double labelY = axisEnd.y() - (axisEnd.y() <= 0 ? axisLabelRect.height() : 0);
+      double const labelX = axisEnd.x() - (axisEnd.x() <  0 ? axisLabelRect.width() : 0);
+      double const labelY = axisEnd.y() - (axisEnd.y() <= 0 ? axisLabelRect.height() : 0);
       axisLabelRect.moveTo(labelX, labelY);
-      painter.drawText(axisLabelRect, alignFlags, this->pimpl->variableNames[ii].displayName);
+      painter.drawText(axisLabelRect, alignFlags, this->pimpl->m_variableNames[ii].displayName);
    }
 
    // TODO Maybe different weight for outer circle?
@@ -260,28 +265,50 @@ void RadarChart::paintEvent(QPaintEvent *event) {
    // the height of the font is a sensible minimum spacing for the circles, otherwise the value marks look too squashed
    // in.
    //
-   QFontMetrics axisValueFontMetrics(axisValueFont);
-   int minPixelDistanceBetweenCircles = 1.5 * axisValueFontMetrics.lineSpacing();
-   int basePixelDistanceBetweenCircles = axisLengthInPixels * this->pimpl->axisMarkInterval / this->pimpl->maxAxisValue;
-   Q_ASSERT(basePixelDistanceBetweenCircles > 0);
-   int pixelDistanceBetweenCircles = basePixelDistanceBetweenCircles;
-   int valueDifferenceBetweenCircles = this->pimpl->axisMarkInterval;
-   while (pixelDistanceBetweenCircles < minPixelDistanceBetweenCircles) {
-      pixelDistanceBetweenCircles += basePixelDistanceBetweenCircles;
-      valueDifferenceBetweenCircles += this->pimpl->axisMarkInterval;
-   }
-   int numCircles = axisLengthInPixels / pixelDistanceBetweenCircles;
+   // Although we are ultimately looking for an integer, we need to do the sums in floating point to handle extreme
+   // cases, such as where pimpl->m_maxAxisValue is so large that
+   // `axisLengthInPixels * pimpl->m_axisMarkInterval / pimpl->m_maxAxisValue` would round to 0 in integer arithmetic.
+   //
+   // In principle we want the smallest positive integer n, such that:
+   //
+   //    n × (axisLengthInPixels × pimpl->m_axisMarkInterval / pimpl->m_maxAxisValue) >= minPixelDistanceBetweenCircles
+   //
+   // In other words:
+   //
+   //           minPixelDistanceBetweenCircles × pimpl->m_maxAxisValue
+   //    n  >=  ------------------------------------------------------
+   //              axisLengthInPixels × pimpl->m_axisMarkInterval
+   //
+   // Once we found this n, then:
+   //                                  n × axisLengthInPixels × pimpl->m_axisMarkInterval
+   //    pixelDistanceBetweenCircles = --------------------------------------------------
+   //                                               pimpl->m_maxAxisValue
+   //
+   // We use the variable 'multiplier' in the code to represent 'n' in the equations above.
+   //
+   QFontMetrics const axisValueFontMetrics(axisValueFont);
+   int const minPixelDistanceBetweenCircles = 1.5 * axisValueFontMetrics.lineSpacing();
+   double const multiplier = std::ceil(
+      (static_cast<double>(minPixelDistanceBetweenCircles) * this->pimpl->m_maxAxisValue) /
+         (static_cast<double>(axisLengthInPixels) * this->pimpl->m_axisMarkInterval)
+   );
+   Q_ASSERT(multiplier >= 1);
+   int const pixelDistanceBetweenCircles =
+      multiplier * static_cast<double>(axisLengthInPixels) * this->pimpl->m_axisMarkInterval /
+      this->pimpl->m_maxAxisValue;
+   int const valueDifferenceBetweenCircles = multiplier * this->pimpl->m_axisMarkInterval;
+   int const numCircles = axisLengthInPixels / pixelDistanceBetweenCircles;
 
    //
    // We want to rotate the canvas to put the value markers on the circle at a jaunty angle.  This has to be
    // done in degrees rather than radians.  The specific jaunty angle we want is half-way between two of the axes.
    //
    painter.save();
-   painter.rotate(this->pimpl->radiansToDegrees(this->pimpl->angleInRadiansBetweenAxes / 2));
+   painter.rotate(this->pimpl->radiansToDegrees(this->pimpl->m_angleInRadiansBetweenAxes / 2));
    painter.setFont(axisValueFont);
 
    for (int jj = 1; jj <= numCircles; ++jj) {
-      double radius = jj * pixelDistanceBetweenCircles;
+      double const radius = jj * pixelDistanceBetweenCircles;
       // Drawing a circle in Qt is a bit convoluted because you have to start with the bounding rectangle
       // Then you have to draw an arc whose angle is measured in 16ths of a degree
       QRectF boundingRectangle{origin.x() - radius, origin.y() - radius, 2 * radius, 2 * radius};
@@ -298,24 +325,29 @@ void RadarChart::paintEvent(QPaintEvent *event) {
    // Now plot the actual data
    //
    QPen seriesPen{allSeriesPen};
-   for (auto const & currSeries : std::as_const(this->pimpl->allSeries)) {
-      seriesPen.setColor(currSeries.color);
+   for (auto const & [name, lineStyleAndObject] : this->pimpl->m_allSeries.asKeyValueRange()) {
+//      qDebug() << Q_FUNC_INFO << "Plotting series:" << name << "in" << lineStyleAndObject.color.name();
+      seriesPen.setColor(lineStyleAndObject.color);
+      seriesPen.setStyle(lineStyleAndObject.penStyle);
       painter.setPen(seriesPen);
-      QVector<QPointF> seriesPoints(this->pimpl->variableNames.size());
-      for (int ii = 0; ii < this->pimpl->variableNames.size(); ++ii) {
-         double angleInRadians = StartingAngleInRadians + ii * this->pimpl->angleInRadiansBetweenAxes;
+      QVector<QPointF> seriesPoints(this->pimpl->m_variableNames.size());
+      for (int ii = 0; ii < this->pimpl->m_variableNames.size(); ++ii) {
+         double const angleInRadians {StartingAngleInRadians + ii * this->pimpl->m_angleInRadiansBetweenAxes};
+         double const value {
+            lineStyleAndObject.object->property(*this->pimpl->m_variableNames[ii].propertyName).toDouble()
+         };
 
          seriesPoints[ii] = this->pimpl->polarToQtCartesian(
-            axisLengthInPixels * currSeries.object->property(*this->pimpl->variableNames[ii].propertyName).toDouble() / this->pimpl->maxAxisValue,
+            axisLengthInPixels * value / this->pimpl->m_maxAxisValue,
             angleInRadians
          );
 
+         // Join the dots
          if (ii > 0) {
             painter.drawLine(seriesPoints[ii - 1], seriesPoints[ii]);
-         }
-
-         if (ii == this->pimpl->variableNames.size() - 1) {
-            painter.drawLine(seriesPoints[ii], seriesPoints[0]);
+            if (ii == this->pimpl->m_variableNames.size() - 1) {
+               painter.drawLine(seriesPoints[ii], seriesPoints[0]);
+            }
          }
       }
    }

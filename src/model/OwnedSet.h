@@ -718,7 +718,7 @@ public:
 
          // Caller supplied nullptr, so we're deleting this item and all the ones after it
          for (int seqNumToDelete = items.size(); seqNumToDelete >= seqNum; --seqNumToDelete) {
-            this->remove(items[seqNumToDelete]);
+            this->remove(items[seqNumToDelete - 1]);
          }
          return;
       }

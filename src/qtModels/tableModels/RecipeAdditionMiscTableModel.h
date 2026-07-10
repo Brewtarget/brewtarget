@@ -30,6 +30,7 @@
 #include <QWidget>
 
 #include "model/RecipeAdditionMisc.h"
+#include "model/Water.h"
 #include "qtModels/tableModels/BtTableModel.h"
 #include "qtModels/tableModels/ItemDelegate.h"
 #include "qtModels/tableModels/TableModelBase.h"
@@ -65,6 +66,28 @@ public:
 
    //! \brief Reimplemented from QAbstractTableModel.
    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+   //===================================== Extra functions for water agent totals ======================================
+
+protected:
+   void modified(std::shared_ptr<RecipeAdditionMisc> item) override;
+
+public:
+   /**
+    * \brief For the specified ion, gives the total mass concentration (in parts per million) if all the Miscs in the
+    *        table were dissolved in 1 liter of pure water.  Caller can derive the actual mass concentration by dividing
+    *        by the actual number of liters of water.
+    */
+   template<Water::MineralIon ion> double concentrationPerLiter_massConcPpm() const;
+   double concentrationPerLiter_massConcPpm(Water::MineralIon const ion) const;
+
+   Measurement::Amount total(Misc::WaterAgentType const waterAgentType) const;
+   double totalAcid_kg(Misc::WaterAgentType waterAgentType) const;
+
+public slots:
+
+signals:
+   void newTotals();
 
 private:
    bool showIBUs; // True if you want to show the IBU contributions in the table rows.

@@ -164,7 +164,7 @@ protected:
          return false;
       }
 
-      TreeNode * childNode = treeModel->doTreeNode(childIndex);
+      TreeNode const * childNode = treeModel->doTreeNode(childIndex);
 
       // Always show folders
       if (childNode->classifier() == TreeNodeClassifier::Folder) {
@@ -180,12 +180,12 @@ protected:
       }
 
       // Hide deleted items
-      NamedEntity * underlyingItem = childNode->rawUnderlyingItem();
-      if (underlyingItem && underlyingItem->deleted()) {
+      if (NamedEntity const * underlyingItem = childNode->rawUnderlyingItem();
+          underlyingItem && underlyingItem->deleted()) {
          return false;
       }
 
-      // Base class does remaining filtering -- eg for Derived::setFilterFixedString (see TreeViewBase::filter).
+      // Base class does the remaining filtering -- eg for Derived::setFilterFixedString (see TreeViewBase::filter).
       return this->derived().QSortFilterProxyModel::filterAcceptsRow(row, parentIndex);
    }
 };

@@ -278,16 +278,18 @@ public:
       return std::nullopt;
    }
 
-   /**
-    * \brief Some subclasses need to override this, but we don't need to make it virtual because we're never calling it
-    *        from a base class pointer/reference.
-    */
    void doSetSelected(QModelIndex const & viewIndex) {
       if (!viewIndex.isValid()) {
          return;
       }
       qDebug() << Q_FUNC_INFO << "New selected index:" << viewIndex;
-      this->derived().selectionModel()->select(viewIndex, QItemSelectionModel::Select);
+      //
+      // Note that it is important to set the QItemSelectionModel::Rows flag as well, rather than just
+      // QItemSelectionModel::Select on its own, otherwise only the cell will be selected, and not the entire row.
+      // If the entire row is not selected, then (a) the selection will look a bit odd and (b) the row won't be
+      // included in this->derived().selectionModel()->selectedRows(), which will break other things.
+      //
+      this->derived().selectionModel()->select(viewIndex, QItemSelectionModel::Select | QItemSelectionModel::Rows);
       TreeNode const * treeNode = this->doTreeNode(viewIndex);
       if (QModelIndex parentIndex = this->parentIndex(viewIndex);
           treeNode->classifier() == TreeNodeClassifier::Folder && !this->derived().isExpanded(parentIndex)) {
@@ -303,13 +305,16 @@ public:
    QList<std::shared_ptr<NE>> getMultipleSelectedPrimary() const {
       QList<std::shared_ptr<NE>> selectedItems;
       for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
-         QModelIndex modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
-         if (TreeNode * treeNode = this->m_model.treeNode(modelIndex);
-             treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+         QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+         TreeNode * treeNode = this->m_model.treeNode(modelIndex);
+         // Normally leave this commented out unless we're specifically debugging issues with tree selections
+//         qDebug() << Q_FUNC_INFO << *treeNode << "is selected";
+         if (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
             TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
             selectedItems.append(primaryTreeNode.underlyingItem());
          }
       }
+
       return selectedItems;
    }
 

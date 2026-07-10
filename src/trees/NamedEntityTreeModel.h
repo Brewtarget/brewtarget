@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/NamedEntityTreeModel.h is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * trees/NamedEntityTreeModel.h is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -28,12 +28,10 @@
 #include "model/StockPurchaseFermentable.h"
 #include "model/StockPurchaseHop.h"
 #include "model/StockPurchaseMisc.h"
-#include "model/StockPurchaseSalt.h"
 #include "model/StockPurchaseYeast.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
-#include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -73,13 +71,6 @@ class StockPurchaseMiscTreeModel : public TreeModel, public TreeModelBase<StockP
    TREE_MODEL_COMMON_DECL(StockPurchaseMisc, StockUseMisc)
 };
 
-class StockPurchaseSaltTreeModel : public TreeModel, public TreeModelBase<StockPurchaseSaltTreeModel,
-                                                                      StockPurchaseSalt,
-                                                                      StockUseSalt> {
-   Q_OBJECT
-   TREE_MODEL_COMMON_DECL(StockPurchaseSalt, StockUseSalt)
-};
-
 class StockPurchaseYeastTreeModel : public TreeModel, public TreeModelBase<StockPurchaseYeastTreeModel,
                                                                        StockPurchaseYeast,
                                                                        StockUseYeast> {
@@ -116,11 +107,6 @@ class HopTreeModel : public TreeModel, public TreeModelBase<HopTreeModel, Hop> {
 class MiscTreeModel : public TreeModel, public TreeModelBase<MiscTreeModel, Misc> {
    Q_OBJECT
    TREE_MODEL_COMMON_DECL(Misc)
-};
-
-class SaltTreeModel : public TreeModel, public TreeModelBase<SaltTreeModel, Salt> {
-   Q_OBJECT
-   TREE_MODEL_COMMON_DECL(Salt)
 };
 
 class StyleTreeModel : public TreeModel, public TreeModelBase<StyleTreeModel, Style> {

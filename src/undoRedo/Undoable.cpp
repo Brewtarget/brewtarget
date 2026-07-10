@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * undoRedo/Undoable.cpp is part of Brewktarget, and is copyright the following authors 2020-2025:
+ * undoRedo/Undoable.cpp is part of Brewktarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -40,12 +40,12 @@ template<class ItemOwnerClass, class ItemClass>
 void Undoable::addEnumeratedItemToOwner(ItemOwnerClass & itemOwner, std::shared_ptr<ItemClass> item) {
    qDebug() << Q_FUNC_INFO;
    //
-   // Mash/Boil/Fermentation Items are a bit different from most other NamedEntity objects in that they don't really
-   // have an independent existence.  Taking Mash as an example, if you ask a Mash to remove a MashItem then it will
-   // also tell the ObjectStore to delete it, but, when we're adding a MashItem to a Mash it's easier (for eg the
-   // implementation of undo/redo) if we add it to the ObjectStore before we call Mash::addMashItem().
+   // Mash/Boil/Fermentation steps are a bit different from most other NamedEntity objects in that they don't really
+   // have an independent existence.  Taking Mash as an example, if you ask a Mash to remove a MashStep then it
+   // will also tell the ObjectStore to delete it, but, when we're adding a MashStep to a Mash it's easier (for eg the
+   // implementation of undo/redo) if we add it to the ObjectStore before we call Mash::addMashStep().
    //
-   // Same applies to StockUse items.
+   // Same applies to StockUse items which are "owned" by their StockPurchase.
    //
    // However, normally, at this point, the new item will already have been added to the DB by
    // EditorBase::doSaveAndClose.  So we are just belt-and-braces here checking whether it needs to be added.
@@ -64,7 +64,7 @@ void Undoable::addEnumeratedItemToOwner(ItemOwnerClass & itemOwner, std::shared_
          QObject::tr("Add %1 to %2").arg(ItemClass::localisedName()).arg(ItemOwnerClass::localisedName())
       )
    );
-   // We don't need to do anything further here.  The change to the mash/boil/ferementation will already have triggered
+   // We don't need to do anything further here.  The change to the mash/boil/fermentation will already have triggered
    // the necessary updates to the corresponding MashItemTableModel/BoilItemTableModel/etc.
    return;
 }
@@ -76,5 +76,4 @@ template void Undoable::addEnumeratedItemToOwner(Fermentation & owner, std::shar
 template void Undoable::addEnumeratedItemToOwner(StockPurchaseFermentable & owner, std::shared_ptr<StockUseFermentable> item);
 template void Undoable::addEnumeratedItemToOwner(StockPurchaseHop         & owner, std::shared_ptr<StockUseHop        > item);
 template void Undoable::addEnumeratedItemToOwner(StockPurchaseMisc        & owner, std::shared_ptr<StockUseMisc       > item);
-template void Undoable::addEnumeratedItemToOwner(StockPurchaseSalt        & owner, std::shared_ptr<StockUseSalt       > item);
 template void Undoable::addEnumeratedItemToOwner(StockPurchaseYeast       & owner, std::shared_ptr<StockUseYeast      > item);

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonRecordDefinition.h is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/json/JsonRecordDefinition.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -97,18 +97,18 @@ public:
     *       https://json-schema.org/understanding-json-schema/reference/regular_expressions.html).  This is used in
     *       BeerJSON for its DateType -- see below.
     *
-    *       BeerJSON Specifically
-    *       ---------------------
+    *       BeerJSON and DotBeer Specifically
+    *       ---------------------------------
     *       In contrast with BeerXML and our database store, where we specify a canonical unit of measure for each field
-    *       (eg temperatures are always stored as degrees celcius), BeerJSON allows lots of different units of measure.
-    *       Thus a lot of the base types in BeerJSON consist of unit & value, where unit is an enum (ie string with
-    *       restricted set of values) and value is a decimal or integer number.  This is a more universal approach in
-    *       allowing multiple units to be used for temperature, time, color, etc, but it also means we have a lot more
-    *       "base" types than for BeerXML or ObjectStore.  (It also means that it's harder for the schema to do bounds
-    *       validation on such values.)
+    *       (eg temperatures are always stored as degrees celcius), BeerJSON and DotBeer allow lots of different units
+    *       of measure.   Thus a lot of the base types in BeerJSON and DotBeer consist of unit & value, where unit is an
+    *       enum (ie string with restricted set of values) and value is a decimal or integer number.  This is a more
+    *       universal approach in allowing multiple units to be used for temperature, time, color, etc, but it also
+    *       means we have a lot more "base" types than for BeerXML or ObjectStore.  (It also means that it's harder for
+    *       the schema to do bounds validation on such values.)
     *
-    *       In some cases, BeerJSON only allows one unit of measurement, but the same structure of {unit, value} is
-    *       maintained, presumably for extensibility.
+    *       In some cases, BeerJSON and DotBeer only allow one unit of measurement, but the same structure of {unit,
+    *       value} is maintained for readability and extensibility.
     *
     *       The main BeerJSON base types are:
     *          AcidityType:        unit ∈ {"pH"} (NB: one-element set)
@@ -230,8 +230,22 @@ public:
    };
 
    /**
-    * \brief How to parse every field that we want to be able to read out of the JSON file.  See class description for
-    *        more details.
+    * This is used in \c ValueDecoder.  When we are writing a property that is a QString, there are certain
+    * circumstances where we want either to sanitise the value or to suppress writing the field altogether.  For
+    * instance, in BeerJSON, the \c style::style_letter field is allowed to be omitted, but is not allowed to be blank
+    * (or anything other than a single character that is either an upper case letter or a space).
+    *
+    * A \c StringOutputValidator function takes the field value and returns:
+    *   - std::nullopt if the field should not be written at all
+    *   - a suitably sanitised version of the field to write otherwise
+    *
+    * NOTE that the caller is responsible for QString::trimmed() before passing the parameter.
+    */
+   using StringOutputValidator = std::optional<QString>(*)(QString const &);
+
+   /**
+    * \brief How to parse (or encode) every field that we want to be able to read out of (or write to) the JSON file.
+    *        See class description for more details.
     *
     *        In general, \c xPath ‡ is simply the key of a key:value pair to read/write from/to a JSON object and
     *        \c propertyName tells us which property of the \c NamedEntity we are reading/writing holds this field.  (In
@@ -276,7 +290,8 @@ public:
                       JsonMeasureableUnitsMapping        const *,  // FieldType::MeasurementWithUnits
                       ListOfJsonMeasureableUnitsMappings const *,  // FieldType::OneOfMeasurementsWithUnits
                       JsonSingleUnitSpecifier            const *,  // FieldType::SingleUnitValue
-                      JsonRecordDefinition               const *>; // FieldType::ListOfRecords
+                      JsonRecordDefinition               const *,  // FieldType::ListOfRecords
+                      StringOutputValidator                     >; // FieldType::String
       ValueDecoder valueDecoder;
       /**
        * \brief Trivial constructor allows us to default \c valueDecoder and saves us having to put & before every
@@ -328,7 +343,8 @@ public:
    /**
     * \brief Constructor
     * \param recordName The name of the JSON object for this type of record, eg "fermentables" for a list of
-    *                   fermentables in BeerJSON.   TODO: I think we can get rid of this.
+    *                   fermentables in BeerJSON.  This is mostly used for logging (see
+    *                   \c SerializationRecordDefinition), but we do need the name to be correct for the root node.
     * \param typeLookup The \c TypeLookup object that, amongst other things allows us to tell whether Qt properties on
     *                   this object type are "optional" (ie wrapped in \c std::optional)
     * \param namedEntityClassName The class name of the \c NamedEntity to which this record relates, eg "Fermentable",

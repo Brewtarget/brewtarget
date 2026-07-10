@@ -35,36 +35,35 @@
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::BrewLog { inline BtStringConst const property{#property}; }
-AddPropertyName(abv              )
-AddPropertyName(attenuation      )
-AddPropertyName(boilOff_l        )
-AddPropertyName(brewDate         )
-AddPropertyName(brewhouseEff_pct )
-AddPropertyName(effIntoBK_pct    )
-AddPropertyName(fermentDate      )
-AddPropertyName(fg               )
-AddPropertyName(finalVolume_l    )
-AddPropertyName(mashFinTemp_c    )
-AddPropertyName(notes            )
-AddPropertyName(og               )
-AddPropertyName(pitchTemp_c      )
-AddPropertyName(postBoilVolume_l )
-AddPropertyName(projABV_pct      )
-AddPropertyName(projAtten        )
-AddPropertyName(projBoilGrav     )
-AddPropertyName(projEff_pct      )
-AddPropertyName(projFermPoints   )
-AddPropertyName(projFg           )
-AddPropertyName(projMashFinTemp_c)
-AddPropertyName(projOg           )
-AddPropertyName(projPoints       )
-AddPropertyName(projStrikeTemp_c )
-AddPropertyName(projVolIntoBK_l  )
-AddPropertyName(projVolIntoFerm_l)
-AddPropertyName(sg               )
-AddPropertyName(strikeTemp_c     )
-AddPropertyName(volumeIntoBK_l   )
-AddPropertyName(volumeIntoFerm_l )
+AddPropertyName(brewDate                     )
+AddPropertyName(computedAlcoholByVolume_pct  )
+AddPropertyName(computedAttenuation_pct      )
+AddPropertyName(computedEfficiency_pct       )
+AddPropertyName(computedPreBoilEfficiency_pct)
+AddPropertyName(expectedAlcoholByVolume_pct  )
+AddPropertyName(expectedAttenuation_pct      )
+AddPropertyName(expectedBoilOff_l            )
+AddPropertyName(expectedEfficiency_pct       )
+AddPropertyName(expectedFinalGravity_sg      )
+AddPropertyName(expectedMashFinalTemp_c      )
+AddPropertyName(expectedOriginalGravity_sg   )
+AddPropertyName(expectedPreBoilGravity_sg    )
+AddPropertyName(expectedPreBoilVolume_l      )
+AddPropertyName(expectedStrikeTemp_c         )
+AddPropertyName(expectedVolumeIntoFermentor_l)
+AddPropertyName(fermentDate                  )
+AddPropertyName(forecastOriginalGravity_sg   )
+AddPropertyName(measuredFinalGravity_sg      )
+AddPropertyName(measuredFinalVolume_l        )
+AddPropertyName(measuredMashFinalTemp_c      )
+AddPropertyName(measuredOriginalGravity_sg   )
+AddPropertyName(measuredPitchTemp_c          )
+AddPropertyName(measuredPostBoilVolume_l     )
+AddPropertyName(measuredPreBoilGravity_sg    )
+AddPropertyName(measuredPreBoilVolume_l      )
+AddPropertyName(measuredStrikeTemp_c         )
+AddPropertyName(measuredVolumeIntoFermentor_l)
+AddPropertyName(notes                        )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -75,7 +74,8 @@ class Recipe;
 /*!
  * \class BrewLog
  *
- * \brief Model for a brew log, which records what you did on brewday.
+ * \brief Model for a brew log, which records what you did on brewday (and afterwards through fermentation up to having
+ *        the finished beer).
  *
  *        The "name" of a BrewLog is used as "batch number" in the UI -- ie the brewer's own unique identifier for this
  *        brew.  It can contain numbers and/or letters and/or symbols, so, "number" might seem a bit of a misnomer;
@@ -92,36 +92,36 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
-   static QString localisedName_abv              ();
-   static QString localisedName_attenuation      ();
-   static QString localisedName_boilOff_l        ();
-   static QString localisedName_brewDate         ();
-   static QString localisedName_brewhouseEff_pct ();
-   static QString localisedName_effIntoBK_pct    ();
-   static QString localisedName_fermentDate      ();
-   static QString localisedName_fg               ();
-   static QString localisedName_finalVolume_l    ();
-   static QString localisedName_mashFinTemp_c    ();
-   static QString localisedName_notes            ();
-   static QString localisedName_og               ();
-   static QString localisedName_pitchTemp_c      ();
-   static QString localisedName_postBoilVolume_l ();
-   static QString localisedName_projABV_pct      ();
-   static QString localisedName_projAtten        ();
-   static QString localisedName_projBoilGrav     ();
-   static QString localisedName_projEff_pct      ();
-   static QString localisedName_projFermPoints   ();
-   static QString localisedName_projFg           ();
-   static QString localisedName_projMashFinTemp_c();
-   static QString localisedName_projOg           ();
-   static QString localisedName_projPoints       ();
-   static QString localisedName_projStrikeTemp_c ();
-   static QString localisedName_projVolIntoBK_l  ();
-   static QString localisedName_projVolIntoFerm_l();
-   static QString localisedName_sg               ();
-   static QString localisedName_strikeTemp_c     ();
-   static QString localisedName_volumeIntoBK_l   ();
-   static QString localisedName_volumeIntoFerm_l ();
+   static QString localisedName_expectedBoilOff_l                    ();
+   static QString localisedName_brewDate                     ();
+   static QString localisedName_computedAlcoholByVolume_pct              ();
+   static QString localisedName_computedAttenuation_pct      ();
+   static QString localisedName_computedEfficiency_pct       ();
+   static QString localisedName_computedPreBoilEfficiency_pct();
+   static QString localisedName_expectedAlcoholByVolume_pct              ();
+   static QString localisedName_expectedAttenuation_pct      ();
+   static QString localisedName_expectedEfficiency_pct       ();
+   static QString localisedName_expectedFinalGravity_sg      ();
+   static QString localisedName_expectedMashFinalTemp_c      ();
+   static QString localisedName_expectedOriginalGravity_sg   ();
+   static QString localisedName_expectedPreBoilGravity_sg    ();
+   static QString localisedName_expectedPreBoilVolume_l      ();
+   static QString localisedName_expectedStrikeTemp_c         ();
+   static QString localisedName_expectedVolumeIntoFermentor_l();
+   static QString localisedName_fermentDate                  ();
+   static QString localisedName_forecastOriginalGravity_sg   ();
+   static QString localisedName_measuredFinalGravity_sg      ();
+   static QString localisedName_measuredFinalVolume_l        ();
+   static QString localisedName_measuredMashFinalTemp_c      ();
+   static QString localisedName_measuredOriginalGravity_sg   ();
+   static QString localisedName_measuredPitchTemp_c          ();
+   static QString localisedName_measuredPostBoilVolume_l     ();
+   static QString localisedName_measuredPreBoilGravity_sg    ();
+   static QString localisedName_measuredPreBoilVolume_l      ();
+   static QString localisedName_measuredStrikeTemp_c         ();
+   static QString localisedName_measuredVolumeIntoFermentor_l();
+   static QString localisedName_notes                        ();
+   static QString localisedName_projFermPoints               ();
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more
@@ -144,108 +144,162 @@ public:
    std::strong_ordering operator<=>(BrewLog const & other) const;
 
    //=================================================== PROPERTIES ====================================================
+   //! The date of the brewday
    Q_PROPERTY(QDate   brewDate            READ brewDate            WRITE setBrewDate         )
+   //! The date fermentation was deemed finished and final gravity readings were taken
    Q_PROPERTY(QDate   fermentDate         READ fermentDate         WRITE setFermentDate      )
+
    Q_PROPERTY(QString notes               READ notes               WRITE setNotes            )
-   Q_PROPERTY(double  sg                  READ sg                  WRITE setSg               )
-   Q_PROPERTY(double  abv                 READ abv                 WRITE setABV              )
-   Q_PROPERTY(double  effIntoBK_pct       READ effIntoBK_pct       WRITE setEffIntoBK_pct    )
-   Q_PROPERTY(double  brewhouseEff_pct    READ brewhouseEff_pct    WRITE setBrewhouseEff_pct )
-   Q_PROPERTY(double  volumeIntoBK_l      READ volumeIntoBK_l      WRITE setVolumeIntoBK_l   )
-   Q_PROPERTY(double  strikeTemp_c        READ strikeTemp_c        WRITE setStrikeTemp_c     )
-   Q_PROPERTY(double  mashFinTemp_c       READ mashFinTemp_c       WRITE setMashFinTemp_c    )
-   Q_PROPERTY(double  og                  READ og                  WRITE setOg               )
-   Q_PROPERTY(double  postBoilVolume_l    READ postBoilVolume_l    WRITE setPostBoilVolume_l )
-   Q_PROPERTY(double  volumeIntoFerm_l    READ volumeIntoFerm_l    WRITE setVolumeIntoFerm_l )
-   Q_PROPERTY(double  pitchTemp_c         READ pitchTemp_c         WRITE setPitchTemp_c      )
-   Q_PROPERTY(double  fg                  READ fg                  WRITE setFg               )
-   Q_PROPERTY(double  attenuation         READ attenuation         WRITE setAttenuation      )
-   Q_PROPERTY(double  finalVolume_l       READ finalVolume_l       WRITE setFinalVolume_l    )
-   Q_PROPERTY(double  boilOff_l           READ boilOff_l           WRITE setBoilOff_l        )
-   Q_PROPERTY(double  projBoilGrav        READ projBoilGrav        WRITE setProjBoilGrav     )
-   Q_PROPERTY(double  projVolIntoBK_l     READ projVolIntoBK_l     WRITE setProjVolIntoBK_l  )
-   Q_PROPERTY(double  projStrikeTemp_c    READ projStrikeTemp_c    WRITE setProjStrikeTemp_c )
-   Q_PROPERTY(double  projMashFinTemp_c   READ projMashFinTemp_c   WRITE setProjMashFinTemp_c)
-   Q_PROPERTY(double  projOg              READ projOg              WRITE setProjOg           )
-   Q_PROPERTY(double  projVolIntoFerm_l   READ projVolIntoFerm_l   WRITE setProjVolIntoFerm_l)
-   Q_PROPERTY(double  projFg              READ projFg              WRITE setProjFg           )
-   Q_PROPERTY(double  projEff_pct         READ projEff_pct         WRITE setProjEff_pct      )
-   Q_PROPERTY(double  projABV_pct         READ projABV_pct         WRITE setProjABV_pct      )
-   Q_PROPERTY(double  projPoints          READ projPoints          WRITE setProjPoints       )
-   Q_PROPERTY(double  projFermPoints      READ projFermPoints      WRITE setProjFermPoints   )
-   Q_PROPERTY(double  projAtten           READ projAtten           WRITE setProjAtten        )
+
+   //
+   // For a lot of properties, we have "planned" vs "actual" values.  In the past, we have used the term "projected" to
+   // mean both "what was originally expected" and "what is expected based on current information" -- eg "projected OG"
+   // was initially set to the value obtained from the Recipe, and then updated based on measured pre-boil gravity and
+   // pre-boil volume, etc.  This is potentially confusing, so we now try to be more rigorous about distinguishing
+   // between different types of value.  We use the following terms:
+   //
+   //    "expected" = Mostly from the Recipe (either directly or by calculation)
+   //    "measured" = Supplied by the brewer for this batch -- eg measured OG and FG
+   //    "computed" = Derived from values supplied by the brewer -- eg ABV calculated from measured OG and FG
+   //    "forecast" = An interim value derived from values supplied by the brewer, but to be superseded by a measured
+   //                 value -- eg forecast of OG at the start of the boil
+   //
+   // These are not necessarily the "best" adjectives (so the wording we use in the UI might be different), but, for the
+   // code, they at have the merit of being the same length, which makes related variable names etc line up neatly. :-)
+   //
+
+   //! Expected pre-boil specific gravity.
+   Q_PROPERTY(double  expectedPreBoilGravity_sg       READ expectedPreBoilGravity_sg       WRITE setExpectedPreBoilGravity_sg    )
+   //! Actual (measured) pre-boil specific gravity.
+   Q_PROPERTY(double  measuredPreBoilGravity_sg       READ measuredPreBoilGravity_sg       WRITE setMeasuredPreBoilGravity_sg    )
+   //! Expected volume of wort collected from mash into boil kettle
+   Q_PROPERTY(double  expectedPreBoilVolume_l         READ expectedPreBoilVolume_l         WRITE setExpectedPreBoilVolume_l      )
+   //! Actual (measured) volume of wort collected from mash into boil kettle
+   Q_PROPERTY(double  measuredPreBoilVolume_l         READ measuredPreBoilVolume_l         WRITE setMeasuredPreBoilVolume_l      )
+   //! Expected (planned) strike water temperature (ie water temperature immediately prior to adding grains at mash start)
+   Q_PROPERTY(double  expectedStrikeTemp_c            READ expectedStrikeTemp_c            WRITE setExpectedStrikeTemp_c         )
+   //! Actual (measured) strike water temperature
+   Q_PROPERTY(double  measuredStrikeTemp_c            READ measuredStrikeTemp_c            WRITE setMeasuredStrikeTemp_c         )
+   //! Expected (planned) final mash temperature (before any mash out)
+   Q_PROPERTY(double  expectedMashFinalTemp_c         READ expectedMashFinalTemp_c         WRITE setExpectedMashFinalTemp_c      )
+   //! Actual (measured) final mash temperature (before any mash out)
+   Q_PROPERTY(double  measuredMashFinalTemp_c         READ measuredMashFinalTemp_c         WRITE setMeasuredMashFinalTemp_c      )
+   //! Expected (planned) original (post-boil, pre-fermentation) specific gravity  TODO: At least in some places this should be computedOG!
+   Q_PROPERTY(double  expectedOriginalGravity_sg      READ expectedOriginalGravity_sg      WRITE setExpectedOriginalGravity_sg   )
+   //! Forecast original (post-boil, pre-fermentation) specific gravity based on measured pre-boil volume & gravity
+   Q_PROPERTY(double  forecastOriginalGravity_sg      READ forecastOriginalGravity_sg      WRITE setForecastOriginalGravity_sg   )
+   //! Actual (measured) original (post-boil, pre-fermentation) specific gravity
+   Q_PROPERTY(double  measuredOriginalGravity_sg      READ measuredOriginalGravity_sg      WRITE setMeasuredOriginalGravity_sg   )
+   // TBD: Do we need expectedPostBoilVolume_l ?
+   //! Actual (measured) volume of wort in kettle after boil
+   Q_PROPERTY(double  measuredPostBoilVolume_l        READ measuredPostBoilVolume_l        WRITE setMeasuredPostBoilVolume_l     )
+   //! Expected (planned) volume of wort into fermentor
+   Q_PROPERTY(double  expectedVolumeIntoFermentor_l   READ expectedVolumeIntoFermentor_l   WRITE setExpectedVolumeIntoFermentor_l)
+   //! Actual (measured) volume of wort into fermentor
+   Q_PROPERTY(double  measuredVolumeIntoFermentor_l   READ measuredVolumeIntoFermentor_l   WRITE setMeasuredVolumeIntoFermentor_l)
+   // TBD: Do we need expectedPitchTemp_c ?
+   //! Actual (measured) temperature of wort when yeast is pitched
+   Q_PROPERTY(double  measuredPitchTemp_c             READ measuredPitchTemp_c             WRITE setMeasuredPitchTemp_c          )
+   //! Expected (planned) final (post-fermentation) specific gravity
+   Q_PROPERTY(double  expectedFinalGravity_sg         READ expectedFinalGravity_sg         WRITE setExpectedFinalGravity_sg      )
+   //! Actual (measured) final (post-fermentation) specific gravity
+   Q_PROPERTY(double  measuredFinalGravity_sg         READ measuredFinalGravity_sg         WRITE setMeasuredFinalGravity_sg      )
+   // TBD: Do we need expectedFinalVolume_l ?
+   //! Actual (measured) final (post-fermentation) volume
+   Q_PROPERTY(double  measuredFinalVolume_l           READ measuredFinalVolume_l           WRITE setMeasuredFinalVolume_l        )
+   //! Expected alcohol by volume based on the Recipe OG
+   Q_PROPERTY(double  expectedAlcoholByVolume_pct     READ expectedAlcoholByVolume_pct     WRITE setExpectedAlcoholByVolume_pct  )
+   //! Actual alcohol by volume based on "original" and "final" gravity readings
+   Q_PROPERTY(double  computedAlcoholByVolume_pct     READ computedAlcoholByVolume_pct     WRITE setComputedAlcoholByVolume_pct  )
+   //! Expected attenuation from the Recipe
+   Q_PROPERTY(double  expectedAttenuation_pct         READ expectedAttenuation_pct         WRITE setExpectedAttenuation_pct      )
+   //! Actual attenuation based on gravity readings
+   Q_PROPERTY(double  computedAttenuation_pct         READ computedAttenuation_pct         WRITE setComputedAttenuation_pct      )
+   /**
+    * Expected brewhouse (ie overall) efficiency from the Recipe, capturing the combined impact of mash conversion,
+    * lautering, kettle losses, and transfer
+    */
+   Q_PROPERTY(double  expectedEfficiency_pct          READ expectedEfficiency_pct          WRITE setExpectedEfficiency_pct       )
+   //! Actual brewhouse (ie overall) efficiency based on gravity readings
+   Q_PROPERTY(double  computedEfficiency_pct          READ computedEfficiency_pct          WRITE setComputedEfficiency_pct       )
+   /**
+    * Actual pre-boil (aka "into boil kettle") efficiency, measuring the percentage of total available sugars that made
+    * it into the kettle.
+    */
+   Q_PROPERTY(double  computedPreBoilEfficiency_pct   READ computedPreBoilEfficiency_pct   WRITE setComputedPreBoilEfficiency_pct)
+   /**
+    * Expected boil-off based on the equipment profile and the length of the boil
+    */
+   Q_PROPERTY(double  expectedBoilOff_l           READ expectedBoilOff_l           WRITE setExpectedBoilOff_l        )
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   QDate   brewDate         () const;
-   QString brewDate_str     () const;
-   QString brewDate_short   () const;
-   QDate   fermentDate      () const;
-   QString fermentDate_str  () const;
-   QString fermentDate_short() const;
-   double  sg               () const;
-   double  abv              () const;
-   double  attenuation      () const;
-   double  volumeIntoBK_l   () const;
-   double  effIntoBK_pct    () const;
-   double  brewhouseEff_pct () const;
-   double  strikeTemp_c     () const;
-   double  mashFinTemp_c    () const;
-   double  og               () const;
-   double  postBoilVolume_l () const;
-   double  volumeIntoFerm_l () const;
-   double  pitchTemp_c      () const;
-   double  fg               () const;
-   double  finalVolume_l    () const;
-   double  boilOff_l        () const;
-   QString notes            () const;
-   double  projBoilGrav     () const;
-   double  projVolIntoBK_l  () const;
-   double  projStrikeTemp_c () const;
-   double  projMashFinTemp_c() const;
-   double  projOg           () const;
-   double  projVolIntoFerm_l() const;
-   double  projFg           () const;
-   double  projEff_pct      () const;
-   double  projABV_pct      () const;
-   double  projPoints       () const;
-   double  projFermPoints   () const;
-   double  projAtten        () const;
+   QDate   brewDate                     () const;
+   QString brewDate_str                 () const;
+   QString brewDate_short               () const;
+   QDate   fermentDate                  () const;
+   QString fermentDate_str              () const;
+   QString fermentDate_short            () const;
+   double  measuredPreBoilGravity_sg    () const;
+   double  computedAlcoholByVolume_pct  () const;
+   double  computedAttenuation_pct      () const;
+   double  measuredPreBoilVolume_l      () const;
+   double  computedPreBoilEfficiency_pct() const;
+   double  computedEfficiency_pct       () const;
+   double  measuredStrikeTemp_c         () const;
+   double  measuredMashFinalTemp_c      () const;
+   double  measuredOriginalGravity_sg   () const;
+   double  measuredPostBoilVolume_l     () const;
+   double  measuredVolumeIntoFermentor_l() const;
+   double  measuredPitchTemp_c          () const;
+   double  measuredFinalGravity_sg      () const;
+   double  measuredFinalVolume_l        () const;
+   double  expectedBoilOff_l            () const;
+   QString notes                        () const;
+   double  expectedPreBoilGravity_sg    () const;
+   double  expectedPreBoilVolume_l      () const;
+   double  expectedStrikeTemp_c         () const;
+   double  expectedMashFinalTemp_c      () const;
+   double  expectedOriginalGravity_sg   () const;
+   double  forecastOriginalGravity_sg   () const;
+   double  expectedVolumeIntoFermentor_l() const;
+   double  expectedFinalGravity_sg      () const;
+   double  expectedEfficiency_pct       () const;
+   double  expectedAlcoholByVolume_pct  () const;
+   double  expectedAttenuation_pct      () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setABV              (double var);
-   void setAttenuation      (double var);
-   void setBrewDate         (QDate   const & var = QDate::currentDate());
-   void setFermentDate      (QDate   const & var);
-   void setNotes            (QString const & var);
-   void setSg               (double var);
-   void setVolumeIntoBK_l   (double var);
-   void setBrewhouseEff_pct (double var);
-   void setEffIntoBK_pct    (double var);
-   void setStrikeTemp_c     (double var);
-   void setMashFinTemp_c    (double var);
-   void setOg               (double var);
-   void setPostBoilVolume_l (double var);
-   void setVolumeIntoFerm_l (double var);
-   void setPitchTemp_c      (double var);
-   void setFg               (double var);
-   void setFinalVolume_l    (double var);
-   void setBoilOff_l        (double var);
-   void setProjBoilGrav     (double var);
-   void setProjVolIntoBK_l  (double var);
-   void setProjStrikeTemp_c (double var);
-   void setProjMashFinTemp_c(double var);
-   void setProjOg           (double var);
-   void setProjVolIntoFerm_l(double var);
-   void setProjFg           (double var);
-   void setProjEff_pct      (double var);
-   void setProjABV_pct      (double var);
-   void setProjPoints       (double var);
-   void setProjFermPoints   (double var);
-   void setProjAtten        (double var);
+   void setComputedAlcoholByVolume_pct  (double var);
+   void setComputedAttenuation_pct      (double var);
+   void setBrewDate                     (QDate   const & var = QDate::currentDate());
+   void setFermentDate                  (QDate   const & var);
+   void setNotes                        (QString const & var);
+   void setMeasuredPreBoilGravity_sg    (double var);
+   void setMeasuredPreBoilVolume_l      (double var);
+   void setComputedEfficiency_pct       (double var);
+   void setComputedPreBoilEfficiency_pct(double var);
+   void setMeasuredStrikeTemp_c         (double var);
+   void setMeasuredMashFinalTemp_c      (double var);
+   void setMeasuredOriginalGravity_sg   (double var);
+   void setMeasuredPostBoilVolume_l     (double var);
+   void setMeasuredVolumeIntoFermentor_l(double var);
+   void setMeasuredPitchTemp_c          (double var);
+   void setMeasuredFinalGravity_sg      (double var);
+   void setMeasuredFinalVolume_l        (double var);
+   void setExpectedBoilOff_l            (double var);
+   void setExpectedPreBoilGravity_sg    (double var);
+   void setExpectedPreBoilVolume_l      (double var);
+   void setExpectedStrikeTemp_c         (double var);
+   void setExpectedMashFinalTemp_c      (double var);
+   void setExpectedOriginalGravity_sg   (double var);
+   void setForecastOriginalGravity_sg   (double var);
+   void setExpectedVolumeIntoFermentor_l(double var);
+   void setExpectedFinalGravity_sg      (double var);
+   void setExpectedEfficiency_pct       (double var);
+   void setExpectedAlcoholByVolume_pct  (double var);
+   void setExpectedAttenuation_pct      (double var);
 
    // Metasetter
-   void populateNote(Recipe* parent);
-   void recalculateEff(Recipe* parent);
+   void populateNote(Recipe * recipe);
    void setLoading(bool flag);
 
    // Calculations
@@ -255,13 +309,13 @@ public:
    //! Projected ABV after fermentation.
    double calculateABV_pct();
    /**
-    * Actual ABV after we have measured og/fg.
+    * Actual ABV after we have measured measuredOriginalGravity_sg/measuredFinalGravity_sg.
     *
-    * NB: Since if the user enters an FG that is larger than OG, this will return NaN
+    * NB: If the user enters an FG that is larger than OG, this will return NaN
     */
    double calculateActualABV_pct();
 
-   //! Actual attenuation, based on measured og/fg
+   //! Actual computedAttenuation_pct, based on measured measuredOriginalGravity_sg/measuredFinalGravity_sg
    double calculateAttenuation_pct();
 
    //! Needed by \c TreeModelBase
@@ -278,36 +332,35 @@ private:
 
    bool loading;
 
-   QDate   m_brewDate         ;
-   QDate   m_fermentDate      ;
-   QString m_notes            ;
-   double  m_sg               ;
-   double  m_abv              ;
-   double  m_effIntoBK_pct    ;
-   double  m_brewhouseEff_pct ;
-   double  m_volumeIntoBK_l   ;
-   double  m_strikeTemp_c     ;
-   double  m_mashFinTemp_c    ;
-   double  m_og               ;
-   double  m_postBoilVolume_l ;
-   double  m_volumeIntoFerm_l ;
-   double  m_pitchTemp_c      ;
-   double  m_fg               ;
-   double  m_attenuation      ;
-   double  m_finalVolume_l    ;
-   double  m_boilOff_l        ;
-   double  m_projBoilGrav     ;
-   double  m_projVolIntoBK_l  ;
-   double  m_projStrikeTemp_c ;
-   double  m_projMashFinTemp_c;
-   double  m_projOg           ;
-   double  m_projVolIntoFerm_l;
-   double  m_projFg           ;
-   double  m_projEff_pct      ;
-   double  m_projABV_pct      ;
-   double  m_projPoints       ;
-   double  m_projFermPoints   ;
-   double  m_projAtten        ;
+   QDate   m_brewDate                     ;
+   QDate   m_fermentDate                  ;
+   QString m_notes                         = "";
+   double  m_measuredPreBoilGravity_sg     = 0.0;
+   double  m_computedAlcoholByVolume_pct   = 0.0;
+   double  m_computedPreBoilEfficiency_pct = 0.0;
+   double  m_computedEfficiency_pct        = 0.0;
+   double  m_measuredPreBoilVolume_l       = 0.0;
+   double  m_measuredStrikeTemp_c          = 0.0;
+   double  m_measuredMashFinalTemp_c       = 0.0;
+   double  m_measuredOriginalGravity_sg    = 0.0;
+   double  m_measuredPostBoilVolume_l      = 0.0;
+   double  m_measuredVolumeIntoFermentor_l = 0.0;
+   double  m_measuredPitchTemp_c           = 0.0;
+   double  m_measuredFinalGravity_sg       = 0.0;
+   double  m_computedAttenuation_pct       = 0.0;
+   double  m_measuredFinalVolume_l         = 0.0;
+   double  m_expectedBoilOff_l             = 0.0;
+   double  m_expectedPreBoilGravity_sg     = 0.0;
+   double  m_expectedPreBoilVolume_l       = 0.0;
+   double  m_expectedStrikeTemp_c          = 0.0;
+   double  m_expectedMashFinalTemp_c       = 0.0;
+   double  m_expectedOriginalGravity_sg    = 0.0;
+   double  m_forecastOriginalGravity_sg    = 0.0;
+   double  m_expectedVolumeIntoFermentor_l = 0.0;
+   double  m_expectedFinalGravity_sg       = 0.0;
+   double  m_expectedEfficiency_pct        = 0.0;
+   double  m_expectedAlcoholByVolume_pct   = 0.0;
+   double  m_expectedAttenuation_pct       = 0.0;
 };
 
 BT_DECLARE_METATYPES(BrewLog)

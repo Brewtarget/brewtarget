@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/EditorBaseField.h is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * editors/EditorBaseField.h is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -571,30 +571,29 @@ using EditorBaseFieldVariant = std::variant<
    //
    // Not all conceivable permutations are valid.  These are the ones it makes sense to use.
    // Note that we cannot write `EditorBaseField<QLabel, BtComboBoxObject>` as we need the actual subclass of
-   // BtComboBoxObject, henc why we have to list them all here.
+   // BtComboBoxObject, hence why we have to list them all here.
    //
-   EditorBaseField<QLabel    , BtComboBoxBool       >,
-   EditorBaseField<QLabel    , BtComboBoxEnum       >,
-   EditorBaseField<QLabel    , BtComboBoxFermentable>,
-   EditorBaseField<QLabel    , BtComboBoxHop        >,
-   EditorBaseField<QLabel    , BtComboBoxMisc       >,
-   EditorBaseField<QLabel    , BtComboBoxSalt       >,
-   EditorBaseField<QLabel    , BtComboBoxYeast      >,
-   EditorBaseField<QLabel    , BtLineEditCurrency   >,
-   EditorBaseField<QLabel    , BtOptionalDateEdit   >,
-   EditorBaseField<QLabel    , QCheckBox            >,
-   EditorBaseField<QLabel    , QDateEdit            >, // For non-optional dates (eg on StockUse items)
-   EditorBaseField<QLabel    , QLabel               >, // For read-only TEXT fields where "edit" field is actually a QLabel.  See also SmartValueDisplay below.
-   EditorBaseField<QLabel    , QLineEdit            >,
-   EditorBaseField<QLabel    , QPlainTextEdit       >,
-   EditorBaseField<QLabel    , QTextEdit            >,
-   EditorBaseField<QLabel    , SmartLineEdit        >,
-   EditorBaseField<QWidget   , QTextEdit            >, // This is for tabs such as tab_notes containing a single QTextEdit with no separate QLabel
-   EditorBaseField<SmartLabel, BtComboBoxBool       >,
-   EditorBaseField<SmartLabel, BtComboBoxEnum       >,
-   EditorBaseField<SmartLabel, QLineEdit            >,
-   EditorBaseField<SmartLabel, SmartLineEdit        >,
-   EditorBaseField<SmartLabel, SmartValueDisplay    >  // Read-only fields where user can control units
+   EditorBaseField<QLabel    , BtComboBoxBool           >,
+   EditorBaseField<QLabel    , BtComboBoxEnum           >,
+   EditorBaseField<QLabel    , BtComboBoxFermentable    >,
+   EditorBaseField<QLabel    , BtComboBoxHop            >,
+   EditorBaseField<QLabel    , BtComboBoxMisc           >,
+   EditorBaseField<QLabel    , BtComboBoxYeast          >,
+   EditorBaseField<QLabel    , BtLineEditCurrency       >,
+   EditorBaseField<QLabel    , BtOptionalDateEdit       >,
+   EditorBaseField<QLabel    , QCheckBox                >,
+   EditorBaseField<QLabel    , QDateEdit                >, // For non-optional dates (eg on StockUse items)
+   EditorBaseField<QLabel    , QLabel                   >, // For read-only TEXT fields where "edit" field is actually a QLabel.  See also SmartValueDisplay below.
+   EditorBaseField<QLabel    , QLineEdit                >,
+   EditorBaseField<QLabel    , QPlainTextEdit           >,
+   EditorBaseField<QLabel    , QTextEdit                >,
+   EditorBaseField<QLabel    , SmartLineEdit            >,
+   EditorBaseField<QWidget   , QTextEdit                >, // This is for tabs such as tab_notes containing a single QTextEdit with no separate QLabel
+   EditorBaseField<SmartLabel, BtComboBoxBool           >,
+   EditorBaseField<SmartLabel, BtComboBoxEnum           >,
+   EditorBaseField<SmartLabel, QLineEdit                >,
+   EditorBaseField<SmartLabel, SmartLineEdit            >,
+   EditorBaseField<SmartLabel, SmartValueDisplay        >  // Read-only fields where user can control units
 >;
 
 /**

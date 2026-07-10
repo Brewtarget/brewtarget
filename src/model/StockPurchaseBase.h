@@ -46,7 +46,7 @@ AddPropertyName(quantityRemaining)
 
 /**
  * \brief Small CRTP base class to provide templated code for stock purchase classes: \c StockPurchaseHop,
- *        \c StockPurchaseFermentable, \c StockPurchaseMisc, \c StockPurchaseSalt, \c StockPurchaseYeast.
+ *        \c StockPurchaseFermentable, \c StockPurchaseMisc, \c StockPurchaseYeast.
  *
  * \param Derived = the derived class, eg \c StockPurchaseHop
  * \param IngredientClass = the ingredient class, eg \c Hop
@@ -62,7 +62,7 @@ protected:
       return;
    }
 
-   StockPurchaseBase([[maybe_unused]] NamedParameterBundle const & namedParameterBundle) :
+   explicit StockPurchaseBase([[maybe_unused]] NamedParameterBundle const & namedParameterBundle) :
       // See comment in OwnedSet for why it never needs the NamedParameterBundle
       m_changes{this->derived()} {
       this->connectSlots();

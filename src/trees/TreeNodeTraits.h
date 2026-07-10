@@ -29,13 +29,11 @@
 #include "model/StockPurchaseFermentable.h"
 #include "model/StockPurchaseMisc.h"
 #include "model/StockPurchaseHop.h"
-#include "model/StockPurchaseSalt.h"
 #include "model/StockPurchaseYeast.h"
 #include "model/StockUseIngredient.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
-#include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -123,7 +121,6 @@ template<> consteval char const * TreeNodeTraits<Folder<Hop         >, Hop      
 template<> consteval char const * TreeNodeTraits<Folder<Mash        >, Mash        >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Mash"        ; }
 template<> consteval char const * TreeNodeTraits<Folder<Misc        >, Misc        >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Misc"        ; }
 template<> consteval char const * TreeNodeTraits<Folder<Recipe      >, Recipe      >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Recipe"      ; }
-template<> consteval char const * TreeNodeTraits<Folder<Salt        >, Salt        >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Salt"        ; }
 template<> consteval char const * TreeNodeTraits<Folder<Style       >, Style       >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Style"       ; }
 template<> consteval char const * TreeNodeTraits<Folder<Water       >, Water       >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Water"       ; }
 template<> consteval char const * TreeNodeTraits<Folder<Yeast       >, Yeast       >::getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Folder-Yeast"       ; }
@@ -342,44 +339,6 @@ template<> struct TreeNodeTraits<StockPurchaseMisc, StockPurchaseMisc> {
    static QString getRootName() { return Misc::tr("Misc Purchases"); }
 };
 
-template<> struct TreeNodeTraits<StockUseSalt, StockPurchaseSalt> {
-   enum class ColumnIndex {
-      Reason         ,
-      Date           ,
-      Comment        ,
-      Recipe         ,
-      AmountUsed     ,
-      AmountRemaining,
-   };
-   static constexpr auto NodeClassifier = TreeNodeClassifier::SecondaryItem;
-
-   using ParentPtrTypes = std::variant<TreeItemNode<StockPurchaseSalt> *>;
-   using ChildPtrTypes = std::variant<std::monostate>;
-   // StockUseSalts cannot be dropped anywhere
-   static consteval char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockUse"; }
-};
-
-template<> struct TreeNodeTraits<StockPurchaseSalt, StockPurchaseSalt> {
-   enum class ColumnIndex {
-      Name           ,
-      DateOrdered    ,
-      Supplier       ,
-      DateReceived   ,
-      AmountReceived ,
-      AmountRemaining,
-      Note           ,
-   };
-   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
-
-   // We have to support folder node for the root node
-   using ParentPtrTypes = std::variant<TreeRootNode<StockPurchaseSalt> *>;
-   using ChildPtrTypes = std::variant<std::shared_ptr<TreeItemNode<StockUseSalt>>>;
-   // StockPurchaseSalts cannot be dropped anywhere except folders
-   static consteval char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-StockPurchase"; }
-
-   static QString getRootName() { return Salt::tr("Salt Purchases"); }
-};
-
 template<> struct TreeNodeTraits<StockUseYeast, StockPurchaseYeast> {
    enum class ColumnIndex {
       Reason         ,
@@ -547,22 +506,6 @@ template<> struct TreeNodeTraits<Yeast, Yeast> {
    static consteval char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Ingredient"; }
 
    static QString getRootName() { return Yeast::tr("Yeasts"); }
-};
-
-template<> struct TreeNodeTraits<Salt, Salt> {
-   enum class ColumnIndex {
-      Name       ,
-      Type       ,
-      IsAcid     ,
-      PercentAcid,
-   };
-   static constexpr auto NodeClassifier = TreeNodeClassifier::PrimaryItem;
-
-   using ParentPtrTypes = std::variant<TreeRootNode<Salt> *, TreeFolderNode<Salt> *>;
-   using ChildPtrTypes = std::variant<std::monostate>;
-   static consteval char const * getDragNDropMimeType() { return DEF_CONFIG_MIME_PREFIX "-Ingredient"; }
-
-   static QString getRootName() { return Salt::tr("Salts"); }
 };
 
 template<> struct TreeNodeTraits<Style, Style> {

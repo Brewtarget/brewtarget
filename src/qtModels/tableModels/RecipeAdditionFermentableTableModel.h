@@ -43,10 +43,11 @@ COLUMN_NAMES(RecipeAdditionFermentableTableModel, Name          ,
                                                   Yield         ,
                                                   Color         ,
                                                   Amount        ,
-                                                  AmountType    ,
-                                                  TotalInventory,
                                                   Stage         ,
-                                                  Time          ,)
+                                                  Step          ,
+                                                  Time          ,
+                                                  AmountType    ,
+                                                  TotalInventory,)
 
 /*!
  * \class RecipeAdditionFermentableTableModel
@@ -69,9 +70,7 @@ public:
    //! \brief Reimplemented from QAbstractTableModel.
    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-private:
-   //! \brief Recalculate the total amount of grains in the model.  TBD: Not implemented -- do we need this?
-//   void updateTotalGrains();
+   double totalLacticAcid_kg() const;
 
 private:
    bool displayPercentages;

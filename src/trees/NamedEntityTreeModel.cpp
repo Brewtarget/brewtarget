@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/NamedEntityTreeModel.cpp is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * trees/NamedEntityTreeModel.cpp is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,11 +23,9 @@ TREE_MODEL_COMMON_CODE(Hop                 )
 TREE_MODEL_COMMON_CODE(StockPurchaseFermentable, StockUseFermentable)
 TREE_MODEL_COMMON_CODE(StockPurchaseHop        , StockUseHop        )
 TREE_MODEL_COMMON_CODE(StockPurchaseMisc       , StockUseMisc       )
-TREE_MODEL_COMMON_CODE(StockPurchaseSalt       , StockUseSalt       )
 TREE_MODEL_COMMON_CODE(StockPurchaseYeast      , StockUseYeast      )
 TREE_MODEL_COMMON_CODE(Mash                , MashStep                  )
 TREE_MODEL_COMMON_CODE(Misc                )
-TREE_MODEL_COMMON_CODE(Salt                )
 TREE_MODEL_COMMON_CODE(Style               )
 TREE_MODEL_COMMON_CODE(Water               )
 TREE_MODEL_COMMON_CODE(Yeast               )

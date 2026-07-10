@@ -63,6 +63,8 @@ namespace IbuMethods {
       Rager  ,
       Noonan ,
       mIbu   ,
+      // TODO: Add Garetz and Daniel methods
+
 //      Smph   , // Not yet implemented
    };
    // Note that we can't use the Q_ENUM macro here to allow storing the above enum class in a QVariant, because Q_ENUM
@@ -76,6 +78,13 @@ namespace IbuMethods {
     *        compile-time.  (One day, C++ will have reflection and we won't need to do things this way.)
     */
    extern EnumStringMapping const formulaStringMapping;
+
+   /**
+    * \brief Same as \c formulaStringMapping but with use of upper case letters (eg "Tinseth" rather than "tinseth",
+    *        "mIBU" rather than "mibu").
+    *
+    */
+   extern EnumStringMapping const formulaStringMappingUc;
 
    /*!
     * \brief Localised names of \c IbuMethods::IbuFormula values suitable for displaying to the end user

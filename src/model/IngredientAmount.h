@@ -48,7 +48,7 @@ AddPropertyName(unit    ) // Only quantity and unit should be used in database m
  *
  *        In our model, different types of ingredients are allowed to be measured in different ways:
  *
- *           \c Salt can be measured only by mass
+ *           \c WaterAdjustment can be measured by mass or by volume
  *           \c Water can be measured only by volume
  *           \c Fermentable and \c Hop can be measured either by mass or by volume
  *           \c Misc and \c Yeast can be measured by mass, by volume or by count
@@ -198,14 +198,14 @@ public:
 
    /**
     * \brief Derived classes also return same info via functions with more friendly names (eg
-    *        \c RecipeAdditionHop::hop(), \c RecipeUseOfWater::water()).  It would be neat to be able to just alias
-    *        those names, but I'm not sure it's possible (because the CRTP base class is an incomplete type inside the
-    *        derived class declaration).  So we use macros instead (see below).
+    *        \c RecipeAdditionHop::hop(), \c RecipeAdditionYeast::yeast()).  It would be neat to be able to just alias
+    *        those names, but I'm not sure that it's possible (because the CRTP base class is an incomplete type inside
+    *        the derived class declaration).  So we use macros instead (see below).
     */
    IngredientClass * ingredientRaw() const {
-      // Normally there should always be a valid Hop/Salt/etc in a RecipeAdjustmentHop/RecipeAdjustmentSalt/etc.  (The
-      // Recipe ID may be -1 if the addition is only just about to be added to the Recipe or has just been removed from
-      // it, but there's no great reason for the Hop/Salt/etc ID not to be valid).
+      // Normally there should always be a valid Hop/WaterAdjustment/etc in a RecipeAdditionHop/RecipeAdditionMisc/etc.
+      // (The Recipe ID may be -1 if the addition is only just about to be added to the Recipe or has just been removed
+      // from it, but there's no great reason for the Hop/WaterAdjustment/etc ID not to be valid).
       if (this->m_ingredientId <= 0) {
          qWarning() <<
             Q_FUNC_INFO << "No" << IngredientClass::staticMetaObject.className() << "set on " <<

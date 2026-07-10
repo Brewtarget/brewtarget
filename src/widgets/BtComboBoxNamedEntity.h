@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxNamedEntity.h is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * widgets/BtComboBoxNamedEntity.h is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@
 #include "model/Fermentation.h"
 #include "model/Hop.h"
 #include "model/Misc.h"
-#include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -36,7 +35,6 @@
 #include "qtModels/listModels/FermentationListModel.h"
 #include "qtModels/listModels/HopListModel.h"
 #include "qtModels/listModels/MiscListModel.h"
-#include "qtModels/listModels/SaltListModel.h"
 #include "qtModels/listModels/StyleListModel.h"
 #include "qtModels/listModels/WaterListModel.h"
 #include "qtModels/listModels/YeastListModel.h"
@@ -48,7 +46,6 @@
 #include "qtModels/sortFilterProxyModels/FermentationSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/HopSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/MiscSortFilterProxyModel.h"
-#include "qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.h"
@@ -118,15 +115,6 @@ class BtComboBoxMisc : public BtComboBoxObject,
                                                    MiscSortFilterProxyModel> {
    Q_OBJECT
    BT_COMBO_BOX_OBJECT_DECL(Misc)
-};
-
-class BtComboBoxSalt : public BtComboBoxObject,
-                       public BtComboBoxObjectBase<BtComboBoxSalt,
-                                                   Salt          ,
-                                                   SaltListModel ,
-                                                   SaltSortFilterProxyModel> {
-   Q_OBJECT
-   BT_COMBO_BOX_OBJECT_DECL(Salt)
 };
 
 class BtComboBoxStyle : public BtComboBoxObject,

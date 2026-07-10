@@ -1,0 +1,96 @@
+//======================================================================================================================
+// schema/StepCommon.beer.schema is part of DotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/StepCommon.beer.schema",
+  "description": "`StepCommon` is not a type itself, but a subschema holding various common parts of `MashStep`, `BoilStep` and `FermentationStep`.",
+  "$defs": {
+    //
+    // The step types have overlapping sets of fields, as follows (where ‡ means a field is required):
+    //
+    //    MashStep             BoilStep            FermentationStep    |   Providing Class
+    //    --------             --------            ----------------    |   --------
+    //  ‡ name               ‡ name              ‡ name                |   StepBase
+    //    step_description     step_description    step_description    |   StepBase
+    //    ramp_time            ramp_time                               |   StepWithRampTime
+    //  ‡ step_time            step_time           step_time           |   StepBase
+    //  ‡ start_temperature    start_temperature   start_temperature   |   StepBase
+    //    end_temperature      end_temperature     end_temperature     |   StepBase
+    //    start_ph             start_ph            start_ph            |   StepBase
+    //    end_ph               end_ph              end_ph              |   StepBase
+    //                         start_gravity       start_gravity       |   StepWithGravity
+    //                         end_gravity         end_gravity         |   StepWithGravity
+    //                                                                 |
+    //  ‡ type                                                         |   MashStep
+    //    amount                                                       |   MashStep
+    //    water_grain_ratio                                            |   MashStep
+    //    infuse_temperature                                           |   MashStep
+    //                                                                 |
+    //                         chilling_type                           |   BoilStep
+    //                                                                 |
+    //                                             free_rise           |   FermentationStep
+    //                                             vessel              |   FermentationStep
+    //
+    "StepBase": {
+      "type": "object",
+      "description": "Common attributes of MashStep, BoilStep and FermentationStep.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "step_description": {
+          "type": "string"
+        },
+        "step_time": {
+          "$ref": "Measurement.beer.schema#/$defs/Time"
+        },
+        "start_temperature": {
+          "description": "For a MashStep this is also known as the step temperature, and is the target temperature for this step",
+          "$ref": "Measurement.beer.schema#/$defs/Temperature"
+        },
+        "end_temperature": {
+          "$ref": "Measurement.beer.schema#/$defs/Temperature"
+        },
+        "start_pH": {
+          "$ref": "Measurement.beer.schema#/$defs/Acidity"
+        },
+        "end_pH": {
+          "$ref": "Measurement.beer.schema#/$defs/Acidity"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "StepWithRampTime": {
+      "type": "object",
+      "description": "Common attribute of MashStep and BoilStep but not FermentationStep.",
+      "properties": {
+        "ramp_time": {
+          "description": "The amount of time that passes before this step begins. eg moving from a mash step (step 1) of 148°F, to a new temperature step of 156°F (step 2) may take 8 minutes to heat the mash. Step 2 would have a ramp time of 8 minutes.",
+          "$ref": "Measurement.beer.schema#/$defs/Time"
+        }
+      }
+    },
+    "StepWithGravity": {
+      "type": "object",
+      "description": "Common attributes of BoilStep and FermentationStep but not MashStep.",
+      "properties": {
+        "start_gravity": {
+          "$ref": "Measurement.beer.schema#/$defs/Gravity"
+        },
+        "end_gravity": {
+          "$ref": "Measurement.beer.schema#/$defs/Gravity"
+        }
+      }
+    }
+  }
+}

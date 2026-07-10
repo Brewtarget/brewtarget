@@ -36,7 +36,6 @@ public:
       m_stockManagerFermentable{new StockManagerFermentable(&m_self)},
       m_stockManagerHop        {new StockManagerHop        (&m_self)},
       m_stockManagerMisc       {new StockManagerMisc       (&m_self)},
-      m_stockManagerSalt       {new StockManagerSalt       (&m_self)},
       m_stockManagerYeast      {new StockManagerYeast      (&m_self)} {
 
       this->m_self.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -61,7 +60,6 @@ public:
       this->m_tabWidget_StockPurchaseTrees->addTab(this->m_stockManagerFermentable, QIcon{QStringLiteral(":/images/smallBarley.svg"  )}, QObject::tr("Fermentables" ));
       this->m_tabWidget_StockPurchaseTrees->addTab(this->m_stockManagerHop        , QIcon{QStringLiteral(":/images/smallHop.svg"     )}, QObject::tr("Hops"         ));
       this->m_tabWidget_StockPurchaseTrees->addTab(this->m_stockManagerMisc       , QIcon{QStringLiteral(":/images/smallQuestion.svg")}, QObject::tr("Miscellaneous"));
-      this->m_tabWidget_StockPurchaseTrees->addTab(this->m_stockManagerSalt       , QIcon{QStringLiteral(":/images/iconSalt.svg"     )}, QObject::tr("Salts"        ));
       this->m_tabWidget_StockPurchaseTrees->addTab(this->m_stockManagerYeast      , QIcon{QStringLiteral(":/images/smallYeast.svg"   )}, QObject::tr("Yeasts"       ));
 
       this->m_vLayout_Outermost->addWidget(this->m_tabWidget_StockPurchaseTrees);
@@ -78,7 +76,6 @@ public:
       this->m_tabWidget_StockPurchaseTrees->setTabText(0, QObject::tr("Fermentables" ));
       this->m_tabWidget_StockPurchaseTrees->setTabText(1, QObject::tr("Hops"         ));
       this->m_tabWidget_StockPurchaseTrees->setTabText(2, QObject::tr("Miscellaneous"));
-      this->m_tabWidget_StockPurchaseTrees->setTabText(3, QObject::tr("Salts"        ));
       this->m_tabWidget_StockPurchaseTrees->setTabText(4, QObject::tr("Yeasts"       ));
 
       return;
@@ -102,7 +99,6 @@ public:
    StockManagerFermentable * m_stockManagerFermentable;
    StockManagerHop         * m_stockManagerHop        ;
    StockManagerMisc        * m_stockManagerMisc       ;
-   StockManagerSalt        * m_stockManagerSalt       ;
    StockManagerYeast       * m_stockManagerYeast      ;
    //! @}
 
@@ -111,13 +107,11 @@ public:
 template<> void StockWindow::impl::selectTab<Fermentable>() { this->m_tabWidget_StockPurchaseTrees->setCurrentIndex(0); return; }
 template<> void StockWindow::impl::selectTab<Hop        >() { this->m_tabWidget_StockPurchaseTrees->setCurrentIndex(1); return; }
 template<> void StockWindow::impl::selectTab<Misc       >() { this->m_tabWidget_StockPurchaseTrees->setCurrentIndex(2); return; }
-template<> void StockWindow::impl::selectTab<Salt       >() { this->m_tabWidget_StockPurchaseTrees->setCurrentIndex(3); return; }
 template<> void StockWindow::impl::selectTab<Yeast      >() { this->m_tabWidget_StockPurchaseTrees->setCurrentIndex(4); return; }
 
 template<> StockManager & StockWindow::impl::getStockManager<Fermentable>() { return *this->m_stockManagerFermentable; }
 template<> StockManager & StockWindow::impl::getStockManager<Hop        >() { return *this->m_stockManagerHop        ; }
 template<> StockManager & StockWindow::impl::getStockManager<Misc       >() { return *this->m_stockManagerMisc       ; }
-template<> StockManager & StockWindow::impl::getStockManager<Salt       >() { return *this->m_stockManagerSalt       ; }
 template<> StockManager & StockWindow::impl::getStockManager<Yeast      >() { return *this->m_stockManagerYeast      ; }
 
 StockWindow::StockWindow(QWidget * parent) :
@@ -140,13 +134,11 @@ void StockWindow::retranslateUi() {
 template<> StockPurchaseFermentableEditor & StockWindow::getPurchaseEditor<Fermentable>() const { return this->pimpl->m_stockManagerFermentable->getPurchaseEditor(); }
 template<> StockPurchaseHopEditor         & StockWindow::getPurchaseEditor<Hop        >() const { return this->pimpl->m_stockManagerHop        ->getPurchaseEditor(); }
 template<> StockPurchaseMiscEditor        & StockWindow::getPurchaseEditor<Misc       >() const { return this->pimpl->m_stockManagerMisc       ->getPurchaseEditor(); }
-template<> StockPurchaseSaltEditor        & StockWindow::getPurchaseEditor<Salt       >() const { return this->pimpl->m_stockManagerSalt       ->getPurchaseEditor(); }
 template<> StockPurchaseYeastEditor       & StockWindow::getPurchaseEditor<Yeast      >() const { return this->pimpl->m_stockManagerYeast      ->getPurchaseEditor(); }
 
 template<> StockUseFermentableEditor & StockWindow::getUseEditor<Fermentable>() const { return this->pimpl->m_stockManagerFermentable->getUseEditor(); }
 template<> StockUseHopEditor         & StockWindow::getUseEditor<Hop        >() const { return this->pimpl->m_stockManagerHop        ->getUseEditor(); }
 template<> StockUseMiscEditor        & StockWindow::getUseEditor<Misc       >() const { return this->pimpl->m_stockManagerMisc       ->getUseEditor(); }
-template<> StockUseSaltEditor        & StockWindow::getUseEditor<Salt       >() const { return this->pimpl->m_stockManagerSalt       ->getUseEditor(); }
 template<> StockUseYeastEditor       & StockWindow::getUseEditor<Yeast      >() const { return this->pimpl->m_stockManagerYeast      ->getUseEditor(); }
 
 template<class Ingrd> void StockWindow::showStockPurchasesFor(Ingrd const * ingredient) {
@@ -163,7 +155,6 @@ template<class Ingrd> void StockWindow::showStockPurchasesFor(Ingrd const * ingr
 template void StockWindow::showStockPurchasesFor(Fermentable const * ingredient);
 template void StockWindow::showStockPurchasesFor(Hop         const * ingredient);
 template void StockWindow::showStockPurchasesFor(Misc        const * ingredient);
-template void StockWindow::showStockPurchasesFor(Salt        const * ingredient);
 template void StockWindow::showStockPurchasesFor(Yeast       const * ingredient);
 
 
@@ -172,7 +163,6 @@ void StockWindow::saveUiState() const {
    this->pimpl->m_stockManagerFermentable->saveUiState(PersistentSettings::Names::uiState_stockManagerFermentable, section);
    this->pimpl->m_stockManagerHop        ->saveUiState(PersistentSettings::Names::uiState_stockManagerHop        , section);
    this->pimpl->m_stockManagerMisc       ->saveUiState(PersistentSettings::Names::uiState_stockManagerMisc       , section);
-   this->pimpl->m_stockManagerSalt       ->saveUiState(PersistentSettings::Names::uiState_stockManagerSalt       , section);
    this->pimpl->m_stockManagerYeast      ->saveUiState(PersistentSettings::Names::uiState_stockManagerYeast      , section);
    return;
 }
@@ -182,7 +172,6 @@ bool StockWindow::restoreUiState() {
    bool const aa = this->pimpl->m_stockManagerFermentable->restoreUiState(PersistentSettings::Names::uiState_stockManagerFermentable, section);
    bool const bb = this->pimpl->m_stockManagerHop        ->restoreUiState(PersistentSettings::Names::uiState_stockManagerHop        , section);
    bool const cc = this->pimpl->m_stockManagerMisc       ->restoreUiState(PersistentSettings::Names::uiState_stockManagerMisc       , section);
-   bool const dd = this->pimpl->m_stockManagerSalt       ->restoreUiState(PersistentSettings::Names::uiState_stockManagerSalt       , section);
-   bool const ee = this->pimpl->m_stockManagerYeast      ->restoreUiState(PersistentSettings::Names::uiState_stockManagerYeast      , section);
-   return aa && bb && cc && dd && ee;
+   bool const dd = this->pimpl->m_stockManagerYeast      ->restoreUiState(PersistentSettings::Names::uiState_stockManagerYeast      , section);
+   return aa && bb && cc && dd;
 }

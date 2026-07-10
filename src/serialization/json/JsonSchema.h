@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonSchema.h is part of Brewtarget, and is copyright the following authors 2021-2022:
+ * serialization/json/JsonSchema.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -40,7 +40,8 @@ public:
    // Each JsonSchema is a const (after construction) singleton for the schema it represents (eg BeerJSON 2.1), so this
    // enum lists all the available ones.
    enum class Id {
-      BEER_JSON_2_1
+      DotBeer_1_0,
+      BeerJSON_2_1,
    };
 
    /*!

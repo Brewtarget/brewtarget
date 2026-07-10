@@ -22,7 +22,7 @@
 #include <QDialog>
 
 /**
- * \brief A window showing stock of Fermentables, Hops, Miscs, Salts, Yeasts
+ * \brief A window showing stock of Fermentables, Hops, Miscs, Yeasts
  *
  */
 class StockWindow : public QDialog {
@@ -30,8 +30,8 @@ class StockWindow : public QDialog {
 
 public:
    //! \brief Default constructor.
-   StockWindow(QWidget * parent = nullptr);
-   ~StockWindow();
+   explicit StockWindow(QWidget * parent = nullptr);
+   ~StockWindow() override;
 
    void retranslateUi();
 

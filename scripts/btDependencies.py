@@ -31,6 +31,7 @@ import re
 import requests
 import shutil
 import subprocess
+import sys
 import tempfile
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -50,7 +51,7 @@ def downloadFile(url):
    response = requests.get(url)
    if (response.status_code != 200):
       btLogger.log.critical('Error code ' + str(response.status_code) + ' while downloading ' + url)
-      exit(1)
+      sys.exit(1)
    with open(filename, 'wb') as fd:
       for chunk in response.iter_content(chunk_size = 128):
          fd.write(chunk)
@@ -488,7 +489,7 @@ def installDependencies():
          exe_uname = shutil.which('uname')
          if (exe_uname is None or exe_uname == ''):
             btLogger.log.critical('Cannot find uname.  This script needs to be run under MSYS2 - see https://www.msys2.org/')
-            exit(1)
+            sys.exit(1)
          # We could just run uname without the -a option, but the latter gives some useful diagnostics to log
          unameResult = str(
             btExecute.abortOnRunFail(subprocess.run([exe_uname, '-a'], encoding = "utf-8", capture_output = True)).stdout
@@ -508,7 +509,7 @@ def installDependencies():
             # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are
             # no longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
             btLogger.log.critical('Running in ' + terminalVersion + ' but need to run in MINGW64 (ie 64-bit build environment)')
-            exit(1)
+            sys.exit(1)
 
          # Ensure pip is up-to-date.  This is what the error message tells you to run if it's not!
          btLogger.log.info('Ensuring Python pip is up-to-date')
@@ -1205,7 +1206,7 @@ def installDependencies():
 
       case _:
          btLogger.log.critical('Unrecognised platform: ' + platform.system())
-         exit(1)
+         sys.exit(1)
 
    #--------------------------------------------------------------------------------------------------------------------
    #------------------------------------------- Cross-platform Dependencies --------------------------------------------

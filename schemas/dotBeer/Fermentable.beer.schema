@@ -1,0 +1,205 @@
+//======================================================================================================================
+// schema/Fermentable.beer.schema is part of DotBeer and is copyright the following authors 2018-2026:
+//   • Mark Price <shadowchao99@gmail.com>
+//   • Matt Young <mfsy@yahoo.com>
+//   • Pierre Smits <pierre.smits@somonar.com>
+//   • Roman Eremin <roman.eremin@gmail.com> <roman.eremin@devexpress.com>
+//   • Ross Merrigan <email@rossmerrigan.com>
+//   • Yuriy Krutilin <y.krutilin@gmail.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/Fermentable.beer.schema",
+  "type": "object",
+  "title": "Fermentable",
+  "description": "Collects the attributes of a fermentable ingredient to store as record information.",
+  "allOf": [
+    {
+      "$ref": "#/$defs/FermentableBase"
+    },
+    {
+      "properties": {
+        "notes": {
+          "type": "string"
+        },
+        "moisture": {
+          "description": "Percentage moisture.  Only appropriate for a \"grain\" or \"other\" type",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "alpha_amylase": {
+          "description": "Total amount of alpha-amylase in the malted grain, measured in dextrinizing units.  (Since you ask, one α-amylase dextrinizing unit is defined as the quantity of α-amylase that will dextrinize soluble starch in the presence of an excess of β-amylase at the rate of 1 g/h at 30°C.  Or, at least, that's what it says at https://www.deerland.com/wp-content/uploads/2015/04/EnzymeAssayUnits_Deerland.pdf.)  Anyway, a value of 25-50 is desirable for base malt.",
+          "type": "number"
+        },
+        "diastatic_power": {
+          "description": "Diastatic power is a measurement of malted grains enzymatic content. A value of 35 Lintner is needed to self convert, while a value of 100 or more is desirable.",
+          "$ref": "Measurement.beer.schema#/$defs/DiastaticPower"
+        },
+        "protein": {
+          "description": "The percentage of protein. Higher values may indicate a possibility of haze, or lautering issues.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "kolbach_index": {
+          "description": "The Kolbach Index, also known as soluble to total ratio of nitrogen or protein, is used to indicate the degree of malt modification. A value above 35% is desired for simple single infusion mashing, undermodified malt may require multiple step mashes or decoction.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "max_in_batch": {
+          "description": "The recommended maximum percentage to use in a grain bill.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "recommend_mash": {
+          "description": "True if the fermentable must be mashed, false if it can be steeped.",
+          "type": "boolean"
+        },
+        "inventory": {
+          "$ref": "#/$defs/FermentableInventory"
+        },
+        "glassy": {
+          "description": "Percentage of malt that is \"glassy\".  For a malt, % \"glassy\" + % \"half glassy\" + % \"mealy\" = 100%.\n\nFrom https://byo.com/article/understanding-malt-spec-sheets-advanced-brewing/:\n\nMalt is also classified in terms of hardness. By convention, it is described as “mealy,” “half-glassy” and “glassy.” Mealy kernels have an endosperm (the partially germinated portion at the heart of the kernel that contains the starches) that is 25% or less glassy (hard). Glassy kernels have an endosperm that is more than 75% hard. The remaining kernels (26–75% hard) are said to be half-glassy.\n\nSee also https://www.probrewer.com/library/malt/understanding-malt-analysis-sheets/:\n\nBy convention, malt is classified by what percentage of the lot is “mealy,” “half-glassy/glassy-ends” and “glassy.”\n...\nAny base malt destined for brewing should be at least 90% mealy; if it is to be infusion-mashed it must be at least 95% mealy.  For base malts whose mealiness is expressed as a ratio, mealy/half-glassy/glassy, the ratio should be 92%/7%/1% for decoction and step mashing, and 95%/4%/1% or better for infusion mashing.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "plump": {
+          "description": "Percentage of grain that is \"plump\". The percentage of grain that masses through sieves with gaps of 7/64″ and 6/64″, desired values of 80% or higher which indicate plump kernels.\n\nFrom https://byo.com/article/understanding-malt-spec-sheets-advanced-brewing/:\n\nThe kernel size [of the malt] is typically expressed in terms of screen separation, that is, the fraction of kernels that do not pass through screens of various sizes.  In general, larger kernels will exhibit higher extract yields.  Kernels smaller than 2 mm (0.079 in.) can be indications of poor or nonexistent modification.  Sometimes the size value is given only in terms of the percentage of kernels that are “plump” or “thin.”  Malt that is more than 2% thin can cause problems when it is milled; a relatively uniform kernel size is desirable from this standpoint.\n\nFrom https://www.probrewer.com/library/malt/understanding-malt-analysis-sheets/:\n\nEuropean malts often list only the percentage of malt that can be sieved through 2.2 mm openings. Brewers will reject a malt if it’s more than 1% thin or 2% less than 2.2 mm, because these values indicate unmodified kernels.  Other analyses are given in terms of screen separation and brewers will typically see percentages of kernels that will remain on a screen with 5/64 inch, 6/64 inch, and 7/64 inch openings.  Kernels considered thin will fall through the 5/64-in. opening. Generally speaking, the plumper the malt kernels, the better the yield.  The uniformity of malt sizes measures how uniformly the malt will crush. Any lot of malt that will crush reasonably well must have kernels that are at least 90% adjacent sizes, regardless of the plumpness.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "half": {
+          "description": "Percentage of malt that is \"half glassy\".  For a malt, % \"glassy\" + % \"half glassy\" + % \"mealy\" = 100%.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "mealy": {
+          "description": "Percentage of malt that is \"mealy\".  For a malt, % \"glassy\" + % \"half glassy\" + % \"mealy\" = 100%.\n\n(The opposite of mealiness is “vitreosity,” which is sometimes used as an alternative measurement.  A value of 1 is assigned to glassy (vitreous) kernels, 0.5 to half-glassy and 0 to mealy kernels. The percentages of each are summed and averaged; a vitreosity value of 0.25 or less is considered desirable.)",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "thru": {
+          "description": "The Percentage of grain that makes it through a thin mesh screen, typically 5/64 inch. Values less than 3% are desired.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "friability": {
+          "description": "Friability is the measure of a malts ability to crumble during the crush, and is used as an indicator for easy gelatinization of the grain and starches, as well as modification of the malt. Value of 85% of higher indicates a well modified malt and is suitable for single step mashes. Lower values may require a step mash.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "di_pH": {
+          "description": "DI pH is the pH of the resultant wort for 40 grams of grain mashed in 100 mL of distilled water (or 1 lb of grain mashed in 1 gallon of distilled water).  Can be used in water chemistry and/or mash pH prediction calculations.<br><br>As explained at https://www.thescrewybrewer.com/2016/12/the-influence-of-grain-di-ph-on-mash-ph.html, \"The term DI pH is derived from the word distilled as in distilled water and pH as in pH value.  You can determine the DI pH value of any grain by finely crushing 40 grams of grain, mixing it in with 100 milliliters of distilled water and then heating the resulting mash to 125°F [52°C] for 20 minutes.  A pH reading taken of the resulting wort when cooled to 77°F [25°C] is the DI pH value of the grain.  Various grain types, and sometimes the same grain type sourced from several maltsters, will have different DI pH values.  Accurately calculating brewing water adjustments to optimize enzyme activity in the mash is largely dependent on knowing the correct DI pH value for each grain.\"",
+          "$ref": "Measurement.beer.schema#/$defs/Acidity"
+        },
+        "viscosity": {
+          "description": "The measure of wort viscosity, typically associated with the breakdown of beta-glucans. The higher the viscosity, the greater the need for a glucan rest and the less suitable for a fly sparge.",
+          "$ref": "Measurement.beer.schema#/$defs/Viscosity"
+        },
+        "dms_p": {
+          "description": "The amount of DMS precursors, namely S-methyl methionine (SMM) and dimethyl sulfoxide (DMSO) in the malt which convert to dimethyl sulfide (DMS).",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "fan": {
+          "description": "Free Amino Nitrogen (FAN) is a critical yeast nutrient. Typical values for base malt is 170.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "fermentability": {
+          "description": "Fermentability - Used in Extracts to indicate a baseline typical apparent attenuation for a typical medium attenuation yeast.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "beta_glucan": {
+          "description": "Values of 180 or more may suggest a glucan rest and avoiding fly sparging.",
+          "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
+        },
+        "lactic_acid_by_weight": {
+          "description": "For aciduated malts (aka acid malts), this is the percentage content by weight of lactic acid (which is usually what provides the acidity).  You might think that maltsters would be keen to give you this figure, but they often prefer to say things such as \"1% of this malt in the grain bill reduces the mash pH by approximately 0.1\", which is less helpful.  According to https://www.brunwater.com/water-knowledge, \"The typical acid content of acid malt can vary from maltster to maltster.  A range of 2 to 3 percent by weight lactic acid to acidulated grain weight is typical.\"",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "FermentableBase": {
+      "type": "object",
+      "description": "FermentableBase provides unique properties to identify individual records of fermentable ingredients.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "dry extract",
+            "extract",
+            "grain",
+            "sugar",
+            "fruit",
+            "juice",
+            "honey",
+            "other"
+          ]
+        },
+        "origin": {
+          "description": "Country or place of origin",
+          "type": "string"
+        },
+        "producer": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "string"
+        },
+        "grain_group": {
+          "description": "This should only be set when `type` is `grain`.",
+          "type": "string",
+          "enum": [
+            "base",
+            "caramel",
+            "flaked",
+            "roasted",
+            "specialty",
+            "smoked",
+            "adjunct"
+          ]
+        },
+        "yield_fine_grind": {
+          "description": "Extract Yield Dry Basis Fine Grind (DBFG) - aka percentage yield, compared to sucrose, of a fine grind.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "yield_coarse_grind": {
+          "description": "Extract Yield Dry Basis Coarse Grind (DBCG) - aka percentage yield, compared to sucrose, of a coarse grind.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "yield_fine_coarse_difference": {
+          "description": "Extract Fine Grind/Coarse Grind Difference (FG/CG) - aka the difference in yield between coarsely milled and finely milled grain.  A FG/CG difference of 0.5–1.0 percentage points is well suited to a single step infusion, while a value greater than 1.5 percentage points indicates that a protein rest or step mash may be advisable.\nNote that `fine_coarse_difference` should be the same as `fine_grind` minus `coarse_grind`.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "yield_potential": {
+          "description": "The potential yield is the specific gravity that can be achieved with 1.00 pound (455 g) of malt mashed in 1.00 gallon (3.78 L) of water.  Calculated as (extract) potential (SG) = 1 + (DBFG / 100) * 0.04621.",
+          "$ref": "Measurement.beer.schema#/$defs/Gravity"
+        },
+        "color": {
+          "description": "Maltsters typically measure grain color in degrees Lovibond, but other units are supported here.",
+          "$ref": "Measurement.beer.schema#/$defs/Color"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "yield",
+        "color"
+      ]
+    },
+    "FermentableInventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "oneOf": [
+            {
+              "$ref": "Measurement.beer.schema#/$defs/Volume"
+            },
+            {
+              "$ref": "Measurement.beer.schema#/$defs/Mass"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

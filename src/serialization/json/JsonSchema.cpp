@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonSchema.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * serialization/json/JsonSchema.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -189,13 +189,13 @@ public:
     */
    boost::json::value const * getReferencedDocument(std::string const & uri) {
       qDebug() << Q_FUNC_INFO << "Request for" << uri.c_str();
-      QString schemaFilePath = QString("%1/%2").arg(this->baseDir, uri.c_str());
+      QString const schemaFilePath = QString("%1/%2").arg(this->baseDir, uri.c_str());
       if (!this->schemaFileCache.contains(schemaFilePath)) {
          //
          // We allow comments in our bundled-as-resource schema files (which come from the BeerJSON project), in case we
          // want to annotate them
          //
-         std::shared_ptr<boost::json::value const> schemaDocument =
+         std::shared_ptr<boost::json::value const> const schemaDocument =
             std::make_shared<boost::json::value const>(JsonUtils::loadJsonDocument(schemaFilePath, true));
 
          qDebug() << Q_FUNC_INFO << "Read" << uri.c_str() << "as" << schemaFilePath;
@@ -239,10 +239,6 @@ JsonSchema::JsonSchema(char const * const baseDir,
 JsonSchema::~JsonSchema() = default;
 
 JsonSchema const & JsonSchema::instance(JsonSchema::Id id) {
-   // Once we are using C++20, we can write the following:
-   ///if (jsonSchemas.contains(id)) {
-   ///   return *jsonSchemas.value(id);
-   ///}
    auto result = jsonSchemas.find(id);
    if (result != jsonSchemas.end()) {
       return *result->second;
@@ -250,7 +246,11 @@ JsonSchema const & JsonSchema::instance(JsonSchema::Id id) {
    char const * baseDir = nullptr;
    char const * fileName = nullptr;
    switch (id) {
-      case JsonSchema::Id::BEER_JSON_2_1:
+      case JsonSchema::Id::DotBeer_1_0:
+         baseDir = ":/schemas/dotBeer";
+         fileName = "DotBeer.beer.schema";
+         break;
+      case JsonSchema::Id::BeerJSON_2_1:
          baseDir = ":/schemas/beerjson/1.0";
          fileName = "beer.json";
          break;

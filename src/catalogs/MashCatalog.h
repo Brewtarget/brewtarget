@@ -33,7 +33,7 @@
 /*!
  * \class MashCatalog
  *
- * \brief View/controller class for showing/editing the list of salts in the database.
+ * \brief View/controller class for showing/editing the list of mashes in the database.
  */
 class MashCatalog : public QDialog, public CatalogBase<MashCatalog,
                                                        Mash,

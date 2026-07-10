@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAdditionBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/RecipeAdditionBase.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@
 #include "utils/TypeTraits.h"
 
 class RecipeAddition;
-class RecipeUseOfWater;
 
 //
 // See comment in qtModels/tableModels/TableModelBase.h about benefits (and limitations) of using concepts.
@@ -49,8 +48,8 @@ class RecipeAdditionBase : public CuriouslyRecurringTemplateBase<RecipeAdditionP
 
 protected:
 
-   bool compareWith([[maybe_unused]] NamedEntity const & other,
-                    [[maybe_unused]] QList<BtStringConst const *> * propertiesThatDiffer) const {
+   bool doCompareWith([[maybe_unused]] NamedEntity const & other,
+                      [[maybe_unused]] QList<BtStringConst const *> * propertiesThatDiffer) const {
       // No member variables, so this is a no-op
       return true;
    }
@@ -65,9 +64,8 @@ public:
 
    //
    // This alias makes it easier to template a number of functions that are essentially the same for all subclasses of
-   // RecipeAddition.  Eg RecipeAdditionHop::IngredientClass is Hop; RecipeUseOfWater::IngredientClass is Water; etc.
-   // Note that the alias and the template parameter cannot have the same name, hence why we use Ingr
-   // for the latter.
+   // RecipeAddition.  Eg RecipeAdditionHop::IngredientClass is Hop; RecipeAdditionMisc::IngredientClass is Misc; etc.
+   // Note that the alias and the template parameter cannot have the same name, hence why we use Ingr for the latter.
    //
    using IngredientClass = Ingr;
 
@@ -87,7 +85,7 @@ public:
     * \brief We define a canonical sort order for any given type of recipe addition.  This is useful when comparing
     *        lists of them (eg all the hop additions in two recipes) for equality.
     *
-    *        Note that, because RecipeAdjustmentSalt has different fields, it needs a different implementation.
+    *        NOTE that, because RecipeAdditionWaterAdjustment has different fields, it needs a different implementation.
     *
     *        Of course, strictly, we should call this function doThreeWayComparisonOperator but doSpaceship has the
     *        merit of brevity, and everyone knows <=> as the spaceship operator.
@@ -114,23 +112,15 @@ public:
    }
 
    /**
-    * \brief Arguably this belongs in \c RecipeAdjustmentSalt, but it's simpler to put it here since that's where we
+    * \brief Arguably this belongs in \c RecipeAdditionWaterAdjustment, but it's simpler to put it here since that's
+    *        where we
     *        have the version for all the Recipe Additions.
     */
    std::strong_ordering doSpaceship(Derived const & other) const requires (!IsRegularAddition<Derived>) {
       // Comments in the other version of doSpaceship, above, apply equally here.
       auto const & ll {this->derived()};
       auto const & rr {other};
-      // RecipeUseOfWater doesn't have m_whenToAdd or m_amount, but instead it has m_volume_l
-      if constexpr (!std::same_as<Derived, RecipeUseOfWater>) {
-         if (ll.m_whenToAdd != rr.m_whenToAdd) {
-            return ll.m_whenToAdd < rr.m_whenToAdd ? std::strong_ordering::less : std::strong_ordering::greater;
-         }
-         if (ll.m_amount != rr.m_amount) {
-            return ll.m_amount < rr.m_amount ? std::strong_ordering::less : std::strong_ordering::greater;
-         }
-      }
-      int nameComparison {ll.name().compare(rr.name(), Qt::CaseInsensitive)};
+      int const nameComparison {ll.name().compare(rr.name(), Qt::CaseInsensitive)};
       if (0 != nameComparison) {
          return nameComparison < 0 ? std::strong_ordering::less : std::strong_ordering::greater;
       }
@@ -145,9 +135,8 @@ public:
  *
  *        Note we have to be careful about comment formats in macro definitions
  *
- *        We can't derive RecipeAddition class name from ingredient name (eg RecipeAdditionHop from Hop) because we
- *        intentionally break the naming pattern with Salt (RecipeAdjustmentSalt).  Hence why these macros take two
- *        parameters.
+ *        TODO: Now we no longer have RecipeUseOfWater, we probably could derive the RecipeAddition class name from the
+ *        ingredient name (eg RecipeAdditionHop from Hop).
  */
 #define RECIPE_ADDITION_DECL(RaIngrd, Ingrd, ingrd) \
    /* This allows RecipeAdditionBase to call protected and private members of Derived */   \

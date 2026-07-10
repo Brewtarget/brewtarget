@@ -315,11 +315,11 @@ public:
     */
    void setDbDialog(Database::DbType db) {
       qDebug() <<
-         Q_FUNC_INFO << "Set " << (db == Database::DbType::PGSQL ? "PostgresSQL" : "SQLite") << " config params visible";
+         Q_FUNC_INFO << "Set " << (db == Database::DbType::PostgreSQL ? "PostgresSQL" : "SQLite") << " config params visible";
       this->m_self.groupBox_dbConfig->setVisible(false);
 
       this->clearLayout();
-      if (db == Database::DbType::PGSQL) {
+      if (db == Database::DbType::PostgreSQL) {
          this->postgresVisible(true);
          this->sqliteVisible(false);
 
@@ -476,7 +476,7 @@ public:
       );
       this->m_self.gravityComboBox->setCurrentIndex(
          this->m_self.gravityComboBox->findData(
-            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Density).uniqueName
+            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Gravity).uniqueName
          )
       );
       this->m_self.dateComboBox->setCurrentIndex(this->m_self.dateComboBox->findData(Localization::getDateFormat()));
@@ -525,7 +525,7 @@ public:
       // Database stuff -- this looks weird, but trust me. We want SQLITE to be
       // the default for this field
       int const tmp = PersistentSettings::value_ck(PersistentSettings::Names::dbType,
-                                                   static_cast<int>(Database::DbType::SQLITE)).toInt() - 1;
+                                                   static_cast<int>(Database::DbType::SQLite)).toInt() - 1;
       this->m_self.comboBox_engine->setCurrentIndex(tmp);
 
       this->input_pgHostname.setText(PersistentSettings::value_ck(PersistentSettings::Names::dbHostname, "localhost").toString());
@@ -667,12 +667,12 @@ OptionDialog::OptionDialog(QWidget * parent) :
    this->pimpl->configure_logging();
 
    // database panel stuff
-   comboBox_engine->addItem(tr("SQLite (default)"), QVariant(static_cast<int>(Database::DbType::SQLITE)));
-   comboBox_engine->addItem(tr("PostgreSQL"), QVariant(static_cast<int>(Database::DbType::PGSQL)));
+   comboBox_engine->addItem(tr("SQLite (default)"), QVariant(static_cast<int>(Database::DbType::SQLite)));
+   comboBox_engine->addItem(tr("PostgreSQL"), QVariant(static_cast<int>(Database::DbType::PostgreSQL)));
 
    // figure out which database we have
    int idx = comboBox_engine->findData(PersistentSettings::value_ck(PersistentSettings::Names::dbType,
-                                                                    static_cast<int>(Database::DbType::SQLITE)).toInt());
+                                                                    static_cast<int>(Database::DbType::SQLite)).toInt());
    this->pimpl->setDbDialog(static_cast<Database::DbType>(idx));
 
    // connect all the signals
@@ -697,7 +697,7 @@ void OptionDialog::connect_signals() {
 
    // figure out which database we have
    int idx = comboBox_engine->findData(PersistentSettings::value_ck(PersistentSettings::Names::dbType,
-                                                                    static_cast<int>(Database::DbType::SQLITE)).toInt());
+                                                                    static_cast<int>(Database::DbType::SQLite)).toInt());
    this->pimpl->setDbDialog(static_cast<Database::DbType>(idx));
 
    // Set the signals
@@ -765,7 +765,7 @@ void OptionDialog::setLogDir() {
 
 void OptionDialog::resetToDefault() {
    if (auto const engine = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
-       engine == Database::DbType::PGSQL) {
+       engine == Database::DbType::PostgreSQL) {
       this->pimpl->input_pgHostname.setText(QString("localhost"));
       this->pimpl->input_pgPortNum.setText(QString("5432"));
       this->pimpl->input_pgSchema.setText(QString("public"));
@@ -820,7 +820,7 @@ void OptionDialog::testConnection() {
 
    bool success;
    switch (newType) {
-      case Database::DbType::PGSQL:
+      case Database::DbType::PostgreSQL:
          {
             QString const hostname = this->pimpl->input_pgHostname.text();
             QString const schema   = this->pimpl->input_pgSchema.text();
@@ -978,8 +978,8 @@ bool OptionDialog::saveDatabaseConfig() {
       PersistentSettings::remove_ck(PersistentSettings::Names::dbPassword);
    }
 
-   Database::DbType dbEngine = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
-   if (dbEngine == Database::DbType::SQLITE) {
+   if (auto const dbEngine = static_cast<Database::DbType>(comboBox_engine->currentData().toInt());
+       dbEngine == Database::DbType::SQLite) {
       saveSqliteConfig();
    }
 
@@ -992,22 +992,32 @@ bool OptionDialog::transferDatabase() {
    // SQLite->Pgsql, Pgsql->Pgsql and Pgsql->SQLite. This will ensure we
    // preserve the information required.
    try {
-      QString theQuestion =
+      QString const theQuestion =
          tr("Would you like %1 to transfer your data to the new database? "
             "NOTE: If you've already loaded the data, say No").arg(CONFIG_APPLICATION_NAME_UC);
       if (QMessageBox::Yes == QMessageBox::question(this, tr("Transfer database"), theQuestion)) {
-         Database::instance().convertDatabase(this->pimpl->input_pgHostname.text(),
-                                              this->pimpl->input_pgDbName.text(),
-                                              this->pimpl->input_pgUsername.text(),
-                                              this->pimpl->input_pgPassword.text(),
-                                              this->pimpl->input_pgPortNum.text().toInt(),
-                                              static_cast<Database::DbType>(this->comboBox_engine->currentData().toInt()));
+         bool const conversionSucceeded =
+            Database::instance().convertDatabase(
+               this->pimpl->input_pgHostname.text(),
+               this->pimpl->input_pgDbName.text(),
+               this->pimpl->input_pgUsername.text(),
+               this->pimpl->input_pgPassword.text(),
+               this->pimpl->input_pgPortNum.text().toInt(),
+               static_cast<Database::DbType>(this->comboBox_engine->currentData().toInt())
+            );
+         if (!conversionSucceeded) {
+            QMessageBox::critical(
+               this,
+               tr("Conversion Error"),
+               tr("Data transfer failed.  See log file for more details.")
+            );
+         }
       }
       // Database engine stuff
-      int engine = comboBox_engine->currentData().toInt();
+      int const engine = comboBox_engine->currentData().toInt();
       PersistentSettings::insert_ck(PersistentSettings::Names::dbType, engine);
       // only write these changes when switching TO pgsql
-      if (engine == static_cast<int>(Database::DbType::PGSQL)) {
+      if (engine == static_cast<int>(Database::DbType::PostgreSQL)) {
          PersistentSettings::insert_ck(PersistentSettings::Names::dbHostname, this->pimpl->input_pgHostname.text());
          PersistentSettings::insert_ck(PersistentSettings::Names::dbPortnum , this->pimpl->input_pgPortNum.text());
          PersistentSettings::insert_ck(PersistentSettings::Names::dbSchema  , this->pimpl->input_pgSchema.text());
@@ -1072,7 +1082,7 @@ bool OptionDialog::saveVolumeUnits() {
 }
 
 bool OptionDialog::saveGravityUnits() {
-   return saveComboBoxChoiceOfUnitSystem(*gravityComboBox, "gravityComboBox", Measurement::PhysicalQuantity::Density);
+   return saveComboBoxChoiceOfUnitSystem(*gravityComboBox, "gravityComboBox", Measurement::PhysicalQuantity::Gravity);
 }
 
 bool OptionDialog::saveDateFormat() {

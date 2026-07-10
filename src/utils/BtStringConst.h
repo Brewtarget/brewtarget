@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/BtStringConst.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * utils/BtStringConst.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -48,27 +48,33 @@ public:
    /**
     * \brief Main constructor.
     *
-    *        It's tempting to make all the constructors explicit, but this then prevents us from using
-    *        \c std::initializer_list<BtStringConst> to initialise \c QVector<BtStringConst>.
+    *        NOTE: Although, elsewhere, we tend to make constructors explicit, we deliberately do not do so here.
+    *              Making the constructor explicit would prevent us from using \c std::initializer_list<BtStringConst>
+    *              to initialise \c QVector<BtStringConst>.
     *
-    *        The downside of this constructor not being explicit is that it can result in ambiguous function overloads.
-    *        Eg, if we have:
+    *              The downside of this constructor not being explicit is that it can result in ambiguous function
+    *              overloads.  Eg, if we have:
     *
-    *           void somefunc(QString       const & parm);
-    *           void somefunc(BtStringConst const & parm);
-    *           ...
-    *           someFunc("My Text");
+    *                 void somefunc(QString       const & parm);
+    *                 void somefunc(BtStringConst const & parm);
+    *                 ...
+    *                 someFunc("My Text");
     *
-    *        the call on the last line above is ambiguous because both \c QString and \c BtStringConst have constructors
-    *        that can implicitly convert from `char const *`.  The workaround (which we use in \c PersistentSettings) is
-    *        to change the name of one of the overloaded functions.
+    *              the call on the last line above is ambiguous because both \c QString and \c BtStringConst have
+    *              constructors that can implicitly convert from `char const *`.  The workaround (which we use in
+    *              \c PersistentSettings) is to change the name of one of the overloaded functions.
     */
-   BtStringConst(char const * const cString);
+   constexpr BtStringConst(char const * const cString) : cString(cString) { return; }
    //! Copy constructor OK
-   explicit BtStringConst(BtStringConst const &);
+   explicit constexpr BtStringConst(BtStringConst const &) = default;
    //! Move constructor OK
-   explicit BtStringConst(BtStringConst &&);
-   ~BtStringConst();
+   explicit constexpr BtStringConst(BtStringConst &&) noexcept = default;
+   ~BtStringConst() = default;
+
+   //! No assignment operator
+   BtStringConst & operator=(BtStringConst const &) = delete;
+   //! No move assignment
+   BtStringConst & operator=(BtStringConst &&) = delete;
 
    /**
     * \brief Compare two \c BtStringConst for equality using \c std::strcmp internally after doing short-cut checks (eg
@@ -93,7 +99,7 @@ public:
    /**
     * \brief Returns \c true if the contained char const * const pointer is null
     */
-   bool isNull() const;
+   [[nodiscard]] bool isNull() const;
 
    /**
     * \brief Returns a copy of the contained char const * const pointer
@@ -118,13 +124,8 @@ public:
       return outputStream;
    }
 
-private:
+   // NB: This needs to be public for us to be able to use BtStringConst instances as compile-time template parameters
    char const * const cString;
-
-   //! No assignment operator
-   BtStringConst & operator=(BtStringConst const &) = delete;
-   //! No move assignment
-   BtStringConst & operator=(BtStringConst &&) = delete;
 };
 
 /**

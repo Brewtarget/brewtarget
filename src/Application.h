@@ -29,8 +29,6 @@
 #define APPLICATION_H
 #pragma once
 
-#define CONFIG_VERSION 1
-
 // need to use this to turn on Mac keyboard shortcuts (see https://doc.qt.io/qt-5/qkeysequence.html#qt_set_sequence_auto_mnemonic)
 extern void qt_set_sequence_auto_mnemonic(bool b);
 

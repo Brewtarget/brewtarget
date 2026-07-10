@@ -80,6 +80,8 @@ FermentableEditor::FermentableEditor(QWidget* parent, QString const editorName) 
       EDITOR_FIELD_NORM(Fermentable, label_fan                   , lineEdit_fan                   , Fermentable::fan_ppm               , 1),
       EDITOR_FIELD_NORM(Fermentable, label_fermentability_pct    , lineEdit_fermentability_pct    , Fermentable::fermentability_pct    , 1),
       EDITOR_FIELD_NORM(Fermentable, label_betaGlucan            , lineEdit_betaGlucan            , Fermentable::betaGlucan_ppm        , 1),
+      //
+      EDITOR_FIELD_NORM(Fermentable, label_lacticAcidByWeight_pct, lineEdit_lacticAcidByWeight_pct, Fermentable::lacticAcidByWeight_pct, 1),
    });
    return;
 }

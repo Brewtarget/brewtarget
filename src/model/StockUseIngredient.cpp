@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * model/StockUseIngredient.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * model/StockUseIngredient.cpp is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -18,17 +18,14 @@
 #include "model/StockPurchaseFermentable.h"
 #include "model/StockPurchaseHop.h"
 #include "model/StockPurchaseMisc.h"
-#include "model/StockPurchaseSalt.h"
 #include "model/StockPurchaseYeast.h"
 
-STOCK_USE_COMMON_CODE(Fermentable)
-STOCK_USE_COMMON_CODE(Hop        )
-STOCK_USE_COMMON_CODE(Misc       )
-STOCK_USE_COMMON_CODE(Salt       )
-STOCK_USE_COMMON_CODE(Yeast      )
+STOCK_USE_COMMON_CODE(Fermentable    )
+STOCK_USE_COMMON_CODE(Hop            )
+STOCK_USE_COMMON_CODE(Misc           )
+STOCK_USE_COMMON_CODE(Yeast          )
 
-ENUMERATED_COMMON_CODE(StockUseFermentable)
-ENUMERATED_COMMON_CODE(StockUseHop        )
-ENUMERATED_COMMON_CODE(StockUseMisc       )
-ENUMERATED_COMMON_CODE(StockUseSalt       )
-ENUMERATED_COMMON_CODE(StockUseYeast      )
+ENUMERATED_COMMON_CODE(StockUseFermentable    )
+ENUMERATED_COMMON_CODE(StockUseHop            )
+ENUMERATED_COMMON_CODE(StockUseMisc           )
+ENUMERATED_COMMON_CODE(StockUseYeast          )

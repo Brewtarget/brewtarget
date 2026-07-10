@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/MiscEditor.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * editors/MiscEditor.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -29,7 +29,8 @@
 #include "editors/EditorBase.h"
 #include "model/Misc.h"
 
-#define MiscEditorOptions EditorBaseOptions{ .nameTab = true, .idDisplay = true, .numRecipesUsing = true }
+// Some Misc items have long names, so we disable putting the name in the "Main" tab
+#define MiscEditorOptions EditorBaseOptions{ .nameTab = false, .idDisplay = true, .numRecipesUsing = true }
 /*!
  * \class MiscEditor
  *
@@ -44,6 +45,12 @@ class MiscEditor : public QDialog,
    Q_OBJECT
 
    EDITOR_COMMON_DECL(Misc, MiscEditorOptions)
+
+public slots:
+   void hideOrShowWaterAgentFields();
+
+private:
+   void postReadFieldsFromEditItem(std::optional<QString> propName);
 };
 
 #endif

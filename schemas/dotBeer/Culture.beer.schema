@@ -1,0 +1,166 @@
+//======================================================================================================================
+// schema/Culture.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+//   • Mark Price <shadowchao99@gmail.com>
+//   • Matt Young <mfsy@yahoo.com>
+//   • Pierre Smits <pierre.smits@somonar.com>
+//   • Roman Eremin <roman.eremin@gmail.com> <roman.eremin@devexpress.com>
+//   • Yuriy Krutilin <y.krutilin@gmail.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/Culture.beer.schema",
+  "type": "object",
+  "title": "Culture",
+  "description": "Collects the attributes of a microbial culture such as a yeast.",
+  "allOf": [
+    {
+      "$ref": "#/$defs/CultureBase"
+    },
+    {
+      "properties": {
+        "temperature_range": {
+          "description": "The recommended temperature range of fermentation by the culture producer.",
+          "$ref": "Measurement.beer.schema#/$defs/RangeOfTemperature"
+        },
+        "alcohol_tolerance": {
+          "description": "The recommended limit of abv by the culture producer before attenuation stops.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "flocculation": {
+          "description": "Floculation refers to the ability of yeast to aggregate to form large flocs which drop out of suspension.",
+          "enum": [
+            "very low",
+            "low",
+            "medium low",
+            "medium",
+            "medium high",
+            "high",
+            "very high"
+          ]
+        },
+        "attenuation_range": {
+          "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "best_for": {
+          "description": "Recommended styles for a particular culture.",
+          "type": "string"
+        },
+        "max_reuse": {
+          "description": "Maximum number of times to reuse a culture before a new lab source is recommended.",
+          "type": "integer"
+        },
+        "pof": {
+          "description": "A POF+ culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts.",
+          "type": "boolean"
+        },
+        "glucoamylase": {
+          "description": "A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.",
+          "type": "boolean"
+        },
+        "inventory": {
+          "$ref": "#/$defs/CultureInventory"
+        },
+        "killer": {
+          "$ref": "#/$defs/KillerProperties"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "CultureBase": {
+      "type": "object",
+      "description": "Provides unique properties to identify individual records of a culture.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "culture_type": {
+          "enum": [
+            "ale",
+            "bacteria",
+            "brett",
+            "champagne",
+            "kveik",
+            "lacto",
+            "lager",
+            "malolactic",
+            "mixed-culture",
+            "other",
+            "pedio",
+            "spontaneous",
+            "wine"
+          ]
+        },
+        "form": {
+          "enum": [
+            "liquid",
+            "dry",
+            "slant",
+            "culture",
+            "dregs"
+          ]
+        },
+        "producer": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "culture_type",
+        "form"
+      ]
+    },
+    "CultureInventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "liquid": {
+          "$ref": "Measurement.beer.schema#/$defs/Volume"
+        },
+        "dry": {
+          "$ref": "Measurement.beer.schema#/$defs/Mass"
+        },
+        "slant": {
+          "$ref": "Measurement.beer.schema#/$defs/Volume"
+        },
+        "culture": {
+          "$ref": "Measurement.beer.schema#/$defs/Volume"
+        }
+      }
+    },
+    "KillerProperties": {
+      "type": "object",
+      "description": "Killer yeast properties (also known as zymocide) are common among wine yeasts.  There are some ale and brett yeasts that are immune to some killer (aka zymocidic) properties, these are known as \"killer neutral\".\n\nSee https://www.milkthefunk.com/wiki/Saccharomyces#Killer_Wine_Yeast for more on \"killer\" yeasts and \"killer neutral\" yeasts.  Some folks call these killer yeast properties \"zymocide\", but AFAICT \"killer\" is still the more widely used term, at least in relation to brewing.\n\nNote that `killerNeutral` being `true` implies all the other `producingXxxToxin` properties are `false`, because \"neutral strains do not produce toxins, nor are they killed by them\".",
+      "additionalProperties": false,
+      "properties": {
+        "producingK1Toxin": {
+          "type": "boolean"
+        },
+        "producingK2Toxin": {
+          "type": "boolean"
+        },
+        "producingK28Toxin": {
+          "type": "boolean"
+        },
+        "producingKlusToxin": {
+          "type": "boolean"
+        },
+        "neutral": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

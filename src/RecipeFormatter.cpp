@@ -977,15 +977,6 @@ public:
       return ret;
    }
 
-   /* I am not sure how I want to implement these yet.
-    * I might just include the salts in the instructions table. Until I decide
-    * these stay commented out
-   QString buildWaterTableHtml();
-   QString buildWaterTableTxt();
-   QString buildSaltTableHtml();
-   QString buildSaltTableTxt();
-   */
-
    QString buildBrewLogsHtml() {
       if (this->rec == nullptr) {
          return "";
@@ -1007,18 +998,19 @@ public:
          bnTable += "<table id=\"brewLog\">";
          bnTable += QString("<caption>%1</caption>").arg(tr("Preboil"));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
-                  .arg(tr("SG"))
-                  .arg(Measurement::displayAmount(Measurement::Amount{note->sg(), Measurement::Units::specificGravity}, 3))
-                  .arg(tr("Volume into BK"))
-                  .arg(Measurement::displayAmount(Measurement::Amount{note->volumeIntoBK_l(),
+                  .arg(BrewLog::localisedName_measuredPreBoilGravity_sg())
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->measuredPreBoilGravity_sg(),
+                                                                      Measurement::Units::specificGravity}, 3))
+                  .arg(BrewLog::localisedName_measuredPreBoilVolume_l())
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->measuredPreBoilVolume_l(),
                                                                       Measurement::Units::liters}));
 
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
-                  .arg(tr("Strike Temp"))
-                  .arg(Measurement::displayAmount(Measurement::Amount{note->strikeTemp_c(),
+                  .arg(BrewLog::localisedName_measuredStrikeTemp_c())
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->measuredStrikeTemp_c(),
                                                                       Measurement::Units::celsius}))
-                  .arg(tr("Final Temp"))
-                  .arg(Measurement::displayAmount(Measurement::Amount{note->mashFinTemp_c(),
+                  .arg(BrewLog::localisedName_measuredMashFinalTemp_c())
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->measuredMashFinalTemp_c(),
                                                                       Measurement::Units::celsius}));
 
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
@@ -1033,14 +1025,15 @@ public:
          bnTable += "<table id=\"brewLog\">";
          bnTable += QString("<caption>%1</caption>").arg(tr("Postboil"));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
-                  .arg(tr("OG"))
-                  .arg(Measurement::displayAmount(Measurement::Amount{note->og(), Measurement::Units::specificGravity}, 3))
-                  .arg(tr("Postboil Volume"))
-                  .arg(Measurement::displayAmount(Measurement::Amount{note->postBoilVolume_l(),
+                  .arg(BrewLog::localisedName_measuredOriginalGravity_sg())
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->measuredOriginalGravity_sg(),
+                                                                      Measurement::Units::specificGravity}, 3))
+                  .arg(BrewLog::localisedName_measuredPostBoilVolume_l())
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->measuredPostBoilVolume_l(),
                                                                       Measurement::Units::liters}));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
-                  .arg(tr("Volume Into Fermenter"))
-                  .arg(Measurement::displayAmount(Measurement::Amount{note->volumeIntoFerm_l(),
+                  .arg(BrewLog::localisedName_measuredVolumeIntoFermentor_l())
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->measuredVolumeIntoFermentor_l(),
                                                                       Measurement::Units::liters}))
                   .arg(tr("Brewhouse Eff"))
                   .arg(Measurement::displayQuantity(note->calculateBrewHouseEff_pct(), 2));
@@ -1054,10 +1047,12 @@ public:
          bnTable += "<table id=\"brewLog\">";
          bnTable += QString("<caption>%1</caption>").arg(tr("Postferment"));
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
-                  .arg(tr("FG"))
-                  .arg(Measurement::displayAmount(Measurement::Amount{note->fg(), Measurement::Units::specificGravity}, 3))
-                  .arg(tr("Volume"))
-                  .arg(Measurement::displayAmount(Measurement::Amount{note->finalVolume_l(), Measurement::Units::liters}));
+                  .arg(BrewLog::localisedName_measuredFinalGravity_sg())
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->measuredFinalGravity_sg(),
+                                                                      Measurement::Units::specificGravity}, 3))
+                  .arg(BrewLog::localisedName_measuredFinalVolume_l())
+                  .arg(Measurement::displayAmount(Measurement::Amount{note->measuredFinalVolume_l(),
+                                                                      Measurement::Units::liters}));
 
          bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                   .arg(tr("Date"))

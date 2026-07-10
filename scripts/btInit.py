@@ -139,7 +139,7 @@ match platform.system():
 
    case _:
       btLogger.log.critical('Unrecognised platform: ' + platform.system())
-      exit(1)
+      sys.exit(1)
 
 exe_python = shutil.which('python3')
 btLogger.log.info('sys.version: ' + sys.version + '; exe_python: ' + exe_python + '; ' + sys.executable)

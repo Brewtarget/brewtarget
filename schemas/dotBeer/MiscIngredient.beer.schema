@@ -1,0 +1,114 @@
+//======================================================================================================================
+// schema/MiscIngredient.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+//   • Mark Price <shadowchao99@gmail.com>
+//   • Matt Young <mfsy@yahoo.com>
+//   • Pierre Smits <pierre.smits@somonar.com>
+//   • Ricardo Rosa <rmsrosa@gmail.com>
+//   • Roman Eremin <roman.eremin@gmail.com> <roman.eremin@devexpress.com>
+//   • Yuriy Krutilin <y.krutilin@gmail.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/MiscIngredient.beer.schema",
+  "type": "object",
+  "title": "MiscIngredient",
+  "description": "Collects the attributes of an ingredient to store as record information.",
+  "allOf": [
+    {
+      "$ref": "#/$defs/MiscIngredientBase"
+    },
+    {
+      "properties": {
+        "use_for": {
+          "description": "Used to describe the purpose of the miscellaneous ingredient, e.g. whirlfloc is used for clarity.",
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "inventory": {
+          "$ref": "#/$defs/MiscIngredientInventory"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "MiscIngredientBase": {
+      "type": "object",
+      "description": "Miscellaneous ingredients that are not hops, fermentables, yeasts/cultures or water.  Some people would call these \"non-fermentable adjuncts\", but there are also narrower definitions of \"adjunct\", so we do not use that term.  Also often referred to as \"other ingredients\", but we already use \"other\" in a lot of classifications, so we prefer \"miscellaneous\" as abbreviated to \"misc\".",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "producer": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "string"
+        },
+        "misc_type": {
+          "description": "If this is `water agent` then `water_agent_type` should also be set.",
+          "enum": [
+            "spice",
+            "fining",
+            "water agent",
+            "herb",
+            "flavor",
+            "wood",
+            "other"
+          ]
+        },
+        "water_agent_type": {
+          "description": "Should only be set if `misc_type` is `water agent`.<br>`calcium chloride` = CaCl₂<br>`calcium carbonate` = CaCO₃<br>`calcium sulfate` = CaSO₄<br>`magnesium sulfate` = MgSO₄<br>`sodium chloride` = NaCl  aka \"regular\" salt<br>`sodium bicarbonate` = NaHCO₃<br>`lactic acid` = CH₃CH(OH)CO₂H (extended formula) = C₃H₆O₃ (regular formula)<br>`phosphoric acid` = H₃PO₄<br>`other` = none of the above",
+          "enum": [
+            "calcium chloride",
+            "calcium carbonate",
+            "calcium sulfate",
+            "magnesium sulfate",
+            "sodium chloride",
+            "sodium bicarbonate",
+            "lactic acid",
+            "phosphoric acid",
+            "other"
+          ]
+        },
+        "water_agent_percent_acid": {
+          "description": "Should only be set if `misc_type` is `water agent`.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "MiscIngredientInventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "oneOf": [
+            {
+              "$ref": "Measurement.beer.schema#/$defs/Volume"
+            },
+            {
+              "$ref": "Measurement.beer.schema#/$defs/Mass"
+            },
+            {
+              "$ref": "Measurement.beer.schema#/$defs/Count"
+            }
+          ]
+        }
+      },
+      "required": [
+        "amount"
+      ]
+    }
+  }
+}

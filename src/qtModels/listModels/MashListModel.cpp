@@ -24,5 +24,5 @@
    #include "moc_MashListModel.cpp"
 #endif
 
-// Insert the boiler-plate stuff that we cannot do in ListModelBase
+// Insert the boilerplate stuff that we cannot do in ListModelBase
 LIST_MODEL_COMMON_CODE(Mash, PropertyNames::Recipe::mash)

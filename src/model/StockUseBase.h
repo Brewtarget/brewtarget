@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * model/StockUseBase.h is part of Brewtarget, and is copyright the following authors 2025:
+ * model/StockUseBase.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -33,10 +33,10 @@ AddPropertyName(quantityRemaining)
 
 /**
  * \brief Small CRTP base class to provide templated code for inventory classes: \c StockUseHop, \c StockUseFermentable,
- *        \c StockUseMisc, \c StockUseSalt, \c StockUseYeast.
+ *        \c StockUseMisc, \c StockUseYeast.
  *
  * \param Derived            = the derived class, eg \c StockUseHop
- * \param StockPurchaseClass = the inventoryclass, eg \c StockPurchaseHop
+ * \param StockPurchaseClass = the inventory class, eg \c StockPurchaseHop
  */
 template<class Derived> class StockUsePhantom;
 template<class Derived, class StockPurchaseClass>

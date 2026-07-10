@@ -723,6 +723,12 @@ namespace Measurement::Units {
                               // is just to keep moving the decimal place until the value is less than 10 -- though TBH
                               // even a value greater than 2 is pretty implausible.
                               [](double val){ while (val >= 10.0) { val /= 10.0; } return val; }};
+   Unit const gravityPoints  {Measurement::UnitSystems::density_GravityPoints,
+                              {QObject::tr("points")},
+                              defaultSanitiser,
+                              [](double const val_points){return 1.0 + (val_points / 1000.0);},
+                              [](double const val_sg    ){return (val_sg - 1.0) * 1000.0;},
+                              &specificGravity};
    Unit const plato          {Measurement::UnitSystems::density_Plato,
                               {QObject::tr("P")},
                               defaultSanitiser,

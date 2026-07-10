@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/WaterTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * qtModels/tableModels/WaterTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -37,7 +37,6 @@
 // Forward declarations.
 class Water;
 class Recipe;
-class RecipeUseOfWater;
 
 class WaterItemDelegate;
 

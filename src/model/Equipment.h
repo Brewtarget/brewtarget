@@ -252,12 +252,14 @@ public:
     */
    Q_PROPERTY(std::optional<double> mashTunSpecificHeat_calGC READ mashTunSpecificHeat_calGC WRITE setMashTunSpecificHeat_calGC )
    /**
-    * \brief The top-up water in liters.               ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
+    * \brief The top-up water in liters.               ⮜⮜⮜ Optional in BeerXML, not part of BeerJSON ⮞⮞⮞
     *        The amount of top up water normally added just prior to starting fermentation.  Usually used for extract
     *        brewing.
     *
     *        Note this is not stored in BeerJSON.  Instead, all water top-ups are part of the Recipe to which they
-    *        relate.  See \c RecipeUseOfWater
+    *        relate.
+    *
+    *        TODO: This should get moved to Recipe
     */
    Q_PROPERTY(std::optional<double> topUpWater_l          READ topUpWater_l          WRITE setTopUpWater_l          )
    /**
@@ -301,7 +303,9 @@ public:
     *        Amount normally added to the boil kettle before the boil.
     *
     *        Note this is not stored in BeerJSON.  Instead, all water top-ups are part of the Recipe to which they
-    *        relate.  See \c RecipeUseOfWater
+    *        relate.
+    *
+    *        TODO: Move to Recipe
     */
    Q_PROPERTY(std::optional<double>  topUpKettle_l         READ topUpKettle_l         WRITE setTopUpKettle_l         )
    /**

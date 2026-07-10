@@ -75,6 +75,7 @@ AddPropertyName(ibuGalPerLb           )
 AddPropertyName(kernelSizePrpPlump_pct)
 AddPropertyName(kernelSizePrpThin_pct )
 AddPropertyName(kolbachIndex_pct      )
+AddPropertyName(lacticAcidByWeight_pct)
 AddPropertyName(maxInBatch_pct        )
 AddPropertyName(moisture_pct          )
 AddPropertyName(notes                 )
@@ -132,6 +133,7 @@ public:
    static QString localisedName_kernelSizePrpPlump_pct();
    static QString localisedName_kernelSizePrpThin_pct ();
    static QString localisedName_kolbachIndex_pct      ();
+   static QString localisedName_lacticAcidByWeight_pct();
    static QString localisedName_maxInBatch_pct        ();
    static QString localisedName_moisture_pct          ();
    static QString localisedName_notes                 ();
@@ -252,7 +254,7 @@ public:
    Q_PROPERTY(double         color_lovibond         READ color_lovibond         WRITE setColor_lovibond                     )
    //! \brief The color in SRM - our canonical color units
    Q_PROPERTY(double         color_srm              READ color_srm              WRITE setColor_srm                          )
-   //! \brief The origin.
+   //! \brief Country or place of origin
    Q_PROPERTY(QString        origin                 READ origin                 WRITE setOrigin                             )
    //! \brief The supplier.  NB: Not supported by BeerJSON (which does have Producer and Product ID)
    Q_PROPERTY(QString        supplier               READ supplier               WRITE setSupplier                           )
@@ -261,7 +263,8 @@ public:
    /**
     * \brief Extract Fine Grind/Coarse Grind Difference (FG/CG) - aka the difference in yield between coarsely milled
     *        and finely milled grain.  A FG/CG difference of 0.5–1.0 percentage points is well suited to a single step
-    *        infusion, while a value greater than 1.5 percentage points indicates that a protein rest may be advisable.
+    *        infusion, while a value greater than 1.5 percentage points indicates that a protein rest or step mash may
+    *        be advisable.
     *
     *        Optional in both BeerJSON and BeerXML.
     *
@@ -325,7 +328,7 @@ public:
     *              be a problem in practice.
     */
    Q_PROPERTY(std::optional<double> fineGrindYield_pct      READ fineGrindYield_pct      WRITE setFineGrindYield_pct    )
-   //! \brief Extract Yield Dry Basis Coarse Grind (DBCG) - aka percentage yield, compared to sucrose, of a coarse grind
+   //! \brief Extract Yield Dry Basis Coarse Grind (DBCG) - aka percentage yield, compared to sucrose, of a coarse grind.
    Q_PROPERTY(std::optional<double> coarseGrindYield_pct    READ coarseGrindYield_pct    WRITE setCoarseGrindYield_pct  )
    /**
     * \brief The potential yield is the specific gravity that can be achieved with 1.00 pound (455 g) of malt mashed in
@@ -357,7 +360,7 @@ public:
     *        From https://byo.com/article/understanding-malt-spec-sheets-advanced-brewing/:
     *
     *           Malt is also classified in terms of hardness. By convention, it is described as “mealy,” “half-glassy”
-    *           and “glassy.” Mealy kernels have an endosperm (the partially geminated portion at the heart of the
+    *           and “glassy.” Mealy kernels have an endosperm (the partially germinated portion at the heart of the
     *           kernel that contains the starches) that is 25% or less glassy (hard). Glassy kernels have an endosperm
     *           that is more than 75% hard. The remaining kernels (26–75% hard) are said to be half-glassy.
     *
@@ -388,8 +391,8 @@ public:
    Q_PROPERTY(std::optional<double> hardnessPrpMealy_pct    READ hardnessPrpMealy_pct    WRITE setHardnessPrpMealy_pct  )
 
    /**
-    * \brief Percentage of grain that is "plump". The percentage of grain that masses through sieves with gaps of 7/64"
-    *        and 6/64", desired values of 80% or higher which indicate plump kernels.
+    * \brief Percentage of grain that is "plump". The percentage of grain that masses through sieves with gaps of 7/64″
+    *        and 6/64″, desired values of 80% or higher which indicate plump kernels.
     *
     *        From https://byo.com/article/understanding-malt-spec-sheets-advanced-brewing/:
     *
@@ -507,7 +510,19 @@ public:
     *        Yes, it would be neat to include β in the property, variable and function names etc, but the Qt MOC doesn't
     *        appear to like it.
     */
-   Q_PROPERTY(std::optional<double> betaGlucan_ppm                  READ betaGlucan_ppm                  WRITE setBetaGlucan_ppm               )
+   Q_PROPERTY(std::optional<double> betaGlucan_ppm   READ betaGlucan_ppm   WRITE setBetaGlucan_ppm)
+
+   /**
+    * \brief For aciduated malts (aka acid malts), this is the percentage content by weight of lactic acid (which is
+    *        usually what provides the acidity).  You might think that maltsters would be keen to give you this figure,
+    *        but they often prefer to say things such as "1% of this malt in the grain bill reduces the mash pH by
+    *        approximately 0.1", which is less helpful.  According to https://www.brunwater.com/water-knowledge, "The
+    *        typical acid content of acid malt can vary from maltster to maltster.  A range of 2 to 3 percent by weight
+    *        lactic acid to acidulated grain weight is typical."
+    *
+    *        NB: This is not part of BeerXML or BeerJSON.
+    */
+   Q_PROPERTY(std::optional<double> lacticAcidByWeight_pct   READ lacticAcidByWeight_pct   WRITE setLacticAcidByWeight_pct)
 
    SUPPORT_NUM_RECIPES_USED_IN
 
@@ -547,6 +562,8 @@ public:
    std::optional<double>     fan_ppm                  () const;
    std::optional<double>     fermentability_pct       () const;
    std::optional<double>     betaGlucan_ppm           () const;
+
+   std::optional<double>     lacticAcidByWeight_pct   () const;
 
    // Calculated getters.
    bool    isExtract             () const;
@@ -589,44 +606,48 @@ public:
    void setFermentability_pct       (std::optional<double>     const   val);
    void setBetaGlucan_ppm           (std::optional<double>     const   val);
 
+   void setLacticAcidByWeight_pct   (std::optional<double>     const   val);
+
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
-   Type                      m_type                     ;
-   double                    m_color_lovibond           ;
-   QString                   m_origin                   ;
-   QString                   m_supplier                 ;
-   QString                   m_notes                    ;
-   std::optional<double>     m_coarseFineDiff_pct       ;
-   std::optional<double>     m_moisture_pct             ;
-   std::optional<double>     m_diastaticPower_lintner   ;
-   std::optional<double>     m_protein_pct              ;
-   std::optional<double>     m_maxInBatch_pct           ;
-   std::optional<bool>       m_recommendMash            ;
-   std::optional<double>     m_ibuGalPerLb              ;
+   Type                      m_type                   = Type::Grain;
+   double                    m_color_lovibond         = 0.0;
+   QString                   m_origin                 = "";
+   QString                   m_supplier               = "";
+   QString                   m_notes                  = "";
+   std::optional<double>     m_coarseFineDiff_pct     = std::nullopt;
+   std::optional<double>     m_moisture_pct           = std::nullopt;
+   std::optional<double>     m_diastaticPower_lintner = std::nullopt;
+   std::optional<double>     m_protein_pct            = std::nullopt;
+   std::optional<double>     m_maxInBatch_pct         = std::nullopt;
+   std::optional<bool>       m_recommendMash          = std::nullopt;
+   std::optional<double>     m_ibuGalPerLb            = std::nullopt;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   std::optional<GrainGroup> m_grainGroup               ;
-   QString                   m_producer                 ;
-   QString                   m_productId                ;
-   std::optional<double>     m_fineGrindYield_pct       ;
-   std::optional<double>     m_coarseGrindYield_pct     ;
-   std::optional<double>     m_potentialYield_sg        ;
-   std::optional<double>     m_alphaAmylase_dextUnits   ;
-   std::optional<double>     m_kolbachIndex_pct         ;
-   std::optional<double>     m_hardnessPrpGlassy_pct    ;
-   std::optional<double>     m_hardnessPrpHalf_pct      ;
-   std::optional<double>     m_hardnessPrpMealy_pct     ;
-   std::optional<double>     m_kernelSizePrpPlump_pct   ;
-   std::optional<double>     m_kernelSizePrpThin_pct    ;
-   std::optional<double>     m_friability_pct           ;
-   std::optional<double>     m_di_ph                    ;
-   std::optional<double>     m_viscosity_cP             ;
-   std::optional<double>     m_dmsP_ppm                 ;
-   std::optional<double>     m_fan_ppm                  ;
-   std::optional<double>     m_fermentability_pct       ;
-   std::optional<double>     m_betaGlucan_ppm           ;
+   std::optional<GrainGroup> m_grainGroup             = std::nullopt;
+   QString                   m_producer               = "";
+   QString                   m_productId              = "";
+   std::optional<double>     m_fineGrindYield_pct     = std::nullopt;
+   std::optional<double>     m_coarseGrindYield_pct   = std::nullopt;
+   std::optional<double>     m_potentialYield_sg      = std::nullopt;
+   std::optional<double>     m_alphaAmylase_dextUnits = std::nullopt;
+   std::optional<double>     m_kolbachIndex_pct       = std::nullopt;
+   std::optional<double>     m_hardnessPrpGlassy_pct  = std::nullopt;
+   std::optional<double>     m_hardnessPrpHalf_pct    = std::nullopt;
+   std::optional<double>     m_hardnessPrpMealy_pct   = std::nullopt;
+   std::optional<double>     m_kernelSizePrpPlump_pct = std::nullopt;
+   std::optional<double>     m_kernelSizePrpThin_pct  = std::nullopt;
+   std::optional<double>     m_friability_pct         = std::nullopt;
+   std::optional<double>     m_di_ph                  = std::nullopt;
+   std::optional<double>     m_viscosity_cP           = std::nullopt;
+   std::optional<double>     m_dmsP_ppm               = std::nullopt;
+   std::optional<double>     m_fan_ppm                = std::nullopt;
+   std::optional<double>     m_fermentability_pct     = std::nullopt;
+   std::optional<double>     m_betaGlucan_ppm         = std::nullopt;
+
+   std::optional<double>     m_lacticAcidByWeight_pct = std::nullopt;
 };
 
 BT_DECLARE_METATYPES(Fermentable)

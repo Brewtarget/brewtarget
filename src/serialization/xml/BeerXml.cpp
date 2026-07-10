@@ -45,7 +45,6 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
-#include "model/RecipeUseOfWater.h"
 #include "model/RecipeUtils.h"
 #include "model/Style.h"
 #include "model/Water.h"
@@ -68,7 +67,7 @@ namespace {
    BtStringConst const VERSION1{"1"};
 
    //
-   // In places we create our own records that are completely outside the scope of BeerXML (eg for boils and
+   // In places, we create our own records that are completely outside the scope of BeerXML (eg for boils and
    // fermentations).  This is allowed ("all non-standard tags will be ignored by the importing program.  This allows
    // programs to store additional information if desired using their own tags.  Any tags not defined as part of this
    // standard may safely be ignored by the importing program.")  We use a different version number for these records to
@@ -271,6 +270,8 @@ namespace {
       {XmlRecordDefinition::FieldType::Double          , "FAN_PPM"                       , PropertyNames::Fermentable::fan_ppm                  },
       {XmlRecordDefinition::FieldType::Double          , "FERMENTABILITY"                , PropertyNames::Fermentable::fermentability_pct       },
       {XmlRecordDefinition::FieldType::Double          , "BETA_GLUCAN_PPM"               , PropertyNames::Fermentable::betaGlucan_ppm           },
+      // This is not part of BeerXML or BeerJSON, so another extension tag
+      {XmlRecordDefinition::FieldType::Double          , "LACTIC_ACID_BY_WEIGHT_PCT"     , PropertyNames::Fermentable::lacticAcidByWeight_pct   },
    };
    std::initializer_list<XmlRecordDefinition::FieldDefinition> const BeerXml_FermentableType_ExclBase {
       // Type                                            XPath     Q_PROPERTY               Value Decoder
@@ -391,7 +392,7 @@ namespace {
    EnumStringMapping const BEER_XML_MISC_TYPE_MAPPER {
       {Misc::Type::Spice      , "Spice"           },
       {Misc::Type::Fining     , "Fining"          },
-      {Misc::Type::Water_Agent, "Water Agent"     },
+      {Misc::Type::WaterAgent, "Water Agent"     },
       {Misc::Type::Herb       , "Herb"            },
       {Misc::Type::Flavor     , "Flavor"          },
       {Misc::Type::Other      , "Other"           },
@@ -842,33 +843,31 @@ namespace {
          {XmlRecordDefinition::FieldType::Date            , "BREWDATE"               , PropertyNames::BrewLog::brewDate         },
          {XmlRecordDefinition::FieldType::Date            , "DATE_FERMENTED_OUT"     , PropertyNames::BrewLog::fermentDate      },
          {XmlRecordDefinition::FieldType::String          , "NOTES"                  , PropertyNames::BrewLog::notes            },
-         {XmlRecordDefinition::FieldType::Double          , "SG"                     , PropertyNames::BrewLog::sg               },
-         {XmlRecordDefinition::FieldType::Double          , "ACTUAL_ABV"             , PropertyNames::BrewLog::abv              },
-         {XmlRecordDefinition::FieldType::Double          , "EFF_INTO_BK"            , PropertyNames::BrewLog::effIntoBK_pct    },
-         {XmlRecordDefinition::FieldType::Double          , "BREWHOUSE_EFF"          , PropertyNames::BrewLog::brewhouseEff_pct },
-         {XmlRecordDefinition::FieldType::Double          , "VOLUME_INTO_BK"         , PropertyNames::BrewLog::volumeIntoBK_l   },
-         {XmlRecordDefinition::FieldType::Double          , "STRIKE_TEMP"            , PropertyNames::BrewLog::strikeTemp_c     },
-         {XmlRecordDefinition::FieldType::Double          , "MASH_FINAL_TEMP"        , PropertyNames::BrewLog::mashFinTemp_c    },
-         {XmlRecordDefinition::FieldType::Double          , "OG"                     , PropertyNames::BrewLog::og               },
-         {XmlRecordDefinition::FieldType::Double          , "POST_BOIL_VOLUME"       , PropertyNames::BrewLog::postBoilVolume_l },
-         {XmlRecordDefinition::FieldType::Double          , "VOLUME_INTO_FERMENTER"  , PropertyNames::BrewLog::volumeIntoFerm_l },
-         {XmlRecordDefinition::FieldType::Double          , "PITCH_TEMP"             , PropertyNames::BrewLog::pitchTemp_c      },
-         {XmlRecordDefinition::FieldType::Double          , "FG"                     , PropertyNames::BrewLog::fg               },
-         {XmlRecordDefinition::FieldType::Double          , "ATTENUATION"            , PropertyNames::BrewLog::attenuation      },
-         {XmlRecordDefinition::FieldType::Double          , "FINAL_VOLUME"           , PropertyNames::BrewLog::finalVolume_l    },
-         {XmlRecordDefinition::FieldType::Double          , "BOIL_OFF"               , PropertyNames::BrewLog::boilOff_l        },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_BOIL_GRAV"    , PropertyNames::BrewLog::projBoilGrav     },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_VOL_INTO_BK"  , PropertyNames::BrewLog::projVolIntoBK_l  },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_STRIKE_TEMP"  , PropertyNames::BrewLog::projStrikeTemp_c },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_MASH_FIN_TEMP", PropertyNames::BrewLog::projMashFinTemp_c},
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_OG"           , PropertyNames::BrewLog::projOg           },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_VOL_INTO_FERM", PropertyNames::BrewLog::projVolIntoFerm_l},
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_FG"           , PropertyNames::BrewLog::projFg           },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_EFF"          , PropertyNames::BrewLog::projEff_pct      },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_ABV"          , PropertyNames::BrewLog::projABV_pct      },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_POINTS"       , PropertyNames::BrewLog::projPoints       },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_FERM_POINTS"  , PropertyNames::BrewLog::projFermPoints   },
-         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_ATTEN"        , PropertyNames::BrewLog::projAtten        },
+         {XmlRecordDefinition::FieldType::Double          , "SG"                     , PropertyNames::BrewLog::measuredPreBoilGravity_sg      },
+         {XmlRecordDefinition::FieldType::Double          , "ACTUAL_ABV"             , PropertyNames::BrewLog::computedAlcoholByVolume_pct    },
+         {XmlRecordDefinition::FieldType::Double          , "EFF_INTO_BK"            , PropertyNames::BrewLog::computedPreBoilEfficiency_pct  },
+         {XmlRecordDefinition::FieldType::Double          , "BREWHOUSE_EFF"          , PropertyNames::BrewLog::computedEfficiency_pct         },
+         {XmlRecordDefinition::FieldType::Double          , "VOLUME_INTO_BK"         , PropertyNames::BrewLog::measuredPreBoilVolume_l        },
+         {XmlRecordDefinition::FieldType::Double          , "STRIKE_TEMP"            , PropertyNames::BrewLog::measuredStrikeTemp_c           },
+         {XmlRecordDefinition::FieldType::Double          , "MASH_FINAL_TEMP"        , PropertyNames::BrewLog::measuredMashFinalTemp_c        },
+         {XmlRecordDefinition::FieldType::Double          , "OG"                     , PropertyNames::BrewLog::measuredOriginalGravity_sg     },
+         {XmlRecordDefinition::FieldType::Double          , "POST_BOIL_VOLUME"       , PropertyNames::BrewLog::measuredPostBoilVolume_l       },
+         {XmlRecordDefinition::FieldType::Double          , "VOLUME_INTO_FERMENTER"  , PropertyNames::BrewLog::measuredVolumeIntoFermentor_l  },
+         {XmlRecordDefinition::FieldType::Double          , "PITCH_TEMP"             , PropertyNames::BrewLog::measuredPitchTemp_c            },
+         {XmlRecordDefinition::FieldType::Double          , "FG"                     , PropertyNames::BrewLog::measuredFinalGravity_sg        },
+         {XmlRecordDefinition::FieldType::Double          , "ATTENUATION"            , PropertyNames::BrewLog::computedAttenuation_pct        },
+         {XmlRecordDefinition::FieldType::Double          , "FINAL_VOLUME"           , PropertyNames::BrewLog::measuredFinalVolume_l          },
+         {XmlRecordDefinition::FieldType::Double          , "BOIL_OFF"               , PropertyNames::BrewLog::expectedBoilOff_l              },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_BOIL_GRAV"    , PropertyNames::BrewLog::expectedPreBoilGravity_sg      },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_VOL_INTO_BK"  , PropertyNames::BrewLog::expectedPreBoilVolume_l        },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_STRIKE_TEMP"  , PropertyNames::BrewLog::expectedStrikeTemp_c           },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_MASH_FIN_TEMP", PropertyNames::BrewLog::expectedMashFinalTemp_c        },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_OG"           , PropertyNames::BrewLog::expectedOriginalGravity_sg     },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_VOL_INTO_FERM", PropertyNames::BrewLog::expectedVolumeIntoFermentor_l  },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_FG"           , PropertyNames::BrewLog::expectedFinalGravity_sg        },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_EFF"          , PropertyNames::BrewLog::expectedEfficiency_pct         },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_ABV"          , PropertyNames::BrewLog::expectedAlcoholByVolume_pct    },
+         {XmlRecordDefinition::FieldType::Double          , "PROJECTED_ATTEN"        , PropertyNames::BrewLog::expectedAttenuation_pct        },
       }
    };
 
@@ -1046,22 +1045,6 @@ namespace {
    };
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   // Field mappings for <WATER>...</WATER> BeerXML records inside <RECIPE>...</RECIPE> records
-   //
-   // See comment on BEER_XML_RECORD_DEFN<RecipeAdditionHop> above!
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   template<> XmlRecordDefinition const BEER_XML_RECORD_DEFN<RecipeUseOfWater> {
-      std::in_place_type_t<RecipeUseOfWater>{},
-      "WATER",                          // XML record name
-      XmlRecordDefinition::create<XmlNamedEntityRecord<RecipeUseOfWater>>,
-      {
-         // Type                                  XPath     Q_PROPERTY                                 Value Decoder
-         {XmlRecordDefinition::FieldType::Double, "AMOUNT", PropertyNames::RecipeUseOfWater::volume_l},
-         {XmlRecordDefinition::FieldType::Record, ""      , PropertyNames::RecipeUseOfWater::water   , &BEER_XML_RECORD_DEFN_WATER_IN_RECIPE_USE_OF_WATER},
-      }
-   };
-
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for <RECIPE>...</RECIPE> BeerXML records
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    EnumStringMapping const BEER_XML_RECIPE_STEP_TYPE_MAPPER {
@@ -1102,7 +1085,8 @@ namespace {
          {XmlRecordDefinition::FieldType::ListOfRecords   , "FERMENTABLES/FERMENTABLE", PropertyNames::Recipe::fermentableAdditions, &BEER_XML_RECORD_DEFN<RecipeAdditionFermentable>}, // Additional logic for "FERMENTABLES" is handled in xml/XmlRecipeRecord.cpp
          {XmlRecordDefinition::FieldType::ListOfRecords   , "MISCS/MISC"              , PropertyNames::Recipe::miscAdditions     , &BEER_XML_RECORD_DEFN<RecipeAdditionMisc> }, // Additional logic for "MISCS" is handled in xml/XmlRecipeRecord.cpp
          {XmlRecordDefinition::FieldType::ListOfRecords   , "YEASTS/YEAST"            , PropertyNames::Recipe::yeastAdditions    , &BEER_XML_RECORD_DEFN<RecipeAdditionYeast>}, // Additional logic for "YEASTS" is handled in xml/XmlRecipeRecord.cpp
-         {XmlRecordDefinition::FieldType::ListOfRecords   , "WATERS/WATER"            , PropertyNames::Recipe::waterUses         , &BEER_XML_RECORD_DEFN<RecipeUseOfWater>   }, // Additional logic for "WATERS" is handled in xml/XmlRecipeRecord.cpp
+         // NOTE that, per comments elsewhere, we no longer support the ingredients/water_additions array.  It feels
+         // like it's a slightly incomplete part of both BeerXML and BeerJSON.
          {XmlRecordDefinition::FieldType::Record          , "MASH"                    , PropertyNames::Recipe::mash              , &BEER_XML_RECORD_DEFN<Mash>             },
          {XmlRecordDefinition::FieldType::ListOfRecords   , "INSTRUCTIONS/INSTRUCTION", PropertyNames::Recipe::instructions      , &BEER_XML_RECORD_DEFN<Instruction>      }, // Additional logic for "INSTRUCTIONS" is handled in xml/XmlNamedEntityRecord.h
          {XmlRecordDefinition::FieldType::ListOfRecords   , "BREWNOTES/BREWNOTE"      , PropertyNames::Recipe::brewLogs          , &BEER_XML_RECORD_DEFN<BrewLog>          }, // Additional logic for "BREWNOTES" is handled in xml/XmlNamedEntityRecord.h

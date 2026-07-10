@@ -33,7 +33,7 @@
 /*!
  * \class BoilCatalog
  *
- * \brief View/controller class for showing/editing the list of salts in the database.
+ * \brief View/controller class for showing/editing the list of boils in the database.
  */
 class BoilCatalog : public QDialog, public CatalogBase<BoilCatalog,
                                                        Boil,

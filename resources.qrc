@@ -139,5 +139,19 @@
       <file alias="schemas/beerjson/1.0/style.json"            >schemas/beerjson/1.0/style.json</file>
       <file alias="schemas/beerjson/1.0/timing.json"           >schemas/beerjson/1.0/timing.json</file>
       <file alias="schemas/beerjson/1.0/water.json"            >schemas/beerjson/1.0/water.json</file>
+      <file alias="schemas/dotBeer/DotBeer.beer.schema"        >schemas/dotBeer/DotBeer.beer.schema</file>
+      <file alias="schemas/dotBeer/Boil.beer.schema"           >schemas/dotBeer/Boil.beer.schema</file>
+      <file alias="schemas/dotBeer/Culture.beer.schema"        >schemas/dotBeer/Culture.beer.schema</file>
+      <file alias="schemas/dotBeer/Equipment.beer.schema"      >schemas/dotBeer/Equipment.beer.schema</file>
+      <file alias="schemas/dotBeer/Fermentable.beer.schema"    >schemas/dotBeer/Fermentable.beer.schema</file>
+      <file alias="schemas/dotBeer/Fermentation.beer.schema"   >schemas/dotBeer/Fermentation.beer.schema</file>
+      <file alias="schemas/dotBeer/Hop.beer.schema"            >schemas/dotBeer/Hop.beer.schema</file>
+      <file alias="schemas/dotBeer/Mash.beer.schema"           >schemas/dotBeer/Mash.beer.schema</file>
+      <file alias="schemas/dotBeer/Measurement.beer.schema"    >schemas/dotBeer/Measurement.beer.schema</file>
+      <file alias="schemas/dotBeer/MiscIngredient.beer.schema" >schemas/dotBeer/MiscIngredient.beer.schema</file>
+      <file alias="schemas/dotBeer/Recipe.beer.schema"         >schemas/dotBeer/Recipe.beer.schema</file>
+      <file alias="schemas/dotBeer/StepCommon.beer.schema"     >schemas/dotBeer/StepCommon.beer.schema</file>
+      <file alias="schemas/dotBeer/Style.beer.schema"          >schemas/dotBeer/Style.beer.schema</file>
+      <file alias="schemas/dotBeer/Water.beer.schema"          >schemas/dotBeer/Water.beer.schema</file>
    </qresource>
 </RCC>

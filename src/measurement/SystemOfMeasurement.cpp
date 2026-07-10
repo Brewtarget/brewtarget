@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/SystemOfMeasurement.cpp is part of Brewtarget, and is copyright the following authors 2022-2025:
+ * measurement/SystemOfMeasurement.cpp is part of Brewtarget, and is copyright the following authors 2022-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@ namespace {
       {Measurement::SystemOfMeasurement::EuropeanBreweryConvention   , "EuropeanBreweryConvention"   },
       {Measurement::SystemOfMeasurement::Lovibond                    , "Lovibond"                    },
       {Measurement::SystemOfMeasurement::SpecificGravity             , "SpecificGravity"             },
+      {Measurement::SystemOfMeasurement::GravityPoints               , "GravityPoints"               },
       {Measurement::SystemOfMeasurement::Plato                       , "Plato"                       },
       {Measurement::SystemOfMeasurement::Brix                        , "Brix"                        },
       {Measurement::SystemOfMeasurement::Lintner                     , "Lintner"                     },
@@ -60,6 +61,7 @@ QString Measurement::getDisplayName(Measurement::SystemOfMeasurement const syste
       case Measurement::SystemOfMeasurement::EuropeanBreweryConvention   : return QObject::tr("EBC (European Brewery Convention)"  );
       case Measurement::SystemOfMeasurement::Lovibond                    : return QObject::tr("Lovibond"                           );
       case Measurement::SystemOfMeasurement::SpecificGravity             : return QObject::tr("SG (Specific Gravity)"              );
+      case Measurement::SystemOfMeasurement::GravityPoints               : return QObject::tr("Gravity Points"                     );
       case Measurement::SystemOfMeasurement::Plato                       : return QObject::tr("Plato"                              );
       case Measurement::SystemOfMeasurement::Brix                        : return QObject::tr("Brix"                               );
       case Measurement::SystemOfMeasurement::Lintner                     : return QObject::tr("Lintner"                            );

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxNamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * widgets/BtComboBoxNamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@ BT_COMBO_BOX_OBJECT_CODE(Fermentable )
 BT_COMBO_BOX_OBJECT_CODE(Fermentation)
 BT_COMBO_BOX_OBJECT_CODE(Hop         )
 BT_COMBO_BOX_OBJECT_CODE(Misc        )
-BT_COMBO_BOX_OBJECT_CODE(Salt        )
 BT_COMBO_BOX_OBJECT_CODE(Style       )
 BT_COMBO_BOX_OBJECT_CODE(Water       )
 BT_COMBO_BOX_OBJECT_CODE(Yeast       )

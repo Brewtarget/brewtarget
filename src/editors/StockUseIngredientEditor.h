@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * editors/StockUseIngredientEditor.h is part of Brewtarget, and is copyright the following authors 2025:
+ * editors/StockUseIngredientEditor.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -70,22 +70,6 @@ public:
    void retranslateUi();
 
    EDITOR_COMMON_DECL(StockUseMisc, StockUseMiscEditorOptions)
-};
-
-#define StockUseSaltEditorOptions EditorBaseOptions{ .nameTab = false, .idDisplay = true, .numRecipesUsing = false }
-class StockUseSaltEditor :
-   public QDialog,
-   public Ui::stockUseIngredientEditor,
-   public EnumeratedItemEditorBase<StockUseSaltEditor, StockUseSalt>,
-   public EditorBase<StockUseSaltEditor,
-                     StockUseSalt,
-                     StockUseSaltEditorOptions> {
-   Q_OBJECT
-
-public:
-   void retranslateUi();
-
-   EDITOR_COMMON_DECL(StockUseSalt, StockUseSaltEditorOptions)
 };
 
 #define StockUseYeastEditorOptions EditorBaseOptions{ .nameTab = false, .idDisplay = true, .numRecipesUsing = false }

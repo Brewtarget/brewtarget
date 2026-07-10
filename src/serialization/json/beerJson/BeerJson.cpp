@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/BeerJson.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
+ * serialization/json/beerJson/BeerJson.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -12,8 +12,8 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#include "serialization/json/BeerJson.h"
+ =====================================================================================================================*/
+#include "serialization/json/beerJson/BeerJson.h"
 
 #include <cstdlib>
 
@@ -46,7 +46,6 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
-#include "model/RecipeUseOfWater.h"
 #include "model/RecipeUtils.h"
 #include "model/Style.h"
 #include "model/Water.h"
@@ -63,7 +62,7 @@
 namespace {
    // See below for more comments on this.  If and when BeerJSON evolves then we will want separate constants for
    // min/max versions we can read plus whatever version we write.
-   BtStringConst const jsonVersionWeSupport{"2.06"};
+   BtStringConst const beerJsonVersionWeSupport{"2.06"};
 
    // These are only used in BEER_JSON_RECORD_DEFN<Equipment>
    BtStringConst const nameForHlt            {"Hot Liquor Tank" };
@@ -221,6 +220,17 @@ namespace {
        {"floz/oz", &Measurement::Units::us_fluidOuncesPerOunce},
        {"ft^3/lb", &Measurement::Units::cubicFeetPerPound     }}
    };
+
+   std::optional<QString> BEER_JSON_STYLE_LETTER_VALIDATOR(QString const & str) {
+      if (!str.isEmpty()) {
+         QString const firstLetter = str.first(1).toUpper();
+         static const QRegularExpression aToZ("[A-Z]");
+         if (firstLetter.contains(aToZ)) {
+            return firstLetter;
+         }
+      };
+      return std::nullopt;
+   }
 
    //
    // We use a templated variable name as small short-cut for exporting lists of top-level objects.  Eg, if we have a
@@ -435,7 +445,7 @@ namespace {
       {JsonRecordDefinition::FieldType::String, "name"      , PropertyNames::NamedEntity::name},
       {JsonRecordDefinition::FieldType::String, "producer"  , PropertyNames::Misc::producer   },
       {JsonRecordDefinition::FieldType::String, "product_id", PropertyNames::Misc::productId  },
-      {JsonRecordDefinition::FieldType::Enum  , "type"      , PropertyNames::Fermentable::type, &Misc::typeStringMapping},
+      {JsonRecordDefinition::FieldType::Enum  , "type"      , PropertyNames::Misc::type       , &Misc::typeStringMapping},
    };
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_MiscType_ExclBase {
       // Type                                                       XPath               Q_PROPERTY                                 Value Decoder
@@ -514,8 +524,10 @@ namespace {
    };
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_WaterType_ExclBase {
       // Type                                            XPath    Q_PROPERTY                   Value Decoder
-      {JsonRecordDefinition::FieldType::SingleUnitValue, "pH"   , PropertyNames::Water::ph   , &BEER_JSON_ACIDITY_UNIT},
-      {JsonRecordDefinition::FieldType::String         , "notes", PropertyNames::Water::notes,                        },
+      // When https://github.com/beerjson/beerjson/issues/218 is fixed, we'll replace the line below with this one:
+//      {JsonRecordDefinition::FieldType::SingleUnitValue, "pH"   , PropertyNames::Water::ph   , &BEER_JSON_ACIDITY_UNIT},
+      {JsonRecordDefinition::FieldType::Double, "pH"   , PropertyNames::Water::ph   },
+      {JsonRecordDefinition::FieldType::String, "notes", PropertyNames::Water::notes},
    };
 
    // As mentioned above, it would be really nice to do this at compile time, but haven't yet found a nice way to do so
@@ -533,7 +545,7 @@ namespace {
       {JsonRecordDefinition::FieldType::String, "name"           , PropertyNames::NamedEntity::name    },
       {JsonRecordDefinition::FieldType::String, "category"       , PropertyNames::Style::category      },
       {JsonRecordDefinition::FieldType::Int   , "category_number", PropertyNames::Style::categoryNumber},
-      {JsonRecordDefinition::FieldType::String, "style_letter"   , PropertyNames::Style::styleLetter   },
+      {JsonRecordDefinition::FieldType::String, "style_letter"   , PropertyNames::Style::styleLetter   , &BEER_JSON_STYLE_LETTER_VALIDATOR},
       {JsonRecordDefinition::FieldType::String, "style_guide"    , PropertyNames::Style::styleGuide    },
       {JsonRecordDefinition::FieldType::Enum  , "type"           , PropertyNames::Style::type          , &Style::typeStringMapping},
    };
@@ -1000,17 +1012,6 @@ namespace {
       {BeerJson_IngredientAdditionType_Timing, BeerJson_IngredientAdditionType_MassVolumeOrCount, BeerJson_YeastAdditionType_Base}
    };
 
-   std::initializer_list<JsonRecordDefinition::FieldDefinition> const BeerJson_WaterUseType_Base {
-      // Type                                   XPath  Q_PROPERTY                               Value Decoder
-      {JsonRecordDefinition::FieldType::Record, ""   , PropertyNames::RecipeUseOfWater::water,  &BEER_JSON_RECORD_DEFN_WATER_IN_ADDITION},
-   };
-   template<> JsonRecordDefinition const BEER_JSON_RECORD_DEFN<RecipeUseOfWater> {
-      std::in_place_type_t<RecipeUseOfWater>{},
-      "water_additions", // JSON record name
-      // NB: No timing for water_additions
-      {BeerJson_IngredientAdditionType_Volume, BeerJson_WaterUseType_Base}
-   };
-
    template<> JsonRecordDefinition const BEER_JSON_RECORD_DEFN<BoilStep> {
       std::in_place_type_t<BoilStep>{},
       "boil_steps", // JSON record name (not actually used as BoilStep always part of a Boil)
@@ -1079,18 +1080,17 @@ namespace {
          {JsonRecordDefinition::FieldType::ListOfRecords       , "ingredients/"
                                                                  "culture_additions"      , PropertyNames::Recipe::yeastAdditions,
                                                                                             &BEER_JSON_RECORD_DEFN<RecipeAdditionYeast>},
-         {JsonRecordDefinition::FieldType::ListOfRecords       , "ingredients/"
-                                                                 "water_additions"        , PropertyNames::Recipe::waterUses,
-                                                                                            &BEER_JSON_RECORD_DEFN<RecipeUseOfWater>},
+         // NOTE that, per comments elsewhere, we no longer support the ingredients/water_additions array.  It feels
+         // like it's a slightly incomplete part of both BeerXML and BeerJSON.
          {JsonRecordDefinition::FieldType::Record              , "mash"                   , PropertyNames::Recipe::mash,
                                                                                             &BEER_JSON_RECORD_DEFN<Mash>},
          {JsonRecordDefinition::FieldType::String              , "notes"                  , PropertyNames::Recipe::notes         },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "original_gravity"       , PropertyNames::Recipe::og            , &BEER_JSON_DENSITY_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "final_gravity"          , PropertyNames::Recipe::fg            , &BEER_JSON_DENSITY_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "alcohol_by_volume"      , PropertyNames::Recipe::ABV_pct       , &BEER_JSON_PERCENT_UNIT       },
-         // TODO: BeerJSON ibu_estimate field of recipe is IBUEstimateType ("Rager", "Tinseth", "Garetz", "Other").  We
-         //       do not currently support having recipe-specific IBU estimate type, but could consider this as a future
-         //       enhancement.
+         // TODO: BeerJSON ibu_estimate field of recipe is IBUEstimateType ("Rager", "Tinseth", "Garetz", "Other").  We have more
+         //       methods than this, so would need to do a mapping to support it.  Also, it ideally should be renamed
+         //       per https://github.com/beerjson/beerjson/issues/223
          {JsonRecordDefinition::FieldType::Enum                , "ibu_estimate"           , BtString::NULL_STR                   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "color_estimate"         , PropertyNames::Recipe::color_srm     , &BEER_JSON_COLOR_UNIT_MAPPER  },
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "beer_pH"                , PropertyNames::Recipe::beerAcidity_pH, &BEER_JSON_ACIDITY_UNIT       },
@@ -1132,18 +1132,18 @@ namespace {
       JsonRecordDefinition::create<JsonRecord>,
       {
          // Type                                             Name                         Q_PROPERTY            Value Decoder
-         {JsonRecordDefinition::FieldType::RequiredConstant, "version"                  , jsonVersionWeSupport},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "fermentables"             , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Fermentable>},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "miscellaneous_ingredients", BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Misc       >},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "hop_varieties"            , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Hop        >},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "cultures"                 , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Yeast      >},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "profiles"                 , BtString::NULL_STR  , /* TODO */},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "styles"                   , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Style      >},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "mashes"                   , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Mash       >},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "recipes"                  , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Recipe     >},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "equipments"               , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Equipment  >},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "fermentations"            , BtString::NULL_STR  , /* TODO */},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "boil"                     , BtString::NULL_STR  , /* TODO */},
+         {JsonRecordDefinition::FieldType::RequiredConstant, "version"                  , beerJsonVersionWeSupport},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "fermentables"             , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Fermentable >},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "miscellaneous_ingredients", BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Misc        >},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "hop_varieties"            , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Hop         >},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "cultures"                 , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Yeast       >},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "profiles"                 , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Water       >},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "styles"                   , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Style       >},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "mashes"                   , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Mash        >},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "recipes"                  , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Recipe      >},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "equipments"               , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Equipment   >},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "fermentations"            , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Fermentation>},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "boil"                     , BtString::NULL_STR  , &BEER_JSON_RECORD_DEFN<Boil        >},
          {JsonRecordDefinition::FieldType::ListOfRecords   , "packaging"                , BtString::NULL_STR  , /* TODO */}
       },
       JsonRecordDefinition::RecordType::Normal
@@ -1153,11 +1153,11 @@ namespace {
    // The mapping we use between BeerJSON structure and our own object structure
    //
    JsonCoding const BEER_JSON_1_CODING{
-      // Yes, it is odd that BeerJSON 1.0 uses version number 2.06.  AFAICT this is because BeerJSON 1.0 was took its
+      // Yes, it is odd that BeerJSON 1.0 uses version number 2.06.  AFAICT this is because BeerJSON 1.0 took its
       // starting point as the unfinished BeerXML 2.01 specification.
       "BeerJSON 1.0",
-      *jsonVersionWeSupport, // "2.06",
-      JsonSchema::Id::BEER_JSON_2_1,
+      *beerJsonVersionWeSupport, // "2.06",
+      JsonSchema::Id::BeerJSON_2_1,
       BEER_JSON_RECORD_DEFN_ROOT
    };
 
@@ -1234,10 +1234,10 @@ namespace {
       //
       // Obviously, in time, if and when BeerJSON evolves, we'll want to do something less hard-coded here!
       //
-      if (beerJsonVersion != jsonVersionWeSupport) {
+      if (beerJsonVersion != beerJsonVersionWeSupport) {
          qWarning() <<
             Q_FUNC_INFO << "BeerJSON version " << beerJsonVersion << "differs from what we are expecting (" <<
-            jsonVersionWeSupport << ")";
+            beerJsonVersionWeSupport << ")";
       }
 
       // If you want to check what Boost.JSON read from the file (eg to debug escaping issues etc), uncomment the next
@@ -1291,7 +1291,7 @@ namespace BeerJson {
                                       outputDocument{} {
          // We have to pass in jsonVersionWeSupport as a double, not a char * or a std::string, otherwise it will get
          // quotes put around it.
-         this->outputDocument["beerjson"] = { {"version", std::atof(*jsonVersionWeSupport)} };
+         this->outputDocument["beerjson"] = { {"version", std::atof(*beerJsonVersionWeSupport)} };
          return;
       }
 

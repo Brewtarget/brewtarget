@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/PhysicalQuantity.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * measurement/PhysicalQuantity.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -114,8 +114,8 @@ namespace Measurement {
 
       Temperature,
 
-      // Note this NOT dates or times of day but length-of-time or elapsed time, eg duration of a mash step, or how long
-      // after the start of the boil to add something.  I was wondering whether to rename it LengthOfTime, or
+      // Note this is NOT dates or times of day but length-of-time or elapsed time, eg duration of a mash step, or how
+      // long after the start of the boil to add something.  I was wondering whether to rename it LengthOfTime, or
       // TimeDuration or ElapsedTime or something, but all those names are slightly unsatisfactory (eg several sound
       // wrong for "when to add hops").  Since SI units talk about seconds as base unit of time, it doesn't seem crazy
       // to stick with just Time here.  If we ever (elsewhere) need time of day or something else, we'll pick TimeOfDay
@@ -124,13 +124,17 @@ namespace Measurement {
 
       Color,
 
-      // Density is sometimes referred to as "gravity" as a shorthand for "specific gravity".  Strictly, what we're
-      // measuring as brewers is relative density (aka "ratio of the density ... with respect to water at its densest
-      // (at 4 °C)" per https://en.wikipedia.org/wiki/Relative_density) in order to find % sugar content (see
+      //
+      // We used to call this Density, as we are typically measuring relative density.  And we did consider calling it
+      // RelativeDensity or SugarConcentration.  However, Gravity is the most widely used term amongst brewers (see eg
+      // https://en.wikipedia.org/wiki/Gravity_(alcoholic_beverage), so we now use that.
+      //
+      // "Gravity" is a shorthand for "specific gravity".  Strictly, what we're measuring as brewers is relative density
+      // (aka "ratio of the density ... with respect to water at its densest (at 4 °C)" per
+      // https://en.wikipedia.org/wiki/Relative_density) in order to find % sugar content (see
       // https://en.wikipedia.org/wiki/Brix and https://en.wikipedia.org/wiki/Beer_measurement#Other_density_scales).
-      // So we could call this RelativeDensity or SugarConcentration or Gravity.  But I think Density is truest to the
-      // idea of a measurable physical quantity described above.
-      Density,
+      //
+      Gravity,
 
       DiastaticPower,
 
@@ -147,15 +151,16 @@ namespace Measurement {
 
       //
       // As explained at https://en.wikipedia.org/wiki/Concentration, there are several types of concentration,
-      // including "mass concentration", which is expressed as mass-per-volume, and "volume concentration", which is
-      // strictly-speaking a dimensionless number (because volume-per-volume cancels out) but is often expressed as
-      // parts per million (or similar) or sometimes as a percentage.
+      // including:
+      //    - "mass concentration", which is expressed as mass-per-volume, and
+      //    - "volume concentration", which is strictly-speaking a dimensionless number (because volume-per-volume
+      //      cancels out) but is often expressed as parts per million (or similar) or sometimes as a percentage.
       //
       // Additionally, there is "mass fraction" (see https://en.wikipedia.org/wiki/Mass_fraction_(chemistry)) and
       // "volume fraction" (see https://en.wikipedia.org/wiki/Volume_fraction), both of which are dimensionless (because
       // mass-per-mass and volume-per-volume cancel out).
       //
-      // Volume fraction is, strictly, different than volume concentration because the former is measured before mixing
+      // Volume fraction is, strictly, different from volume concentration because the former is measured before mixing
       // everything together and the latter afterwards.  So they are only the same in an "ideal solution", where the
       // volumes of the constituents are additive (the volume of the solution is equal to the sum of the volumes of its
       // ingredients).
@@ -179,7 +184,7 @@ namespace Measurement {
       // expect to be able to type "ppm" and "ppb" as these are the more day-to-day terms used in brewing.  So, again we
       // take the pragmatic rather than pedantic route.
       //
-      MassFractionOrConc,
+      MassFractionOrConcentration,
 
       // Viscosity -- see https://en.wikipedia.org/wiki/Viscosity
       Viscosity,
