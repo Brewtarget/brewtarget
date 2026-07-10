@@ -325,8 +325,13 @@ void RadarChart::paintEvent(QPaintEvent *event) {
    // Now plot the actual data
    //
    QPen seriesPen{allSeriesPen};
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
    for (auto const & [name, lineStyleAndObject] : this->pimpl->m_allSeries.asKeyValueRange()) {
 //      qDebug() << Q_FUNC_INFO << "Plotting series:" << name << "in" << lineStyleAndObject.color.name();
+#else
+   for (auto const & lineStyleAndObject : std::as_const(this->pimpl->m_allSeries)) {
+#endif
       seriesPen.setColor(lineStyleAndObject.color);
       seriesPen.setStyle(lineStyleAndObject.penStyle);
       painter.setPen(seriesPen);
