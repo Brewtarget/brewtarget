@@ -22,7 +22,6 @@
 #include <boost/stacktrace.hpp>
 
 #include <QDebug>
-#include <QString>
 #include <QTextStream>
 #include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
@@ -152,7 +151,7 @@ QVariant NamedParameterBundle::get(BtStringConst const & propertyName) const {
    }
    QVariant returnValue = this->m_parameters.at(*propertyName);
    if (!returnValue.isValid()) {
-      QString errorMessage =
+      QString const errorMessage =
          QString{"Invalid value (%1) supplied for required parameter, %2"}.arg(returnValue.toString(), *propertyName);
       qCritical() << Q_FUNC_INFO << errorMessage;
       throw std::invalid_argument(errorMessage.toStdString());
@@ -185,7 +184,8 @@ S & NamedParameterBundle::writeToStream(S & stream, QString const indent) const 
       // convert, eg QVariant<std::optional<int>> to "QVariant(std::optional<int>, 0)" or "QVariant(std::optional<int>,
       // NULL)" etc.
       //
-      if (value.canConvert<QString>()) {
+      bool const canConvertToQString = value.canConvert<QString>();
+      if (canConvertToQString) {
          stream << newIndent << key << "->" << value.typeName() << ":" << value.toString() << "\n";
       } else {
          QString stringValue;

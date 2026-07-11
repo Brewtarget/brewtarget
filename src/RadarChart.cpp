@@ -330,6 +330,7 @@ void RadarChart::paintEvent(QPaintEvent *event) {
    for (auto const & [name, lineStyleAndObject] : this->pimpl->m_allSeries.asKeyValueRange()) {
 //      qDebug() << Q_FUNC_INFO << "Plotting series:" << name << "in" << lineStyleAndObject.color.name();
 #else
+   // This is the old way, that we still need on Ubuntu 22.04 as we don't have Qt 6.4 there
    for (auto const & lineStyleAndObject : std::as_const(this->pimpl->m_allSeries)) {
 #endif
       seriesPen.setColor(lineStyleAndObject.color);
