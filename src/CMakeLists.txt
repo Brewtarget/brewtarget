@@ -81,7 +81,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/buttons/MashButton.cpp
     ${repoDir}/src/buttons/RecipeAttributeButton.cpp
     ${repoDir}/src/buttons/StyleButton.cpp
-    ${repoDir}/src/buttons/WaterButton.cpp
     ${repoDir}/src/catalogs/BoilCatalog.cpp
     ${repoDir}/src/catalogs/EquipmentCatalog.cpp
     ${repoDir}/src/catalogs/FermentableCatalog.cpp

@@ -29,7 +29,6 @@
 #include <QVector>
 
 #include "MainWindow.h"
-#include "buttons/WaterButton.h"
 #include "catalogs/FermentableCatalog.h"
 #include "catalogs/MiscCatalog.h"
 #include "editors/WaterEditor.h"
@@ -530,8 +529,8 @@ void WaterAdjuster::init() {
    connect(spinBox_mashRO   , QOverload<int>::of(&QSpinBox::valueChanged), this, &WaterAdjuster::updateRoWaterMash_pct  );
    connect(spinBox_spargeRO , QOverload<int>::of(&QSpinBox::valueChanged), this, &WaterAdjuster::updateRoWaterSparge_pct);
 
-   connect(pushButton_editBaseProfile,   &WaterButton::clicked, this->pimpl->m_editorForBase,   &QWidget::show);
-   connect(pushButton_editTargetProfile, &WaterButton::clicked, this->pimpl->m_editorForTarget, &QWidget::show);
+   connect(pushButton_editBaseProfile,   &QPushButton::clicked, this->pimpl->m_editorForBase,   &QWidget::show);
+   connect(pushButton_editTargetProfile, &QPushButton::clicked, this->pimpl->m_editorForTarget, &QWidget::show);
 
    connect(this->pimpl->m_miscAdditionsVeriTable.m_tableModel.get(),
            &RecipeAdditionMiscTableModel::newTotals,

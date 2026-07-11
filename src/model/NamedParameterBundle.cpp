@@ -184,8 +184,12 @@ S & NamedParameterBundle::writeToStream(S & stream, QString const indent) const 
       // convert, eg QVariant<std::optional<int>> to "QVariant(std::optional<int>, 0)" or "QVariant(std::optional<int>,
       // NULL)" etc.
       //
-      bool const canConvertToQString = value.canConvert<QString>();
-      if (canConvertToQString) {
+      // Note that, although we might normally write `value.canConvert<QString>()` here, that gives problems on older
+      // versions of GCC, where, because we are in a templated function, you have to write
+      // `value.template canConvert<QString>()`.  This is horrible IMHO, so, instead, we use the metatype version of the
+      // call which does the same thing and sidesteps the issue.
+      //
+      if (value.canConvert(QMetaType::fromType<QString>())) {
          stream << newIndent << key << "->" << value.typeName() << ":" << value.toString() << "\n";
       } else {
          QString stringValue;
