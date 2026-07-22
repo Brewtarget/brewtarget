@@ -6378,6 +6378,26 @@ Log file may contain more details.</source>
         <source>DotBeer format (*.beer);;BeerJSON format (*.json);;BeerXML format (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Success (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recoverable Error (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fatal Error (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unrecognised (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -8654,10 +8674,6 @@ The final volume in the primary is %1.</source>
 </context>
 <context>
     <name>XmlCoding</name>
-    <message>
-        <source>Internal Error! (Document parse returned null pointer.)</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Contents of file were not readable</source>
         <translation type="unfinished"></translation>

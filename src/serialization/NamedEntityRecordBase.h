@@ -118,10 +118,10 @@ namespace Serialization {
          auto matchResult = ObjectStoreTyped<NE>::getInstance().findFirstMatching(
             //
             // Note that, because we run this check both before and after something has been stored in the database (for
-            // reasons explained in XmlRecord::normaliseAndStoreInDb and JsonRecord::normaliseAndStoreInDb) we need to
-            // be particularly careful NOT to match the object with itself!
+            // reasons explained in SerializationRecord::normaliseAndStoreInDb and JsonRecord::normaliseAndStoreInDb) we
+            // need to be particularly careful NOT to match the object with itself!
             //
-            // Note too that we don't want to match against soft-deleted entities.  (Otherwise, if you delete something
+            // Note too, that we don't want to match against soft-deleted entities.  (Otherwise, if you delete something
             // and then try to import it again, it will never import!)
             //
             [namedEntity](std::shared_ptr<NE> ne) {

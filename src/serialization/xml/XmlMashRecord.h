@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlMashRecord.h is part of Brewtarget, and is copyright the following authors 2021:
+ * serialization/xml/XmlMashRecord.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -30,10 +30,9 @@ public:
 
 protected:
    /**
-    * \brief We need to override \c XmlRecord::propertiesToXml for similar reasons that that
-    *        \c XmlRecipeRecord does.  (Note that we do not need to override \c XmlRecord::normaliseAndStoreInDb as the
-    *        connection between a \c MashStep and its \c Mash is handled in
-    *        \c Serialization::NamedEntityRecordBase::doSetContainingEntity.)
+    * \brief We need to override \c XmlRecord::propertiesToXml for similar reasons that \c XmlRecipeRecord does.  (Note
+    *        that we do not need to override \c SerializationRecord::normaliseAndStoreInDb as the connection between a
+    *        \c MashStep and its \c Mash is handled in \c Serialization::NamedEntityRecordBase::doSetContainingEntity.)
     */
    virtual void subRecordToXml(XmlRecordDefinition::FieldDefinition const & fieldDefinition,
                                XmlRecord const & subRecord,

@@ -7081,12 +7081,12 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../src/main.cpp" line="197"/>
+        <location filename="../src/main.cpp" line="195"/>
         <source>%1 is already running!</source>
         <translation>%1 kører allerede!</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="198"/>
+        <location filename="../src/main.cpp" line="196"/>
         <source>Another instance of %1 is already running.
 
 Running two copies of the program at once may lead to data loss.
@@ -7099,35 +7099,35 @@ At køre 2 kopier af programmet samtidig kan medføre datatab.
 Tryk OK for at stoppe.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="239"/>
+        <location filename="../src/main.cpp" line="237"/>
         <source>Creation of empty Database file &apos;%1&apos; %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="240"/>
+        <location filename="../src/main.cpp" line="238"/>
         <source>succeeded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="240"/>
+        <location filename="../src/main.cpp" line="238"/>
         <source>failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="247"/>
+        <location filename="../src/main.cpp" line="245"/>
         <source>To use the newly-created file, rename it to &apos;%1&apos; and move it to directory %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="296"/>
-        <location filename="../src/main.cpp" line="302"/>
-        <location filename="../src/main.cpp" line="308"/>
+        <location filename="../src/main.cpp" line="294"/>
+        <location filename="../src/main.cpp" line="300"/>
+        <location filename="../src/main.cpp" line="306"/>
         <source>Application terminates</source>
         <translation>Program stopper</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="297"/>
-        <location filename="../src/main.cpp" line="303"/>
+        <location filename="../src/main.cpp" line="295"/>
+        <location filename="../src/main.cpp" line="301"/>
         <source>The application encountered a fatal error.
 Error message:
 %1</source>
@@ -7136,7 +7136,7 @@ Fejlmeddelelse:
 %</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="309"/>
+        <location filename="../src/main.cpp" line="307"/>
         <source>The application encountered a fatal error.</source>
         <translation>Programmet løb ind i en fatal fejl.</translation>
     </message>
@@ -8157,36 +8157,36 @@ Logfil indeholder evt. flere detaljer.</translation>
         <translation type="vanished">Vand</translation>
     </message>
     <message>
-        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="149"/>
+        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="150"/>
         <source>Boil for %1</source>
         <translation>Kog i %1</translation>
     </message>
     <message>
-        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="150"/>
-        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="165"/>
-        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="187"/>
-        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="194"/>
-        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="201"/>
+        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="151"/>
+        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="166"/>
+        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="188"/>
+        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="195"/>
+        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="202"/>
         <source>Automatically created by BeerXML import</source>
         <translation>Automatisk genereret af ved import af BeerXML</translation>
     </message>
     <message>
-        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="163"/>
+        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="164"/>
         <source>Fermentation for %1</source>
         <translation>Gæring i %1</translation>
     </message>
     <message>
-        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="185"/>
+        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="186"/>
         <source>Primary Fermentation Step for %1</source>
         <translation>Første gæringstrin i %1</translation>
     </message>
     <message>
-        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="192"/>
+        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="193"/>
         <source>Secondary Fermentation Step for %1</source>
         <translation>Andet gæringstrin i %1</translation>
     </message>
     <message>
-        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="199"/>
+        <location filename="../src/serialization/xml/XmlRecipeRecord.cpp" line="200"/>
         <source>Tertiary Fermentation Step for %1</source>
         <translation>Tredje gæringstrin i %1</translation>
     </message>
@@ -8453,6 +8453,31 @@ Logfil indeholder evt. flere detaljer.</translation>
         <location filename="../src/undoRedo/Undoable.cpp" line="64"/>
         <source>Add %1 to %2</source>
         <translation>Tilføj %1 til %2</translation>
+    </message>
+    <message>
+        <location filename="../src/serialization/xml/XmlErrorHandler.cpp" line="38"/>
+        <source>Success (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/serialization/xml/XmlErrorHandler.cpp" line="39"/>
+        <source>Warning (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/serialization/xml/XmlErrorHandler.cpp" line="40"/>
+        <source>Recoverable Error (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/serialization/xml/XmlErrorHandler.cpp" line="41"/>
+        <source>Fatal Error (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/serialization/xml/XmlErrorHandler.cpp" line="42"/>
+        <source>Unrecognised (%1)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11762,33 +11787,33 @@ The final volume in the primary is %1.</source>
 <context>
     <name>WaterAdjuster</name>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="261"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="260"/>
         <source>Minimum expected concentration is %1 ppm</source>
         <translation type="unfinished">Minimum forventet koncentration er %1 ppm</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="262"/>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="488"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="261"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="487"/>
         <source>In range for target profile.</source>
         <translation type="unfinished">Passende til anvendt profil.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="263"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="262"/>
         <source>Maximum expected concentration is %1 ppm</source>
         <translation type="unfinished">Maksimum forventet koncentration er %1 ppm</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="469"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="468"/>
         <source>PPM</source>
         <translation type="unfinished">ppm</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="487"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="486"/>
         <source>Too low for target profile.</source>
         <translation type="unfinished">For lav til anvendt profil.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="489"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="488"/>
         <source>Too high for target profile.</source>
         <translation type="unfinished">For høj til anvendt profil.</translation>
     </message>
@@ -11872,17 +11897,17 @@ The final volume in the primary is %1.</source>
         <translation>HCO₃</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="161"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="160"/>
         <source>Base Profile</source>
         <translation type="unfinished">Basisprofil</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="162"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="161"/>
         <source>Target Profile</source>
         <translation type="unfinished">Anvendt profil</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="163"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="162"/>
         <source>Actual Profile</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11960,17 +11985,16 @@ The final volume in the primary is %1.</source>
 <context>
     <name>XmlCoding</name>
     <message>
-        <location filename="../src/serialization/xml/XmlCoding.cpp" line="415"/>
         <source>Internal Error! (Document parse returned null pointer.)</source>
-        <translation>Intern fejl! (Parsning af dokument returnerede en nulpointer)</translation>
+        <translation type="vanished">Intern fejl! (Parsning af dokument returnerede en nulpointer)</translation>
     </message>
     <message>
-        <location filename="../src/serialization/xml/XmlCoding.cpp" line="481"/>
+        <location filename="../src/serialization/xml/XmlCoding.cpp" line="182"/>
         <source>Contents of file were not readable</source>
         <translation>Indhold af filen kunne ikke læses</translation>
     </message>
     <message>
-        <location filename="../src/serialization/xml/XmlCoding.cpp" line="489"/>
+        <location filename="../src/serialization/xml/XmlCoding.cpp" line="191"/>
         <source>Could not understand file format</source>
         <translation>Filformat ukendt</translation>
     </message>

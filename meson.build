@@ -506,32 +506,28 @@ backtraceDependency = compiler.find_library('backtrace',
 #
 # See https://mesonbuild.com/Reference-manual_returned_dep.html for what info we can pull from a dependency object
 #
-# For BeerXML processing we need Xerces-C++ and Xalan-C++.  Meson can find both of these automatically in a couple of
-# different ways.  The official way is to use `dependency('xerces-c')` and `dependency('xalan-c')` which results in
-# calling pkg-config.  However, I don't think this gives us access to the paths of the libraries (which we want to
-# export for the packaging scripts -- see various comments about shared libraries in the `bt` build tool script).
-# Instead, we can have Meson use CMake's find_package(), as long as (a) CMake is installed(!) and (b) we provide the
-# right library names ('XercesC' per https://cmake.org/cmake/help/latest/module/FindXercesC.html and 'XalanC' per
-# https://cmake.org/cmake/help/latest/module/FindXalanC.html).
+# For BeerXML processing we need libxml2.  (Previously we used Xerces-C++ and Xalan-C++.)
 #
-xercesDependency = dependency('XercesC',
+# Although Meson can find libraries directly, we have been telling it to use CMake's find_package() instead, as this
+# gives us access to the paths of the libraries (which we want to export for the packaging scripts -- see various
+# comments about shared libraries in the `bt` build tool script).  Note that this means we need the CMake name of the
+# library rather than the Meson one.  (Eg 'xerces-c' = Meson name, 'XercesC' = CMake name.)  To find CMake module
+# names, look at https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html
+#
+# As of 2026-07-18: the versions of libxml2 that ship with Ubuntu are:
+#   - libxml2 version 2.9.13 is the maximum available in Ubuntu 22.04 (Jammy).
+#   - libxml2 version 2.9.14 is the maximum available in Ubuntu 24.04 (Noble).
+#
+libxml2Dependency = dependency('LibXml2',
                               method : 'cmake',
-                              version : '>=3.2.2',
+                              version : '>=2.9.13',
                               required : true,
                               static : true)
-xercesLibPaths = xercesDependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
-message('Xerces Library:', xercesDependency.name(), 'found =', xercesDependency.found(),
-        'version =', xercesDependency.version(), 'path(s)=', xercesLibPaths)
-sharedLibraryPaths += xercesLibPaths
-xalanDependency = dependency('XalanC',
-                             method : 'cmake',
-                             version : '>=1.11.0',
-                             required : true,
-                             static : true)
-xalanLibPaths = xalanDependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
-message('Xalan Library:', xalanDependency.name(), 'found =', xalanDependency.found(),
-        'version =', xalanDependency.version(), 'path(s)=', xalanLibPaths)
-sharedLibraryPaths += xalanLibPaths
+libxml2LibPaths = libxml2Dependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
+message('libxml2 Library:', libxml2Dependency.name(), 'found =', libxml2Dependency.found(),
+        'version =', libxml2Dependency.version(), 'path(s)=', libxml2LibPaths)
+sharedLibraryPaths += libxml2LibPaths
+
 
 #======================================================= OpenSSL =======================================================
 # This is needed for us to use https with Boost.Asio
@@ -777,9 +773,9 @@ commonSourceFiles = files([
    'src/serialization/json/JsonUtils.cpp',
    'src/serialization/json/JsonXPath.cpp',
    'src/serialization/xml/BeerXml.cpp',
-   'src/serialization/xml/BtDomErrorHandler.cpp',
-   'src/serialization/xml/XercesHelpers.cpp',
    'src/serialization/xml/XmlCoding.cpp',
+   'src/serialization/xml/XmlErrorHandler.cpp',
+   'src/serialization/xml/XmlLibHelpers.cpp',
    'src/serialization/xml/XmlMashRecord.cpp',
    'src/serialization/xml/XmlRecipeRecord.cpp',
    'src/serialization/xml/XmlRecord.cpp',
@@ -1337,8 +1333,7 @@ translations = qt.compile_translations(ts_files         : translationSourceFiles
 #=============================================== Lists of Dependencies =================================================
 #=======================================================================================================================
 commonDependencies = [qtCommonDependencies,
-                      xercesDependency,
-                      xalanDependency,
+                      libxml2Dependency,
                       boostDependency,
                       dlDependency,
                       openSslDependency, # This isn't strictly needed for the testRunner, but no harm comes from including it

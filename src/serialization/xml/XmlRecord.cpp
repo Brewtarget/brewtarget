@@ -19,11 +19,6 @@
 #include <QDebug>
 #include <QXmlStreamWriter>
 
-#include <xalanc/XalanDOM/XalanNodeList.hpp>
-#include <xalanc/XPath/NodeRefList.hpp>
-#include <xalanc/XPath/XPathEvaluator.hpp>
-#include <xalanc/XalanDOM/XalanNamedNodeMap.hpp>
-
 #include "serialization/xml/XmlCoding.h"
 #include "utils/OptionalHelpers.h"
 #include "utils/ObjectAddressStringMapping.h"
@@ -75,10 +70,9 @@ SerializationRecordDefinition const & XmlRecord::recordDefinition() const {
    return this->m_recordDefinition;
 }
 
-bool XmlRecord::load(xalanc::DOMSupport & domSupport,
-                     xalanc::XalanNode * rootNodeOfRecord,
-                     QTextStream & userMessage) {
-   xalanc::XPathEvaluator xPathEvaluator;
+bool XmlRecord::load(XmlLibHelpers::XmlDocument & document,
+                     xmlNode         & rootNodeOfRecord,
+                     QTextStream     & userMessage) {
    //
    // Loop through all the fields that we know/care about.  Anything else is intentionally ignored.  (We won't know
    // what to do with it, and, if it weren't allowed to be there, it would have generated an error at XSD parsing.)
@@ -92,14 +86,14 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
    Q_ASSERT(this->m_recordDefinition.fieldDefinitions.size() > 0);
    for (auto & fieldDefinition : this->m_recordDefinition.fieldDefinitions) {
       //
-      // NB: If we don't find a node, there's nothing for us to do.  The XSD parsing should already flagged up an error
-      // if there are missing _required_ fields or if string fields that are present are not allowed to be blank.  (See
-      // comments in BeerXml.xsd for why it is, in practice, plausible and acceptable for some "required" text fields
-      // to be empty/blank.)
+      // NB: If we don't find a node, there's nothing for us to do.  The XSD parsing should already have flagged up an
+      // error if there are missing _required_ fields or if string fields that are present are not allowed to be blank.
+      // (See comments in BeerXml.xsd for why it is, in practice, plausible and acceptable for some "required" text
+      // fields to be empty/blank.)
       //
       // Equally, although we only look for nodes we know about, some of these we won't use.  If there is no property
-      // name/path in our field definition then it's a field we neither read nor write.  We'll parse it but we won't try
-      // to pass it to the object we're creating.  But there are some fields that are "write only", such as IBU on
+      // name/path in our field definition then it's a field we neither read nor write.  We'll parse it, but we won't
+      // try to pass it to the object we're creating.  But there are some fields that are "write only", such as IBU on
       // Recipe.  These have a property name in the field definition, so they will be written out in XmlRecord::toXml,
       // but the relevant object constructor ignores them when they appear in a NamedParameterBundle.  (In the case of
       // IBU on Recipe, this is because it is a calculated value.  It is helpful to some users to export it in the XML,
@@ -112,30 +106,36 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
       //
 
       //
-      // If the current field is using the "Base Record" trick (descibed in serialization/json/JsonRecordDefinition.h)
-      // we will have an empty xPath.  Xalan will crash if we ask it to follow an empty xPath, so we need to manually
-      // do the no-op navigation (ie pretend that the current XML record is actually a child of itself for the purposes
-      // of reading in a new object in our model.
+      // If the current field is using the "Base Record" trick (described in serialization/json/JsonRecordDefinition.h)
+      // we will have an empty xPath.  Some XML libraries (eg Xalan) will crash if we ask them to follow an empty xPath,
+      // so we manually do the no-op navigation (ie pretend that the current XML record is actually a child of itself
+      // for the purposes of reading in a new object in our model).
       //
-      // There's a bit of extra faffing around here because the XalanC "native" type `xalanc::NodeRefList` is, to all
-      // intents and purposes, read-only outside of the XalanC library (eg here in our code).  We need it as an output
-      // from xalanc::XPathEvaluator::selectNodeList, but, once we have it populated, it's better to copy its contents
-      // into std::vector and use that.
+      // NOTE: In general, the result of an XPath expression can be one of four types:
+      //    - node-set
+      //    - string
+      //    - number
+      //    - boolean
+      // HOWEVER, the structure of BeerXML, and the way in which we parse it, means we only need to deal with XPaths
+      // that will yield node-sets.  So we can ignore the other cases and thereby simplify our code.
       //
-      std::vector<xalanc::XalanNode *> nodesForCurrentXPath;
+      // Similarly, although the XML library will, one way or another, give us the node-set result in some read-only
+      // native structure (eg Xalan gives `xalanc::NodeRefList`, libxml2 gives `xmlNodeSet` inside `xmlXPathObject`), it
+      // simplifies our lives to convert this to a list of nodes in std::vector.  (For one thing, this allows us to do
+      // the "base record" trick.)
+      //
+      std::vector<xmlNode *> nodesForCurrentXPath;
       if (fieldDefinition.xPath.isEmpty()) {
          // We mark ourselves as our child - something we assert we should only be doing in the case of a Record field
          // type.  (Even then, it's only in certain cases.)
          Q_ASSERT(std::holds_alternative<XmlRecordDefinition const *>(fieldDefinition.valueDecoder));
-         nodesForCurrentXPath.push_back(rootNodeOfRecord);
+         nodesForCurrentXPath.push_back(&rootNodeOfRecord);
       } else {
-         xalanc::NodeRefList tempNodesForCurrentXPath;
-         xPathEvaluator.selectNodeList(tempNodesForCurrentXPath,
-                                       domSupport,
-                                       rootNodeOfRecord,
-                                       fieldDefinition.xPath.getXalanString());
-         for (xalanc::NodeRefList::size_type ii = 0; ii < tempNodesForCurrentXPath.getLength(); ++ii) {
-            nodesForCurrentXPath.push_back(tempNodesForCurrentXPath.item(ii));
+         XmlLibHelpers::XPathResult const xPathResult{
+            document.xPathResult(rootNodeOfRecord, fieldDefinition.xPath)
+         };
+         for (std::size_t ii = 0; ii < xPathResult.numNodes(); ++ii) {
+            nodesForCurrentXPath.push_back(xPathResult.node(ii));
          }
       }
       auto numChildNodes = nodesForCurrentXPath.size();
@@ -145,7 +145,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
           XmlRecordDefinition::FieldType::ListOfRecords == fieldDefinition.type) {
          //
          // Depending on the context, it may or may not be valid to have multiple children of this type of record (eg
-         // a Recipe might have multiple Hops but it only has one Equipment).  We don't really have to worry about that
+         // a Recipe might have multiple Hops, but it only has one Equipment).  We don't really have to worry about that
          // here though as any rules should have been enforced in the XSD.
          //
          Q_ASSERT(std::holds_alternative<XmlRecordDefinition const *>(fieldDefinition.valueDecoder));
@@ -153,7 +153,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
          XmlRecordDefinition const & childRecordDefinition{
             *std::get<XmlRecordDefinition const *>(fieldDefinition.valueDecoder)
          };
-         if (!this->loadChildRecords(domSupport,
+         if (!this->loadChildRecords(document,
                                      fieldDefinition,
                                      childRecordDefinition,
                                      nodesForCurrentXPath,
@@ -162,26 +162,26 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
          }
       } else if (numChildNodes > 0) {
          //
-         // If the field we're looking at is not a record, so the XSD should mostly have enforced no duplicates.  If
-         // there are any though, we'll ignore them.
+         // The field we're looking at is not a record, so the XSD should mostly have enforced no duplicates.  If there
+         // are any though, we'll ignore them.
          //
          if (numChildNodes > 1) {
             qWarning() <<
                Q_FUNC_INFO << numChildNodes << " nodes found with path " << fieldDefinition.xPath << ".  Taking value "
                "only of the first one.";
          }
-         xalanc::XalanNode * fieldContainerNode = nodesForCurrentXPath.at(0);
+         xmlNode * fieldContainerNode = nodesForCurrentXPath.at(0);
 
-         // Normally the node for the tag will be type ELEMENT_NODE and will not have a value in and of itself.
+         // Normally the node for the tag will be type XMLELEMENT_NODE and will not have a value in and of itself.
          // To get the "contents", we need to look at the value of the child node, which, for strings and numbers etc,
          // should be type TEXT_NODE (and name "#text").
-         XQString fieldName{fieldContainerNode->getNodeName()};
-         xalanc::XalanNodeList const * fieldContents = fieldContainerNode->getChildNodes();
-         int numChildrenOfContainerNode = fieldContents->getLength();
+         QString fieldName{XmlLibHelpers::toQString(fieldContainerNode->name)};
+         std::vector<xmlNode *> fieldContents = XmlLibHelpers::childNodes(fieldContainerNode);
+         int numChildrenOfContainerNode = fieldContents.size();
          // Normally keep this log statement commented out otherwise it generates too many lines in the log file
          qDebug() <<
             Q_FUNC_INFO << "Node " << fieldDefinition.xPath << "(" << fieldName << ":" <<
-            XALAN_NODE_TYPES[fieldContainerNode->getNodeType()] << ") has " <<
+            XmlLibHelpers::elementTypeToString(fieldContainerNode->type) << ") has " <<
             numChildrenOfContainerNode << " children";
          if (0 == numChildrenOfContainerNode) {
             // Normally keep this log statement commented out otherwise it generates too many lines in the log file
@@ -198,10 +198,11 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      Q_FUNC_INFO << "Node " << fieldDefinition.xPath << " has " <<
                      numChildrenOfContainerNode << " children.  Taking value only of the first one.";
                }
-               xalanc::XalanNode * valueNode = fieldContents->item(0);
-               XQString value(valueNode->getNodeValue());
+               xmlNode * valueNode = fieldContents.at(0);
+
+               QString value{XmlLibHelpers::toQString(valueNode->content)};
                // Normally keep this log statement commented out otherwise it generates too many lines in the log file
-//               qDebug() << Q_FUNC_INFO << "Value " << value;
+               qDebug() << Q_FUNC_INFO << "Value " << value;
 
                bool parsedValueOk = false;
                QVariant parsedValue;
@@ -523,8 +524,8 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
    //
    // Note that this will not construct sub-objects for non-trivial property paths in m_namedParameterBundle (eg
    // {PropertyNames::Recipe::boil, PropertyNames::Boil::boilTime_mins}).  This is handled in subclass implementation of
-   // normaliseAndStoreInDb, eg XmlRecipeRecord::normaliseAndStoreInDb, (and is part of why we retain
-   // m_namedParameterBundle).
+   // SerializationRecord::normaliseAndStoreInDb, eg XmlRecipeRecord::normaliseAndStoreInDb, (and is part of why we
+   // retain m_namedParameterBundle).
    //
    if (!this->m_namedParameterBundle.isEmpty()) {
       // Normally keep this log statement commented out otherwise it generates too many lines in the log file
@@ -538,10 +539,10 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
    return true;
 }
 
-[[nodiscard]] bool XmlRecord::loadChildRecords(xalanc::DOMSupport & domSupport,
+[[nodiscard]] bool XmlRecord::loadChildRecords(XmlLibHelpers::XmlDocument & document,
                                                XmlRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                                XmlRecordDefinition const & childRecordDefinition,
-                                               std::vector<xalanc::XalanNode *> & nodesForCurrentXPath,
+                                               std::vector<xmlNode *> & nodesForCurrentXPath,
                                                QTextStream & userMessage) {
    //
    // This is where we have one or more substantive records of a particular type inside the one we are
@@ -561,7 +562,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
       Q_FUNC_INFO << "childRecordDefinition" << childRecordDefinition << ". m_childRecordSets for" <<
       this->m_recordDefinition << "has" << this->m_childRecordSets.size() << "entries";
    XmlRecord::ChildRecordSet & childRecordSet = this->m_childRecordSets.back();
-   for (xalanc::XalanNode * childRecordNode : nodesForCurrentXPath) {
+   for (auto childRecordNode : nodesForCurrentXPath) {
       //
       // It's a coding error if we don't recognise the type of node that we've been configured (via
       // this->fieldDefinitions) to read in.  Again, an advantage of using XPaths is that we just
@@ -578,7 +579,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
       //    </RECIPE>
       // Requesting the HOPS/HOP subpath of RECIPE will not return FOO or BAR
       //
-      XQString childRecordName{childRecordNode->getNodeName()};
+      QString childRecordName{XmlLibHelpers::toQString(childRecordNode->name)};
       // Normally keep this log statement commented out otherwise it generates too many lines in the log file
 //      qDebug() << Q_FUNC_INFO << childRecordName;
 
@@ -586,14 +587,12 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
          constructorWrapper(this->m_coding, childRecordDefinition)
       };
 
-      //
-      // The return value of xalanc::XalanNode::getIndex() doesn't have an instantly obvious direct meaning, but AFAICT
-      // higher values are for nodes that were later in the input file, so useful to log.
-      //
       qDebug() <<
-         Q_FUNC_INFO << "Loading child record" << childRecordName << "with index" << childRecordNode->getIndex() <<
-         "for" << childRecordDefinition.m_namedEntityClassName;
-      if (!childRecord->load(domSupport, childRecordNode, userMessage)) {
+         Q_FUNC_INFO << "Loading child record" << childRecordName << "for" <<
+         childRecordDefinition.m_namedEntityClassName;
+      if (!childRecord->load(document,
+                             *childRecordNode,
+                             userMessage)) {
          return false;
       }
       childRecordSet.records.push_back(std::move(childRecord));

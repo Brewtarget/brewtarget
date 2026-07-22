@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/BtDomErrorHandler.h is part of Brewtarget, and is copyright the following authors 2020:
+ * serialization/xml/XmlErrorHandler.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -13,8 +13,8 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
-#ifndef SERIALIZATION_XML_BTDOMERRORHANDLER_H
-#define SERIALIZATION_XML_BTDOMERRORHANDLER_H
+#ifndef SERIALIZATION_XML_XMLERRORHANDLER_H
+#define SERIALIZATION_XML_XMLERRORHANDLER_H
 #pragma once
 
 
@@ -23,21 +23,31 @@
 
 #include <QVector>
 
-#include <xercesc/dom/DOMErrorHandler.hpp>
+#include <libxml2/libxml/xmlerror.h>
 
 class QString;
 
 /**
- * Although some Xerces errors generate exceptions, others are handled through a callback to an object you provide
- * which needs to implement the xercesc::DOMErrorHandler interface.
+ * XML libraries typically handle at least some of their errors through a callback.
  *
- * Aside from "just" logging errors passed to us we need to:
+ * When we were using Xerces, some errors generated exceptions, but others were handled through a callback to a user
+ * object that needed to implement the xercesc::DOMErrorHandler interface.  This was easy, because we could hold other
+ * information in the same object.
+ *
+ * Now that we're using libxml2, things are slightly different.  Errors are written to stderr by default, unless and
+ * until you set a callback function, whose signature must match  xmlStructuredErrorFunc in libxml2/libxml/xmlerror.h.
+ * Because libxml2 is C rather than C++, we can't have a non-static member function as the callback.  However, when we
+ * set the callback, we also give a memory address that gets passed back to us as the first parameter (void * userData)
+ * when the callback is invoked.  So, with a bit of casting, we can have a static member function invoke a non-static
+ * member function on the stateful object we want to use for error handling.
+ *
+ * Aside from "just" logging errors passed to us, we need to:
  *  - decide whether the error is one we can safely deal with (including by ignoring!) or whether it should prevent
  *    further processing of the document,
  *  - apply any "corrections" needed the location of the error, which are required when we have made temporary
  *    modifications to the document being parsed (see comments elsewhere for why we would want to do this)
  */
-class BtDomErrorHandler: public xercesc::DOMErrorHandler {
+class XmlErrorHandler {
 public:
    struct PatternAndReason {
       QString const regExMatchingErrorMessage;
@@ -57,11 +67,11 @@ public:
     * \param lineAfterWhichInserted If numberOfLinesInserted is not 0 then this says at which point in the document the
     *                               insertion was made.
     */
-   BtDomErrorHandler(QVector<PatternAndReason> const * errorPatternsToIgnore = nullptr,
+   XmlErrorHandler(QVector<PatternAndReason> const * errorPatternsToIgnore = nullptr,
                      unsigned int numberOfLinesInserted = 0,
                      unsigned int lineAfterWhichInserted = 0);
 
-   ~BtDomErrorHandler();
+   ~XmlErrorHandler();
 
    bool failed() const;
 
@@ -84,7 +94,21 @@ public:
     * If the handleError method returns true the DOM implementation should continue as if the error didn't happen when
     * possible, if the method returns false then the DOM implementation should stop the current processing when possible.
     */
-   virtual bool handleError(xercesc::DOMError const & domError);
+   void handleError(xmlError const * error);
+
+   /**
+    * Callback function that we pass to libxml2
+    *
+    * Although libxml2 is written in C, we do not need an `extern "C" { ... }` block here as the library gets passed a
+    * function pointer and never needs to know the name of the function (so the C++ name mangling doesn't matter).
+    *
+    * The signature of this function needs to correspond with xmlStructuredErrorFunc in libxml2/libxml/xmlerror.h
+    *
+    * @param userData this void pointer should be castable to an instance of XmlErrorHandler
+    * @param error
+    */
+   static void xmlStructuredErrorFunc(void * userData, xmlError * error);
+
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/
@@ -92,9 +116,9 @@ private:
    std::unique_ptr<impl> pimpl;
 
    //! No copy constructor, as no need for people to make copies (and keeps PImpl implementation simpler)
-   BtDomErrorHandler(BtDomErrorHandler const&) = delete;
+   XmlErrorHandler(XmlErrorHandler const&) = delete;
    //! No assignment operator, as no need for people to make copies (and keeps PImpl implementation simpler)
-   BtDomErrorHandler& operator=(BtDomErrorHandler const&) = delete;
+   XmlErrorHandler& operator=(XmlErrorHandler const&) = delete;
 
 };
 

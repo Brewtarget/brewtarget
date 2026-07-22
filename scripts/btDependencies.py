@@ -152,8 +152,7 @@ def installDependencies():
             'libqt6svg6',
             'libqt6svgwidgets6',
             'libssl-dev', # For OpenSSL headers
-            'libxalan-c-dev',
-            'libxerces-c-dev',
+            'libxml2-dev',
             'meson',
             'ninja-build',
             'pandoc',
@@ -597,8 +596,7 @@ def installDependencies():
                         'mingw-w64-' + arch + '-qt6-translations',
                         'mingw-w64-' + arch + '-qt6',
                         'mingw-w64-' + arch + '-toolchain',
-                        'mingw-w64-' + arch + '-xalan-c',
-                        'mingw-w64-' + arch + '-xerces-c',
+                        'mingw-w64-' + arch + '-libxml2-dev',
 #                        'mingw-w64-' + arch + '-7zip', # To unzip NSIS plugins
                         'mingw-w64-' + arch + '-angleproject', # See comment above
                         'mingw-w64-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
@@ -735,7 +733,7 @@ def installDependencies():
          # both directories in the include path when we came to compile (because CMake and Meson can generally take care
          # of finding a library automatically once given its name).
          #
-         # However, as at 2023-12-01, Homebrew has stopped supplying a package for Xalan-C.  So, we started installing
+         # However, as at 2023-12-01, Homebrew had stopped supplying a package for Xalan-C.  So, we started installing
          # Xalan and Xerces using MacPorts, whilst still installing everything else via Homebrew.  This seemed to work
          # for a while, but in 2024, after upgrading to Qt6, we started having problems with the Qt `macdeployqt`
          # command (which is used to pull all the necessary Qt libraries into the app bundle we distribute).  AFAICT
@@ -787,8 +785,7 @@ def installDependencies():
                             'qtmultimedia',
                             'qtnetworkauth',
                             'openssl@3', # OpenSSL headers and library
-#                            'xalan-c',
-#                            'xerces-c'
+                            'libxml2-dev',
                             ]
          for packageToInstall in installListBrew:
             #
@@ -948,8 +945,7 @@ def installDependencies():
 #                            'tree',
 #                            'dylibbundler',
                             'pandoc',
-                            'xercesc3',
-                            'xalanc',
+#                            'libxml2-dev',
 #                            'qt6',
 #                            'qt6-qttranslations',
                             'dbus'
@@ -1170,39 +1166,6 @@ def installDependencies():
          # https://dmgbuild.readthedocs.io/en/latest/settings.html#badge_icon)
          #
 #         btExecute.abortOnRunFail(subprocess.run(['pip3', 'install', 'dmgbuild[badge_icons]']))
-
-         #
-         # TBD: If, in future, we have further problems installing Xerces and/or Xalan-C++ from ports, the commented
-         #      code here is a first stab at Plan C -- building from source ourselves.
-         #
-#         xalanCSourceUrl = 'https://github.com/apache/xalan-c/releases/download/Xalan-C_1_12_0/xalan_c-1.12.tar.gz'
-#         btLogger.log.debug('Downloading Xalan-C++ source from ' + xalanCSourceUrl)
-#         btExecute.abortOnRunFail(subprocess.run([
-#            'wget',
-#            xalanCSourceUrl
-#         ]))
-#         btExecute.abortOnRunFail(subprocess.run(['tar', 'xf', 'xalan_c-1.12.tar.gz']))
-#
-#         os.chdir('xalan_c-1.12')
-#         btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
-#         os.makedirs('build')
-#         os.chdir('build')
-#         btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
-#         btExecute.abortOnRunFail(subprocess.run([
-#            'cmake',
-#            '-G',
-#            'Ninja',
-#            '-DCMAKE_INSTALL_PREFIX=/opt/Xalan-c',
-#            '-DCMAKE_BUILD_TYPE=Release',
-#            '-Dnetwork-accessor=curl',
-#            '..'
-#         ]))
-#         btLogger.log.debug('Building Xalan-C++')
-#         btExecute.abortOnRunFail(subprocess.run(['ninja']))
-#         btLogger.log.debug('Running Xalan-C++ tests')
-#         btExecute.abortOnRunFail(subprocess.run(['ctest', '-V', '-j', '8']))
-#         btLogger.log.debug('Installing Xalan-C++')
-#         btExecute.abortOnRunFail(subprocess.run(['sudo', 'ninja', 'install']))
 
       case _:
          btLogger.log.critical('Unrecognised platform: ' + platform.system())

@@ -216,9 +216,9 @@ set(filesToCompile_cpp
     ${repoDir}/src/serialization/json/JsonUtils.cpp
     ${repoDir}/src/serialization/json/JsonXPath.cpp
     ${repoDir}/src/serialization/xml/BeerXml.cpp
-    ${repoDir}/src/serialization/xml/BtDomErrorHandler.cpp
-    ${repoDir}/src/serialization/xml/XercesHelpers.cpp
     ${repoDir}/src/serialization/xml/XmlCoding.cpp
+    ${repoDir}/src/serialization/xml/XmlErrorHandler.cpp
+    ${repoDir}/src/serialization/xml/XmlLibHelpers.cpp
     ${repoDir}/src/serialization/xml/XmlMashRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecord.cpp

@@ -49,7 +49,7 @@
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
-#include "serialization/xml/BtDomErrorHandler.h"
+#include "serialization/xml/XmlErrorHandler.h"
 #include "serialization/xml/MibEnum.h"
 #include "serialization/xml/XmlCoding.h"
 #include "serialization/xml/XmlRecord.h"
@@ -1233,7 +1233,7 @@ namespace {
       //  - We read in the rest of the file unchanged (so what was line 2 on disk will be line 3 in memory and so on)
       //  - We append a new final line that says "</BEER_XML>"
       //
-      // We then give enough information to our instance of BtDomErrorHandler to allow it to correct the line numbers
+      // We then give enough information to our instance of XmlErrorHandler to allow it to correct the line numbers
       // for any errors it needs to log.  (And we get a bit of help from this class when we need to make similar
       // adjustments during exception processing.)
       //
@@ -1306,14 +1306,18 @@ namespace {
       //   • "no declaration found for element 'ABC'"
       //   • "element 'ABC' is not allowed for content model 'XYZ'.
       //
-      static QVector<BtDomErrorHandler::PatternAndReason> const errorPatternsToIgnore {
+      static QVector<XmlErrorHandler::PatternAndReason> const errorPatternsToIgnore {
+         // TODO - commented out below are the Xerces errors; assume we'll end up with a new list for libxml2.
          //       Reg-ex to match                                               Reason to ignore errors matching this pattern
-         {QString("^no declaration found for element"),                 QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")},
-         {QString("^element '[^']*' is not allowed for content model"), QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")}
+//         {QString("^no declaration found for element"),                 QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")},
+//         {QString("^element '[^']*' is not allowed for content model"), QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")}
       };
-      BtDomErrorHandler domErrorHandler(&errorPatternsToIgnore, 1, 1);
+      XmlErrorHandler errorHandler(&errorPatternsToIgnore, 1, 1);
 
-      return BEER_XML_1_CODING.validateLoadAndStoreInDb(documentData, fileName, domErrorHandler, userMessage);
+      return BEER_XML_1_CODING.validateLoadAndStoreInDb(documentData,
+                                                        fileName,
+                                                        errorHandler,
+                                                        userMessage);
 
    }
 

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlRecordDefinition.h is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/xml/XmlRecordDefinition.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@
 #include <variant>
 
 #include "measurement/Unit.h"
-#include "serialization/xml/XQString.h"
 #include "serialization/SerializationRecordDefinition.h"
 #include "utils/EnumStringMapping.h"
 #include "utils/PropertyPath.h"
@@ -30,8 +29,6 @@
 // Forward declarations
 class XmlCoding;
 class XmlRecord;
-template<class NE>
-class XmlNamedEntityRecord;
 
 /**
  * \brief \c XmlRecordDefinition represents a type of data record in an XML document.  Each instance of this class is a
@@ -71,7 +68,7 @@ public:
     */
    struct FieldDefinition {
       FieldType    type;
-      XQString     xPath;
+      QString      xPath;
       PropertyPath propertyPath; // If fieldType == ListOfRecords, then this is used only on export
                                  // If fieldType == RequiredConstant, then this is actually the constant value
       using ValueDecoder =
@@ -86,7 +83,7 @@ public:
        * Defining a constructor allows us to control the default value of valueDecoder
        */
       FieldDefinition(FieldType    type,
-                      XQString     xPath,
+                      QString      xPath,
                       PropertyPath propertyPath,
                       ValueDecoder valueDecoder = ValueDecoder{});
    };
@@ -102,7 +99,7 @@ public:
     *           XmlRecordDefinition::create< XmlNamedEntityRecord< Hop > >
     *           XmlRecordDefinition::create< XmlNamedEntityRecord< Yeast > >
     *
-    *        (We maybe could have called this function xmlRecordConstructorWrapper but it makes things rather long-
+    *        (We maybe could have called this function xmlRecordConstructorWrapper, but it makes things rather long-
     *        winded in the definitions.)
     */
    template<typename XRT>
