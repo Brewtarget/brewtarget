@@ -118,7 +118,7 @@ endif()
 #=======================================================================================================================
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case).
-project(brewtarget VERSION 5.1.2 LANGUAGES CXX)
+project(brewtarget VERSION 5.2.0 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 # Sometimes we do need the capitalised version of the project name
@@ -763,22 +763,14 @@ message("Backtrace libs  ${DL_LIBRARY}  |  ${Backtrace_LIBRARIES}  |  ${Boost_LI
 # will be removed in a future release of Boost.JSON".
 #ADD_COMPILE_DEFINITIONS(BOOST_JSON_STANDALONE)
 
-#=================================================== Find Xerces-C++ ===================================================
-# CMake already knows how to find and configure Xerces-C++, see
-# https://cmake.org/cmake/help/latest/module/FindXercesC.html
-find_package(XercesC REQUIRED)
-include_directories(${XercesC_INCLUDE_DIRS})
-# Uncomment the next two lines if you want to find where Xerces headers and DLLs are on your system
-message("Xerces-C++ include directories: ${XercesC_INCLUDE_DIRS}")
-message("Xerces-C++ libraries: ${XercesC_LIBRARIES}")
-
-#==================================================== Find Xalan-C++ ===================================================
-# Same comments apply here as for Xerces above
-find_package(XalanC REQUIRED)
-include_directories(${XalanC_INCLUDE_DIRS})
-# Uncomment the next two lines if you want to find where Xalan headers and DLLs are on your system
-message("Xalan-C++ include directories: ${XalanC_INCLUDE_DIRS}")
-message("Xalan-C++ libraries: ${XalanC_LIBRARIES}")
+#=================================================== Find libxml2 ===================================================
+# CMake already knows how to find and configure libxml2, see
+# https://cmake.org/cmake/help/latest/module/FindLibXml2.html
+find_package(LibXml2 REQUIRED)
+include_directories(${LIBXML2_INCLUDE_DIRS})
+# Uncomment the next two lines if you want to find where libxml2 headers and DLLs are on your system
+message("libxml2 include directories: ${LIBXML2_INCLUDE_DIRS}")
+message("libxml2 libraries: ${LIBXML2_LIBRARIES}")
 
 #===================================================== Find OpenSSL ====================================================
 # This is needed for us to use https with Boost.Asio

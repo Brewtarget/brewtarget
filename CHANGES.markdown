@@ -7,15 +7,18 @@ format therein, otherwise you'll get, eg, no-changelogname-tag error from rpmlin
 release timestamp to be a date in the future, and I'm guessing nobody cares about the exact time of day a release
 happens, so I'm now setting it to a slightly arbitrary time early in the morning.
 
-## Forthcoming in v5.2.0
+## Forthcoming in v5.3.0
 
 ### New Features
 * TODO: Additional methods for calculating IBU
 * Shopping Lists
 * We'll list other new features here...
 
-## v5.1.2
-Bug fixes.
+## v5.2.0
+* Migrate to new XML libraries (libxml2 replaces Xerces and Xalan) [1131](https://github.com/Brewtarget/brewtarget/issues/1131)
+* DotBeer file format support [1122](https://github.com/Brewtarget/brewtarget/issues/1122)
+* Water Calculator improvements [252](https://github.com/Brewtarget/brewtarget/issues/252)
+* Salts (aka water agents) are now a subcategory of Miscellaneous ingredients
 
 ### New Features
 None
