@@ -20,8 +20,6 @@
 // Ubuntu 22.04 ships with an old version of GCC which doesn't have support for std::format
 #if defined(__cpp_lib_format) && __cpp_lib_format >= 201907L
    #include <format>
-#else
-   #include <sstream>
 #endif
 
 // We could just include <boost/json.hpp> which pulls all the Boost.JSON headers in, but that seems overkill
@@ -38,6 +36,7 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QDebug>
+#include <QString>
 #include <QVersionNumber>
 
 #include "config.h"
@@ -1111,7 +1110,7 @@ namespace DotBeer {
 #if defined(__cpp_lib_format) && __cpp_lib_format >= 201907L
             std::format("{} v{}", CONFIG_APPLICATION_NAME_UC, CONFIG_VERSION_STRING)
 #else
-            (std::ostringstream{} << CONFIG_APPLICATION_NAME_UC << " v" << CONFIG_VERSION_STRING).str()
+            QString("%1 v%2").arg(CONFIG_APPLICATION_NAME_UC, CONFIG_VERSION_STRING).toStdString()
 #endif
          };
 
