@@ -780,7 +780,7 @@ message("OpenSSL include directories: ${OPENSSL_INCLUDE_DIR}")
 message("OpenSSL libraries: ${OPENSSL_LIBRARIES}")
 
 if(APPLE)
-# TBD: Is this also needed when static linking Xerces on MacOS?
+# TBD: Is this still needed?
 find_package(CURL REQUIRED)
 endif()
 
@@ -1149,13 +1149,12 @@ set(appAndTestCommonLibraries
    ${Backtrace_LIBRARIES}
    ${Boost_LIBRARIES}
    ${DL_LIBRARY}
-   ${XalanC_LIBRARIES}
-   ${XercesC_LIBRARIES}
+   ${LIBXML2_LIBRARIES}
    ${OPENSSL_LIBRARIES}
 )
 if(APPLE)
-   # Static linking Xerces and Xalan on MacOS means we have to explicitly say what libraries and frameworks they in turn
-   # depend on.  It would be neat to find some automated tool that does this for us.
+   # Static linking with libraries on MacOS means we have to explicitly say what other libraries and frameworks they in
+   # turn depend on.  It would be neat to find some automated tool that does this for us.
    list(APPEND appAndTestCommonLibraries CURL::libcurl
                                          "-framework CoreFoundation"
                                          "-framework CoreServices"

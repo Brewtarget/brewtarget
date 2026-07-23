@@ -102,13 +102,20 @@ public:
     * Although libxml2 is written in C, we do not need an `extern "C" { ... }` block here as the library gets passed a
     * function pointer and never needs to know the name of the function (so the C++ name mangling doesn't matter).
     *
-    * The signature of this function needs to correspond with xmlStructuredErrorFunc in libxml2/libxml/xmlerror.h
+    * The signature of this function needs to correspond with xmlStructuredErrorFunc in libxml2/libxml/xmlerror.h.  In
+    * older versions of the library, this is:
+    *    typedef void(* xmlStructuredErrorFunc) (void *userData, xmlError *error)
+    * in newer ones it is:
+    *    typedef void(* xmlStructuredErrorFunc) (void *userData, const xmlError *error)
     *
     * @param userData this void pointer should be castable to an instance of XmlErrorHandler
     * @param error
     */
+#if LIBXML_VERSION < 21200
    static void xmlStructuredErrorFunc(void * userData, xmlError * error);
-
+#else
+   static void xmlStructuredErrorFunc(void * userData, xmlError const * error);
+#endif
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

@@ -152,6 +152,9 @@ def installDependencies():
             'libqt6svg6',
             'libqt6svgwidgets6',
             'libssl-dev', # For OpenSSL headers
+            # On Linux, 'libxml2' is only what you need to run applications that use libxml2, and 'libxml2-dev' is the
+            # superset of this that also allows you to compile such applications.  On other platforms, 'libxml2'
+            # contains everything for building and running.
             'libxml2-dev',
             'meson',
             'ninja-build',
@@ -596,7 +599,7 @@ def installDependencies():
                         'mingw-w64-' + arch + '-qt6-translations',
                         'mingw-w64-' + arch + '-qt6',
                         'mingw-w64-' + arch + '-toolchain',
-                        'mingw-w64-' + arch + '-libxml2-dev',
+                        'mingw-w64-' + arch + '-libxml2',
 #                        'mingw-w64-' + arch + '-7zip', # To unzip NSIS plugins
                         'mingw-w64-' + arch + '-angleproject', # See comment above
                         'mingw-w64-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
@@ -785,7 +788,7 @@ def installDependencies():
                             'qtmultimedia',
                             'qtnetworkauth',
                             'openssl@3', # OpenSSL headers and library
-                            'libxml2-dev',
+                            'libxml2',
                             ]
          for packageToInstall in installListBrew:
             #
@@ -945,7 +948,7 @@ def installDependencies():
 #                            'tree',
 #                            'dylibbundler',
                             'pandoc',
-#                            'libxml2-dev',
+#                            'libxml2',
 #                            'qt6',
 #                            'qt6-qttranslations',
                             'dbus'

@@ -17,6 +17,13 @@
 
 #include <cstdlib>
 
+// Ubuntu 22.04 ships with an old version of GCC which doesn't have support for std::format
+#if defined(__cpp_lib_format) && __cpp_lib_format >= 201907L
+   #include <format>
+#else
+   #include <sstream>
+#endif
+
 // We could just include <boost/json.hpp> which pulls all the Boost.JSON headers in, but that seems overkill
 #include <boost/json/kind.hpp>
 #include <boost/json/parse_options.hpp>
@@ -1099,7 +1106,15 @@ namespace DotBeer {
                                       userMessage{userMessage},
                                       writtenToFile{false},
                                       outputDocument{} {
-         std::string const outputBy{std::format("{} v{}", CONFIG_APPLICATION_NAME_UC, CONFIG_VERSION_STRING)};
+         // Ubuntu 22.04 ships with an old version of GCC which doesn't have support for std::format
+         std::string const outputBy{
+#if defined(__cpp_lib_format) && __cpp_lib_format >= 201907L
+            std::format("{} v{}", CONFIG_APPLICATION_NAME_UC, CONFIG_VERSION_STRING)
+#else
+            (std::ostringstream{} << CONFIG_APPLICATION_NAME_UC << " v" << CONFIG_VERSION_STRING).str()
+#endif
+         };
+
          this->outputDocument[outputDocumentName] = {
             {"version", dotBeerVersionWeSupport.toString().toStdString()},
             {"output_by", outputBy},

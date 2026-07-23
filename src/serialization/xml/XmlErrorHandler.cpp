@@ -220,8 +220,12 @@ void XmlErrorHandler::handleError(xmlError const * error) {
    return;
 }
 
+#if LIBXML_VERSION < 21200
 void XmlErrorHandler::xmlStructuredErrorFunc(void * userData, xmlError * error) {
-   auto xmlErrorHandler = static_cast<XmlErrorHandler *>(userData);
+#else
+void XmlErrorHandler::xmlStructuredErrorFunc(void * userData, xmlError const * error) {
+#endif
+   auto const xmlErrorHandler = static_cast<XmlErrorHandler *>(userData);
    xmlErrorHandler->handleError(error);
    return;
 }

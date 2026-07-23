@@ -226,7 +226,7 @@ public:
    void moveSelectedItemDown() {
       int const row = this->getSelectedRowNum();
 
-      // Make sure row is valid and it's not the last row so we can move it down.
+      // Make sure row is valid, and that it's not the last row, so we can move it down.
       if (row < 0 || row >= this->m_itemTableModel->rowCount() - 1) {
          return;
       }
