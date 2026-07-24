@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>waterAdjuster</class>
+ <widget class="QWidget" name="waterAdjuster">
+  <!--property name="windowTitle">
+   <string>Water Profile Adjustment Tool</string>
+  </property-->
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item>
+    <widget class="QSplitter" name="splitter_vertical_recipe">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <!--
+     ================================================= Left-hand panel =================================================
+      -->
+     <widget class="QWidget" name="panel_left" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_left" stretch="0,0,0">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_profiles">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_baseProfile">
+           <property name="text">
+            <string>Base Profile</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="4">
+          <widget class="BtComboBoxWater" name="combo_waterBase">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>128</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="5">
+          <widget class="QPushButton" name="pushButton_editBaseProfile">
+           <property name="toolTip">
+            <string>Edit base water profile</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
+           </property>
+          </widget>
+         </item>
+
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_mashRO">
+           <property name="text">
+            <string>% RO in Mash</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QSpinBox" name="spinBox_mashRO">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+
+         <item row="3" column="3">
+          <widget class="QLabel" name="label_spargeRO">
+           <property name="text">
+            <string>% RO in Sparge</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="4">
+          <widget class="QSpinBox" name="spinBox_spargeRO">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_targetProfile">
+           <property name="text">
+            <string>Target Profile</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1" colspan="4">
+          <widget class="BtComboBoxWater" name="combo_waterTarget">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>128</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="5">
+          <widget class="QPushButton" name="pushButton_editTargetProfile">
+           <property name="toolTip">
+            <string>Edit target water profile</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
+           </property>
+          </widget>
+         </item>
+
+        </layout>
+
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupbox_actual">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Actual</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_ppm" rowstretch="0,0,0,0">
+          <item row="1" column="1">
+           <widget class="SmartLabel" name="label_ca">
+            <property name="text">
+             <string>Ca</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="SmartDigitWidget" name="btDigit_ca">
+           </widget>
+          </item>
+
+          <item row="1" column="3">
+           <spacer name="horizontalSpacer_1">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+
+          <item row="1" column="4">
+           <widget class="SmartLabel" name="label_mg">
+            <property name="text">
+             <string>Mg</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <widget class="SmartDigitWidget" name="btDigit_mg">
+           </widget>
+          </item>
+
+          <item row="1" column="6">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+
+          <item row="1" column="7">
+           <widget class="SmartLabel" name="label_na">
+            <property name="text">
+             <string>Na</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="8">
+           <widget class="SmartDigitWidget" name="btDigit_na">
+           </widget>
+          </item>
+
+          <item row="3" column="1">
+           <widget class="SmartLabel" name="label_cl">
+            <property name="text">
+             <string>Cl</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="SmartDigitWidget" name="btDigit_cl">
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="SmartLabel" name="label_so4">
+            <property name="text">
+             <string>SO&lt;sub&gt;4&lt;/sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="5">
+           <widget class="SmartDigitWidget" name="btDigit_so4">
+           </widget>
+          </item>
+          <item row="3" column="7">
+           <widget class="SmartLabel" name="label_hco3">
+            <property name="text">
+             <string>HCO&lt;sub&gt;3&lt;/sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="8">
+           <widget class="SmartDigitWidget" name="btDigit_hco3">
+           </widget>
+          </item>
+
+          <item row="5" column="1">
+           <widget class="SmartLabel" name="label_pH">
+            <property name="text">
+             <string>pH</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="SmartDigitWidget" name="btDigit_ph">
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+
+       <item>
+        <widget class="BtTabWidget" name="tabWidget_adjustments">
+         <widget class="QWidget" name="tab_waterAgents">
+          <attribute name="title">
+           <string>Water Agents (Miscellaneous)</string>
+          </attribute>
+          <layout class="QHBoxLayout" name="horizontalLayout_waterAgents">
+           <item>
+            <widget class="QTableView" name="tableView_waterAgents">
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_waterAgentButtons">
+             <property name="spacing">
+              <number>1</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="pushButton_addWaterAgent">
+               <property name="toolTip">
+                <string>Add a water agent</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../resources.qrc">
+                 <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_removeWaterAgent">
+               <property name="toolTip">
+                <string>Remove selected water agent</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../resources.qrc">
+                 <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+
+         <widget class="QWidget" name="tab_acidMalts">
+          <attribute name="title">
+           <string>Acid Malts (Fermentables)</string>
+          </attribute>
+          <layout class="QHBoxLayout" name="horizontalLayout_acidMalts">
+           <item>
+            <widget class="QTableView" name="tableView_acidMalts">
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_acidMaltButtons">
+             <property name="spacing">
+              <number>1</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="pushButton_addAcidMalt">
+               <property name="toolTip">
+                <string>Add an acid malt</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../resources.qrc">
+                 <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_removeAcidMalt">
+               <property name="toolTip">
+                <string>Remove selected acid malt</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../resources.qrc">
+                 <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="panel_right" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_right">
+       <item>
+        <widget class="RadarChart" name="radarChart" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>500</width>
+           <height>500</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtComboBoxWater</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBoxNamedEntity.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>BtTabWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>RadarChart</class>
+   <extends>QWidget</extends>
+   <header>RadarChart.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SmartLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartLabel.h</header>
+   <slots>
+    <signal>changedSystemOfMeasurementOrScale(PreviousScaleInfo)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>SmartDigitWidget</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartDigitWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>combo_waterBase</tabstop>
+  <tabstop>pushButton_editBaseProfile</tabstop>
+  <tabstop>combo_waterTarget</tabstop>
+  <tabstop>pushButton_editTargetProfile</tabstop>
+  <tabstop>spinBox_mashRO</tabstop>
+  <tabstop>spinBox_spargeRO</tabstop>
+  <tabstop>pushButton_addWaterAgent</tabstop>
+  <tabstop>pushButton_removeWaterAgent</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
+</ui>

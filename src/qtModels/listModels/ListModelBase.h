@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/listModels/ListModelBase.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * qtModels/listModels/ListModelBase.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -96,11 +96,6 @@ public:
          return m_items[ndx];
       }
       return nullptr;
-   }
-
-   //! \return the index of the specified item
-   [[deprecated]] int indexOf(NE * item) const {
-      return m_items.indexOf(item);
    }
 
    //! \return the index of the specified item

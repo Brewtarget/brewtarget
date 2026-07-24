@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * database/DbTransaction.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * database/DbTransaction.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 
 DbTransaction::DbTransaction(Database & database,
                              QSqlDatabase & connection,
-                             QString const nameForLogging,
+                             QString const & nameForLogging,
                              DbTransaction::SpecialBehaviours specialBehaviours) :
    database{database},
    connection{connection},
@@ -33,13 +33,15 @@ DbTransaction::DbTransaction(Database & database,
    // Note that, on SQLite at least, turning foreign keys on and off has to happen outside a transaction, so we have to
    // be careful about the order in which we do things.
    if (this->specialBehaviours & DISABLE_FOREIGN_KEYS) {
-      this->database.setForeignKeysEnabled(false, connection);
+      if (!this->database.setForeignKeysEnabled(false, connection)) {
+         throw QString("Could not disable foreign keys for database");
+      }
    }
 
    // Normally leave the next line commented out
 //   qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
 
-   bool succeeded = this->connection.transaction();
+   bool const succeeded = this->connection.transaction();
    qDebug() <<
       Q_FUNC_INFO << "Database transaction" << this->nameForLogging << "begin: " << (succeeded ? "succeeded" : "failed");
    if (!succeeded) {
@@ -54,18 +56,24 @@ DbTransaction::~DbTransaction() {
    // Normally leave the next line commented out
 //   qDebug() << Q_FUNC_INFO;
    if (!committed) {
-      bool succeeded = this->connection.rollback();
+      bool const succeeded = this->connection.rollback();
       qDebug() <<
-         Q_FUNC_INFO << "Database transaction" << this->nameForLogging << "rollback: " << (succeeded ? "succeeded" : "failed");
+         Q_FUNC_INFO << "Database transaction" << this->nameForLogging << "rollback: " <<
+         (succeeded ? "succeeded" : "failed");
       if (!succeeded) {
          qCritical() <<
-            Q_FUNC_INFO << "Unable to rollback database transaction" << this->nameForLogging << ":" << connection.lastError().text();
+            Q_FUNC_INFO << "Unable to rollback database transaction" << this->nameForLogging << ":" <<
+            connection.lastError().text();
       }
    }
 
    // See comment above about why we need to do this _after_ the transaction has finished
    if (this->specialBehaviours & DISABLE_FOREIGN_KEYS) {
-      this->database.setForeignKeysEnabled(true, connection);
+      if (this->database.setForeignKeysEnabled(true, connection)) {
+         qCritical() <<
+            Q_FUNC_INFO << "Unable to re-enable foreign keys" << this->nameForLogging << ":" <<
+            connection.lastError().text();
+      }
    }
    return;
 }

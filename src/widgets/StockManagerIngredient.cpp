@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/StockManagerIngredient.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * widgets/StockManagerIngredient.cpp is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -18,5 +18,4 @@
 STOCK_MGR_COMMON_CODE(Fermentable)
 STOCK_MGR_COMMON_CODE(Hop        )
 STOCK_MGR_COMMON_CODE(Misc       )
-STOCK_MGR_COMMON_CODE(Salt       )
 STOCK_MGR_COMMON_CODE(Yeast      )

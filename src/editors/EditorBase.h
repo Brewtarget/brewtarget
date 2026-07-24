@@ -44,8 +44,8 @@ class StepOwner;
  *        \c StockUseFermentableEditor, \c StockUseHopEditor, etc to inherit from \b before inheriting
  *        from \c EditorBase.  This provides the functionality that, if we are creating a new step (or inventory
  *        change), rather than editing an existing one, then we need to be able to set the owner (ie the \c Mash,
- *        \c Boil, \c Fermentation, \c StockPurchaseFermentable, \c StockPurchaseHop, etc) when we click \b Save, because the
- *        steps (or inventory changes) have no independent existence without their owner.
+ *        \c Boil, \c Fermentation, \c StockPurchaseFermentable, \c StockPurchaseHop, etc) when we click \b Save,
+ *        because the steps (or stock uses) have no independent existence without their owner.
  */
 template<class Derived> class EnumeratedItemEditorPhantom;
 template<class Derived, class NE>
@@ -102,10 +102,12 @@ struct EditorBaseOptions {
     * \brief Enabling this turns on the automatic update of the first tab to show the name of the item being edited.
     *        This relies on the \c Derived class having a \c QTabWidget called \c tabWidget_editor (and that the object
     *        name is provided by the \c PropertyNames::NamedEntity::name property).
+    *
+    *        This only really works for things that will all have shortish names.
     */
    bool nameTab = false;
    /**
-    * \brief Enabling this turns on the observation of (the current) \c Recipe.  Typically it makes sense for us to be
+    * \brief Enabling this turns on the observation of (the current) \c Recipe.  Typically, it makes sense for us to be
     *        able to watch a \c Recipe when it can have at most one of the thing we are editing (\c Boil, \c Equipment,
     *        \c Fermentation, \c Mash, \c Style).
     */
@@ -200,7 +202,7 @@ private:
     *        Note that we cannot initialise this->m_fields here, as the parameters themselves won't get constructed
     *        until Derived calls setupUi().
     */
-   EditorBase(QString const editorName) :
+   explicit EditorBase(QString const editorName) :
       m_editorName{editorName},
       m_fields{nullptr},
       m_editItem{nullptr},
@@ -619,7 +621,7 @@ public:
     * \brief Subclass should call this from its \c changed slot
     *
     *        Note that \c QObject::sender has \c protected access specifier, so we can't call it from here, not even
-    *        via the derived class pointer.  Therefore we have derived class call it and pass us the result.
+    *        via the derived class pointer.  Therefore, we have derived class call it and pass us the result.
     */
    void doChanged(QObject * sender, QMetaProperty prop, [[maybe_unused]] QVariant val) {
       if (this->handleChangeFromRecipe(sender)) {

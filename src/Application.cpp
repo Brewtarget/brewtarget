@@ -62,7 +62,6 @@
 #include "model/Instruction.h"
 #include "model/Mash.h"
 #include "model/Misc.h"
-#include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -164,20 +163,20 @@ namespace {
 
    //! \brief Every so often, we need to update the config file itself. This does that.
    void updateConfig() {
-      int cVersion = PersistentSettings::value_ck(PersistentSettings::Names::config_version, QVariant(0)).toInt();
-      while ( cVersion < CONFIG_VERSION ) {
-         switch ( ++cVersion ) {
+      int configVersion = PersistentSettings::value_ck(PersistentSettings::Names::config_version, QVariant(0)).toInt();
+      while ( configVersion < PersistentSettings::latestConfigVersion ) {
+         switch ( ++configVersion ) {
             case 1:
                // Update the dbtype, because I had to increase the NODB value from -1 to 0
                Database::DbType newType =
                   static_cast<Database::DbType>(
                      PersistentSettings::value_ck(PersistentSettings::Names::dbType,
-                                                  static_cast<int>(Database::DbType::NODB)).toInt() + 1
+                                                  static_cast<int>(Database::DbType::None)).toInt() + 1
                   );
                // Write that back to the config file
                PersistentSettings::insert_ck(PersistentSettings::Names::dbType, static_cast<int>(newType));
                // and make sure we don't do it again.
-               PersistentSettings::insert_ck(PersistentSettings::Names::config_version, QVariant(cVersion));
+               PersistentSettings::insert_ck(PersistentSettings::Names::config_version, QVariant(configVersion));
                break;
          }
       }
@@ -271,7 +270,7 @@ namespace {
 QDir Application::getResourceDir() {
    //
    // We want to initialise the resourceDir exactly once.  Using std::call_once means that happens even in a
-   // multi-threaded application.
+   // multithreaded application.
    //
    static std::once_flag initFlag_resourceDir;
    static QDir resourceDir;
@@ -287,7 +286,6 @@ bool Application::initialize() {
    qRegisterMetaType<Equipment *>();
    qRegisterMetaType<Mash      *>();
    qRegisterMetaType<Style     *>();
-   qRegisterMetaType<Salt      *>();
    qRegisterMetaType<QList<BrewLog    *>>();
    qRegisterMetaType<QList<Hop         *>>();
    qRegisterMetaType<QList<Instruction *>>();
@@ -295,7 +293,6 @@ bool Application::initialize() {
    qRegisterMetaType<QList<Misc        *>>();
    qRegisterMetaType<QList<Yeast       *>>();
    qRegisterMetaType<QList<Water       *>>();
-   qRegisterMetaType<QList<Salt        *>>();
 
    // Make sure all the necessary directories and files we need exist before starting.
    ensureDirectoriesExist();

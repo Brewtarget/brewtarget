@@ -58,7 +58,7 @@ template <typename NE> concept CONCEPT_FIX_UP    CanHaveStockPurchase = std::is_
 template <typename NE> concept CONCEPT_FIX_UP CannotHaveStockPurchase = std::negation_v<std::is_base_of<Ingredient, NE>>;
 
 /**
- * \brief Class representing the acquisition (eg purchase) of an ingredient (Hop/Fermentable/Yeast/Misc/Salt).
+ * \brief Class representing the acquisition (eg purchase) of an ingredient (Hop/Fermentable/Yeast/Misc/WaterAdjustment).
  *
  *        In older versions of the software, we used "Inventory" to talk about how much stock we have of a given
  *        ingredient.  However, we now want to track acquisition and use of ingredients, but we don't want to end up

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAdditionMisc.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/RecipeAdditionMisc.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ bool RecipeAdditionMisc::compareWith(NamedEntity const & other,
    return (
       // Parent classes have to be equal
       this->RecipeAddition    ::compareWith  (rhs, propertiesThatDiffer) &&
-      this->RecipeAdditionBase::compareWith  (rhs, propertiesThatDiffer) &&
+      this->RecipeAdditionBase::doCompareWith(rhs, propertiesThatDiffer) &&
       this->IngredientAmount  ::doCompareWith(rhs, propertiesThatDiffer)
    );
 }

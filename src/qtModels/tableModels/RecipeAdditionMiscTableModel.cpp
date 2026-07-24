@@ -1,5 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/RecipeAdditionMiscTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * qtModels/tableModels/RecipeAdditionMiscTableModel.cpp is part of Brewtarget, and is copyright the following authors
+ * 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Luke Vincent <luke.r.vincent@gmail.com>
@@ -34,6 +35,7 @@
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/StockPurchase.h"
+#include "model/Mash.h"
 #include "model/Recipe.h"
 
 #ifdef BUILDING_WITH_CMAKE
@@ -74,9 +76,27 @@ RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, 
 
 RecipeAdditionMiscTableModel::~RecipeAdditionMiscTableModel() = default;
 
-void RecipeAdditionMiscTableModel::added  ([[maybe_unused]] std::shared_ptr<RecipeAdditionMisc> item) { return; }
-void RecipeAdditionMiscTableModel::removed([[maybe_unused]] std::shared_ptr<RecipeAdditionMisc> item) { return; }
-void RecipeAdditionMiscTableModel::updateTotals()                                                    { return; }
+void RecipeAdditionMiscTableModel::added  ([[maybe_unused]] std::shared_ptr<RecipeAdditionMisc> const item) {
+   auto const misc = item->misc();
+   if (misc->type() == Misc::Type::WaterAgent && misc->waterAgentType()) {
+      emit newTotals();
+   }
+   return;
+}
+void RecipeAdditionMiscTableModel::removed([[maybe_unused]] std::shared_ptr<RecipeAdditionMisc> const item) {
+   // Logic is the same as for added, so don't repeat ourselves here
+   this->added(item);
+   return;
+}
+void RecipeAdditionMiscTableModel::modified(std::shared_ptr<RecipeAdditionMisc> const item) {
+   // Logic is the same as for added, so don't repeat ourselves here
+   this->added(item);
+   return;
+}
+
+void RecipeAdditionMiscTableModel::updateTotals() {
+   return;
+}
 
 void RecipeAdditionMiscTableModel::setShowIBUs(bool var) {
    showIBUs = var;
@@ -105,9 +125,136 @@ bool RecipeAdditionMiscTableModel::setData(QModelIndex const & index, QVariant c
    return this->doSetDataDefault(index, value, role);
 }
 
-// Insert the boiler-plate stuff that we cannot do in TableModelBase
+template<Water::MineralIon ion> double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm() const {
+   double concentrationPerLiter_massConcPpm = 0.0;
+   for (auto const & miscAddition : this->m_rows) {
+      if (auto const misc = miscAddition->misc();
+          misc->type() == Misc::Type::WaterAgent && misc->waterAgentType()) {
+         auto const additionAmount = miscAddition->amount();
+         //
+         // If the amount is a volume, we are assuming that 1 liter of it weighs 1 kilogram.
+         //
+         // Our canonical unit for weight is kg, so multiply by 1000 here to go from kg to g
+         //
+         double const additionMass_g = 1000.0 * additionAmount.quantity;
+         double const concentrationPerGramPerLiter_massConcPpm =
+            Misc::concentrationPerGramPerLiter_massConcPpm<ion>(*misc->waterAgentType());
+         concentrationPerLiter_massConcPpm += additionMass_g * concentrationPerGramPerLiter_massConcPpm;
+      }
+   }
+   return concentrationPerLiter_massConcPpm;
+}
+// Instantiate the above template function for the types that are going to use it
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Bicarbonate>() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Calcium    >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Carbonate  >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Chloride   >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Copper     >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Iron       >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Magnesium  >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Manganese  >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Nitrate    >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Nitrite    >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Phosphate  >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Potassium  >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Sodium     >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Sulfate    >() const;
+template double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm<Water::MineralIon::Zinc       >() const;
+
+double RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm(Water::MineralIon const ion) const {
+   switch(ion) {
+      case Water::MineralIon::Bicarbonate: return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Bicarbonate>();
+      case Water::MineralIon::Calcium    : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Calcium    >();
+      case Water::MineralIon::Carbonate  : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Carbonate  >();
+      case Water::MineralIon::Chloride   : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Chloride   >();
+      case Water::MineralIon::Copper     : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Copper     >();
+      case Water::MineralIon::Iron       : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Iron       >();
+      case Water::MineralIon::Magnesium  : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Magnesium  >();
+      case Water::MineralIon::Manganese  : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Manganese  >();
+      case Water::MineralIon::Nitrate    : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Nitrate    >();
+      case Water::MineralIon::Nitrite    : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Nitrite    >();
+      case Water::MineralIon::Phosphate  : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Phosphate  >();
+      case Water::MineralIon::Potassium  : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Potassium  >();
+      case Water::MineralIon::Sodium     : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Sodium     >();
+      case Water::MineralIon::Sulfate    : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Sulfate    >();
+      case Water::MineralIon::Zinc       : return this->concentrationPerLiter_massConcPpm<Water::MineralIon::Zinc       >();
+         // NB: No default case as we want compiler to warn us if we missed a possibility above
+   }
+   return 0.0;
+}
+
+Measurement::Amount RecipeAdditionMiscTableModel::total(Misc::WaterAgentType const waterAgentType) const {
+   Measurement::Amount totalAmount{Misc::suggestedMeasureFor(waterAgentType), 0.0};
+   for (auto const & miscAddition : this->m_rows) {
+      if (auto const misc = miscAddition->misc();
+          misc->type() == Misc::Type::WaterAgent && misc->waterAgentType() == waterAgentType) {
+         Measurement::Amount const waterAgentAmount = miscAddition->amount().toCanonical();
+         // Normally leave this commented out as otherwise generates too much logging
+//         qDebug() << Q_FUNC_INFO << waterAgentAmount << "of" << misc << "to add to" << totalAmount;
+         // .:TBD:. For the moment, we are assuming that mass and volume are interchangeable, which isn't great.  But at
+         //         least let's log a warning when we do it.
+         if (waterAgentAmount.unit != totalAmount.unit) {
+            //
+            // If we didn't yet add anything to our running total, we just assume the first amount we find is measured
+            // in the physical quantity we want.
+            //
+            // Although we wouldn't normally compare doubles using ==, I think it's OK in checking whether we yet added
+            // anything to zero.
+            //
+            if (0.0 == totalAmount.quantity) {
+               qDebug() <<
+                  Q_FUNC_INFO << "First water agent addition found was" << waterAgentAmount << "of" << misc <<
+                  "so changing units from" << totalAmount.unit;
+               totalAmount.unit = waterAgentAmount.unit;
+            } else {
+               qWarning() <<
+                  Q_FUNC_INFO << "Adding" << waterAgentAmount << "of" << misc << "to a total of" << totalAmount <<
+                  "involves implicit assumption that units are interchangeable";
+            }
+
+         }
+         totalAmount.quantity += waterAgentAmount.quantity;
+         qDebug() << Q_FUNC_INFO << "Total now" << totalAmount;
+      }
+   }
+   return totalAmount;
+}
+
+double RecipeAdditionMiscTableModel::totalAcid_kg(Misc::WaterAgentType const waterAgentType) const {
+   constexpr double H3PO4_density  = 1.685;
+   constexpr double lactic_density = 1.2;
+
+   // .:TODO:. There are assumptions in here about measurement being by weight or by volume.  We should check or assert
+   //          these.
+   double ret = 0.0;
+   for (auto const & miscAddition : this->m_rows) {
+      if (auto const misc = miscAddition->misc();
+          misc->type() == Misc::Type::WaterAgent && misc->waterAgentType() == waterAgentType) {
+
+         double const mult  = 1000.0;
+         auto const waterAgentAcid_pct = misc->waterAgentPercentAcid();
+         if (waterAgentAcid_pct) {
+            if (waterAgentType == Misc::WaterAgentType::Other) {
+               ret += 1000.0 * miscAddition->amount().quantity * *waterAgentAcid_pct;
+            } else if (waterAgentType == Misc::WaterAgentType::LacticAcid) {
+               // Lactic acid isn't quite so easy
+               double const density = *waterAgentAcid_pct/88.0 * (lactic_density - 1.0) + 1.0;
+               double const lactic_wgt = 1000.0 * miscAddition->amount().quantity * mult * density;
+               ret += (*waterAgentAcid_pct/100.0) * lactic_wgt;
+            } else if (waterAgentType == Misc::WaterAgentType::PhosphoricAcid) {
+               double const density = *waterAgentAcid_pct/85.0 * (H3PO4_density - 1.0) + 1.0;
+               double const H3PO4_wgt = 1000.0 * miscAddition->amount().quantity * density;
+               ret += (*waterAgentAcid_pct/100.0) * H3PO4_wgt;
+            }
+         }
+      }
+   }
+   return ret;
+}
+
+// Insert the boilerplate stuff that we cannot do in TableModelBase
 TABLE_MODEL_COMMON_CODE(RecipeAdditionMisc, recipeAdditionMisc, PropertyNames::Recipe::miscAdditions)
 //=============================================== CLASS RecipeAdditionMiscItemDelegate ================================================
 
-// Insert the boiler-plate stuff that we cannot do in ItemDelegate
+// Insert the boilerplate stuff that we cannot do in ItemDelegate
 ITEM_DELEGATE_COMMON_CODE(RecipeAdditionMisc)

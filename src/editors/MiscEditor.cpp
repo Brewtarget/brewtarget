@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/MiscEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * editors/MiscEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -53,11 +53,36 @@ MiscEditor::MiscEditor(QWidget * parent, QString const editorName) :
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
       EDITOR_FIELD_NORM(Misc, label_producer  , lineEdit_producer  , Misc::producer            ),
       EDITOR_FIELD_NORM(Misc, label_productId , lineEdit_productId , Misc::productId           ),
+      // Moved from Salt
+      EDITOR_FIELD_ENUM(Misc, label_waterAgentType       , comboBox_waterAgentType       , Misc::waterAgentType       ),
+      EDITOR_FIELD_NORM(Misc, label_waterAgentPercentAcid, lineEdit_waterAgentPercentAcid, Misc::waterAgentPercentAcid, 1),
    });
+
+   connect(this->comboBox_type          , &QComboBox::currentIndexChanged, this, &MiscEditor::hideOrShowWaterAgentFields);
+   connect(this->comboBox_waterAgentType, &QComboBox::currentIndexChanged, this, &MiscEditor::hideOrShowWaterAgentFields);
+
    return;
 }
 
 MiscEditor::~MiscEditor() = default;
 
-// Insert the boiler-plate stuff that we cannot do in EditorBase
+void MiscEditor::postReadFieldsFromEditItem([[maybe_unused]] std::optional<QString> propName) {
+   this->hideOrShowWaterAgentFields();
+   return;
+}
+
+void MiscEditor::hideOrShowWaterAgentFields() {
+   bool const showWaterAgentFields {
+      this->comboBox_type->getNonOptValue<Misc::Type>() == Misc::Type::WaterAgent
+   };
+   this->groupBox_waterAgentFields->setVisible(showWaterAgentFields);
+   if (showWaterAgentFields) {
+      auto const waterAgentType = this->comboBox_waterAgentType->getOptValue<Misc::WaterAgentType>();
+      bool const percentAcidEnabled {waterAgentType && Misc::isAcid(*waterAgentType)};
+      this->label_waterAgentPercentAcid->setEnabled(percentAcidEnabled);
+      this->lineEdit_waterAgentPercentAcid->setEnabled(percentAcidEnabled);
+   }
+}
+
+// Insert the boilerplate stuff that we cannot do in EditorBase
 EDITOR_COMMON_CODE(Misc)

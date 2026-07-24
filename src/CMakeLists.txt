@@ -81,7 +81,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/buttons/MashButton.cpp
     ${repoDir}/src/buttons/RecipeAttributeButton.cpp
     ${repoDir}/src/buttons/StyleButton.cpp
-    ${repoDir}/src/buttons/WaterButton.cpp
     ${repoDir}/src/catalogs/BoilCatalog.cpp
     ${repoDir}/src/catalogs/EquipmentCatalog.cpp
     ${repoDir}/src/catalogs/FermentableCatalog.cpp
@@ -89,7 +88,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/catalogs/HopCatalog.cpp
     ${repoDir}/src/catalogs/MashCatalog.cpp
     ${repoDir}/src/catalogs/MiscCatalog.cpp
-    ${repoDir}/src/catalogs/SaltCatalog.cpp
     ${repoDir}/src/catalogs/StyleCatalog.cpp
     ${repoDir}/src/catalogs/WaterCatalog.cpp
     ${repoDir}/src/catalogs/YeastCatalog.cpp
@@ -110,11 +108,9 @@ set(filesToCompile_cpp
     ${repoDir}/src/editors/MashEditor.cpp
     ${repoDir}/src/editors/MashStepEditor.cpp
     ${repoDir}/src/editors/MiscEditor.cpp
-    ${repoDir}/src/editors/SaltEditor.cpp
     ${repoDir}/src/editors/StockPurchaseFermentableEditor.cpp
     ${repoDir}/src/editors/StockPurchaseHopEditor.cpp
     ${repoDir}/src/editors/StockPurchaseMiscEditor.cpp
-    ${repoDir}/src/editors/StockPurchaseSaltEditor.cpp
     ${repoDir}/src/editors/StockPurchaseYeastEditor.cpp
     ${repoDir}/src/editors/StockUseIngredientEditor.cpp
     ${repoDir}/src/editors/StyleEditor.cpp
@@ -156,17 +152,13 @@ set(filesToCompile_cpp
     ${repoDir}/src/model/RecipeAdditionHop.cpp
     ${repoDir}/src/model/RecipeAdditionMisc.cpp
     ${repoDir}/src/model/RecipeAdditionYeast.cpp
-    ${repoDir}/src/model/RecipeAdjustmentSalt.cpp
-    ${repoDir}/src/model/RecipeUseOfWater.cpp
     ${repoDir}/src/model/RecipeUtils.cpp
-    ${repoDir}/src/model/Salt.cpp
     ${repoDir}/src/model/Step.cpp
     ${repoDir}/src/model/StepExtended.cpp
     ${repoDir}/src/model/StockPurchase.cpp
     ${repoDir}/src/model/StockPurchaseFermentable.cpp
     ${repoDir}/src/model/StockPurchaseHop.cpp
     ${repoDir}/src/model/StockPurchaseMisc.cpp
-    ${repoDir}/src/model/StockPurchaseSalt.cpp
     ${repoDir}/src/model/StockPurchaseYeast.cpp
     ${repoDir}/src/model/StockUse.cpp
     ${repoDir}/src/model/StockUseIngredient.cpp
@@ -185,9 +177,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/qtModels/listModels/RecipeAdditionHopListModel.cpp
     ${repoDir}/src/qtModels/listModels/RecipeAdditionMiscListModel.cpp
     ${repoDir}/src/qtModels/listModels/RecipeAdditionYeastListModel.cpp
-    ${repoDir}/src/qtModels/listModels/RecipeAdjustmentSaltListModel.cpp
     ${repoDir}/src/qtModels/listModels/RecipeListModel.cpp
-    ${repoDir}/src/qtModels/listModels/SaltListModel.cpp
     ${repoDir}/src/qtModels/listModels/StyleListModel.cpp
     ${repoDir}/src/qtModels/listModels/WaterListModel.cpp
     ${repoDir}/src/qtModels/listModels/YeastListModel.cpp
@@ -207,19 +197,17 @@ set(filesToCompile_cpp
     ${repoDir}/src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp
-    ${repoDir}/src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/RecipeTableModel.cpp
-    ${repoDir}/src/qtModels/tableModels/SaltTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/StockUseFermentableTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/StockUseHopTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/StockUseMiscTableModel.cpp
-    ${repoDir}/src/qtModels/tableModels/StockUseSaltTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/StockUseYeastTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/StyleTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/WaterTableModel.cpp
     ${repoDir}/src/qtModels/tableModels/YeastTableModel.cpp
     ${repoDir}/src/serialization/ImportExport.cpp
-    ${repoDir}/src/serialization/json/BeerJson.cpp
+    ${repoDir}/src/serialization/json/beerJson/BeerJson.cpp
+    ${repoDir}/src/serialization/json/dotBeer/DotBeer.cpp
     ${repoDir}/src/serialization/json/JsonCoding.cpp
     ${repoDir}/src/serialization/json/JsonMeasureableUnitsMapping.cpp
     ${repoDir}/src/serialization/json/JsonRecord.cpp
@@ -228,9 +216,9 @@ set(filesToCompile_cpp
     ${repoDir}/src/serialization/json/JsonUtils.cpp
     ${repoDir}/src/serialization/json/JsonXPath.cpp
     ${repoDir}/src/serialization/xml/BeerXml.cpp
-    ${repoDir}/src/serialization/xml/BtDomErrorHandler.cpp
-    ${repoDir}/src/serialization/xml/XercesHelpers.cpp
     ${repoDir}/src/serialization/xml/XmlCoding.cpp
+    ${repoDir}/src/serialization/xml/XmlErrorHandler.cpp
+    ${repoDir}/src/serialization/xml/XmlLibHelpers.cpp
     ${repoDir}/src/serialization/xml/XmlMashRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecord.cpp
@@ -246,7 +234,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/tools/ScaleRecipeTool.cpp
     ${repoDir}/src/tools/StrikeWaterDialog.cpp
     ${repoDir}/src/tools/TimerMainDialog.cpp
-    ${repoDir}/src/tools/WaterProfileAdjustmentTool.cpp
     ${repoDir}/src/trees/NamedEntityTreeModel.cpp
     ${repoDir}/src/trees/NamedEntityTreeSortFilterProxyModel.cpp
     ${repoDir}/src/trees/NamedEntityTreeView.cpp
@@ -299,6 +286,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/StockManager.cpp
     ${repoDir}/src/widgets/ToggleSwitch.cpp
     ${repoDir}/src/widgets/UnitAndScalePopUpMenu.cpp
+    ${repoDir}/src/widgets/WaterAdjuster.cpp
 )
 #
 # Extra files we compile for unit testing

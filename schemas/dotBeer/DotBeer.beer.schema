@@ -1,0 +1,159 @@
+//======================================================================================================================
+// schema/DotBeer.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+//   • Mark Price <shadowchao99@gmail.com>
+//   • Matt Young <mfsy@yahoo.com>
+//   • Roman Eremin <roman.eremin@gmail.com> <roman.eremin@devexpress.com>
+//   • Yuriy Krutilin <y.krutilin@gmail.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  //
+  // NB: We reserve plurals for where multiple elements are required.  Thus, "Hop" and "Fermentable" are singular
+  //     (because they are classifiers) but "hops" and "fermentables" are plural (because they are lists of things).
+  //
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/DotBeer.beer.schema",
+  "type": "object",
+  "title": "DotBeer File Format",
+  "description": "A free and open serialisation format for beer recipes, ingredients and related data",
+  //
+  // Version of this schema.
+  // Versions prior to 1.0.0 are subject to breaking changes!
+  //
+  "Version": "0.3.0",
+  //
+  "properties": {
+    //
+    // Having a root element such as this is not strictly necessary, but it is useful to provide context, showing that
+    // the file contents are DotBeer format, even if the file extension got changed or is unavailable.
+    //
+    "DotBeer": {
+      "type": "object",
+      "description": "Root element of all DotBeer documents.  Most of the Primary Types (ie ones that have their own schema file) are referred to here.  Various Component Types (ie smaller types used for composition) are defined in the \"$defs\" sections of most of the schema files (apart from this one).",
+      //
+      // Allowing additional properties makes it easier to extend the schema in a way that allows old versions of
+      // software to read newer versions of DotBeer files.  However, it also makes it harder to validate things.  Eg
+      // if a program accidentally wrote optional parameter "foobar" with key "barfoo", it wouldn't be picked up by
+      // schema validation if additional properties are allowed.
+      //
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "description": "DotBeer schema version used to create the file.",
+          "$ref": "Measurement.beer.schema#/$defs/VersionNumber"
+        },
+        "output_by": {
+          "description": "Application that wrote the file -- eg Brewtarget 5.2.1.",
+          "type": "string"
+        },
+        "timestamp": {
+          "description": "Date and time file was created.",
+          "$ref": "Measurement.beer.schema#/$defs/Date"
+        },
+        // Ingredients
+        "hops": {
+          "type": "array",
+          "description": "Records detailing properties of unique hop varieties.",
+          "items": {
+            "$ref": "Hop.beer.schema"
+          }
+        },
+        "fermentables": {
+          "type": "array",
+          "description": "Records for any ingredient that contributes to the gravity of the beer.",
+          "items": {
+            "$ref": "Fermentable.beer.schema"
+          }
+        },
+        "misc_ingredients": {
+          "type": "array",
+          "description": "Records for ingredients that area not hops, fermentables or cultures.  Variously known as \"miscellaneous ingredients\", \"non-fermentable adjuncts\", \"other ingredients\", or \"adjuncts that do not contribute to the gravity of the beer\".",
+          "items": {
+            "$ref": "MiscIngredient.beer.schema"
+          }
+        },
+        "cultures": {
+          "type": "array",
+          "description": "Records detailing the wide array of unique cultures.",
+          "items": {
+            "$ref": "Culture.beer.schema"
+          }
+        },
+        //
+        // TODO: Add stock purchase/use here
+        //
+        "waters": {
+          //
+          // Water is different from other ingredients, in that it doesn't have inventory and its additions are (mostly)
+          // defined in the mash steps.
+          //
+          "type": "array",
+          "description": "Records for water profiles used in brewing.",
+          "items": {
+            "$ref": "Water.beer.schema"
+          }
+        },
+        // Processes
+        "mashes": {
+          "type": "array",
+          "description": "Common mashing procedures.",
+          "items": {
+            "$ref": "Mash.beer.schema"
+          }
+        },
+        "boils": {
+          "type": "array",
+          "description": "Common boil procedures.",
+          "items": {
+            "$ref": "Boil.beer.schema"
+          }
+        },
+        "fermentations": {
+          "type": "array",
+          "description": "Common fermentation procedures.",
+          "items": {
+            "$ref": "Fermentation.beer.schema"
+          }
+        },
+        //
+        // TODO: Add packaging here
+        //
+        // Other objects
+        "styles": {
+          "type": "array",
+          "description": "Details of judging guidelines for individual beer styles.",
+          "items": {
+            "$ref": "Style.beer.schema"
+          }
+        },
+        "equipments": {
+          "type": "array",
+          "description": "Provides necessary information for brewing equipment.",
+          "items": {
+            "$ref": "Equipment.beer.schema"
+          }
+        },
+        "recipes": {
+          "type": "array",
+          "description": "Records containing a minimal collection of the description of ingredients, procedures and other required parameters necessary to recreate a batch of beer.",
+          "items": {
+            "$ref": "Recipe.beer.schema"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "output_by",
+        "timestamp"
+      ]
+    }
+  },
+  "required": [
+    "DotBeer"
+  ]
+}

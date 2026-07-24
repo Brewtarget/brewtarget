@@ -36,7 +36,9 @@
 #include <QVariant>
 #include <QVector>
 
+#include "config.h"
 #include "database/ObjectStoreWrapper.h"
+#include "measurement/IbuMethods.h"
 #include "model/Ingredient.h"
 #include "model/FolderPropertyBase.h"
 #include "model/NamedEntity.h"
@@ -47,8 +49,10 @@
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Recipe { inline BtStringConst const property{#property}; }
 AddPropertyName(ABV_pct                )
-AddPropertyName(age_days               )
+AddPropertyName(IBU                    )
+AddPropertyName(IBUs                   )
 AddPropertyName(ageTemp_c              )
+AddPropertyName(age_days               )
 AddPropertyName(ancestorId             )
 AddPropertyName(apparentAttenuation_pct)
 AddPropertyName(asstBrewer             )
@@ -58,8 +62,8 @@ AddPropertyName(boil                   )
 AddPropertyName(boilGrav               )
 AddPropertyName(boilId                 )
 AddPropertyName(boilVolume_l           )
-AddPropertyName(brewer                 )
 AddPropertyName(brewLogs               )
+AddPropertyName(brewer                 )
 AddPropertyName(calcsEnabled           )
 AddPropertyName(caloriesPer33cl        )
 AddPropertyName(caloriesPerLiter       )
@@ -81,8 +85,7 @@ AddPropertyName(forcedCarbonation      )
 AddPropertyName(grainsInMash_kg        )
 AddPropertyName(grains_kg              )
 AddPropertyName(hopAdditions           )
-AddPropertyName(IBU                    )
-AddPropertyName(IBUs                   )
+AddPropertyName(ibuFormula             )
 AddPropertyName(instructions           )
 AddPropertyName(kegPrimingFactor       )
 AddPropertyName(locked                 )
@@ -96,13 +99,17 @@ AddPropertyName(points                 )
 AddPropertyName(postBoilVolume_l       )
 AddPropertyName(primingSugarEquiv      )
 AddPropertyName(primingSugarName       )
-AddPropertyName(saltAdjustments        )
+AddPropertyName(roWaterMash_pct        )
+AddPropertyName(roWaterSparge_pct      )
 AddPropertyName(style                  )
 AddPropertyName(styleId                )
 AddPropertyName(tasteNotes             )
 AddPropertyName(tasteRating            )
 AddPropertyName(type                   )
-AddPropertyName(waterUses              )
+AddPropertyName(waterBase              )
+AddPropertyName(waterBaseId            )
+AddPropertyName(waterTarget            )
+AddPropertyName(waterTargetId          )
 AddPropertyName(wortFromMash_l         )
 AddPropertyName(yeastAdditions         )
 #undef AddPropertyName
@@ -123,9 +130,7 @@ class MashStep;
 class RecipeAdditionFermentable;
 class RecipeAdditionHop;
 class RecipeAdditionMisc;
-class RecipeAdjustmentSalt;
 class RecipeAdditionYeast;
-class RecipeUseOfWater;
 class Style;
 class Water;
 class Yeast;
@@ -160,8 +165,10 @@ public:
     */
    static QString localisedName();
    static QString localisedName_ABV_pct                ();
-   static QString localisedName_age_days               ();
+   static QString localisedName_IBU                    ();
+   static QString localisedName_IBUs                   ();
    static QString localisedName_ageTemp_c              ();
+   static QString localisedName_age_days               ();
    static QString localisedName_ancestorId             ();
    static QString localisedName_apparentAttenuation_pct();
    static QString localisedName_asstBrewer             ();
@@ -171,8 +178,8 @@ public:
    static QString localisedName_boilGrav               ();
    static QString localisedName_boilId                 ();
    static QString localisedName_boilVolume_l           ();
-   static QString localisedName_brewer                 ();
    static QString localisedName_brewLogs               ();
+   static QString localisedName_brewer                 ();
    static QString localisedName_calcsEnabled           ();
    static QString localisedName_caloriesPer33cl        ();
    static QString localisedName_caloriesPerLiter       ();
@@ -194,8 +201,7 @@ public:
    static QString localisedName_grainsInMash_kg        ();
    static QString localisedName_grains_kg              ();
    static QString localisedName_hopAdditions           ();
-   static QString localisedName_IBU                    ();
-   static QString localisedName_IBUs                   ();
+   static QString localisedName_ibuFormula             ();
    static QString localisedName_instructions           ();
    static QString localisedName_kegPrimingFactor       ();
    static QString localisedName_locked                 ();
@@ -209,13 +215,17 @@ public:
    static QString localisedName_postBoilVolume_l       ();
    static QString localisedName_primingSugarEquiv      ();
    static QString localisedName_primingSugarName       ();
-   static QString localisedName_saltAdjustments        ();
+   static QString localisedName_roWaterMash_pct        ();
+   static QString localisedName_roWaterSparge_pct      ();
    static QString localisedName_style                  ();
    static QString localisedName_styleId                ();
    static QString localisedName_tasteNotes             ();
    static QString localisedName_tasteRating            ();
    static QString localisedName_type                   ();
-   static QString localisedName_waterUses              ();
+   static QString localisedName_waterBase              ();
+   static QString localisedName_waterBaseId            ();
+   static QString localisedName_waterTarget            ();
+   static QString localisedName_waterTargetId          ();
    static QString localisedName_wortFromMash_l         ();
    static QString localisedName_yeastAdditions         ();
 
@@ -292,7 +302,11 @@ public:
     * \brief The batch size is the target size of the finished batch (in liters) aka the volume into the fermenter.
     */
    Q_PROPERTY(double  batchSize_l        READ batchSize_l        WRITE setBatchSize_l      )
-   //! \brief The overall efficiency in percent.
+   /**
+    * \brief The overall (aka brewhouse) efficiency in percent.
+    *
+    *        Brewhouse efficiency counts all losses to the fermentor.
+    */
    Q_PROPERTY(double  efficiency_pct     READ efficiency_pct     WRITE setEfficiency_pct   )
    //! \brief The assistant brewer.  This becomes "coauthor" in BeerJSON
    Q_PROPERTY(QString asstBrewer         READ asstBrewer         WRITE setAsstBrewer       )
@@ -337,7 +351,11 @@ public:
     *        in fermentable_additions with timing.use == add_to_package).
     */
    Q_PROPERTY(QString primingSugarName   READ primingSugarName   WRITE setPrimingSugarName )
-   //! \brief The temperature in C while carbonating.
+   /**
+    * \brief The temperature in °C while carbonating.  NB: This is part of BeerXML, but not BeerJSON.
+    *
+    *        TBD: This is not currently exposed in the UI.
+    */
    Q_PROPERTY(double  carbonationTemp_c  READ carbonationTemp_c  WRITE setCarbonationTemp_c)
    //! \brief The factor required to convert this priming agent to an equivalent amount of glucose monohyrate.
    Q_PROPERTY(double  primingSugarEquiv  READ primingSugarEquiv  WRITE setPrimingSugarEquiv)
@@ -390,10 +408,13 @@ public:
    Q_PROPERTY(double  ABV_pct             READ ABV_pct             STORED false)
   //! \brief The calculated color in SRM.  Derived from \c color_mcu via \c ColorMethods::mcuToSrm.
    Q_PROPERTY(double  color_srm           READ color_srm           STORED false)
-   //! \brief The calculated boil gravity.   TODO This should be renamed boilSg or boilGravity_sg or boilDensity_sg for consistency
+   //! \brief The calculated gravity at the start of the boil.   TODO This should be renamed boilSg or boilGravity_sg or boilDensity_sg for consistency
    Q_PROPERTY(double  boilGrav            READ boilGrav            STORED false)
    //! \brief The calculated IBUs.
    Q_PROPERTY(double  IBU                 READ IBU                 STORED false)
+   //! \brief The formula used to calculate IBUs.
+   Q_PROPERTY(IbuMethods::IbuFormula  ibuFormula   READ ibuFormula   STORED false)
+
    //! \brief IBU contributions from each hop.
    Q_PROPERTY(QList<double> IBUs          READ IBUs                STORED false)
    //! \brief The calculated wort coming from the mash in liters.
@@ -433,6 +454,32 @@ public:
    Q_PROPERTY(std::shared_ptr<Style       > style           READ style              WRITE setStyle          STORED false)
    Q_PROPERTY(int            styleId         READ getStyleId         WRITE setStyleId)
 
+   /**
+    * \brief These are not part of BeerXML or BeerJSON.  (They both have the concept of a list of amounts of one or
+    *        more Waters that a Recipe uses, but it doesn't really tie in with the amount field in MashStep.)
+    *
+    *        BeerJSON models a list of WaterAdditionType on Recipe (RecipeType.ingredients.water_additions), but it's
+    *        not obvious how to interpret multiple entries on that list.  Nor is it evident how to reconcile
+    *        WaterAdditionType.amount with MashStepType.amount.
+    *
+    *        We prefer a simpler approach, where you can optionally specify the ideal water profile for this recipe
+    *        (\c waterTarget) and/or the brewer's local water profile (\c waterBase).  If both of these are set, then,
+    *        ideally, the Recipe should include the water agents etc required to modify base to target.  In particular:
+    *           - Misc ingredients of type Misc::Type::WaterAgent can add salt ions or acidity to the base profile water
+    *           - Aciduated malts (originally developed for German brewers working under Reinheitsgebot) can replace
+    *             acid additions
+    *           - Using some proportion of Reverse Osmosis (RO) water can dilute a base-profile water that has a higher
+    *             mineral content than the target.
+    */
+   Q_PROPERTY(std::shared_ptr<Water> waterBase      READ waterBase         WRITE setWaterBase      STORED false)
+   Q_PROPERTY(int                    waterBaseId    READ getWaterBaseId    WRITE setWaterBaseId    STORED false)
+   Q_PROPERTY(std::shared_ptr<Water> waterTarget    READ waterTarget       WRITE setWaterTarget    STORED false)
+   Q_PROPERTY(int                    waterTargetId  READ getWaterTargetId  WRITE setWaterTargetId  STORED false)
+   //! \brief percent of the mash water that is RO (reverse osmosis)
+   Q_PROPERTY(double roWaterMash_pct       READ roWaterMash_pct       WRITE setRoWaterMash_pct)
+   //! \brief percent of the sparge water that is RO (reverse osmosis)
+   Q_PROPERTY(double roWaterSparge_pct     READ roWaterSparge_pct     WRITE setRoWaterSparge_pct)
+
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
    //! \brief The fermentable additions.
@@ -443,10 +490,6 @@ public:
    Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionMisc>>        miscAdditions          READ miscAdditions          WRITE setMiscAdditions          STORED false)
    //! \brief The yeast additions.
    Q_PROPERTY(QList<std::shared_ptr<RecipeAdditionYeast>>       yeastAdditions         READ yeastAdditions         WRITE setYeastAdditions         STORED false)
-   //! \brief The waters.
-   Q_PROPERTY(QList<std::shared_ptr<RecipeUseOfWater>>          waterUses              READ waterUses              WRITE setWaterUses              STORED false)
-   //! \brief The salt adjustments.
-   Q_PROPERTY(QList<std::shared_ptr<RecipeAdjustmentSalt>>      saltAdjustments        READ saltAdjustments        WRITE setSaltAdjustments        STORED false)
    //! \brief The brew logs.
    Q_PROPERTY(QList<std::shared_ptr<BrewLog>>                   brewLogs               READ brewLogs               WRITE setBrewLogs               STORED false)
    //! \brief The instructions.
@@ -581,6 +624,9 @@ public:
    std::optional<double> beerAcidity_pH()          const;
    std::optional<double> apparentAttenuation_pct() const;
 
+   double roWaterMash_pct  () const;
+   double roWaterSparge_pct() const;
+
    // === Calculated getters ===
    double        points                  () const;
    double        ABV_pct                 () const;
@@ -588,6 +634,7 @@ public:
    double        color_srm               () const;
    double        boilGrav                () const;
    double        IBU                     () const;
+   IbuMethods::IbuFormula  ibuFormula() const;
    /**
     * \brief For a grain-based recipe, returns the part of the boil water that comes from post-mash top-up.
     *
@@ -625,20 +672,22 @@ public:
    template<typename NE> QList<std::shared_ptr<NE>> allOwned() const;
 
    // Relational getters
-   QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions  () const;
-   QList<std::shared_ptr<RecipeAdditionHop>>         hopAdditions          () const;
-   QList<std::shared_ptr<RecipeAdditionMisc>>        miscAdditions         () const;
-   QList<std::shared_ptr<RecipeAdditionYeast>>       yeastAdditions        () const;
-   QList<std::shared_ptr<RecipeAdjustmentSalt>>      saltAdjustments       () const;
-   QList<std::shared_ptr<RecipeUseOfWater>>          waterUses             () const;
-   QList<std::shared_ptr<BrewLog>>                   brewLogs              () const;
-   QList<std::shared_ptr<Instruction>>               instructions          () const;
-   QList<std::shared_ptr<Recipe>>                    ancestors             () const;
-   QList<Recipe *>                                   ancestorsRaw          () const;
-   std::shared_ptr<Equipment>                        equipment             () const;
-   int                                               getEquipmentId        () const;
-   std::shared_ptr<Style>                            style                 () const;
-   int                                               getStyleId            () const;
+   QList<std::shared_ptr<RecipeAdditionFermentable>> fermentableAdditions   () const;
+   QList<std::shared_ptr<RecipeAdditionHop>>         hopAdditions           () const;
+   QList<std::shared_ptr<RecipeAdditionMisc>>        miscAdditions          () const;
+   QList<std::shared_ptr<RecipeAdditionYeast>>       yeastAdditions         () const;
+   QList<std::shared_ptr<BrewLog>>                   brewLogs               () const;
+   QList<std::shared_ptr<Instruction>>               instructions           () const;
+   QList<std::shared_ptr<Recipe>>                    ancestors              () const;
+   QList<Recipe *>                                   ancestorsRaw           () const;
+   std::shared_ptr<Equipment>                        equipment              () const;
+   int                                               getEquipmentId         () const;
+   std::shared_ptr<Style>                            style                  () const;
+   int                                               getStyleId             () const;
+   std::shared_ptr<Water>                            waterBase       () const;
+   int                                               getWaterBaseId  () const;
+   std::shared_ptr<Water>                            waterTarget     () const;
+   int                                               getWaterTargetId() const;
 
    std::shared_ptr<Mash>                        mash              () const;
    //! \brief This will create a \c Mash object if it doesn't exist
@@ -672,13 +721,13 @@ public:
    int getAncestorId() const;
    int numAncestors () const;
 
-   // Relational setters
    void setEquipment   (std::shared_ptr<Equipment   > val);
    void setStyle       (std::shared_ptr<Style       > val);
    void setMash        (std::shared_ptr<Mash        > val);
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    void setBoil        (std::shared_ptr<Boil        > val);
    void setFermentation(std::shared_ptr<Fermentation> val);
+   void setWaterBase   (std::shared_ptr<Water       > val);
+   void setWaterTarget (std::shared_ptr<Water       > val);
 
    /**
     * \brief Similar to \c get
@@ -686,14 +735,12 @@ public:
    template<class NE> void set(std::shared_ptr<NE> val);
 
    template<typename RA> void setAdditions(QList<std::shared_ptr<RA>> val);
-   void setFermentableAdditions(QList<std::shared_ptr<RecipeAdditionFermentable>> val);
-   void setHopAdditions        (QList<std::shared_ptr<RecipeAdditionHop        >> val);
-   void setMiscAdditions       (QList<std::shared_ptr<RecipeAdditionMisc       >> val);
-   void setYeastAdditions      (QList<std::shared_ptr<RecipeAdditionYeast      >> val);
-   void setSaltAdjustments     (QList<std::shared_ptr<RecipeAdjustmentSalt     >> val);
-   void setWaterUses           (QList<std::shared_ptr<RecipeUseOfWater         >> val);
-   void setBrewLogs           (QList<std::shared_ptr<BrewLog                 >> val);
-   void setInstructions        (QList<std::shared_ptr<Instruction              >> val);
+   void setFermentableAdditions    (QList<std::shared_ptr<RecipeAdditionFermentable    >> val);
+   void setHopAdditions            (QList<std::shared_ptr<RecipeAdditionHop            >> val);
+   void setMiscAdditions           (QList<std::shared_ptr<RecipeAdditionMisc           >> val);
+   void setYeastAdditions          (QList<std::shared_ptr<RecipeAdditionYeast          >> val);
+   void setBrewLogs                (QList<std::shared_ptr<BrewLog                      >> val);
+   void setInstructions            (QList<std::shared_ptr<Instruction                  >> val);
 
    /**
     * \brief These calls are intended for use by the ObjectStore when pulling data from the database.  As such they do
@@ -703,11 +750,15 @@ public:
    void setEquipmentId   (int const id);
    void setStyleId       (int const id);
    void setMashId        (int const id);
-   // ⮜⮜⮜ Next two added for BeerJSON support ⮞⮞⮞
    void setBoilId        (int const id);
    void setFermentationId(int const id);
+   void setWaterBaseId   (int const id);
+   void setWaterTargetId (int const id);
    void setAncestorId    (int ancestorId, bool notify = true);
    //! @}
+
+   void setRoWaterMash_pct  (double const val);
+   void setRoWaterSparge_pct(double const val);
 
    // Other junk.
    bool hasAncestors() const;
@@ -725,15 +776,42 @@ public:
    //! \brief Formats the mashsteps for instructions
    QList<QString> getReagents(QList< std::shared_ptr<MashStep> >);
 
+   /**
+    * This structure holds some intermediate values that are used for calculating brewhouse efficiency etc.
+    *
+    */
    struct Sugars {
-      double sugar_kg_ignoreEfficiency = 0.0;
-      double sugar_kg                  = 0.0;
-      double nonFermentableSugars_kg   = 0.0;
-      double lateAddition_kg           = 0.0;
-      double lateAddition_kg_ignoreEff = 0.0;
+      /**
+       * Mass of sugars present before the mash (and is therefore *not* affected by mash efficiency).
+       *
+       * At the moment, this is Fermentable additions of type:
+       *    Fermentable::Type::Sugar
+       *    Fermentable::Type::Extract
+       *    Fermentable::Type::Dry_Extract
+       *
+       * However TODO we need to extend sugarTotals and related functions to handle Fruit, Juice and Honey
+       */
+      double existingSugars_all_kg = 0.0;
+      /**
+       * The part of \c existingSugars_all_kg that is not Fermentable::Type::Sugar
+       * and not called "Milk Sugar (Lactose)" -- TODO we need to fix that latter part for non-English locales
+       */
+      double existingSugars_nonFermentable_kg = 0.0;
+      /**
+       * The part of \c existingSugars_all_kg that is added after the boil
+       */
+      double existingSugars_lateAddition_kg = 0.0;
+      /**
+       * Total sugars from Fermentable additions that are not sugars or extracts
+       */
+      double sugarsFromStarch_all_kg = 0.0;
+      /**
+       * The part of \c sugarsFromStarch_all_kg that is added after the boil
+       */
+      double sugarsFromStarch_lateAddition_kg = 0.0;
    };
 
-   Sugars calcTotalPoints();
+   Sugars sugarTotals() const;
 
    // Setters that are not slots
    void setType              (Type    const   val);
@@ -788,14 +866,12 @@ public slots:
    void acceptChangeToContainedObject(QMetaProperty prop, QVariant val);
    // It would be neat if we could template these slots, but the Qt MOC does not allow it, and will give "error:
    // Template function as signal or slot".  These slot functions just call the obvious
-   void acceptChangeToRecipeAdditionFermentable(QMetaProperty prop, QVariant val);
-   void acceptChangeToRecipeAdditionHop        (QMetaProperty prop, QVariant val);
-   void acceptChangeToRecipeAdditionMisc       (QMetaProperty prop, QVariant val);
-   void acceptChangeToRecipeAdditionYeast      (QMetaProperty prop, QVariant val);
-   void acceptChangeToRecipeAdjustmentSalt     (QMetaProperty prop, QVariant val);
-   void acceptChangeToRecipeUseOfWater         (QMetaProperty prop, QVariant val);
-   void acceptChangeToBrewLog                 (QMetaProperty prop, QVariant val);
-   void acceptChangeToInstruction              (QMetaProperty prop, QVariant val);
+   void acceptChangeToRecipeAdditionFermentable    (QMetaProperty prop, QVariant val);
+   void acceptChangeToRecipeAdditionHop            (QMetaProperty prop, QVariant val);
+   void acceptChangeToRecipeAdditionMisc           (QMetaProperty prop, QVariant val);
+   void acceptChangeToRecipeAdditionYeast          (QMetaProperty prop, QVariant val);
+   void acceptChangeToBrewLog                      (QMetaProperty prop, QVariant val);
+   void acceptChangeToInstruction                  (QMetaProperty prop, QVariant val);
 
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
@@ -807,40 +883,42 @@ private:
    std::unique_ptr<impl> pimpl;
 
    // Cached properties that are written directly to db
-   Type                  m_type                   ;
-   QString               m_brewer                 ;
-   QString               m_asstBrewer             ;
-   double                m_batchSize_l            ;
-   double                m_efficiency_pct         ;
-   int                   m_fermentationStages     ;
-   std::optional<double> m_age_days               ;
-   std::optional<double> m_ageTemp_c              ;
+   Type                  m_type                   = Type::AllGrain;
+   QString               m_brewer                 = "";
+   QString               m_asstBrewer             = QString{"%1: free beer software"}.arg(CONFIG_APPLICATION_NAME_UC);
+   double                m_batchSize_l            = 0.0;
+   double                m_efficiency_pct         = 0.0;
+   std::optional<double> m_age_days               = std::nullopt;
+   std::optional<double> m_ageTemp_c              = std::nullopt;
    std::optional<QDate>  m_date                   ;
-   std::optional<double> m_carbonation_vols       ;
-   bool                  m_forcedCarbonation      ;
-   QString               m_primingSugarName       ;
-   double                m_carbonationTemp_c      ;
-   double                m_primingSugarEquiv      ;
-   double                m_kegPrimingFactor       ;
-   QString               m_notes                  ;
-   QString               m_tasteNotes             ;
-   double                m_tasteRating            ;
+   std::optional<double> m_carbonation_vols       = std::nullopt;
+   bool                  m_forcedCarbonation      = false;
+   QString               m_primingSugarName       = "";
+   double                m_carbonationTemp_c      = 0.0; // Not a great default, but we don't use this field
+   double                m_primingSugarEquiv      = 0.0;
+   double                m_kegPrimingFactor       = 0.0;
+   QString               m_notes                  = "";
+   QString               m_tasteNotes             = "";
+   double                m_tasteRating            = 0.0;
 
-   int                   m_styleId                ;
-   int                   m_equipmentId            ;
-   int                   m_mashId                 ;
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   int                   m_boilId                 ;
-   int                   m_fermentationId         ;
-   std::optional<double> m_beerAcidity_pH         ;
-   std::optional<double> m_apparentAttenuation_pct;
+   int                   m_styleId                = -1;
+   int                   m_equipmentId            = -1;
+   int                   m_mashId                 = -1;
+   int                   m_boilId                 = -1;
+   int                   m_fermentationId         = -1;
+   int                   m_waterBaseId            = -1;
+   int                   m_waterTargetId          = -1;
+   std::optional<double> m_beerAcidity_pH          = std::nullopt;
+   std::optional<double> m_apparentAttenuation_pct = std::nullopt;
+
+   double m_roWaterMash_pct     = 0.0;
+   double m_roWaterSparge_pct   = 0.0;
 
    OwnedSet<Recipe, RecipeAdditionFermentable, PropertyNames::Recipe::fermentableAdditions, &Recipe::acceptChangeToRecipeAdditionFermentable> m_fermentableAdditions;
    OwnedSet<Recipe, RecipeAdditionHop        , PropertyNames::Recipe::hopAdditions        , &Recipe::acceptChangeToRecipeAdditionHop        > m_hopAdditions        ;
    OwnedSet<Recipe, RecipeAdditionMisc       , PropertyNames::Recipe::miscAdditions       , &Recipe::acceptChangeToRecipeAdditionMisc       > m_miscAdditions       ;
    OwnedSet<Recipe, RecipeAdditionYeast      , PropertyNames::Recipe::yeastAdditions      , &Recipe::acceptChangeToRecipeAdditionYeast      > m_yeastAdditions      ;
-   OwnedSet<Recipe, RecipeAdjustmentSalt     , PropertyNames::Recipe::saltAdjustments     , &Recipe::acceptChangeToRecipeAdjustmentSalt     > m_saltAdjustments     ;
-   OwnedSet<Recipe, RecipeUseOfWater         , PropertyNames::Recipe::waterUses           , &Recipe::acceptChangeToRecipeUseOfWater         > m_waterUses           ;
+
    /**
     * \brief Each \c BrewLog is a record of a brew day.  We assume that if you're copying a \c Recipe, it is in order
     *        to modify it into a new \c Recipe, in which case it does not make sense to bring the original brew logs
@@ -865,21 +943,21 @@ private:
    // These are mutable because updates to these cached values aren't, in and of themselves, modifications to the
    // recipe.  An update might be triggered by some other change to the recipe or it might be done just because the
    // cached value is stale.
-   mutable double m_og;
-   mutable double m_fg;
+   mutable double m_og = 1.0;
+   mutable double m_fg = 1.0;
 
-   bool m_locked      ;
-   bool m_calcsEnabled;
+   bool m_locked       = false;
+   bool m_calcsEnabled = true;
 
    // True when constructed, indicates whether recalcAll has been called.
-   bool   m_uninitializedCalcs     ;
+   bool   m_uninitializedCalcs      = true;
    QMutex m_uninitializedCalcsMutex;
    QMutex m_recalcMutex            ;
 
    // version things
-   int                                    m_ancestor_id;
+   int                                    m_ancestor_id = -1;
    mutable QList<std::shared_ptr<Recipe>> m_ancestors;
-   mutable bool                           m_hasDescendants;
+   mutable bool                           m_hasDescendants = false;
 
    // Some recalculators for calculated properties.
    void recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged);

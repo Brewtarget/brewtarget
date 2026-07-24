@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/listModels/WaterListModel.cpp is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * qtModels/listModels/WaterListModel.cpp is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -21,5 +21,7 @@
    #include "moc_WaterListModel.cpp"
 #endif
 
-// Insert the boiler-plate stuff that we cannot do in ListModelBase
-LIST_MODEL_COMMON_CODE(Water, PropertyNames::Recipe::waterUses)
+// Insert the boilerplate stuff that we cannot do in ListModelBase.  (Note that there are two Recipe properties that
+// accept a Water profile: waterBase and waterTarget.  We use the second here, as we generally assume the first is the
+// user's local water profile, which is less likely to change from recipe to recipe.)
+LIST_MODEL_COMMON_CODE(Water, PropertyNames::Recipe::waterTarget)

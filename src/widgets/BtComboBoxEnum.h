@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxEnum.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * widgets/BtComboBoxEnum.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -37,8 +37,8 @@ class BtComboBoxEnum : public QComboBox {
 Q_OBJECT
 
 public:
-   BtComboBoxEnum(QWidget * parent);
-   virtual ~BtComboBoxEnum();
+   explicit BtComboBoxEnum(QWidget * parent);
+   ~BtComboBoxEnum() override;
 
    /**
     * \brief Post-construction initialisation.  Other than in \c EditorBaseField, usually called via

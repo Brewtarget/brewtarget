@@ -19,8 +19,6 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
-#include "model/RecipeAdjustmentSalt.h"
-#include "model/RecipeUseOfWater.h"
 
 TREE_VIEW_COMMON_CODE(Boil                , BoilStep                  )
 TREE_VIEW_COMMON_CODE(Equipment           )
@@ -30,11 +28,9 @@ TREE_VIEW_COMMON_CODE(Hop                 )
 TREE_VIEW_COMMON_CODE(StockPurchaseFermentable, StockUseFermentable)
 TREE_VIEW_COMMON_CODE(StockPurchaseHop        , StockUseHop        )
 TREE_VIEW_COMMON_CODE(StockPurchaseMisc       , StockUseMisc       )
-TREE_VIEW_COMMON_CODE(StockPurchaseSalt       , StockUseSalt       )
 TREE_VIEW_COMMON_CODE(StockPurchaseYeast      , StockUseYeast      )
 TREE_VIEW_COMMON_CODE(Mash                , MashStep                  )
 TREE_VIEW_COMMON_CODE(Misc                )
-TREE_VIEW_COMMON_CODE(Salt                )
 TREE_VIEW_COMMON_CODE(Style               )
 TREE_VIEW_COMMON_CODE(Water               )
 TREE_VIEW_COMMON_CODE(Yeast               )

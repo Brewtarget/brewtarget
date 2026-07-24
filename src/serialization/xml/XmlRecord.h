@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlRecord.h is part of Brewtarget, and is copyright the following authors 2020-2023:
+ * serialization/xml/XmlRecord.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -19,17 +19,16 @@
 
 #include <vector>
 
-#include <QTextStream>
-#include <QVector>
-
-#include <xalanc/DOMSupport/DOMSupport.hpp>
-#include <xalanc/XalanDOM/XalanNode.hpp>
-#include <xalanc/XPath/NodeRefList.hpp>
+#include <libxml2/libxml/tree.h>
 
 #include "serialization/xml/XmlRecordDefinition.h"
+#include "serialization/xml/XmlLibHelpers.h"
 #include "serialization/SerializationRecord.h"
 #include "utils/ImportRecordCount.h"
 #include "utils/TypeLookup.h"
+
+#include <QTextStream>
+#include <QVector>
 
 class XmlCoding;
 
@@ -40,8 +39,9 @@ class XmlCoding;
  *
  *        Note that one structural difference between \c XmlRecord and \c JsonRecord is that, in the former we only pass
  *        underlying (ie Xalan) record data in when we are reading from XML, not when we are writing, so the parameter
- *        is on the \c load function, not the constructor.  Maybe one day we could rejig the XML so it works more like
- *        the Json code, or, more likely, we'll just leave it alone once everything is working.
+ *        is on the \c load function, not the constructor.  The main reason for this is that, with XML, we do the output
+ *        manually, without using the library.  In contrast, for JSON, we use the library to both read and write
+ *        records.
  */
 class XmlRecord : public SerializationRecord<XmlRecord, XmlCoding, XmlRecordDefinition> {
 public:
@@ -71,14 +71,14 @@ public:
     * \brief From the supplied record (ie node) in an XML document, load into memory the data it contains, including
     *        any other records nested inside it.
     *
-    * \param domSupport
+    * \param document
     * \param rootNodeOfRecord
     * \param userMessage Where to append any error messages that we want the user to see on the screen
     *
     * \return \b true if load succeeded, \b false if there was an error
     */
-   bool load(xalanc::DOMSupport & domSupport,
-             xalanc::XalanNode * rootNodeOfRecord,
+   bool load(XmlLibHelpers::XmlDocument & document,
+             xmlNode                    & rootNodeOfRecord,
              QTextStream & userMessage);
 
    /**
@@ -103,10 +103,10 @@ private:
     *        process (eg Hop records inside a Recipe).  But the algorithm for processing is generic, so we implement it
     *        in this base class.
     */
-   bool loadChildRecords(xalanc::DOMSupport & domSupport,
+   bool loadChildRecords(XmlLibHelpers::XmlDocument & document,
                          XmlRecordDefinition::FieldDefinition const & parentFieldDefinition,
                          XmlRecordDefinition const & childRecordDefinition,
-                         std::vector<xalanc::XalanNode *> & nodesForCurrentXPath,
+                         std::vector<xmlNode *> & nodesForCurrentXPath,
                          QTextStream & userMessage);
 
 protected:

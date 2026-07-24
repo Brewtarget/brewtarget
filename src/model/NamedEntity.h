@@ -352,30 +352,30 @@ public:
     *        The following pseudo-inheritance diagram shows which \c NamedEntity classes are Dependent, Independent and
     *        Semi-Independent.  (The class \c OwnedByRecipe exists, but \c IndependentOfRecipe does not.)
     *
-    *           OwnedByRecipe                          IndependentOfRecipe († = semi-independent)
-    *             ├── BrewLog                           ├── Boil †
-    *             ├── Instruction                       ├── Equipment
-    *             ├── RecipeAddition                    ├── Fermentation †
-    *             │    ├── RecipeAdditionFermentable    ├── Ingredient
-    *             │    ├── RecipeAdditionHop            │    ├── Fermentable
-    *             │    ├── RecipeAdditionMisc           │    ├── Hop
-    *             │    ├── RecipeAdjustmentSalt         │    ├── Misc
-    *             │    └── RecipeAdditionYeast          │    ├── Salt
-    *             └── RecipeUseOfWater                  │    └── Yeast
-    *                                                   ├── StockPurchase
-    *                                                   │    ├── StockPurchaseFermentable (owned by its Fermentable)
-    *                                                   │    ├── StockPurchaseHop         (owned by its Hop        )
-    *                                                   │    ├── StockPurchaseMisc        (owned by its Misc       )
-    *                                                   │    └── StockPurchaseYeast       (owned by its Yeast      )
-    *                                                   ├── Mash †
-    *                                                   ├── Recipe (but owns itself for the purpose of changes)
-    *                                                   ├── Step
-    *                                                   │    ├── MashStep † (owned by its Mash)
-    *                                                   │    └── StepExtended
-    *                                                   │         ├── BoilStep † (owned by its Boil)
-    *                                                   │         └── FermentationStep † (owned by its Fermentation)
-    *                                                   ├── Style
-    *                                                   └── Water
+    *          OwnedByRecipe                             IndependentOfRecipe († = semi-independent)
+    *           ├── BrewLog                              ├── Boil †
+    *           ├── Instruction                          ├── Equipment
+    *           └── RecipeAddition                       ├── Fermentation †
+    *                ├── RecipeAdditionFermentable       ├── Ingredient
+    *                ├── RecipeAdditionHop               │    ├── Fermentable
+    *                ├── RecipeAdditionMisc              │    ├── Hop
+    *                ├── RecipeAddditionWaterAdjustment  │    ├── Misc
+    *                └── RecipeAdditionYeast             │    └── Yeast
+    *                                                    ├── StockPurchase
+    *                                                    │    ├── StockPurchaseFermentable (owned by its Fermentable)
+    *                                                    │    ├── StockPurchaseHop         (owned by its Hop        )
+    *                                                    │    ├── StockPurchaseMisc        (owned by its Misc       )
+    *                                                    │    └── StockPurchaseYeast       (owned by its Yeast      )
+    *                                                    ├── Mash †
+    *                                                    ├── Recipe (but owns itself for the purpose of changes)
+    *                                                    ├── Step
+    *                                                    │    ├── MashStep † (owned by its Mash)
+    *                                                    │    └── StepExtended
+    *                                                    │         ├── BoilStep † (owned by its Boil)
+    *                                                    │         └── FermentationStep † (owned by its Fermentation)
+    *                                                    ├── Style
+    *                                                    └── Water
+    *
     *
     *        HOWEVER, even aside from the case of semi-independent items, we want run-time determination of whether an
     *        object has an owning \c Recipe to make it easy to determine whether a change to a base class property

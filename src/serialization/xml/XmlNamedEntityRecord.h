@@ -24,8 +24,6 @@
 #include "model/Recipe.h"
 #include "serialization/NamedEntityRecordBase.h"
 #include "serialization/xml/XmlRecord.h"
-#include "serialization/xml/XQString.h"
-
 
 /**
  * \brief Provides class-specific extensions to \b XmlRecord.  See comment in xml/XmlCoding.h for more details.

@@ -32,7 +32,6 @@
 class WaterCatalog;
 class WaterEditor;
 class WaterItemDelegate;
-class RecipeUseOfWater;
 class WaterSortFilterProxyModel;
 class WaterTableModel;
 
@@ -49,21 +48,16 @@ AddPropertyName(chloride_ppm    )
 AddPropertyName(fluoride_ppm    )
 AddPropertyName(iron_ppm        )
 AddPropertyName(magnesium_ppm   )
-AddPropertyName(mashRo_pct      )
 AddPropertyName(nitrate_ppm     )
 AddPropertyName(nitrite_ppm     )
 AddPropertyName(notes           )
 AddPropertyName(ph              )
 AddPropertyName(potassium_ppm   )
 AddPropertyName(sodium_ppm      )
-AddPropertyName(spargeRo_pct    )
 AddPropertyName(sulfate_ppm     )
-AddPropertyName(type            )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
-
-class RecipeUseOfWater;
 
 /*!
  * \class Water
@@ -71,6 +65,12 @@ class RecipeUseOfWater;
  * \brief Model for water records in the database.
  *
  *        Note that we do not support the BeerJSON "producer" field on water as it is not clear what it means!
+ *
+ *        In general, although it may initially seem tempting to treat water as an ingredient akin to Hops,
+ *        Fermentables, etc, there are some significant differences:
+ *           - For most brewers, water does not have stock or inventory
+ *           - Although you might want to modify the water profile, including by using a mixture of reverse-osmosis
+ *             water and tap-water, most brewers do not need to use multiple water profiles in a single recipe
  */
 class Water : public OutlineableNamedEntity,
               public FolderPropertyBase<Water> {
@@ -93,58 +93,45 @@ public:
    static QString localisedName_fluoride_ppm    ();
    static QString localisedName_iron_ppm        ();
    static QString localisedName_magnesium_ppm   ();
-   static QString localisedName_mashRo_pct      ();
    static QString localisedName_nitrate_ppm     ();
    static QString localisedName_nitrite_ppm     ();
    static QString localisedName_notes           ();
    static QString localisedName_ph              ();
    static QString localisedName_potassium_ppm   ();
    static QString localisedName_sodium_ppm      ();
-   static QString localisedName_spargeRo_pct    ();
    static QString localisedName_sulfate_ppm     ();
-   static QString localisedName_type            ();
 
    /**
-    * \brief
-    *        NOTE: This does not appear to be part of BeerXML or BeerJSON.
-    *        TBD: I am not 100% certain that we need it.  If we do, then it most likely belongs on RecipeUseOfWater
+    * \brief In the past, we have given these sorts of things names corresponding to their chemical symbols/formulae --
+    *        eg Ca for calcium and HCO3 for bicarbonate, but this seems unsatisfactory.  It would be more accurate to
+    *        write these things with subscripts, superscripts etc -- eg CO₃²⁻ for carbonate -- but that creates
+    *        different problems.  (Last time I looked, there is still not universal compiler support for Unicode
+    *        characters in identifiers.  And, even if there were, they would be hard to type.  Moreover, the superscript
+    *        and subscript elements make variable names a bit hard read, unless you jack up your font size.)  So, we've
+    *        gone with the English names instead.
+    *
+    * .:TBD:. If we could add CO3 to this list and move the enum to \c WaterAdjustment, it would help us template a bunch of very
+    *         similar functions in WaterAdjustment.cpp and RecipeAdditionWaterAdjustmentTableModel.cpp.
     */
-   enum class Type {
-      Base  ,
-      Target,
+   enum class MineralIon {
+      Bicarbonate, // HCO₃⁻
+      Calcium    , // Ca²⁺
+      Carbonate  , // CO₃²⁻
+      Chloride   , // Cl⁻
+      Copper     , // Cu²⁺
+      Iron       , // Fe²⁺
+      Magnesium  , // Mg²⁺
+      Manganese  , // Mn²⁺
+      Nitrate    , // NO₃⁻
+      Nitrite    , // NO₂⁻
+      Phosphate  , // PO₄³⁻
+      Potassium  , // K⁺
+      Sodium     , // Na⁺
+      Sulfate    , // SO₄²⁻
+      Zinc       , // Zn²⁺
    };
    // This allows us to store the above enum class in a QVariant
-   Q_ENUM(Type)
-
-   /*!
-    * \brief Mapping between \c Water::Type and string values suitable for serialisation in DB
-    *
-    *        This can also be used to obtain the number of values of \c Type, albeit at run-time rather than
-    *        compile-time.  (One day, C++ will have reflection and we won't need to do things this way.)
-    */
-   static EnumStringMapping const typeStringMapping;
-
-   /*!
-    * \brief Localised names of \c Water::Type values suitable for displaying to the end user
-    */
-   static EnumStringMapping const typeDisplayNames;
-
-   /**
-    * \brief
-    *
-    * .:TBD:. If we could add CO3 to this list and move the enum to \c Salt, it would help us template a bunch of very
-    *         similar functions in Salt.cpp and RecipeAdjustmentSaltTableModel.cpp.
-    */
-   enum class Ion {
-      Ca  ,
-      Cl  ,
-      HCO3,
-      Mg  ,
-      Na  ,
-      SO4 ,
-   };
-   // This allows us to store the above enum class in a QVariant
-   Q_ENUM(Ion)
+   Q_ENUM(MineralIon)
 
    static EnumStringMapping const ionStringMapping;
    static EnumStringMapping const ionDisplayNames;
@@ -159,13 +146,9 @@ public:
    // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
    // subclasses.
    //
-   // Although Water is a bit different from other "ingredients" (eg no inventory), RecipeAdditionClass is still helpful
-   // for templating functions where it is valid to create RecipeUseOfWater as a RecipeAddition class.
-   //
    using CatalogClass              = WaterCatalog;
    using EditorClass               = WaterEditor;
    using ItemDelegateClass         = WaterItemDelegate;
-   using RecipeAdditionClass       = RecipeUseOfWater;
    using SortFilterProxyModelClass = WaterSortFilterProxyModel;
    using TableModelClass           = WaterTableModel;
 
@@ -176,11 +159,11 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   Water(QString name = "");
-   Water(NamedParameterBundle const & namedParameterBundle);
+   explicit Water(QString name = "");
+   explicit Water(NamedParameterBundle const & namedParameterBundle);
    Water(Water const & other);
 
-   virtual ~Water();
+   ~Water() override;
 
    // It is useful to be able to assign one Water to another - see eg editors/WaterEditor.cpp
    Water & operator=(Water other);
@@ -215,20 +198,6 @@ public:
    Q_PROPERTY(std::optional<double> alkalinity_ppm  READ alkalinity_ppm  WRITE setAlkalinity_ppm)
    //! \brief The notes.
    Q_PROPERTY(QString notes          READ notes           WRITE setNotes)
-   /**
-    * \brief What kind of water is this.  NB: Not part of BeerXML or BeerJSON.
-    *
-    *        See comment in \c model/Fermentable.h for \c grainGroup property for why this has to be
-    *        \c std::optional<int>, not \c std::optional<Type>
-    */
-   Q_PROPERTY(std::optional<int> type READ typeAsInt        WRITE setTypeAsInt)
-   //
-   // TBD: mashRo_pct and spargeRo_pct should probably move to RecipeUseOfWater
-   //
-   //! \brief percent of the mash water that is RO (reverse osmosis)   NB: Not part of BeerXML or BeerJSON
-   Q_PROPERTY(std::optional<double> mashRo_pct       READ mashRo_pct       WRITE setMashRo_pct)
-   //! \brief percent of the sparge water that is RO (reverse osmosis)   NB: Not part of BeerXML or BeerJSON
-   Q_PROPERTY(std::optional<double> spargeRo_pct     READ spargeRo_pct     WRITE setSpargeRo_pct)
    //! \brief is the alkalinity measured as HCO3 (bicarbonate) or CO3 (carbonate)?  NB: Not part of BeerXML or BeerJSON
    Q_PROPERTY(bool   alkalinityAsHCO3 READ alkalinityAsHCO3 WRITE setAlkalinityAsHCO3)
 
@@ -252,10 +221,6 @@ public:
    std::optional<double> ph              () const;
    std::optional<double> alkalinity_ppm  () const;
    QString               notes           () const;
-   std::optional<Type>   type            () const;
-   std::optional<int>    typeAsInt       () const;
-   std::optional<double> mashRo_pct      () const;
-   std::optional<double> spargeRo_pct    () const;
    bool                  alkalinityAsHCO3() const;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    std::optional<double> carbonate_ppm () const;
@@ -265,7 +230,8 @@ public:
    std::optional<double> nitrite_ppm   () const;
    std::optional<double> fluoride_ppm  () const;
 
-   double       ppm(Water::Ion const ion) const;
+   //! Get the concentration (or, strictly speaking, the mass fraction) of the specified ion
+   std::optional<double> ionConcentration_ppm(MineralIon const ion) const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setCalcium_ppm     (double                const   val);
@@ -277,10 +243,6 @@ public:
    void setPh              (std::optional<double> const   val);
    void setAlkalinity_ppm  (std::optional<double> const   val);
    void setNotes           (QString               const & val);
-   void setType            (std::optional<Type>   const   val);
-   void setTypeAsInt       (std::optional<int>    const   val);
-   void setMashRo_pct      (std::optional<double> const   val);
-   void setSpargeRo_pct    (std::optional<double> const   val);
    void setAlkalinityAsHCO3(bool                  const   val);
 
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
@@ -290,6 +252,9 @@ public:
    void setNitrate_ppm     (std::optional<double> const   val);
    void setNitrite_ppm     (std::optional<double> const   val);
    void setFluoride_ppm    (std::optional<double> const   val);
+
+   //! Set the concentration (or, strictly speaking, the mass fraction) of the specified ion
+   void setIonConcentration_ppm(MineralIon const ion, std::optional<double> const val);
 
 signals:
 
@@ -307,9 +272,6 @@ private:
    std::optional<double> m_ph                ;
    std::optional<double> m_alkalinity_ppm    ;
    QString               m_notes             ;
-   std::optional<Type>   m_type              ;
-   std::optional<double> m_mashRo_pct        ;
-   std::optional<double> m_spargeRo_pct      ;
    bool                  m_alkalinity_as_hco3;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    std::optional<double> m_carbonate_ppm   ;

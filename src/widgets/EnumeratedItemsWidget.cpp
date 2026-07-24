@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/EnumeratedItemsWidget.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * widgets/EnumeratedItemsWidget.cpp is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -88,5 +88,4 @@ ENUMERATED_ITEMS_WIDGET_COMMON_CODE(FermentationStep)
 ENUMERATED_ITEMS_WIDGET_COMMON_CODE(StockUseFermentable)
 ENUMERATED_ITEMS_WIDGET_COMMON_CODE(StockUseHop)
 ENUMERATED_ITEMS_WIDGET_COMMON_CODE(StockUseMisc)
-ENUMERATED_ITEMS_WIDGET_COMMON_CODE(StockUseSalt)
 ENUMERATED_ITEMS_WIDGET_COMMON_CODE(StockUseYeast)

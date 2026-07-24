@@ -228,7 +228,7 @@ public:
    Q_PROPERTY(std::optional<int>    form         READ formAsInt    WRITE setFormAsInt            )
    //! \brief The percent of beta acids.  ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
    Q_PROPERTY(std::optional<double> beta_pct     READ beta_pct     WRITE setBeta_pct             )
-   //! \brief The origin.
+   //! \brief Country of origin for the hop variety.
    Q_PROPERTY(QString               origin       READ origin       WRITE setOrigin               )
    //! \brief The notes.
    Q_PROPERTY(QString               notes        READ notes        WRITE setNotes                )
@@ -241,14 +241,21 @@ public:
    Q_PROPERTY(std::optional<int>    type         READ typeAsInt    WRITE setTypeAsInt            )
    /**
     * \brief The hop stability index in percent.  The Hop Stability Index (HSI) is defined as the percentage of hop
-    *        alpha lost in 6 months of storage.  It may be related to the Hop Storage Index...
+    *        alpha lost in 6 months of storage -- see eg
+    *        https://hopdoctor.co.uk/2024/12/02/understanding-the-hop-stability-index-key-for-smaller-scale-brewers/.
     *
-    *        In BeerJSON, this is called `percent_lost`
+    *        It is not to be confused with Hop Storage Index, which is derived from ultraviolet absorbance measured with
+    *        a spectrophotometer (HSI = absorption at 275 nm divided by absorption at 325 nm, or A275/A325).
+    *
+    *        In BeerJSON, this is called `percent_lost`, possibly because "Hop Stability Index" does not appear to be
+    *        a massively widely used term.
+    *
+    *        TODO: We should rename this to sixMonthAlphaLoss_pct
     *
     *        ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
     */
    Q_PROPERTY(std::optional<double> hsi_pct               READ hsi_pct               WRITE setHsi_pct              )
-   //! \brief The list of substitutes.
+   //! \brief Alternate hop varieties that can be used in place of this hop variety
    Q_PROPERTY(QString               substitutes           READ substitutes           WRITE setSubstitutes          )
    //! \brief Humulene as a percentage of total hop oil.      ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
    Q_PROPERTY(std::optional<double> humulene_pct          READ humulene_pct          WRITE setHumulene_pct         )

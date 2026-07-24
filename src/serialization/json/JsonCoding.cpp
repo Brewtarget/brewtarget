@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonCoding.cpp is part of Brewtarget, and is copyright the following authors 2020-2023:
+ * serialization/json/JsonCoding.cpp is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -101,12 +101,8 @@ bool JsonCoding::validateLoadAndStoreInDb(boost::json::value & inputDocument,
    qDebug() << Q_FUNC_INFO << "Schema validation succeeded";
 
    //
-   // We're expecting the root of the JSON document to be an object named "beerjson".  This should have been
-   // established by the validation above.
-   //
-   // Of course, if we were being truly general, we would not hard-code "beerjson" here but rather have it as some
-   // construction parameter of JsonCoding.  But, we do not foresee this being necessary any time soon (or possibly
-   // ever).
+   // We're expecting the root of the JSON document to be an object named "beerjson" or "DotBeer".  This should have
+   // been established by the validation above.
    //
    // It would be nice to make documentRoot and rootRecordData references to const objects, but we need the
    // boost::json::value references stored in JsonRecord _not_ to be const when we're exporting to JSON, and it feels
@@ -114,9 +110,9 @@ bool JsonCoding::validateLoadAndStoreInDb(boost::json::value & inputDocument,
    //
    Q_ASSERT(inputDocument.is_object());
    boost::json::object & documentRoot = inputDocument.as_object();
-   Q_ASSERT(documentRoot.contains("beerjson"));
+   Q_ASSERT(documentRoot.contains(*this->pimpl->m_rootRecordDefinition.m_recordName));
 
-   boost::json::value & rootRecordData = *documentRoot.if_contains("beerjson"); //documentRoot["beerjson"];
+   boost::json::value & rootRecordData = *documentRoot.if_contains(*this->pimpl->m_rootRecordDefinition.m_recordName);
    Q_ASSERT(rootRecordData.is_object());
    qDebug() << Q_FUNC_INFO << "Root record contains" << rootRecordData.as_object().size() << "elements";
 

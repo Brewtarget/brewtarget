@@ -115,7 +115,7 @@ namespace Algorithms {
     * \param sugar_kg kilograms of dissolved sucrose or equivalent
     * \param wort_l liters of wort
     */
-   double getPlato( double sugar_kg, double wort_l );
+   double platoFromSugarMassAndWortVolume( double sugar_kg, double wort_l );
    //! \brief Gets ABV by using current gravity reading and brix reading.
    double getABVBySGPlato( double sg, double plato );
    //! \brief Gets ABW from current gravity and plato.

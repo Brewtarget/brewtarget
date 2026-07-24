@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RadarChart.h is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * RadarChart.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -35,8 +35,8 @@ public:
    /**
     * @param parent
     */
-   RadarChart(QWidget *parent = nullptr);
-   virtual ~RadarChart();
+   explicit RadarChart(QWidget *parent = nullptr);
+   ~RadarChart() override;
 
    /**
     * Identifies a variable to plot on the chart.  Each variable in a series is a Qt property, identified by its
@@ -52,26 +52,29 @@ public:
     * @brief Initialise the chart
     * @param unitsName name of the units being measured - eg "PPM" for salt concentrations in water
     * @param axisMarkInterval spacing between ticks on axes - eg 50 means put ticks at 50, 100, 150, 200, etc
-    * @param propertyToDisplayNames an ordered list of all the Qt property names to plot with, for each one, the
-    *                               (localised) axis name to display, in the order you want them displayed.  (First item
-    *                               in the list will be the axis at 12 o'clock and the others will follow
-    *                               anti-clockwise.)
+    * @param variableNames an ordered list of all the property-display name pairs, in the order you want them displayed.
+    *                      (First item in the list will be the axis at 12 o'clock and the others will follow
+    *                      anticlockwise.)
     */
-   void init(QString const unitsName,
-             double axisMarkInterval,
+   void init(QString const & unitsName,
+             double const axisMarkInterval,
              QVector<RadarChart::VariableName> const variableNames);
 
    /**
     * @brief Add a series to the chart
     * @param name  Unique displayable name for the series.  If the chart already has a series with this name, it will
     *              be replaced by the one supplied here.
+    * @param object  The object whose properties are to be plotted for this series
     * @param color  Color in which to plot the series
-    * @param values  The object whose properties are to be plotted for this series
+    * @param penStyle
     */
-   void addSeries(QString name, QColor color, NamedEntity const & object);
+   void addSeries(QString const & name,
+                  NamedEntity const & object,
+                  QColor const color,
+                  Qt::PenStyle const penStyle = Qt::SolidLine);
 
    //! \brief Remove the named series if present
-   void removeSeries(QString name);
+   void removeSeries(QString const & name);
 
    /**
     * @brief (Re)plot the graph.  Call this when there's a change to a property on an object being plotted, so that the
@@ -81,7 +84,7 @@ public:
 
 
 protected:
-   void paintEvent(QPaintEvent *event);
+   void paintEvent(QPaintEvent *event) override;
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/WaterEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * editors/WaterEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
@@ -65,12 +65,12 @@ WaterEditor::WaterEditor(QWidget *parent, QString const editorName) :
       tr("PPM"),
       50,
       {
-         {PropertyNames::Water::calcium_ppm,     tr("Calcium"    )},
-         {PropertyNames::Water::bicarbonate_ppm, tr("Bicarbonate")},
-         {PropertyNames::Water::sulfate_ppm,     tr("Sulfate"    )},
-         {PropertyNames::Water::chloride_ppm,    tr("Chloride"   )},
-         {PropertyNames::Water::sodium_ppm,      tr("Sodium"     )},
-         {PropertyNames::Water::magnesium_ppm,   tr("Magnesium"  )}
+         {PropertyNames::Water::calcium_ppm    , Water::ionDisplayNames[Water::MineralIon::Calcium    ]},
+         {PropertyNames::Water::bicarbonate_ppm, Water::ionDisplayNames[Water::MineralIon::Bicarbonate]},
+         {PropertyNames::Water::sulfate_ppm    , Water::ionDisplayNames[Water::MineralIon::Sulfate    ]},
+         {PropertyNames::Water::chloride_ppm   , Water::ionDisplayNames[Water::MineralIon::Chloride   ]},
+         {PropertyNames::Water::sodium_ppm     , Water::ionDisplayNames[Water::MineralIon::Sodium     ]},
+         {PropertyNames::Water::magnesium_ppm  , Water::ionDisplayNames[Water::MineralIon::Magnesium  ]}
       }
    );
 
@@ -98,9 +98,9 @@ void WaterEditor::postSetEditItem() {
    if (this->m_editItem) {
       // Note that we don't need to remove the old series from any previous Water objects as the call to addSeries will
       // replace them.
-      this->waterEditRadarChart->addSeries(seriesNameCurrent, Qt::darkGreen, *this->m_editItem);
+      this->waterEditRadarChart->addSeries(seriesNameCurrent, *this->m_editItem, Qt::darkGreen);
 
-      this->waterEditRadarChart->addSeries(seriesNameModified, Qt::green, *this->m_liveEditItem);
+      this->waterEditRadarChart->addSeries(seriesNameModified, *this->m_liveEditItem, Qt::green);
       this->waterEditRadarChart->replot();
    } else {
       this->waterEditRadarChart->removeSeries(seriesNameCurrent );

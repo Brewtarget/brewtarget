@@ -312,30 +312,6 @@ COLUMN_INFOS(
 )
 
 COLUMN_INFOS(
-   TreeItemNode<StockPurchaseSalt>,
-   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, Name           , PropertyPath{{PropertyNames::StockPurchaseSalt::salt,
-                                                                            PropertyNames::NamedEntity::name}, 1}),
-   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, DateOrdered    , PropertyNames::StockPurchase::dateOrdered ),
-   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, Supplier       , PropertyNames::StockPurchase::supplier    ),
-   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, DateReceived   , PropertyNames::StockPurchase::dateReceived),
-   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, AmountReceived , PropertyNames::StockPurchaseBase::amountReceived ),
-   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, AmountRemaining, PropertyNames::StockPurchaseBase::amountRemaining),
-   COLINFO_TREE_ITEM_NODE(StockPurchaseSalt, Note           , PropertyNames::StockPurchase::note        ),
-)
-
-COLUMN_INFOS(
-   TreeItemNode<StockUseSalt>,
-   COLINFO_TREE_ITEM_NODE(StockUseSalt, Reason         , PropertyNames::StockUse::reason),
-   COLINFO_TREE_ITEM_NODE(StockUseSalt, Date           , PropertyNames::StockUse::date  ),
-   COLINFO_TREE_ITEM_NODE(StockUseSalt, Comment        , PropertyNames::StockUse::comment),
-   COLINFO_TREE_ITEM_NODE(StockUseSalt, Recipe         , PropertyPath{{PropertyNames::StockUse::brewLog,
-                                                                       PropertyNames::OwnedByRecipe::recipe,
-                                                                       PropertyNames::NamedEntity::name}, 1}),
-   COLINFO_TREE_ITEM_NODE(StockUseSalt, AmountUsed     , PropertyNames::StockUseBase::amountUsed     ),
-   COLINFO_TREE_ITEM_NODE(StockUseSalt, AmountRemaining, PropertyNames::StockUseBase::amountRemaining),
-)
-
-COLUMN_INFOS(
    TreeItemNode<StockPurchaseYeast>,
    COLINFO_TREE_ITEM_NODE(StockPurchaseYeast, Name           , PropertyPath{{PropertyNames::StockPurchaseYeast::yeast,
                                                                              PropertyNames::NamedEntity::name}, 1}),
@@ -363,14 +339,6 @@ COLUMN_INFOS(
    TreeItemNode<Misc>,
    COLINFO_TREE_ITEM_NODE(Misc, Name, PropertyNames::NamedEntity::name),
    COLINFO_TREE_ITEM_NODE(Misc, Type, PropertyNames::Misc::type       ),
-)
-
-COLUMN_INFOS(
-   TreeItemNode<Salt>,
-   COLINFO_TREE_ITEM_NODE(Salt, Name       , PropertyNames::NamedEntity::name),
-   COLINFO_TREE_ITEM_NODE(Salt, Type       , PropertyNames::Salt::type       ),
-   COLINFO_TREE_ITEM_NODE(Salt, IsAcid     , PropertyNames::Salt::isAcid     ),
-   COLINFO_TREE_ITEM_NODE(Salt, PercentAcid, PropertyNames::Salt::percentAcid),
 )
 
 COLUMN_INFOS(
@@ -826,59 +794,6 @@ template<> QString TreeItemNode<StockUseMisc>::getToolTip() const {
    return outputString;
 }
 
-template<> QString TreeItemNode<StockPurchaseSalt>::getToolTip() const {
-   QString outputString = getHeader();
-   QTextStream output{&outputString};
-
-   output <<
-      "<body>"
-        "<div id=\"headerdiv\">"
-          "<caption>" << this->m_underlyingItem->name() << "</caption>"
-        "</div>"
-        "<table id=\"tooltip\">"
-          "<tr>"
-            "<td class=\"left\">" << StockPurchase::localisedName_dateOrdered() << "</td>"
-            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateOrdered()) << "</td>"
-          "</tr>"
-          "<tr>"
-            "<td class=\"left\">" << StockPurchase::localisedName_dateReceived() << "</td>"
-            "<td class=\"value\">" << Localization::displayDateUserFormated(this->m_underlyingItem->dateReceived()) << "</td>"
-          "</tr>"
-          "<tr>"
-            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountReceived() << "</td>"
-            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountReceived(), 1) << "</td>"
-          "</tr>"
-          "<tr>"
-            "<td class=\"left\">" << StockPurchaseFermentable::localisedName_amountRemaining() << "</td>"
-            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountRemaining(), 1) << "</td>"
-          "</tr>"
-        "</table>"
-      "</body>"
-      "</html>";
-
-   return outputString;
-}
-
-template<> QString TreeItemNode<StockUseSalt>::getToolTip() const {
-   QString outputString = getHeader();
-   QTextStream output{&outputString};
-   output <<
-      "<body>"
-        "<div id=\"headerdiv\">"
-        "<caption>" << this->m_underlyingItem->name() << "</caption>"
-        "</div>"
-        "<table id=\"tooltip\">"
-          "<tr>"
-            "<td class=\"left\">" << Localization::displayDateUserFormated(this->m_underlyingItem->date()) << "</td>"
-            "<td class=\"value\">" << StockUse::reasonDisplayNames[this->m_underlyingItem->reason()] << "</td>"
-            "<td class=\"value\">" << Measurement::displayAmount(this->m_underlyingItem->amountUsed(), 1) << "</td>"
-          "</tr>"
-        "</table>"
-      "</body>"
-      "</html>";
-   return outputString;
-}
-
 template<> QString TreeItemNode<StockPurchaseYeast>::getToolTip() const {
    QString outputString = getHeader();
    QTextStream output{&outputString};
@@ -983,25 +898,6 @@ template<> QString TreeItemNode<Misc>::getToolTip() const {
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(Misc::tr("Type"))
            .arg(Misc::typeDisplayNames[this->m_underlyingItem->type()]);
-
-   body += "</table></body></html>";
-
-   return header + body;
-}
-
-template<> QString TreeItemNode<Salt>::getToolTip() const {
-   QString const header = getHeader();
-
-   QString body   = "<body>";
-
-   body += QString("<div id=\"headerdiv\">");
-   body += QString("<table id=\"tooltip\">");
-   body += QString("<caption>%1</caption>")
-         .arg( this->m_underlyingItem->name() );
-   // First row -- type and use
-   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
-           .arg(Salt::tr("Type"))
-           .arg(Salt::typeDisplayNames[this->m_underlyingItem->type()]);
 
    body += "</table></body></html>";
 

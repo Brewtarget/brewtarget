@@ -429,6 +429,7 @@ private:
             Q_FUNC_INFO << "Trying to add" << Item::staticMetaObject.className() << "#" << item->key() << "to" <<
             Owner::staticMetaObject.className() << "#" << this->m_owner.key() << "when already owned by #" <<
             item->ownerId();
+         qWarning().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
       }
 
       if (this->m_owner.key() > 0) {
@@ -463,7 +464,15 @@ private:
          // See comment above in items() for why, even in an enumerated set, we just append to this list rather than
          // inserting the ID at its "correct" position.
          //
-         this->m_itemIds.append(item->key());
+         // In theory, the item should not already be in the list.  In practice, it doesn't hurt to check.
+         //
+         if (auto found = std::find(this->m_itemIds.cbegin(), this->m_itemIds.cend(), item->key());
+             found != this->m_itemIds.cend()) {
+            qWarning() <<
+               Q_FUNC_INFO << Item::staticMetaObject.className() << "#" << item->key() << "already in owned IDs list";
+         } else {
+            this->m_itemIds.append(item->key());
+         }
       }
 
       // Now we added an item to the set, we need to listen for changes to it
@@ -718,7 +727,7 @@ public:
 
          // Caller supplied nullptr, so we're deleting this item and all the ones after it
          for (int seqNumToDelete = items.size(); seqNumToDelete >= seqNum; --seqNumToDelete) {
-            this->remove(items[seqNumToDelete]);
+            this->remove(items[seqNumToDelete - 1]);
          }
          return;
       }

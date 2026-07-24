@@ -52,14 +52,14 @@ protected:
 public slots:
    void updateBrewDate(QDate const & datetime);
    void updateName();
-   void updateSG();
-   void updateVolumeIntoBK_l();
-   void updateStrikeTemp_c();
-   void updateMashFinTemp_c();
+   void updateMeasuredPreBoilGravity_sg();
+   void updateMeasuredPreBoilVolume_l();
+   void updateMeasuredStrikeTemp_c();
+   void updateMeasuredMashFinalTemp_c();
 
    void updateOG();
-   void updatePostBoilVolume_l();
-   void updateVolumeIntoFerm_l();
+   void updateMeasuredPostBoilVolume_l();
+   void updateVolumeIntoFermentor_l();
    void updatePitchTemp_c();
 
    void updateFG();
@@ -74,14 +74,15 @@ public slots:
    void showChanges(QString field = "");
 
    /**
-    * The signal coming into this slot has two parameters:
+    * The signal coming into these slots has two parameters:
     *   • Measurement::SystemOfMeasurement oldSystemOfMeasurement,
     *   • std::optional<Measurement::UnitSystem::RelativeScale> oldForcedScale
     * However, because we have access to the underlying "standard units" value, we don't need to be told the old unit or
     * scale.  Qt allows slots to ignore parameters - eg it is happy to deliver a two-parameter signal to a
     * zero-parameter slot.  So that is what we do here.
     */
-   void updateProjOg();
+   void updateExpectedOg();
+   void updateForecastOg();
 
 private:
    BrewLog * m_brewLog = nullptr;

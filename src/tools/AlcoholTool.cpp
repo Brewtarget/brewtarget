@@ -71,8 +71,8 @@ public:
       output_result                {new QLabel       (&self)},
       gridLayout                   {new QGridLayout  (&self)} {
 
-      SMART_FIELD_INIT_FS(AlcoholTool, label_og                     , input_og                     , double, Measurement::PhysicalQuantity::Density    );
-      SMART_FIELD_INIT_FS(AlcoholTool, label_fg                     , input_fg                     , double, Measurement::PhysicalQuantity::Density    );
+      SMART_FIELD_INIT_FS(AlcoholTool, label_og                     , input_og                     , double, Measurement::PhysicalQuantity::Gravity    );
+      SMART_FIELD_INIT_FS(AlcoholTool, label_fg                     , input_fg                     , double, Measurement::PhysicalQuantity::Gravity    );
       SMART_FIELD_INIT_FS(AlcoholTool, label_temperature            , input_og_temperature         , double, Measurement::PhysicalQuantity::Temperature);
       SMART_FIELD_INIT_FS(AlcoholTool, label_temperature            , input_fg_temperature         , double, Measurement::PhysicalQuantity::Temperature);
       SMART_FIELD_INIT_FS(AlcoholTool, label_calibration_temperature, input_calibration_temperature, double, Measurement::PhysicalQuantity::Temperature);

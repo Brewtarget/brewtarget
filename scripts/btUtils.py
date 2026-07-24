@@ -29,6 +29,7 @@ import pathlib
 import re
 import shutil
 import subprocess
+import sys
 import tomlkit
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -81,7 +82,7 @@ def findAndCopyLibs(pathsToSearch, extraLibs, libExtension, libRegex, targetDire
             break;
       if (not found):
          btLogger.log.critical('Could not find '+ extraLib + ' library in any of the following directories: ' + ', '.join(pathsToSearch))
-         exit(1)
+         sys.exit(1)
    return
 
 
@@ -170,7 +171,7 @@ def findMesonAndGit():
    exe_meson = shutil.which("meson")
    if (exe_meson is None or exe_meson == ""):
       btLogger.log.critical('Cannot find meson - please see https://mesonbuild.com/Getting-meson.html for how to install')
-      exit(1)
+      sys.exit(1)
 
    global mesonVersion
    rawVersion = btExecute.abortOnRunFail(subprocess.run([exe_meson, '--version'], capture_output=True)).stdout.decode('UTF-8').rstrip()
@@ -185,7 +186,7 @@ def findMesonAndGit():
       btLogger.log.debug('Found git information directory:' + btFileSystem.dir_gitInfo.as_posix())
       if (exe_git is None or exe_git == ""):
          btLogger.log.critical('Cannot find git - please see https://git-scm.com/downloads for how to install')
-         exit(1)
+         sys.exit(1)
 
    return
 
@@ -194,7 +195,7 @@ def findWget():
    exe_wget = shutil.which("wget")
    if (exe_wget is None or exe_wget == ""):
       btLogger.log.critical('Cannot find wget')
-      exit(1)
+      sys.exit(1)
 
    return
 

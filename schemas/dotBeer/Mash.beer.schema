@@ -1,0 +1,92 @@
+//======================================================================================================================
+// schema/Mash.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+//   • Mark Price <shadowchao99@gmail.com>
+//   • Matt Young <mfsy@yahoo.com>
+//   • Yuriy Krutilin <y.krutilin@gmail.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/Mash.beer.schema",
+  "type": "object",
+  "description": "A mash procedure, which can be used by multiple recipes.",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "grain_temperature": {
+      "description": "Initial grain temperature prior to the start of the mash.",
+      "$ref": "Measurement.beer.schema#/$defs/Temperature"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "mash_steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/MashStep"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "grain_temperature",
+    "mash_steps"
+  ],
+  "$defs": {
+    "MashStep": {
+      "type": "object",
+      "description": "A mash step is an internal record used within a mash profile to denote a separate step in a multi-step mash.  A mash step is not intended for use outside of a mash profile.",
+      "allOf": [
+        {
+          "$ref": "StepCommon.beer.schema#/$defs/StepBase"
+        },
+        {
+          "$ref": "StepCommon.beer.schema#/$defs/StepWithRampTime"
+        },
+        {
+          "properties": {
+            "step_type": {
+              "description": "Infusion denotes adding hot water, temperature denotes heating with an outside heat source, and decoction denotes drawing off some mash for boiling.",
+              "enum": [
+                "infusion",
+                "temperature",
+                "decoction",
+                "souring mash",
+                "souring wort",
+                "drain mash tun",
+                "sparge"
+              ]
+            },
+            "amount": {
+              "description": "For a infusion step, this is the volume of water to infuse in this step.  For a decoction step, this is the calculated volume of mash to decoction.",
+              "$ref": "Measurement.beer.schema#/$defs/Volume"
+            },
+            "water_grain_ratio": {
+              "description": "Also known as the mash thickness. eg 1.75 qt/lb or 3.65 L/kg.",
+              "$ref": "Measurement.beer.schema#/$defs/SpecificVolume"
+            },
+            "infuse_temperature": {
+              "description": "Temperature of the water for an infusion step -- typically calculated based on the current step, grain, and other settings.  Applicable only for an infusion step.",
+              "$ref": "Measurement.beer.schema#/$defs/Temperature"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "name",
+        "step_type",
+        "start_temperature",
+        "step_time"
+      ]
+    }
+  }
+}

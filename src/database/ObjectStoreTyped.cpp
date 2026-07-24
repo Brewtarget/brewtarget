@@ -35,7 +35,6 @@
 #include "model/StockPurchaseFermentable.h"
 #include "model/StockPurchaseHop.h"
 #include "model/StockPurchaseMisc.h"
-#include "model/StockPurchaseSalt.h"
 #include "model/StockPurchaseYeast.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
@@ -44,10 +43,7 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
-#include "model/RecipeAdjustmentSalt.h"
-#include "model/RecipeUseOfWater.h"
 #include "model/Recipe.h"
-#include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -103,7 +99,6 @@ namespace {
    //                             Folder<Fermentable >
    //                             Folder<Hop         >
    //                             Folder<Misc        >
-   //                             Folder<Salt        >
    //                             Folder<Water       >
    //                             Folder<Yeast       >
    //
@@ -125,18 +120,17 @@ namespace {
    }; \
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Folder<BaseName>> {};
 
-   TABLE_FOLDER_DEFN(Recipe      , recipe      )
-   TABLE_FOLDER_DEFN(Style       , style       )
-   TABLE_FOLDER_DEFN(Equipment   , equipment   )
-   TABLE_FOLDER_DEFN(Mash        , mash        )
-   TABLE_FOLDER_DEFN(Boil        , boil        )
-   TABLE_FOLDER_DEFN(Fermentation, fermentation)
-   TABLE_FOLDER_DEFN(Fermentable , fermentable )
-   TABLE_FOLDER_DEFN(Hop         , hop         )
-   TABLE_FOLDER_DEFN(Misc        , misc        )
-   TABLE_FOLDER_DEFN(Salt        , salt        )
-   TABLE_FOLDER_DEFN(Water       , water       )
-   TABLE_FOLDER_DEFN(Yeast       , yeast       )
+   TABLE_FOLDER_DEFN(Recipe         , recipe          )
+   TABLE_FOLDER_DEFN(Style          , style           )
+   TABLE_FOLDER_DEFN(Equipment      , equipment       )
+   TABLE_FOLDER_DEFN(Mash           , mash            )
+   TABLE_FOLDER_DEFN(Boil           , boil            )
+   TABLE_FOLDER_DEFN(Fermentation   , fermentation    )
+   TABLE_FOLDER_DEFN(Fermentable    , fermentable     )
+   TABLE_FOLDER_DEFN(Hop            , hop             )
+   TABLE_FOLDER_DEFN(Misc           , misc            )
+   TABLE_FOLDER_DEFN(Water          , water           )
+   TABLE_FOLDER_DEFN(Yeast          , yeast           )
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Equipment
@@ -149,8 +143,6 @@ namespace {
          {ObjectStore::FieldType::Double, {"fermenter_batch_size_l"        }, PropertyNames::Equipment::fermenterBatchSize_l        },
          {ObjectStore::FieldType::Double, {"boiling_point"                 }, PropertyNames::Equipment::boilingPoint_c              },
          {ObjectStore::FieldType::Double, {"kettle_boil_size_l"            }, PropertyNames::Equipment::kettleBoilSize_l            },
-//         {ObjectStore::FieldType::Double, {"boil_time"                     }, PropertyNames::Equipment::boilTime_min                }, // Boil & BoilStep objects now supersede this
-//         {ObjectStore::FieldType::Bool  , {"calc_boil_volume"              }, PropertyNames::Equipment::calcBoilVolume              },
          {ObjectStore::FieldType::Double, {"kettle_evaporation_per_hour_l" }, PropertyNames::Equipment::kettleEvaporationPerHour_l  },
          {ObjectStore::FieldType::Double, {"evap_rate"                     }, PropertyNames::Equipment::evapRate_pctHr              },
          {ObjectStore::FieldType::Double, {"mash_tun_grain_absorption_lkg" }, PropertyNames::Equipment::mashTunGrainAbsorption_LKg  },
@@ -240,6 +232,9 @@ namespace {
          {ObjectStore::FieldType::Double, {"fan_ppm"                  }, PropertyNames::Fermentable::fan_ppm                   },
          {ObjectStore::FieldType::Double, {"fermentability_pct"       }, PropertyNames::Fermentable::fermentability_pct        },
          {ObjectStore::FieldType::Double, {"beta_glucan_ppm"          }, PropertyNames::Fermentable::betaGlucan_ppm            },
+         //
+         {ObjectStore::FieldType::Double, {"lactic_acid_by_weight_pct"}, PropertyNames::Fermentable::lacticAcidByWeight_pct    },
+
       },
       {&NAMED_ENTITY_COMMON_FIELDS}
    };
@@ -432,33 +427,20 @@ namespace {
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Misc> {
       "misc",
       {
-         {ObjectStore::FieldType::Int   , {"id"                    }, PropertyNames::NamedEntity::key                       },
-         {ObjectStore::FieldType::Int   , {"contained_in_folder_id"}, PropertyNames::FolderPropertyBase::containedInFolderId, &PRIMARY_TABLE<Folder<Misc>>},
-         {ObjectStore::FieldType::Enum  , {"mtype"                 }, PropertyNames::Misc::type                             , &Misc::typeStringMapping},
-         {ObjectStore::FieldType::String, {"use_for"               }, PropertyNames::Misc::useFor                           },
-         {ObjectStore::FieldType::String, {"notes"                 }, PropertyNames::Misc::notes                            },
+         {ObjectStore::FieldType::Int   , {"id"                      }, PropertyNames::NamedEntity::key           },
+         {ObjectStore::FieldType::Int   , {"contained_in_folder_id"  }, PropertyNames::FolderPropertyBase::containedInFolderId, &PRIMARY_TABLE<Folder<Misc>>},
+         {ObjectStore::FieldType::Enum  , {"mtype"                   }, PropertyNames::Misc::type                 , &Misc::typeStringMapping},
+         {ObjectStore::FieldType::String, {"use_for"                 }, PropertyNames::Misc::useFor               },
+         {ObjectStore::FieldType::String, {"notes"                   }, PropertyNames::Misc::notes                },
          // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-         {ObjectStore::FieldType::String, {"producer"              }, PropertyNames::Misc::producer                         },
-         {ObjectStore::FieldType::String, {"product_id"            }, PropertyNames::Misc::productId                        },
+         {ObjectStore::FieldType::String, {"producer"                }, PropertyNames::Misc::producer             },
+         {ObjectStore::FieldType::String, {"product_id"              }, PropertyNames::Misc::productId            },
+         // Below added for migration of Salt to Misc
+         {ObjectStore::FieldType::Enum  , {"water_agent_type"        }, PropertyNames::Misc::waterAgentType       , &Misc::waterAgentTypeStringMapping},
+         {ObjectStore::FieldType::Double, {"water_agent_percent_acid"}, PropertyNames::Misc::waterAgentPercentAcid},
       },
       {&NAMED_ENTITY_COMMON_FIELDS}
    };
-
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   // Database field mappings for Salt
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   template<> ObjectStore::TableDefinition const PRIMARY_TABLE<Salt> {
-      "salt",
-      {
-         {ObjectStore::FieldType::Int   , {"id"                    }, PropertyNames::NamedEntity::key                       },
-         {ObjectStore::FieldType::Int   , {"contained_in_folder_id"}, PropertyNames::FolderPropertyBase::containedInFolderId, &PRIMARY_TABLE<Folder<Salt>>},
-         {ObjectStore::FieldType::Double, {"percent_acid"          }, PropertyNames::Salt::percentAcid                      },
-         {ObjectStore::FieldType::Enum  , {"stype"                 }, PropertyNames::Salt::type                             , &Salt::typeStringMapping},
-      },
-      {&NAMED_ENTITY_COMMON_FIELDS}
-   };
-   // Salts don't have children
-   template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<Salt> {};
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for Style
@@ -515,9 +497,6 @@ namespace {
          {ObjectStore::FieldType::Double, {"magnesium"             }, PropertyNames::Water::magnesium_ppm                   },
          {ObjectStore::FieldType::Double, {"ph"                    }, PropertyNames::Water::ph                              },
          {ObjectStore::FieldType::Double, {"alkalinity"            }, PropertyNames::Water::alkalinity_ppm                  },
-         {ObjectStore::FieldType::Int   , {"wtype"                 }, PropertyNames::Water::type                            }, // TODO: Would be less fragile to store this as text than a number
-         {ObjectStore::FieldType::Double, {"mash_ro"               }, PropertyNames::Water::mashRo_pct                      },
-         {ObjectStore::FieldType::Double, {"sparge_ro"             }, PropertyNames::Water::spargeRo_pct                    },
          {ObjectStore::FieldType::Bool  , {"as_hco3"               }, PropertyNames::Water::alkalinityAsHCO3                },
          // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
          {ObjectStore::FieldType::Double, {"carbonate_ppm"         }, PropertyNames::Water::carbonate_ppm                   },
@@ -600,6 +579,11 @@ namespace {
          // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
          {ObjectStore::FieldType::Double, {"beer_acidity_ph"         }, PropertyNames::Recipe::beerAcidity_pH                 },
          {ObjectStore::FieldType::Double, {"apparent_attenuation_pct"}, PropertyNames::Recipe::apparentAttenuation_pct        },
+         // Below are for our reworking of water profiles etc
+         {ObjectStore::FieldType::Int   , {"water_base"              }, PropertyNames::Recipe::waterBaseId                    , &PRIMARY_TABLE<Water>},
+         {ObjectStore::FieldType::Int   , {"water_target"            }, PropertyNames::Recipe::waterTargetId                  , &PRIMARY_TABLE<Water>},
+         {ObjectStore::FieldType::Double, {"ro_water_mash_pct"       }, PropertyNames::Recipe::roWaterMash_pct                },
+         {ObjectStore::FieldType::Double, {"ro_water_sparge_pct"     }, PropertyNames::Recipe::roWaterSparge_pct              },
       },
       {&NAMED_ENTITY_COMMON_FIELDS}
    };
@@ -690,33 +674,6 @@ namespace {
    };
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   // Database field mappings for RecipeAdjustmentSalt
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   template<> ObjectStore::TableDefinition const PRIMARY_TABLE<RecipeAdjustmentSalt> {
-      "salt_in_recipe",
-      {
-         {ObjectStore::FieldType::Int   , {"id"         }, PropertyNames::NamedEntity::key                },
-         {ObjectStore::FieldType::Int   , {"recipe_id"  }, PropertyNames::OwnedByRecipe::recipeId         , &PRIMARY_TABLE<Recipe>},
-         {ObjectStore::FieldType::Int   , {"salt_id"    }, PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Salt>   },
-         {ObjectStore::FieldType::Enum  , {"when_to_add"}, PropertyNames::RecipeAdjustmentSalt::whenToAdd , &RecipeAdjustmentSalt::whenToAddStringMapping},
-      },
-      {&NAMED_ENTITY_COMMON_FIELDS, &INGREDIENT_AMOUNT_COMMON_FIELDS}
-   };
-
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   // Database field mappings for RecipeUseOfWater
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   template<> ObjectStore::TableDefinition const PRIMARY_TABLE<RecipeUseOfWater> {
-      "water_in_recipe",
-      {
-         {ObjectStore::FieldType::Int   , {"id"       }, PropertyNames::NamedEntity::key                },
-         {ObjectStore::FieldType::Int   , {"recipe_id"}, PropertyNames::OwnedByRecipe::recipeId         , &PRIMARY_TABLE<Recipe>},
-         {ObjectStore::FieldType::Int   , {"water_id" }, PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Water>   },
-      },
-      {&NAMED_ENTITY_COMMON_FIELDS, &INGREDIENT_AMOUNT_COMMON_FIELDS}
-   };
-
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for BrewLog
    //
    // Note that the "name" of a BrewLog is shown as "batch number" in the UI.
@@ -725,38 +682,37 @@ namespace {
       "brew_log",
       {
          {ObjectStore::FieldType::Int   , {"id"                     }, PropertyNames::NamedEntity::key          },
-         // NB: BrewLogs don't have folders, as each one is owned by a Recipe
-         {ObjectStore::FieldType::Double, {"abv"                    }, PropertyNames::BrewLog::abv              },
-         {ObjectStore::FieldType::Double, {"attenuation"            }, PropertyNames::BrewLog::attenuation      },
-         {ObjectStore::FieldType::Double, {"boil_off"               }, PropertyNames::BrewLog::boilOff_l        },
-         {ObjectStore::FieldType::Date  , {"brewdate"               }, PropertyNames::BrewLog::brewDate         },
-         {ObjectStore::FieldType::Double, {"brewhouse_eff"          }, PropertyNames::BrewLog::brewhouseEff_pct },
-         {ObjectStore::FieldType::Double, {"eff_into_bk"            }, PropertyNames::BrewLog::effIntoBK_pct    },
-         {ObjectStore::FieldType::Date  , {"fermentdate"            }, PropertyNames::BrewLog::fermentDate      },
-         {ObjectStore::FieldType::Double, {"fg"                     }, PropertyNames::BrewLog::fg               },
-         {ObjectStore::FieldType::Double, {"final_volume"           }, PropertyNames::BrewLog::finalVolume_l    },
-         {ObjectStore::FieldType::Double, {"mash_final_temp"        }, PropertyNames::BrewLog::mashFinTemp_c    },
-         {ObjectStore::FieldType::String, {"notes"                  }, PropertyNames::BrewLog::notes            },
-         {ObjectStore::FieldType::Double, {"og"                     }, PropertyNames::BrewLog::og               },
-         {ObjectStore::FieldType::Double, {"pitch_temp"             }, PropertyNames::BrewLog::pitchTemp_c      },
-         {ObjectStore::FieldType::Double, {"post_boil_volume"       }, PropertyNames::BrewLog::postBoilVolume_l },
-         {ObjectStore::FieldType::Double, {"projected_abv"          }, PropertyNames::BrewLog::projABV_pct      },
-         {ObjectStore::FieldType::Double, {"projected_atten"        }, PropertyNames::BrewLog::projAtten        },
-         {ObjectStore::FieldType::Double, {"projected_boil_grav"    }, PropertyNames::BrewLog::projBoilGrav     },
-         {ObjectStore::FieldType::Double, {"projected_eff"          }, PropertyNames::BrewLog::projEff_pct      },
-         {ObjectStore::FieldType::Double, {"projected_ferm_points"  }, PropertyNames::BrewLog::projFermPoints   },
-         {ObjectStore::FieldType::Double, {"projected_fg"           }, PropertyNames::BrewLog::projFg           },
-         {ObjectStore::FieldType::Double, {"projected_mash_fin_temp"}, PropertyNames::BrewLog::projMashFinTemp_c},
-         {ObjectStore::FieldType::Double, {"projected_og"           }, PropertyNames::BrewLog::projOg           },
-         {ObjectStore::FieldType::Double, {"projected_points"       }, PropertyNames::BrewLog::projPoints       },
-         {ObjectStore::FieldType::Double, {"projected_strike_temp"  }, PropertyNames::BrewLog::projStrikeTemp_c },
-         {ObjectStore::FieldType::Double, {"projected_vol_into_bk"  }, PropertyNames::BrewLog::projVolIntoBK_l  },
-         {ObjectStore::FieldType::Double, {"projected_vol_into_ferm"}, PropertyNames::BrewLog::projVolIntoFerm_l},
-         {ObjectStore::FieldType::Double, {"sg"                     }, PropertyNames::BrewLog::sg               },
-         {ObjectStore::FieldType::Double, {"strike_temp"            }, PropertyNames::BrewLog::strikeTemp_c     },
-         {ObjectStore::FieldType::Double, {"volume_into_bk"         }, PropertyNames::BrewLog::volumeIntoBK_l   },
-         {ObjectStore::FieldType::Double, {"volume_into_fermenter"  }, PropertyNames::BrewLog::volumeIntoFerm_l },
          {ObjectStore::FieldType::Int   , {"recipe_id"              }, PropertyNames::OwnedByRecipe::recipeId    , &PRIMARY_TABLE<Recipe>},
+         // NB: BrewLogs don't have folders, as each one is owned by a Recipe
+         {ObjectStore::FieldType::Date  , {"brew_date"               }, PropertyNames::BrewLog::brewDate         },
+         {ObjectStore::FieldType::Date  , {"ferment_date"            }, PropertyNames::BrewLog::fermentDate      },
+         {ObjectStore::FieldType::String, {"notes"                   }, PropertyNames::BrewLog::notes            },
+         {ObjectStore::FieldType::Double, {"expected_pre_boil_gravity_sg"    }, PropertyNames::BrewLog::expectedPreBoilGravity_sg    },
+         {ObjectStore::FieldType::Double, {"measured_pre_boil_gravity_sg"    }, PropertyNames::BrewLog::measuredPreBoilGravity_sg    },
+         {ObjectStore::FieldType::Double, {"expected_pre_boil_volume_l"      }, PropertyNames::BrewLog::expectedPreBoilVolume_l      },
+         {ObjectStore::FieldType::Double, {"measured_pre_boil_volume_l"      }, PropertyNames::BrewLog::measuredPreBoilVolume_l      },
+         {ObjectStore::FieldType::Double, {"expected_strike_temp_c"          }, PropertyNames::BrewLog::expectedStrikeTemp_c         },
+         {ObjectStore::FieldType::Double, {"measured_strike_temp_c"          }, PropertyNames::BrewLog::measuredStrikeTemp_c         },
+         {ObjectStore::FieldType::Double, {"expected_mash_final_temp_c"      }, PropertyNames::BrewLog::expectedMashFinalTemp_c      },
+         {ObjectStore::FieldType::Double, {"measured_mash_final_temp_c"      }, PropertyNames::BrewLog::measuredMashFinalTemp_c      },
+         {ObjectStore::FieldType::Double, {"expected_original_gravity_sg"    }, PropertyNames::BrewLog::expectedOriginalGravity_sg   },
+         {ObjectStore::FieldType::Double, {"forecast_original_gravity_sg"    }, PropertyNames::BrewLog::forecastOriginalGravity_sg   },
+         {ObjectStore::FieldType::Double, {"measured_original_gravity_sg"    }, PropertyNames::BrewLog::measuredOriginalGravity_sg   },
+         {ObjectStore::FieldType::Double, {"measured_post_boil_volume_l"     }, PropertyNames::BrewLog::measuredPostBoilVolume_l     },
+         {ObjectStore::FieldType::Double, {"expected_volume_into_fermentor_l"}, PropertyNames::BrewLog::expectedVolumeIntoFermentor_l},
+         {ObjectStore::FieldType::Double, {"measured_volume_into_fermentor_l"}, PropertyNames::BrewLog::measuredVolumeIntoFermentor_l},
+         {ObjectStore::FieldType::Double, {"measured_pitch_temp_c"           }, PropertyNames::BrewLog::measuredPitchTemp_c          },
+         {ObjectStore::FieldType::Double, {"expected_final_gravity_sg"       }, PropertyNames::BrewLog::expectedFinalGravity_sg      },
+         {ObjectStore::FieldType::Double, {"measured_final_gravity_sg"       }, PropertyNames::BrewLog::measuredFinalGravity_sg      },
+         {ObjectStore::FieldType::Double, {"measured_final_volume"           }, PropertyNames::BrewLog::measuredFinalVolume_l        },
+         {ObjectStore::FieldType::Double, {"expected_alcohol_by_volume_pct"  }, PropertyNames::BrewLog::expectedAlcoholByVolume_pct  },
+         {ObjectStore::FieldType::Double, {"computed_alcohol_by_volume_pct"  }, PropertyNames::BrewLog::computedAlcoholByVolume_pct  },
+         {ObjectStore::FieldType::Double, {"expected_attenuation_pct"        }, PropertyNames::BrewLog::expectedAttenuation_pct      },
+         {ObjectStore::FieldType::Double, {"computed_attenuation_pct"        }, PropertyNames::BrewLog::computedAttenuation_pct      },
+         {ObjectStore::FieldType::Double, {"expected_efficiency_pct"         }, PropertyNames::BrewLog::expectedEfficiency_pct       },
+         {ObjectStore::FieldType::Double, {"computed_efficiency_pct"         }, PropertyNames::BrewLog::computedEfficiency_pct       },
+         {ObjectStore::FieldType::Double, {"computed_pre_boil_efficiency_pct"}, PropertyNames::BrewLog::computedPreBoilEfficiency_pct},
+         {ObjectStore::FieldType::Double, {"expected_boil_off_l"             }, PropertyNames::BrewLog::expectedBoilOff_l            },
       },
       {&NAMED_ENTITY_COMMON_FIELDS}
    };
@@ -857,19 +813,6 @@ namespace {
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<StockPurchaseMisc> {};
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   // Database field mappings for StockPurchaseSalt
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   template<> ObjectStore::TableDefinition const PRIMARY_TABLE<StockPurchaseSalt> {
-      "salt_stock_purchase",
-      {
-         {ObjectStore::FieldType::Int, {"id"     }, PropertyNames::NamedEntity::key              },
-         {ObjectStore::FieldType::Int, {"salt_id"}, PropertyNames::IngredientAmount::ingredientId, &PRIMARY_TABLE<Salt>},
-      },
-      {&NAMED_ENTITY_COMMON_FIELDS, &INGREDIENT_AMOUNT_COMMON_FIELDS, &STOCK_PURCHASE_COMMON_FIELDS}
-   };
-   template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<StockPurchaseSalt> {};
-
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for StockPurchaseYeast
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    template<> ObjectStore::TableDefinition const PRIMARY_TABLE<StockPurchaseYeast> {
@@ -934,19 +877,6 @@ namespace {
       {&NAMED_ENTITY_COMMON_FIELDS, &STOCK_USE_COMMON_FIELDS}
    };
    template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<StockUseMisc> {};
-
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   // Database field mappings for StockUseSalt
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   template<> ObjectStore::TableDefinition const PRIMARY_TABLE<StockUseSalt> {
-      "salt_stock_use",
-      {
-         {ObjectStore::FieldType::Int, {"id"         }, PropertyNames::NamedEntity::key       },
-         {ObjectStore::FieldType::Int, {"salt_purchase_id"}, PropertyNames::EnumeratedBase::ownerId, &PRIMARY_TABLE<StockPurchaseSalt>},
-      },
-      {&NAMED_ENTITY_COMMON_FIELDS, &STOCK_USE_COMMON_FIELDS}
-   };
-   template<> ObjectStore::JunctionTableDefinitions const JUNCTION_TABLES<StockUseSalt> {};
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Database field mappings for StockUseYeast
@@ -1035,35 +965,29 @@ template ObjectStoreTyped<Instruction              > & ObjectStoreTyped<Instruct
 template ObjectStoreTyped<Mash                     > & ObjectStoreTyped<Mash                     >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<MashStep                 > & ObjectStoreTyped<MashStep                 >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Misc                     > & ObjectStoreTyped<Misc                     >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Recipe      >   > & ObjectStoreTyped<Folder<Recipe      >   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Style       >   > & ObjectStoreTyped<Folder<Style       >   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Equipment   >   > & ObjectStoreTyped<Folder<Equipment   >   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Mash        >   > & ObjectStoreTyped<Folder<Mash        >   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Boil        >   > & ObjectStoreTyped<Folder<Boil        >   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Fermentation>   > & ObjectStoreTyped<Folder<Fermentation>   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Fermentable >   > & ObjectStoreTyped<Folder<Fermentable >   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Hop         >   > & ObjectStoreTyped<Folder<Hop         >   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Misc        >   > & ObjectStoreTyped<Folder<Misc        >   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Salt        >   > & ObjectStoreTyped<Folder<Salt        >   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Water       >   > & ObjectStoreTyped<Folder<Water       >   >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Folder<Yeast       >   > & ObjectStoreTyped<Folder<Yeast       >   >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Recipe      >     > & ObjectStoreTyped<Folder<Recipe      >     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Style       >     > & ObjectStoreTyped<Folder<Style       >     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Equipment   >     > & ObjectStoreTyped<Folder<Equipment   >     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Mash        >     > & ObjectStoreTyped<Folder<Mash        >     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Boil        >     > & ObjectStoreTyped<Folder<Boil        >     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Fermentation>     > & ObjectStoreTyped<Folder<Fermentation>     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Fermentable >     > & ObjectStoreTyped<Folder<Fermentable >     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Hop         >     > & ObjectStoreTyped<Folder<Hop         >     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Misc        >     > & ObjectStoreTyped<Folder<Misc        >     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Water       >     > & ObjectStoreTyped<Folder<Water       >     >::getInstance(Database * database = nullptr);
+template ObjectStoreTyped<Folder<Yeast       >     > & ObjectStoreTyped<Folder<Yeast       >     >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Recipe                   > & ObjectStoreTyped<Recipe                   >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<RecipeAdditionFermentable> & ObjectStoreTyped<RecipeAdditionFermentable>::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<RecipeAdditionHop        > & ObjectStoreTyped<RecipeAdditionHop        >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<RecipeAdditionMisc       > & ObjectStoreTyped<RecipeAdditionMisc       >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<RecipeAdditionYeast      > & ObjectStoreTyped<RecipeAdditionYeast      >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<RecipeAdjustmentSalt     > & ObjectStoreTyped<RecipeAdjustmentSalt     >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<RecipeUseOfWater         > & ObjectStoreTyped<RecipeUseOfWater         >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<Salt                     > & ObjectStoreTyped<Salt                     >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<StockPurchaseFermentable > & ObjectStoreTyped<StockPurchaseFermentable >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<StockPurchaseHop         > & ObjectStoreTyped<StockPurchaseHop         >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<StockPurchaseMisc        > & ObjectStoreTyped<StockPurchaseMisc        >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<StockPurchaseSalt        > & ObjectStoreTyped<StockPurchaseSalt        >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<StockPurchaseYeast       > & ObjectStoreTyped<StockPurchaseYeast       >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<StockUseFermentable      > & ObjectStoreTyped<StockUseFermentable      >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<StockUseHop              > & ObjectStoreTyped<StockUseHop              >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<StockUseMisc             > & ObjectStoreTyped<StockUseMisc             >::getInstance(Database * database = nullptr);
-template ObjectStoreTyped<StockUseSalt             > & ObjectStoreTyped<StockUseSalt             >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<StockUseYeast            > & ObjectStoreTyped<StockUseYeast            >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Style                    > & ObjectStoreTyped<Style                    >::getInstance(Database * database = nullptr);
 template ObjectStoreTyped<Water                    > & ObjectStoreTyped<Water                    >::getInstance(Database * database = nullptr);
@@ -1076,7 +1000,7 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    // NOTE: This is the 2nd of 4 places we need to add any new ObjectStoreTyped
    if (ObjectStoreTyped<Boil                     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Boil"                     ; }
    if (ObjectStoreTyped<BoilStep                 >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "BoilStep"                 ; }
-   if (ObjectStoreTyped<BrewLog                 >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "BrewLog"                 ; }
+   if (ObjectStoreTyped<BrewLog                  >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "BrewLog"                  ; }
    if (ObjectStoreTyped<Equipment                >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Equipment"                ; }
    if (ObjectStoreTyped<Fermentable              >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Fermentable"              ; }
    if (ObjectStoreTyped<Fermentation             >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Fermentation"             ; }
@@ -1095,7 +1019,6 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    if (ObjectStoreTyped<Folder<Fermentable >     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Folder<Fermentable >"     ; }
    if (ObjectStoreTyped<Folder<Hop         >     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Folder<Hop         >"     ; }
    if (ObjectStoreTyped<Folder<Misc        >     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Folder<Misc        >"     ; }
-   if (ObjectStoreTyped<Folder<Salt        >     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Folder<Salt        >"     ; }
    if (ObjectStoreTyped<Folder<Water       >     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Folder<Water       >"     ; }
    if (ObjectStoreTyped<Folder<Yeast       >     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Folder<Yeast       >"     ; }
    if (ObjectStoreTyped<Recipe                   >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Recipe"                   ; }
@@ -1103,18 +1026,13 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    if (ObjectStoreTyped<RecipeAdditionHop        >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "RecipeAdditionHop"        ; }
    if (ObjectStoreTyped<RecipeAdditionMisc       >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "RecipeAdditionMisc"       ; }
    if (ObjectStoreTyped<RecipeAdditionYeast      >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "RecipeAdditionYeast"      ; }
-   if (ObjectStoreTyped<RecipeAdjustmentSalt     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "RecipeAdjustmentSalt"     ; }
-   if (ObjectStoreTyped<RecipeUseOfWater         >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "RecipeUseOfWater"         ; }
-   if (ObjectStoreTyped<Salt                     >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Salt"                     ; }
    if (ObjectStoreTyped<StockPurchaseFermentable >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "StockPurchaseFermentable" ; }
    if (ObjectStoreTyped<StockPurchaseHop         >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "StockPurchaseHop"         ; }
    if (ObjectStoreTyped<StockPurchaseMisc        >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "StockPurchaseMisc"        ; }
-   if (ObjectStoreTyped<StockPurchaseSalt        >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "StockPurchaseSalt"        ; }
    if (ObjectStoreTyped<StockPurchaseYeast       >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "StockPurchaseYeast"       ; }
    if (ObjectStoreTyped<StockUseFermentable      >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "StockPurchaseFermentable" ; }
    if (ObjectStoreTyped<StockUseHop              >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "StockPurchaseHop"         ; }
    if (ObjectStoreTyped<StockUseMisc             >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "StockPurchaseMisc"        ; }
-   if (ObjectStoreTyped<StockUseSalt             >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "StockPurchaseSalt"        ; }
    if (ObjectStoreTyped<StockUseYeast            >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "StockPurchaseYeast"       ; }
    if (ObjectStoreTyped<Style                    >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Style"                    ; }
    if (ObjectStoreTyped<Water                    >::getInstance().state() == ObjectStore::State::ErrorInitialising) { errors << "Water"                    ; }
@@ -1137,51 +1055,45 @@ bool InitialiseAllObjectStores(QString & errorMessage) {
    // to be done (see postLoadInit above).
    //
    // NOTE: This is the 3rd of 4 places we need to add any new ObjectStoreTyped
-   postLoadInit(ObjectStoreTyped<Boil                      >::getInstance());
-   postLoadInit(ObjectStoreTyped<BoilStep                  >::getInstance());
+   postLoadInit(ObjectStoreTyped<Boil                     >::getInstance());
+   postLoadInit(ObjectStoreTyped<BoilStep                 >::getInstance());
    postLoadInit(ObjectStoreTyped<BrewLog                  >::getInstance());
-   postLoadInit(ObjectStoreTyped<Equipment                 >::getInstance());
-   postLoadInit(ObjectStoreTyped<Fermentable               >::getInstance());
-   postLoadInit(ObjectStoreTyped<Fermentation              >::getInstance());
-   postLoadInit(ObjectStoreTyped<FermentationStep          >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Recipe      >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Style       >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Equipment   >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Mash        >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Boil        >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Fermentation>      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Fermentable >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Hop         >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Misc        >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Salt        >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Water       >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Folder<Yeast       >      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Hop                       >::getInstance());
-   postLoadInit(ObjectStoreTyped<Instruction               >::getInstance());
-   postLoadInit(ObjectStoreTyped<StockUseFermentable       >::getInstance());
-   postLoadInit(ObjectStoreTyped<StockUseHop               >::getInstance());
-   postLoadInit(ObjectStoreTyped<StockUseMisc              >::getInstance());
-   postLoadInit(ObjectStoreTyped<StockUseSalt              >::getInstance());
-   postLoadInit(ObjectStoreTyped<StockUseYeast             >::getInstance());
-   postLoadInit(ObjectStoreTyped<StockPurchaseFermentable  >::getInstance());
-   postLoadInit(ObjectStoreTyped<StockPurchaseHop          >::getInstance());
-   postLoadInit(ObjectStoreTyped<StockPurchaseMisc         >::getInstance());
-   postLoadInit(ObjectStoreTyped<StockPurchaseSalt         >::getInstance());
-   postLoadInit(ObjectStoreTyped<StockPurchaseYeast        >::getInstance());
-   postLoadInit(ObjectStoreTyped<Mash                      >::getInstance());
-   postLoadInit(ObjectStoreTyped<MashStep                  >::getInstance());
-   postLoadInit(ObjectStoreTyped<Misc                      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Recipe                    >::getInstance());
-   postLoadInit(ObjectStoreTyped<RecipeAdditionFermentable >::getInstance());
-   postLoadInit(ObjectStoreTyped<RecipeAdditionHop         >::getInstance());
-   postLoadInit(ObjectStoreTyped<RecipeAdditionMisc        >::getInstance());
-   postLoadInit(ObjectStoreTyped<RecipeAdditionYeast       >::getInstance());
-   postLoadInit(ObjectStoreTyped<RecipeAdjustmentSalt      >::getInstance());
-   postLoadInit(ObjectStoreTyped<RecipeUseOfWater          >::getInstance());
-   postLoadInit(ObjectStoreTyped<Salt                      >::getInstance());
-   postLoadInit(ObjectStoreTyped<Style                     >::getInstance());
-   postLoadInit(ObjectStoreTyped<Water                     >::getInstance());
-   postLoadInit(ObjectStoreTyped<Yeast                     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Equipment                >::getInstance());
+   postLoadInit(ObjectStoreTyped<Fermentable              >::getInstance());
+   postLoadInit(ObjectStoreTyped<Fermentation             >::getInstance());
+   postLoadInit(ObjectStoreTyped<FermentationStep         >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Recipe      >     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Style       >     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Equipment   >     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Mash        >     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Boil        >     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Fermentation>     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Fermentable >     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Hop         >     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Misc        >     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Water       >     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Folder<Yeast          >  >::getInstance());
+   postLoadInit(ObjectStoreTyped<Hop                      >::getInstance());
+   postLoadInit(ObjectStoreTyped<Instruction              >::getInstance());
+   postLoadInit(ObjectStoreTyped<StockUseFermentable      >::getInstance());
+   postLoadInit(ObjectStoreTyped<StockUseHop              >::getInstance());
+   postLoadInit(ObjectStoreTyped<StockUseMisc             >::getInstance());
+   postLoadInit(ObjectStoreTyped<StockUseYeast            >::getInstance());
+   postLoadInit(ObjectStoreTyped<StockPurchaseFermentable >::getInstance());
+   postLoadInit(ObjectStoreTyped<StockPurchaseHop         >::getInstance());
+   postLoadInit(ObjectStoreTyped<StockPurchaseMisc        >::getInstance());
+   postLoadInit(ObjectStoreTyped<StockPurchaseYeast       >::getInstance());
+   postLoadInit(ObjectStoreTyped<Mash                     >::getInstance());
+   postLoadInit(ObjectStoreTyped<MashStep                 >::getInstance());
+   postLoadInit(ObjectStoreTyped<Misc                     >::getInstance());
+   postLoadInit(ObjectStoreTyped<Recipe                   >::getInstance());
+   postLoadInit(ObjectStoreTyped<RecipeAdditionFermentable>::getInstance());
+   postLoadInit(ObjectStoreTyped<RecipeAdditionHop        >::getInstance());
+   postLoadInit(ObjectStoreTyped<RecipeAdditionMisc       >::getInstance());
+   postLoadInit(ObjectStoreTyped<RecipeAdditionYeast      >::getInstance());
+   postLoadInit(ObjectStoreTyped<Style                    >::getInstance());
+   postLoadInit(ObjectStoreTyped<Water                    >::getInstance());
+   postLoadInit(ObjectStoreTyped<Yeast                    >::getInstance());
 
    return true;
 }
@@ -1190,51 +1102,45 @@ namespace {
    QVector<ObjectStore const *> getAllObjectStores(Database * database = nullptr) {
       // NOTE: This is the 4th of 4 places we need to add any new ObjectStoreTyped
       static QVector<ObjectStore const *> allObjectStores {
-         &ObjectStoreTyped<Boil                      >::getInstance(database),
-         &ObjectStoreTyped<BoilStep                  >::getInstance(database),
+         &ObjectStoreTyped<Boil                     >::getInstance(database),
+         &ObjectStoreTyped<BoilStep                 >::getInstance(database),
          &ObjectStoreTyped<BrewLog                  >::getInstance(database),
-         &ObjectStoreTyped<Equipment                 >::getInstance(database),
-         &ObjectStoreTyped<Fermentable               >::getInstance(database),
-         &ObjectStoreTyped<Fermentation              >::getInstance(database),
-         &ObjectStoreTyped<FermentationStep          >::getInstance(database),
-         &ObjectStoreTyped<Folder<Recipe      >      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Style       >      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Equipment   >      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Mash        >      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Boil        >      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Fermentation>      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Fermentable >      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Hop         >      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Misc        >      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Salt        >      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Water       >      >::getInstance(database),
-         &ObjectStoreTyped<Folder<Yeast       >      >::getInstance(database),
-         &ObjectStoreTyped<Hop                       >::getInstance(database),
-         &ObjectStoreTyped<Instruction               >::getInstance(database),
-         &ObjectStoreTyped<StockUseFermentable       >::getInstance(database),
-         &ObjectStoreTyped<StockUseHop               >::getInstance(database),
-         &ObjectStoreTyped<StockUseMisc              >::getInstance(database),
-         &ObjectStoreTyped<StockUseSalt              >::getInstance(database),
-         &ObjectStoreTyped<StockUseYeast             >::getInstance(database),
-         &ObjectStoreTyped<StockPurchaseFermentable  >::getInstance(database),
-         &ObjectStoreTyped<StockPurchaseHop          >::getInstance(database),
-         &ObjectStoreTyped<StockPurchaseMisc         >::getInstance(database),
-         &ObjectStoreTyped<StockPurchaseSalt         >::getInstance(database),
-         &ObjectStoreTyped<StockPurchaseYeast        >::getInstance(database),
-         &ObjectStoreTyped<Mash                      >::getInstance(database),
-         &ObjectStoreTyped<MashStep                  >::getInstance(database),
-         &ObjectStoreTyped<Misc                      >::getInstance(database),
-         &ObjectStoreTyped<Recipe                    >::getInstance(database),
-         &ObjectStoreTyped<RecipeAdditionFermentable >::getInstance(database),
-         &ObjectStoreTyped<RecipeAdditionHop         >::getInstance(database),
-         &ObjectStoreTyped<RecipeAdditionMisc        >::getInstance(database),
-         &ObjectStoreTyped<RecipeAdditionYeast       >::getInstance(database),
-         &ObjectStoreTyped<RecipeAdjustmentSalt      >::getInstance(database),
-         &ObjectStoreTyped<RecipeUseOfWater          >::getInstance(database),
-         &ObjectStoreTyped<Salt                      >::getInstance(database),
-         &ObjectStoreTyped<Style                     >::getInstance(database),
-         &ObjectStoreTyped<Water                     >::getInstance(database),
-         &ObjectStoreTyped<Yeast                     >::getInstance(database),
+         &ObjectStoreTyped<Equipment                >::getInstance(database),
+         &ObjectStoreTyped<Fermentable              >::getInstance(database),
+         &ObjectStoreTyped<Fermentation             >::getInstance(database),
+         &ObjectStoreTyped<FermentationStep         >::getInstance(database),
+         &ObjectStoreTyped<Folder<Recipe      >     >::getInstance(database),
+         &ObjectStoreTyped<Folder<Style       >     >::getInstance(database),
+         &ObjectStoreTyped<Folder<Equipment   >     >::getInstance(database),
+         &ObjectStoreTyped<Folder<Mash        >     >::getInstance(database),
+         &ObjectStoreTyped<Folder<Boil        >     >::getInstance(database),
+         &ObjectStoreTyped<Folder<Fermentation>     >::getInstance(database),
+         &ObjectStoreTyped<Folder<Fermentable >     >::getInstance(database),
+         &ObjectStoreTyped<Folder<Hop         >     >::getInstance(database),
+         &ObjectStoreTyped<Folder<Misc        >     >::getInstance(database),
+         &ObjectStoreTyped<Folder<Water       >     >::getInstance(database),
+         &ObjectStoreTyped<Folder<Yeast       >     >::getInstance(database),
+         &ObjectStoreTyped<Hop                      >::getInstance(database),
+         &ObjectStoreTyped<Instruction              >::getInstance(database),
+         &ObjectStoreTyped<StockUseFermentable      >::getInstance(database),
+         &ObjectStoreTyped<StockUseHop              >::getInstance(database),
+         &ObjectStoreTyped<StockUseMisc             >::getInstance(database),
+         &ObjectStoreTyped<StockUseYeast            >::getInstance(database),
+         &ObjectStoreTyped<StockPurchaseFermentable >::getInstance(database),
+         &ObjectStoreTyped<StockPurchaseHop         >::getInstance(database),
+         &ObjectStoreTyped<StockPurchaseMisc        >::getInstance(database),
+         &ObjectStoreTyped<StockPurchaseYeast       >::getInstance(database),
+         &ObjectStoreTyped<Mash                     >::getInstance(database),
+         &ObjectStoreTyped<MashStep                 >::getInstance(database),
+         &ObjectStoreTyped<Misc                     >::getInstance(database),
+         &ObjectStoreTyped<Recipe                   >::getInstance(database),
+         &ObjectStoreTyped<RecipeAdditionFermentable>::getInstance(database),
+         &ObjectStoreTyped<RecipeAdditionHop        >::getInstance(database),
+         &ObjectStoreTyped<RecipeAdditionMisc       >::getInstance(database),
+         &ObjectStoreTyped<RecipeAdditionYeast      >::getInstance(database),
+         &ObjectStoreTyped<Style                    >::getInstance(database),
+         &ObjectStoreTyped<Water                    >::getInstance(database),
+         &ObjectStoreTyped<Yeast                    >::getInstance(database),
       };
       return allObjectStores;
    }

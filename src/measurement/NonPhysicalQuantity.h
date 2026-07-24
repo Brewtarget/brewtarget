@@ -36,7 +36,7 @@ enum class NonPhysicalQuantity {
    //! This usually means we need a \c BtComboBoxEnum
    Enum,
    /**
-    * This is for things like step number and other orderings where we have 1st, 2nd, 3rd etc (though its usually
+    * This is for things like step number and other orderings where we have 1st, 2nd, 3rd etc (though it's usually
     * presented as step #1, step #2, step #3, etc) and should usually be stored in an int (or unsigned int).
     *
     * This is also used for "number of times" something has been done or is to be done.  Eg number of times a yeast

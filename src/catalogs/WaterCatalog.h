@@ -22,7 +22,6 @@
 
 #include "editors/WaterEditor.h"
 #include "model/Water.h"
-#include "model/RecipeUseOfWater.h"
 #include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
 #include "qtModels/tableModels/WaterTableModel.h"
 
@@ -34,7 +33,7 @@
 /*!
  * \class WaterCatalog
  *
- * \brief View/controller class for showing/editing the list of salts in the database.
+ * \brief View/controller class for showing/editing the list of water profiles in the database.
  */
 class WaterCatalog : public QDialog, public CatalogBase<WaterCatalog,
                                                         Water,

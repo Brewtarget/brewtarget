@@ -44,7 +44,6 @@ template void CommonContextMenuHelper::doAddToOrSetForRecipe<Fermentation>(std::
 template void CommonContextMenuHelper::doAddToOrSetForRecipe<Hop         >(std::shared_ptr<Hop         > selected);
 template void CommonContextMenuHelper::doAddToOrSetForRecipe<Mash        >(std::shared_ptr<Mash        > selected);
 template void CommonContextMenuHelper::doAddToOrSetForRecipe<Misc        >(std::shared_ptr<Misc        > selected);
-template void CommonContextMenuHelper::doAddToOrSetForRecipe<Salt        >(std::shared_ptr<Salt        > selected);
 template void CommonContextMenuHelper::doAddToOrSetForRecipe<Style       >(std::shared_ptr<Style       > selected);
 template void CommonContextMenuHelper::doAddToOrSetForRecipe<Water       >(std::shared_ptr<Water       > selected);
 template void CommonContextMenuHelper::doAddToOrSetForRecipe<Yeast       >(std::shared_ptr<Yeast       > selected);

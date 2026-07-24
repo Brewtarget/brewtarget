@@ -40,39 +40,40 @@
 #endif
 
 QString Fermentable::localisedName() { return tr("Fermentable"); }
-QString Fermentable::localisedName_alphaAmylase_dextUnits() { return tr("Alpha Amylase"               ); }
-QString Fermentable::localisedName_betaGlucan_ppm        () { return tr("Beta Glucan"                 ); }
-QString Fermentable::localisedName_coarseFineDiff_pct    () { return tr("Coarse Fine Diff"            ); }
-QString Fermentable::localisedName_coarseGrindYield_pct  () { return tr("Coarse Grind Yield"          ); }
-QString Fermentable::localisedName_color_lovibond        () { return tr("Color"                       ); } // See header file comment
-QString Fermentable::localisedName_color_srm             () { return tr("Color"                       ); }
-QString Fermentable::localisedName_diastaticPower_lintner() { return tr("Diastatic Power"             ); }
-QString Fermentable::localisedName_di_ph                 () { return tr("DI pH"                       ); }
-QString Fermentable::localisedName_dmsP_ppm              () { return tr("DMS precursors"              ); }
-QString Fermentable::localisedName_fan_ppm               () { return tr("Free Amino Nitrogen (FAN)"   ); }
-QString Fermentable::localisedName_fermentability_pct    () { return tr("Fermentability"              ); }
-QString Fermentable::localisedName_fineGrindYield_pct    () { return tr("Yield (DBFG) %"              ); } // We'll treat this as default yield, for now at least
-QString Fermentable::localisedName_friability_pct        () { return tr("Friability"                  ); }
-QString Fermentable::localisedName_grainGroup            () { return tr("Grain Group"                 ); }
-QString Fermentable::localisedName_hardnessPrpGlassy_pct () { return tr("Hardness Proportion Glassy"  ); }
-QString Fermentable::localisedName_hardnessPrpHalf_pct   () { return tr("Hardness Proportion Half"    ); }
-QString Fermentable::localisedName_hardnessPrpMealy_pct  () { return tr("Hardness Proportion Mealy"   ); }
-QString Fermentable::localisedName_ibuGalPerLb           () { return tr("IBU Gal Per Lb"              ); }
-QString Fermentable::localisedName_kernelSizePrpPlump_pct() { return tr("Kernel Size Proportion Plump"); }
-QString Fermentable::localisedName_kernelSizePrpThin_pct () { return tr("Kernel Size Proportion Thin" ); }
-QString Fermentable::localisedName_kolbachIndex_pct      () { return tr("Kolbach Index"               ); }
-QString Fermentable::localisedName_maxInBatch_pct        () { return tr("Max In Batch"                ); }
-QString Fermentable::localisedName_moisture_pct          () { return tr("Moisture"                    ); }
-QString Fermentable::localisedName_notes                 () { return tr("Notes"                       ); }
-QString Fermentable::localisedName_origin                () { return tr("Origin"                      ); }
-QString Fermentable::localisedName_potentialYield_sg     () { return tr("Potential Yield"             ); }
-QString Fermentable::localisedName_producer              () { return tr("Producer"                    ); }
-QString Fermentable::localisedName_productId             () { return tr("Product ID"                  ); }
-QString Fermentable::localisedName_protein_pct           () { return tr("Protein"                     ); }
-QString Fermentable::localisedName_recommendMash         () { return tr("Recommend Mash"              ); }
-QString Fermentable::localisedName_supplier              () { return tr("Supplier"                    ); }
-QString Fermentable::localisedName_type                  () { return tr("Type"                        ); }
-QString Fermentable::localisedName_viscosity_cP          () { return tr("Viscosity"                   ); }
+QString Fermentable::localisedName_alphaAmylase_dextUnits() { return tr("Alpha Amylase"                 ); }
+QString Fermentable::localisedName_betaGlucan_ppm        () { return tr("Beta Glucan"                   ); }
+QString Fermentable::localisedName_coarseFineDiff_pct    () { return tr("Coarse Fine Diff"              ); }
+QString Fermentable::localisedName_coarseGrindYield_pct  () { return tr("Coarse Grind Yield"            ); }
+QString Fermentable::localisedName_color_lovibond        () { return tr("Color"                         ); } // See header file comment
+QString Fermentable::localisedName_color_srm             () { return tr("Color"                         ); }
+QString Fermentable::localisedName_diastaticPower_lintner() { return tr("Diastatic Power"               ); }
+QString Fermentable::localisedName_di_ph                 () { return tr("DI pH"                         ); }
+QString Fermentable::localisedName_dmsP_ppm              () { return tr("DMS precursors"                ); }
+QString Fermentable::localisedName_fan_ppm               () { return tr("Free Amino Nitrogen (FAN)"     ); }
+QString Fermentable::localisedName_fermentability_pct    () { return tr("Fermentability"                ); }
+QString Fermentable::localisedName_fineGrindYield_pct    () { return tr("Yield (DBFG) %"                ); } // We'll treat this as default yield, for now at least
+QString Fermentable::localisedName_friability_pct        () { return tr("Friability"                    ); }
+QString Fermentable::localisedName_grainGroup            () { return tr("Grain Group"                   ); }
+QString Fermentable::localisedName_hardnessPrpGlassy_pct () { return tr("Hardness Proportion Glassy"    ); }
+QString Fermentable::localisedName_hardnessPrpHalf_pct   () { return tr("Hardness Proportion Half"      ); }
+QString Fermentable::localisedName_hardnessPrpMealy_pct  () { return tr("Hardness Proportion Mealy"     ); }
+QString Fermentable::localisedName_ibuGalPerLb           () { return tr("IBU Gal Per Lb"                ); }
+QString Fermentable::localisedName_kernelSizePrpPlump_pct() { return tr("Kernel Size Proportion Plump"  ); }
+QString Fermentable::localisedName_kernelSizePrpThin_pct () { return tr("Kernel Size Proportion Thin"   ); }
+QString Fermentable::localisedName_kolbachIndex_pct      () { return tr("Kolbach Index"                 ); }
+QString Fermentable::localisedName_lacticAcidByWeight_pct() { return tr("Lactic Acid content (% weight)"); }
+QString Fermentable::localisedName_maxInBatch_pct        () { return tr("Max In Batch"                  ); }
+QString Fermentable::localisedName_moisture_pct          () { return tr("Moisture"                      ); }
+QString Fermentable::localisedName_notes                 () { return tr("Notes"                         ); }
+QString Fermentable::localisedName_origin                () { return tr("Origin"                        ); }
+QString Fermentable::localisedName_potentialYield_sg     () { return tr("Potential Yield"               ); }
+QString Fermentable::localisedName_producer              () { return tr("Producer"                      ); }
+QString Fermentable::localisedName_productId             () { return tr("Product ID"                    ); }
+QString Fermentable::localisedName_protein_pct           () { return tr("Protein"                       ); }
+QString Fermentable::localisedName_recommendMash         () { return tr("Recommend Mash"                ); }
+QString Fermentable::localisedName_supplier              () { return tr("Supplier"                      ); }
+QString Fermentable::localisedName_type                  () { return tr("Type"                          ); }
+QString Fermentable::localisedName_viscosity_cP          () { return tr("Viscosity"                     ); }
 
 // Note that Fermentable::typeStringMapping and Fermentable::grainGroupStringMapping are as defined by BeerJSON, but we
 // also use them for the DB and for the UI.  We can't use them for BeerXML as it only supports subsets of these types.
@@ -170,6 +171,7 @@ bool Fermentable::compareWith(NamedEntity const & other, QList<BtStringConst con
       AUTO_PROPERTY_COMPARE(this, rhs, m_fermentability_pct    , PropertyNames::Fermentable::fermentability_pct    , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_betaGlucan_ppm        , PropertyNames::Fermentable::betaGlucan_ppm        , propertiesThatDiffer) &&
       // Non-BeerJSON fields
+      AUTO_PROPERTY_COMPARE(this, rhs, m_lacticAcidByWeight_pct, PropertyNames::Fermentable::lacticAcidByWeight_pct, propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_supplier              , PropertyNames::Fermentable::supplier              , propertiesThatDiffer)
    );
 }
@@ -206,7 +208,7 @@ TypeLookup const Fermentable::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, productId             , m_productId             ,           NonPhysicalQuantity::String        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, fineGrindYield_pct    , m_fineGrindYield_pct    ,           NonPhysicalQuantity::Percentage    , DisplayInfo::Precision{1}),
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, coarseGrindYield_pct  , m_coarseGrindYield_pct  ,           NonPhysicalQuantity::Percentage    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, potentialYield_sg     , m_potentialYield_sg     , Measurement::PhysicalQuantity::Density       ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, potentialYield_sg     , m_potentialYield_sg     , Measurement::PhysicalQuantity::Gravity       ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, alphaAmylase_dextUnits, m_alphaAmylase_dextUnits,           NonPhysicalQuantity::Dimensionless ), // Not really dimensionless...
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, kolbachIndex_pct      , m_kolbachIndex_pct      ,           NonPhysicalQuantity::Percentage    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, hardnessPrpGlassy_pct , m_hardnessPrpGlassy_pct ,           NonPhysicalQuantity::Percentage    ),
@@ -217,10 +219,12 @@ TypeLookup const Fermentable::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, friability_pct        , m_friability_pct        ,           NonPhysicalQuantity::Percentage    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, di_ph                 , m_di_ph                 , Measurement::PhysicalQuantity::Acidity       ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, viscosity_cP          , m_viscosity_cP          , Measurement::PhysicalQuantity::Viscosity     ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, dmsP_ppm              , m_dmsP_ppm              , Measurement::PhysicalQuantity::MassFractionOrConc),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, fan_ppm               , m_fan_ppm               , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, dmsP_ppm              , m_dmsP_ppm              , Measurement::PhysicalQuantity::MassFractionOrConcentration),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, fan_ppm               , m_fan_ppm               , Measurement::PhysicalQuantity::MassFractionOrConcentration),
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, fermentability_pct    , m_fermentability_pct    ,           NonPhysicalQuantity::Percentage    ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, betaGlucan_ppm        , m_betaGlucan_ppm        , Measurement::PhysicalQuantity::MassFractionOrConc),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, betaGlucan_ppm        , m_betaGlucan_ppm        , Measurement::PhysicalQuantity::MassFractionOrConcentration),
+      //
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, lacticAcidByWeight_pct, m_lacticAcidByWeight_pct,           NonPhysicalQuantity::Percentage    ),
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,
@@ -231,40 +235,7 @@ static_assert(std::is_base_of<FolderPropertyBase<Fermentable>, Fermentable>::val
 
 Fermentable::Fermentable(QString const & name) :
    Ingredient                 {name},
-   FolderPropertyBase         {},
-   m_type                     {Fermentable::Type::Grain},
-   m_color_lovibond           {0.0                     },
-   m_origin                   {""                      },
-   m_supplier                 {""                      },
-   m_notes                    {""                      },
-   m_coarseFineDiff_pct       {std::nullopt            },
-   m_moisture_pct             {std::nullopt            },
-   m_diastaticPower_lintner   {std::nullopt            },
-   m_protein_pct              {std::nullopt            },
-   m_maxInBatch_pct           {std::nullopt            },
-   m_recommendMash            {std::nullopt            },
-   m_ibuGalPerLb              {std::nullopt            },
-   // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   m_grainGroup               {std::nullopt            },
-   m_producer                 {""                      },
-   m_productId                {""                      },
-   m_fineGrindYield_pct       {std::nullopt            },
-   m_coarseGrindYield_pct     {std::nullopt            },
-   m_potentialYield_sg        {std::nullopt            },
-   m_alphaAmylase_dextUnits   {std::nullopt            },
-   m_kolbachIndex_pct         {std::nullopt            },
-   m_hardnessPrpGlassy_pct    {std::nullopt            },
-   m_hardnessPrpHalf_pct      {std::nullopt            },
-   m_hardnessPrpMealy_pct     {std::nullopt            },
-   m_kernelSizePrpPlump_pct   {std::nullopt            },
-   m_kernelSizePrpThin_pct    {std::nullopt            },
-   m_friability_pct           {std::nullopt            },
-   m_di_ph                    {std::nullopt            },
-   m_viscosity_cP             {std::nullopt            },
-   m_dmsP_ppm                 {std::nullopt            },
-   m_fan_ppm                  {std::nullopt            },
-   m_fermentability_pct       {std::nullopt            },
-   m_betaGlucan_ppm           {std::nullopt            } {
+   FolderPropertyBase         {} {
 
    CONSTRUCTOR_END
    return;
@@ -305,7 +276,9 @@ Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_dmsP_ppm                           , namedParameterBundle, PropertyNames::Fermentable::dmsP_ppm              , std::nullopt),
    SET_REGULAR_FROM_NPB (m_fan_ppm                            , namedParameterBundle, PropertyNames::Fermentable::fan_ppm               , std::nullopt),
    SET_REGULAR_FROM_NPB (m_fermentability_pct                 , namedParameterBundle, PropertyNames::Fermentable::fermentability_pct    , std::nullopt),
-   SET_REGULAR_FROM_NPB (m_betaGlucan_ppm                     , namedParameterBundle, PropertyNames::Fermentable::betaGlucan_ppm        , std::nullopt) {
+   SET_REGULAR_FROM_NPB (m_betaGlucan_ppm                     , namedParameterBundle, PropertyNames::Fermentable::betaGlucan_ppm        , std::nullopt),
+   //
+   SET_REGULAR_FROM_NPB (m_lacticAcidByWeight_pct             , namedParameterBundle, PropertyNames::Fermentable::lacticAcidByWeight_pct, std::nullopt) {
 
    // The bundle should have either color_lovibond (BeerXML, DB) or color_srm (BeerJSON) set, but not both
    if (!SET_IF_PRESENT_FROM_NPB_NO_MV(Fermentable::setColor_lovibond, namedParameterBundle, PropertyNames::Fermentable::color_lovibond) &&
@@ -356,7 +329,9 @@ Fermentable::Fermentable(Fermentable const & other) :
    m_dmsP_ppm              {other.m_dmsP_ppm              },
    m_fan_ppm               {other.m_fan_ppm               },
    m_fermentability_pct    {other.m_fermentability_pct    },
-   m_betaGlucan_ppm        {other.m_betaGlucan_ppm        } {
+   m_betaGlucan_ppm        {other.m_betaGlucan_ppm        },
+   //
+   m_lacticAcidByWeight_pct{other.m_lacticAcidByWeight_pct} {
 
    CONSTRUCTOR_END
    return;
@@ -403,6 +378,8 @@ std::optional<double>                  Fermentable::dmsP_ppm                 () 
 std::optional<double>                  Fermentable::fan_ppm                  () const { return                    this->m_fan_ppm                  ; }
 std::optional<double>                  Fermentable::fermentability_pct       () const { return                    this->m_fermentability_pct       ; }
 std::optional<double>                  Fermentable::betaGlucan_ppm           () const { return                    this->m_betaGlucan_ppm           ; }
+//
+std::optional<double>                  Fermentable::lacticAcidByWeight_pct   () const { return                    this->m_lacticAcidByWeight_pct   ; }
 
 bool Fermentable::isExtract() const {
    return ((type() == Fermentable::Type::Extract) || (type() == Fermentable::Type::Dry_Extract));
@@ -432,27 +409,29 @@ void Fermentable::setDiastaticPower_lintner   (std::optional<double>     const  
 void Fermentable::setProtein_pct              (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::protein_pct              , this->m_protein_pct              , this->enforceMinAndMax(val, "protein",        0.0, 100.0)); return; }
 void Fermentable::setMaxInBatch_pct           (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::maxInBatch_pct           , this->m_maxInBatch_pct           , this->enforceMinAndMax(val, "max in batch",   0.0, 100.0)); return; }
 // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-void Fermentable::setGrainGroup               (std::optional<GrainGroup> const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::grainGroup               , this->m_grainGroup               , val                                  ); return; }
+void Fermentable::setGrainGroup               (std::optional<GrainGroup> const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::grainGroup               , this->m_grainGroup               , val); return; }
 void Fermentable::setGrainGroupAsInt          (std::optional<int>        const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::grainGroup               , this->m_grainGroup               , Optional::fromOptInt<GrainGroup>(val)); return; }
-void Fermentable::setProducer                 (QString                   const & val) { SET_AND_NOTIFY(PropertyNames::Fermentable::producer                 , this->m_producer                 , val                                  ); return; }
-void Fermentable::setProductId                (QString                   const & val) { SET_AND_NOTIFY(PropertyNames::Fermentable::productId                , this->m_productId                , val                                  ); return; }
-void Fermentable::setFineGrindYield_pct       (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::fineGrindYield_pct       , this->m_fineGrindYield_pct       , val                                  ); return; }
-void Fermentable::setCoarseGrindYield_pct     (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::coarseGrindYield_pct     , this->m_coarseGrindYield_pct     , val                                  ); return; }
-void Fermentable::setPotentialYield_sg        (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::potentialYield_sg        , this->m_potentialYield_sg        , val                                  ); return; }
-void Fermentable::setAlphaAmylase_dextUnits   (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::alphaAmylase_dextUnits   , this->m_alphaAmylase_dextUnits   , val                                  ); return; }
-void Fermentable::setKolbachIndex_pct         (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::kolbachIndex_pct         , this->m_kolbachIndex_pct         , val                                  ); return; }
-void Fermentable::setHardnessPrpGlassy_pct    (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::hardnessPrpGlassy_pct    , this->m_hardnessPrpGlassy_pct    , val                                  ); return; }
-void Fermentable::setHardnessPrpHalf_pct      (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::hardnessPrpHalf_pct      , this->m_hardnessPrpHalf_pct      , val                                  ); return; }
-void Fermentable::setHardnessPrpMealy_pct     (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::hardnessPrpMealy_pct     , this->m_hardnessPrpMealy_pct     , val                                  ); return; }
-void Fermentable::setKernelSizePrpPlump_pct   (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::kernelSizePrpPlump_pct   , this->m_kernelSizePrpPlump_pct   , val                                  ); return; }
-void Fermentable::setKernelSizePrpThin_pct    (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::kernelSizePrpThin_pct    , this->m_kernelSizePrpThin_pct    , val                                  ); return; }
-void Fermentable::setFriability_pct           (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::friability_pct           , this->m_friability_pct           , val                                  ); return; }
-void Fermentable::setDi_ph                    (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::di_ph                    , this->m_di_ph                    , val                                  ); return; }
-void Fermentable::setViscosity_cP             (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::viscosity_cP             , this->m_viscosity_cP             , val                                  ); return; }
-void Fermentable::setDmsP_ppm                 (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::dmsP_ppm                 , this->m_dmsP_ppm                     , val                                  ); return; }
-void Fermentable::setFan_ppm                  (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::fan_ppm                  , this->m_fan_ppm                      , val                                  ); return; }
-void Fermentable::setFermentability_pct       (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::fermentability_pct       , this->m_fermentability_pct       , val                                  ); return; }
-void Fermentable::setBetaGlucan_ppm           (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::betaGlucan_ppm           , this->m_betaGlucan_ppm               , val                                  ); return; }
+void Fermentable::setProducer                 (QString                   const & val) { SET_AND_NOTIFY(PropertyNames::Fermentable::producer                 , this->m_producer                 , val); return; }
+void Fermentable::setProductId                (QString                   const & val) { SET_AND_NOTIFY(PropertyNames::Fermentable::productId                , this->m_productId                , val); return; }
+void Fermentable::setFineGrindYield_pct       (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::fineGrindYield_pct       , this->m_fineGrindYield_pct       , val); return; }
+void Fermentable::setCoarseGrindYield_pct     (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::coarseGrindYield_pct     , this->m_coarseGrindYield_pct     , val); return; }
+void Fermentable::setPotentialYield_sg        (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::potentialYield_sg        , this->m_potentialYield_sg        , val); return; }
+void Fermentable::setAlphaAmylase_dextUnits   (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::alphaAmylase_dextUnits   , this->m_alphaAmylase_dextUnits   , val); return; }
+void Fermentable::setKolbachIndex_pct         (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::kolbachIndex_pct         , this->m_kolbachIndex_pct         , val); return; }
+void Fermentable::setHardnessPrpGlassy_pct    (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::hardnessPrpGlassy_pct    , this->m_hardnessPrpGlassy_pct    , val); return; }
+void Fermentable::setHardnessPrpHalf_pct      (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::hardnessPrpHalf_pct      , this->m_hardnessPrpHalf_pct      , val); return; }
+void Fermentable::setHardnessPrpMealy_pct     (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::hardnessPrpMealy_pct     , this->m_hardnessPrpMealy_pct     , val); return; }
+void Fermentable::setKernelSizePrpPlump_pct   (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::kernelSizePrpPlump_pct   , this->m_kernelSizePrpPlump_pct   , val); return; }
+void Fermentable::setKernelSizePrpThin_pct    (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::kernelSizePrpThin_pct    , this->m_kernelSizePrpThin_pct    , val); return; }
+void Fermentable::setFriability_pct           (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::friability_pct           , this->m_friability_pct           , val); return; }
+void Fermentable::setDi_ph                    (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::di_ph                    , this->m_di_ph                    , val); return; }
+void Fermentable::setViscosity_cP             (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::viscosity_cP             , this->m_viscosity_cP             , val); return; }
+void Fermentable::setDmsP_ppm                 (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::dmsP_ppm                 , this->m_dmsP_ppm                 , val); return; }
+void Fermentable::setFan_ppm                  (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::fan_ppm                  , this->m_fan_ppm                  , val); return; }
+void Fermentable::setFermentability_pct       (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::fermentability_pct       , this->m_fermentability_pct       , val); return; }
+void Fermentable::setBetaGlucan_ppm           (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::betaGlucan_ppm           , this->m_betaGlucan_ppm           , val); return; }
+//
+void Fermentable::setLacticAcidByWeight_pct   (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::lacticAcidByWeight_pct   , this->m_lacticAcidByWeight_pct   , val); return; }
 
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Fermentable)

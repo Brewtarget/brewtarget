@@ -67,16 +67,6 @@ class StockPurchaseMiscTreeSortFilterProxyModel :
    TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseMisc, StockUseMisc)
 };
 
-class StockPurchaseSaltTreeSortFilterProxyModel :
-   public QSortFilterProxyModel,
-   public TreeSortFilterProxyModelBase<StockPurchaseSaltTreeSortFilterProxyModel,
-                                       StockPurchaseSaltTreeModel,
-                                       StockPurchaseSalt,
-                                       StockUseSalt> {
-   Q_OBJECT
-   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(StockPurchaseSalt, StockUseSalt)
-};
-
 class StockPurchaseYeastTreeSortFilterProxyModel :
    public QSortFilterProxyModel,
    public TreeSortFilterProxyModelBase<StockPurchaseYeastTreeSortFilterProxyModel,
@@ -120,13 +110,6 @@ class MiscTreeSortFilterProxyModel :
    public TreeSortFilterProxyModelBase<MiscTreeSortFilterProxyModel, MiscTreeModel, Misc> {
    Q_OBJECT
    TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Misc)
-};
-
-class SaltTreeSortFilterProxyModel :
-   public QSortFilterProxyModel,
-   public TreeSortFilterProxyModelBase<SaltTreeSortFilterProxyModel, SaltTreeModel, Salt> {
-   Q_OBJECT
-   TREE_SORT_FILTER_PROXY_MODEL_COMMON_DECL(Salt)
 };
 
 class StyleTreeSortFilterProxyModel :

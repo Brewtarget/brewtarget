@@ -187,7 +187,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '5.1.2',
+        version: '5.2.0',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.63.0',
         default_options : ['cpp_std=c++23',
@@ -506,32 +506,28 @@ backtraceDependency = compiler.find_library('backtrace',
 #
 # See https://mesonbuild.com/Reference-manual_returned_dep.html for what info we can pull from a dependency object
 #
-# For BeerXML processing we need Xerces-C++ and Xalan-C++.  Meson can find both of these automatically in a couple of
-# different ways.  The official way is to use `dependency('xerces-c')` and `dependency('xalan-c')` which results in
-# calling pkg-config.  However, I don't think this gives us access to the paths of the libraries (which we want to
-# export for the packaging scripts -- see various comments about shared libraries in the `bt` build tool script).
-# Instead, we can have Meson use CMake's find_package(), as long as (a) CMake is installed(!) and (b) we provide the
-# right library names ('XercesC' per https://cmake.org/cmake/help/latest/module/FindXercesC.html and 'XalanC' per
-# https://cmake.org/cmake/help/latest/module/FindXalanC.html).
+# For BeerXML processing we need libxml2.  (Previously we used Xerces-C++ and Xalan-C++.)
 #
-xercesDependency = dependency('XercesC',
+# Although Meson can find libraries directly, we have been telling it to use CMake's find_package() instead, as this
+# gives us access to the paths of the libraries (which we want to export for the packaging scripts -- see various
+# comments about shared libraries in the `bt` build tool script).  Note that this means we need the CMake name of the
+# library rather than the Meson one.  (Eg 'xerces-c' = Meson name, 'XercesC' = CMake name.)  To find CMake module
+# names, look at https://cmake.org/cmake/help/latest/manual/cmake-modules.7.html
+#
+# As of 2026-07-18: the versions of libxml2 that ship with Ubuntu are:
+#   - libxml2 version 2.9.13 is the maximum available in Ubuntu 22.04 (Jammy).
+#   - libxml2 version 2.9.14 is the maximum available in Ubuntu 24.04 (Noble).
+#
+libxml2Dependency = dependency('LibXml2',
                               method : 'cmake',
-                              version : '>=3.2.2',
+                              version : '>=2.9.13',
                               required : true,
                               static : true)
-xercesLibPaths = xercesDependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
-message('Xerces Library:', xercesDependency.name(), 'found =', xercesDependency.found(),
-        'version =', xercesDependency.version(), 'path(s)=', xercesLibPaths)
-sharedLibraryPaths += xercesLibPaths
-xalanDependency = dependency('XalanC',
-                             method : 'cmake',
-                             version : '>=1.11.0',
-                             required : true,
-                             static : true)
-xalanLibPaths = xalanDependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
-message('Xalan Library:', xalanDependency.name(), 'found =', xalanDependency.found(),
-        'version =', xalanDependency.version(), 'path(s)=', xalanLibPaths)
-sharedLibraryPaths += xalanLibPaths
+libxml2LibPaths = libxml2Dependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
+message('libxml2 Library:', libxml2Dependency.name(), 'found =', libxml2Dependency.found(),
+        'version =', libxml2Dependency.version(), 'path(s)=', libxml2LibPaths)
+sharedLibraryPaths += libxml2LibPaths
+
 
 #======================================================= OpenSSL =======================================================
 # This is needed for us to use https with Boost.Asio
@@ -550,7 +546,11 @@ message('OpenSSL Library:', openSslDependency.name(), 'found =', openSslDependen
 
 #====================================================== Valijson =======================================================
 # Don't need to do anything special, other than set include directories below, as it's header-only and we pull it in as
-# a Git submodule.
+# a Git submodule.  We do, however, periodically need to run the following, to update to the latest version of it:
+#
+#    git submodule update --remote
+#
+add_global_arguments('-DVALIJSON_USE_EXCEPTIONS', language : 'cpp')
 
 #==================================================== Other headers ====================================================
 # Other directories to search in for headers.  Meson will barf an error if any of these directories does not exist.
@@ -638,7 +638,6 @@ commonSourceFiles = files([
    'src/buttons/MashButton.cpp',
    'src/buttons/RecipeAttributeButton.cpp',
    'src/buttons/StyleButton.cpp',
-   'src/buttons/WaterButton.cpp',
    'src/catalogs/BoilCatalog.cpp',
    'src/catalogs/EquipmentCatalog.cpp',
    'src/catalogs/FermentableCatalog.cpp',
@@ -646,7 +645,6 @@ commonSourceFiles = files([
    'src/catalogs/HopCatalog.cpp',
    'src/catalogs/MashCatalog.cpp',
    'src/catalogs/MiscCatalog.cpp',
-   'src/catalogs/SaltCatalog.cpp',
    'src/catalogs/StyleCatalog.cpp',
    'src/catalogs/WaterCatalog.cpp',
    'src/catalogs/YeastCatalog.cpp',
@@ -667,11 +665,9 @@ commonSourceFiles = files([
    'src/editors/MashEditor.cpp',
    'src/editors/MashStepEditor.cpp',
    'src/editors/MiscEditor.cpp',
-   'src/editors/SaltEditor.cpp',
    'src/editors/StockPurchaseFermentableEditor.cpp',
    'src/editors/StockPurchaseHopEditor.cpp',
    'src/editors/StockPurchaseMiscEditor.cpp',
-   'src/editors/StockPurchaseSaltEditor.cpp',
    'src/editors/StockPurchaseYeastEditor.cpp',
    'src/editors/StockUseIngredientEditor.cpp',
    'src/editors/StyleEditor.cpp',
@@ -713,17 +709,13 @@ commonSourceFiles = files([
    'src/model/RecipeAdditionHop.cpp',
    'src/model/RecipeAdditionMisc.cpp',
    'src/model/RecipeAdditionYeast.cpp',
-   'src/model/RecipeAdjustmentSalt.cpp',
-   'src/model/RecipeUseOfWater.cpp',
    'src/model/RecipeUtils.cpp',
-   'src/model/Salt.cpp',
    'src/model/Step.cpp',
    'src/model/StepExtended.cpp',
    'src/model/StockPurchase.cpp',
    'src/model/StockPurchaseFermentable.cpp',
    'src/model/StockPurchaseHop.cpp',
    'src/model/StockPurchaseMisc.cpp',
-   'src/model/StockPurchaseSalt.cpp',
    'src/model/StockPurchaseYeast.cpp',
    'src/model/StockUse.cpp',
    'src/model/StockUseIngredient.cpp',
@@ -742,9 +734,7 @@ commonSourceFiles = files([
    'src/qtModels/listModels/RecipeAdditionHopListModel.cpp',
    'src/qtModels/listModels/RecipeAdditionMiscListModel.cpp',
    'src/qtModels/listModels/RecipeAdditionYeastListModel.cpp',
-   'src/qtModels/listModels/RecipeAdjustmentSaltListModel.cpp',
    'src/qtModels/listModels/RecipeListModel.cpp',
-   'src/qtModels/listModels/SaltListModel.cpp',
    'src/qtModels/listModels/StyleListModel.cpp',
    'src/qtModels/listModels/WaterListModel.cpp',
    'src/qtModels/listModels/YeastListModel.cpp',
@@ -764,19 +754,17 @@ commonSourceFiles = files([
    'src/qtModels/tableModels/RecipeAdditionHopTableModel.cpp',
    'src/qtModels/tableModels/RecipeAdditionMiscTableModel.cpp',
    'src/qtModels/tableModels/RecipeAdditionYeastTableModel.cpp',
-   'src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.cpp',
    'src/qtModels/tableModels/RecipeTableModel.cpp',
-   'src/qtModels/tableModels/SaltTableModel.cpp',
    'src/qtModels/tableModels/StockUseFermentableTableModel.cpp',
    'src/qtModels/tableModels/StockUseHopTableModel.cpp',
    'src/qtModels/tableModels/StockUseMiscTableModel.cpp',
-   'src/qtModels/tableModels/StockUseSaltTableModel.cpp',
    'src/qtModels/tableModels/StockUseYeastTableModel.cpp',
    'src/qtModels/tableModels/StyleTableModel.cpp',
    'src/qtModels/tableModels/WaterTableModel.cpp',
    'src/qtModels/tableModels/YeastTableModel.cpp',
    'src/serialization/ImportExport.cpp',
-   'src/serialization/json/BeerJson.cpp',
+   'src/serialization/json/beerJson/BeerJson.cpp',
+   'src/serialization/json/dotBeer/DotBeer.cpp',
    'src/serialization/json/JsonCoding.cpp',
    'src/serialization/json/JsonMeasureableUnitsMapping.cpp',
    'src/serialization/json/JsonRecord.cpp',
@@ -785,9 +773,9 @@ commonSourceFiles = files([
    'src/serialization/json/JsonUtils.cpp',
    'src/serialization/json/JsonXPath.cpp',
    'src/serialization/xml/BeerXml.cpp',
-   'src/serialization/xml/BtDomErrorHandler.cpp',
-   'src/serialization/xml/XercesHelpers.cpp',
    'src/serialization/xml/XmlCoding.cpp',
+   'src/serialization/xml/XmlErrorHandler.cpp',
+   'src/serialization/xml/XmlLibHelpers.cpp',
    'src/serialization/xml/XmlMashRecord.cpp',
    'src/serialization/xml/XmlRecipeRecord.cpp',
    'src/serialization/xml/XmlRecord.cpp',
@@ -803,7 +791,6 @@ commonSourceFiles = files([
    'src/tools/ScaleRecipeTool.cpp',
    'src/tools/StrikeWaterDialog.cpp',
    'src/tools/TimerMainDialog.cpp',
-   'src/tools/WaterProfileAdjustmentTool.cpp',
    'src/trees/NamedEntityTreeModel.cpp',
    'src/trees/NamedEntityTreeSortFilterProxyModel.cpp',
    'src/trees/NamedEntityTreeView.cpp',
@@ -856,6 +843,7 @@ commonSourceFiles = files([
    'src/widgets/StockManager.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
+   'src/widgets/WaterAdjuster.cpp',
 ])
 
 applicationMainSourceFile = files([
@@ -911,7 +899,6 @@ mocHeaders = files([
    'src/buttons/MashButton.h',
    'src/buttons/RecipeAttributeButton.h',
    'src/buttons/StyleButton.h',
-   'src/buttons/WaterButton.h',
    'src/catalogs/BoilCatalog.h',
    'src/catalogs/EquipmentCatalog.h',
    'src/catalogs/FermentableCatalog.h',
@@ -919,7 +906,6 @@ mocHeaders = files([
    'src/catalogs/HopCatalog.h',
    'src/catalogs/MashCatalog.h',
    'src/catalogs/MiscCatalog.h',
-   'src/catalogs/SaltCatalog.h',
    'src/catalogs/StyleCatalog.h',
    'src/catalogs/WaterCatalog.h',
    'src/catalogs/YeastCatalog.h',
@@ -934,11 +920,9 @@ mocHeaders = files([
    'src/editors/MashEditor.h',
    'src/editors/MashStepEditor.h',
    'src/editors/MiscEditor.h',
-   'src/editors/SaltEditor.h',
    'src/editors/StockPurchaseFermentableEditor.h',
    'src/editors/StockPurchaseHopEditor.h',
    'src/editors/StockPurchaseMiscEditor.h',
-   'src/editors/StockPurchaseSaltEditor.h',
    'src/editors/StockPurchaseYeastEditor.h',
    'src/editors/StockUseIngredientEditor.h',
    'src/editors/StyleEditor.h',
@@ -967,16 +951,12 @@ mocHeaders = files([
    'src/model/RecipeAdditionHop.h',
    'src/model/RecipeAdditionMisc.h',
    'src/model/RecipeAdditionYeast.h',
-   'src/model/RecipeAdjustmentSalt.h',
-   'src/model/RecipeUseOfWater.h',
-   'src/model/Salt.h',
    'src/model/Step.h',
    'src/model/StepExtended.h',
    'src/model/StockPurchase.h',
    'src/model/StockPurchaseFermentable.h',
    'src/model/StockPurchaseHop.h',
    'src/model/StockPurchaseMisc.h',
-   'src/model/StockPurchaseSalt.h',
    'src/model/StockPurchaseYeast.h',
    'src/model/StockUse.h',
    'src/model/StockUseIngredient.h',
@@ -995,9 +975,7 @@ mocHeaders = files([
    'src/qtModels/listModels/RecipeAdditionHopListModel.h',
    'src/qtModels/listModels/RecipeAdditionMiscListModel.h',
    'src/qtModels/listModels/RecipeAdditionYeastListModel.h',
-   'src/qtModels/listModels/RecipeAdjustmentSaltListModel.h',
    'src/qtModels/listModels/RecipeListModel.h',
-   'src/qtModels/listModels/SaltListModel.h',
    'src/qtModels/listModels/StyleListModel.h',
    'src/qtModels/listModels/WaterListModel.h',
    'src/qtModels/listModels/YeastListModel.h',
@@ -1012,9 +990,7 @@ mocHeaders = files([
    'src/qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.h',
-   'src/qtModels/sortFilterProxyModels/RecipeAdjustmentSaltSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/RecipeSortFilterProxyModel.h',
-   'src/qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h',
    'src/qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.h',
@@ -1033,13 +1009,10 @@ mocHeaders = files([
    'src/qtModels/tableModels/RecipeAdditionHopTableModel.h',
    'src/qtModels/tableModels/RecipeAdditionMiscTableModel.h',
    'src/qtModels/tableModels/RecipeAdditionYeastTableModel.h',
-   'src/qtModels/tableModels/RecipeAdjustmentSaltTableModel.h',
    'src/qtModels/tableModels/RecipeTableModel.h',
-   'src/qtModels/tableModels/SaltTableModel.h',
    'src/qtModels/tableModels/StockUseFermentableTableModel.h',
    'src/qtModels/tableModels/StockUseHopTableModel.h',
    'src/qtModels/tableModels/StockUseMiscTableModel.h',
-   'src/qtModels/tableModels/StockUseSaltTableModel.h',
    'src/qtModels/tableModels/StockUseYeastTableModel.h',
    'src/qtModels/tableModels/StyleTableModel.h',
    'src/qtModels/tableModels/WaterTableModel.h',
@@ -1055,7 +1028,6 @@ mocHeaders = files([
    'src/tools/ScaleRecipeTool.h',
    'src/tools/StrikeWaterDialog.h',
    'src/tools/TimerMainDialog.h',
-   'src/tools/WaterProfileAdjustmentTool.h',
    'src/trees/NamedEntityTreeModel.h',
    'src/trees/NamedEntityTreeSortFilterProxyModel.h',
    'src/trees/NamedEntityTreeView.h',
@@ -1080,6 +1052,7 @@ mocHeaders = files([
    'src/widgets/SmartValueDisplay.h',
    'src/widgets/StockManagerIngredient.h',
    'src/widgets/ToggleSwitch.h',
+   'src/widgets/WaterAdjuster.h',
 ])
 
 unitTestMocHeaders = files([
@@ -1116,7 +1089,6 @@ uiFiles = files([
    'ui/primingDialog.ui',
    'ui/recipeExtrasWidget.ui',
    'ui/refractoDialog.ui',
-   'ui/saltEditor.ui',
    'ui/stockPurchaseIngredientEditor.ui',
    'ui/stockUseIngredientEditor.ui',
    'ui/strikeWaterDialog.ui',
@@ -1126,7 +1098,7 @@ uiFiles = files([
    'ui/timerMainDialog.ui',
    'ui/timerWidget.ui',
    'ui/waterEditor.ui',
-   'ui/waterProfileAdjustmentTool.ui',
+   'ui/waterAdjuster.ui',
    'ui/yeastEditor.ui',
 ])
 
@@ -1361,8 +1333,7 @@ translations = qt.compile_translations(ts_files         : translationSourceFiles
 #=============================================== Lists of Dependencies =================================================
 #=======================================================================================================================
 commonDependencies = [qtCommonDependencies,
-                      xercesDependency,
-                      xalanDependency,
+                      libxml2Dependency,
                       boostDependency,
                       dlDependency,
                       openSslDependency, # This isn't strictly needed for the testRunner, but no harm comes from including it

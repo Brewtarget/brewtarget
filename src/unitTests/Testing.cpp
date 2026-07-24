@@ -33,7 +33,7 @@
 
 #include <boost/json/src.hpp> // Needs to be included exactly once in the code to use header-only version of Boost.JSON
 
-#include <xercesc/util/PlatformUtils.hpp>
+#include <libxml2/libxml/parser.h>
 
 #include <QDebug>
 #include <QString>
@@ -402,14 +402,9 @@ QTEST_MAIN(Testing)
 
 void Testing::initTestCase() {
 
-   // Initialize Xerces XML tools
-   // NB: This is also where where we would initialise xalanc::XalanTransformer if we were using it
-   try {
-      xercesc::XMLPlatformUtils::Initialize();
-   } catch (xercesc::XMLException const & xercesInitException) {
-      qCritical() << Q_FUNC_INFO << "Xerces XML Parser Initialisation Failed: " << xercesInitException.getMessage();
-      return;
-   }
+   // See comment in main.cpp for how much longer we need to retain this call
+   xmlInitParser();
+
    std::cout << "Initialising Test Case" << std::endl;
 
    try {
@@ -464,7 +459,6 @@ void Testing::initTestCase() {
       this->pimpl->m_equipFiveGalNoLoss->setTopUpWater_l(0);
       this->pimpl->m_equipFiveGalNoLoss->setKettleTrubChillerLoss_l(0);
       this->pimpl->m_equipFiveGalNoLoss->setKettleEvaporationPerHour_l(4.0);
-///      this->pimpl->m_equipFiveGalNoLoss->setBoilTime_min(60);
       this->pimpl->m_equipFiveGalNoLoss->setMashTunLoss_l(0); // This is lautering deadspace loss as no separate lautering tun
       this->pimpl->m_equipFiveGalNoLoss->setTopUpKettle_l(0);
       this->pimpl->m_equipFiveGalNoLoss->setHopUtilization_pct(100);
@@ -891,15 +885,6 @@ void Testing::cleanupTestCase() {
    // Clear all persistent properties linked with this test suite.
    // It will clear all settings that are application specific, user-scoped, and in the application namespace.
    QSettings().clear();
-
-   //
-   // Clean exit of Xerces XML tools
-   // If we, in future, want to use XalanTransformer, this needs to be extended to:
-   //    XalanTransformer::terminate();
-   //    XMLPlatformUtils::Terminate();
-   //    XalanTransformer::ICUCleanUp();
-   //
-   xercesc::XMLPlatformUtils::Terminate();
 
    return;
 }

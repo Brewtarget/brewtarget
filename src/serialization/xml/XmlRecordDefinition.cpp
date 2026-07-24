@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlRecordDefinition.cpp is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/xml/XmlRecordDefinition.cpp is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ namespace {
 }
 
 XmlRecordDefinition::FieldDefinition::FieldDefinition(FieldType    const type,
-                                                      XQString     const xPath,
+                                                      QString      const xPath,
                                                       PropertyPath const propertyPath,
                                                       ValueDecoder const valueDecoder) :
    type{type},

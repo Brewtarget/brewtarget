@@ -43,7 +43,7 @@ PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent) {
    this->updateViabilityFromDate(QDate::currentDate());
 
    SMART_FIELD_INIT_FS(PitchDialog, label_vol       , lineEdit_vol       , double, Measurement::PhysicalQuantity::Volume          ); // Input: Wort Volume
-   SMART_FIELD_INIT_FS(PitchDialog, label_og        , lineEdit_OG        , double, Measurement::PhysicalQuantity::Density         ); // Input: OG
+   SMART_FIELD_INIT_FS(PitchDialog, label_og        , lineEdit_OG        , double, Measurement::PhysicalQuantity::Gravity         ); // Input: OG
    SMART_FIELD_INIT_FS(PitchDialog, label_cells     , lineEdit_cells     , double,           NonPhysicalQuantity::Dimensionless, 1); // Output: Billions of Yeast Cells Required
    SMART_FIELD_INIT_FS(PitchDialog, label_vials     , lineEdit_vials     , double,           NonPhysicalQuantity::Dimensionless, 0); // Output: # Vials/Smack Packs w/o Starter
    SMART_FIELD_INIT_FS(PitchDialog, label_yeast     , lineEdit_yeast     , double, Measurement::PhysicalQuantity::Mass            ); // Output: Dry Yeast

@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/StockManagerIngredient.h is part of Brewtarget, and is copyright the following authors 2025:
+ * widgets/StockManagerIngredient.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -21,12 +21,10 @@
 #include "editors/StockPurchaseFermentableEditor.h"
 #include "editors/StockPurchaseHopEditor.h"
 #include "editors/StockPurchaseMiscEditor.h"
-#include "editors/StockPurchaseSaltEditor.h"
 #include "editors/StockPurchaseYeastEditor.h"
 #include "model/StockPurchaseFermentable.h"
 #include "model/StockPurchaseHop.h"
 #include "model/StockPurchaseMisc.h"
-#include "model/StockPurchaseSalt.h"
 #include "model/StockPurchaseYeast.h"
 #include "trees/NamedEntityTreeView.h"
 #include "trees/NamedEntityTreeSortFilterProxyModel.h"
@@ -55,14 +53,6 @@ class StockManagerMisc : public StockManager,
                                                  StockPurchaseMiscTreeView> {
    Q_OBJECT
    STOCK_MGR_COMMON_DECL(Misc)
-};
-
-class StockManagerSalt : public StockManager,
-                         public StockManagerBase<StockManagerSalt,
-                                                 StockPurchaseSalt,
-                                                 StockPurchaseSaltTreeView> {
-   Q_OBJECT
-   STOCK_MGR_COMMON_DECL(Salt)
 };
 
 class StockManagerYeast : public StockManager,

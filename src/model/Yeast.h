@@ -131,7 +131,9 @@ public:
    enum class Type {
       Ale         , // Saccharomyces cerevisiae strains used for beer
       Lager       , // Saccharomyces pastorianus - https://en.wikipedia.org/wiki/Saccharomyces_pastorianus
-      Other       , // Was Wheat.  In BeerXML, there was a "Wheat" yeast type, for the subset of Ale yeasts used in Wheat beers.  In BeerJSON, this category doesn't exist, so we subsume it into Other.
+      Other       , // Was Wheat.  In BeerXML, there was a "Wheat" yeast type, for the subset of Ale yeasts used in
+                    // Wheat beers.  In BeerJSON, this category doesn't exist, so we subsumed it into "Other".
+                    // TBD: We could bring Wheat back (and just map it to Other for BeerJSON).
       Wine        , // Typically Saccharomyces cerevisiae and/or Saccharomyces bayanus
       Champagne   , // Wine yeast strains used for sparkling wines
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
@@ -287,7 +289,11 @@ public:
     */
    Q_PROPERTY(std::optional<bool>    glucoamylasePositive      READ glucoamylasePositive      WRITE setGlucoamylasePositive     )
    /**
-    * \brief See https://www.milkthefunk.com/wiki/Saccharomyces#Killer_Wine_Yeast for more on "killer" yeasts and
+    * \brief Killer yeast properties (also known as zymocide) are common among wine yeasts.  There are some ale and
+    *        brett yeasts that are immune to some killer (aka zymocidic) properties, these are known as "killer
+    *        neutral".
+    *
+    *        See https://www.milkthefunk.com/wiki/Saccharomyces#Killer_Wine_Yeast for more on "killer" yeasts and
     *        "killer neutral" yeasts.  BeerJSON calls these killer yeast properties "zymocide", but AFAICT "killer" is
     *        still the more widely used term, at least in relation to brewing.
     *

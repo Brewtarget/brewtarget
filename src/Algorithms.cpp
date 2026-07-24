@@ -374,7 +374,7 @@ double Algorithms::BrixToSgAt20C(double brix) {
 
 }
 
-double Algorithms::getPlato(double sugar_kg, double wort_l) {
+double Algorithms::platoFromSugarMassAndWortVolume(double sugar_kg, double wort_l) {
    double const water_kg = wort_l - sugar_kg/PhysicalConstants::sucroseDensity_kgL; // Assumes sucrose vol and water vol add to wort vol.
    double const totalMass_kg = sugar_kg + water_kg;
 

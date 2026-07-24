@@ -1049,7 +1049,7 @@ def doPackage():
             btLogger.log.critical(
                'Cannot find bin subdirectory of ' + btFileSystem.dir_packages_platform.as_posix() + ' packaging directory'
             )
-            exit(1)
+            sys.exit(1)
          if (len(packageBinDirList) > 1):
             btLogger.log.warning(
                'Found more than one bin subdirectory of ' + btFileSystem.dir_packages_platform.as_posix() +
@@ -1181,9 +1181,7 @@ def doPackage():
             'libstdc++'    ,
             'librsvg-2'    , # SVG rendering library -- see https://wiki.gnome.org/Projects/LibRsvg
             'libwinpthread',
-            'libxalan-c'   ,
-            'libxalanMsg'  ,
-            'libxerces-c-3',
+            'libxml2'      ,
             'libzstd'      , # ZStandard (aka zstd) = fast lossless compression algorithm
             'zlib'         , # ZLib compression library
          ]
@@ -1270,10 +1268,8 @@ def doPackage():
          #        │   ├── libwebp.7.dylib        🟢
          #        │   ├── libwebpdemux.2.dylib   🟢
          #        │   ├── libwebpmux.3.dylib     🟢
-         #        │   ├── libxalan-c.112.dylib   🟢
-         #        │   ├── libxerces-c-3.2.dylib  🟢
-         #        │   ├── libzstd.1.dylib        🟢
-         #        │   └── libxalanMsg.112.dylib  ❇ ✴
+         #        │   ├── libxml2.*.dylib        🟢
+         #        │   └── libzstd.1.dylib        🟢
          #        ├── MacOS
          #        │   └── [capitalisedProjectName] ❇  <── the executable
          #        ├── Plugins  <── Contains loadable bundles that extend the basic features of the application
@@ -1441,7 +1437,6 @@ def doPackage():
          #
          # For us, macdeployqt does seem to cover almost all the shared libraries and frameworks we need, including
          # those that are not part of Qt.  The exceptions are:
-         #    - libxalanMsg -- a library that libxalan-c uses (so an indirect rather than direct dependency)
          #    - libqsqlpsql.dylib -- which would be needed for any user that wants to use PostgreSQL instead of SQLite
          #
          # Note per https://www.unix.com/man_page/osx/1/dyld/ that the dynamic link editor (dyld), which is what loads
@@ -1501,76 +1496,75 @@ def doPackage():
          # '@loader_path/../Frameworks/', as will be seen from the subsequent output of running `otool`.
          #
          # We want to grab:
-         #   - the directory containing libxalan-c, as that's the same directory in which we should find libxalanMsg
          #   - information that would allow us to find libqsqlpsql.dylib .:TODO:. Still to work out how to do this.  For
          #     now, I think that means users requiring PostgreSQL support on MacOS will need to build the app from
          #     source.
          #
-         xalanDir = ''
-         xalanLibName = ''
-         xalanMatch = re.search(r'^\s*(\S+/)(libxalan-c\S*.dylib)', otoolOutputExe, re.MULTILINE)
-         if (xalanMatch):
-            # The [1] index gives us the first parenthesized subgroup of the regexp match, which in this case should be
-            # the directory path to libxalan-c.xxx.dylib
-            xalanDir = xalanMatch[1]
-            xalanLibName = xalanMatch[2]
-         else:
-            btLogger.log.warning(
-               'Could not find libxalan dependency in ' + capitalisedProjectName +
-               ' so assuming /usr/local/opt/xalan-c/lib/'
-            )
-            xalanDir = '/usr/local/opt/xalan-c/lib/'
-            xalanLibName = 'libxalan-c.112.dylib'
-         btLogger.log.debug('xalanDir: ' + xalanDir + '; contents:')
-         btExecute.abortOnRunFail(subprocess.run(['ls', '-l', xalanDir], capture_output=False))
-
-         #
-         # Strictly speaking, we should look at every /usr/local/opt/.../*.dylib dependency of our executable, and run
-         # each of those .dylib files through otool to get its dependencies, then repeat until we find no new
-         # dependencies.  Then we should ensure each dependency is copied into the app bundle and whatever depends on it
-         # knows where to find it etc.  Pretty soon we'd have ended up reimplementing macdeployqt.  Fortunately, in
-         # practice, for Xalan, it suffices to grab libxalanMsg and put it in the same directory in the bundle as
-         # libxalanc.
-         #
-         # We use otool to get the right name for libxalanMsg, which is typically listed as a relative path dependency
-         # eg '@rpath/libxalanMsg.112.dylib'.
-         #
-         # Per https://www.mikeash.com/pyblog/friday-qa-2009-11-06-linking-and-install-names.html:
-         #
-         #    @executable_path - will expand at run time to the absolute path of the app bundle's executable directory,
-         #                       ie [projectName]_[versionNumber].app/Contents/MacOS for us
-         #
-         #    @loader_path     - will expand at run time to the absolute path of whatever is loading the library,
-         #                       typically either the executable directory (if it's the executable loading the library
-         #                       directly) or, for us, the [projectName]_[versionNumber].app/Contents/Frameworks
-         #                       directory if it's another shared library requesting the load
-         #
-         #    @rpath           - means search a list of locations specified at the point the application was linked (by
-         #                       means of the -rpath linker flag), so, eg, including
-         #                       '-rpath @executable_path/../Frameworks' at link time means, for us, that
-         #                       [projectName]_[versionNumber].app/Contents/Frameworks is one of the places to search
-         #                       when @rpath is specified
-         #
-         btLogger.log.debug('Running otool -L on ' + xalanDir + xalanLibName)
-         otoolOutputXalan = btExecute.abortOnRunFail(
-            subprocess.run(['otool',
-                            '-L',
-                            xalanDir + xalanLibName],
-                           capture_output=True)
-         ).stdout.decode('UTF-8')
-         btLogger.log.debug('Output of `otool -L ' + xalanDir + xalanLibName + '`: ' + otoolOutputXalan)
-         xalanMsgLibName = ''
-         xalanMsgMatch =  re.search(r'^\s*(\S+/)(libxalanMsg\S*.dylib)', otoolOutputXalan, re.MULTILINE)
-         if (xalanMsgMatch):
-            xalanMsgLibName = xalanMsgMatch[2]
-         else:
-            btLogger.log.warning(
-               'Could not find libxalanMsg dependency in ' + xalanDir + xalanLibName +
-               ' so assuming libxalanMsg.112.dylib'
-            )
-            xalanMsgLibName = 'libxalanMsg.112.dylib'
-         btLogger.log.debug('Copying ' + xalanDir + xalanMsgLibName + ' to ' + dir_packages_mac_frm.as_posix())
-         shutil.copy2(xalanDir + xalanMsgLibName, dir_packages_mac_frm)
+###         xalanDir = ''
+###         xalanLibName = ''
+###         xalanMatch = re.search(r'^\s*(\S+/)(libxalan-c\S*.dylib)', otoolOutputExe, re.MULTILINE)
+###         if (xalanMatch):
+###            # The [1] index gives us the first parenthesized subgroup of the regexp match, which in this case should be
+###            # the directory path to libxalan-c.xxx.dylib
+###            xalanDir = xalanMatch[1]
+###            xalanLibName = xalanMatch[2]
+###         else:
+###            btLogger.log.warning(
+###               'Could not find libxalan dependency in ' + capitalisedProjectName +
+###               ' so assuming /usr/local/opt/xalan-c/lib/'
+###            )
+###            xalanDir = '/usr/local/opt/xalan-c/lib/'
+###            xalanLibName = 'libxalan-c.112.dylib'
+###         btLogger.log.debug('xalanDir: ' + xalanDir + '; contents:')
+###         btExecute.abortOnRunFail(subprocess.run(['ls', '-l', xalanDir], capture_output=False))
+###
+###         #
+###         # Strictly speaking, we should look at every /usr/local/opt/.../*.dylib dependency of our executable, and run
+###         # each of those .dylib files through otool to get its dependencies, then repeat until we find no new
+###         # dependencies.  Then we should ensure each dependency is copied into the app bundle and whatever depends on it
+###         # knows where to find it etc.  Pretty soon we'd have ended up reimplementing macdeployqt.  Fortunately, in
+###         # practice, for Xalan, it suffices to grab libxalanMsg and put it in the same directory in the bundle as
+###         # libxalanc.
+###         #
+###         # We use otool to get the right name for libxalanMsg, which is typically listed as a relative path dependency
+###         # eg '@rpath/libxalanMsg.112.dylib'.
+###         #
+###         # Per https://www.mikeash.com/pyblog/friday-qa-2009-11-06-linking-and-install-names.html:
+###         #
+###         #    @executable_path - will expand at run time to the absolute path of the app bundle's executable directory,
+###         #                       ie [projectName]_[versionNumber].app/Contents/MacOS for us
+###         #
+###         #    @loader_path     - will expand at run time to the absolute path of whatever is loading the library,
+###         #                       typically either the executable directory (if it's the executable loading the library
+###         #                       directly) or, for us, the [projectName]_[versionNumber].app/Contents/Frameworks
+###         #                       directory if it's another shared library requesting the load
+###         #
+###         #    @rpath           - means search a list of locations specified at the point the application was linked (by
+###         #                       means of the -rpath linker flag), so, eg, including
+###         #                       '-rpath @executable_path/../Frameworks' at link time means, for us, that
+###         #                       [projectName]_[versionNumber].app/Contents/Frameworks is one of the places to search
+###         #                       when @rpath is specified
+###         #
+###         btLogger.log.debug('Running otool -L on ' + xalanDir + xalanLibName)
+###         otoolOutputXalan = btExecute.abortOnRunFail(
+###            subprocess.run(['otool',
+###                            '-L',
+###                            xalanDir + xalanLibName],
+###                           capture_output=True)
+###         ).stdout.decode('UTF-8')
+###         btLogger.log.debug('Output of `otool -L ' + xalanDir + xalanLibName + '`: ' + otoolOutputXalan)
+###         xalanMsgLibName = ''
+###         xalanMsgMatch =  re.search(r'^\s*(\S+/)(libxalanMsg\S*.dylib)', otoolOutputXalan, re.MULTILINE)
+###         if (xalanMsgMatch):
+###            xalanMsgLibName = xalanMsgMatch[2]
+###         else:
+###            btLogger.log.warning(
+###               'Could not find libxalanMsg dependency in ' + xalanDir + xalanLibName +
+###               ' so assuming libxalanMsg.112.dylib'
+###            )
+###            xalanMsgLibName = 'libxalanMsg.112.dylib'
+###         btLogger.log.debug('Copying ' + xalanDir + xalanMsgLibName + ' to ' + dir_packages_mac_frm.as_posix())
+###         shutil.copy2(xalanDir + xalanMsgLibName, dir_packages_mac_frm)
 
          #
          # The dylibbundler tool (https://github.com/auriamg/macdylibbundler/) proposes a ready-made solution to make
@@ -1923,9 +1917,9 @@ def doPackage():
          os.chdir(dir_packages_mac_bin)
          btExecute.abortOnRunFail(subprocess.run(['otool', '-L', capitalisedProjectName], capture_output=False))
          btExecute.abortOnRunFail(subprocess.run(['otool', '-l', capitalisedProjectName], capture_output=False))
-         btLogger.log.debug('Running otool on ' + xalanDir + xalanLibName + ' library after macdeployqt')
-         os.chdir(dir_packages_mac_frm)
-         btExecute.abortOnRunFail(subprocess.run(['otool', '-L', xalanDir + xalanLibName], capture_output=False))
+###         btLogger.log.debug('Running otool on ' + xalanDir + xalanLibName + ' library after macdeployqt')
+###         os.chdir(dir_packages_mac_frm)
+###         btExecute.abortOnRunFail(subprocess.run(['otool', '-L', xalanDir + xalanLibName], capture_output=False))
 
          btLogger.log.info('Created ' + dmgFileName + ' in directory ' + btFileSystem.dir_packages_platform.as_posix())
 
@@ -1963,7 +1957,7 @@ def doPackage():
 
       case _:
          btLogger.log.critical('Unrecognised platform: ' + platform.system())
-         exit(1)
+         sys.exit(1)
 
    # If we got this far, everything must have worked
    print()
@@ -1997,4 +1991,4 @@ match args.subCommand:
    # If we get here, it's a coding error as argparse should have already validated the command line arguments
    case _:
       btLogger.log.error('Unrecognised command "' + command + '"')
-      exit(1)
+      sys.exit(1)

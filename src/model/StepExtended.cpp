@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/StepExtended.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/StepExtended.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -42,8 +42,8 @@ bool StepExtended::compareWith(NamedEntity const & other, QList<BtStringConst co
 TypeLookup const StepExtended::typeLookup {
    "StepExtended",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(StepExtended, startGravity_sg, m_startGravity_sg, Measurement::PhysicalQuantity::Density),
-      PROPERTY_TYPE_LOOKUP_ENTRY(StepExtended, endGravity_sg  , m_endGravity_sg  , Measurement::PhysicalQuantity::Density),
+      PROPERTY_TYPE_LOOKUP_ENTRY(StepExtended, startGravity_sg, m_startGravity_sg, Measurement::PhysicalQuantity::Gravity),
+      PROPERTY_TYPE_LOOKUP_ENTRY(StepExtended, endGravity_sg  , m_endGravity_sg  , Measurement::PhysicalQuantity::Gravity),
    },
    // Parent class lookup
    {&Step::typeLookup}

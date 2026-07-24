@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/BtTableModel.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * qtModels/tableModels/BtTableModel.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -59,7 +59,6 @@ BtTableModel::BtTableModel(QTableView * parent,
    // (In theory, QHeaderView::ResizeToContents automatically sets a fixed size that's right for all the data, but, in
    // practice it doesn't always do what you want, so it's better to give the user some control).
    columnHeaderView->setSectionResizeMode(QHeaderView::Interactive);
-//   columnHeaderView->setMinimumSectionSize(parent->width()/this->columnCount()); SaltTableModel
 
    return;
 }

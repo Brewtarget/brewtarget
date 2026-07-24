@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * model/StockUseIngredient.h is part of Brewtarget, and is copyright the following authors 2025:
+ * model/StockUseIngredient.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,31 +23,26 @@
 #include "model/Fermentable.h"
 #include "model/Hop.h"
 #include "model/Misc.h"
-#include "model/Salt.h"
 #include "model/Yeast.h"
 
 class StockPurchaseFermentable;
 class StockPurchaseHop;
 class StockPurchaseMisc;
-class StockPurchaseSalt;
 class StockPurchaseYeast;
 
 class StockUseFermentableItemDelegate;
 class StockUseHopItemDelegate;
 class StockUseMiscItemDelegate;
-class StockUseSaltItemDelegate;
 class StockUseYeastItemDelegate;
 
 class StockUseFermentableEditor;
 class StockUseHopEditor;
 class StockUseMiscEditor;
-class StockUseSaltEditor;
 class StockUseYeastEditor;
 
 class StockUseFermentableTableModel;
 class StockUseHopTableModel;
 class StockUseMiscTableModel;
-class StockUseSaltTableModel;
 class StockUseYeastTableModel;
 
 class StockUseFermentable : public StockUse,
@@ -107,25 +102,6 @@ class StockUseMisc : public StockUse,
 
 };
 
-class StockUseSalt : public StockUse,
-                            public StockUseBase<StockUseSalt, StockPurchaseSalt>,
-                            public EnumeratedBase     <StockUseSalt, StockPurchaseSalt> {
-   Q_OBJECT
-
-   ENUMERATED_COMMON_DECL(StockUseSalt, StockPurchaseSalt)
-   STOCK_USE_COMMON_DECL(Salt)
-
-   //=================================================== PROPERTIES ====================================================
-   //! See \c StockUseBase for getters and setters
-   Q_PROPERTY(Measurement::Amount amountUsed         READ amountUsed          WRITE setAmountUsed)
-   Q_PROPERTY(double              quantityRemaining  READ quantityRemaining   STORED false)
-   Q_PROPERTY(Measurement::Amount amountRemaining    READ amountRemaining     STORED false)
-   // See model/EnumeratedBase.h for info, getters and setters for these properties
-   Q_PROPERTY(int ownerId          READ ownerId          WRITE setOwnerId       )
-   Q_PROPERTY(int sequenceNumber   READ sequenceNumber   WRITE setSequenceNumber)
-
-};
-
 class StockUseYeast : public StockUse,
                              public StockUseBase<StockUseYeast, StockPurchaseYeast>,
                              public EnumeratedBase     <StockUseYeast, StockPurchaseYeast> {
@@ -148,7 +124,6 @@ class StockUseYeast : public StockUse,
 STOCK_USE_COMMON_TMPL(Fermentable)
 STOCK_USE_COMMON_TMPL(Hop)
 STOCK_USE_COMMON_TMPL(Misc)
-STOCK_USE_COMMON_TMPL(Salt)
 STOCK_USE_COMMON_TMPL(Yeast)
 
 #endif

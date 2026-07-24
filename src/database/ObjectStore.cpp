@@ -308,7 +308,7 @@ namespace {
       Q_ASSERT(std::holds_alternative<EnumStringMapping const *>(fieldDefn.valueDecoder));
       Q_ASSERT(fieldDefn.columnNames.size() == 1);
       auto const enumMapping = std::get<EnumStringMapping const *>(fieldDefn.valueDecoder);
-      auto match = enumMapping->stringToEnumAsInt(stringValue);
+      auto const match = enumMapping->stringToEnumAsInt(stringValue);
       // If we didn't find a match, it's either a coding error or someone messed with the DB data
       if (!match) {
          qCritical() <<

@@ -30,7 +30,6 @@
 #include "model/Mash.h"
 #include "model/Misc.h"
 #include "model/Recipe.h"
-#include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"

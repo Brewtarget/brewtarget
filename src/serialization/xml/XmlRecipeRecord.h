@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlRecipeRecord.h is part of Brewtarget, and is copyright the following authors 2020-2023:
+ * serialization/xml/XmlRecipeRecord.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -35,9 +35,9 @@ protected:
     *        properties is hard unless you make the getters and setters all use the same list type, eg QList<QVariant>
     *        instead of QList<Hop *>, QList<Fermentable *>, QList<Instruction *>, etc.
     */
-   [[nodiscard]] virtual XmlRecord::ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
-                                                                           QTextStream & userMessage,
-                                                                           ImportRecordCount & stats) override;
+   [[nodiscard]] XmlRecord::ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> const containingEntity,
+                                                                   QTextStream & userMessage,
+                                                                   ImportRecordCount & stats) override;
 
    /**
     * \brief We override \c XmlRecord::normaliseAndStoreChildRecordsInDb because we want to create a child record for

@@ -85,7 +85,7 @@ TypeLookup const RecipeAddition::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, stage          , m_stage          , ENUM_INFO(RecipeAddition::stage)      ),
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, step           , m_step           , NonPhysicalQuantity::OrdinalNumeral   ),
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, addAtTime_mins , m_addAtTime_mins , Measurement::PhysicalQuantity::Time   , DisplayInfo::Precision{0}),
-      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, addAtGravity_sg, m_addAtGravity_sg, Measurement::PhysicalQuantity::Density),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, addAtGravity_sg, m_addAtGravity_sg, Measurement::PhysicalQuantity::Gravity),
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, addAtAcidity_pH, m_addAtAcidity_pH, Measurement::PhysicalQuantity::Acidity, DisplayInfo::Precision{1}),
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAddition, duration_mins  , m_duration_mins  , Measurement::PhysicalQuantity::Time   ),
    },

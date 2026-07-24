@@ -540,7 +540,6 @@ template<>          struct TreeTypeDeducer<FermentationStep   > { using TreeType
 template<>          struct TreeTypeDeducer<StockUseFermentable> { using TreeType = StockPurchaseFermentable; };
 template<>          struct TreeTypeDeducer<StockUseHop        > { using TreeType = StockPurchaseHop        ; };
 template<>          struct TreeTypeDeducer<StockUseMisc       > { using TreeType = StockPurchaseMisc       ; };
-template<>          struct TreeTypeDeducer<StockUseSalt       > { using TreeType = StockPurchaseSalt       ; };
 template<>          struct TreeTypeDeducer<StockUseYeast      > { using TreeType = StockPurchaseYeast      ; };
 
 //==================================================== TreeItemNode ====================================================

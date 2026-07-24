@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/NamedParameterBundle.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * model/NamedParameterBundle.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@
 #include <boost/stacktrace.hpp>
 
 #include <QDebug>
-#include <QString>
 #include <QTextStream>
 #include <qglobal.h> // For Q_ASSERT and Q_UNREACHABLE
 
@@ -152,7 +151,7 @@ QVariant NamedParameterBundle::get(BtStringConst const & propertyName) const {
    }
    QVariant returnValue = this->m_parameters.at(*propertyName);
    if (!returnValue.isValid()) {
-      QString errorMessage =
+      QString const errorMessage =
          QString{"Invalid value (%1) supplied for required parameter, %2"}.arg(returnValue.toString(), *propertyName);
       qCritical() << Q_FUNC_INFO << errorMessage;
       throw std::invalid_argument(errorMessage.toStdString());
@@ -174,7 +173,30 @@ S & NamedParameterBundle::writeToStream(S & stream, QString const indent) const 
    static_cast<void const *>(this) << " {\n";
    QString const newIndent{QString("   %1").arg(indent)};
    for (auto const & [key, value] : this->m_parameters) {
-      stream << newIndent << key << "->" << value.typeName() << ":" << value.toString() << "\n";
+      //
+      // We can't pass a QVariant directly to the stream because it's not supported (unless the stream is QDebug, which
+      // it won't always be).
+      //
+      // We used to write all values as `value.typeName() << ":" value.toString()`.  However QVariant::toString() does
+      // not work for some types (eg std::optional<int>) and in such cases you always get empty string.
+      //
+      // So now, for contained types where QVariant::toString() is not supported, we go via QDebug, which will happily
+      // convert, eg QVariant<std::optional<int>> to "QVariant(std::optional<int>, 0)" or "QVariant(std::optional<int>,
+      // NULL)" etc.
+      //
+      // Note that, although we might normally write `value.canConvert<QString>()` here, that gives problems on older
+      // versions of GCC, where, because we are in a templated function, you have to write
+      // `value.template canConvert<QString>()`.  This is horrible IMHO, so, instead, we use the metatype version of the
+      // call which does the same thing and sidesteps the issue.
+      //
+      if (value.canConvert(QMetaType::fromType<QString>())) {
+         stream << newIndent << key << "->" << value.typeName() << ":" << value.toString() << "\n";
+      } else {
+         QString stringValue;
+         QDebug stringValueStream{&stringValue};
+         stringValueStream << value;
+         stream << newIndent << key << "->" << value.typeName() << ":" << stringValue << "\n";
+      }
    }
 
    for (auto const & [bundleName, bundle] : this->m_containedBundles) {

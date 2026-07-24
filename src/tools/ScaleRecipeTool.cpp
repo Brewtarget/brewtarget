@@ -36,7 +36,6 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
-#include "model/RecipeUseOfWater.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
 #include "PersistentSettings.h"
@@ -113,10 +112,6 @@ void ScaleRecipeTool::scale(Equipment* equip, double const newEff) {
    for (auto const & miscAddition : this->m_recObs->miscAdditions()) {
       // We assume volumes and masses get scaled the same way
       miscAddition->setQuantity(miscAddition->quantity() * volRatio);
-   }
-
-   for (auto const & waterUse : this->m_recObs->waterUses()) {
-      waterUse->setVolume_l(waterUse->volume_l() * volRatio);
    }
 
    if (auto const mash = this->m_recObs->mash()) {

@@ -22,8 +22,7 @@
 
 #include <iostream>
 
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xalanc/Include/PlatformDefinitions.hpp>
+#include <libxml2/libxml/parser.h>
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -157,14 +156,13 @@ int main(int argc, char **argv) {
    Logging::initializeLogging();
    qDebug() << Q_FUNC_INFO << "Logging initialised";
 
-   // Initialize Xerces XML tools
-   // NB: This is also where where we would initialise xalanc::XalanTransformer if we were using it
-   try {
-      xercesc::XMLPlatformUtils::Initialize();
-   } catch (xercesc::XMLException const & xercesInitException) {
-      qCritical() << Q_FUNC_INFO << "Xerces XML Parser Initialisation Failed: " << xercesInitException.getMessage();
-      return 1;
-   }
+   //
+   // In versions prior to 2.14.0, libxml2 needs one-off initialisation: "it's recommended to call this function once
+   // from the main thread before using the library in multithreaded programs".  In newer versions of libxml2, "it
+   // should be unnecessary to call this function".  Ubuntu 24.04 still ships with version 2.10.04 of libxml2, so we
+   // leave this call in for now.
+   //
+   xmlInitParser();
 
    //
    // Check whether another instance of the application is running.  We want to avoid two instances running at the same
@@ -278,15 +276,15 @@ int main(int argc, char **argv) {
       auto const mainAppReturnValue = Application::run();
 
       //
-      // Clean exit of Xerces XML tools
-      // If we, in future, want to use XalanTransformer, this needs to be extended to:
-      //    XalanTransformer::terminate();
-      //    XMLPlatformUtils::Terminate();
-      //    XalanTransformer::ICUCleanUp();
+      // In older versions of libxml2, prior to 2.9.11, we would want to call xmlCleanupParser() here to "free global
+      // memory allocated by various components of the library".  However, "since 2.9.11, cleanup is performed
+      // automatically on most platforms and there's no need at all for manual cleanup. This includes all compilers and
+      // platforms that support GCC-style destructor attributes as well as Windows DLLs."
       //
-      xercesc::XMLPlatformUtils::Terminate();
+      // (Ubuntu 22.03LTS is on version 2.9.13 of libxml2, and all our other platforms are newer than this.)
+      //
 
-      qDebug() << Q_FUNC_INFO << "Xerces terminated cleanly.  Returning " << mainAppReturnValue;
+      qDebug() << Q_FUNC_INFO << "Returning " << mainAppReturnValue;
 
       return mainAppReturnValue;
    }

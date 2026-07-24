@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * measurement/PhysicalQuantity.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * measurement/PhysicalQuantity.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -81,12 +81,12 @@ EnumStringMapping const Measurement::physicalQuantityStringMapping {
    {Measurement::PhysicalQuantity::Temperature         , "Temperature"         },
    {Measurement::PhysicalQuantity::Time                , "Time"                },
    {Measurement::PhysicalQuantity::Color               , "Color"               },
-   {Measurement::PhysicalQuantity::Density             , "Density"             },
+   {Measurement::PhysicalQuantity::Gravity             , "Density"             },
    {Measurement::PhysicalQuantity::DiastaticPower      , "DiastaticPower"      },
    {Measurement::PhysicalQuantity::Acidity             , "Acidity"             },
    {Measurement::PhysicalQuantity::Bitterness          , "Bitterness"          },
    {Measurement::PhysicalQuantity::Carbonation         , "Carbonation"         },
-   {Measurement::PhysicalQuantity::MassFractionOrConc  , "MassFractionOrConc"  },
+   {Measurement::PhysicalQuantity::MassFractionOrConcentration  , "MassFractionOrConc"  },
    {Measurement::PhysicalQuantity::Viscosity           , "Viscosity"           },
    {Measurement::PhysicalQuantity::SpecificHeatCapacity, "SpecificHeatCapacity"},
    {Measurement::PhysicalQuantity::HeatCapacity        , "HeatCapacity"        },
@@ -101,12 +101,12 @@ EnumStringMapping const Measurement::physicalQuantityDisplayNames {
    {Measurement::PhysicalQuantity::Temperature         , QObject::tr("Temperature"                   )},
    {Measurement::PhysicalQuantity::Time                , QObject::tr("Time"                          )},
    {Measurement::PhysicalQuantity::Color               , QObject::tr("Color"                         )},
-   {Measurement::PhysicalQuantity::Density             , QObject::tr("Density"                       )},
+   {Measurement::PhysicalQuantity::Gravity             , QObject::tr("Density"                       )},
    {Measurement::PhysicalQuantity::DiastaticPower      , QObject::tr("Diastatic Power"               )},
    {Measurement::PhysicalQuantity::Acidity             , QObject::tr("Acidity"                       )},
    {Measurement::PhysicalQuantity::Bitterness          , QObject::tr("Bitterness"                    )},
    {Measurement::PhysicalQuantity::Carbonation         , QObject::tr("Carbonation"                   )},
-   {Measurement::PhysicalQuantity::MassFractionOrConc  , QObject::tr("Mass Fraction or Concentration")},
+   {Measurement::PhysicalQuantity::MassFractionOrConcentration  , QObject::tr("Mass Fraction or Concentration")},
    {Measurement::PhysicalQuantity::Viscosity           , QObject::tr("Viscosity"                     )},
    {Measurement::PhysicalQuantity::SpecificHeatCapacity, QObject::tr("Specific Heat Capacity"        )},
    {Measurement::PhysicalQuantity::HeatCapacity        , QObject::tr("Heat Capacity"                 )},
@@ -127,12 +127,12 @@ BtStringConst const & Measurement::getSettingsName(PhysicalQuantity const physic
       case Measurement::PhysicalQuantity::Count               : return unitSystem_count               ;
       case Measurement::PhysicalQuantity::Temperature         : return unitSystem_temperature         ;
       case Measurement::PhysicalQuantity::Color               : return unitSystem_color               ;
-      case Measurement::PhysicalQuantity::Density             : return unitSystem_density             ;
+      case Measurement::PhysicalQuantity::Gravity             : return unitSystem_density             ;
       case Measurement::PhysicalQuantity::DiastaticPower      : return unitSystem_diastaticPower      ;
       case Measurement::PhysicalQuantity::Acidity             : return unitSystem_acidity             ;
       case Measurement::PhysicalQuantity::Bitterness          : return unitSystem_bitterness          ;
       case Measurement::PhysicalQuantity::Carbonation         : return unitSystem_carbonation         ;
-      case Measurement::PhysicalQuantity::MassFractionOrConc  : return unitSystem_massFractionOrConc  ;
+      case Measurement::PhysicalQuantity::MassFractionOrConcentration  : return unitSystem_massFractionOrConc  ;
       case Measurement::PhysicalQuantity::Viscosity           : return unitSystem_viscosity           ;
       case Measurement::PhysicalQuantity::SpecificHeatCapacity: return unitSystem_specificHeatCapacity;
       case Measurement::PhysicalQuantity::HeatCapacity        : return unitSystem_heatCapacity        ;
@@ -165,15 +165,6 @@ template<> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity<Me
                                                                               Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count>() {
    return Measurement::PhysicalQuantity::Mass;
 }
-//
-// This specialisation is needed because we have a volume-only IngredientAmount for RecipeUseOfWater to keep its
-// structure aligned with RecipeUseOfWater and RecipaAddition* classes.
-//
-template<> Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity<Measurement::PhysicalQuantity,
-                                                                              Measurement::PhysicalQuantity::Volume>() {
-   return Measurement::PhysicalQuantity::Volume;
-}
-
 
 Measurement::PhysicalQuantity Measurement::defaultPhysicalQuantity(Measurement::ChoiceOfPhysicalQuantity const val) {
    switch (val) {

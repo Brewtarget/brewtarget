@@ -269,6 +269,14 @@ EnumStringMapping const IbuMethods::formulaStringMapping {
 //   {IbuMethods::IbuFormula::Smph   , "smph"   },
 };
 
+EnumStringMapping const IbuMethods::formulaStringMappingUc {
+      {IbuMethods::IbuFormula::Tinseth, "Tinseth"},
+      {IbuMethods::IbuFormula::Rager  , "Rager"  },
+      {IbuMethods::IbuFormula::Noonan , "Noonan" },
+      {IbuMethods::IbuFormula::mIbu   , "mIBU"   },
+   //   {IbuMethods::IbuFormula::Smph   , "smph"   },
+};
+
 EnumStringMapping const IbuMethods::formulaDisplayNames {
    {IbuMethods::IbuFormula::Tinseth, QObject::tr("Tinseth's approximation")},
    {IbuMethods::IbuFormula::Rager  , QObject::tr("Rager's approximation"  )},

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/RecipeAdditionMisc.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/RecipeAdditionMisc.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -104,11 +104,11 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   RecipeAdditionMisc(QString name = "", int const recipeId = -1, int const ingredientId = -1);
-   RecipeAdditionMisc(NamedParameterBundle const & namedParameterBundle);
+   explicit RecipeAdditionMisc(QString name = "", int const recipeId = -1, int const ingredientId = -1);
+   explicit RecipeAdditionMisc(NamedParameterBundle const & namedParameterBundle);
    RecipeAdditionMisc(RecipeAdditionMisc const & other);
 
-   virtual ~RecipeAdditionMisc();
+   ~RecipeAdditionMisc() override;
 
    //=================================================== PROPERTIES ====================================================
    /**

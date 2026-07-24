@@ -106,13 +106,17 @@ template <typename E> concept HasMemberPctAcid        = requires { E::PctAcid   
  *        Classes inheriting from this one need to include the TABLE_MODEL_COMMON_DECL macro in their header file and
  *        the TABLE_MODEL_COMMON_CODE macro in their .cpp file.
  *
- *        Subclasses also need to declare and implement the following functions (with the obvious substitutions for NS):
+ *        Subclasses also need to declare and implement the following functions (with the obvious substitutions for NE):
  *           void added  (std::shared_ptr<NE> item);  // Updates any global info as a result of item being added
  *           void removed(std::shared_ptr<NE> item);  // Updates any global info as a result of item being removed
  *           void updateTotals();                     // Updates any global info, eg as a result of an item changed or
  *                                                    // all items being removed.  (Better in latter case than repeated
  *                                                    // calls to removed() because avoids rounding errors on running
  *                                                    // totals.)
+ *
+ *        Subclasses may also optionally declare and implement the following function (with the obvious substitution):
+ *           void modified(std::shared_ptr<NE> item); // Take any action (eg emit a signal) as a result of item being
+ *                                                    // modified.
  *
  *        Note that we use ColumnOwnerTraits as the phantom class for CuriouslyRecurringTemplateBase since it fits the
  *        bill.
@@ -265,8 +269,7 @@ public:
     *
     *        Note that using this function is a lot safer than, say, calling ObjectStoreWrapper::getSharedFromRaw(), as
     *        that only works for objects that are already stored in the database, something which is not guaranteed to
-    *        be the case with our rows.  (Eg in SaltTableModel, new Salts are only stored in the DB when the window is
-    *        closed with OK.)
+    *        be the case with our rows.
     *
     *        Function name is for consistency with \c QList::indexOf
     *
@@ -762,21 +765,6 @@ protected:
             return defaults /*| Qt::ItemIsEnabled*/;
          }
       }
-      // This is only for SaltTableModel and RecipeAdjustmentSaltTableModel, but it's still less work to do a special
-      // case here than have each subclass implement its own flags function.
-      if constexpr (HasMemberPctAcid<ColumnIndex>) {
-         if (columnIndex == Derived::ColumnIndex::PctAcid) {
-            bool isAcid;
-            if constexpr (std::same_as<std::remove_cvref_t<NE>, RecipeAdjustmentSalt>) {
-               isAcid = this->derived().m_rows[index.row()]->salt()->isAcid();
-            } else {
-               isAcid = this->derived().m_rows[index.row()]->isAcid();
-            }
-            if (!isAcid) {
-               return Qt::NoItemFlags;
-            }
-         }
-      }
 
       //
       // If the underlying property is read-only, then this column should not be editable
@@ -788,9 +776,14 @@ protected:
       return defaults | (tableIsEditable ? Qt::ItemIsEditable : Qt::NoItemFlags);
    }
 
+   //! Child classes can override this if they need to send a signal when data is modified
+   virtual void modified([[maybe_unused]] std::shared_ptr<NE> item) {
+      return;
+   }
+
    //! \brief Default implementation for Derived::setData
    template<bool updateHeader = false>
-   bool doSetDataDefault(QModelIndex const & index, QVariant const & value, int role) {
+   bool doSetDataDefault(QModelIndex const & index, QVariant const & value, int const role) {
       if (!this->indexAndRoleOk(index, role)) {
          return false;
       }
@@ -803,6 +796,11 @@ protected:
          if (retVal) {
             emit this->derived().headerDataChanged(Qt::Vertical, index.row(), index.row());
          }
+      }
+
+      if (retVal) {
+         // We don't have to validate index here, as the fact that writeDataToModel succeeded implies index is AOK
+         this->derived().modified(this->m_rows[index.row()]);
       }
 
       return retVal;

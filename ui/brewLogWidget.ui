@@ -78,7 +78,7 @@
             </attribute>
             <layout class="QFormLayout" name="formLayout_2">
              <item row="0" column="0">
-              <widget class="SmartLabel" name="label_Sg">
+              <widget class="SmartLabel" name="label_measuredPreBoilGravity">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -89,12 +89,12 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_Sg</cstring>
+                <cstring>lineEdit_measuredPreBoilGravity</cstring>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="SmartLineEdit" name="lineEdit_Sg">
+              <widget class="SmartLineEdit" name="lineEdit_measuredPreBoilGravity">
                <property name="toolTip">
                 <string>Preboil gravity</string>
                </property>
@@ -104,7 +104,7 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="SmartLabel" name="label_volIntoBk">
+              <widget class="SmartLabel" name="label_measuredPreBoilVolume">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -115,19 +115,19 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_volIntoBk</cstring>
+                <cstring>lineEdit_measuredPreBoilVolume</cstring>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="SmartLineEdit" name="lineEdit_volIntoBk">
+              <widget class="SmartLineEdit" name="lineEdit_measuredPreBoilVolume">
                <property name="toolTip">
                 <string>Volume of wort collected</string>
                </property>
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="SmartLabel" name="label_strikeTemp">
+              <widget class="SmartLabel" name="label_measuredStrikeTemp">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -138,19 +138,19 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_strikeTemp</cstring>
+                <cstring>lineEdit_measuredStrikeTemp</cstring>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="SmartLineEdit" name="lineEdit_strikeTemp">
+              <widget class="SmartLineEdit" name="lineEdit_measuredStrikeTemp">
                <property name="toolTip">
                 <string>Temperature of strike water before dough in</string>
                </property>
               </widget>
              </item>
              <item row="3" column="0">
-              <widget class="SmartLabel" name="label_mashFinTemp">
+              <widget class="SmartLabel" name="label_measuredMashFinalTemp">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -161,12 +161,12 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_mashFinTemp</cstring>
+                <cstring>lineEdit_measuredMashFinalTemp</cstring>
                </property>
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="SmartLineEdit" name="lineEdit_mashFinTemp">
+              <widget class="SmartLineEdit" name="lineEdit_measuredMashFinalTemp">
                <property name="toolTip">
                 <string>Temperature of mash before mash out</string>
                </property>
@@ -188,7 +188,7 @@
             </attribute>
             <layout class="QFormLayout" name="formLayout">
              <item row="0" column="0">
-              <widget class="SmartLabel" name="label_Og">
+              <widget class="SmartLabel" name="label_measuredOriginalGravity">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -199,19 +199,19 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_Og</cstring>
+                <cstring>lineEdit_measuredOriginalGravity</cstring>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="SmartLineEdit" name="lineEdit_Og">
+              <widget class="SmartLineEdit" name="lineEdit_measuredOriginalGravity">
                <property name="toolTip">
                 <string>Post boil gravity</string>
                </property>
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="SmartLabel" name="label_postBoilVol">
+              <widget class="SmartLabel" name="label_measuredPostBoilVolume">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -228,19 +228,19 @@
                 <bool>true</bool>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_postBoilVol</cstring>
+                <cstring>lineEdit_measuredPostBoilVolume</cstring>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="SmartLineEdit" name="lineEdit_postBoilVol">
+              <widget class="SmartLineEdit" name="lineEdit_measuredPostBoilVolume">
                <property name="toolTip">
                 <string>Volume of wort in BK after boil</string>
                </property>
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="SmartLabel" name="label_volIntoFerm">
+              <widget class="SmartLabel" name="label_measuredVolumeIntoFermentor">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -257,16 +257,16 @@
                 <bool>true</bool>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_volIntoFerm</cstring>
+                <cstring>lineEdit_measuredVolumeIntoFermentor</cstring>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="SmartLineEdit" name="lineEdit_volIntoFerm">
+              <widget class="SmartLineEdit" name="lineEdit_measuredVolumeIntoFermentor">
               </widget>
              </item>
              <item row="3" column="0">
-              <widget class="SmartLabel" name="label_pitchTemp">
+              <widget class="SmartLabel" name="label_measuredPitchTemp">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -280,12 +280,12 @@
                 <bool>true</bool>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_pitchTemp</cstring>
+                <cstring>lineEdit_measuredPitchTemp</cstring>
                </property>
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="SmartLineEdit" name="lineEdit_pitchTemp">
+              <widget class="SmartLineEdit" name="lineEdit_measuredPitchTemp">
                <property name="toolTip">
                 <string>Temperature of wort when yeast is pitched</string>
                </property>
@@ -307,7 +307,7 @@
             </attribute>
             <layout class="QFormLayout" name="formLayout_5">
              <item row="0" column="0">
-              <widget class="SmartLabel" name="label_Fg">
+              <widget class="SmartLabel" name="label_measuredFinalGravity">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -315,19 +315,19 @@
                 <string notr="true">FG</string>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_Fg</cstring>
+                <cstring>lineEdit_measuredFinalGravity</cstring>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="SmartLineEdit" name="lineEdit_Fg">
+              <widget class="SmartLineEdit" name="lineEdit_measuredFinalGravity">
                <property name="toolTip">
                 <string>Final gravity</string>
                </property>
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="SmartLabel" name="label_finalVolume">
+              <widget class="SmartLabel" name="label_measuredFinalVolume">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -335,12 +335,12 @@
                 <string notr="true">Volume</string>
                </property>
                <property name="buddy">
-                <cstring>lineEdit_finalVolume</cstring>
+                <cstring>lineEdit_measuredFinalVolume</cstring>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="SmartLineEdit" name="lineEdit_finalVolume">
+              <widget class="SmartLineEdit" name="lineEdit_measuredFinalVolume">
                <property name="toolTip">
                 <string>Volume of beer into serving keg/bottles</string>
                </property>
@@ -381,7 +381,7 @@
               <enum>QFormLayout::ExpandingFieldsGrow</enum>
              </property>
              <item row="0" column="0">
-              <widget class="QLabel" name="label_effInfoBk">
+              <widget class="QLabel" name="label_computedPreBoilEfficiency">
                <property name="statusTip">
                 <string>Percent efficiency into boil kettle</string>
                </property>
@@ -391,34 +391,54 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="SmartDigitWidget" name="lcdnumber_effBK">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="SmartLabel" name="label_projectedOg">
-               <property name="contextMenuPolicy">
-                <enum>Qt::CustomContextMenu</enum>
-               </property>
-               <property name="statusTip">
-                <string>Expected OG, based on measured FG</string>
-               </property>
-               <property name="text">
-                <string>Projected OG</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="SmartDigitWidget" name="lcdnumber_projectedOG">
+              <widget class="SmartDigitWidget" name="lcdnumber_computedPreBoilEfficiency">
                <property name="text">
                 <string/>
                </property>
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_brewHouseEff">
+              <widget class="SmartLabel" name="label_expectedOriginalGravity">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
+               <property name="statusTip">
+                <string>Expected OG, based on recipe</string>
+               </property>
+               <property name="text">
+                <string>Recipe OG</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="SmartDigitWidget" name="lcdnumber_expectedOriginalGravity">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="SmartLabel" name="label_forecastOriginalGravity">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
+               <property name="statusTip">
+                <string>Projected OG, based on measured pre-boil gravity</string>
+               </property>
+               <property name="text">
+                <string>Projected OG</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="SmartDigitWidget" name="lcdnumber_forecastOriginalGravity">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="label_computedEfficiency">
                <property name="statusTip">
                 <string>Brewhouse efficiency</string>
                </property>
@@ -427,15 +447,15 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="SmartDigitWidget" name="lcdnumber_brewhouseEff">
+             <item row="6" column="1">
+              <widget class="SmartDigitWidget" name="lcdnumber_computedEfficiency">
                <property name="text">
                 <string/>
                </property>
               </widget>
              </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_projectedAbv">
+             <item row="8" column="0">
+              <widget class="QLabel" name="label_expectedAlcoholByVolume">
                <property name="statusTip">
                 <string>Expected ABV based on recipe OG</string>
                </property>
@@ -444,15 +464,15 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
-              <widget class="SmartDigitWidget" name="lcdnumber_projABV">
+             <item row="8" column="1">
+              <widget class="SmartDigitWidget" name="lcdnumber_expectedAlcoholByVolume">
                <property name="text">
                 <string/>
                </property>
               </widget>
              </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_Abv">
+             <item row="10" column="0">
+              <widget class="QLabel" name="label_computedAlcoholByVolume">
                <property name="statusTip">
                 <string>ABV based on user-reported FG</string>
                </property>
@@ -461,15 +481,15 @@
                </property>
               </widget>
              </item>
-             <item row="4" column="1">
-              <widget class="SmartDigitWidget" name="lcdnumber_abv">
+             <item row="10" column="1">
+              <widget class="SmartDigitWidget" name="lcdnumber_computedAlcoholByVolume">
                <property name="text">
                 <string/>
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_yeastProjAtten">
+             <item row="12" column="0">
+              <widget class="QLabel" name="label_expectedAttenuation">
                <property name="statusTip">
                 <string>Yeast attenuation based on yeast specified in recipe</string>
                </property>
@@ -478,25 +498,25 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="1">
-              <widget class="SmartDigitWidget" name="lcdnumber_projAtten">
+             <item row="12" column="1">
+              <widget class="SmartDigitWidget" name="lcdnumber_expectedAttenuation">
                <property name="text">
                 <string/>
                </property>
               </widget>
              </item>
-             <item row="6" column="0">
-              <widget class="QLabel" name="label_yeastAtten">
+             <item row="14" column="0">
+              <widget class="QLabel" name="label_computedAttenuation">
                <property name="statusTip">
-                <string>Yeast attentuation based on user-reported OG and FG</string>
+                <string>Yeast attenuation based on user-reported OG and FG</string>
                </property>
                <property name="text">
                 <string>Measured yeast attenuation</string>
                </property>
               </widget>
              </item>
-             <item row="6" column="1">
-              <widget class="SmartDigitWidget" name="lcdnumber_atten">
+             <item row="14" column="1">
+              <widget class="SmartDigitWidget" name="lcdnumber_computedAttenuation">
                <property name="text">
                 <string/>
                </property>

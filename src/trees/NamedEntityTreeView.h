@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * trees/NamedEntityTreeView.h is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * trees/NamedEntityTreeView.h is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -25,11 +25,9 @@
 #include "editors/StockPurchaseFermentableEditor.h"
 #include "editors/StockPurchaseHopEditor.h"
 #include "editors/StockPurchaseMiscEditor.h"
-#include "editors/StockPurchaseSaltEditor.h"
 #include "editors/StockPurchaseYeastEditor.h"
 #include "editors/MashEditor.h"
 #include "editors/MiscEditor.h"
-#include "editors/SaltEditor.h"
 #include "editors/StyleEditor.h"
 #include "editors/WaterEditor.h"
 #include "editors/YeastEditor.h"
@@ -39,11 +37,9 @@
 #include "model/StockPurchaseFermentable.h"
 #include "model/StockPurchaseHop.h"
 #include "model/StockPurchaseMisc.h"
-#include "model/StockPurchaseSalt.h"
 #include "model/StockPurchaseYeast.h"
 #include "model/Mash.h"
 #include "model/Misc.h"
-#include "model/Salt.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -157,17 +153,6 @@ class StockPurchaseMiscTreeView : public TreeView,
    TREE_VIEW_COMMON_DECL(StockPurchaseMisc, StockUseMisc)
 };
 
-class StockPurchaseSaltTreeView : public TreeView,
-                              public TreeViewBase<StockPurchaseSaltTreeView,
-                                                  StockPurchaseSaltTreeModel,
-                                                  StockPurchaseSaltTreeSortFilterProxyModel,
-                                                  StockPurchaseSaltEditor,
-                                                  StockPurchaseSalt,
-                                                  StockUseSalt> {
-   Q_OBJECT
-   TREE_VIEW_COMMON_DECL(StockPurchaseSalt, StockUseSalt)
-};
-
 class StockPurchaseYeastTreeView : public TreeView,
                                public TreeViewBase<StockPurchaseYeastTreeView,
                                                    StockPurchaseYeastTreeModel,
@@ -187,16 +172,6 @@ class MiscTreeView : public TreeView,
                                          Misc> {
    Q_OBJECT
    TREE_VIEW_COMMON_DECL(Misc)
-};
-
-class SaltTreeView : public TreeView,
-                     public TreeViewBase<SaltTreeView,
-                                         SaltTreeModel,
-                                         SaltTreeSortFilterProxyModel,
-                                         SaltEditor,
-                                         Salt> {
-   Q_OBJECT
-   TREE_VIEW_COMMON_DECL(Salt)
 };
 
 class StyleTreeView : public TreeView,

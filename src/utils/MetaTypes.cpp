@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/MetaTypes.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * utils/MetaTypes.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -29,8 +29,6 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
-#include "model/RecipeAdjustmentSalt.h"
-#include "model/RecipeUseOfWater.h"
 #include "model/Style.h"
 
 void registerMetaTypes() {
@@ -60,15 +58,13 @@ void registerMetaTypes() {
    //
    // If you get a compile error here, it may be because you didn't include the necessary "model/" header file
    //
-   qRegisterMetaType<QList<std::shared_ptr<BoilStep                 >>>();
-   qRegisterMetaType<QList<std::shared_ptr<FermentationStep         >>>();
-   qRegisterMetaType<QList<std::shared_ptr<MashStep                 >>>();
-   qRegisterMetaType<QList<std::shared_ptr<RecipeAdditionFermentable>>>();
-   qRegisterMetaType<QList<std::shared_ptr<RecipeAdditionHop        >>>();
-   qRegisterMetaType<QList<std::shared_ptr<RecipeAdditionMisc       >>>();
-   qRegisterMetaType<QList<std::shared_ptr<RecipeAdditionYeast      >>>();
-   qRegisterMetaType<QList<std::shared_ptr<RecipeAdjustmentSalt     >>>();
-   qRegisterMetaType<QList<std::shared_ptr<RecipeUseOfWater         >>>();
+   qRegisterMetaType<QList<std::shared_ptr<BoilStep                     >>>();
+   qRegisterMetaType<QList<std::shared_ptr<FermentationStep             >>>();
+   qRegisterMetaType<QList<std::shared_ptr<MashStep                     >>>();
+   qRegisterMetaType<QList<std::shared_ptr<RecipeAdditionFermentable    >>>();
+   qRegisterMetaType<QList<std::shared_ptr<RecipeAdditionHop            >>>();
+   qRegisterMetaType<QList<std::shared_ptr<RecipeAdditionMisc           >>>();
+   qRegisterMetaType<QList<std::shared_ptr<RecipeAdditionYeast          >>>();
 
    qRegisterMetaType<std::shared_ptr<Boil            >>();
    qRegisterMetaType<std::shared_ptr<Equipment       >>();

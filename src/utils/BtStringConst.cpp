@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/BtStringConst.cpp is part of Brewtarget, and is copyright the following authors 2021-2023:
+ * utils/BtStringConst.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -23,15 +23,6 @@
 
 BtStringConst const BtString::NULL_STR{static_cast<char const *>(nullptr)};
 BtStringConst const BtString::EMPTY_STR{""};
-
-BtStringConst::BtStringConst(char const * const cString) : cString(cString) {
-   return;
-}
-
-BtStringConst::BtStringConst(BtStringConst const &) = default;
-BtStringConst::BtStringConst(BtStringConst &&) = default;
-
-BtStringConst::~BtStringConst() = default;
 
 bool BtStringConst::operator==(BtStringConst const & rhs) const {
    // A very common case of equality should be that two strings are in fact the same constant, so checking whether the

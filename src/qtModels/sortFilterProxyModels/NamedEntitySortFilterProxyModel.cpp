@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * qtModels/sortFilterProxyModels/NamedEntitySortFilterProxyModel.cpp is part of Brewtarget, and is copyright the following
- * authors 2009-2025:
+ * authors 2009-2026:
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Jamie Daws <jdelectronics1@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -24,7 +24,6 @@
 #include "model/StockPurchaseFermentable.h"
 #include "model/StockPurchaseHop.h"
 #include "model/StockPurchaseMisc.h"
-#include "model/StockPurchaseSalt.h"
 #include "model/StockPurchaseYeast.h"
 #include "qtModels/sortFilterProxyModels/BoilSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/EquipmentSortFilterProxyModel.h"
@@ -37,9 +36,7 @@
 #include "qtModels/sortFilterProxyModels/RecipeAdditionHopSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/RecipeAdditionYeastSortFilterProxyModel.h"
-#include "qtModels/sortFilterProxyModels/RecipeAdjustmentSaltSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/RecipeSortFilterProxyModel.h"
-#include "qtModels/sortFilterProxyModels/SaltSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.h"
@@ -57,9 +54,7 @@
    #include "moc_RecipeAdditionHopSortFilterProxyModel.cpp"
    #include "moc_RecipeAdditionMiscSortFilterProxyModel.cpp"
    #include "moc_RecipeAdditionYeastSortFilterProxyModel.cpp"
-   #include "moc_RecipeAdjustmentSaltSortFilterProxyModel.cpp"
    #include "moc_RecipeSortFilterProxyModel.cpp"
-   #include "moc_SaltSortFilterProxyModel.cpp"
    #include "moc_StyleSortFilterProxyModel.cpp"
    #include "moc_WaterSortFilterProxyModel.cpp"
    #include "moc_YeastSortFilterProxyModel.cpp"
@@ -77,9 +72,7 @@ SORT_FILTER_PROXY_MODEL_COMMON_CODE(RecipeAdditionFermentable)
 SORT_FILTER_PROXY_MODEL_COMMON_CODE(RecipeAdditionHop)
 SORT_FILTER_PROXY_MODEL_COMMON_CODE(RecipeAdditionMisc)
 SORT_FILTER_PROXY_MODEL_COMMON_CODE(RecipeAdditionYeast)
-SORT_FILTER_PROXY_MODEL_COMMON_CODE(RecipeAdjustmentSalt)
 SORT_FILTER_PROXY_MODEL_COMMON_CODE(Recipe)
-SORT_FILTER_PROXY_MODEL_COMMON_CODE(Salt)
 SORT_FILTER_PROXY_MODEL_COMMON_CODE(Style)
 SORT_FILTER_PROXY_MODEL_COMMON_CODE(Water)
 SORT_FILTER_PROXY_MODEL_COMMON_CODE(Yeast)

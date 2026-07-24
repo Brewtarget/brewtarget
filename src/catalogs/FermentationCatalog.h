@@ -33,7 +33,7 @@
 /*!
  * \class FermentationCatalog
  *
- * \brief View/controller class for showing/editing the list of salts in the database.
+ * \brief View/controller class for showing/editing the list of fermentations in the database.
  */
 class FermentationCatalog : public QDialog, public CatalogBase<FermentationCatalog,
                                                        Fermentation,

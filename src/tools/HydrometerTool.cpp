@@ -40,8 +40,8 @@
 HydrometerTool::HydrometerTool(QWidget* parent) : QDialog(parent) {
    this->doLayout();
 
-   SMART_FIELD_INIT_FS(HydrometerTool, label_inputSg       , lineEdit_inputSg       , double, Measurement::PhysicalQuantity::Density    );
-   SMART_FIELD_INIT_FS(HydrometerTool, label_outputSg      , lineEdit_outputSg      , double, Measurement::PhysicalQuantity::Density    );
+   SMART_FIELD_INIT_FS(HydrometerTool, label_inputSg       , lineEdit_inputSg       , double, Measurement::PhysicalQuantity::Gravity    );
+   SMART_FIELD_INIT_FS(HydrometerTool, label_outputSg      , lineEdit_outputSg      , double, Measurement::PhysicalQuantity::Gravity    );
    SMART_FIELD_INIT_FS(HydrometerTool, label_calibratedTemp, lineEdit_calibratedTemp, double, Measurement::PhysicalQuantity::Temperature, 1);
    SMART_FIELD_INIT_FS(HydrometerTool, label_inputTemp     , lineEdit_inputTemp     , double, Measurement::PhysicalQuantity::Temperature);
 

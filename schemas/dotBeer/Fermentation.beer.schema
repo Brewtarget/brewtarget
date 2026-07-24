@@ -1,0 +1,72 @@
+//======================================================================================================================
+// schema/Fermentation.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+//   • Cameron Eldridge <cameron@mad.man>
+//   • John Jenkman <45741477+johnjenkman@users.noreply.github.com>
+//   • Mark Price <shadowchao99@gmail.com>
+//   • Matt Young <mfsy@yahoo.com>
+//   • Yuriy Krutilin <y.krutilin@gmail.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/Fermentation.beer.schema",
+  "type": "object",
+  "description": "A fermentation procedure, which can be used by multiple recipes.",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "fermentation_description": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "fermentation_steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/FermentationStep"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "fermentation_steps"
+  ],
+  "$defs": {
+    "FermentationStep": {
+      "type": "object",
+      "description": "Individual step of a fermentation.",
+      "allOf": [
+        {
+          "$ref": "StepCommon.beer.schema#/$defs/StepBase"
+        },
+        {
+          "$ref": "StepCommon.beer.schema#/$defs/StepWithGravity"
+        },
+        {
+          "properties": {
+            "free_rise": {
+              "description": "Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction This is either True or false.",
+              "type": "boolean"
+            },
+            "vessel": {
+              "type": "string"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "name"
+      ]
+    }
+  }
+}

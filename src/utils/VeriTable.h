@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * utils/VeriTable.h is part of Brewtarget, and is copyright the following authors 2025:
+ * utils/VeriTable.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@ template<class NE> struct VeriTable {
          }
       }
 
-      QModelIndex modelIndex = this->m_sortFilterProxyModel->mapToSource(viewIndex);
+      QModelIndex const modelIndex = this->m_sortFilterProxyModel->mapToSource(viewIndex);
       return this->m_tableModel->getRow(modelIndex.row()).get();
    }
 
@@ -139,8 +139,6 @@ template<class NE> struct VeriTable {
       return;
    }
 
-
 };
-
 
 #endif

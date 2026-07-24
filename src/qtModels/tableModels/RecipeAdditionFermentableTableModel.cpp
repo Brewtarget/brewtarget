@@ -1,6 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * qtModels/tableModels/RecipeAdditionFermentableTableModel.cpp is part of Brewtarget, and is copyright the following authors
- * 2009-2024:
+ * 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Luke Vincent <luke.r.vincent@gmail.com>
@@ -47,21 +47,23 @@ COLUMN_INFOS(
    //
    // Note that for Name, we want the name of the contained Fermentable, not the name of the RecipeAdditionFermentable
    //
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Name          , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,   // "Name"
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Name          , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
                                                                                PropertyNames::NamedEntity::name                 }, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Type          , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,   // "Type"
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Type          , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
                                                                                PropertyNames::Fermentable::type                 }, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Yield         , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,   // "Yield"
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Yield         , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
                                                                                PropertyNames::Fermentable::fineGrindYield_pct   }, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Color         , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,   // "Color"
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Color         , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
                                                                                PropertyNames::Fermentable::color_srm            }, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Amount        , PropertyNames::IngredientAmount::amount),                              // "Amount"
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, AmountType    , PropertyNames::IngredientAmount::amount, Fermentable::validMeasures),  // "Amount Type"
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Amount        , PropertyNames::IngredientAmount::amount),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Stage         , PropertyNames::RecipeAddition::stage         ),
+   // TODO: This is currently free text entry.  It should be constrained to the number of steps in Stage.
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Step          , PropertyNames::RecipeAddition::step          ),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Time          , PropertyNames::RecipeAddition::addAtTime_mins),
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, AmountType    , PropertyNames::IngredientAmount::amount, Fermentable::validMeasures),
    // Total inventory is read-only, so there is intentionally no TotalInventoryType column
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, TotalInventory, PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable, // "Inventory"
+   TABLE_MODEL_HEADER(RecipeAdditionFermentable, TotalInventory, PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
                                                                                PropertyNames::Ingredient::totalInventory       }, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Stage         , PropertyNames::RecipeAddition::stage         ), // "Stage"
-   TABLE_MODEL_HEADER(RecipeAdditionFermentable, Time          , PropertyNames::RecipeAddition::addAtTime_mins), // "Time"
 )
 
 RecipeAdditionFermentableTableModel::RecipeAdditionFermentableTableModel(QTableView * parent, bool editable) :
@@ -81,13 +83,19 @@ RecipeAdditionFermentableTableModel::RecipeAdditionFermentableTableModel(QTableV
 RecipeAdditionFermentableTableModel::~RecipeAdditionFermentableTableModel() = default;
 
 // .:TODO:.:JSON:.  Now that fermentables can also be measured by volume, we might need to rethink this
-void RecipeAdditionFermentableTableModel::added  (std::shared_ptr<RecipeAdditionFermentable> item) { if (item->amount().unit == &Measurement::Units::kilograms) { this->totalFermMass_kg += item->amount().quantity; } return; }
-void RecipeAdditionFermentableTableModel::removed(std::shared_ptr<RecipeAdditionFermentable> item) { if (item->amount().unit == &Measurement::Units::kilograms) { this->totalFermMass_kg -= item->amount().quantity; } return; }
+void RecipeAdditionFermentableTableModel::added  (std::shared_ptr<RecipeAdditionFermentable> item) {
+   if (item->amount().unit == &Measurement::Units::kilograms) { this->totalFermMass_kg += item->amount().quantity; }
+   return;
+}
+void RecipeAdditionFermentableTableModel::removed(std::shared_ptr<RecipeAdditionFermentable> item) {
+   if (item->amount().unit == &Measurement::Units::kilograms) { this->totalFermMass_kg -= item->amount().quantity; }
+   return;
+}
 void RecipeAdditionFermentableTableModel::updateTotals() {
    this->totalFermMass_kg = 0;
-   for (auto const & ferm : this->m_rows) {
-      if (ferm->amount().unit->getPhysicalQuantity() == Measurement::PhysicalQuantity::Mass) {
-         totalFermMass_kg += ferm->amount().quantity;
+   for (auto const & fermentable : this->m_rows) {
+      if (fermentable->amount().unit->getPhysicalQuantity() == Measurement::PhysicalQuantity::Mass) {
+         totalFermMass_kg += fermentable->amount().quantity;
       }
    }
    if (this->displayPercentages && this->rowCount() > 0) {
@@ -130,9 +138,25 @@ bool RecipeAdditionFermentableTableModel::setData(QModelIndex const & index, QVa
    return this->doSetDataDefault<true>(index, value, role);
 }
 
-// Insert the boiler-plate stuff that we cannot do in TableModelBase
+double RecipeAdditionFermentableTableModel::totalLacticAcid_kg() const {
+   double totalLacticAcid_kg = 0.0;
+   for (auto const & fermentableAddition : this->m_rows) {
+      auto const fermentable = fermentableAddition->fermentable();
+      if (auto const lacticAcidByWeight_pct = fermentable->lacticAcidByWeight_pct();
+          lacticAcidByWeight_pct && *lacticAcidByWeight_pct > 0.0) {
+         totalLacticAcid_kg += *lacticAcidByWeight_pct * fermentableAddition->amount().quantity;
+         if (fermentableAddition->amount().unit->getPhysicalQuantity() != Measurement::PhysicalQuantity::Mass) {
+            qWarning() << Q_FUNC_INFO << fermentableAddition->amount() << "is not a mass!";
+         }
+      }
+   }
+   return totalLacticAcid_kg;
+}
+
+
+// Insert the boilerplate stuff that we cannot do in TableModelBase
 TABLE_MODEL_COMMON_CODE(RecipeAdditionFermentable, recipeAdditionFermentable, PropertyNames::Recipe::fermentableAdditions)
 //=============================================== CLASS RecipeAdditionFermentableItemDelegate ================================================
 
-// Insert the boiler-plate stuff that we cannot do in ItemDelegate
+// Insert the boilerplate stuff that we cannot do in ItemDelegate
 ITEM_DELEGATE_COMMON_CODE(RecipeAdditionFermentable)

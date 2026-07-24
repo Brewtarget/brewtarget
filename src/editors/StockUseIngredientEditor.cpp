@@ -98,32 +98,6 @@ void StockUseMiscEditor::retranslateUi() {
    return;
 }
 
-StockUseSaltEditor::StockUseSaltEditor(QWidget* parent, QString const editorName) :
-   QDialog(parent),
-   EnumeratedItemEditorBase<StockUseSaltEditor, StockUseSalt>{},
-   EditorBase<StockUseSaltEditor, StockUseSalt, StockUseSaltEditorOptions>(editorName) {
-   setupUi(this);
-   // Do the ingredient-specific bits of the UI
-   this->retranslateUi();
-
-   this->postSetupUiInit({
-      EDITOR_FIELD_NORM(StockUseSalt, label_date      , dateEdit_date      , StockUse::date  ),
-      EDITOR_FIELD_ENUM(StockUseSalt, label_reason    , comboBox_reason    , StockUse::reason),
-      EDITOR_FIELD_NORM(StockUseSalt, label_amountUsed, lineEdit_amountUsed, StockUseBase::amountUsed, 1),
-      EDITOR_FIELD_NORM(StockUseSalt, label_comment   , lineEdit_comment   , StockUse::comment),
-      EDITOR_FIELD_PATH(StockUseSalt, label_recipe    , label_recipe_value , {PropertyNames::StockUse::brewLog,
-                                                                              PropertyNames::OwnedByRecipe::recipe,
-                                                                              PropertyNames::NamedEntity::name}, 1),
-   });
-   return;
-}
-
-void StockUseSaltEditor::retranslateUi() {
-   this->setWindowTitle(tr("%1 Stock Use Editor").arg(Salt::localisedName()));
-   this->Ui::stockUseIngredientEditor::retranslateUi(this);
-   return;
-}
-
 StockUseYeastEditor::StockUseYeastEditor(QWidget* parent, QString const editorName) :
    QDialog(parent),
    EnumeratedItemEditorBase<StockUseYeastEditor, StockUseYeast>{},
@@ -153,12 +127,10 @@ void StockUseYeastEditor::retranslateUi() {
 StockUseFermentableEditor::~StockUseFermentableEditor() = default;
 StockUseHopEditor        ::~StockUseHopEditor        () = default;
 StockUseMiscEditor       ::~StockUseMiscEditor       () = default;
-StockUseSaltEditor       ::~StockUseSaltEditor       () = default;
 StockUseYeastEditor      ::~StockUseYeastEditor      () = default;
 
-// Insert the boiler-plate stuff that we cannot do in EditorBase
+// Insert the boilerplate stuff that we cannot do in EditorBase
 EDITOR_COMMON_CODE(StockUseFermentable)
 EDITOR_COMMON_CODE(StockUseHop        )
 EDITOR_COMMON_CODE(StockUseMisc       )
-EDITOR_COMMON_CODE(StockUseSalt       )
 EDITOR_COMMON_CODE(StockUseYeast      )

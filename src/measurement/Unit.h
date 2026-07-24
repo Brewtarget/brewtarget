@@ -341,7 +341,13 @@ namespace Measurement {
       // usually interested in density in order to get % sugar content to do calculations about how much sugar turned to
       // alcohol.  However, since our primary measurement (specific gravity) is of density, that's the physical quantity
       // under which we'll group all three units.
+      //
+      // Gravity Points, aka Brewer's Points, are essentially just a shorthand way of showing specific gravity (eg 23
+      // instead of 1.023).  In the past we didn't support them in the UI.  However, they are used in some calculations,
+      // and are recognised by many brewers, so there seems no harm to make them a first-class unit.
+      //
       extern Unit const specificGravity;
+      extern Unit const gravityPoints;
       extern Unit const plato;
       extern Unit const brix;
       // == Diastatic power ==

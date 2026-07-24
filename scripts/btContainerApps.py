@@ -26,6 +26,7 @@ import re
 import shutil
 import stat
 import subprocess
+import sys
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Our own modules
@@ -54,7 +55,7 @@ def doAppImage():
    sysName = platform.system()
    if sysName != 'Linux':
       btLogger.log.critical('AppImage creation not supported on: ' + sysName)
-      exit(1)
+      sys.exit(1)
 
    # Create the relevant top-level directory and ensure it starts out empty
    # (NB: Any missing parent directories will automatically get created by os.makedirs.  In particular,
@@ -516,7 +517,7 @@ def doFlatpak():
    sysName = platform.system()
    if sysName != 'Linux':
       btLogger.log.critical('Flatpak creation not supported on: ' + sysName)
-      exit(1)
+      sys.exit(1)
 
    btLogger.log.info('XDG_DATA_HOME: ' + os.environ.get('XDG_DATA_HOME', ''))
 
@@ -532,7 +533,7 @@ def doFlatpak():
 
    if exe_flatpak is None or exe_flatpak == '':
       btLogger.log.error('Cannot find flatpak.  PATH=' + os.environ['PATH'])
-      exit(1)
+      sys.exit(1)
 
    #
    # Read in the variables exported from the Meson build
@@ -636,7 +637,7 @@ def doFlatpak():
 
    if not versions:
       btLogger.log.critical('No org.kde.Sdk versions found on Flathub')
-      exit(1)
+      sys.exit(1)
 
    # Sort by version number (not lexicographically)
    latest = sorted(versions, key=lambda v: tuple(int(x) for x in v.split('.')))[-1]
@@ -888,7 +889,7 @@ def doSnap():
    sysName = platform.system()
    if sysName != 'Linux':
       btLogger.log.critical('Snap creation not supported on: ' + sysName)
-      exit(1)
+      sys.exit(1)
 
    #
    # Read in the variables exported from the Meson build
@@ -916,7 +917,7 @@ def doSnap():
    sysName = platform.system()
    if sysName != 'Linux':
       btLogger.log.critical('Snap creation not supported on: ' + sysName)
-      exit(1)
+      sys.exit(1)
 
    # TODO: Haven't managed to get this working yet.  Meson build keeps hanging.  Next thing might be to try the CMake
    #       build to see if it gives us more/different diagnostics.

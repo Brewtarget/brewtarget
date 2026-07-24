@@ -1,0 +1,148 @@
+//======================================================================================================================
+// schema/Equipment.beer.schema is part of DotBeer and is copyright the following authors 2018-2026:
+//   • Mark Price <shadowchao99@gmail.com>
+//   • Matt Young <mfsy@yahoo.com>
+//   • Yuriy Krutilin <y.krutilin@gmail.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/Equipment.beer.schema",
+  "type": "object",
+  "description": "Groups together all the vessels in a set of brewing equipment.  Note that, in some set-ups, one vessel serves multiple purposes -- eg mash tun and kettle may be the same physical vessel -- but there are nonetheless individual entries here for each \"purpose\".",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "hlt": {
+      "description": "Hot Liquor Tank",
+      "$ref": "#/$defs/HotSideVessel"
+    },
+    "mash_tun": {
+      "description": "Mash Tun",
+      "$ref": "#/$defs/MashTun"
+    },
+    "lauter_tun": {
+      "description": "Lauter Tun",
+      "$ref": "#/$defs/HotSideVessel"
+    },
+    "kettle": {
+      "description": "Boil Kettle",
+      "$ref": "#/$defs/BoilKettle"
+    },
+    "fermenter": {
+      "description": "Fermentation Vessel",
+      "$ref": "#/$defs/Vessel"
+    },
+    "aging_vessel": {
+      "description": "Aging Vessel",
+      "$ref": "#/$defs/Vessel"
+    },
+    "packaging_vessel": {
+      "description": "Packaging Vessel",
+      "$ref": "#/$defs/Vessel"
+    }
+  },
+  "required": [
+    "name",
+    "kettle"
+  ],
+  "$defs": {
+    "Vessel": {
+      "type": "object",
+      "description": "An individual vessel (eg mash tun, boil kettle) that forms part of brewing equipment.",
+      "properties": {
+        "vessel_type": {
+          "type": "string"
+        },
+        "max_volume": {
+          "description": "Maximum usable capacity of the vessel.",
+          "$ref": "Measurement.beer.schema#/$defs/Volume"
+        },
+        "loss": {
+          "$ref": "Measurement.beer.schema#/$defs/Volume"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "maximum_volume",
+        "loss"
+      ]
+    },
+    "HotSideVessel": {
+      "type": "object",
+      "description": "A vessel used for the hot-side of brewing.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Vessel"
+        },
+        {
+          "properties": {
+            "weight": {
+              "description": "The weight of the piece of equipment, especially important for when the mash tun is not preheated.",
+              "$ref": "Measurement.beer.schema#/$defs/Mass"
+            },
+            "specific_heat_capacity": {
+              "description": "The specific heat capacity of the piece of equipment, especially important for when the mash tun is not preheated.",
+              "$ref": "Measurement.beer.schema#/$defs/SpecificHeatCapacity"
+            }
+          }
+        }
+      ]
+    },
+    "MashTun": {
+      "type": "object",
+      "description": "A hot-side vessel used for the mash.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/HotSideVessel"
+        },
+        {
+          "properties": {
+            "grain_absorption_rate": {
+              "description": "The apparent volume absorbed by grain, typical values are 0.125 qt/lb (1.04 L/kg) for a mash tun, 0.08 gal/lb (0.66 L/kg) for BIAB.",
+              "$ref": "Measurement.beer.schema#/$defs/SpecificVolume"
+            }
+          }
+        }
+      ]
+    },
+    "BoilKettle": {
+      "type": "object",
+      "description": "A hot-side vessel used for the boil.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/HotSideVessel"
+        },
+        {
+          "properties": {
+            "boil_rate_per_hour": {
+              "description": "The volume boiled off during 1 hour, measured before and after at room temperature.",
+              "$ref": "Measurement.beer.schema#/$defs/Volume"
+            },
+            "drain_rate_per_minute": {
+              "description": "The volume that leaves the kettle, especially important for non-immersion chillers that cool the wort as it leaves the kettle.",
+              "$ref": "Measurement.beer.schema#/$defs/Volume"
+            },
+            "internalDiameter": {
+              "description": "With openingDiameter, allows calculation of IBU by Paul-John Hosom's mIBU formula",
+              "$ref": "Measurement.beer.schema#/$defs/Length"
+            },
+            "openingDiameter": {
+              "description": "With internalDiameter, allows calculation of IBU by Paul-John Hosom's mIBU formula",
+              "$ref": "Measurement.beer.schema#/$defs/Length"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

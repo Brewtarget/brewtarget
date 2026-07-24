@@ -24,7 +24,6 @@
 #include "model/Fermentable.h"
 #include "model/Hop.h"
 #include "model/Misc.h"
-#include "model/Salt.h"
 #include "model/Yeast.h"
 
 class Equipment;
@@ -48,7 +47,7 @@ class BtTabWidget : public QTabWidget {
    Q_OBJECT
 
 public:
-   BtTabWidget(QWidget* parent = nullptr);
+   explicit BtTabWidget(QWidget* parent = nullptr);
 
    //=================================================== PROPERTIES ====================================================
    Q_PROPERTY(QString   mimeAccepted   READ mimeAccepted   WRITE setMimeAccepted)
@@ -57,14 +56,13 @@ public:
    void setMimeAccepted(QString const & val);
 
 signals:
-   void setRecipe(Recipe* rec);
-   void setEquipment(Equipment * equipment);
-   void setStyle    (Style     * style    );
+   void setRecipe      (Recipe* rec);
+   void setEquipment   (Equipment * equipment);
+   void setStyle       (Style     * style    );
    void setFermentables(QList<Fermentable *> ferms );
    void setHops        (QList<Hop         *> hops  );
    void setMiscs       (QList<Misc        *> miscs );
    void setYeasts      (QList<Yeast       *> yeasts);
-   void setSalts       (QList<Salt        *> salts );
 
 private:
    template<class NE, void (BtTabWidget::*signalSender)(NE *)>
@@ -73,9 +71,9 @@ private:
    bool appendItemIfMatch(QString const & itemClassName, int const id, QList<NE *> & droppedItems);
 
 protected:
-   void dropEvent(QDropEvent *dpEvent);
+   void dropEvent(QDropEvent *dpEvent) override;
    // void dragMoveEvent(QDragMoveEvent *dmEvent);
-   virtual void dragEnterEvent(QDragEnterEvent *deEvent);
+   virtual void dragEnterEvent(QDragEnterEvent *deEvent) override;
 
 protected:
    QString acceptMime;

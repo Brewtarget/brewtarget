@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlCoding.h is part of Brewtarget, and is copyright the following authors 2020-2022:
+ * serialization/xml/XmlCoding.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -24,10 +24,6 @@
 #include <QTextStream>
 #include <QVariant>
 
-#include <xalanc/DOMSupport/DOMSupport.hpp>
-#include <xalanc/XalanDOM/XalanNode.hpp>
-
-#include "serialization/xml/BtDomErrorHandler.h"
 #include "serialization/xml/XmlRecord.h"
 #include "serialization/xml/XmlNamedEntityRecord.h"
 #include "serialization/xml/XmlMashRecord.h"
@@ -148,7 +144,7 @@ public:
     * \param documentData The contents of the XML file, which the caller should already have loaded into memory
     * \param fileName Used only for logging / error message
     * \param domErrorHandler The rules for handling any errors encountered in the file - in particular which errors
-    *                        should ignored and whether any adjustment needs to be made to the line numbers where
+    *                        should be ignored and whether any adjustment needs to be made to the line numbers where
     *                        errors are found when creating user-readable messages.  (This latter is needed because in
     *                        some encodings, eg BeerXML, we need to modify the in-memory copy of the XML file before
     *                        parsing it.  See comments in the BeerXML-specific files for more details.)
@@ -160,7 +156,7 @@ public:
     */
    bool validateLoadAndStoreInDb(QByteArray const & documentData,
                                  QString const & fileName,
-                                 BtDomErrorHandler & domErrorHandler,
+                                 XmlErrorHandler & errorHandler,
                                  QTextStream & userMessage) const;
 
 private:

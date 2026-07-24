@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/EnumeratedItemsWidget.h is part of Brewtarget, and is copyright the following authors 2025:
+ * widgets/EnumeratedItemsWidget.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -132,16 +132,6 @@ class StockUseMiscsWidget : public EnumeratedItemsWidget,
    Q_OBJECT
 
    ENUMERATED_ITEMS_WIDGET_COMMON_DECL(StockUseMisc)
-};
-//»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-#include "qtModels/tableModels/StockUseSaltTableModel.h"
-
-class StockUseSaltsWidget : public EnumeratedItemsWidget,
-                            public EnumeratedItemsWidgetBase<StockUseSaltsWidget,
-                                                             StockUseSalt> {
-   Q_OBJECT
-
-   ENUMERATED_ITEMS_WIDGET_COMMON_DECL(StockUseSalt)
 };
 //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
 #include "qtModels/tableModels/StockUseYeastTableModel.h"
