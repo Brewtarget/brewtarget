@@ -107,11 +107,9 @@ public:
     */
    impl(QVector<XmlErrorHandler::PatternAndReason> const * errorPatternsToIgnore,
         unsigned int numberOfLinesInserted,
-        unsigned int lineAfterWhichInserted) : couldntHandleError(false),
-                                               lastError(),
-                                               errorPatternsToIgnore(errorPatternsToIgnore),
-                                               numberOfLinesInserted(numberOfLinesInserted),
-                                               lineAfterWhichInserted(lineAfterWhichInserted) {
+        unsigned int lineAfterWhichInserted) : m_errorPatternsToIgnore(errorPatternsToIgnore),
+                                               m_numberOfLinesInserted(numberOfLinesInserted),
+                                               m_lineAfterWhichInserted(lineAfterWhichInserted) {
       return;
    }
 
@@ -123,11 +121,11 @@ public:
    // See https://xerces.apache.org/xerces-c/apiDocs-3/classDOMError.html for possible indexes into this array
    static char const * const XercesErrorSeverities[];
 
-   bool couldntHandleError;
-   QString lastError;
-   QVector<XmlErrorHandler::PatternAndReason> const * errorPatternsToIgnore;
-   unsigned int numberOfLinesInserted;
-   unsigned int lineAfterWhichInserted;
+   bool m_couldntHandleError = false;
+   QString m_lastError = "";
+   QVector<XmlErrorHandler::PatternAndReason> const * m_errorPatternsToIgnore;
+   unsigned int m_numberOfLinesInserted;
+   unsigned int m_lineAfterWhichInserted;
 
 };
 
@@ -150,25 +148,25 @@ XmlErrorHandler::~XmlErrorHandler() = default;
 
 
 bool XmlErrorHandler::failed() const {
-   return this->pimpl->couldntHandleError;
+   return this->pimpl->m_couldntHandleError;
 }
 
 void XmlErrorHandler::reset() {
-   this->pimpl->couldntHandleError = false;
+   this->pimpl->m_couldntHandleError = false;
    return;
 }
 
 QString XmlErrorHandler::getlastError() {
-   return this->pimpl->lastError;
+   return this->pimpl->m_lastError;
 }
 
 unsigned int XmlErrorHandler::correctErrorLine(unsigned int lineNumberOfError) {
-   if (this->pimpl->numberOfLinesInserted > 0 &&
-         lineNumberOfError > (this->pimpl->lineAfterWhichInserted + this->pimpl->numberOfLinesInserted)) {
+   if (this->pimpl->m_numberOfLinesInserted > 0 &&
+         lineNumberOfError > (this->pimpl->m_lineAfterWhichInserted + this->pimpl->m_numberOfLinesInserted)) {
       qDebug() <<
-         Q_FUNC_INFO << "Removing " << this->pimpl->numberOfLinesInserted << " from raw line number of error ("<<
+         Q_FUNC_INFO << "Removing " << this->pimpl->m_numberOfLinesInserted << " from raw line number of error ("<<
          lineNumberOfError << ")";
-      return lineNumberOfError - this->pimpl->numberOfLinesInserted;
+      return lineNumberOfError - this->pimpl->m_numberOfLinesInserted;
    }
 
    return lineNumberOfError;
@@ -197,8 +195,8 @@ void XmlErrorHandler::handleError(xmlError const * error) {
    //
    // Check whether the error we just hit is one we can actually ignore
    //
-   if (nullptr != this->pimpl->errorPatternsToIgnore) {
-      for (auto ii = this->pimpl->errorPatternsToIgnore->cbegin(); ii != this->pimpl->errorPatternsToIgnore->cend(); ++ii) {
+   if (nullptr != this->pimpl->m_errorPatternsToIgnore) {
+      for (auto ii = this->pimpl->m_errorPatternsToIgnore->cbegin(); ii != this->pimpl->m_errorPatternsToIgnore->cend(); ++ii) {
          QRegularExpression pattern(ii->regExMatchingErrorMessage);
          QRegularExpressionMatch match = pattern.match(error->message);
          if (match.hasMatch()) {
@@ -215,8 +213,8 @@ void XmlErrorHandler::handleError(xmlError const * error) {
    // Other errors get logged as such and cause us to stop processing the document
    //
    qCritical() << fullErrorMessage;
-   this->pimpl->lastError = shortErrorMessage;
-   this->pimpl->couldntHandleError = true;
+   this->pimpl->m_lastError = shortErrorMessage;
+   this->pimpl->m_couldntHandleError = true;
    return;
 }
 

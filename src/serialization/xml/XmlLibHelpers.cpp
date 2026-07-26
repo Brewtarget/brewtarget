@@ -106,7 +106,9 @@ QString XmlLibHelpers::elementTypeToString(xmlElementType const elementType) {
    return QString{"%1 = %2"}.arg(elementType).arg(elementTypeToStringRaw(elementType));
 }
 
-XmlLibHelpers::XmlSchema::XmlSchema(QString const & schemaResource, XmlErrorHandler & errorHandler) {
+XmlLibHelpers::XmlSchema::XmlSchema(QString const & schemaResource, XmlErrorHandler & errorHandler) :
+   m_errorHandler{errorHandler} {
+
    QFile schemaFile(schemaResource);
    if (!schemaFile.open(QIODevice::ReadOnly)) {
       // This should pretty much never happen, as we're loading from a QResource compiled into the binary rather
@@ -157,17 +159,23 @@ XmlLibHelpers::XmlSchema::~XmlSchema() = default;
 
 bool XmlLibHelpers::XmlSchema::validate(XmlLibHelpers::XmlDocument const & xmlDocument,
                                         QTextStream & userMessage) const {
-   // Return code is "0 if the document is schemas valid, a positive error code number otherwise and -1 in case of
+   // Return code is "0 if the document is schemas valid [sic], a positive error code number otherwise and -1 in case of
    // internal or API error".
    int returnCode = xmlSchemaValidateDoc(this->m_schemaValidationContext.get(), xmlDocument.get());
    if (returnCode < 0) {
       qCritical() << Q_FUNC_INFO << "Internal or API error";
       throw std::runtime_error("Internal or API error -- see log file for more details");
+      return false;
    }
+
+   // Per comments in XmlCoding::impl::validateLoadAndStoreInDb, some errors are safe to ignore
    if (returnCode > 0) {
-      userMessage << "Invalid file -- see log file for more details";
+      if (this->m_errorHandler.failed()) {
+         userMessage << "Invalid file -- see log file for more details";
+         return false;
+      }
    }
-   return 0 == returnCode;
+   return true;
 }
 
 XmlLibHelpers::XmlDocument::XmlDocument(QByteArray const & documentData,

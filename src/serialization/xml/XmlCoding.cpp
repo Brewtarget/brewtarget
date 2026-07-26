@@ -145,8 +145,18 @@ public:
 
          XmlLibHelpers::XmlDocument xmlDocument{documentData, fileName};
          if (!this->m_schema->validate(xmlDocument, userMessage)) {
-            userMessage << "\n" << errorHandler.getlastError();
-            return false;
+            //
+            // We cannot express all the rules of BeerXML in an XSD.  This means that certain schema validation errors
+            // are OK (eg BeerXML explicitly allows implementations to add their own non-standard tags, so hitting
+            // "unexpected tag" does not mean the document is invalid).  So, we only bail out here if we hit an error
+            // that is not on our OK-to-ignore list.
+            //
+            if (errorHandler.failed()) {
+               userMessage << "\n" << errorHandler.getlastError();
+               return false;
+            } else {
+               qDebug() << Q_FUNC_INFO << "Validation errors were all ignorable";
+            }
          }
 
          // If we got this far, the validation has succeeded, and we can now proceed to loading

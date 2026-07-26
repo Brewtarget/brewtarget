@@ -1303,13 +1303,13 @@ namespace {
       // explanation.)
       //
       // So, our workaround for this is to ignore errors that say:
-      //   • "no declaration found for element 'ABC'"
+      //   • "Element 'ABC': This element is not expected."
       //   • "element 'ABC' is not allowed for content model 'XYZ'.
       //
       static QVector<XmlErrorHandler::PatternAndReason> const errorPatternsToIgnore {
-         // TODO - commented out below are the Xerces errors; assume we'll end up with a new list for libxml2.
          //       Reg-ex to match                                               Reason to ignore errors matching this pattern
-//         {QString("^no declaration found for element"),                 QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")},
+         {QString("^Element '[^']*': This element is not expected."),           QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")},
+         // TBD: For Xerces we also had this error to ignore.  Not sure yet whether there is an equivlaent in libxml2.
 //         {QString("^element '[^']*' is not allowed for content model"), QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")}
       };
       XmlErrorHandler errorHandler(&errorPatternsToIgnore, 1, 1);

@@ -76,6 +76,7 @@ namespace XmlLibHelpers {
 
    private:
       //=============================================== Member Variables ===============================================
+      XmlErrorHandler & m_errorHandler;
       //
       // Resource management is handled automatically via unique_c_pointer.  However, we have to declare things in the
       // right order here.  Member variables are destroyed in the reverse order of their declaration, and we want

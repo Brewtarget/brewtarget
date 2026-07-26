@@ -674,12 +674,14 @@ def installDependencies():
          #
          # Getting the "release name" (aka "friendly name") is a bit more tricky.  See
          # https://apple.stackexchange.com/questions/333452/how-can-i-find-the-friendly-name-of-the-operating-system-from-the-shell-term
-         # for various approaches with varying reliability.  However, in reality, it's simpler to hard-code the info in
+         # for several approaches with varying reliability.  However, in reality, it's simpler to hard-code the info in
          # this script by copying it from https://en.wikipedia.org/wiki/MacOS#Timeline_of_releases or
          # https://en.wikipedia.org/wiki/MacOS_version_history.  We just have to update the list below whenever a new
          # version of MacOS comes out.
          #
          macOsVersionToReleaseName = {
+            '27'    : 'Golden Gate'  ,
+            '26.4'  : 'Tahoe'        , # As of 2026-07, we're seeing this slightly different version number
             '26'    : 'Tahoe'        , # Released 2025-09-15
             '15'    : 'Sequoia'      , # Released 2024-09-16
             '14'    : 'Sonoma'       , # Released 2023-09-26
