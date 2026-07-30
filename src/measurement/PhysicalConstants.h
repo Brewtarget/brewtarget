@@ -1,5 +1,6 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  * measurement/PhysicalConstants.h is part of Brewtarget, and is copyright the following authors 2009-2026:
+ *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -70,10 +71,10 @@ namespace MolarMass {
    double constexpr Oxygen     = 15.9991      ; // 15.999(1)         <- O
    double constexpr Phosphorus = 30.9737619985; // 30.973 761 998(5) <- P
    double constexpr Sodium     = 22.989769282 ; // 22.989 769 28(2)  <- Na
-   double constexpr Sulfur          = 32.062       ; // 32.06(2)          <- S
+   double constexpr Sulfur	    = 32.062       ; // 32.06(2)          <- S
 
    // ======== Monatomic Ions with different names from their corresponding elements ========
-   double constexpr Chloride  = Chlorine;
+   double constexpr Chloride  =	Chlorine;
 
    // ======== Polyatomic ions ========
    double constexpr Bicarbonate = Hydrogen + Carbon + 3 * Oxygen; // <- HCO₃⁻

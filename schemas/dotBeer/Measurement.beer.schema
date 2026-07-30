@@ -430,7 +430,7 @@
     // Ranges
     //
     // Ranges are all essentially the same structure, but you can't really do templating in a JSON schema, so there's a
-    // bit more repetition here than we might tolerate in, say, a C++ program.
+    // little more repetition here than we might tolerate in, say, a C++ program.
     //
     "RangeOfBitterness": {
       "type": "object",

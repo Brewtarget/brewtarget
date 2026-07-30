@@ -340,7 +340,10 @@ public:
             if (!propertyPath.isNull()) {
                // It's a coding error if we had a property defined for a record that's not trying to populate a NamedEntity
                // (ie for the root record).
-               Q_ASSERT(this->m_namedEntity);
+               if (!this->m_namedEntity) {
+                  qCritical() << Q_FUNC_INFO << "Property path" << propertyPath << "set with no NamedEntity!";
+                  Q_ASSERT(false);
+               }
 
                QVariant valueToSet;
                //

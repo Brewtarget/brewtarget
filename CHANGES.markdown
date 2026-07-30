@@ -24,6 +24,7 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 None
 
 ### Bug Fixes
+* Exporting a style with no style letter to BeerJSON creates a file that cannot be imported [1121](https://github.com/Brewtarget/brewtarget/issues/1121)
 * Brewtarget fails to update PostgreSQL database schema [1126](https://github.com/Brewtarget/brewtarget/issues/1126)
 
 ### Release Timestamp

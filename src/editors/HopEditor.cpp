@@ -34,8 +34,6 @@
    #include "moc_HopEditor.cpp"
 #endif
 
-// TODO: Need a separate editor for inventory
-
 HopEditor::HopEditor(QWidget * parent, QString const editorName) :
    QDialog(parent),
    EditorBase<HopEditor, Hop, HopEditorOptions>(editorName) {
@@ -51,9 +49,13 @@ HopEditor::HopEditor(QWidget * parent, QString const editorName) :
       EDITOR_FIELD_NORM(Hop, label_name              , lineEdit_name              , NamedEntity::name            ),
       EDITOR_FIELD_NORM(Hop, tab_notes               , textEdit_notes             , Hop::notes                   ),
       EDITOR_FIELD_NORM(Hop, label_alpha             , lineEdit_alpha             , Hop::alpha_pct            , 1),
+      EDITOR_FIELD_NORM(Hop, label_alphaMin          , lineEdit_alphaMin          , Hop::alphaMin_pct         , 1),
+      EDITOR_FIELD_NORM(Hop, label_alphaMax          , lineEdit_alphaMax          , Hop::alphaMax_pct         , 1),
       EDITOR_FIELD_NORM(Hop, label_totalInventory    , display_totalInventory     , Ingredient::totalInventory, 1, WhenToWriteField::Never),
       EDITOR_FIELD_NORM(Hop, label_beta              , lineEdit_beta              , Hop::beta_pct             , 1),
-      EDITOR_FIELD_NORM(Hop, label_HSI               , lineEdit_HSI               , Hop::hsi_pct              , 0),
+      EDITOR_FIELD_NORM(Hop, label_betaMin           , lineEdit_betaMin           , Hop::betaMin_pct          , 1),
+      EDITOR_FIELD_NORM(Hop, label_betaMax           , lineEdit_betaMax           , Hop::betaMax_pct          , 1),
+      EDITOR_FIELD_NORM(Hop, label_sixMonthAlphaLoss , lineEdit_sixMonthAlphaLoss , Hop::sixMonthAlphaLoss_pct, 0),
       EDITOR_FIELD_NORM(Hop, label_origin            , lineEdit_origin            , Hop::origin                  ),
       EDITOR_FIELD_NORM(Hop, label_humulene          , lineEdit_humulene          , Hop::humulene_pct         , 2),
       EDITOR_FIELD_NORM(Hop, label_caryophyllene     , lineEdit_caryophyllene     , Hop::caryophyllene_pct    , 2),

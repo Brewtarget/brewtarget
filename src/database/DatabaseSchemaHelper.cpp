@@ -3059,8 +3059,10 @@ namespace {
     *        We add base and target water profiles to Recipe, along with mashRo_pct and spargeRo_pct (which we drop from
     *        Water).
     *
-    *        We also tidy up brew_log, and drop the no-longer used equipment.boil_time and equipment.calc_boil_volume
+    *        We tidy up brew_log, and drop the no-longer used equipment.boil_time and equipment.calc_boil_volume
     *        columns.
+    *
+    *        And we add typical ranges for alpha and beta acid to hop.
     */
    bool migrate_to_21([[maybe_unused]] Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> const migrationQueries{
@@ -3306,6 +3308,25 @@ namespace {
          // computed from pre-boil measurements.
          //
          {QString("ALTER TABLE brew_log ADD COLUMN forecast_original_gravity_sg %1").arg(db.getDbNativeTypeName<double>())},
+
+         //
+         // Add new min/max ranges for alpha and beta acid to hop.  And, while we're here, bring the existing column
+         // names into line with convention.
+         //
+         {QString("ALTER TABLE hop ADD COLUMN alpha_min_pct %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE hop ADD COLUMN alpha_max_pct %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE hop ADD COLUMN  beta_min_pct %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE hop ADD COLUMN  beta_max_pct %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE hop RENAME COLUMN          alpha TO          alpha_pct")},
+         {QString("ALTER TABLE hop RENAME COLUMN           beta TO           beta_pct")},
+         {QString("ALTER TABLE hop RENAME COLUMN  caryophyllene TO  caryophyllene_pct")},
+         {QString("ALTER TABLE hop RENAME COLUMN     cohumulone TO     cohumulone_pct")},
+         {QString("ALTER TABLE hop RENAME COLUMN       humulene TO       humulene_pct")},
+         {QString("ALTER TABLE hop RENAME COLUMN        myrcene TO        myrcene_pct")},
+
+         // HSI stands for "hop stability index", but it's not a very widely used term AFAIK, so we switch to a more
+         // descriptive name.
+         {QString("ALTER TABLE hop RENAME COLUMN hsi TO sixMonthAlphaLoss_pct")},
 
       };
 

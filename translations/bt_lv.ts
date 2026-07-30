@@ -3273,10 +3273,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hop Stability Index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Humulene</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3342,6 +3338,26 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>% Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max % Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min % Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max % Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min % Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Six Month Alpha Loss</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9001,14 +9017,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>HSI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hop Stability/Storage index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Origin</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9037,10 +9045,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Alpha %</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Extras</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9050,10 +9054,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Myrcene %</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Beta %</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9214,6 +9214,46 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Create a new stock purchase record for this hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alpha Acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Actual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Typical Range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min alpha acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max alpha acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beta Acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min beta acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max beta acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>6 Month Alpha Loss</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
