@@ -76,7 +76,8 @@
           "description": "Country of origin for the hop variety"
         },
         "year": {
-          "type": "string"
+          "type": "string",
+          "description": "Year of harvest.  (Note that this is intentionally not a number, as, for one thing, years are not generally formatted in the same way as numbers.)"
         },
         "form": {
           "enum": [
@@ -89,10 +90,20 @@
           ]
         },
         "alpha_acid": {
+          "description": "The actual alpha acid content of the specific year's harvest (and batch) of this type of hop.",
           "$ref": "Measurement.beer.schema#/$defs/Percentage"
         },
+        "alpha_acid_range": {
+          "description": "The typical range of alpha acid for this type of hop.",
+          "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
+        },
         "beta_acid": {
+          "description": "The actual beta acid content of the specific year's harvest (and batch) of this type of hop.",
           "$ref": "Measurement.beer.schema#/$defs/Percentage"
+        },
+        "beta_acid_range": {
+          "description": "The typical range of beta acid for this type of hop.",
+          "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
         }
       },
       "required": [

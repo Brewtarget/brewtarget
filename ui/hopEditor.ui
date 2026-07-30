@@ -69,61 +69,90 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="1">
-        <widget class="QLabel" name="label_alpha">
-         <property name="toolTip">
-          <string>Required</string>
+
+       <item row="4" column="1" colspan="5">
+        <widget class="QGroupBox" name="groupBox_alpha">
+         <property name="title">
+          <string>Alpha Acid</string>
          </property>
-         <property name="text">
-          <string>Alpha %</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_alpha</cstring>
-         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_alpha">
+          <item>
+           <widget class="QLabel" name="label_alpha">
+            <property name="toolTip">
+             <string>Required</string>
+            </property>
+            <property name="text">
+             <string>Actual</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_alpha</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="SmartLineEdit" name="lineEdit_alpha">
+            <property name="toolTip">
+             <string>Alpha acids as percent by mass</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="spacer_alpha">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>60</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <!-- The label_alphaMin / label_alphaMax label names are very slightly misleading, but not too much so
+                IMHO. -->
+           <widget class="QLabel" name="label_alphaMin">
+            <property name="text">
+             <string>Typical Range</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_alphaMin</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="SmartLineEdit" name="lineEdit_alphaMin">
+            <property name="toolTip">
+             <string>Min alpha acids as percent by mass</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_alphaMax">
+            <property name="text">
+             <string>-</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_alphaMax</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="SmartLineEdit" name="lineEdit_alphaMax">
+            <property name="toolTip">
+             <string>Max alpha acids as percent by mass</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item row="2" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_alpha">
-         <property name="toolTip">
-          <string>Alpha acids as percent by mass</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="4">
-        <widget class="QLabel" name="label_type">
-         <property name="text">
-          <string>Type</string>
-         </property>
-         <property name="buddy">
-          <cstring>comboBox_hopType</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="5">
-        <widget class="BtComboBoxEnum" name="comboBox_hopType">
-         <property name="toolTip">
-          <string>Hop Type</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="label_origin">
-         <property name="text">
-          <string>Origin</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_origin</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_origin">
-         <property name="toolTip">
-          <string>Origin</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="4">
+
+       <item row="10" column="1">
         <widget class="QLabel" name="label_form">
          <property name="text">
           <string>Form</string>
@@ -133,20 +162,67 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="5">
+       <item row="10" column="2">
         <widget class="BtComboBoxEnum" name="comboBox_hopForm">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="toolTip">
           <string>Hop Form</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="10" column="4">
+        <widget class="QLabel" name="label_year">
+         <property name="text">
+          <string>Year</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_year</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="5">
+        <widget class="SmartLineEdit" name="lineEdit_year">
+         <property name="toolTip">
+          <string>Year</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="12" column="1">
+        <widget class="QLabel" name="label_origin">
+         <property name="text">
+          <string>Origin</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_origin</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_origin">
+         <property name="toolTip">
+          <string>Origin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="4">
+        <widget class="QLabel" name="label_type">
+         <property name="text">
+          <string>Type</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBox_hopType</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="5">
+        <widget class="BtComboBoxEnum" name="comboBox_hopType">
+         <property name="toolTip">
+          <string>Hop Type</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="14" column="1">
         <widget class="QLabel" name="label_producer">
          <property name="text">
           <string>Producer</string>
@@ -156,7 +232,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="14" column="2">
         <widget class="SmartLineEdit" name="lineEdit_producer">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -169,30 +245,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="4">
-        <widget class="QLabel" name="label_year">
-         <property name="text">
-          <string>Year</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_year</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="5">
-        <widget class="SmartLineEdit" name="lineEdit_year">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Year</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="4">
+       <item row="14" column="4">
         <widget class="QLabel" name="label_productId">
          <property name="text">
           <string>Product ID</string>
@@ -202,7 +255,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="5">
+       <item row="14" column="5">
         <widget class="SmartLineEdit" name="lineEdit_productId">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -216,7 +269,7 @@
         </widget>
        </item>
 
-       <item row="6" column="1">
+       <item row="16" column="1">
         <widget class="SmartLabel" name="label_totalInventory">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
@@ -229,7 +282,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
+       <item row="16" column="2">
         <!-- We could do this by inserting another column in the QGridLayout, but I think this is simpler. -->
         <layout class="QHBoxLayout" name="horizontalLayout_inventory">
          <item>
@@ -252,7 +305,7 @@
         </layout>
        </item>
 
-       <item row="12" column="1">
+       <item row="17" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -265,27 +318,28 @@
          </property>
         </spacer>
        </item>
-       <item row="13" column="0">
+
+       <item row="18" column="0">
         <widget class="InfoButton" name="infoButton_id"></widget>
        </item>
-       <item row="13" column="1">
+       <item row="18" column="1">
         <widget class="QLabel" name="label_id">
          <property name="text">
           <string>ID in database</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="2">
+       <item row="18" column="2">
         <widget class="QLabel" name="label_id_value">
         </widget>
        </item>
 
-       <item row="13" column="4" colspan="2">
+       <item row="18" column="4" colspan="2">
         <widget class="QLabel" name="label_numRecipesUsing">
         </widget>
        </item>
 
-       <item row="14" column="1" colspan="5">
+       <item row="20" column="1" colspan="5">
         <widget class="InfoText" name="infoText_id">
          <property name="buddy">
           <cstring>infoButton_id</cstring>
@@ -302,60 +356,108 @@
        <string>Extras</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_beta">
+
+       <!-- Beta acid fields follow the same structure as for alpha acid ones on the main pane (see above) -->
+       <item row="1" column="0" colspan="4">
+        <widget class="QGroupBox" name="groupBox_beta">
+         <property name="title">
+          <string>Beta Acid</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_beta">
+          <item>
+           <widget class="QLabel" name="label_beta">
+            <property name="toolTip">
+             <string>Required</string>
+            </property>
+            <property name="text">
+             <string>Actual</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_beta</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="SmartLineEdit" name="lineEdit_beta">
+            <property name="toolTip">
+             <string>Beta acids as percent by mass</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="spacer_beta">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>60</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_betaMin">
+            <property name="text">
+             <string>Typical Range</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_betaMin</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="SmartLineEdit" name="lineEdit_betaMin">
+            <property name="toolTip">
+             <string>Min beta acids as percent by mass</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_betaMax">
+            <property name="text">
+             <string>-</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_betaMax</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="SmartLineEdit" name="lineEdit_betaMax">
+            <property name="toolTip">
+             <string>Max beta acids as percent by mass</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_sixMonthAlphaLoss">
          <property name="text">
-          <string>Beta %</string>
+          <string>6 Month Alpha Loss</string>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_beta</cstring>
+          <cstring>lineEdit_sixMonthAlphaLoss</cstring>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_beta">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
+       <item row="2" column="1">
+        <widget class="SmartLineEdit" name="lineEdit_sixMonthAlphaLoss">
          <property name="toolTip">
-          <string>Beta acids as percent by mass</string>
+          <string>6 Month Alpha Loss</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="label_HSI">
-         <property name="text">
-          <string>HSI</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_HSI</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="SmartLineEdit" name="lineEdit_HSI">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Hop Stability/Storage index</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
+
+       <item row="4" column="0">
         <widget class="QLabel" name="label_humulene">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="text">
           <string>Humulene %</string>
          </property>
@@ -364,7 +466,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="4" column="1">
         <widget class="SmartLineEdit" name="lineEdit_humulene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -377,7 +479,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
+       <item row="4" column="2">
         <widget class="QLabel" name="label_linalool">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -393,7 +495,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
+       <item row="4" column="3">
         <widget class="SmartLineEdit" name="lineEdit_linalool">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -406,7 +508,8 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+
+       <item row="6" column="0">
         <widget class="QLabel" name="label_caryophyllene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -422,7 +525,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="6" column="1">
         <widget class="SmartLineEdit" name="lineEdit_caryophyllene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -435,7 +538,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item row="6" column="2">
         <widget class="QLabel" name="label_limonene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -451,7 +554,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="3">
+       <item row="6" column="3">
         <widget class="SmartLineEdit" name="lineEdit_limonene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -464,7 +567,8 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+
+       <item row="8" column="0">
         <widget class="QLabel" name="label_cohumulone">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -480,7 +584,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="8" column="1">
         <widget class="SmartLineEdit" name="lineEdit_cohumulone">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -493,7 +597,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
+       <item row="8" column="2">
         <widget class="QLabel" name="label_nerol">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -509,7 +613,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="3">
+       <item row="8" column="3">
         <widget class="SmartLineEdit" name="lineEdit_nerol">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -522,7 +626,8 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+
+       <item row="10" column="0">
         <widget class="QLabel" name="label_myrcene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -538,7 +643,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="10" column="1">
         <widget class="SmartLineEdit" name="lineEdit_myrcene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -551,7 +656,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="10" column="2">
         <widget class="QLabel" name="label_pinene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -567,7 +672,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="3">
+       <item row="10" column="3">
         <widget class="SmartLineEdit" name="lineEdit_pinene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -580,7 +685,8 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+
+       <item row="12" column="0">
         <widget class="QLabel" name="label_farnesene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -596,7 +702,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="12" column="1">
         <widget class="SmartLineEdit" name="lineEdit_farnesene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -609,7 +715,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="2">
+       <item row="12" column="2">
         <widget class="QLabel" name="label_polyphenols">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -625,7 +731,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="3">
+       <item row="12" column="3">
         <widget class="SmartLineEdit" name="lineEdit_polyphenols">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -638,7 +744,8 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
+
+       <item row="14" column="0">
         <widget class="QLabel" name="label_geraniol">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -654,7 +761,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="14" column="1">
         <widget class="SmartLineEdit" name="lineEdit_geraniol">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -667,7 +774,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
+       <item row="14" column="2">
         <widget class="QLabel" name="label_xanthohumol">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -683,7 +790,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="3">
+       <item row="14" column="3">
         <widget class="SmartLineEdit" name="lineEdit_xanthohumol">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -696,7 +803,8 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
+
+       <item row="16" column="0">
         <widget class="QLabel" name="label_bPinene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -712,7 +820,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item row="16" column="1">
         <widget class="SmartLineEdit" name="lineEdit_bPinene">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -725,7 +833,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="2">
+       <item row="16" column="2">
         <widget class="QLabel" name="label_totalOil_mlPer100g">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -741,7 +849,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="3">
+       <item row="16" column="3">
         <widget class="SmartLineEdit" name="lineEdit_totalOil_mlPer100g">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -754,7 +862,8 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
+
+       <item row="18" column="0">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -948,7 +1057,7 @@
   <tabstop>lineEdit_farnesene</tabstop>
   <tabstop>lineEdit_geraniol</tabstop>
   <tabstop>lineEdit_bPinene</tabstop>
-  <tabstop>lineEdit_HSI</tabstop>
+  <tabstop>lineEdit_sixMonthAlphaLoss</tabstop>
   <tabstop>lineEdit_linalool</tabstop>
   <tabstop>lineEdit_limonene</tabstop>
   <tabstop>lineEdit_nerol</tabstop>

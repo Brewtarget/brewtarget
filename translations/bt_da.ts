@@ -4804,7 +4804,7 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Kog</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="97"/>
+        <location filename="../src/model/Hop.cpp" line="101"/>
         <source>Aroma</source>
         <translation>Aroma</translation>
     </message>
@@ -4813,7 +4813,7 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Tør humle</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="96"/>
+        <location filename="../src/model/Hop.cpp" line="100"/>
         <source>Bittering</source>
         <translation>Bitter</translation>
     </message>
@@ -4822,17 +4822,17 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Begge</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="77"/>
+        <location filename="../src/model/Hop.cpp" line="81"/>
         <source>Leaf</source>
         <translation>Frisk</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="78"/>
+        <location filename="../src/model/Hop.cpp" line="82"/>
         <source>Pellet</source>
         <translation>Pille</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="79"/>
+        <location filename="../src/model/Hop.cpp" line="83"/>
         <source>Plug</source>
         <translation>Prop</translation>
     </message>
@@ -4850,142 +4850,141 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Beta-syre</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="41"/>
+        <location filename="../src/model/Hop.cpp" line="45"/>
         <source>β-Pinene</source>
         <translation>β-pinen</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="42"/>
+        <location filename="../src/model/Hop.cpp" line="46"/>
         <source>Caryophyllene</source>
         <translation>Caryophyllen %</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="43"/>
+        <location filename="../src/model/Hop.cpp" line="47"/>
         <source>Cohumulone</source>
         <translation>Cohumulen</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="44"/>
+        <location filename="../src/model/Hop.cpp" line="48"/>
         <source>Farnesene</source>
         <translation>Farnesen</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="46"/>
+        <location filename="../src/model/Hop.cpp" line="50"/>
         <source>Geraniol</source>
         <translation>Geraniol</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="47"/>
         <source>Hop Stability Index</source>
-        <translation>Humle stabilitetsindeks</translation>
+        <translation type="vanished">Humle stabilitetsindeks</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="48"/>
+        <location filename="../src/model/Hop.cpp" line="52"/>
         <source>Humulene</source>
         <translation>Humulen</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="49"/>
+        <location filename="../src/model/Hop.cpp" line="53"/>
         <source>Limonene</source>
         <translation>Limonen</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="50"/>
+        <location filename="../src/model/Hop.cpp" line="54"/>
         <source>Linalool</source>
         <translation>Linalool</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="51"/>
+        <location filename="../src/model/Hop.cpp" line="55"/>
         <source>Myrcene</source>
         <translation>Myrcen</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="52"/>
+        <location filename="../src/model/Hop.cpp" line="56"/>
         <source>Nerol</source>
         <translation>Nerol</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="53"/>
+        <location filename="../src/model/Hop.cpp" line="57"/>
         <source>Notes</source>
         <translation>Notater</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="55"/>
+        <location filename="../src/model/Hop.cpp" line="59"/>
         <source>Pinene</source>
         <translation>Pinen</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="56"/>
+        <location filename="../src/model/Hop.cpp" line="60"/>
         <source>Polyphenols</source>
         <translation>Polyphenoler</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="57"/>
+        <location filename="../src/model/Hop.cpp" line="61"/>
         <source>Producer</source>
         <translation>Producent</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="58"/>
+        <location filename="../src/model/Hop.cpp" line="62"/>
         <source>Product ID</source>
         <translation>Produkt-ID</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="59"/>
+        <location filename="../src/model/Hop.cpp" line="63"/>
         <source>Substitutes</source>
         <translation>Erstatninger</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="60"/>
+        <location filename="../src/model/Hop.cpp" line="64"/>
         <source>Total Oil</source>
         <translation>Total olie</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="62"/>
+        <location filename="../src/model/Hop.cpp" line="66"/>
         <source>Xanthohumol</source>
         <translation>Xanthohumol</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="63"/>
+        <location filename="../src/model/Hop.cpp" line="67"/>
         <source>Year</source>
         <translation>År</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="80"/>
+        <location filename="../src/model/Hop.cpp" line="84"/>
         <source>Extract</source>
         <translation>Ekstrakt</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="81"/>
+        <location filename="../src/model/Hop.cpp" line="85"/>
         <source>WetLeaf</source>
         <translation>Friskhøstet</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="82"/>
+        <location filename="../src/model/Hop.cpp" line="86"/>
         <source>Powder</source>
         <translation>Pulver</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="98"/>
+        <location filename="../src/model/Hop.cpp" line="102"/>
         <source>Aroma &amp; Bittering</source>
         <translation>Aroma og bitter</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="99"/>
+        <location filename="../src/model/Hop.cpp" line="103"/>
         <source>Flavor</source>
         <translation>Duft</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="100"/>
+        <location filename="../src/model/Hop.cpp" line="104"/>
         <source>Bittering &amp; Flavor</source>
         <translation>Bitter og duft</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="101"/>
+        <location filename="../src/model/Hop.cpp" line="105"/>
         <source>Aroma &amp; Flavor</source>
         <translation>Aroma og duft</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="102"/>
+        <location filename="../src/model/Hop.cpp" line="106"/>
         <source>Aroma, Bittering &amp; Flavor</source>
         <translation>Aroma, bitter og duft</translation>
     </message>
@@ -4994,7 +4993,7 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Navn</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="61"/>
+        <location filename="../src/model/Hop.cpp" line="65"/>
         <location filename="../src/trees/TreeNode.cpp" line="879"/>
         <source>Type</source>
         <translation>Form</translation>
@@ -5006,11 +5005,36 @@ Logfil indeholder måske flere detaljer.</translation>
     </message>
     <message>
         <location filename="../src/model/Hop.cpp" line="40"/>
+        <source>Max % Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/model/Hop.cpp" line="41"/>
+        <source>Min % Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/model/Hop.cpp" line="42"/>
         <source>% Beta</source>
         <translation type="unfinished">% beta</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="54"/>
+        <location filename="../src/model/Hop.cpp" line="43"/>
+        <source>Max % Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/model/Hop.cpp" line="44"/>
+        <source>Min % Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/model/Hop.cpp" line="51"/>
+        <source>Six Month Alpha Loss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/model/Hop.cpp" line="58"/>
         <source>Origin</source>
         <translation>Oprindelsessted</translation>
     </message>
@@ -5025,7 +5049,7 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../src/model/Hop.cpp" line="45"/>
+        <location filename="../src/model/Hop.cpp" line="49"/>
         <location filename="../src/trees/TreeNode.cpp" line="874"/>
         <source>Form</source>
         <translation>Type</translation>
@@ -7409,7 +7433,7 @@ Programmet lukkes nu.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/database/ObjectStoreTyped.cpp" line="1043"/>
+        <location filename="../src/database/ObjectStoreTyped.cpp" line="1047"/>
         <source>There were errors loading the following object store(s): %1</source>
         <translation>Der opstod fejl ved hentning af følgende objektsamling(er): %1</translation>
     </message>
@@ -11989,12 +12013,12 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Intern fejl! (Parsning af dokument returnerede en nulpointer)</translation>
     </message>
     <message>
-        <location filename="../src/serialization/xml/XmlCoding.cpp" line="182"/>
+        <location filename="../src/serialization/xml/XmlCoding.cpp" line="192"/>
         <source>Contents of file were not readable</source>
         <translation>Indhold af filen kunne ikke læses</translation>
     </message>
     <message>
-        <location filename="../src/serialization/xml/XmlCoding.cpp" line="191"/>
+        <location filename="../src/serialization/xml/XmlCoding.cpp" line="201"/>
         <source>Could not understand file format</source>
         <translation>Filformat ukendt</translation>
     </message>
@@ -14002,7 +14026,7 @@ The final volume in the primary is %1.</source>
         <translation>Navn</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="88"/>
+        <location filename="../ui/hopEditor.ui" line="95"/>
         <source>Alpha acids as percent by mass</source>
         <translation>Alfasyre som procent pr. masse</translation>
     </message>
@@ -14039,7 +14063,7 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Varighed</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="95"/>
+        <location filename="../ui/hopEditor.ui" line="210"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
@@ -14052,7 +14076,7 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Begge</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="129"/>
+        <location filename="../ui/hopEditor.ui" line="158"/>
         <source>Form</source>
         <translation>Type</translation>
     </message>
@@ -14065,48 +14089,67 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Pille</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="324"/>
+        <location filename="../ui/hopEditor.ui" line="383"/>
         <source>Beta acids as percent by mass</source>
         <translation>Betasyrer som procent pr. masse</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="331"/>
         <source>HSI</source>
-        <translation>Humle lagerindeks (HSI)</translation>
+        <translation type="vanished">Humle lagerindeks (HSI)</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="347"/>
         <source>Hop Stability/Storage index</source>
-        <translation>Humle stabilietet/lagrings-indeks</translation>
+        <translation type="vanished">Humle stabilietet/lagrings-indeks</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="112"/>
-        <location filename="../ui/hopEditor.ui" line="122"/>
+        <location filename="../ui/hopEditor.ui" line="193"/>
+        <location filename="../ui/hopEditor.ui" line="203"/>
         <source>Origin</source>
         <translation>Oprindelsessted</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="245"/>
+        <location filename="../ui/hopEditor.ui" line="298"/>
         <source>Add Purchase</source>
         <translation>Tilføj køb</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="248"/>
+        <location filename="../ui/hopEditor.ui" line="301"/>
         <source>Create a new stock purchase record for this hop</source>
         <translation>Lav en ny lager køb post for denne humle</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="376"/>
+        <location filename="../ui/hopEditor.ui" line="364"/>
+        <source>Beta Acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/hopEditor.ui" line="416"/>
+        <source>Min beta acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/hopEditor.ui" line="433"/>
+        <source>Max beta acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/hopEditor.ui" line="444"/>
+        <location filename="../ui/hopEditor.ui" line="454"/>
+        <source>6 Month Alpha Loss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/hopEditor.ui" line="478"/>
         <source>Humulene</source>
         <translation>Humulen</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="492"/>
+        <location filename="../ui/hopEditor.ui" line="596"/>
         <source>Cohumulone</source>
         <translation>Cohumulen</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="550"/>
+        <location filename="../ui/hopEditor.ui" line="655"/>
         <source>Myrcene</source>
         <translation>Myrcen</translation>
     </message>
@@ -14121,50 +14164,83 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../ui/hopEditor.ui" line="42"/>
-        <location filename="../ui/hopEditor.ui" line="75"/>
+        <location filename="../ui/hopEditor.ui" line="82"/>
+        <location filename="../ui/hopEditor.ui" line="370"/>
         <source>Required</source>
         <translation>Krævet</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="78"/>
         <source>Alpha %</source>
-        <translation>Alfa %</translation>
+        <translation type="vanished">Alfa %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="105"/>
+        <location filename="../ui/hopEditor.ui" line="220"/>
         <source>Hop Type</source>
         <translation>Humletype</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="145"/>
+        <location filename="../ui/hopEditor.ui" line="168"/>
         <source>Hop Form</source>
         <translation>Hop form</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="152"/>
-        <location filename="../ui/hopEditor.ui" line="168"/>
+        <location filename="../ui/hopEditor.ui" line="228"/>
+        <location filename="../ui/hopEditor.ui" line="244"/>
         <source>Producer</source>
         <translation>Producent</translation>
     </message>
     <message>
         <location filename="../ui/hopEditor.ui" line="175"/>
-        <location filename="../ui/hopEditor.ui" line="191"/>
+        <location filename="../ui/hopEditor.ui" line="185"/>
         <source>Year</source>
         <translation>År</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="198"/>
-        <location filename="../ui/hopEditor.ui" line="214"/>
+        <location filename="../ui/hopEditor.ui" line="76"/>
+        <source>Alpha Acid</source>
+        <translation type="unfinished">Alfa-syre</translation>
+    </message>
+    <message>
+        <location filename="../ui/hopEditor.ui" line="85"/>
+        <location filename="../ui/hopEditor.ui" line="373"/>
+        <source>Actual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/hopEditor.ui" line="120"/>
+        <location filename="../ui/hopEditor.ui" line="406"/>
+        <source>Typical Range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/hopEditor.ui" line="130"/>
+        <source>Min alpha acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/hopEditor.ui" line="137"/>
+        <location filename="../ui/hopEditor.ui" line="423"/>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/hopEditor.ui" line="147"/>
+        <source>Max alpha acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/hopEditor.ui" line="251"/>
+        <location filename="../ui/hopEditor.ui" line="267"/>
         <source>Product ID</source>
         <translation>Produkt ID</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="225"/>
+        <location filename="../ui/hopEditor.ui" line="278"/>
         <source>Total Inventory</source>
         <translation>Total på lager</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="238"/>
+        <location filename="../ui/hopEditor.ui" line="291"/>
         <source>Total amount in inventory</source>
         <translation>Samlet mængde på lager</translation>
     </message>
@@ -14177,179 +14253,178 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Mængdeangivelse</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="274"/>
+        <location filename="../ui/hopEditor.ui" line="328"/>
         <source>ID in database</source>
         <translation>ID i database</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="294"/>
+        <location filename="../ui/hopEditor.ui" line="348"/>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation>Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="302"/>
+        <location filename="../ui/hopEditor.ui" line="356"/>
         <source>Extras</source>
         <translation>Ekstra</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="308"/>
         <source>Beta %</source>
-        <translation>Beta %</translation>
+        <translation type="vanished">Beta %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="360"/>
+        <location filename="../ui/hopEditor.ui" line="462"/>
         <source>Humulene %</source>
         <translation>Humulen %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="389"/>
+        <location filename="../ui/hopEditor.ui" line="491"/>
         <source>Linalool %</source>
         <translation>Linalool %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="405"/>
+        <location filename="../ui/hopEditor.ui" line="507"/>
         <source>Linalool</source>
         <translation>Linalool</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="418"/>
-        <location filename="../ui/hopEditor.ui" line="434"/>
+        <location filename="../ui/hopEditor.ui" line="521"/>
+        <location filename="../ui/hopEditor.ui" line="537"/>
         <source>Caryophyllene %</source>
         <translation>Caryophyllen %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="447"/>
+        <location filename="../ui/hopEditor.ui" line="550"/>
         <source>Limonene %</source>
         <translation>Limonen %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="463"/>
+        <location filename="../ui/hopEditor.ui" line="566"/>
         <source>Limonene</source>
         <translation>Limonen</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="476"/>
+        <location filename="../ui/hopEditor.ui" line="580"/>
         <source>Cohumulone %</source>
         <translation>Cohumulen %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="505"/>
+        <location filename="../ui/hopEditor.ui" line="609"/>
         <source>Nerol %</source>
         <translation>Nerol %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="521"/>
+        <location filename="../ui/hopEditor.ui" line="625"/>
         <source>Nerol</source>
         <translation>Nerol</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="534"/>
+        <location filename="../ui/hopEditor.ui" line="639"/>
         <source>Myrcene %</source>
         <translation>Myrcen %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="563"/>
+        <location filename="../ui/hopEditor.ui" line="668"/>
         <source>Pinene %</source>
         <translation>Pinen %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="579"/>
+        <location filename="../ui/hopEditor.ui" line="684"/>
         <source>Pinene</source>
         <translation>Pinen</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="592"/>
+        <location filename="../ui/hopEditor.ui" line="698"/>
         <source>Farnesene %</source>
         <translation>Farnesen %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="608"/>
+        <location filename="../ui/hopEditor.ui" line="714"/>
         <source>Farnesene</source>
         <translation>Farnesen</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="621"/>
+        <location filename="../ui/hopEditor.ui" line="727"/>
         <source>Polyphenols %</source>
         <translation>Polyphenoler %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="637"/>
+        <location filename="../ui/hopEditor.ui" line="743"/>
         <source>Polyphenols</source>
         <translation>Polyphenoler</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="650"/>
+        <location filename="../ui/hopEditor.ui" line="757"/>
         <source>Geraniol %</source>
         <translation>Geraniol %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="666"/>
+        <location filename="../ui/hopEditor.ui" line="773"/>
         <source>Geraniol</source>
         <translation>Geraniol</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="679"/>
+        <location filename="../ui/hopEditor.ui" line="786"/>
         <source>Xanthohumol %</source>
         <translation>Xanthohumol %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="695"/>
+        <location filename="../ui/hopEditor.ui" line="802"/>
         <source>Xanthohumol</source>
         <translation>Xanthohumol</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="708"/>
+        <location filename="../ui/hopEditor.ui" line="816"/>
         <source>β-pinene %</source>
         <translation>β-pinen %</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="724"/>
+        <location filename="../ui/hopEditor.ui" line="832"/>
         <source>β-pinene</source>
         <translation>β-pinen</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="737"/>
-        <location filename="../ui/hopEditor.ui" line="753"/>
+        <location filename="../ui/hopEditor.ui" line="845"/>
+        <location filename="../ui/hopEditor.ui" line="861"/>
         <source>Total Oil ml/100g</source>
         <translation>Total olie mL/100 g</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="774"/>
+        <location filename="../ui/hopEditor.ui" line="883"/>
         <source>Substitutes</source>
         <translation>Erstatninger</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="803"/>
+        <location filename="../ui/hopEditor.ui" line="912"/>
         <source>Notes</source>
         <translation>Notater</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="850"/>
+        <location filename="../ui/hopEditor.ui" line="959"/>
         <source>New hop</source>
         <translation>Ny humle</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="864"/>
+        <location filename="../ui/hopEditor.ui" line="973"/>
         <source>Save and close</source>
         <translation>Gem og luk</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="878"/>
+        <location filename="../ui/hopEditor.ui" line="987"/>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="853"/>
+        <location filename="../ui/hopEditor.ui" line="962"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="867"/>
+        <location filename="../ui/hopEditor.ui" line="976"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>
     <message>
-        <location filename="../ui/hopEditor.ui" line="881"/>
+        <location filename="../ui/hopEditor.ui" line="990"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>

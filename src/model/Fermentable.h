@@ -271,9 +271,9 @@ public:
     *        Note that \c coarseFineDiff_pct = \c fineGrindYield_pct - \c coarseGrindYield_pct
     *        .:TODO:. We should attempt to enforce this when two or more of the values are set.
     */
-   Q_PROPERTY(std::optional<double>   coarseFineDiff_pct     READ coarseFineDiff_pct     WRITE setCoarseFineDiff_pct                 )
+   Q_PROPERTY(std::optional<double> coarseFineDiff_pct     READ coarseFineDiff_pct     WRITE setCoarseFineDiff_pct                 )
    //! \brief The moisture in pct.  Only appropriate for a "Grain" or "Other_Adjunct" type.   NB Optional in both BeerXML and BeerJSON.
-   Q_PROPERTY(std::optional<double>   moisture_pct           READ moisture_pct           WRITE setMoisture_pct                       )
+   Q_PROPERTY(std::optional<double> moisture_pct           READ moisture_pct           WRITE setMoisture_pct                       )
    //! \brief The diastatic power in Lintner.  Only appropriate for a "Grain" or "Other_Adjunct" type.  NB Optional in both BeerXML and BeerJSON.
    Q_PROPERTY(std::optional<double> diastaticPower_lintner READ diastaticPower_lintner WRITE setDiastaticPower_lintner             )
    //! \brief The percent protein.  Only appropriate for a "Grain" or "Other_Adjunct" type.  NB Optional in both BeerXML and BeerJSON.

@@ -3881,10 +3881,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hop Stability Index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Humulene</source>
         <translation type="unfinished">α-Humulene</translation>
     </message>
@@ -3950,6 +3946,26 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>% Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max % Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min % Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max % Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min % Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Six Month Alpha Loss</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11138,11 +11154,11 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>HSI</source>
-        <translation>HSI</translation>
+        <translation type="vanished">HSI</translation>
     </message>
     <message>
         <source>Hop Stability/Storage index</source>
-        <translation>Hopfen Stabilität/Lagerungs Index</translation>
+        <translation type="vanished">Hopfen Stabilität/Lagerungs Index</translation>
     </message>
     <message>
         <source>Origin</source>
@@ -11210,7 +11226,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Alpha %</source>
-        <translation type="unfinished">Alpha %</translation>
+        <translation type="obsolete">Alpha %</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -11222,10 +11238,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Myrcene %</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Beta %</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11390,6 +11402,46 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alpha Acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Actual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Typical Range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min alpha acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max alpha acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beta Acid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min beta acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max beta acids as percent by mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>6 Month Alpha Loss</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

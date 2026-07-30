@@ -46,31 +46,35 @@ class HopTableModel;
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Hop { inline BtStringConst const property{#property}; }
-AddPropertyName(alpha_pct         )
-AddPropertyName(beta_pct          )
-AddPropertyName(bPinene_pct       )
-AddPropertyName(caryophyllene_pct )
-AddPropertyName(cohumulone_pct    )
-AddPropertyName(farnesene_pct     )
-AddPropertyName(form              )
-AddPropertyName(geraniol_pct      )
-AddPropertyName(hsi_pct           )
-AddPropertyName(humulene_pct      )
-AddPropertyName(limonene_pct      )
-AddPropertyName(linalool_pct      )
-AddPropertyName(myrcene_pct       )
-AddPropertyName(nerol_pct         )
-AddPropertyName(notes             )
-AddPropertyName(origin            )
-AddPropertyName(pinene_pct        )
-AddPropertyName(polyphenols_pct   )
-AddPropertyName(producer          )
-AddPropertyName(productId         )
-AddPropertyName(substitutes       )
-AddPropertyName(totalOil_mlPer100g)
-AddPropertyName(type              )
-AddPropertyName(xanthohumol_pct   )
-AddPropertyName(year              )
+AddPropertyName(alphaMax_pct         )
+AddPropertyName(alphaMin_pct         )
+AddPropertyName(alpha_pct            )
+AddPropertyName(bPinene_pct          )
+AddPropertyName(betaMax_pct          )
+AddPropertyName(betaMin_pct          )
+AddPropertyName(beta_pct             )
+AddPropertyName(caryophyllene_pct    )
+AddPropertyName(cohumulone_pct       )
+AddPropertyName(farnesene_pct        )
+AddPropertyName(form                 )
+AddPropertyName(geraniol_pct         )
+AddPropertyName(humulene_pct         )
+AddPropertyName(limonene_pct         )
+AddPropertyName(linalool_pct         )
+AddPropertyName(myrcene_pct          )
+AddPropertyName(nerol_pct            )
+AddPropertyName(notes                )
+AddPropertyName(origin               )
+AddPropertyName(pinene_pct           )
+AddPropertyName(polyphenols_pct      )
+AddPropertyName(producer             )
+AddPropertyName(productId            )
+AddPropertyName(sixMonthAlphaLoss_pct)
+AddPropertyName(substitutes          )
+AddPropertyName(totalOil_mlPer100g   )
+AddPropertyName(type                 )
+AddPropertyName(xanthohumol_pct      )
+AddPropertyName(year                 )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -81,10 +85,14 @@ AddPropertyName(year              )
  *
  * \brief Model class for a hop record in the database.
  *
- *        TBD: Ideally we would find a way to model:
- *           > A general type of Hop - eg "East Kent Goldings", which will have an alpha acid range
- *           > A specific form and harvest - eg "Pellet 2020 harvest", which will have a single alpha acid value eg 6.0%
- *        Probably we should do this via StockPurchase.
+ *        A hop record can represent either:
+ *           - a general type of Hop - eg "East Kent Goldings", which will have an alpha acid range; or
+ *           - a specific form and harvest - eg "Pellet 2020 harvest", which will have a single alpha acid value eg 6.0%
+ *
+ *        Strictly, we ought to have two separate classes -- eg HopVariety and DriedHop -- but this does not reflect the
+ *        structure of BeerXML and BeerJSON.
+ *
+ *        Probably we could do some of this via StockPurchase.
  */
 class Hop : public Ingredient,
             public IngredientBase<Hop>,
@@ -101,31 +109,35 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
-   static QString localisedName_alpha_pct         ();
-   static QString localisedName_beta_pct          ();
-   static QString localisedName_bPinene_pct       ();
-   static QString localisedName_caryophyllene_pct ();
-   static QString localisedName_cohumulone_pct    ();
-   static QString localisedName_farnesene_pct     ();
-   static QString localisedName_form              ();
-   static QString localisedName_geraniol_pct      ();
-   static QString localisedName_hsi_pct           ();
-   static QString localisedName_humulene_pct      ();
-   static QString localisedName_limonene_pct      ();
-   static QString localisedName_linalool_pct      ();
-   static QString localisedName_myrcene_pct       ();
-   static QString localisedName_nerol_pct         ();
-   static QString localisedName_notes             ();
-   static QString localisedName_origin            ();
-   static QString localisedName_pinene_pct        ();
-   static QString localisedName_polyphenols_pct   ();
-   static QString localisedName_producer          ();
-   static QString localisedName_productId         ();
-   static QString localisedName_substitutes       ();
-   static QString localisedName_totalOil_mlPer100g();
-   static QString localisedName_type              ();
-   static QString localisedName_xanthohumol_pct   ();
-   static QString localisedName_year              ();
+   static QString localisedName_alphaMax_pct         ();
+   static QString localisedName_alphaMin_pct         ();
+   static QString localisedName_alpha_pct            ();
+   static QString localisedName_bPinene_pct          ();
+   static QString localisedName_betaMax_pct          ();
+   static QString localisedName_betaMin_pct          ();
+   static QString localisedName_beta_pct             ();
+   static QString localisedName_caryophyllene_pct    ();
+   static QString localisedName_cohumulone_pct       ();
+   static QString localisedName_farnesene_pct        ();
+   static QString localisedName_form                 ();
+   static QString localisedName_geraniol_pct         ();
+   static QString localisedName_humulene_pct         ();
+   static QString localisedName_limonene_pct         ();
+   static QString localisedName_linalool_pct         ();
+   static QString localisedName_myrcene_pct          ();
+   static QString localisedName_nerol_pct            ();
+   static QString localisedName_notes                ();
+   static QString localisedName_origin               ();
+   static QString localisedName_pinene_pct           ();
+   static QString localisedName_polyphenols_pct      ();
+   static QString localisedName_producer             ();
+   static QString localisedName_productId            ();
+   static QString localisedName_sixMonthAlphaLoss_pct();
+   static QString localisedName_substitutes          ();
+   static QString localisedName_totalOil_mlPer100g   ();
+   static QString localisedName_type                 ();
+   static QString localisedName_xanthohumol_pct      ();
+   static QString localisedName_year                 ();
 
    /*!
     * \brief The form of the hop.
@@ -197,7 +209,7 @@ public:
    //
    using CatalogClass              = HopCatalog;
    using EditorClass               = HopEditor;
-   using StockPurchaseClass            = StockPurchaseHop;
+   using StockPurchaseClass        = StockPurchaseHop;
    using ItemDelegateClass         = HopItemDelegate;
    using RecipeAdditionClass       = RecipeAdditionHop;
    using SortFilterProxyModelClass = HopSortFilterProxyModel;
@@ -217,8 +229,17 @@ public:
    ~Hop() override;
 
    //=================================================== PROPERTIES ====================================================
-   //! \brief Typical percent alpha acid for this type of hop.  ⮜⮜⮜ Required in BeerJSON and BeerXML ⮞⮞⮞
-   Q_PROPERTY(double                alpha_pct    READ alpha_pct    WRITE setAlpha_pct            )
+   /**
+    * \brief \c alpha_pct is the actual alpha acid content of the specific year's harvest (and batch) of this type of
+    *        hop.  ⮜⮜⮜ Required in BeerJSON and BeerXML ⮞⮞⮞
+    *
+    *        \c alphaMax_pct and alphaMin_pct give the typical range of alpha acid for this type of hop -- and are not
+    *        part of BeerXML or BeerJSON.
+    */
+   Q_PROPERTY(double                alpha_pct       READ alpha_pct       WRITE setAlpha_pct   )
+   Q_PROPERTY(std::optional<double> alphaMin_pct    READ alphaMin_pct    WRITE setAlphaMin_pct)
+   Q_PROPERTY(std::optional<double> alphaMax_pct    READ alphaMax_pct    WRITE setAlphaMax_pct)
+
    /**
     * \brief The \c Form.                ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
     *
@@ -226,8 +247,18 @@ public:
     *        \c std::optional<int>, not \c std::optional<Use>
     */
    Q_PROPERTY(std::optional<int>    form         READ formAsInt    WRITE setFormAsInt            )
-   //! \brief The percent of beta acids.  ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
-   Q_PROPERTY(std::optional<double> beta_pct     READ beta_pct     WRITE setBeta_pct             )
+
+   /**
+    * \brief \c beta_pct is the actual beta acid content of the specific year's harvest (and batch) of this type of
+    *        hop.  ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
+    *
+    *        \c betaMax_pct and betaMin_pct give the typical range of beta acid for this type of hop -- and are not part
+    *        of BeerXML or BeerJSON.
+    */
+   Q_PROPERTY(std::optional<double> beta_pct      READ beta_pct      WRITE setBeta_pct   )
+   Q_PROPERTY(std::optional<double> betaMin_pct   READ betaMin_pct   WRITE setBetaMin_pct)
+   Q_PROPERTY(std::optional<double> betaMax_pct   READ betaMax_pct   WRITE setBetaMax_pct)
+
    //! \brief Country of origin for the hop variety.
    Q_PROPERTY(QString               origin       READ origin       WRITE setOrigin               )
    //! \brief The notes.
@@ -240,21 +271,27 @@ public:
     */
    Q_PROPERTY(std::optional<int>    type         READ typeAsInt    WRITE setTypeAsInt            )
    /**
-    * \brief The hop stability index in percent.  The Hop Stability Index (HSI) is defined as the percentage of hop
-    *        alpha lost in 6 months of storage -- see eg
+    * \brief The percentage of hop alpha acid lost in 6 months of storage.
+    *
+    *        Note that this is percentage and not percentage points.  So, eg, if a hop starts out with 4.0% alpha_pct
+    *        and has 25% sixMonthAlphaLoss_pct, then we would expect its alpha acid to be 3.0% after six months in
+    *        storage.
+    *
+    *        BeerXML calls this HSI for "Hop Stability Index" -- see eg
     *        https://hopdoctor.co.uk/2024/12/02/understanding-the-hop-stability-index-key-for-smaller-scale-brewers/.
     *
-    *        It is not to be confused with Hop Storage Index, which is derived from ultraviolet absorbance measured with
-    *        a spectrophotometer (HSI = absorption at 275 nm divided by absorption at 325 nm, or A275/A325).
+    *        However, we changed the name (a) because "Hop Stability Index" does not appear to be a massively widely
+    *        used term and (b) to avoid confusion with Hop Storage Index, which is derived from ultraviolet absorbance
+    *        measured with a spectrophotometer (HSI = absorption at 275 nm divided by absorption at 325 nm, or
+    *        A275/A325).
     *
-    *        In BeerJSON, this is called `percent_lost`, possibly because "Hop Stability Index" does not appear to be
-    *        a massively widely used term.
+    *        In BeerJSON, this is called `percent_lost`.
     *
-    *        TODO: We should rename this to sixMonthAlphaLoss_pct
+    *        TODO: At the moment we do not use this in any calculations, but it would be neat to be able to do so.
     *
     *        ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
     */
-   Q_PROPERTY(std::optional<double> hsi_pct               READ hsi_pct               WRITE setHsi_pct              )
+   Q_PROPERTY(std::optional<double> sixMonthAlphaLoss_pct   READ sixMonthAlphaLoss_pct   WRITE setSixMonthAlphaLoss_pct)
    //! \brief Alternate hop varieties that can be used in place of this hop variety
    Q_PROPERTY(QString               substitutes           READ substitutes           WRITE setSubstitutes          )
    //! \brief Humulene as a percentage of total hop oil.      ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
@@ -289,99 +326,111 @@ public:
    SUPPORT_NUM_RECIPES_USED_IN
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   double                alpha_pct         () const;
-   std::optional<Form  > form              () const;
-   std::optional<int   > formAsInt         () const;
-   std::optional<double> beta_pct          () const;
-   QString               origin            () const;
-   QString               notes             () const;
-   std::optional<Type>   type              () const;
-   std::optional<int>    typeAsInt         () const;
-   std::optional<double> hsi_pct           () const;
-   QString               substitutes       () const;
-   std::optional<double> humulene_pct      () const;
-   std::optional<double> caryophyllene_pct () const;
-   std::optional<double> cohumulone_pct    () const;
-   std::optional<double> myrcene_pct       () const;
+   double                alpha_pct            () const;
+   std::optional<double> alphaMin_pct         () const;
+   std::optional<double> alphaMax_pct         () const;
+   std::optional<Form  > form                 () const;
+   std::optional<int   > formAsInt            () const;
+   std::optional<double> beta_pct             () const;
+   std::optional<double> betaMin_pct          () const;
+   std::optional<double> betaMax_pct          () const;
+   QString               origin               () const;
+   QString               notes                () const;
+   std::optional<Type>   type                 () const;
+   std::optional<int>    typeAsInt            () const;
+   std::optional<double> sixMonthAlphaLoss_pct() const;
+   QString               substitutes          () const;
+   std::optional<double> humulene_pct         () const;
+   std::optional<double> caryophyllene_pct    () const;
+   std::optional<double> cohumulone_pct       () const;
+   std::optional<double> myrcene_pct          () const;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   std::optional<double> totalOil_mlPer100g() const;
-   std::optional<double> farnesene_pct     () const;
-   std::optional<double> geraniol_pct      () const;
-   std::optional<double> bPinene_pct       () const;
-   std::optional<double> linalool_pct      () const;
-   std::optional<double> limonene_pct      () const;
-   std::optional<double> nerol_pct         () const;
-   std::optional<double> pinene_pct        () const;
-   std::optional<double> polyphenols_pct   () const;
-   std::optional<double> xanthohumol_pct   () const;
-   QString               producer          () const;
-   QString               productId         () const;
-   QString               year              () const;
+   std::optional<double> totalOil_mlPer100g   () const;
+   std::optional<double> farnesene_pct        () const;
+   std::optional<double> geraniol_pct         () const;
+   std::optional<double> bPinene_pct          () const;
+   std::optional<double> linalool_pct         () const;
+   std::optional<double> limonene_pct         () const;
+   std::optional<double> nerol_pct            () const;
+   std::optional<double> pinene_pct           () const;
+   std::optional<double> polyphenols_pct      () const;
+   std::optional<double> xanthohumol_pct      () const;
+   QString               producer             () const;
+   QString               productId            () const;
+   QString               year                 () const;
 
    // Combined getters (all added for BeerJSON support)
    [[deprecated]] MassOrVolumeAmt       amountWithUnits      () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   void setAlpha_pct         (double                const   val);
-   void setForm              (std::optional<Form  > const   val);
-   void setFormAsInt         (std::optional<int   > const   val);
-   void setBeta_pct          (std::optional<double> const   val);
-   void setOrigin            (QString               const & val);
-   void setNotes             (QString               const & val);
-   void setType              (std::optional<Type>   const   val);
-   void setTypeAsInt         (std::optional<int>    const   val);
-   void setHsi_pct           (std::optional<double> const   val);
-   void setSubstitutes       (QString               const & val);
-   void setHumulene_pct      (std::optional<double> const   val);
-   void setCaryophyllene_pct (std::optional<double> const   val);
-   void setCohumulone_pct    (std::optional<double> const   val);
-   void setMyrcene_pct       (std::optional<double> const   val);
+   void setAlpha_pct            (double                const   val);
+   void setAlphaMin_pct         (std::optional<double> const   val);
+   void setAlphaMax_pct         (std::optional<double> const   val);
+   void setForm                 (std::optional<Form  > const   val);
+   void setFormAsInt            (std::optional<int   > const   val);
+   void setBeta_pct             (std::optional<double> const   val);
+   void setBetaMin_pct          (std::optional<double> const   val);
+   void setBetaMax_pct          (std::optional<double> const   val);
+   void setOrigin               (QString               const & val);
+   void setNotes                (QString               const & val);
+   void setType                 (std::optional<Type>   const   val);
+   void setTypeAsInt            (std::optional<int>    const   val);
+   void setSixMonthAlphaLoss_pct(std::optional<double> const   val);
+   void setSubstitutes          (QString               const & val);
+   void setHumulene_pct         (std::optional<double> const   val);
+   void setCaryophyllene_pct    (std::optional<double> const   val);
+   void setCohumulone_pct       (std::optional<double> const   val);
+   void setMyrcene_pct          (std::optional<double> const   val);
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   void setTotalOil_mlPer100g(std::optional<double> const   val);
-   void setFarnesene_pct     (std::optional<double> const   val);
-   void setGeraniol_pct      (std::optional<double> const   val);
-   void setBPinene_pct       (std::optional<double> const   val);
-   void setLinalool_pct      (std::optional<double> const   val);
-   void setLimonene_pct      (std::optional<double> const   val);
-   void setNerol_pct         (std::optional<double> const   val);
-   void setPinene_pct        (std::optional<double> const   val);
-   void setPolyphenols_pct   (std::optional<double> const   val);
-   void setXanthohumol_pct   (std::optional<double> const   val);
-   void setProducer          (QString               const & val);
-   void setProductId         (QString               const & val);
-   void setYear              (QString               const & val);
+   void setTotalOil_mlPer100g   (std::optional<double> const   val);
+   void setFarnesene_pct        (std::optional<double> const   val);
+   void setGeraniol_pct         (std::optional<double> const   val);
+   void setBPinene_pct          (std::optional<double> const   val);
+   void setLinalool_pct         (std::optional<double> const   val);
+   void setLimonene_pct         (std::optional<double> const   val);
+   void setNerol_pct            (std::optional<double> const   val);
+   void setPinene_pct           (std::optional<double> const   val);
+   void setPolyphenols_pct      (std::optional<double> const   val);
+   void setXanthohumol_pct      (std::optional<double> const   val);
+   void setProducer             (QString               const & val);
+   void setProductId            (QString               const & val);
+   void setYear                 (QString               const & val);
 
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
-   double                m_alpha_pct         ;
-   std::optional<Form  > m_form              ;
-   std::optional<double> m_beta_pct          ;
-   QString               m_origin            ;
-   std::optional<Type>   m_type              ;
-   QString               m_notes             ;
-   std::optional<double> m_hsi_pct           ;
-   QString               m_substitutes       ;
-   std::optional<double> m_humulene_pct      ;
-   std::optional<double> m_caryophyllene_pct ;
-   std::optional<double> m_cohumulone_pct    ;
-   std::optional<double> m_myrcene_pct       ;
+   double                m_alpha_pct             = 0.0;
+   std::optional<double> m_alphaMin_pct          = std::nullopt;
+   std::optional<double> m_alphaMax_pct          = std::nullopt;
+   std::optional<Form  > m_form                  = std::nullopt;
+   std::optional<double> m_beta_pct              = std::nullopt;
+   std::optional<double> m_betaMin_pct           = std::nullopt;
+   std::optional<double> m_betaMax_pct           = std::nullopt;
+   QString               m_origin                = "";
+   std::optional<Type>   m_type                  = std::nullopt;
+   QString               m_notes                 = "";
+   std::optional<double> m_sixMonthAlphaLoss_pct = std::nullopt;
+   QString               m_substitutes           = "";
+   std::optional<double> m_humulene_pct          = std::nullopt;
+   std::optional<double> m_caryophyllene_pct     = std::nullopt;
+   std::optional<double> m_cohumulone_pct        = std::nullopt;
+   std::optional<double> m_myrcene_pct           = std::nullopt;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   std::optional<double> m_totalOil_mlPer100g;
-   std::optional<double> m_farnesene_pct     ;
-   std::optional<double> m_geraniol_pct      ;
-   std::optional<double> m_bPinene_pct       ;
-   std::optional<double> m_linalool_pct      ;
-   std::optional<double> m_limonene_pct      ;
-   std::optional<double> m_nerol_pct         ;
-   std::optional<double> m_pinene_pct        ;
-   std::optional<double> m_polyphenols_pct   ;
-   std::optional<double> m_xanthohumol_pct   ;
-   QString               m_producer          ;
-   QString               m_productId         ;
-   QString               m_year              ;
+   std::optional<double> m_totalOil_mlPer100g    = std::nullopt;
+   std::optional<double> m_farnesene_pct         = std::nullopt;
+   std::optional<double> m_geraniol_pct          = std::nullopt;
+   std::optional<double> m_bPinene_pct           = std::nullopt;
+   std::optional<double> m_linalool_pct          = std::nullopt;
+   std::optional<double> m_limonene_pct          = std::nullopt;
+   std::optional<double> m_nerol_pct             = std::nullopt;
+   std::optional<double> m_pinene_pct            = std::nullopt;
+   std::optional<double> m_polyphenols_pct       = std::nullopt;
+   std::optional<double> m_xanthohumol_pct       = std::nullopt;
+   QString               m_producer              = "";
+   QString               m_productId             = "";
+   QString               m_year                  = "";
 };
 
 BT_DECLARE_METATYPES(Hop)

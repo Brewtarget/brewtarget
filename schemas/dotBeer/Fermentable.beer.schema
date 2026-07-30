@@ -181,7 +181,7 @@
       "required": [
         "name",
         "type",
-        "yield",
+        // Normally you want at least one of "yield_fine_grind", "yield_coarse_grind", "yield_fine_coarse_difference", "yield_potential"
         "color"
       ]
     },
