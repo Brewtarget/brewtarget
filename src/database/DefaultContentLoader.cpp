@@ -124,7 +124,8 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
             qCritical() <<
                Q_FUNC_INFO << "Search for" << globPattern << "in directory" << dir << "yielded" <<
                matchingFiles.size() << "results (expecting 1):" << matchingFiles.join(", ");
-            userMessage << QObject::tr("Error matching %1 file pattern in %2 directory").arg(globPattern, dir.absolutePath());
+            userMessage << QObject::tr("Error matching %1 file pattern in %2 directory").arg(globPattern,
+                                                                                             dir.absolutePath());
             return DefaultContentLoader::UpdateResult::Failed;
          }
          qDebug() << Q_FUNC_INFO << "Will read in" << matchingFiles.at(0);
@@ -133,14 +134,22 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
 
       if (inputFiles.size() > 0) {
          //
-         // We'd like to put any newly-imported default Recipes in the same folder as the other default ones.  To do this, we
-         // first make a note of which Recipes exist already, then, after the import, any new ones need to go in the default
-         // folder.
+         // We'd like to put any newly-imported default Recipes in the same folder as the other default ones.  To do
+         // this, we first make a note of which Recipes exist already, then, after the import, any new ones need to go
+         // in the default folder.
+         //
+         // Starting in mid-2026, for other things (ingredients, styles, equipments, etc), we'll put them in a folder
+         // called 'New ⭐ #x' where x is DefaultContentLoader::availableContentVersion.  (This means if you, eg,
+         // import content files 1, 2, 3 and 4 at the same time, then you'll get all the contents in folders called
+         // 'New ⭐ #4', rather than a separate folder for each content file.  I think this is OK, because the main
+         // point here is to allow the user to easily see what was just loaded in.  We would expect people to drag
+         // things to other folders in due course.)
          //
          QList<Recipe *> allRecipesBeforeImport = ObjectStoreWrapper::getAllRaw<Recipe>();
          qDebug() << Q_FUNC_INFO << allRecipesBeforeImport.size() << "Recipes before import";
 
-         succeeded = ImportExport::importFromFiles(inputFiles);
+         QString const importFolder = QString{"New ⭐ #%1"}.arg(DefaultContentLoader::availableContentVersion);
+         succeeded = ImportExport::importFromFiles(importFolder, inputFiles);
 
          if (succeeded) {
             //
@@ -163,7 +172,7 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
             // TODO: It would be neat, at some point, to to have a mechanism for setting a property on multiple objects
             //       of the same type, so that we could do it in a single DB update.
             for (auto recipe : newlyImportedRecipes) {
-               Folder<Recipe> const * folder = Folder<Recipe>::createFromPath(FOLDER_PATH_FOR_SUPPLIED_RECIPES);
+               Folder<Recipe> const * folder = Folder<Recipe>::ensure(FOLDER_PATH_FOR_SUPPLIED_RECIPES);
                recipe->setContainedInFolderId(folder->key());
             }
 

@@ -60,11 +60,13 @@ namespace ImportExport {
     *        similar to how other programs work (eg LibreOffice, Gimp), so I think it's OK, but we'll see what feedback
     *        is on usability.
     *
+    * \param targetFolderPath The folder to put things in (will be created if doesn't exist).
+    *                         "" or "/" means don't put in a folder.
     * \param inputFiles If \c std::nullopt (ie not supplied) then user will be prompted for file(s) through the UI
     *
     * \return \c true if succeeded, \c false otherwise
     */
-   bool importFromFiles(std::optional<QStringList> inputFiles = std::nullopt);
+   bool importFromFiles(QString const & targetFolderPath, std::optional<QStringList> inputFiles = std::nullopt);
 
    /**
     * \brief Export recipes, hops, equipment, etc to a BeerXML or BeerJSON file specified by the user

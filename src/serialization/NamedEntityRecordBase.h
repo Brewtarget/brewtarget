@@ -18,6 +18,7 @@
 #pragma once
 
 #include "database/ObjectStoreUtils.h"
+#include "model/Folder.h"
 #include "serialization/SerializationRecord.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/TypeTraits.h"
@@ -45,6 +46,20 @@ namespace Serialization {
 //            Q_FUNC_INFO << "Constructing" << NE::staticMetaObject.className() << "from" << this->derived().m_namedParameterBundle;
 
          this->derived().m_namedEntity = std::make_shared<NE>(this->derived().m_namedParameterBundle);
+         return;
+      }
+
+      //! No-op version
+      void doSetFolderPath([[maybe_unused]] QString const & targetFolderPath) requires HasNoFolder<NE> {
+         return;
+      }
+
+      //! Substantive version
+      void doSetFolderPath(QString const & targetFolderPath) requires HasFolder<NE> {
+         if (Folder<NE> * folder = Folder<NE>::ensure(targetFolderPath)) {
+            auto namedEntity = std::static_pointer_cast<NE>(this->derived().m_namedEntity);
+            namedEntity->setContainedInFolder(folder);
+         }
          return;
       }
 
@@ -226,6 +241,10 @@ namespace Serialization {
                                                                                                      \
    protected:                                                                                        \
       virtual void constructNamedEntity() override { this->doConstructNamedEntity(); return; }       \
+      virtual void setFolderPath([[maybe_unused]] QString const & targetFolderPath) {                \
+        this->doSetFolderPath(targetFolderPath);                                                     \
+        return;                                                                                      \
+      }                                                                                              \
       virtual int storeNamedEntityInDb() override { return this->doStoreNamedEntityInDb(); }         \
    public:                                                                                           \
       virtual void deleteNamedEntityFromDb() override { this->doDeleteNamedEntityFromDb(); return; } \

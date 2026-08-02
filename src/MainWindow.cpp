@@ -2274,9 +2274,9 @@ void MainWindow::restoreFromBackup() {
    return;
 }
 
-// Imports all the recipes, hops, equipment or whatever from a BeerXML or BeerJSON file into the database.
+// Imports all the recipes, hops, equipment or whatever from a DotBeer, BeerXML or BeerJSON file into the database.
 void MainWindow::importFiles() {
-   ImportExport::importFromFiles();
+   ImportExport::importFromFiles("");
    return;
 }
 

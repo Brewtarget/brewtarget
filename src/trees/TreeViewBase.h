@@ -333,6 +333,12 @@ public:
       return nullptr;
    }
 
+   /**
+    * \brief Gets the folder (or containing folder), if any, for the supplied index.  Thus, if the item at the  supplied
+    *        index is a folder, that is returned.  Otherwise, the item's containing folder, if any, is returned.
+    *
+    *        NB: Not all trees support folders.  Specifically, the StockPurchase/StockUse trees do not have folders.
+    */
    std::shared_ptr<Folder<NE>> getCurrentFolder() const requires (HasFolder<NE>) {
       for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
          QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
@@ -842,7 +848,12 @@ public:
     *              users, then we could have a rethink.
     */
    void doImportFromFiles() const {
-      ImportExport::importFromFiles();
+      if constexpr (HasFolder<NE>) {
+         auto folder = this->getCurrentFolder();
+         ImportExport::importFromFiles(folder ? folder->fullPath() : "/");
+      } else {
+         ImportExport::importFromFiles("/");
+      }
       return;
    }
 

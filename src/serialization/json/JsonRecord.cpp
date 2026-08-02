@@ -304,7 +304,8 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
    return this->m_recordDefinition;
 }
 
-[[nodiscard]] bool JsonRecord::load(QTextStream & userMessage) {
+[[nodiscard]] bool JsonRecord::load(QString const & targetFolderPath,
+                                    QTextStream & userMessage) {
    Q_ASSERT(this->m_recordData.is_object());
    qDebug() <<
       Q_FUNC_INFO << "Loading" << this->m_recordDefinition.m_recordName << "record containing" <<
@@ -381,7 +382,8 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                // handling the special "Base Record" case described in serialization/json/JsonRecordDefinition.h (that
                // being the only case in which fieldDefinition.xPath should be empty).
                //
-               if (!this->loadChildRecord(fieldDefinition,
+               if (!this->loadChildRecord(targetFolderPath,
+                                          fieldDefinition,
                                           childRecordDefinition,
                                           *container,
                                           userMessage)) {
@@ -401,7 +403,8 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                // Note that there are some arrays that we don't treat as lists-of-things because we use Named Array Item Id
                // part of a JsonXPath to access a specific "named" member of the array.  Those are not handled in this code
                // branch.
-               if (!this->loadChildRecords(fieldDefinition,
+               if (!this->loadChildRecords(targetFolderPath,
+                                           fieldDefinition,
                                            childRecordDefinition,
                                            childRecordsData,
                                            userMessage)) {
@@ -674,12 +677,16 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
 }
 
 [[nodiscard]] JsonRecord::ProcessingResult JsonRecord::normaliseAndStoreInDb(
+   QString const & targetFolderPath,
    std::shared_ptr<NamedEntity> containingEntity,
    QTextStream & userMessage,
    ImportRecordCount & stats
 ) {
    // Most of the work is done in the base class
-   auto processingResult = this->SerializationRecord::normaliseAndStoreInDb(containingEntity, userMessage, stats);
+   auto processingResult = this->SerializationRecord::normaliseAndStoreInDb(targetFolderPath,
+                                                                            containingEntity,
+                                                                            userMessage,
+                                                                            stats);
 
    //
    // If we read in and stored an outline Fermentable/Hop/etc object (because we could not find any existing
@@ -696,7 +703,8 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
    return processingResult;
 }
 
-[[nodiscard]] bool JsonRecord::loadChildRecord(JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
+[[nodiscard]] bool JsonRecord::loadChildRecord(QString const & targetFolderPath,
+                                               JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                                JsonRecordDefinition const & childRecordDefinition,
                                                boost::json::value & childRecordData,
                                                QTextStream & userMessage) {
@@ -710,14 +718,15 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
    std::unique_ptr<JsonRecord> childRecord{
       constructorWrapper(this->m_coding, childRecordData, childRecordDefinition)
    };
-   if (!childRecord->load(userMessage)) {
+   if (!childRecord->load(targetFolderPath, userMessage)) {
       return false;
    }
    childRecordSet.records.push_back(std::move(childRecord));
    return true;
 }
 
-[[nodiscard]] bool JsonRecord::loadChildRecords(JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
+[[nodiscard]] bool JsonRecord::loadChildRecords(QString const & targetFolderPath,
+                                                JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                                 JsonRecordDefinition const & childRecordDefinition,
                                                 boost::json::array & childRecordsData,
                                                 QTextStream & userMessage) {
@@ -738,7 +747,7 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
       std::unique_ptr<JsonRecord> childRecord{
          constructorWrapper(this->m_coding, recordData, childRecordDefinition)
       };
-      if (!childRecord->load(userMessage)) {
+      if (!childRecord->load(targetFolderPath, userMessage)) {
          return false;
       }
       childRecordSet.records.push_back(std::move(childRecord));

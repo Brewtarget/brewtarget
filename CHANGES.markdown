@@ -15,13 +15,15 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * We'll list other new features here...
 
 ## v5.2.0
+Various improvements, including:
 * Migrate to new XML libraries (libxml2 replaces Xerces and Xalan) [1131](https://github.com/Brewtarget/brewtarget/issues/1131)
+
+### New Features
 * DotBeer file format support [1122](https://github.com/Brewtarget/brewtarget/issues/1122)
 * Water Calculator improvements [252](https://github.com/Brewtarget/brewtarget/issues/252)
 * Salts (aka water agents) are now a subcategory of Miscellaneous ingredients
-
-### New Features
-None
+* Hops now support optional min/max values for alpha acid and beta acid
+* Import to folder [1133]https://github.com/Brewtarget/brewtarget/issues/1133
 
 ### Bug Fixes
 * Exporting a style with no style letter to BeerJSON creates a file that cannot be imported [1121](https://github.com/Brewtarget/brewtarget/issues/1121)

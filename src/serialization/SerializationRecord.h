@@ -71,7 +71,7 @@ public:
     *
     * \return Reference to an object that the caller does NOT own
     */
-   NamedParameterBundle const & getNamedParameterBundle() const {
+   [[nodiscard]] NamedParameterBundle const & getNamedParameterBundle() const {
       return this->m_namedParameterBundle;
    }
 
@@ -85,7 +85,7 @@ public:
     *
     * \return Shared pointer, which will contain nullptr for the root record
     */
-   std::shared_ptr<NamedEntity> getNamedEntity() const {
+   [[nodiscard]] std::shared_ptr<NamedEntity> getNamedEntity() const {
       return this->m_namedEntity;
    }
 
@@ -98,7 +98,7 @@ protected:
     */
    virtual void constructNamedEntity() {
       // Base class does not have a NamedEntity or a container, so nothing to do
-      // Stictly, it's a coding error if this function is called, as caller should first check whether there is a
+      // Strictly, it's a coding error if this function is called, as caller should first check whether there is a
       // NamedEntity, and subclasses that do have one should override this function.
       qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
       Q_ASSERT(false && "Trying to construct named entity for base record");
@@ -106,7 +106,21 @@ protected:
    }
 
    /**
-    * \brief Subclasses  need to implement this to store this->namedEntity in the appropriate ObjectStore
+    * \brief Subclasses need to implement this to set the containing folder (or ignore it for classes that do not
+    *        support folders)
+    *
+    *        This is implemented by NAMED_ENTITY_RECORD_COMMON_DECL (see NamedEntityRecordBase.h)
+    *
+    * @param targetFolderPath
+    */
+   virtual void setFolderPath([[maybe_unused]] QString const & targetFolderPath) {
+      qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
+      Q_ASSERT(false && "Trying to set folder path for base record");
+      return;
+   }
+
+   /**
+    * \brief Subclasses need to implement this to store this->namedEntity in the appropriate ObjectStore
     * \return the ID of the newly-inserted object
     */
    virtual int storeNamedEntityInDb() {
@@ -133,7 +147,7 @@ public:
     *        part of a \c Mash, so we tell the user about reading in a \c Mash but not about reading in a \c MashStep)
     *        and \c true otherwise.
     */
-   virtual bool includedInStats() const {
+   [[nodiscard]] virtual bool includedInStats() const {
       return false;
    }
 
@@ -146,6 +160,7 @@ public:
     *        Child classes may override this function to extend functionality but should make sure to call this base
     *        class version to ensure child nodes are saved.
     *
+    * \param targetFolderPath
     * \param containingEntity If not null, this is the entity that contains this one.  Eg, for a MashStep it should
     *                         always be the containing Mash.  For a Style inside a Recipe, this will be a pointer to
     *                         the Recipe, but for a freestanding Style, this will be null.
@@ -155,7 +170,8 @@ public:
     * \return \b Succeeded, if processing succeeded, \b Failed, if there was an unresolvable problem, \b FoundDuplicate
     *         if the current record is a duplicate of one already in the DB and should be skipped.
     */
-   [[nodiscard]] virtual ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> const containingEntity,
+   [[nodiscard]] virtual ProcessingResult normaliseAndStoreInDb(QString const & targetFolderPath,
+                                                                std::shared_ptr<NamedEntity> const containingEntity,
                                                                 QTextStream & userMessage,
                                                                 ImportRecordCount & stats) {
       if (this->m_namedEntity) {
@@ -184,14 +200,19 @@ public:
 
          this->normaliseName();
 
-         // Some classes of object are owned by their containing entity and can't sensibly be saved without knowing what it
-         // is.  Subclasses of XmlRecord will override setContainingEntity() to pass the info in if it is needed (or ignore
-         // it if not).
+         // Some classes of object are owned by their containing entity and can't sensibly be saved without knowing what
+         // it is.  Subclasses of XmlRecord will override setContainingEntity() to pass the info in if it is needed (or
+         // ignore it if not).
          this->setContainingEntity(containingEntity);
 
+         //
+         // If this is the sort of thing that can have folders, then set its folder
+         //
+         this->setFolderPath(targetFolderPath);
+
          // Now we're ready to store in the DB
-         int id = this->storeNamedEntityInDb();
-         if (id <= 0) {
+         if (int const id = this->storeNamedEntityInDb();
+             id <= 0) {
             userMessage << "Error storing " << this->m_namedEntity->metaObject()->className() <<
             " in database.  See logs for more details";
             return SerializationRecord::ProcessingResult::Failed;
@@ -206,7 +227,7 @@ public:
       // Note, of course, that this still needs to be done, even if nullptr == this->m_namedEntity, because that just means
       // we're processing the root node.
       //
-      if (this->normaliseAndStoreChildRecordsInDb(userMessage, stats)) {
+      if (this->normaliseAndStoreChildRecordsInDb(targetFolderPath, userMessage, stats)) {
          //
          // Now all the processing succeeded, we do that final duplicate check for any complex object such as Recipe that
          // had to be fully constructed before we could meaningfully check whether it's the same as something we already
@@ -270,20 +291,21 @@ public:
       return processingResult;
    }
 
-   [[nodiscard]] virtual bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
+   [[nodiscard]] virtual bool normaliseAndStoreChildRecordsInDb(QString const & targetFolderPath,
+                                                                QTextStream & userMessage,
                                                                 ImportRecordCount & stats) {
       //
       // We are assuming it does not matter which order different children are processed in.
       //
-      // Where there are several children of the same type, we need to process them in the same order as they were read in
-      // from the XML document because, in some cases, this order matters.  In particular, in both BeerXML and BeerJSON,
-      // the Mash Steps inside a Mash (eg for BeerXML the MASH_STEP tags inside a MASH_STEPS tag inside a MASH tag) are
-      // stored in order without any other means of identifying order.
+      // Where there are several children of the same type, we need to process them in the same order as they were read
+      // in from the XML/JSON document because, in some cases, this order matters.  In particular, in both BeerXML and
+      // BeerJSON, the Mash Steps inside a Mash (eg for BeerXML the MASH_STEP tags inside a MASH_STEPS tag inside a MASH
+      // tag) are stored in order without any other means of identifying order.
       //
-      // So it's simplest just to process all the child records in the order they were read out of the XML document.  This
-      // is the advantage of storing things in a list such as QVector.  (Alternatives such as QMultiHash iterate through
-      // items that share the same key in the opposite order to which they were inserted and don't offer STL reverse
-      // iterators, so going backwards would be a bit clunky.)
+      // So it's simplest just to process all the child records in the order they were read out of the XML document.
+      // This is the advantage of storing things in a list such as QVector.  (Alternatives such as QMultiHash iterate
+      // through items that share the same key in the opposite order to which they were inserted and don't offer STL
+      // reverse iterators, so going backwards would be a bit clunky.)
       //
       qDebug() <<
          Q_FUNC_INFO << "this->m_childRecordSets for" << this->m_recordDefinition << "has" <<
@@ -311,7 +333,7 @@ public:
                Q_FUNC_INFO << "Storing" << childRecord->m_recordDefinition.m_namedEntityClassName << "child of" <<
                this->m_recordDefinition.m_namedEntityClassName << ":" << this->m_namedEntity;
             if (SerializationRecord::ProcessingResult::Failed ==
-               childRecord->normaliseAndStoreInDb(this->m_namedEntity, userMessage, stats)) {
+               childRecord->normaliseAndStoreInDb(targetFolderPath, this->m_namedEntity, userMessage, stats)) {
                return false;
             }
             processedChildren.append(childRecord->m_namedEntity);
@@ -431,7 +453,7 @@ protected:
     */
    [[nodiscard]] virtual bool resolveDuplicates() {
       // Base class does not have a NamedEntity so nothing to check
-      // Stictly, it's a coding error if this function is called, as caller should first check whether there is a
+      // Strictly, it's a coding error if this function is called, as caller should first check whether there is a
       // NamedEntity, and subclasses that do have one should override this function.
       Q_ASSERT(false && "Trying to check for duplicate NamedEntity when there is none");
       return false;
@@ -444,7 +466,7 @@ protected:
     */
    virtual void normaliseName() {
       // Base class does not have a NamedEntity so nothing to normalise
-      // Stictly, it's a coding error if this function is called, as caller should first check whether there is a
+      // Strictly, it's a coding error if this function is called, as caller should first check whether there is a
       // NamedEntity, and subclasses that do have one should override this function.
       Q_ASSERT(false && "Trying to normalise name of NamedEntity when there is none");
       return;
@@ -457,7 +479,7 @@ protected:
     */
    virtual void setContainingEntity([[maybe_unused]] std::shared_ptr<NamedEntity> containingEntity) {
       // Base class does not have a NamedEntity or a container, so nothing to do
-      // Stictly, it's a coding error if this function is called, as caller should first check whether there is a
+      // Strictly, it's a coding error if this function is called, as caller should first check whether there is a
       // NamedEntity, and subclasses that do have one should override this function.
       Q_ASSERT(false && "Trying to set containing entity when there is none");
       return;

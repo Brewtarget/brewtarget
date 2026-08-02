@@ -1166,7 +1166,7 @@ namespace {
    /**
     * \brief This function first validates the input file against a JSON schema (https://json-schema.org/)
     */
-   bool validateAndLoad(QString const & fileName, QTextStream & userMessage) {
+   bool validateAndLoad(QString const & targetFolderPath, QString const & fileName, QTextStream & userMessage) {
       boost::json::value inputDocument;
       try {
          inputDocument = JsonUtils::loadJsonDocument(fileName);
@@ -1244,13 +1244,13 @@ namespace {
       // line.
 //      qDebug() << Q_FUNC_INFO << "JSON file read in is:" << inputDocument;
 
-      return BEER_JSON_1_CODING.validateLoadAndStoreInDb(inputDocument, userMessage);
+      return BEER_JSON_1_CODING.validateLoadAndStoreInDb(targetFolderPath, inputDocument, userMessage);
    }
 
 }
 
 
-bool BeerJson::import(QString const & filename, QTextStream & userMessage) {
+bool BeerJson::import(QString const & targetFolderPath, QString const & filename, QTextStream & userMessage) {
    // .:TODO:. This wrapper code is about the same as in BeerXML::importFromXML(), so let's try to pull out the common
    //          bits to one place.
 
@@ -1267,7 +1267,7 @@ bool BeerJson::import(QString const & filename, QTextStream & userMessage) {
    //
    QApplication::setOverrideCursor(Qt::WaitCursor);
    QApplication::processEvents();
-   bool result = validateAndLoad(filename, userMessage);
+   bool result = validateAndLoad(targetFolderPath, filename, userMessage);
    QApplication::restoreOverrideCursor();
    return result;
 }

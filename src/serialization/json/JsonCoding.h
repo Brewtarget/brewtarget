@@ -75,6 +75,7 @@ public:
    /**
     * \brief Validate JSON file against schema, load its contents into objects, and store then in the DB
     *
+    * \param targetFolderPath
     * \param inputDocument The JSON file to validate and read
     * \param userMessage Any message that we want the top-level caller to display to the user (either about an error
     *                    or, in the event of success, summarising what was read in) should be appended to this string.
@@ -82,7 +83,8 @@ public:
     * \return true if file validated OK (including if there were "errors" that we can safely ignore)
     *         false if there was a problem that means it's not worth trying to read in the data from the file
     */
-   bool validateLoadAndStoreInDb(boost::json::value & inputDocument,
+   bool validateLoadAndStoreInDb(QString const & targetFolderPath,
+                                 boost::json::value & inputDocument,
                                  QTextStream & userMessage) const;
 
 private:

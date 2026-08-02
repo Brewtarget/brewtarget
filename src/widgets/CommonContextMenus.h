@@ -118,6 +118,10 @@ struct CommonContextMenus {
          this->addAndConnect(this->m_menu_primary, this->m_action_merge, &Derived::mergeSelected);
       }
 
+      this->m_menu_primary.addSeparator();
+      this->addAndConnect(this->m_menu_primary, this->m_action_export, &Derived::exportSelected);
+      this->addAndConnect(this->m_menu_primary, this->m_action_import, &Derived::importFromFiles);
+
       if constexpr (std::is_same_v<NE, Recipe>) {
          this->m_menu_primary.addSeparator();
          this->m_menu_primary.addMenu(&this->m_menu_versioning);
@@ -196,7 +200,8 @@ public:
          this->m_action_showStockPurchases.setText(Derived::tr("Show stock purchases"));
       }
 
-      this->m_action_import.setText(Derived::tr("Import (from BeerXML or BeerJSON)"));
+      this->m_action_export.setText(Derived::tr("Export (to dotBeer, BeerXML or BeerJSON)"));
+      this->m_action_import.setText(Derived::tr("Import (from dotBeer, BeerXML or BeerJSON)"));
 
       if constexpr (!std::disjunction_v<std::is_same<NE, Recipe>, std::is_base_of<StockPurchase, NE>>) {
          this->m_action_merge.setText(Derived::tr("Merge selected"));
@@ -214,8 +219,8 @@ public:
 
       if constexpr (!IsVoid<SNE>) {
          if constexpr (std::is_same_v<SNE, BrewLog>) {
-            this->m_action_brewAgain       .setText(Derived::tr("Brew again"            ));
-            this->m_action_changeBrewDate  .setText(Derived::tr("Change date"           ));
+            this->m_action_brewAgain       .setText(Derived::tr("Brew again" ));
+            this->m_action_changeBrewDate  .setText(Derived::tr("Change date"));
          }
          this->m_action_deleteSecondary.setText(Derived::tr("Delete"));
       }
@@ -282,8 +287,6 @@ public:
                this->m_action_orphanRecipe.setEnabled(recipe->hasAncestors() && !recipe->locked());
                // We don't want to be able to spawn ancestors directly.
                this->m_action_spawnRecipe.setEnabled(!recipe->hasDescendants());
-               // If user has clicked the top-level Item 'Recipes' Once this menu Item will be forever disabled if we don't enable it.
-               this->m_menu_export.setEnabled(true);
                this->m_action_copy.setEnabled(true);
                this->m_action_brewIt.setEnabled(true);
             } else if (selected.numFolders > 0) {
@@ -291,7 +294,6 @@ public:
                this->m_action_showAncestors.setEnabled(false);
                this->m_action_orphanRecipe.setEnabled(false);
                this->m_action_spawnRecipe.setEnabled(false);
-               this->m_menu_export.setEnabled(false);
                this->m_action_copy.setEnabled(false);
                this->m_action_brewIt.setEnabled(false);
             }
@@ -764,10 +766,9 @@ public:
    [[no_unique_address]] std::conditional_t<!std::derived_from<NE, Ingredient>, Empty, QAction> m_action_showStockPurchases;
    [[no_unique_address]] std::conditional_t<std::is_same_v<NE, Recipe>, Empty, QAction> m_action_addToRecipe;
 
-   QMenu m_menu_export;
-   QAction m_action_exportToXmlOrJson;
-
+   QAction m_action_export;
    QAction m_action_import;
+
    [[no_unique_address]] std::conditional_t<
       std::disjunction_v<std::is_same<NE, Recipe>, std::is_base_of<StockPurchase, NE>>, Empty, QAction
    > m_action_merge;

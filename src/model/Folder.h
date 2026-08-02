@@ -198,14 +198,18 @@ public:
     * \brief Returns a \c Folder for the supplied full path (which must not be empty), creating any folders (and parent
     *        folders) as needed.
     *
-    * @param path
+    *        If "" or "/" is specified as the fullPath, then \c nullptr is returned
+    *
+    * @param fullPath
     * @return
     */
-   static Folder<NE> * createFromPath(QString const & path) {
+   static Folder<NE> * ensure(QString const & fullPath) {
       Folder<NE> * folder = nullptr;
-      QStringList pieces = path.split("/", Qt::SkipEmptyParts);
-      Q_ASSERT(!pieces.empty());
-      while(!pieces.empty()) {
+      QStringList pieces = fullPath.split("/", Qt::SkipEmptyParts);
+      if (pieces.empty()) {
+         return nullptr;
+      }
+      while (!pieces.empty()) {
          auto const parentId = folder ? folder->key() : -1;
          QString const folderName = pieces.takeFirst();
          std::shared_ptr<Folder<NE>> subFolder = ObjectStoreWrapper::findFirstMatching<Folder<NE>>(

@@ -52,13 +52,16 @@ public:
     */
    template<class NE> void toXml(QList<NE const *> const & nes, QFile & outFile) const;
 
-   /*! Import ingredients, recipes, etc from BeerXML documents.
+   /**
+    * Import ingredients, recipes, etc from BeerXML documents.
+    *
+    * \param targetFolderPath
     * \param filename
     * \param userMessage Where to write any (brief!) message we want to be shown to the user after the import.
     *                    Typically this is either the reason the import failed or a summary of what was imported.
     * \return true if succeeded, false otherwise
     */
-   bool importFromXML(QString const & filename, QTextStream & userMessage);
+   bool importFromXML(QString const & targetFolderPath, QString const & filename, QTextStream & userMessage);
 
 private:
 
