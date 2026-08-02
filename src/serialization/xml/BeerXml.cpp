@@ -1191,6 +1191,7 @@ namespace {
    /**
     * \brief Validate XML file against schema and load its contents
     *
+    * \param targetFolderPath
     * \param fileName Fully-qualified name of the file to validate
     * \param userMessage Any message that we want the top-level caller to display to the user (either about an error
     *                    or, in the event of success, summarising what was read in) should be appended to this string.
@@ -1198,7 +1199,7 @@ namespace {
     * \return true if file validated OK (including if there were "errors" that we can safely ignore)
     *         false if there was a problem that means it's not worth trying to read in the data from the file
     */
-   bool validateAndLoad(QString const & fileName, QTextStream & userMessage) {
+   bool validateAndLoad(QString const & targetFolderPath, QString const & fileName, QTextStream & userMessage) {
 
       QFile inputFile;
       inputFile.setFileName(fileName);
@@ -1314,7 +1315,8 @@ namespace {
       };
       XmlErrorHandler errorHandler(&errorPatternsToIgnore, 1, 1);
 
-      return BEER_XML_1_CODING.validateLoadAndStoreInDb(documentData,
+      return BEER_XML_1_CODING.validateLoadAndStoreInDb(targetFolderPath,
+                                                        documentData,
                                                         fileName,
                                                         errorHandler,
                                                         userMessage);
@@ -1404,7 +1406,7 @@ template void BeerXML::toXml(QList<BrewLog    const *> const & nes, QFile & outF
 template void BeerXML::toXml(QList<Recipe      const *> const & nes, QFile & outFile) const;
 
 // fromXml ====================================================================
-bool BeerXML::importFromXML(QString const & filename, QTextStream & userMessage) {
+bool BeerXML::importFromXML(QString const & targetFolderPath, QString const & filename, QTextStream & userMessage) {
    //
    // During importation we do not want automatic versioning turned on because, during the process of reading in a
    // Recipe we'll end up creating load of versions of it.  The magic of RAII means it's a one-liner to suspend
@@ -1418,7 +1420,7 @@ bool BeerXML::importFromXML(QString const & filename, QTextStream & userMessage)
    //
    QApplication::setOverrideCursor(Qt::WaitCursor);
    QApplication::processEvents();
-   bool result = validateAndLoad(filename, userMessage);
+   bool result = validateAndLoad(targetFolderPath, filename, userMessage);
    QApplication::restoreOverrideCursor();
    return result;
 }

@@ -197,7 +197,7 @@ template <typename T> concept CONCEPT_FIX_UP ValidFolderType = (HasFolder<T> && 
  *        derived classes also need to include the following block (see comment in model/StepBase.h for why):
  *
  *           // See model/FolderPropertyBase.h for info, getters and setters for these properties
- *           Q_PROPERTY(int containedInFolderId        READ containedInFolderId        WRITE setFolderId)
+ *           Q_PROPERTY(int containedInFolderId        READ containedInFolderId        WRITE setContainedInFolderId)
  *
  *        We can't use this macro for Folder<NE> classes because templated classes need their member function
  *        declarations and definitions combined.

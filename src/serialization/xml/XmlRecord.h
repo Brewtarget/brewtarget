@@ -38,7 +38,7 @@ class XmlCoding;
  *        more detail.
  *
  *        Note that one structural difference between \c XmlRecord and \c JsonRecord is that, in the former we only pass
- *        underlying (ie Xalan) record data in when we are reading from XML, not when we are writing, so the parameter
+ *        underlying (ie libxml2) record data in when we are reading from XML, not when we are writing, so the parameter
  *        is on the \c load function, not the constructor.  The main reason for this is that, with XML, we do the output
  *        manually, without using the library.  In contrast, for JSON, we use the library to both read and write
  *        records.
@@ -63,7 +63,7 @@ public:
              XmlRecordDefinition const & recordDefinition);
 
    // Need a virtual destructor as we have virtual member functions
-   virtual ~XmlRecord();
+   ~XmlRecord() override;
 
    virtual SerializationRecordDefinition const & recordDefinition() const override;
 

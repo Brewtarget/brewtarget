@@ -35,7 +35,8 @@ protected:
     *        properties is hard unless you make the getters and setters all use the same list type, eg QList<QVariant>
     *        instead of QList<Hop *>, QList<Fermentable *>, QList<Instruction *>, etc.
     */
-   [[nodiscard]] XmlRecord::ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> const containingEntity,
+   [[nodiscard]] XmlRecord::ProcessingResult normaliseAndStoreInDb(QString const & targetFolderPath,
+                                                                   std::shared_ptr<NamedEntity> const containingEntity,
                                                                    QTextStream & userMessage,
                                                                    ImportRecordCount & stats) override;
 
@@ -43,7 +44,8 @@ protected:
     * \brief We override \c XmlRecord::normaliseAndStoreChildRecordsInDb because we want to create a child record for
     *        \c Boil (which isn't modelled as a child record in BeerXML).
     */
-   [[nodiscard]] virtual bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
+   [[nodiscard]] virtual bool normaliseAndStoreChildRecordsInDb(QString const & targetFolderPath,
+                                                                QTextStream & userMessage,
                                                                 ImportRecordCount & stats) override;
 
    /**

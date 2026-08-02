@@ -71,14 +71,17 @@ public:
     * \brief From the supplied record (ie node) in an JSON document, load into memory the data it contains, including
     *        any other records nested inside it.
     *
+    * \param targetFolderPath
     * \param userMessage Where to append any error messages that we want the user to see on the screen
     *
     * \return \b true if load succeeded, \b false if there was an error
     */
-   [[nodiscard]] bool load(QTextStream & userMessage);
+   [[nodiscard]] bool load(QString const & targetFolderPath,
+                           QTextStream & userMessage);
 
    //! \brief Override base class member function
-   [[nodiscard]] virtual ProcessingResult normaliseAndStoreInDb(std::shared_ptr<NamedEntity> containingEntity,
+   [[nodiscard]] virtual ProcessingResult normaliseAndStoreInDb(QString const & targetFolderPath,
+                                                                std::shared_ptr<NamedEntity> containingEntity,
                                                                 QTextStream & userMessage,
                                                                 ImportRecordCount & stats) override;
 
@@ -99,7 +102,8 @@ private:
    /**
     * \brief Load in a single child record.
     */
-   [[nodiscard]] bool loadChildRecord(JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
+   [[nodiscard]] bool loadChildRecord(QString const & targetFolderPath,
+                                      JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                       JsonRecordDefinition const & childRecordDefinition,
                                       boost::json::value & childRecordData,
                                       QTextStream & userMessage);
@@ -109,7 +113,8 @@ private:
     *        records to process (eg Hop records inside a Recipe).  But the algorithm for processing is generic, so we
     *        implement it in this base class.
     */
-   [[nodiscard]] bool loadChildRecords(JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
+   [[nodiscard]] bool loadChildRecords(QString const & targetFolderPath,
+                                       JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                        JsonRecordDefinition const & childRecordDefinition,
                                        boost::json::array & childRecordsData,
                                        QTextStream & userMessage);

@@ -453,7 +453,8 @@ public:
     *              users, then we could have a rethink.
     */
    void doImportFromFiles() const {
-      ImportExport::importFromFiles();
+      // Catalogs don't show folders, so we don't need to handle importing into a folder here
+      ImportExport::importFromFiles("");
       return;
    }
 

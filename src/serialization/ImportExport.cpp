@@ -279,7 +279,7 @@ namespace {
    }
 }
 
-bool ImportExport::importFromFiles(std::optional<QStringList> inputFiles) {
+bool ImportExport::importFromFiles(QString const & targetFolderPath, std::optional<QStringList> inputFiles) {
    if (!inputFiles) {
       inputFiles = selectFiles(ImportOrExport::IMPORT);
    }
@@ -288,7 +288,7 @@ bool ImportExport::importFromFiles(std::optional<QStringList> inputFiles) {
    }
 
    bool allSucceeded = true;
-   for (QString filename : *inputFiles) {
+   for (QString const & filename : *inputFiles) {
       //
       // I guess if the user were importing a lot of files in one go, it might be annoying to have a separate result
       // message for each one, but TBD whether that's much of a use case.  For now, we keep things simple.
@@ -298,11 +298,11 @@ bool ImportExport::importFromFiles(std::optional<QStringList> inputFiles) {
       QTextStream userMessageAsStream{&userMessage};
       bool succeeded = false;
       if (filename.endsWith("beer", Qt::CaseInsensitive)) {
-         succeeded = DotBeer::import(filename, userMessageAsStream);
+         succeeded = DotBeer::import(targetFolderPath, filename, userMessageAsStream);
       } else if (filename.endsWith("json", Qt::CaseInsensitive)) {
-         succeeded = BeerJson::import(filename, userMessageAsStream);
+         succeeded = BeerJson::import(targetFolderPath, filename, userMessageAsStream);
       } else if (filename.endsWith("xml", Qt::CaseInsensitive)) {
-         succeeded = BeerXML::getInstance().importFromXML(filename, userMessageAsStream);
+         succeeded = BeerXML::getInstance().importFromXML(targetFolderPath, filename, userMessageAsStream);
       } else {
          qInfo() << Q_FUNC_INFO << "Don't understand file extension on" << filename << "so ignoring!";
          userMessageAsStream <<

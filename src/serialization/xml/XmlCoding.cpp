@@ -133,7 +133,8 @@ public:
     * \return true if file validated OK (including if there were "errors" that we can safely ignore)
     *         false if there was a problem that means it's not worth trying to read in the data from the file
     */
-   bool validateLoadAndStoreInDb(QByteArray const & documentData,
+   bool validateLoadAndStoreInDb(QString const & targetFolderPath,
+                                 QByteArray const & documentData,
                                  QString const & fileName,
                                  XmlErrorHandler & errorHandler,
                                  QTextStream & userMessage) {
@@ -160,7 +161,7 @@ public:
          }
 
          // If we got this far, the validation has succeeded, and we can now proceed to loading
-         return this->loadValidated(xmlDocument, userMessage);
+         return this->loadValidated(targetFolderPath, xmlDocument, userMessage);
 
       } catch (std::runtime_error const & re) {
          qCritical() << Q_FUNC_INFO << "Caught std::exception: " << re.what();
@@ -183,7 +184,8 @@ public:
     * \return true if file validated OK (including if there were "errors" that we can safely ignore)
     *         false if there was a problem that means it's not worth trying to read in the data from the file
     */
-   bool loadValidated(XmlLibHelpers::XmlDocument & xmlDocument,
+   bool loadValidated(QString const & targetFolderPath,
+                      XmlLibHelpers::XmlDocument & xmlDocument,
                       QTextStream & userMessage) {
 
       xmlNode * rootNode = xmlDocGetRootElement(xmlDocument.get());
@@ -202,7 +204,8 @@ public:
          return false;
       }
 
-      return this->loadNormaliseAndStoreInDb(xmlDocument,
+      return this->loadNormaliseAndStoreInDb(targetFolderPath,
+                                             xmlDocument,
                                              rootNode,
                                              rootNodeName,
                                              userMessage);
@@ -217,7 +220,8 @@ public:
     *                    or, in the event of success, summarising what was read in) should be appended to this.
     * \return
     */
-   bool loadNormaliseAndStoreInDb(XmlLibHelpers::XmlDocument & xmlDocument,
+   bool loadNormaliseAndStoreInDb(QString const & targetFolderPath,
+                                  XmlLibHelpers::XmlDocument & xmlDocument,
                                   xmlNode * rootNode,
                                   QString const & rootNodeName,
                                   QTextStream & userMessage) const {
@@ -229,7 +233,8 @@ public:
       //
       XmlRecord rootRecord{this->m_self, this->m_rootRecordDefinition};
       qDebug() <<
-         Q_FUNC_INFO << "Looking at field definitions of root element (" << this->m_rootRecordDefinition.m_recordName << ")";
+         Q_FUNC_INFO << "Looking at field definitions of root element (" <<
+         this->m_rootRecordDefinition.m_recordName << ")";
 
       ImportRecordCount stats;
 
@@ -239,7 +244,10 @@ public:
 
       // At the root level, Succeeded and FoundDuplicate are both OK return values.  It's only Failed that indicates an
       // error (rather than in info) message for the user in userMessage.
-      if (XmlRecord::ProcessingResult::Failed == rootRecord.normaliseAndStoreInDb(nullptr, userMessage, stats)) {
+      if (XmlRecord::ProcessingResult::Failed == rootRecord.normaliseAndStoreInDb(targetFolderPath,
+                                                                                  nullptr,
+                                                                                  userMessage,
+                                                                                  stats)) {
          return false;
       }
 
@@ -279,11 +287,13 @@ XmlRecordDefinition const & XmlCoding::getRoot() const {
    return this->pimpl->m_rootRecordDefinition;
 }
 
-bool XmlCoding::validateLoadAndStoreInDb(QByteArray const & documentData,
+bool XmlCoding::validateLoadAndStoreInDb(QString const & targetFolderPath,
+                                         QByteArray const & documentData,
                                          QString const & fileName,
                                          XmlErrorHandler & errorHandler,
                                          QTextStream & userMessage) const {
-   return this->pimpl->validateLoadAndStoreInDb(documentData,
+   return this->pimpl->validateLoadAndStoreInDb(targetFolderPath,
+                                                documentData,
                                                 fileName,
                                                 errorHandler,
                                                 userMessage);

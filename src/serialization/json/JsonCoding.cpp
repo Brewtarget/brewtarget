@@ -82,7 +82,8 @@ JsonRecordDefinition const & JsonCoding::getRoot() const {
    return this->pimpl->m_rootRecordDefinition;
 }
 
-bool JsonCoding::validateLoadAndStoreInDb(boost::json::value & inputDocument,
+bool JsonCoding::validateLoadAndStoreInDb(QString const & targetFolderPath,
+                                          boost::json::value & inputDocument,
                                           QTextStream & userMessage) const {
    try {
       JsonSchema const & schema = JsonSchema::instance(this->pimpl->m_schemaId);
@@ -128,18 +129,23 @@ bool JsonCoding::validateLoadAndStoreInDb(boost::json::value & inputDocument,
    // Look at the root object first
    //
    JsonRecord rootRecord{*this, rootRecordData, this->pimpl->m_rootRecordDefinition};
-   qDebug() << Q_FUNC_INFO << "Looking at field definitions of root element (" << this->pimpl->m_rootRecordDefinition.m_recordName << ")";
+   qDebug() <<
+      Q_FUNC_INFO << "Looking at field definitions of root element (" <<
+      this->pimpl->m_rootRecordDefinition.m_recordName << ")";
 
    ImportRecordCount stats;
 
-   if (!rootRecord.load(userMessage)) {
+   if (!rootRecord.load(targetFolderPath, userMessage)) {
       return false;
    }
    qDebug() << Q_FUNC_INFO;
 
    // At the root level, Succeeded and FoundDuplicate are both OK return values.  It's only Failed that indicates an
    // error (rather than in info) message for the user in userMessage.
-   if (JsonRecord::ProcessingResult::Failed == rootRecord.normaliseAndStoreInDb(nullptr, userMessage, stats)) {
+   if (JsonRecord::ProcessingResult::Failed == rootRecord.normaliseAndStoreInDb(targetFolderPath,
+                                                                                nullptr,
+                                                                                userMessage,
+                                                                                stats)) {
       return false;
    }
 

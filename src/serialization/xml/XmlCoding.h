@@ -141,6 +141,7 @@ public:
    /**
     * \brief Validate XML file against schema, load its contents into objects, and store then in the DB
     *
+    * \param targetFolderPath
     * \param documentData The contents of the XML file, which the caller should already have loaded into memory
     * \param fileName Used only for logging / error message
     * \param domErrorHandler The rules for handling any errors encountered in the file - in particular which errors
@@ -154,7 +155,8 @@ public:
     * \return true if file validated OK (including if there were "errors" that we can safely ignore)
     *         false if there was a problem that means it's not worth trying to read in the data from the file
     */
-   bool validateLoadAndStoreInDb(QByteArray const & documentData,
+   bool validateLoadAndStoreInDb(QString const & targetFolderPath,
+                                 QByteArray const & documentData,
                                  QString const & fileName,
                                  XmlErrorHandler & errorHandler,
                                  QTextStream & userMessage) const;

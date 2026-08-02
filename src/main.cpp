@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
 
       QString errorMessage;
       if (QTextStream errorMessageAsStream{&errorMessage};
-          !BeerXML::getInstance().importFromXML(fileName, errorMessageAsStream)) {
+          !BeerXML::getInstance().importFromXML("/", fileName, errorMessageAsStream)) {
          qCritical() << "Unable to import" << fileName << "Error: " << errorMessage;
          return 1;
       }

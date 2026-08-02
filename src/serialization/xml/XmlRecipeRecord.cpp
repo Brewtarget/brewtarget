@@ -57,7 +57,8 @@ namespace {
    };
 }
 
-XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(std::shared_ptr<NamedEntity> const containingEntity,
+XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(QString const & targetFolderPath,
+                                                                   std::shared_ptr<NamedEntity> const containingEntity,
                                                                    QTextStream & userMessage,
                                                                    ImportRecordCount & stats) {
    Q_ASSERT(this->m_namedEntity);
@@ -74,7 +75,10 @@ XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(std::shared_p
    // This call to the base class function will store the Recipe and all the objects it contains (via call to
    // normaliseAndStoreChildRecordsInDb), as well as link the Recipe to its Style and Equipment.
    //
-   XmlRecord::ProcessingResult result = XmlRecord::normaliseAndStoreInDb(containingEntity, userMessage, stats);
+   XmlRecord::ProcessingResult result = XmlRecord::normaliseAndStoreInDb(targetFolderPath,
+                                                                         containingEntity,
+                                                                         userMessage,
+                                                                         stats);
    if (XmlRecord::ProcessingResult::FoundDuplicate == result) {
       //
       // If the Recipe we read in turns out to be a duplicate, then (courtesy of
@@ -122,10 +126,11 @@ XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(std::shared_p
    return XmlRecord::ProcessingResult::Succeeded;
 }
 
-bool XmlRecipeRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
+bool XmlRecipeRecord::normaliseAndStoreChildRecordsInDb(QString const & targetFolderPath,
+                                                        QTextStream & userMessage,
                                                         ImportRecordCount & stats) {
    // Base class processing is all still needed and valid
-   bool result = XmlRecord::normaliseAndStoreChildRecordsInDb(userMessage, stats);
+   bool result = XmlRecord::normaliseAndStoreChildRecordsInDb(targetFolderPath, userMessage, stats);
    if (!result) {
       return false;
    }
