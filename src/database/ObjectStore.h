@@ -489,7 +489,7 @@ signals:
     * \param id The primary key of the deleted object.  (For the moment we assume all primary keys are integers.
     *           If we want to extend this in future then we'd change this param to a QVariant.)
     * \param object Shared pointer to the deleted object.  (Some recipients currently need the deleted object, and they
-    *               won't be able to get it from the ID because ... it's deleted.
+    *               won't be able to get it from the ID because ... it's deleted.)
     */
    void signalObjectDeleted(int id, std::shared_ptr<QObject> object);
 

@@ -28,9 +28,10 @@ Various improvements, including:
 ### Bug Fixes
 * Exporting a style with no style letter to BeerJSON creates a file that cannot be imported [1121](https://github.com/Brewtarget/brewtarget/issues/1121)
 * Brewtarget fails to update PostgreSQL database schema [1126](https://github.com/Brewtarget/brewtarget/issues/1126)
+* Root-level drag-and-drop [1137](https://github.com/Brewtarget/brewtarget/issues/1137)
 
 ### Release Timestamp
-Wed, 10 Jun 2026 05:01:02 +0100
+Wed, 5 Aug 2026 05:01:02 +0100
 
 ## v5.1.1
 Bug fixes.

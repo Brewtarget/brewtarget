@@ -148,8 +148,8 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
          QList<Recipe *> allRecipesBeforeImport = ObjectStoreWrapper::getAllRaw<Recipe>();
          qDebug() << Q_FUNC_INFO << allRecipesBeforeImport.size() << "Recipes before import";
 
-         QString const importFolder = QString{"New ⭐ #%1"}.arg(DefaultContentLoader::availableContentVersion);
-         succeeded = ImportExport::importFromFiles(importFolder, inputFiles);
+         QString const importFolderPath = QString{"New ⭐ #%1"}.arg(DefaultContentLoader::availableContentVersion);
+         succeeded = ImportExport::importFromFiles(importFolderPath, inputFiles);
 
          if (succeeded) {
             //
@@ -171,9 +171,21 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
             qDebug() << Q_FUNC_INFO << newlyImportedRecipes.size() << "newly imported Recipes";
             // TODO: It would be neat, at some point, to to have a mechanism for setting a property on multiple objects
             //       of the same type, so that we could do it in a single DB update.
-            for (auto recipe : newlyImportedRecipes) {
+            for (auto const recipe : newlyImportedRecipes) {
                Folder<Recipe> const * folder = Folder<Recipe>::ensure(FOLDER_PATH_FOR_SUPPLIED_RECIPES);
                recipe->setContainedInFolderId(folder->key());
+            }
+
+            //
+            // Now that we moved all the newly-imported Recipes, we should delete the 'New ⭐ #x' Recipe folder if it
+            // is empty.  (Any 'New ⭐ #x' Hop folder, or Yeast folder etc can be assumed either non-empty or
+            // user-created.)
+            //
+            auto const recipeImportFolder = Folder<Recipe>::get(importFolderPath);
+            qDebug() << Q_FUNC_INFO << recipeImportFolder << "has" << recipeImportFolder->numChildren() << "children";
+            if (recipeImportFolder && recipeImportFolder->empty()) {
+               qDebug() << Q_FUNC_INFO << "Deleting empty folder:" << recipeImportFolder;
+               ObjectStoreWrapper::hardDelete(*recipeImportFolder);
             }
 
             //
