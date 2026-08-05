@@ -195,15 +195,9 @@ public:
    }
 
    /**
-    * \brief Returns a \c Folder for the supplied full path (which must not be empty), creating any folders (and parent
-    *        folders) as needed.
-    *
-    *        If "" or "/" is specified as the fullPath, then \c nullptr is returned
-    *
-    * @param fullPath
-    * @return
+    *\brief Does the work for \c get and \c ensure
     */
-   static Folder<NE> * ensure(QString const & fullPath) {
+   static Folder<NE> * getAndOptionallyCreate(QString const & fullPath, bool const createIfNotFound) {
       Folder<NE> * folder = nullptr;
       QStringList pieces = fullPath.split("/", Qt::SkipEmptyParts);
       if (pieces.empty()) {
@@ -223,16 +217,40 @@ public:
                return (val->name() == folderName);
             }
          );
-         // If we didn't find the sub-folder, we need to create it
+         // If we didn't find the sub-folder, we either bail or create it, depending on which behaviour the caller
+         // requested.
          if (!subFolder) {
-            subFolder = std::make_shared<Folder<NE>>(folderName);
-            subFolder->setContainedInFolderId(folder ? folder->key() : -1);
-            ObjectStoreWrapper::insert(subFolder);
+            if (createIfNotFound) {
+               subFolder = std::make_shared<Folder<NE>>(folderName);
+               subFolder->setContainedInFolderId(folder ? folder->key() : -1);
+               ObjectStoreWrapper::insert(subFolder);
+            } else {
+               return nullptr;
+            }
          }
          folder = subFolder.get();
       }
 
       return folder;
+   }
+
+   /**
+    * \brief Returns the \c Folder with the supplied full path, or \c nullptr if no such folder exists.
+    */
+   static Folder<NE> * get(QString const & fullPath) {
+      return Folder<NE>::getAndOptionallyCreate(fullPath, false);
+   }
+
+   /**
+    * \brief Returns a \c Folder for the supplied full path, creating any folders (and parent folders) as needed.
+    *
+    *        If "" or "/" is specified as the fullPath, then \c nullptr is returned
+    *
+    * @param fullPath
+    * @return
+    */
+   static Folder<NE> * ensure(QString const & fullPath) {
+      return Folder<NE>::getAndOptionallyCreate(fullPath, true);
    }
 
    /**
@@ -253,6 +271,14 @@ public:
     */
    QList<std::shared_ptr<NE>        > childItems  () const { return this->children<NE        >(); }
    QList<std::shared_ptr<Folder<NE>>> childFolders() const { return this->children<Folder<NE>>(); }
+   int numChildren() const {
+      return this->childItems().size() + this->childFolders().size();
+   }
+   bool empty() const {
+      // This isn't the most efficient way to do this, but it works, and we can always optimise it later if need be.
+      return this->numChildren() == 0;
+   }
+
 
 protected:
    [[nodiscard]] ObjectStore & getObjectStoreTypedInstance() const override {

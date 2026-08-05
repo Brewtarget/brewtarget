@@ -372,14 +372,37 @@ public:
                           int row,
                           int column,
                           QModelIndex const & parent) const {
+      //
       // We don't need to do this override, as we rely on base class behaviour, but it's useful to have it for debugging
-      return this->derived().QAbstractItemModel::canDropMimeData(data, action, row, column, parent);
+      //
+      // Doco for QAbstractItemModel::canDropMimeData says:
+      //
+      //    Returns true if a model can accept a drop of the data. This default implementation only checks if data has
+      //    at least one format in the list of mimeTypes() and if action is among the model's supportedDropActions().
+      //
+      //    Reimplement this function in your custom model, if you want to test whether the data can be dropped at row,
+      //    column, parent with action. If you don't need that test, it is not necessary to reimplement this function.
+      //
+      bool const response = this->derived().QAbstractItemModel::canDropMimeData(data,
+                                                                                action,
+                                                                                row,
+                                                                                column,
+                                                                                parent);
+      // Normally leave this next line commented out otherwise it generates too much logging
+//      qDebug() <<
+//         Q_FUNC_INFO << "At row:" << row << ", column:" << column << ", parent:" << parent << ", parent.isValid():" <<
+//         parent.isValid() << ", action:" << action << ", response is " << response;
+      return response;
    }
 
    Qt::ItemFlags doFlags(QModelIndex const & index) const {
       Qt::ItemFlags flags = this->derived().QAbstractItemModel::flags(index);
       if (index.isValid()) {
          flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+      } else {
+         // Invalid index means we're in the viewport but outside the tree.  There's nothing to drag here, but we want
+         // to be able to drop here to drop at "top" level (ie inside m_rootNode).
+         flags |= Qt::ItemIsDropEnabled;
       }
       // Normally leave this next line commented out otherwise it generates too much logging
 //      qDebug() << Q_FUNC_INFO << flags;
@@ -505,10 +528,6 @@ public:
          return false;
       } else {
 
-         if (!parentIndex.isValid()) {
-            return false;
-         }
-
          qDebug() << Q_FUNC_INFO << "Parent row:" << parentIndex.row() << ", column:" << parentIndex.column();
 
          QByteArray encodedData;
@@ -522,12 +541,12 @@ public:
             return false;   // Don't know what we got, but we don't want it
          }
 
+         // If parentIndex.isValid() is false, it means we're outside the visible tree structure, so the drop target
+         // should be m_rootNode.  Nothing special to do here as doTreeNode handles this for us.
          TreeNode const * parentNode = this->doTreeNode(parentIndex);
          if (!parentNode) {
-            // Did you know there's a space between elements in a tree, and you can
-            // actually drop things there? If somebody drops something there, don't
-            // do anything
-            qDebug() << Q_FUNC_INFO << "Invalid drop location";
+            // I don't _think_ this should happen, but if we can't work out where the drop is supposed to be, bail out.
+            qWarning() << Q_FUNC_INFO << "Invalid drop location: " << parentNode;
             return false;
          }
 
@@ -1408,7 +1427,8 @@ protected:
          //
          for (int secondaryElementId : toBeCorrected) {
             if (currentlyInTree.contains(secondaryElementId)) {
-               this->doSecondaryElementRemoved(secondaryElementId);
+               std::shared_ptr<SNE> secondaryElement = ObjectStoreWrapper::getById<SNE>(secondaryElementId);
+               this->doSecondaryElementRemoved(secondaryElementId, secondaryElement);
             } else {
                Q_ASSERT(shouldBeInTree.contains(secondaryElementId));
                this->doSecondaryElementAdded(secondaryElementId);
@@ -1569,31 +1589,31 @@ public:
       return this->removeItemByIndex(elementIndex);
    }
 
-   void doElementRemoved(int const elementId) {
-      auto element = ObjectStoreWrapper::getById<NE>(elementId);
-      this->implElementRemoved(element);
+   void doElementRemoved([[maybe_unused]] int const elementId,
+                         [[maybe_unused]] std::shared_ptr<QObject> element) {
+      this->implElementRemoved(std::static_pointer_cast<NE>(element));
       return;
    }
 
    //! No-op version
-   void doSecondaryElementRemoved([[maybe_unused]] int const elementId) requires (IsVoid<SNE>) {
+   void doSecondaryElementRemoved([[maybe_unused]] int const elementId,
+                                  [[maybe_unused]] std::shared_ptr<QObject> element) requires (IsVoid<SNE>) {
       // It's a coding error if this ever gets called!
       Q_ASSERT(false);
       return;
    }
    //! Substantive version
-   void doSecondaryElementRemoved(int const elementId) requires (!IsVoid<SNE>) {
-      auto element = ObjectStoreWrapper::getById<SNE>(elementId);
-      this->implElementRemoved(element);
+   void doSecondaryElementRemoved([[maybe_unused]] int const elementId,
+                                  std::shared_ptr<QObject> element) requires (!IsVoid<SNE>) {
+      this->implElementRemoved(std::static_pointer_cast<SNE>(element));
       return;
    }
 
-   void doFolderRemoved(int const folderId) {
+   void doFolderRemoved([[maybe_unused]] int const folderId, std::shared_ptr<QObject> folder) {
       // We shouldn't get called on trees that don't support folders, but it's easier to just have a no-op in such cases
       // then remove the function calls etc.
       if constexpr (HasFolder<NE>) {
-         auto folder = ObjectStoreWrapper::getById<Folder<NE>>(folderId);
-         this->implElementRemoved(folder);
+         this->implElementRemoved(std::static_pointer_cast<Folder<NE>>(folder));
       }
       return;
    }
@@ -1987,7 +2007,7 @@ protected:
 #define TREE_MODEL_COMMON_DECL_SNE_1(NeName)
 #define TREE_MODEL_COMMON_DECL_SNE_2(NeName, SneName) \
       void secondaryElementAdded  (int elementId);    \
-      void secondaryElementRemoved(int elementId);    \
+      void secondaryElementRemoved(int elementId, std::shared_ptr<QObject> element);    \
       void secondaryElementChanged(QMetaProperty property, QVariant value); \
 
 #define TREE_MODEL_COMMON_DECL_SNE(...) \
@@ -2043,7 +2063,7 @@ protected:
                                                                                             \
 private slots:                                                                              \
       void elementAdded  (int elementId);                                                   \
-      void elementRemoved(int elementId);                                                   \
+      void elementRemoved(int elementId, std::shared_ptr<QObject> element);                 \
       void elementChanged(QMetaProperty property, QVariant value);                          \
       TREE_MODEL_COMMON_DECL_SNE(NeName __VA_OPT__(,) __VA_ARGS__)                          \
                                                                                             \
@@ -2051,7 +2071,7 @@ private slots:                                                                  
       /* folders.  However, to avoid even more macro jiggery pokery, we let them exist */   \
       /* as no-ops in such cases. */                                                        \
       void folderAdded  (int folderId);                                                     \
-      void folderRemoved(int folderId);                                                     \
+      void folderRemoved(int folderId, std::shared_ptr<QObject> folder);                    \
       void folderChanged(QMetaProperty property, QVariant value);                           \
                                                                                             \
       void secondaryElementsChanged();                                                      \
@@ -2062,11 +2082,18 @@ private slots:                                                                  
 //
 #define TREE_MODEL_COMMON_CODE_SNE_1(NeName)
 #define TREE_MODEL_COMMON_CODE_SNE_2(NeName, SneName) \
-   void NeName##TreeModel::secondaryElementAdded  (int elementId) { this->doSecondaryElementAdded  (elementId)     ; return; } \
-   void NeName##TreeModel::secondaryElementRemoved(int elementId) { this->doSecondaryElementRemoved(elementId)     ; return; } \
+   void NeName##TreeModel::secondaryElementAdded  (int elementId) { \
+      this->doSecondaryElementAdded  (elementId);                   \
+      return;                                                       \
+   }                                                                \
+   void NeName##TreeModel::secondaryElementRemoved(int elementId,                      \
+                                                   std::shared_ptr<QObject> element) { \
+      this->doSecondaryElementRemoved(elementId, element);                             \
+      return;                                                                          \
+   }                                                                                   \
    void NeName##TreeModel::secondaryElementChanged(QMetaProperty property, QVariant value) { \
-      this->doSecondaryElementChanged(this->sender(), property, value); return; \
-   } \
+      this->doSecondaryElementChanged(this->sender(), property, value); return;              \
+   }                                                                                         \
 
 #define TREE_MODEL_COMMON_CODE_SNE(...) \
    TREE_MODEL_GET_OVERLOAD(__VA_ARGS__ __VA_OPT__(,) \
@@ -2139,14 +2166,22 @@ private slots:                                                                  
    QString NeName##TreeModel::treeForLocalisedClassName() const { return this->doTreeForLocalisedClassName(); } \
                                                                                                                 \
    void NeName##TreeModel::elementAdded  (int const elementId) { this->doElementAdded  (elementId)     ; return; } \
-   void NeName##TreeModel::elementRemoved(int const elementId) { this->doElementRemoved(elementId)     ; return; } \
+   void NeName##TreeModel::elementRemoved(int const elementId,                \
+                                          std::shared_ptr<QObject> element) { \
+      this->doElementRemoved(elementId, element);                             \
+      return;                                                                 \
+   }                                                                          \
    void NeName##TreeModel::elementChanged(QMetaProperty property, QVariant value) { \
       this->doElementChanged(this->sender(), property, value);                      \
       return;                                                                       \
    }                                                                                \
    TREE_MODEL_COMMON_CODE_SNE(NeName __VA_OPT__(,) __VA_ARGS__)                                           \
    void NeName##TreeModel::folderAdded  (int const folderId) { this->doFolderAdded  (folderId); return; } \
-   void NeName##TreeModel::folderRemoved(int const folderId) { this->doFolderRemoved(folderId); return; } \
+   void NeName##TreeModel::folderRemoved(int const folderId,                \
+                                         std::shared_ptr<QObject> folder) { \
+      this->doFolderRemoved(folderId, folder);                              \
+      return;                                                               \
+   }                                                                        \
    void NeName##TreeModel::folderChanged(QMetaProperty property, QVariant value) { \
       this->doFolderChanged (this->sender(), property, value);                     \
       return;                                                                      \

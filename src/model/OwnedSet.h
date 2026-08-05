@@ -422,9 +422,12 @@ private:
     */
    std::shared_ptr<Item> extend(std::shared_ptr<Item> item) {
       //
-      // It's a coding error to add an item to a set if it is already in one
+      // It's a coding error to add an item to a set if it is already in a different one.
       //
-      if (item->ownerId() > 0) {
+      // (Ideally, we would also avoid adding something to a set if it's already in it, but it's harmless if this
+      // happens.)
+      //
+      if (item->ownerId() > 0 && item->ownerId() != this->m_owner.key()) {
          qWarning() <<
             Q_FUNC_INFO << "Trying to add" << Item::staticMetaObject.className() << "#" << item->key() << "to" <<
             Owner::staticMetaObject.className() << "#" << this->m_owner.key() << "when already owned by #" <<

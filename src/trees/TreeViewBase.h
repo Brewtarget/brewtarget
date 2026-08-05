@@ -164,28 +164,30 @@ protected:
 
    void doContextMenu(QPoint const & point) {
       QModelIndex selectedViewIndex = this->derived().indexAt(point);
-      if (!selectedViewIndex.isValid()) {
-         return;
-      }
-
+      //
+      // We show the context menu even if nothing "valid" is under the cursor, as user may want to create a root-level
+      // folder, or import from a file.
+      //
       CommonContextMenuHelper::Selected<NE, SNE> selected = this->getNumbersSelected();
-      TreeNode * selectedNode = this->doTreeNode(selectedViewIndex);
-      if (selectedNode->classifier() == TreeNodeClassifier::PrimaryItem) {
-         auto const & primaryNode = static_cast<TreeItemNode<NE> &>(*selectedNode);
-         auto primaryItem = primaryNode.underlyingItem();
-         QModelIndex translated = this->m_treeSortFilterProxy.mapToSource(selectedViewIndex);
-         selected.firstPrimary = primaryItem;
-         if constexpr (std::is_same_v<NE, Recipe>) {
-            selected.fpAncestorsVisible = (primaryItem->hasAncestors() && this->m_model.showChild(translated));
+      if (selectedViewIndex.isValid()) {
+         TreeNode * selectedNode = this->doTreeNode(selectedViewIndex);
+         if (selectedNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+            auto const & primaryNode = static_cast<TreeItemNode<NE> &>(*selectedNode);
+            auto primaryItem = primaryNode.underlyingItem();
+            QModelIndex translated = this->m_treeSortFilterProxy.mapToSource(selectedViewIndex);
+            selected.firstPrimary = primaryItem;
+            if constexpr (std::is_same_v<NE, Recipe>) {
+               selected.fpAncestorsVisible = (primaryItem->hasAncestors() && this->m_model.showChild(translated));
+            }
+         } else if (selectedNode->classifier() == TreeNodeClassifier::SecondaryItem) {
+            if constexpr (!IsVoid<SNE>) {
+               auto const & secondaryNode = static_cast<TreeItemNode<SNE> &>(*selectedNode);
+               auto secondaryItem = secondaryNode.underlyingItem();
+               selected.firstSecondary = secondaryItem;
+            }
+         } else {
+            selected.firstPrimary = this->getFirstSelectedPrimary();
          }
-      } else if (selectedNode->classifier() == TreeNodeClassifier::SecondaryItem) {
-         if constexpr (!IsVoid<SNE>) {
-            auto const & secondaryNode = static_cast<TreeItemNode<SNE> &>(*selectedNode);
-            auto secondaryItem = secondaryNode.underlyingItem();
-            selected.firstSecondary = secondaryItem;
-         }
-      } else {
-         selected.firstPrimary = this->getFirstSelectedPrimary();
       }
       this->m_contextMenus.showContextMenu(this->derived().mapToGlobal(point), selected);
 

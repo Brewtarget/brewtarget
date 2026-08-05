@@ -240,6 +240,9 @@ public:
       // item, secondary item or folders.  In practice, for the moment at least, we have the same menu for primary items
       // and folders (with slightly different things enabled) so it's a choice of two.
       //
+      // We also need to decide what to show/enable when nothing is under the cursor.  Previously we didn't show any
+      // menu, but that, eg, can make it hard to create folders at root level.
+      //
       // Strictly, the first check here is not necessary when SNE is void, but adding a compile-time check for that
       // would, in this instance, make things more complicated.
       //
@@ -277,7 +280,7 @@ public:
          if constexpr (std::same_as<NE, Recipe>) {
             if (selected.numPrimary > 0) {
                auto const & recipe{selected.firstPrimary};
-
+               this->m_menu_versioning.setEnabled(true);
                // if we have ancestors and are showing them but are not an actual
                // ancestor, then enable hide
                this->m_action_hideAncestors.setEnabled(recipe->hasAncestors() && selected.fpAncestorsVisible);
@@ -289,19 +292,22 @@ public:
                this->m_action_spawnRecipe.setEnabled(!recipe->hasDescendants());
                this->m_action_copy.setEnabled(true);
                this->m_action_brewIt.setEnabled(true);
-            } else if (selected.numFolders > 0) {
+               this->m_action_export.setEnabled(true);
+            } else {
+               this->m_menu_versioning.setEnabled(false);
                this->m_action_hideAncestors.setEnabled(false);
                this->m_action_showAncestors.setEnabled(false);
                this->m_action_orphanRecipe.setEnabled(false);
                this->m_action_spawnRecipe.setEnabled(false);
                this->m_action_copy.setEnabled(false);
                this->m_action_brewIt.setEnabled(false);
+               this->m_action_export.setEnabled(selected.numFolders > 0);
             }
          }
 
          //
-         // TBD: For the moment, we don't allow multiple selections either to be deleted or to be added to the recipe.  But
-         //      it would not be huge work to fix that if there is user demand for it.
+         // TBD: For the moment, we don't allow multiple selections either to be deleted or to be added to the recipe.
+         //      But it would not be huge work to fix that if there is user demand for it.
          //
          if constexpr (!std::is_same_v<NE, Recipe>) {
             this->m_action_addToRecipe.setEnabled(selected.numPrimary == 1);
