@@ -354,15 +354,22 @@ public:
    CommonContextMenuHelper::Selected<NE, SNE> getNumbersSelected() const {
       CommonContextMenuHelper::Selected<NE, SNE> selected;
       for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
-         switch (QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
-                 this->m_model.treeNode(modelIndex)->classifier()) {
-            case TreeNodeClassifier::PrimaryItem  : ++selected.numPrimary  ; break;
-            case TreeNodeClassifier::SecondaryItem: ++selected.numSecondary; break;
-            case TreeNodeClassifier::Folder       : ++selected.numFolders  ; break;
-            case TreeNodeClassifier::Root         :
-               // I think this should be impossible, but OK to ignore if happens
-               break;
-            // No default as we want the compiler to warn us if we missed an option above
+         //
+         // You might think that, if the user clicked outside the tree (but still in the tree's viewport), we'd have
+         // no selected rows.  But, in fact, we can have an invalid QModelIndex returned in such a case.  That's OK, but
+         // we just need to make sure we don't try to look up what type of node it is (because it isn't one!).
+         //
+         QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+         if (modelIndex.isValid()) {
+            switch (this->m_model.treeNode(modelIndex)->classifier()) {
+               case TreeNodeClassifier::PrimaryItem  : ++selected.numPrimary  ; break;
+               case TreeNodeClassifier::SecondaryItem: ++selected.numSecondary; break;
+               case TreeNodeClassifier::Folder       : ++selected.numFolders  ; break;
+               case TreeNodeClassifier::Root         :
+                  // I think this should be impossible, but OK to ignore if happens
+                  break;
+                  // No default as we want the compiler to warn us if we missed an option above
+            }
          }
       }
       return selected;
