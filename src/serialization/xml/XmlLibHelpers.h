@@ -22,98 +22,17 @@
 #include <libxml2/libxml/parser.h>
 #include <libxml2/libxml/xmlerror.h>
 #include <libxml2/libxml/xpath.h>
-#include <libxml2/libxml/xmlschemas.h>
 
 #include <QByteArray>
 #include <QString>
 #include <QTextStream>
 
 #include "serialization/xml/XmlErrorHandler.h"
-
-/**
- * Because std::unique_ptr can take a custom deleter, it can handle resource ownership even for libxml2 entities, even
- * though each of these is a C struct with its own custom "free" function to release the resource.
- *
- * By default, if you have a custom deleter type for std::unique_ptr, you need to specify the instance of it when you
- * initialise or assign to the unique_ptr.  In our case, each type always has a single global function to release
- * resources.  So, rather than keep repeating this, we create a default-constructable deleter functor that calls the
- * relevant global function.
- */
-template<auto freeFunctionForT>
-struct freeFunctionCaller {
-   //
-   // This struct has no member variables, so its default constructor and destructor are trivial.  (The constructor also
-   // won't throw any exception, which is another requirement for using with std::unique_ptr.)  We just need to
-   // provide the "functor" bit.  Although there is only one type to which it can apply, having this bit itself
-   // templated simplifies the calling code -- and the compiler will tell us if we got it wrong because we'll be trying
-   // to pass the wront pointer type to freeFunctionForT.
-   //
-   template<typename T>
-   void operator()(T * pointer) const noexcept {
-      if (pointer) {
-         freeFunctionForT(pointer);
-      }
-      return;
-   }
-};
-template<typename T, auto freeFunctionForT>
-using unique_c_ptr = std::unique_ptr<T, freeFunctionCaller<freeFunctionForT>>;
+#include "utils/CWrappers.h"
 
 namespace XmlLibHelpers {
 
    QString elementTypeToString(xmlElementType const elementType);
-
-   class XmlDocument;
-
-   //! RAII wrapper around libxml2's xmlSchema / xmlSchemaValidCtxt
-   class XmlSchema {
-   public:
-      explicit XmlSchema(QString const & schemaResource, XmlErrorHandler & errorHandler);
-      ~XmlSchema();
-
-      bool validate(XmlDocument const & xmlDocument,
-                    QTextStream & userMessage) const;
-
-   private:
-      //=============================================== Member Variables ===============================================
-      XmlErrorHandler & m_errorHandler;
-      //
-      // Resource management is handled automatically via unique_c_pointer.  However, we have to declare things in the
-      // right order here.  Member variables are destroyed in the reverse order of their declaration, and we want
-      // xmlSchemaFreeValidCtxt() called before xmlSchemaFree().
-      //
-      unique_c_ptr<xmlSchema         , xmlSchemaFree         > m_schema                  = nullptr;
-      unique_c_ptr<xmlSchemaValidCtxt, xmlSchemaFreeValidCtxt> m_schemaValidationContext = nullptr;
-   };
-
-   class XPathResult;
-
-   //! RAII wrapper around libxml2's xmlDoc
-   class XmlDocument {
-   public:
-
-      explicit XmlDocument(QByteArray const & documentData,
-                           QString const & fileName);
-      ~XmlDocument();
-
-      xmlDoc * get() const;
-
-      XPathResult const xPathResult(xmlNode & node, QString const & xPath);
-
-   private:
-      //=============================================== Member Variables ===============================================
-      //
-      // Yes, it is mildly annoying that libxml2 free function naming is not consistent (eg xmlSchemaFree for xmlSchema
-      // but xmlFreeDoc for xmlDoc).  AIUI this is just because the library evolved over the course of time with
-      // multiple contributors taking slightly different approaches.
-      //
-      QString m_fileName = "";
-      unique_c_ptr<xmlDoc, xmlFreeDoc> m_document = nullptr;
-
-   public:
-      //! NB: Putting this here assumes we are only reading one XML document at a time.
-      unique_c_ptr<xmlXPathContext, xmlXPathFreeContext> m_context = nullptr;
-   };
 
    /**
     * Wrapper around xmlXPathObject

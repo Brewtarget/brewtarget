@@ -106,10 +106,12 @@ public:
     * Constructor
     */
    impl(QVector<XmlErrorHandler::PatternAndReason> const * errorPatternsToIgnore,
-        unsigned int numberOfLinesInserted,
-        unsigned int lineAfterWhichInserted) : m_errorPatternsToIgnore(errorPatternsToIgnore),
-                                               m_numberOfLinesInserted(numberOfLinesInserted),
-                                               m_lineAfterWhichInserted(lineAfterWhichInserted) {
+        unsigned int const numberOfLinesInserted,
+        unsigned int const lineAfterWhichInserted) :
+      m_errorPatternsToIgnore{errorPatternsToIgnore},
+      m_numberOfLinesInserted{numberOfLinesInserted},
+      m_lineAfterWhichInserted{lineAfterWhichInserted} {
+
       return;
    }
 
@@ -118,27 +120,34 @@ public:
     */
    ~impl() = default;
 
-   // See https://xerces.apache.org/xerces-c/apiDocs-3/classDOMError.html for possible indexes into this array
-   static char const * const XercesErrorSeverities[];
+   /**
+    * Adjusts the location of an error to take account of any insertions we made to the file after reading it in (but
+    * before parsing).  See comments elsewhere for _why_ we want to make such insertions.  Note that we assume the
+    * insertions themselves will never cause an error!
+    */
+   unsigned int correctErrorLine(unsigned int const lineNumberOfError) const {
+      if (this->m_numberOfLinesInserted > 0 &&
+            lineNumberOfError > (this->m_lineAfterWhichInserted + this->m_numberOfLinesInserted)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Removing " << this->m_numberOfLinesInserted << " from raw line number of error ("<<
+            lineNumberOfError << ")";
+         return lineNumberOfError - this->m_numberOfLinesInserted;
+            }
+
+      return lineNumberOfError;
+   }
 
    bool m_couldntHandleError = false;
    QString m_lastError = "";
-   QVector<XmlErrorHandler::PatternAndReason> const * m_errorPatternsToIgnore;
-   unsigned int m_numberOfLinesInserted;
-   unsigned int m_lineAfterWhichInserted;
+   QVector<XmlErrorHandler::PatternAndReason> const * const m_errorPatternsToIgnore;
+   unsigned int const m_numberOfLinesInserted;
+   unsigned int const m_lineAfterWhichInserted;
 
-};
-
-constexpr char const * const XmlErrorHandler::impl::XercesErrorSeverities[] {
-   "Not Used",
-   "Warning",     // DOM_SEVERITY_WARNING = 1
-   "Error",       // DOM_SEVERITY_ERROR = 2
-   "Fatal Error"  // DOM_SEVERITY_FATAL_ERROR = 3
 };
 
 XmlErrorHandler::XmlErrorHandler(QVector<XmlErrorHandler::PatternAndReason> const * errorPatternsToIgnore,
-                                     unsigned int numberOfLinesInserted,
-                                     unsigned int lineAfterWhichInserted) :
+                                 unsigned int numberOfLinesInserted,
+                                 unsigned int lineAfterWhichInserted) :
    pimpl{std::make_unique<impl>(errorPatternsToIgnore, numberOfLinesInserted, lineAfterWhichInserted) } {
    return;
 }
@@ -160,18 +169,6 @@ QString XmlErrorHandler::getlastError() {
    return this->pimpl->m_lastError;
 }
 
-unsigned int XmlErrorHandler::correctErrorLine(unsigned int lineNumberOfError) {
-   if (this->pimpl->m_numberOfLinesInserted > 0 &&
-         lineNumberOfError > (this->pimpl->m_lineAfterWhichInserted + this->pimpl->m_numberOfLinesInserted)) {
-      qDebug() <<
-         Q_FUNC_INFO << "Removing " << this->pimpl->m_numberOfLinesInserted << " from raw line number of error ("<<
-         lineNumberOfError << ")";
-      return lineNumberOfError - this->pimpl->m_numberOfLinesInserted;
-   }
-
-   return lineNumberOfError;
-}
-
 void XmlErrorHandler::handleError(xmlError const * error) {
    qWarning() <<
       Q_FUNC_INFO << errorLevelToString(error->level) << errorDomainToString(error->domain);
@@ -183,7 +180,7 @@ void XmlErrorHandler::handleError(xmlError const * error) {
    QString shortErrorMessage;
    QTextStream shortErrorMessageAsTextStream(&shortErrorMessage);
    shortErrorMessageAsTextStream <<
-      errorLevelToString(error->level) << " at line " << this->correctErrorLine(error->line) <<
+      errorLevelToString(error->level) << " at line " << this->pimpl->correctErrorLine(error->line) <<
       // Yes, the column number field really is called "int2"
       ", column " << error->int2 << ": " << error->message;
 
@@ -195,7 +192,7 @@ void XmlErrorHandler::handleError(xmlError const * error) {
    //
    // Check whether the error we just hit is one we can actually ignore
    //
-   if (nullptr != this->pimpl->m_errorPatternsToIgnore) {
+   if (this->pimpl->m_errorPatternsToIgnore) {
       for (auto ii = this->pimpl->m_errorPatternsToIgnore->cbegin(); ii != this->pimpl->m_errorPatternsToIgnore->cend(); ++ii) {
          QRegularExpression pattern(ii->regExMatchingErrorMessage);
          QRegularExpressionMatch match = pattern.match(error->message);

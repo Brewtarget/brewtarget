@@ -217,12 +217,14 @@ set(filesToCompile_cpp
     ${repoDir}/src/serialization/json/JsonXPath.cpp
     ${repoDir}/src/serialization/xml/BeerXml.cpp
     ${repoDir}/src/serialization/xml/XmlCoding.cpp
+    ${repoDir}/src/serialization/xml/XmlDocument.cpp
     ${repoDir}/src/serialization/xml/XmlErrorHandler.cpp
     ${repoDir}/src/serialization/xml/XmlLibHelpers.cpp
     ${repoDir}/src/serialization/xml/XmlMashRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecipeRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecord.cpp
     ${repoDir}/src/serialization/xml/XmlRecordDefinition.cpp
+    ${repoDir}/src/serialization/xml/XmlSchema.cpp
     ${repoDir}/src/tools/AlcoholTool.cpp
     ${repoDir}/src/tools/AncestorDialog.cpp
     ${repoDir}/src/tools/UnitConversionTool.cpp

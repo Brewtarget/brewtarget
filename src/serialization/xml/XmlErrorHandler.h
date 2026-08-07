@@ -57,7 +57,7 @@ public:
    /**
     * \brief Constructor
     *
-    * \param errorPatternsToIgnore If not null, this is a list Xerces errors that we may safely ignore.  Specifically
+    * \param errorPatternsToIgnore If not null, this is a list libxml2 errors that we may safely ignore.  Specifically
     *                              for each error to ignore, there are two things: a regular expression that will
     *                              match (only) against the message of the error we want to ignore, and a reason why we
     *                              are ignoring this error (so we can log "Ignored error X for reason Y".
@@ -67,9 +67,9 @@ public:
     * \param lineAfterWhichInserted If numberOfLinesInserted is not 0 then this says at which point in the document the
     *                               insertion was made.
     */
-   XmlErrorHandler(QVector<PatternAndReason> const * errorPatternsToIgnore = nullptr,
-                     unsigned int numberOfLinesInserted = 0,
-                     unsigned int lineAfterWhichInserted = 0);
+   explicit XmlErrorHandler(QVector<PatternAndReason> const * errorPatternsToIgnore = nullptr,
+                            unsigned int numberOfLinesInserted = 0,
+                            unsigned int lineAfterWhichInserted = 0);
 
    ~XmlErrorHandler();
 
@@ -82,13 +82,6 @@ public:
     * look in the log file for more detailed info).
     */
    QString getlastError();
-
-   /**
-    * Adjusts the location of an error to take account of any insertions we made to the file after reading it in (but
-    * before parsing).  See comments elsewhere for _why_ we want to make such insertions.  Note that we assume the
-    * insertions themselves will never cause an error!
-    */
-   unsigned int correctErrorLine(unsigned int lineNumberOfError);
 
    /**
     * If the handleError method returns true the DOM implementation should continue as if the error didn't happen when

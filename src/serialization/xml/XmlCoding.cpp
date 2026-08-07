@@ -15,6 +15,8 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "serialization/xml/XmlCoding.h"
 
+#include <memory>
+
 #include <QDebug>
 #include <QFile>
 
@@ -23,6 +25,7 @@
 
 #include "serialization/xml/XmlErrorHandler.h"
 #include "serialization/xml/XmlLibHelpers.h"
+#include "serialization/xml/XmlSchema.h"
 #include "utils/ImportRecordCount.h"
 
 //
@@ -112,7 +115,7 @@ public:
     */
    void loadSchema(QString const & schemaResource, XmlErrorHandler & errorHandler) {
       // We leave it to our caller to catch any exceptions thrown in XmlSchema's constructor
-      this->m_schema = std::make_unique<XmlLibHelpers::XmlSchema>(schemaResource, errorHandler);
+      this->m_schema = std::make_unique<XmlSchema>(schemaResource, errorHandler);
 
       return;
    }
@@ -120,6 +123,7 @@ public:
    /**
     * \brief Validate XML file against schema, then call other functions to load its contents and store them in the DB
     *
+    * \param targetFolderPath
     * \param documentData The contents of the XML file, which the caller should already have loaded into memory
     * \param fileName     Used only for logging / error message
     * \param errorHandler The rules for handling any errors encountered in the file - in particular which errors should
@@ -144,8 +148,8 @@ public:
             m_initialised = true;
          }
 
-         XmlLibHelpers::XmlDocument xmlDocument{documentData, fileName};
-         if (!this->m_schema->validate(xmlDocument, userMessage)) {
+         XmlDocument xmlDocument{documentData, fileName};
+         if (!this->m_schema->validate(xmlDocument, errorHandler, userMessage)) {
             //
             // We cannot express all the rules of BeerXML in an XSD.  This means that certain schema validation errors
             // are OK (eg BeerXML explicitly allows implementations to add their own non-standard tags, so hitting
@@ -185,7 +189,7 @@ public:
     *         false if there was a problem that means it's not worth trying to read in the data from the file
     */
    bool loadValidated(QString const & targetFolderPath,
-                      XmlLibHelpers::XmlDocument & xmlDocument,
+                      XmlDocument & xmlDocument,
                       QTextStream & userMessage) {
 
       xmlNode * rootNode = xmlDocGetRootElement(xmlDocument.get());
@@ -221,7 +225,7 @@ public:
     * \return
     */
    bool loadNormaliseAndStoreInDb(QString const & targetFolderPath,
-                                  XmlLibHelpers::XmlDocument & xmlDocument,
+                                  XmlDocument & xmlDocument,
                                   xmlNode * rootNode,
                                   QString const & rootNodeName,
                                   QTextStream & userMessage) const {
@@ -264,7 +268,7 @@ public:
    QString const m_schemaResource;
    XmlRecordDefinition const & m_rootRecordDefinition;
 
-   std::unique_ptr<XmlLibHelpers::XmlSchema> m_schema = nullptr;
+   std::unique_ptr<XmlSchema> m_schema = nullptr;
 
 };
 
