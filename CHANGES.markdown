@@ -31,6 +31,7 @@ Various improvements, including:
 * Root-level drag-and-drop [1137](https://github.com/Brewtarget/brewtarget/issues/1137)
 * Mash tree not updated when you add a mash step [1043](https://github.com/Brewtarget/brewtarget/issues/1043) (NB: May have been fixed in an earlier release!)
 * Range comparison on the water chemistry is not quite right [572](https://github.com/Brewtarget/brewtarget/issues/572)
+* 5.1.x - snapshots are not showing [1139](https://github.com/Brewtarget/brewtarget/issues/1139)
 
 ### Release Timestamp
 Wed, 5 Aug 2026 05:01:02 +0100

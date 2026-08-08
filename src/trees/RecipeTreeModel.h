@@ -38,16 +38,16 @@ public:
    void init(AncestorDialog & ancestorDialog, OptionDialog & optionDialog);
 
    //! \b show the versions of the recipe at index
-   void showAncestors(QModelIndex ndx);
+   void showAncestors(QModelIndex index);
    //! \b show the child of the recipe at index
-   bool showChild(QModelIndex ndx) const;
+   bool showChild(QModelIndex childIndex) const;
    //! \b hide the ancestors
-   void hideAncestors(QModelIndex ndx);
+   void hideAncestors(QModelIndex index);
    void revertRecipeToPreviousVersion(QModelIndex ndx);
    //! \b orphan a recipe
-   void orphanRecipe(QModelIndex ndx);
+   void orphanRecipe(QModelIndex index);
    //! \b spawns a recipe
-   void spawnRecipe(QModelIndex ndx);
+   void spawnRecipe(QModelIndex index);
 
 public slots:
    void versionedRecipe(Recipe * ancestor, Recipe * descendant);
@@ -59,10 +59,9 @@ protected slots:
 signals:
    void recipeSpawn(Recipe * descendant);
 
-protected:
 private:
    //! \b flip the switch to show descendants
-   void setShowChild(QModelIndex child, bool val);
+   void setShowChild(QModelIndex childIndex, bool val);
 
    //! \brief convenience function to add brewLogs to a recipe as a subtree
    void addBrewLogSubTree(TreeNode & recipeNodeRaw,
@@ -70,17 +69,15 @@ private:
                            Recipe const & recipe,
                            bool recurse = true);
 
-   void addAncestoralTree(TreeNode & recipeNode,
+   void addAncestoralTree(TreeNode & recipeNodeRaw,
                           int recipeChildNumber,
                           Recipe const & recipe);
 
    /**
     * \brief Add BrewLogs and ancestors to a recipe as a sub-tree
-    * \param recurse
     */
    void addSubTree(Recipe const & recipe,
-                   TreeItemNode<Recipe> & recipeNode/*,
-                   bool const recurse = true*/);
+                   TreeItemNode<Recipe> & recipeNode);
 
 };
 
