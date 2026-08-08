@@ -29,6 +29,8 @@ Various improvements, including:
 * Exporting a style with no style letter to BeerJSON creates a file that cannot be imported [1121](https://github.com/Brewtarget/brewtarget/issues/1121)
 * Brewtarget fails to update PostgreSQL database schema [1126](https://github.com/Brewtarget/brewtarget/issues/1126)
 * Root-level drag-and-drop [1137](https://github.com/Brewtarget/brewtarget/issues/1137)
+* Mash tree not updated when you add a mash step [1043](https://github.com/Brewtarget/brewtarget/issues/1043) (NB: May have been fixed in an earlier release!)
+* Range comparison on the water chemistry is not quite right [572](https://github.com/Brewtarget/brewtarget/issues/572)
 
 ### Release Timestamp
 Wed, 5 Aug 2026 05:01:02 +0100

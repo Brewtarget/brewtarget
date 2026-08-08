@@ -85,7 +85,7 @@
       },
       "required": [
         "name",
-        "type"
+        "misc_type"
       ]
     },
     "MiscIngredientInventory": {

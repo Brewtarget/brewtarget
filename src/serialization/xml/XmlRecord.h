@@ -21,8 +21,8 @@
 
 #include <libxml2/libxml/tree.h>
 
+#include "serialization/xml/XmlDocument.h"
 #include "serialization/xml/XmlRecordDefinition.h"
-#include "serialization/xml/XmlLibHelpers.h"
 #include "serialization/SerializationRecord.h"
 #include "utils/ImportRecordCount.h"
 #include "utils/TypeLookup.h"
@@ -77,8 +77,8 @@ public:
     *
     * \return \b true if load succeeded, \b false if there was an error
     */
-   bool load(XmlLibHelpers::XmlDocument & document,
-             xmlNode                    & rootNodeOfRecord,
+   bool load(XmlDocument & document,
+             xmlNode     & rootNodeOfRecord,
              QTextStream & userMessage);
 
    /**
@@ -103,7 +103,7 @@ private:
     *        process (eg Hop records inside a Recipe).  But the algorithm for processing is generic, so we implement it
     *        in this base class.
     */
-   bool loadChildRecords(XmlLibHelpers::XmlDocument & document,
+   bool loadChildRecords(XmlDocument & document,
                          XmlRecordDefinition::FieldDefinition const & parentFieldDefinition,
                          XmlRecordDefinition const & childRecordDefinition,
                          std::vector<xmlNode *> & nodesForCurrentXPath,

@@ -1067,7 +1067,10 @@
             the assert tag. -->
          <xs:element name="HOPS" type="HopsEmptyAllowedType"/>
          <xs:element name="FERMENTABLES" type="FermentablesEmptyAllowedType"/>
-         <xs:element name="MISCS" type="MiscsEmptyAllowedType"/>
+         <!-- Strictly speaking, <MISCS>...</MISCS> is a required element of RECIPE, although it is allowed to be empty
+              ("Zero or more MISC records may appear between <MISCS> … </MISCS>".)  However, in practice, some software
+              omits it entirely if there are no Misc ingredients.  So, we allow this in our input. -->
+         <xs:element name="MISCS" type="MiscsEmptyAllowedType" minOccurs="0" maxOccurs="1"/>
          <xs:element name="YEASTS" type="YeastsEmptyAllowedType"/>
          <!-- Strictly speaking the WATERS tag is required inside a RECIPE, even though it is allowed to be empty, ie
               to contain no WATER records.  Some software doesn't write it out though, so we make it optional. -->

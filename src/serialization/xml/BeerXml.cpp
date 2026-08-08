@@ -1296,7 +1296,7 @@ namespace {
       // existing implementations take any care to make their custom tag names unique to the program using them.)
       //
       // The second problem is that, because the BeerXML 1.0 standard also says that tags inside a containing element
-      // may occur in any order, we cannot easily tell the XSD to ignore unkonwn tags.  (The issue is that, in the XSD,
+      // may occur in any order, we cannot easily tell the XSD to ignore unknown tags.  (The issue is that, in the XSD,
       // we have to to use <xs:all> rather than <xs:sequence> for the containing tags, as this allows the contained
       // tags to appear in any order.  In turn, this means we cannot use <xs:any> to allow unrecognised tags.  This is
       // disallowed by the W3C XML Schema standard because it would make validation harder (and slower).  See

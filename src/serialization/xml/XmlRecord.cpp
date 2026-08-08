@@ -70,9 +70,9 @@ SerializationRecordDefinition const & XmlRecord::recordDefinition() const {
    return this->m_recordDefinition;
 }
 
-bool XmlRecord::load(XmlLibHelpers::XmlDocument & document,
-                     xmlNode         & rootNodeOfRecord,
-                     QTextStream     & userMessage) {
+bool XmlRecord::load(XmlDocument & document,
+                     xmlNode     & rootNodeOfRecord,
+                     QTextStream & userMessage) {
    //
    // Loop through all the fields that we know/care about.  Anything else is intentionally ignored.  (We won't know
    // what to do with it, and, if it weren't allowed to be there, it would have generated an error at XSD parsing.)
@@ -539,7 +539,7 @@ bool XmlRecord::load(XmlLibHelpers::XmlDocument & document,
    return true;
 }
 
-[[nodiscard]] bool XmlRecord::loadChildRecords(XmlLibHelpers::XmlDocument & document,
+[[nodiscard]] bool XmlRecord::loadChildRecords(XmlDocument & document,
                                                XmlRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                                XmlRecordDefinition const & childRecordDefinition,
                                                std::vector<xmlNode *> & nodesForCurrentXPath,
