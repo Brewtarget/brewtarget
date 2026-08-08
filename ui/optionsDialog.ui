@@ -447,7 +447,7 @@
        <item>
         <widget class="QCheckBox" name="checkBox_alwaysShowSnaps">
          <property name="text">
-          <string>Always show snapshots</string>
+          <string>Show snapshots by default</string>
          </property>
         </widget>
        </item>

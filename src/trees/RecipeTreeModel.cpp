@@ -81,7 +81,7 @@ void RecipeTreeModel::addBrewLogSubTree(TreeNode & recipeNodeRaw,
 }
 
 void RecipeTreeModel::addAncestoralTree(TreeNode & recipeNodeRaw,
-                                        int recipeChildNumber,
+                                        int const recipeChildNumber,
                                         Recipe const & recipe) {
    auto ancestors = recipe.ancestors();
 
@@ -115,8 +115,7 @@ void RecipeTreeModel::addAncestoralTree(TreeNode & recipeNodeRaw,
 }
 
 void RecipeTreeModel::addSubTree(Recipe const & recipe,
-                                 TreeItemNode<Recipe> & recipeNode/*,
-                                 bool const recurse*/) {
+                                 TreeItemNode<Recipe> & recipeNode) {
 
    bool const showSnapshots = PersistentSettings::value_ck(PersistentSettings::Names::showsnapshots, false).toBool();
 
@@ -133,13 +132,16 @@ void RecipeTreeModel::addSubTree(Recipe const & recipe,
       this->addBrewLogSubTree(recipeNode, childNumber, recipe, false);
    } else {
       this->addBrewLogSubTree(recipeNode, childNumber, recipe, true);
+
+      // This is for menus
+      this->setShowChild(recipeNodeIndex, false);
    }
 
    return;
 }
 
-bool RecipeTreeModel::showChild(QModelIndex child) const {
-   TreeNode const * node = this->treeNode(child);
+bool RecipeTreeModel::showChild(QModelIndex childIndex) const {
+   TreeNode const * node = this->treeNode(childIndex);
    return node->showMe();
 }
 
@@ -184,7 +186,7 @@ void RecipeTreeModel::showAncestors(QModelIndex recipeNodeIndex) {
    return;
 }
 
-void RecipeTreeModel::hideAncestors(QModelIndex index) {
+void RecipeTreeModel::hideAncestors(QModelIndex const index) {
    // This has no potential to be clever. None.
    if (!index.isValid()) {
       return;
@@ -195,11 +197,11 @@ void RecipeTreeModel::hideAncestors(QModelIndex index) {
    // It's a coding error to call this for a non-Recipe node...
    Q_ASSERT(node->classifier() == TreeNodeClassifier::PrimaryItem);
    // ...so this cast should be safe.
-   auto & recipeNode = static_cast<TreeItemNode<Recipe> &>(*node);
+   auto const & recipeNode = static_cast<TreeItemNode<Recipe> &>(*node);
 
    // remove all the currently shown children
    this->removeChildren(0, recipeNode.childCount(), index);
-   auto descendant = recipeNode.underlyingItem();
+   auto const descendant = recipeNode.underlyingItem();
 
    // put the brewLogs back, including those from the ancestors.
    this->addBrewLogSubTree(*node, index.row(), *descendant);
@@ -209,15 +211,15 @@ void RecipeTreeModel::hideAncestors(QModelIndex index) {
 
    // Now we just need to mark each ancestor invisible again
    for (auto ancestor : descendant->ancestors()) {
-      QModelIndex aIndex = this->findElement(ancestor.get(), node);
-      this->setShowChild(aIndex, false);
-      emit dataChanged(aIndex, aIndex);
+      QModelIndex ancestorIndex = this->findElement(ancestor.get(), node);
+      this->setShowChild(ancestorIndex, false);
+      emit dataChanged(ancestorIndex, ancestorIndex);
    }
    return;
 }
 
 // more cleverness must happen. Wonder if I can figure it out.
-void RecipeTreeModel::showOrHideAllAncestors(bool show) {
+void RecipeTreeModel::showOrHideAllAncestors(bool const show) {
    for (auto recipe : ObjectStoreWrapper::getAllDisplayable<Recipe>()) {
       if (recipe->hasAncestors()) {
          QModelIndex recipeIndex = this->findElement(recipe.get());
