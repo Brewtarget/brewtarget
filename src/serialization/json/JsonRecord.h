@@ -63,7 +63,7 @@ public:
     *        constructor arguments (which is what this template trick achieves).
     */
    template <typename P, typename Q, typename R> JsonRecord(P, Q, R) = delete;
-   virtual ~JsonRecord();
+   ~JsonRecord() override;
 
    virtual SerializationRecordDefinition const & recordDefinition() const override;
 
@@ -85,7 +85,8 @@ public:
                                                                 QTextStream & userMessage,
                                                                 ImportRecordCount & stats) override;
 
-   static bool listToJson(QList< std::shared_ptr<NamedEntity> > const & objectsToWrite,
+   static bool listToJson(QString const & baseFolderPath,
+                          QList< std::shared_ptr<NamedEntity> > const & objectsToWrite,
                           boost::json::array & outputArray,
                           JsonCoding const & coding,
                           JsonRecordDefinition const & recordDefinition);
@@ -96,7 +97,8 @@ public:
     *
     * \return \c true if succeeded, \c false otherwise
     */
-   [[nodiscard]] bool toJson(NamedEntity const & namedEntityToExport);
+   [[nodiscard]] bool toJson(QString const & baseFolderPath,
+                             NamedEntity const & namedEntityToExport);
 
 private:
    /**
@@ -123,6 +125,7 @@ private:
    /**
     * \brief Add a value to a JSON object
     *
+    * \param baseFolderPath
     * \param fieldDefinition
     * \param recordDataAsObject
     * \param key
@@ -130,7 +133,8 @@ private:
     *               from \c std::optional<T> to \c T).  Caller is not expected to need the value after this function
     *               returns.
     */
-   void insertValue(JsonRecordDefinition::FieldDefinition const & fieldDefinition,
+   void insertValue(QString const & baseFolderPath,
+                    JsonRecordDefinition::FieldDefinition const & fieldDefinition,
                     boost::json::object & recordDataAsObject,
                     std::string_view const & key,
                     QVariant & value);

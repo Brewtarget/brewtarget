@@ -1154,7 +1154,8 @@ namespace DotBeer {
       return;
    }
 
-   template<class NE> void Exporter::add(QList<NE const *> const & nes) {
+   template<class NE> void Exporter::add(QString const & baseFolderPath,
+                                         QList<NE const *> const & nes) {
       QList< std::shared_ptr<NamedEntity> > objectsToWrite;
       objectsToWrite.reserve(nes.size());
       for (NE const * ne : nes) {
@@ -1168,7 +1169,7 @@ namespace DotBeer {
          );
       }
       boost::json::array outputArray;
-      JsonRecord::listToJson(objectsToWrite, outputArray, DOT_BEER_1_CODING, DOT_BEER_RECORD_DEFN<NE>);
+      JsonRecord::listToJson(baseFolderPath, objectsToWrite, outputArray, DOT_BEER_1_CODING, DOT_BEER_RECORD_DEFN<NE>);
       this->pimpl->outputDocument[outputDocumentName].get_object()[*DOT_BEER_RECORD_DEFN<NE>.m_recordName] = outputArray;
       return;
    }
@@ -1178,21 +1179,21 @@ namespace DotBeer {
    // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header,
    // which means, amongst other things, that we can reference the pimpl.)
    //
-   template void Exporter::add(QList<Hop          const *> const & nes);
-   template void Exporter::add(QList<Fermentable  const *> const & nes);
-   template void Exporter::add(QList<Yeast        const *> const & nes);
-   template void Exporter::add(QList<Misc         const *> const & nes);
-   template void Exporter::add(QList<Water        const *> const & nes);
-   template void Exporter::add(QList<Style        const *> const & nes);
-   template void Exporter::add(QList<MashStep     const *> const & nes);
-   template void Exporter::add(QList<Mash         const *> const & nes);
-   template void Exporter::add(QList<Fermentation const *> const & nes);
-   template void Exporter::add(QList<Boil         const *> const & nes);
-   template void Exporter::add(QList<Equipment    const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Hop          const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Fermentable  const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Yeast        const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Misc         const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Water        const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Style        const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<MashStep     const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Mash         const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Fermentation const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Boil         const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Equipment    const *> const & nes);
    // Following two lines are commented out as neither Instruction nor BrewLog is part of DotBeer.
 //   template void Exporter::add(QList<Instruction const *> const & nes);
 //   template void Exporter::add(QList<BrewLog    const *> const & nes);
-   template void Exporter::add(QList<Recipe      const *> const & nes);
+   template void Exporter::add(QString const & baseFolderPath, QList<Recipe      const *> const & nes);
 
    void Exporter::close() {
       if (this->pimpl->writtenToFile) {

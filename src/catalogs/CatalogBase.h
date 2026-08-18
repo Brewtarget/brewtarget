@@ -439,7 +439,7 @@ public:
     */
    void doExportSelected() const {
       QList<std::shared_ptr<NE>> selectedItems = this->getMultipleSelected();
-      this->m_contextMenus.exportItems(CastAndConvert::toConstRaw(selectedItems));
+      this->m_contextMenus.exportItems(QString{"/"}, CastAndConvert::toConstRaw(selectedItems));
       return;
    }
 

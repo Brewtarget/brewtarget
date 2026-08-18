@@ -154,6 +154,7 @@ namespace {
 
    bool migrate_to_210(Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> migrationQueries{
+         // NB: Table `salt` does not get created until schema version 9 -- see migrate_to_9() below
          {QString("ALTER TABLE equipment   ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
          {QString("ALTER TABLE fermentable ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
          {QString("ALTER TABLE hop         ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
@@ -164,14 +165,13 @@ namespace {
          {QString("ALTER TABLE mash        ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
          {QString("ALTER TABLE recipe      ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
          {QString("ALTER TABLE brewnote    ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
-         {QString("ALTER TABLE salt        ADD COLUMN folder %1").arg(db.getDbNativeTypeName<QString>())}, // Previously DEFAULT ''
          // Put the "Bt:.*" recipes into /brewtarget folder
          {QString("UPDATE recipe   SET folder='/brewtarget' WHERE name LIKE 'Bt:%'")},
          // Update version to 2.1.0
          {QString("UPDATE settings SET version='2.1.0' WHERE id=1")},
          // Used to trigger the code to populate the ingredient inheritance tables.  Gets removed in schema version 11.
          {QString("ALTER TABLE settings ADD COLUMN repopulatechildrenonnextstart %1").arg(db.getDbNativeTypeName<int>())},
-         {QString("UPDATE repopulatechildrenonnextstart integer=1")},
+         {QString("UPDATE settings SET repopulatechildrenonnextstart = 1")},
       };
       // Drop and re-create children tables with new UNIQUE requirement
       for (char const * baseTableName : {"equipment", "fermentable", "hop", "misc", "recipe", "style", "water", "yeast"}) {
@@ -186,26 +186,31 @@ namespace {
                                        db.getDbNativePrimaryKeyDeclaration(),
                                        db.getDbNativeTypeName<int>())});
       }
-      for (char const * tableName : {"fermentable_in_inventory", "hop_in_inventory", "misc_in_inventory"}) {
-         migrationQueries.append({QString("DROP TABLE   %1;").arg(tableName)});
+      for (char const * baseName : {"fermentable", "hop", "misc"}) {
+         migrationQueries.append({QString("DROP TABLE %1_in_inventory;").arg(baseName)});
          migrationQueries.append(
             {
                QString(
-                  "CREATE TABLE %1 (id %2, "
-                                 "amount %3);" // Previously DEFAULT 0
-               ).arg(tableName, db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())
+                  "CREATE TABLE %1_in_inventory (id %2, "
+                                                "%1_id %3, "
+                                                "amount %4)" // Previously DEFAULT 0
+               ).arg(baseName,
+                     db.getDbNativePrimaryKeyDeclaration(),
+                     db.getDbNativeTypeName<int>(),
+                     db.getDbNativeTypeName<double>())
             }
          );
       }
       migrationQueries.append({QString("DROP TABLE   yeast_in_inventory")});
       migrationQueries.append(
          {
-            QString("CREATE TABLE %1 (id %2, "
-                                     "quanta %3);" // Previously DEFAULT 0
-            ).arg("yeast_in_inventory", db.getDbNativePrimaryKeyDeclaration(), db.getDbNativeTypeName<double>())
+            QString(
+               "CREATE TABLE yeast_in_inventory (id %1, yeast_id %2, quanta %3)" // Previously DEFAULT 0
+            ).arg(db.getDbNativePrimaryKeyDeclaration(),
+                  db.getDbNativeTypeName<int>(),
+                  db.getDbNativeTypeName<double>())
          }
       );
-      migrationQueries.append({QString("UPDATE settings VALUES(1,2)")});
       return executeSqlQueries(q, migrationQueries);
    }
 
@@ -2064,7 +2069,7 @@ namespace {
          {QString("ALTER TABLE yeast       DROP COLUMN amount_is_weight")},
          //
          // We would like hop_in_inventory.hop_id to be a foreign key to hop.id.  SQLite only lets you create foreign
-         // key constraints at the time that you create the table (or add a new column), so this is a bit of a palava.
+         // key constraints at the time that you create the table (or add a new column), so this is a bit of a palaver.
          //
          {QString("CREATE TABLE tmp_hop_in_inventory ( "
                     "id        %1, "
@@ -3510,15 +3515,11 @@ int DatabaseSchemaHelper::schemaVersion(QSqlDatabase & db) {
    }
 
    // Get the string before we kill it by convert()-ing
-   QString stringVer( ver.toString() );
+   QString const stringVer( ver.toString() );
    qDebug() << Q_FUNC_INFO << "Database schema version" << stringVer;
 
    // Initially, versioning was done with strings, so we need to convert
    // the old version strings to integer versions
-   if (ver.canConvert<int>()) {
-      return ver.toInt();
-   }
-
    if (stringVer == "2.0.0") {
       return 1;
    }
@@ -3529,6 +3530,13 @@ int DatabaseSchemaHelper::schemaVersion(QSqlDatabase & db) {
 
    if (stringVer == "2.1.0") {
       return 3;
+   }
+
+   // Note that we have to do this _after_ we checked for the string versions above.  QVariant::canConvert<int>() will
+   // return true on any string content, and QVariant::toInt() will yield 0 if, eg, the variant's string content is
+   // "2.0.2".
+   if (ver.canConvert<int>()) {
+      return ver.toInt();
    }
 
    qCritical() << "Could not find database version";

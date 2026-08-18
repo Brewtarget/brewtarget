@@ -426,7 +426,7 @@ public:
          Application::abort();
       }
 
-      bool doUpdate = dbSchemaVersion < latestSchemaVersion;
+      bool const doUpdate = dbSchemaVersion < latestSchemaVersion;
       if (doUpdate) {
          //
          // Before we do a DB upgrade, we backup the DB if we can.  We know how to backup SQLite as it's just a question
@@ -446,7 +446,7 @@ public:
             // It's probably enough for most users to put the date on the backup file name to make it unique.  But we
             // put the time too just in case.  Note that, even though it is done in the ISO 8601 standard, we cannot
             // format the time with colons (eg as hh:mm:ss) because Windows does not accept colons in filenames.  We
-            // could use the ratio symbol (∶) which looks almost the same.  There is a precendent for doing this:
+            // could use the ratio symbol (∶) which looks almost the same.  There is a precedent for doing this:
             // https://web.archive.org/web/20190108033419/https://blogs.msdn.microsoft.com/oldnewthing/20180913-00/?p=99725
             // However, at least on KDE desktop, this looks a bit odd in filenames as the character is padded with a lot
             // of space.  So, instead, we use the raised colon (˸), which gives tighter spacing in proportional fonts.
@@ -494,14 +494,17 @@ public:
             }
             dbUpgradeMessageBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Abort);
             dbUpgradeMessageBox.setDefaultButton(QMessageBox::Ok);
-            int ret = dbUpgradeMessageBox.exec();
+            int const ret = dbUpgradeMessageBox.exec();
             if (ret == QMessageBox::Abort) {
                qDebug() << Q_FUNC_INFO << "User clicked \"Abort\".  Exiting.";
                Application::abort();
             }
          }
 
-         bool success = DatabaseSchemaHelper::migrate(database, dbSchemaVersion, latestSchemaVersion, database.sqlDatabase() );
+         bool const success = DatabaseSchemaHelper::migrate(database,
+                                                            dbSchemaVersion,
+                                                            latestSchemaVersion,
+                                                            database.sqlDatabase());
          if (!success) {
             qCritical() << Q_FUNC_INFO << QString("Database migration %1->%2 failed").arg(dbSchemaVersion).arg(latestSchemaVersion);
             if (err) {

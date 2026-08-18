@@ -27,6 +27,7 @@
 #include "serialization/json/JsonCoding.h"
 #include "serialization/json/JsonRecordDefinition.h"
 #include "serialization/json/JsonUtils.h"
+#include "model/Folder.h"
 #include "model/Hop.h"  // Only needed for workaround/hack for Hop year property
 #include "model/NamedEntity.h"
 #include "model/NamedParameterBundle.h"
@@ -423,7 +424,7 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
             // our internal data model.  If it is, then, for whatever underlying type T it is, we need the parsedValue
             // QVariant to hold std::optional<T> instead of just T.
             //
-            // NB: propertyPath is not actually a property path when fieldType is RequiredConstant
+            // NB: propertyPath is not actually a property path when fieldType is RequiredConstant.
             //
             bool const propertyIsOptional {
                (fieldDefinition.type == JsonRecordDefinition::FieldType::RequiredConstant ||
@@ -636,6 +637,18 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                      ") as not useful";
                   continue; // NB: _NOT_break here.  We want to jump straight to the next run through the for loop.
 
+               case JsonRecordDefinition::FieldType::FolderPath:
+                  Q_ASSERT(container->is_string());
+                  {
+                     QString subFolderPath{container->get_string().c_str()};
+                     QString fullFolderPath{FolderCommon::joinPaths(targetFolderPath, subFolderPath)};
+                     // We actually know folder paths are not optional (though they can be blank), but there's no harm
+                     // in using the propertyIsOptional flag.  And it might conceivably serve us in future.
+                     parsedValue = Optional::variantFromRaw(fullFolderPath, propertyIsOptional);
+                     parsedValueOk = true;
+                  }
+                  break;
+
                // Don't need a default case.  Compiler should warn us if we didn't have a case for one of the
                // JsonRecordDefinition::FieldType values.  This is one of the benefits of strongly-typed enums
             }
@@ -764,7 +777,8 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
  * \param key
  * \param value
  */
-void JsonRecord::insertValue(JsonRecordDefinition::FieldDefinition const & fieldDefinition,
+void JsonRecord::insertValue(QString const & baseFolderPath,
+                             JsonRecordDefinition::FieldDefinition const & fieldDefinition,
                              boost::json::object & recordDataAsObject,
                              std::string_view const & key,
                              QVariant & value) {
@@ -976,13 +990,33 @@ void JsonRecord::insertValue(JsonRecordDefinition::FieldDefinition const & field
          recordDataAsObject.emplace(key, fieldDefinition.propertyPath.asXPath().toStdString());
          break;
 
+      case JsonRecordDefinition::FieldType::FolderPath:
+         // As with FieldType::String, we mostly don't bother making folder paths optional because empty string will
+         // suffice for an unspecified value.  But we keep the logic consistent here anyway.
+         if (Optional::removeOptionalWrapperIfPresent<QString>(value, propertyIsOptional)) {
+            //
+            // We need to remove baseFolderPath if it is a prefix of the folder path.  If the user right clicked on,
+            // say, folder /foo/bar and clicked "Export", then an element with folder path "/foo/bar" should be written
+            // with path "" (or "/") and an element with folder path "/foo/bar/hum/bug" should be written with path
+            // "hum/bug" (or "/hum/bug").
+            //
+            QString const fullFolderPath = value.toString().trimmed();
+            QString const subFolderPath = FolderCommon::subPath(baseFolderPath, fullFolderPath);
+            std::string const valueAsStdString = subFolderPath.toStdString();
+            recordDataAsObject.emplace(key, valueAsStdString);
+         }
+
+         break;
+
+
       // Don't need a default case as we want the compiler to warn us if we didn't cover everything explicitly above
    }
 
    return;
 }
 
-bool JsonRecord::listToJson(QList< std::shared_ptr<NamedEntity> > const & objectsToWrite,
+bool JsonRecord::listToJson(QString const & baseFolderPath,
+                            QList< std::shared_ptr<NamedEntity> > const & objectsToWrite,
                             boost::json::array & outputArray,
                             JsonCoding const & coding,
                             JsonRecordDefinition const & recordDefinition) {
@@ -994,7 +1028,7 @@ bool JsonRecord::listToJson(QList< std::shared_ptr<NamedEntity> > const & object
       std::unique_ptr<JsonRecord> jsonRecord{
          recordDefinition.makeRecord(coding, neJson)
       };
-      if (!jsonRecord->toJson(*obj)) {
+      if (!jsonRecord->toJson(baseFolderPath, *obj)) {
          return false;
       }
 
@@ -1005,7 +1039,8 @@ bool JsonRecord::listToJson(QList< std::shared_ptr<NamedEntity> > const & object
    return true;
 }
 
-bool JsonRecord::toJson(NamedEntity const & namedEntityToExport) {
+bool JsonRecord::toJson(QString const & baseFolderPath,
+                        NamedEntity const & namedEntityToExport) {
    Q_ASSERT(this->m_recordData.is_object());
    qDebug() <<
       Q_FUNC_INFO << "Exporting JSON for" << namedEntityToExport.metaObject()->className() << "#" <<
@@ -1171,7 +1206,7 @@ bool JsonRecord::toJson(NamedEntity const & namedEntityToExport) {
                std::unique_ptr<JsonRecord> subRecord{
                   childRecordDefinition.makeRecord(this->m_coding, *valuePointer)
                };
-               if (!subRecord->toJson(*childNamedEntity)) {
+               if (!subRecord->toJson(baseFolderPath, *childNamedEntity)) {
                   return false;
                }
 
@@ -1203,12 +1238,12 @@ bool JsonRecord::toJson(NamedEntity const & namedEntityToExport) {
             // currently record this.  For now, we write out all arrays, even if they are empty, as some of them are
             // required fields (eg recipe/ingredients/fermentable_additions in BeerJSON).
             //
-            JsonRecord::listToJson(objectsToWrite, outputArray, this->m_coding, childRecordDefinition);
+            JsonRecord::listToJson(baseFolderPath, objectsToWrite, outputArray, this->m_coding, childRecordDefinition);
             valuePointer->get_object().emplace(key, outputArray);
          }
 
       } else {
-         this->insertValue(fieldDefinition, valuePointer->get_object(), key, value);
+         this->insertValue(baseFolderPath, fieldDefinition, valuePointer->get_object(), key, value);
       }
    }
 

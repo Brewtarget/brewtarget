@@ -2073,7 +2073,7 @@ void MainWindow::exportRecipe() {
    QList<Recipe const *> recipes;
    recipes.append(this->pimpl->m_recipeObs);
 
-   bool const exportResult = ImportExport::exportToFile(recipes);
+   bool const exportResult = ImportExport::exportToFile(QString{"/"}, recipes);
    if (exportResult) {
       this->updateStatus(tr("Wrote recipe to file"));
    } else {
@@ -2507,7 +2507,7 @@ void MainWindow::exportSelected() const {
    exportLists.waters       = &waters      ;
    exportLists.yeasts       = &yeasts      ;
 
-   ImportExport::exportToFile(exportLists);
+   ImportExport::exportToFile(QString{"/"}, exportLists);
    return;
 }
 
