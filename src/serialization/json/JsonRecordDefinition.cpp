@@ -21,19 +21,20 @@
 
 namespace {
    EnumStringMapping const fieldTypeToName {
-      {JsonRecordDefinition::FieldType::Bool                      , QObject::tr("Bool"                      )},
-      {JsonRecordDefinition::FieldType::Int                       , QObject::tr("Int"                       )},
-      {JsonRecordDefinition::FieldType::UInt                      , QObject::tr("UInt"                      )},
-      {JsonRecordDefinition::FieldType::Double                    , QObject::tr("Double"                    )},
-      {JsonRecordDefinition::FieldType::String                    , QObject::tr("String"                    )},
-      {JsonRecordDefinition::FieldType::Enum                      , QObject::tr("Enum"                      )},
-      {JsonRecordDefinition::FieldType::Record                    , QObject::tr("Record"                    )},
-      {JsonRecordDefinition::FieldType::ListOfRecords             , QObject::tr("ListOfRecords"             )},
-      {JsonRecordDefinition::FieldType::Date                      , QObject::tr("Date"                      )},
-      {JsonRecordDefinition::FieldType::MeasurementWithUnits      , QObject::tr("MeasurementWithUnits"      )},
-      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, QObject::tr("OneOfMeasurementsWithUnits")},
-      {JsonRecordDefinition::FieldType::SingleUnitValue           , QObject::tr("SingleUnitValue"           )},
-      {JsonRecordDefinition::FieldType::RequiredConstant          , QObject::tr("RequiredConstant"          )},
+      {JsonRecordDefinition::FieldType::Bool                      , QObject::tr("Bool"                          )},
+      {JsonRecordDefinition::FieldType::Int                       , QObject::tr("Int"                           )},
+      {JsonRecordDefinition::FieldType::UInt                      , QObject::tr("UInt"                          )},
+      {JsonRecordDefinition::FieldType::Double                    , QObject::tr("Double"                        )},
+      {JsonRecordDefinition::FieldType::String                    , QObject::tr("String"                        )},
+      {JsonRecordDefinition::FieldType::Enum                      , QObject::tr("Enum"                          )},
+      {JsonRecordDefinition::FieldType::Record                    , QObject::tr("Record"                        )},
+      {JsonRecordDefinition::FieldType::ListOfRecords             , QObject::tr("List-Of-Records"               )},
+      {JsonRecordDefinition::FieldType::Date                      , QObject::tr("Date"                          )},
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits      , QObject::tr("Measurement-With-Units"        )},
+      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, QObject::tr("One-Of-Measurements-With-Units")},
+      {JsonRecordDefinition::FieldType::SingleUnitValue           , QObject::tr("Single-Unit-Value"             )},
+      {JsonRecordDefinition::FieldType::RequiredConstant          , QObject::tr("Required-Constant"             )},
+      {JsonRecordDefinition::FieldType::FolderPath                , QObject::tr("Folder-Path"                   )},
    };
 }
 

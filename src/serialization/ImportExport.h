@@ -76,24 +76,25 @@ namespace ImportExport {
     *        Each of the parameters is allowed to be \c nullptr or an empty list, but it is the caller's responsibility
     *        to ensure that not \b all of them are!
     *
-    * \param recipes
-    * \param equipments
-    * \param fermentables
-    * \param hops
-    * \param miscs
-    * \param styles
-    * \param waters
-    * \param yeasts
+    * \param baseFolderPath If this is set, and if the output format is dotBeer, then this prefix will be removed from
+    *                       the folder path(s) of the exported objects.  Eg, if a Hop is in folder /foo/bar/hum/bug, and
+    *                       baseFolderPath is set to "/foo/bar" then the dotBeer folder_path property will be written as
+    *                       "hum/bug".
+    *
+    *                       If this is not a prefix for an object's folder path, then that folder path is written as is.
+    *                       (Eg, if a Fermentable is in folder /ding/dang/dong, and baseFolderPath is set to "/foo/bar"
+    *                       then the dotBeer folder_path property will be written as "ding/dang/dong".)
+    * \param exportLists
     *
     * \return \c true if succeeded, \c false otherwise
     */
-   bool exportToFile(Lists const & exportLists);
+   bool exportToFile(QString const & baseFolderPath, Lists const & exportLists);
 
    /**
     * \brief Version for when we know we're only exporting one type of thing
     *
     */
-   template<typename NE> bool exportToFile(QList<NE const *> const & items);
+   template<typename NE> bool exportToFile(QString const & baseFolderPath, QList<NE const *> const & items);
 }
 
 #endif

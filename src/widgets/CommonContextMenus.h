@@ -429,7 +429,7 @@ public:
     *
     * @param items
     */
-   void exportItems(QList<NE const *> const & items) const {
+   void exportItems(QString const & baseFolderPath, QList<NE const *> const & items) const {
       if (items.empty()) {
          // Ideally we should have greyed out export if there was nothing to export, but this is belt-and-braces
          QMessageBox nothingSelectedMessageBox;
@@ -445,7 +445,7 @@ public:
       // TODO: We should allow them to export to DotBeer files though
       //
       if constexpr (!std::is_base_of_v<StockPurchase, NE>) {
-         bool const success = ImportExport::exportToFile(items);
+         bool const success = ImportExport::exportToFile(baseFolderPath, items);
          // We don't need a message box here, as ImportExport will already have shown one
          qDebug() << Q_FUNC_INFO << "Export result:" << success;
       }

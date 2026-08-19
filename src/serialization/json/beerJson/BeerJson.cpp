@@ -1333,7 +1333,8 @@ namespace BeerJson {
          );
       }
       boost::json::array outputArray;
-      JsonRecord::listToJson(objectsToWrite, outputArray, BEER_JSON_1_CODING, BEER_JSON_RECORD_DEFN<NE>);
+      // BeerJSON doesn't support folder paths, so we just hard-code the first argument here, as it won't be used
+      JsonRecord::listToJson(QString{""}, objectsToWrite, outputArray, BEER_JSON_1_CODING, BEER_JSON_RECORD_DEFN<NE>);
       this->pimpl->outputDocument["beerjson"].get_object()[*BEER_JSON_RECORD_DEFN<NE>.m_recordName] = outputArray;
       return;
    }

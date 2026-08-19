@@ -56,7 +56,7 @@ namespace DotBeer {
       /**
       * \brief Add a list of \c NamedEntity objects to the serializer
       */
-      template<class NE> void add(QList<NE const *> const & nes);
+      template<class NE> void add(QString const & baseFolderPath, QList<NE const *> const & nes);
 
       /**
       * \brief Write the serialized data to the file.  Will be called in destructor if not already invoked directly.

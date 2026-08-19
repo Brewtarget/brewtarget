@@ -86,3 +86,22 @@ FolderCommon::FolderCommon(FolderCommon const & other) :
 }
 
 FolderCommon::~FolderCommon() = default;
+
+[[nodiscard]] QString FolderCommon::joinPaths(QString const & leftPath, QString const & rightPath) {
+   //
+   // We don't worry about leading slash on leftPath or trailing slash on rightPath, as those are harmless.  But we
+   // want to ensure there is exactly one slash where they join.
+   //
+   return QString("%1/%2").arg(
+      leftPath.chopped(leftPath.endsWith('/') ? 1 : 0),    // Chop any trailing slash off leftPath
+      rightPath.sliced(rightPath.startsWith('/') ? 1 : 0)  // Chop any leading slash off rightPath
+   );
+}
+
+[[nodiscard]] QString FolderCommon::subPath(QString const & basePath, QString const & fullPath) {
+   if (basePath.isEmpty() || basePath == "/" || !fullPath.startsWith(basePath)) {
+      return fullPath;
+   }
+
+   return fullPath.sliced(basePath.length());
+}

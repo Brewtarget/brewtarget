@@ -82,6 +82,27 @@ public:
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    virtual void setContainedInFolderId(int const var) = 0;
 
+   //================================================= OTHER FUNCTIONS =================================================
+   /**
+    * Concatenates two paths, ensuring the correct number of slashes between them.  Eg  "/foo" + "/bar", "/foo" + "bar",
+    * "/foo/" + "/bar" all give the same result ("/foo/bar").
+    *
+    * @param leftPath   It is OK for this to be "" or "/"
+    * @param rightPath  It is OK for this to be "" or "/"
+    * @return
+    */
+   [[nodiscard]] static QString joinPaths(QString const & leftPath, QString const & rightPath);
+
+   /**
+    * Converts \c fullPath to a sub-path of \c basePath if \c basePath is a prefix of \c fullPath.  Otherwise returns
+    * \c fullPath unchanged.
+    *
+    * @param basePath
+    * @param fullPath
+    * @return
+    */
+   [[nodiscard]] static QString subPath(QString const & basePath, QString const & fullPath);
+
 protected:
    bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 };

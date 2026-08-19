@@ -107,7 +107,7 @@ public:
     *       means we have a lot more "base" types than for BeerXML or ObjectStore.  (It also means that it's harder for
     *       the schema to do bounds validation on such values.)
     *
-    *       In some cases, BeerJSON and DotBeer only allow one unit of measurement, but the same structure of {unit,
+    *       In some cases, BeerJSON and dotBeer only allow one unit of measurement, but the same structure of {unit,
     *       value} is maintained for readability and extensibility.
     *
     *       The main BeerJSON base types are:
@@ -152,9 +152,13 @@ public:
     *       elements, minimum and maximum, of the underlying type (eg GravityType for the members of GravityRangeType,
     *       BitternessType for the members of BitternessRangeType, etc).  This means we can treat it as two separate
     *       entries that differ by XPath (blah/minimum and blah/maximum).
+   *
+    *       In dotBeer it's a similar story, but we drop the Smurf naming (Volume instead of VolumeType, RangeOfGravity
+    *       instead of GravityRangeType etc.)
     *
-    *       BeerJSON also has DateType which is a regexp restriction on a string.  The regexp is a bit cumbersome, but
-    *       it boils down to allowing either of the following formats where 'd' is a digit (ie 0-9):
+    *       BeerJSON also has DateType (and it's Date in dotBeer) which is a regexp restriction on a string.  The regexp
+    *       is a bit cumbersome, but it boils down to allowing either of the following formats where 'd' is a digit
+    *       (ie 0-9):
     *          dddd-dd-dd
     *          dddd-dd-ddTdd:dd:dd
     *       We take this to mean ISO 8601 is used for date fields.  (Hurrah!)
@@ -226,7 +230,12 @@ public:
       // "number without units" (eg number of apples or number of packets of yeast).
       //
       SingleUnitValue,
-      RequiredConstant  // A fixed value we have to write out in the record (used for BeerJSON VERSION tag)
+      RequiredConstant,  // A fixed value we have to write out in the record (used for BeerJSON VERSION tag)
+      //
+      // In dotBeer, we can specify a subfolder path for any free-standing object.  This is useful if you want to export
+      // a lot of objects with some structure (eg yeasts grouped by type or by lab)
+      //
+      FolderPath,
    };
 
    /**
