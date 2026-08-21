@@ -39,14 +39,14 @@ class Recipe;
 
 // Define the columns on this table
 COLUMN_NAMES(RecipeAdditionHopTableModel, Name          ,
-                                          Form          ,
                                           Alpha         ,
-                                          Year          ,
                                           Amount        ,
-                                          AmountType    ,
-                                          TotalInventory,
                                           Stage         ,
-                                          Time          ,)
+                                          Time          ,
+                                          Form          ,
+                                          Year          ,
+                                          AmountType    ,
+                                          TotalInventory,)
 
 /*!
  * \class RecipeAdditionHopTableModel

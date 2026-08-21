@@ -556,7 +556,7 @@ namespace {
          {ObjectStore::FieldType::Int   , {"contained_in_folder_id"  }, PropertyNames::FolderPropertyBase::containedInFolderId, &PRIMARY_TABLE<Folder<Recipe>>},
          {ObjectStore::FieldType::Double, {"age"                     }, PropertyNames::Recipe::age_days                       },
          {ObjectStore::FieldType::Double, {"age_temp"                }, PropertyNames::Recipe::ageTemp_c                      },
-         {ObjectStore::FieldType::String, {"assistant_brewer"        }, PropertyNames::Recipe::asstBrewer                     },
+         {ObjectStore::FieldType::String, {"assistant_brewer"        }, PropertyNames::Recipe::assistantBrewer                     },
          {ObjectStore::FieldType::Double, {"batch_size"              }, PropertyNames::Recipe::batchSize_l                    },
          {ObjectStore::FieldType::String, {"brewer"                  }, PropertyNames::Recipe::brewer                         },
          {ObjectStore::FieldType::Double, {"carb_volume"             }, PropertyNames::Recipe::carbonation_vols               },

@@ -25,6 +25,10 @@
     },
     {
       "properties": {
+        "folder_path": {
+          "description": "The suggested slash-delimited subfolder path in which to store this Hop object.",
+          "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+        },
         "type": {
           "enum": [
             "aroma",
@@ -51,7 +55,7 @@
           "$ref": "#/$defs/OilContent"
         },
         "inventory": {
-          "$ref": "#/$defs/HopInventory"
+          "$ref": "#/$defs/HopAmount"
         }
       }
     }
@@ -111,21 +115,16 @@
         "alpha_acid"
       ]
     },
-    "HopInventory": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "amount": {
-          "oneOf": [
-            {
-              "$ref": "Measurement.beer.schema#/$defs/Volume"
-            },
-            {
-              "$ref": "Measurement.beer.schema#/$defs/Mass"
-            }
-          ]
+    "HopAmount" : {
+      "description": "The ways in which an amount of a Hop could be measured",
+      "oneOf": [
+        {
+          "$ref": "Measurement.beer.schema#/$defs/Volume"
+        },
+        {
+          "$ref": "Measurement.beer.schema#/$defs/Mass"
         }
-      }
+      ]
     },
     "OilContent": {
       "type": "object",

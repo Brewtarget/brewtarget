@@ -66,7 +66,9 @@ public:
 
    //=================================================== PROPERTIES ====================================================
    //! The ID of the folder (if any) that contains this one
-   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
+   Q_PROPERTY(int     containedInFolderId     READ containedInFolderId     WRITE setContainedInFolderId  )
+   //! The full path of the folder (if any) that contains this one
+   Q_PROPERTY(QString containedInFolderPath   READ containedInFolderPath   WRITE setContainedInFolderPath)
 
    //! \brief The \c path is the names of all the parent folders concatenated together with '/'
    Q_PROPERTY(QString path     READ path     /*WRITE setPath*/    )
@@ -75,12 +77,14 @@ public:
    Q_PROPERTY(QString fullPath READ fullPath /*WRITE setFullPath*/)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
-   [[nodiscard]] virtual int containedInFolderId() const = 0;
+   [[nodiscard]] virtual int     containedInFolderId  () const = 0;
+   [[nodiscard]] virtual QString containedInFolderPath() const = 0;
    [[nodiscard]] virtual QString path() const = 0;
    [[nodiscard]] virtual QString fullPath() const = 0;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
-   virtual void setContainedInFolderId(int const var) = 0;
+   virtual void setContainedInFolderId  (int     const   var) = 0;
+   virtual void setContainedInFolderPath(QString const & var) = 0;
 
    //================================================= OTHER FUNCTIONS =================================================
    /**
@@ -135,7 +139,15 @@ class Folder : public FolderCommon, public FolderPropertyBase<Folder<NE>, IsFold
    friend class FolderPropertyBase<Folder<NE>, IsFolder::Yes>;
 public:
    [[nodiscard]] int containedInFolderId() const override { return this->doContainedInFolderId(); }
+   [[nodiscard]] QString containedInFolderPath() const override {
+      Folder<NE> const * const containedIn = this->containedInFolderRaw();
+      return containedIn ? containedIn->fullPath() : QString{"/"};
+   }
    void setContainedInFolderId(int const val) override { this->doSetContainedInFolderId(val); return; }
+   void setContainedInFolderPath(QString const & val) override {
+      this->doSetContainedInFolderId(Folder<NE>::ensure(val)->key());
+      return;
+   }
    static std::shared_ptr<Folder<NE>> getById(int const id) { return ObjectStoreWrapper::getById<Folder<NE>>(id); }
    static Folder<NE> * getByIdRaw(int const id) { return ObjectStoreWrapper::getByIdRaw<Folder<NE>>(id); }
    //
@@ -309,8 +321,10 @@ protected:
 private:
 
    /**
+    * Implementation for path() and fullPath().  Constructs a path working back up through the parent folders.
     *
-    * @param startWith
+    * @param startWith Either blank or the name of the object for which we are constructing a path, depending on whether
+    *                  we are implementing path() or fullPath().
     * @return
     */
    [[nodiscard]] QString doPath(QString const & startWith) const {

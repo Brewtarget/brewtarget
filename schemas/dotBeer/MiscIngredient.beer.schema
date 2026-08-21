@@ -25,6 +25,10 @@
     },
     {
       "properties": {
+        "folder_path": {
+          "description": "The suggested slash-delimited subfolder path in which to store this MiscIngredient object.",
+          "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+        },
         "use_for": {
           "description": "Used to describe the purpose of the miscellaneous ingredient, e.g. whirlfloc is used for clarity.",
           "type": "string"
@@ -33,7 +37,7 @@
           "type": "string"
         },
         "inventory": {
-          "$ref": "#/$defs/MiscIngredientInventory"
+          "$ref": "#/$defs/MiscIngredientAmount"
         }
       }
     }
@@ -88,26 +92,18 @@
         "misc_type"
       ]
     },
-    "MiscIngredientInventory": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "amount": {
-          "oneOf": [
-            {
-              "$ref": "Measurement.beer.schema#/$defs/Volume"
-            },
-            {
-              "$ref": "Measurement.beer.schema#/$defs/Mass"
-            },
-            {
-              "$ref": "Measurement.beer.schema#/$defs/Count"
-            }
-          ]
+    "MiscIngredientAmount" : {
+      "description": "The ways in which an amount of a MiscIngredient could be measured",
+      "oneOf": [
+        {
+          "$ref": "Measurement.beer.schema#/$defs/Volume"
+        },
+        {
+          "$ref": "Measurement.beer.schema#/$defs/Mass"
+        },
+        {
+          "$ref": "Measurement.beer.schema#/$defs/Count"
         }
-      },
-      "required": [
-        "amount"
       ]
     }
   }

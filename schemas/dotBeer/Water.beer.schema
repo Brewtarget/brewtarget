@@ -22,6 +22,10 @@
     },
     {
       "properties": {
+        "folder_path": {
+          "description": "The suggested slash-delimited subfolder path in which to store this Water object.",
+          "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+        },
         "pH": {
           "description": "Acidity of the water profile",
           "$ref": "Measurement.beer.schema#/$defs/Acidity"

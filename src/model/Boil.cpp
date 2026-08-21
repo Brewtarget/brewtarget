@@ -20,6 +20,7 @@
 #include "database/ObjectStoreWrapper.h"
 #include "model/Fermentation.h"
 #include "model/FermentationStep.h"
+#include "model/Folder.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/NamedParameterBundle.h"

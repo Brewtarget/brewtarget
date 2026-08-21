@@ -55,7 +55,7 @@ AddPropertyName(ageTemp_c              )
 AddPropertyName(age_days               )
 AddPropertyName(ancestorId             )
 AddPropertyName(apparentAttenuation_pct)
-AddPropertyName(asstBrewer             )
+AddPropertyName(assistantBrewer             )
 AddPropertyName(batchSize_l            )
 AddPropertyName(beerAcidity_pH         )
 AddPropertyName(boil                   )
@@ -171,7 +171,7 @@ public:
    static QString localisedName_age_days               ();
    static QString localisedName_ancestorId             ();
    static QString localisedName_apparentAttenuation_pct();
-   static QString localisedName_asstBrewer             ();
+   static QString localisedName_assistantBrewer             ();
    static QString localisedName_batchSize_l            ();
    static QString localisedName_beerAcidity_pH         ();
    static QString localisedName_boil                   ();
@@ -309,7 +309,7 @@ public:
     */
    Q_PROPERTY(double  efficiency_pct     READ efficiency_pct     WRITE setEfficiency_pct   )
    //! \brief The assistant brewer.  This becomes "coauthor" in BeerJSON
-   Q_PROPERTY(QString asstBrewer         READ asstBrewer         WRITE setAsstBrewer       )
+   Q_PROPERTY(QString assistantBrewer         READ assistantBrewer         WRITE setAssistantBrewer       )
    //! \brief The notes.
    Q_PROPERTY(QString notes              READ notes              WRITE setNotes            )
    //! \brief The tasting notes.
@@ -603,7 +603,7 @@ public:
    QString brewer            () const;
    double  batchSize_l       () const;
    double  efficiency_pct    () const;
-   QString asstBrewer        () const;
+   QString assistantBrewer        () const;
    QString notes             () const;
    QString tasteNotes        () const;
    double  tasteRating       () const;
@@ -818,7 +818,7 @@ public:
    void setBrewer            (QString const & val);
    void setBatchSize_l       (double  const   val);
    void setEfficiency_pct    (double  const   val);
-   void setAsstBrewer        (QString const & val);
+   void setAssistantBrewer        (QString const & val);
    void setNotes             (QString const & val);
    void setTasteNotes        (QString const & val);
    void setTasteRating       (double  const   val);
@@ -885,7 +885,7 @@ private:
    // Cached properties that are written directly to db
    Type                  m_type                   = Type::AllGrain;
    QString               m_brewer                 = "";
-   QString               m_asstBrewer             = QString{"%1: free beer software"}.arg(CONFIG_APPLICATION_NAME_UC);
+   QString               m_assistantBrewer             = QString{"%1: free beer software"}.arg(CONFIG_APPLICATION_NAME_UC);
    double                m_batchSize_l            = 0.0;
    double                m_efficiency_pct         = 0.0;
    std::optional<double> m_age_days               = std::nullopt;

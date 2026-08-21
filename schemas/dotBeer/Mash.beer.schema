@@ -20,6 +20,10 @@
     "name": {
       "type": "string"
     },
+    "folder_path": {
+      "description": "The suggested slash-delimited subfolder path in which to store this Mash object.",
+      "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+    },
     "grain_temperature": {
       "description": "Initial grain temperature prior to the start of the mash.",
       "$ref": "Measurement.beer.schema#/$defs/Temperature"

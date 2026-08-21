@@ -362,11 +362,6 @@
         "value"
       ]
     },
-    "VersionNumber": {
-      "type": "string",
-      "description": "We use semantic versioning, which encodes a version by a three-part version number (Major.Minor.Patch)",
-      "pattern": "\\d+[.]\\d+[.]\\d+"
-    },
     "Viscosity": {
       "type": "object",
       "description": "Viscosity of fluids",

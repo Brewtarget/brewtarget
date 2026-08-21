@@ -44,46 +44,22 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item row="0" column="1" colspan="2">
           <widget class="SmartLineEdit" name="lineEdit_brewer">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_asstBrewer">
+          <widget class="QLabel" name="label_assistantBrewer">
            <property name="text">
-            <string>Asst. Brewer</string>
+            <string>Assistant Brewer</string>
            </property>
            <property name="buddy">
-            <cstring>lineEdit_asstBrewer</cstring>
+            <cstring>lineEdit_assistantBrewer</cstring>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="SmartLineEdit" name="lineEdit_asstBrewer">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
+         <item row="1" column="1" colspan="2">
+          <widget class="SmartLineEdit" name="lineEdit_assistantBrewer">
           </widget>
          </item>
          <item row="2" column="0">
@@ -128,6 +104,19 @@
             </sizepolicy>
            </property>
           </widget>
+         </item>
+         <item row="3" column="2">
+          <spacer name="horizontalSpacer_1">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item row="4" column="0">
           <widget class="SmartLabel" name="label_ageTemp">
@@ -215,6 +204,12 @@
          </item>
          <item row="7" column="1">
           <widget class="SmartLineEdit" name="lineEdit_acidity">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
           </widget>
          </item>
 
@@ -230,6 +225,36 @@
          </item>
          <item row="8" column="1">
           <widget class="SmartLineEdit" name="lineEdit_attenuation">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+
+         <item row="9" column="0">
+          <widget class="QLabel" name="label_caloriesPer">
+           <property name="text">
+            <string>Calories/12oz</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <widget class="QLabel" name="label_calories">
+           <property name="font">
+            <font>
+             <family>Sans Serif</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+             <kerning>true</kerning>
+            </font>
+           </property>
+           <property name="text">
+            <string>1.0</string>
+           </property>
           </widget>
          </item>
 
@@ -317,7 +342,7 @@
  <tabstops>
   <tabstop>scrollArea</tabstop>
   <tabstop>lineEdit_brewer</tabstop>
-  <tabstop>lineEdit_asstBrewer</tabstop>
+  <tabstop>lineEdit_assistantBrewer</tabstop>
   <tabstop>spinBox_tasteRating</tabstop>
   <tabstop>lineEdit_age</tabstop>
   <tabstop>lineEdit_ageTemp</tabstop>

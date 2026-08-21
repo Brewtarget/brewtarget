@@ -24,6 +24,7 @@
 
 #include "database/ObjectStoreWrapper.h"
 #include "measurement/PhysicalConstants.h"
+#include "model/Folder.h"
 #include "model/StockPurchaseYeast.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"

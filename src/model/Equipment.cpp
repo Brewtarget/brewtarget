@@ -20,6 +20,7 @@
 #include "model/Equipment.h"
 
 #include "database/ObjectStoreWrapper.h"
+#include "model/Folder.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
 #include "utils/AutoCompare.h"

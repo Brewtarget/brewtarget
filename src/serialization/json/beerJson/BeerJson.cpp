@@ -428,8 +428,6 @@ namespace {
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "oil_content/polyphenols"          , PropertyNames::Hop::polyphenols_pct      , &BEER_JSON_PERCENT_UNIT},
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "oil_content/xanthohumol"          , PropertyNames::Hop::xanthohumol_pct      , &BEER_JSON_PERCENT_UNIT},
       {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory/amount"                 , PropertyNames::Ingredient::totalInventory, &BEER_JSON_MASS_OR_VOLUME_UNIT_MAPPER},
-
-      // .:TODO.JSON:. Note that we'll need to look at HopAdditionType, IBUEstimateType, IBUMethodType when we use Hops in Recipes
    };
    template<> JsonRecordDefinition const BEER_JSON_RECORD_DEFN<Hop> {
       std::in_place_type_t<Hop>{},
@@ -488,6 +486,7 @@ namespace {
 //          dry     -- MassType
 //          slant   -- VolumeType
 //          culture -- VolumeType
+//      Hopefully this will change -- see https://github.com/beerjson/beerjson/issues/239
 //      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory/amount"         , PropertyNames::Ingredient::totalInventory   , &BEER_JSON_MASS_OR_VOLUME_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::Bool                      , "zymocide/no1"             , PropertyNames::Yeast::killerProducingK1Toxin   },
       {JsonRecordDefinition::FieldType::Bool                      , "zymocide/no2"             , PropertyNames::Yeast::killerProducingK2Toxin   },
@@ -1059,7 +1058,7 @@ namespace {
          {JsonRecordDefinition::FieldType::String              , "name"                   , PropertyNames::NamedEntity::name        },
          {JsonRecordDefinition::FieldType::Enum                , "type"                   , PropertyNames::Recipe::type             , &Recipe::typeStringMapping},
          {JsonRecordDefinition::FieldType::String              , "author"                 , PropertyNames::Recipe::brewer           },
-         {JsonRecordDefinition::FieldType::String              , "coauthor"               , PropertyNames::Recipe::asstBrewer       },
+         {JsonRecordDefinition::FieldType::String              , "coauthor"               , PropertyNames::Recipe::assistantBrewer       },
          {JsonRecordDefinition::FieldType::Date                , "created"                , PropertyNames::Recipe::date             },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "batch_size"             , PropertyNames::Recipe::batchSize_l      , &BEER_JSON_VOLUME_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "efficiency/brewhouse"   , PropertyNames::Recipe::efficiency_pct   , &BEER_JSON_PERCENT_UNIT      },

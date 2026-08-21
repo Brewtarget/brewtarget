@@ -22,6 +22,10 @@
     "name": {
       "type": "string"
     },
+    "folder_path": {
+      "description": "The suggested slash-delimited subfolder path in which to store this Recipe object.",
+      "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+    },
     "type": {
       "enum": [
         "cider",
@@ -53,18 +57,8 @@
       "description": "Stores each efficiency component.",
       "additionalProperties": false,
       "properties": {
-        "conversion": {
-          "description": "The percentage of sugar from the grain yield that is extracted and converted during the mash.",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
-        },
-        "lauter": {
-          "description": "The percentage of sugar that makes it from the mash tun to the kettle.",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
-        },
-        "mash": {
-          "description": "The percentage of sugar that makes it from the grain to the kettle.",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
-        },
+        // BeerJSON has additional efficiencies for "conversion", "lauter" and "mash", but we don't support these in
+        // Brewken or Brewtarget.
         "brewhouse": {
           "description": "The percentage of sugar that makes it from the grain to the fermenter.",
           "$ref": "Measurement.beer.schema#/$defs/Percentage"
@@ -170,7 +164,7 @@
       "$ref": "Measurement.beer.schema#/$defs/Bitterness"
     },
     "ibu_estimate_formula": {
-      "description": "Used to differentiate which IBU formula is being used in a recipe. If formula is modified in any way, eg to support whirlpool/flameout additions etc etc, please use `Other` for transparency.",
+      "description": "Used to differentiate which IBU formula is being used in a recipe.",
       "enum": [
         "Tinseth",
         "Rager",
@@ -244,10 +238,7 @@
           "description": "How long an ingredient addition remains, this was referred to as time in the BeerXML standard. Eg A 40 minute hop boil additions means to boil for 40 minutes, and a 2 day duration for a dry hop means to remove it after 2 days.",
           "$ref": "Measurement.beer.schema#/$defs/Time"
         },
-        "continuous": {
-          "description": "A continuous addition is spread out evenly and added during the entire process step.  Eg 60 minute IPA by dogfish head takes all ofthe hop additions and adds them throughout the entire boil.",
-          "type": "boolean"
-        },
+        // BeerJSON has "continuous" here, but we don't support this in Brewken or Brewtarget
         "specific_gravity": {
           "description": "Used to indicate when an addition is added based on a desired specific gravity.  Eg Add dry hop at when SG is 1.018.",
           "$ref": "Measurement.beer.schema#/$defs/Gravity"
@@ -294,17 +285,7 @@
               "type": "integer"
             },
             "amount": {
-              "oneOf": [
-                {
-                  "$ref": "Measurement.beer.schema#/$defs/Volume"
-                },
-                {
-                  "$ref": "Measurement.beer.schema#/$defs/Mass"
-                },
-                {
-                  "$ref": "Measurement.beer.schema#/$defs/Count"
-                }
-              ]
+              "$ref": "Culture.beer.schema#/$defs/CultureAmount"
             }
           }
         },
@@ -328,14 +309,7 @@
               "$ref": "#/$defs/AdditionSchedule"
             },
             "amount": {
-              "oneOf": [
-                {
-                  "$ref": "Measurement.beer.schema#/$defs/Volume"
-                },
-                {
-                  "$ref": "Measurement.beer.schema#/$defs/Mass"
-                }
-              ]
+              "$ref": "Fermentable.beer.schema#/$defs/FermentableAmount"
             }
           }
         }
@@ -357,14 +331,7 @@
               "$ref": "#/$defs/AdditionSchedule"
             },
             "amount": {
-              "oneOf": [
-                {
-                  "$ref": "Measurement.beer.schema#/$defs/Volume"
-                },
-                {
-                  "$ref": "Measurement.beer.schema#/$defs/Mass"
-                }
-              ]
+              "$ref": "Hop.beer.schema#/$defs/HopAmount"
             }
           }
         }
@@ -387,17 +354,7 @@
               "$ref": "#/$defs/AdditionSchedule"
             },
             "amount": {
-              "oneOf": [
-                {
-                  "$ref": "Measurement.beer.schema#/$defs/Volume"
-                },
-                {
-                  "$ref": "Measurement.beer.schema#/$defs/Mass"
-                },
-                {
-                  "$ref": "Measurement.beer.schema#/$defs/Count"
-                }
-              ]
+              "$ref": "MiscIngredient.beer.schema#/$defs/MiscIngredientAmount"
             }
           }
         },

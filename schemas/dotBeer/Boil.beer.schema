@@ -20,6 +20,10 @@
     "name": {
       "type": "string"
     },
+    "folder_path": {
+      "description": "The suggested slash-delimited subfolder path in which to store this Boil object.",
+      "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+    },
     "boil_description": {
       "type": "string"
     },

@@ -32,9 +32,10 @@ Various improvements, including:
 * Mash tree not updated when you add a mash step [1043](https://github.com/Brewtarget/brewtarget/issues/1043) (NB: May have been fixed in an earlier release!)
 * Range comparison on the water chemistry is not quite right [572](https://github.com/Brewtarget/brewtarget/issues/572)
 * 5.1.x - snapshots are not showing [1139](https://github.com/Brewtarget/brewtarget/issues/1139)
+* 5.1.1 Install Issue, upgrading from 2.0.2 - database fails to update [1143](https://github.com/Brewtarget/brewtarget/issues/1143)
 
 ### Release Timestamp
-Wed, 5 Aug 2026 05:01:02 +0100
+Wed, 19 Aug 2026 05:01:02 +0100
 
 ## v5.1.1
 Bug fixes.

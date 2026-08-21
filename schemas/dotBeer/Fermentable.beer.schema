@@ -25,6 +25,10 @@
     },
     {
       "properties": {
+        "folder_path": {
+          "description": "The suggested slash-delimited subfolder path in which to store this Fermentable object.",
+          "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+        },
         "notes": {
           "type": "string"
         },
@@ -57,7 +61,7 @@
           "type": "boolean"
         },
         "inventory": {
-          "$ref": "#/$defs/FermentableInventory"
+          "$ref": "#/$defs/FermentableAmount"
         },
         "glassy": {
           "description": "Percentage of malt that is \"glassy\".  For a malt, % \"glassy\" + % \"half glassy\" + % \"mealy\" = 100%.\n\nFrom https://byo.com/article/understanding-malt-spec-sheets-advanced-brewing/:\n\nMalt is also classified in terms of hardness. By convention, it is described as “mealy,” “half-glassy” and “glassy.” Mealy kernels have an endosperm (the partially germinated portion at the heart of the kernel that contains the starches) that is 25% or less glassy (hard). Glassy kernels have an endosperm that is more than 75% hard. The remaining kernels (26–75% hard) are said to be half-glassy.\n\nSee also https://www.probrewer.com/library/malt/understanding-malt-analysis-sheets/:\n\nBy convention, malt is classified by what percentage of the lot is “mealy,” “half-glassy/glassy-ends” and “glassy.”\n...\nAny base malt destined for brewing should be at least 90% mealy; if it is to be infusion-mashed it must be at least 95% mealy.  For base malts whose mealiness is expressed as a ratio, mealy/half-glassy/glassy, the ratio should be 92%/7%/1% for decoction and step mashing, and 95%/4%/1% or better for infusion mashing.",
@@ -185,21 +189,16 @@
         "color"
       ]
     },
-    "FermentableInventory": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "amount": {
-          "oneOf": [
-            {
-              "$ref": "Measurement.beer.schema#/$defs/Volume"
-            },
-            {
-              "$ref": "Measurement.beer.schema#/$defs/Mass"
-            }
-          ]
+    "FermentableAmount" : {
+      "description": "The ways in which an amount of a Fermentable could be measured",
+      "oneOf": [
+        {
+          "$ref": "Measurement.beer.schema#/$defs/Volume"
+        },
+        {
+          "$ref": "Measurement.beer.schema#/$defs/Mass"
         }
-      }
+      ]
     }
   }
 }

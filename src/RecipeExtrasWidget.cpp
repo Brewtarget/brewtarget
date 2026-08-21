@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <QDebug>
 
+#include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Recipe.h"
 #include "undoRedo/Undoable.h"
@@ -43,7 +44,7 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) :
    // Note that label_age is QLabel, not SmartLabel, as we're "forcing" the measurement to be in days rather than
    // allowing the usual units of PhysicalQuantity::Time
    SMART_FIELD_INIT(RecipeExtrasWidget, label_brewer     , lineEdit_brewer     , Recipe, PropertyNames::Recipe::brewer              );
-   SMART_FIELD_INIT(RecipeExtrasWidget, label_asstBrewer , lineEdit_asstBrewer , Recipe, PropertyNames::Recipe::asstBrewer          );
+   SMART_FIELD_INIT(RecipeExtrasWidget, label_assistantBrewer , lineEdit_assistantBrewer , Recipe, PropertyNames::Recipe::assistantBrewer          );
    SMART_FIELD_INIT(RecipeExtrasWidget, label_age        , lineEdit_age        , Recipe, PropertyNames::Recipe::age_days         , 0);
    SMART_FIELD_INIT(RecipeExtrasWidget, label_ageTemp    , lineEdit_ageTemp    , Recipe, PropertyNames::Recipe::ageTemp_c        , 1);
    SMART_FIELD_INIT(RecipeExtrasWidget, label_carbVols   , lineEdit_carbVols   , Recipe, PropertyNames::Recipe::carbonation_vols    );
@@ -56,7 +57,7 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) :
    connect(this->lineEdit_age         , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAge          );
 
    connect(this->lineEdit_ageTemp     , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAgeTemp      );
-   connect(this->lineEdit_asstBrewer  , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateBrewerAsst   );
+   connect(this->lineEdit_assistantBrewer  , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateBrewerAsst   );
    connect(this->lineEdit_brewer      , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateBrewer       );
    connect(this->lineEdit_carbVols    , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateCarbonation  );
    connect(this->spinBox_tasteRating  , QOverload<int>::of(&QSpinBox::valueChanged), this, &RecipeExtrasWidget::changeRatings      );
@@ -93,8 +94,8 @@ void RecipeExtrasWidget::updateBrewer() {
 
 void RecipeExtrasWidget::updateBrewerAsst() {
    if (!this->recipe) { return; }
-   if ( lineEdit_asstBrewer->isModified() ) {
-      Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, asstBrewer), lineEdit_asstBrewer->text(), tr("Change Assistant Brewer"));
+   if ( lineEdit_assistantBrewer->isModified() ) {
+      Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, assistantBrewer), lineEdit_assistantBrewer->text(), tr("Change Assistant Brewer"));
    }
    return;
 }
@@ -238,7 +239,7 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop) {
    // updateAll
    if (updateAll || propName == PropertyNames::Recipe::age_days        ) { this->lineEdit_age         ->setQuantity (recipe->age_days        ()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::ageTemp_c       ) { this->lineEdit_ageTemp     ->setQuantity (recipe->ageTemp_c       ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::asstBrewer      ) { this->lineEdit_asstBrewer  ->setText     (recipe->asstBrewer      ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::assistantBrewer      ) { this->lineEdit_assistantBrewer  ->setText     (recipe->assistantBrewer      ()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::brewer          ) { this->lineEdit_brewer      ->setText     (recipe->brewer          ()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::carbonation_vols) { this->lineEdit_carbVols    ->setQuantity (recipe->carbonation_vols()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::tasteRating     ) { this->spinBox_tasteRating  ->setValue       (recipe->tasteRating  ()); if (!updateAll) { return; } }
@@ -247,6 +248,20 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop) {
    if (updateAll || propName == PropertyNames::Recipe::tasteNotes      ) { this->btTextEdit_tasteNotes->setPlainText(recipe->tasteNotes      ()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::beerAcidity_pH  ) { this->lineEdit_acidity     ->setQuantity (recipe->beerAcidity_pH  ()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::apparentAttenuation_pct) { this->lineEdit_attenuation->setQuantity (recipe->apparentAttenuation_pct()); if (!updateAll) { return; } }
+
+
+   bool const volumesAreMetric{
+      Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Volume) == Measurement::UnitSystems::volume_Metric
+   };
+   this->label_caloriesPer->setText(
+   volumesAreMetric ? tr("Calories/33cl") : tr("Calories/12oz")
+   );
+   this->label_calories->setText(
+      QString("%1").arg(volumesAreMetric ? this->recipe->caloriesPer33cl() : this->recipe->caloriesPerUs12oz(),
+                        0,
+                        'f',
+                        0)
+   );
 
    return;
 }

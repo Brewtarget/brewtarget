@@ -31,9 +31,10 @@ template<class NE> class Folder;
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::FolderPropertyBase { inline BtStringConst const property{#property}; }
-AddPropertyName(containedInFolder   )
-AddPropertyName(containedInFolderId )
-AddPropertyName(containedInFolderRaw)
+AddPropertyName(containedInFolder    )
+AddPropertyName(containedInFolderId  )
+AddPropertyName(containedInFolderPath)
+AddPropertyName(containedInFolderRaw )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -108,11 +109,11 @@ private:
    ~FolderPropertyBase() = default;
 
 public:
-   FolderType * containedInFolderRaw() const {
+   [[nodiscard]] FolderType * containedInFolderRaw() const {
       return FolderType::getByIdRaw(this->m_containedInFolderId);
    }
 
-   std::shared_ptr<FolderType> containedInFolder() const {
+   [[nodiscard]] std::shared_ptr<FolderType> containedInFolder() const {
       return FolderType::getById(this->m_containedInFolderId);
    }
 
@@ -120,13 +121,16 @@ public:
    void setContainedInFolder(std::shared_ptr<FolderType> const & val) { this->doSetContainedInFolderId(val ? val->key() : -1); }
    void setContainedInFolder(FolderType                  const & val) { this->doSetContainedInFolderId(val->key()); }
 
-   static QString localisedName_containedInFolder  () { return Derived::tr("Contained in Folder"   ); }
-   static QString localisedName_containedInFolderId() { return Derived::tr("Contained in Folder ID"); }
+   static QString localisedName_containedInFolder    () { return Derived::tr("Contained in Folder"   ); }
+   static QString localisedName_containedInFolderId  () { return Derived::tr("Contained in Folder ID"); }
+   static QString localisedName_containedInFolderPath() { return Derived::tr("Contained in Folder Path"); }
 
 protected:
    [[nodiscard]] int doContainedInFolderId() const {
       return this->m_containedInFolderId;
    }
+   // Note that we can't do the same trick and put doContainedInFolderFullPath() here, as it would create circular
+   // dependencies.  Same applies to doSetContainedInFolderPath().
 
    void doSetContainedInFolderId(int const val) {
       this->derived().setAndNotify(PropertyNames::FolderPropertyBase::containedInFolderId, this->m_containedInFolderId, val);
@@ -213,9 +217,15 @@ template <typename T> concept CONCEPT_FIX_UP ValidFolderType = (HasFolder<T> && 
                                                                                           \
    public:                                                                                     \
       /*=========================== FB "GETTER" MEMBER FUNCTIONS ===========================*/ \
-      [[nodiscard]] int containedInFolderId() const;                                           \
+      [[nodiscard]] int     containedInFolderId  () const;                                     \
+      /* Strictly this should perhaps be called doContainedInFolderFullPath, but I think */    \
+      /* the name is long enough already and not, IMHO, ambiguous.                       */    \
+      /* Returns the full path of the folder in which this item is contained, or "/" if  */    \
+      /* it is not contained in any folder.                                              */    \
+      [[nodiscard]] QString containedInFolderPath() const;                                     \
       /*=========================== FB "SETTER" MEMBER FUNCTIONS ===========================*/ \
-      void setContainedInFolderId(int const val);                                              \
+      void setContainedInFolderId  (int     const   val);                                      \
+      void setContainedInFolderPath(QString const & val);                                      \
       /* We need these to avoid circular dependencies with ObjectStoreWrapper */               \
       static std::shared_ptr<Derived> getById(int const id);                                   \
       static Derived * getByIdRaw(int const id);                                               \
@@ -236,10 +246,17 @@ template <typename T> concept CONCEPT_FIX_UP ValidFolderType = (HasFolder<T> && 
  */
 #define FOLDER_BASE_COMMON_CODE(Derived) \
    /*====================================== FB "GETTER" MEMBER FUNCTIONS ======================================*/ \
-   int Derived::containedInFolderId() const { return this->doContainedInFolderId(); }                             \
+   int Derived::containedInFolderId  () const { return this->doContainedInFolderId(); }                           \
+   QString Derived::containedInFolderPath() const {                                                               \
+      Folder<Derived> const * const containedIn = this->containedInFolderRaw();                                   \
+      return containedIn ? containedIn->fullPath() : QString{"/"};                                                \
+   }                                                                                                              \
    /*====================================== FB "SETTER" MEMBER FUNCTIONS ======================================*/ \
-   void Derived::setContainedInFolderId(int const val) { this->doSetContainedInFolderId(val); return; }           \
-                                                                                                                  \
+   void Derived::setContainedInFolderId  (int     const   val) { this->doSetContainedInFolderId  (val); return; } \
+   void Derived::setContainedInFolderPath(QString const & val) {                                                  \
+      this->doSetContainedInFolderId(FolderType::ensure(val)->key());                                             \
+      return;                                                                                                     \
+   }                                                                                                              \
    std::shared_ptr<Derived> Derived::getById(int const id) { return ObjectStoreWrapper::getById<Derived>(id); }   \
    Derived * Derived::getByIdRaw(int const id) { return ObjectStoreWrapper::getByIdRaw<Derived>(id); }            \
 
