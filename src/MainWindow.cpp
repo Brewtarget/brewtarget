@@ -854,8 +854,6 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
    SMART_FIELD_INIT_NO_SF(MainWindow, label_og       , Recipe, PropertyNames::Recipe::og         );
    SMART_FIELD_INIT_NO_SF(MainWindow, label_fg       , Recipe, PropertyNames::Recipe::fg         );
    SMART_FIELD_INIT_NO_SF(MainWindow, label_color    , Recipe, PropertyNames::Recipe::color_srm  );
-///   SMART_FIELD_INIT_NO_SF(MainWindow, label_batchSize, Recipe, PropertyNames::Recipe::batchSize_l);
-///   SMART_FIELD_INIT_NO_SF(MainWindow, label_boilSize , Boil  , PropertyNames::Boil::preBoilSize_l);
 
    // Stop things looking ridiculously tiny on high DPI displays
    this->pimpl->setSizesInPixelsBasedOnDpi();
@@ -1099,24 +1097,6 @@ void MainWindow::setupRanges() {
    styleRangeWidget_ibu->setRange(0.0, 120.0);
    styleRangeWidget_ibu->setPrecision(1);
    styleRangeWidget_ibu->setTickMarks(10, 2);
-
-///   // definitely cheating, but I don't feel like making a whole subclass just to support this
-///   // or the next.
-///   rangeWidget_batchSize->setRange(0, this->pimpl->m_recipeObs == nullptr ? 19.0 : this->pimpl->m_recipeObs->batchSize_l());
-///   rangeWidget_batchSize->setPrecision(1);
-///   rangeWidget_batchSize->setTickMarks(2,5);
-///
-///   rangeWidget_batchSize->setBackgroundBrush(QColor(255,255,255));
-///   rangeWidget_batchSize->setPreferredRangeBrush(QColor(55,138,251));
-///   rangeWidget_batchSize->setMarkerBrush(QBrush(Qt::NoBrush));
-///
-///   rangeWidget_boilsize->setRange(0, this->pimpl->m_recipeObs == nullptr? 24.0 : this->pimpl->m_recipeObs->boilVolume_l());
-///   rangeWidget_boilsize->setPrecision(1);
-///   rangeWidget_boilsize->setTickMarks(2,5);
-///
-///   rangeWidget_boilsize->setBackgroundBrush(QColor(255,255,255));
-///   rangeWidget_boilsize->setPreferredRangeBrush(QColor(55,138,251));
-///   rangeWidget_boilsize->setMarkerBrush(QBrush(Qt::NoBrush));
 
    int constexpr srmMax = 50;
    styleRangeWidget_srm->setRange(0.0, static_cast<double>(srmMax));

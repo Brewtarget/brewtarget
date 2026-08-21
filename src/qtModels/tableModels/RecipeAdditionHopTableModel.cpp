@@ -45,23 +45,25 @@
 COLUMN_INFOS(
    RecipeAdditionHopTableModel,
    //
+   // *** NB: These need to be in the same order as in the COLUMN_NAMES macro in the header file! ***
+   //
    // Note that for Name, we want the name of the contained Hop, not the name of the RecipeAdditionHop
    //
    TABLE_MODEL_HEADER(RecipeAdditionHop, Name          , PropertyPath{{PropertyNames::RecipeAdditionHop::hop,          // "Name"
                                                                        PropertyNames::NamedEntity::name     }, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionHop, Form          , PropertyPath{{PropertyNames::RecipeAdditionHop::hop,          // "Form"
-                                                                       PropertyNames::Hop::form             }, 1}),
    TABLE_MODEL_HEADER(RecipeAdditionHop, Alpha         , PropertyPath{{PropertyNames::RecipeAdditionHop::hop,          // "Alpha %"
                                                                        PropertyNames::Hop::alpha_pct        }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Amount        , PropertyNames::IngredientAmount::amount),                     // "Amount"
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Stage         , PropertyNames::RecipeAddition::stage                     ),    // "Stage"
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Time          , PropertyNames::RecipeAddition::addAtTime_mins            ),    // "Time"
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Form          , PropertyPath{{PropertyNames::RecipeAdditionHop::hop,          // "Form"
+                                                                       PropertyNames::Hop::form             }, 1}),
    TABLE_MODEL_HEADER(RecipeAdditionHop, Year          , PropertyPath{{PropertyNames::RecipeAdditionHop::hop,          // "Year"
                                                                        PropertyNames::Hop::year             }, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionHop, Amount        , PropertyNames::IngredientAmount::amount),                     // "Amount"
    TABLE_MODEL_HEADER(RecipeAdditionHop, AmountType    , PropertyNames::IngredientAmount::amount, Hop::validMeasures), // "Amount Type"
    // Total inventory is read-only, so there is intentionally no TotalInventoryType column
    TABLE_MODEL_HEADER(RecipeAdditionHop, TotalInventory, PropertyPath{{PropertyNames::RecipeAdditionHop::hop,           // "Inventory"
                                                                        PropertyNames::Ingredient::totalInventory}, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionHop, Stage         , PropertyNames::RecipeAddition::stage                     ),    // "Stage"
-   TABLE_MODEL_HEADER(RecipeAdditionHop, Time          , PropertyNames::RecipeAddition::addAtTime_mins            ),    // "Time"
 )
 
 RecipeAdditionHopTableModel::RecipeAdditionHopTableModel(QTableView * parent, bool const editable) :

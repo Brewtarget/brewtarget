@@ -46,6 +46,8 @@
 COLUMN_INFOS(
    RecipeAdditionMiscTableModel,
    //
+   // *** NB: These need to be in the same order as in the COLUMN_NAMES macro in the header file! ***
+   //
    // Note that for Name, we want the name of the contained Misc, not the name of the RecipeAdditionMisc
    //
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Name          , PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,         // "Name"
@@ -53,12 +55,12 @@ COLUMN_INFOS(
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Type          , PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,         // "Type"
                                                                         PropertyNames::Misc::type             }, 1}),
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Amount        , PropertyNames::IngredientAmount::amount             ),         // "Amount"
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , PropertyNames::RecipeAddition::stage                     ),    // "Stage"
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , PropertyNames::RecipeAddition::addAtTime_mins            ),    // "Time"
    TABLE_MODEL_HEADER(RecipeAdditionMisc, AmountType    , PropertyNames::IngredientAmount::amount, Misc::validMeasures), // "Amount Type"
    // Total inventory is read-only, so there is intentionally no TotalInventoryType column
    TABLE_MODEL_HEADER(RecipeAdditionMisc, TotalInventory, PropertyPath{{PropertyNames::RecipeAdditionMisc::misc,         // "Inventory"
                                                                         PropertyNames::Ingredient::totalInventory}, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , PropertyNames::RecipeAddition::stage                     ),    // "Stage"
-   TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , PropertyNames::RecipeAddition::addAtTime_mins            ),    // "Time"
 )
 
 RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, bool editable) :
