@@ -24,6 +24,10 @@
     },
     {
       "properties": {
+        "folder_path": {
+          "description": "The suggested slash-delimited subfolder path in which to store this Culture object.",
+          "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+        },
         "temperature_range": {
           "description": "The recommended temperature range of fermentation by the culture producer.",
           "$ref": "Measurement.beer.schema#/$defs/RangeOfTemperature"
@@ -67,7 +71,7 @@
           "type": "boolean"
         },
         "inventory": {
-          "$ref": "#/$defs/CultureInventory"
+          "$ref": "#/$defs/CultureAmount"
         },
         "killer": {
           "$ref": "#/$defs/KillerProperties"
@@ -122,23 +126,19 @@
         "form"
       ]
     },
-    "CultureInventory": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "liquid": {
+    "CultureAmount" : {
+      "description": "The ways in which an amount of a Culture could be measured",
+      "oneOf": [
+        {
           "$ref": "Measurement.beer.schema#/$defs/Volume"
         },
-        "dry": {
+        {
           "$ref": "Measurement.beer.schema#/$defs/Mass"
         },
-        "slant": {
-          "$ref": "Measurement.beer.schema#/$defs/Volume"
-        },
-        "culture": {
-          "$ref": "Measurement.beer.schema#/$defs/Volume"
+        {
+          "$ref": "Measurement.beer.schema#/$defs/Count"
         }
-      }
+      ]
     },
     "KillerProperties": {
       "type": "object",

@@ -25,7 +25,7 @@
   // Version of this schema.
   // Versions prior to 1.0.0 are subject to breaking changes!
   //
-  "Version": "0.3.0",
+  "Version": "0.5.0",
   //
   "properties": {
     //
@@ -45,7 +45,7 @@
       "properties": {
         "version": {
           "description": "DotBeer schema version used to create the file.",
-          "$ref": "Measurement.beer.schema#/$defs/VersionNumber"
+          "$ref": "#/$defs/VersionNumber"
         },
         "output_by": {
           "description": "Application that wrote the file -- eg Brewtarget 5.2.1.",
@@ -155,5 +155,21 @@
   },
   "required": [
     "DotBeer"
-  ]
+  ],
+  "$defs": {
+    //
+    // Version Numbers and Folders don't really belong in Measurement.  But it seems overkill to create dedicated schema
+    // file(s) for them.  So, they live here.
+    //
+    "FolderPath": {
+      "type": "string",
+      "description": "A FolderPath is typically used for the suggested slash-delimited subfolder path in which to store an object.  Any leading slash should be ignored.  Eg, if an object's folder path is \"/hum/bug\" (or \"hum/bug\") then importing the object into folder \"/foo/bar\" should result in its folder path being \"/foo/bar/hum/bug\".  If the importing software does not support folders, then it should ignore folder path fields.",
+      "pattern": "/?[^/]+(/[^/]+)*"
+    },
+    "VersionNumber": {
+      "type": "string",
+      "description": "We use semantic versioning, which encodes a version by a three-part version number (Major.Minor.Patch)",
+      "pattern": "\\d+[.]\\d+[.]\\d+"
+    }
+  }
 }

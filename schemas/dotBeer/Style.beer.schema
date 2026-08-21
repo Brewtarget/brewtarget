@@ -22,6 +22,10 @@
     },
     {
       "properties": {
+        "folder_path": {
+          "description": "The suggested slash-delimited subfolder path in which to store this Style object.",
+          "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+        },
         "original_gravity": {
           "description": "The range of acceptable original gravity for the style.",
           "$ref": "Measurement.beer.schema#/$defs/RangeOfGravity"

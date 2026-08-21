@@ -25,6 +25,7 @@
 #include <QObject>
 
 #include "database/ObjectStoreWrapper.h"
+#include "model/Folder.h"
 #include "model/StockPurchaseHop.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"

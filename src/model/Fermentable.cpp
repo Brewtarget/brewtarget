@@ -28,6 +28,7 @@
 #include <QVariant>
 
 #include "database/ObjectStoreWrapper.h"
+#include "model/Folder.h"
 #include "model/StockPurchaseFermentable.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"

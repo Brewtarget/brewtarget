@@ -42,10 +42,10 @@ class Recipe;
 COLUMN_NAMES(RecipeAdditionMiscTableModel, Name          ,
                                            Type          ,
                                            Amount        ,
-                                           AmountType    ,
-                                           TotalInventory,
                                            Stage         ,
-                                           Time          ,)
+                                           Time          ,
+                                           AmountType    ,
+                                           TotalInventory,)
 
 /*!
  * \class RecipeAdditionMiscTableModel

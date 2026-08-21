@@ -52,6 +52,7 @@
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
 #include "model/FermentationStep.h"
+#include "model/Folder.h"
 #include "model/Hop.h"
 #include "model/Instruction.h"
 #include "model/Mash.h"
@@ -1444,7 +1445,7 @@ QString Recipe::localisedName_age_days               () { return tr("Age"       
 QString Recipe::localisedName_ageTemp_c              () { return tr("Age Temp"               ); }
 QString Recipe::localisedName_ancestorId             () { return tr("Ancestor ID"            ); }
 QString Recipe::localisedName_apparentAttenuation_pct() { return tr("Apparent Attenuation"   ); }
-QString Recipe::localisedName_asstBrewer             () { return tr("Assistant Brewer"       ); }
+QString Recipe::localisedName_assistantBrewer             () { return tr("Assistant Brewer"       ); }
 QString Recipe::localisedName_batchSize_l            () { return tr("BatchSize"              ); }
 QString Recipe::localisedName_beerAcidity_pH         () { return tr("Beer Acidity"           ); }
 QString Recipe::localisedName_boil                   () { return tr("Boil"                   ); }
@@ -1584,7 +1585,7 @@ TypeLookup const Recipe::typeLookup {
       //      Both would be ugly -- but doable, as we have done elsewhere
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, type             , m_type              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, brewer           , m_brewer            ,           NonPhysicalQuantity::String        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, asstBrewer       , m_asstBrewer        ,           NonPhysicalQuantity::String        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, assistantBrewer       , m_assistantBrewer        ,           NonPhysicalQuantity::String        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, batchSize_l      , m_batchSize_l       , Measurement::PhysicalQuantity::Volume        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, efficiency_pct   , m_efficiency_pct    ,           NonPhysicalQuantity::Percentage    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, age_days         , m_age_days          ,           NonPhysicalQuantity::Dimensionless ), // See comment above for why Dimensionless, not Time
@@ -1656,7 +1657,7 @@ Recipe::Recipe(QString name) :
    NamedEntity              {name},
    FolderPropertyBase<Recipe>       {},
    pimpl                    {std::make_unique<impl>(*this)},
-   m_asstBrewer             {QString{"%1: free beer software"}.arg(CONFIG_APPLICATION_NAME_UC)},
+   m_assistantBrewer             {QString{"%1: free beer software"}.arg(CONFIG_APPLICATION_NAME_UC)},
    m_date                   {QDate::currentDate()}, // Date is allowed to be blank, but we default it to today
    m_fermentableAdditions   {*this               },
    m_hopAdditions           {*this               },
@@ -1675,7 +1676,7 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    pimpl                {std::make_unique<impl>(*this, namedParameterBundle)},
    SET_REGULAR_FROM_NPB (m_type                   , namedParameterBundle, PropertyNames::Recipe::type                   ),
    SET_REGULAR_FROM_NPB (m_brewer                 , namedParameterBundle, PropertyNames::Recipe::brewer                 , ""),
-   SET_REGULAR_FROM_NPB (m_asstBrewer             , namedParameterBundle, PropertyNames::Recipe::asstBrewer             , ""),
+   SET_REGULAR_FROM_NPB (m_assistantBrewer             , namedParameterBundle, PropertyNames::Recipe::assistantBrewer             , ""),
    SET_REGULAR_FROM_NPB (m_batchSize_l            , namedParameterBundle, PropertyNames::Recipe::batchSize_l            ),
    SET_REGULAR_FROM_NPB (m_efficiency_pct         , namedParameterBundle, PropertyNames::Recipe::efficiency_pct         ),
    SET_REGULAR_FROM_NPB (m_age_days               , namedParameterBundle, PropertyNames::Recipe::age_days               , std::nullopt),
@@ -1738,7 +1739,7 @@ Recipe::Recipe(Recipe const & other) :
    pimpl{std::make_unique<impl>(*this, other)},
    m_type                   {other.m_type              },
    m_brewer                 {other.m_brewer            },
-   m_asstBrewer             {other.m_asstBrewer        },
+   m_assistantBrewer             {other.m_assistantBrewer        },
    m_batchSize_l            {other.m_batchSize_l       },
    m_efficiency_pct         {other.m_efficiency_pct    },
    m_age_days               {other.m_age_days          },
@@ -2301,8 +2302,8 @@ void Recipe::setEfficiency_pct(double val) {
    recalcAll();
 }
 
-void Recipe::setAsstBrewer(const QString & val) {
-   SET_AND_NOTIFY(PropertyNames::Recipe::asstBrewer, this->m_asstBrewer, val);
+void Recipe::setAssistantBrewer(const QString & val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::assistantBrewer, this->m_assistantBrewer, val);
    return;
 }
 
@@ -2650,7 +2651,7 @@ int Recipe::numAncestors () const { return this->ancestors().size(); }
 //============================== Other Getters ===================================
 Recipe::Type           Recipe::type             () const { return m_type             ; }
 QString                Recipe::brewer           () const { return m_brewer           ; }
-QString                Recipe::asstBrewer       () const { return m_asstBrewer       ; }
+QString                Recipe::assistantBrewer       () const { return m_assistantBrewer       ; }
 QString                Recipe::notes            () const { return m_notes            ; }
 QString                Recipe::tasteNotes       () const { return m_tasteNotes       ; }
 QString                Recipe::primingSugarName () const { return m_primingSugarName ; }

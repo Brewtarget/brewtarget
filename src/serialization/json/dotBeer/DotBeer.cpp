@@ -303,6 +303,7 @@ namespace {
    };
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_FermentableType_ExclBase {
       // Type                                                       XPath                    Q_PROPERTY                                          Value Decoder
+      {JsonRecordDefinition::FieldType::FolderPath                , "folder_path"          , PropertyNames::FolderPropertyBase::containedInFolderPath                                 },
       {JsonRecordDefinition::FieldType::String                    , "notes"                , PropertyNames::Fermentable::notes                 ,                                      },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "moisture"             , PropertyNames::Fermentable::moisture_pct          , &DOT_BEER_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::Double                    , "alpha_amylase"        , PropertyNames::Fermentable::alphaAmylase_dextUnits,                                      },
@@ -311,7 +312,7 @@ namespace {
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "kolbach_index"        , PropertyNames::Fermentable::kolbachIndex_pct      , &DOT_BEER_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "max_in_batch"         , PropertyNames::Fermentable::maxInBatch_pct        , &DOT_BEER_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::Bool                      , "recommend_mash"       , PropertyNames::Fermentable::recommendMash         ,                                      },
-      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory/amount"     , PropertyNames::Ingredient::totalInventory         , &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER },
+      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory"            , PropertyNames::Ingredient::totalInventory         , &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "glassy"               , PropertyNames::Fermentable::hardnessPrpGlassy_pct , &DOT_BEER_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "plump"                , PropertyNames::Fermentable::kernelSizePrpPlump_pct, &DOT_BEER_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "half"                 , PropertyNames::Fermentable::hardnessPrpHalf_pct   , &DOT_BEER_PERCENT_UNIT               },
@@ -354,6 +355,7 @@ namespace {
    };
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_HopType_ExclBase {
       // Type                                                       XPath                                Q_PROPERTY                                 Value Decoder
+      {JsonRecordDefinition::FieldType::FolderPath                , "folder_path"                      , PropertyNames::FolderPropertyBase::containedInFolderPath          },
       {JsonRecordDefinition::FieldType::Enum                      , "type"                             , PropertyNames::Hop::type                 , &Hop::typeStringMapping},
       {JsonRecordDefinition::FieldType::String                    , "notes"                            , PropertyNames::Hop::notes                },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "six_month_alpha_loss"             , PropertyNames::Hop::sixMonthAlphaLoss_pct, &DOT_BEER_PERCENT_UNIT},
@@ -372,9 +374,7 @@ namespace {
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "oil_content/pinene"               , PropertyNames::Hop::pinene_pct           , &DOT_BEER_PERCENT_UNIT},
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "oil_content/polyphenols"          , PropertyNames::Hop::polyphenols_pct      , &DOT_BEER_PERCENT_UNIT},
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "oil_content/xanthohumol"          , PropertyNames::Hop::xanthohumol_pct      , &DOT_BEER_PERCENT_UNIT},
-      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory/amount"                 , PropertyNames::Ingredient::totalInventory, &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER},
-
-      // .:TODO.JSON:. Note that we'll need to look at HopAdditionType, IBUEstimateType, IBUMethodType when we use Hops in Recipes
+      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory"                        , PropertyNames::Ingredient::totalInventory, &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER},
    };
    template<> JsonRecordDefinition const DOT_BEER_RECORD_DEFN<Hop> {
       std::in_place_type_t<Hop>{},
@@ -396,9 +396,10 @@ namespace {
    };
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_MiscType_ExclBase {
       // Type                                                       XPath               Q_PROPERTY                                 Value Decoder
+      {JsonRecordDefinition::FieldType::FolderPath                , "folder_path"     , PropertyNames::FolderPropertyBase::containedInFolderPath                       },
       {JsonRecordDefinition::FieldType::String                    , "use_for"         , PropertyNames::Misc::useFor              },
       {JsonRecordDefinition::FieldType::String                    , "notes"           , PropertyNames::Misc::notes               },
-      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory/amount", PropertyNames::Ingredient::totalInventory, &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER},
+      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory"       , PropertyNames::Ingredient::totalInventory, &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER},
    };
    template<> JsonRecordDefinition const DOT_BEER_RECORD_DEFN<Misc> {
       std::in_place_type_t<Misc>{},
@@ -418,7 +419,8 @@ namespace {
       {JsonRecordDefinition::FieldType::String, "product_id"  , PropertyNames::Yeast::productId },
    };
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_YeastType_ExclBase {
-      // Type                                                       XPath               Q_PROPERTY                                          Value Decoder
+      // Type                                                       XPath                        Q_PROPERTY                                       Value Decoder
+      {JsonRecordDefinition::FieldType::FolderPath                , "folder_path"              , PropertyNames::FolderPropertyBase::containedInFolderPath                          },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , "temperature_range/minimum", PropertyNames::Yeast::minTemperature_c         , &DOT_BEER_TEMPERATURE_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , "temperature_range/maximum", PropertyNames::Yeast::maxTemperature_c         , &DOT_BEER_TEMPERATURE_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "alcohol_tolerance"        , PropertyNames::Yeast::alcoholTolerance_pct     , &DOT_BEER_PERCENT_UNIT           },
@@ -430,12 +432,7 @@ namespace {
       {JsonRecordDefinition::FieldType::Int                       , "max_reuse"                , PropertyNames::Yeast::maxReuse                 },
       {JsonRecordDefinition::FieldType::Bool                      , "pof"                      , PropertyNames::Yeast::phenolicOffFlavorPositive},
       {JsonRecordDefinition::FieldType::Bool                      , "glucoamylase"             , PropertyNames::Yeast::glucoamylasePositive     },
-//    TODO: Another complexity is that, for yeast/culture, inventory/amount has sub-fields:
-//          liquid  -- VolumeType
-//          dry     -- MassType
-//          slant   -- VolumeType
-//          culture -- VolumeType
-//      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory/amount"         , PropertyNames::Ingredient::totalInventory   , &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER},
+      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory"                , PropertyNames::Ingredient::totalInventory      , &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::Bool                      , "killer/producingK1Toxin"  , PropertyNames::Yeast::killerProducingK1Toxin   },
       {JsonRecordDefinition::FieldType::Bool                      , "killer/producingK2Toxin"  , PropertyNames::Yeast::killerProducingK2Toxin   },
       {JsonRecordDefinition::FieldType::Bool                      , "killer/producingK28Toxin" , PropertyNames::Yeast::killerProducingK28Toxin  },
@@ -468,9 +465,10 @@ namespace {
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "magnesium"  , PropertyNames::Water::magnesium_ppm  , &DOT_BEER_MASS_FRACT_OR_CONC_UNIT_MAPPER},
    };
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_WaterType_ExclBase {
-      // Type                                            XPath    Q_PROPERTY                   Value Decoder
-      {JsonRecordDefinition::FieldType::SingleUnitValue, "pH"   , PropertyNames::Water::ph   , &DOT_BEER_ACIDITY_UNIT},
-      {JsonRecordDefinition::FieldType::String         , "notes", PropertyNames::Water::notes,                        },
+      // Type                                            XPath          Q_PROPERTY                   Value Decoder
+      {JsonRecordDefinition::FieldType::FolderPath     , "folder_path", PropertyNames::FolderPropertyBase::containedInFolderPath},
+      {JsonRecordDefinition::FieldType::SingleUnitValue, "pH"         , PropertyNames::Water::ph   , &DOT_BEER_ACIDITY_UNIT},
+      {JsonRecordDefinition::FieldType::String         , "notes"      , PropertyNames::Water::notes,                        },
    };
 
    // As mentioned above, it would be really nice to do this at compile time, but haven't yet found a nice way to do so
@@ -493,7 +491,8 @@ namespace {
       {JsonRecordDefinition::FieldType::Enum  , "style_type"     , PropertyNames::Style::type          , &Style::typeStringMapping},
    };
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_StyleType_ExclBase {
-      // Type                                                       XPath                                Q_PROPERTY                              Value Decoder
+      // Type                                                 XPath                                     Q_PROPERTY                              Value Decoder
+      {JsonRecordDefinition::FieldType::FolderPath          , "folder_path"                           , PropertyNames::FolderPropertyBase::containedInFolderPath              },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "original_gravity/minimum"              , PropertyNames::Style::ogMin            , &DOT_BEER_DENSITY_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "original_gravity/maximum"              , PropertyNames::Style::ogMax            , &DOT_BEER_DENSITY_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "final_gravity/minimum"                 , PropertyNames::Style::fgMin            , &DOT_BEER_DENSITY_UNIT_MAPPER},
@@ -559,6 +558,7 @@ namespace {
       "mashes", // DotBeer record name
       {
          // Type                                                 XPath                Q_PROPERTY                        Value Decoder
+         {JsonRecordDefinition::FieldType::FolderPath          , "folder_path"      , PropertyNames::FolderPropertyBase::containedInFolderPath},
          {JsonRecordDefinition::FieldType::String              , "name"             , PropertyNames::NamedEntity::name},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "grain_temperature", PropertyNames::Mash::grainTemp_c, &DOT_BEER_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::String              , "notes"            , PropertyNames::Mash::notes      },
@@ -599,11 +599,12 @@ namespace {
       std::in_place_type_t<Fermentation>{},
       "fermentations", // DotBeer record name
       {
-         // Type                                          XPath                 Q_PROPERTY                                      Value Decoder
-         {JsonRecordDefinition::FieldType::String       , "name"              , PropertyNames::NamedEntity::name              },
-         {JsonRecordDefinition::FieldType::String       , "fermentation_description"       , PropertyNames::Fermentation::description      },
-         {JsonRecordDefinition::FieldType::String       , "notes"             , PropertyNames::Fermentation::notes            },
-         {JsonRecordDefinition::FieldType::ListOfRecords, "fermentation_steps", PropertyNames::StepOwnerBase::steps, &DOT_BEER_RECORD_DEFN<FermentationStep>},
+         // Type                                          XPath                       Q_PROPERTY                                Value Decoder
+         {JsonRecordDefinition::FieldType::FolderPath   , "folder_path"             , PropertyNames::FolderPropertyBase::containedInFolderPath},
+         {JsonRecordDefinition::FieldType::String       , "name"                    , PropertyNames::NamedEntity::name        },
+         {JsonRecordDefinition::FieldType::String       , "fermentation_description", PropertyNames::Fermentation::description},
+         {JsonRecordDefinition::FieldType::String       , "notes"                   , PropertyNames::Fermentation::notes      },
+         {JsonRecordDefinition::FieldType::ListOfRecords, "fermentation_steps"      , PropertyNames::StepOwnerBase::steps     , &DOT_BEER_RECORD_DEFN<FermentationStep>},
       }
    };
 
@@ -624,48 +625,49 @@ namespace {
          //     we read a DotBeer file.
          //
 
-         // Type                                                 XPath / Q_PROPERTY / Value Decoder
-         {JsonRecordDefinition::FieldType::String              , "name"                      , PropertyNames::NamedEntity::name                     },
-         {JsonRecordDefinition::FieldType::String              , "hlt/vessel_type"           , PropertyNames::Equipment::hltType              },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/max_volume"            , PropertyNames::Equipment::hltVolume_l          , &DOT_BEER_VOLUME_UNIT_MAPPER       },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/loss"                  , PropertyNames::Equipment::hltLoss_l            , &DOT_BEER_VOLUME_UNIT_MAPPER       },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/weight"                , PropertyNames::Equipment::hltWeight_kg         , &DOT_BEER_MASS_UNIT_MAPPER         },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/specific_heat_capacity", PropertyNames::Equipment::hltSpecificHeat_calGC, &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER},
-         {JsonRecordDefinition::FieldType::String              , "hlt/notes"                 , PropertyNames::Equipment::hltNotes             },
-         {JsonRecordDefinition::FieldType::String              , "mash_tun/vessel_type"           , PropertyNames::Equipment::mashTunType               },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/max_volume"            , PropertyNames::Equipment::mashTunVolume_l           , &DOT_BEER_VOLUME_UNIT_MAPPER         },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/loss"                  , PropertyNames::Equipment::mashTunLoss_l             , &DOT_BEER_VOLUME_UNIT_MAPPER         },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/grain_absorption_rate" , PropertyNames::Equipment::mashTunGrainAbsorption_LKg, &DOT_BEER_SPECIFIC_VOLUME_UNIT_MAPPER},
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/weight"                , PropertyNames::Equipment::mashTunWeight_kg          , &DOT_BEER_MASS_UNIT_MAPPER           },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/specific_heat_capacity", PropertyNames::Equipment::mashTunSpecificHeat_calGC , &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER  },
-         {JsonRecordDefinition::FieldType::String              , "mash_tun/notes"                 , PropertyNames::Equipment::mashTunNotes              },
+         // Type                                                 XPath                                Q_PROPERTY                                             Value Decoder
+         {JsonRecordDefinition::FieldType::String              , "name"                             , PropertyNames::NamedEntity::name                     },
+         {JsonRecordDefinition::FieldType::FolderPath          , "folder_path"                      , PropertyNames::FolderPropertyBase::containedInFolderPath},
+         {JsonRecordDefinition::FieldType::String              , "hlt/vessel_type"                  , PropertyNames::Equipment::hltType                    },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/max_volume"                   , PropertyNames::Equipment::hltVolume_l                , &DOT_BEER_VOLUME_UNIT_MAPPER       },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/loss"                         , PropertyNames::Equipment::hltLoss_l                  , &DOT_BEER_VOLUME_UNIT_MAPPER       },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/weight"                       , PropertyNames::Equipment::hltWeight_kg               , &DOT_BEER_MASS_UNIT_MAPPER         },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/specific_heat_capacity"       , PropertyNames::Equipment::hltSpecificHeat_calGC      , &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::String              , "hlt/notes"                        , PropertyNames::Equipment::hltNotes                   },
+         {JsonRecordDefinition::FieldType::String              , "mash_tun/vessel_type"             , PropertyNames::Equipment::mashTunType                },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/max_volume"              , PropertyNames::Equipment::mashTunVolume_l            , &DOT_BEER_VOLUME_UNIT_MAPPER         },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/loss"                    , PropertyNames::Equipment::mashTunLoss_l              , &DOT_BEER_VOLUME_UNIT_MAPPER         },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/grain_absorption_rate"   , PropertyNames::Equipment::mashTunGrainAbsorption_LKg , &DOT_BEER_SPECIFIC_VOLUME_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/weight"                  , PropertyNames::Equipment::mashTunWeight_kg           , &DOT_BEER_MASS_UNIT_MAPPER           },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/specific_heat_capacity"  , PropertyNames::Equipment::mashTunSpecificHeat_calGC  , &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER  },
+         {JsonRecordDefinition::FieldType::String              , "mash_tun/notes"                   , PropertyNames::Equipment::mashTunNotes               },
          {JsonRecordDefinition::FieldType::String              , "lauter_tun/vessel_type"           , PropertyNames::Equipment::lauterTunType              },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "lauter_tun/max_volume"            , PropertyNames::Equipment::lauterTunVolume_l          , &DOT_BEER_VOLUME_UNIT_MAPPER       },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "lauter_tun/loss"                  , PropertyNames::Equipment::lauterTunDeadspaceLoss_l   , &DOT_BEER_VOLUME_UNIT_MAPPER       },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "lauter_tun/weight"                , PropertyNames::Equipment::lauterTunWeight_kg         , &DOT_BEER_MASS_UNIT_MAPPER         },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "lauter_tun/specific_heat_capacity", PropertyNames::Equipment::lauterTunSpecificHeat_calGC, &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::String              , "lauter_tun/notes"                 , PropertyNames::Equipment::lauterTunNotes             },
-         {JsonRecordDefinition::FieldType::String              , "kettle/vessel_type"           , PropertyNames::Equipment::kettleType               },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/max_volume"            , PropertyNames::Equipment::kettleBoilSize_l         , &DOT_BEER_VOLUME_UNIT_MAPPER       },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/loss"                  , PropertyNames::Equipment::kettleTrubChillerLoss_l  , &DOT_BEER_VOLUME_UNIT_MAPPER       },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/drain_rate_per_minute" , PropertyNames::Equipment::kettleOutflowPerMinute_l , &DOT_BEER_VOLUME_UNIT_MAPPER       },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/weight"                , PropertyNames::Equipment::kettleWeight_kg          , &DOT_BEER_MASS_UNIT_MAPPER         },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/specific_heat_capacity", PropertyNames::Equipment::kettleSpecificHeat_calGC , &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER},
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettleInternalDiameter"       , PropertyNames::Equipment::kettleInternalDiameter_cm, &DOT_BEER_LENGTH_MAPPER            },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettleOpeningDiameter"        , PropertyNames::Equipment::kettleOpeningDiameter_cm , &DOT_BEER_LENGTH_MAPPER            },
-         {JsonRecordDefinition::FieldType::String              , "kettle/notes"                 , PropertyNames::Equipment::kettleNotes              },
-         {JsonRecordDefinition::FieldType::String              , "fermenter/vessel_type", PropertyNames::Equipment::fermenterType       },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "fermenter/max_volume" , PropertyNames::Equipment::fermenterBatchSize_l, &DOT_BEER_VOLUME_UNIT_MAPPER},
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "fermenter/loss"       , PropertyNames::Equipment::fermenterLoss_l     , &DOT_BEER_VOLUME_UNIT_MAPPER},
-         {JsonRecordDefinition::FieldType::String              , "fermenter/notes"      , PropertyNames::Equipment::fermenterNotes      },
-         {JsonRecordDefinition::FieldType::String              , "aging_vessel/vessel_type", PropertyNames::Equipment::agingVesselType    },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "aging_vessel/max_volume", PropertyNames::Equipment::agingVesselVolume_l, &DOT_BEER_VOLUME_UNIT_MAPPER},
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "aging_vessel/loss"      , PropertyNames::Equipment::agingVesselLoss_l  , &DOT_BEER_VOLUME_UNIT_MAPPER},
-         {JsonRecordDefinition::FieldType::String              , "aging_vessel/notes"     , PropertyNames::Equipment::agingVesselNotes   },
-         {JsonRecordDefinition::FieldType::String              , "packaging_vessel/vessel_type", PropertyNames::Equipment::packagingVesselType    },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "packaging_vessel/max_volume" , PropertyNames::Equipment::packagingVesselVolume_l, &DOT_BEER_VOLUME_UNIT_MAPPER},
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "packaging_vessel/loss"       , PropertyNames::Equipment::packagingVesselLoss_l  , &DOT_BEER_VOLUME_UNIT_MAPPER},
-         {JsonRecordDefinition::FieldType::String              , "packaging_vessel/notes"      , PropertyNames::Equipment::packagingVesselNotes   },
+         {JsonRecordDefinition::FieldType::String              , "kettle/vessel_type"               , PropertyNames::Equipment::kettleType                 },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/max_volume"                , PropertyNames::Equipment::kettleBoilSize_l           , &DOT_BEER_VOLUME_UNIT_MAPPER       },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/loss"                      , PropertyNames::Equipment::kettleTrubChillerLoss_l    , &DOT_BEER_VOLUME_UNIT_MAPPER       },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/drain_rate_per_minute"     , PropertyNames::Equipment::kettleOutflowPerMinute_l   , &DOT_BEER_VOLUME_UNIT_MAPPER       },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/weight"                    , PropertyNames::Equipment::kettleWeight_kg            , &DOT_BEER_MASS_UNIT_MAPPER         },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/specific_heat_capacity"    , PropertyNames::Equipment::kettleSpecificHeat_calGC   , &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettleInternalDiameter"           , PropertyNames::Equipment::kettleInternalDiameter_cm  , &DOT_BEER_LENGTH_MAPPER            },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettleOpeningDiameter"            , PropertyNames::Equipment::kettleOpeningDiameter_cm   , &DOT_BEER_LENGTH_MAPPER            },
+         {JsonRecordDefinition::FieldType::String              , "kettle/notes"                     , PropertyNames::Equipment::kettleNotes                },
+         {JsonRecordDefinition::FieldType::String              , "fermenter/vessel_type"            , PropertyNames::Equipment::fermenterType              },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "fermenter/max_volume"             , PropertyNames::Equipment::fermenterBatchSize_l       , &DOT_BEER_VOLUME_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "fermenter/loss"                   , PropertyNames::Equipment::fermenterLoss_l            , &DOT_BEER_VOLUME_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::String              , "fermenter/notes"                  , PropertyNames::Equipment::fermenterNotes             },
+         {JsonRecordDefinition::FieldType::String              , "aging_vessel/vessel_type"         , PropertyNames::Equipment::agingVesselType            },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "aging_vessel/max_volume"          , PropertyNames::Equipment::agingVesselVolume_l        , &DOT_BEER_VOLUME_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "aging_vessel/loss"                , PropertyNames::Equipment::agingVesselLoss_l          , &DOT_BEER_VOLUME_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::String              , "aging_vessel/notes"               , PropertyNames::Equipment::agingVesselNotes           },
+         {JsonRecordDefinition::FieldType::String              , "packaging_vessel/vessel_type"     , PropertyNames::Equipment::packagingVesselType        },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "packaging_vessel/max_volume"      , PropertyNames::Equipment::packagingVesselVolume_l    , &DOT_BEER_VOLUME_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "packaging_vessel/loss"            , PropertyNames::Equipment::packagingVesselLoss_l      , &DOT_BEER_VOLUME_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::String              , "packaging_vessel/notes"           , PropertyNames::Equipment::packagingVesselNotes       },
       }
    };
 
@@ -727,7 +729,6 @@ namespace {
       // Type                                                       XPath                      Q_PROPERTY                                       Value Decoder
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , "schedule/time"            , PropertyNames::RecipeAddition::addAtTime_mins ,  &DOT_BEER_TIME_UNIT_MAPPER          },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , "schedule/duration"        , PropertyNames::RecipeAddition::duration_mins  ,  &DOT_BEER_TIME_UNIT_MAPPER          },
-      {JsonRecordDefinition::FieldType::Bool                      , "schedule/continuous"      , BtString::NULL_STR                            }, // Not supported -- see comment in model/RecipeAddition.h
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , "schedule/specific_gravity", PropertyNames::RecipeAddition::addAtGravity_sg,  &DOT_BEER_DENSITY_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "schedule/pH"              , PropertyNames::RecipeAddition::addAtAcidity_pH,  &DOT_BEER_ACIDITY_UNIT              },
       {JsonRecordDefinition::FieldType::Int                       , "schedule/step"            , PropertyNames::RecipeAddition::step           },
@@ -815,13 +816,14 @@ namespace {
       std::in_place_type_t<Boil>{},
       "boils", // DotBeer record name
       {
-         // Type                                                 XPath            Q_PROPERTY                          Value Decoder
-         {JsonRecordDefinition::FieldType::String              , "name"         , PropertyNames::NamedEntity::name  },
-         {JsonRecordDefinition::FieldType::String              , "boil_description"  , PropertyNames::Boil::description  },
-         {JsonRecordDefinition::FieldType::String              , "notes"        , PropertyNames::Boil::notes        },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "pre_boil_size", PropertyNames::Boil::preBoilSize_l, &DOT_BEER_VOLUME_UNIT_MAPPER   },
-         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "boil_time"    , PropertyNames::Boil::boilTime_mins, &DOT_BEER_TIME_UNIT_MAPPER     },
-         {JsonRecordDefinition::FieldType::ListOfRecords       , "boil_steps"   , PropertyNames::StepOwnerBase::steps, &DOT_BEER_RECORD_DEFN<BoilStep>},
+         // Type                                                 XPath               Q_PROPERTY                           Value Decoder
+         {JsonRecordDefinition::FieldType::String              , "name"            , PropertyNames::NamedEntity::name   },
+         {JsonRecordDefinition::FieldType::FolderPath          , "folder_path"     , PropertyNames::FolderPropertyBase::containedInFolderPath},
+         {JsonRecordDefinition::FieldType::String              , "boil_description", PropertyNames::Boil::description   },
+         {JsonRecordDefinition::FieldType::String              , "notes"           , PropertyNames::Boil::notes         },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "pre_boil_size"   , PropertyNames::Boil::preBoilSize_l , &DOT_BEER_VOLUME_UNIT_MAPPER   },
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "boil_time"       , PropertyNames::Boil::boilTime_mins , &DOT_BEER_TIME_UNIT_MAPPER     },
+         {JsonRecordDefinition::FieldType::ListOfRecords       , "boil_steps"      , PropertyNames::StepOwnerBase::steps, &DOT_BEER_RECORD_DEFN<BoilStep>},
       }
    };
 
@@ -874,15 +876,13 @@ namespace {
       {
          // Type                                                 XPath                      Q_PROPERTY                                Value Decoder
          {JsonRecordDefinition::FieldType::String              , "name"                   , PropertyNames::NamedEntity::name        },
+         {JsonRecordDefinition::FieldType::FolderPath          , "folder_path"            , PropertyNames::FolderPropertyBase::containedInFolderPath},
          {JsonRecordDefinition::FieldType::Enum                , "type"                   , PropertyNames::Recipe::type             , &Recipe::typeStringMapping},
          {JsonRecordDefinition::FieldType::String              , "author"                 , PropertyNames::Recipe::brewer           },
-         {JsonRecordDefinition::FieldType::String              , "coauthor"               , PropertyNames::Recipe::asstBrewer       },
+         {JsonRecordDefinition::FieldType::String              , "coauthor"               , PropertyNames::Recipe::assistantBrewer  },
          {JsonRecordDefinition::FieldType::Date                , "created"                , PropertyNames::Recipe::date             },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "batch_size"             , PropertyNames::Recipe::batchSize_l      , &DOT_BEER_VOLUME_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "efficiency/brewhouse"   , PropertyNames::Recipe::efficiency_pct   , &DOT_BEER_PERCENT_UNIT      },
-         {JsonRecordDefinition::FieldType::SingleUnitValue     , "efficiency/conversion"  , BtString::NULL_STR                      , &DOT_BEER_PERCENT_UNIT      }, // .:TBD:. Do we want to support this optional DotBeer field?
-         {JsonRecordDefinition::FieldType::SingleUnitValue     , "efficiency/lauter"      , BtString::NULL_STR                      , &DOT_BEER_PERCENT_UNIT      }, // .:TBD:. Do we want to support this optional DotBeer field?
-         {JsonRecordDefinition::FieldType::SingleUnitValue     , "efficiency/mash"        , BtString::NULL_STR                      , &DOT_BEER_PERCENT_UNIT      }, // .:TBD:. Do we want to support this optional DotBeer field?
          {JsonRecordDefinition::FieldType::Record              , "style"                  , PropertyNames::Recipe::style,
                                                                                             &DOT_BEER_RECORD_DEFN_STYLE_IN_RECIPE},
          {JsonRecordDefinition::FieldType::ListOfRecords       , "ingredients/"
@@ -936,12 +936,6 @@ namespace {
 
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-   // Field mappings for packaging DotBeer records TODO
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
-//      JsonRecordDefinition::create< JsonNamedEntityRecord< Packaging > >,
-
-
-   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for root of DotBeer document
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    JsonRecordDefinition const DOT_BEER_RECORD_DEFN_ROOT {
@@ -965,7 +959,6 @@ namespace {
          {JsonRecordDefinition::FieldType::ListOfRecords   , "equipments"       , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Equipment  >},
          {JsonRecordDefinition::FieldType::ListOfRecords   , "fermentations"    , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Fermentation>},
          {JsonRecordDefinition::FieldType::ListOfRecords   , "boil"             , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Boil        >}
-//         {JsonRecordDefinition::FieldType::ListOfRecords   , "packaging"        , BtString::NULL_STR  , /* TODO */}
       },
       JsonRecordDefinition::RecordType::Normal
    };

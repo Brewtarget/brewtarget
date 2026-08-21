@@ -1074,7 +1074,7 @@ namespace {
          {XmlRecordDefinition::FieldType::Record          , "STYLE"                   , PropertyNames::Recipe::style             , &BEER_XML_RECORD_DEFN<Style>},
          {XmlRecordDefinition::FieldType::Record          , "EQUIPMENT"               , PropertyNames::Recipe::equipment         , &BEER_XML_RECORD_DEFN<Equipment>},
          {XmlRecordDefinition::FieldType::String          , "BREWER"                  , PropertyNames::Recipe::brewer            },
-         {XmlRecordDefinition::FieldType::String          , "ASST_BREWER"             , PropertyNames::Recipe::asstBrewer        },
+         {XmlRecordDefinition::FieldType::String          , "ASST_BREWER"             , PropertyNames::Recipe::assistantBrewer        },
          {XmlRecordDefinition::FieldType::Double          , "BATCH_SIZE"              , PropertyNames::Recipe::batchSize_l       },
          {XmlRecordDefinition::FieldType::Double          , "BOIL_SIZE"               , {PropertyNames::Recipe::boil,
                                                                                          PropertyNames::Boil::preBoilSize_l}     },

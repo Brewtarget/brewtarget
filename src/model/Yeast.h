@@ -221,7 +221,7 @@ public:
    //
    using CatalogClass              = YeastCatalog;
    using EditorClass               = YeastEditor;
-   using StockPurchaseClass            = StockPurchaseYeast;
+   using StockPurchaseClass        = StockPurchaseYeast;
    using ItemDelegateClass         = YeastItemDelegate;
    using RecipeAdditionClass       = RecipeAdditionYeast;
    using SortFilterProxyModelClass = YeastSortFilterProxyModel;

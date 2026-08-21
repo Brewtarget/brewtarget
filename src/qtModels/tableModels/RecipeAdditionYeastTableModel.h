@@ -41,14 +41,14 @@ class Recipe;
 COLUMN_NAMES(RecipeAdditionYeastTableModel, Name          ,
                                             Laboratory    ,
                                             ProductId     ,
-                                            Type          ,
-                                            Form          ,
                                             Amount        ,
-                                            AmountType    ,
-                                            TotalInventory,
                                             Stage         ,
                                             Step          ,
+                                            Type          ,
+                                            Form          ,
                                             Attenuation   ,
+                                            AmountType    ,
+                                            TotalInventory,
                                             TimesCultured ,)
 
 /*!
