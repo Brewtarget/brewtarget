@@ -45,6 +45,8 @@
 COLUMN_INFOS(
    RecipeAdditionYeastTableModel,
    //
+   // *** NB: These need to be in the same order as in the COLUMN_NAMES macro in the header file! ***
+   //
    // Note that for Name, we want the name of the contained Yeast, not the name of the RecipeAdditionYeast
    //
    TABLE_MODEL_HEADER(RecipeAdditionYeast, Name          , PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Name"
@@ -53,18 +55,18 @@ COLUMN_INFOS(
                                                                          PropertyNames::Yeast::laboratory      }, 1}),
    TABLE_MODEL_HEADER(RecipeAdditionYeast, ProductId     , PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Product ID"
                                                                          PropertyNames::Yeast::productId       }, 1}),
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Amount        , PropertyNames::IngredientAmount::amount                ),       // "Amount"
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Stage         , PropertyNames::RecipeAddition::stage                   ),       // "Stage"
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Step          , PropertyNames::RecipeAddition::step                    ),       // "Step"
    TABLE_MODEL_HEADER(RecipeAdditionYeast, Type          , PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Type"
                                                                          PropertyNames::Yeast::type             }, 1}),
    TABLE_MODEL_HEADER(RecipeAdditionYeast, Form          , PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Form"
                                                                          PropertyNames::Yeast::form             }, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Amount        , PropertyNames::IngredientAmount::amount                ),       // "Amount"
+   TABLE_MODEL_HEADER(RecipeAdditionYeast, Attenuation   , PropertyNames::RecipeAdditionYeast::attenuation_pct    ),       // "Attenuation"
    TABLE_MODEL_HEADER(RecipeAdditionYeast, AmountType    , PropertyNames::IngredientAmount::amount, Yeast::validMeasures), // "Amount Type"
    // Total inventory is read-only, so there is intentionally no TotalInventoryType column
    TABLE_MODEL_HEADER(RecipeAdditionYeast, TotalInventory, PropertyPath{{PropertyNames::RecipeAdditionYeast::yeast,        // "Inventory"
                                                                          PropertyNames::Ingredient::totalInventory}, 1}),
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Stage         , PropertyNames::RecipeAddition::stage                   ),       // "Stage"
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Step          , PropertyNames::RecipeAddition::step                    ),       // "Step"
-   TABLE_MODEL_HEADER(RecipeAdditionYeast, Attenuation   , PropertyNames::RecipeAdditionYeast::attenuation_pct    ),       // "Attenuation"
    TABLE_MODEL_HEADER(RecipeAdditionYeast, TimesCultured , PropertyNames::RecipeAdditionYeast::timesCultured      ),       // "Times Cultured"
 )
 

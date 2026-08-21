@@ -45,6 +45,8 @@
 COLUMN_INFOS(
    RecipeAdditionFermentableTableModel,
    //
+   // *** NB: These need to be in the same order as in the COLUMN_NAMES macro in the header file! ***
+   //
    // Note that for Name, we want the name of the contained Fermentable, not the name of the RecipeAdditionFermentable
    //
    TABLE_MODEL_HEADER(RecipeAdditionFermentable, Name          , PropertyPath{{PropertyNames::RecipeAdditionFermentable::fermentable,
