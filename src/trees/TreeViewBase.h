@@ -27,6 +27,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QModelIndex>
+#include <QItemSelection>
 #include <QString>
 #include <QWidget>
 
@@ -189,6 +190,7 @@ protected:
             selected.firstPrimary = this->getFirstSelectedPrimary();
          }
       }
+
       this->m_contextMenus.showContextMenu(this->derived().mapToGlobal(point), selected);
 
       return;
@@ -353,25 +355,40 @@ public:
 
    CommonContextMenuHelper::Selected<NE, SNE> getNumbersSelected() const {
       CommonContextMenuHelper::Selected<NE, SNE> selected;
-      for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
-         //
-         // You might think that, if the user clicked outside the tree (but still in the tree's viewport), we'd have
-         // no selected rows.  But, in fact, we can have an invalid QModelIndex returned in such a case.  That's OK, but
-         // we just need to make sure we don't try to look up what type of node it is (because it isn't one!).
-         //
-         QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
-         if (modelIndex.isValid()) {
-            switch (this->m_model.treeNode(modelIndex)->classifier()) {
-               case TreeNodeClassifier::PrimaryItem  : ++selected.numPrimary  ; break;
-               case TreeNodeClassifier::SecondaryItem: ++selected.numSecondary; break;
-               case TreeNodeClassifier::Folder       : ++selected.numFolders  ; break;
-               case TreeNodeClassifier::Root         :
-                  // I think this should be impossible, but OK to ignore if happens
-                  break;
-                  // No default as we want the compiler to warn us if we missed an option above
+
+      //
+      // As explained at https://runebook.dev/en/docs/qt/qitemselectionmodel/selectedRows, calling
+      // QItemSelectionModel::selectedRows() doesn't necessarily give you each and every selected row.  (It can also
+      // give you a row that isn't selected but isn't invalid either.)
+      //
+      // QItemSelectionModel::selection() gives a list of ranges.  For each range, we loop through its rows.
+      //
+      QModelIndexList selectedIndexes;
+      for (QItemSelectionRange const & range : this->derived().selectionModel()->selection()) {
+         for (int row = range.top(); row <= range.bottom(); ++row) {
+            //
+            // You might think that, if the user clicked outside the tree (but still in the tree's viewport), we'd have
+            // no selected rows.  But, in fact, we can have an invalid QModelIndex returned in such a case.
+            //
+            QModelIndex viewIndex = range.model()->index(row, 0);
+            if (viewIndex.isValid()) {
+               QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+               if (modelIndex.isValid()) {
+                  TreeNode const * treeNode = this->m_model.treeNode(modelIndex);
+                  switch (treeNode->classifier()) {
+                     case TreeNodeClassifier::PrimaryItem  : ++selected.numPrimary  ; break;
+                     case TreeNodeClassifier::SecondaryItem: ++selected.numSecondary; break;
+                     case TreeNodeClassifier::Folder       : ++selected.numFolders  ; break;
+                     case TreeNodeClassifier::Root         :
+                        // I think this should be impossible, but OK to ignore if happens
+                        break;
+                        // No default as we want the compiler to warn us if we missed an option above
+                  }
+               }
             }
          }
       }
+
       return selected;
    }
 

@@ -235,6 +235,17 @@ public:
     * @param selected
     */
    QAction * showContextMenu(QPoint const & point, CommonContextMenuHelper::Selected<NE, SNE> const & selected) {
+
+      // If there are one or more primary items selected, then we must have a first one
+      Q_ASSERT(selected.firstPrimary || 0 == selected.numPrimary);
+      if constexpr (!IsVoid<SNE>) {
+         // If secondary items can exist in this tree/list and one or more are selected, then we must have a first one
+         Q_ASSERT(selected.firstSecondary || 0 == selected.numSecondary);
+      } else {
+         // If secondary items cannot exist in this tree/list, then none can be selected.
+         Q_ASSERT(0 == selected.numSecondary);
+      }
+
       //
       // In principle there are three different menus we could show, depending on whether we want actions for primary
       // item, secondary item or folders.  In practice, for the moment at least, we have the same menu for primary items

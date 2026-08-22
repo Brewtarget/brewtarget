@@ -600,15 +600,9 @@
                     </item>
                     <item row="5" column="2">
                      <widget class="SmartLineEdit" name="lineEdit_efficiency">
-                      <!--property name="contextMenuPolicy">
-                       <enum>Qt::DefaultContextMenu</enum>
-                      </property-->
                       <property name="toolTip">
                        <string>The extraction efficiency you expect</string>
                       </property>
-                      <!--property name="alignment">
-                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                      </property-->
                      </widget>
                     </item>
                     <item row="5" column="3">
