@@ -229,7 +229,8 @@ TypeLookup const Fermentable::typeLookup {
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,
-    &IngredientBase<Fermentable>::typeLookup}
+    &IngredientBase<Fermentable>::typeLookup,
+    &FolderPropertyBase<Fermentable>::typeLookup}
 };
 static_assert(std::is_base_of<Ingredient, Fermentable>::value);
 static_assert(std::is_base_of<FolderPropertyBase<Fermentable>, Fermentable>::value);

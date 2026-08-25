@@ -159,7 +159,13 @@ TypeLookup const FolderPropertyBase<Derived, DerivedIsFolder>::typeLookup {
           PropertyNames::FolderPropertyBase::containedInFolderId,
           FolderPropertyBase::localisedName_containedInFolderId,
           TypeLookupOf<decltype(FolderPropertyBase<Derived>::m_containedInFolderId)>::value
-       )}
+       )},
+      {&PropertyNames::FolderPropertyBase::containedInFolderPath,
+       TypeInfo::construct<MemberFunctionReturnType_t<&Derived::containedInFolderPath>>(
+          PropertyNames::FolderPropertyBase::containedInFolderPath,
+          FolderPropertyBase::localisedName_containedInFolderPath,
+          TypeLookupOf<MemberFunctionReturnType_t<&Derived::containedInFolderPath>>::value
+       )},
    },
    // Parent class lookup: none as we are at the top of this branch of the inheritance tree
    {}
@@ -201,7 +207,8 @@ template <typename T> concept CONCEPT_FIX_UP ValidFolderType = (HasFolder<T> && 
  *        derived classes also need to include the following block (see comment in model/StepBase.h for why):
  *
  *           // See model/FolderPropertyBase.h for info, getters and setters for these properties
- *           Q_PROPERTY(int containedInFolderId        READ containedInFolderId        WRITE setContainedInFolderId)
+ *           Q_PROPERTY(int     containedInFolderId     READ containedInFolderId     WRITE setContainedInFolderId  )
+ *           Q_PROPERTY(QString containedInFolderPath   READ containedInFolderPath   WRITE setContainedInFolderPath)
  *
  *        We can't use this macro for Folder<NE> classes because templated classes need their member function
  *        declarations and definitions combined.

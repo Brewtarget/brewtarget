@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <QSqlRecord>
 
+#include "model/FolderPropertyBase.h"
 #include "model/Ingredient.h"
 #include "model/IngredientBase.h"
 #include "model/IngredientAmount.h"
@@ -102,7 +103,8 @@ class Hop : public Ingredient,
    INGREDIENT_BASE_DECL(Hop)
    FOLDER_BASE_DECL(Hop)
    // See model/FolderPropertyBase.h for info, getters and setters for these properties
-   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
+   Q_PROPERTY(int     containedInFolderId     READ containedInFolderId     WRITE setContainedInFolderId  )
+   Q_PROPERTY(QString containedInFolderPath   READ containedInFolderPath   WRITE setContainedInFolderPath)
 
 public:
    /**

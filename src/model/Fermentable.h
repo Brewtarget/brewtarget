@@ -36,6 +36,7 @@
 #include "measurement/Amount.h"
 #include "measurement/ConstrainedAmount.h"
 #include "measurement/Unit.h"
+#include "model/FolderPropertyBase.h"
 #include "model/Ingredient.h"
 #include "model/IngredientBase.h"
 #include "model/IngredientAmount.h"
@@ -105,7 +106,8 @@ class Fermentable : public Ingredient,
    INGREDIENT_BASE_DECL(Fermentable)
    FOLDER_BASE_DECL(Fermentable)
    // See model/FolderPropertyBase.h for info, getters and setters for these properties
-   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
+   Q_PROPERTY(int     containedInFolderId     READ containedInFolderId     WRITE setContainedInFolderId  )
+   Q_PROPERTY(QString containedInFolderPath   READ containedInFolderPath   WRITE setContainedInFolderPath)
 
 public:
    /**

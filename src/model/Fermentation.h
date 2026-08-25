@@ -59,7 +59,8 @@ class Fermentation : public NamedEntity,
    FOLDER_BASE_DECL(Fermentation)
    STEP_OWNER_COMMON_DECL(Fermentation, fermentation)
    // See model/FolderPropertyBase.h for info, getters and setters for these properties
-   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
+   Q_PROPERTY(int     containedInFolderId     READ containedInFolderId     WRITE setContainedInFolderId  )
+   Q_PROPERTY(QString containedInFolderPath   READ containedInFolderPath   WRITE setContainedInFolderPath)
    // See model/StepOwnerBase.h for info, getters and setters for these properties
    Q_PROPERTY(QList<std::shared_ptr<FermentationStep>> steps   READ steps   WRITE setSteps   STORED false)
    Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)

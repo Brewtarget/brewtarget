@@ -438,6 +438,7 @@ public:
 
    /**
     *
+    * @param baseFolderPath
     * @param items
     */
    void exportItems(QString const & baseFolderPath, QList<NE const *> const & items) const {

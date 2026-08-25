@@ -33,6 +33,7 @@ Various improvements, including:
 * Range comparison on the water chemistry is not quite right [572](https://github.com/Brewtarget/brewtarget/issues/572)
 * 5.1.x - snapshots are not showing [1139](https://github.com/Brewtarget/brewtarget/issues/1139)
 * 5.1.1 Install Issue, upgrading from 2.0.2 - database fails to update [1143](https://github.com/Brewtarget/brewtarget/issues/1143)
+* Selecting a folder doesn't let you export its contents [1148](https://github.com/Brewtarget/brewtarget/issues/1148)
 
 ### Release Timestamp
 Wed, 19 Aug 2026 05:01:02 +0100

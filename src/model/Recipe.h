@@ -147,7 +147,8 @@ class Recipe : public NamedEntity,
    FOLDER_BASE_DECL(Recipe)
 
    // See model/FolderPropertyBase.h for info, getters and setters for these properties
-   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
+   Q_PROPERTY(int     containedInFolderId     READ containedInFolderId     WRITE setContainedInFolderId  )
+   Q_PROPERTY(QString containedInFolderPath   READ containedInFolderPath   WRITE setContainedInFolderPath)
 
    /**
     * \brief \c MainWindow is a friend so it can access \c Recipe::recalcAll() and \c Recipe::recalcIfNeeded()

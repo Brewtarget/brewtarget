@@ -27,6 +27,7 @@
 #include <QString>
 #include <QStringList>
 
+#include "model/FolderPropertyBase.h"
 #include "model/Ingredient.h"
 #include "model/IngredientBase.h"
 #include "model/IngredientAmount.h"
@@ -85,7 +86,8 @@ class Yeast : public Ingredient,
    INGREDIENT_BASE_DECL(Yeast)
    FOLDER_BASE_DECL(Yeast)
    // See model/FolderPropertyBase.h for info, getters and setters for these properties
-   Q_PROPERTY(int containedInFolderId   READ containedInFolderId   WRITE setContainedInFolderId)
+   Q_PROPERTY(int     containedInFolderId     READ containedInFolderId     WRITE setContainedInFolderId  )
+   Q_PROPERTY(QString containedInFolderPath   READ containedInFolderPath   WRITE setContainedInFolderPath)
 
 public:
    /**

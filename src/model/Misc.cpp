@@ -148,7 +148,8 @@ TypeLookup const Misc::typeLookup {
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,
-    &IngredientBase<Misc>::typeLookup}
+    &IngredientBase<Misc>::typeLookup,
+    &FolderPropertyBase<Misc>::typeLookup}
 };
 static_assert(std::is_base_of<Ingredient, Misc>::value);
 

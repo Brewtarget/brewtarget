@@ -107,6 +107,14 @@ public:
     */
    [[nodiscard]] static QString subPath(QString const & basePath, QString const & fullPath);
 
+   /**
+    * @brief Given two folder paths, modifies the first one to be the common path prefix of both
+    *
+    * @param baseFolderPath
+    * @param folderPath
+    */
+   static void commonPathPrefix(QString & baseFolderPath, QString const & folderPath);
+
 protected:
    bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
 };
@@ -300,6 +308,28 @@ public:
    }
 
    /**
+    * Recursively get either the NE or the Folder<NE> children of this folder and its subfolders
+    * @return
+    */
+   template<class ChildType>
+   QList<std::shared_ptr<ChildType>> descendants() const requires (std::same_as<ChildType, NE> ||
+                                                                   std::same_as<ChildType, Folder<NE>>) {
+      QList<std::shared_ptr<ChildType>> result = this->children<ChildType>();
+
+      QList<std::shared_ptr<Folder<NE>>> subFolders;
+      if constexpr (std::same_as<ChildType, NE>) {
+         subFolders = this->children<Folder<NE>>();
+      } else {
+         // We don't need to call children<Folder<NE>>() here as we already called it to populate result
+         subFolders = result;
+      }
+      for (auto const & subFolder : subFolders) {
+         result.append(subFolder->template descendants<ChildType>());
+      }
+      return result;
+   }
+
+   /**
     * Convenience wrappers for above
     */
    QList<std::shared_ptr<NE>        > childItems  () const { return this->children<NE        >(); }
@@ -311,7 +341,11 @@ public:
       // This isn't the most efficient way to do this, but it works, and we can always optimise it later if need be.
       return this->numChildren() == 0;
    }
-
+   QList<std::shared_ptr<NE>        > descendantItems  () const { return this->descendants<NE        >(); }
+   QList<std::shared_ptr<Folder<NE>>> descendantFolders() const { return this->descendants<Folder<NE>>(); }
+   int numDescendants() const {
+      return this->descendantItems().size() + this->descendantFolders().size();
+   }
 
 protected:
    [[nodiscard]] ObjectStore & getObjectStoreTypedInstance() const override {

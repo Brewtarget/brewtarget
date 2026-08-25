@@ -198,7 +198,8 @@ TypeLookup const Hop::typeLookup {
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,
-    &IngredientBase<Hop>::typeLookup}
+    &IngredientBase<Hop>::typeLookup,
+    &FolderPropertyBase<Hop>::typeLookup}
 };
 static_assert(std::is_base_of<Ingredient, Hop>::value);
 

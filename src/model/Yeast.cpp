@@ -200,7 +200,8 @@ TypeLookup const Yeast::typeLookup {
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,
-    &IngredientBase<Yeast>::typeLookup}
+    &IngredientBase<Yeast>::typeLookup,
+    &FolderPropertyBase<Yeast>::typeLookup}
 };
 static_assert(std::is_base_of<Ingredient, Yeast>::value);
 

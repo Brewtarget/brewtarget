@@ -17,7 +17,6 @@
 #define MODEL_INGREDIENT_H
 #pragma once
 
-#include "model/FolderPropertyBase.h"
 #include "model/OutlineableNamedEntity.h"
 #include "utils/EnumStringMapping.h"
 #include "utils/TypeTraits.h"

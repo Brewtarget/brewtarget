@@ -31,6 +31,7 @@
 #include <QString>
 #include <QWidget>
 
+#include "model/Folder.h"
 #include "model/StockPurchase.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/WindowDistributor.h"
@@ -169,6 +170,11 @@ protected:
       // We show the context menu even if nothing "valid" is under the cursor, as user may want to create a root-level
       // folder, or import from a file.
       //
+      // Note that the CommonContextMenuHelper::Selected struct holds enough info for us to work out what to show in the
+      // context menu but not necessarily all the info needed to perform every possible action on that menu.  (Eg, to
+      // export things, we need a list of each selected primary item.  We don't pass that in at this stage because it's
+      // not needed just to show the context menu.)
+      //
       CommonContextMenuHelper::Selected<NE, SNE> selected = this->getNumbersSelected();
       if (selectedViewIndex.isValid()) {
          TreeNode * selectedNode = this->doTreeNode(selectedViewIndex);
@@ -304,12 +310,44 @@ public:
    }
 
    /**
+    * \brief Return indexes of all selected items.
+    *
+    *        According to https://runebook.dev/en/docs/qt/qitemselectionmodel/selectedRows, calling
+    *        QItemSelectionModel::selectedRows() doesn't necessarily give you each and every selected row.  Moreover,
+    *        we observe that it can sometimes give you a row that isn't selected but isn't invalid either (eg when you
+    *        click outside the tree).
+    *
+    *        QItemSelectionModel::selection() is more reliable.  It gives a list of ranges, for each of which we can
+    *        loop through to get selected items.
+    *
+    *        We still need to deal with the case that, if the user clicked outside the tree (but still in the tree's
+    *        viewport), you get an invalid QModelIndex instead of nothing selected, but it does seem to be consistently
+    *        invalid in that instance, so we can filter it out.
+    *
+    * @return
+    */
+   QModelIndexList getSelectedModelIndexes() const {
+      QModelIndexList selectedModelIndexes;
+      for (QItemSelectionRange const & range : this->derived().selectionModel()->selection()) {
+         for (int row = range.top(); row <= range.bottom(); ++row) {
+            if (QModelIndex const viewIndex = range.model()->index(row, 0);
+                viewIndex.isValid()) {
+               if (QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+                   modelIndex.isValid()) {
+                  selectedModelIndexes.append(modelIndex);
+               }
+            }
+         }
+      }
+      return selectedModelIndexes;
+   }
+
+   /**
     * \brief Returns a (possibly empty) list of all the selected Primary items
     */
    QList<std::shared_ptr<NE>> getMultipleSelectedPrimary() const {
       QList<std::shared_ptr<NE>> selectedItems;
-      for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
-         QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+      for (QModelIndex const & modelIndex : this->getSelectedModelIndexes()) {
          TreeNode * treeNode = this->m_model.treeNode(modelIndex);
          // Normally leave this commented out unless we're specifically debugging issues with tree selections
 //         qDebug() << Q_FUNC_INFO << *treeNode << "is selected";
@@ -326,8 +364,7 @@ public:
     * \brief Returns the first (if any) selected Primary item
     */
    std::shared_ptr<NE> getFirstSelectedPrimary() const {
-      for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
-         QModelIndex modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+      for (QModelIndex const & modelIndex : this->getSelectedModelIndexes()) {
          if (TreeNode * treeNode = this->m_model.treeNode(modelIndex);
              treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
             TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
@@ -337,15 +374,27 @@ public:
       return nullptr;
    }
 
+   QList<std::shared_ptr<Folder<NE>>> getMultipleSelectedFolders() const requires (HasFolder<NE>) {
+      QList<std::shared_ptr<Folder<NE>>> selectedFolders;
+      for (QModelIndex const & modelIndex : this->getSelectedModelIndexes()) {
+         if (TreeNode * treeNode = this->m_model.treeNode(modelIndex);
+             treeNode->classifier() == TreeNodeClassifier::Folder) {
+            TreeFolderNode<NE> const & treeFolderNode = static_cast<TreeFolderNode<NE> &>(*treeNode);
+            selectedFolders.append(treeFolderNode.underlyingItem());
+         }
+      }
+
+      return selectedFolders;
+   }
+
    /**
-    * \brief Gets the folder (or containing folder), if any, for the supplied index.  Thus, if the item at the  supplied
-    *        index is a folder, that is returned.  Otherwise, the item's containing folder, if any, is returned.
+    * \brief Gets the folder (or containing folder), if any, for the first selected item.  Thus, if the first selected
+    *        item is a folder, that is returned.  Otherwise, the item's containing folder, if any, is returned.
     *
     *        NB: Not all trees support folders.  Specifically, the StockPurchase/StockUse trees do not have folders.
     */
    std::shared_ptr<Folder<NE>> getCurrentFolder() const requires (HasFolder<NE>) {
-      for (QModelIndex viewIndex : this->derived().selectionModel()->selectedRows()) {
-         QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
+      for (QModelIndex const & modelIndex : this->getSelectedModelIndexes()) {
          if (auto folder = this->m_model.folder(modelIndex)) {
             return folder;
          }
@@ -356,36 +405,16 @@ public:
    CommonContextMenuHelper::Selected<NE, SNE> getNumbersSelected() const {
       CommonContextMenuHelper::Selected<NE, SNE> selected;
 
-      //
-      // As explained at https://runebook.dev/en/docs/qt/qitemselectionmodel/selectedRows, calling
-      // QItemSelectionModel::selectedRows() doesn't necessarily give you each and every selected row.  (It can also
-      // give you a row that isn't selected but isn't invalid either.)
-      //
-      // QItemSelectionModel::selection() gives a list of ranges.  For each range, we loop through its rows.
-      //
-      QModelIndexList selectedIndexes;
-      for (QItemSelectionRange const & range : this->derived().selectionModel()->selection()) {
-         for (int row = range.top(); row <= range.bottom(); ++row) {
-            //
-            // You might think that, if the user clicked outside the tree (but still in the tree's viewport), we'd have
-            // no selected rows.  But, in fact, we can have an invalid QModelIndex returned in such a case.
-            //
-            QModelIndex viewIndex = range.model()->index(row, 0);
-            if (viewIndex.isValid()) {
-               QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
-               if (modelIndex.isValid()) {
-                  TreeNode const * treeNode = this->m_model.treeNode(modelIndex);
-                  switch (treeNode->classifier()) {
-                     case TreeNodeClassifier::PrimaryItem  : ++selected.numPrimary  ; break;
-                     case TreeNodeClassifier::SecondaryItem: ++selected.numSecondary; break;
-                     case TreeNodeClassifier::Folder       : ++selected.numFolders  ; break;
-                     case TreeNodeClassifier::Root         :
-                        // I think this should be impossible, but OK to ignore if happens
-                        break;
-                        // No default as we want the compiler to warn us if we missed an option above
-                  }
-               }
-            }
+      for (QModelIndex const & modelIndex : this->getSelectedModelIndexes()) {
+         switch (TreeNode const * treeNode = this->m_model.treeNode(modelIndex);
+                 treeNode->classifier()) {
+            case TreeNodeClassifier::PrimaryItem  : ++selected.numPrimary  ; break;
+            case TreeNodeClassifier::SecondaryItem: ++selected.numSecondary; break;
+            case TreeNodeClassifier::Folder       : ++selected.numFolders  ; break;
+            case TreeNodeClassifier::Root         :
+               // I think this should be impossible, but OK to ignore if happens
+               break;
+               // No default as we want the compiler to warn us if we missed an option above
          }
       }
 
@@ -859,8 +888,96 @@ public:
     * \brief Subclass should call this from its \c exportSelected slot
     */
    void doExportSelected() const {
+      //
+      // Note that we don't have to worry about secondary items here, as the export will deal with that automatically.
+      // Eg, if you export a Recipe and the export format supports BrewLogs, then the Recipe's BrewLogs will get
+      // included in the export without us having to explicitly specify them.
+      //
       QList<std::shared_ptr<NE>> selectedItems = this->getMultipleSelectedPrimary();
-      this->m_contextMenus.exportItems(QString{"/"}, CastAndConvert::toConstRaw(selectedItems));
+
+      //
+      // For similar reasons, we don't have to pass in a list of folders.
+      //
+      // However, if a folder is selected then we do need to (recursively) add the primary items of its contents to the
+      // list we give exportItems.  We also want to pass the folder under the cursor, if there is one, so that the
+      // export can handle relative paths.  Eg, suppose we have a folder "/foo/bar" containing two primary items:
+      //
+      //    /foo/bar/hum
+      //    /foo/bar/bug
+      //
+      // If you select "/foo/bar/hum" and "/foo/bar/bug", then they should get exported with baseFolderPath "/foo/bar",
+      // so that, in the export, each item has path "".  Thus the export contains:
+      //
+      //    hum
+      //    bug
+      //
+      // If you select folder "/foo/bar" then the same two items should get exported, but this time with baseFolderPath
+      // "/foo", so that, in the export, each item has path "bar".  Thus the export contains:
+      //
+      //    bar/hum  (ie item hum with folder path bar)
+      //    bar/bug
+      //
+      // What about if the user has selected folder "/foo/bar" and primary item "/baz/qux"?  In that case, we want
+      // baseFolderPath of "/", so that the export contains:
+      //
+      //    foo/bar/hum
+      //    foo/bar/bug
+      //    baz/qux
+      //
+      // This is simple to do, because we just find the common path prefix of all selected folders and items.
+      //
+      // The ALTERNATIVE would be to try to construct an export containing:
+      //
+      //    bar/hum
+      //    bar/bug
+      //    qux
+      //
+      // This would reflect the fact that the user selected "bar" and "qux", but it's somewhat more work to achieve
+      // because we'd now have to pass a separate relative path for each item we're exporting.  If it turns out that
+      // there is strong user desire for this behaviour then we'll implement it.  But, for now, simplicity wins, and we
+      // go with the prior option.
+      //
+      QString baseFolderPath{""};
+      if constexpr (HasFolder<NE>) {
+         QList<std::shared_ptr<Folder<NE>>> selectedFolders = this->getMultipleSelectedFolders();
+         bool doneFirstFolder = false;
+         for (auto const & folder : selectedFolders) {
+            //
+            // We're looking for the longest common path of all the folders.  The path of the first folder is the first
+            // candidate path.  As we examine subsequent folders, this candidate path can get shorter.  It can never get
+            // longer.
+            //
+            if (!doneFirstFolder) {
+               //
+               // Note that we can't assume baseFolderPath being empty means we're on the first folder: we might
+               // already have processed two folders with no common path.
+               //
+               baseFolderPath = folder->path();
+               doneFirstFolder = true;
+
+               //
+               // At the moment, selectedItems contains just the primary items directly selected by the user.  So this
+               // is a good time to get the common path prefix from them
+               //
+               for (auto const & selectedItem : selectedItems) {
+                  FolderCommon::commonPathPrefix(baseFolderPath, selectedItem->containedInFolderPath());
+               }
+            } else if (!baseFolderPath.isEmpty()) {
+               //
+               // Conversely, if baseFolderPath is empty at any point after the first folder, there is no point
+               // searching for a shorter common path!  Hence we only come into this branch if it is not empty.
+               //
+               FolderCommon::commonPathPrefix(baseFolderPath, folder->path());
+            }
+
+            //
+            // Add contents of folder to selectedItems
+            //
+            selectedItems.append(folder->descendantItems());
+         }
+      }
+
+      this->m_contextMenus.exportItems(baseFolderPath, CastAndConvert::toConstRaw(selectedItems));
       return;
    }
 

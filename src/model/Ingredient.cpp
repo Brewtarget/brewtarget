@@ -34,8 +34,7 @@ TypeLookup const Ingredient::typeLookup {
       // IngredientBase.
    },
    // Parent classes lookup
-   {&OutlineableNamedEntity::typeLookup,
-    std::addressof(FolderPropertyBase<Ingredient>::typeLookup)}
+   {&OutlineableNamedEntity::typeLookup}
 };
 static_assert(std::is_base_of<OutlineableNamedEntity, Ingredient>::value);
 

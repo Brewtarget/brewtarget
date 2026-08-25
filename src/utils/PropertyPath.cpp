@@ -170,7 +170,7 @@ QVariant PropertyPath::getValue(NamedEntity const & obj) const {
 
          // It's a coding error if we're trying to get a non-existent property on the NamedEntity subclass for this
          // record.
-         int propertyIndex = neMetaObject->indexOfProperty(**property);
+         int const propertyIndex = neMetaObject->indexOfProperty(**property);
          Q_ASSERT(propertyIndex >= 0);
          QMetaProperty neMetaProperty = neMetaObject->property(propertyIndex);
 
@@ -183,7 +183,7 @@ QVariant PropertyPath::getValue(NamedEntity const & obj) const {
          if (neMetaProperty.isReadable()) {
             retVal = ne->property(**property);
             if (!retVal.isValid()) {
-               auto mo = ne->metaObject();
+               auto const mo = ne->metaObject();
                qWarning() <<
                   Q_FUNC_INFO << "Property" << *property << "on" << mo->className() << "#" << ne->key() <<
                   "not readable.  Property Index =" << mo->indexOfProperty(**property);
