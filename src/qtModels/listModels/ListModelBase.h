@@ -65,7 +65,7 @@ public:
       }
 
       if (tmp.size() > 0) {
-         int size = m_items.size();
+         int const size = static_cast<int>(m_items.size());
          this->derived().beginInsertRows(QModelIndex(), size, size + tmp.size());
          m_items.append(tmp);
 
@@ -109,11 +109,11 @@ public:
    }
 
    void remove(NE * item) {
-      int ndx = m_items.indexOf(item);
-      if (ndx >= 0) {
-         this->derived().beginRemoveRows(QModelIndex(), ndx, ndx);
+      int const index = static_cast<int>(m_items.indexOf(item));
+      if (index >= 0) {
+         this->derived().beginRemoveRows(QModelIndex(), index, index);
          this->derived().disconnect(item, nullptr, &this->derived(), nullptr);
-         m_items.removeAt(ndx);
+         m_items.removeAt(index);
          this->derived().endRemoveRows();
       }
       return;
@@ -165,12 +165,12 @@ protected:
          return;
       }
 
-      QString propName(prop.name());
-      if (propName == PropertyNames::NamedEntity::name) {
-         int ndx = m_items.indexOf(neSender);
-         if (ndx >= 0 ) {
-            this->derived().emit dataChanged(this->derived().createIndex(ndx, 0),
-                                        this->derived().createIndex(ndx, 0));
+      if (QString const propName(prop.name());
+          propName == PropertyNames::NamedEntity::name) {
+         if (int const index = static_cast<int>(m_items.indexOf(neSender));
+             index >= 0) {
+            this->derived().emit dataChanged(this->derived().createIndex(index, 0),
+                                             this->derived().createIndex(index, 0));
          }
       }
       return;
@@ -184,7 +184,7 @@ protected:
       }
 
       if (!m_items.contains(ne) ) {
-         int size = m_items.size();
+         int const size = static_cast<int>(m_items.size());
          this->derived().beginInsertRows(QModelIndex(), size, size);
          m_items.append(ne);
          this->derived().connect(ne, &NamedEntity::changed, &this->derived(), &Derived::itemChanged );

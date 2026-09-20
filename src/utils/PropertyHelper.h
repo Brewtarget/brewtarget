@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * utils/PropertyHelper.h is part of Brewtarget, and is copyright the following authors 2025:
+ * utils/PropertyHelper.h is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -127,7 +127,7 @@ namespace PropertyHelper {
             Q_ASSERT(std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType));
             // It's a coding error if physicalQuantity was not supplied for a non-Amount quantity column.  Equally it's
             // a coding error to supply it for the drop-down chooser column or for an Amount column.
-            if (typeInfo.typeIndex == typeid(double)) {
+            if (typeInfo.typeIndex == TypeInfo::Index::Double) {
                // For a double representing a ChoiceOfPhysicalQuantity, we need to be passed in the current
                // PhysicalQuantity because we don't know how to obtain it generically.
                Q_ASSERT(physicalQuantity);
@@ -156,14 +156,14 @@ namespace PropertyHelper {
                                      forcedSystemOfMeasurement,
                                      forcedRelativeScale)
          };
-         if (typeInfo.typeIndex == typeid(double)) {
+         if (typeInfo.typeIndex == TypeInfo::Index::Double) {
             processedValue = Optional::variantFromRaw(value.toString(), amount.quantity, typeInfo.isOptional());
          } else {
             // Comments above in readDataFromModel apply equally here.  You can cast between MassOrVolumeAmt and
             // Measurement::Amount, but not between QVariant<MassOrVolumeAmt> and QVariant<Measurement::Amount>, so
             // we have to do the casting before we wrap.
             if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(*typeInfo.fieldType) ||
-                typeInfo.typeIndex == typeid(Measurement::Amount)) {
+                typeInfo.typeIndex == TypeInfo::Index::MeasurementAmount) {
 
                // If this is the drop-down for the PhysicalQuantity of the amount, then changing it is just another way
                // of changing the amount itself.

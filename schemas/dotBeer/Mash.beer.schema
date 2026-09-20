@@ -15,7 +15,6 @@
   "$id": "https://dotbeer.org/schema/Mash.beer.schema",
   "type": "object",
   "description": "A mash procedure, which can be used by multiple recipes.",
-  "additionalProperties": false,
   "properties": {
     "name": {
       "type": "string"
@@ -44,6 +43,7 @@
     "grain_temperature",
     "mash_steps"
   ],
+  "unevaluatedProperties": false,
   "$defs": {
     "MashStep": {
       "type": "object",
@@ -84,13 +84,13 @@
           }
         }
       ],
-      "unevaluatedProperties": false,
       "required": [
         "name",
         "step_type",
         "start_temperature",
         "step_time"
-      ]
+      ],
+      "unevaluatedProperties": false
     }
   }
 }

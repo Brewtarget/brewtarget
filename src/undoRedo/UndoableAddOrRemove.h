@@ -81,13 +81,13 @@ public:
                                 QString const & description,
                                 QUndoCommand * parent = nullptr) :
       QUndoCommand(parent),
-      updatee(updatee),
-      doer(doer),
-      whatToAddOrRemove(whatToAddOrRemove),
-      undoer(undoer),
-      doCallback(doCallback),
-      undoCallback(undoCallback),
-      everDone(false) {
+      m_updatee(updatee),
+      m_doer(doer),
+      m_whatToAddOrRemove(whatToAddOrRemove),
+      m_undoer(undoer),
+      m_doCallback(doCallback),
+      m_undoCallback(undoCallback),
+      m_everDone(false) {
       // Uncomment this block if you need to diagnose problems that result in hitting the asserts below
 //      if (!whatToAddOrRemove || whatToAddOrRemove->key() <= 0) {
 //         qCritical().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
@@ -147,37 +147,37 @@ private:
       //
       if (!isUndo) {
          qDebug() <<
-            Q_FUNC_INFO << (this->everDone ? "Redo" : "Do" ) << this->text() << "for " <<
-            this->whatToAddOrRemove->metaObject()->className() << "#" << this->whatToAddOrRemove->key() << "(" <<
-            this->whatToAddOrRemove->name() << ")";
+            Q_FUNC_INFO << (this->m_everDone ? "Redo" : "Do" ) << this->text() << "for " <<
+            this->m_whatToAddOrRemove->metaObject()->className() << "#" << this->m_whatToAddOrRemove->key() << "(" <<
+            this->m_whatToAddOrRemove->name() << ")";
          // Normally leave the next line commented out as it generates a lot of logging
 //         qDebug().noquote() << Q_FUNC_INFO << Logging::getStackTrace();
 
-         this->whatToAddOrRemove = (this->updatee.*(this->doer))(this->whatToAddOrRemove);
+         this->m_whatToAddOrRemove = (this->m_updatee.*(this->m_doer))(this->m_whatToAddOrRemove);
          qDebug() <<
-            Q_FUNC_INFO << (this->everDone ? "Redo" : "Do" ) << "Returned " <<
-            this->whatToAddOrRemove->metaObject()->className() << "#" << this->whatToAddOrRemove->key() << "(" <<
-            this->whatToAddOrRemove->name() << ")";
+            Q_FUNC_INFO << (this->m_everDone ? "Redo" : "Do" ) << "Returned " <<
+            this->m_whatToAddOrRemove->metaObject()->className() << "#" << this->m_whatToAddOrRemove->key() << "(" <<
+            this->m_whatToAddOrRemove->name() << ")";
 
-         if (this->doCallback != nullptr) {
-            (*(this->doCallback))(this->whatToAddOrRemove);
+         if (this->m_doCallback != nullptr) {
+            (*(this->m_doCallback))(this->m_whatToAddOrRemove);
          }
 
          // In this implementation "Do" and "Redo" are identical, but it's nonetheless useful for debugging purposes to
          // be able to distinguish the two cases.
-         this->everDone = true;
+         this->m_everDone = true;
       } else {
          qDebug() <<
-            Q_FUNC_INFO << "Undo" << this->text() << "for " << this->whatToAddOrRemove->metaObject()->className() <<
-            "#" << this->whatToAddOrRemove->key() << "(" << this->whatToAddOrRemove->name() << ")";
+            Q_FUNC_INFO << "Undo" << this->text() << "for " << this->m_whatToAddOrRemove->metaObject()->className() <<
+            "#" << this->m_whatToAddOrRemove->key() << "(" << this->m_whatToAddOrRemove->name() << ")";
 
-         this->whatToAddOrRemove = (this->updatee.*(this->undoer))(this->whatToAddOrRemove);
+         this->m_whatToAddOrRemove = (this->m_updatee.*(this->m_undoer))(this->m_whatToAddOrRemove);
          qDebug() <<
-            Q_FUNC_INFO << "Undo Returned " << this->whatToAddOrRemove->metaObject()->className() << "#" <<
-            this->whatToAddOrRemove->key() << "(" << this->whatToAddOrRemove->name() << ")";
+            Q_FUNC_INFO << "Undo Returned " << this->m_whatToAddOrRemove->metaObject()->className() << "#" <<
+            this->m_whatToAddOrRemove->key() << "(" << this->m_whatToAddOrRemove->name() << ")";
 
-         if (this->undoCallback != nullptr) {
-            (*(this->undoCallback))(this->whatToAddOrRemove);
+         if (this->m_undoCallback != nullptr) {
+            (*(this->m_undoCallback))(this->m_whatToAddOrRemove);
          }
       }
 
@@ -189,13 +189,13 @@ private:
    //! No move assignment
    UndoableAddOrRemove & operator=(UndoableAddOrRemove &&) = delete;
 
-   UU & updatee;
-   std::shared_ptr<VV> (BB::*doer)(std::shared_ptr<VV>);
-   std::shared_ptr<VV> whatToAddOrRemove;
-   std::shared_ptr<VV> (BB::*undoer)(std::shared_ptr<VV>);
-   void (*doCallback)(std::shared_ptr<VV>);
-   void (*undoCallback)(std::shared_ptr<VV>);
-   bool everDone;
+   UU & m_updatee;
+   std::shared_ptr<VV> (BB::*m_doer)(std::shared_ptr<VV>);
+   std::shared_ptr<VV> m_whatToAddOrRemove;
+   std::shared_ptr<VV> (BB::*m_undoer)(std::shared_ptr<VV>);
+   void (*m_doCallback)(std::shared_ptr<VV>);
+   void (*m_undoCallback)(std::shared_ptr<VV>);
+   bool m_everDone;
 };
 
 /*!

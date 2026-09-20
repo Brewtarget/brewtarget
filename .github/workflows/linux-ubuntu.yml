@@ -45,7 +45,7 @@ jobs:
         # LTS release and the update of ubuntu-latest (eg in October 2022, it was still Ubuntu 20.04 rather than 22.04).
         # So we explicitly specify here which versions we want to build on.
         #
-        os: [ubuntu-22.04, ubuntu-24.04]
+        os: [ubuntu-24.04, ubuntu-26.04]
     steps:
       - uses: actions/checkout@v6
         with:
@@ -78,17 +78,6 @@ jobs:
       - name: Create CMake build environment
         run: cmake -E make_directory ${{github.workspace}}/build
 
-      - name: Configure CMake
-        shell: bash
-        working-directory: ${{github.workspace}}/build
-        run: |
-          umask 022
-          cmake \
-            DESTDIR=/usr \
-            -DDO_RELEASE_BUILD=ON \
-            -DNO_MESSING_WITH_FLAGS=ON \
-            $GITHUB_WORKSPACE
-
       - name: Build (with Meson)
         id: meson-build
         working-directory: ${{github.workspace}}/mbuild
@@ -98,7 +87,7 @@ jobs:
           meson compile
 
       # The 'export QT_DEBUG_PLUGINS=1' give us diagnostics in the event that there are problems initialising QT
-      # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb sub-module trying to connect to a non-existent display
+      # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb submodule trying to connect to a non-existent display
       # (which would cause the test runner to abort before running any tests).
       - name: Test (via Meson)
         id: meson-test
@@ -109,12 +98,24 @@ jobs:
           export QT_QPA_PLATFORM=offscreen
           meson test
 
+      #
+      # As explained at https://hnsws.blogspot.com/2026/05/openspace-builds-on-github-actions.html, it's possible for a
+      # highly parallel CMake build to run out of memory on a GitHub Action runner.  You'll see output along the
+      # following lines:
+      #
+      #    gmake[2]: *** [ CMakeFiles/btobjlib.dir/build.make:239: CMakeFiles/btobjlib.dir/src/Algorithms.cpp.o ] Terminated
+      #    gmake[1]: *** [ CMakeFiles/Makefile2:206: CMakeFiles/btobjlib.dir/all ] Terminated
+      #    gmake: *** [ Makefile:146: all ] Terminated
+      #    Error: Process completed with exit code 143.
+      #
+      # Hence, we limit parallelism below
+      #
       - name: Build (with CMake)
         id: cmake-build
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: |
-          make
+           cmake --build . --parallel 3
 
       - name: Test (via CMake)
         id: cmake-test
@@ -143,7 +144,7 @@ jobs:
       #    libxerces-c3.2t64
       #
       # I suspect this is because there are restrictions on what you can install on GitHub action runners - presumably
-      # because they want you to not to do things other than builds with them.
+      # because they want you not to do things other than builds with them.
       #
       - name: Package
         working-directory: ${{github.workspace}}/mbuild

@@ -116,8 +116,10 @@
           "$ref": "Measurement.beer.schema#/$defs/Percentage"
         }
       }
+//      "unevaluatedProperties": false, ¥¥ 2
     }
   ],
+//  "unevaluatedProperties": false, ¥¥ 1
   "$defs": {
     "FermentableBase": {
       "type": "object",
@@ -188,6 +190,7 @@
         // Normally you want at least one of "yield_fine_grind", "yield_coarse_grind", "yield_fine_coarse_difference", "yield_potential"
         "color"
       ]
+//      "unevaluatedProperties": false ¥¥ 3
     },
     "FermentableAmount" : {
       "description": "The ways in which an amount of a Fermentable could be measured",
@@ -198,7 +201,8 @@
         {
           "$ref": "Measurement.beer.schema#/$defs/Mass"
         }
-      ]
+      ],
+      "unevaluatedProperties": false
     }
   }
 }

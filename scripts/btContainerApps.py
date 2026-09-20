@@ -526,7 +526,7 @@ def doFlatpak():
       btLogger.log.info('Installing flatpak')
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak']))
-      # We deliberately don't apt install flatpak-builder here -- see comment below
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'flatpak-builder']))
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'appstream']))
       btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'appstream-compose']))
       exe_flatpak = shutil.which('flatpak')
@@ -661,13 +661,13 @@ def doFlatpak():
    )
 
    #
-   # In theory, we could install flatpak builder using `sudo apt install flatpak-builder` (above where we install
-   # flatpak itself).  However, on Ubuntu 22.04, this installs too old a version.  Instead, we install via flatpak
-   # which gives us a more recent one.  Note, however, that we need to have installed the Platform and Sdk first.
+   # Although we could install flatpak builder using `sudo apt install flatpak-builder` (above where we install
+   # flatpak itself), this does not install Flatpak Linter (flatpak-builder-lint).  So we also we install flatpak
+   # builder via flatpak, as that does give us the linter.  Note, however, that we need to have installed the Platform and Sdk first.
    #
    # Note that Flatpak Linter (flatpak-builder-lint) is included in Flatpak Builder
    #
-   btLogger.log.info('Installing Flatpak Builder')
+   btLogger.log.info('Installing Flatpak Builder from Flatpak (to get Linter)')
    btExecute.abortOnRunFail(
 #      subprocess.run(['flatpak', '--user', 'install', 'flathub', '--assumeyes', 'org.flatpak.Builder'])
       subprocess.run(['flatpak', '--user', 'install', '--assumeyes', 'org.flatpak.Builder'])
@@ -699,7 +699,7 @@ def doFlatpak():
 
    #
    # Since we have to rebuild everything, we need the source code.  We want this in a subdirectory of the one holding
-   # the manifest, because flatpak-builder is going to copy it and we don't want to be trying to copy a directory tree
+   # the manifest, because flatpak-builder is going to copy it, and we don't want to be trying to copy a directory tree
    # inside itself.
    #
    btLogger.log.info('Copy source tree etc')
@@ -759,13 +759,13 @@ def doFlatpak():
    btExecute.abortOnRunFail(
       subprocess.run(
          ['flatpak',
-               '--user',
-               '--verbose',
-               'run',
-               '--command=flatpak-builder-lint',
-               'org.flatpak.Builder',
-               'manifest',
-               file_manifest.as_posix()],
+          '--user',
+          '--verbose',
+          'run',
+          '--command=flatpak-builder-lint',
+          'org.flatpak.Builder',
+          'manifest',
+          file_manifest.as_posix()],
          capture_output=False
       )
    )
@@ -797,48 +797,16 @@ def doFlatpak():
    #
    btLogger.log.info('Running Flatpak Builder')
    btExecute.abortOnRunFail(
-      #
-      # Because we needed to get a more recent version of Flatpak Builder than is in the Ubuntu 22.04 repositories, we
-      # install Flatpak Builder from a Flatpak (see above).  This means we need to invoke
-      # 'flatpak run org.flatpak.Builder' here rather than directly call 'flatpak-builder'.  As a result, we need to
-      # take care that there are separate options to the 'flatpak' command and to the
-      # 'org.flatpak.Builder' app it is invoking.  Eg this is why we see '--user' and '--verbose' twice below.
-      #
-      # However, there is a bit more pain/complexity to deal with:
-      #    (1) Because we are running Flatpak Builder as a Flatpak, it is somewhat isolated from the rest of the system.
-      #        Eg it cannot see org.kde.Sdk that we installed above.  The way we get around this is to tell Builder to
-      #        install any dependencies it needs (inside its own sandbox presumably) -- hence the
-      #        '--install-deps-from=flathub' option.
-      #    (2) In a GitHub Action, the install-deps-from option causes Flatpak Builder will fail with an error along the
-      #        lines of "Error installing deps: running flatpak --user install -y --noninteractive flathub
-      #        org.kde.Sdk/x86_64/6.10: Cannot autolaunch D-Bus without X11 $DISPLAY".  We get around this by running
-      #        Flatpak builder inside an isolated D-Bus instance -- hence the 'dbus-run-session --' wrapper.
-      #
-      # TBD: In 2026, when we get to a point where we are no longer supporting Ubuntu 22.04, we can probably switch to
-      #      using the apt repository version of flatpak-builder, which will then mean this call can be simplified down
-      #      to ['flatpak-builder',
-      #          '--user',
-      #          '--verbose'
-      #          dir_flatpakBuild.as_posix(),
-      #          file_manifest.as_posix()].
-      #
       subprocess.run(
          #
          # See https://docs.flatpak.org/en/latest/flatpak-builder-command-reference.html for flatpak-builder command
          # reference.
          #
-         ['dbus-run-session', '--',
-            'flatpak',
-          '--user',
-          '--verbose',
-          'run',
-          'org.flatpak.Builder',
-          '--user',
-          '--verbose',
-          '--install-deps-from=flathub', # In theory we already installed the dependencies above, but, in practice, we
-                                         # seem to need some more when we're running as a GitHub action.
-          dir_flatpakBuild.as_posix(),
-          file_manifest.as_posix()],
+         ['flatpak-builder',
+                    '--user',
+                    '--verbose',
+                    dir_flatpakBuild.as_posix(),
+                    file_manifest.as_posix()],
          capture_output=False
       )
    )

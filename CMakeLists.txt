@@ -1,16 +1,16 @@
-#╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-# CMakeLists.txt is part of Brewtarget, and is Copyright the following authors 2009-2026:
-#  - Chris Pavetto <chrispavetto@gmail.com>
-#  - Dan Cavanagh <dan@dancavanagh.com>
-#  - Daniel Moreno <danielm5@users.noreply.github.com>
-#  - Daniel Pettersson <pettson81@gmail.com>
-#  - Kregg Kemper <gigatropolis@yahoo.com>
-#  - Matt Young <mfsy@yahoo.com>
-#  - Maxime Lavigne (malavv) <duguigne@gmail.com>
-#  - Mik Firestone <mikfire@gmail.com>
-#  - Philip Greggory Lee <rocketman768@gmail.com>
-#  - Robby Workman <rworkman@slackware.com>
-#  - Théophane Martin <theophane.m@gmail.com>
+#----------------------------------------------------------------------------------------------------------------------
+# CMakeLists.txt is part of Brewtarget, and is copyright the following authors 2009-2026:
+#   • Chris Pavetto <chrispavetto@gmail.com>
+#   • Dan Cavanagh <dan@dancavanagh.com>
+#   • Daniel Moreno <danielm5@users.noreply.github.com>
+#   • Daniel Pettersson <pettson81@gmail.com>
+#   • Kregg Kemper <gigatropolis@yahoo.com>
+#   • Matt Young <mfsy@yahoo.com>
+#   • Maxime Lavigne (malavv) <duguigne@gmail.com>
+#   • Mik Firestone <mikfire@gmail.com>
+#   • Philip Greggory Lee <rocketman768@gmail.com>
+#   • Robby Workman <rworkman@slackware.com>
+#   • Théophane Martin <theophane.m@gmail.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -84,11 +84,12 @@
 #=======================================================================================================================
 #================================================= CMake Configuration =================================================
 #=======================================================================================================================
-cmake_minimum_required(VERSION 3.16)
-cmake_policy(VERSION 3.16)
-# Ensure we are using modern behaviour of the project command (introduced in CMake 3.0) which enables setting version
-# numbers via it (rather than manually setting individual major/minor/patch vars).
-cmake_policy(SET CMP0048 NEW)
+# Need CMake 3.20 for cmake_path
+cmake_minimum_required(VERSION 3.20)
+###cmake_policy(VERSION 3.16)
+#### Ensure we are using modern behaviour of the project command (introduced in CMake 3.0) which enables setting version
+#### numbers via it (rather than manually setting individual major/minor/patch vars).
+###cmake_policy(SET CMP0048 NEW)
 
 # Compatibility settings used with modern CMAKE (>= 3.29) used to pull BoostConfig.cmake from upstream
 # -> FindBoost cmake module was removed in recent versions.
@@ -119,7 +120,7 @@ endif()
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case).
 project(brewtarget VERSION 5.2.0 LANGUAGES CXX)
-message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
+message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION} with CMake ${CMAKE_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 # Sometimes we do need the capitalised version of the project name
 set(capitalisedProjectName Brewtarget)
@@ -151,8 +152,8 @@ option(NO_MESSING_WITH_FLAGS "On means do not add any build flags whatsoever. Ma
 #
 set(repoDir "${CMAKE_CURRENT_SOURCE_DIR}")
 
-# Location of custom CMake modules. (At the moment, there is only one, which is used for Windows packaging
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+#### Location of custom CMake modules. (At the moment, there is only one, which is used for Windows packaging
+###set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 #================================================= Install directories =================================================
 # Note that WIN32 is true "when the target system is Windows, including Win64" (see
@@ -250,8 +251,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-include_directories(${repoDir}/third-party/valijson/include/)
-
+include_directories(${PROJECT_SOURCE_DIR}/third-party/blaze/build/dist/include)
 include_directories(${repoDir}/src)
 include_directories("${CMAKE_BINARY_DIR}/src") # In case of out-of-source build.
 
@@ -312,6 +312,12 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 #
+# We have to tell the compiler if we want Link-Time Optimization (LTO) to run in parallel.  Fortunately it's the same
+# flag for both Clang and GCC.
+#
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto=auto")
+
+#
 # On Ubuntu 22.04, the packages for Qt6 differ from those for Qt5 in that they require you to build with the PIC option,
 # otherwise we'll get the error: "You must build your code with position independent code if Qt was built with
 # -reduce-relocations. " "Compile your code with -fPIC (and not with -fPIE)."
@@ -350,51 +356,6 @@ if(APPLE)
    # This is needed for Boost stacktrace on Mac
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE")
 endif()
-
-#======Speed up compilation by using precompiled headers (PCH) for development======
-
-# (ADD_PCH_RULE  _header_filename _src_list)
-# Version 7/26/2010
-#
-# use this macro before "add_executable"
-#
-# _header_filename
-#  header to make a .gch
-#
-# _src_list
-#   the variable name (do not use ${..}) which contains a
-#     a list of sources (a.cpp b.cpp c.cpp ...)
-#  This macro will append a header file to it, then this src_list can be used in
-#  "add_executable..."
-#
-#
-# Now a .gch file should be generated and gcc should use it.
-#        (add -Winvalid-pch to the cpp flags to verify)
-#
-# make clean should delete the pch file
-#
-# example : ADD_PCH_RULE(headers.h myprog_SRCS)
-MACRO (ADD_PCH_RULE  _header_filename _src_list)
-   set(_gch_filename "${CMAKE_CURRENT_BINARY_DIR}/${_header_filename}.gch")
-   set(_header "${CMAKE_CURRENT_SOURCE_DIR}/${_header_filename}")
-
-   LIST(APPEND ${_src_list} ${_gch_filename})
-
-   SET (_args ${CMAKE_CXX_FLAGS})
-   LIST(APPEND _args -c ${_header} -o ${_gch_filename})
-
-   GET_DIRECTORY_PROPERTY(DIRINC include_directories)
-   FOREACH(_inc ${DIRINC})
-      LIST(APPEND _args "-I" ${_inc})
-   ENDFOREACH(_inc ${DIRINC})
-
-   SEPARATE_ARGUMENTS(_args)
-
-   ADD_CUSTOM_COMMAND(OUTPUT ${_gch_filename}
-                      COMMAND rm -f ${_gch_filename}
-                      COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_args}
-                      DEPENDS ${_header})
-ENDMACRO(ADD_PCH_RULE _src_list _header_filename)
 
 #=======================================================================================================================
 #=================================================== Set build type ====================================================
@@ -449,7 +410,7 @@ if(APPLE)
    # It seems this is only needed on MacOS.  According to ./third-party/valijson/README.md we are not the only ones to
    # experience this!
    #
-   execute_process(COMMAND brew --prefix qt6 OUTPUT_VARIABLE CMAKE_PREFIX_PATH)
+   execute_process(COMMAND brew --prefix qt6 OUTPUT_VARIABLE CMAKE_PREFIX_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
    message(STATUS "CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}")
 endif()
 
@@ -467,7 +428,7 @@ set(CMAKE_AUTOMOC ON)
 #
 # (We don't want to do this extra manual include on the Meson builds because then we'd get duplicate symbols at the
 # linking stage.)
-add_compile_definitions(BUILDING_WITH_CMAKE)
+add_compile_definitions(MANUALLY_INCLUDE_MOC)
 
 # Set the AUTOUIC property on all targets.  This tells CMake to automatically handle the Qt uic code generator, without
 # having to use commands such as QT4_WRAP_UI(), QT5_WRAP_UI(), etc.
@@ -593,48 +554,8 @@ if(WIN32)
    get_filename_component(QT_BIN_DIR "${_qmake_executable}" DIRECTORY)
    message("QT_BIN_DIR = ${QT_BIN_DIR}")
 
-###   #
-###   # Per https://doc.qt.io/qt-6/windows-deployment.html, the windeployqt executable creates all the necessary folder
-###   # tree "containing the Qt-related dependencies (libraries, QML imports, plugins, and translations) required to run
-###   # the application from that folder".
-###   #
-###   # On some systems at least, looks like Qt6::windeployqt is already available in CMake (when Qt5::windeployqt) was
-###   # not.  If it is, then we can't try to set it up again as we'll get an error ("add_executable cannot create imported
-###   # target "Qt6::windeployqt" because another target with the same name already exists").
-###   #
-###   if (NOT TARGET Qt6::windeployqt)
-###      find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT_BIN_DIR}")
-###      if(EXISTS ${WINDEPLOYQT_EXECUTABLE})
-###         # Per https://cmake.org/cmake/help/latest/command/add_executable.html, "IMPORTED executables are useful for
-###         # convenient reference from commands like add_custom_command()".
-###         add_executable(Qt6::windeployqt IMPORTED)
-###         set_target_properties(Qt6::windeployqt PROPERTIES IMPORTED_LOCATION ${WINDEPLOYQT_EXECUTABLE})
-###      endif()
-###   endif()
-
    # International Components for Unicode
    file(GLOB IcuDlls "${QT_BIN_DIR}/libicu*.dll")
-
-###elseif(APPLE)
-###   #====================================================================================================================
-###   #=================================================== Mac Qt Stuff ===================================================
-###   #====================================================================================================================
-###
-###   # The macdeployqt executable shipped with Qt does for Mac what windeployqt does for Windows -- see
-###   # https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool
-###   #
-###   # At first glance, you might thanks that, with a few name changes, we might share all the CMake code for macdeployqt
-###   # and windeployqt.  However, as you will see below, the two programs share _only_ a top-level goal ("automate the
-###   # process of creating a deployable [folder / applicaiton bundle] that contains [the necessary Qt dependencies]" - ie
-###   # so that the end user does not have to install Qt to run our software).  They have completely different
-###   # implementations and command line options, so it would be unhelpful to try to treat them identically.
-###   find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${QT_BIN_DIR}")
-###   if(EXISTS ${MACDEPLOYQT_EXECUTABLE})
-###      # Per https://cmake.org/cmake/help/latest/command/add_executable.html, "IMPORTED executables are useful for
-###      # convenient reference from commands like add_custom_command()".
-###      add_executable(Qt6::macdeployqt IMPORTED)
-###      set_target_properties(Qt6::macdeployqt PROPERTIES IMPORTED_LOCATION ${MACDEPLOYQT_EXECUTABLE})
-###   endif()
 
 endif()
 
@@ -784,28 +705,13 @@ if(APPLE)
 find_package(CURL REQUIRED)
 endif()
 
-#=======================================================Valijson========================================================
-# Since Valijson is also hosted at github (https://github.com/tristanpenman/valijson) we just add it as a submodule
-# (via git clone https://github.com/tristanpenman/valijson third-party/valijson).  Then the following also come from
-# https://github.com/tristanpenman/valijson#readme
-#
-# Valijson is a header-only library, so we don't need to build or link to any libraries etc (unless you want to build
-# its test suite - in which case, uncomment the add_subdirectory line and add ValiJSON::valijson to both lists of
-# target_link_libraries in src/CMakeLists.txt).
-#
-# Previously we were using CMake ExternalProject_Add to pull Valijson in, but this is unnecessary (because we don't need
-# to build Valijson) and somewhat harder to debug when it goes wrong.  So, instead, per the readme at
-# https://github.com/tristanpenman/valijson, we just added ValiJSON as a git submodule from the command line.
-#
-message(STATUS "Valijson source at  ${CMAKE_CURRENT_SOURCE_DIR}/third-party/valijson")
-# Per comment above, leave the next line commented out unless you want to build the ValiJSON test suite
-#add_subdirectory(third-party/valijson)
-add_compile_definitions(VALIJSON_USE_EXCEPTIONS)
-include_directories(${ROOTDIR}/third-party/valijson/include)
-execute_process(COMMAND git config --global --add safe.directory third-party/valijson
-                WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-execute_process(COMMAND git submodule update --init --recursive
-                WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+#================================================== Sourcemeta Blaze ===================================================
+# See comments in meson.build for why we need extra options here (mostly to make things work on Windows/MSYS2).
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${PROJECT_SOURCE_DIR}/third-party/blaze/build/dist)
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
+set(CMAKE_FIND_DEBUG_MODE TRUE)
+find_package(Blaze REQUIRED COMPONENTS compiler evaluator output)
+find_package(Core REQUIRED COMPONENTS json jsonpointer)
 
 #========================================= Find MinGW (only needed on Windows) =========================================
 if(WIN32)
@@ -878,7 +784,10 @@ set(filesToInstall_data ${repoDir}/data/default_db.sqlite
                         ${repoDir}/data/DefaultContent004-MoreYeasts.json)
 
 # Desktop files to install.
-set(filesToInstall_desktop ${repoDir}/linux/${PROJECT_NAME}.desktop)
+#
+# TODO: The linux/desktop.in needs some processing to become ${PROJECT_NAME}.desktop
+#
+# set(filesToInstall_desktop ${repoDir}/linux/${PROJECT_NAME}.desktop)
 
 # Icon files to install.
 set(filesToInstall_icons ${repoDir}/images/${PROJECT_NAME}.svg)
@@ -1163,11 +1072,14 @@ if(APPLE)
                                          "-framework Cocoa"
                                          "-framework ApplicationServices")
 endif()
+
 foreach(qtComponent IN LISTS qtCommonComponents)
    list(APPEND appAndTestCommonLibraries "Qt6::${qtComponent}")
 endforeach()
-message("appAndTestCommonLibraries: ${appAndTestCommonLibraries}")
-target_link_libraries(${fileName_executable} ${appAndTestCommonLibraries})
+list(APPEND appAndTestCommonLibraries "sourcemeta::blaze::evaluator")
+list(APPEND appAndTestCommonLibraries "sourcemeta::blaze::compiler")
+
+target_link_libraries(${fileName_executable} PRIVATE ${appAndTestCommonLibraries})
 
 #=================================Tests========================================
 # We used to build the unit test executable in the bin subdirectory because, on Windows, we're going to copy a lot of
@@ -1180,7 +1092,7 @@ add_executable(${fileName_unitTestRunner}
 #set_target_properties(${fileName_unitTestRunner} PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 
 # Test app needs all the same libraries as the main app, plus Qt6::Test
-target_link_libraries(${fileName_unitTestRunner} ${appAndTestCommonLibraries} Qt6::Test)
+target_link_libraries(${fileName_unitTestRunner} PRIVATE ${appAndTestCommonLibraries} Qt6::Test)
 
 message("Unit Test Runner: ./${fileName_unitTestRunner}")
 

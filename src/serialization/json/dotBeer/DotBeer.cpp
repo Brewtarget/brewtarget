@@ -28,11 +28,6 @@
 #include <boost/json/parse.hpp>
 #include <boost/json/string.hpp>
 
-#include <valijson/adapters/boost_json_adapter.hpp>
-#include <valijson/schema.hpp>
-#include <valijson/schema_parser.hpp>
-#include <valijson/validator.hpp>
-
 #include <QApplication>
 #include <QDateTime>
 #include <QDebug>

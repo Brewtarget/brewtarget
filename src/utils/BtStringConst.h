@@ -64,7 +64,7 @@ public:
     *              constructors that can implicitly convert from `char const *`.  The workaround (which we use in
     *              \c PersistentSettings) is to change the name of one of the overloaded functions.
     */
-   constexpr BtStringConst(char const * const cString) : cString(cString) { return; }
+   constexpr BtStringConst(char const * const cString_) : cString{cString_} { return; }
    //! Copy constructor OK
    explicit constexpr BtStringConst(BtStringConst const &) = default;
    //! Move constructor OK

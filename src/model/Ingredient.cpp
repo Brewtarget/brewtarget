@@ -18,7 +18,7 @@
 #include "database/ObjectStoreWrapper.h" // Needed by FOLDER_BASE_COMMON_CODE
 #include "model/NamedParameterBundle.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_Ingredient.cpp"
 #endif

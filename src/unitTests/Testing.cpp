@@ -258,13 +258,14 @@ namespace {
       QString const posChars = "ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwwxyz";
       int constexpr randomcharLength = 64;
 
-      QString randSTR;
+      QString randomString;
       for (int i = 0; i < randomcharLength; i++) {
-         int index = QRandomGenerator().generate64() % posChars.length();
-         QChar nChar = posChars.at(index);
-         randSTR.append(nChar);
+
+         int const index = static_cast<int>(QRandomGenerator().generate64()) % static_cast<int>(posChars.length());
+         QChar const nChar = posChars.at(index);
+         randomString.append(nChar);
       }
-      return randSTR;
+      return randomString;
    }
 
    /**
@@ -823,7 +824,7 @@ void Testing::testAlgorithms() {
 }
 
 void Testing::testTypeLookups() {
-   QVERIFY2(Hop::typeLookup.getType(PropertyNames::Hop::alpha_pct).typeIndex == typeid(double),
+   QVERIFY2(Hop::typeLookup.getType(PropertyNames::Hop::alpha_pct).typeIndex == TypeInfo::Index::Double,
             "PropertyNames::Hop::alpha_pct not a double");
    auto const & grainGroupTypeInfo = Fermentable::typeLookup.getType(PropertyNames::Fermentable::grainGroup);
    QVERIFY2(grainGroupTypeInfo.isOptional(),
@@ -868,7 +869,7 @@ void Testing::testLogRotation() {
       QFile f(QString(fileList.at(i).canonicalFilePath()));
       qDebug() << Q_FUNC_INFO << "File" << f.fileName() << "has size" << f.size();
       //Here we test if the file is more than 10% bigger than the specified logFileSize", if so, fail.
-      QVERIFY2(f.size() <= (Logging::logFileSize * 1.1), "Wrong Sized file");
+      QVERIFY2(f.size() <= static_cast<int>(Logging::logFileSize * 1.1), "Wrong Sized file");
    }
    return;
 }

@@ -205,7 +205,7 @@ public:
    }
 
    unsigned int numSteps() const {
-      return this->m_stepSet.size();
+      return static_cast<int>(this->m_stepSet.size());
    }
 
    /*!

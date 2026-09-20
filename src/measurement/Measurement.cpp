@@ -107,13 +107,13 @@ template<> [[nodiscard]] double       Measurement::extractRawFromString<double> 
       }
 
       // We do have something to return, so just make sure it's the right type
-      if (typeInfo.typeIndex == typeid(double      )) { return QVariant::fromValue<std::optional<double      >>(                          valueAsDouble ); }
-      if (typeInfo.typeIndex == typeid(int         )) { return QVariant::fromValue<std::optional<int         >>(static_cast<int         >(valueAsDouble)); }
-      if (typeInfo.typeIndex == typeid(unsigned int)) { return QVariant::fromValue<std::optional<unsigned int>>(static_cast<unsigned int>(valueAsDouble)); }
+      if (typeInfo.typeIndex == TypeInfo::Index::Double     ) { return QVariant::fromValue<std::optional<double      >>(                          valueAsDouble ); }
+      if (typeInfo.typeIndex == TypeInfo::Index::Int        ) { return QVariant::fromValue<std::optional<int         >>(static_cast<int         >(valueAsDouble)); }
+      if (typeInfo.typeIndex == TypeInfo::Index::UnsignedInt) { return QVariant::fromValue<std::optional<unsigned int>>(static_cast<unsigned int>(valueAsDouble)); }
    } else {
-      if (typeInfo.typeIndex == typeid(double      )) { return QVariant::fromValue(                          valueAsDouble ); }
-      if (typeInfo.typeIndex == typeid(int         )) { return QVariant::fromValue(static_cast<int         >(valueAsDouble)); }
-      if (typeInfo.typeIndex == typeid(unsigned int)) { return QVariant::fromValue(static_cast<unsigned int>(valueAsDouble)); }
+      if (typeInfo.typeIndex == TypeInfo::Index::Double     ) { return QVariant::fromValue(                          valueAsDouble ); }
+      if (typeInfo.typeIndex == TypeInfo::Index::Int        ) { return QVariant::fromValue(static_cast<int         >(valueAsDouble)); }
+      if (typeInfo.typeIndex == TypeInfo::Index::UnsignedInt) { return QVariant::fromValue(static_cast<unsigned int>(valueAsDouble)); }
    }
 
    // It's a coding error if we reached here

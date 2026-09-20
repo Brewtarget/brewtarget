@@ -74,7 +74,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/StyleRangeWidget.cpp
     ${repoDir}/src/TimerListDialog.cpp
     ${repoDir}/src/TimerWidget.cpp
-    ${repoDir}/src/boiltime.cpp
+    ${repoDir}/src/BoilTimer.cpp
     ${repoDir}/src/buttons/BoilButton.cpp
     ${repoDir}/src/buttons/EquipmentButton.cpp
     ${repoDir}/src/buttons/FermentationButton.cpp

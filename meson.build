@@ -12,7 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
-#
+#-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
 #
@@ -173,7 +173,9 @@
 #                     lumped in with -Wall.)
 #
 #   - prefer_static   We want to try static linking before shared linking because it makes packaging a lot easier on
-#                     Windows and Mac.   NB: This requires meson 0.63.0 or newer.
+#                     Windows and Mac.   NB: This requires meson 0.63.0 or newer.  HOWEVER we don't set this here
+#                     because we don't want static linking on Linux.  (In particular it creates problems with the
+#                     OpenSSL library on Ubuntu 26.04.)  So we set this option in buildTool.py
 #
 #   - buildtype   For the moment at least, I'm not making a distinction between debug and release builds.  Unless we
 #                 find some compelling performance etc reason to do otherwise, my instinct is to have as much diagnostic
@@ -192,7 +194,6 @@ project('brewtarget', 'cpp',
         meson_version: '>=0.63.0',
         default_options : ['cpp_std=c++23',
                            'warning_level=3',
-                           'prefer_static=true',
                            'buildtype=plain'])
 
 #
@@ -301,6 +302,85 @@ fs = import('fs')
 prefix = get_option('prefix')
 
 #=======================================================================================================================
+#========================================= Compiler-specific settings & flags ==========================================
+#=======================================================================================================================
+if compiler.get_id() == 'gcc'
+   #
+   # -g3   should give even more debugging information than -g (which is equivalent to -g2)
+   #
+   # -O2   is hopefully a sensible optimisation level.  It means "GCC performs nearly all supported optimizations that do
+   #       not involve a space-speed tradeoff. As compared to -O, this option increases both compilation time and the
+   #       performance of the generated code."
+   #
+   # -z noexecstack  Is, in theory at least, to ensure/assert we do not have an executable stack.  This is partly as a
+   #                 good thing in itself, and partly because, by default, rpmlint with throw a
+   #                 missing-PT_GNU_STACK-section error if we don't.
+   #                    In theory, the compiler should work out automatically whether we need an executable stack,
+   #                 decide the answer is "No" and pass all the right options to the linker.   In practice, it seems
+   #                 this doesn't happen for reasons I have, as yet, to discover.
+   #                    So, we attempt to assert manually that the stack should not be executable.  The "-z noexecstack"
+   #                 should get passed through by gcc the linker (see
+   #                 https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#Link-Options) and the GNU linker
+   #                 (https://sourceware.org/binutils/docs/ld/Options.html) should recognise "-z noexecstack" as "Marks
+   #                 the object as not requiring executable stack".
+   #                    However, even this is not sufficient(!).  So, for the moment, we suppress the rpmlint error (see
+   #                 packaging/rpmLintFilters.toml).
+   #
+   # -fconcepts  Is needed on older versions of GCC to enable C++20 concepts (because specifying C++20 was not enough
+   #             for some reason).
+   #
+   # -fconcepts-diagnostics-depth  This needs to be set to 2 or higher to give more detailed diagnostics if there is a
+   #                               compile-time error (eg from `static_assert(std::random_access_iterator<iterator>)`).
+   #
+   # The following are, according to some comments at
+   # https://stackoverflow.com/questions/52583544/boost-stack-trace-not-showing-function-names-and-line-numbers, needed
+   # for Boost stacktrace to work properly:
+   #    -no-pie
+   #    -fno-pie
+   #    -rdynamic
+   #
+   # HOWEVER, there are a couple of gotchas:
+   #    - For some reason, gcc on Windows does not accept -rdynamic -- so we only set this on Linux
+   #    - On Linux, executables in Debian packages are supposed to be compiled as position-independent code, otherwise
+   #      we'll get a 'hardening-no-pie' Lintian warning -- so we only set no-pie options on Windows
+   #
+   # NOTE that add_global_arguments() must be called before any build target is declared, otherwise we'll get an error.
+   #
+   add_global_arguments(['-g3',
+                         '-O2',
+                         '-z', 'noexecstack', # NB Not '-z noexecstack' as otherwise will be passed to gcc in quotes!
+                         '-fconcepts',
+                         '-fconcepts-diagnostics-depth=2'
+                        ], language : 'cpp')
+   if host_machine.system() == 'windows'
+      add_global_arguments     (['-no-pie', '-fno-pie'], language : 'cpp')
+      if compiler.get_linker_id() == 'ld.bfd'
+         #
+         # GNU Linker
+         #
+         # See https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html for options
+         #
+         add_global_link_arguments(['-no-pie',
+                                    '-fno-pie'], language : 'cpp')
+      endif
+   else
+      add_global_arguments     (['-pie', '-fpie'], language : 'cpp')
+      add_global_link_arguments(['-pie', '-fpie'], language : 'cpp')
+      add_global_arguments     ('-rdynamic', language : 'cpp')
+      add_global_link_arguments('-rdynamic', language : 'cpp')
+   endif
+endif
+
+if host_machine.system() == 'darwin'
+   # As explained at https://stackoverflow.com/questions/5582211/what-does-define-gnu-source-imply, defining _GNU_SOURCE
+   # gives access to various non-standard GNU/Linux extension functions and changes the behaviour of some POSIX
+   # functions.
+   #
+   # This is needed for Boost stacktrace on Mac
+   add_project_arguments('-D_GNU_SOURCE', language : 'cpp')
+endif
+
+#=======================================================================================================================
 #============================================== Frameworks and Libraries ===============================================
 #=======================================================================================================================
 #
@@ -308,7 +388,7 @@ prefix = get_option('prefix')
 # which we depend.  However, I have yet to find a universal pain-free solution.
 #
 # Meson has its own dependency management system, Wrap, but the list of pre-provided projects at
-# https://mesonbuild.com/Wrapdb-projects.html does not include Qt, Boost, Xerces, Xalan or Valijson.
+# https://mesonbuild.com/Wrapdb-projects.html does not include all the libraries/frameworks we need (eg Qt, Boost).
 #
 # You can bridge out to other systems such as Conan or vcpkg, but it's a bit clunky.
 #
@@ -431,6 +511,13 @@ qtTestRunnerDependencies = dependency('qt6', version : minVersionOfQt, modules: 
 #    Boost.Core, part of collection of the Boost C++ Libraries, is a collection of core utilities used by other Boost
 #    libraries.  Boost JSON needs a more recent version than 1.71.
 #
+#    *******************
+#    *** Boost.Regex ***
+#    *******************
+#
+#    We use this header-only library to provide an alternative to std::regex for Valijson (see
+#    https://github.com/tristanpenman/valijson#regular-expression-engine).
+#
 # For Boost, per https://mesonbuild.com/Dependencies.html#boost, we only need to supply module names for libraries we
 # need to link against.  For the header-only Boost libraries, the 'boost' dependency suffices.
 boostModules = []
@@ -519,10 +606,10 @@ backtraceDependency = compiler.find_library('backtrace',
 #   - libxml2 version 2.9.14 is the maximum available in Ubuntu 24.04 (Noble).
 #
 libxml2Dependency = dependency('LibXml2',
-                              method : 'cmake',
-                              version : '>=2.9.13',
-                              required : true,
-                              static : true)
+                               method : 'cmake',
+                               version : '>=2.9.13',
+                               required : true,
+                               static : true)
 libxml2LibPaths = libxml2Dependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
 message('libxml2 Library:', libxml2Dependency.name(), 'found =', libxml2Dependency.found(),
         'version =', libxml2Dependency.version(), 'path(s)=', libxml2LibPaths)
@@ -537,24 +624,136 @@ sharedLibraryPaths += libxml2LibPaths
 #
 openSslDependency = dependency('OpenSSL',
                                version : '>=3.0.2',
-                               required : true,
-                               static : true)
+                               required : true ###,static : true
+                                 )
 #openSslLibPaths = openSslDependency.get_variable(cmake : 'PACKAGE_LIBRARIES')
 message('OpenSSL Library:', openSslDependency.name(), 'found =', openSslDependency.found(),
         'version =', openSslDependency.version())
 #sharedLibraryPaths += openSslLibPaths
 
-#====================================================== Valijson =======================================================
-# Don't need to do anything special, other than set include directories below, as it's header-only and we pull it in as
-# a Git submodule.  We do, however, periodically need to run the following, to update to the latest version of it:
+#================================================== Sourcemeta Blaze ===================================================
+#
+# Although we previously used Valijson for JSON schema validation, it does not support more recent versions of the JSON
+# Schema standard.  As of 2026-08, it seems full support for the 2020-12 standard is still a long way off (see eg
+# https://bowtie.report/#/implementations/cpp-valijson).
+#
+# So we have switched to Sourcemeta Blaze (https://github.com/sourcemeta/blaze).  Per the instructions at
+# https://blaze.sourcemeta.com/, we add it as a git submodule.  However, as with libbacktrace, the build is done in
+# scripts/btDependencies.py.  (You might imagine that we could compile it as a subproject here.  However, this turns out
+# to be surprisingly painful because lots of the compiler flags from Blaze and its internal sourcemeta dependencies leak
+# up to this project and break things.  In theory, you can limit this "leaking" by using Meson's `partial_dependency`
+# command, but, in practice, it's fiddly and fragile.)
+#
+# We periodically need to run the following, to update to the latest version of Blaze:
 #
 #    git submodule update --remote
 #
-add_global_arguments('-DVALIJSON_USE_EXCEPTIONS', language : 'cpp')
+# In order for Meson to find Blaze as a dependency, we need to "outsource" things to CMake's `find_package()` command
+# (via the `method : 'cmake'` option on Meson's `dependency()` command).  This is a bit fiddly because Blaze consists of
+# multiple static libraries, so we need it to find its own dependencies.  There are a couple of options we can pass in
+# to CMake's `find_package()`:
+#
+#    CMAKE_PREFIX_PATH is a "Semicolon-separated list of directories specifying installation prefixes to be searched by
+#                      the find_package(), find_program(), find_library(), find_file(), and find_path() commands. Each
+#                      command will add appropriate subdirectories (like bin, lib, or include) as specified in its own
+#                      documentation."
+#
+#    CMAKE_MODULE_PATH is a "semicolon-separated list of directories, represented using forward slashes, specifying a
+#                      search path for CMake modules to be loaded by the include() or find_package() commands before
+#                      checking the default modules that come with CMake".  What this means is that it's a place CMake
+#                      looks for a FindFoobar.cmake file when you invoke find_package(Foobar).  If you don't have a
+#                      FindFoobar.cmake file, you should instead use CMAKE_PREFIX_PATH to provide the path to a
+#                      directory containing FoobarConfig.cmake or foobar-config.cmake.
+#
+# In theory we shouldn't need to worry about either of these if Blaze is installed to a "Standard" location (eg
+# subdirectories of /usr/local/lib and /usr/local/include on Ubuntu).  However, things aren't simple on all platforms.
+#
+# One thing to understand is that, per https://cmake.org/cmake/help/latest/command/find_package.html, `find_package()`
+# can run in two different modes:
+#
+#    Module Mode: CMake searches for a file called Find<PackageName>.cmake, looking first in the locations listed in the
+#                 CMAKE_MODULE_PATH, then among the Find Modules provided by the CMake installation.
+#
+#    Config Mode: CMake searches for a file matching <PackageName>.cps, <lowercasePackageName>.cps,
+#                 <lowercasePackageName>-config.cmake, or <PackageName>Config.cmake.
+#
+# Depending on how CMake is invoked, it runs either Module Mode or Config Mode but then potentially falls back to the
+# other mode if the package is not found.
+#
+# Blaze provides cmake/FindCore.cmake, for Blaze to find its Core dependency in Module Mode, but this is for building
+# Blaze, and is not part of its install.  There is no FindBlaze.cmake, because Blaze does not need to know how to find
+# itself(!)  Moreover, setting CMAKE_MODULE_PATH to the third-party/blaze/cmake directory is counterproductive: it
+# results in the `dependency()` command below failing.
+#
+# To avoid confusing errors about not being able to find FindBlaze.cmake, we would prefer CMake to fun in Config Mode
+# first.  Per https://cmake.org/cmake/help/latest/variable/CMAKE_FIND_PACKAGE_PREFER_CONFIG.html, we can do this via the
+# CMAKE_FIND_PACKAGE_PREFER_CONFIG variable.
+#
+# We need CMake to be able to find core-config.cmake and blaze-config.cmake.  These are in the ./core and ./blaze
+# subdirectories of wherever Blaze is installed (eg /usr/local/lib/cmake/core and /usr/local/lib/cmake/blaze if
+# installed to default location on Ubuntu.
+#
+# The trouble is that, on Windows, the default install location puts these files at
+# '/c/Program Files (x86)/blaze/lib/cmake/blaze' and '/c/Program Files (x86)/blaze/lib/cmake/core' (from an MSYS2 point
+# of view).  And, for some reason, that means CMake doesn't find them when Meson invokes it from inside the MSYS2
+# environment.
+#
+# So, we take a leaf out of Blaze's own nightly builds and "install" Blaze to third-party/blaze/build/dist.  Then we
+# use CMAKE_PREFIX_PATH to tell CMake where Blaze is installed.  (It takes a bit of trial-and-error to understand which
+# directory CMake needs here.  It turns out it's the top-level one and lib/cmake gets added automatically inside CMake.)
+#
+# For reasons I have not got to the bottom of, this does not work on every platform.  In some cases (Ubuntu IIRC), I
+# only mananged to get things working with Blaze installed in the default location.  So, for now, as a sledgehammer
+# solution, we install Blaze to _both_ locations and let Meson/CMake find whichever one it can.  TODO: One day we should
+# find a cleaner solution.
+#
+# There is a specific Meson dependency() option, `cmake_module_path`, for setting CMAKE_MODULE_PATH (which, per above we
+# do NOT want to set).  However, for some reason, there is _not_ a `cmake_prefix_path` option.  Fortunately, we can also
+# pass settings to CMake via the poorly-documented `cmake_args` option.
+#
+blazeDistDir = join_paths(meson.project_source_root(), 'third-party/blaze/build/dist')
+message('blazeDistDir:', blazeDistDir)
+blazeBlazeDir = join_paths(blazeDistDir, 'lib/cmake/blaze')
+message('blazeBlazeDir:', blazeBlazeDir)
+blazeCoreDir = join_paths(blazeDistDir, 'lib/cmake/core')
+message('blazeCoreDir:', blazeCoreDir)
+blazeDependencies = dependency('Blaze',
+                               method : 'cmake',
+                               modules : [ 'sourcemeta::core::json',
+                                           'sourcemeta::blaze::compiler',
+                                           'sourcemeta::blaze::evaluator',
+                                           'sourcemeta::blaze::output' ],
+                               # Blaze components are
+                               #   - alterschema
+                               #   - bundle
+                               #   - canonicalizer
+                               #   - codegen
+                               #   - compiler
+                               #   - configuration
+                               #   - editor
+                               #   - evaluator
+                               #   - format
+                               #   - foundation
+                               #   - output
+                               #   - test
+                               components : ['compiler',
+                                             'evaluator',
+                                             'output'],
+                               # Per https://cmake.org/cmake/help/latest/variable/CMAKE_FIND_DEBUG_MODE.html, setting
+                               # CMAKE_FIND_DEBUG_MODE gives "extra find call information ... to standard error"
+                               cmake_args : [
+                                  '-DCMAKE_PREFIX_PATH=' + blazeDistDir,
+                                  '-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=TRUE',
+                                  '-DCMAKE_FIND_DEBUG_MODE=TRUE',
+                                  '-DBlaze_DIR=' + blazeBlazeDir,
+                                  '-DCore_DIR=' + blazeCoreDir,
+                               ],
+                               required : true)
 
 #==================================================== Other headers ====================================================
 # Other directories to search in for headers.  Meson will barf an error if any of these directories does not exist.
-includeDirs = include_directories('src', 'third-party/valijson/include', 'third-party/libbacktrace')
+includeDirs = include_directories('src',
+                                  'third-party/libbacktrace')
 
 #=======================================================================================================================
 #============================================== Extra Apple dependencies ===============================================
@@ -631,7 +830,7 @@ commonSourceFiles = files([
    'src/StyleRangeWidget.cpp',
    'src/TimerListDialog.cpp',
    'src/TimerWidget.cpp',
-   'src/boiltime.cpp',
+   'src/BoilTimer.cpp',
    'src/buttons/BoilButton.cpp',
    'src/buttons/EquipmentButton.cpp',
    'src/buttons/FermentationButton.cpp',
@@ -894,7 +1093,7 @@ mocHeaders = files([
    'src/StyleRangeWidget.h',
    'src/TimerListDialog.h',
    'src/TimerWidget.h',
-   'src/boiltime.h',
+   'src/BoilTimer.h',
    'src/buttons/BoilButton.h',
    'src/buttons/EquipmentButton.h',
    'src/buttons/FermentationButton.h',
@@ -1334,12 +1533,15 @@ translations = qt.compile_translations(ts_files         : translationSourceFiles
 #=======================================================================================================================
 #=============================================== Lists of Dependencies =================================================
 #=======================================================================================================================
-commonDependencies = [qtCommonDependencies,
-                      libxml2Dependency,
-                      boostDependency,
-                      dlDependency,
-                      openSslDependency, # This isn't strictly needed for the testRunner, but no harm comes from including it
-                      backtraceDependency]
+commonDependencies = [
+   qtCommonDependencies,
+   libxml2Dependency,
+   boostDependency,
+   dlDependency,
+   openSslDependency, # This isn't strictly needed for the testRunner, but no harm comes from including it
+   backtraceDependency,
+   blazeDependencies
+]
 mainExeDependencies = commonDependencies + qtMainExeDependencies
 testRunnerDependencies = commonDependencies + qtTestRunnerDependencies
 
@@ -1642,83 +1844,6 @@ if host_machine.system() == 'darwin'
 elif host_machine.system() == 'windows'
    # TBD: Not sure whether this is the right place to put the icon on Windows
    install_data(filesToInstall_windowsIcon, install_dir : installSubDir_data)
-endif
-
-#=======================================================================================================================
-#========================================= Compiler-specific settings & flags ==========================================
-#=======================================================================================================================
-if compiler.get_id() == 'gcc'
-   #
-   # -g3   should give even more debugging information than -g (which is equivalent to -g2)
-   #
-   # -O2   is hopefully a sensible optimisation level.  It means "GCC performs nearly all supported optimizations that do
-   #       not involve a space-speed tradeoff. As compared to -O, this option increases both compilation time and the
-   #       performance of the generated code."
-   #
-   # -z noexecstack  Is, in theory at least, to ensure/assert we do not have an executable stack.  This is partly as a
-   #                 good thing in itself, and partly because, by default, rpmlint with throw a
-   #                 missing-PT_GNU_STACK-section error if we don't.
-   #                    In theory, the compiler should work out automatically whether we need an executable stack,
-   #                 decide the answer is "No" and pass all the right options to the linker.   In practice, it seems
-   #                 this doesn't happen for reasons I have, as yet, to discover.
-   #                    So, we attempt to assert manually that the stack should not be executable.  The "-z noexecstack"
-   #                 should get passed through by gcc the linker (see
-   #                 https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#Link-Options) and the GNU linker
-   #                 (https://sourceware.org/binutils/docs/ld/Options.html) should recognise "-z noexecstack" as "Marks
-   #                 the object as not requiring executable stack".
-   #                    However, even this is not sufficient(!).  So, for the moment, we suppress the rpmlint error (see
-   #                 packaging/rpmLintFilters.toml).
-   #
-   # -fconcepts  Is needed on older versions of GCC to enable C++20 concepts (because specifying C++20 was not enough
-   #             for some reason).
-   #
-   # -fconcepts-diagnostics-depth  This needs to be set to 2 or higher to give more detailed diagnostics if there is a
-   #                               compile-time error (eg from `static_assert(std::random_access_iterator<iterator>)`).
-   #
-   # The following are, according to some comments at
-   # https://stackoverflow.com/questions/52583544/boost-stack-trace-not-showing-function-names-and-line-numbers, needed
-   # for Boost stacktrace to work properly:
-   #    -no-pie
-   #    -fno-pie
-   #    -rdynamic
-   #
-   # HOWEVER, there are a couple of gotchas:
-   #    - For some reason, gcc on Windows does not accept -rdynamic -- so we only set this on Linux
-   #    - On Linux, executables in Debian packages are supposed to be compiled as position-independent code, otherwise
-   #      we'll get a 'hardening-no-pie' Lintian warning -- so we only set no-pie options on Windows
-   #
-   add_global_arguments(['-g3',
-                         '-O2',
-                         '-z', 'noexecstack', # NB Not '-z noexecstack' as otherwise will be passed to gcc in quotes!
-                         '-fconcepts',
-                         '-fconcepts-diagnostics-depth=2'
-                         ], language : 'cpp')
-   if host_machine.system() == 'windows'
-      add_global_arguments     (['-no-pie', '-fno-pie'], language : 'cpp')
-      if compiler.get_linker_id() == 'ld.bfd'
-         #
-         # GNU Linker
-         #
-         # See https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html for options
-         #
-         add_global_link_arguments(['-no-pie',
-                                    '-fno-pie'], language : 'cpp')
-      endif
-   else
-      add_global_arguments     (['-pie', '-fpie'], language : 'cpp')
-      add_global_link_arguments(['-pie', '-fpie'], language : 'cpp')
-      add_global_arguments     ('-rdynamic', language : 'cpp')
-      add_global_link_arguments('-rdynamic', language : 'cpp')
-   endif
-endif
-
-if host_machine.system() == 'darwin'
-   # As explained at https://stackoverflow.com/questions/5582211/what-does-define-gnu-source-imply, defining _GNU_SOURCE
-   # gives access to various non-standard GNU/Linux extension functions and changes the behaviour of some POSIX
-   # functions.
-   #
-   # This is needed for Boost stacktrace on Mac
-   add_project_arguments('-D_GNU_SOURCE', language : 'cpp')
 endif
 
 #=======================================================================================================================

@@ -17,7 +17,6 @@
   "$id": "https://dotbeer.org/schema/Fermentation.beer.schema",
   "type": "object",
   "description": "A fermentation procedure, which can be used by multiple recipes.",
-  "additionalProperties": false,
   "properties": {
     "name": {
       "type": "string"
@@ -44,6 +43,7 @@
     "name",
     "fermentation_steps"
   ],
+  "unevaluatedProperties": false,
   "$defs": {
     "FermentationStep": {
       "type": "object",
@@ -67,10 +67,10 @@
           }
         }
       ],
-      "unevaluatedProperties": false,
       "required": [
         "name"
-      ]
+      ],
+      "unevaluatedProperties": false
     }
   }
 }

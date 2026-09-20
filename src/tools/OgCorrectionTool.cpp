@@ -30,7 +30,7 @@
 #include "model/Equipment.h"
 #include "model/Recipe.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_OgCorrectionTool.cpp"
 #endif

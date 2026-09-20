@@ -37,7 +37,7 @@
 #include "model/NamedEntity.h"
 #include "model/Recipe.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_AncestorDialog.cpp"
 #endif

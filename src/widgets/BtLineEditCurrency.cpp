@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/BtLineEditCurrency.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * widgets/BtLineEditCurrency.cpp is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ void BtLineEditCurrency::init(char const * const   editorName,
    Q_ASSERT(typeInfo.fieldType);
    Q_ASSERT(std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType));
    Q_ASSERT(NonPhysicalQuantity::Currency == std::get<NonPhysicalQuantity>(*typeInfo.fieldType));
-   Q_ASSERT(typeInfo.typeIndex == typeid(CurrencyAmount));
+   Q_ASSERT(typeInfo.typeIndex == TypeInfo::Index::CurrencyAmount);
 
    this->pimpl->m_editorName     =  editorName    ;
    this->pimpl->m_lineEditName   =  lineEditName  ;

@@ -20,7 +20,6 @@
   "$defs": {
     "Acidity": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "enum": [
@@ -34,11 +33,11 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Bitterness": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "enum": [
@@ -52,11 +51,11 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Carbonation": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "enum": [
@@ -71,12 +70,12 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Color": {
       "type": "object",
       "description": "Supports both grain color properties, such as Lovibond, and wort color properties such as SRM and EBC.",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "description": "`EBC` is European Brewing Convention system of color measurement<br>`Lovi` is Lovibond<br>`SRM` is Standard Reference Method color measurement system",
@@ -93,12 +92,12 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Count": {
       "type": "object",
       "description": "Used where unitless amounts are required, such as 1 apple, or 1 yeast packet.  Note that this _is_ allowed to be fractional because you might want to add 1½ cinnamon sticks or 2.5 packets of yeast.",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "enum": [
@@ -116,7 +115,8 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Date": {
       "type": "string",
@@ -126,7 +126,6 @@
     "Gravity": {
       "type": "object",
       "description": "In brewing, \"gravity\" is a shorthand for \"specific gravity\".  Typically, brewers measure relative gravity (aka specific gravity) to gauge percent of sugar content (ie Plato and Brix).",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "description": "`sg` is specific gravity<br>`plato` is degrees Plato (°P)<br>`brix` is degrees Brix (°Bx)",
@@ -143,12 +142,12 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "DiastaticPower": {
       "type": "object",
       "description": "Diastatic power is a measurement of malted grains enzymatic content. A value of 35 Lintner is needed to self convert, while a value of 100 or more is desirable for base malts.",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "enum": [
@@ -163,11 +162,11 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Length": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "enum": [
@@ -185,11 +184,11 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Mass": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "description": "`mg` is milligrams<br>`g` is grams<br>`kg` is kilograms<br>`lb` is pounds (imperial and US customary)<br>`oz` is ounces (imperial and US customary)",
@@ -208,12 +207,12 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "MassFractionOrConcentration": {
       "type": "object",
       "description": "Strictly speaking, mass concentration (eg mg/l) is different from mass fraction (eg ppm, ppb) but, in the context of brewing, it is usually approximately true that 1 mg/L mass concentration = 1 parts per million (ppm) mass fraction.",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "description": "`ppm` is parts per million<br>`ppb` is parts per billion<br>`mg/l` is milligrams per liter",
@@ -230,11 +229,11 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Percentage": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "enum": [
@@ -248,11 +247,11 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Pressure": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "description": "`kPa` is kilopascals<br>`psi` is pounds per square inch<br>`bar` is bar (where 1 bar = 100 kPa)",
@@ -269,12 +268,12 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "SpecificHeatCapacity": {
       "type": "object",
       "description": "The amount of heat that must be added to one unit of mass of the substance in order to cause an increase of one unit in temperature.",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "enum": [
@@ -290,12 +289,12 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "SpecificVolume": {
       "type": "object",
       "description": "Specific volume is the reciprocal of Gravity, commonly used for mash thickness.",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "enum": [
@@ -316,11 +315,11 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Temperature": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "description": "`C` is degrees Celsius (°C)<br>`F` is decrees Fahrenheit (°F)",
@@ -336,12 +335,12 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Time": {
       "type": "object",
       "description": "Note this is NOT dates or times of day but length-of-time or elapsed time, eg duration of a mash step, or how long after the start of the boil to add something.",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "description": "`sec` is seconds<br>`min` is minutes<br>`hr` is hours<br>`day` is days<br>`week` is weeks<br>",
@@ -360,12 +359,12 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Viscosity": {
       "type": "object",
       "description": "Viscosity of fluids",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "enum": [
@@ -380,11 +379,11 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "Volume": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "unit": {
           "description": "`ml` is milliliters (Metric/SI)<br>`l` is liters (Metric/SI)<br>`tsp` is US teaspoons<br>`tbsp` is US tablespoons<br>`floz` is US fluid ounces<br>`cup` is US cups<br>`pt` is US pints (liquid)<br>`qt` is US quarts (liquid)<br>`gal` is US gallons (liquid)<br>`bbl` is US barrels (liquid)<br>`itsp` is Imperial teaspoons<br>`itbsp` is Imperial tablespoons<br>`ifloz` is Imperial fluid ounces<br>`icup` is Imperial cups<br>`ipt` is Imperial pints (liquid)<br>`iqt` is Imperial quarts (liquid)<br>`igal` is Imperial gallons (liquid)<br>`ibbl` is Imperial barrels (liquid)",
@@ -419,7 +418,8 @@
       "required": [
         "unit",
         "value"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     //
     // Ranges
@@ -429,7 +429,6 @@
     //
     "RangeOfBitterness": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "minimum": {
           "$ref": "#/$defs/Bitterness"
@@ -441,11 +440,11 @@
       "required": [
         "minimum",
         "maximum"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "RangeOfCarbonation": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "minimum": {
           "$ref": "#/$defs/Carbonation"
@@ -457,11 +456,11 @@
       "required": [
         "minimum",
         "maximum"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "RangeOfTemperature": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "minimum": {
           "$ref": "#/$defs/Temperature"
@@ -473,11 +472,11 @@
       "required": [
         "minimum",
         "maximum"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "RangeOfColor": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "minimum": {
           "$ref": "#/$defs/Color"
@@ -489,11 +488,11 @@
       "required": [
         "minimum",
         "maximum"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "RangeOfGravity": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "minimum": {
           "$ref": "#/$defs/Gravity"
@@ -505,11 +504,11 @@
       "required": [
         "minimum",
         "maximum"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "RangeOfPercentage": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "minimum": {
           "$ref": "#/$defs/Percentage"
@@ -521,7 +520,8 @@
       "required": [
         "minimum",
         "maximum"
-      ]
+      ],
+      "unevaluatedProperties": false
     }
   }
 }

@@ -20,7 +20,9 @@
 #include <memory>
 
 #include <QDebug>
+#include <QModelIndex>
 
+#include "model/NamedEntity.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 
 /**
@@ -50,7 +52,7 @@ public:
          qDebug() <<
             Q_FUNC_INFO << "Removing" << this->derived().m_rows.size() << ItemClass::staticMetaObject.className() <<
             "rows for old" << OwnerClass::staticMetaObject.className() << "#" << this->m_itemOwnerObs->key();
-         this->derived().beginRemoveRows(QModelIndex(), 0, this->derived().m_rows.size() - 1);
+         this->derived().beginRemoveRows(QModelIndex(), 0, static_cast<int>(this->derived().m_rows.size() - 1));
 
          for (auto item : this->derived().m_rows) {
             this->derived().disconnect(item.get(), nullptr, &this->derived(), nullptr);
@@ -84,7 +86,7 @@ public:
             qDebug() <<
                Q_FUNC_INFO << "Inserting" << tmpEnumeratedItems.size() << " " << ItemClass::staticMetaObject.className() <<
                "rows";
-            this->derived().beginInsertRows(QModelIndex(), 0, tmpEnumeratedItems.size() - 1);
+            this->derived().beginInsertRows(QModelIndex(), 0, static_cast<int>(tmpEnumeratedItems.size() - 1));
             this->derived().m_rows = tmpEnumeratedItems;
             for (auto item : this->derived().m_rows) {
                this->derived().connect(item.get(), &NamedEntity::changed, &this->derived(), &Derived::itemChanged);
@@ -108,7 +110,7 @@ public:
 protected:
    //! \returns true if \c item is successfully found and removed.
    bool doRemoveItem(std::shared_ptr<ItemClass> item) {
-      int ii {static_cast<int>(this->derived().m_rows.indexOf(item))};
+      int const ii {static_cast<int>(this->derived().m_rows.indexOf(item))};
       if (ii >= 0) {
          qDebug() <<
             Q_FUNC_INFO << "Removing" << ItemClass::staticMetaObject.className() << item->name() << "(#" <<

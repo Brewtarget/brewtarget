@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------------------------------------------------
-# scripts/btFileSystem.py is part of Brewtarget, and is copyright the following authors 2022-2025:
+# scripts/btFileSystem.py is part of Brewtarget, and is copyright the following authors 2022-2026:
 #   • Matt Young <mfsy@yahoo.com>
 #
 # Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -77,7 +77,8 @@ def setGlobalDirVars():
    #--------------------------------------------------------------------------------------------------------------------
    global dir_base
    global dir_gitInfo
-   global dir_build
+   global dir_build      # This is the Meson build directory (mbuild)
+   global dir_cMakeBuild # This is the CMake build directory (build)
    global dir_gitSubmodules
    global num_gitSubmodules
    global dir_packages
@@ -92,7 +93,8 @@ def setGlobalDirVars():
    dir_base          = getBaseDir()
    dir_gitInfo       = dir_base.joinpath('.git')
    dir_build         = dir_base.joinpath('mbuild')
-   # Where submodules live and how many there are.  Currently there are 2: libbacktrace and valijson
+   dir_cMakeBuild    = dir_base.joinpath('build')
+   # Where submodules live and how many there are.  Currently, there are 2: libbacktrace and blaze
    dir_gitSubmodules = dir_base.joinpath('third-party')
    num_gitSubmodules = 2
    # Top-level packaging directory - NB deliberately different name from 'packaging' (= dir_base.joinpath('packaging'))

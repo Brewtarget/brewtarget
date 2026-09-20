@@ -68,7 +68,8 @@
       },
       "required": [
         "name"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "StepWithRampTime": {
       "type": "object",
@@ -78,7 +79,8 @@
           "description": "The amount of time that passes before this step begins. eg moving from a mash step (step 1) of 148°F, to a new temperature step of 156°F (step 2) may take 8 minutes to heat the mash. Step 2 would have a ramp time of 8 minutes.",
           "$ref": "Measurement.beer.schema#/$defs/Time"
         }
-      }
+      },
+      "unevaluatedProperties": false
     },
     "StepWithGravity": {
       "type": "object",
@@ -90,7 +92,8 @@
         "end_gravity": {
           "$ref": "Measurement.beer.schema#/$defs/Gravity"
         }
-      }
+      },
+      "unevaluatedProperties": false
     }
   }
 }

@@ -42,9 +42,9 @@ template<typename T> struct EnumKeyValue {
    /**
     * \brief Standard constructor, which we need to declare explicitly in order to have the templated version below
     */
-   EnumKeyValue(int const key, T const value) :
-      key{key},
-      value{value} {
+   EnumKeyValue(int const key_, T const value_) :
+      key{key_},
+      value{value_} {
       return;
    };
 
@@ -53,7 +53,7 @@ template<typename T> struct EnumKeyValue {
     *        "enum class")
     */
    template<typename E>
-   EnumKeyValue(E const key, T const value) : EnumKeyValue{static_cast<int>(key), value} {
+   EnumKeyValue(E const key_, T const value_) : EnumKeyValue{static_cast<int>(key_), value_} {
       return;
    }
 
@@ -69,7 +69,7 @@ public:
     * \param isRegularEnum Shouldn't normally need to be specified, other than by subclass constructor
     */
    EnumMapping(std::initializer_list<EnumKeyValue<T>> args, bool const isRegularEnum = true) {
-      this->reserve(args.size());
+      this->reserve(static_cast<qsizetype>(args.size()));
       for (auto arg : args) {
          // Uncomment this block for debugging -- eg if you are hitting the assert below at start-up!
 //         qDebug().noquote() <<

@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * tools/TimerWidget.h is part of Brewtarget, and is copyright the following authors 2009-2026:
+ * TimerWidget.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Eric Tamme <etamme@gmail.com>
  *   • Julein <j2bweb@gmail.com>
@@ -28,7 +28,7 @@
 
 #include "ui_timerWidget.h"
 
-#include "boiltime.h"
+#include "BoilTimer.h"
 
 class TimerMainDialog;
 
@@ -41,11 +41,11 @@ class TimerWidget : public QDialog, public Ui::timerWidget {
    Q_OBJECT
 
 public:
-   TimerWidget(TimerMainDialog *parent, BoilTime* bt = 0);
+   TimerWidget(TimerMainDialog *parent, BoilTimer* bt = nullptr);
    ~TimerWidget();
    void setTime(int t);
    void setNote(QString n);
-   void setBoil(BoilTime* bt);
+   void setBoil(BoilTimer* bt);
    void reset();
    int getTime();
    QString getNote() const;
@@ -67,7 +67,7 @@ private:
    TimerMainDialog* mainTimer;
    QPalette paletteOld, paletteNew;
    bool oldColors;
-   BoilTime* boilTime;
+   BoilTimer* boilTime;
    bool started; // Used to automatically start timers if main timer is running
    bool stopped; // Used to flash LCDNumber if time has elapsed
    /**

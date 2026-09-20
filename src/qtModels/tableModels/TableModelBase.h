@@ -325,7 +325,7 @@ public:
 
    //! \returns true if \c item is successfully found and removed.
    bool remove(std::shared_ptr<NE> item) {
-      int const rowNum = this->m_rows.indexOf(item);
+      int const rowNum = static_cast<int>(this->m_rows.indexOf(item));
       if (rowNum >= 0)  {
          this->derived().beginRemoveRows(QModelIndex(), rowNum, rowNum);
          this->derived().disconnect(item.get(), nullptr, &this->derived(), nullptr);
@@ -366,12 +366,12 @@ public:
       QModelIndexList const selected = tableView.selectionModel()->selectedIndexes();
       QList<std::shared_ptr<NE>> itemsToRemove;
 
-      int const size = selected.size();
+      auto const size = selected.size();
       if (size == 0) {
          return;
       }
 
-      for (int ii = 0; ii < size; ii++) {
+      for (auto ii = 0; ii < size; ii++) {
          QModelIndex viewIndex = selected.at(ii);
          QModelIndex modelIndex = proxy.mapToSource(viewIndex);
          itemsToRemove.append(this->getRow(modelIndex.row()));
@@ -432,7 +432,7 @@ protected:
 
       qDebug() << Q_FUNC_INFO << "After de-duping, adding " << tmp.size() << "of" << NE::staticMetaObject.className();
 
-      int size = this->m_rows.size();
+      int const size = static_cast<int>(this->m_rows.size());
       if (size + tmp.size()) {
          this->derived().beginInsertRows(QModelIndex(), size, size + tmp.size() - 1);
 
@@ -452,7 +452,7 @@ protected:
     * \brief Clear the model.
     */
    void removeAll() {
-      int const size = this->m_rows.size();
+      int const size = static_cast<int>(this->m_rows.size());
       if (size > 0) {
          this->derived().beginRemoveRows(QModelIndex(), 0, size - 1);
          while (!this->m_rows.empty()) {
@@ -466,7 +466,7 @@ protected:
       return;
    }
 
-   virtual std::shared_ptr<NamedEntity> getRowAsNamedEntity(int ii) {
+   virtual std::shared_ptr<NamedEntity> getRowAsNamedEntity(int const ii) {
       return std::static_pointer_cast<NamedEntity>(this->getRow(ii));
    }
 

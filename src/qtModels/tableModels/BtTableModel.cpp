@@ -30,7 +30,7 @@
 #include "widgets/SmartAmounts.h"
 #include "widgets/UnitAndScalePopUpMenu.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_BtTableModel.cpp"
 #endif

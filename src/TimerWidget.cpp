@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * tools/TimerWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
+ * TimerWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Julein <j2bweb@gmail.com>
@@ -37,12 +37,12 @@
 #include "tools/TimerMainDialog.h"
 #include "utils/TimerUtils.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_TimerWidget.cpp"
 #endif
 
-TimerWidget::TimerWidget(TimerMainDialog *parent, BoilTime* bt) :
+TimerWidget::TimerWidget(TimerMainDialog *parent, BoilTimer* bt) :
    QDialog{parent},
 //   ui{new Ui::timerWidget},
    mainTimer{parent},
@@ -87,8 +87,8 @@ TimerWidget::TimerWidget(TimerMainDialog *parent, BoilTime* bt) :
    this->retranslateUi(this);
 
    //Connections
-   connect(boilTime, &BoilTime::BoilTimeChanged, this, &TimerWidget::decrementTime);
-   connect(boilTime, &BoilTime::timesUp, this, &TimerWidget::decrementTime);
+   connect(boilTime, &BoilTimer::BoilTimeChanged, this, &TimerWidget::decrementTime);
+   connect(boilTime, &BoilTimer::timesUp, this, &TimerWidget::decrementTime);
    return;
 }
 
@@ -121,7 +121,7 @@ void TimerWidget::setNote(QString n) {
    return;
 }
 
-void TimerWidget::setBoil(BoilTime *bt) {
+void TimerWidget::setBoil(BoilTimer *bt) {
    this->boilTime = bt;
    return;
 }
