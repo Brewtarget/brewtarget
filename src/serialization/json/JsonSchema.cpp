@@ -105,7 +105,7 @@ public:
       try {
          this->m_compiledSchema = sourcemeta::blaze::compile(
             this->getBlazeReferencedDoc(std::string(this->m_fileName)),
-            sourcemeta::blaze::schema_walker,
+            sourcemeta::core::schema_walker,
             //
             // We do our own schema resolution.  The required callback signature is a function that takes on parameter,
             // `std::string_view const identifier`, and returns
