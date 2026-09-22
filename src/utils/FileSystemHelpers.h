@@ -30,23 +30,25 @@ namespace {
       std::filesystem::perms permission;
       char                   flag;
    };
-   constexpr std::array allPermsAndFlags{
-      permissionAndFlag{std::filesystem::perms::owner_read  , 'r'},
-      permissionAndFlag{std::filesystem::perms::owner_write , 'w'},
-      permissionAndFlag{std::filesystem::perms::owner_exec  , 'x'},
-      permissionAndFlag{std::filesystem::perms::group_read  , 'r'},
-      permissionAndFlag{std::filesystem::perms::group_write , 'w'},
-      permissionAndFlag{std::filesystem::perms::group_exec  , 'x'},
-      permissionAndFlag{std::filesystem::perms::others_read , 'r'},
-      permissionAndFlag{std::filesystem::perms::others_write, 'w'},
-      permissionAndFlag{std::filesystem::perms::others_exec , 'x'},
-      //
-      // We just add extra output for these "special" bits, rather than trying to mimic the output of, say, ls -l
-      //
-      permissionAndFlag{std::filesystem::perms::set_uid     , 'u'},
-      permissionAndFlag{std::filesystem::perms::set_gid     , 'g'},
-      permissionAndFlag{std::filesystem::perms::sticky_bit  , 's'},
-   };
+   constexpr std::array allPermsAndFlags = std::to_array(
+      {
+         permissionAndFlag{std::filesystem::perms::owner_read  , 'r'},
+         permissionAndFlag{std::filesystem::perms::owner_write , 'w'},
+         permissionAndFlag{std::filesystem::perms::owner_exec  , 'x'},
+         permissionAndFlag{std::filesystem::perms::group_read  , 'r'},
+         permissionAndFlag{std::filesystem::perms::group_write , 'w'},
+         permissionAndFlag{std::filesystem::perms::group_exec  , 'x'},
+         permissionAndFlag{std::filesystem::perms::others_read , 'r'},
+         permissionAndFlag{std::filesystem::perms::others_write, 'w'},
+         permissionAndFlag{std::filesystem::perms::others_exec , 'x'},
+         //
+         // We just add extra output for these "special" bits, rather than trying to mimic the output of, say, ls -l
+         //
+         permissionAndFlag{std::filesystem::perms::set_uid     , 'u'},
+         permissionAndFlag{std::filesystem::perms::set_gid     , 'g'},
+         permissionAndFlag{std::filesystem::perms::sticky_bit  , 's'},
+      }
+   );
 }
 
 

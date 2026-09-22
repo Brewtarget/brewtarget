@@ -86,15 +86,15 @@ template<class NE> struct VeriTable {
    NE * selected() {
       QModelIndexList selected = this->m_tableView->selectionModel()->selectedIndexes();
 
-      int size = selected.size();
+      auto const size = selected.size();
       if (size == 0) {
          return nullptr;
       }
 
       // Make sure only one row is selected.
       QModelIndex viewIndex = selected[0];
-      int row = viewIndex.row();
-      for (int ii = 1; ii < size; ++ii ) {
+      int const row = viewIndex.row();
+      for (auto ii = 1; ii < size; ++ii ) {
          if (selected[ii].row() != row) {
             return nullptr;
          }

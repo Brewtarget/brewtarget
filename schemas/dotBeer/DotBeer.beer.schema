@@ -25,7 +25,7 @@
   // Version of this schema.
   // Versions prior to 1.0.0 are subject to breaking changes!
   //
-  "Version": "0.5.0",
+  "Version": "0.6.0",
   //
   "properties": {
     //
@@ -35,13 +35,6 @@
     "DotBeer": {
       "type": "object",
       "description": "Root element of all DotBeer documents.  Most of the Primary Types (ie ones that have their own schema file) are referred to here.  Various Component Types (ie smaller types used for composition) are defined in the \"$defs\" sections of most of the schema files (apart from this one).",
-      //
-      // Allowing additional properties makes it easier to extend the schema in a way that allows old versions of
-      // software to read newer versions of DotBeer files.  However, it also makes it harder to validate things.  Eg
-      // if a program accidentally wrote optional parameter "foobar" with key "barfoo", it wouldn't be picked up by
-      // schema validation if additional properties are allowed.
-      //
-      "additionalProperties": false,
       "properties": {
         "version": {
           "description": "DotBeer schema version used to create the file.",
@@ -150,12 +143,24 @@
         "version",
         "output_by",
         "timestamp"
-      ]
+      ],
+      //
+      // Allowing additional properties would make it easier to extend the schema in a way that allows old versions of
+      // software to read newer versions of DotBeer files.  However, it would also make it harder to validate things.
+      // Eg if a program accidentally wrote optional parameter "foobar" with key "barfoo", it wouldn't be picked up by
+      // schema validation if additional properties are allowed.  So, in general, we forbid unspecified properties.
+      // Here, and elsewhere, `"unevaluatedProperties": false` is the newer, and more robust, way to do this (replacing
+      // `"additionalProperties": false`).
+      //
+      "unevaluatedProperties": false,
+      "additionalProperties": false
     }
   },
   "required": [
     "DotBeer"
   ],
+  "additionalProperties": false,
+  "unevaluatedProperties": false,
   "$defs": {
     //
     // Version Numbers and Folders don't really belong in Measurement.  But it seems overkill to create dedicated schema
@@ -164,7 +169,7 @@
     "FolderPath": {
       "type": "string",
       "description": "A FolderPath is typically used for the suggested slash-delimited subfolder path in which to store an object.  Any leading slash should be ignored.  Eg, if an object's folder path is \"/hum/bug\" (or \"hum/bug\") then importing the object into folder \"/foo/bar\" should result in its folder path being \"/foo/bar/hum/bug\".  If the importing software does not support folders, then it should ignore folder path fields.",
-      "pattern": "/?[^/]+(/[^/]+)*"
+      "pattern": "\/?[^\/]+(\/[^\/]+)*"
     },
     "VersionNumber": {
       "type": "string",

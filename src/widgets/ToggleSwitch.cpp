@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/ToggleSwitch.cpp is is part of Brewtarget, and is copyright the following authors 2018-2022:
+ * widgets/ToggleSwitch.cpp is is part of Brewtarget, and is copyright the following authors 2018-2025:
  *   • Iman Ahmadvand <iman72411@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *
@@ -18,7 +18,7 @@
 
 #include <QtCore/qeasingcurve.h>
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_ToggleSwitch.cpp"
 #endif

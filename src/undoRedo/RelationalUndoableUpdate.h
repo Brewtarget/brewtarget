@@ -56,11 +56,11 @@ public:
                             QString const & description,
                             QUndoCommand * parent = nullptr) :
       QUndoCommand{parent},
-      updatee{updatee},
-      setter{setter},
-      oldValue{oldValue},
-      newValue{newValue},
-      callback{callback} {
+      m_updatee{updatee},
+      m_setter{setter},
+      m_oldValue{oldValue},
+      m_newValue{newValue},
+      m_callback{callback} {
       // Parent class handles storing description and making it accessible to the undo stack etc - we just have to give
       // it the text.
       this->setText(description);
@@ -93,18 +93,18 @@ private:
     * \param isUndo true for undo, false for redo
     */
    void undoOrRedo(bool const isUndo) {
-      (this->updatee.*(this->setter))(isUndo ? this->oldValue : this->newValue);
-      if (this->callback != nullptr) {
-         (MainWindow::instance().*(this->callback))();
+      (this->m_updatee.*(this->m_setter))(isUndo ? this->m_oldValue : this->m_newValue);
+      if (this->m_callback != nullptr) {
+         (MainWindow::instance().*(this->m_callback))();
       }
       return;
    }
 
-   UU & updatee;
-   void (UU::*setter)(std::shared_ptr<VV>);
-   std::shared_ptr<VV> oldValue;
-   std::shared_ptr<VV> newValue;
-   void (MainWindow::*callback)(void);
+   UU & m_updatee;
+   void (UU::*m_setter)(std::shared_ptr<VV>);
+   std::shared_ptr<VV> m_oldValue;
+   std::shared_ptr<VV> m_newValue;
+   void (MainWindow::*m_callback)(void);
 };
 
 

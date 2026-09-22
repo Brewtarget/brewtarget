@@ -47,7 +47,8 @@ namespace Measurement {
       ~ConstrainedAmount() = default;
 
       //! Regular constructor
-      ConstrainedAmount(double const quantity, Measurement::Unit const & unit) : Measurement::Amount{quantity, unit} {
+      ConstrainedAmount(double const quantity_, Measurement::Unit const & unit_) :
+         Measurement::Amount{quantity_, unit_} {
          checkConstructAssignOrMoveOK("construct");
          return;
       }

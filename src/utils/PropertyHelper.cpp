@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * utils/PropertyHelper.cpp is part of Brewtarget, and is copyright the following authors 2025:
+ * utils/PropertyHelper.cpp is part of Brewtarget, and is copyright the following authors 2025-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -22,8 +22,8 @@ Qt::AlignmentFlag PropertyHelper::getAlignment(TypeInfo const & typeInfo) {
    //
    // Number fields are right-aligned
    //
-   if (typeInfo.typeIndex == typeid(double             ) ||
-       typeInfo.typeIndex == typeid(Measurement::Amount)) {
+   if (typeInfo.typeIndex == TypeInfo::Index::Double ||
+       typeInfo.typeIndex == TypeInfo::Index::MeasurementAmount) {
       return Qt::AlignRight;
    }
    return Qt::AlignLeft;
@@ -181,7 +181,7 @@ QVariant PropertyHelper::readDataFromPropertyValue(
       //
       // If it's a double, then we know it must be measured in canonical units of that PhysicalQuantity.
       //
-      if (typeInfo.typeIndex == typeid(double)) {
+      if (typeInfo.typeIndex == TypeInfo::Index::Double) {
          Q_ASSERT(std::holds_alternative<Measurement::PhysicalQuantity>(*typeInfo.fieldType));
 
          Q_ASSERT(modelData.canConvert<double>());

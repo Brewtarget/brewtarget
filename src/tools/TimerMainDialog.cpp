@@ -20,7 +20,7 @@
 #include <QMessageBox>
 #include <QToolTip>
 
-#include "boiltime.h"
+#include "BoilTimer.h"
 #include "MainWindow.h"
 #include "measurement/Unit.h"
 #include "measurement/Measurement.h"
@@ -29,28 +29,28 @@
 #include "TimerListDialog.h"
 #include "TimerWidget.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_TimerMainDialog.cpp"
 #endif
 
 TimerMainDialog::TimerMainDialog(MainWindow* parent) :
    QDialog{parent},
-   mainWindow{parent},
-   timers{new QList<TimerWidget*>()},
-   stopped{false},
-   limitAlarmRing{false},
-   alarmLimit{5} {
+   m_mainWindow{parent},
+   m_timers{new QList<TimerWidget*>()},
+   m_stopped{false},
+   m_limitAlarmRing{false},
+   m_alarmLimit{5} {
    this->setupUi(this);
 
-   this->boilTime = new BoilTime(this);
-   this->boilTime->setBoilTime(setBoilTimeBox->value() * 60); //default 60mins
-   this->timerWindow = new TimerListDialog(this, timers);
+   this->m_boilTimer = new BoilTimer(this);
+   this->m_boilTimer->setBoilTime(setBoilTimeBox->value() * 60); //default 60mins
+   this->m_timerWindow = new TimerListDialog(this, m_timers);
    this->updateTime();
 
    //Connections
-   connect(boilTime, &BoilTime::BoilTimeChanged, this, &TimerMainDialog::decrementTimer);
-   connect(boilTime, &BoilTime::timesUp, this, &TimerMainDialog::timesUp);
+   connect(m_boilTimer, &BoilTimer::BoilTimeChanged, this, &TimerMainDialog::decrementTimer);
+   connect(m_boilTimer, &BoilTimer::timesUp, this, &TimerMainDialog::timesUp);
 
    this->retranslateUi(this);
    return;
@@ -64,9 +64,9 @@ void TimerMainDialog::on_addTimerButton_clicked() {
 }
 
 TimerWidget* TimerMainDialog::createNewTimer() {
-   TimerWidget* newTimer = new TimerWidget(this, boilTime);
-   timers->append(newTimer);
-   newTimer->setAlarmLimits(limitAlarmRing, alarmLimit);
+   TimerWidget* newTimer = new TimerWidget(this, m_boilTimer);
+   m_timers->append(newTimer);
+   newTimer->setAlarmLimits(m_limitAlarmRing, m_alarmLimit);
    return newTimer;
 }
 
@@ -74,7 +74,7 @@ void TimerMainDialog::createTimer() {
    TimerWidget* newTimer = createNewTimer();
    sortTimers();
    showTimers();
-   timerWindow->setTimerVisible(newTimer);
+   m_timerWindow->setTimerVisible(newTimer);
    return;
 }
 
@@ -83,7 +83,7 @@ void TimerMainDialog::createTimer(QString n) {
    newTimer->setNote(n);
    sortTimers();
    showTimers();
-   timerWindow->setTimerVisible(newTimer);
+   m_timerWindow->setTimerVisible(newTimer);
    return;
 }
 
@@ -93,38 +93,38 @@ void TimerMainDialog::createTimer(QString n, int t) {
    newTimer->setTime(t);
    sortTimers();
    showTimers();
-   timerWindow->setTimerVisible(newTimer);
+   m_timerWindow->setTimerVisible(newTimer);
    return;
 }
 
 void TimerMainDialog::showTimers() {
-   if (timers->isEmpty()) {
-      if (!timerWindow->isHidden()) {
-         timerWindow->hide();
+   if (m_timers->isEmpty()) {
+      if (!m_timerWindow->isHidden()) {
+         m_timerWindow->hide();
       }
    } else {
-      int x = timerWindow->x();
-      int y = timerWindow->y();
-      this->timerWindow->setAttribute(Qt::WA_DeleteOnClose);
-      this->timerWindow->close();
+      int x = m_timerWindow->x();
+      int y = m_timerWindow->y();
+      this->m_timerWindow->setAttribute(Qt::WA_DeleteOnClose);
+      this->m_timerWindow->close();
 
-      this->timerWindow = new TimerListDialog(this, timers);
-      this->timerWindow->move(x, y);
-      this->timerWindow->show();
+      this->m_timerWindow = new TimerListDialog(this, m_timers);
+      this->m_timerWindow->move(x, y);
+      this->m_timerWindow->show();
    }
    return;
 }
 
 void TimerMainDialog::on_startButton_clicked() {
-   if (!this->boilTime->isStarted()) {
-      this->boilTime->startTimer();
+   if (!this->m_boilTimer->isStarted()) {
+      this->m_boilTimer->startTimer();
    }
    return;
 }
 
 void TimerMainDialog::on_stopButton_clicked() {
-   if (this->boilTime->isStarted()) {
-      this->boilTime->stopTimer();
+   if (this->m_boilTimer->isStarted()) {
+      this->m_boilTimer->stopTimer();
    }
    return;
 }
@@ -136,11 +136,11 @@ void TimerMainDialog::on_resetButton_clicked() {
 
 void TimerMainDialog::resetTimers() {
    // Reset boil time to defined boil time
-   this->boilTime->setBoilTime(setBoilTimeBox->value() * 60);
+   this->m_boilTimer->setBoilTime(setBoilTimeBox->value() * 60);
    this->updateTime();
    // Reset all children timers
-   if (!this->timers->isEmpty()) {
-      for (TimerWidget* t : *this->timers) {
+   if (!this->m_timers->isEmpty()) {
+      for (TimerWidget* t : *this->m_timers) {
          t->reset();
       }
    }
@@ -148,9 +148,9 @@ void TimerMainDialog::resetTimers() {
 }
 
 void TimerMainDialog::on_setBoilTimeBox_valueChanged(int t) {
-   this->boilTime->setBoilTime(t * 60);
+   this->m_boilTimer->setBoilTime(t * 60);
    this->resetTimers();
-   this->stopped = false;
+   this->m_stopped = false;
    return;
 }
 
@@ -162,7 +162,7 @@ void TimerMainDialog::decrementTimer() {
 }
 
 void TimerMainDialog::updateTime() {
-   unsigned int time = boilTime->getTime();
+   unsigned int time = m_boilTimer->getTime();
    this->timeLCD->display(timeToString(time));
    return;
 }
@@ -209,19 +209,18 @@ void TimerMainDialog::on_hideButton_clicked() {
 }
 
 void TimerMainDialog::hideTimers() {
-   if (!this->timerWindow->isHidden()) {
-      this->timerWindow->hide();
+   if (!this->m_timerWindow->isHidden()) {
+      this->m_timerWindow->hide();
    }
    return;
 }
 
 void TimerMainDialog::on_showButton_clicked() {
-   if (!this->timers->isEmpty()) {
-      if (this->timerWindow->isHidden()) {
-         this->timerWindow->show();
+   if (!this->m_timers->isEmpty()) {
+      if (this->m_timerWindow->isHidden()) {
+         this->m_timerWindow->show();
       }
-   }
-   else {
+   } else {
       QMessageBox::warning(this, tr("No Timers"), tr("There are currently no timers to show."));
    }
    return;
@@ -229,10 +228,10 @@ void TimerMainDialog::on_showButton_clicked() {
 
 void TimerMainDialog::timesUp() {
    // If there are no knockout timers generate a timer for this
-   if (!this->stopped) {
+   if (!this->m_stopped) {
       bool isKnockOutTimer = false;
-      QString note = tr("KNOCKOUT");
-      for (TimerWidget* t : *this->timers) {
+      QString const note = tr("KNOCKOUT");
+      for (TimerWidget* t : *this->m_timers) {
          if (t->getTime() == 0) {
             isKnockOutTimer = true;
             t->setNote(note); //update existing timers note
@@ -241,14 +240,14 @@ void TimerMainDialog::timesUp() {
       if (!isKnockOutTimer) {
          this->createTimer(note);
       }
-      stopped = true;
+      m_stopped = true;
    }
    return;
 }
 
 void TimerMainDialog::on_loadRecipesButton_clicked() {
    // Load current recipes
-   if (!this->timers->isEmpty()) {
+   if (!this->m_timers->isEmpty()) {
       QMessageBox mb;
       mb.setText(tr("Active Timers"));
       mb.setInformativeText(tr("You currently have active timers, would you like to replace them or add to them?"));
@@ -261,7 +260,7 @@ void TimerMainDialog::on_loadRecipesButton_clicked() {
          removeAllTimers();
       }
    }
-   Recipe * recipe = mainWindow->currentRecipe();
+   Recipe * recipe = m_mainWindow->currentRecipe();
    this->setBoilTimeBox->setValue(recipe->boil() ? recipe->boil()->boilTime_mins() : 0.0);
    bool timerFound = false;
    int duplicates = 0;
@@ -270,8 +269,8 @@ void TimerMainDialog::on_loadRecipesButton_clicked() {
       if (hopAddition->stage() == RecipeAddition::Stage::Boil &&
           hopAddition->addAtTime_mins()) {
          QString note = tr("%1 of %2").arg(Measurement::displayAmount(hopAddition->amount())).arg(hopAddition->hop()->name());
-         int addAtTime_seconds = *hopAddition->addAtTime_mins() * 60;
-         for (TimerWidget * td : *this->timers) {
+         int const addAtTime_seconds = *hopAddition->addAtTime_mins() * 60;
+         for (TimerWidget * td : *this->m_timers) {
             if (td->getTime() == addAtTime_seconds) {
                if (!td->getNote().contains(note, Qt::CaseInsensitive)) {
                   td->setNote(note); // append note to existing timer
@@ -314,17 +313,17 @@ void TimerMainDialog::on_cancelButton_clicked() {
 }
 
 void TimerMainDialog::removeAllTimers() {
-   qDeleteAll(*this->timers);
-   this->timers->clear();
-   this->timerWindow->close();
+   qDeleteAll(*this->m_timers);
+   this->m_timers->clear();
+   this->m_timerWindow->close();
    return;
 }
 
 void TimerMainDialog::removeTimer(TimerWidget *t) {
-   for (int i = 0; i < this->timers->count(); i++) {
-      if (this->timers->at(i) == t) {
-         delete(this->timers->at(i));
-         this->timers->removeAt(i);
+   for (int i = 0; i < this->m_timers->count(); i++) {
+      if (this->m_timers->at(i) == t) {
+         delete(this->m_timers->at(i));
+         this->m_timers->removeAt(i);
       }
    }
    this->showTimers();
@@ -333,8 +332,8 @@ void TimerMainDialog::removeTimer(TimerWidget *t) {
 
 void TimerMainDialog::reject() {
    // Escape resets MainTimer if timer has completed
-   if (boilTime->isCompleted()) {
-      boilTime->stopTimer();
+   if (m_boilTimer->isCompleted()) {
+      m_boilTimer->stopTimer();
       removeAllTimers();
       resetTimers();
       this->hide();
@@ -346,58 +345,56 @@ void TimerMainDialog::reject() {
 
 void TimerMainDialog::on_limitRingTimeCheckBox_clicked() {
    if (limitRingTimeCheckBox->isChecked()) {
-      limitAlarmRing = true;
+      m_limitAlarmRing = true;
       limitRingTimeSpinBox->setEnabled(true);
    }
    if (!limitRingTimeCheckBox->isChecked()) {
-      limitAlarmRing = false;
+      m_limitAlarmRing = false;
       limitRingTimeSpinBox->setEnabled(false);
    }
-   setRingLimits(limitAlarmRing, alarmLimit);
+   this->setRingLimits();
    return;
 }
 
-void TimerMainDialog::on_limitRingTimeSpinBox_valueChanged(int limit) {
-   this->alarmLimit = limit;
-   this->setRingLimits(this->limitAlarmRing, alarmLimit);
+void TimerMainDialog::on_limitRingTimeSpinBox_valueChanged(int const limit) {
+   this->m_alarmLimit = limit;
+   this->setRingLimits();
    return;
 }
 
-// .:TODO:. I think this function needs refactoring given that it doesn't do anything with either of its parameters!
-void TimerMainDialog::setRingLimits([[maybe_unused]] bool limit,
-                                    [[maybe_unused]] unsigned int a) {
-   for (TimerWidget* t : *this->timers) {
-      t->setAlarmLimits(limitAlarmRing, alarmLimit);
+void TimerMainDialog::setRingLimits() {
+   for (TimerWidget * tt : *this->m_timers) {
+      tt->setAlarmLimits(m_limitAlarmRing, m_alarmLimit);
    }
    return;
 }
 
 unsigned int TimerMainDialog::getAlarmLimit() {
-   return alarmLimit;
+   return m_alarmLimit;
 }
 
 void TimerMainDialog::setTimerVisible(TimerWidget *t) {
-   timerWindow->setTimerVisible(t);
+   m_timerWindow->setTimerVisible(t);
    return;
 }
 
 void TimerMainDialog::sortTimers() {
-   if (!this->timers->isEmpty()) {
+   if (!this->m_timers->isEmpty()) {
       QList<TimerWidget*>* sortedTimers = new QList<TimerWidget*>;
-      TimerWidget* biggest = this->timers->front();
-      while (!this->timers->isEmpty()) {
-         for (TimerWidget* t : *this->timers) {
+      TimerWidget* biggest = this->m_timers->front();
+      while (!this->m_timers->isEmpty()) {
+         for (TimerWidget* t : *this->m_timers) {
             if (t->getTime() > biggest->getTime()) {
                biggest = t;
             }
          }
          sortedTimers->append(biggest);
-         this->timers->removeOne(biggest);
-         if (!this->timers->isEmpty()) {
-            biggest = this->timers->front();
+         this->m_timers->removeOne(biggest);
+         if (!this->m_timers->isEmpty()) {
+            biggest = this->m_timers->front();
          }
       }
-      this->timers = sortedTimers;
+      this->m_timers = sortedTimers;
    }
    return;
 }

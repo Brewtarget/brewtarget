@@ -40,7 +40,7 @@
 #include "model/Yeast.h"
 #include "PersistentSettings.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_ScaleRecipeTool.cpp"
 #endif

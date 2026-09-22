@@ -24,7 +24,7 @@
 class QTextStream;
 
 /**
- * \class JsonSchema holds all the files for a single JSON schema (which we give to Valijson for it to validate a JSON
+ * \class JsonSchema holds all the files for a single JSON schema (which we give to Blaze for it to validate a JSON
  *        document)
  *
  *        Note that this class ONLY wraps the JSON schema (see https://json-schema.org/).  It does not hold any of the
@@ -101,13 +101,6 @@ private:
    JsonSchema(JsonSchema &&) = delete;
    //! No move assignment
    JsonSchema & operator=(JsonSchema &&) = delete;
-
-
-   /**
-    * \brief This is the callback we give to Valijson, which then forwards it on to whatever the last JsonSchema object
-    *        we were dealing with on this thread was (which should be the one that gave the callback to Valijson).
-    */
-   static boost::json::value const * fetchReferencedDocument(std::string const & uri);
 };
 
 #endif

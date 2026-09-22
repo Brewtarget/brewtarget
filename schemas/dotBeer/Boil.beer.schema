@@ -15,7 +15,6 @@
   "$id": "https://dotbeer.org/schema/Boil.beer.schema",
   "type": "object",
   "description": "A boil procedure, which can be used by multiple recipes.  A boil procedure with no steps is the same as a standard single step boil.",
-  "additionalProperties": false,
   "properties": {
     "name": {
       "type": "string"
@@ -46,6 +45,7 @@
   "required": [
     "boil_time"
   ],
+  "unevaluatedProperties": false,
   "$defs": {
     "BoilStep": {
       "type": "object",
@@ -73,10 +73,10 @@
           }
         }
       ],
-      "unevaluatedProperties": false, // NB: Best to use this rather than additionalProperties when composing with allOf
       "required": [
         "name"
-      ]
+      ],
+      "unevaluatedProperties": false
     }
   }
 }

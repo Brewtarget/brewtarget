@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/OptionalHelpers.cpp is part of Brewtarget, and is copyright the following authors 2023:
+ * utils/OptionalHelpers.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -27,11 +27,11 @@ void Optional::removeOptionalWrapper(QVariant & propertyValue, TypeInfo const & 
 
    // Most common field type is double, so check it first
    // QString is also pretty common, but it's never optional because an empty string suffices for "no data"
-   if (typeInfo.typeIndex == typeid(double      )) { removeOptionalWrapper<double      >(propertyValue, hasValue); return; }
-   if (typeInfo.typeIndex == typeid(int         )) { removeOptionalWrapper<int         >(propertyValue, hasValue); return; }
-   if (typeInfo.typeIndex == typeid(unsigned int)) { removeOptionalWrapper<unsigned int>(propertyValue, hasValue); return; }
-   if (typeInfo.typeIndex == typeid(bool        )) { removeOptionalWrapper<bool        >(propertyValue, hasValue); return; }
-   if (typeInfo.typeIndex == typeid(QDate       )) { removeOptionalWrapper<QDate       >(propertyValue, hasValue); return; }
+   if (typeInfo.typeIndex == TypeInfo::Index::Double     ) { removeOptionalWrapper<double      >(propertyValue, hasValue); return; }
+   if (typeInfo.typeIndex == TypeInfo::Index::Int        ) { removeOptionalWrapper<int         >(propertyValue, hasValue); return; }
+   if (typeInfo.typeIndex == TypeInfo::Index::UnsignedInt) { removeOptionalWrapper<unsigned int>(propertyValue, hasValue); return; }
+   if (typeInfo.typeIndex == TypeInfo::Index::Bool       ) { removeOptionalWrapper<bool        >(propertyValue, hasValue); return; }
+   if (typeInfo.typeIndex == TypeInfo::Index::QDate      ) { removeOptionalWrapper<QDate       >(propertyValue, hasValue); return; }
 
    // If the native type is an enum, then the QVariant should actually contain an int
    if (typeInfo.isEnum() && propertyValue.canConvert<std::optional<int>>()) {
@@ -49,10 +49,10 @@ void Optional::removeOptionalWrapper(QVariant & propertyValue, TypeInfo const & 
 }
 
 QVariant Optional::makeNullOpt(TypeInfo const & typeInfo) {
-   if (typeInfo.typeIndex == typeid(double      )) { return QVariant::fromValue<std::optional<double      >>(std::nullopt); }
-   if (typeInfo.typeIndex == typeid(int         )) { return QVariant::fromValue<std::optional<int         >>(std::nullopt); }
-   if (typeInfo.typeIndex == typeid(unsigned int)) { return QVariant::fromValue<std::optional<unsigned int>>(std::nullopt); }
-   if (typeInfo.typeIndex == typeid(bool        )) { return QVariant::fromValue<std::optional<bool        >>(std::nullopt); }
+   if (typeInfo.typeIndex == TypeInfo::Index::Double     ) { return QVariant::fromValue<std::optional<double      >>(std::nullopt); }
+   if (typeInfo.typeIndex == TypeInfo::Index::Int        ) { return QVariant::fromValue<std::optional<int         >>(std::nullopt); }
+   if (typeInfo.typeIndex == TypeInfo::Index::UnsignedInt) { return QVariant::fromValue<std::optional<unsigned int>>(std::nullopt); }
+   if (typeInfo.typeIndex == TypeInfo::Index::Bool       ) { return QVariant::fromValue<std::optional<bool        >>(std::nullopt); }
 
    // It's a coding error if we reached here
    qCritical().noquote() <<

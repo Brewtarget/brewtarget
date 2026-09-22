@@ -42,6 +42,7 @@
       }
     }
   ],
+  "unevaluatedProperties": false,
   "$defs": {
     "MiscIngredientBase": {
       "type": "object",
@@ -90,7 +91,8 @@
       "required": [
         "name",
         "misc_type"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "MiscIngredientAmount" : {
       "description": "The ways in which an amount of a MiscIngredient could be measured",
@@ -104,7 +106,8 @@
         {
           "$ref": "Measurement.beer.schema#/$defs/Count"
         }
-      ]
+      ],
+      "unevaluatedProperties": false
     }
   }
 }

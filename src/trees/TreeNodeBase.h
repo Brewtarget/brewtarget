@@ -177,7 +177,8 @@ public:
    }
 
    virtual QVariant data(int const column, int const role) const override {
-      if (column < 0 || column >= ColumnOwnerTraits<Derived>::numColumns()) {
+      int const numColumns = static_cast<int>(ColumnOwnerTraits<Derived>::numColumns());
+      if (column < 0 || column >= numColumns) {
          return QVariant{};
       }
 
@@ -332,7 +333,7 @@ public:
    //! \brief returns the number of children of the folder (or recipe)
    virtual int childCount() const override {
       if constexpr (IsSubstantiveVariant<ChildPtrTypes>) {
-         return this->m_children.size();
+         return static_cast<int>(this->m_children.size());
       } else {
          return 0;
       }
@@ -343,10 +344,11 @@ public:
     *
     *        TODO: One day it would be neat to have an iterator for looping over children etc.
     */
-   ChildPtrTypes child(int number) const {
+   ChildPtrTypes child(int const number) const {
       if constexpr (IsSubstantiveVariant<ChildPtrTypes>) {
          Q_ASSERT(number < static_cast<int>(this->m_children.size()));
-         return this->m_children.at(number);
+         Q_ASSERT(number >= 0);
+         return this->m_children.at(static_cast<unsigned int>(number));
       } else {
          // For the moment, it is simpler to allow calls to this function even when there can be no children.  We just
          // always return the null variant in such cases.
@@ -354,7 +356,7 @@ public:
       }
    }
 
-   virtual TreeNode * rawChild(int number) const override {
+   virtual TreeNode * rawChild(int const number) const override {
       // If this node type does not support children, there are never any to return.  (It is in fact unlikely we'd get
       // called in such circumstances, but we can't have a requires clause on a virtual function, so it's easier just to
       // cover the case here.)
@@ -488,7 +490,6 @@ public:
    // as we can get is using [[no_unique_address]] here, which allows the compiler to optimise away the variable storage
    // when it's an empty class type
    //
-   struct Empty { };
    [[no_unique_address]] std::conditional_t<IsSubstantiveVariant<ChildPtrTypes>,
                                             std::vector<ChildPtrTypes>,
                                             Empty>  m_children;

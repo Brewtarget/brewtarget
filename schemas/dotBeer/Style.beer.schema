@@ -79,7 +79,8 @@
           "description": "Example beers of this style.",
           "type": "string"
         }
-      }
+      },
+      "unevaluatedProperties": false
     }
   ],
   "$defs": {
@@ -128,7 +129,8 @@
         "category",
         "style_guide",
         "style_type"
-      ]
+      ],
+      "unevaluatedProperties": false
     }
   }
 }

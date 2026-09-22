@@ -623,7 +623,8 @@ public:
             // Before we do that, check whether the items are identical and, if not, give the user a chance to bail.
             //
             QList<BtStringConst const *> propertiesThatDiffer = firstItem->getPropertiesThatDiffer(*lastItem);
-            if (int const numDifferences = propertiesThatDiffer.size(); numDifferences > 0) {
+            if (auto const numDifferences = propertiesThatDiffer.size();
+                numDifferences > 0) {
                //
                // Show the user the list of properties that differ, and their values, and ask them if they really really
                // want to force the merge.  We'll show them how many fields differ in the main message, and then we'll list

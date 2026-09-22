@@ -41,7 +41,7 @@
 #include "qtModels/sortFilterProxyModels/WaterSortFilterProxyModel.h"
 #include "qtModels/sortFilterProxyModels/YeastSortFilterProxyModel.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing these includes reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_BoilSortFilterProxyModel.cpp"
    #include "moc_EquipmentSortFilterProxyModel.cpp"

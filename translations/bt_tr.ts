@@ -2608,10 +2608,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Import (from BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Merge selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2681,6 +2677,18 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Nothing is selected or none of the selected things can be exported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contained in Folder Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export (to dotBeer, BeerXML or BeerJSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import (from dotBeer, BeerXML or BeerJSON)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6466,27 +6474,7 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
         <translation type="unfinished">Tarih</translation>
     </message>
     <message>
-        <source>MeasurementWithUnits</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OneOfMeasurementsWithUnits</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SingleUnitValue</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>RequiredConstant</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>At node %1, error was %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 errors found in JSON file.  First error: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6851,6 +6839,34 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>Unrecognised (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List-Of-Records</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measurement-With-Units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>One-Of-Measurements-With-Units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Single-Unit-Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Required-Constant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder-Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 errors found in JSON file.  First error at %2: schema condition %3 is violated because &quot;%4&quot;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7937,6 +7953,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Change Apparent Attenuation</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calories/33cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calories/12oz</source>
+        <translation type="unfinished">Kalori/12oz</translation>
     </message>
 </context>
 <context>
@@ -11949,7 +11973,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Calories/12oz</source>
-        <translation>Kalori/12oz</translation>
+        <translation type="vanished">Kalori/12oz</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -12248,10 +12272,6 @@ The final volume in the primary is %1.</source>
         <translation>Mayşeler</translation>
     </message>
     <message>
-        <source>1.0</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Export to &amp;BBCode</source>
         <translation>&amp;BBCode olarak dışa aktar</translation>
     </message>
@@ -12277,7 +12297,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Tar&amp;get Boil Size</source>
-        <translation>Hedeflenen Kaynama &amp;Boyutu</translation>
+        <translation type="vanished">Hedeflenen Kaynama &amp;Boyutu</translation>
     </message>
     <message>
         <source>Recipe Locked</source>
@@ -12285,7 +12305,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Target Batch Si&amp;ze</source>
-        <translation>Hedeflenen Şıra Boyut&amp;u</translation>
+        <translation type="vanished">Hedeflenen Şıra Boyut&amp;u</translation>
     </message>
     <message>
         <source>&amp;Efficiency (%)</source>
@@ -12297,7 +12317,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Size</source>
-        <translation>Kaynama Boyutu</translation>
+        <translation type="vanished">Kaynama Boyutu</translation>
     </message>
     <message>
         <source>Edit</source>
@@ -12485,6 +12505,26 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Efficienc&amp;y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target</source>
+        <translation type="unfinished">Hedef</translation>
+    </message>
+    <message>
+        <source>Calculated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculated final volume into the primary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-Boil Volume</source>
+        <translation type="unfinished">Kaynatma Öncesi Hacim</translation>
+    </message>
+    <message>
+        <source>Calculated preboil volume - See Boil tab below</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -13516,7 +13556,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Always show snapshots</source>
-        <translation>Anlık görütüleri her zaman göster</translation>
+        <translation type="vanished">Anlık görütüleri her zaman göster</translation>
     </message>
     <message>
         <source>How many times Brewtarget needs to be run to trigger another backup: 1 means always backup</source>
@@ -13586,6 +13626,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Default boil time to set on new recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show snapshots by default</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -13803,7 +13847,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Asst. Brewer</source>
-        <translation>Bira Yardımcı Üreticisi</translation>
+        <translation type="vanished">Bira Yardımcı Üreticisi</translation>
     </message>
     <message>
         <source>Taste Rating</source>
@@ -13871,6 +13915,18 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date Created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Assistant Brewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calories/12oz</source>
+        <translation type="unfinished">Kalori/12oz</translation>
+    </message>
+    <message>
+        <source>1.0</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

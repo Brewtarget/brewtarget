@@ -60,6 +60,7 @@
       }
     }
   ],
+  "unevaluatedProperties": false,
   "$defs": {
     "HopBase": {
       "type": "object",
@@ -113,7 +114,8 @@
       "required": [
         "name",
         "alpha_acid"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "HopAmount" : {
       "description": "The ways in which an amount of a Hop could be measured",
@@ -124,7 +126,8 @@
         {
           "$ref": "Measurement.beer.schema#/$defs/Mass"
         }
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "OilContent": {
       "type": "object",
@@ -173,7 +176,8 @@
         "xanthohumol": {
           "$ref": "Measurement.beer.schema#/$defs/Percentage"
         }
-      }
+      },
+      "unevaluatedProperties": false
     }
   }
 }

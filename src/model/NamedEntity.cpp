@@ -36,7 +36,7 @@
 #include "model/Recipe.h"
 #include "model/RecipeUtils.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_NamedEntity.cpp"
 #endif
@@ -149,7 +149,8 @@ NamedEntity::NamedEntity(NamedEntity const & other) :
 
 void NamedEntity::swap(NamedEntity & other) noexcept {
    // We assert that we only swap two objects of the same class.  We never want to swap a Hop with a Recipe etc.
-   Q_ASSERT(typeid(*this) == typeid(other));
+   // Comment in NamedEntity::operator==() applies here too
+   Q_ASSERT(this->metaObject() == other.metaObject());
 
    // Assume nothing important to swap in QObject (see comment in model/NamedEntity.h
    //
@@ -191,9 +192,14 @@ NamedEntity::~NamedEntity() = default;
 //   - We want to do the type comparison first, as this saves us repeating this test in each subclass
 //
 bool NamedEntity::operator==(NamedEntity const & other) const {
+   //
    // The first thing to do is check we are even comparing two objects of the same class.  A Hop is never equal to
    // a Recipe etc.
-   if (typeid(*this) != typeid(other)) {
+   //
+   // With RTTI enabled, we could write `if (typeid(*this) != typeid(other)) {...}` here.  However, both objects inherit
+   // from QObject, so we can use the Qt way rather than have the additional overhead of RTTI.
+   //
+   if (this->metaObject() != other.metaObject()) {
 //      qDebug() << Q_FUNC_INFO << "No type id match (" << typeid(*this).name() << "/" << typeid(other).name() << ")";
       return false;
    }

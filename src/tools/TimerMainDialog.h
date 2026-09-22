@@ -27,7 +27,7 @@
 #include <QString>
 #include <QWidget>
 
-class BoilTime;
+class BoilTimer;
 class MainWindow;
 class TimerWidget;
 class TimerListDialog;
@@ -70,7 +70,7 @@ private:
    void resetTimers();
    void updateTime();
    static QString timeToString(int t);
-   void setRingLimits(bool l, unsigned int a);
+   void setRingLimits();
    void sortTimers();
    TimerWidget* createNewTimer();
    void createTimer();
@@ -79,13 +79,13 @@ private:
    //Overload QDialog::reject()
    void reject();
 
-   MainWindow* mainWindow; //To get currently selected recipe
-   QList<TimerWidget*> * timers;
-   TimerListDialog* timerWindow;
-   BoilTime* boilTime;
-   bool stopped;
-   bool limitAlarmRing;
-   unsigned int alarmLimit; // In seconds
+   MainWindow* m_mainWindow; //To get currently selected recipe
+   QList<TimerWidget*> * m_timers;
+   TimerListDialog* m_timerWindow;
+   BoilTimer * m_boilTimer;
+   bool m_stopped;
+   bool m_limitAlarmRing;
+   unsigned int m_alarmLimit; // In seconds
 };
 
 #endif

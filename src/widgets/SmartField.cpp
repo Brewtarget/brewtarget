@@ -87,15 +87,10 @@ public:
          // It's a coding error to specify precision for a field that's not a (possibly optional) double (or a float,
          // but we don't use float) or an Amount.  However, we allow precision of 0 for a type that is stored as an int
          // or unsigned int, because that's what we're going to set it to anyway.
-         //
-         // TBD: I think the std::optional lines are superfluous here because we ensure typeInfo.typeIndex matches the
-         //      underlying type.
-         Q_ASSERT(typeInfo.typeIndex == typeid(double) ||
-                  typeInfo.typeIndex == typeid(std::optional<double>) ||
-                  typeInfo.typeIndex == typeid(Measurement::Amount) ||
-                  typeInfo.typeIndex == typeid(std::optional<Measurement::Amount>) ||
-                  (0 == *precision && typeInfo.typeIndex == typeid(int         )) ||
-                  (0 == *precision && typeInfo.typeIndex == typeid(unsigned int)) );
+         Q_ASSERT(typeInfo.typeIndex == TypeInfo::Index::Double            ||
+                  typeInfo.typeIndex == TypeInfo::Index::MeasurementAmount ||
+                  (0 == *precision && typeInfo.typeIndex == TypeInfo::Index::Int        ) ||
+                  (0 == *precision && typeInfo.typeIndex == TypeInfo::Index::UnsignedInt) );
 
          // It's a coding error if precision is not some plausible value.  For the moment at least, we assert there
          // are no envisageable circumstances where we need to show more than 3 decimal places
@@ -103,8 +98,8 @@ public:
          this->m_precision = *precision;
       }
       // For integers, there are no decimal places to show
-      if (typeInfo.typeIndex == typeid(int) ||
-          typeInfo.typeIndex == typeid(unsigned int)) {
+      if (typeInfo.typeIndex == TypeInfo::Index::Int        ||
+          typeInfo.typeIndex == TypeInfo::Index::UnsignedInt) {
          this->m_precision = 0;
       }
       this->m_maximalDisplayString = maximalDisplayString;
@@ -303,11 +298,11 @@ template<typename T, typename> void SmartField::setQuantity(std::optional<T> qua
    // Usually leave this debug log commented out unless trouble-shooting as it generates a lot of logging
 //   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "quantity =" << quantity;
 
-   if (this->getTypeInfo().typeIndex != typeid(T)) {
+   if (this->getTypeInfo().typeIndex != TypeInfo::indexOf<T>()) {
       // This is a coding error
       qCritical() <<
          Q_FUNC_INFO << this->pimpl->m_fieldFqName << ": Trying to set wrong type; m_typeInfo=" <<
-         this->getTypeInfo() << ", typeid(T)=" << typeid(T).name();
+         this->getTypeInfo() << ", TypeInfo::indexOf<T>()=" << TypeInfo::indexOf<T>();
       Q_ASSERT(false);
    }
 
@@ -325,11 +320,11 @@ template<typename T, typename> void SmartField::setQuantity(T quantity) {
    // Usually leave this debug log commented out unless trouble-shooting as it generates a lot of logging
 //   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "quantity =" << quantity;
 
-   if (this->getTypeInfo().typeIndex != typeid(T)) {
+   if (this->getTypeInfo().typeIndex != TypeInfo::indexOf<T>()) {
       // This is a coding error
       qCritical() <<
          Q_FUNC_INFO << this->pimpl->m_fieldFqName << ": Trying to set wrong type; m_typeInfo=" <<
-         this->getTypeInfo() << ", typeid(T)=" << typeid(T).name();
+         this->getTypeInfo() << ", TypeInfo::indexOf<T>()=" << TypeInfo::indexOf<T>();
       Q_ASSERT(false);
    }
 
@@ -430,31 +425,31 @@ void SmartField::setFromVariant(QVariant const & value) {
    // Remember that typeInfo.typeIndex has std::optional stripped out, hence the need for typeInfo.isOptional()
    //
    auto const ti {typeInfo.typeIndex};
-   if (ti == typeid(int)) {
+   if (ti == TypeInfo::Index::Int) {
       if (typeInfo.isOptional()) {
          this->setQuantity(value.value<std::optional<int>>());
       } else {
          this->setQuantity(value.value<int>());
       }
-   } else if (ti == typeid(unsigned int)) {
+   } else if (ti == TypeInfo::Index::UnsignedInt) {
       if (typeInfo.isOptional()) {
          this->setQuantity(value.value<std::optional<unsigned int>>());
       } else {
          this->setQuantity(value.value<unsigned int>());
       }
-   } else if (ti == typeid(double)) {
+   } else if (ti == TypeInfo::Index::Double) {
       if (typeInfo.isOptional()) {
          this->setQuantity(value.value<std::optional<double>>());
       } else {
          this->setQuantity(value.value<double>());
       }
-   } else if (ti == typeid(Measurement::Amount)) {
+   } else if (ti == TypeInfo::Index::MeasurementAmount) {
       if (typeInfo.isOptional()) {
          this->setAmount(value.value<std::optional<Measurement::Amount>>());
       } else {
          this->setAmount(value.value<Measurement::Amount >());
       }
-   } else if (ti == typeid(QString)) {
+   } else if (ti == TypeInfo::Index::QString) {
       Q_ASSERT(!typeInfo.isOptional());
       this->setRawText(value.value<QString>());
    } else {
@@ -474,15 +469,15 @@ QVariant SmartField::getAsVariant() const {
    // needed for doubles.
    //
    auto const ti {typeInfo.typeIndex};
-   if (ti == typeid(int)) {
+   if (ti == TypeInfo::Index::Int) {
       return typeInfo.isOptional() ? QVariant::fromValue(this->getOptValue   <int>()) :
                                      QVariant::fromValue(this->getNonOptValue<int>());
    }
-   if (ti == typeid(unsigned int)) {
+   if (ti == TypeInfo::Index::UnsignedInt) {
       return typeInfo.isOptional() ? QVariant::fromValue(this->getOptValue   <unsigned int>()) :
                                      QVariant::fromValue(this->getNonOptValue<unsigned int>());
    }
-   if (ti == typeid(double)) {
+   if (ti == TypeInfo::Index::Double) {
       if (typeInfo.fieldType && std::holds_alternative<Measurement::PhysicalQuantity>(*typeInfo.fieldType)) {
          return typeInfo.isOptional() ? QVariant::fromValue(this->getOptCanonicalQty   ()) :
                                         QVariant::fromValue(this->getNonOptCanonicalQty());
@@ -490,11 +485,11 @@ QVariant SmartField::getAsVariant() const {
       return typeInfo.isOptional() ? QVariant::fromValue(this->getOptValue   <double>()) :
                                      QVariant::fromValue(this->getNonOptValue<double>());
    }
-   if (ti == typeid(Measurement::Amount)) {
+   if (ti == TypeInfo::Index::MeasurementAmount) {
       return typeInfo.isOptional() ? QVariant::fromValue(this->getOptCanonicalAmt   ()) :
                                      QVariant::fromValue(this->getNonOptCanonicalAmt());
    }
-   if (ti == typeid(QString)) {
+   if (ti == TypeInfo::Index::QString) {
       Q_ASSERT(!typeInfo.isOptional());
       return QVariant::fromValue(this->getRawText());
    }
@@ -663,9 +658,9 @@ void SmartField::correctEnteredText() {
       auto const type = this->getTypeInfo().typeIndex;
       bool const optional = this->getTypeInfo().isOptional();
       bool ok = false;
-      if (type == typeid(double      )) { if (optional) { this->setQuantity(this->getOptValue<double      >(&ok)); } else { this->setQuantity(this->getNonOptValue<double      >(&ok)); } } else
-      if (type == typeid(int         )) { if (optional) { this->setQuantity(this->getOptValue<int         >(&ok)); } else { this->setQuantity(this->getNonOptValue<int         >(&ok)); } } else
-      if (type == typeid(unsigned int)) { if (optional) { this->setQuantity(this->getOptValue<unsigned int>(&ok)); } else { this->setQuantity(this->getNonOptValue<unsigned int>(&ok)); } } else {
+      if (type == TypeInfo::Index::Double     ) { if (optional) { this->setQuantity(this->getOptValue<double      >(&ok)); } else { this->setQuantity(this->getNonOptValue<double      >(&ok)); } } else
+      if (type == TypeInfo::Index::Int        ) { if (optional) { this->setQuantity(this->getOptValue<int         >(&ok)); } else { this->setQuantity(this->getNonOptValue<int         >(&ok)); } } else
+      if (type == TypeInfo::Index::UnsignedInt) { if (optional) { this->setQuantity(this->getOptValue<unsigned int>(&ok)); } else { this->setQuantity(this->getNonOptValue<unsigned int>(&ok)); } } else {
          // It's a coding error if we get here
          qCritical() << Q_FUNC_INFO << this->getFqFieldName() << ": Don't know how to parse" << this->getTypeInfo();
          Q_ASSERT(false);

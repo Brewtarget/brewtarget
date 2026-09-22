@@ -75,28 +75,97 @@ namespace DisplayInfo {
 class TypeLookup;
 
 /**
+ * \brief This empty struct is used when we'd like a conditional member variable -- eg in TreeNodeBase, where we want
+ *        m_children to only exist for node types that can have children.  We can't really do conditional variables
+ *        (yet), but using [[no_unique_address]] allows the compiler to optimise away the variable storage when it's an
+ *        empty class type.
+ */
+struct Empty{};
+
+/**
  * \brief Extends \c std::type_index with some other info we need about a type for serialisation, specifically whether
  *        it is an enum and/or whether it is \c std::optional.
  */
 struct TypeInfo {
    /**
-    * \brief This is the type ID of the \b underlying type, eg should be the same for \c int and \c std::optional<int>.
+    * \brief This enumerates all the built-in or object types that we need to know about for displayable object fields.
     *
-    *        \c std::type_index is essentially a wrapper around pointer to \c std::type_info.  It is guaranteed unique
-    *        for each different type and guaranteed to compare equal for two properties of the same type.  (This is
-    *        better than using raw pointers as they are not guaranteed to be identical for two properties of the same
-    *        type.)
-    *
-    *        Note that we cannot use \c std::type_info::name() for this purpose as "the returned string can be identical
-    *        for several types".
+    *        Previously we used std::type_index for this, but that can require enabling RTTI which (a) is unnecessary
+    *        overhead and (b) prevents us linking with certain libraries such as Blaze that explicitly disable RTTI.
     */
-   std::type_index typeIndex;
+   enum class Index {
+      // Built-ins (in alphabetical order)
+      Bool                                ,
+      Double                              ,
+      Int                                 ,
+      UnsignedInt                         ,
+      // Classes (in alphabetical order)
+      BoilStepChillingType                ,  // BoilStep::ChillingType
+      ColorFormula                        ,  // ColorMethods::ColorFormula
+      CurrencyAmount                      ,  // CurrencyAmount
+      Empty                               ,  // Empty
+      FermentableGrainGroup               ,  // Fermentable::GrainGroup
+      FermentablePtr                      ,  // Fermentable *
+      FermentableType                     ,  // Fermentable::Type
+      HopForm                             ,  // Hop::Form
+      HopPtr                              ,  // Hop *
+      HopType                             ,  // Hop::Type
+      IbuMethodsIbuFormula                ,  // IbuMethods::IbuFormula
+      MashStepType                        ,  // MashStep::Type
+      MeasurementAmount                   ,  // Measurement::Amount
+      MeasurementPhysicalQuantity         ,  // Measurement::PhysicalQuantity
+      MeasurementUnit                     ,  // Measurement::Unit const *
+      MiscPtr                             ,  // Misc *
+      MiscType                            ,  // Misc::Type
+      MiscWaterAgentType                  ,  // Misc::WaterAgentType
+      QDate                               ,  // QDate
+      QListOfSptrBoilStep                 ,  // QList<std::shared_ptr<BoilStep>                 >
+      QListOfSptrBrewLog                  ,  // QList<std::shared_ptr<BrewLog>                  >
+      QListOfSptrFermentationStep         ,  // QList<std::shared_ptr<FermentationStep>         >
+      QListOfSptrMashStep                 ,  // QList<std::shared_ptr<MashStep>                 >
+      QListOfSptrRecipeAdditionFermentable,  // QList<std::shared_ptr<RecipeAdditionFermentable>>
+      QListOfSptrRecipeAdditionHop        ,  // QList<std::shared_ptr<RecipeAdditionHop>        >
+      QListOfSptrRecipeAdditionMisc       ,  // QList<std::shared_ptr<RecipeAdditionMisc>       >
+      QListOfSptrRecipeAdditionYeast      ,  // QList<std::shared_ptr<RecipeAdditionYeast>      >
+      QString                             ,  // QString
+      RecipeAdditionHopUse                ,  // RecipeAdditionHop::Use
+      RecipeAdditionMiscUse               ,  // RecipeAdditionMisc::Use
+      RecipeAdditionStage                 ,  // RecipeAddition::Stage
+      RecipeType                          ,  // Recipe::Type
+      SptrBoil                            ,  // std::shared_ptr<Boil            >
+      SptrBrewLog                         ,  // std::shared_ptr<BrewLog         >
+      SptrEquipment                       ,  // std::shared_ptr<Equipment       >
+      SptrFermentation                    ,  // std::shared_ptr<Fermentation    >
+      SptrFermentationStep                ,  // std::shared_ptr<FermentationStep>
+      SptrMash                            ,  // std::shared_ptr<Mash            >
+      SptrRecipe                          ,  // std::shared_ptr<Recipe          >
+      SptrStyle                           ,  // std::shared_ptr<Style           >
+      SptrWater                           ,  // std::shared_ptr<Water           >
+      StockUseReason                      ,  // StockUse::Reason
+      StyleType                           ,  // Style::Type
+      YeastFlocculation                   ,  // Yeast::Flocculation
+      YeastForm                           ,  // Yeast::Form
+      YeastPtr                            ,  // Yeast *
+      YeastType                           ,  // Yeast::Type
+
+   };
+
+   // See below for specialisations.  Second version is to automatically strip out `std::optional` wrapper
+   template<typename   T> static Index indexOf();
+   template<IsOptional T> static Index indexOf();
+
+   static QString indexName(Index const index);
 
    /**
-    * \brief Templated factory function strips out the `std::optional` wrapper
+    * \brief This is the Index of the \b underlying type, eg should be the same for \c int and \c std::optional<int>.
     */
-   template<typename   T> static std::type_index makeTypeIndex() {return typeid(T                     ); }
-   template<IsOptional T> static std::type_index makeTypeIndex() {return typeid(typename T::value_type); }
+   Index typeIndex;
+
+///   /**
+///    * \brief Templated factory function strips out the `std::optional` wrapper
+///    */
+///   template<typename   T> static std::type_index makeTypeIndex() {return typeid(T                     ); }
+///   template<IsOptional T> static std::type_index makeTypeIndex() {return typeid(typename T::value_type); }
 
    /**
     * \brief This classification covers the main special cases we need to deal with, viz whether a property is optional
@@ -237,11 +306,11 @@ struct TypeInfo {
    template<typename T> const static TypeInfo construct(BtStringConst const & propertyName,
                                                         QString (&localisedNameFunction) (),
                                                         TypeLookup const * typeLookup,
-                                                        Access access = Access::ReadWrite,
-                                                        std::optional<QuantityFieldType> fieldType = std::nullopt,
-                                                        DisplayAs displayAs = std::nullopt,
+                                                        Access const access = Access::ReadWrite,
+                                                        std::optional<QuantityFieldType> const fieldType = std::nullopt,
+                                                        DisplayAs const displayAs = std::nullopt,
                                                         Measurement::Unit const * unit = nullptr) {
-      return TypeInfo{makeTypeIndex<T>(),
+      return TypeInfo{indexOf<T>(),
                       makeClassification<T>(),
                       makePointerType<T>(),
                       makeCasters<T>(),
@@ -257,10 +326,10 @@ struct TypeInfo {
    template<typename T> const static TypeInfo construct(BtStringConst const & propertyName,
                                                         QString (&localisedNameFunction) (),
                                                         TypeLookup const * typeLookup,
-                                                        std::optional<QuantityFieldType> fieldType,
-                                                        DisplayAs displayAs = std::nullopt,
+                                                        std::optional<QuantityFieldType> const fieldType,
+                                                        DisplayAs const displayAs = std::nullopt,
                                                         Measurement::Unit const * unit = nullptr) {
-      return TypeInfo{makeTypeIndex<T>(),
+      return TypeInfo{indexOf<T>(),
                       makeClassification<T>(),
                       makePointerType<T>(),
                       makeCasters<T>(),
@@ -274,6 +343,18 @@ struct TypeInfo {
    }
 };
 
+
+// The constrained overload, generic — strips optional and recurses:
+template<IsOptional T> TypeInfo::Index TypeInfo::indexOf() { return indexOf<typename T::value_type>(); }
+
+/**
+ * \brief Convenience function for logging
+ */
+template<class S>
+S & operator<<(S & stream, TypeInfo::Index const index) {
+   stream << TypeInfo::indexName(index);
+   return stream;
+}
 
 /**
  * \brief Convenience functions for logging
@@ -293,7 +374,7 @@ S & operator<<(S & stream, TypeInfo::Access const & access) {
 template<class S>
 S & operator<<(S & stream, TypeInfo const & typeInfo) {
    stream <<
-      "««« TypeInfo " << (typeInfo.isOptional() ? "optional" : "non-optional") << " \"" << typeInfo.typeIndex.name() <<
+      "««« TypeInfo " << (typeInfo.isOptional() ? "optional" : "non-optional") << " \"" << typeInfo.typeIndex <<
       "\"; fieldType:" << typeInfo.fieldType << " (" << typeInfo.access << "); property name:" <<
       *typeInfo.propertyName << "; typeLookup:" << typeInfo.typeLookup << "»»»";
    return stream;

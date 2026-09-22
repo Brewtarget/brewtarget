@@ -17,7 +17,6 @@
   "$id": "https://dotbeer.org/schema/Recipe.beer.schema",
   "type": "object",
   "description": "The information stored in a beer recipe.",
-  "additionalProperties": false,
   "properties": {
     "name": {
       "type": "string"
@@ -55,7 +54,6 @@
     "efficiency": {
       "type": "object",
       "description": "Stores each efficiency component.",
-      "additionalProperties": false,
       "properties": {
         // BeerJSON has additional efficiencies for "conversion", "lauter" and "mash", but we don't support these in
         // Brewken or Brewtarget.
@@ -66,7 +64,8 @@
       },
       "required": [
         "brewhouse"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "style": {
       "$ref": "Style.beer.schema#/$defs/StyleBase"
@@ -74,7 +73,6 @@
     "ingredients": {
       "type": "object",
       "description": "All the recipe's ingredient additions.  Note that these lists are \"abbreviated\" versions of each ingredient, which saves on repetition when, eg, the same type of hop is added at more then one point.  If you are exporting one or more recipes, you should also export the full versions of their ingredients in the same file.",
-      "additionalProperties": false,
       "properties": {
         "fermentable_additions": {
           "type": "array",
@@ -112,7 +110,8 @@
       },
       "required": [
         "fermentable_additions"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "water_base": {
       "description": "Optional parameter to specify the starting profile of the brewing water, which may be modified with salts etc to obtain the target profile.",
@@ -191,7 +190,6 @@
     "taste": {
       "type": "object",
       "description": "Subjective tasting notes, and rating.",
-      "additionalProperties": false,
       "properties": {
         "notes": {
           "type": "string"
@@ -203,7 +201,8 @@
       "required": [
         "notes",
         "rating"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "calories_per_us_pint": {
       "type": "number"
@@ -224,11 +223,11 @@
     "batch_size",
     "ingredients"
   ],
+  "unevaluatedProperties": false,
   "$defs": {
     "AdditionSchedule": {
       "type": "object",
       "description": "This object fully describes when, and for how long, a recipe addition should be made, with options for basis on time, gravity, or pH at any process step.",
-      "additionalProperties": false,
       "properties": {
         "time": {
           "description": "What time during a process step is added, eg a value of 2 days for a dry hop addition would be added 2 days into the fermentation step.  NOTE that, for use::add_to_boil, this is time before the end of the step (or of the boil if no step is specified).  For other values of use, this is time after the start of the step (or of the process if no step is specified).",
@@ -260,7 +259,8 @@
             "add_to_package"
           ]
         }
-      }
+      },
+      "unevaluatedProperties": false
     },
     "CultureRecipeAddition": {
       "type": "object",
@@ -294,7 +294,8 @@
             "amount"
           ]
         }
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "FermentableRecipeAddition": {
       "type": "object",
@@ -316,7 +317,8 @@
       ],
       "required": [
         "amount"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "HopRecipeAddition": {
       "type": "object",
@@ -339,7 +341,8 @@
       "required": [
         "schedule",
         "amount"
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "MiscIngredientRecipeAddition": {
       "type": "object",
@@ -363,12 +366,12 @@
             "amount"
           ]
         }
-      ]
+      ],
+      "unevaluatedProperties": false
     },
     "BrewLog": {
       "type": "object",
       "description": "Record of a \"brewday\", ie of an individual brew of a recipe.  Note that:<br> • Fields beginning with \"expected_\" are values taken rom the Recipe (either directly or by calculation)<br> • Fields beginning with \"measured_\" are supplied by the brewer for this batch -- eg measured OG and FG<br> • Fields beginning with \"computed_\" are derived from values supplied by the brewer -- eg ABV calculated from measured OG and FG<br>Strictly speaking, \"expected_\" and \"computed_\" fields are not needed because they can be derived from other information.  However, we include them because (a) a recipe might have been modified after a brewday and (b) some calculations (eg alcohol by volume) might be done differently by different programs.",
-      "additionalProperties": false,
       "properties": {
         "batch_number": {
           "description": "The brewer's own unique identifier for this brew.  It can contain numbers and/or letters and/or symbols, so, \"number\" might seem a bit of a misnomer; nonetheless, it is the standard term for such an identifying code.",
@@ -498,7 +501,8 @@
         "expected_attenuation",
         "expected_efficiency",
         "expected_boil_off"
-      ]
+      ],
+      "unevaluatedProperties": false
     }
   }
 }

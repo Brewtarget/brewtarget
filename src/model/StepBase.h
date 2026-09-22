@@ -98,13 +98,12 @@ template <StepBaseOptions ebo> concept CONCEPT_FIX_UP RampTimeSupported = has_ra
 template<class Derived> class StepPhantom;
 template<class Derived, class Owner, StepBaseOptions stepBaseOptions>
 class StepBase : public EnumeratedBase<Derived, Owner> {
-
+public:
    //
    // It's easy to control whether a member variable (or parameter or return type) is optional via a template parameter.
    // And it's similarly to control whether a member function exists.  But controlling whether a member variable exists
    // is a bit tricky pre C++26.  So, for now, we use the same trick as TreeNodeBase.
    //
-   struct Empty { };
    using  StepTimeType = std::conditional_t<StepTimeRequired <stepBaseOptions>, double, std::optional<double>>;
    using StartTempType = std::conditional_t<StartTempRequired<stepBaseOptions>, double, std::optional<double>>;
    using  RampTimeType = std::conditional_t<RampTimeSupported<stepBaseOptions>, std::optional<double>, Empty >;
@@ -136,7 +135,7 @@ private:
       return;
    }
 
-   StepBase(NamedParameterBundle const & namedParameterBundle) :
+   explicit StepBase(NamedParameterBundle const & namedParameterBundle) :
       EnumeratedBase<Derived, Owner>{namedParameterBundle},
       // See below for m_stepTime_mins
       SET_REGULAR_FROM_NPB (m_startTemp_c  , namedParameterBundle, PropertyNames::StepBase::startTemp_c  /*, std::nullopt*/),
@@ -165,6 +164,8 @@ private:
       m_rampTime_mins{other.m_rampTime_mins} {
       return;
    }
+
+   virtual ~StepBase() = default;
 
 public:
    StepTimeType stepTime_mins() const {
@@ -228,7 +229,7 @@ private:
 
 public:
    //! \brief Convenience function for logging
-   virtual QString toString() const {
+   QString toString() const override {
       return QString{
          "StepBase (m_stepTime_mins: %1; m_startTemp_c: %2; m_rampTime_mins: %3) %4"
       }.arg(

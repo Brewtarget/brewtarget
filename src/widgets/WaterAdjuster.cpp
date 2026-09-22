@@ -49,7 +49,7 @@
 #include "utils/VeriTable.h"
 #include "widgets/SmartDigitWidget.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_WaterAdjuster.cpp"
 #endif

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxBool.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * widgets/BtComboBoxBool.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 
 #include "utils/MetaTypes.h"
 
-#ifdef BUILDING_WITH_CMAKE
+#ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
    #include "moc_BtComboBoxBool.cpp"
 #endif
@@ -82,7 +82,7 @@ void BtComboBoxBool::init(char const * const   editorName    ,
    Q_ASSERT(typeInfo.fieldType);
    Q_ASSERT(std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType));
    Q_ASSERT(NonPhysicalQuantity::Bool == std::get<NonPhysicalQuantity>(*typeInfo.fieldType));
-   Q_ASSERT(typeInfo.typeIndex == typeid(bool));
+   Q_ASSERT(typeInfo.typeIndex == TypeInfo::Index::Bool);
 
    this->pimpl->m_editorName     =  editorName    ;
    this->pimpl->m_comboBoxName   =  comboBoxName  ;
