@@ -278,6 +278,21 @@ namespace {
    };
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   // Common field mappings for any free-standing entity (ie one that is not "owned" by another entity) that might be
+   // cross-referenced by another (eg Recipe or StockPurchase).
+   //
+   // Eg, Boil, Hop, Fermentable, Mash, Style, Water are free-standing entities, but BoilStep, MashStep, BrewLog are
+   // not.  Recipe is a free-standing entity, but it is not cross-referenced by any other entity (so it doesn't have a
+   // local ID).
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_CrossReferencableBase {
+      // Type                                       XPath          Q_PROPERTY                                                Value Decoder
+      {JsonRecordDefinition::FieldType::String    , "name"       , PropertyNames::NamedEntity::name                        , },
+      {JsonRecordDefinition::FieldType::LocalId   , "local_id"   , BtString::NULL_STR                                      , },
+      {JsonRecordDefinition::FieldType::FolderPath, "folder_path", PropertyNames::FolderPropertyBase::containedInFolderPath, },
+   };
+
+   //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for fermentables DotBeer records - see schemas/DotBeer/1.0/fermentable.json
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_FermentableBase {

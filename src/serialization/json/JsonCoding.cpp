@@ -128,7 +128,8 @@ bool JsonCoding::validateLoadAndStoreInDb(QString const & targetFolderPath,
    //
    // Look at the root object first
    //
-   JsonRecord rootRecord{*this, rootRecordData, this->pimpl->m_rootRecordDefinition};
+   QHash<QString, int> localIdToDbId;
+   JsonRecord rootRecord{&localIdToDbId, *this, rootRecordData, this->pimpl->m_rootRecordDefinition};
    qDebug() <<
       Q_FUNC_INFO << "Looking at field definitions of root element (" <<
       this->pimpl->m_rootRecordDefinition.m_recordName << ")";
