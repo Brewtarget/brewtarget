@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonRecord.h is part of Brewtarget, and is copyright the following authors 2020-2023:
+ * serialization/json/JsonRecord.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ public:
     *
     *        To create a new \c JsonRecord call \c JsonRecordDefinition::makeRecord
     *
+    * \param localIdToDbId
     * \param jsonCoding
     * \param recordData  Note that this must be a reference to \c boost::json::value.  (If you pass in a reference to
     *                    a \c boost::json::object then the compiler will use it as a parameter to construct a temporary
@@ -55,14 +56,15 @@ public:
     *
     * \param recordDefinition
     */
-   JsonRecord(JsonCoding const & jsonCoding,
+   JsonRecord(QHash<QString, int> * localIdToDbId,
+              JsonCoding const & jsonCoding,
               boost::json::value & recordData,
               JsonRecordDefinition const & recordDefinition);
    /**
     * \brief See constructor comment above for why we don't want to let the compiler do automatic conversions of the
     *        constructor arguments (which is what this template trick achieves).
     */
-   template <typename P, typename Q, typename R> JsonRecord(P, Q, R) = delete;
+   template <typename P, typename Q, typename R, typename S> JsonRecord(P, Q, R, S) = delete;
    ~JsonRecord() override;
 
    virtual SerializationRecordDefinition const & recordDefinition() const override;
@@ -121,7 +123,6 @@ private:
                                        boost::json::array & childRecordsData,
                                        QTextStream & userMessage);
 
-private:
    /**
     * \brief Add a value to a JSON object
     *
@@ -134,6 +135,7 @@ private:
     *               returns.
     */
    void insertValue(QString const & baseFolderPath,
+                    NamedEntity const & namedEntityToExport,
                     JsonRecordDefinition::FieldDefinition const & fieldDefinition,
                     boost::json::object & recordDataAsObject,
                     std::string_view const & key,
@@ -147,6 +149,20 @@ protected:
     * and get the containing \c boost::json::value from a \c boost::json::object).
     */
    boost::json::value & m_recordData;
+
+   /**
+    * See JsonRecordDefinition::FieldType::LocalId.  This is only used when we are reading in a dotBeer file.  We need
+    * to store a record's Local ID (if it has one) somewhere until we have a DB ID for it which can be stored in
+    * \c m_localIdToDbId.
+    */
+   QString m_localId = "";
+
+   /**
+    * As with \c m_localId, this is only needed when we are reading in a file.  When we are writing one, we generate
+    * local IDs from database IDs deterministically, so we don't need a look-up.
+    */
+   QHash<QString, int> * m_localIdToDbId = nullptr;
+
 };
 
 #endif

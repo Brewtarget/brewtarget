@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonRecordDefinition.cpp is part of Brewtarget, and is copyright the following authors 2020-2024:
+ * serialization/json/JsonRecordDefinition.cpp is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -93,9 +93,10 @@ JsonRecordDefinition::JsonRecordDefinition(
    return;
 }
 
-std::unique_ptr<JsonRecord> JsonRecordDefinition::makeRecord(JsonCoding const & jsonCoding,
-                                                             boost::json::value & recordData) const {
-   return this->jsonRecordConstructorWrapper(jsonCoding, recordData, *this);
+[[nodiscard]] std::unique_ptr<JsonRecord> JsonRecordDefinition::makeRecord(QHash<QString, int> * localIdToDbId,
+                                                                           JsonCoding const & jsonCoding,
+                                                                           boost::json::value & recordData) const {
+   return this->jsonRecordConstructorWrapper(localIdToDbId, jsonCoding, recordData, *this);
 }
 
 
