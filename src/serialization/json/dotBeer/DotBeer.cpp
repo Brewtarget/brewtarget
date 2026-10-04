@@ -867,7 +867,7 @@ namespace {
          {JsonRecordDefinition::FieldType::ListOfRecords   , "miscs"        , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Misc        >},
          {JsonRecordDefinition::FieldType::ListOfRecords   , "hops"         , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Hop         >},
          {JsonRecordDefinition::FieldType::ListOfRecords   , "cultures"     , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Yeast       >},
-         {JsonRecordDefinition::FieldType::ListOfRecords   , "profiles"     , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Water       >},
+         {JsonRecordDefinition::FieldType::ListOfRecords   , "waters"       , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Water       >},
          {JsonRecordDefinition::FieldType::ListOfRecords   , "styles"       , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Style       >},
          {JsonRecordDefinition::FieldType::ListOfRecords   , "mashes"       , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Mash        >},
          {JsonRecordDefinition::FieldType::ListOfRecords   , "boils"        , BtString::NULL_STR  , &DOT_BEER_RECORD_DEFN<Boil        >},

@@ -16,6 +16,12 @@
   "type": "object",
   "description": "Groups together all the vessels in a set of brewing equipment.  Note that, in some set-ups, one vessel serves multiple purposes -- eg mash tun and kettle may be the same physical vessel -- but there are nonetheless individual entries here for each \"purpose\".",
   "properties": {
+    //
+    // We put the `"unevaluatedProperties": false` property on the individual fields rather than their types because,
+    // per the $defs section below, we need to be able to combine the types.  Eg, `HotSideVessel` is `Vessel` with some
+    // extra fields (which precludes `"unevaluatedProperties": false` on Vessel), but we have fields of type `Vessel`,
+    // where we don't want unexpected additional properties.
+    //
     "name": {
       "type": "string"
     },
@@ -29,31 +35,38 @@
     },
     "hlt": {
       "description": "Hot Liquor Tank",
-      "$ref": "#/$defs/HotSideVessel"
+      "$ref": "#/$defs/HotSideVessel",
+      "unevaluatedProperties": false
     },
     "mash_tun": {
       "description": "Mash Tun",
-      "$ref": "#/$defs/MashTun"
+      "$ref": "#/$defs/MashTun",
+      "unevaluatedProperties": false
     },
     "lauter_tun": {
       "description": "Lauter Tun",
-      "$ref": "#/$defs/HotSideVessel"
+      "$ref": "#/$defs/HotSideVessel",
+      "unevaluatedProperties": false
     },
     "kettle": {
       "description": "Boil Kettle",
-      "$ref": "#/$defs/BoilKettle"
+      "$ref": "#/$defs/BoilKettle",
+      "unevaluatedProperties": false
     },
     "fermenter": {
       "description": "Fermentation Vessel",
-      "$ref": "#/$defs/Vessel"
+      "$ref": "#/$defs/Vessel",
+      "unevaluatedProperties": false
     },
     "aging_vessel": {
       "description": "Aging Vessel",
-      "$ref": "#/$defs/Vessel"
+      "$ref": "#/$defs/Vessel",
+      "unevaluatedProperties": false
     },
     "packaging_vessel": {
       "description": "Packaging Vessel",
-      "$ref": "#/$defs/Vessel"
+      "$ref": "#/$defs/Vessel",
+      "unevaluatedProperties": false
     }
   },
   "required": [
@@ -62,6 +75,9 @@
   ],
   "unevaluatedProperties": false,
   "$defs": {
+    //
+    // See comment above for why we don't put the `"unevaluatedProperties": false` property on these local types
+    //
     "Vessel": {
       "type": "object",
       "description": "An individual vessel (eg mash tun, boil kettle) that forms part of brewing equipment.",
@@ -81,10 +97,9 @@
         }
       },
       "required": [
-        "maximum_volume",
+        "max_volume",
         "loss"
-      ],
-      "unevaluatedProperties": false
+      ]
     },
     "HotSideVessel": {
       "type": "object",
@@ -105,8 +120,7 @@
             }
           }
         }
-      ],
-      "unevaluatedProperties": false
+      ]
     },
     "MashTun": {
       "type": "object",
@@ -123,8 +137,7 @@
             }
           }
         }
-      ],
-      "unevaluatedProperties": false
+      ]
     },
     "BoilKettle": {
       "type": "object",
@@ -153,8 +166,7 @@
             }
           }
         }
-      ],
-      "unevaluatedProperties": false
+      ]
     }
   }
 }
