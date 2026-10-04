@@ -157,6 +157,13 @@ public:
     *        already have been done via the XSD, but there are some validation rules have to be done in code, including
     *        checking for duplicates and name clashes.
     *
+    *        For BeerXML and BeerJSON, it was fine to load all records into memory and then call this function
+    *        recursively (from the root record) at the end.  However, with the introduction of Local IDs in dotBeer,
+    *        we now need to call after each child of the root record is read in.  This is because, eg, we need to have
+    *        all the Mashes stored in the DB before we read the Recipes.  Nonetheless, we still want the recursive
+    *        behaviour for "owned" records -- eg we want to process MashSteps after storing the Mash record that owns
+    *        them.
+    *
     *        Child classes may override this function to extend functionality but should make sure to call this base
     *        class version to ensure child nodes are saved.
     *

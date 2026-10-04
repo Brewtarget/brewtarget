@@ -54,7 +54,7 @@
  * `VariantSupports<Variant, Seeking, index - 1>` for index 0 even if we put it in the else branch of `if (index == 0)`.
  *
  * @tparam Variant
- * @tparam Seeking /
+ * @tparam Seeking
  * @tparam index
  * @return
  */
@@ -989,7 +989,7 @@ public:
                           IfNotFound const ifNotFound,
                           bool * folderIsNewlyCreated = nullptr) requires HasFolder<NE> {
       if (targetFolder) {
-         qDebug() << Q_FUNC_INFO << "Searching for" << targetFolder;
+//         qDebug() << Q_FUNC_INFO << "Searching for" << targetFolder;
          TreeNode * parentNode = this->m_rootNode.get();
 
          //

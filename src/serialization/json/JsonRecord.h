@@ -56,7 +56,7 @@ public:
     *
     * \param recordDefinition
     */
-   JsonRecord(QHash<QString, int> * localIdToDbId,
+   JsonRecord(JsonRecordDefinition::LocalIdToDbId * localIdToDbId,
               JsonCoding const & jsonCoding,
               boost::json::value & recordData,
               JsonRecordDefinition const & recordDefinition);
@@ -73,13 +73,19 @@ public:
     * \brief From the supplied record (ie node) in an JSON document, load into memory the data it contains, including
     *        any other records nested inside it.
     *
+    *        For top level records (ie those without a containing entity), this also calls \c normaliseAndStoreInDb
+    *
     * \param targetFolderPath
+    * \param containingRecord
     * \param userMessage Where to append any error messages that we want the user to see on the screen
+    * \param stats
     *
     * \return \b true if load succeeded, \b false if there was an error
     */
    [[nodiscard]] bool load(QString const & targetFolderPath,
-                           QTextStream & userMessage);
+                           JsonRecord const * containingRecord,
+                           QTextStream & userMessage,
+                           ImportRecordCount & stats);
 
    //! \brief Override base class member function
    [[nodiscard]] virtual ProcessingResult normaliseAndStoreInDb(QString const & targetFolderPath,
@@ -110,7 +116,8 @@ private:
                                       JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                       JsonRecordDefinition const & childRecordDefinition,
                                       boost::json::value & childRecordData,
-                                      QTextStream & userMessage);
+                                      QTextStream & userMessage,
+                                      ImportRecordCount & stats);
 
    /**
     * \brief Load in an array of child records.  It is for derived classes to determine whether and when they have child
@@ -121,7 +128,8 @@ private:
                                        JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                        JsonRecordDefinition const & childRecordDefinition,
                                        boost::json::array & childRecordsData,
-                                       QTextStream & userMessage);
+                                       QTextStream & userMessage,
+                                       ImportRecordCount & stats);
 
    /**
     * \brief Add a value to a JSON object
@@ -135,7 +143,6 @@ private:
     *               returns.
     */
    void insertValue(QString const & baseFolderPath,
-                    NamedEntity const & namedEntityToExport,
                     JsonRecordDefinition::FieldDefinition const & fieldDefinition,
                     boost::json::object & recordDataAsObject,
                     std::string_view const & key,
@@ -161,7 +168,7 @@ protected:
     * As with \c m_localId, this is only needed when we are reading in a file.  When we are writing one, we generate
     * local IDs from database IDs deterministically, so we don't need a look-up.
     */
-   QHash<QString, int> * m_localIdToDbId = nullptr;
+   JsonRecordDefinition::LocalIdToDbId * m_localIdToDbId = nullptr;
 
 };
 

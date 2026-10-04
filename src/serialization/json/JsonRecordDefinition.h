@@ -21,6 +21,7 @@
 #include <utility> // For std::in_place_type_t
 #include <variant>
 
+#include <QHash>
 #include <QVector>
 
 #include "model/NamedEntity.h"
@@ -266,6 +267,21 @@ public:
    };
 
    /**
+    * \brief A "database ID", which is just a primary key (ie \c NamedEntity::key()) and the name of class to which it
+    *        relates.
+    *
+    *        This is used when we're reading in a JSON file that contains JsonRecordDefinition::FieldType::LocalId
+    *        records.  We don't strictly need to store the class name, but it's a good sanity check that, eg, a recipe's
+    *        style ID is the ID of a style rather than, say, a hop.
+    */
+   struct DbId {
+      char const * namedEntityClassName;
+      int id;
+   };
+
+   using LocalIdToDbId = QHash<QString, DbId>;
+
+   /**
     * This is used in \c ValueDecoder.  When we are writing a property that is a QString, there are certain
     * circumstances where we want either to sanitise the value or to suppress writing the field altogether.  For
     * instance, in BeerJSON, the \c style::style_letter field is allowed to be omitted, but is not allowed to be blank
@@ -360,7 +376,7 @@ public:
     *        winded in the definitions.)
     */
    template<typename JRT>
-   static std::unique_ptr<JsonRecord> create(QHash<QString, int>        * localIdToDbId,
+   static std::unique_ptr<JsonRecord> create(LocalIdToDbId              * localIdToDbId,
                                              JsonCoding           const & jsonCoding,
                                              boost::json::value         & recordData,
                                              JsonRecordDefinition const & recordDefinition) {
@@ -371,7 +387,7 @@ public:
     * \brief This is just a convenience typedef representing a pointer to a template instantiation of
     *        \b JsonRecordDefinition::create().
     */
-   typedef std::unique_ptr<JsonRecord> (*JsonRecordConstructorWrapper)(QHash<QString, int>        * localIdToDbId,
+   typedef std::unique_ptr<JsonRecord> (*JsonRecordConstructorWrapper)(LocalIdToDbId              * localIdToDbId,
                                                                        JsonCoding           const & jsonCoding,
                                                                        boost::json::value         & recordData,
                                                                        JsonRecordDefinition const & recordDefinition);
@@ -462,7 +478,7 @@ public:
     * \brief This is the simplest way to get the right type of \c JsonRecord for this \c JsonRecordDefinition.  It
     *        ensures you get the right subclass (if any) of \c JsonRecord.
     */
-   [[nodiscard]] std::unique_ptr<JsonRecord> makeRecord(QHash<QString, int> * localIdToDbId,
+   [[nodiscard]] std::unique_ptr<JsonRecord> makeRecord(LocalIdToDbId * localIdToDbId,
                                                         JsonCoding const & jsonCoding,
                                                         boost::json::value & recordData) const;
 

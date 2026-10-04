@@ -291,7 +291,7 @@ namespace {
 
 }
 
-JsonRecord::JsonRecord(QHash<QString, int> * localIdToDbId,
+JsonRecord::JsonRecord(JsonRecordDefinition::LocalIdToDbId * localIdToDbId,
                        JsonCoding const & jsonCoding,
                        boost::json::value & recordData,
                        JsonRecordDefinition const & recordDefinition) :
@@ -309,7 +309,9 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
 }
 
 [[nodiscard]] bool JsonRecord::load(QString const & targetFolderPath,
-                                    QTextStream & userMessage) {
+                                    JsonRecord const * containingRecord,
+                                    QTextStream & userMessage,
+                                    ImportRecordCount & stats) {
    Q_ASSERT(this->m_recordData.is_object());
    qDebug() <<
       Q_FUNC_INFO << "Loading" << this->m_recordDefinition.m_recordName << "record containing" <<
@@ -367,6 +369,7 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
          // Recipes, etc) don't have property paths!
          //
          if (fieldDefinition.propertyPath.isNull() &&
+             JsonRecordDefinition::FieldType::LocalId != fieldDefinition.type &&
              std::holds_alternative<std::monostate>(fieldDefinition.valueDecoder)) {
             qInfo() <<
                Q_FUNC_INFO << "Ignoring unsupported field at" << fieldDefinition.xPath << " (" <<
@@ -390,7 +393,8 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                                           fieldDefinition,
                                           childRecordDefinition,
                                           *container,
-                                          userMessage)) {
+                                          userMessage,
+                                          stats)) {
                   return false;
                }
             } else {
@@ -411,7 +415,8 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                                            fieldDefinition,
                                            childRecordDefinition,
                                            childRecordsData,
-                                           userMessage)) {
+                                           userMessage,
+                                           stats)) {
                   return false;
                }
             }
@@ -656,25 +661,88 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                   Q_ASSERT(container->is_string());
                   {
                      QString const value{container->get_string().c_str()};
+                     //
+                     // We shouldn't really ever have a blank local ID, and the dotBeer JSON schema forbids it.
+                     //
+                     // In cases where it is valid for there to be no local ID (eg no Style ID on a Recipe that has no
+                     // associated style), a program should simply not write the field at all.
+                     //
+                     // This constraint allows the schema to enforce which "foreign key" fields are mandatory (eg Hop
+                     // ID on a Hop addition to a Recipe) vs optional (eg Style ID on a Recipe).
+                     //
+                     // (In other cases, we will write a local ID even when it might not be required -- eg in a JSON
+                     // file containing Hop records, those records only _need_ a local ID if they are referred to
+                     // elsewhere in the same file -- eg in a Recipe record.  However, we always write the local ID for
+                     // them, as it keeps things simple, and the "unused" local IDs do not impede the file being read.)
+                     //
+                     // In any case, since the the schema should have enforced no blank local IDs, it's a programming
+                     // error if we somehow have an empty field here.
+                     //
+                     if (value.isEmpty()) {
+                        QString const errorMessage{
+                           QString{"Field %1, node %2 refers to empty Local ID"}.arg(
+                              *this->m_recordDefinition.m_namedEntityClassName
+                           ).arg(
+                              fieldDefinition.xPath.asXPath_c_str()
+                           )
+                        };
+                        qWarning() << Q_FUNC_INFO << errorMessage;
+                        userMessage << errorMessage;
+                        return false;
+                     }
 
                      //
                      // Per comments in JsonRecordDefinition.h, if there is no property path then this field is the
-                     // Local ID of the current object.
-                     //
-                     // Otherwise, it should be the ID of something we've already read from the file.  (This is another
-                     // reason why it's important to read things in the right order -- eg Styles before Recipes.)
+                     // Local ID of the current object...
                      //
                      if (fieldDefinition.propertyPath.isNull()) {
                         this->m_localId = value;
-                     } else {
-                        if (!this->m_localIdToDbId->contains(value)) {
-                           userMessage <<
-                              "Field " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
-                              fieldDefinition.xPath << "refers to unrecognised Local ID" << value;
-                           return false;
-                        }
-                        parsedValue = this->m_localIdToDbId->value(value);
+                        // NB: _NOT_break here.  We already stored the value and we want to jump straight to the next
+                        //     run through the for loop.
+                        continue;
                      }
+
+                     //
+                     // ...Otherwise, it should be the ID of something we've already read from the file.  (This is
+                     // another reason why it's important to read things in the right order -- eg Styles before Recipes.)
+                     //
+                     if (!this->m_localIdToDbId->contains(value)) {
+                        QString const errorMessage{
+                           QString{"Field %1, node %2 refers to unrecognised ID \"%3\""}.arg(
+                              *this->m_recordDefinition.m_namedEntityClassName
+                           ).arg(
+                              fieldDefinition.xPath.asXPath_c_str()
+                           ).arg(
+                              value
+                           )
+                        };
+                        qWarning() << Q_FUNC_INFO << errorMessage;
+                        userMessage << errorMessage;
+                        qDebug() << Q_FUNC_INFO << "Known Local IDs:" << this->m_localIdToDbId->keys();
+                        return false;
+                     }
+
+                     // It's a coding error if we didn't specify the class of the "foreign key" this field holds
+                     Q_ASSERT(std::holds_alternative<QMetaObject const *>(fieldDefinition.valueDecoder));
+                     QMetaObject const * const metaObject = std::get<QMetaObject const *>(fieldDefinition.valueDecoder);
+                     Q_ASSERT(metaObject);
+
+                     //
+                     // We never want, eg, to put a Hop ID in a Recipe::styleId field, so we have an extra sanity
+                     // check here.
+                     //
+                     JsonRecordDefinition::DbId const dbId = this->m_localIdToDbId->value(value);
+                     if (dbId.namedEntityClassName != metaObject->className() &&
+                         0 != std::strcmp(dbId.namedEntityClassName, metaObject->className())) {
+                        userMessage <<
+                           "Field " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
+                           fieldDefinition.xPath << "Local ID" << value << "refers to" <<
+                           dbId.namedEntityClassName << "(#" << dbId.id << ").  Expected ID of a" <<
+                           metaObject->className();
+                        return false;
+                     }
+
+                     parsedValue = dbId.id;
                      parsedValueOk = true;
                   }
                   break;
@@ -716,6 +784,31 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
       this->constructNamedEntity();
    }
 
+   //
+   // Per comment in SerializationRecord.h, we want to call the recursive function normaliseAndStoreInDb if and only if
+   // this is a top-level record -- so that Mashes are stored before Recipes, but MashSteps are stored after Mashes.
+   //
+   // We can't use the existence "containing entity" as a test because that will always be null here.  Eg MashSteps are
+   // always read in before we have constructed the containing Mash -- it's just that we want to store the Mash in the
+   // DB before we store the MashSteps in the DB.  Instead, we look at the containing record's NamedParameterBundle, as
+   // this will be empty for the root record and, courtesy of one assumption, non-empty for anything else.  The
+   // assumption is that a child record is never the first field, which is reasonable in practice because the first
+   // few fields of any top-level record are things such as name, type, folder path etc.
+   //
+   // Of course, we can only look at the containing record if there is one, which there won't be for the root record
+   // itself!
+   //
+   if (containingRecord && containingRecord->m_namedParameterBundle.isEmpty()) {
+      // At the top level, Succeeded and FoundDuplicate are both OK return values.  It's only Failed that indicates an
+      // error (rather than an info) message for the user in userMessage.
+      if (JsonRecord::ProcessingResult::Failed == this->normaliseAndStoreInDb(targetFolderPath,
+                                                                              nullptr, // == containing entity
+                                                                              userMessage,
+                                                                              stats)) {
+         return false;
+      }
+   }
+
    return true;
 }
 
@@ -726,10 +819,10 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
    ImportRecordCount & stats
 ) {
    // Most of the work is done in the base class
-   auto processingResult = this->SerializationRecord::normaliseAndStoreInDb(targetFolderPath,
-                                                                            containingEntity,
-                                                                            userMessage,
-                                                                            stats);
+   auto const processingResult = this->SerializationRecord::normaliseAndStoreInDb(targetFolderPath,
+                                                                                  containingEntity,
+                                                                                  userMessage,
+                                                                                  stats);
 
    //
    // If we read in and stored an outline Fermentable/Hop/etc object (because we could not find any existing
@@ -742,13 +835,24 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
       auto createdFromOutline = static_pointer_cast<OutlineableNamedEntity>(this->m_namedEntity);
       createdFromOutline->setOutline(false);
    }
-   if (!this->m_localId.isEmpty()) {
+
+   //
+   // If we read in something with a local ID then, now that we have stored it in the database, we can make a note of
+   // what DB ID the local ID maps to -- in case a subsequent record in the file has a reference to this local ID.
+   //
+   if (this->m_namedEntity && !this->m_localId.isEmpty()) {
       if (this->m_localIdToDbId->contains(this->m_localId)) {
-         userMessage <<
-            "The Local ID of " << this->m_recordDefinition.m_namedEntityClassName <<
-            " was already used in this file.  Second instance will be ignored.";
+         qWarning() <<
+            Q_FUNC_INFO << "Bad file structure.  Field" << this->m_recordDefinition.m_namedEntityClassName <<
+            "has Local ID" << this->m_localId << "which was already used in this file.  Second instance will be "
+            "ignored.";
       } else {
-         this->m_localIdToDbId->insert(this->m_localId, this->m_namedEntity->key());
+         JsonRecordDefinition::DbId const dbId{
+            *this->m_recordDefinition.m_namedEntityClassName,
+            this->m_namedEntity->key()
+         };
+         qDebug() << Q_FUNC_INFO << "Storing" << this->m_localId << "->" << dbId.namedEntityClassName << "#" << dbId.id;
+         this->m_localIdToDbId->insert(this->m_localId, dbId);
       }
    }
 
@@ -759,7 +863,8 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                                                JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                                JsonRecordDefinition const & childRecordDefinition,
                                                boost::json::value & childRecordData,
-                                               QTextStream & userMessage) {
+                                               QTextStream & userMessage,
+                                               ImportRecordCount & stats) {
    qDebug() << Q_FUNC_INFO;
    // TODO: We could move these 3 lines to the caller to save duplication with loadChildRecords
    auto constructorWrapper = childRecordDefinition.jsonRecordConstructorWrapper;
@@ -770,7 +875,7 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
    std::unique_ptr<JsonRecord> childRecord{
       constructorWrapper(this->m_localIdToDbId, this->m_coding, childRecordData, childRecordDefinition)
    };
-   if (!childRecord->load(targetFolderPath, userMessage)) {
+   if (!childRecord->load(targetFolderPath, this, userMessage, stats)) {
       return false;
    }
    childRecordSet.records.push_back(std::move(childRecord));
@@ -781,7 +886,8 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                                                 JsonRecordDefinition::FieldDefinition const & parentFieldDefinition,
                                                 JsonRecordDefinition const & childRecordDefinition,
                                                 boost::json::array & childRecordsData,
-                                                QTextStream & userMessage) {
+                                                QTextStream & userMessage,
+                                                ImportRecordCount & stats) {
    qDebug() << Q_FUNC_INFO;
    //
    // This is where we have a list of one or more substantive records of a particular type, which may be either at top
@@ -799,7 +905,7 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
       std::unique_ptr<JsonRecord> childRecord{
          constructorWrapper(this->m_localIdToDbId, this->m_coding, recordData, childRecordDefinition)
       };
-      if (!childRecord->load(targetFolderPath, userMessage)) {
+      if (!childRecord->load(targetFolderPath, this, userMessage, stats)) {
          return false;
       }
       childRecordSet.records.push_back(std::move(childRecord));
@@ -808,16 +914,7 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
    return true;
 }
 
-/**
- * \brief Add a value to a JSON object
- *
- * \param fieldDefinition
- * \param recordDataAsObject
- * \param key
- * \param value
- */
 void JsonRecord::insertValue(QString const & baseFolderPath,
-                             NamedEntity const & namedEntityToExport,
                              JsonRecordDefinition::FieldDefinition const & fieldDefinition,
                              boost::json::object & recordDataAsObject,
                              std::string_view const & key,
@@ -833,8 +930,13 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
    //
    // NB: propertyPath is not actually a property path when fieldType is RequiredConstant
    //
+   //     propertyPath will be BtString::NULL_STR for a Local ID definition (but not for a Local ID reference).  In
+   //     practice, the fields on our objects associated with a Local ID are never optional because we already use -1
+   //     as a special value for "not set".
+   //
    bool const propertyIsOptional {
-      (fieldDefinition.type == JsonRecordDefinition::FieldType::RequiredConstant) ?
+      (fieldDefinition.type == JsonRecordDefinition::FieldType::RequiredConstant ||
+       fieldDefinition.type == JsonRecordDefinition::FieldType::LocalId) ?
          false : fieldDefinition.propertyPath.getTypeInfo(*this->m_recordDefinition.m_typeLookup).isOptional()
    };
 
@@ -1056,16 +1158,17 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
          // current object, and <Classname> is its classname.  Eg, if we are writing a Style record, with database ID
          // 123 then we create local ID "Style_123" for it.
          //
-         // Otherwise, <Database ID> is the value, and <Classname> comes from Value Decoder.  Eg, if we are writing the
-         // PropertyNames::Recipe::styleId field, then Value Decoder should be &Style::staticMetaObject.
+         // Otherwise, <Database ID> is the property value, and <Classname> comes from Value Decoder.  Eg, if we are
+         // writing the PropertyNames::Recipe::styleId field, then Value Decoder should be &Style::staticMetaObject.
          // However, if value is negative, it means there is nothing to write -- eg if a Recipe does not have a style
          // set then its styleId field will be -1.
          //
+         // In both cases, JsonRecord::toJson() will already have put the correct <Database ID> in `value`, so we only
+         // have to handle the <Classname> bit here.
+         //
          // There should be no circumstances where value is optional!
          //
-         int const dbId {
-            fieldDefinition.propertyPath.isNull() ? namedEntityToExport.key() : value.toInt()
-         };
+         int const dbId {value.toInt()};
          if (dbId >= 0) {
             QString const className{
                fieldDefinition.propertyPath.isNull() ?
@@ -1073,7 +1176,7 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
                   std::get<QMetaObject const *>(fieldDefinition.valueDecoder)->className()
             };
 
-            QString const localId = QString{"%1_%2"}.arg(className, dbId);
+            QString const localId = QString{"%1_%2"}.arg(className).arg(dbId);
             std::string const localIdAsStdString = localId.toStdString();
             recordDataAsObject.emplace(key, localIdAsStdString);
          }
@@ -1097,10 +1200,10 @@ bool JsonRecord::listToJson(QString const & baseFolderPath,
       boost::json::value neJson(boost::json::object_kind); // Can't use braces on this constructor until Boost 1.81!
 
       //
-      // When we're reading in a file, each JsonRecord needs a pointer to the same `QHash<QString, int> localIdToDbId`
-      // (which is owned by JsonCoding::validateLoadAndStoreInDb()).  But when we're writing a file, this is not used
-      // (because we use a deterministic way of generating local IDs from database IDs), so we pass nullptr instead.
-      //
+      // When we're reading in a file, each JsonRecord needs a pointer to the same JsonRecordDefinition::LocalIdToDbId
+      // lookup (which is owned by JsonCoding::validateLoadAndStoreInDb()).  But when we're writing a file, this is not
+      // used (because we use a deterministic way of generating local IDs from database IDs), so we pass nullptr
+      // instead.
       //
       std::unique_ptr<JsonRecord> jsonRecord{
          recordDefinition.makeRecord(nullptr, coding, neJson)
@@ -1140,21 +1243,31 @@ bool JsonRecord::toJson(QString const & baseFolderPath,
       qDebug() << Q_FUNC_INFO <<
          "fieldDefinition.xPath:" << fieldDefinition.xPath << ", fieldDefinition.propertyPath:" <<
          fieldDefinition.propertyPath;
-      // If there isn't a property name that means this is not a field we support so there's nothing to write out.
-      if (fieldDefinition.propertyPath.isNull()) {
+      // With the exception of a defining local ID (where we need to construct a local ID as `<Classname>_<DB ID>`), if
+      // there isn't a property name that means this is not a field we support so there's nothing to write out.
+      if (JsonRecordDefinition::FieldType::LocalId != fieldDefinition.type &&
+         fieldDefinition.propertyPath.isNull()) {
          // At the moment at least, we support all sub-record fields, so it's a coding error if one of them does not
          // have a property name.
          Q_ASSERT(JsonRecordDefinition::FieldType::ListOfRecords != fieldDefinition.type);
          continue;
       }
 
-      // Note we have to handle the case where we (ab)use the propertyPath field to hold the value of a required
-      // constant.
-      QVariant value = (
-         fieldDefinition.type == JsonRecordDefinition::FieldType::RequiredConstant ?
-         fieldDefinition.propertyPath.asXPath() :
-         fieldDefinition.propertyPath.getValue(namedEntityToExport)
-      );
+      QVariant value;
+      if (JsonRecordDefinition::FieldType::RequiredConstant == fieldDefinition.type) {
+         // This is the case where we (ab)use the propertyPath field to hold the value of a required constant.
+         value = fieldDefinition.propertyPath.asXPath();
+      } else if (JsonRecordDefinition::FieldType::LocalId == fieldDefinition.type &&
+                 fieldDefinition.propertyPath.isNull()) {
+         // This is the case where we are writing a Local ID definition, so we need the primary key of the current
+         // object rather than a property value, hence why propertyPath is not set.  (At first glance, you might wonder
+         // why we don't just set propertyPath to PropertyNames::NamedEntity::key.  However, although this would work
+         // for writing files, we'd still need special case code for reading files.  It feels more consistent to handle
+         // Local ID definition as a special case on both read and write.)
+         value = namedEntityToExport.key();
+      } else {
+         value = fieldDefinition.propertyPath.getValue(namedEntityToExport);
+      }
       Q_ASSERT(value.isValid());
 
       //
@@ -1321,7 +1434,6 @@ bool JsonRecord::toJson(QString const & baseFolderPath,
 
       } else {
          this->insertValue(baseFolderPath,
-                           namedEntityToExport,
                            fieldDefinition,
                            valuePointer->get_object(),
                            key,

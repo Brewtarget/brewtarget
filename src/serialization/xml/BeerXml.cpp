@@ -21,9 +21,7 @@
 
 #include <QApplication>
 #include <QDebug>
-#include <QDomNodeList>
 #include <QFile>
-#include <QHash>
 #include <QList>
 #include <QStringConverter>
 #include <QTextStream>
@@ -50,7 +48,6 @@
 #include "model/Water.h"
 #include "model/Yeast.h"
 #include "serialization/xml/XmlErrorHandler.h"
-#include "serialization/xml/MibEnum.h"
 #include "serialization/xml/XmlCoding.h"
 #include "serialization/xml/XmlRecord.h"
 

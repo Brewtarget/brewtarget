@@ -27,6 +27,7 @@
 
 #include <sourcemeta/blaze/compiler.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/blaze/output_simple.h> // For sourcemeta::blaze::SimpleOutput
 
 #include "serialization/json/JsonUtils.h"
 
@@ -103,8 +104,37 @@ public:
    void parseAndPopulateSchema() {
 
       try {
-         this->m_compiledSchema = sourcemeta::blaze::compile(
-            this->getBlazeReferencedDoc(std::string(this->m_fileName)),
+         //
+         // Blaze can do schema validation in two different modes: FastValidation gives you a valid/not-valid result "as
+         // fast as possible", whereas Exhaustive "performs exhaustive evaluation, including annotations".  Typically,
+         // you want to do "fast" first and then only if that signals "not valid" re-run with "exhaustive" to get a
+         // detailed error message.
+         //
+         // The validation modes are baked-in to the compiled schema, so we have to compile the schema twice, once in
+         // each mode.  But this is reasonably fast and a one-off overhead.
+         //
+         auto const blazeReferencedDoc{this->getBlazeReferencedDoc(std::string(this->m_fileName))};
+
+         qDebug() << Q_FUNC_INFO << "Populating Schema for" << this->m_fileName;
+         this->m_compiledSchemaFastValidation = sourcemeta::blaze::compile(
+            blazeReferencedDoc,
+            sourcemeta::core::schema_walker,
+            //
+            // We do our own schema resolution.  The required callback signature is a function that takes on parameter,
+            // `std::string_view const identifier`, and returns
+            // `sourcemeta::core::OwnedOrReference<sourcemeta::core::JSON>`.  Using a lambda here allows us to match
+            // this but delegate the substantive work to a member function.
+            //
+            [this](std::string_view const uri){ return this->getBlazeReferencedDoc(uri); },
+            sourcemeta::blaze::default_schema_compiler,
+            // This next parameter can be either FastValidation or Exhaustive.  The former attempt to get to a boolean
+            // result as fast as possible.  The latter perform exhaustive evaluation, including annotations.
+            sourcemeta::blaze::Mode::FastValidation
+         );
+         qDebug() << Q_FUNC_INFO << "FastValidation schema populated";
+
+         this->m_compiledSchemaExhaustive = sourcemeta::blaze::compile(
+            blazeReferencedDoc,
             sourcemeta::core::schema_walker,
             //
             // We do our own schema resolution.  The required callback signature is a function that takes on parameter,
@@ -118,8 +148,7 @@ public:
             // result as fast as possible.  The latter perform exhaustive evaluation, including annotations.
             sourcemeta::blaze::Mode::Exhaustive
          );
-
-         qDebug() << Q_FUNC_INFO << "Schema populated";
+         qDebug() << Q_FUNC_INFO << "Exhaustive schema populated";
 
       } catch (std::exception const & exception) {
          // Because we're only populating data from resources shipped with the program, we're not expecting exceptions,
@@ -228,7 +257,8 @@ public:
    char const * const m_fileName;
    QMap<QString, std::shared_ptr<boost::json::value const> > m_schemaFileCache = {};
    QMap<boost::json::value const *, std::shared_ptr<sourcemeta::core::JSON const> > m_blazeSchemaFileCache = {};
-   sourcemeta::blaze::Template m_compiledSchema = {};
+   sourcemeta::blaze::Template m_compiledSchemaFastValidation = {};
+   sourcemeta::blaze::Template m_compiledSchemaExhaustive = {};
 };
 
 
@@ -304,88 +334,96 @@ bool JsonSchema::validate(boost::json::value const & document, QTextStream & use
    };
 
    //
-   // Blaze offers two extremes for reporting the results of validation.  The minimal approach is to call the two
+   // Blaze offers two options for reporting the results of validation.  The minimal approach is to call the two
    // parameter version of sourcemeta::blaze::Evaluator::validate(), and get a boolean return value for whether the
-   // validation succeeded.  If we want more than this (eg to know the cause of a validation failure), we jump to the
-   // other extreme and pass a third parameter to sourcemeta::blaze::Evaluator::validate().  This extra parameter is a
-   // callback function that gets invoked before and after every step of the validation.  Inside that callback, we have
-   // to pick out the cases where the step ran and failed (and do nothing when it it didn't yet run or it succeeded).
+   // validation succeeded.  Alternatively, to get every single error, we can pass a third parameter to
+   // sourcemeta::blaze::Evaluator::validate(): a pointer to a callback function that gets invoked before and after
+   // every step of the validation.  Inside that callback, you can filter on the cases where the step ran and failed
+   // (and do nothing when it it didn't yet run or it succeeded).
+   //
+   // HOWEVER, getting every error as the validation happens can be misleading.  Some errors are expected.  Eg, if we
+   // have a field that is `oneOf` or `anyOf`, say, Mass and Volume, then we'll get an on-the-fly error message when
+   // "kg" doesn't match any of the Volume units -- even though that's ultimately OK and expected because "kg" does
+   // match one of the Mass units.
+   //
+   // What you actually need to do is use the callback to gather errors as they occur, then, if `validate()` returns
+   // false, walk backwards through the list to pull out only the errors that actually contributed towards the failure
+   // of validate().  Fortunately, Blaze supplies a class that do all this logic for us:
+   // sourcemeta::blaze::SimpleOutput.  (There is also sourcemeta::blaze::TraceOutput, which gives you a callback
+   // showing every single step of validation processing.  I'm pretty sure you'd only want this if you were trying to
+   // debug Blaze itself!)
+   //
+   // Since we mostly expect schema validation to succeed, we initially run a no-callback validation with the "fast
+   // validation" compiled schema.  Then, only if that fails, do we run with the error-recording callback against the
+   // "exhaustive" compiled schema.
    //
    sourcemeta::blaze::Evaluator evaluator;
-   QList<BlazeValidationError> blazeValidationErrors;
-   bool const succeeded{
+   bool const succeededFastValidation{
       evaluator.validate(
-         this->pimpl->m_compiledSchema,
-         blazeDocument,
-         [&blazeDocument,
-          &blazeValidationErrors](sourcemeta::blaze::EvaluationType   const    callBack_type,
-                                  bool                                const    callBack_valid,
-                                  sourcemeta::blaze::Instruction      const &  callBack_instruction,
-                 [[maybe_unused]] sourcemeta::blaze::InstructionExtra const &  callBack_instructionExtra,
-                                  sourcemeta::core::WeakPointer       const &  callBack_evaluatePath,
-                                  sourcemeta::core::WeakPointer       const &  callBack_instanceLocation,
-                                  sourcemeta::core::JSON              const &  callBack_annotation) {
-            if (callBack_type != sourcemeta::blaze::EvaluationType::Post || callBack_valid) {
-               // Step succeeded or didn't yet run.  In either case, nothing for us to do.
-               return;
-            }
-            blazeValidationErrors.append(
-               //
-               // Doco for sourcemeta::blaze::describe says:
-               //
-               //    This function translates a "post" step execution into a human-readable string. Useful as the
-               //    building block for producing user-friendly evaluation results.  Note that describing a "pre" step
-               //    execution is NOT supported.
-               //
-               BlazeValidationError{
-                  QString::fromStdString(sourcemeta::blaze::describe(callBack_valid,
-                                                                     callBack_instruction,
-                                                                     callBack_evaluatePath,
-                                                                     callBack_instanceLocation,
-                                                                     blazeDocument,
-                                                                     callBack_annotation)),
-                  QString::fromStdString(sourcemeta::core::to_string(callBack_evaluatePath)),
-                  QString::fromStdString(sourcemeta::core::to_string(callBack_instanceLocation))
-               }
-            );
-            return;
-         }
+         this->pimpl->m_compiledSchemaFastValidation,
+         blazeDocument
       )
    };
-   qDebug() << Q_FUNC_INFO << "Schema validation via Blaze" << (succeeded ? "succeeded": "failed");
-   if (!succeeded) {
+   qDebug() <<
+      Q_FUNC_INFO << "\"Fast\" schema validation via Blaze" << (succeededFastValidation ? "succeeded": "failed");
+   if (!succeededFastValidation) {
+      sourcemeta::blaze::SimpleOutput blazeSimpleOutput{blazeDocument};
+      bool const succeededExhaustive{
+         evaluator.validate(
+            this->pimpl->m_compiledSchemaExhaustive,
+            blazeDocument,
+            std::ref(blazeSimpleOutput)
+         )
+      };
+      qDebug() <<
+         Q_FUNC_INFO << "\"Exhaustive\" schema validation via Blaze" << (succeededExhaustive ? "succeeded": "failed");
+      if (succeededExhaustive) {
+         // Hopefully this never happens!
+         qCritical() << Q_FUNC_INFO << "Fast validation failed but Exhaustive validation succeeded!?!";
+      }
+
+      for (auto const & entry : blazeSimpleOutput) {
+         std::cerr << entry.message << "\n";
+         sourcemeta::core::stringify(entry.instance_location, std::cerr);
+         std::cerr << "\n";
+         sourcemeta::core::stringify(entry.evaluate_path, std::cerr);
+         std::cerr << "\n";
+      }
+
+
       int errorNumber = 0;
       // If there is more than one error, then we'll log them all here but only show the first one to the user on
       // the screen.  (Otherwise we might risk information overload.)
-      for (auto const & blazeValidationError : blazeValidationErrors) {
+      for (auto const & blazeValidationError : blazeSimpleOutput) {
+         QString const message{QString::fromStdString(blazeValidationError.message)};
+         QString const instanceLocation{
+            QString::fromStdString(sourcemeta::core::to_string(blazeValidationError.instance_location))
+         };
+         QString const evaluatePath{
+            QString::fromStdString(sourcemeta::core::to_string(blazeValidationError.evaluate_path))
+         };
+
          //
          // We'll put the log file error in English on the assumption that many users will want to report a bug and
          // include log files (or extracts thereof).
          //
          qWarning() <<
-            Q_FUNC_INFO << "Validation error #" << ++errorNumber << " at " << blazeValidationError.instanceLocation <<
-            "schema condition" << blazeValidationError.evaluatePath << "is violated:" <<
-            blazeValidationError.description;
+            Q_FUNC_INFO << "Validation error #" << ++errorNumber << ": at" << instanceLocation <<
+            ", schema condition" << evaluatePath << "is violated:" <<
+            message;
          if (1 == errorNumber) {
             //
             // For displaying on the screen we can translate the text under our control, but the stuff from Blaze will
             // still be in English -- for now at least.
             //
+            auto const numErrors = std::distance(blazeSimpleOutput.cbegin(), blazeSimpleOutput.cend());
             userMessage <<
                QObject::tr(
                   "%1 errors found in JSON file.  First error at %2: schema condition %3 is violated because \"%4\""
-               ).arg(
-                  blazeValidationErrors.size()
-               ).arg(
-                  blazeValidationError.instanceLocation
-               ).arg(
-                  blazeValidationError.evaluatePath
-               ).arg(
-                  blazeValidationError.description
-               );
+               ).arg(numErrors).arg(instanceLocation).arg(evaluatePath).arg(message);
          }
       }
    }
 
-   return succeeded;
+   return succeededFastValidation;
 }

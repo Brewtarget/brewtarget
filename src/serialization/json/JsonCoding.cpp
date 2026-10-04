@@ -128,7 +128,7 @@ bool JsonCoding::validateLoadAndStoreInDb(QString const & targetFolderPath,
    //
    // Look at the root object first
    //
-   QHash<QString, int> localIdToDbId;
+   JsonRecordDefinition::LocalIdToDbId localIdToDbId;
    JsonRecord rootRecord{&localIdToDbId, *this, rootRecordData, this->pimpl->m_rootRecordDefinition};
    qDebug() <<
       Q_FUNC_INFO << "Looking at field definitions of root element (" <<
@@ -136,17 +136,8 @@ bool JsonCoding::validateLoadAndStoreInDb(QString const & targetFolderPath,
 
    ImportRecordCount stats;
 
-   if (!rootRecord.load(targetFolderPath, userMessage)) {
-      return false;
-   }
-   qDebug() << Q_FUNC_INFO;
-
-   // At the root level, Succeeded and FoundDuplicate are both OK return values.  It's only Failed that indicates an
-   // error (rather than in info) message for the user in userMessage.
-   if (JsonRecord::ProcessingResult::Failed == rootRecord.normaliseAndStoreInDb(targetFolderPath,
-                                                                                nullptr,
-                                                                                userMessage,
-                                                                                stats)) {
+   // Root record by definition has no containing record, hence nullptr here
+   if (!rootRecord.load(targetFolderPath, nullptr, userMessage, stats)) {
       return false;
    }
 

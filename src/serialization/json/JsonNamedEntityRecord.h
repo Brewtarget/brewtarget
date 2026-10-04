@@ -37,7 +37,7 @@ public:
     * \brief This constructor doesn't have to do much more than create an appropriate new subclass of \b NamedEntity.
     *        Everything else is done in the base class.
     */
-   JsonNamedEntityRecord(QHash<QString, int> * localIdToDbId,
+   JsonNamedEntityRecord(JsonRecordDefinition::LocalIdToDbId * localIdToDbId,
                          JsonCoding const & jsonCoding,
                          boost::json::value & recordData,
                          JsonRecordDefinition const & recordDefinition) :

@@ -207,8 +207,8 @@
       "required": [
         "unit",
         "value"
-      ],
-      "unevaluatedProperties": false
+      ] //,
+//      "unevaluatedProperties": false
     },
     "MassFractionOrConcentration": {
       "type": "object",
@@ -418,8 +418,8 @@
       "required": [
         "unit",
         "value"
-      ],
-      "unevaluatedProperties": false
+      ]//,
+//      "unevaluatedProperties": false
     },
     //
     // Ranges
