@@ -19,6 +19,10 @@
     "name": {
       "type": "string"
     },
+    "local_id" : {
+      "description": "The \"local ID\" that allows other objects in this file (eg recipes) to refer to this mash.",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
+    },
     "folder_path": {
       "description": "The suggested slash-delimited subfolder path in which to store this Mash object.",
       "$ref": "DotBeer.beer.schema#/$defs/FolderPath"

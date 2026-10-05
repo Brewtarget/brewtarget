@@ -98,6 +98,32 @@ private:
 
    explicit FolderPropertyBase(NamedParameterBundle const & namedParameterBundle) :
       SET_REGULAR_FROM_NPB(m_containedInFolderId, namedParameterBundle, PropertyNames::FolderPropertyBase::containedInFolderId, -1) {
+      //
+      // If we have a folder but are not ourselves a folder then, depending on where we're being constructed from, the
+      // bundle should contain:
+      //   - containedInFolderId but not containedInFolderPath (DB)
+      //   - containedInFolderPath but not containedInFolderId (dotBeer)
+      //   - neither containedInFolderId nor containedInFolderPath (BeerXML, BeerJSON)
+      //
+      // We have a default value (above) for containedInFolderId, so we only need to do special handling here for
+      // containedInFolderPath.
+      //
+      if constexpr (DerivedIsFolder == IsFolder::No) {
+         if (namedParameterBundle.contains(PropertyNames::FolderPropertyBase::containedInFolderPath)) {
+            // It's a bit fiddly to use SET_REGULAR_FROM_NPB_NO_MV here, so we do things manually
+            this->doSetContainedInFolderPath(
+               namedParameterBundle.val<QString>(PropertyNames::FolderPropertyBase::containedInFolderPath)
+            );
+            if (namedParameterBundle.contains(PropertyNames::FolderPropertyBase::containedInFolderId)) {
+               //
+               // This is a coding error, but we can soldier on
+               //
+               qWarning() <<
+                  Q_FUNC_INFO << "Error: both Folder Path and Folder ID set on " << this->derived() <<
+                  ".  This is probably a bug!";
+            }
+         }
+      }
       return;
    }
 
@@ -129,12 +155,29 @@ protected:
    [[nodiscard]] int doContainedInFolderId() const {
       return this->m_containedInFolderId;
    }
-   // Note that we can't do the same trick and put doContainedInFolderFullPath() here, as it would create circular
-   // dependencies.  Same applies to doSetContainedInFolderPath().
+
+   /**
+    * Note that we can't implement this function here where Derived is a Folder because it would create circular
+    * dependencies, so Folder::containedInFolderId() has the same logic.
+    */
+   [[nodiscard]] QString doContainedInFolderPath() const requires (DerivedIsFolder == IsFolder::No) {
+      Folder<Derived> const * const containedIn = this->containedInFolderRaw();
+      return containedIn ? containedIn->fullPath() : QString{"/"};
+   }
 
    void doSetContainedInFolderId(int const val) {
       this->derived().setAndNotify(PropertyNames::FolderPropertyBase::containedInFolderId, this->m_containedInFolderId, val);
       Q_ASSERT(this->m_containedInFolderId == val);
+      return;
+   }
+
+   /**
+    * Note that we can't implement this function here where Derived is a Folder because it would create circular
+    * dependencies, so Folder::setContainedInFolderPath() has the same logic.
+    */
+   void doSetContainedInFolderPath(QString const & fullPath) requires (DerivedIsFolder == IsFolder::No) {
+      FolderType const * folder = FolderType::ensure(fullPath);
+      this->doSetContainedInFolderId(folder ? folder->key() : -1);
       return;
    }
 
@@ -225,7 +268,7 @@ template <typename T> concept CONCEPT_FIX_UP ValidFolderType = (HasFolder<T> && 
    public:                                                                                     \
       /*=========================== FB "GETTER" MEMBER FUNCTIONS ===========================*/ \
       [[nodiscard]] int     containedInFolderId  () const;                                     \
-      /* Strictly this should perhaps be called doContainedInFolderFullPath, but I think */    \
+      /* Strictly this should perhaps be called containedInFolderFullPath, but I think   */    \
       /* the name is long enough already and not, IMHO, ambiguous.                       */    \
       /* Returns the full path of the folder in which this item is contained, or "/" if  */    \
       /* it is not contained in any folder.                                              */    \
@@ -254,16 +297,10 @@ template <typename T> concept CONCEPT_FIX_UP ValidFolderType = (HasFolder<T> && 
 #define FOLDER_BASE_COMMON_CODE(Derived) \
    /*====================================== FB "GETTER" MEMBER FUNCTIONS ======================================*/ \
    int Derived::containedInFolderId  () const { return this->doContainedInFolderId(); }                           \
-   QString Derived::containedInFolderPath() const {                                                               \
-      Folder<Derived> const * const containedIn = this->containedInFolderRaw();                                   \
-      return containedIn ? containedIn->fullPath() : QString{"/"};                                                \
-   }                                                                                                              \
+   QString Derived::containedInFolderPath() const { return this->doContainedInFolderPath(); }                     \
    /*====================================== FB "SETTER" MEMBER FUNCTIONS ======================================*/ \
    void Derived::setContainedInFolderId  (int     const   val) { this->doSetContainedInFolderId  (val); return; } \
-   void Derived::setContainedInFolderPath(QString const & val) {                                                  \
-      this->doSetContainedInFolderId(FolderType::ensure(val)->key());                                             \
-      return;                                                                                                     \
-   }                                                                                                              \
+   void Derived::setContainedInFolderPath(QString const & val) { this->doSetContainedInFolderPath(val); return; } \
    std::shared_ptr<Derived> Derived::getById(int const id) { return ObjectStoreWrapper::getById<Derived>(id); }   \
    Derived * Derived::getByIdRaw(int const id) { return ObjectStoreWrapper::getByIdRaw<Derived>(id); }            \
 

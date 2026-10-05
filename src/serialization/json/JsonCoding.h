@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/json/JsonCoding.h is part of Brewtarget, and is copyright the following authors 2020-2023:
+ * serialization/json/JsonCoding.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -18,11 +18,8 @@
 #pragma once
 
 #include <memory> // For smart pointers
-#include <QHash>
-#include <QObject>
 #include <QString>
 #include <QTextStream>
-#include <QVariant>
 
 #include "serialization/json/JsonRecordDefinition.h"
 #include "serialization/json/JsonSchema.h"
@@ -45,9 +42,9 @@ public:
     * \brief Constructor
     * \param name The name of this encoding (eg "BeerJSON 1.0").  Used primarily for logging.
     * \param version The version to write out to BeerJSON records
-    * \param schema The wrapper around the JSON schema that we'll use to validate the input (if we are reading from,
-    *               rather than writing to, JSON).
-    * \param jsonRecordDefinitions  TODO: I don't think we need all of these.  It should suffice to have the root record.
+    * \param schemaId Identifies the wrapper around the JSON schema that we'll use to validate the input (if we are
+    *                 reading from, rather than writing to, JSON).
+    * \param rootRecordDefinition
     */
    JsonCoding(char const * const name,
               char const * const version,
@@ -58,14 +55,6 @@ public:
     * \brief Destructor
     */
    ~JsonCoding();
-
-   /**
-    * \brief Check whether we know how to process a record of a given (JSON tag) name
-    * \param recordName
-    * \return \c true if we know how to process (ie we have the address of a function that can create a suitable
-    *         \c JsonRecord object), \c false if not
-    */
-   [[nodiscard]] bool isKnownJsonRecordDefinition(QString recordName) const;
 
    /**
     * \brief Get the root definition element, ie what we use to start processing a document

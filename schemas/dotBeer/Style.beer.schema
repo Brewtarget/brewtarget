@@ -16,121 +16,109 @@
   "$id": "https://dotbeer.org/schema/Style.beer.schema",
   "type": "object",
   "description": "A beer style may be from the BJCP style guide, Australian, UK or local style guides.  Generally a recipe is designed to one style.",
-  "allOf": [
-    {
-      "$ref": "#/$defs/StyleBase"
+  "properties": {
+    "name": {
+      "description": "Name of the style profile – usually this is the specific name of the style – for example “Scottish Wee Heavy Ale” and not the Category which in this case might be “Scottish Ale”",
+      "type": "string"
     },
-    {
-      "properties": {
-        "folder_path": {
-          "description": "The suggested slash-delimited subfolder path in which to store this Style object.",
-          "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
-        },
-        "original_gravity": {
-          "description": "The range of acceptable original gravity for the style.",
-          "$ref": "Measurement.beer.schema#/$defs/RangeOfGravity"
-        },
-        "final_gravity": {
-          "description": "The range of acceptable final gravity for the style.",
-          "$ref": "Measurement.beer.schema#/$defs/RangeOfGravity"
-        },
-        "international_bitterness_units": {
-          "description": "The range of bitterness for this style.",
-          "$ref": "Measurement.beer.schema#/$defs/RangeOfBitterness"
-        },
-        "color": {
-          "description": "The range of color for this beer style.",
-          "$ref": "Measurement.beer.schema#/$defs/RangeOfColor"
-        },
-        "carbonation": {
-          "description": "Range of carbonation for this beer style.",
-          "$ref": "Measurement.beer.schema#/$defs/RangeOfCarbonation"
-        },
-        "alcohol_by_volume": {
-          "description": "The range of alcohol by volume for this beer style.",
-          "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
-        },
-        "notes": {
-          "description": "Description of the style, history",
-          "type": "string"
-        },
-        "aroma": {
-          "description": "Aroma profile for this style.",
-          "type": "string"
-        },
-        "appearance": {
-          "type": "string"
-        },
-        "flavor": {
-          "description": "Flavor profile for this style.",
-          "type": "string"
-        },
-        "mouthfeel": {
-          "type": "string"
-        },
-        "overall_impression": {
-          "type": "string"
-        },
-        "ingredients": {
-          "description": "Suggested ingredients for this style",
-          "type": "string"
-        },
-        "examples": {
-          "description": "Example beers of this style.",
-          "type": "string"
-        }
-      },
-      "unevaluatedProperties": false
+    "category": {
+      "description": "Category that this style belongs to – usually associated with a group of styles such as “English Ales” or “American Lagers”.",
+      "type": "string"
+    },
+    "category_number": {
+      "description": "Number or identifier associated with this style category. For example in the BJCP style guide, the “American Lager” category has a category number of “1”.",
+      "type": "integer"
+    },
+    "style_letter": {
+      "description": "The specific subcategory letter associated with this particular style. For example in the BJCP style guide, an American Standard Lager would be style letter “A” under the main category.  Letters should be upper case.",
+      "type": "string",
+      "maxLength": 1,
+      "minLength": 1,
+      "pattern": "[A-Z ]"
+    },
+    "style_guide": {
+      "description": "The name of the style guide that this particular style or category belongs to. For example “BJCP” might denote the BJCP style guide, and “AHA” would be used for the AHA style guide.",
+      "type": "string"
+    },
+    "style_type": {
+      "description": "Defines the type of beverage associated with this category.",
+      "enum": [
+        "beer",
+        "cider",
+        "kombucha",
+        "mead",
+        "other",
+        "soda",
+        "wine"
+      ]
+    },
+    "local_id" : {
+      "description": "The \"local ID\" that allows other objects in this file (eg recipes) to refer to this style.",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
+    },
+    "folder_path": {
+      "description": "The suggested slash-delimited subfolder path in which to store this Style object.",
+      "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+    },
+    "original_gravity": {
+      "description": "The range of acceptable original gravity for the style.",
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfGravity"
+    },
+    "final_gravity": {
+      "description": "The range of acceptable final gravity for the style.",
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfGravity"
+    },
+    "international_bitterness_units": {
+      "description": "The range of bitterness for this style.",
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfBitterness"
+    },
+    "color": {
+      "description": "The range of color for this beer style.",
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfColor"
+    },
+    "carbonation": {
+      "description": "Range of carbonation for this beer style.",
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfCarbonation"
+    },
+    "alcohol_by_volume": {
+      "description": "The range of alcohol by volume for this beer style.",
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
+    },
+    "notes": {
+      "description": "Description of the style, history",
+      "type": "string"
+    },
+    "aroma": {
+      "description": "Aroma profile for this style.",
+      "type": "string"
+    },
+    "appearance": {
+      "type": "string"
+    },
+    "flavor": {
+      "description": "Flavor profile for this style.",
+      "type": "string"
+    },
+    "mouthfeel": {
+      "type": "string"
+    },
+    "overall_impression": {
+      "type": "string"
+    },
+    "ingredients": {
+      "description": "Suggested ingredients for this style",
+      "type": "string"
+    },
+    "examples": {
+      "description": "Example beers of this style.",
+      "type": "string"
     }
+  },
+  "required": [
+    "name",
+    "category",
+    "style_guide",
+    "style_type"
   ],
-  "$defs": {
-    "StyleBase": {
-      "type": "object",
-      "description": "The descriptive base type for both style guideline records, and recipe style provisions. Provides unique properties to identify individual styles",
-      "properties": {
-        "name": {
-          "description": "Name of the style profile – usually this is the specific name of the style – for example “Scottish Wee Heavy Ale” and not the Category which in this case might be “Scottish Ale”",
-          "type": "string"
-        },
-        "category": {
-          "description": "Category that this style belongs to – usually associated with a group of styles such as “English Ales” or “American Lagers”.",
-          "type": "string"
-        },
-        "category_number": {
-          "description": "Number or identifier associated with this style category. For example in the BJCP style guide, the “American Lager” category has a category number of “1”.",
-          "type": "integer"
-        },
-        "style_letter": {
-          "description": "The specific subcategory letter associated with this particular style. For example in the BJCP style guide, an American Standard Lager would be style letter “A” under the main category.  Letters should be upper case.",
-          "type": "string",
-          "maxLength": 1,
-          "minLength": 1,
-          "pattern": "[A-Z ]"
-        },
-        "style_guide": {
-          "description": "The name of the style guide that this particular style or category belongs to. For example “BJCP” might denote the BJCP style guide, and “AHA” would be used for the AHA style guide.",
-          "type": "string"
-        },
-        "style_type": {
-          "description": "Defines the type of beverage associated with this category.",
-          "enum": [
-            "beer",
-            "cider",
-            "kombucha",
-            "mead",
-            "other",
-            "soda",
-            "wine"
-          ]
-        }
-      },
-      "required": [
-        "name",
-        "category",
-        "style_guide",
-        "style_type"
-      ],
-      "unevaluatedProperties": false
-    }
-  }
+  "unevaluatedProperties": false
 }

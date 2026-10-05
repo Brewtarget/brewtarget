@@ -148,7 +148,7 @@
       <file alias="schemas/dotBeer/Hop.beer.schema"            >schemas/dotBeer/Hop.beer.schema</file>
       <file alias="schemas/dotBeer/Mash.beer.schema"           >schemas/dotBeer/Mash.beer.schema</file>
       <file alias="schemas/dotBeer/Measurement.beer.schema"    >schemas/dotBeer/Measurement.beer.schema</file>
-      <file alias="schemas/dotBeer/MiscIngredient.beer.schema" >schemas/dotBeer/MiscIngredient.beer.schema</file>
+      <file alias="schemas/dotBeer/Misc.beer.schema"           >schemas/dotBeer/Misc.beer.schema</file>
       <file alias="schemas/dotBeer/Recipe.beer.schema"         >schemas/dotBeer/Recipe.beer.schema</file>
       <file alias="schemas/dotBeer/StepCommon.beer.schema"     >schemas/dotBeer/StepCommon.beer.schema</file>
       <file alias="schemas/dotBeer/Style.beer.schema"          >schemas/dotBeer/Style.beer.schema</file>

@@ -18,116 +18,106 @@
   "type": "object",
   "title": "Culture",
   "description": "Collects the attributes of a microbial culture such as a yeast.",
-  "allOf": [
-    {
-      "$ref": "#/$defs/CultureBase"
+  "properties": {
+    "name": {
+      "type": "string"
     },
-    {
-      "properties": {
-        "folder_path": {
-          "description": "The suggested slash-delimited subfolder path in which to store this Culture object.",
-          "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
-        },
-        "temperature_range": {
-          "description": "The recommended temperature range of fermentation by the culture producer.",
-          "$ref": "Measurement.beer.schema#/$defs/RangeOfTemperature"
-        },
-        "alcohol_tolerance": {
-          "description": "The recommended limit of abv by the culture producer before attenuation stops.",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
-        },
-        "flocculation": {
-          "description": "Floculation refers to the ability of yeast to aggregate to form large flocs which drop out of suspension.",
-          "enum": [
-            "very low",
-            "low",
-            "medium low",
-            "medium",
-            "medium high",
-            "high",
-            "very high"
-          ]
-        },
-        "attenuation_range": {
-          "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
-        },
-        "notes": {
-          "type": "string"
-        },
-        "best_for": {
-          "description": "Recommended styles for a particular culture.",
-          "type": "string"
-        },
-        "max_reuse": {
-          "description": "Maximum number of times to reuse a culture before a new lab source is recommended.",
-          "type": "integer"
-        },
-        "pof": {
-          "description": "A POF+ culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts.",
-          "type": "boolean"
-        },
-        "glucoamylase": {
-          "description": "A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.",
-          "type": "boolean"
-        },
-        "inventory": {
-          "$ref": "#/$defs/CultureAmount"
-        },
-        "killer": {
-          "$ref": "#/$defs/KillerProperties"
-        }
-      }
+    "local_id" : {
+      "description": "The \"local ID\" that allows other objects in this file (eg recipes) to refer to this Culture object.",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
+    },
+    "folder_path": {
+      "description": "The suggested slash-delimited subfolder path in which to store this Culture object.",
+      "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+    },
+    "culture_type": {
+      "enum": [
+        "ale",
+        "bacteria",
+        "brett",
+        "champagne",
+        "kveik",
+        "lacto",
+        "lager",
+        "malolactic",
+        "mixed-culture",
+        "other",
+        "pedio",
+        "spontaneous",
+        "wine"
+      ]
+    },
+    "form": {
+      "enum": [
+        "liquid",
+        "dry",
+        "slant",
+        "culture",
+        "dregs"
+      ]
+    },
+    "producer": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "temperature_range": {
+      "description": "The recommended temperature range of fermentation by the culture producer.",
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfTemperature"
+    },
+    "alcohol_tolerance": {
+      "description": "The recommended limit of abv by the culture producer before attenuation stops.",
+      "$ref": "Measurement.beer.schema#/$defs/Percentage"
+    },
+    "flocculation": {
+      "description": "Floculation refers to the ability of yeast to aggregate to form large flocs which drop out of suspension.",
+      "enum": [
+        "very low",
+        "low",
+        "medium low",
+        "medium",
+        "medium high",
+        "high",
+        "very high"
+      ]
+    },
+    "attenuation_range": {
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "best_for": {
+      "description": "Recommended styles for a particular culture.",
+      "type": "string"
+    },
+    "max_reuse": {
+      "description": "Maximum number of times to reuse a culture before a new lab source is recommended.",
+      "type": "integer"
+    },
+    "pof": {
+      "description": "A POF+ culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts.",
+      "type": "boolean"
+    },
+    "glucoamylase": {
+      "description": "A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.",
+      "type": "boolean"
+    },
+    "inventory": {
+      "$ref": "#/$defs/CultureAmount"
+    },
+    "killer": {
+      "$ref": "#/$defs/KillerProperties"
     }
+  },
+  "required": [
+    "name",
+    "culture_type",
+    "form"
   ],
   "unevaluatedProperties": false,
   "$defs": {
-    "CultureBase": {
-      "type": "object",
-      "description": "Provides unique properties to identify individual records of a culture.",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "culture_type": {
-          "enum": [
-            "ale",
-            "bacteria",
-            "brett",
-            "champagne",
-            "kveik",
-            "lacto",
-            "lager",
-            "malolactic",
-            "mixed-culture",
-            "other",
-            "pedio",
-            "spontaneous",
-            "wine"
-          ]
-        },
-        "form": {
-          "enum": [
-            "liquid",
-            "dry",
-            "slant",
-            "culture",
-            "dregs"
-          ]
-        },
-        "producer": {
-          "type": "string"
-        },
-        "product_id": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "name",
-        "culture_type",
-        "form"
-      ],
-      "unevaluatedProperties": false
-    },
     "CultureAmount" : {
       "description": "The ways in which an amount of a Culture could be measured",
       "oneOf": [
@@ -140,8 +130,7 @@
         {
           "$ref": "Measurement.beer.schema#/$defs/Count"
         }
-      ],
-      "unevaluatedProperties": false
+      ]
     },
     "KillerProperties": {
       "type": "object",

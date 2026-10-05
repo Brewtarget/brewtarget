@@ -35,6 +35,7 @@ namespace {
       {JsonRecordDefinition::FieldType::SingleUnitValue           , QObject::tr("Single-Unit-Value"             )},
       {JsonRecordDefinition::FieldType::RequiredConstant          , QObject::tr("Required-Constant"             )},
       {JsonRecordDefinition::FieldType::FolderPath                , QObject::tr("Folder-Path"                   )},
+      {JsonRecordDefinition::FieldType::LocalId                   , QObject::tr("Local-ID"                      )},
    };
 }
 
@@ -93,7 +94,7 @@ JsonRecordDefinition::JsonRecordDefinition(
    return;
 }
 
-[[nodiscard]] std::unique_ptr<JsonRecord> JsonRecordDefinition::makeRecord(QHash<QString, int> * localIdToDbId,
+[[nodiscard]] std::unique_ptr<JsonRecord> JsonRecordDefinition::makeRecord(LocalIdToDbId * localIdToDbId,
                                                                            JsonCoding const & jsonCoding,
                                                                            boost::json::value & recordData) const {
    return this->jsonRecordConstructorWrapper(localIdToDbId, jsonCoding, recordData, *this);

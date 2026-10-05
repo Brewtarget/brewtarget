@@ -591,7 +591,7 @@ def installDependencies():
                         'mingw-w64-' + arch + '-qt6-base',
                         'mingw-w64-' + arch + '-qt6-declarative', # Also needed for lupdate?
                         'mingw-w64-' + arch + '-qt6-multimedia',
-                        'mingw-w64-' + arch + '-qt6-static',
+#                        'mingw-w64-' + arch + '-qt6-static', # No longer available (or needed?)
                         'mingw-w64-' + arch + '-qt6-svg',
                         'mingw-w64-' + arch + '-qt6-tools',
                         'mingw-w64-' + arch + '-qt6-translations',

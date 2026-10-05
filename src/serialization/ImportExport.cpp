@@ -90,7 +90,6 @@ namespace {
             QObject::tr("DotBeer format (*.beer);;BeerJSON format (*.json);;BeerXML format (*.xml)")
       };
       fileChooser.setViewMode(QFileDialog::List);
-      // ¥¥
       fileChooser.setOption(QFileDialog::DontUseNativeDialog, false);
       if (importing) {
          fileChooser.setAcceptMode(QFileDialog::AcceptOpen);
@@ -240,15 +239,15 @@ namespace {
     * \brief Make a set of Hop/Fermentable/etc from a list of same and a list of Recipes
     *        Used in ImportExport::exportToFile when exporting to BeerJSON.  See comment in that function for why.
     */
-   template<class NE> QSet<NE const *> makeSet(QList<NE     const *> const * ingredients,
-                                               QList<Recipe const *> const * recipes) {
+   template<class NE> QSet<NE const *>
+   makeSet(QList<NE     const *> const * ingredients,
+           QList<Recipe const *> const * recipes    ) requires(std::is_base_of_v<Ingredient, NE>) {
       QSet<NE const *> ingredientSet{makeSet(ingredients)};
       if (recipes) {
          for (Recipe const * recipe : *recipes) {
-            auto ingredientAdditions = recipe->allOwned<typename NE::RecipeAdditionClass>();
-            for (auto ingredientAddition : ingredientAdditions) {
-               auto ingredient = ingredientAddition->ingredient();
-               if (ingredient) {
+            for (auto ingredientAdditions = recipe->allOwned<typename NE::RecipeAdditionClass>();
+                 auto ingredientAddition : ingredientAdditions) {
+               if (auto ingredient = ingredientAddition->ingredient()) {
                   ingredientSet.insert(ingredient.get());
                }
             }
@@ -258,10 +257,33 @@ namespace {
    }
 
    /**
-    * \brief Specialisation needed for Water as it's a bit different from other ingredients
+    * \brief Specialisation for things that Recipe uses (but does not own) that are not ingredients
+    *
+    * @tparam NE
+    * @param nonIngredients Maybe one day we'll think of a better collective noun for
+    *                       Mash/Boil/Fermentation/Style/Equipment!
+    * @param recipes
+    * @return
     */
-   template<> QSet<Water const *> makeSet(QList<Water const *> const * ingredients,
-                                          QList<Recipe const *> const * recipes) {
+   template<class NE> QSet<NE const *>
+   makeSet(QList<NE     const *> const * nonIngredients,
+           QList<Recipe const *> const * recipes       ) requires(!std::is_base_of_v<Ingredient, NE>) {
+      QSet<NE const *> nonIngredientSet{makeSet(nonIngredients)};
+      if (recipes) {
+         for (Recipe const * recipe : *recipes) {
+            if (auto const nonIngredient = recipe->get<NE>()) {
+               nonIngredientSet.insert(nonIngredient.get());
+            }
+         }
+      }
+      return nonIngredientSet;
+   }
+
+   /**
+    * \brief Specialisation (well, in fact an overload) needed for Water as it's a bit different from other ingredients
+    */
+   QSet<Water const *> makeSet(QList<Water const *> const * ingredients,
+                               QList<Recipe const *> const * recipes) {
       QSet<Water const *> ingredientSet{makeSet(ingredients)};
       if (recipes) {
          for (Recipe const * recipe : *recipes) {
@@ -355,29 +377,35 @@ bool ImportExport::exportToFile(QString const & baseFolderPath, ImportExport::Li
 
    } else if (filename.endsWith(".beer", Qt::CaseInsensitive)) {
       //
+      // In dotBeer, things are cross-referenced by "local IDs" so we need to make sure that everything referenced eg by
+      // any recipe we are exporting is itself explicitly exported.
+      //
       // TODO: This needs some more work.  For one thing, I would like to have a canonical order for exporting things,
       //       as it makes it easier to compare two sets of output (eg by different versions of the code).
       //
-      QSet<Fermentable const *> const setOfFermentable = makeSet(exportLists.fermentables, exportLists.recipes);
-      QSet<Hop         const *> const setOfHop         = makeSet(exportLists.hops        , exportLists.recipes);
-      QSet<Misc        const *> const setOfMisc        = makeSet(exportLists.miscs       , exportLists.recipes);
-      QSet<Yeast       const *> const setOfYeast       = makeSet(exportLists.yeasts      , exportLists.recipes);
-      QSet<Water       const *> const setOfWater       = makeSet(exportLists.waters      , exportLists.recipes);
-      QSet<Style       const *> const setOfStyle       = makeSet(exportLists.styles);
-      QSet<Equipment   const *> const setOfEquipment   = makeSet(exportLists.equipments);
+      QSet<Fermentable  const *> const setOfFermentable   = makeSet(exportLists.fermentables , exportLists.recipes);
+      QSet<Hop          const *> const setOfHop           = makeSet(exportLists.hops         , exportLists.recipes);
+      QSet<Misc         const *> const setOfMisc          = makeSet(exportLists.miscs        , exportLists.recipes);
+      QSet<Yeast        const *> const setOfYeast         = makeSet(exportLists.yeasts       , exportLists.recipes);
+      QSet<Water        const *> const setOfWater         = makeSet(exportLists.waters       , exportLists.recipes);
+      QSet<Style        const *> const setOfStyle         = makeSet(exportLists.styles       , exportLists.recipes);
+      QSet<Equipment    const *> const setOfEquipment     = makeSet(exportLists.equipments   , exportLists.recipes);
+      QSet<Mash         const *> const setOfMashes        = makeSet(exportLists.mashes       , exportLists.recipes);
+      QSet<Boil         const *> const setOfBoils         = makeSet(exportLists.boils        , exportLists.recipes);
+      QSet<Fermentation const *> const setOfFermentations = makeSet(exportLists.fermentations, exportLists.recipes);
 
       DotBeer::Exporter exporter(outFile, userMessageAsStream);
-      if (!setOfFermentable.isEmpty()   ) { exporter.add(baseFolderPath, setOfFermentable.values()); }
-      if (!setOfHop        .isEmpty()   ) { exporter.add(baseFolderPath, setOfHop        .values()); }
-      if (!setOfMisc       .isEmpty()   ) { exporter.add(baseFolderPath, setOfMisc       .values()); }
-      if (!setOfYeast      .isEmpty()   ) { exporter.add(baseFolderPath, setOfYeast      .values()); }
-      if (!setOfStyle      .isEmpty()   ) { exporter.add(baseFolderPath, setOfStyle      .values()); }
-      if (!setOfEquipment  .isEmpty()   ) { exporter.add(baseFolderPath, setOfEquipment  .values()); }
-      if (!setOfWater      .isEmpty()   ) { exporter.add(baseFolderPath, setOfWater      .values()); }
-      if (exportLists.mashes        && exportLists.mashes       ->size() > 0) { exporter.add(baseFolderPath, *exportLists.mashes       ); }
-      if (exportLists.boils         && exportLists.boils        ->size() > 0) { exporter.add(baseFolderPath, *exportLists.boils        ); }
-      if (exportLists.fermentations && exportLists.fermentations->size() > 0) { exporter.add(baseFolderPath, *exportLists.fermentations); }
-      if (exportLists.recipes       && exportLists.recipes      ->size() > 0) { exporter.add(baseFolderPath, *exportLists.recipes      ); }
+      if (!setOfFermentable  .isEmpty()) { exporter.add(baseFolderPath, setOfFermentable  .values()); }
+      if (!setOfHop          .isEmpty()) { exporter.add(baseFolderPath, setOfHop          .values()); }
+      if (!setOfMisc         .isEmpty()) { exporter.add(baseFolderPath, setOfMisc         .values()); }
+      if (!setOfYeast        .isEmpty()) { exporter.add(baseFolderPath, setOfYeast        .values()); }
+      if (!setOfStyle        .isEmpty()) { exporter.add(baseFolderPath, setOfStyle        .values()); }
+      if (!setOfEquipment    .isEmpty()) { exporter.add(baseFolderPath, setOfEquipment    .values()); }
+      if (!setOfWater        .isEmpty()) { exporter.add(baseFolderPath, setOfWater        .values()); }
+      if (!setOfMashes       .isEmpty()) { exporter.add(baseFolderPath, setOfMashes       .values()); }
+      if (!setOfBoils        .isEmpty()) { exporter.add(baseFolderPath, setOfBoils        .values()); }
+      if (!setOfFermentations.isEmpty()) { exporter.add(baseFolderPath, setOfFermentations.values()); }
+      if (exportLists.recipes && exportLists.recipes->size() > 0) { exporter.add(baseFolderPath, *exportLists.recipes); }
 
       exporter.close();
       succeeded = true;

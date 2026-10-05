@@ -719,10 +719,10 @@ blazeCoreDir = join_paths(blazeDistDir, 'lib/cmake/core')
 message('blazeCoreDir:', blazeCoreDir)
 blazeDependencies = dependency('Blaze',
                                method : 'cmake',
-                               modules : [ 'sourcemeta::core::json',
-                                           'sourcemeta::blaze::compiler',
-                                           'sourcemeta::blaze::evaluator',
-                                           'sourcemeta::blaze::output' ],
+                               modules : ['sourcemeta::core::json'      ,
+                                          'sourcemeta::blaze::compiler' ,
+                                          'sourcemeta::blaze::evaluator',
+                                          'sourcemeta::blaze::output'    ],
                                # Blaze components are
                                #   - alterschema
                                #   - bundle
@@ -736,9 +736,9 @@ blazeDependencies = dependency('Blaze',
                                #   - foundation
                                #   - output
                                #   - test
-                               components : ['compiler',
+                               components : ['compiler' ,
                                              'evaluator',
-                                             'output'],
+                                             'output'   ],
                                # Per https://cmake.org/cmake/help/latest/variable/CMAKE_FIND_DEBUG_MODE.html, setting
                                # CMAKE_FIND_DEBUG_MODE gives "extra find call information ... to standard error"
                                cmake_args : [

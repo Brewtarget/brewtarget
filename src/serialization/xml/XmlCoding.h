@@ -18,7 +18,6 @@
 #pragma once
 
 #include <memory> // For smart pointers
-#include <QHash>
 #include <QObject>
 #include <QString>
 #include <QTextStream>

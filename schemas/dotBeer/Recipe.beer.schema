@@ -67,8 +67,13 @@
       ],
       "unevaluatedProperties": false
     },
-    "style": {
-      "$ref": "Style.beer.schema#/$defs/StyleBase"
+    "style_id": {
+      "description": "Local ID of the style of this recipe.  (Obviously the style in question must be in the \"styles\" section of the same dotBeer file.)",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
+    },
+    "equipment_id": {
+      "description": "Local ID of the equipment for this recipe.  (Obviously the equipment in question must be in the \"equipments\" section of the same dotBeer file.)",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
     },
     "ingredients": {
       "type": "object",
@@ -88,11 +93,11 @@
             "$ref": "#/$defs/HopRecipeAddition"
           }
         },
-        "miscellaneous_additions": {
+        "misc_additions": {
           "type": "array",
           "description": "All the miscellaneous item additions to the recipe",
           "items": {
-            "$ref": "#/$defs/MiscIngredientRecipeAddition"
+            "$ref": "#/$defs/MiscRecipeAddition"
           }
         },
         "culture_additions": {
@@ -113,13 +118,13 @@
       ],
       "unevaluatedProperties": false
     },
-    "water_base": {
-      "description": "Optional parameter to specify the starting profile of the brewing water, which may be modified with salts etc to obtain the target profile.",
-      "$ref": "Water.beer.schema#/$defs/WaterBase"
+    "water_base_id": {
+      "description": "Optional parameter to specify the Local ID of the starting profile of the brewing water, which may be modified with salts etc to obtain the target profile.",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
     },
-    "water_target": {
-      "description": "Optional parameter to specify the desired profile of the brewing water, which may be modified with salts etc from the base (starting) profile.",
-      "$ref": "Water.beer.schema#/$defs/WaterBase"
+    "water_target_id": {
+      "description": "Optional parameter to specify the Local ID of the desired profile of the brewing water, which may be modified with salts etc from the base (starting) profile.",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
     },
     "ro_water_mash": {
       "description": "Percentage of the mash water that is reverse-osmosis (rather than the same profile as `water_base`).  If this field is not present, a value of 0.0 may be assumed.",
@@ -129,17 +134,17 @@
       "description": "Percentage of the sparge water that is reverse-osmosis (rather than the same profile as `water_base`).  If this field is not present, a value of 0.0 may be assumed.",
       "$ref": "Measurement.beer.schema#/$defs/Percentage"
     },
-    "mash": {
-      "description": "This defines the procedure for performing unique mashing processes.",
-      "$ref": "Mash.beer.schema"
+    "mash_id": {
+      "description": "Local ID of the mash procedure used in this recipe.  (Obviously the mash in question must be in the \"mashes\" section of the same dotBeer file.)",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
     },
-    "boil": {
-      "description": "Defines the procedure for performing a boil. A boil procedure with no steps is the same as a standard single step boil.",
-      "$ref": "Boil.beer.schema"
+    "boil_id": {
+      "description": "Local ID of the boil procedure used in this recipe.  (Obviously the boil in question must be in the \"boils\" section of the same dotBeer file.)",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
     },
-    "fermentation": {
-      "description": "FermentationProcedureType defines the procedure for performing fermentation.",
-      "$ref": "Fermentation.beer.schema"
+    "fermentation_id": {
+      "description": "Local ID of the fermentation procedure used in this recipe.  (Obviously the fermentation in question must be in the \"fermentations\" section of the same dotBeer file.)",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
     },
     //
     // If and when we support packaging, we'll add it here
@@ -265,57 +270,52 @@
     "CultureRecipeAddition": {
       "type": "object",
       "description": "Collects the attributes of each culture ingredient for use in a recipe.",
-      "allOf": [
-        {
-          "$ref": "Culture.beer.schema#/$defs/CultureBase"
+      "properties": {
+        "culture_id": {
+          "description": "The Local ID of the culture in this addition.  (Obviously the culture in question must be in the \"cultures\" section of the same dotBeer file.)",
+          "$ref": "DotBeer.beer.schema#/$defs/LocalId"
         },
-        {
-          "properties": {
-            "attenuation": {
-              "description": "The expected, or measured apparent attenuation for a given culture in a given recipe. In comparison to attenuation range, this is a single value.",
-              "$ref": "Measurement.beer.schema#/$defs/Percentage"
-            },
-            "times_cultured": {
-              "type": "integer"
-            },
-            "schedule": {
-              "$ref": "#/$defs/AdditionSchedule"
-            },
-            "cell_count_billions": {
-              "type": "integer"
-            },
-            "amount": {
-              "$ref": "Culture.beer.schema#/$defs/CultureAmount"
-            }
-          }
+        "attenuation": {
+          "description": "The expected, or measured apparent attenuation for a given culture in a given recipe. In comparison to attenuation range, this is a single value.",
+          "$ref": "Measurement.beer.schema#/$defs/Percentage"
         },
-        {
-          "required": [
-            "amount"
-          ]
+        "times_cultured": {
+          "type": "integer"
+        },
+        "schedule": {
+          "$ref": "#/$defs/AdditionSchedule"
+        },
+        "cell_count_billions": {
+          "type": "integer"
+        },
+        "amount": {
+          "$ref": "Culture.beer.schema#/$defs/CultureAmount"
         }
+      },
+      "required": [
+        "culture_id",
+        "amount"
       ],
       "unevaluatedProperties": false
     },
     "FermentableRecipeAddition": {
       "type": "object",
       "description": "Collects the attributes of each fermentable ingredient for use in a recipe fermentable bill.",
-      "allOf": [
-        {
-          "$ref": "Fermentable.beer.schema#/$defs/FermentableBase"
+      "properties": {
+        "fermentable_id": {
+          "description": "The Local ID of the fermentable in this addition.  (Obviously the fermentable in question must be in the \"fermentables\" section of the same dotBeer file.)",
+          "$ref": "DotBeer.beer.schema#/$defs/LocalId"
         },
-        {
-          "properties": {
-            "schedule": {
-              "$ref": "#/$defs/AdditionSchedule"
-            },
-            "amount": {
-              "$ref": "Fermentable.beer.schema#/$defs/FermentableAmount"
-            }
-          }
+        "schedule": {
+          "$ref": "#/$defs/AdditionSchedule"
+        },
+        "amount": {
+          "$ref": "Fermentable.beer.schema#/$defs/FermentableAmount"
         }
-      ],
+      },
       "required": [
+        "fermentable_id",
+        "schedule",
         "amount"
       ],
       "unevaluatedProperties": false
@@ -323,49 +323,44 @@
     "HopRecipeAddition": {
       "type": "object",
       "description": "Collects the attributes of each hop ingredient for use in a recipe hop bill.",
-      "allOf": [
-        {
-          "$ref": "Hop.beer.schema#/$defs/HopBase"
+      "properties": {
+        "hop_id": {
+          "description": "The Local ID of the hop in this addition.  (Obviously the hop in question must be in the \"hops\" section of the same dotBeer file.)",
+          "$ref": "DotBeer.beer.schema#/$defs/LocalId"
         },
-        {
-          "properties": {
-            "schedule": {
-              "$ref": "#/$defs/AdditionSchedule"
-            },
-            "amount": {
-              "$ref": "Hop.beer.schema#/$defs/HopAmount"
-            }
-          }
+        "schedule": {
+          "$ref": "#/$defs/AdditionSchedule"
+        },
+        "amount": {
+          "$ref": "Hop.beer.schema#/$defs/HopAmount"
         }
-      ],
+      },
       "required": [
+        "hop_id",
         "schedule",
         "amount"
       ],
       "unevaluatedProperties": false
     },
-    "MiscIngredientRecipeAddition": {
+    "MiscRecipeAddition": {
       "type": "object",
       "description": "Collects the attributes of each miscellaneous ingredient for use in a recipe.",
-      "allOf": [
-        {
-          "$ref": "MiscIngredient.beer.schema#/$defs/MiscIngredientBase"
+      "properties": {
+        "misc_id": {
+          "description": "The Local ID of the misc in this addition.  (Obviously the misc in question must be in the \"miscs\" section of the same dotBeer file.)",
+          "$ref": "DotBeer.beer.schema#/$defs/LocalId"
         },
-        {
-          "properties": {
-            "schedule": {
-              "$ref": "#/$defs/AdditionSchedule"
-            },
-            "amount": {
-              "$ref": "MiscIngredient.beer.schema#/$defs/MiscIngredientAmount"
-            }
-          }
+        "schedule": {
+          "$ref": "#/$defs/AdditionSchedule"
         },
-        {
-          "required": [
-            "amount"
-          ]
+        "amount": {
+          "$ref": "Misc.beer.schema#/$defs/MiscAmount"
         }
+      },
+      "required": [
+        "misc_id",
+        "schedule",
+        "amount"
       ],
       "unevaluatedProperties": false
     },

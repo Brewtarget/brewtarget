@@ -19,104 +19,95 @@
   "type": "object",
   "title": "Hop",
   "description": "Full definition of a hop variety.",
-  "allOf": [
-    {
-      "$ref": "#/$defs/HopBase"
+  "properties": {
+    "name": {
+      "type": "string"
     },
-    {
-      "properties": {
-        "folder_path": {
-          "description": "The suggested slash-delimited subfolder path in which to store this Hop object.",
-          "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
-        },
-        "type": {
-          "enum": [
-            "aroma",
-            "bittering",
-            "flavor",
-            "aroma/bittering",
-            "bittering/flavor",
-            "aroma/flavor",
-            "aroma/bittering/flavor"
-          ]
-        },
-        "notes": {
-          "type": "string"
-        },
-        "six_month_alpha_loss": {
-          "description": " Defined as the percentage of hop alpha lost in 6 months of storage.",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
-        },
-        "substitutes": {
-          "type": "string",
-          "description": "Alternate hop varieties that can be used in place of this hop variety"
-        },
-        "oil_content": {
-          "$ref": "#/$defs/OilContent"
-        },
-        "inventory": {
-          "$ref": "#/$defs/HopAmount"
-        }
-      }
+    "local_id" : {
+      "description": "The \"local ID\" that allows other objects in this file (eg recipes) to refer to this hop.",
+      "$ref": "DotBeer.beer.schema#/$defs/LocalId"
+    },
+    "folder_path": {
+      "description": "The suggested slash-delimited subfolder path in which to store this Hop object.",
+      "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+    },
+    "producer": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "string",
+      "description": "Country of origin for the hop variety"
+    },
+    "year": {
+      "type": "string",
+      "description": "Year of harvest.  (Note that this is intentionally not a number, as, for one thing, years are not generally formatted in the same way as numbers.)"
+    },
+    "form": {
+      "enum": [
+        "extract",
+        "leaf",
+        "leaf (wet)",
+        "pellet",
+        "powder",
+        "plug"
+      ]
+    },
+    "alpha_acid": {
+      "description": "The actual alpha acid content of the specific year's harvest (and batch) of this type of hop.",
+      "$ref": "Measurement.beer.schema#/$defs/Percentage"
+    },
+    "alpha_acid_range": {
+      "description": "The typical range of alpha acid for this type of hop.",
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
+    },
+    "beta_acid": {
+      "description": "The actual beta acid content of the specific year's harvest (and batch) of this type of hop.",
+      "$ref": "Measurement.beer.schema#/$defs/Percentage"
+    },
+    "beta_acid_range": {
+      "description": "The typical range of beta acid for this type of hop.",
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
+    },
+    // Although it would be OK simply to call this field "type", we prefer to avoid using a JSON schema keyword as a
+    // property name.
+    "hop_type": {
+      "enum": [
+        "aroma",
+        "bittering",
+        "flavor",
+        "aroma/bittering",
+        "bittering/flavor",
+        "aroma/flavor",
+        "aroma/bittering/flavor"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    },
+    "six_month_alpha_loss": {
+      "description": " Defined as the percentage of hop alpha lost in 6 months of storage.",
+      "$ref": "Measurement.beer.schema#/$defs/Percentage"
+    },
+    "substitutes": {
+      "type": "string",
+      "description": "Alternate hop varieties that can be used in place of this hop variety"
+    },
+    "oil_content": {
+      "$ref": "#/$defs/OilContent"
+    },
+    "inventory": {
+      "$ref": "#/$defs/HopAmount"
     }
+  },
+  "required": [
+    "name",
+    "alpha_acid"
   ],
   "unevaluatedProperties": false,
   "$defs": {
-    "HopBase": {
-      "type": "object",
-      "title": "Base Hop Record",
-      "description": "Minimal properties to identify individual records of a hop variety.",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "producer": {
-          "type": "string"
-        },
-        "product_id": {
-          "type": "string"
-        },
-        "origin": {
-          "type": "string",
-          "description": "Country of origin for the hop variety"
-        },
-        "year": {
-          "type": "string",
-          "description": "Year of harvest.  (Note that this is intentionally not a number, as, for one thing, years are not generally formatted in the same way as numbers.)"
-        },
-        "form": {
-          "enum": [
-            "extract",
-            "leaf",
-            "leaf (wet)",
-            "pellet",
-            "powder",
-            "plug"
-          ]
-        },
-        "alpha_acid": {
-          "description": "The actual alpha acid content of the specific year's harvest (and batch) of this type of hop.",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
-        },
-        "alpha_acid_range": {
-          "description": "The typical range of alpha acid for this type of hop.",
-          "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
-        },
-        "beta_acid": {
-          "description": "The actual beta acid content of the specific year's harvest (and batch) of this type of hop.",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
-        },
-        "beta_acid_range": {
-          "description": "The typical range of beta acid for this type of hop.",
-          "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
-        }
-      },
-      "required": [
-        "name",
-        "alpha_acid"
-      ],
-      "unevaluatedProperties": false
-    },
     "HopAmount" : {
       "description": "The ways in which an amount of a Hop could be measured",
       "oneOf": [
@@ -126,8 +117,7 @@
         {
           "$ref": "Measurement.beer.schema#/$defs/Mass"
         }
-      ],
-      "unevaluatedProperties": false
+      ]
     },
     "OilContent": {
       "type": "object",

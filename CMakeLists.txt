@@ -707,6 +707,8 @@ endif()
 
 #================================================== Sourcemeta Blaze ===================================================
 # See comments in meson.build for why we need extra options here (mostly to make things work on Windows/MSYS2).
+# Note that, whatever we do in find_package here needs a counterpart addition to appAndTestCommonLibraries below,
+# otherwise we'll get link errors.
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${PROJECT_SOURCE_DIR}/third-party/blaze/build/dist)
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 set(CMAKE_FIND_DEBUG_MODE TRUE)
@@ -1078,6 +1080,7 @@ foreach(qtComponent IN LISTS qtCommonComponents)
 endforeach()
 list(APPEND appAndTestCommonLibraries "sourcemeta::blaze::evaluator")
 list(APPEND appAndTestCommonLibraries "sourcemeta::blaze::compiler")
+list(APPEND appAndTestCommonLibraries "sourcemeta::blaze::output")
 
 target_link_libraries(${fileName_executable} PRIVATE ${appAndTestCommonLibraries})
 
