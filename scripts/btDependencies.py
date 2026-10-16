@@ -520,13 +520,13 @@ def installDependencies():
          # bunch of Python packaging files unless we force Pacman to overwrite them.  This is somewhat less of a hack
          # than specifying --overwrite globally.
          #
-         # We have to do both 32-bit and 64-bit versions of Python here to be certain.
+###         # We have to do both 32-bit and 64-bit versions of Python here to be certain.
          #
          # Note that the rules for glob expansion are different when invoking a command from Python then when typing it
          # on the command line, hence why the overwrite parameter is '*python*' not '"*python*"'.
          #
          btLogger.log.info('Ensuring Python packaging is up-to-date')
-         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-ucrt-i686-python-packaging']))
+###         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-ucrt-i686-python-packaging']))
          btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-ucrt-x86_64-python-packaging']))
 
          #
