@@ -526,8 +526,8 @@ def installDependencies():
          # on the command line, hence why the overwrite parameter is '*python*' not '"*python*"'.
          #
          btLogger.log.info('Ensuring Python packaging is up-to-date')
-         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-i686-python-packaging']))
-         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-x86_64-python-packaging']))
+         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-ucrt-i686-python-packaging']))
+         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-ucrt-x86_64-python-packaging']))
 
          #
          # Before we install packages, we want to make sure the MSYS2 installation itself is up-to-date, otherwise you
@@ -571,6 +571,9 @@ def installDependencies():
          #                  in Qt 6 (see https://doc.qt.io/qt-6/windows-deployment.html vs
          #                  https://doc.qt.io/qt-5/windows-deployment.html).
          #
+         # 2026-10-16: Switch from MINGW64 to UCRT64.  Latter uses the newer Windows runtime, and support for the former
+         #             is going away.  TLDR: Instead of installing mingw-w64-x86_64-foobar, we install mingw-w64-ucrt-x86_64-foobar
+         #
          arch = 'x86_64'
          installList = ['base-devel',
                         'cmake',
@@ -578,28 +581,28 @@ def installDependencies():
                         'doxygen',
                         'gcc',
                         'git',
-                        'mingw-w64-' + arch + '-boost',
-                        'mingw-w64-' + arch + '-cmake',
-                        'mingw-w64-' + arch + '-clang-libs', # Needed for lupdate
-                        'mingw-w64-' + arch + '-libbacktrace',
-                        'mingw-w64-' + arch + '-meson',
-                        'mingw-w64-' + arch + '-nsis',
-                        'mingw-w64-' + arch + '-freetype',
-                        'mingw-w64-' + arch + '-harfbuzz',
-                        'mingw-w64-' + arch + '-librsvg', # Possibly needed to include in packaging for SVG display
-                        'mingw-w64-' + arch + '-openssl', # OpenSSL headers and library
-                        'mingw-w64-' + arch + '-qt6-base',
-                        'mingw-w64-' + arch + '-qt6-declarative', # Also needed for lupdate?
-                        'mingw-w64-' + arch + '-qt6-multimedia',
-#                        'mingw-w64-' + arch + '-qt6-static', # No longer available (or needed?)
-                        'mingw-w64-' + arch + '-qt6-svg',
-                        'mingw-w64-' + arch + '-qt6-tools',
-                        'mingw-w64-' + arch + '-qt6-translations',
-                        'mingw-w64-' + arch + '-qt6',
-                        'mingw-w64-' + arch + '-toolchain',
-                        'mingw-w64-' + arch + '-libxml2',
-                        'mingw-w64-' + arch + '-angleproject', # See comment above
-                        'mingw-w64-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
+                        'mingw-w64-ucrt-' + arch + '-boost',
+                        'mingw-w64-ucrt-' + arch + '-cmake',
+                        'mingw-w64-ucrt-' + arch + '-clang-libs', # Needed for lupdate
+                        'mingw-w64-ucrt-' + arch + '-libbacktrace',
+                        'mingw-w64-ucrt-' + arch + '-meson',
+                        'mingw-w64-ucrt-' + arch + '-nsis',
+                        'mingw-w64-ucrt-' + arch + '-freetype',
+                        'mingw-w64-ucrt-' + arch + '-harfbuzz',
+                        'mingw-w64-ucrt-' + arch + '-librsvg', # Possibly needed to include in packaging for SVG display
+                        'mingw-w64-ucrt-' + arch + '-openssl', # OpenSSL headers and library
+                        'mingw-w64-ucrt-' + arch + '-qt6-base',
+                        'mingw-w64-ucrt-' + arch + '-qt6-declarative', # Also needed for lupdate?
+                        'mingw-w64-ucrt-' + arch + '-qt6-multimedia',
+                        'mingw-w64-ucrt-' + arch + '-qt6-static',
+                        'mingw-w64-ucrt-' + arch + '-qt6-svg',
+                        'mingw-w64-ucrt-' + arch + '-qt6-tools',
+                        'mingw-w64-ucrt-' + arch + '-qt6-translations',
+                        'mingw-w64-ucrt-' + arch + '-qt6',
+                        'mingw-w64-ucrt-' + arch + '-toolchain',
+                        'mingw-w64-ucrt-' + arch + '-libxml2',
+                        'mingw-w64-ucrt-' + arch + '-angleproject', # See comment above
+                        'mingw-w64-ucrt-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
                         ]
          for packageToInstall in installList:
             btLogger.log.debug('Installing ' + packageToInstall)

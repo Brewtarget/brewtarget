@@ -95,7 +95,7 @@ bool JsonCoding::validateLoadAndStoreInDb(QString const & targetFolderPath,
    } catch (sourcemeta::blaze::CompilerReferenceTargetNotSchemaError const & blazeException) {
       qWarning() <<
          Q_FUNC_INFO << "Caught exception while validating JSON file:" << blazeException.what() << "; identifier:" <<
-         blazeException.identifier();
+         QString::fromStdString(blazeException.identifier());
       userMessage << blazeException.what();
       return false;
    } catch (std::exception const & exception) {

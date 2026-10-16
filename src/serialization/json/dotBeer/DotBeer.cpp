@@ -32,6 +32,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QString>
+#include <QTimeZone>
 #include <QVersionNumber>
 
 #include "config.h"
