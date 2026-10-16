@@ -581,6 +581,7 @@ def installDependencies():
                         'doxygen',
                         'gcc',
                         'git',
+                        'meson',
                         'mingw-w64-ucrt-' + arch + '-boost',
                         'mingw-w64-ucrt-' + arch + '-cmake',
                         'mingw-w64-ucrt-' + arch + '-clang-libs', # Needed for lupdate
