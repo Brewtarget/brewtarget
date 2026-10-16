@@ -188,7 +188,11 @@ public:
    //=================================================== PROPERTIES ====================================================
    //! \brief The category.
    Q_PROPERTY(QString category                       READ category           WRITE setCategory         )
-   //! \brief The category number.
+   /**
+    * \brief The category "number".
+    *        This can sometimes contain letters (eg BJCP mead and cider categories are M1–M4 and C1–C2) and so is
+    *        actually a string rather than, say, an integer.
+    */
    Q_PROPERTY(QString categoryNumber                 READ categoryNumber     WRITE setCategoryNumber   )
    //! \brief The style letter
    Q_PROPERTY(QString styleLetter                    READ styleLetter        WRITE setStyleLetter      )
@@ -196,21 +200,21 @@ public:
    Q_PROPERTY(QString styleGuide                     READ styleGuide         WRITE setStyleGuide       )
    //! \brief The \c Type.
    Q_PROPERTY(Type type                              READ type               WRITE setType             )
-   //! \brief The minimum og.
+   //! \brief The minimum og.  ⮜⮜⮜ Required in BeerXML, optional in BeerJSON. ⮞⮞⮞
    Q_PROPERTY(double ogMin                           READ ogMin              WRITE setOgMin            )
-   //! \brief The maximum og.
+   //! \brief The maximum og.  ⮜⮜⮜ Required in BeerXML, optional in BeerJSON. ⮞⮞⮞
    Q_PROPERTY(double ogMax                           READ ogMax              WRITE setOgMax            )
-   //! \brief The minimum fg.
+   //! \brief The minimum fg.  ⮜⮜⮜ Required in BeerXML, optional in BeerJSON. ⮞⮞⮞
    Q_PROPERTY(double fgMin                           READ fgMin              WRITE setFgMin            )
-   //! \brief The maximum fg.
+   //! \brief The maximum fg.  ⮜⮜⮜ Required in BeerXML, optional in BeerJSON. ⮞⮞⮞
    Q_PROPERTY(double fgMax                           READ fgMax              WRITE setFgMax            )
-   //! \brief The minimum ibus.
+   //! \brief The minimum ibus.  ⮜⮜⮜ Required in BeerXML, optional in BeerJSON. ⮞⮞⮞
    Q_PROPERTY(double ibuMin                          READ ibuMin             WRITE setIbuMin           )
-   //! \brief The maximum ibus.
+   //! \brief The maximum ibus.  ⮜⮜⮜ Required in BeerXML, optional in BeerJSON. ⮞⮞⮞
    Q_PROPERTY(double ibuMax                          READ ibuMax             WRITE setIbuMax           )
-   //! \brief The minimum color in SRM.
+   //! \brief The minimum color in SRM.  ⮜⮜⮜ Required in BeerXML, optional in BeerJSON. ⮞⮞⮞
    Q_PROPERTY(double colorMin_srm                    READ colorMin_srm       WRITE setColorMin_srm     )
-   //! \brief The maximum color in SRM.
+   //! \brief The maximum color in SRM.  ⮜⮜⮜ Required in BeerXML, optional in BeerJSON. ⮞⮞⮞
    Q_PROPERTY(double colorMax_srm                    READ colorMax_srm       WRITE setColorMax_srm     )
    //! \brief The minimum carbonation in volumes at STP.   ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
    Q_PROPERTY(std::optional<double> carbMin_vol      READ carbMin_vol        WRITE setCarbMin_vol      )

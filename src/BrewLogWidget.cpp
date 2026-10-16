@@ -70,7 +70,7 @@ BrewLogWidget::BrewLogWidget(QWidget *parent) : QWidget(parent) {
    SMART_FIELD_INIT(BrewLogWidget, label_measuredFinalVolume        , lineEdit_measuredFinalVolume        , BrewLog, PropertyNames::BrewLog::measuredFinalVolume_l        , 2);
    SMART_FIELD_INIT(BrewLogWidget, label_measuredPostBoilVolume     , lineEdit_measuredPostBoilVolume     , BrewLog, PropertyNames::BrewLog::measuredPostBoilVolume_l     , 2);
    SMART_FIELD_INIT(BrewLogWidget, label_measuredPreBoilVolume      , lineEdit_measuredPreBoilVolume      , BrewLog, PropertyNames::BrewLog::measuredPreBoilVolume_l      , 2);
-   SMART_FIELD_INIT(BrewLogWidget, label_measuredVolumeIntoFermentor, lineEdit_measuredVolumeIntoFermentor, BrewLog, PropertyNames::BrewLog::measuredVolumeIntoFermentor_l, 2);
+   SMART_FIELD_INIT(BrewLogWidget, label_measuredVolumeIntoFermentor, lineEdit_measuredVolumeIntoFermentor, BrewLog, PropertyNames::BrewLog::measuredVolumeIntoFv_l       , 2);
 //   SMART_FIELD_INIT(BrewLogWidget, label_fermentDate   , lineEdit_fermentDate  , BrewLog, PropertyNames::BrewLog::fermentDate     ); No specialisation for QDateTimeEdit
    SMART_FIELD_INIT(BrewLogWidget, label_expectedOriginalGravity    , lcdnumber_expectedOriginalGravity   , BrewLog, PropertyNames::BrewLog::expectedOriginalGravity_sg   );
    SMART_FIELD_INIT(BrewLogWidget, label_forecastOriginalGravity    , lcdnumber_forecastOriginalGravity   , BrewLog, PropertyNames::BrewLog::forecastOriginalGravity_sg   );
@@ -179,20 +179,20 @@ BrewLog * BrewLogWidget::brewLog() const {
    return this->m_brewLog;
 }
 
-void BrewLogWidget::updateBrewDate(QDate const & datetime)    { if (this->m_brewLog) { this->m_brewLog->setBrewDate        (datetime);                                                                 } return; }
-void BrewLogWidget::updateName()                              { if (this->m_brewLog) { this->m_brewLog->setName            (this->lineEdit_batchNumber->text()                 );                      } return; }
-void BrewLogWidget::updateMeasuredPreBoilGravity_sg()         { if (this->m_brewLog) { this->m_brewLog->setMeasuredPreBoilGravity_sg(this->lineEdit_measuredPreBoilGravity->getNonOptCanonicalQty());                } return; }
-void BrewLogWidget::updateMeasuredPreBoilVolume_l()           { if (this->m_brewLog) { this->m_brewLog->setMeasuredPreBoilVolume_l  (this->lineEdit_measuredPreBoilVolume  ->getNonOptCanonicalQty());                      } return; }
-void BrewLogWidget::updateMeasuredStrikeTemp_c()              { if (this->m_brewLog) { this->m_brewLog->setMeasuredStrikeTemp_c    (this->lineEdit_measuredStrikeTemp ->getNonOptCanonicalQty());                      } return; }
-void BrewLogWidget::updateMeasuredMashFinalTemp_c()           { if (this->m_brewLog) { this->m_brewLog->setMeasuredMashFinalTemp_c   (this->lineEdit_measuredMashFinalTemp->getNonOptCanonicalQty());                      } return; }
-void BrewLogWidget::updateOG()                                { if (this->m_brewLog) { this->m_brewLog->setMeasuredOriginalGravity_sg(this->lineEdit_measuredOriginalGravity         ->getNonOptCanonicalQty());                      } return; }
-void BrewLogWidget::updateMeasuredPostBoilVolume_l()          { if (this->m_brewLog) { this->m_brewLog->setMeasuredPostBoilVolume_l(this->lineEdit_measuredPostBoilVolume->getNonOptCanonicalQty()); this->showChanges(); } return; }
-void BrewLogWidget::updateVolumeIntoFermentor_l()             { if (this->m_brewLog) { this->m_brewLog->setMeasuredVolumeIntoFermentor_l(this->lineEdit_measuredVolumeIntoFermentor->getNonOptCanonicalQty()); this->showChanges(); } return; }
-void BrewLogWidget::updatePitchTemp_c()                       { if (this->m_brewLog) { this->m_brewLog->setMeasuredPitchTemp_c     (this->lineEdit_measuredPitchTemp  ->getNonOptCanonicalQty()); this->showChanges(); } return; }
-void BrewLogWidget::updateFG()                                { if (this->m_brewLog) { this->m_brewLog->setMeasuredFinalGravity_sg              (this->lineEdit_measuredFinalGravity         ->getNonOptCanonicalQty()); this->showChanges(); } return; }
-void BrewLogWidget::updateFinalVolume_l()                     { if (this->m_brewLog) { this->m_brewLog->setMeasuredFinalVolume_l   (this->lineEdit_measuredFinalVolume->getNonOptCanonicalQty());                      } return; }
-void BrewLogWidget::updateFermentDate(QDate const & datetime) { if (this->m_brewLog) { this->m_brewLog->setFermentDate     (datetime);                                                                 } return; }
-void BrewLogWidget::updateNotes()                             { if (this->m_brewLog) { this->m_brewLog->setNotes           (this->btTextEdit_brewLogs->toPlainText() );                                } return; }
+void BrewLogWidget::updateBrewDate(QDate const & datetime)    { if (this->m_brewLog) { this->m_brewLog->setBrewDate                  (datetime);                                                                 } return; }
+void BrewLogWidget::updateName()                              { if (this->m_brewLog) { this->m_brewLog->setName                      (this->lineEdit_batchNumber->text()                 );                      } return; }
+void BrewLogWidget::updateMeasuredPreBoilGravity_sg()         { if (this->m_brewLog) { this->m_brewLog->setMeasuredPreBoilGravity_sg (this->lineEdit_measuredPreBoilGravity     ->getNonOptCanonicalQty());                } return; }
+void BrewLogWidget::updateMeasuredPreBoilVolume_l()           { if (this->m_brewLog) { this->m_brewLog->setMeasuredPreBoilVolume_l   (this->lineEdit_measuredPreBoilVolume      ->getNonOptCanonicalQty());                      } return; }
+void BrewLogWidget::updateMeasuredStrikeTemp_c()              { if (this->m_brewLog) { this->m_brewLog->setMeasuredStrikeTemp_c      (this->lineEdit_measuredStrikeTemp         ->getNonOptCanonicalQty());                      } return; }
+void BrewLogWidget::updateMeasuredMashFinalTemp_c()           { if (this->m_brewLog) { this->m_brewLog->setMeasuredMashFinalTemp_c   (this->lineEdit_measuredMashFinalTemp      ->getNonOptCanonicalQty());                      } return; }
+void BrewLogWidget::updateOG()                                { if (this->m_brewLog) { this->m_brewLog->setMeasuredOriginalGravity_sg(this->lineEdit_measuredOriginalGravity    ->getNonOptCanonicalQty());                      } return; }
+void BrewLogWidget::updateMeasuredPostBoilVolume_l()          { if (this->m_brewLog) { this->m_brewLog->setMeasuredPostBoilVolume_l  (this->lineEdit_measuredPostBoilVolume     ->getNonOptCanonicalQty()); this->showChanges(); } return; }
+void BrewLogWidget::updateVolumeIntoFermentor_l()             { if (this->m_brewLog) { this->m_brewLog->setMeasuredVolumeIntoFv_l    (this->lineEdit_measuredVolumeIntoFermentor->getNonOptCanonicalQty()); this->showChanges(); } return; }
+void BrewLogWidget::updatePitchTemp_c()                       { if (this->m_brewLog) { this->m_brewLog->setMeasuredPitchTemp_c       (this->lineEdit_measuredPitchTemp          ->getNonOptCanonicalQty()); this->showChanges(); } return; }
+void BrewLogWidget::updateFG()                                { if (this->m_brewLog) { this->m_brewLog->setMeasuredFinalGravity_sg   (this->lineEdit_measuredFinalGravity       ->getNonOptCanonicalQty()); this->showChanges(); } return; }
+void BrewLogWidget::updateFinalVolume_l()                     { if (this->m_brewLog) { this->m_brewLog->setMeasuredFinalVolume_l     (this->lineEdit_measuredFinalVolume        ->getNonOptCanonicalQty());                      } return; }
+void BrewLogWidget::updateFermentDate(QDate const & datetime) { if (this->m_brewLog) { this->m_brewLog->setFermentDate               (datetime);                                                                 } return; }
+void BrewLogWidget::updateNotes()                             { if (this->m_brewLog) { this->m_brewLog->setNotes                     (this->btTextEdit_brewLogs->toPlainText() );                                } return; }
 
 void BrewLogWidget::changed([[maybe_unused]] QMetaProperty prop,
                             [[maybe_unused]] QVariant val) {
@@ -209,20 +209,20 @@ void BrewLogWidget::showChanges([[maybe_unused]] QString field) {
       return;
    }
 
-   this->dateEdit_brewDate->setDate       (m_brewLog->brewDate        ());
-   this->lineEdit_batchNumber->setText    (m_brewLog->name            ());
-   this->lineEdit_measuredPreBoilGravity->setQuantity(m_brewLog->measuredPreBoilGravity_sg());
-   this->lineEdit_measuredPreBoilVolume ->setQuantity(m_brewLog->measuredPreBoilVolume_l  ());
-   this->lineEdit_measuredStrikeTemp ->setQuantity(m_brewLog->measuredStrikeTemp_c    ());
-   this->lineEdit_measuredMashFinalTemp->setQuantity(m_brewLog->measuredMashFinalTemp_c   ());
-   this->lineEdit_measuredOriginalGravity         ->setQuantity(m_brewLog->measuredOriginalGravity_sg());
-   this->lineEdit_measuredPostBoilVolume->setQuantity(m_brewLog->measuredPostBoilVolume_l());
-   this->lineEdit_measuredVolumeIntoFermentor->setQuantity(m_brewLog->measuredVolumeIntoFermentor_l());
-   this->lineEdit_measuredPitchTemp  ->setQuantity(m_brewLog->measuredPitchTemp_c     ());
-   this->lineEdit_measuredFinalGravity         ->setQuantity(m_brewLog->measuredFinalGravity_sg             ());
-   this->lineEdit_measuredFinalVolume->setQuantity(m_brewLog->measuredFinalVolume_l   ());
-   this->dateEdit_fermentDate->setDate    (m_brewLog->fermentDate     ());
-   this->btTextEdit_brewLogs->setPlainText(m_brewLog->notes           ());
+   this->dateEdit_brewDate                   ->setDate     (m_brewLog->brewDate                  ());
+   this->lineEdit_batchNumber                ->setText     (m_brewLog->name                      ());
+   this->lineEdit_measuredPreBoilGravity     ->setQuantity (m_brewLog->measuredPreBoilGravity_sg ());
+   this->lineEdit_measuredPreBoilVolume      ->setQuantity (m_brewLog->measuredPreBoilVolume_l   ());
+   this->lineEdit_measuredStrikeTemp         ->setQuantity (m_brewLog->measuredStrikeTemp_c      ());
+   this->lineEdit_measuredMashFinalTemp      ->setQuantity (m_brewLog->measuredMashFinalTemp_c   ());
+   this->lineEdit_measuredOriginalGravity    ->setQuantity (m_brewLog->measuredOriginalGravity_sg());
+   this->lineEdit_measuredPostBoilVolume     ->setQuantity (m_brewLog->measuredPostBoilVolume_l  ());
+   this->lineEdit_measuredVolumeIntoFermentor->setQuantity (m_brewLog->measuredVolumeIntoFv_l    ());
+   this->lineEdit_measuredPitchTemp          ->setQuantity (m_brewLog->measuredPitchTemp_c       ());
+   this->lineEdit_measuredFinalGravity       ->setQuantity (m_brewLog->measuredFinalGravity_sg   ());
+   this->lineEdit_measuredFinalVolume        ->setQuantity (m_brewLog->measuredFinalVolume_l     ());
+   this->dateEdit_fermentDate                ->setDate     (m_brewLog->fermentDate               ());
+   this->btTextEdit_brewLogs                 ->setPlainText(m_brewLog->notes                     ());
 
    // Now with the calculated stuff
    this->lcdnumber_computedPreBoilEfficiency->setQuantity(m_brewLog->computedPreBoilEfficiency_pct());

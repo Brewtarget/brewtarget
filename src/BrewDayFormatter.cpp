@@ -194,17 +194,19 @@ QList<QStringList> BrewDayFormatter::buildTitleList() {
  * @return QString
  */
 QString BrewDayFormatter::buildInstructionHtml() {
-   QString middle = QString("<h2>%1</h2>").arg(tr("Instructions"));
-   middle += QString("<table id=\"steps\">");
-   middle += QString("<tr><th class=\"check\">%1</th><th class=\"time\">%2</th><th class=\"step\">%3</th></tr>")
-             .arg(tr("Completed"))
-             .arg(tr("Time"))
-             .arg(tr("Step"));
+   QString middle = QString{
+      "<h2>%1</h2>"
+      "<table id=\"steps\">"
+      "<tr><th class=\"check\">%2</th><th class=\"time\">%3</th><th class=\"step\">%4</th></tr>"}
+      .arg(tr("Instructions"))
+      .arg(tr("Completed"))
+      .arg(tr("Time"))
+      .arg(tr("Step"));
 
    bool useAlt = true;
-   for (auto instruction : recObs->instructions()) {
+   for (auto const & instruction : recObs->instructions()) {
       useAlt = !useAlt;
-      QString stepTime, tmp;
+      QString stepTime;
       QList<QString> reagents;
 
       if (instruction->interval_mins() > 0.0) {
@@ -213,16 +215,13 @@ QString BrewDayFormatter::buildInstructionHtml() {
          stepTime = "--";
       }
 
-      tmp = "";
+      QString tmp = "";
 
-      // TODO: comparing instruction->name() with these untranslated strings means this
-      // doesn't work in other languages. Find a better way.
+      // TODO: Comparing ins->name() here is a bit fragile.
       if (instruction->name() == tr("Add grains")) {
-         reagents = recObs->getReagents(recObs->fermentableAdditions());
+         reagents = recObs->getFermentableAdditionNameAndAmounts();
       } else if (instruction->name() == tr("Heat water")) {
-         if (recObs->mash()) {
-            reagents = recObs->getReagents(recObs->mash()->mashSteps());
-         }
+         reagents = recObs->getMashHeatingSteps();
       } else {
          reagents = instruction->reagents();
       }
@@ -264,8 +263,8 @@ QList<QStringList> BrewDayFormatter::buildInstructionList() {
    ret.append(row);
    row.clear();
 
-   for (auto instruction : recObs->instructions()) {
-      QString stepTime, tmp;
+   for (auto const & instruction : recObs->instructions()) {
+      QString stepTime;
       QList<QString> reagents;
 
       if (instruction->interval_mins() > 0.0) {
@@ -274,19 +273,16 @@ QList<QStringList> BrewDayFormatter::buildInstructionList() {
          stepTime = "--";
       }
 
-      // TODO: comparing instruction->name() with these untranslated strings means this
-      // doesn't work in other languages. Find a better way.
+      // TODO: Comparing ins->name() here is a bit fragile.
       if (instruction->name() == tr("Add grains")) {
-         reagents = recObs->getReagents(recObs->fermentableAdditions());
+         reagents = recObs->getFermentableAdditionNameAndAmounts();
       } else if (instruction->name() == tr("Heat water")) {
-         if (recObs->mash()) {
-            reagents = recObs->getReagents(recObs->mash()->mashSteps());
-         }
+         reagents = recObs->getMashHeatingSteps();
       } else {
          reagents = instruction->reagents();
       }
 
-      tmp = "";
+      QString tmp = "";
       if (reagents.size() > 0) {
          for (QString reagent : reagents) {
             tmp += QString("\t%1\n").arg(reagent);
@@ -315,7 +311,7 @@ QString BrewDayFormatter::buildFooterHtml() {
              .arg(tr("PostBoil Gravity"));
 
    bottom += QString("<tr><td class=\"left\">%1:</td><td class=\"value\"></tr>")
-             .arg(tr("Volume into fermenter"));
+             .arg(tr("Volume into fermentor"));
    bottom += "</table>";
 
    return bottom;

@@ -47,7 +47,8 @@ class Recipe;
 /*!
  * \class Instruction
  *
- * \brief Model class for an instruction record in the database.
+ * \brief Model class for an instruction record in the database.  Recipe instructions can be automatically generated
+ *        and/or manually edited.
  *
  *        NOTE that \c Instruction is not part of the official BeerXML or BeerJSON standards.  We add it in to our
  *             BeerXML files, because we can, but TBD whether this is possible with BeerJSON.
@@ -84,20 +85,25 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   Instruction(QString name = "");
-   Instruction(NamedParameterBundle const & namedParameterBundle);
+   explicit Instruction(QString name = "");
+   explicit Instruction(NamedParameterBundle const & namedParameterBundle);
    Instruction(Instruction const & other);
 
-   virtual ~Instruction();
+   ~Instruction() override;
 
    //=================================================== PROPERTIES ====================================================
    Q_PROPERTY(QString        directions        READ directions         WRITE setDirections   )
+   // TODO: As far as I can tell, none of the next three properties is used anywhere.  We should confirm and then drop
+   //       them.
    Q_PROPERTY(bool           hasTimer          READ hasTimer           WRITE setHasTimer     )
    Q_PROPERTY(QString        timerValue        READ timerValue         WRITE setTimerValue   )
    Q_PROPERTY(bool           completed         READ completed          WRITE setCompleted    )
    /**
     * I think this is time before end of stage -- eg for adding a Hop 15 mins after the start of a 75 min boil, this
-    * would be 60.
+    * would be 60.0.
+    *
+    * TODO: We should make this optional instead of having 0.0 mean "unset/unused".  Also, "duration" would be a better
+    *       name than "interval" IMHO.
     */
    Q_PROPERTY(double         interval_mins     READ interval_mins      WRITE setInterval_mins)
    Q_PROPERTY(QList<QString> reagents          READ reagents           STORED false          )

@@ -323,8 +323,21 @@ namespace Measurement {
       extern UnitSystem const heatCapacity_Joules      ;
       extern UnitSystem const heatCapacity_Btus        ;
 
-      extern UnitSystem const specificVolume_Metric     ;
-      extern UnitSystem const specificVolume_UsCustomary;
+      extern UnitSystem const volumePerMass_Metric     ;
+      extern UnitSystem const volumePerMass_UsCustomary;
+
+      //
+      // The choice the user makes here is really one of serving size, which tracks the volume system they use.  The
+      // energy side is (almost) always kilocalories, aka "food Calories".
+      //
+      // Strictly speaking, what we call energyPerVolume_Metric is only metric on the volume side, and it is
+      // energyPerVolume_MetricAlternate that is truly metric on both sides.  OTOH, the former is more of a day-to-day
+      // set of measures.
+      //
+      extern UnitSystem const energyPerVolume_Metric         ; // kcal/25cl, kcal/33cl, kcal/50cl, kcal/l
+      extern UnitSystem const energyPerVolume_UsCustomary    ; // kcal/12floz, kcal/pt (US pint)
+      extern UnitSystem const energyPerVolume_Imperial       ; // kcal/ipt (UK pint, 568 ml)
+      extern UnitSystem const energyPerVolume_MetricAlternate; // kJ/100ml
    }
 }
 

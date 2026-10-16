@@ -22,6 +22,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <sourcemeta/blaze/compiler_error.h>
 
 #include "serialization/json/JsonRecord.h"
 #include "serialization/json/JsonUtils.h"
@@ -91,7 +92,12 @@ bool JsonCoding::validateLoadAndStoreInDb(QString const & targetFolderPath,
          qWarning() << Q_FUNC_INFO << "Schema validation failed";
          return false;
       }
-
+   } catch (sourcemeta::blaze::CompilerReferenceTargetNotSchemaError const & blazeException) {
+      qWarning() <<
+         Q_FUNC_INFO << "Caught exception while validating JSON file:" << blazeException.what() << "; identifier:" <<
+         blazeException.identifier();
+      userMessage << blazeException.what();
+      return false;
    } catch (std::exception const & exception) {
       qWarning() <<
          Q_FUNC_INFO << "Caught exception while validating JSON file:" << exception.what();

@@ -64,7 +64,7 @@ namespace {
    BtStringConst const nameForMashTun        {"Mash Tun"        };
    BtStringConst const nameForLauterTun      {"Lauter Tun"      };
    BtStringConst const nameForKettle         {"Brew Kettle"     };
-   BtStringConst const nameForFermenter      {"Fermenter"       };
+   BtStringConst const nameForFermentor      {"Fermentor"       };
    BtStringConst const nameForAgingVessel    {"Aging Vessel"    };
    BtStringConst const nameForPackagingVessel{"Packaging Vessel"};
 
@@ -216,6 +216,9 @@ namespace {
        {"ft^3/lb", &Measurement::Units::cubicFeetPerPound     }}
    };
 
+   //
+   // See comment on JsonRecordDefinition::StringOutputValidator
+   //
    std::optional<QString> BEER_JSON_STYLE_LETTER_VALIDATOR(QString const & str) {
       if (!str.isEmpty()) {
          QString const firstLetter = str.first(1).toUpper();
@@ -805,32 +808,32 @@ namespace {
                                                                  &BEER_JSON_LENGTH_MAPPER                                },
          {JsonRecordDefinition::FieldType::String              , "equipment_items[form=\"Brew Kettle\"]/notes"        ,
                                                                  PropertyNames::Equipment::kettleNotes                },
-         {JsonRecordDefinition::FieldType::RequiredConstant    , "equipment_items[form=\"Fermenter\"]/name"           , nameForFermenter},
+         {JsonRecordDefinition::FieldType::RequiredConstant    , "equipment_items[form=\"Fermenter\"]/name"           , nameForFermentor},
          {JsonRecordDefinition::FieldType::String              , "equipment_items[form=\"Fermenter\"]/type"           ,
-                                                                 PropertyNames::Equipment::fermenterType              },
+                                                                 PropertyNames::Equipment::fvType              },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Fermenter\"]/maximum_volume" ,
-                                                                 PropertyNames::Equipment::fermenterBatchSize_l       ,
+                                                                 PropertyNames::Equipment::fvBatchSize_l       ,
                                                                  &BEER_JSON_VOLUME_UNIT_MAPPER                        },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Fermenter\"]/loss"           ,
-                                                                 PropertyNames::Equipment::fermenterLoss_l            ,
+                                                                 PropertyNames::Equipment::fvLoss_l            ,
                                                                  &BEER_JSON_VOLUME_UNIT_MAPPER                        },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Fermenter\"]/grain_absorption_rate",
                                                                  BtString::NULL_STR                                         ,
-                                                                 &BEER_JSON_SPECIFIC_VOLUME_UNIT_MAPPER                     }, // Assume meaningless for Fermenter.
+                                                                 &BEER_JSON_SPECIFIC_VOLUME_UNIT_MAPPER                     }, // Assume meaningless for Fermentor.
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Fermenter\"]/boil_rate_per_hour"   ,
                                                                  BtString::NULL_STR                                         ,
-                                                                 &BEER_JSON_VOLUME_UNIT_MAPPER                              }, // Assume meaningless for Fermenter.
+                                                                 &BEER_JSON_VOLUME_UNIT_MAPPER                              }, // Assume meaningless for Fermentor.
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Fermenter\"]/drain_rate_per_minute",
                                                                  BtString::NULL_STR                                         ,
-                                                                 &BEER_JSON_VOLUME_UNIT_MAPPER                              }, // Assume unimportant for Fermenter.
+                                                                 &BEER_JSON_VOLUME_UNIT_MAPPER                              }, // Assume unimportant for Fermentor.
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Fermenter\"]/weight"               ,
                                                                  BtString::NULL_STR                                         ,
-                                                                 &BEER_JSON_MASS_UNIT_MAPPER                                }, // Assume unimportant for Fermenter.
+                                                                 &BEER_JSON_MASS_UNIT_MAPPER                                }, // Assume unimportant for Fermentor.
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Fermenter\"]/specific_heat"        ,
                                                                  BtString::NULL_STR                                         ,
-                                                                 &BEER_JSON_SPECIFIC_HEAT_UNIT_MAPPER                       }, // Assume unimportant for Fermenter.
+                                                                 &BEER_JSON_SPECIFIC_HEAT_UNIT_MAPPER                       }, // Assume unimportant for Fermentor.
          {JsonRecordDefinition::FieldType::String              , "equipment_items[form=\"Fermenter\"]/notes"                ,
-                                                                 PropertyNames::Equipment::fermenterNotes                   },
+                                                                 PropertyNames::Equipment::fvNotes                   },
          {JsonRecordDefinition::FieldType::RequiredConstant    , "equipment_items[form=\"Aging Vessel\"]/name"              , nameForAgingVessel},
          {JsonRecordDefinition::FieldType::String              , "equipment_items[form=\"Aging Vessel\"]/type"              ,
                                                                  PropertyNames::Equipment::agingVesselType                  },
@@ -1054,7 +1057,7 @@ namespace {
          {JsonRecordDefinition::FieldType::Enum                , "type"                   , PropertyNames::Recipe::type             , &Recipe::typeStringMapping},
          {JsonRecordDefinition::FieldType::String              , "author"                 , PropertyNames::Recipe::brewer           },
          {JsonRecordDefinition::FieldType::String              , "coauthor"               , PropertyNames::Recipe::assistantBrewer       },
-         {JsonRecordDefinition::FieldType::Date                , "created"                , PropertyNames::Recipe::date             },
+         {JsonRecordDefinition::FieldType::DateOrDateTimeLocal                , "created"                , PropertyNames::Recipe::date             },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "batch_size"             , PropertyNames::Recipe::batchSize_l      , &BEER_JSON_VOLUME_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "efficiency/brewhouse"   , PropertyNames::Recipe::efficiency_pct   , &BEER_JSON_PERCENT_UNIT      },
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "efficiency/conversion"  , BtString::NULL_STR                      , &BEER_JSON_PERCENT_UNIT      }, // .:TBD:. Do we want to support this optional BeerJSON field?

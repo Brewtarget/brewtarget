@@ -14,9 +14,8 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/Culture.beer.schema",
+  "$id": "https://dotbeer.org/schema/0.9.0/Culture.beer.schema",
   "type": "object",
-  "title": "Culture",
   "description": "Collects the attributes of a microbial culture such as a yeast.",
   "properties": {
     "name": {
@@ -68,10 +67,10 @@
     },
     "alcohol_tolerance": {
       "description": "The recommended limit of abv by the culture producer before attenuation stops.",
-      "$ref": "Measurement.beer.schema#/$defs/Percentage"
+      "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "flocculation": {
-      "description": "Floculation refers to the ability of yeast to aggregate to form large flocs which drop out of suspension.",
+      "description": "Flocculation refers to the ability of yeast to aggregate to form large flocs which drop out of suspension.",
       "enum": [
         "very low",
         "low",
@@ -83,7 +82,7 @@
       ]
     },
     "attenuation_range": {
-      "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentageSimple"
     },
     "notes": {
       "type": "string"
@@ -94,7 +93,8 @@
     },
     "max_reuse": {
       "description": "Maximum number of times to reuse a culture before a new lab source is recommended.",
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0
     },
     "pof": {
       "description": "A POF+ culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts.",
@@ -134,22 +134,43 @@
     },
     "KillerProperties": {
       "type": "object",
-      "description": "Killer yeast properties (also known as zymocide) are common among wine yeasts.  There are some ale and brett yeasts that are immune to some killer (aka zymocidic) properties, these are known as \"killer neutral\".\n\nSee https://www.milkthefunk.com/wiki/Saccharomyces#Killer_Wine_Yeast for more on \"killer\" yeasts and \"killer neutral\" yeasts.  Some folks call these killer yeast properties \"zymocide\", but AFAICT \"killer\" is still the more widely used term, at least in relation to brewing.\n\nNote that `killerNeutral` being `true` implies all the other `producingXxxToxin` properties are `false`, because \"neutral strains do not produce toxins, nor are they killed by them\".",
+      "description": "Killer yeast properties (also known as zymocide) are common among wine yeasts.  There are some ale and brett yeasts that are immune to some killer (aka zymocidic) properties, these are known as \"killer neutral\".\n\nSee https://www.milkthefunk.com/wiki/Saccharomyces#Killer_Wine_Yeast for more on \"killer\" yeasts and \"killer neutral\" yeasts.  Some folks call these killer yeast properties \"zymocide\", but AFAICT \"killer\" is still the more widely used term, at least in relation to brewing.\n\nNote that `neutral` being `true` implies all the other `producing_xxx_toxin` properties are `false`, because \"neutral strains do not produce toxins, nor are they killed by them\".",
       "properties": {
-        "producingK1Toxin": {
+        "producing_K1_toxin": {
           "type": "boolean"
         },
-        "producingK2Toxin": {
+        "producing_K2_toxin": {
           "type": "boolean"
         },
-        "producingK28Toxin": {
+        "producing_K28_toxin": {
           "type": "boolean"
         },
-        "producingKlusToxin": {
+        "producing_Klus_toxin": {
           "type": "boolean"
         },
         "neutral": {
           "type": "boolean"
+        }
+      },
+      //
+      // See https://json-schema.org/understanding-json-schema/reference/conditionals#ifthenelse for how if/then/else
+      // works in JSON Schemas.  We enforce here that `neutral` being `true` implies all the other `producingXxxToxin`
+      // properties are `false`.
+      //
+      "if":   {
+        //
+        // Per comment in Misc.beer.schema, we need `required` here to stop this being trivially true when `neutral` is
+        // not set.
+        //
+        "properties": { "neutral": { "const": true } },
+        "required": ["neutral"]
+      },
+      "then": {
+        "properties": {
+          "producing_K1_toxin"  : { "const": false },
+          "producing_K2_toxin"  : { "const": false },
+          "producing_K28_toxin" : { "const": false },
+          "producing_Klus_toxin": { "const": false }
         }
       },
       "unevaluatedProperties": false

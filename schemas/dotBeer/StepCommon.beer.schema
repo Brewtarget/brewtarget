@@ -10,26 +10,26 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/StepCommon.beer.schema",
+  "$id": "https://dotbeer.org/schema/0.9.0/StepCommon.beer.schema",
   "description": "`StepCommon` is not a type itself, but a subschema holding various common parts of `MashStep`, `BoilStep` and `FermentationStep`.",
   "$defs": {
     //
     // The step types have overlapping sets of fields, as follows (where ‡ means a field is required):
     //
-    //    MashStep             BoilStep            FermentationStep    |   Providing Class
-    //    --------             --------            ----------------    |   --------
+    //    MashStep             BoilStep            FermentationStep    |   Provided By
+    //    --------             --------            ----------------    |   -----------
     //  ‡ name               ‡ name              ‡ name                |   StepBase
     //    step_description     step_description    step_description    |   StepBase
     //    ramp_time            ramp_time                               |   StepWithRampTime
     //  ‡ step_time            step_time           step_time           |   StepBase
     //  ‡ start_temperature    start_temperature   start_temperature   |   StepBase
     //    end_temperature      end_temperature     end_temperature     |   StepBase
-    //    start_ph             start_ph            start_ph            |   StepBase
-    //    end_ph               end_ph              end_ph              |   StepBase
+    //    start_pH             start_pH            start_pH            |   StepBase
+    //    end_pH               end_pH              end_pH              |   StepBase
     //                         start_gravity       start_gravity       |   StepWithGravity
     //                         end_gravity         end_gravity         |   StepWithGravity
     //                                                                 |
-    //  ‡ type                                                         |   MashStep
+    //  ‡ step_type                                                    |   MashStep
     //    amount                                                       |   MashStep
     //    water_grain_ratio                                            |   MashStep
     //    infuse_temperature                                           |   MashStep

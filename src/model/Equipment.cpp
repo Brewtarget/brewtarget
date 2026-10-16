@@ -37,10 +37,10 @@ QString Equipment::localisedName_agingVesselType            () { return tr("Agin
 QString Equipment::localisedName_agingVesselVolume_l        () { return tr("Aging Vessel Volume"        ); }
 QString Equipment::localisedName_boilingPoint_c             () { return tr("Boiling Point"              ); }
 QString Equipment::localisedName_evapRate_pctHr             () { return tr("Evaporation Rate"           ); }
-QString Equipment::localisedName_fermenterBatchSize_l       () { return tr("Fermenter Batch Size"       ); }
-QString Equipment::localisedName_fermenterLoss_l            () { return tr("Fermenter Loss"             ); }
-QString Equipment::localisedName_fermenterNotes             () { return tr("Fermenter Notes"            ); }
-QString Equipment::localisedName_fermenterType              () { return tr("Fermenter Type"             ); }
+QString Equipment::localisedName_fvBatchSize_l       () { return tr("Fermentor Batch Size"       ); }
+QString Equipment::localisedName_fvLoss_l            () { return tr("Fermentor Loss"             ); }
+QString Equipment::localisedName_fvNotes             () { return tr("Fermentor Notes"            ); }
+QString Equipment::localisedName_fvType              () { return tr("Fermentor Type"             ); }
 QString Equipment::localisedName_hltLoss_l                  () { return tr("HLT Loss"                   ); }
 QString Equipment::localisedName_hltNotes                   () { return tr("HLT Notes"                  ); }
 QString Equipment::localisedName_hltSpecificHeat_calGC      () { return tr("HLT Specific Heat"          ); }
@@ -84,7 +84,7 @@ bool Equipment::compareWith(NamedEntity const & other, QList<BtStringConst const
    // Base class will already have ensured names are equal
    return (
       AUTO_PROPERTY_COMPARE(this, rhs, m_kettleBoilSize_l          , PropertyNames::Equipment::kettleBoilSize_l          , propertiesThatDiffer) &&
-      AUTO_PROPERTY_COMPARE(this, rhs, m_fermenterBatchSize_l      , PropertyNames::Equipment::fermenterBatchSize_l      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_fvBatchSize_l             , PropertyNames::Equipment::fvBatchSize_l             , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunVolume_l           , PropertyNames::Equipment::mashTunVolume_l           , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunWeight_kg          , PropertyNames::Equipment::mashTunWeight_kg          , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_mashTunSpecificHeat_calGC , PropertyNames::Equipment::mashTunSpecificHeat_calGC , propertiesThatDiffer) &&
@@ -111,7 +111,7 @@ TypeLookup const Equipment::typeLookup {
    "Equipment",
    {
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleBoilSize_l           , m_kettleBoilSize_l           , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fermenterBatchSize_l       , m_fermenterBatchSize_l       , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fvBatchSize_l       , m_fvBatchSize_l       , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunVolume_l            , m_mashTunVolume_l            , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunWeight_kg           , m_mashTunWeight_kg           , Measurement::PhysicalQuantity::Mass                ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunSpecificHeat_calGC  , m_mashTunSpecificHeat_calGC  , Measurement::PhysicalQuantity::SpecificHeatCapacity),
@@ -123,7 +123,7 @@ TypeLookup const Equipment::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, topUpKettle_l              , m_topUpKettle_l              , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hopUtilization_pct         , m_hopUtilization_pct         ,           NonPhysicalQuantity::Percentage          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleNotes                , m_kettleNotes                ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunGrainAbsorption_LKg , m_mashTunGrainAbsorption_LKg , Measurement::PhysicalQuantity::SpecificVolume      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunGrainAbsorption_LKg , m_mashTunGrainAbsorption_LKg , Measurement::PhysicalQuantity::VolumePerMass      ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, boilingPoint_c             , m_boilingPoint_c             , Measurement::PhysicalQuantity::Temperature         ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleInternalDiameter_cm  , m_kettleInternalDiameter_cm  , Measurement::PhysicalQuantity::Length              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleOpeningDiameter_cm   , m_kettleOpeningDiameter_cm   , Measurement::PhysicalQuantity::Length              ),
@@ -132,7 +132,7 @@ TypeLookup const Equipment::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunType                , m_mashTunType                ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, lauterTunType              , m_lauterTunType              ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleType                 , m_kettleType                 ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fermenterType              , m_fermenterType              ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fvType              , m_fvType              ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, agingVesselType            , m_agingVesselType            ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, packagingVesselType        , m_packagingVesselType        ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hltVolume_l                , m_hltVolume_l                , Measurement::PhysicalQuantity::Volume              ),
@@ -141,7 +141,7 @@ TypeLookup const Equipment::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, packagingVesselVolume_l    , m_packagingVesselVolume_l    , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hltLoss_l                  , m_hltLoss_l                  , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunLoss_l              , m_mashTunLoss_l              , Measurement::PhysicalQuantity::Volume              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fermenterLoss_l            , m_fermenterLoss_l            , Measurement::PhysicalQuantity::Volume              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fvLoss_l            , m_fvLoss_l            , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, agingVesselLoss_l          , m_agingVesselLoss_l          , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, packagingVesselLoss_l      , m_packagingVesselLoss_l      , Measurement::PhysicalQuantity::Volume              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, kettleOutflowPerMinute_l   , m_kettleOutflowPerMinute_l   , Measurement::PhysicalQuantity::Volume              ),
@@ -154,7 +154,7 @@ TypeLookup const Equipment::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, hltNotes                   , m_hltNotes                   ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, mashTunNotes               , m_mashTunNotes               ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, lauterTunNotes             , m_lauterTunNotes             ,           NonPhysicalQuantity::String              ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fermenterNotes             , m_fermenterNotes             ,           NonPhysicalQuantity::String              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, fvNotes             , m_fvNotes             ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, agingVesselNotes           , m_agingVesselNotes           ,           NonPhysicalQuantity::String              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Equipment, packagingVesselNotes       , m_packagingVesselNotes       ,           NonPhysicalQuantity::String              ),
    },
@@ -169,7 +169,7 @@ Equipment::Equipment(QString name) :
    NamedEntity{name},
    FolderPropertyBase<Equipment>{},
    m_kettleBoilSize_l           {22.927      },
-   m_fermenterBatchSize_l       {18.927      },
+   m_fvBatchSize_l       {18.927      },
    m_mashTunVolume_l            {0.0         },
    m_mashTunWeight_kg           {std::nullopt},
    m_mashTunSpecificHeat_calGC  {std::nullopt},
@@ -190,7 +190,7 @@ Equipment::Equipment(QString name) :
    m_mashTunType                {""          },
    m_lauterTunType              {""          },
    m_kettleType                 {""          },
-   m_fermenterType              {""          },
+   m_fvType              {""          },
    m_agingVesselType            {""          },
    m_packagingVesselType        {""          },
    m_hltVolume_l                {0.0         },
@@ -199,7 +199,7 @@ Equipment::Equipment(QString name) :
    m_packagingVesselVolume_l    {0.0         },
    m_hltLoss_l                  {0.0         },
    m_mashTunLoss_l              {0.0         },
-   m_fermenterLoss_l            {0.0         },
+   m_fvLoss_l            {0.0         },
    m_agingVesselLoss_l          {0.0         },
    m_packagingVesselLoss_l      {0.0         },
    m_kettleOutflowPerMinute_l   {std::nullopt},
@@ -212,7 +212,7 @@ Equipment::Equipment(QString name) :
    m_hltNotes                   {""          },
    m_mashTunNotes               {""          },
    m_lauterTunNotes             {""          },
-   m_fermenterNotes             {""          },
+   m_fvNotes             {""          },
    m_agingVesselNotes           {""          },
    m_packagingVesselNotes       {""          } {
 
@@ -232,7 +232,7 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity{namedParameterBundle},
    FolderPropertyBase<Equipment>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_kettleBoilSize_l           , namedParameterBundle, PropertyNames::Equipment::kettleBoilSize_l           ),
-   SET_REGULAR_FROM_NPB (m_fermenterBatchSize_l       , namedParameterBundle, PropertyNames::Equipment::fermenterBatchSize_l       ),
+   SET_REGULAR_FROM_NPB (m_fvBatchSize_l       , namedParameterBundle, PropertyNames::Equipment::fvBatchSize_l       ),
    SET_REGULAR_FROM_NPB (m_mashTunVolume_l            , namedParameterBundle, PropertyNames::Equipment::mashTunVolume_l            ),
    SET_REGULAR_FROM_NPB (m_mashTunWeight_kg           , namedParameterBundle, PropertyNames::Equipment::mashTunWeight_kg           , std::nullopt),
    SET_REGULAR_FROM_NPB (m_mashTunSpecificHeat_calGC  , namedParameterBundle, PropertyNames::Equipment::mashTunSpecificHeat_calGC  , std::nullopt),
@@ -253,7 +253,7 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_mashTunType                , namedParameterBundle, PropertyNames::Equipment::mashTunType                , ""          ),
    SET_REGULAR_FROM_NPB (m_lauterTunType              , namedParameterBundle, PropertyNames::Equipment::lauterTunType              , ""          ),
    SET_REGULAR_FROM_NPB (m_kettleType                 , namedParameterBundle, PropertyNames::Equipment::kettleType                 , ""          ),
-   SET_REGULAR_FROM_NPB (m_fermenterType              , namedParameterBundle, PropertyNames::Equipment::fermenterType              , ""          ),
+   SET_REGULAR_FROM_NPB (m_fvType              , namedParameterBundle, PropertyNames::Equipment::fvType              , ""          ),
    SET_REGULAR_FROM_NPB (m_agingVesselType            , namedParameterBundle, PropertyNames::Equipment::agingVesselType            , ""          ),
    SET_REGULAR_FROM_NPB (m_packagingVesselType        , namedParameterBundle, PropertyNames::Equipment::packagingVesselType        , ""          ),
    SET_REGULAR_FROM_NPB (m_hltVolume_l                , namedParameterBundle, PropertyNames::Equipment::hltVolume_l                , 0.0         ),
@@ -262,7 +262,7 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_packagingVesselVolume_l    , namedParameterBundle, PropertyNames::Equipment::packagingVesselVolume_l    , 0.0         ),
    SET_REGULAR_FROM_NPB (m_hltLoss_l                  , namedParameterBundle, PropertyNames::Equipment::hltLoss_l                  , 0.0         ),
    SET_REGULAR_FROM_NPB (m_mashTunLoss_l              , namedParameterBundle, PropertyNames::Equipment::mashTunLoss_l              , 0.0         ),
-   SET_REGULAR_FROM_NPB (m_fermenterLoss_l            , namedParameterBundle, PropertyNames::Equipment::fermenterLoss_l            , 0.0         ),
+   SET_REGULAR_FROM_NPB (m_fvLoss_l            , namedParameterBundle, PropertyNames::Equipment::fvLoss_l            , 0.0         ),
    SET_REGULAR_FROM_NPB (m_agingVesselLoss_l          , namedParameterBundle, PropertyNames::Equipment::agingVesselLoss_l          , 0.0         ),
    SET_REGULAR_FROM_NPB (m_packagingVesselLoss_l      , namedParameterBundle, PropertyNames::Equipment::packagingVesselLoss_l      , 0.0         ),
    SET_REGULAR_FROM_NPB (m_kettleOutflowPerMinute_l   , namedParameterBundle, PropertyNames::Equipment::kettleOutflowPerMinute_l   , std::nullopt),
@@ -275,7 +275,7 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_hltNotes                   , namedParameterBundle, PropertyNames::Equipment::hltNotes                   , ""          ),
    SET_REGULAR_FROM_NPB (m_mashTunNotes               , namedParameterBundle, PropertyNames::Equipment::mashTunNotes               , ""          ),
    SET_REGULAR_FROM_NPB (m_lauterTunNotes             , namedParameterBundle, PropertyNames::Equipment::lauterTunNotes             , ""          ),
-   SET_REGULAR_FROM_NPB (m_fermenterNotes             , namedParameterBundle, PropertyNames::Equipment::fermenterNotes             , ""          ),
+   SET_REGULAR_FROM_NPB (m_fvNotes             , namedParameterBundle, PropertyNames::Equipment::fvNotes             , ""          ),
    SET_REGULAR_FROM_NPB (m_agingVesselNotes           , namedParameterBundle, PropertyNames::Equipment::agingVesselNotes           , ""          ),
    SET_REGULAR_FROM_NPB (m_packagingVesselNotes       , namedParameterBundle, PropertyNames::Equipment::packagingVesselNotes       , ""          ) {
 
@@ -287,7 +287,7 @@ Equipment::Equipment(Equipment const & other) :
    NamedEntity          {other},
    FolderPropertyBase<Equipment>{other},
    m_kettleBoilSize_l           {other.m_kettleBoilSize_l           },
-   m_fermenterBatchSize_l       {other.m_fermenterBatchSize_l       },
+   m_fvBatchSize_l       {other.m_fvBatchSize_l       },
    m_mashTunVolume_l            {other.m_mashTunVolume_l            },
    m_mashTunWeight_kg           {other.m_mashTunWeight_kg           },
    m_mashTunSpecificHeat_calGC  {other.m_mashTunSpecificHeat_calGC  },
@@ -308,7 +308,7 @@ Equipment::Equipment(Equipment const & other) :
    m_mashTunType                {other.m_mashTunType                },
    m_lauterTunType              {other.m_lauterTunType              },
    m_kettleType                 {other.m_kettleType                 },
-   m_fermenterType              {other.m_fermenterType              },
+   m_fvType              {other.m_fvType              },
    m_agingVesselType            {other.m_agingVesselType            },
    m_packagingVesselType        {other.m_packagingVesselType        },
    m_hltVolume_l                {other.m_hltVolume_l                },
@@ -317,7 +317,7 @@ Equipment::Equipment(Equipment const & other) :
    m_packagingVesselVolume_l    {other.m_packagingVesselVolume_l    },
    m_hltLoss_l                  {other.m_hltLoss_l                  },
    m_mashTunLoss_l              {other.m_mashTunLoss_l              },
-   m_fermenterLoss_l            {other.m_fermenterLoss_l            },
+   m_fvLoss_l            {other.m_fvLoss_l            },
    m_agingVesselLoss_l          {other.m_agingVesselLoss_l          },
    m_packagingVesselLoss_l      {other.m_packagingVesselLoss_l      },
    m_kettleOutflowPerMinute_l   {other.m_kettleOutflowPerMinute_l   },
@@ -330,7 +330,7 @@ Equipment::Equipment(Equipment const & other) :
    m_hltNotes                   {other.m_hltNotes                   },
    m_mashTunNotes               {other.m_mashTunNotes               },
    m_lauterTunNotes             {other.m_lauterTunNotes             },
-   m_fermenterNotes             {other.m_fermenterNotes             },
+   m_fvNotes             {other.m_fvNotes             },
    m_agingVesselNotes           {other.m_agingVesselNotes           },
    m_packagingVesselNotes       {other.m_packagingVesselNotes       } {
 
@@ -343,7 +343,7 @@ Equipment::~Equipment() = default;
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
 
 double                Equipment::kettleBoilSize_l           () const { return m_kettleBoilSize_l           ; }
-double                Equipment::fermenterBatchSize_l       () const { return m_fermenterBatchSize_l       ; }
+double                Equipment::fvBatchSize_l       () const { return m_fvBatchSize_l       ; }
 double                Equipment::mashTunVolume_l            () const { return m_mashTunVolume_l            ; }
 std::optional<double> Equipment::mashTunWeight_kg           () const { return m_mashTunWeight_kg           ; }
 std::optional<double> Equipment::mashTunSpecificHeat_calGC  () const { return m_mashTunSpecificHeat_calGC  ; }
@@ -364,7 +364,7 @@ QString               Equipment::hltType                    () const { return m_
 QString               Equipment::mashTunType                () const { return m_mashTunType                ; }
 QString               Equipment::lauterTunType              () const { return m_lauterTunType              ; }
 QString               Equipment::kettleType                 () const { return m_kettleType                 ; }
-QString               Equipment::fermenterType              () const { return m_fermenterType              ; }
+QString               Equipment::fvType              () const { return m_fvType              ; }
 QString               Equipment::agingVesselType            () const { return m_agingVesselType            ; }
 QString               Equipment::packagingVesselType        () const { return m_packagingVesselType        ; }
 double                Equipment::hltVolume_l                () const { return m_hltVolume_l                ; }
@@ -373,7 +373,7 @@ double                Equipment::agingVesselVolume_l        () const { return m_
 double                Equipment::packagingVesselVolume_l    () const { return m_packagingVesselVolume_l    ; }
 double                Equipment::hltLoss_l                  () const { return m_hltLoss_l                  ; }
 double                Equipment::mashTunLoss_l              () const { return m_mashTunLoss_l              ; }
-double                Equipment::fermenterLoss_l            () const { return m_fermenterLoss_l            ; }
+double                Equipment::fvLoss_l            () const { return m_fvLoss_l            ; }
 double                Equipment::agingVesselLoss_l          () const { return m_agingVesselLoss_l          ; }
 double                Equipment::packagingVesselLoss_l      () const { return m_packagingVesselLoss_l      ; }
 std::optional<double> Equipment::kettleOutflowPerMinute_l   () const { return m_kettleOutflowPerMinute_l   ; }
@@ -386,7 +386,7 @@ std::optional<double> Equipment::kettleSpecificHeat_calGC   () const { return m_
 QString               Equipment::hltNotes                   () const { return m_hltNotes                   ; }
 QString               Equipment::mashTunNotes               () const { return m_mashTunNotes               ; }
 QString               Equipment::lauterTunNotes             () const { return m_lauterTunNotes             ; }
-QString               Equipment::fermenterNotes             () const { return m_fermenterNotes             ; }
+QString               Equipment::fvNotes             () const { return m_fvNotes             ; }
 QString               Equipment::agingVesselNotes           () const { return m_agingVesselNotes           ; }
 QString               Equipment::packagingVesselNotes       () const { return m_packagingVesselNotes       ; }
 
@@ -395,7 +395,7 @@ QString               Equipment::packagingVesselNotes       () const { return m_
 // The logic through here is similar to what's in Hop. Unfortunately, the additional signals don't allow quite the
 // compactness.
 void Equipment::setKettleBoilSize_l         (double                const val) { SET_AND_NOTIFY(PropertyNames::Equipment::kettleBoilSize_l         , this->m_kettleBoilSize_l         , this->enforceMin(val, "boil size"        )); }
-void Equipment::setFermenterBatchSize_l     (double                const val) { SET_AND_NOTIFY(PropertyNames::Equipment::fermenterBatchSize_l     , this->m_fermenterBatchSize_l     , this->enforceMin(val, "batch size"       )); }
+void Equipment::setFvBatchSize_l     (double                const val) { SET_AND_NOTIFY(PropertyNames::Equipment::fvBatchSize_l     , this->m_fvBatchSize_l     , this->enforceMin(val, "batch size"       )); }
 void Equipment::setMashTunVolume_l          (double                const val) { SET_AND_NOTIFY(PropertyNames::Equipment::mashTunVolume_l          , this->m_mashTunVolume_l          , this->enforceMin(val, "tun volume"       )); }
 void Equipment::setMashTunWeight_kg         (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Equipment::mashTunWeight_kg         , this->m_mashTunWeight_kg         , this->enforceMin(val, "tun weight"       )); }
 void Equipment::setMashTunSpecificHeat_calGC(std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Equipment::mashTunSpecificHeat_calGC, this->m_mashTunSpecificHeat_calGC, this->enforceMin(val, "tun specific heat")); }
@@ -406,7 +406,7 @@ void Equipment::setEvapRate_pctHr(std::optional<double> const val) {
    // NOTE: We never use evapRate_pctHr, but we do use kettleEvaporationPerHour_l. So keep them
    //       synced, and implement the former in terms of the latter.
    if (val) {
-      this->setKettleEvaporationPerHour_l(*val/100.0 * m_fermenterBatchSize_l);
+      this->setKettleEvaporationPerHour_l(*val/100.0 * m_fvBatchSize_l);
    } else {
       this->setKettleEvaporationPerHour_l(std::nullopt);
    }
@@ -420,7 +420,7 @@ void Equipment::setKettleEvaporationPerHour_l(std::optional<double> const val) {
    this->prepareForPropertyChange(PropertyNames::Equipment::kettleEvaporationPerHour_l);
    this->m_kettleEvaporationPerHour_l = this->enforceMin(val, "evap rate");
    if (this->m_kettleEvaporationPerHour_l) {
-      this->m_evapRate_pctHr = *this->m_kettleEvaporationPerHour_l/this->m_fermenterBatchSize_l * 100.0; // We don't use it, but keep it current.
+      this->m_evapRate_pctHr = *this->m_kettleEvaporationPerHour_l/this->m_fvBatchSize_l * 100.0; // We don't use it, but keep it current.
    } else {
       this->m_evapRate_pctHr = std::nullopt;
    }
@@ -442,7 +442,7 @@ void Equipment::setHltType                    (QString               const & val
 void Equipment::setMashTunType                (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::mashTunType                , this->m_mashTunType                , val); }
 void Equipment::setLauterTunType              (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::lauterTunType              , this->m_lauterTunType              , val); }
 void Equipment::setKettleType                 (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::kettleType                 , this->m_kettleType                 , val); }
-void Equipment::setFermenterType              (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::fermenterType              , this->m_fermenterType              , val); }
+void Equipment::setFvType              (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::fvType              , this->m_fvType              , val); }
 void Equipment::setAgingVesselType            (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::agingVesselType            , this->m_agingVesselType            , val); }
 void Equipment::setPackagingVesselType        (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::packagingVesselType        , this->m_packagingVesselType        , val); }
 void Equipment::setHltVolume_l                (double                const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::hltVolume_l                , this->m_hltVolume_l                , val); }
@@ -451,7 +451,7 @@ void Equipment::setAgingVesselVolume_l        (double                const   val
 void Equipment::setPackagingVesselVolume_l    (double                const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::packagingVesselVolume_l    , this->m_packagingVesselVolume_l    , val); }
 void Equipment::setHltLoss_l                  (double                const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::hltLoss_l                  , this->m_hltLoss_l                  , val); }
 void Equipment::setMashTunLoss_l              (double                const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::mashTunLoss_l              , this->m_mashTunLoss_l              , val); }
-void Equipment::setFermenterLoss_l            (double                const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::fermenterLoss_l            , this->m_fermenterLoss_l            , val); }
+void Equipment::setFvLoss_l            (double                const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::fvLoss_l            , this->m_fvLoss_l            , val); }
 void Equipment::setAgingVesselLoss_l          (double                const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::agingVesselLoss_l          , this->m_agingVesselLoss_l          , val); }
 void Equipment::setPackagingVesselLoss_l      (double                const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::packagingVesselLoss_l      , this->m_packagingVesselLoss_l      , val); }
 void Equipment::setKettleOutflowPerMinute_l   (std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::Equipment::kettleOutflowPerMinute_l   , this->m_kettleOutflowPerMinute_l   , val); }
@@ -464,7 +464,7 @@ void Equipment::setKettleSpecificHeat_calGC   (std::optional<double> const   val
 void Equipment::setHltNotes                   (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::hltNotes                   , this->m_hltNotes                   , val); }
 void Equipment::setMashTunNotes               (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::mashTunNotes               , this->m_mashTunNotes               , val); }
 void Equipment::setLauterTunNotes             (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::lauterTunNotes             , this->m_lauterTunNotes             , val); }
-void Equipment::setFermenterNotes             (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::fermenterNotes             , this->m_fermenterNotes             , val); }
+void Equipment::setFvNotes             (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::fvNotes             , this->m_fvNotes             , val); }
 void Equipment::setAgingVesselNotes           (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::agingVesselNotes           , this->m_agingVesselNotes           , val); }
 void Equipment::setPackagingVesselNotes       (QString               const & val) { SET_AND_NOTIFY(PropertyNames::Equipment::packagingVesselNotes       , this->m_packagingVesselNotes       , val); }
 

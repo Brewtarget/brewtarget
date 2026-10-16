@@ -34,7 +34,7 @@ namespace {
    char const * const FOLDER_PATH_FOR_SUPPLIED_RECIPES = CONFIG_APPLICATION_NAME_LC;
 }
 
-int constexpr DefaultContentLoader::availableContentVersion = 4;
+int constexpr DefaultContentLoader::availableContentVersion = 5;
 
 DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessary(QSqlDatabase & db,
                                                                                   QTextStream  & userMessage) {
@@ -74,17 +74,21 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
    //      includes Equipment in a Recipe, where as BeerJSON does not).  Where we have source data in one format, it's
    //      better to retain it in that format than convert it.
    //
-   // So, now we load a sequence of "default content" files, each of which can be BeerXML or BeerJSON.  Each filename
-   // begins "DefaultContentNNN-" where NNN is a unique three-digit number from a sequence starting 001.  So, eg, we can
-   // have:
+   // So, now we load a sequence of "default content" files, each of which can be BeerXML, BeerJSON or dotBeer.  Each
+   // filename begins "DefaultContentNNN-" where NNN is a unique three-digit number from a sequence starting 001.  So,
+   // eg, we can have:
    //    DefaultContent001-OriginalBtContent.xml
    //    DefaultContent002-BJCP_2021_Styles.json
    //    DefaultContent003-Yeasts.json
+   //    DefaultContent004-MoreYeasts.json
+   //    DefaultContent005-Fermentables-Recipes.beer
    //    etc
    //
-   // NOTE that when a new DefaultContentNNN- is added, there are changes to make to the following files:
-   //    meson.build
-   //    CMakeLists.txt
+   // *******************************************************************************************************
+   // * NOTE that when a new DefaultContentNNN- is added, there are changes to make to the following files: *
+   // *    meson.build                                                                                      *
+   // *    CMakeLists.txt                                                                                   *
+   // *******************************************************************************************************
    //
    // We store in the DB settings table what file number we've already reached.
    //

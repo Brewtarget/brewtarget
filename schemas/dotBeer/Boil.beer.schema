@@ -12,7 +12,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/Boil.beer.schema",
+  "$id": "https://dotbeer.org/schema/0.9.0/Boil.beer.schema",
   "type": "object",
   "description": "A boil procedure, which can be used by multiple recipes.  A boil procedure with no steps is the same as a standard single step boil.",
   "properties": {
@@ -36,9 +36,15 @@
     "pre_boil_size": {
       "$ref": "Measurement.beer.schema#/$defs/Volume"
     },
-    "boil_time": {
-      "$ref": "Measurement.beer.schema#/$defs/Time"
-    },
+    //
+    // BeerJSON has an extra field, "boil_time" which I _think_ is a hangover from BeerXML (which doesn't model boil
+    // steps).  Now that we have boil steps, we calculate boil time from the steps rather than storing it separately,
+    // so we remove the "boil_time" field in dotBeer.
+    //
+    // (In theory, we could allow boil_time when boil_steps is not present, to imitate BeerXML.  But, in reality, what
+    // happens, when we read BeerXML, is that we create some default boil steps, based on its BOIL_TIME field, so, in
+    // this newer format, we might as well insist on the steps.)
+    //
     "boil_steps": {
       "type": "array",
       "items": {
@@ -47,7 +53,8 @@
     }
   },
   "required": [
-    "boil_time"
+    "name",
+    "boil_steps"
   ],
   "unevaluatedProperties": false,
   "$defs": {

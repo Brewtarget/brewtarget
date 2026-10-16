@@ -114,7 +114,7 @@ namespace IbuMethods {
     * \param AArating decimal alpha-acid rating of the hops added in [0,1] (0.04 means 4% AA for example)
     * \param hops_grams - mass of hops in grams
     * \param postBoilVolume_liters - In some explanations, the phrase “finished volume of beer” is used, implying
-    *        “volume into fermenter” ie after both boil-off _and_ any trub & chiller loss. However, the comments at
+    *        “volume into fermentor” ie after both boil-off _and_ any trub & chiller loss. However, the comments at
     *        https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/
     *        say that Tinseth himself confirmed "Post boil volume is correct" because "We are concerned with the mg/L
     *        and any portions of a liter lost post boil doesn’t affect the calculation".

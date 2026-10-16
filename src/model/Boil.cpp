@@ -61,6 +61,7 @@ TypeLookup const Boil::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Boil, description  , m_description  ,           NonPhysicalQuantity::String),
       PROPERTY_TYPE_LOOKUP_ENTRY(Boil, notes        , m_notes        ,           NonPhysicalQuantity::String),
       PROPERTY_TYPE_LOOKUP_ENTRY(Boil, preBoilSize_l, m_preBoilSize_l, Measurement::PhysicalQuantity::Volume, DisplayInfo::Precision{1}),
+      // NB: boilTime_mins is only used when we are constructing from BeerXML
       PROPERTY_TYPE_LOOKUP_NO_MV(Boil, boilTime_mins, boilTime_mins  , Measurement::PhysicalQuantity::Time  , DisplayInfo::Precision{0}),
    },
    // Parent classes lookup

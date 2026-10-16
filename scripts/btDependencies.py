@@ -598,7 +598,6 @@ def installDependencies():
                         'mingw-w64-' + arch + '-qt6',
                         'mingw-w64-' + arch + '-toolchain',
                         'mingw-w64-' + arch + '-libxml2',
-#                        'mingw-w64-' + arch + '-7zip', # To unzip NSIS plugins
                         'mingw-w64-' + arch + '-angleproject', # See comment above
                         'mingw-w64-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
                         ]

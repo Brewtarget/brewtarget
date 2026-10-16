@@ -185,7 +185,7 @@ public:
     */
    static EnumStringMapping const formDisplayNames;
 
-   //! \brief How flocculant the strain is.
+   //! \brief Flocculation refers to the ability of yeast to aggregate to form large flocs which drop out of suspension.
    enum class Flocculation {
       // BeerJSON has an entire type called QualitativeRangeType, but it's only used for this field, so, for now, we
       // treat it as an enum

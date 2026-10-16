@@ -1667,15 +1667,19 @@ public:
             }
          }
 
-         // We want to delete the contents of the folder (and remove it from the model) before we remove the folder
-         // itself, otherwise the QModelIndex values for the contents will not be valid.
-         Q_ASSERT(nodeType == TreeNodeClassifier::Folder);
-         this->deleteItems(treeNode->rawChildren());
-         //
-         // For the moment, folders don't exist in the database, so we just remove directly from the tree
-         //
-         QModelIndex folderIndex = this->indexOfNode(treeNode);
-         this->removeItemByIndex(folderIndex);
+         if constexpr (HasFolder<NE>) {
+            Q_ASSERT(nodeType == TreeNodeClassifier::Folder);
+            // We want to delete the contents of the folder (and remove it from the model) before we remove the folder
+            // itself, otherwise the QModelIndex values for the contents will not be valid.
+            this->deleteItems(treeNode->rawChildren());
+            //
+            // Now we can delete the folder itself
+            //
+            auto & folderTreeNode = static_cast<TreeFolderNode<NE> &>(*treeNode);
+            auto folder = folderTreeNode.underlyingItem();
+            ObjectStoreWrapper::softDelete(*folder);
+         }
+
       }
       return;
    }

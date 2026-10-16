@@ -14,7 +14,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/Measurement.beer.schema",
+  "$id": "https://dotbeer.org/schema/0.9.0/Measurement.beer.schema",
   "title": "Measurement",
   "description": "'Measurement' is not a type itself, but a subschema holding various types of measurement, and ranges thereof.\n\nIn principle, we could have sub-groupings such as \"physical quantities\" (volume, mass, acidity, etc), \"non-physical quantities\" (percentage, count, date, etc).  However, this adds complexity to the schema for little gain, because there is nowhere else in the schema where we would rely on such groupings.  So, instead, we keep a flat hierarchy.\n\nIn several cases, there is only one possible unit (eg acidity, percentage, count), so it would be possible to omit units altogether.  However, in common with BeerJSON, we retain them for a couple of reasons.  Firstly, it makes the serialisation easier to understand for human readers.  Secondly, it makes things more extendable: eg, if we decided at a future date we would like to support \"percentage points\" in addition to \"percentages\", then it's a smaller change to add them.\n\nFor Ranges, note that we do not force the same units for lower and upper bounds.  This is partly because it would complicate the schema for only small gain, and partly because it's conceivable that you want different units on min and max (eg if you had a mass range you might want min in grams and max in kilograms).",
   "$defs": {
@@ -27,7 +27,10 @@
           ]
         },
         "value": {
-          "type": "number"
+          "description": "The minimum and maximum pH values here come from the table on https://fr.wikipedia.org/wiki/Potentiel_hydrog%C3%A8ne.  In practice, a smaller range would probably suffice.",
+          "type": "number",
+          "minimum": -1.1,
+          "maximum": 15.0
         }
       },
       "required": [
@@ -45,7 +48,8 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -64,7 +68,8 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -86,7 +91,11 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          //
+          // 0° Lovibond (colorless) = -0.76 SRM = -1.496 EBC
+          //
+          "minimum": -1.5
         }
       },
       "required": [
@@ -97,19 +106,20 @@
     },
     "Count": {
       "type": "object",
-      "description": "Used where unitless amounts are required, such as 1 apple, or 1 yeast packet.  Note that this _is_ allowed to be fractional because you might want to add 1½ cinnamon sticks or 2.5 packets of yeast.",
+      "description": "Used where unitless amounts are required, such as 1 apple, or 1 yeast packet.  Note that this _is_ allowed to be fractional because you might want to add 1½ cinnamon sticks or 2.5 packets of yeast.  Note too, that this only used in cases where things might be measured in multiple ways.  Eg a Misc can be measured by Volume, Mass or Count (depending on what it is).  In other places that use a count, eg CultureRecipeAddition.times_cultured, we just use a non-negative integer.",
       "properties": {
         "unit": {
           "enum": [
-            "1",
-            "unit",
-            "each",
-            "dimensionless",
-            "pkg"
+            //
+            // BeerJSON has "1", "unit", "each", "dimensionless" and "pkg".  Since they all mean the same thing, we
+            // prefer to use a single unit name, and "count" is more descriptive IMHO.
+            //
+            "count"
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -120,14 +130,68 @@
     },
     "Date": {
       "type": "string",
-      "description": "To avoid ambiguity, dates are always stored in ISO 8601 format.  The two possibilities here are with and without time of day.",
-      "pattern": "\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"
+      "description": "A calendar date in ISO 8601 / RFC 3339 format, ie YYYY-MM-DD.",
+      //
+      // NB: We use [0-9] rather than \d because, in some regex engines (eg Python's `re`), \d also matches non-ASCII
+      // digits such as "٢".
+      //
+      // The pattern checks that the month is 01-12 and the day is 01-31, but it does not check that the day exists in
+      // that month (eg it accepts 2026-02-30).  A validator that asserts "format" will catch that.
+      //
+      "format": "date",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "DateTime": {
+      "type": "string",
+      "description": "A date and time of day in ISO 8601 / RFC 3339 format, ie YYYY-MM-DDThh:mm:ss, optionally with fractional seconds, and always with a timezone: either `Z` for UTC or an offset such as `+02:00`.  Eg 2026-10-14T09:08:00+02:00.",
+      //
+      // The timezone is mandatory: a time without one is ambiguous.  Seconds may be 60 to allow for leap seconds, per
+      // RFC 3339.
+      //
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)([.][0-9]+)?(Z|[+-]([01][0-9]|2[0-3]):[0-5][0-9])$"
+    },
+    "EnergyPerVolume": {
+      "type": "object",
+      "description": "Energy per volume is used in nutritional labelling.<br>`kcal/L` is kilocalories per liter<br>`kcal/50cl` is kilocalories per 50 centiliters<br>`kcal/33cl` is kilocalories per 33 centiliters<br>`kcal/25cl` is kilocalories per 25 centiliters<br>`kcal/100ml` is kilocalories per 100 milliliters*<br>`kcal/pt` is kilocalories per US pint (16 US fluid ounces)<br>`kcal/12floz` is kilocalories per 12 US fluid ounces<br>`kcal/ipt` is kilocalories per imperial pint<br>`kJ/100ml` is kilojoules per 100 milliliters*<br>Those marked * are EU standards for nutritional labelling.",
+      "properties": {
+        "unit": {
+          "enum": [
+            "kcal/L"     ,
+            "kcal/50cl"  ,
+            "kcal/33cl"  ,
+            "kcal/25cl"  ,
+            "kcal/100ml" ,
+            "kcal/pt"    ,
+            "kcal/12floz",
+            "kcal/ipt"   ,
+            "kJ/100ml"
+          ]
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "unit",
+        "value"
+      ],
+      "unevaluatedProperties": false
     },
     "Gravity": {
       "type": "object",
-      "description": "In brewing, \"gravity\" is a shorthand for \"specific gravity\".  Typically, brewers measure relative gravity (aka specific gravity) to gauge percent of sugar content (ie Plato and Brix).",
+      "description": "In brewing, \"gravity\" is a shorthand for \"specific gravity\".  Typically, brewers measure relative gravity (aka specific gravity) to gauge percent of sugar content (ie Plato and Brix).\n\nWe assume that brewers don't need \"specific gravity\" below 0.900 SG (-30°P/°Bx) or above 2.000 SG (212.9°P/°Bx) ",
       "properties": {
         "unit": {
+          //
+          // Brix isn't much used in beer brewing, but BeerJSON supports it, so we have it here.
+          // Per https://en.wikipedia.org/wiki/Beer_measurement, Plato and Brix are "essentially ... the same ([both
+          // based on mass fraction of sucrose) [and only] differ in their conversion from weight percentage to specific
+          // gravity in the fifth and sixth decimal places".
+          //
+          // TBD: At some point we could add Gravity Points (aka Brewer's Points) here.
+          //
           "description": "`sg` is specific gravity<br>`plato` is degrees Plato (°P)<br>`brix` is degrees Brix (°Bx)",
           "enum": [
             "sg",
@@ -143,6 +207,21 @@
         "unit",
         "value"
       ],
+      //
+      // In reality, a gravity below 0.990 or above 1.200 would be pretty unusual in the context of brewing, so the
+      // [0.900, 2.000] range here is somewhat conservative.
+      //
+      // NOTE: Because specific gravity is actually measuring something different (density) than plato and brix (sugar
+      //       content), the conversions from SG here have a built-in assumption that, when we are converting to or from
+      //       specific gravity, it is "measured at 20°C and relative to the density of water at 20°C".  I'm pretty sure
+      //       this is "good enough" for the purposes of calculating a validity range.
+      //
+      // As elsewhere with if/then, the `required` field is not strictly necessary here (because "unit" is already
+      // required above) but it emphasises that we need the field to be present to avoid the "if" being trivially true.
+      //
+      "if":   { "properties": { "unit": { "const": "sg" } }, "required": ["unit"] },
+      "then": { "properties": { "value": { "minimum":   0.9, "maximum":   2.0 } } },
+      "else": { "properties": { "value": { "minimum": -30.0, "maximum": 212.9 } } },
       "unevaluatedProperties": false
     },
     "DiastaticPower": {
@@ -156,7 +235,8 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -178,7 +258,8 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -201,14 +282,15 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
         "unit",
         "value"
-      ] //,
-//      "unevaluatedProperties": false
+      ],
+      "unevaluatedProperties": false
     },
     "MassFractionOrConcentration": {
       "type": "object",
@@ -223,7 +305,8 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -232,8 +315,9 @@
       ],
       "unevaluatedProperties": false
     },
-    "Percentage": {
+    "PercentageNoMax": {
       "type": "object",
+      "description": "PercentageNoMax, aka, \"no max percentage\" is a percentage that can be more than 100% (but cannot be less than 0%)",
       "properties": {
         "unit": {
           "enum": [
@@ -241,7 +325,29 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "unit",
+        "value"
+      ],
+      "unevaluatedProperties": false
+    },
+    "PercentageSimple": {
+      "type": "object",
+      "description": "PercentageSimple, aka, \"simple percentage\" is a percentage where the value is no less than 0% and no greater than 100%",
+      "properties": {
+        "unit": {
+          "enum": [
+            "%"
+          ]
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
         }
       },
       "required": [
@@ -262,7 +368,8 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -273,43 +380,18 @@
     },
     "SpecificHeatCapacity": {
       "type": "object",
-      "description": "The amount of heat that must be added to one unit of mass of the substance in order to cause an increase of one unit in temperature.",
+      "description": "The amount of heat that must be added to one unit of mass of the substance in order to cause an increase of one unit in temperature.<br>`c/g·C` is calories per Celsius per gram (and also kilocalories per degree Celsius per kilogram)<br>`J/kg·K` is joules per Kelvin per kilogram<br>`BTU/lb·F` is BTU per Fahrenheit per pound<br>Although SI units are \"joules per kelvin per kilogram\" (which is the same as \"joules per degree Celsius per kilogram\"), historically a measurement involving calories instead of joules was used in chemistry, nutrition and brewing.  There are two types of calorie: the \"small calorie\" (or \"gram-calorie\", \"cal\") = 4.184 J; and the \"grand calorie\" (aka \"kilocalorie\", \"kcal\" or \"Cal\") = 1000 small calories = 4184 J.  However, the specific heat measurement using \"cal\" (\"calories per degree Celsius per gram\") is the same as that for \"Cal\" (\"kilocalories per degree Celsius per kilogram\"): 1 cal / (°C × g) = 1 Cal / (°C × kg) = 4184 J / (°K × kg) = the specific heat capacity of liquid water.  Note too that, because a British Thermal Unit (BTU) is defined as \"the amount of heat required to raise the temperature of one pound of water by one degree Fahrenheit\", we have 1 BTU/lb·F = 1 c/g·C.",
       "properties": {
         "unit": {
           "enum": [
-            "Cal/(g C)",
-            "J/(kg K)",
-            "BTU/(lb F)"
+            "c/g·C",
+            "J/kg·K",
+            "BTU/lb·F"
           ]
         },
         "value": {
-          "type": "number"
-        }
-      },
-      "required": [
-        "unit",
-        "value"
-      ],
-      "unevaluatedProperties": false
-    },
-    "SpecificVolume": {
-      "type": "object",
-      "description": "Specific volume is the reciprocal of Gravity, commonly used for mash thickness.",
-      "properties": {
-        "unit": {
-          "enum": [
-            "qt/lb",
-            "gal/lb",
-            "gal/oz",
-            "l/g",
-            "l/kg",
-            "floz/oz",
-            "m^3/kg",
-            "ft^3/lb"
-          ]
-        },
-        "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -322,7 +404,7 @@
       "type": "object",
       "properties": {
         "unit": {
-          "description": "`C` is degrees Celsius (°C)<br>`F` is decrees Fahrenheit (°F)",
+          "description": "`C` is degrees Celsius (°C)<br>`F` is degrees Fahrenheit (°F).  We assume that brewers never need temperatures below -30°C (-22°F) or above 150°C (302°F).",
           "enum": [
             "C",
             "F"
@@ -336,6 +418,19 @@
         "unit",
         "value"
       ],
+      //
+      // Most domestic freezers operate at -18°C (0°F).  A heavy-duty freezer would go to -29°C (-20°F).  So a
+      // minimum of -30°C (-22°F) here should be below anything a brewer will ever need.
+      //
+      // Similarly, since wort boils at around 100°C (212°F), it's hard to imagine that we need to record temperatures
+      // very much above this for brewing purposes, so a maximum of 150°C (302°F) here feels a safe margin.
+      //
+      // As elsewhere with if/then, the `required` field is not strictly necessary here (because "unit" is already
+      // required above) but it emphasises that we need the field to be present to avoid the "if" being trivially true.
+      //
+      "if":   { "properties": { "unit": { "const": "C" } }, "required": ["unit"] },
+      "then": { "properties": { "value": { "minimum": -30.0, "maximum": 150.0 } } },
+      "else": { "properties": { "value": { "minimum": -22.0, "maximum": 302.0  } } },
       "unevaluatedProperties": false
     },
     "Time": {
@@ -353,7 +448,12 @@
           ]
         },
         "value": {
-          "type": "integer"
+          //
+          // In contrast to BeerJSON, which requires an integer, we allow decimals here.  This allows writers to output
+          // 3.5 minutes instead of having to convert to seconds to have an integer.
+          //
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -373,7 +473,8 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -412,14 +513,42 @@
           ]
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
         "unit",
         "value"
-      ]//,
-//      "unevaluatedProperties": false
+      ],
+      "unevaluatedProperties": false
+    },
+    "VolumePerMass": {
+      "type": "object",
+      "description": "For a single substance, volume-per-mass is the substance's \"specific volume\" (see https://en.wikipedia.org/wiki/Specific_volume), which is the reciprocal of its density.  However, in brewing, volume-per-mass is mostly used for ratios between two different things -- eg mash thickness (volume of water per mass of grain) or grain absorption rate (volume of water absorbed per mass of grain).  In such cases, it would be inaccurate to refer to \"specific volume\".",
+      "properties": {
+        "unit": {
+          "enum": [
+            "qt/lb",
+            "gal/lb",
+            "gal/oz",
+            "l/g",
+            "l/kg",
+            "floz/oz",
+            "m^3/kg",
+            "ft^3/lb"
+          ]
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "unit",
+        "value"
+      ],
+      "unevaluatedProperties": false
     },
     //
     // Ranges
@@ -507,14 +636,14 @@
       ],
       "unevaluatedProperties": false
     },
-    "RangeOfPercentage": {
+    "RangeOfPercentageSimple": {
       "type": "object",
       "properties": {
         "minimum": {
-          "$ref": "#/$defs/Percentage"
+          "$ref": "#/$defs/PercentageSimple"
         },
         "maximum": {
-          "$ref": "#/$defs/Percentage"
+          "$ref": "#/$defs/PercentageSimple"
         }
       },
       "required": [

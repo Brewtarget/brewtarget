@@ -34,15 +34,16 @@ AddSettingName(unitSystem_color               )
 AddSettingName(unitSystem_count               )
 AddSettingName(unitSystem_density             )
 AddSettingName(unitSystem_diastaticPower      )
+AddSettingName(unitSystem_energyPerVolume     )
 AddSettingName(unitSystem_heatCapacity        )
 AddSettingName(unitSystem_length              )
 AddSettingName(unitSystem_massFractionOrConc  )
 AddSettingName(unitSystem_specificHeatCapacity)
-AddSettingName(unitSystem_specificVolume      )
 AddSettingName(unitSystem_temperature         )
 AddSettingName(unitSystem_time                )
 AddSettingName(unitSystem_viscosity           )
 AddSettingName(unitSystem_volume              )
+AddSettingName(unitSystem_volumePerMass       )
 AddSettingName(unitSystem_weight              )
 #undef AddSettingName
 
@@ -74,43 +75,45 @@ namespace {
 }
 
 EnumStringMapping const Measurement::physicalQuantityStringMapping {
-   {Measurement::PhysicalQuantity::Mass                , "Mass"                },
-   {Measurement::PhysicalQuantity::Volume              , "Volume"              },
-   {Measurement::PhysicalQuantity::Length              , "Length"              },
-   {Measurement::PhysicalQuantity::Count               , "Count"               },
-   {Measurement::PhysicalQuantity::Temperature         , "Temperature"         },
-   {Measurement::PhysicalQuantity::Time                , "Time"                },
-   {Measurement::PhysicalQuantity::Color               , "Color"               },
-   {Measurement::PhysicalQuantity::Gravity             , "Density"             },
-   {Measurement::PhysicalQuantity::DiastaticPower      , "DiastaticPower"      },
-   {Measurement::PhysicalQuantity::Acidity             , "Acidity"             },
-   {Measurement::PhysicalQuantity::Bitterness          , "Bitterness"          },
-   {Measurement::PhysicalQuantity::Carbonation         , "Carbonation"         },
-   {Measurement::PhysicalQuantity::MassFractionOrConcentration  , "MassFractionOrConc"  },
-   {Measurement::PhysicalQuantity::Viscosity           , "Viscosity"           },
-   {Measurement::PhysicalQuantity::SpecificHeatCapacity, "SpecificHeatCapacity"},
-   {Measurement::PhysicalQuantity::HeatCapacity        , "HeatCapacity"        },
-   {Measurement::PhysicalQuantity::SpecificVolume      , "SpecificVolume"      },
+   {Measurement::PhysicalQuantity::Mass                       , "Mass"                },
+   {Measurement::PhysicalQuantity::Volume                     , "Volume"              },
+   {Measurement::PhysicalQuantity::Length                     , "Length"              },
+   {Measurement::PhysicalQuantity::Count                      , "Count"               },
+   {Measurement::PhysicalQuantity::Temperature                , "Temperature"         },
+   {Measurement::PhysicalQuantity::Time                       , "Time"                },
+   {Measurement::PhysicalQuantity::Color                      , "Color"               },
+   {Measurement::PhysicalQuantity::Gravity                    , "Density"             },
+   {Measurement::PhysicalQuantity::DiastaticPower             , "DiastaticPower"      },
+   {Measurement::PhysicalQuantity::Acidity                    , "Acidity"             },
+   {Measurement::PhysicalQuantity::Bitterness                 , "Bitterness"          },
+   {Measurement::PhysicalQuantity::Carbonation                , "Carbonation"         },
+   {Measurement::PhysicalQuantity::MassFractionOrConcentration, "MassFractionOrConc"  },
+   {Measurement::PhysicalQuantity::Viscosity                  , "Viscosity"           },
+   {Measurement::PhysicalQuantity::SpecificHeatCapacity       , "SpecificHeatCapacity"},
+   {Measurement::PhysicalQuantity::HeatCapacity               , "HeatCapacity"        },
+   {Measurement::PhysicalQuantity::VolumePerMass              , "VolumePerMass"       },
+   {Measurement::PhysicalQuantity::EnergyPerVolume            , "EnergyPerVolume"     },
 };
 
 EnumStringMapping const Measurement::physicalQuantityDisplayNames {
-   {Measurement::PhysicalQuantity::Mass                , QObject::tr("Weight (Mass)"                 )},
-   {Measurement::PhysicalQuantity::Volume              , QObject::tr("Volume"                        )},
-   {Measurement::PhysicalQuantity::Length              , QObject::tr("Length"                        )},
-   {Measurement::PhysicalQuantity::Count               , QObject::tr("Count"                         )},
-   {Measurement::PhysicalQuantity::Temperature         , QObject::tr("Temperature"                   )},
-   {Measurement::PhysicalQuantity::Time                , QObject::tr("Time"                          )},
-   {Measurement::PhysicalQuantity::Color               , QObject::tr("Color"                         )},
-   {Measurement::PhysicalQuantity::Gravity             , QObject::tr("Density"                       )},
-   {Measurement::PhysicalQuantity::DiastaticPower      , QObject::tr("Diastatic Power"               )},
-   {Measurement::PhysicalQuantity::Acidity             , QObject::tr("Acidity"                       )},
-   {Measurement::PhysicalQuantity::Bitterness          , QObject::tr("Bitterness"                    )},
-   {Measurement::PhysicalQuantity::Carbonation         , QObject::tr("Carbonation"                   )},
-   {Measurement::PhysicalQuantity::MassFractionOrConcentration  , QObject::tr("Mass Fraction or Concentration")},
-   {Measurement::PhysicalQuantity::Viscosity           , QObject::tr("Viscosity"                     )},
-   {Measurement::PhysicalQuantity::SpecificHeatCapacity, QObject::tr("Specific Heat Capacity"        )},
-   {Measurement::PhysicalQuantity::HeatCapacity        , QObject::tr("Heat Capacity"                 )},
-   {Measurement::PhysicalQuantity::SpecificVolume      , QObject::tr("Specific Volume"               )},
+   {Measurement::PhysicalQuantity::Mass                       , QObject::tr("Weight (Mass)"                 )},
+   {Measurement::PhysicalQuantity::Volume                     , QObject::tr("Volume"                        )},
+   {Measurement::PhysicalQuantity::Length                     , QObject::tr("Length"                        )},
+   {Measurement::PhysicalQuantity::Count                      , QObject::tr("Count"                         )},
+   {Measurement::PhysicalQuantity::Temperature                , QObject::tr("Temperature"                   )},
+   {Measurement::PhysicalQuantity::Time                       , QObject::tr("Time"                          )},
+   {Measurement::PhysicalQuantity::Color                      , QObject::tr("Color"                         )},
+   {Measurement::PhysicalQuantity::Gravity                    , QObject::tr("Density"                       )},
+   {Measurement::PhysicalQuantity::DiastaticPower             , QObject::tr("Diastatic Power"               )},
+   {Measurement::PhysicalQuantity::Acidity                    , QObject::tr("Acidity"                       )},
+   {Measurement::PhysicalQuantity::Bitterness                 , QObject::tr("Bitterness"                    )},
+   {Measurement::PhysicalQuantity::Carbonation                , QObject::tr("Carbonation"                   )},
+   {Measurement::PhysicalQuantity::MassFractionOrConcentration, QObject::tr("Mass Fraction or Concentration")},
+   {Measurement::PhysicalQuantity::Viscosity                  , QObject::tr("Viscosity"                     )},
+   {Measurement::PhysicalQuantity::SpecificHeatCapacity       , QObject::tr("Specific Heat Capacity"        )},
+   {Measurement::PhysicalQuantity::HeatCapacity               , QObject::tr("Heat Capacity"                 )},
+   {Measurement::PhysicalQuantity::VolumePerMass              , QObject::tr("Volume per Mass"               )},
+   {Measurement::PhysicalQuantity::EnergyPerVolume            , QObject::tr("Energy per Volume"             )},
 };
 
 
@@ -120,23 +123,24 @@ BtStringConst const & Measurement::getSettingsName(PhysicalQuantity const physic
    switch (physicalQuantity) {
       // Yes, strictly, unitSystem_weight should be unitSystem_mass, but users already have this in their settings files
       // so it would be annoying to just change it now.
-      case Measurement::PhysicalQuantity::Mass                : return unitSystem_weight              ;
-      case Measurement::PhysicalQuantity::Volume              : return unitSystem_volume              ;
-      case Measurement::PhysicalQuantity::Length              : return unitSystem_length              ;
-      case Measurement::PhysicalQuantity::Time                : return unitSystem_time                ;
-      case Measurement::PhysicalQuantity::Count               : return unitSystem_count               ;
-      case Measurement::PhysicalQuantity::Temperature         : return unitSystem_temperature         ;
-      case Measurement::PhysicalQuantity::Color               : return unitSystem_color               ;
-      case Measurement::PhysicalQuantity::Gravity             : return unitSystem_density             ;
-      case Measurement::PhysicalQuantity::DiastaticPower      : return unitSystem_diastaticPower      ;
-      case Measurement::PhysicalQuantity::Acidity             : return unitSystem_acidity             ;
-      case Measurement::PhysicalQuantity::Bitterness          : return unitSystem_bitterness          ;
-      case Measurement::PhysicalQuantity::Carbonation         : return unitSystem_carbonation         ;
-      case Measurement::PhysicalQuantity::MassFractionOrConcentration  : return unitSystem_massFractionOrConc  ;
-      case Measurement::PhysicalQuantity::Viscosity           : return unitSystem_viscosity           ;
-      case Measurement::PhysicalQuantity::SpecificHeatCapacity: return unitSystem_specificHeatCapacity;
-      case Measurement::PhysicalQuantity::HeatCapacity        : return unitSystem_heatCapacity        ;
-      case Measurement::PhysicalQuantity::SpecificVolume      : return unitSystem_specificVolume      ;
+      case Measurement::PhysicalQuantity::Mass                        : return unitSystem_weight              ;
+      case Measurement::PhysicalQuantity::Volume                      : return unitSystem_volume              ;
+      case Measurement::PhysicalQuantity::Length                      : return unitSystem_length              ;
+      case Measurement::PhysicalQuantity::Time                        : return unitSystem_time                ;
+      case Measurement::PhysicalQuantity::Count                       : return unitSystem_count               ;
+      case Measurement::PhysicalQuantity::Temperature                 : return unitSystem_temperature         ;
+      case Measurement::PhysicalQuantity::Color                       : return unitSystem_color               ;
+      case Measurement::PhysicalQuantity::Gravity                     : return unitSystem_density             ;
+      case Measurement::PhysicalQuantity::DiastaticPower              : return unitSystem_diastaticPower      ;
+      case Measurement::PhysicalQuantity::Acidity                     : return unitSystem_acidity             ;
+      case Measurement::PhysicalQuantity::Bitterness                  : return unitSystem_bitterness          ;
+      case Measurement::PhysicalQuantity::Carbonation                 : return unitSystem_carbonation         ;
+      case Measurement::PhysicalQuantity::MassFractionOrConcentration : return unitSystem_massFractionOrConc  ;
+      case Measurement::PhysicalQuantity::Viscosity                   : return unitSystem_viscosity           ;
+      case Measurement::PhysicalQuantity::SpecificHeatCapacity        : return unitSystem_specificHeatCapacity;
+      case Measurement::PhysicalQuantity::HeatCapacity                : return unitSystem_heatCapacity        ;
+      case Measurement::PhysicalQuantity::VolumePerMass               : return unitSystem_volumePerMass       ;
+      case Measurement::PhysicalQuantity::EnergyPerVolume             : return unitSystem_energyPerVolume     ;
    }
    // It's a coding error if we get here
    Q_UNREACHABLE();

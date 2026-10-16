@@ -56,7 +56,7 @@ namespace Utils {
    template<typename PQT, PQT const pqt>
    inline bool AutoCompare(Measurement::ConstrainedAmount<PQT, pqt> const & lhs,
                            Measurement::ConstrainedAmount<PQT, pqt> const & rhs) { return lhs == rhs; }
-   // QStrings should ignore trailling spaces etc when comparing
+   // QStrings should ignore trailing spaces etc when comparing
    inline bool AutoCompare(QString const & lhs, QString const & rhs) { return lhs.trimmed() == rhs.trimmed(); }
    inline bool AutoCompare(std::optional<double> const & lhs, std::optional<double> const & rhs) { return FuzzyCompare(lhs, rhs); }
    inline bool AutoCompare(std::optional<int   > const & lhs, std::optional<int   > const & rhs) { return lhs == rhs; }
@@ -96,8 +96,13 @@ namespace Utils {
       }
 
       //
-      // We first need to put the lists in order.  This is why we take the parameters by value and not by reference, and
-      // why they aren't const!
+      // We first need to put the lists in order (mostly courtesy of NamedEntity::operator<=>).  This is why we take the
+      // parameters by value and not by reference, and why they aren't const!
+      //
+      // TODO: This is not entirely deterministic as we don't yet have a tie-break for two items that have the same
+      //       name.  We can't always used key() for this, as it wouldn't work for owned objects such as RecipeAddition
+      //       or Instruction.  So we probably want to do something similar to NamedEntity::compareWith, but for
+      //       sorting.
       //
       std::sort(lhs.begin(), lhs.end(), [](auto const & a, auto const & b){ return *a < *b; } );
       std::sort(rhs.begin(), rhs.end(), [](auto const & a, auto const & b){ return *a < *b; } );

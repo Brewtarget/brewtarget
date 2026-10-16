@@ -235,10 +235,10 @@ public:
       // all schema files are in the same directory.  So, when we get a URI request we just chop it down to everything
       // after the last slash, and treat that as a filename.
       //
+      QString const fullUriAsQString{QString::fromUtf8(fullUri.data(), fullUri.size())};
       std::string const uri{fullUri.substr(fullUri.find_last_of('/') + 1)};
       qDebug() <<
-         Q_FUNC_INFO << "Assuming" << uri.c_str() << "for request of" <<
-         QString::fromUtf8(fullUri.data(), fullUri.size());
+         Q_FUNC_INFO << "Assuming" << uri.c_str() << "for request of" << fullUriAsQString;
       boost::json::value const * boostDoc = this->getReferencedDocument(uri);
       if (!this->m_blazeSchemaFileCache.contains(boostDoc)) {
          auto const blazeSchemaDocument =
@@ -248,7 +248,21 @@ public:
             );
          this->m_blazeSchemaFileCache.insert(boostDoc, blazeSchemaDocument);
       }
-      return *this->m_blazeSchemaFileCache.value(boostDoc);
+
+      sourcemeta::core::JSON const & referencedDocument{*this->m_blazeSchemaFileCache.value(boostDoc)};
+      sourcemeta::core::JSON const * referencedDocumentIdRaw{
+         referencedDocument.try_at("$id")
+      };
+      QString const referencedDocumentId{
+         referencedDocumentIdRaw && referencedDocumentIdRaw->is_string() ?
+            QString::fromStdString(referencedDocumentIdRaw->to_string()) : QString{}
+      };
+      qDebug() << Q_FUNC_INFO << "Document stored for" << uri.c_str() << "has $id" << referencedDocumentId;
+      if (referencedDocumentId != fullUriAsQString) {
+         qWarning() <<
+            Q_FUNC_INFO << "ID Mismatch!  Document found for" << fullUriAsQString << "has $id" << referencedDocumentId;
+      }
+      return referencedDocument;
    }
 
    // Member variables

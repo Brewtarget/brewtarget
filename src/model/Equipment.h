@@ -46,10 +46,10 @@ AddPropertyName(agingVesselType            )
 AddPropertyName(agingVesselVolume_l        )
 AddPropertyName(boilingPoint_c             )
 AddPropertyName(evapRate_pctHr             )
-AddPropertyName(fermenterBatchSize_l       )
-AddPropertyName(fermenterLoss_l            )
-AddPropertyName(fermenterNotes             )
-AddPropertyName(fermenterType              )
+AddPropertyName(fvBatchSize_l              )
+AddPropertyName(fvLoss_l                   )
+AddPropertyName(fvNotes                    )
+AddPropertyName(fvType                     )
 AddPropertyName(hltLoss_l                  )
 AddPropertyName(hltNotes                   )
 AddPropertyName(hltSpecificHeat_calGC      )
@@ -98,7 +98,7 @@ AddPropertyName(topUpWater_l               )
  *
  *        This is where things get fun.  In BeerXML, Equipment is a single record representing all the hot-side
  *        equipment used in a recipe.  In BeerJSON however, the model is of a named array of EquipmentItemType objects,
- *        each of which can be one of "HLT", "Mash Tun", "Lauter Tun", "Brew Kettle", "Fermenter", "Aging Vessel" or
+ *        each of which can be one of "HLT", "Mash Tun", "Lauter Tun", "Brew Kettle", "fv", "Aging Vessel" or
  *        "Packaging Vessel".
  *
  *        We take the view that it is right to have a single Equipment object, but that subdividing it into the 7
@@ -108,11 +108,11 @@ AddPropertyName(topUpWater_l               )
  *
  *        There are a few wrinkles around the edges.  In BeerJSON, you don't have to have a record for a particular
  *        vessel (eg you might not have an "Aging Vessel") but, if a vessel record is present, it has to have values for
- *        "name", "maxiumum_volume" and "loss".  This means some \c Equipment fields should, technically, be "optional
+ *        "name", "maximum_volume" and "loss".  This means some \c Equipment fields should, technically, be "optional
  *        in certain circumstances" -- eg \c agingVesselLoss_l should be optional unless any of the other agingVessel
  *        fields are set.  However, for the moment at least, we simplify and say something is either optional or it's
  *        not.  And, since \c agingVesselLoss_l can be required, then it is never null.  (Our default values for "name",
- *        "maxiumum_volume" and "loss" are "", 0.0 and 0.0 respectively.)  The upshot of this is that, when we write an
+ *        "maximum_volume" and "loss" are "", 0.0 and 0.0 respectively.)  The upshot of this is that, when we write an
  *        \c Equipment record out to BeerJSON, we will write records for all seven vessel types.  This is slightly ugly,
  *        but I don't think it has any significant bad consequences.  At worst, it should be self evident to the user
  *        when there is no substantive data in a record.  However, we can, in fact, make things better in the UI.  When
@@ -144,10 +144,10 @@ public:
    static QString localisedName_agingVesselVolume_l        ();
    static QString localisedName_boilingPoint_c             ();
    static QString localisedName_evapRate_pctHr             ();
-   static QString localisedName_fermenterBatchSize_l       ();
-   static QString localisedName_fermenterLoss_l            ();
-   static QString localisedName_fermenterNotes             ();
-   static QString localisedName_fermenterType              ();
+   static QString localisedName_fvBatchSize_l       ();
+   static QString localisedName_fvLoss_l            ();
+   static QString localisedName_fvNotes             ();
+   static QString localisedName_fvType              ();
    static QString localisedName_hltLoss_l                  ();
    static QString localisedName_hltNotes                   ();
    static QString localisedName_hltSpecificHeat_calGC      ();
@@ -231,9 +231,9 @@ public:
    /**
     * \brief The batch size in liters, aka the target volume of the batch at the start of fermentation.
     *
-    *        In BeerJSON, this corresponds to the maxiumum_volume of the "Fermenter".
+    *        In BeerJSON, this corresponds to the maxiumum_volume of the "fv".
     */
-   Q_PROPERTY(double fermenterBatchSize_l   READ fermenterBatchSize_l   WRITE setFermenterBatchSize_l) // Required in BeerJSON (when Fermenter record present)
+   Q_PROPERTY(double fvBatchSize_l   READ fvBatchSize_l   WRITE setFvBatchSize_l) // Required in BeerJSON (when fv record present)
    /**
     * \brief The mash tun volume in liters.                ⮜⮜⮜ Optional in BeerXML but required in BeerJSON ⮞⮞⮞
     *        This parameter can be used to calculate if a particular mash and grain profile will fit in the mash tun.
@@ -327,7 +327,7 @@ public:
    /**
     * \brief How much water the grains absorb in liters/kg.  NB: Not part of BeerXML (but is part of BeerJSON)
     *
-    *        The apparent volume absorbed by grain, typical values are 0.125 qt/lb (1.04 L/kg) for a mashtun,
+    *        The apparent volume absorbed by grain, typical values are 0.125 gal/lb (1.04 L/kg) for a mash tun,
     *        0.08 gal/lb (0.66 L/kg) for BIAB.
     */
    Q_PROPERTY(std::optional<double> mashTunGrainAbsorption_LKg   READ mashTunGrainAbsorption_LKg   WRITE setMashTunGrainAbsorption_LKg   )
@@ -357,7 +357,7 @@ public:
    Q_PROPERTY(QString               mashTunType                       READ mashTunType                       WRITE setMashTunType                      )
    Q_PROPERTY(QString               lauterTunType                     READ lauterTunType                     WRITE setLauterTunType                    )
    Q_PROPERTY(QString               kettleType                        READ kettleType                        WRITE setKettleType                       )
-   Q_PROPERTY(QString               fermenterType                     READ fermenterType                     WRITE setFermenterType                    )
+   Q_PROPERTY(QString               fvType                     READ fvType                     WRITE setFvType                    )
    Q_PROPERTY(QString               agingVesselType                   READ agingVesselType                   WRITE setAgingVesselType                  )
    Q_PROPERTY(QString               packagingVesselType               READ packagingVesselType               WRITE setPackagingVesselType              )
 
@@ -365,7 +365,7 @@ public:
    // mashTunVolume_l -- see above
    Q_PROPERTY(double                lauterTunVolume_l                 READ lauterTunVolume_l                 WRITE setLauterTunVolume_l                ) // Required in BeerJSON (when Lauter Tun record present)
    // kettleVolume_l -- see kettleBoilSize_l above
-   // fermenterVolume_l -- see fermenterBatchSize_l above
+   // fvVolume_l -- see fvBatchSize_l above
    Q_PROPERTY(double                agingVesselVolume_l               READ agingVesselVolume_l               WRITE setAgingVesselVolume_l              ) // Required in BeerJSON (when Aging Vessel record present)
    Q_PROPERTY(double                packagingVesselVolume_l           READ packagingVesselVolume_l           WRITE setPackagingVesselVolume_l          ) // Required in BeerJSON (when Packaging Vessel record present)
 
@@ -373,7 +373,7 @@ public:
    Q_PROPERTY(double                mashTunLoss_l                     READ mashTunLoss_l                     WRITE setMashTunLoss_l                    ) // Required in BeerJSON (when Mash Tun record present)
    // lauterTunLoss_l -- see lauterTunDeadspaceLoss_l above
    // kettleLoss_l -- see kettleTrubChillerLoss_l above
-   Q_PROPERTY(double                fermenterLoss_l                   READ fermenterLoss_l                   WRITE setFermenterLoss_l                  ) // Required in BeerJSON (when Fermenter record present)
+   Q_PROPERTY(double                fvLoss_l                   READ fvLoss_l                   WRITE setFvLoss_l                  ) // Required in BeerJSON (when fv record present)
    Q_PROPERTY(double                agingVesselLoss_l                 READ agingVesselLoss_l                 WRITE setAgingVesselLoss_l                ) // Required in BeerJSON (when Aging Vessel record present)
    Q_PROPERTY(double                packagingVesselLoss_l             READ packagingVesselLoss_l             WRITE setPackagingVesselLoss_l            ) // Required in BeerJSON (when Packaging Vessel record present)
 
@@ -397,7 +397,7 @@ public:
    Q_PROPERTY(QString               mashTunNotes                      READ mashTunNotes                      WRITE setMashTunNotes                     )
    Q_PROPERTY(QString               lauterTunNotes                    READ lauterTunNotes                    WRITE setLauterTunNotes                   )
    // kettleNotes -- see above
-   Q_PROPERTY(QString               fermenterNotes                    READ fermenterNotes                    WRITE setFermenterNotes                   )
+   Q_PROPERTY(QString               fvNotes                    READ fvNotes                    WRITE setFvNotes                   )
    Q_PROPERTY(QString               agingVesselNotes                  READ agingVesselNotes                  WRITE setAgingVesselNotes                 )
    Q_PROPERTY(QString               packagingVesselNotes              READ packagingVesselNotes              WRITE setPackagingVesselNotes             )
 
@@ -405,7 +405,7 @@ public:
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    double                kettleBoilSize_l           () const;
-   double                fermenterBatchSize_l       () const;
+   double                fvBatchSize_l       () const;
    double                mashTunVolume_l            () const;
    std::optional<double> mashTunWeight_kg           () const;
    std::optional<double> mashTunSpecificHeat_calGC  () const;
@@ -426,7 +426,7 @@ public:
    QString               mashTunType                () const;
    QString               lauterTunType              () const;
    QString               kettleType                 () const;
-   QString               fermenterType              () const;
+   QString               fvType              () const;
    QString               agingVesselType            () const;
    QString               packagingVesselType        () const;
    double                hltVolume_l                () const;
@@ -435,7 +435,7 @@ public:
    double                packagingVesselVolume_l    () const;
    double                hltLoss_l                  () const;
    double                mashTunLoss_l              () const;
-   double                fermenterLoss_l            () const;
+   double                fvLoss_l            () const;
    double                agingVesselLoss_l          () const;
    double                packagingVesselLoss_l      () const;
    std::optional<double> kettleOutflowPerMinute_l   () const;
@@ -448,13 +448,13 @@ public:
    QString               hltNotes                   () const;
    QString               mashTunNotes               () const;
    QString               lauterTunNotes             () const;
-   QString               fermenterNotes             () const;
+   QString               fvNotes             () const;
    QString               agingVesselNotes           () const;
    QString               packagingVesselNotes       () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setKettleBoilSize_l           (double                const   val);
-   void setFermenterBatchSize_l       (double                const   val);
+   void setFvBatchSize_l       (double                const   val);
    void setMashTunVolume_l            (double                const   val);
    void setMashTunWeight_kg           (std::optional<double> const   val);
    void setMashTunSpecificHeat_calGC  (std::optional<double> const   val);
@@ -475,7 +475,7 @@ public:
    void setMashTunType                (QString               const & val);
    void setLauterTunType              (QString               const & val);
    void setKettleType                 (QString               const & val);
-   void setFermenterType              (QString               const & val);
+   void setFvType              (QString               const & val);
    void setAgingVesselType            (QString               const & val);
    void setPackagingVesselType        (QString               const & val);
    void setHltVolume_l                (double                const   val);
@@ -484,7 +484,7 @@ public:
    void setPackagingVesselVolume_l    (double                const   val);
    void setHltLoss_l                  (double                const   val);
    void setMashTunLoss_l              (double                const   val);
-   void setFermenterLoss_l            (double                const   val);
+   void setFvLoss_l            (double                const   val);
    void setAgingVesselLoss_l          (double                const   val);
    void setPackagingVesselLoss_l      (double                const   val);
    void setKettleOutflowPerMinute_l   (std::optional<double> const   val);
@@ -497,7 +497,7 @@ public:
    void setHltNotes                   (QString               const & val);
    void setMashTunNotes               (QString               const & val);
    void setLauterTunNotes             (QString               const & val);
-   void setFermenterNotes             (QString               const & val);
+   void setFvNotes             (QString               const & val);
    void setAgingVesselNotes           (QString               const & val);
    void setPackagingVesselNotes       (QString               const & val);
 
@@ -523,7 +523,7 @@ protected:
 
 private:
    double                m_kettleBoilSize_l          ;
-   double                m_fermenterBatchSize_l      ;
+   double                m_fvBatchSize_l      ;
    double                m_mashTunVolume_l           ;
    std::optional<double> m_mashTunWeight_kg          ;
    std::optional<double> m_mashTunSpecificHeat_calGC ;
@@ -544,7 +544,7 @@ private:
    QString               m_mashTunType                ;
    QString               m_lauterTunType              ;
    QString               m_kettleType                 ;
-   QString               m_fermenterType              ;
+   QString               m_fvType              ;
    QString               m_agingVesselType            ;
    QString               m_packagingVesselType        ;
    double                m_hltVolume_l                ;
@@ -553,7 +553,7 @@ private:
    double                m_packagingVesselVolume_l    ;
    double                m_hltLoss_l                  ;
    double                m_mashTunLoss_l              ;
-   double                m_fermenterLoss_l            ;
+   double                m_fvLoss_l            ;
    double                m_agingVesselLoss_l          ;
    double                m_packagingVesselLoss_l      ;
    std::optional<double> m_kettleOutflowPerMinute_l   ;
@@ -566,7 +566,7 @@ private:
    QString               m_hltNotes                   ;
    QString               m_mashTunNotes               ;
    QString               m_lauterTunNotes             ;
-   QString               m_fermenterNotes             ;
+   QString               m_fvNotes             ;
    QString               m_agingVesselNotes           ;
    QString               m_packagingVesselNotes       ;
 

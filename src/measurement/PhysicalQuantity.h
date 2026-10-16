@@ -195,8 +195,25 @@ namespace Measurement {
       // Heat capacity -- see https://en.wikipedia.org/wiki/Heat_capacity -- equals Mass × Specific Heat Capacity
       HeatCapacity,
 
-      // Specific volume (= the reciprocal of density) -- see https://en.wikipedia.org/wiki/Specific_volume
-      SpecificVolume,
+      //
+      // Volume per unit mass.
+      //
+      // For a single substance, volume-per-mass is the substance's "specific volume" (see
+      // https://en.wikipedia.org/wiki/Specific_volume), which is the reciprocal of its density.  However, in brewing,
+      // volume-per-mass is mostly used for ratios between two different things -- eg mash thickness (volume of water
+      // per mass of grain) or grain absorption rate (volume of water absorbed per mass of grain).  In such cases, it
+      // would be inaccurate to refer to "specific volume".
+      //
+      VolumePerMass,
+
+      //
+      // Energy per volume.
+      //
+      // This is used where we display "calories (kcal) per 33cl", "calories (kcal) per 12oz" or
+      // "calories (kcal) per US pint (16oz)".  We avoid the term "energy density" because, in nutrition, “energy
+      // density” often means energy per mass (kcal/g).
+      //
+      EnergyPerVolume,
 
       // .:TBD:. Should we add Energy for PropertyNames::Recipe::calories (in which case, should canonical measure be
       //         Joules)?

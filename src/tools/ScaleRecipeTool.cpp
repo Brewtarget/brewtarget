@@ -81,7 +81,7 @@ void ScaleRecipeTool::scale(Equipment* equip, double const newEff) {
 
    // Calculate volume ratio
    double const currentBatchSize_l = m_recObs->batchSize_l();
-   double const newBatchSize_l = equipment->fermenterBatchSize_l();
+   double const newBatchSize_l = equipment->fvBatchSize_l();
    double const volRatio = newBatchSize_l / currentBatchSize_l;
 
    // Calculate efficiency ratio

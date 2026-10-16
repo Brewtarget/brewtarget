@@ -398,6 +398,8 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                   return false;
                }
             } else {
+               // JsonRecordDefinition::FieldType::ListOfRecords
+
                //
                // One difference between XML and JSON when it comes to arrays is that the latter has one less layer of
                // tags.  In XML (eg BeerXML), we have "<HOPS><HOP>...</HOP><HOP>...</HOP>...</HOPS>".  In JSON (eg
@@ -601,13 +603,27 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                   }
                   break;
 
-               //
-               // From here on, we have BeerJSON-specific types.  If we ever wanted to parse some other type of JSON,
-               // then we might need to make this code more generic, but, for now, we're not going to worry too much as
-               // it seems unlikely there will be other JSON encodings we want to deal with in the foreseeable future.
-               //
+               case JsonRecordDefinition::FieldType::DateTimeOffset:
+                  Q_ASSERT(container->is_string());
+                  {
+                     QString value{container->get_string().c_str()};
+                     QDateTime rawValue = QDateTime::fromString(value, Qt::ISODate);
+                     parsedValueOk = rawValue.isValid();
+                     if (parsedValueOk) {
+                        parsedValue = Optional::variantFromRaw(rawValue, propertyIsOptional);
+                     } else {
+                        // The JSON schema validation doesn't guarantee the date is valid, just that it's the right
+                        // digit groupings.  So, we do need to handle cases such as 2022-13-13 which are the right
+                        // format but not valid dates.
+                        qWarning() <<
+                           Q_FUNC_INFO << "Ignoring " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
+                           fieldDefinition.xPath << "=" << value << " as could not be parsed as ISO 8601 date";
+                     }
+                  }
+                  break;
 
                case JsonRecordDefinition::FieldType::Date:
+               case JsonRecordDefinition::FieldType::DateOrDateTimeLocal:
                   // In BeerJSON, DateType is a string matching this regexp:
                   //   "\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"
                   // This is One True Date Format™ (aka ISO 8601), which makes our life somewhat easier
@@ -1104,16 +1120,28 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
          }
          break;
 
-      //
-      // From here on, we have BeerJSON-specific types.  If we ever wanted to parse some other type of JSON,
-      // then we might need to make this code more generic, but, for now, we're not going to worry too much as
-      // it seems unlikely there will be other JSON encodings we want to deal with in the foreseeable future.
-      //
-      case JsonRecordDefinition::FieldType::Date:
          if (Optional::removeOptionalWrapperIfPresent<QDate>(value, propertyIsOptional)) {
-            // In BeerJSON, DateType is a string matching this regexp:
+            std::string formattedDate = value.toDate().toString(Qt::ISODate).toStdString();
+            recordDataAsObject.emplace(key, formattedDate);
+         }
+         break;
+
+      case JsonRecordDefinition::FieldType::DateTimeOffset:
+         if (Optional::removeOptionalWrapperIfPresent<QDateTime>(value, propertyIsOptional)) {
+            std::string formattedDate = value.toDateTime().toString(Qt::ISODate).toStdString();
+            recordDataAsObject.emplace(key, formattedDate);
+         }
+         break;
+
+      case JsonRecordDefinition::FieldType::Date:
+      case JsonRecordDefinition::FieldType::DateOrDateTimeLocal:
+         if (Optional::removeOptionalWrapperIfPresent<QDate>(value, propertyIsOptional)) {
+            //
+            // DateOrDateTimeLocal corresponds to BeerJSON, DateType, which is a string matching this regexp:
             //   "\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"
-            // This is One True Date Format™ (aka ISO 8601), which makes our life somewhat easier
+            // This allows date or date plus time (but not timezone) in One True Date Format™ (aka ISO 8601).  For most
+            // fields (date recipe created, date brewed), we only want a date, not a timestamp, so we just write that.
+            //
             std::string formattedDate = value.toDate().toString(Qt::ISODate).toStdString();
             recordDataAsObject.emplace(key, formattedDate);
          }
@@ -1406,6 +1434,7 @@ bool JsonRecord::toJson(QString const & baseFolderPath,
                   fieldDefinition.propertyPath;
             }
          } else {
+            // JsonRecordDefinition::FieldType::ListOfRecords
             boost::json::array outputArray;
 
             //

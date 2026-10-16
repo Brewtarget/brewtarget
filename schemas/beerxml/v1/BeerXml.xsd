@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  *╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * beerxml/v1/BeerXml.xsd is part of Brewtarget, and is Copyright the following authors 2020-2025
+ * schemas/beerxml/v1/BeerXml.xsd is part of Brewtarget, and is Copyright the following authors 2020-2026
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
@@ -91,7 +91,7 @@
       </xs:restriction>
    </xs:simpleType>
 
-   <!-- An "no max" percentage is one that can be more than 100 -->
+   <!-- A "no max" percentage is one that can be more than 100 -->
    <xs:simpleType name="NoMaxPercentage">
       <xs:restriction base="xs:decimal">
          <xs:minInclusive value="0"/>

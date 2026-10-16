@@ -444,14 +444,13 @@ namespace Measurement {
       extern Unit const joulesPerKelvin       ;
       extern Unit const btuPerFahrenheit      ;
 
-      // == Specific Volume ==
-      // Per https://en.wikipedia.org/wiki/Specific_volume, specific volume is the reciprocal of density; in other words
-      // it is "an intrinsic property of a substance, defined as the ratio of the substance's volume to its mass.  In
-      // brewing, it's typically used to measure mash thickness.  The standard unit of specific volume is cubic meters
-      // per kilogram (m³/kg), but there are various other metric combinations in widespread use.  We have historically
-      // used litres per kilogram as our canonical units, and I see no pressing reason to change that.
-      // We have a lot of units here because BeerJSON supports them all.  (I'm assuming the non-metric BeerJSON units
-      // are US Customary rather than Imperial because I think the imperial versions are getting a bit obscure.)
+      // == Volume Per Mass ==
+      // I'm not sure that there is a "standard" unit for volume per mass.  For the (ahem) specific case of specific
+      // volume, it's cubic meters per kilogram (m³/kg), but we're typically not dealing with specific volume in
+      // brewing.  We have historically used litres per kilogram as our canonical units, and I see no pressing reason to
+      // change that.  We have a lot of units here because BeerJSON supports them all.  (I'm assuming the non-metric
+      // BeerJSON units are US Customary rather than Imperial because I think the imperial versions are getting a bit
+      // obscure.)
       extern Unit const litresPerKilogram     ;
       extern Unit const litresPerGram         ;
       extern Unit const cubicMetersPerKilogram;
@@ -460,6 +459,21 @@ namespace Measurement {
       extern Unit const us_gallonsPerOunce    ;
       extern Unit const us_fluidOuncesPerOunce;
       extern Unit const cubicFeetPerPound     ;
+
+      // == Energy Per Volume ==
+      // Historically we had "calories (kcal) per 33cl", "calories (kcal) per 12oz" and "calories (kcal) per US pint
+      // (16oz)".  We''ve extended this a bit, including adding kJ/100ml and kcal/100ml because those are the two
+      // required per-volume units on EU nutrition labels (see
+      // https://europa.eu/youreurope/business/product-rules-compliance/food/nutrition-declaration/index_en.htm).
+      extern Unit const kilocaloriesPerLiter     ;
+      extern Unit const kilocaloriesPer50cl      ;
+      extern Unit const kilocaloriesPer33cl      ;
+      extern Unit const kilocaloriesPer25cl      ;
+      extern Unit const kilocaloriesPer100ml     ;
+      extern Unit const kilocaloriesPer16us_floz ;
+      extern Unit const kilocaloriesPer12us_floz ;
+      extern Unit const kilocaloriesPer20imp_floz;
+      extern Unit const kilojoulesPer100ml       ;
 
       //================================================================================================================
 

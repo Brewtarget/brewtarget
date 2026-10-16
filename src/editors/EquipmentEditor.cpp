@@ -62,7 +62,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
       EDITOR_FIELD_NORM(Equipment, label_hopUtilization          , lineEdit_hopUtilization          , Equipment::hopUtilization_pct       , 0),
       EDITOR_FIELD_NORM(Equipment, label_mashTunWeight           , lineEdit_mashTunWeight           , Equipment::mashTunWeight_kg            ),
       EDITOR_FIELD_NORM(Equipment, label_boilingPoint            , lineEdit_boilingPoint            , Equipment::boilingPoint_c           , 1),
-      EDITOR_FIELD_NORM(Equipment, label_fermenterBatchSize      , lineEdit_fermenterBatchSize      , Equipment::fermenterBatchSize_l        ),
+      EDITOR_FIELD_NORM(Equipment, label_fvBatchSize      , lineEdit_fvBatchSize      , Equipment::fvBatchSize_l        ),
       EDITOR_FIELD_NORM(Equipment, label_kettleBoilSize          , lineEdit_kettleBoilSize          , Equipment::kettleBoilSize_l            ),
       EDITOR_FIELD_NORM(Equipment, label_kettleEvaporationPerHour, lineEdit_kettleEvaporationPerHour, Equipment::kettleEvaporationPerHour_l  ),
       EDITOR_FIELD_NORM(Equipment, label_lauterTunDeadspaceLoss  , lineEdit_lauterTunDeadspaceLoss  , Equipment::lauterTunDeadspaceLoss_l    ),
@@ -75,7 +75,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
       EDITOR_FIELD_NORM(Equipment, label_mashTunType             , lineEdit_mashTunType             , Equipment::mashTunType                 ),
       EDITOR_FIELD_NORM(Equipment, label_lauterTunType           , lineEdit_lauterTunType           , Equipment::lauterTunType               ),
       EDITOR_FIELD_NORM(Equipment, label_kettleType              , lineEdit_kettleType              , Equipment::kettleType                  ),
-      EDITOR_FIELD_NORM(Equipment, label_fermenterType           , lineEdit_fermenterType           , Equipment::fermenterType               ),
+      EDITOR_FIELD_NORM(Equipment, label_fvType           , lineEdit_fvType           , Equipment::fvType               ),
       EDITOR_FIELD_NORM(Equipment, label_agingVesselType         , lineEdit_agingVesselType         , Equipment::agingVesselType             ),
       EDITOR_FIELD_NORM(Equipment, label_packagingVesselType     , lineEdit_packagingVesselType     , Equipment::packagingVesselType         ),
       EDITOR_FIELD_NORM(Equipment, label_hltVolume               , lineEdit_hltVolume               , Equipment::hltVolume_l                 ),
@@ -84,7 +84,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
       EDITOR_FIELD_NORM(Equipment, label_packagingVesselVolume   , lineEdit_packagingVesselVolume   , Equipment::packagingVesselVolume_l     ),
       EDITOR_FIELD_NORM(Equipment, label_hltLoss                 , lineEdit_hltLoss                 , Equipment::hltLoss_l                   ),
       EDITOR_FIELD_NORM(Equipment, label_mashTunLoss             , lineEdit_mashTunLoss             , Equipment::mashTunLoss_l               ),
-      EDITOR_FIELD_NORM(Equipment, label_fermenterLoss           , lineEdit_fermenterLoss           , Equipment::fermenterLoss_l             ),
+      EDITOR_FIELD_NORM(Equipment, label_fvLoss           , lineEdit_fvLoss           , Equipment::fvLoss_l             ),
       EDITOR_FIELD_NORM(Equipment, label_agingVesselLoss         , lineEdit_agingVesselLoss         , Equipment::agingVesselLoss_l           ),
       EDITOR_FIELD_NORM(Equipment, label_packagingVesselLoss     , lineEdit_packagingVesselLoss     , Equipment::packagingVesselLoss_l       ),
       EDITOR_FIELD_NORM(Equipment, label_kettleOutflowPerMinute  , lineEdit_kettleOutflowPerMinute  , Equipment::kettleOutflowPerMinute_l    ),
@@ -142,7 +142,7 @@ bool EquipmentEditor::validateBeforeSave() {
       inform = inform + QString("<li>%1</li>").arg(tr("mash tun volume (all-grain and BIAB only)"));
    }
 
-   if (qFuzzyIsNull(lineEdit_fermenterBatchSize->getNonOptCanonicalQty())) {
+   if (qFuzzyIsNull(lineEdit_fvBatchSize->getNonOptCanonicalQty())) {
       problems = true;
       inform = inform + QString("<li>%1</li>").arg(tr("batch size"));
    }

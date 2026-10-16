@@ -783,7 +783,8 @@ set(filesToInstall_data ${repoDir}/data/default_db.sqlite
                         ${repoDir}/data/DefaultContent001-OriginalDefaultData.xml
                         ${repoDir}/data/DefaultContent002-BJCP_2021_Styles.json
                         ${repoDir}/data/DefaultContent003-Ingredients-Hops-Yeasts.json
-                        ${repoDir}/data/DefaultContent004-MoreYeasts.json)
+                        ${repoDir}/data/DefaultContent004-MoreYeasts.json
+                        ${repoDir}/data/DefaultContent005-Fermentables-Recipes.beer)
 
 # Desktop files to install.
 #

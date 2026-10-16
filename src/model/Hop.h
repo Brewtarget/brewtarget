@@ -296,25 +296,157 @@ public:
    Q_PROPERTY(std::optional<double> sixMonthAlphaLoss_pct   READ sixMonthAlphaLoss_pct   WRITE setSixMonthAlphaLoss_pct)
    //! \brief Alternate hop varieties that can be used in place of this hop variety
    Q_PROPERTY(QString               substitutes           READ substitutes           WRITE setSubstitutes          )
-   //! \brief Humulene as a percentage of total hop oil.      ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
+   /**
+    * \brief Humulene as a percentage of total hop oil.
+    *
+    *        Brad Smith writes "The second largest hop oil by percentage, humulene makes up between 12% and 50% of total
+    *        hop oils.  Humulene is responsible for earthy and spicy flavors found in traditional noble hops.  While
+    *        humulene has a higher boiling point (around 106°C), it is very volatile and hydrophobic, so it is still
+    *        best used in the whirlpool or dry hopping.  Humulene is also easily oxidized, though the oxidized
+    *        humulene-epoxide III play a major role in the flavor of varieties like Hallertauer Mittelfrüh."  (See
+    *        https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)
+    *
+    *        ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
+    */
    Q_PROPERTY(std::optional<double> humulene_pct          READ humulene_pct          WRITE setHumulene_pct         )
-   //! \brief Caryophyllene as a percentage of total hop oil. ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
+   /**
+    * \brief Caryophyllene (more formally β-caryophyllene or BCP) as a percentage of total hop oil.
+    *
+    *        Brad Smith writes "Caryophyllene makes up between 6% and 15% of total hop oils in most varieties.  It is a
+    *        major compound in many aromatic plants including cloves, cannabis, rosemary, and hops.  It is also a
+    *        significant aromatic compound in black pepper.  The aroma is described as woody, earthy, and peppery though
+    *        it also has a strong herbal component.  The spicy, woody aroma is often evident when you crush dried hops
+    *        in your hands.  Many English hop varieties such as East Kent Goldings have the largest percentage of
+    *        caryphyllene giving them a woody, earthy finish.  While not quite as volatile as myrcene, caryophyllene it
+    *        will boil quickly and is best used in the whirlpool or as a dry hop."  (See
+    *        https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)
+    *
+    *        ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
+    */
    Q_PROPERTY(std::optional<double> caryophyllene_pct     READ caryophyllene_pct     WRITE setCaryophyllene_pct    )
-   //! \brief Cohumulone as a percentage of total hop oil.    ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
+   /**
+    * \brief Cohumulone as a percentage of total hop alpha acids.
+    *
+    *        Per (English translation of) https://fr.wikipedia.org/wiki/Cohumulone:
+    *
+    *           Cohumulone is one of the three hop-derived alpha acids that provide beer with most of its bitterness.
+    *           Some brewers believe that hop varieties with a high cohumulone content produce a harsher bitterness.
+    *           Cohumulone generally accounts for between 20% and 50% of a hop’s alpha acid content.
+    *
+    *           Cohumulone, like other known alpha acids (the main ones being humulone and adhumulone), is produced by
+    *           the breakdown of lupulin (derived from hops).   However, it has greater polarity and better solubility
+    *           in water than other alpha acids.  In water, its isomerization produces two compounds: cis-isocohumulone
+    *           and trans-isocohumulone, which appear to impart a harsher bitterness than that of isohumulones.
+    *
+    *        ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
+    */
    Q_PROPERTY(std::optional<double> cohumulone_pct        READ cohumulone_pct        WRITE setCohumulone_pct       )
-   //! \brief Myrcene as a percentage of total hop oil.       ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
+   /**
+    * \brief Myrcene as a percentage of total hop oil.
+    *
+    *        Brad Smith writes "This is the most significant hop oil, making up from 30-60% of total hop oils in most
+    *        varieties.  Myrcene is often described as the “fresh hop oil” and has flavors and aroma varying from
+    *        herbaceous to resinous, green, balsamic, and slightly metallic.  It is a major component in many hop
+    *        varieties from the Pacific Northwest, and is therefore a critical oil in IPAs.  Cascade, for example has a
+    *        myrcene content of nearly 60%.  Myrcene has a low boiling point and is highly volatile.  In fact it will
+    *        virtually disappear in most boil additions, and even tends to be volatile in higher temperature
+    *        whirlpool/steeping additions.  It also oxidizes very rapidly, and is probably best used in dry hop
+    *        applications."  (See https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)
+    *
+    *        ⮜⮜⮜ Optional in BeerJSON and BeerXML ⮞⮞⮞
+    */
    Q_PROPERTY(std::optional<double> myrcene_pct           READ myrcene_pct           WRITE setMyrcene_pct          )
 
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
+
    Q_PROPERTY(std::optional<double> totalOil_mlPer100g    READ totalOil_mlPer100g   WRITE setTotalOil_mlPer100g)
+
+   /**
+    *\brief Farnesene as a percentage of total hop oil.
+    *
+    *       Brad Smith writes "Farnesene is a volatile hop oil that is loosely associated with certain noble hops like
+    *       Saaz, but can make up 10-20% of total hop oils in other noble hops like Tettnanger, Styrian hops and many
+    *       American varieties.  It has a woody, herbal, citrus aroma and sometimes also takes on a floral character.
+    *       Because it is very volatile, it is rarely found in the finished beer unless it has been dry hopped.  [It] is
+    *       often associated with varieties that take on a noble hop character, so if you see a hop high in Farnesene it
+    *       likely has the aroma profile similar to many noble hops."  (See
+    *       https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)
+    */
    Q_PROPERTY(std::optional<double> farnesene_pct         READ farnesene_pct        WRITE setFarnesene_pct     )
+   /**
+    * \brief Geraniol as a percentage of total hop oil.
+    *
+    *        Brad Smith writes "Geraniol is an aromatic oil with a floral, sweet or rose aroma found in many American,
+    *        New Zealand and Australian hops.  It is used in rose oil, palmarosa oil, and citronella oil, and is a
+    *        component of common spices like lavender, nutmeg, coriander, rose and blackberry.  Many brewers also will
+    *        add hops with geraniol during the tail end of active fermentation to promote tropical and citrus fruit
+    *        flavors.  Hops with high geraniol have become popular for creating tropical/fruity IPA styles."  (See
+    *        https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)
+    */
    Q_PROPERTY(std::optional<double> geraniol_pct          READ geraniol_pct         WRITE setGeraniol_pct      )
+   /**
+    * \brief β-Pinene as a percentage of total hop oil.
+    *
+    *        Brad Smith writes "Though not a major hop oil, β-Pinene has a green-woody and piney aroma.  It is a
+    *        monoterpene, commonly found in many plants and it is soluble in alcohol but not water."  (See
+    *        https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)
+    */
    Q_PROPERTY(std::optional<double> bPinene_pct           READ bPinene_pct          WRITE setBPinene_pct       )
+   /**
+    * \brief Linalool as a percentage of total hop oil.
+    *
+    *        Brad Smith writes "Related closely to Myrcene chemically, linalool has a floral aroma that smells like
+    *        rose, orange, citrus or lavender.  It is more soluble in wort than myrcene, and also has a lower flavor
+    *        threshold so it can be potent despite the small fraction it makes up of total hop oils.  Like geraniol,
+    *        linalool is associated with many of the tropical, floral and citrus flavors that are popular in fruity and
+    *        tropical IPAs."  (See https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)
+    */
    Q_PROPERTY(std::optional<double> linalool_pct          READ linalool_pct         WRITE setLinalool_pct      )
+   /**
+    * \brief Limonene as a percentage of total hop oil.
+    *
+    *        Limonene is a relatively stable monoterpene occurring naturally in citrus fruit peels, hops and numerous
+    *        coniferous and broadleaved trees.  Limonene delivers a powerful citrus character, and is associated with
+    *        punchy citrus based hops, such as Citra, Simcoe and Centennial.
+    */
    Q_PROPERTY(std::optional<double> limonene_pct          READ limonene_pct         WRITE setLimonene_pct      )
+
+   /**
+    * \brief Nerol as a percentage of total hop oil.
+    *
+    *        Nerol is an isomer of geraniol.  Like geraniol, it has a sweet rose odor but it is considered to be
+    *        fresher.  Its aroma is described as sweet, natural, neroli, citrus, magnolia, fresh, floral, green, lemon,
+    *        and lime.
+    */
    Q_PROPERTY(std::optional<double> nerol_pct             READ nerol_pct            WRITE setNerol_pct         )
+
+   /**
+    * \brief  α-Pinene as a percentage of total hop oil.
+    *
+    *         Alpha-Pinene has a distinctly woody, herbal scent and can be found in cone-bearing trees and herbs like
+    *         rosemary.
+    *
+    *         TODO: We should raname this to aPinene_pct
+    */
    Q_PROPERTY(std::optional<double> pinene_pct            READ pinene_pct           WRITE setPinene_pct        )
+
+   /**
+    * \brief Polyphenols as a percentage of hop mass.
+    *
+    *        Polyphenols are a large family of naturally occurring phenols with "several hydroxyl groups on aromatic
+    *        rings".  They include four principal classes: phenolic acids, flavonoids, stilbenes, and lignans.
+    *        Polyphenols in hops contribute to the astringency and fullness of beer's taste, enhancing its overall
+    *        flavor profile.  They do not have a direct aroma but can affect beer taste by contributing to its
+    *        mouthfeel, astringency, and haze formation.  Additionally, they play a role in beer stability, as they have
+    *        antioxidant properties that can help prevent the oxidation of flavor compounds.
+    */
    Q_PROPERTY(std::optional<double> polyphenols_pct       READ polyphenols_pct      WRITE setPolyphenols_pct   )
+
+   /**
+    * \brief Xanthohumol as a percentage of hop mass.
+    *
+    *        Xanthohumol is a natural flavonoid found in the female inflorescences of hops.  Its impact on beer taste is not as significant that of alpha acids or essential oils, but it may contribute to the overall complexity and subtle nuances in beer flavors.  (Xanthohumol has also been the subject of considerable research for its potential health benefits, but typically in quantities far exceeding any amount that could be obtained by ordinary dietary intake.)
+    */
    Q_PROPERTY(std::optional<double> xanthohumol_pct       READ xanthohumol_pct      WRITE setXanthohumol_pct   )
    Q_PROPERTY(QString               producer              READ producer             WRITE setProducer          )
    Q_PROPERTY(QString               productId             READ productId            WRITE setProductId         )

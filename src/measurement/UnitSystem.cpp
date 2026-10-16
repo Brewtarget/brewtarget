@@ -599,7 +599,7 @@ namespace Measurement::UnitSystems {
                                       "heatCapacity_Btus",
                                       Measurement::SystemOfMeasurement::HeatCapacityBtus};
 
-   UnitSystem const specificVolume_Metric{PhysicalQuantity::SpecificVolume,
+   UnitSystem const volumePerMass_Metric{PhysicalQuantity::VolumePerMass,
                                           &Measurement::Units::litresPerKilogram,
                                           "specificVolume_Metric",
                                           Measurement::SystemOfMeasurement::Metric,
@@ -607,7 +607,7 @@ namespace Measurement::UnitSystems {
                                            &Measurement::Units::cubicMetersPerKilogram,
                                            &Measurement::Units::litresPerGram         }};
 
-   UnitSystem const specificVolume_UsCustomary{PhysicalQuantity::SpecificVolume,
+   UnitSystem const volumePerMass_UsCustomary{PhysicalQuantity::VolumePerMass,
                                                &Measurement::Units::us_quartsPerPound,
                                                "specificVolume_UsCustomary",
                                                Measurement::SystemOfMeasurement::UsCustomary,
@@ -616,4 +616,31 @@ namespace Measurement::UnitSystems {
                                                 &Measurement::Units::us_gallonsPerPound    ,
                                                 &Measurement::Units::us_quartsPerPound     ,
                                                 &Measurement::Units::us_gallonsPerOunce    }};
+
+UnitSystem const energyPerVolume_Metric{PhysicalQuantity::EnergyPerVolume,
+                                        &Measurement::Units::kilocaloriesPerLiter,
+                                        "energyPerVolume_Metric",
+                                        Measurement::SystemOfMeasurement::Metric,
+                                        {&Measurement::Units::kilocaloriesPerLiter,
+                                         &Measurement::Units::kilocaloriesPer50cl ,
+                                         &Measurement::Units::kilocaloriesPer33cl ,
+                                         &Measurement::Units::kilocaloriesPer25cl ,
+                                         &Measurement::Units::kilocaloriesPer100ml}};
+
+UnitSystem const energyPerVolume_UsCustomary{PhysicalQuantity::EnergyPerVolume,
+                                             &Measurement::Units::kilocaloriesPer16us_floz,
+                                             "energyPerVolume_UsCustomary",
+                                             Measurement::SystemOfMeasurement::UsCustomary,
+                                             {&Measurement::Units::kilocaloriesPer16us_floz,
+                                              &Measurement::Units::kilocaloriesPer12us_floz}};
+
+UnitSystem const energyPerVolume_Imperial{PhysicalQuantity::EnergyPerVolume,
+                                          &Measurement::Units::kilocaloriesPer20imp_floz,
+                                          "energyPerVolume_Imperial",
+                                          Measurement::SystemOfMeasurement::Imperial};
+
+UnitSystem const energyPerVolume_MetricAlternate{PhysicalQuantity::EnergyPerVolume,
+                                                 &Measurement::Units::kilojoulesPer100ml,
+                                                 "energyPerVolume_MetricAlternate",
+                                                 Measurement::SystemOfMeasurement::MetricAlternate};
 }

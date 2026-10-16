@@ -364,6 +364,8 @@ private:
    [[nodiscard]] QString doPath(QString const & startWith) const {
       QString myPath = startWith;
       for (auto myParent = this->containedInFolderRaw(); myParent; myParent = myParent->containedInFolderRaw()) {
+         // A folder can't ever be its own parent.
+         Q_ASSERT(myParent != myParent->containedInFolderRaw());
          myPath = QString("%1/%2").arg(myParent->name()).arg(myPath);
       }
       return myPath;

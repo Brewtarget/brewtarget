@@ -79,11 +79,11 @@ RecipeAdditionFermentable::RecipeAdditionFermentable(NamedParameterBundle const 
    RecipeAdditionBase<RecipeAdditionFermentable, Fermentable>{},
    IngredientAmount<RecipeAdditionFermentable, Fermentable>{namedParameterBundle} {
    //
-   // If the addition stage is not specified then we assume it is boil, as this is the first stage at which it is usual
-   // to add hops.
+   // If the addition stage is not specified then we assume it is mash, as this is the first stage at which it is usual
+   // to add fermentables.
    //
    this->m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
-                                                                   RecipeAddition::Stage::Boil);
+                                                                   RecipeAddition::Stage::Mash);
 
    CONSTRUCTOR_END
    return;
@@ -103,8 +103,8 @@ RecipeAdditionFermentable::~RecipeAdditionFermentable() = default;
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
 NamedEntity * RecipeAdditionFermentable::ensureExists(BtStringConst const & property) {
    if (property == PropertyNames::RecipeAdditionFermentable::fermentable) {
-      // It's a coding error if a RecipeAdditionFermentable doesn't have a Fermentable by the time we're accessing it via the property
-      // system.
+      // It's a coding error if a RecipeAdditionFermentable doesn't have a Fermentable by the time we're accessing it
+      // via the property system.
       Fermentable * fermentable = this->fermentable();
       if (!fermentable) {
          qCritical() << Q_FUNC_INFO << "No Fermentable set on RecipeAdditionFermentable #" << this->key();

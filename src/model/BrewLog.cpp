@@ -59,7 +59,7 @@ QString BrewLog::localisedName_expectedOriginalGravity_sg   () { return tr("Plan
 QString BrewLog::localisedName_expectedPreBoilGravity_sg    () { return tr("Expected pre-boil specific gravity"); }
 QString BrewLog::localisedName_expectedPreBoilVolume_l      () { return tr("Projected Volume Into Boil Kettle" ); }
 QString BrewLog::localisedName_expectedStrikeTemp_c         () { return tr("Projected Strike Temperature"      ); }
-QString BrewLog::localisedName_expectedVolumeIntoFermentor_l() { return tr("Projected Volume Into Fermentor"   ); }
+QString BrewLog::localisedName_expectedVolumeIntoFv_l       () { return tr("Projected Volume Into Fermentation Vessel"); }
 QString BrewLog::localisedName_fermentDate                  () { return tr("Ferment Date"                      ); }
 QString BrewLog::localisedName_forecastOriginalGravity_sg   () { return tr("Projected OG"                      ); }
 QString BrewLog::localisedName_measuredFinalGravity_sg      () { return tr("Measured FG"                       ); }
@@ -71,7 +71,7 @@ QString BrewLog::localisedName_measuredPostBoilVolume_l     () { return tr("Post
 QString BrewLog::localisedName_measuredPreBoilGravity_sg    () { return tr("Measured pre-boil specific gravity"); }
 QString BrewLog::localisedName_measuredPreBoilVolume_l      () { return tr("Volume Into Boil Kettle"           ); }
 QString BrewLog::localisedName_measuredStrikeTemp_c         () { return tr("Strike Temperature"                ); }
-QString BrewLog::localisedName_measuredVolumeIntoFermentor_l() { return tr("Volume Into Fermentor"             ); }
+QString BrewLog::localisedName_measuredVolumeIntoFv_l       () { return tr("Volume Into Fermentation Vessel"   ); }
 QString BrewLog::localisedName_notes                        () { return tr("Notes"                             ); }
 QString BrewLog::localisedName_projFermPoints               () { return tr("Projected Fermentation Points"     ); }
 
@@ -113,7 +113,7 @@ TypeLookup const BrewLog::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, expectedPreBoilGravity_sg    , m_expectedPreBoilGravity_sg    , Measurement::PhysicalQuantity::Gravity    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, expectedPreBoilVolume_l      , m_expectedPreBoilVolume_l      , Measurement::PhysicalQuantity::Volume     ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, expectedStrikeTemp_c         , m_expectedStrikeTemp_c         , Measurement::PhysicalQuantity::Temperature),
-      PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, expectedVolumeIntoFermentor_l, m_expectedVolumeIntoFermentor_l, Measurement::PhysicalQuantity::Volume     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, expectedVolumeIntoFv_l, m_expectedVolumeIntoFv_l, Measurement::PhysicalQuantity::Volume     ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, fermentDate                  , m_fermentDate                  ,           NonPhysicalQuantity::Date       ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, forecastOriginalGravity_sg   , m_forecastOriginalGravity_sg   , Measurement::PhysicalQuantity::Gravity    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, measuredFinalGravity_sg      , m_measuredFinalGravity_sg      , Measurement::PhysicalQuantity::Gravity    ),
@@ -125,7 +125,7 @@ TypeLookup const BrewLog::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, measuredPreBoilGravity_sg    , m_measuredPreBoilGravity_sg    , Measurement::PhysicalQuantity::Gravity    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, measuredPreBoilVolume_l      , m_measuredPreBoilVolume_l      , Measurement::PhysicalQuantity::Volume     ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, measuredStrikeTemp_c         , m_measuredStrikeTemp_c         , Measurement::PhysicalQuantity::Temperature),
-      PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, measuredVolumeIntoFermentor_l, m_measuredVolumeIntoFermentor_l, Measurement::PhysicalQuantity::Volume     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, measuredVolumeIntoFv_l, m_measuredVolumeIntoFv_l, Measurement::PhysicalQuantity::Volume     ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, notes                        , m_notes                        ,           NonPhysicalQuantity::String     ),
    },
    // Parent class lookup
@@ -173,7 +173,7 @@ BrewLog::BrewLog(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_measuredMashFinalTemp_c      , namedParameterBundle, PropertyNames::BrewLog::measuredMashFinalTemp_c      ),
    SET_REGULAR_FROM_NPB (m_measuredOriginalGravity_sg   , namedParameterBundle, PropertyNames::BrewLog::measuredOriginalGravity_sg   ),
    SET_REGULAR_FROM_NPB (m_measuredPostBoilVolume_l     , namedParameterBundle, PropertyNames::BrewLog::measuredPostBoilVolume_l     ),
-   SET_REGULAR_FROM_NPB (m_measuredVolumeIntoFermentor_l, namedParameterBundle, PropertyNames::BrewLog::measuredVolumeIntoFermentor_l),
+   SET_REGULAR_FROM_NPB (m_measuredVolumeIntoFv_l, namedParameterBundle, PropertyNames::BrewLog::measuredVolumeIntoFv_l),
    SET_REGULAR_FROM_NPB (m_measuredPitchTemp_c          , namedParameterBundle, PropertyNames::BrewLog::measuredPitchTemp_c          ),
    SET_REGULAR_FROM_NPB (m_measuredFinalGravity_sg      , namedParameterBundle, PropertyNames::BrewLog::measuredFinalGravity_sg      ),
    SET_REGULAR_FROM_NPB (m_computedAttenuation_pct      , namedParameterBundle, PropertyNames::BrewLog::computedAttenuation_pct      ),
@@ -185,7 +185,7 @@ BrewLog::BrewLog(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_expectedMashFinalTemp_c      , namedParameterBundle, PropertyNames::BrewLog::expectedMashFinalTemp_c      ),
    SET_REGULAR_FROM_NPB (m_expectedOriginalGravity_sg   , namedParameterBundle, PropertyNames::BrewLog::expectedOriginalGravity_sg   ),
    SET_REGULAR_FROM_NPB (m_forecastOriginalGravity_sg   , namedParameterBundle, PropertyNames::BrewLog::forecastOriginalGravity_sg   ),
-   SET_REGULAR_FROM_NPB (m_expectedVolumeIntoFermentor_l, namedParameterBundle, PropertyNames::BrewLog::expectedVolumeIntoFermentor_l),
+   SET_REGULAR_FROM_NPB (m_expectedVolumeIntoFv_l, namedParameterBundle, PropertyNames::BrewLog::expectedVolumeIntoFv_l),
    SET_REGULAR_FROM_NPB (m_expectedFinalGravity_sg      , namedParameterBundle, PropertyNames::BrewLog::expectedFinalGravity_sg      ),
    SET_REGULAR_FROM_NPB (m_expectedEfficiency_pct       , namedParameterBundle, PropertyNames::BrewLog::expectedEfficiency_pct       ),
    SET_REGULAR_FROM_NPB (m_expectedAlcoholByVolume_pct  , namedParameterBundle, PropertyNames::BrewLog::expectedAlcoholByVolume_pct  ),
@@ -209,7 +209,7 @@ BrewLog::BrewLog(BrewLog const & other) :
    m_measuredMashFinalTemp_c      {other.m_measuredMashFinalTemp_c      },
    m_measuredOriginalGravity_sg   {other.m_measuredOriginalGravity_sg   },
    m_measuredPostBoilVolume_l     {other.m_measuredPostBoilVolume_l     },
-   m_measuredVolumeIntoFermentor_l{other.m_measuredVolumeIntoFermentor_l},
+   m_measuredVolumeIntoFv_l{other.m_measuredVolumeIntoFv_l},
    m_measuredPitchTemp_c          {other.m_measuredPitchTemp_c          },
    m_measuredFinalGravity_sg      {other.m_measuredFinalGravity_sg      },
    m_computedAttenuation_pct      {other.m_computedAttenuation_pct      },
@@ -221,7 +221,7 @@ BrewLog::BrewLog(BrewLog const & other) :
    m_expectedMashFinalTemp_c      {other.m_expectedMashFinalTemp_c      },
    m_expectedOriginalGravity_sg   {other.m_expectedOriginalGravity_sg   },
    m_forecastOriginalGravity_sg   {other.m_forecastOriginalGravity_sg   },
-   m_expectedVolumeIntoFermentor_l{other.m_expectedVolumeIntoFermentor_l},
+   m_expectedVolumeIntoFv_l{other.m_expectedVolumeIntoFv_l},
    m_expectedFinalGravity_sg      {other.m_expectedFinalGravity_sg      },
    m_expectedEfficiency_pct       {other.m_expectedEfficiency_pct       },
    m_expectedAlcoholByVolume_pct  {other.m_expectedAlcoholByVolume_pct  },
@@ -246,8 +246,8 @@ void BrewLog::populateNote(Recipe * recipe) {
    this->setExpectedPreBoilVolume_l      (boilSize_l);
    this->setMeasuredPreBoilVolume_l      (boilSize_l);
    this->setMeasuredPostBoilVolume_l     (recipe->postBoilVolume_l());
-   this->setExpectedVolumeIntoFermentor_l(recipe->finalVolume_l());
-   this->setMeasuredVolumeIntoFermentor_l(recipe->finalVolume_l());
+   this->setExpectedVolumeIntoFv_l(recipe->finalVolume_l());
+   this->setMeasuredVolumeIntoFv_l(recipe->finalVolume_l());
    this->setMeasuredFinalVolume_l        (recipe->finalVolume_l());
 
    if (auto const equip = recipe->equipment()) {
@@ -342,7 +342,7 @@ double  BrewLog::computedEfficiency_pct       () const { return this->m_computed
 double  BrewLog::measuredStrikeTemp_c         () const { return this->m_measuredStrikeTemp_c         ; }
 double  BrewLog::measuredMashFinalTemp_c      () const { return this->m_measuredMashFinalTemp_c      ; }
 double  BrewLog::measuredOriginalGravity_sg   () const { return this->m_measuredOriginalGravity_sg   ; }
-double  BrewLog::measuredVolumeIntoFermentor_l() const { return this->m_measuredVolumeIntoFermentor_l; }
+double  BrewLog::measuredVolumeIntoFv_l() const { return this->m_measuredVolumeIntoFv_l; }
 double  BrewLog::measuredPostBoilVolume_l     () const { return this->m_measuredPostBoilVolume_l     ; }
 double  BrewLog::measuredPitchTemp_c          () const { return this->m_measuredPitchTemp_c          ; }
 double  BrewLog::measuredFinalGravity_sg      () const { return this->m_measuredFinalGravity_sg      ; }
@@ -353,7 +353,7 @@ double  BrewLog::expectedStrikeTemp_c         () const { return this->m_expected
 double  BrewLog::expectedMashFinalTemp_c      () const { return this->m_expectedMashFinalTemp_c      ; }
 double  BrewLog::expectedOriginalGravity_sg   () const { return this->m_expectedOriginalGravity_sg   ; }
 double  BrewLog::forecastOriginalGravity_sg   () const { return this->m_forecastOriginalGravity_sg   ; }
-double  BrewLog::expectedVolumeIntoFermentor_l() const { return this->m_expectedVolumeIntoFermentor_l; }
+double  BrewLog::expectedVolumeIntoFv_l() const { return this->m_expectedVolumeIntoFv_l; }
 double  BrewLog::expectedFinalGravity_sg      () const { return this->m_expectedFinalGravity_sg      ; }
 double  BrewLog::expectedEfficiency_pct       () const { return this->m_expectedEfficiency_pct       ; }
 double  BrewLog::expectedAlcoholByVolume_pct  () const { return this->m_expectedAlcoholByVolume_pct  ; }
@@ -419,8 +419,8 @@ void BrewLog::setMeasuredOriginalGravity_sg(double var) {
    return;
 }
 
-void BrewLog::setMeasuredVolumeIntoFermentor_l(double var) {
-   SET_AND_NOTIFY(PropertyNames::BrewLog::measuredVolumeIntoFermentor_l, this->m_measuredVolumeIntoFermentor_l, var);
+void BrewLog::setMeasuredVolumeIntoFv_l(double var) {
+   SET_AND_NOTIFY(PropertyNames::BrewLog::measuredVolumeIntoFv_l, this->m_measuredVolumeIntoFv_l, var);
 
    if (!this->loading) {
       this->calculateBrewHouseEff_pct();
@@ -453,7 +453,7 @@ void BrewLog::setExpectedStrikeTemp_c         (double const var) { SET_AND_NOTIF
 void BrewLog::setExpectedMashFinalTemp_c      (double const var) { SET_AND_NOTIFY(PropertyNames::BrewLog::expectedMashFinalTemp_c      , this->m_expectedMashFinalTemp_c      , var); }
 void BrewLog::setExpectedOriginalGravity_sg   (double const var) { SET_AND_NOTIFY(PropertyNames::BrewLog::expectedOriginalGravity_sg   , this->m_expectedOriginalGravity_sg   , var); }
 void BrewLog::setForecastOriginalGravity_sg   (double const var) { SET_AND_NOTIFY(PropertyNames::BrewLog::forecastOriginalGravity_sg   , this->m_forecastOriginalGravity_sg   , var); }
-void BrewLog::setExpectedVolumeIntoFermentor_l(double const var) { SET_AND_NOTIFY(PropertyNames::BrewLog::expectedVolumeIntoFermentor_l, this->m_expectedVolumeIntoFermentor_l, var); }
+void BrewLog::setExpectedVolumeIntoFv_l(double const var) { SET_AND_NOTIFY(PropertyNames::BrewLog::expectedVolumeIntoFv_l, this->m_expectedVolumeIntoFv_l, var); }
 void BrewLog::setExpectedFinalGravity_sg      (double const var) { SET_AND_NOTIFY(PropertyNames::BrewLog::expectedFinalGravity_sg      , this->m_expectedFinalGravity_sg      , var); }
 void BrewLog::setExpectedEfficiency_pct       (double const var) { SET_AND_NOTIFY(PropertyNames::BrewLog::expectedEfficiency_pct       , this->m_expectedEfficiency_pct       , var); }
 void BrewLog::setExpectedAlcoholByVolume_pct  (double const var) { SET_AND_NOTIFY(PropertyNames::BrewLog::expectedAlcoholByVolume_pct  , this->m_expectedAlcoholByVolume_pct  , var); }
@@ -509,7 +509,7 @@ double BrewLog::calculateBrewHouseEff_pct() {
    double const allPossibleSugar_kg = sugars.existingSugars_all_kg + sugars.sugarsFromStarch_all_kg;
    // Since °Plato is the mass fraction of sucrose in the wort, the sums here are relatively easy.  We assume 1 liter of
    // wort weighs 1 kilogram.  So, 1 degree Plato represents 10g of sugar in 1 liter of wort.
-   double const maxGravity_plato = 100.0 * allPossibleSugar_kg / this->m_expectedVolumeIntoFermentor_l;
+   double const maxGravity_plato = 100.0 * allPossibleSugar_kg / this->m_expectedVolumeIntoFv_l;
    double const measuredGravity_plato = 100.0 * Measurement::Units::plato.fromCanonical(this->m_measuredOriginalGravity_sg);
 
 
@@ -518,7 +518,7 @@ double BrewLog::calculateBrewHouseEff_pct() {
    //
    // The standard formula is:
    //
-   // Brewhouse efficiency (%) = [(OG – 1) × 1000 × volume into fermenter (litres)] ÷ [grain weight (kg) × maximum extract points per kg] × 100
+   // Brewhouse efficiency (%) = [(OG – 1) × 1000 × volume into fermentor (litres)] ÷ [grain weight (kg) × maximum extract points per kg] × 100
    //
    double const brewhouseEfficiency = measuredGravity_plato / maxGravity_plato;
 

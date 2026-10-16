@@ -153,7 +153,7 @@ public:
     *       elements, minimum and maximum, of the underlying type (eg GravityType for the members of GravityRangeType,
     *       BitternessType for the members of BitternessRangeType, etc).  This means we can treat it as two separate
     *       entries that differ by XPath (blah/minimum and blah/maximum).
-   *
+    *
     *       In dotBeer it's a similar story, but we drop the Smurf naming (Volume instead of VolumeType, RangeOfGravity
     *       instead of GravityRangeType etc.)
     *
@@ -193,11 +193,18 @@ public:
       //
       // === Other types start here ===
       //
-      // For now we treat Date as synonymous with the BeerJSON date type (DateType in measurable_units.json in the
-      // BeerJSON schema).  We'll wait to worry about doing something more generic until another JSON format comes
-      // along (if ever).
+      // Date
       //
       Date,
+      //
+      // Timestamp including timezone
+      //
+      DateTimeOffset,
+      //
+      // This is the BeerJSON "date" type (DateType in measurable_units.json in the BeerJSON schema), which is actually
+      // "either a date or a date and time, but without timezone".
+      //
+      DateOrDateTimeLocal,
       //
       // MeasurementWithUnits covers most cases where we need to convert between a value plus unit (used a lot in
       // BeerJSON) and our internal canonical (usually SI) units via a Measurement::Unit constant.
@@ -285,7 +292,8 @@ public:
     * This is used in \c ValueDecoder.  When we are writing a property that is a QString, there are certain
     * circumstances where we want either to sanitise the value or to suppress writing the field altogether.  For
     * instance, in BeerJSON, the \c style::style_letter field is allowed to be omitted, but is not allowed to be blank
-    * (or anything other than a single character that is either an upper case letter or a space).
+    * (or anything other than a single character that is either an upper case letter or a space).  In dotBeer, the rule
+    * for the \c style::style_letter field is even slightly more strict, in that we don't allow it to be a space.
     *
     * A \c StringOutputValidator function takes the field value and returns:
     *   - std::nullopt if the field should not be written at all

@@ -50,7 +50,7 @@ AddPropertyName(expectedOriginalGravity_sg   )
 AddPropertyName(expectedPreBoilGravity_sg    )
 AddPropertyName(expectedPreBoilVolume_l      )
 AddPropertyName(expectedStrikeTemp_c         )
-AddPropertyName(expectedVolumeIntoFermentor_l)
+AddPropertyName(expectedVolumeIntoFv_l)
 AddPropertyName(fermentDate                  )
 AddPropertyName(forecastOriginalGravity_sg   )
 AddPropertyName(measuredFinalGravity_sg      )
@@ -62,7 +62,7 @@ AddPropertyName(measuredPostBoilVolume_l     )
 AddPropertyName(measuredPreBoilGravity_sg    )
 AddPropertyName(measuredPreBoilVolume_l      )
 AddPropertyName(measuredStrikeTemp_c         )
-AddPropertyName(measuredVolumeIntoFermentor_l)
+AddPropertyName(measuredVolumeIntoFv_l)
 AddPropertyName(notes                        )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -92,13 +92,13 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
-   static QString localisedName_expectedBoilOff_l                    ();
+   static QString localisedName_expectedBoilOff_l            ();
    static QString localisedName_brewDate                     ();
-   static QString localisedName_computedAlcoholByVolume_pct              ();
+   static QString localisedName_computedAlcoholByVolume_pct  ();
    static QString localisedName_computedAttenuation_pct      ();
    static QString localisedName_computedEfficiency_pct       ();
    static QString localisedName_computedPreBoilEfficiency_pct();
-   static QString localisedName_expectedAlcoholByVolume_pct              ();
+   static QString localisedName_expectedAlcoholByVolume_pct  ();
    static QString localisedName_expectedAttenuation_pct      ();
    static QString localisedName_expectedEfficiency_pct       ();
    static QString localisedName_expectedFinalGravity_sg      ();
@@ -107,7 +107,7 @@ public:
    static QString localisedName_expectedPreBoilGravity_sg    ();
    static QString localisedName_expectedPreBoilVolume_l      ();
    static QString localisedName_expectedStrikeTemp_c         ();
-   static QString localisedName_expectedVolumeIntoFermentor_l();
+   static QString localisedName_expectedVolumeIntoFv_l       ();
    static QString localisedName_fermentDate                  ();
    static QString localisedName_forecastOriginalGravity_sg   ();
    static QString localisedName_measuredFinalGravity_sg      ();
@@ -119,7 +119,7 @@ public:
    static QString localisedName_measuredPreBoilGravity_sg    ();
    static QString localisedName_measuredPreBoilVolume_l      ();
    static QString localisedName_measuredStrikeTemp_c         ();
-   static QString localisedName_measuredVolumeIntoFermentor_l();
+   static QString localisedName_measuredVolumeIntoFv_l       ();
    static QString localisedName_notes                        ();
    static QString localisedName_projFermPoints               ();
 
@@ -194,9 +194,9 @@ public:
    //! Actual (measured) volume of wort in kettle after boil
    Q_PROPERTY(double  measuredPostBoilVolume_l        READ measuredPostBoilVolume_l        WRITE setMeasuredPostBoilVolume_l     )
    //! Expected (planned) volume of wort into fermentor
-   Q_PROPERTY(double  expectedVolumeIntoFermentor_l   READ expectedVolumeIntoFermentor_l   WRITE setExpectedVolumeIntoFermentor_l)
+   Q_PROPERTY(double  expectedVolumeIntoFv_l   READ expectedVolumeIntoFv_l   WRITE setExpectedVolumeIntoFv_l)
    //! Actual (measured) volume of wort into fermentor
-   Q_PROPERTY(double  measuredVolumeIntoFermentor_l   READ measuredVolumeIntoFermentor_l   WRITE setMeasuredVolumeIntoFermentor_l)
+   Q_PROPERTY(double  measuredVolumeIntoFv_l   READ measuredVolumeIntoFv_l   WRITE setMeasuredVolumeIntoFv_l)
    // TBD: Do we need expectedPitchTemp_c ?
    //! Actual (measured) temperature of wort when yeast is pitched
    Q_PROPERTY(double  measuredPitchTemp_c             READ measuredPitchTemp_c             WRITE setMeasuredPitchTemp_c          )
@@ -249,7 +249,7 @@ public:
    double  measuredMashFinalTemp_c      () const;
    double  measuredOriginalGravity_sg   () const;
    double  measuredPostBoilVolume_l     () const;
-   double  measuredVolumeIntoFermentor_l() const;
+   double  measuredVolumeIntoFv_l() const;
    double  measuredPitchTemp_c          () const;
    double  measuredFinalGravity_sg      () const;
    double  measuredFinalVolume_l        () const;
@@ -261,7 +261,7 @@ public:
    double  expectedMashFinalTemp_c      () const;
    double  expectedOriginalGravity_sg   () const;
    double  forecastOriginalGravity_sg   () const;
-   double  expectedVolumeIntoFermentor_l() const;
+   double  expectedVolumeIntoFv_l() const;
    double  expectedFinalGravity_sg      () const;
    double  expectedEfficiency_pct       () const;
    double  expectedAlcoholByVolume_pct  () const;
@@ -281,7 +281,7 @@ public:
    void setMeasuredMashFinalTemp_c      (double var);
    void setMeasuredOriginalGravity_sg   (double var);
    void setMeasuredPostBoilVolume_l     (double var);
-   void setMeasuredVolumeIntoFermentor_l(double var);
+   void setMeasuredVolumeIntoFv_l(double var);
    void setMeasuredPitchTemp_c          (double var);
    void setMeasuredFinalGravity_sg      (double var);
    void setMeasuredFinalVolume_l        (double var);
@@ -292,7 +292,7 @@ public:
    void setExpectedMashFinalTemp_c      (double var);
    void setExpectedOriginalGravity_sg   (double var);
    void setForecastOriginalGravity_sg   (double var);
-   void setExpectedVolumeIntoFermentor_l(double var);
+   void setExpectedVolumeIntoFv_l(double var);
    void setExpectedFinalGravity_sg      (double var);
    void setExpectedEfficiency_pct       (double var);
    void setExpectedAlcoholByVolume_pct  (double var);
@@ -344,7 +344,7 @@ private:
    double  m_measuredMashFinalTemp_c       = 0.0;
    double  m_measuredOriginalGravity_sg    = 0.0;
    double  m_measuredPostBoilVolume_l      = 0.0;
-   double  m_measuredVolumeIntoFermentor_l = 0.0;
+   double  m_measuredVolumeIntoFv_l = 0.0;
    double  m_measuredPitchTemp_c           = 0.0;
    double  m_measuredFinalGravity_sg       = 0.0;
    double  m_computedAttenuation_pct       = 0.0;
@@ -356,7 +356,7 @@ private:
    double  m_expectedMashFinalTemp_c       = 0.0;
    double  m_expectedOriginalGravity_sg    = 0.0;
    double  m_forecastOriginalGravity_sg    = 0.0;
-   double  m_expectedVolumeIntoFermentor_l = 0.0;
+   double  m_expectedVolumeIntoFv_l = 0.0;
    double  m_expectedFinalGravity_sg       = 0.0;
    double  m_expectedEfficiency_pct        = 0.0;
    double  m_expectedAlcoholByVolume_pct   = 0.0;

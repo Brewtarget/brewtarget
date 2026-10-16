@@ -186,10 +186,11 @@ public:
     *        counted forwards for Mash, Fermentation and Packaging (though I can't personally think of a time when I
     *        needed to add something to the Mash other than at the start).
     *
-    *        (If we were designing a new system from scratch, we might make this a signed field and have positive values
+    *        If we were starting again from scratch, we might make this a signed field and have positive values
     *        represent "time after start of the step" and negative ones represent "time before end of step", with
-    *        \c std::nullopt meaning "at the start of the step" and 0.0 meaning "at the end".  But I'm not sure the
-    *        world is ready for yet another beer recipe serialisation format.)
+    *        \c std::nullopt meaning "at the start of the step" and 0.0 meaning "at the end".  However, we have already
+    *        baked-in the logic for the BeerJSON approach, so I'm not sure that it's worth unpicking it just to have the
+    *        perfect internal representation.
     *
     */
    Q_PROPERTY(std::optional<double> addAtTime_mins   READ addAtTime_mins   WRITE setAddAtTime_mins)

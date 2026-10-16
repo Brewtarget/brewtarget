@@ -27,11 +27,11 @@
 
 COLUMN_INFOS(
    EquipmentTableModel,
-   TABLE_MODEL_HEADER(Equipment, Name            , PropertyNames::NamedEntity::name              ), // "Name"
-   TABLE_MODEL_HEADER(Equipment, MashTunVolume   , PropertyNames::Equipment::mashTunVolume_l     ), // "Mash Tun Volume"
-   TABLE_MODEL_HEADER(Equipment, KettleVolume    , PropertyNames::Equipment::kettleBoilSize_l    ), // "Kettle Volume"
-   TABLE_MODEL_HEADER(Equipment, FermenterVolume , PropertyNames::Equipment::fermenterBatchSize_l), // "Fermenter Volume"
-   TABLE_MODEL_HEADER(Equipment, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn  ), // "N° Recipes"
+   TABLE_MODEL_HEADER(Equipment, Name            , PropertyNames::NamedEntity::name            ), // "Name"
+   TABLE_MODEL_HEADER(Equipment, MashTunVolume   , PropertyNames::Equipment::mashTunVolume_l   ), // "Mash Tun Volume"
+   TABLE_MODEL_HEADER(Equipment, KettleVolume    , PropertyNames::Equipment::kettleBoilSize_l  ), // "Kettle Volume"
+   TABLE_MODEL_HEADER(Equipment, FermentorVolume , PropertyNames::Equipment::fvBatchSize_l     ), // "Fermentor Volume"
+   TABLE_MODEL_HEADER(Equipment, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
 )
 
 EquipmentTableModel::EquipmentTableModel(QTableView* parent, bool editable) :
