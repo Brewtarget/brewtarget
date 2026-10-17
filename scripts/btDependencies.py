@@ -481,9 +481,8 @@ def installDependencies():
          # version of it.
          #
          # We take the existence of an executable `uname` in the path as a pretty good indicator that we're in MSYS2
-         # or similar environment).  Then the result of running that should tell us if we're in the 32-bit version of
-         # MSYS2.  (See comment below on why we don't yet support the 64-bit version, though I'm sure we'll fix this one
-         # day.)
+         # or similar environment).  Then the result of running that should tell us what build environment we're in
+         # (which we can double-check against the MSYSTEM environment variable).
          #
          exe_uname = shutil.which('uname')
          if (exe_uname is None or exe_uname == ''):
@@ -493,7 +492,8 @@ def installDependencies():
          unameResult = str(
             btExecute.abortOnRunFail(subprocess.run([exe_uname, '-a'], encoding = "utf-8", capture_output = True)).stdout
          ).rstrip()
-         btLogger.log.debug('Running uname -a gives ' + unameResult)
+         msystem = os.getenv("MSYSTEM");
+         btLogger.log.debug('Running uname -a gives ' + unameResult + '; MSYSTEM env var holds ' + msystem)
          # Output from `uname -a` will be of the form
          #    UCRT64_NT-10.0-19044 Matt-Virt-Win 3.4.3.x86_64 2023-01-11 20:20 UTC x86_64 Msys
          # We just need the bit before the first underscore, eg
@@ -507,11 +507,7 @@ def installDependencies():
             #
             # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are
             # no longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
-            #
-            # As of August 2026, the MINGW64 environment (which targets the old Windows MSVCRT = Microsoft Visual C++
-            # Runtime Library) is deprecated and UCRT64 (which targets the newer Windows UCRT = Universal C Runtime)
-            # replaces it.
-            btLogger.log.critical('Running in ' + terminalVersion + ' but need to run in UCRT64 (ie 64-bit build environment)')
+            btLogger.log.critical('Running in ' + terminalVersion + ' (' + msystem + ') but need to run in UCRT64 (ie 64-bit build environment)')
             sys.exit(1)
 
          # Ensure pip is up-to-date.  This is what the error message tells you to run if it's not!
@@ -528,6 +524,10 @@ def installDependencies():
          #
          # Note that the rules for glob expansion are different when invoking a command from Python then when typing it
          # on the command line, hence why the overwrite parameter is '*python*' not '"*python*"'.
+         #
+         # As of August 2026, the MINGW64 environment (which targets the old Windows MSVCRT = Microsoft Visual C++
+         # Runtime Library) is deprecated and UCRT64 (which targets the newer Windows UCRT = Universal C Runtime)
+         # replaces it.
          #
          btLogger.log.info('Ensuring Python packaging is up-to-date')
 ###         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-ucrt-i686-python-packaging']))

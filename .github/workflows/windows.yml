@@ -72,7 +72,7 @@ jobs:
           #
           # As of late 2026, MINGW64 (which targets the older Windows runtime) is deprecated.  UCRT64 (which uses the
           # same toolchain but targets newer Windows runtime) replaces it.
-          { msystem: ucrt64, arch: x86_64 },
+          { msystem: UCRT64, arch: x86_64 },
         ]
     steps:
 
