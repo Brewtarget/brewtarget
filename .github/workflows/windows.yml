@@ -69,7 +69,10 @@ jobs:
           #
           # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are no
           # longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
-          { msystem: MINGW64, arch: x86_64 },
+          #
+          # As of late 2026, MINGW64 (which targets the older Windows runtime) is deprecated.  UCRT64 (which uses the
+          # same toolchain but targets newer Windows runtime) replaces it.
+          { msystem: UCRT64, arch: x86_64 },
         ]
     steps:
 

@@ -495,19 +495,23 @@ def installDependencies():
          ).rstrip()
          btLogger.log.debug('Running uname -a gives ' + unameResult)
          # Output from `uname -a` will be of the form
-         #    MINGW64_NT-10.0-19044 Matt-Virt-Win 3.4.3.x86_64 2023-01-11 20:20 UTC x86_64 Msys
+         #    UCRT64_NT-10.0-19044 Matt-Virt-Win 3.4.3.x86_64 2023-01-11 20:20 UTC x86_64 Msys
          # We just need the bit before the first underscore, eg
-         #    MINGW64
+         #    UCRT64
          terminalVersion = unameResult.split(sep='_', maxsplit=1)[0]
 
-         if (terminalVersion != 'MINGW64'):
+         if (terminalVersion != 'UCRT64'):
             # In the past, we built only 32-bit packages (i686 architecture) on Windows because of problems getting
             # 64-bit versions of NSIS plugins to work.  However, we now invoke NSIS without plugins, so the 64-bit build
             # seems to be working.
             #
             # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are
             # no longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
-            btLogger.log.critical('Running in ' + terminalVersion + ' but need to run in MINGW64 (ie 64-bit build environment)')
+            #
+            # As of August 2026, the MINGW64 environment (which targets the old Windows MSVCRT = Microsoft Visual C++
+            # Runtime Library) is deprecated and UCRT64 (which targets the newer Windows UCRT = Universal C Runtime)
+            # replaces it.
+            btLogger.log.critical('Running in ' + terminalVersion + ' but need to run in UCRT64 (ie 64-bit build environment)')
             sys.exit(1)
 
          # Ensure pip is up-to-date.  This is what the error message tells you to run if it's not!
