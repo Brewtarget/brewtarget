@@ -481,8 +481,10 @@ def installDependencies():
          # version of it.
          #
          # We take the existence of an executable `uname` in the path as a pretty good indicator that we're in MSYS2
-         # or similar environment).  Then the result of running that should tell us what build environment we're in
-         # (which we can double-check against the MSYSTEM environment variable).
+         # or similar environment).
+         #
+         # In the past, we took the output of `uname -a` as a means of determining which version of MSYS2 we're in, but
+         # the MSYSTEM environment variable is a more reliable source of this information.
          #
          exe_uname = shutil.which('uname')
          if (exe_uname is None or exe_uname == ''):
@@ -493,21 +495,22 @@ def installDependencies():
             btExecute.abortOnRunFail(subprocess.run([exe_uname, '-a'], encoding = "utf-8", capture_output = True)).stdout
          ).rstrip()
          msystem = os.getenv("MSYSTEM");
-         btLogger.log.debug('Running uname -a gives ' + unameResult + '; MSYSTEM env var holds ' + msystem)
-         # Output from `uname -a` will be of the form
-         #    UCRT64_NT-10.0-19044 Matt-Virt-Win 3.4.3.x86_64 2023-01-11 20:20 UTC x86_64 Msys
-         # We just need the bit before the first underscore, eg
-         #    UCRT64
-         terminalVersion = unameResult.split(sep='_', maxsplit=1)[0]
+         mingwPrefix = os.getenv("MINGW_PREFIX");
+         btLogger.log.debug('Running uname -a gives ' + unameResult + '; MSYSTEM = ' + msystem + '; MINGW_PREFIX = ' + mingwPrefix)
+###         # Output from `uname -a` will be of the form
+###         #    UCRT64_NT-10.0-19044 Matt-Virt-Win 3.4.3.x86_64 2023-01-11 20:20 UTC x86_64 Msys
+###         # We just need the bit before the first underscore, eg
+###         #    UCRT64
+###         terminalVersion = unameResult.split(sep='_', maxsplit=1)[0]
 
-         if (terminalVersion != 'UCRT64'):
+         if (msystem != 'UCRT64'):
             # In the past, we built only 32-bit packages (i686 architecture) on Windows because of problems getting
             # 64-bit versions of NSIS plugins to work.  However, we now invoke NSIS without plugins, so the 64-bit build
             # seems to be working.
             #
             # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are
             # no longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
-            btLogger.log.critical('Running in ' + terminalVersion + ' (' + msystem + ') but need to run in UCRT64 (ie 64-bit build environment)')
+            btLogger.log.critical('Running in ' + msystem + ' (' + terminalVersion + ') but need to run in UCRT64')
             sys.exit(1)
 
          # Ensure pip is up-to-date.  This is what the error message tells you to run if it's not!
