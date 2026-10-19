@@ -500,16 +500,16 @@ public:
       // This is a bit more work to implement because it's a PNG image in a QLabel object
       //
       qDebug() <<
-         Q_FUNC_INFO << "Logo default size:" << this->m_self.label_Brewken->width() << "×" <<
-         this->m_self.label_Brewken->height();
-      this->m_self.label_Brewken->setScaledContents(true);
-      this->m_self.label_Brewken->setFixedSize(
+         Q_FUNC_INFO << "Logo default size:" << this->m_self.label_Brewtarget->width() << "×" <<
+         this->m_self.label_Brewtarget->height();
+      this->m_self.label_Brewtarget->setScaledContents(true);
+      this->m_self.label_Brewtarget->setFixedSize(
          static_cast<int>((265.0/66.0) * dpiX/2),  // width = 265/66 × height = 265/66 × half an inch = (265/66) × (dpiX/2)
          dpiY/2                                    // height = half an inch = dpiY/2
       );
       qDebug() <<
-         Q_FUNC_INFO << "Logo new size:" << this->m_self.label_Brewken->width() << "×" <<
-         this->m_self.label_Brewken->height();
+         Q_FUNC_INFO << "Logo new size:" << this->m_self.label_Brewtarget->width() << "×" <<
+         this->m_self.label_Brewtarget->height();
 
       return;
    }
