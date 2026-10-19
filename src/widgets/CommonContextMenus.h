@@ -279,9 +279,11 @@ public:
 
          if constexpr (std::same_as<NE, Recipe>) {
             // You cannot delete a locked recipe
-            this->m_action_delete.setEnabled(selected.numPrimary >= 1 && !selected.firstPrimary->locked());
+            this->m_action_delete.setEnabled((selected.numPrimary >= 1 && !selected.firstPrimary->locked()) ||
+                                             selected.numFolders >= 1);
          } else {
-            this->m_action_delete.setEnabled(selected.numPrimary >= 1);
+            this->m_action_delete.setEnabled(selected.numPrimary >= 1 ||
+                                             selected.numFolders >= 1);
          }
 
          //
@@ -465,6 +467,8 @@ public:
    }
 
    /**
+    * TODO: Currently this is only called from CatalogBase::doDeleteSelected().  We should have
+    *       TreeViewBase::doDeleteSelected() and TreeViewBase::doDeleteItems() use this function too.
     *
     * @param items
     */
@@ -474,6 +478,13 @@ public:
       auto confirmDelete = QMessageBox::NoButton;
 
       for (auto const & item : items) {
+         if constexpr (std::same_as<NE, Recipe>) {
+            // You cannot delete a locked recipe
+            if  (item->locked()) {
+               continue;
+            }
+         }
+
          //
          // If someone tries to delete something that's used in one or more Recipes then we just say it's not allowed.
          // (The alternative would be to check that they are sure and then run through every Recipe removing the item

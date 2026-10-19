@@ -16,17 +16,19 @@
   // NB: We reserve plurals for where multiple elements are required.  Thus, "Hop" and "Fermentable" are singular
   //     (because they are classifiers) but "hops" and "fermentables" are plural (because they are lists of things).
   //
+  //     Similarly, CamelCase is for types (eg FolderPath) and snake_case is for properties (eg folder_path).  We make
+  //     one minor exception to the latter for pH, the measure of acidity, because IMHO it improves readability to write
+  //     beer_pH, start_pH, end_pH etc rather than beer_ph, start_ph, end_ph.
+  //
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/DotBeer.beer.schema",
+  //
+  // This is not a "real" URL.  The "directory" above the filename is the version of the dotBeer schema.
+  // Versions prior to 1.0.0 are subject to breaking changes!
+  //
+  "$id": "https://dotbeer.org/schema/0.9.0/DotBeer.beer.schema",
   "type": "object",
   "title": "DotBeer File Format",
   "description": "A free and open serialisation format for beer recipes, ingredients and related data",
-  //
-  // Version of this schema.
-  // Versions prior to 1.0.0 are subject to breaking changes!
-  //
-  "Version": "0.6.0",
-  //
   "properties": {
     //
     // Having a root element such as this is not strictly necessary, but it is useful to provide context, showing that
@@ -36,6 +38,10 @@
       "type": "object",
       "description": "Root element of all DotBeer documents.  Most of the Primary Types (ie ones that have their own schema file) are referred to here.  Various Component Types (ie smaller types used for composition) are defined in the \"$defs\" sections of most of the schema files (apart from this one).",
       "properties": {
+        "$schema": {
+          "description": "It is not required or expected to include this field in a dotBeer file.  However, some tools such as VS Code make use of it for syntax highlighting and autocorrect, so we allow it to be set.  If it is present, the most sensible value for it to have is \"https://json-schema.org/draft/2020-12/schema\" (ie the same as the dotBeer schema files).",
+          "type":"string"
+        },
         "version": {
           "description": "DotBeer schema version used to create the file.",
           "$ref": "#/$defs/VersionNumber"
@@ -46,7 +52,7 @@
         },
         "timestamp": {
           "description": "Date and time file was created.",
-          "$ref": "Measurement.beer.schema#/$defs/Date"
+          "$ref": "Measurement.beer.schema#/$defs/DateTime"
         },
         // Ingredients
         "hops": {
@@ -65,7 +71,7 @@
         },
         "miscs": {
           "type": "array",
-          "description": "Records for ingredients that area not hops, fermentables or cultures.  Variously known as \"miscellaneous ingredients\", \"non-fermentable adjuncts\", \"other ingredients\", or \"adjuncts that do not contribute to the gravity of the beer\".",
+          "description": "Records for ingredients that are not hops, fermentables or cultures.  Variously known as \"miscellaneous ingredients\", \"non-fermentable adjuncts\", \"other ingredients\", or \"adjuncts that do not contribute to the gravity of the beer\".",
           "items": {
             "$ref": "Misc.beer.schema"
           }
@@ -170,14 +176,12 @@
       // Bar schemas.  If we do, evaluation against Foo will fail because of the presence of Bar's properties, and
       // evaluation against Bar will fail because of the presence of Foo's properties.
       //
-      "unevaluatedProperties": false,
-      "additionalProperties": false
+      "unevaluatedProperties": false
     }
   },
   "required": [
     "DotBeer"
   ],
-  "additionalProperties": false,
   "unevaluatedProperties": false,
   "$defs": {
     //
@@ -191,17 +195,34 @@
       // The regular expression here is a bit convoluted so that it allows leading slashes but not trailing ones (other
       // then the trivial case of "/").
       //
-      "pattern": "^[/]?([^/]+([/][^/]+)*)?$"
+      "pattern": "^[/]?([^/]+([/][^/]+)*)?$",
+      //
+      // Although it isn't intended that a FolderPath ever be translated to a filesystem path, it feels like best
+      // practice to protect any future importer that does map folder paths onto a real filesystem.  We therefore
+      // prohibit a segment that is exactly "." or "..", so that a filesystem-mapping importer is not tricked into
+      // writing outside the intended folder.  (Names that merely contain dots, eg "...", ".hidden" or "a..b", are
+      // fine.)
+      //
+      "not": {
+        "pattern": "(^|[/])[.]{1,2}([/]|$)"
+      }
     },
     "LocalId": {
       "type": "string",
-      "description": "A string that, within a dotBeer file, uniquely identifies something (eg hop, fermentable, style, mash) that is used in a recipe in that same file.  Thus, for example, if each hop in the file defines its own local ID, then, for the hop additions in any recipe in the same file, it suffices to use the relevant local ID to identify the hop being added.\n\nNo two items in a single file should have the same local ID, even if they are of different types.  (This is to make reading files simpler, as a single look-up map can be used for all different types.)  The string has no meaning in any wider scope: it is a cross-reference rather than a true attribute.  Local IDs simplify the structure of dotBeer and help reduce repetition within the files.\n\nThe JSON Schema cannot validate that local IDs are correct - merely that they adhere to a particular format.  Implementing programs should therefore validate that (a) all defined local IDs in a file are unique in that file, (b) all referred-to local IDs are defined elsewhere in the file, and (c) any referred-to local ID is for an object of the relevant type (eg the local ID for the style of a recipe must be that of a style).",
-      "pattern": "[A-Za-z0-9_]+"
+      "description": "A string that, within a dotBeer file, uniquely identifies something (eg hop, fermentable, style, mash) that is used in a recipe in that same file.  Thus, for example, if each hop in the file defines its own local ID, then, for the hop additions in any recipe in the same file, it suffices to use the relevant local ID to identify the hop being added.\n\nNo two items in a single file should have the same local ID, even if they are of different types.  (This is to make reading files simpler, as a single look-up map can be used for all different types.)  The string has no meaning in any wider scope: it is a cross-reference rather than a true attribute.  Local IDs simplify the structure of dotBeer and help reduce repetition within the files.\n\nThe JSON Schema cannot validate that local IDs are correct - merely that they adhere to a particular format.  Implementing programs should therefore validate that (a) all defined local IDs in a file are unique in that file, (b) all referred-to local IDs are defined elsewhere in the file, and (c) any referred-to local ID is for an object of the relevant type (eg the local ID for the style of a recipe must be that of a style).\n\nNOTE: If you are merging two or more dotBeer files, you will first need to ensure that there are no Local ID clashes in them.",
+      "pattern": "^[A-Za-z0-9_]+$"
     },
     "VersionNumber": {
       "type": "string",
       "description": "We use semantic versioning, which encodes a version by a three-part version number (Major.Minor.Patch)",
-      "pattern": "\\d+[.]\\d+[.]\\d+"
+      //
+      // As elsewhere, we use [0-9] rather than \\d here because, in Python at least, it matches Eastern Arabic numerals
+      // such as '٣' and '٩' (see https://en.wikipedia.org/wiki/Eastern_Arabic_numerals).
+      //
+      // Also, the regexp here leans towards simplicity rather than completeness.  Eg it allows 1.00000002.03, which
+      // isn't something you'd ever use in practice.
+      //
+      "pattern": "^[0-9]+[.][0-9]+[.][0-9]+$"
     }
   }
 }

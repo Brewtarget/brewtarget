@@ -225,7 +225,7 @@ bool NamedEntity::operator!=(NamedEntity const & other) const {
 std::strong_ordering NamedEntity::operator<=>(NamedEntity const & other) const {
    // The spaceship operator is not defined for two QString objects, but it is defined for a pair of std::u16string,
    // which is close to the same thing (in that QString stores "a string of 16-bit QChars, where each QChar corresponds
-   // to one UTF-16 code unit".
+   // to one UTF-16 code unit").
 #ifdef __clang__
    // As of 2023-09-01 Apple Clang is version 14 and does not support operator <=> on std::u16string
    return this->m_name.data() <=> other.m_name.data();

@@ -69,7 +69,10 @@ jobs:
           #
           # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are no
           # longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
-          { msystem: MINGW64, arch: x86_64 },
+          #
+          # As of late 2026, MINGW64 (which targets the older Windows runtime) is deprecated.  UCRT64 (which uses the
+          # same toolchain but targets newer Windows runtime) replaces it.
+          { msystem: UCRT64, arch: x86_64 },
         ]
     steps:
 
@@ -107,8 +110,8 @@ jobs:
         with:
           msystem: ${{ matrix.msystem }}
           install: >-
-            mingw-w64-${{ matrix.arch }}-python
-            mingw-w64-${{ matrix.arch }}-python-pip
+            mingw-w64-ucrt-${{ matrix.arch }}-python
+            mingw-w64-ucrt-${{ matrix.arch }}-python-pip
             tree
           update: true
           release: true
@@ -123,7 +126,7 @@ jobs:
       #
       #  - For historical reasons, Linux and other platforms need to run both Python v2 (still used by some bits of
       #    system) and Python v3 (eg that you installed yourself) so there are usually two corresponding Python
-      #    executables, python2 and python3.  On Windows there is only whatever Python you installed and it's called
+      #    executables, python2 and python3.  On Windows there is only whatever Python you installed, and it's called
       #    python.exe.  To keep the shebang in the bt script working, we just make a softlink to python called python3.
       #
       #  - Getting Unicode input/output to work is fun.  We should already have a Unicode locale, but it seems we also
@@ -178,13 +181,6 @@ jobs:
           Expand-Archive -Path C:/_/build/nsis/Nsislog.zip -DestinationPath C:/_/build/nsis/Nsislog
           Tree /f C:/_/build
 
-###      # The configure script does default set-up for CMake that is enough for us here
-###      - name: CMake Config
-###        shell: msys2 {0}
-###        run: |
-###          cd /C/_
-###          ./configure
-
       - name: Build (with Meson)
         shell: msys2 {0}
         run: |
@@ -206,7 +202,7 @@ jobs:
           ls
 
       # The 'export QT_DEBUG_PLUGINS=1' give us diagnostics in the event that there are problems initialising QT
-      # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb sub-module trying to connect to a non-existent display
+      # The 'export QT_QPA_PLATFORM=offscreen' stops Qt's xcb submodule trying to connect to a non-existent display
       # (which would cause the test runner to abort before running any tests).
       - name: Test (via Meson)
         shell: msys2 {0}

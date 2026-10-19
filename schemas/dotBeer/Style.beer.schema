@@ -13,7 +13,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/Style.beer.schema",
+  "$id": "https://dotbeer.org/schema/0.9.0/Style.beer.schema",
   "type": "object",
   "description": "A beer style may be from the BJCP style guide, Australian, UK or local style guides.  Generally a recipe is designed to one style.",
   "properties": {
@@ -26,15 +26,17 @@
       "type": "string"
     },
     "category_number": {
-      "description": "Number or identifier associated with this style category. For example in the BJCP style guide, the “American Lager” category has a category number of “1”.",
-      "type": "integer"
+      "description": "Number or identifier associated with this style category. For example in the BJCP style guide, the “American Lager” category has a category number of “1”.  Despite the name, this needs to be a string rather than, say, an integer, because it can contain letters.  Eg BJCP mead and cider categories are M1–M4 and C1–C2.",
+      "type": "string"
     },
     "style_letter": {
+      // In contrast with BeerJSON, we do not allow the style letter to be a space.  If no style letter is set, this
+      // field should simply be omitted.
       "description": "The specific subcategory letter associated with this particular style. For example in the BJCP style guide, an American Standard Lager would be style letter “A” under the main category.  Letters should be upper case.",
       "type": "string",
       "maxLength": 1,
       "minLength": 1,
-      "pattern": "[A-Z ]"
+      "pattern": "[A-Z]"
     },
     "style_guide": {
       "description": "The name of the style guide that this particular style or category belongs to. For example “BJCP” might denote the BJCP style guide, and “AHA” would be used for the AHA style guide.",
@@ -68,7 +70,15 @@
       "description": "The range of acceptable final gravity for the style.",
       "$ref": "Measurement.beer.schema#/$defs/RangeOfGravity"
     },
-    "international_bitterness_units": {
+    //
+    // Strictly speaking IBUs (international bitterness units) are not what is being measured by the units used to do
+    // so.  However, IBU is the only widely-used unit, and it is common parlance amongst brewers to talk about the IBU
+    // of a beer rather than bitterness.  (Eg the BJCP guidelines’ Vital Statistics list “IBUs” alongside OG, FG, SRM
+    // and ABV.)  In any case, the "strictly-correct" name would not be "bitterness" or even "perceived_bitterness", as
+    // what is actually measured is iso-alpha acid content.  And you almost never hear brewers saying "Would you say
+    // that's within the iso-alpha acid content range for this style?" :)
+    //
+    "ibu": {
       "description": "The range of bitterness for this style.",
       "$ref": "Measurement.beer.schema#/$defs/RangeOfBitterness"
     },
@@ -82,7 +92,7 @@
     },
     "alcohol_by_volume": {
       "description": "The range of alcohol by volume for this beer style.",
-      "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentage"
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentageSimple"
     },
     "notes": {
       "description": "Description of the style, history",

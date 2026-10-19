@@ -15,11 +15,10 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/Misc.beer.schema",
-  "type": "object",
   // I have oscillated between `Misc` and `MiscIngredient` for this.  The latter is "better" in terms of being more
   // descriptive, but both brevity and consistency with Brewtarget/Brewken push us towards the former.
-  "title": "Misc",
+  "$id": "https://dotbeer.org/schema/0.9.0/Misc.beer.schema",
+  "type": "object",
   "description": "Miscellaneous ingredients that are not hops, fermentables, yeasts/cultures or water.  Some people would call these \"non-fermentable adjuncts\", but there are also narrower definitions of \"adjunct\", so we do not use that term.  Also often referred to as \"other ingredients\", but we already use \"other\" in a lot of classifications, so we prefer \"miscellaneous\" as abbreviated to \"misc\".",
   "properties": {
     "name": {
@@ -52,7 +51,7 @@
       ]
     },
     "water_agent_type": {
-      "description": "Should only be set if `misc_type` is `water agent`.<br>`calcium chloride` = CaCl₂<br>`calcium carbonate` = CaCO₃<br>`calcium sulfate` = CaSO₄<br>`magnesium sulfate` = MgSO₄<br>`sodium chloride` = NaCl  aka \"regular\" salt<br>`sodium bicarbonate` = NaHCO₃<br>`lactic acid` = CH₃CH(OH)CO₂H (extended formula) = C₃H₆O₃ (regular formula)<br>`phosphoric acid` = H₃PO₄<br>`other` = none of the above",
+      "description": "Must be set if and only if `misc_type` is `water agent`.<br>`calcium chloride` = CaCl₂<br>`calcium carbonate` = CaCO₃<br>`calcium sulfate` = CaSO₄<br>`magnesium sulfate` = MgSO₄<br>`sodium chloride` = NaCl  aka \"regular\" salt<br>`sodium bicarbonate` = NaHCO₃<br>`lactic acid` = CH₃CH(OH)CO₂H (extended formula) = C₃H₆O₃ (regular formula)<br>`phosphoric acid` = H₃PO₄<br>`other` = none of the above",
       "enum": [
         "calcium chloride",
         "calcium carbonate",
@@ -63,11 +62,38 @@
         "lactic acid",
         "phosphoric acid",
         "other"
+        //
+        // TBD: Consider in future adding some of the following:
+        //
+        //    citric acid : Citric acid (C₆H₈O₇) is a weak polyprotic organic acid, prominent in citrus fruits.  This
+        //                  acid adds fruity or estery qualities, with a flavor threshold of around 150ppm in beer.  In
+        //                  the past, citric acid was used for mash pH adjustment.  It has fallen out of favor for this
+        //                  purpose because the flavor is detectable, especially since beer may already contain citric
+        //                  acid, and so any addition may push the level over the flavor threshold.
+        //
+        //    sulfuric acid : Eg sulphuric acid 25% is available as a ready for use food grade acid to reduce alkalinity
+        //                    and to increase desirable ions in product waters.  It is especially used in the brewing
+        //                    industry as a liquor treatment.  (See
+        //                    https://www.murphyandson.co.uk/wp-content/uploads/2020/07/Sulphuric-Acid-Rev-3.pdf.)
+        //
+        //    hydrochloric acid : Hydrochloric acid is not commonly used in home brewing.  Nonetheless, you can use it
+        //                        to replace lactic or phosphoric acid to lower the pH of your mash.
+        //                        If your source water is low in chloride, hydrochloric acid is the easiest modifier to
+        //                        find and use.
+        //                        In brewing, the concentration of the solution being used should be 0.1 M
+        //
+        //    calcium hydroxide : Calcium hydroxide Ca(OH)₂, also called slaked lime, is a strong base that can be used
+        //                        to increase mash pH.  Generally, sodium bicarbonate (baking soda) is preferred for the
+        //                        purpose of pH adjustment because it is less hazardous and equally effective.
+        //
+        //    magnesium chloride : Magnesium chloride (hexahydrate MgCl₂•6H₂O) is a salt that can be used to increase
+        //                         the magnesium level of the brewing water or the wort.
+        //
       ]
     },
     "water_agent_percent_acid": {
-      "description": "Should only be set if `misc_type` is `water agent`.",
-      "$ref": "Measurement.beer.schema#/$defs/Percentage"
+      "description": "Should only be set if `misc_type` is `water agent` and `water_agent_type` is `lactic acid`, `phosphoric acid` or `other`.",
+      "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "use_for": {
       "description": "Used to describe the purpose of the miscellaneous ingredient, e.g. whirlfloc is used for clarity.",
@@ -84,6 +110,43 @@
     "name",
     "misc_type"
   ],
+  //
+  // See https://json-schema.org/understanding-json-schema/reference/conditionals#dependentSchemas for how the
+  // "dependentSchemas" keyword works.  Essentially, it allows us to enforce that `water_agent_type` and
+  // `water_agent_percent_acid` only be set if `misc_type` is `water agent`, and additionally that
+  // `water_agent_percent_acid` only be set if `water_agent_type` is an acid (or `other`).
+  //
+  "dependentSchemas": {
+    "water_agent_type"        : {
+      "properties": { "misc_type": { "const": "water agent" } }
+    },
+    "water_agent_percent_acid": {
+      "properties": {
+        "misc_type":        { "const": "water agent" },
+        "water_agent_type": { "enum": ["lactic acid", "phosphoric acid", "other"] }
+      },
+      //
+      // As with if/then, `properties` only checks keys that are present, so we need `required` here to stop
+      // `water_agent_percent_acid` being accepted when `water_agent_type` is absent.
+      //
+      "required": ["water_agent_type"]
+    }
+  },
+  //
+  // For `water_agent_type`, we have a stronger requirement, that it _must_ be set if `misc_type` is "water agent".
+  // This if/then enforces that.
+  //
+  "if": {
+    //
+    // Strictly, we don't need "required" here as `misc_type` is already required above.  However, it's idiomatic to use
+    // it, as `properties` only checks keys that are present.
+    //
+    "properties": { "misc_type": { "const": "water agent" } },
+    "required": ["misc_type"]
+  },
+  "then": {
+    "required": ["water_agent_type"]
+  },
   "unevaluatedProperties": false,
   "$defs": {
     "MiscAmount" : {

@@ -330,15 +330,17 @@ public:
       QModelIndexList selectedModelIndexes;
       for (QItemSelectionRange const & range : this->derived().selectionModel()->selection()) {
          for (int row = range.top(); row <= range.bottom(); ++row) {
-            if (QModelIndex const viewIndex = range.model()->index(row, 0);
+            if (QModelIndex const viewIndex = range.model()->index(row, 0, range.parent());
                 viewIndex.isValid()) {
                if (QModelIndex const modelIndex = this->m_treeSortFilterProxy.mapToSource(viewIndex);
                    modelIndex.isValid()) {
+                  qDebug() << Q_FUNC_INFO << "¥¥¥ modelIndex" << modelIndex << "is selected";
                   selectedModelIndexes.append(modelIndex);
                }
             }
          }
       }
+
       return selectedModelIndexes;
    }
 
@@ -511,6 +513,16 @@ public:
          if (!treeNode->rawParent()) {
             // You can't delete the root element
             continue;
+         }
+
+         if constexpr (std::same_as<NE, Recipe>) {
+            // You cannot delete a locked recipe
+            if  (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
+               if (TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
+                   primaryTreeNode.underlyingItem()->locked()) {
+                  continue;
+               }
+            }
          }
 
          //

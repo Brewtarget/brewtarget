@@ -14,18 +14,19 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/Recipe.beer.schema",
+  "$id": "https://dotbeer.org/schema/0.9.0/Recipe.beer.schema",
   "type": "object",
   "description": "The information stored in a beer recipe.",
   "properties": {
     "name": {
       "type": "string"
     },
+    // NB: Recipes do not have a local ID, as there is currently nothing that cross-refers to a recipe
     "folder_path": {
       "description": "The suggested slash-delimited subfolder path in which to store this Recipe object.",
       "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
     },
-    "type": {
+    "recipe_type": {
       "enum": [
         "cider",
         "kombucha",
@@ -48,7 +49,7 @@
       "$ref": "Measurement.beer.schema#/$defs/Date"
     },
     "batch_size": {
-      "description": "The volume into the fermenter.",
+      "description": "The volume into the fermentation vessel.",
       "$ref": "Measurement.beer.schema#/$defs/Volume"
     },
     "efficiency": {
@@ -59,7 +60,7 @@
         // Brewken or Brewtarget.
         "brewhouse": {
           "description": "The percentage of sugar that makes it from the grain to the fermenter.",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+          "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         }
       },
       "required": [
@@ -77,7 +78,7 @@
     },
     "ingredients": {
       "type": "object",
-      "description": "All the recipe's ingredient additions.  Note that these lists are \"abbreviated\" versions of each ingredient, which saves on repetition when, eg, the same type of hop is added at more then one point.  If you are exporting one or more recipes, you should also export the full versions of their ingredients in the same file.",
+      "description": "All the recipe's ingredient additions.  Note that these lists are cross-references (via \"local IDs\") to ingredient definitions that must appear in the same file.  This saves on repetition when, eg, the same type of hop is added at more than one point.  If you are exporting one or more recipes, you must also export the full versions of their ingredients in the same file.",
       "properties": {
         "fermentable_additions": {
           "type": "array",
@@ -127,12 +128,12 @@
       "$ref": "DotBeer.beer.schema#/$defs/LocalId"
     },
     "ro_water_mash": {
-      "description": "Percentage of the mash water that is reverse-osmosis (rather than the same profile as `water_base`).  If this field is not present, a value of 0.0 may be assumed.",
-      "$ref": "Measurement.beer.schema#/$defs/Percentage"
+      "description": "Percentage of the mash water that is reverse-osmosis (rather than the same profile as `water_base_id`).  If this field is not present, a value of 0.0 may be assumed.",
+      "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "ro_water_sparge": {
-      "description": "Percentage of the sparge water that is reverse-osmosis (rather than the same profile as `water_base`).  If this field is not present, a value of 0.0 may be assumed.",
-      "$ref": "Measurement.beer.schema#/$defs/Percentage"
+      "description": "Percentage of the sparge water that is reverse-osmosis (rather than the same profile as `water_base_id`).  If this field is not present, a value of 0.0 may be assumed.",
+      "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "mash_id": {
       "description": "Local ID of the mash procedure used in this recipe.  (Obviously the mash in question must be in the \"mashes\" section of the same dotBeer file.)",
@@ -161,7 +162,7 @@
       "$ref": "Measurement.beer.schema#/$defs/Gravity"
     },
     "alcohol_by_volume": {
-      "$ref": "Measurement.beer.schema#/$defs/Percentage"
+      "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "ibu_estimate": {
       "description": "Estimated bitterness of finished beer.",
@@ -190,7 +191,7 @@
     },
     "apparent_attenuation": {
       "description": "The total apparent attenuation of the finished beer after fermentation.",
-      "$ref": "Measurement.beer.schema#/$defs/Percentage"
+      "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "taste": {
       "type": "object",
@@ -200,7 +201,35 @@
           "type": "string"
         },
         "rating": {
-          "type": "number"
+          //
+          // The 0-50 range follows BeerXML.  In BeerJSON, there is no constraint, but I don't know whether that is
+          // oversight or deliberate.
+          //
+          // The BJCP Beer Scoresheet divides the evaluation into five major areas, each scored on whole points:
+          //    - Aroma: 12 points
+          //    - Appearance: 3 points
+          //    - Flavor: 20 points
+          //    - Mouthfeel: 5 points
+          //    - Overall Impression: 10 points
+          // That adds up to a maximum possible score of 50 points.
+          //
+          // The scoresheet breaks the results into these general ranges:
+          //    - Outstanding: 45 to 50 – World-class example of style
+          //    - Excellent: 38 to 44 – Exemplifies style well and requires only minor fine-tuning
+          //    - Very Good: 30 to 37 – Generally within style parameters with some minor flaws
+          //    - Good: 21 to 29 – Misses the mark on style and/or has minor flaws
+          //    - Fair: 14 to 20 – Off flavors, aromas or major style deficiencies
+          //    - Problematic: 0 to 13 – Major off flavors and aromas dominate
+          //
+          // NB: The type here is deliberately `number` not `integer`.  Although an individual BJCP judge’s score is a
+          //     whole number, the score a brewer actually gets back is not necessarily an integer as some competitions
+          //     report the average of two or three judges’ scores.  Equally, a brewer who tastes a batch several times
+          //     might also want to record an average.
+          //
+          "description": "Number between zero and 50 denoting the taste rating – corresponds to the 50 point BJCP rating system.",
+          "type": "number",
+          "minimum":  0.0,
+          "maximum": 50.0
         }
       },
       "required": [
@@ -209,8 +238,18 @@
       ],
       "unevaluatedProperties": false
     },
-    "calories_per_us_pint": {
-      "type": "number"
+    "energy_content": {
+      // TBD: There is, in principle at least, more than one way to do this estimate.  But I don't know in practice
+      //      how many different approaches are used.
+      "description": "Estimate of the energy content of this beer (as used on nutritional labelling).  Typically calculated.",
+      "$ref": "Measurement.beer.schema#/$defs/EnergyPerVolume"
+    },
+    "instructions": {
+      "type": "array",
+      "description": "Records of individual instructions for this recipe",
+      "items": {
+        "$ref": "#/$defs/Instruction"
+      }
     },
     "brew_logs": {
       "type": "array",
@@ -222,7 +261,7 @@
   },
   "required": [
     "name",
-    "type",
+    "recipe_type",
     "author",
     "efficiency",
     "batch_size",
@@ -235,7 +274,14 @@
       "description": "This object fully describes when, and for how long, a recipe addition should be made, with options for basis on time, gravity, or pH at any process step.",
       "properties": {
         "time": {
-          "description": "What time during a process step is added, eg a value of 2 days for a dry hop addition would be added 2 days into the fermentation step.  NOTE that, for use::add_to_boil, this is time before the end of the step (or of the boil if no step is specified).  For other values of use, this is time after the start of the step (or of the process if no step is specified).",
+          "description": "What time during a process step is added, eg a value of 2 days for a dry hop addition would be added 2 days into the fermentation step.  NOTE that, for `stage::add_to_boil`, this is time before the end of the step (or of the boil if no step is specified).  For other values of use, this is time after the start of the step (or of the process if no step is specified).",
+          //
+          // We have chosen to follow BeerJSON here rather than reinvent the wheel, not least because it keeps things
+          // simpler in Brewtarget and Brewken.  An alternative approach would have been to have positive values
+          // represent "time after start of the step" and negative ones represent "time before end of step", probably
+          // necessitating [unset] meaning "at the start of the step" and 0.0 meaning "at the end".  This would arguably
+          // be cleaner if we were starting from scratch, but it doesn't otherwise buy us anything.
+          //
           "$ref": "Measurement.beer.schema#/$defs/Time"
         },
         "duration": {
@@ -244,18 +290,21 @@
         },
         // BeerJSON has "continuous" here, but we don't support this in Brewken or Brewtarget
         "specific_gravity": {
-          "description": "Used to indicate when an addition is added based on a desired specific gravity.  Eg Add dry hop at when SG is 1.018.",
+          "description": "Used (as an alternatie to `time`) to indicate when an addition is added based on a desired specific gravity.  Eg Add dry hop at when SG is 1.018.",
           "$ref": "Measurement.beer.schema#/$defs/Gravity"
         },
         "pH": {
-          "description": "Used to indicate when an addition is added based on a desired specific pH.  Eg Add brett when pH is 3.4.",
+          "description": "Used (as an alternatie to `time`) to indicate when an addition is added based on a desired specific pH.  Eg Add brett when pH is 3.4.",
           "$ref": "Measurement.beer.schema#/$defs/Acidity"
         },
         "step": {
-          "description": "Used to indicate what step this ingredient timing addition is referencing.  Eg A value of 2 for add_to_fermentation would mean to add during the second fermentation step.",
-          "type": "integer"
+          "description": "Used to indicate what step this ingredient timing addition is referencing.  Steps are numbered from 1.  Eg A value of 2 for add_to_fermentation would mean to add during the second fermentation step.",
+          "type": "integer",
+          "minimum" : 1
         },
-        "use": {
+        "stage": {
+          // In BeerJSON, this is called "use", but I think that's for historical reasons -- eg that it replaces the
+          // USE field on HOP in BeerXML.  Anyway, "stage" is somewhat clearer IMHO.
           "description": "Differentiates the specific process type when this ingredient addition is used.",
           "enum": [
             "add_to_mash",
@@ -264,6 +313,21 @@
             "add_to_package"
           ]
         }
+      },
+      "required": [
+        "stage"
+      ],
+      //
+      // `time`, `specific_gravity` and `pH` are alternative ways of saying when the addition is made, so at most one of
+      // them may be set.  (It's fine to set none of them -- eg to add something at the start of a step.)  We express
+      // this as "not (any two of them are present)".
+      //
+      "not": {
+        "anyOf": [
+          { "required": ["time"            , "specific_gravity"] },
+          { "required": ["time"            , "pH"              ] },
+          { "required": ["specific_gravity", "pH"              ] }
+        ]
       },
       "unevaluatedProperties": false
     },
@@ -276,17 +340,20 @@
           "$ref": "DotBeer.beer.schema#/$defs/LocalId"
         },
         "attenuation": {
-          "description": "The expected, or measured apparent attenuation for a given culture in a given recipe. In comparison to attenuation range, this is a single value.",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+          "description": "The expected, or measured apparent attenuation for a given culture in a given recipe.  In comparison to attenuation range, this is a single value.",
+          "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "times_cultured": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "schedule": {
           "$ref": "#/$defs/AdditionSchedule"
         },
         "cell_count_billions": {
-          "type": "integer"
+          // TODO: We don't yet support this!
+          "type": "number",
+          "minimum": 0
         },
         "amount": {
           "$ref": "Culture.beer.schema#/$defs/CultureAmount"
@@ -364,9 +431,32 @@
       ],
       "unevaluatedProperties": false
     },
+    "Instruction": {
+      "type": "object",
+      "description": "Descriptive instruction for what to do at a particular point in a recipe.",
+      "properties": {
+        "name": {
+          "description": "This is the title of the instruction, eg \"Step 2: Heat water\".",
+          "type": "string"
+        },
+        "directions": {
+          "description": "Detail of what to do at this step, eg \"Bring 11.5 L of water to 68.0°C for upcoming infusions\".",
+          "type": "string"
+        },
+        "duration": {
+          "description": "Where the instruction involves adding something to the boil or holding the mash at a particular temperature, this field tells you how long that should be for.  Eg, if the instruction is \"Add 11.5 L water at 68.0 °C to mash to bring it to 68.0 °C. Hold for 50 min.\" then this field would be `{\"unit\":\"min\",\"value\":50}`.",
+          "$ref": "Measurement.beer.schema#/$defs/Time"
+        }
+      },
+      "required": [
+        "name",
+        "directions"
+      ],
+      "unevaluatedProperties": false
+    },
     "BrewLog": {
       "type": "object",
-      "description": "Record of a \"brewday\", ie of an individual brew of a recipe.  Note that:<br> • Fields beginning with \"expected_\" are values taken rom the Recipe (either directly or by calculation)<br> • Fields beginning with \"measured_\" are supplied by the brewer for this batch -- eg measured OG and FG<br> • Fields beginning with \"computed_\" are derived from values supplied by the brewer -- eg ABV calculated from measured OG and FG<br>Strictly speaking, \"expected_\" and \"computed_\" fields are not needed because they can be derived from other information.  However, we include them because (a) a recipe might have been modified after a brewday and (b) some calculations (eg alcohol by volume) might be done differently by different programs.",
+      "description": "Record of a \"brewday\", ie of an individual brew of a recipe.  Note that:<br> • Fields beginning with \"expected_\" are values taken from the Recipe (either directly or by calculation)<br> • Fields beginning with \"measured_\" are supplied by the brewer for this batch -- eg measured OG and FG<br> • Fields beginning with \"computed_\" are derived from values supplied by the brewer -- eg ABV calculated from measured OG and FG<br>Strictly speaking, \"expected_\" and \"computed_\" fields are not needed because they can be derived from other information.  However, we include them because (a) a recipe might have been modified after a brewday and (b) some calculations (eg alcohol by volume) might be done differently by different programs.",
       "properties": {
         "batch_number": {
           "description": "The brewer's own unique identifier for this brew.  It can contain numbers and/or letters and/or symbols, so, \"number\" might seem a bit of a misnomer; nonetheless, it is the standard term for such an identifying code.",
@@ -383,11 +473,11 @@
         "notes": {
           "type": "string"
         },
-        "expected_pre_boil_gravity_sg": {
+        "expected_pre_boil_gravity": {
           "description": "Expected (planned) pre-boil specific gravity",
           "$ref": "Measurement.beer.schema#/$defs/Gravity"
         },
-        "measured_pre_boil_gravity_sg": {
+        "measured_pre_boil_gravity": {
           "description": "Actual (measured) pre-boil specific gravity",
           "$ref": "Measurement.beer.schema#/$defs/Gravity"
         },
@@ -407,11 +497,11 @@
           "description" : "Actual (measured) strike water temperature (ie water temperature immediately prior to adding grains at mash start)",
           "$ref": "Measurement.beer.schema#/$defs/Temperature"
         },
-        "expected_mash_final_temp_c" : {
+        "expected_mash_final_temperature" : {
           "description": "Expected (planned) final mash temperature (before any mash out)",
           "$ref": "Measurement.beer.schema#/$defs/Temperature"
         },
-        "measured_mash_final_temp_c" : {
+        "measured_mash_final_temperature" : {
           "description": "Actual (measured) final mash temperature (before any mash out)",
           "$ref": "Measurement.beer.schema#/$defs/Temperature"
         },
@@ -427,12 +517,12 @@
           "description" : "Actual (measured) volume of wort in kettle after boil",
           "$ref": "Measurement.beer.schema#/$defs/Volume"
         },
-        "expected_volume_into_fermentor": {
-          "description" : "Expected (planned) volume of wort into fermentor",
+        "expected_volume_into_fv": {
+          "description" : "Expected (planned) volume of wort into fermentation vessel",
           "$ref": "Measurement.beer.schema#/$defs/Volume"
         },
-        "measured_volume_into_fermentor": {
-          "description" : "Actual (measured) volume of wort into fermentor",
+        "measured_volume_into_fermentation_vessel": {
+          "description" : "Actual (measured) volume of wort into fermentation vessel",
           "$ref": "Measurement.beer.schema#/$defs/Volume"
         },
         "measured_pitch_temperature": {
@@ -453,31 +543,31 @@
         },
         "expected_alcohol_by_volume": {
           "description" : "Expected alcohol by volume based on the recipe OG",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+          "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "computed_alcohol_by_volume": {
           "description" : "Actual alcohol by volume based on \"original\" and \"final\" gravity readings",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+          "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "expected_attenuation": {
           "description" : "Expected attenuation from the recipe",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+          "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "computed_attenuation": {
           "description" : "Actual attenuation based on gravity readings",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+          "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "expected_efficiency": {
           "description" : "Expected brewhouse (ie overall) efficiency from the Recipe, capturing the combined impact of mash conversion, lautering, kettle losses, and transfer",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+          "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "computed_efficiency": {
           "description" : "Actual brewhouse (ie overall) efficiency based on gravity readings",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+          "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "computed_pre_boil_efficiency": {
           "description" : "Actual pre-boil (aka \"into boil kettle\") efficiency, measuring the percentage of total available sugars that made it into the kettle",
-          "$ref": "Measurement.beer.schema#/$defs/Percentage"
+          "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "expected_boil_off": {
           "description" : "Expected boil-off based on the equipment profile and the length of the boil",
@@ -487,10 +577,10 @@
       "required": [
         "batch_number",
         "brew_date",
-        "expected_pre_boil_gravity_sg",
-        "expected_mash_final_temp_c",
+        "expected_pre_boil_gravity",
+        "expected_mash_final_temperature",
         "expected_original_gravity",
-        "expected_volume_into_fermentor",
+        "expected_volume_into_fv",
         "expected_final_gravity",
         "expected_alcohol_by_volume",
         "expected_attenuation",

@@ -34,7 +34,7 @@ class Recipe;
 COLUMN_NAMES(EquipmentTableModel, Name            ,
                                   MashTunVolume   ,
                                   KettleVolume    ,
-                                  FermenterVolume ,
+                                  FermentorVolume ,
                                   NumRecipesUsedIn,)
 
 /*!

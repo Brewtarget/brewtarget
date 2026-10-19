@@ -444,29 +444,27 @@ QString BrewDayScrollWidget::buildInstructionTable() {
 
    auto instructions = this->m_recObs->m_instructions.items();
    auto mashSteps = this->m_recObs->mash()->mashSteps();
-   int size = instructions.size();
-   for (int i = 0; i < size; ++i ) {
+   for (int ii = 0; ii < instructions.size(); ++ii ) {
 
-      auto ins = instructions[i];
+      auto instruction = instructions[ii];
 
       QString stepTime;
-      if (ins->interval_mins() > 0.0 ) {
-         stepTime = Measurement::displayAmount(Measurement::Amount{ins->interval_mins(), Measurement::Units::minutes}, 0);
+      if (instruction->interval_mins() > 0.0 ) {
+         stepTime = Measurement::displayAmount(Measurement::Amount{instruction->interval_mins(), Measurement::Units::minutes}, 0);
       } else {
          stepTime = "--";
       }
 
       QString tmp = "";
 
-      // TODO: comparing ins->name() with these untranslated strings means this
-      // doesn't work in other languages. Find a better way.
+      // TODO: Comparing ins->name() here is a bit fragile.
       QList<QString> reagents;
-      if ( ins->name() == tr("Add grains") ) {
-         reagents = this->m_recObs->getReagents( this->m_recObs->fermentableAdditions() );
-      } else if ( ins->name() == tr("Heat water") ) {
-         reagents = this->m_recObs->getReagents( this->m_recObs->mash()->mashSteps() );
+      if ( instruction->name() == tr("Add grains") ) {
+         reagents = this->m_recObs->getFermentableAdditionNameAndAmounts();
+      } else if ( instruction->name() == tr("Heat water") ) {
+         reagents = this->m_recObs->getMashHeatingSteps();
       } else {
-         reagents = ins->reagents();
+         reagents = instruction->reagents();
       }
 
       if ( reagents.size() > 1 ) {
@@ -479,15 +477,15 @@ QString BrewDayScrollWidget::buildInstructionTable() {
       } else if ( reagents.size() == 1 ) {
          tmp = reagents.at(0);
       } else {
-         tmp = ins->directions();
+         tmp = instruction->directions();
       }
 
-      QString altTag = i % 2 ? "alt" : "norm";
+      QString altTag = ii % 2 ? "alt" : "norm";
 
       middle += QString("<tr class=\"%1\"><td class=\"check\"></td><td class=\"time\">%2</td><td align=\"step\">%3 : %4</td></tr>")
                .arg(altTag)
                .arg(stepTime)
-               .arg(ins->name())
+               .arg(instruction->name())
                .arg(tmp);
    }
    middle += "</table>";
@@ -506,7 +504,7 @@ QString BrewDayScrollWidget::buildFooterTable() {
          .arg(tr("PostBoil Gravity"));
 
    bottom += QString("<tr><td class=\"left\">%1:</td><td class=\"value\"></tr>")
-         .arg(tr("Volume into fermenter"));
+         .arg(tr("Volume into fermentor"));
    bottom += "</table>";
 
    return bottom;

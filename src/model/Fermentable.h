@@ -393,7 +393,7 @@ public:
    Q_PROPERTY(std::optional<double> hardnessPrpMealy_pct    READ hardnessPrpMealy_pct    WRITE setHardnessPrpMealy_pct  )
 
    /**
-    * \brief Percentage of grain that is "plump". The percentage of grain that masses through sieves with gaps of 7/64″
+    * \brief Percentage of grain that is "plump". The percentage of grain retained on sieves with gaps of 7/64″
     *        and 6/64″, desired values of 80% or higher which indicate plump kernels.
     *
     *        From https://byo.com/article/understanding-malt-spec-sheets-advanced-brewing/:
@@ -515,7 +515,7 @@ public:
    Q_PROPERTY(std::optional<double> betaGlucan_ppm   READ betaGlucan_ppm   WRITE setBetaGlucan_ppm)
 
    /**
-    * \brief For aciduated malts (aka acid malts), this is the percentage content by weight of lactic acid (which is
+    * \brief For acidulated malts (aka acid malts), this is the percentage content by weight of lactic acid (which is
     *        usually what provides the acidity).  You might think that maltsters would be keen to give you this figure,
     *        but they often prefer to say things such as "1% of this malt in the grain bill reduces the mash pH by
     *        approximately 0.1", which is less helpful.  According to https://www.brunwater.com/water-knowledge, "The

@@ -1350,7 +1350,8 @@ filesToInstall_data = files([
    'data/DefaultContent001-OriginalDefaultData.xml',
    'data/DefaultContent002-BJCP_2021_Styles.json',
    'data/DefaultContent003-Ingredients-Hops-Yeasts.json',
-   'data/DefaultContent004-MoreYeasts.json'
+   'data/DefaultContent004-MoreYeasts.json',
+   'data/DefaultContent005-Fermentables-Recipes.beer',
 ])
 
 filesToInstall_icons = files([

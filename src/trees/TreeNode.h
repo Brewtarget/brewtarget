@@ -172,8 +172,8 @@ private:
 //! \brief Convenience function for logging
 template<class S> S & operator<<(S & stream, TreeNode const & treeNode) {
    stream <<
-      treeNode.className() << "TreeNode (" << treeNode.classifier() << " #" << treeNode.underlyingItemKey() << "): " <<
-      treeNode.name() << " (" << treeNode.childCount() << " children)";
+      QString{"%1Tree"}.arg(treeNode.className()) << "" << treeNode.classifier() << "Node #" <<
+      treeNode.underlyingItemKey() << ": " << treeNode.name() << " (" << treeNode.childCount() << " children)";
    return stream;
 }
 template<class S> S & operator<<(S & stream, TreeNode const * treeNode) {

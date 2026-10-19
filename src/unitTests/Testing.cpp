@@ -455,7 +455,7 @@ void Testing::initTestCase() {
       this->pimpl->m_equipFiveGalNoLoss = std::make_shared<Equipment>();
       this->pimpl->m_equipFiveGalNoLoss->setName("5 gal No Loss");
       this->pimpl->m_equipFiveGalNoLoss->setKettleBoilSize_l(24.0);
-      this->pimpl->m_equipFiveGalNoLoss->setFermenterBatchSize_l(20.0);
+      this->pimpl->m_equipFiveGalNoLoss->setFvBatchSize_l(20.0);
       this->pimpl->m_equipFiveGalNoLoss->setMashTunVolume_l(40.0);
       this->pimpl->m_equipFiveGalNoLoss->setTopUpWater_l(0);
       this->pimpl->m_equipFiveGalNoLoss->setKettleTrubChillerLoss_l(0);
@@ -495,7 +495,7 @@ void Testing::recipeCalcTest_allGrain() {
    auto rec = std::make_shared<Recipe>("TestRecipe");
 
    // Basic recipe parameters
-   rec->setBatchSize_l(this->pimpl->m_equipFiveGalNoLoss->fermenterBatchSize_l());
+   rec->setBatchSize_l(this->pimpl->m_equipFiveGalNoLoss->fvBatchSize_l());
    rec->nonOptBoil()->setPreBoilSize_l(this->pimpl->m_equipFiveGalNoLoss->kettleBoilSize_l());
    rec->setEfficiency_pct(70.0);
 
@@ -596,11 +596,11 @@ void Testing::postBoilLossOgTest() {
    eLoss->setKettleBoilSize_l(this->pimpl->m_equipFiveGalNoLoss->kettleBoilSize_l() + eLoss->kettleTrubChillerLoss_l());
 
    // Basic recipe parameters
-   recNoLoss->setBatchSize_l(this->pimpl->m_equipFiveGalNoLoss->fermenterBatchSize_l());
+   recNoLoss->setBatchSize_l(this->pimpl->m_equipFiveGalNoLoss->fvBatchSize_l());
    recNoLoss->nonOptBoil()->setPreBoilSize_l(this->pimpl->m_equipFiveGalNoLoss->kettleBoilSize_l());
    recNoLoss->setEfficiency_pct(70.0);
 
-   recLoss->setBatchSize_l(eLoss->fermenterBatchSize_l() - eLoss->kettleTrubChillerLoss_l()); // Adjust for trub losses
+   recLoss->setBatchSize_l(eLoss->fvBatchSize_l() - eLoss->kettleTrubChillerLoss_l()); // Adjust for trub losses
    recLoss->nonOptBoil()->setPreBoilSize_l(eLoss->kettleBoilSize_l() - eLoss->kettleTrubChillerLoss_l());
    recLoss->setEfficiency_pct(70.0);
 

@@ -30,6 +30,8 @@ namespace {
       {JsonRecordDefinition::FieldType::Record                    , QObject::tr("Record"                        )},
       {JsonRecordDefinition::FieldType::ListOfRecords             , QObject::tr("List-Of-Records"               )},
       {JsonRecordDefinition::FieldType::Date                      , QObject::tr("Date"                          )},
+      {JsonRecordDefinition::FieldType::DateTimeOffset            , QObject::tr("Date-Time-With-Timezone"       )},
+      {JsonRecordDefinition::FieldType::DateOrDateTimeLocal       , QObject::tr("Date-or-Date-Time-Local"       )},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , QObject::tr("Measurement-With-Units"        )},
       {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, QObject::tr("One-Of-Measurements-With-Units")},
       {JsonRecordDefinition::FieldType::SingleUnitValue           , QObject::tr("Single-Unit-Value"             )},

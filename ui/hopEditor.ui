@@ -665,7 +665,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Pinene %</string>
+          <string>α-Pinene %</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_pinene</cstring>
@@ -681,7 +681,7 @@
           </sizepolicy>
          </property>
          <property name="toolTip">
-          <string>Pinene</string>
+          <string>α-Pinene</string>
          </property>
         </widget>
        </item>

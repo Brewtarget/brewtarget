@@ -36,7 +36,8 @@ AddPropertyName(sequenceNumber)
 
 
 /**
- * \brief This CRTP base class provides "step-like" behaviour to classes that inherit from it.
+ * \brief This CRTP base class provides "step-like" behaviour to classes that inherit from it.  Step numbers start from
+ *        1.
  *
  *        For various reasons, including because it's the term used in BeerXML and BeerJSON, when we talk about a
  *        "step", we usually mean a \c MashStep, \c BoilStep or \c FermentationStep.  We use \c Step and \c StepBase to

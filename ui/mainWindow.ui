@@ -523,6 +523,9 @@
                       <property name="title">
                        <string>Batch Size</string>
                       </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeft</set>
+                      </property>
                       <layout class="QHBoxLayout" name="horizontalLayout_batchSize">
                        <item>
                         <widget class="SmartLabel" name="label_targetBatchSize">

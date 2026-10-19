@@ -3076,7 +3076,7 @@ namespace {
          // the type names for water agents (previously salts).
          //
          // Strictly speaking, we should move anything of type "AcidulatedMalt" into the Fermentables table rather than
-         // the Misc one.  However, this might create as many problems as it solves.  An aciduated malt in the Salt
+         // the Misc one.  However, this might create as many problems as it solves.  An acidulated malt in the Salt
          // table would not have counted towards the grain bill and so would already have needed a duplicate entry in
          // the Fermentable table.  So, in this instance, we'll leave it to the user to make corrective modifications
          // after this migration.
@@ -3333,6 +3333,17 @@ namespace {
          // descriptive name.
          {QString("ALTER TABLE hop RENAME COLUMN hsi TO sixMonthAlphaLoss_pct")},
 
+         //
+         // Per comments in Equipment.beer.schema, some authors argue that the vessel where fermentation happens should
+         // be referred to as a "fermentor", with the word "fermenter" reserved for the organism (such as yeast) that
+         // performs the fermentation.  In reality, the use of "fermenter" for the fermentation vessel is widespread,
+         // and it's rare to refer to yeast etc as a "fermenter".  So, although "fermentor" is more "correct" it's also
+         // potentially a source of errors and confusion.  So we sidestep the issue by using fermentaiton vessel and FV.
+         //
+         {QString("ALTER TABLE equipment RENAME COLUMN fermenter_batch_size_l TO fv_batch_size_l")},
+         {QString("ALTER TABLE equipment RENAME COLUMN fermenter_type         TO fv_type"        )},
+         {QString("ALTER TABLE equipment RENAME COLUMN fermenter_loss_l       TO fv_loss_l"      )},
+         {QString("ALTER TABLE equipment RENAME COLUMN fermenter_notes        TO fv_notes"       )},
       };
 
       return executeSqlQueries(q, migrationQueries);

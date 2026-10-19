@@ -481,9 +481,10 @@ def installDependencies():
          # version of it.
          #
          # We take the existence of an executable `uname` in the path as a pretty good indicator that we're in MSYS2
-         # or similar environment).  Then the result of running that should tell us if we're in the 32-bit version of
-         # MSYS2.  (See comment below on why we don't yet support the 64-bit version, though I'm sure we'll fix this one
-         # day.)
+         # or similar environment).
+         #
+         # In the past, we took the output of `uname -a` as a means of determining which version of MSYS2 we're in, but
+         # the MSYSTEM environment variable is a more reliable source of this information.
          #
          exe_uname = shutil.which('uname')
          if (exe_uname is None or exe_uname == ''):
@@ -493,21 +494,23 @@ def installDependencies():
          unameResult = str(
             btExecute.abortOnRunFail(subprocess.run([exe_uname, '-a'], encoding = "utf-8", capture_output = True)).stdout
          ).rstrip()
-         btLogger.log.debug('Running uname -a gives ' + unameResult)
-         # Output from `uname -a` will be of the form
-         #    MINGW64_NT-10.0-19044 Matt-Virt-Win 3.4.3.x86_64 2023-01-11 20:20 UTC x86_64 Msys
-         # We just need the bit before the first underscore, eg
-         #    MINGW64
-         terminalVersion = unameResult.split(sep='_', maxsplit=1)[0]
+         msystem = os.getenv("MSYSTEM");
+         mingwPrefix = os.getenv("MINGW_PREFIX");
+         btLogger.log.debug('Running uname -a gives ' + unameResult + '; MSYSTEM = ' + msystem + '; MINGW_PREFIX = ' + mingwPrefix)
+###         # Output from `uname -a` will be of the form
+###         #    UCRT64_NT-10.0-19044 Matt-Virt-Win 3.4.3.x86_64 2023-01-11 20:20 UTC x86_64 Msys
+###         # We just need the bit before the first underscore, eg
+###         #    UCRT64
+###         terminalVersion = unameResult.split(sep='_', maxsplit=1)[0]
 
-         if (terminalVersion != 'MINGW64'):
+         if (msystem != 'UCRT64'):
             # In the past, we built only 32-bit packages (i686 architecture) on Windows because of problems getting
             # 64-bit versions of NSIS plugins to work.  However, we now invoke NSIS without plugins, so the 64-bit build
             # seems to be working.
             #
             # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are
             # no longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
-            btLogger.log.critical('Running in ' + terminalVersion + ' but need to run in MINGW64 (ie 64-bit build environment)')
+            btLogger.log.critical('Running in ' + msystem + ' (' + terminalVersion + ') but need to run in UCRT64')
             sys.exit(1)
 
          # Ensure pip is up-to-date.  This is what the error message tells you to run if it's not!
@@ -520,14 +523,18 @@ def installDependencies():
          # bunch of Python packaging files unless we force Pacman to overwrite them.  This is somewhat less of a hack
          # than specifying --overwrite globally.
          #
-         # We have to do both 32-bit and 64-bit versions of Python here to be certain.
+###         # We have to do both 32-bit and 64-bit versions of Python here to be certain.
          #
          # Note that the rules for glob expansion are different when invoking a command from Python then when typing it
          # on the command line, hence why the overwrite parameter is '*python*' not '"*python*"'.
          #
+         # As of August 2026, the MINGW64 environment (which targets the old Windows MSVCRT = Microsoft Visual C++
+         # Runtime Library) is deprecated and UCRT64 (which targets the newer Windows UCRT = Universal C Runtime)
+         # replaces it.
+         #
          btLogger.log.info('Ensuring Python packaging is up-to-date')
-         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-i686-python-packaging']))
-         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-x86_64-python-packaging']))
+###         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-ucrt-i686-python-packaging']))
+         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-ucrt-x86_64-python-packaging']))
 
          #
          # Before we install packages, we want to make sure the MSYS2 installation itself is up-to-date, otherwise you
@@ -571,6 +578,9 @@ def installDependencies():
          #                  in Qt 6 (see https://doc.qt.io/qt-6/windows-deployment.html vs
          #                  https://doc.qt.io/qt-5/windows-deployment.html).
          #
+         # 2026-10-16: Switch from MINGW64 to UCRT64.  Latter uses the newer Windows runtime, and support for the former
+         #             is going away.  TLDR: Instead of installing mingw-w64-x86_64-foobar, we install mingw-w64-ucrt-x86_64-foobar
+         #
          arch = 'x86_64'
          installList = ['base-devel',
                         'cmake',
@@ -578,29 +588,29 @@ def installDependencies():
                         'doxygen',
                         'gcc',
                         'git',
-                        'mingw-w64-' + arch + '-boost',
-                        'mingw-w64-' + arch + '-cmake',
-                        'mingw-w64-' + arch + '-clang-libs', # Needed for lupdate
-                        'mingw-w64-' + arch + '-libbacktrace',
-                        'mingw-w64-' + arch + '-meson',
-                        'mingw-w64-' + arch + '-nsis',
-                        'mingw-w64-' + arch + '-freetype',
-                        'mingw-w64-' + arch + '-harfbuzz',
-                        'mingw-w64-' + arch + '-librsvg', # Possibly needed to include in packaging for SVG display
-                        'mingw-w64-' + arch + '-openssl', # OpenSSL headers and library
-                        'mingw-w64-' + arch + '-qt6-base',
-                        'mingw-w64-' + arch + '-qt6-declarative', # Also needed for lupdate?
-                        'mingw-w64-' + arch + '-qt6-multimedia',
-#                        'mingw-w64-' + arch + '-qt6-static', # No longer available (or needed?)
-                        'mingw-w64-' + arch + '-qt6-svg',
-                        'mingw-w64-' + arch + '-qt6-tools',
-                        'mingw-w64-' + arch + '-qt6-translations',
-                        'mingw-w64-' + arch + '-qt6',
-                        'mingw-w64-' + arch + '-toolchain',
-                        'mingw-w64-' + arch + '-libxml2',
-#                        'mingw-w64-' + arch + '-7zip', # To unzip NSIS plugins
-                        'mingw-w64-' + arch + '-angleproject', # See comment above
-                        'mingw-w64-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
+                        'meson',
+                        'mingw-w64-ucrt-' + arch + '-boost',
+                        'mingw-w64-ucrt-' + arch + '-cmake',
+                        'mingw-w64-ucrt-' + arch + '-clang-libs', # Needed for lupdate
+                        'mingw-w64-ucrt-' + arch + '-libbacktrace',
+                        'mingw-w64-ucrt-' + arch + '-meson',
+                        'mingw-w64-ucrt-' + arch + '-nsis',
+                        'mingw-w64-ucrt-' + arch + '-freetype',
+                        'mingw-w64-ucrt-' + arch + '-harfbuzz',
+                        'mingw-w64-ucrt-' + arch + '-librsvg', # Possibly needed to include in packaging for SVG display
+                        'mingw-w64-ucrt-' + arch + '-openssl', # OpenSSL headers and library
+                        'mingw-w64-ucrt-' + arch + '-qt6-base',
+                        'mingw-w64-ucrt-' + arch + '-qt6-declarative', # Also needed for lupdate?
+                        'mingw-w64-ucrt-' + arch + '-qt6-multimedia',
+                        'mingw-w64-ucrt-' + arch + '-qt6-static',
+                        'mingw-w64-ucrt-' + arch + '-qt6-svg',
+                        'mingw-w64-ucrt-' + arch + '-qt6-tools',
+                        'mingw-w64-ucrt-' + arch + '-qt6-translations',
+                        'mingw-w64-ucrt-' + arch + '-qt6',
+                        'mingw-w64-ucrt-' + arch + '-toolchain',
+                        'mingw-w64-ucrt-' + arch + '-libxml2',
+                        'mingw-w64-ucrt-' + arch + '-angleproject', # See comment above
+                        'mingw-w64-ucrt-' + arch + '-ntldd', # Dependency tool useful for running manually -- see below
                         ]
          for packageToInstall in installList:
             btLogger.log.debug('Installing ' + packageToInstall)

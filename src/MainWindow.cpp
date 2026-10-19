@@ -503,8 +503,10 @@ public:
          Q_FUNC_INFO << "Logo default size:" << this->m_self.label_Brewtarget->width() << "×" <<
          this->m_self.label_Brewtarget->height();
       this->m_self.label_Brewtarget->setScaledContents(true);
-      this->m_self.label_Brewtarget->setFixedSize((265.0/66.0) * dpiX/2,  // width = 265/66 × height = 265/66 × half an inch = (265/66) × (dpiX/2)
-                                               dpiY/2);                // height = half an inch = dpiY/2
+      this->m_self.label_Brewtarget->setFixedSize(
+         static_cast<int>((265.0/66.0) * dpiX/2),  // width = 265/66 × height = 265/66 × half an inch = (265/66) × (dpiX/2)
+         dpiY/2                                    // height = half an inch = dpiY/2
+      );
       qDebug() <<
          Q_FUNC_INFO << "Logo new size:" << this->m_self.label_Brewtarget->width() << "×" <<
          this->m_self.label_Brewtarget->height();
@@ -1825,7 +1827,7 @@ void MainWindow::droppedRecipeEquipment(Equipment * kitRaw) {
       // won't ever be seen by the user, but there's no harm in setting them.
       // (The previous call here to this->pimpl->m_mashEditor->setRecipe() was a roundabout way of calling setTunWeight_kg() and
       // setMashTunSpecificHeat_calGC() on the mash.)
-      new SimpleUndoableUpdate(*this->pimpl->m_recipeObs, TYPE_INFO(Recipe, batchSize_l), kit->fermenterBatchSize_l(), tr("Change Batch Size"), equipmentUpdate);
+      new SimpleUndoableUpdate(*this->pimpl->m_recipeObs, TYPE_INFO(Recipe, batchSize_l), kit->fvBatchSize_l(), tr("Change Batch Size"), equipmentUpdate);
 
       auto const boil = this->pimpl->m_recipeObs->nonOptBoil();
       new SimpleUndoableUpdate(*boil, TYPE_INFO(Boil, preBoilSize_l), kit->kettleBoilSize_l(), tr("Change Boil Size"), equipmentUpdate);
@@ -2142,7 +2144,7 @@ std::shared_ptr<Recipe>  MainWindow::newRecipe() {
       // I really want to do this before we've written the object to the
       // database
       if (auto const equipment = ObjectStoreWrapper::getById<Equipment>(defEquipKey.toInt())) {
-         newRec->setBatchSize_l( equipment->fermenterBatchSize_l() );
+         newRec->setBatchSize_l( equipment->fvBatchSize_l() );
          newBoil->setPreBoilSize_l( equipment->kettleBoilSize_l() );
          newRec->setEquipment(equipment);
       }
