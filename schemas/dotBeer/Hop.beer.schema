@@ -1,5 +1,5 @@
 //======================================================================================================================
-// schema/Hop.beer.schema is part of DotBeer and is copyright the following authors 2018-2026:
+// schema/Hop.beer.schema is part of dotBeer and is copyright the following authors 2018-2026:
 //   • John Jenkman <45741477+johnjenkman@users.noreply.github.com>
 //   • Mark Price <shadowchao99@gmail.com>
 //   • Matt Young <mfsy@yahoo.com>
@@ -15,7 +15,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.9.0/Hop.beer.schema",
+  "$id": "https://dotbeer.org/schema/0.10.0/Hop.beer.schema",
   "type": "object",
   "description": "Full definition of a hop variety.",
   "properties": {
@@ -34,6 +34,7 @@
       "type": "string"
     },
     "product_id": {
+      "description": "Producer’s product code or number for this item.",
       "type": "string"
     },
     "origin": {
@@ -88,7 +89,7 @@
     },
     "six_month_alpha_loss": {
       //
-      // BeerXML calls this HSI for "Hop Stability Index" -- see eg
+      // BeerXML 1.0 calls this HSI for "Hop Stability Index" -- see eg
       // https://hopdoctor.co.uk/2024/12/02/understanding-the-hop-stability-index-key-for-smaller-scale-brewers/.
       //
       // However, we changed the name (a) because "Hop Stability Index" does not appear to be a massively widely
@@ -96,9 +97,9 @@
       // measured with a spectrophotometer (HSI = absorption at 275 nm divided by absorption at 325 nm, or
       // A275/A325).
       //
-      // In BeerJSON, this is called `percent_lost`.
+      // In BeerJSON (and draft BeerXML 2.01), this is called `percent_lost`.
       //
-      "description": "The percentage of hop alpha lost in 6 months of storage.\n\nNote that this is percentage and not percentage points.  So, eg, if a hop starts out with 4.0% `alpha_acid` and has 25% `six_month_alpha_loss`, then we would expect its alpha acid to be 3.0% after six months in storage.",
+      "description": "The percentage of hop alpha lost in 6 months of storage at room temperature (~20 °C).\n\nNote that this is percentage and not percentage points.  So, eg, if a hop starts out with 4.0% `alpha_acid` and has 25% `six_month_alpha_loss`, then we would expect its alpha acid to be 3.0% after six months in storage.",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "substitutes": {
@@ -106,7 +107,7 @@
       "description": "Alternate hop varieties that can be used in place of this hop variety"
     },
     "cohumulone": {
-      "description": "Cohumulone as a percentage of total hop alpha acids.  Per (English translation of) https://fr.wikipedia.org/wiki/Cohumulone: \"Cohumulone is one of the three hop-derived alpha acids that provide beer with most of its bitterness.  Some brewers believe that hop varieties with a high cohumulone content produce a harsher bitterness.  Cohumulone generally accounts for between 20% and 50% of a hop’s alpha acid content.  Cohumulone, like other known alpha acids (the main ones being humulone and adhumulone), is produced by the breakdown of lupulin (derived from hops).   However, it has greater polarity and better solubility in water than other alpha acids.  In water, its isomerization produces two compounds: cis-isocohumulone and trans-isocohumulone, which appear to impart a harsher bitterness than that of isohumulones.\"",
+      "description": "Cohumulone as a percentage of total hop alpha acids.\n\nCohumulone is one of the three main alpha acids (with humulone and adhumulone), and typically makes up 20–50% of a hop's alpha acids.  It is somewhat more soluble than the others and isomerises a little more readily during the boil.  A long-standing view among brewers is that high-cohumulone hops give a harsher bitterness, although the evidence for this is mixed.  (See eg https://en.wikipedia.org/wiki/Humulone.)",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "oil_content": {
@@ -117,12 +118,11 @@
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "xanthohumol": {
-      "description": "Xanthohumol as a percentage of hop mass.\n\nXanthohumol is a natural flavonoid found in the female inflorescences of hops.  Its impact on beer taste is not as significant that of alpha acids or essential oils, but it may contribute to the overall complexity and subtle nuances in beer flavors.  (Xanthohumol has also been the subject of considerable research for its potential health benefits, but typically in quantities far exceeding any amount that could be obtained by ordinary dietary intake.)",
+      "description": "Xanthohumol as a percentage of hop mass.\n\nXanthohumol is a natural flavonoid found in the female inflorescences of hops.  Its impact on beer taste is not as significant as that of alpha acids or essential oils, but it may contribute to the overall complexity and subtle nuances in beer flavors.  (Xanthohumol has also been the subject of considerable research for its potential health benefits, but typically in quantities far exceeding any amount that could be obtained by ordinary dietary intake.)",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
-    },
-    "inventory": {
-      "$ref": "#/$defs/HopAmount"
     }
+    // BeerJSON and BeerXML have `inventory` here, but we prefer to keep inventory separate and more detailed via
+    // StockPurchaseHop and StockUseHop
   },
   "required": [
     "name",
@@ -143,38 +143,39 @@
     },
     "OilContent": {
       "type": "object",
-      "description": "Collects all information of a hop variety pertaining to oil content, polyphenols, and thiols. Each individual compound is expressed as a percent of the total oil measurement.",
+      "description": "Collects all information of a hop variety pertaining to oil content.  With the exception of `total_oil_ml_per_100g`, each individual compound is expressed as a percent of the total oil measurement.  See https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/ for details on several of the oils.",
       "properties": {
         "total_oil_ml_per_100g": {
           "description": "The total amount of oil, including hydrocarbons, esters, and terpene alcohols in units of ml of oil per 100g of hop mass.",
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         },
         "myrcene": {
-          "description": "Myrcene as a percentage of total hop oil.\n\nBrad Smith writes \"This is the most significant hop oil, making up from 30-60% of total hop oils in most varieties. Myrcene is often described as the “fresh hop oil” and has flavors and aroma varying from herbaceous to resinous, green, balsamic, and slightly metallic.  It is a major component in many hop varieties from the Pacific Northwest, and is therefore a critical oil in IPAs.  Cascade, for example has a myrcene content of nearly 60%.  Myrcene has a low boiling point and is highly volatile.  In fact it will virtually disappear in most boil additions, and even tends to be volatile in higher temperature whirlpool/steeping additions.  It also oxidizes very rapidly, and is probably best used in dry hop applications.\"  (See https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)",
+          "description": "Myrcene as a percentage of total hop oil.\n\nUsually the largest component of hop oil, often 30–60% in aroma varieties, and particularly high in many Pacific Northwest hops such as Cascade.  It gives fresh, green, resinous and herbaceous aromas.  Being very volatile and quick to oxidise, little of it survives the boil, and some is lost even in a hot whirlpool, so it mainly contributes via late and dry-hop additions.",
           "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "humulene": {
-          "description": "Humulene as a percentage of total hop oil.\n\nBrad Smith writes \"The second largest hop oil by percentage, humulene makes up between 12% and 50% of total hop oils.  Humulene is responsible for earthy and spicy flavors found in traditional noble hops.  While humulene has a higher boiling point (around 106°C), it is very volatile and hydrophobic, so it is still best used in the whirlpool or dry hopping.  Humulene is also easily oxidized, though the oxidized humulene-epoxide III play a major role in the flavor of varieties like Hallertauer Mittelfrüh.\"  (See https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)",
+          "description": "Humulene as a percentage of total hop oil.\n\nTypically the second-largest component, at roughly 10–50% of total oil.  It gives woody, earthy and spicy aromas and is characteristic of traditional noble hops.  It is volatile and does not dissolve readily in wort, so is best used in the whirlpool or as a dry hop.  Its oxidation products (humulene epoxides) contribute to the aroma of aged noble hops such as Hallertauer Mittelfrüh.",
           "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "caryophyllene": {
-          "description": "Caryophyllene (more formally β-caryophyllene or BCP) as a percentage of total hop oil.\n\nBrad Smith writes \"Caryophyllene makes up between 6% and 15% of total hop oils in most varieties.  It is a major compound in many aromatic plants including cloves, cannabis, rosemary, and hops.  It is also a significant aromatic compound in black pepper.  The aroma is described as woody, earthy, and peppery though it also has a strong herbal component.  The spicy, woody aroma is often evident when you crush dried hops in your hands.  Many English hop varieties such as East Kent Goldings have the largest percentage of caryphyllene giving them a woody, earthy finish.  While not quite as volatile as myrcene, caryophyllene it will boil quickly and is best used in the whirlpool or as a dry hop.\"  (See https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)",
+          "description": "Caryophyllene (more formally β-caryophyllene) as a percentage of total hop oil.\n\nTypically 6–15% of total oil.  It gives woody, peppery, herbal and spicy aromas (it is also found in black pepper, cloves and rosemary), and is prominent in many English varieties such as East Kent Goldings.  It is less volatile than myrcene but still largely lost in the boil, so is best used late or as a dry hop.",
           "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "geraniol": {
-          "description": "Geraniol as a percentage of total hop oil.\n\nBrad Smith writes \"Geraniol is an aromatic oil with a floral, sweet or rose aroma found in many American, New Zealand and Australian hops.  It is used in rose oil, palmarosa oil, and citronella oil, and is a component of common spices like lavender, nutmeg, coriander, rose and blackberry.  Many brewers also will add hops with geraniol during the tail end of active fermentation to promote tropical and citrus fruit flavors.  Hops with high geraniol have become popular for creating tropical/fruity IPA styles.\"  (See https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)",
+          "description": "Geraniol as a percentage of total hop oil.\n\nA floral, rose-like compound found in many American, New Zealand and Australian varieties, and potent even in small amounts.  Yeast can convert some of it into citronellol during fermentation, adding citrus character, which is one reason geraniol-rich hops are popular for fruity, tropical IPAs, and why some brewers dry hop while fermentation is still active.",
           "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "linalool": {
-          "description": "Linalool as a percentage of total hop oil.\n\nBrad Smith writes \"Related closely to Myrcene chemically, linalool has a floral aroma that smells like rose, orange, citrus or lavender.  It is more soluble in wort than myrcene, and also has a lower flavor threshold so it can be potent despite the small fraction it makes up of total hop oils.  Like geraniol, linalool is associated with many of the tropical, floral and citrus flavors that are popular in fruity and tropical IPAs.\"  (See https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)",
+          "description": "Linalool as a percentage of total hop oil.\n\nGives floral, citrus and lavender-like aromas.  Although usually a small fraction of the oil, it is more soluble in wort than myrcene and has a low aroma threshold, so it can have a disproportionate effect on the finished beer.  Like geraniol, it is associated with the fruity, floral character of modern IPAs.",
           "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "farnesene": {
-          "description": "Farnesene as a percentage of total hop oil.\n\nBrad Smith writes \"Farnesene is a volatile hop oil that is loosely associated with certain noble hops like Saaz, but can make up 10-20% of total hop oils in other noble hops like Tettnanger, Styrian hops and many American varieties.  It has a woody, herbal, citrus aroma and sometimes also takes on a floral character.  Because it is very volatile, it is rarely found in the finished beer unless it has been dry hopped.  [It] is often associated with varieties that take on a noble hop character, so if you see a hop high in Farnesene it likely has the aroma profile similar to many noble hops.\"  (See https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)",
+          "description": "Farnesene as a percentage of total hop oil.\n\nVaries widely between varieties: absent or trace in many, but a substantial share (around 10–20%) in some noble-type hops such as Saaz and Tettnanger.  It gives woody, herbal and sometimes floral or citrus notes, so a high farnesene content is a hint of noble-hop character.  It is very volatile and rarely survives into the beer except from dry hopping.",
           "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "b_pinene": {
-          "description": "β-Pinene as a percentage of total hop oil.\n\nBrad Smith writes \"Though not a major hop oil, β-Pinene has a green-woody and piney aroma.  It is a monoterpene, commonly found in many plants and it is soluble in alcohol but not water.\"  (See https://beersmith.com/blog/2024/12/19/major-aromatic-hop-oils-in-beer-brewing/)",
+          "description": "β-Pinene as a percentage of total hop oil.\n\nA minor component with piney, green and woody aromas.  Like other monoterpenes, it dissolves poorly in water but readily in alcohol.",
           "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
         },
         "a_pinene": {

@@ -133,17 +133,52 @@ public:
     *        Equally, although it might be strictly "correct" in object-oriented terms to make \c WaterAgent a subclass
     *        of \c Misc, given that it's only two fields, it's far simpler if we add the fields to \c Misc with a naming
     *        convention and some logic that they are only set and applicable for \c Misc::Type::Water_Agent.
+    *
+    *        Another simplification is that we list actual compounds here.  In a purist approach, we might classify by
+    *        the underlying salt (eg Calcium Chloride = CaCl₂) and then have another field to differentiate between the
+    *        anhydrous form (eg pure CaCl₂) and the hydrate form(s) (eg CaCl₂·H₂O, CaCl₂·2H₂O, CaCl₂·4H₂O, CaCl₂·6H₂O
+    *        are the four hydrate forms of calcium chloride).  Most probably this would be done by proportion by storing
+    *        what proportion of mass is the underlying salt.  However, brewing only uses a small number of salts and
+    *        only a small proportion of the forms of those salts (eg for calcium chloride, only CaCl₂ and CaCl₂·2H₂O are
+    *        of interest to brewers).  So, we lean the other way and enumerate the actual forms of the salts here.
+    *
+    *        We slightly break our normal naming convention to introduce an underscore before the anhydrous/hydrate part
+    *        of the name, as it (IMHO) improves readability.
+    *
+    *
+    *        calcium hydroxide : Calcium hydroxide Ca(OH)₂, also called slaked lime, is a strong base that can be used
+    *                            to increase mash pH.  Generally, sodium bicarbonate (baking soda) is preferred for the
+    *                            purpose of pH adjustment because it is less hazardous and equally effective.
+    *
+    *        magnesium chloride : Magnesium chloride (hexahydrate MgCl₂•6H₂O) is a salt that can be used to increase
+    *                             the magnesium level of the brewing water or the wort.
+    *
+    *        sulfuric acid : Eg sulphuric acid 25% is available as a ready for use food grade acid to reduce alkalinity
+    *                        and to increase desirable ions in product waters.  It is especially used in the brewing
+    *                        industry as a liquor treatment.  (See
+    *                        https://www.murphyandson.co.uk/wp-content/uploads/2020/07/Sulphuric-Acid-Rev-3.pdf.)
+    *
+    *        hydrochloric acid : Hydrochloric acid is not commonly used in home brewing.  Nonetheless, you can use it
+    *                            to replace lactic or phosphoric acid to lower the pH of your mash.
+    *                            If your source water is low in chloride, hydrochloric acid is the easiest modifier to
+    *                            find and use.
+    *                            In brewing, the concentration of the solution being used should be 0.1 M
     */
    enum class WaterAgentType {
-      CalciumChloride  , // <- CaCl₂
-      CalciumCarbonate , // <- CaCO₃
-      CalciumSulfate   , // <- CaSO₄.  See also Gypsum = CaSO4·2H2O
-      MagnesiumSulfate , // <- MgSO₄.  See also Epsom Salt = MgSO4·7H2O
-      SodiumChloride   , // <- NaCl  aka "regular" Salt
-      SodiumBicarbonate, // <- NaHCO₃
-      LacticAcid       , // <- CH₃CH(OH)CO₂H (extended formula) = C₃H₆O₃ (regular formula)
-      PhosphoricAcid   , // <- H₃PO₄
-      Other            ,
+      CalciumChloride_Anhydrous    , // <- CaCl₂
+      CalciumChloride_Dihydrate    , // <- CaCl₂·2H₂O                 (NB: Other CaCl₂ hydrates not used in brewing)
+      CalciumCarbonate             , // <- CaCO₃                      (NB: Hydrate forms not used in brewing)
+      CalciumSulfate_Dihydrate     , // <- CaSO₄·2H₂O = gypsum        (NB: Anhydrous form not used in brewing)
+      CalciumHydroxide             , // <- Ca(OH)₂ = pickling lime
+      MagnesiumSulfate_Heptahydrate, // <- MgSO₄·7H₂O = Epsom Salt    (NB: Anhydrous form not used in brewing)
+      MagnesiumChloride_Hexahydrate, // <- MgCl₂·6H₂O                 (NB: 11 other hydrates not used in brewing)
+      SodiumChloride               , // <- NaCl  aka "regular" Salt
+      SodiumBicarbonate            , // <- NaHCO₃
+      LacticAcid                   , // <- CH₃CH(OH)CO₂H (extended formula) = C₃H₆O₃ (regular formula)
+      PhosphoricAcid               , // <- H₃PO₄
+      SulfuricAcid                 , // <- H₂SO₄
+      HydrochloricAcid             , // <- HCl
+      Other                        ,
    };
 
    // This allows us to store the above enum class in a QVariant

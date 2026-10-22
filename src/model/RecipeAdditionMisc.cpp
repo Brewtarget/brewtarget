@@ -28,6 +28,29 @@
    #include "moc_RecipeAdditionMisc.cpp"
 #endif
 
+namespace {
+   /**
+    * \brief Maps the (legacy, BeerXML) \c RecipeAdditionMisc::Use onto \c RecipeAddition::Stage and step number.  Used
+    *        both by \c RecipeAdditionMisc::setUse and by the \c NamedParameterBundle constructor, where we cannot call
+    *        \c setUse because the addition is not yet attached to a \c Recipe.
+    */
+   struct StageAndStep {
+      RecipeAddition::Stage stage;
+      std::optional<int>    step;
+   };
+   StageAndStep stageAndStepFor(RecipeAdditionMisc::Use const use) {
+      switch (use) {
+         case RecipeAdditionMisc::Use::Mash     : return {RecipeAddition::Stage::Mash        , std::nullopt};
+         case RecipeAdditionMisc::Use::Boil     : return {RecipeAddition::Stage::Boil        , 2           };
+         case RecipeAdditionMisc::Use::Primary  : return {RecipeAddition::Stage::Fermentation, 1           };
+         case RecipeAdditionMisc::Use::Secondary: return {RecipeAddition::Stage::Fermentation, 2           };
+         case RecipeAdditionMisc::Use::Bottling : return {RecipeAddition::Stage::Packaging   , std::nullopt};
+         // No default case as we want the compiler to warn us if we missed a case above
+      }
+      Q_UNREACHABLE(); // We should never get here
+   }
+}
+
 QString RecipeAdditionMisc::localisedName() { return tr("Misc Addition"); }
 QString RecipeAdditionMisc::localisedName_misc() { return tr("Misc"); }
 QString RecipeAdditionMisc::localisedName_use () { return tr("Use "); }
@@ -103,11 +126,23 @@ RecipeAdditionMisc::RecipeAdditionMisc(NamedParameterBundle const & namedParamet
    RecipeAdditionBase<RecipeAdditionMisc, Misc>{},
    IngredientAmount<RecipeAdditionMisc, Misc>{namedParameterBundle} {
    //
-   // If the addition stage is not specified then we assume it is boil, as this is the first stage at which it is usual
-   // to add miscs.
+   // As for RecipeAdditionHop: an explicit stage takes precedence; otherwise (eg BeerXML) use the legacy "use" field
+   // (Mash, Boil, Primary, Secondary, Bottling) if present; otherwise assume boil, as this is the first stage at which it
+   // is usual to add miscs.
    //
-   m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
-                                                             RecipeAddition::Stage::Boil);
+   if (namedParameterBundle.contains(PropertyNames::RecipeAddition::stage)) {
+      this->m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage);
+   } else if (namedParameterBundle.contains(PropertyNames::RecipeAdditionMisc::use)) {
+      auto const stageAndStep = stageAndStepFor(
+         namedParameterBundle.val<RecipeAdditionMisc::Use>(PropertyNames::RecipeAdditionMisc::use)
+      );
+      this->m_stage = stageAndStep.stage;
+      if (!this->m_step) {
+         this->m_step = stageAndStep.step;
+      }
+   } else {
+      this->m_stage = RecipeAddition::Stage::Boil;
+   }
 
    CONSTRUCTOR_END
    return;
@@ -168,33 +203,13 @@ NamedEntity * RecipeAdditionMisc::ensureExists(BtStringConst const & property) {
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
 void RecipeAdditionMisc::setUse(RecipeAdditionMisc::Use const val) {
-   switch (val) {
-
-      case RecipeAdditionMisc::Use::Mash     :
-         this->setStage(RecipeAddition::Stage::Mash);
-         break;
-
-      case RecipeAdditionMisc::Use::Boil     :
-         this->setStage(RecipeAddition::Stage::Boil);
-         this->recipe()->nonOptBoil()->ensureStandardProfile();
-         this->setStep(2);
-         break;
-
-      case RecipeAdditionMisc::Use::Primary  :
-         this->setStage(RecipeAddition::Stage::Fermentation);
-         this->setStep(1);
-         break;
-
-      case RecipeAdditionMisc::Use::Secondary:
-         this->setStage(RecipeAddition::Stage::Fermentation);
-         this->setStep(2);
-         break;
-
-      case RecipeAdditionMisc::Use::Bottling :
-         this->setStage(RecipeAddition::Stage::Packaging);
-         break;
-
-      // No default case as we want the compiler to warn us if we missed a case above
+   auto const stageAndStep = stageAndStepFor(val);
+   this->setStage(stageAndStep.stage);
+   if (stageAndStep.stage == RecipeAddition::Stage::Boil) {
+      this->recipe()->nonOptBoil()->ensureStandardProfile();
+   }
+   if (stageAndStep.step) {
+      this->setStep(stageAndStep.step);
    }
    return;
 }

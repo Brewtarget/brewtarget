@@ -220,7 +220,7 @@ namespace {
    }
 
    /*!
-    * \brief Calculates the IBU by the mIBU formula, developed by Paul-John Hosom, and described at
+    * \brief Calculates the IBU by the mIBU formula, developed by John-Paul Hosom, and described at
     *        https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/
     */
    double mIbu(IbuMethods::IbuCalculationParms const & parms) {
@@ -247,7 +247,7 @@ namespace {
 
 //   /*!
 //    * \brief Calculates the IBU by the SMPH formula, developed by Tom Shellhammer, Mark Malowicki, Val Peacock and
-//    *        Paul-John Hosom, and described at
+//    *        John-Paul Hosom, and described at
 //    *        https://alchemyoverlord.wordpress.com/2021/11/10/ibus-and-the-smph-model/
 //    */
 //   double smph(IbuMethods::IbuCalculationParms const & parms) {

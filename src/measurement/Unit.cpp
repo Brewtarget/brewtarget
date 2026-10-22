@@ -631,6 +631,7 @@ namespace Measurement::Units {
 
    // === Volume ===
    // Where possible, the multipliers for going to and from litres come from www.conversion-metric.org as it seems to offer the most decimal places on its conversion tables
+   // Info on tablespoons and teaspoons comes from https://en.wikipedia.org/wiki/Tablespoon and https://en.wikipedia.org/wiki/Teaspoon
    Unit const liters              {Measurement::UnitSystems::volume_Metric     , {QObject::tr("L"   )}, defaultSanitiser};
    Unit const milliliters         {Measurement::UnitSystems::volume_Metric     , {QObject::tr("mL"  )}, defaultSanitiser, 1.0/1000.0          , &liters};
    Unit const us_barrels          {Measurement::UnitSystems::volume_UsCustomary, {QObject::tr("bbl" )}, defaultSanitiser, 117.34777           , &liters};
@@ -638,17 +639,17 @@ namespace Measurement::Units {
    Unit const us_quarts           {Measurement::UnitSystems::volume_UsCustomary, {QObject::tr("qt"  )}, defaultSanitiser,   0.94635294599999  , &liters};
    Unit const us_pints            {Measurement::UnitSystems::volume_UsCustomary, {QObject::tr("pt"  )}, defaultSanitiser,   0.473176473       , &liters};
    Unit const us_cups             {Measurement::UnitSystems::volume_UsCustomary, {QObject::tr("cup" )}, defaultSanitiser,   0.23658823648491  , &liters, 0.25};
-   Unit const us_fluidOunces      {Measurement::UnitSystems::volume_UsCustomary, {QObject::tr("floz")}, defaultSanitiser,   0.029573529564112 , &liters};
-   Unit const us_tablespoons      {Measurement::UnitSystems::volume_UsCustomary, {QObject::tr("tbsp")}, defaultSanitiser,   0.014786764782056 , &liters};
-   Unit const us_teaspoons        {Measurement::UnitSystems::volume_UsCustomary, {QObject::tr("tsp" )}, defaultSanitiser,   0.0049289215940186, &liters};
+   Unit const us_fluidOunces      {Measurement::UnitSystems::volume_UsCustomary, {QObject::tr("floz")}, defaultSanitiser,   0.029573529564112 , &liters}; // 1/16 of US pint
+   Unit const us_tablespoons      {Measurement::UnitSystems::volume_UsCustomary, {QObject::tr("tbsp")}, defaultSanitiser,   0.014786764782056 , &liters}; // 1/2 US fluid ounce
+   Unit const us_teaspoons        {Measurement::UnitSystems::volume_UsCustomary, {QObject::tr("tsp" )}, defaultSanitiser,   0.0049289215940186, &liters}; // 1/3 US tablespoon
    Unit const imperial_barrels    {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("bbl" )}, defaultSanitiser, 163.659             , &liters};
    Unit const imperial_gallons    {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("gal" )}, defaultSanitiser,   4.54609           , &liters}; // See https://en.wikipedia.org/wiki/Gallon
    Unit const imperial_quarts     {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("qt"  )}, defaultSanitiser,   1.1365225         , &liters};
    Unit const imperial_pints      {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("pt"  )}, defaultSanitiser,   0.56826125        , &liters};
    Unit const imperial_cups       {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("cup" )}, defaultSanitiser,   0.284130625       , &liters, 0.25};
-   Unit const imperial_fluidOunces{Measurement::UnitSystems::volume_Imperial   , {QObject::tr("floz")}, defaultSanitiser,   0.028413075003383 , &liters};
-   Unit const imperial_tablespoons{Measurement::UnitSystems::volume_Imperial   , {QObject::tr("tbsp")}, defaultSanitiser,   0.0177581714      , &liters};
-   Unit const imperial_teaspoons  {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("tsp" )}, defaultSanitiser,   0.00591939047     , &liters};
+   Unit const imperial_fluidOunces{Measurement::UnitSystems::volume_Imperial   , {QObject::tr("floz")}, defaultSanitiser,   0.028413075003383 , &liters}; // 1/20 of imperial pint
+   Unit const imperial_tablespoons{Measurement::UnitSystems::volume_Imperial   , {QObject::tr("tbsp")}, defaultSanitiser,   0.0142065375017   , &liters}; // 1/2 imperial fluid ounce
+   Unit const imperial_teaspoons  {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("tsp" )}, defaultSanitiser,   0.00355163437542  , &liters}; // 1⁄8 imperial fluid ounce
 
    // === Length ===
    // I suppose we could use the other official abbreviations for feet and inches -- either the real ones (see

@@ -1,5 +1,5 @@
 //======================================================================================================================
-// schema/DotBeer.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+// schema/DotBeer.beer.schema is part of dotBeer and is copyright the following authors 2017-2026:
 //   • Mark Price <shadowchao99@gmail.com>
 //   • Matt Young <mfsy@yahoo.com>
 //   • Roman Eremin <roman.eremin@gmail.com> <roman.eremin@devexpress.com>
@@ -20,28 +20,33 @@
   //     one minor exception to the latter for pH, the measure of acidity, because IMHO it improves readability to write
   //     beer_pH, start_pH, end_pH etc rather than beer_ph, start_ph, end_ph.
   //
+  //     For enum values, we have a mixture of snake_case (eg `add_to_mash`, `add_to_boil`, etc) and separate words (eg
+  //     `partial mash`, `all grain`).  This is, except where we have good reason to do otherwise, we follow BeerJSON
+  //     enum values.  (Keeping the same enum values between BeerJSON and dotBeer gives us some minor code
+  //     simplifications in Brewken/Brewtarget.)
+  //
+  //     In "description" fields, we mostly use \n for linebreaks, but there are places where <br> gives better output
+  //     in the generated .md files (because \n would give no linebreak and \n\n would give too much interline spacing).
+  //     (Depending on which tool you are using to view the .md files, YMMV.)
+  //
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   //
   // This is not a "real" URL.  The "directory" above the filename is the version of the dotBeer schema.
   // Versions prior to 1.0.0 are subject to breaking changes!
   //
-  "$id": "https://dotbeer.org/schema/0.9.0/DotBeer.beer.schema",
+  "$id": "https://dotbeer.org/schema/0.10.0/DotBeer.beer.schema",
   "type": "object",
   "title": "DotBeer File Format",
   "description": "A free and open serialisation format for beer recipes, ingredients and related data",
   "properties": {
     //
     // Having a root element such as this is not strictly necessary, but it is useful to provide context, showing that
-    // the file contents are DotBeer format, even if the file extension got changed or is unavailable.
+    // the file contents are dotBeer format, even if the file extension got changed or is unavailable.
     //
     "DotBeer": {
       "type": "object",
-      "description": "Root element of all DotBeer documents.  Most of the Primary Types (ie ones that have their own schema file) are referred to here.  Various Component Types (ie smaller types used for composition) are defined in the \"$defs\" sections of most of the schema files (apart from this one).",
+      "description": "Root element of all dotBeer documents.  Most of the Primary Types (ie ones that have their own schema file) are referred to here.  Various Component Types (ie smaller types used for composition) are defined in the \"$defs\" sections of most of the schema files (apart from this one).",
       "properties": {
-        "$schema": {
-          "description": "It is not required or expected to include this field in a dotBeer file.  However, some tools such as VS Code make use of it for syntax highlighting and autocorrect, so we allow it to be set.  If it is present, the most sensible value for it to have is \"https://json-schema.org/draft/2020-12/schema\" (ie the same as the dotBeer schema files).",
-          "type":"string"
-        },
         "version": {
           "description": "DotBeer schema version used to create the file.",
           "$ref": "#/$defs/VersionNumber"
@@ -52,7 +57,7 @@
         },
         "timestamp": {
           "description": "Date and time file was created.",
-          "$ref": "Measurement.beer.schema#/$defs/DateTime"
+          "$ref": "Measurement.beer.schema#/$defs/DateTimeOffset"
         },
         // Ingredients
         "hops": {
@@ -83,9 +88,6 @@
             "$ref": "Culture.beer.schema"
           }
         },
-        //
-        // TODO: Add stock purchase/use here
-        //
         "waters": {
           //
           // Water is different from other ingredients, in that it doesn't have inventory and its additions are (mostly)
@@ -120,7 +122,8 @@
           }
         },
         //
-        // TODO: Add packaging here
+        // BeerJSON has packaging here (eg what size bottles you're going to put your beer in), but we omit this from
+        // dotBeer as it's not (currently) something we deal with in Brewken/Brewtarget.
         //
         // Other objects
         "styles": {
@@ -143,6 +146,37 @@
           "items": {
             "$ref": "Recipe.beer.schema"
           }
+        },
+        //
+        // Although they _could_ be put inside the ingredient schemas (eg StockPurchaseHop inside Hop), we deliberately
+        // choose a looser coupling to make file processing easier.  Specifically, since recipes refer to ingredients,
+        // styles, equipments and so on, it's easiest to read recipes in after the things to which they refer.  Since
+        // stock purchases refer to ingredients and recipes, it's easiest to read them in after reading in recipes (and
+        // ingredients).
+        //
+        "culture_stock_purchases": {
+          "type": "array",
+          "items": {
+            "$ref": "StockPurchase.beer.schema#/$defs/StockPurchaseCulture"
+          }
+        },
+        "fermentable_stock_purchases": {
+          "type": "array",
+          "items": {
+            "$ref": "StockPurchase.beer.schema#/$defs/StockPurchaseFermentable"
+          }
+        },
+        "hop_stock_purchases": {
+          "type": "array",
+          "items": {
+            "$ref": "StockPurchase.beer.schema#/$defs/StockPurchaseHop"
+          }
+        },
+        "misc_stock_purchases": {
+          "type": "array",
+          "items": {
+            "$ref": "StockPurchase.beer.schema#/$defs/StockPurchaseMisc"
+          }
         }
       },
       "required": [
@@ -152,7 +186,7 @@
       ],
       //
       // Allowing additional properties would make it easier to extend the schema in a way that allows old versions of
-      // software to read newer versions of DotBeer files.  However, it would also make it harder to validate things.
+      // software to read newer versions of dotBeer files.  However, it would also make it harder to validate things.
       // Eg if a program accidentally wrote optional parameter "foobar" with key "barfoo", it wouldn't be picked up by
       // schema validation if additional properties are allowed.  So, in general, we forbid unspecified properties.
       // Here, and elsewhere, `"unevaluatedProperties": false` is the newer, and more robust, way to do this (replacing
@@ -177,6 +211,10 @@
       // evaluation against Bar will fail because of the presence of Foo's properties.
       //
       "unevaluatedProperties": false
+    },
+    "$schema": {
+      "description": "It is not required or expected to include this field in a dotBeer file.  However, some tools such as VS Code make use of it for syntax highlighting and autocorrect, so we allow it to be set.  If it is present, the most sensible value for it to have is \"https://json-schema.org/draft/2020-12/schema\" (ie the same as the dotBeer schema files).",
+      "type":"string"
     }
   },
   "required": [
@@ -210,7 +248,7 @@
     "LocalId": {
       "type": "string",
       "description": "A string that, within a dotBeer file, uniquely identifies something (eg hop, fermentable, style, mash) that is used in a recipe in that same file.  Thus, for example, if each hop in the file defines its own local ID, then, for the hop additions in any recipe in the same file, it suffices to use the relevant local ID to identify the hop being added.\n\nNo two items in a single file should have the same local ID, even if they are of different types.  (This is to make reading files simpler, as a single look-up map can be used for all different types.)  The string has no meaning in any wider scope: it is a cross-reference rather than a true attribute.  Local IDs simplify the structure of dotBeer and help reduce repetition within the files.\n\nThe JSON Schema cannot validate that local IDs are correct - merely that they adhere to a particular format.  Implementing programs should therefore validate that (a) all defined local IDs in a file are unique in that file, (b) all referred-to local IDs are defined elsewhere in the file, and (c) any referred-to local ID is for an object of the relevant type (eg the local ID for the style of a recipe must be that of a style).\n\nNOTE: If you are merging two or more dotBeer files, you will first need to ensure that there are no Local ID clashes in them.",
-      "pattern": "^[A-Za-z0-9_]+$"
+      "pattern": "^[A-Za-z0-9_-]+$"
     },
     "VersionNumber": {
       "type": "string",

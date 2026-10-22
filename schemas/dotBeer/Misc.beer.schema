@@ -1,5 +1,5 @@
 //======================================================================================================================
-// schema/Misc.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+// schema/Misc.beer.schema is part of dotBeer and is copyright the following authors 2017-2026:
 //   • Mark Price <shadowchao99@gmail.com>
 //   • Matt Young <mfsy@yahoo.com>
 //   • Pierre Smits <pierre.smits@somonar.com>
@@ -17,7 +17,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   // I have oscillated between `Misc` and `MiscIngredient` for this.  The latter is "better" in terms of being more
   // descriptive, but both brevity and consistency with Brewtarget/Brewken push us towards the former.
-  "$id": "https://dotbeer.org/schema/0.9.0/Misc.beer.schema",
+  "$id": "https://dotbeer.org/schema/0.10.0/Misc.beer.schema",
   "type": "object",
   "description": "Miscellaneous ingredients that are not hops, fermentables, yeasts/cultures or water.  Some people would call these \"non-fermentable adjuncts\", but there are also narrower definitions of \"adjunct\", so we do not use that term.  Also often referred to as \"other ingredients\", but we already use \"other\" in a lot of classifications, so we prefer \"miscellaneous\" as abbreviated to \"misc\".",
   "properties": {
@@ -36,6 +36,7 @@
       "type": "string"
     },
     "product_id": {
+      "description": "Producer’s product code or number for this item.",
       "type": "string"
     },
     "misc_type": {
@@ -51,43 +52,35 @@
       ]
     },
     "water_agent_type": {
-      "description": "Must be set if and only if `misc_type` is `water agent`.<br>`calcium chloride` = CaCl₂<br>`calcium carbonate` = CaCO₃<br>`calcium sulfate` = CaSO₄<br>`magnesium sulfate` = MgSO₄<br>`sodium chloride` = NaCl  aka \"regular\" salt<br>`sodium bicarbonate` = NaHCO₃<br>`lactic acid` = CH₃CH(OH)CO₂H (extended formula) = C₃H₆O₃ (regular formula)<br>`phosphoric acid` = H₃PO₄<br>`other` = none of the above",
+      "description": "Must be set if and only if `misc_type` is `water agent`.<br>`calcium chloride anhydrous` = CaCl₂<br>`calcium chloride dihydrate` = CaCl₂·2H₂O (Usual food-grade “flake”)<br>`calcium carbonate` = CaCO₃ (anhydrous; eg chalk)<br>`calcium sulfate dihydrate` = CaSO₄·2H₂O (gypsum)<br>`calcium hydroxide` = Ca(OH)₂ (pickling lime)<br>`magnesium sulfate heptahydrate` = MgSO₄·7H₂O  aka Epsom salt<br>`magnesium chloride hexahydrate` = MgCl₂·6H₂O<br>`sodium chloride` = NaCl  aka \"regular\" salt<br>`sodium bicarbonate` = NaHCO₃<br>`lactic acid` = CH₃CH(OH)CO₂H (extended formula) = C₃H₆O₃ (regular formula)<br>`phosphoric acid` = H₃PO₄<br>`sulfuric acid` = H₂SO₄<br>`hydrochloric acid` = HCl<br>`other` = none of the above",
       "enum": [
-        "calcium chloride",
+        "calcium chloride anhydrous",
+        // Calcium chloride has multiple hydrates, but only this one is used in brewing
+        "calcium chloride dihydrate",
+        // Only the anhydrous form of calcium carbonate is used in brewing
         "calcium carbonate",
-        "calcium sulfate",
-        "magnesium sulfate",
+        // We deliberately omit anhydrous calcium sulfate as it is not typically used in brewing
+        "calcium sulfate dihydrate",
+        "calcium hydroxide",
+        // We deliberately omit anhydrous magnesium sulfate as it is not typically used in brewing
+        "magnesium sulfate heptahydrate",
+        // There are 12 different hydrates of magnesium chloride, but this is the one typically used in brewing
+        "magnesium chloride hexahydrate",
         "sodium chloride",
         "sodium bicarbonate",
         "lactic acid",
         "phosphoric acid",
+        "sulfuric acid",
+        "hydrochloric acid",
         "other"
         //
-        // TBD: Consider in future adding some of the following:
+        // TBD: Consider in future adding:
         //
         //    citric acid : Citric acid (C₆H₈O₇) is a weak polyprotic organic acid, prominent in citrus fruits.  This
         //                  acid adds fruity or estery qualities, with a flavor threshold of around 150ppm in beer.  In
         //                  the past, citric acid was used for mash pH adjustment.  It has fallen out of favor for this
         //                  purpose because the flavor is detectable, especially since beer may already contain citric
         //                  acid, and so any addition may push the level over the flavor threshold.
-        //
-        //    sulfuric acid : Eg sulphuric acid 25% is available as a ready for use food grade acid to reduce alkalinity
-        //                    and to increase desirable ions in product waters.  It is especially used in the brewing
-        //                    industry as a liquor treatment.  (See
-        //                    https://www.murphyandson.co.uk/wp-content/uploads/2020/07/Sulphuric-Acid-Rev-3.pdf.)
-        //
-        //    hydrochloric acid : Hydrochloric acid is not commonly used in home brewing.  Nonetheless, you can use it
-        //                        to replace lactic or phosphoric acid to lower the pH of your mash.
-        //                        If your source water is low in chloride, hydrochloric acid is the easiest modifier to
-        //                        find and use.
-        //                        In brewing, the concentration of the solution being used should be 0.1 M
-        //
-        //    calcium hydroxide : Calcium hydroxide Ca(OH)₂, also called slaked lime, is a strong base that can be used
-        //                        to increase mash pH.  Generally, sodium bicarbonate (baking soda) is preferred for the
-        //                        purpose of pH adjustment because it is less hazardous and equally effective.
-        //
-        //    magnesium chloride : Magnesium chloride (hexahydrate MgCl₂•6H₂O) is a salt that can be used to increase
-        //                         the magnesium level of the brewing water or the wort.
         //
       ]
     },
@@ -101,10 +94,9 @@
     },
     "notes": {
       "type": "string"
-    },
-    "inventory": {
-      "$ref": "#/$defs/MiscAmount"
     }
+    // BeerJSON and BeerXML have `inventory` here, but we prefer to keep inventory separate and more detailed via
+    // StockPurchaseMisc and StockUseMisc
   },
   "required": [
     "name",

@@ -3081,15 +3081,28 @@ namespace {
          // the Fermentable table.  So, in this instance, we'll leave it to the user to make corrective modifications
          // after this migration.
          //
-         {QString("UPDATE salt SET stype = 'calcium chloride' "   "WHERE stype = 'CaCl2'"         )},
-         {QString("UPDATE salt SET stype = 'calcium carbonate' "  "WHERE stype = 'CaCO3'"         )},
-         {QString("UPDATE salt SET stype = 'calcium sulfate' "    "WHERE stype = 'CaSO4'"         )},
-         {QString("UPDATE salt SET stype = 'magnesium sulfate' "  "WHERE stype = 'MgSO4'"         )},
-         {QString("UPDATE salt SET stype = 'sodium chloride' "    "WHERE stype = 'NaCl'"          )},
-         {QString("UPDATE salt SET stype = 'sodium bicarbonate' " "WHERE stype = 'NaHCO3'"        )},
-         {QString("UPDATE salt SET stype = 'lactic acid' "        "WHERE stype = 'LacticAcid'"    )},
-         {QString("UPDATE salt SET stype = 'phosphoric acid' "    "WHERE stype = 'H3PO4'"         )},
-         {QString("UPDATE salt SET stype = 'other' "              "WHERE stype = 'AcidulatedMalt'")},
+         // Similarly, we are taking this opportunity to properly distinguish between anhydrous and hydrate forms of
+         // minerals.  For some things, this means we have to convert previously "unspecified" to either the anhydrous
+         // form or a hydrate one:
+         //
+         //    `calcium chloride` => `calcium chloride anhydrous` - This is the conservative choice, and also what
+         //                                                         Bru’n Water and BeerSmith 4 both default to.)
+         //
+         //    `calcium sulfate` => `calcium sulfate dihydrate` - This is gypsum, which is widely used in brewing,
+         //                                                       whereas the anhydrous form is not.
+         //
+         //    `magnesium sulfate` => `magnesium sulfate heptahydrate` - This is Epsom salt, which is widely used in
+         //                                                              brewing, whereas the anhydrous form is not.
+         //
+         {QString("UPDATE salt SET stype = 'calcium chloride anhydrous' "      "WHERE stype = 'CaCl2'"         )},
+         {QString("UPDATE salt SET stype = 'calcium carbonate' "               "WHERE stype = 'CaCO3'"         )},
+         {QString("UPDATE salt SET stype = 'calcium sulfate dihydrate' "       "WHERE stype = 'CaSO4'"         )},
+         {QString("UPDATE salt SET stype = 'magnesium sulfate heptahydrate' "  "WHERE stype = 'MgSO4'"         )},
+         {QString("UPDATE salt SET stype = 'sodium chloride' "                 "WHERE stype = 'NaCl'"          )},
+         {QString("UPDATE salt SET stype = 'sodium bicarbonate' "              "WHERE stype = 'NaHCO3'"        )},
+         {QString("UPDATE salt SET stype = 'lactic acid' "                     "WHERE stype = 'LacticAcid'"    )},
+         {QString("UPDATE salt SET stype = 'phosphoric acid' "                 "WHERE stype = 'H3PO4'"         )},
+         {QString("UPDATE salt SET stype = 'other' "                           "WHERE stype = 'AcidulatedMalt'")},
          // Add the extra water agent columns to misc before we migrate rows from salt
          // Also, add a temporary column to misc to make it easier to migrate salt_in_recipe, salt_stock_purchase, etc
          {QString("ALTER TABLE misc ADD COLUMN water_agent_type %1").arg(db.getDbNativeTypeName<QString>())},
@@ -3344,6 +3357,20 @@ namespace {
          {QString("ALTER TABLE equipment RENAME COLUMN fermenter_type         TO fv_type"        )},
          {QString("ALTER TABLE equipment RENAME COLUMN fermenter_loss_l       TO fv_loss_l"      )},
          {QString("ALTER TABLE equipment RENAME COLUMN fermenter_notes        TO fv_notes"       )},
+
+         //
+         // New field for the percentage of a fermentable's extract that brewing yeast can ferment (see comments in
+         // model/Fermentable.h).  NULL means 100%.
+         //
+         {QString("ALTER TABLE fermentable ADD COLUMN fermentable_fraction_pct %1").arg(db.getDbNativeTypeName<double>())},
+         //
+         // Previously, the only unfermentable fermentable we knew about was one called exactly "Milk Sugar (Lactose)"
+         // (see the old isFermentableSugar() in model/Recipe.cpp).  We now use the new field instead, so set it for
+         // lactose, matching on name a bit more generously than before so that we also catch eg "Lactose" and
+         // "Lactose (Milk Sugar)".  We deliberately don't touch anything else (eg maltodextrin) here, as that would
+         // change the calculated FG of users' existing recipes; they can set the field themselves in the editor.
+         //
+         {QString("UPDATE fermentable SET fermentable_fraction_pct = 0 WHERE LOWER(name) LIKE '%lactose%'")},
       };
 
       return executeSqlQueries(q, migrationQueries);

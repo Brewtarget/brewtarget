@@ -28,6 +28,33 @@
    #include "moc_RecipeAdditionHop.cpp"
 #endif
 
+namespace {
+   /**
+    * \brief Maps the (legacy, BeerXML) \c RecipeAdditionHop::Use onto \c RecipeAddition::Stage and step number.  Used
+    *        both by \c RecipeAdditionHop::setUse and by the \c NamedParameterBundle constructor, where we cannot call
+    *        \c setUse because the addition is not yet attached to a \c Recipe.
+    *
+    *        Step numbers assume the standard three-step boil profile (see \c Boil::ensureStandardProfile).
+    */
+   struct StageAndStep {
+      RecipeAddition::Stage stage;
+      std::optional<int>    step;
+   };
+   StageAndStep stageAndStepFor(RecipeAdditionHop::Use const use) {
+      switch (use) {
+         case RecipeAdditionHop::Use::Mash      : return {RecipeAddition::Stage::Mash        , std::nullopt};
+         // A first wort hop is in the ramp-up stage of the boil
+         case RecipeAdditionHop::Use::First_Wort: return {RecipeAddition::Stage::Boil        , 1           };
+         case RecipeAdditionHop::Use::Boil      : return {RecipeAddition::Stage::Boil        , 2           };
+         // An aroma hop is added during the post-boil
+         case RecipeAdditionHop::Use::Aroma     : return {RecipeAddition::Stage::Boil        , 3           };
+         case RecipeAdditionHop::Use::Dry_Hop   : return {RecipeAddition::Stage::Fermentation, std::nullopt};
+         // No default case as we want the compiler to warn us if we missed a case above
+      }
+      Q_UNREACHABLE(); // We should never get here
+   }
+}
+
 QString RecipeAdditionHop::localisedName() { return tr("Hop Addition"); }
 QString RecipeAdditionHop::localisedName_hop() { return tr("Hop"); }
 QString RecipeAdditionHop::localisedName_use() { return tr("Use"); }
@@ -107,11 +134,25 @@ RecipeAdditionHop::RecipeAdditionHop(NamedParameterBundle const & namedParameter
    RecipeAdditionBase<RecipeAdditionHop, Hop>{},
    IngredientAmount<RecipeAdditionHop, Hop>{namedParameterBundle} {
    //
-   // If the addition stage is not specified then we assume it is boil, as this is the first stage at which it is usual
-   // to add hops.
+   // Where the addition stage is specified (eg BeerJSON, dotBeer, our DB), it takes precedence.  Otherwise (eg BeerXML)
+   // we may have the legacy "use" field (Boil, Dry Hop, Aroma, etc), which tells us the stage and step.  NOTE that we
+   // can't just call setUse() here, as it needs this->recipe(), which isn't yet available.  If neither is present, we
+   // assume boil, as this is the first stage at which it is usual to add hops.
    //
-   m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
-                                                             RecipeAddition::Stage::Boil);
+   if (namedParameterBundle.contains(PropertyNames::RecipeAddition::stage)) {
+      this->m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage);
+   } else if (namedParameterBundle.contains(PropertyNames::RecipeAdditionHop::use)) {
+      auto const stageAndStep = stageAndStepFor(
+         namedParameterBundle.val<RecipeAdditionHop::Use>(PropertyNames::RecipeAdditionHop::use)
+      );
+      this->m_stage = stageAndStep.stage;
+      // An explicit step (eg from the BeerXML STEP extension tag) wins
+      if (!this->m_step) {
+         this->m_step = stageAndStep.step;
+      }
+   } else {
+      this->m_stage = RecipeAddition::Stage::Boil;
+   }
 
    CONSTRUCTOR_END
    return;
@@ -237,36 +278,13 @@ NamedEntity * RecipeAdditionHop::ensureExists(BtStringConst const & property) {
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
 void RecipeAdditionHop::setUse(RecipeAdditionHop::Use const val) {
-   switch (val) {
-      case RecipeAdditionHop::Use::Mash:
-         this->setStage(RecipeAddition::Stage::Mash);
-         break;
-
-      case RecipeAdditionHop::Use::First_Wort:
-         // A first wort hop is in the ramp-up stage of the boil
-         this->setStage(RecipeAddition::Stage::Boil);
-         this->recipe()->nonOptBoil()->ensureStandardProfile();
-         this->setStep(1);
-         break;
-
-      case RecipeAdditionHop::Use::Boil:
-         this->setStage(RecipeAddition::Stage::Boil);
-         this->recipe()->nonOptBoil()->ensureStandardProfile();
-         this->setStep(2);
-         break;
-
-      case RecipeAdditionHop::Use::Aroma:
-         // An aroma hop is added during the post-boil
-         this->setStage(RecipeAddition::Stage::Boil);
-         this->recipe()->nonOptBoil()->ensureStandardProfile();
-         this->setStep(3);
-         break;
-
-      case RecipeAdditionHop::Use::Dry_Hop:
-         this->setStage(RecipeAddition::Stage::Fermentation);
-         break;
-
-      // No default case as we want the compiler to warn us if we missed a case above
+   auto const stageAndStep = stageAndStepFor(val);
+   this->setStage(stageAndStep.stage);
+   if (stageAndStep.stage == RecipeAddition::Stage::Boil) {
+      this->recipe()->nonOptBoil()->ensureStandardProfile();
+   }
+   if (stageAndStep.step) {
+      this->setStep(stageAndStep.step);
    }
    return;
 }

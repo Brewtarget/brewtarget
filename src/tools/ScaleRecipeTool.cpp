@@ -96,8 +96,9 @@ void ScaleRecipeTool::scale(Equipment* equip, double const newEff) {
    // We assume boil time remains unchanged
 
    for (auto const & fermentableAddition : this->m_recObs->fermentableAdditions()) {
-      // We assume volumes and masses get scaled the same way
-      if (!fermentableAddition->fermentable()->isSugar() && !fermentableAddition->fermentable()->isExtract()) {
+      // We assume volumes and masses get scaled the same way.  Only ingredients whose extract is subject to mash
+      // efficiency (see Recipe::sugarTotals) need adjusting for a change of efficiency.
+      if (!fermentableAddition->fermentable()->isExistingSugar()) {
          fermentableAddition->setQuantity(fermentableAddition->quantity() * effRatio * volRatio);
       } else {
          fermentableAddition->setQuantity(fermentableAddition->quantity() * volRatio);

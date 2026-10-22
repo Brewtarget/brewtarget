@@ -267,8 +267,9 @@ namespace {
       {XmlRecordDefinition::FieldType::Double          , "FAN_PPM"                       , PropertyNames::Fermentable::fan_ppm                  },
       {XmlRecordDefinition::FieldType::Double          , "FERMENTABILITY"                , PropertyNames::Fermentable::fermentability_pct       },
       {XmlRecordDefinition::FieldType::Double          , "BETA_GLUCAN_PPM"               , PropertyNames::Fermentable::betaGlucan_ppm           },
-      // This is not part of BeerXML or BeerJSON, so another extension tag
+      // These are not part of BeerXML or BeerJSON, so more extension tags
       {XmlRecordDefinition::FieldType::Double          , "LACTIC_ACID_BY_WEIGHT_PCT"     , PropertyNames::Fermentable::lacticAcidByWeight_pct   },
+      {XmlRecordDefinition::FieldType::Double          , "FERMENTABLE_FRACTION_PCT"      , PropertyNames::Fermentable::fermentableFraction_pct  },
    };
    std::initializer_list<XmlRecordDefinition::FieldDefinition> const BeerXml_FermentableType_ExclBase {
       // Type                                            XPath     Q_PROPERTY               Value Decoder

@@ -1,5 +1,5 @@
 //======================================================================================================================
-// schema/Culture.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+// schema/Culture.beer.schema is part of dotBeer and is copyright the following authors 2017-2026:
 //   • Mark Price <shadowchao99@gmail.com>
 //   • Matt Young <mfsy@yahoo.com>
 //   • Pierre Smits <pierre.smits@somonar.com>
@@ -14,7 +14,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.9.0/Culture.beer.schema",
+  "$id": "https://dotbeer.org/schema/0.10.0/Culture.beer.schema",
   "type": "object",
   "description": "Collects the attributes of a microbial culture such as a yeast.",
   "properties": {
@@ -59,6 +59,7 @@
       "type": "string"
     },
     "product_id": {
+      "description": "Producer’s product code or number for this item.",
       "type": "string"
     },
     "temperature_range": {
@@ -66,11 +67,11 @@
       "$ref": "Measurement.beer.schema#/$defs/RangeOfTemperature"
     },
     "alcohol_tolerance": {
-      "description": "The recommended limit of abv by the culture producer before attenuation stops.",
+      "description": "The recommended limit of abv by the culture producer before attenuation stops.\n\nThis field is normally only meaningful for yeasts (not bacteria).",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "flocculation": {
-      "description": "Flocculation refers to the ability of yeast to aggregate to form large flocs which drop out of suspension.",
+      "description": "Flocculation refers to the ability of yeast to aggregate to form large flocs which drop out of suspension.\n\nThis field is normally only meaningful for yeasts (not bacteria).",
       "enum": [
         "very low",
         "low",
@@ -97,17 +98,17 @@
       "minimum": 0
     },
     "pof": {
-      "description": "A POF+ culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts.",
+      "description": "Phenolic off-flavour positive: converts ferulic acid to 4-vinyl guaiacol (clove), typical of weizen, saison and many Belgian strains.  A POF+ culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts.\n\nThis field is normally only meaningful for yeasts (not bacteria).",
       "type": "boolean"
     },
     "glucoamylase": {
-      "description": "A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.",
+      "description": "STA1-positive (‘diastaticus’): secretes glucoamylase so can ferment dextrins and starch.  Risk of very low FG, over-carbonation and cross-contamination.\n\nThis field is normally only meaningful for yeasts (not bacteria).",
       "type": "boolean"
     },
-    "inventory": {
-      "$ref": "#/$defs/CultureAmount"
-    },
+    // BeerJSON and BeerXML have `inventory` here, but we prefer to keep inventory separate and more detailed via
+    // StockPurchaseCulture and StockUseCulture
     "killer": {
+      "description": "Information about any \"killer yeast properties\".\n\nThis field is normally only meaningful for yeasts (not bacteria).",
       "$ref": "#/$defs/KillerProperties"
     }
   },

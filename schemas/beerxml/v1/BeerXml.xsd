@@ -661,6 +661,9 @@
          <xs:element name="FAN_PPM"               type="xs:decimal"               minOccurs="0" maxOccurs="1"/>
          <xs:element name="FERMENTABILITY"        type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
          <xs:element name="BETA_GLUCAN_PPM"       type="xs:decimal"               minOccurs="0" maxOccurs="1"/>
+         <!-- Extension tags for fields that are in neither BeerXML nor BeerJSON -->
+         <xs:element name="LACTIC_ACID_BY_WEIGHT_PCT" type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FERMENTABLE_FRACTION_PCT"  type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
          <!-- Now the "inside a RECIPE" fields -->
          <xs:element name="TIME"              type="DurationInMinutes"     minOccurs="0" maxOccurs="1"/>
          <xs:element name="UNIT"              type="MassOrVolumeUnit"      minOccurs="0" maxOccurs="1"/>
