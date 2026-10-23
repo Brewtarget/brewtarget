@@ -10,7 +10,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.10.0/StockPurchase.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/StockPurchase.beer.schema",
   "title": "StockPurchase",
   // We use "purchase" rather than, say, "acquisition" in the interests of brevity since, for most brewers, most
   // acquisitions will be purchases.  (StockAcquisitionFermentable would be a bit long IMHO.)
@@ -23,22 +23,26 @@
         "name": {
           //
           // At the moment, this (in combination with date_ordered/date_received) is the only way to group multiple
-          // purchases together.   It's planned to have a more structure to support such groupings in future (eg
+          // purchases together.   It's planned to have more structure to support such groupings in future (eg
           // shopping lists / orders).
           //
           "description": "This is typically a short label for the purchase, eg \"April visit to LHBS\".",
           "type": "string"
         },
         "date_ordered": {
+          "description": "The date the stock was ordered.",
           "$ref": "Measurement.beer.schema#/$defs/Date"
         },
         "date_received": {
+          "description": "The date the stock was received.",
           "$ref": "Measurement.beer.schema#/$defs/Date"
         },
         "date_best_before": {
+          "description": "The best-before (or use-by) date of the stock.",
           "$ref": "Measurement.beer.schema#/$defs/Date"
         },
         "supplier": {
+          "description": "The shop or company the stock was acquired from (which need not be the ingredient's producer).",
           "type": "string"
         },
         "note": {
@@ -76,6 +80,7 @@
           "type": "string"
         },
         "date": {
+          "description": "The date the stock was used, lost or disposed of.",
           "$ref": "Measurement.beer.schema#/$defs/Date"
         },
         "reason": {
@@ -100,6 +105,7 @@
           "$ref": "DotBeer.beer.schema#/$defs/LocalId"
         },
         "note":  {
+          "description": "A brief note about this use of the stock.",
           "type": "string"
         }
       },
@@ -111,7 +117,7 @@
     "StockUseCulture": {
       "allOf": [{ "$ref": "#/$defs/StockUseCommon" }],
       "properties": {
-        "amount_used": { "$ref": "Culture.beer.schema#/$defs/CultureAmount" }
+        "amount_used": { "description": "The amount used, lost or disposed of.", "$ref": "Culture.beer.schema#/$defs/CultureAmount" }
       },
       "required": ["amount_used"],
       "unevaluatedProperties": false
@@ -126,12 +132,15 @@
           "$ref": "DotBeer.beer.schema#/$defs/LocalId"
         },
         "amount_ordered": {
+          "description": "The amount ordered.",
           "$ref": "Culture.beer.schema#/$defs/CultureAmount"
         },
         "amount_received": {
+          "description": "The amount actually received (which may differ from the amount ordered).",
           "$ref": "Culture.beer.schema#/$defs/CultureAmount"
         },
         "stock_uses":   {
+          "description": "What was subsequently done with this stock (eg used in a brew, lost or disposed of).",
           "type": "array",
           "items": {
             "$ref": "#/$defs/StockUseCulture"
@@ -153,7 +162,7 @@
     "StockUseFermentable": {
       "allOf": [{ "$ref": "#/$defs/StockUseCommon" }],
       "properties": {
-        "amount_used": { "$ref": "Fermentable.beer.schema#/$defs/FermentableAmount" }
+        "amount_used": { "description": "The amount used, lost or disposed of.", "$ref": "Fermentable.beer.schema#/$defs/FermentableAmount" }
       },
       "required": ["amount_used"],
       "unevaluatedProperties": false
@@ -168,12 +177,15 @@
           "$ref": "DotBeer.beer.schema#/$defs/LocalId"
         },
         "amount_ordered": {
+          "description": "The amount ordered.",
           "$ref": "Fermentable.beer.schema#/$defs/FermentableAmount"
         },
         "amount_received": {
+          "description": "The amount actually received (which may differ from the amount ordered).",
           "$ref": "Fermentable.beer.schema#/$defs/FermentableAmount"
         },
         "stock_uses":   {
+          "description": "What was subsequently done with this stock (eg used in a brew, lost or disposed of).",
           "type": "array",
           "items": {
             "$ref": "#/$defs/StockUseFermentable"
@@ -195,7 +207,7 @@
     "StockUseHop": {
       "allOf": [{ "$ref": "#/$defs/StockUseCommon" }],
       "properties": {
-        "amount_used": { "$ref": "Hop.beer.schema#/$defs/HopAmount" }
+        "amount_used": { "description": "The amount used, lost or disposed of.", "$ref": "Hop.beer.schema#/$defs/HopAmount" }
       },
       "required": ["amount_used"],
       "unevaluatedProperties": false
@@ -210,12 +222,15 @@
           "$ref": "DotBeer.beer.schema#/$defs/LocalId"
         },
         "amount_ordered": {
+          "description": "The amount ordered.",
           "$ref": "Hop.beer.schema#/$defs/HopAmount"
         },
         "amount_received": {
+          "description": "The amount actually received (which may differ from the amount ordered).",
           "$ref": "Hop.beer.schema#/$defs/HopAmount"
         },
         "stock_uses":   {
+          "description": "What was subsequently done with this stock (eg used in a brew, lost or disposed of).",
           "type": "array",
           "items": {
             "$ref": "#/$defs/StockUseHop"
@@ -237,7 +252,7 @@
     "StockUseMisc": {
       "allOf": [{ "$ref": "#/$defs/StockUseCommon" }],
       "properties": {
-        "amount_used": { "$ref": "Misc.beer.schema#/$defs/MiscAmount" }
+        "amount_used": { "description": "The amount used, lost or disposed of.", "$ref": "Misc.beer.schema#/$defs/MiscAmount" }
       },
       "required": ["amount_used"],
       "unevaluatedProperties": false
@@ -252,12 +267,15 @@
           "$ref": "DotBeer.beer.schema#/$defs/LocalId"
         },
         "amount_ordered": {
+          "description": "The amount ordered.",
           "$ref": "Misc.beer.schema#/$defs/MiscAmount"
         },
         "amount_received": {
+          "description": "The amount actually received (which may differ from the amount ordered).",
           "$ref": "Misc.beer.schema#/$defs/MiscAmount"
         },
         "stock_uses":   {
+          "description": "What was subsequently done with this stock (eg used in a brew, lost or disposed of).",
           "type": "array",
           "items": {
             "$ref": "#/$defs/StockUseMisc"

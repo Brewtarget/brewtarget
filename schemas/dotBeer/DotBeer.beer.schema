@@ -21,9 +21,23 @@
   //     beer_pH, start_pH, end_pH etc rather than beer_ph, start_ph, end_ph.
   //
   //     For enum values, we have a mixture of snake_case (eg `add_to_mash`, `add_to_boil`, etc) and separate words (eg
-  //     `partial mash`, `all grain`).  This is, except where we have good reason to do otherwise, we follow BeerJSON
-  //     enum values.  (Keeping the same enum values between BeerJSON and dotBeer gives us some minor code
+  //     `partial mash`, `all grain`).  This is because, except where we have good reason to do otherwise, we follow
+  //     BeerJSON enum values.  (Keeping the same enum values between BeerJSON and dotBeer gives us some minor code
   //     simplifications in Brewken/Brewtarget.)
+  //
+  //     Similarly, many field names and meanings are the same as in BeerJSON.  Where a field is similar to, but
+  //     different from, one in BeerJSON, there is a comment saying so next to it.  There are also some systematic
+  //     differences, which we don't comment on each time:
+  //       - Where BeerJSON has a field called `type`, we prefix it with what it is the type of (eg `hop_type`,
+  //         `culture_type`, `step_type`), as `type` is a JSON Schema keyword (so is confusing to read in a schema).
+  //       - Similarly, BeerJSON's free text `description` fields are `step_description`, `boil_description` etc.
+  //       - As noted above, we write pH rather than ph in field names (eg `start_pH`, `di_pH`).
+  //       - BeerJSON embeds things (eg the style, mash, boil and fermentation of a recipe, or the full details of each
+  //         ingredient in an addition), whereas we refer to them by local ID (`style_id`, `mash_id`, `hop_id`, etc).
+  //       - The top-level lists have different names: BeerJSON `hop_varieties`, `miscellaneous_ingredients` and
+  //         `profiles` are our `hops`, `miscs` and `waters`; and BeerJSON's single `boil` is our `boils` list.
+  //       - BeerJSON's `timing` on an addition is our `schedule`, and its `use` is our `stage`.
+  //       - BeerJSON's `inventory` on ingredients is replaced by our (more detailed) stock purchases.
   //
   //     In "description" fields, we mostly use \n for linebreaks, but there are places where <br> gives better output
   //     in the generated .md files (because \n would give no linebreak and \n\n would give too much interline spacing).
@@ -31,10 +45,10 @@
   //
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   //
-  // This is not a "real" URL.  The "directory" above the filename is the version of the dotBeer schema.
-  // Versions prior to 1.0.0 are subject to breaking changes!
+  // The "directory" above the filename is the version of the dotBeer schema.  (See "Versioning" in README.md for what
+  // changes between versions mean.)
   //
-  "$id": "https://dotbeer.org/schema/0.10.0/DotBeer.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/DotBeer.beer.schema",
   "type": "object",
   "title": "DotBeer File Format",
   "description": "A free and open serialisation format for beer recipes, ingredients and related data",

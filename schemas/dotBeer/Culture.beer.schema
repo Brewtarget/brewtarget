@@ -14,11 +14,12 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.10.0/Culture.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Culture.beer.schema",
   "type": "object",
   "description": "Collects the attributes of a microbial culture such as a yeast.",
   "properties": {
     "name": {
+      "description": "Name of the culture, usually the name its producer sells it under.",
       "type": "string"
     },
     "local_id" : {
@@ -30,6 +31,7 @@
       "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
     },
     "culture_type": {
+      "description": "The kind of organism the culture is, which determines how it ferments and what flavours it contributes.",
       "enum": [
         "ale",
         "bacteria",
@@ -43,10 +45,13 @@
         "other",
         "pedio",
         "spontaneous",
+        // Added in BeerJSON 3.0, for (eg Hefeweizen) strains that BeerXML 1.0 called "Wheat"
+        "wheat",
         "wine"
       ]
     },
     "form": {
+      "description": "The physical form the culture is supplied or stored in.",
       "enum": [
         "liquid",
         "dry",
@@ -56,6 +61,7 @@
       ]
     },
     "producer": {
+      "description": "The lab or company that produced the culture.",
       "type": "string"
     },
     "product_id": {
@@ -83,7 +89,8 @@
       ]
     },
     "attenuation_range": {
-      "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentageSimple"
+      "description": "The range of apparent attenuation that the producer quotes for the culture.  (This can be more than 100%, eg for a diastatic yeast.)",
+      "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentageNoMax"
     },
     "notes": {
       "type": "string"
@@ -107,6 +114,7 @@
     },
     // BeerJSON and BeerXML have `inventory` here, but we prefer to keep inventory separate and more detailed via
     // StockPurchaseCulture and StockUseCulture
+    // BeerJSON calls this `zymocide`, with fields `no1`, `no2`, `no28`, `klus` and `neutral`
     "killer": {
       "description": "Information about any \"killer yeast properties\".\n\nThis field is normally only meaningful for yeasts (not bacteria).",
       "$ref": "#/$defs/KillerProperties"

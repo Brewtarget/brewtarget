@@ -15,11 +15,12 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.10.0/Fermentable.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Fermentable.beer.schema",
   "type": "object",
   "description": "An ingredient that contributes extractable sugar (and usually colour): malts and other grains, extracts, sugars, honey, fruit, juice.\n\nA fermentable must have at least one of `yield_fine_grind`, `yield_coarse_grind` and `yield_potential`, as otherwise its contribution to gravity cannot be calculated.  (`yield_fine_coarse_difference` does not count for this purpose, as, on its own, it does not give a yield.)\n\nAs noted in descriptions, some fields are only meaningful for certain types of fermentable.  On the whole, the schema does not try to enforce this, partly in the interests of simplicity and partly because analysis sheets for unusual products do sometimes quote these values.",
   "properties": {
     "name": {
+      "description": "Name of the fermentable, usually the name its producer sells it under.",
       "type": "string"
     },
     "local_id" : {
@@ -31,6 +32,7 @@
       "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
     },
     "fermentable_type": {
+      "description": "The kind of fermentable, which determines how it is used and whether it has to be mashed.",
       "enum": [
         "dry extract",
         "extract",
@@ -47,6 +49,7 @@
       "type": "string"
     },
     "producer": {
+      "description": "The maltster or company that produced the fermentable.",
       "type": "string"
     },
     "product_id": {
@@ -66,6 +69,11 @@
         "adjunct"
       ]
     },
+    //
+    // BeerJSON has a `yield` object holding `fine_grind`, `coarse_grind`, `fine_coarse_difference` and `potential`.  We
+    // flatten these out to `yield_fine_grind` etc, partly because it's simpler and partly because it makes it easier to
+    // require at least one of them (see "anyOf" below).  (In BeerJSON, `yield` is required, but can be empty.)
+    //
     "yield_fine_grind": {
       "description": "Extract Yield Dry Basis Fine Grind (DBFG) - aka percentage yield, compared to sucrose, of a fine grind, or, for extracts and sugars, the raw yield by weight.",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
@@ -120,6 +128,13 @@
     },
     // BeerJSON and BeerXML have `inventory` here, but we prefer to keep inventory separate and more detailed via
     // StockPurchaseFermentable and StockUseFermentable
+    //
+    // BeerJSON's names for these fields are `glassy`, `half`, `mealy`, `plump` and `thru` (the last being our
+    // `kernel_size_prp_thin`).  Our names group them by what they measure.  NB: BeerJSON describes `glassy` as "the
+    // 'crystallized' percentage of starches for crystal malts", but, on malt analysis sheets, glassy (aka vitreous) is
+    // the kernel hardness measure described here, and BeerJSON's own description of `mealy` ("the opposite of glassy")
+    // agrees with that.
+    //
     "hardness_prp_glassy": {
       "description": "Percentage of malt that is \"glassy\".  For a malt, % \"glassy\" + % \"half glassy\" + % \"mealy\" = 100%.\n\nMaltsters classify kernels by how much of the endosperm is hard and glassy (vitreous) rather than soft and mealy: mealy kernels are up to 25% glassy, half-glassy 26–75%, and glassy more than 75%.  Glassy kernels are generally a sign of poor modification, and mill and mash less well.  As a rule of thumb, a base malt should be at least 90% mealy, and at least 95% mealy for a single-infusion mash.  (See https://byo.com/article/understanding-malt-spec-sheets-advanced-brewing/ and https://www.probrewer.com/library/malt/understanding-malt-analysis-sheets/.)\n\nThis field is normally only meaningful for *malted* grains.",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
@@ -144,6 +159,11 @@
       "description": "Friability is the measure of a malt's ability to crumble during the crush, and is used as an indicator for easy gelatinization of the grain and starches, as well as modification of the malt. Value of 85% or higher indicates a well modified malt and is suitable for single step mashes. Lower values may require a step mash.\n\nThis field is normally only meaningful for *malted* grains.",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
+    //
+    // BeerJSON's `di_ph` description gives a different method for measuring this (1 lb of grain mashed in 1 gallon of
+    // distilled water, ie about 120 g/L, rather than the 400 g/L below).  Either way, what matters in practice is the
+    // figure the maltster quotes, which is what this field is for.
+    //
     "di_pH": {
       "description": "The pH of wort made by mashing the malt alone in distilled (or deionised) water, which is where the \"DI\" comes from.  This is a key input for mash pH prediction and water chemistry calculations.  DI pH varies by malt type, and between maltsters for nominally the same malt.\n\nOne way to measure it is to mash 40 g of finely crushed grain in 100 mL of distilled water at 52°C (125°F) for 20 minutes, then measure the pH once the wort has cooled to 25°C (77°F).  (See https://www.thescrewybrewer.com/2016/12/the-influence-of-grain-di-ph-on-mash-ph.html.)\n\nThis field is normally only meaningful when `fermentable_type` is `grain`.",
       "$ref": "Measurement.beer.schema#/$defs/Acidity"
@@ -161,9 +181,10 @@
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
     },
     "fermentability": {
-      "description": "Fermentability - indicates a baseline typical apparent attenuation for a typical medium attenuation yeast.\n\nThis field is normally only meaningful for extracts (and possibly sugars and honey).  Compare `fermentable_fraction`.",
-      "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
+      "description": "Fermentability - indicates a baseline typical apparent attenuation for a typical medium attenuation yeast.  (Like any apparent attenuation, this can be more than 100%, eg for a sugar that ferments out completely.)\n\nThis field is normally only meaningful for extracts (and possibly sugars and honey).  Compare `fermentable_fraction`.",
+      "$ref": "Measurement.beer.schema#/$defs/PercentageNoMax"
     },
+    // Not in BeerJSON
     "fermentable_fraction": {
       "description": "The percentage of this ingredient's extract that brewing yeast (*Saccharomyces*) can ferment.  The rest is treated as unfermentable when estimating final gravity and ABV: it raises both original and final gravity, but is not attenuated.  If this field is absent, 100% should be assumed.\n\nTypical values are 0% for lactose and around 10% for maltodextrin, which is mostly dextrins with a little glucose and maltose.\n\nThis is a property of the ingredient, not of the beer, and is intended for ingredients that are wholly or largely unfermentable.  Do not set it for ordinary malts, as the attenuation figures quoted for yeasts already allow for the unfermentable dextrins in a normal all-malt wort.  (By contrast, `fermentability` is the typical apparent attenuation of a wort made from the ingredient, and so already includes the effect of the yeast.)\n\nNote that some organisms (eg some *Brettanomyces* strains and lactic acid bacteria) can ferment sugars that brewing yeast cannot, so a recipe using them may attenuate further than this value implies.",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
@@ -172,6 +193,7 @@
       "description": "β-glucan content, as given on a malt analysis sheet, ie measured in a Congress (standard laboratory) wort, typically in mg/L. High values (roughly 180 mg/L or more) indicate a risk of high wort viscosity and slow lautering, so a β-glucan rest and avoiding fly sparging may be worth considering.\n\nThis field is normally only meaningful for *malted* grains.",
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
     },
+    // Not in BeerJSON
     "lactic_acid_by_weight": {
       "description": "For acidulated malts (aka acid malts), this is the percentage content by weight of lactic acid (which is usually what provides the acidity).  You might think that maltsters would be keen to give you this figure, but they often prefer to say things such as \"1% of this malt in the grain bill reduces the mash pH by approximately 0.1\", which is less helpful.  According to https://www.brunwater.com/water-knowledge, \"The typical acid content of acid malt can vary from maltster to maltster.  A range of 2 to 3 percent by weight lactic acid to acidulated grain weight is typical.\"",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
@@ -181,6 +203,16 @@
     "name",
     "fermentable_type",
     "color"
+  ],
+  //
+  // A fermentable with no yield is no use for calculating gravity, so we require at least one of the fields from which
+  // yield can be obtained.  `yield_fine_coarse_difference` on its own does not count, as it is only the difference
+  // between the two grind yields, and does not give us either of them.
+  //
+  "anyOf": [
+    { "required": ["yield_fine_grind"  ] },
+    { "required": ["yield_coarse_grind"] },
+    { "required": ["yield_potential"   ] }
   ],
   //
   // See https://json-schema.org/understanding-json-schema/reference/conditionals#dependentSchemas for how the

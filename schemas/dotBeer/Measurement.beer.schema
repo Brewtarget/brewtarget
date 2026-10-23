@@ -14,7 +14,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.10.0/Measurement.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Measurement.beer.schema",
   "title": "Measurement",
   "description": "'Measurement' is not a type itself, but a subschema holding various types of measurement, and ranges thereof.\n\nIn principle, we could have sub-groupings such as \"physical quantities\" (volume, mass, acidity, etc), \"non-physical quantities\" (percentage, count, date, etc).  However, this adds complexity to the schema for little gain, because there is nowhere else in the schema where we would rely on such groupings.  So, instead, we keep a flat hierarchy.\n\nIn several cases, there is only one possible unit (eg acidity, percentage, count), so it would be possible to omit units altogether.  However, in common with BeerJSON, we retain them for a couple of reasons.  Firstly, it makes the serialisation easier to understand for human readers.  Secondly, it makes things more extendable: eg, if we decided at a future date we would like to support \"percentage points\" in addition to \"percentages\", then it's a smaller change to add them.\n\nFor Ranges, note that we do not force the same units for lower and upper bounds.  This is partly because it would complicate the schema for only small gain, and partly because it's conceivable that you want different units on min and max (eg if you had a mass range you might want min in grams and max in kilograms).",
   "$defs": {
@@ -173,6 +173,7 @@
           // use JSON's floating point type.  This simplifies the storage (eg we don't have to record how many minor
           // units the currency has per major unit).
           //
+          "description": "The amount in the currency's major unit, eg 1.23 for $1.23 (and not 123 cents).",
           "type": "number",
           "minimum": 0
         }
@@ -379,7 +380,7 @@
     },
     "PercentageNoMax": {
       "type": "object",
-      "description": "PercentageNoMax, aka, \"no max percentage\" is a percentage that can be more than 100% (but cannot be less than 0%).\n\nNOTE: This is not currently used, but is reserved for future use.",
+      "description": "PercentageNoMax, aka, \"no max percentage\" is a percentage that can be more than 100% (but cannot be less than 0%).  Eg apparent attenuation is more than 100% for a beer whose final gravity is below 1.000 SG.",
       "properties": {
         "unit": {
           "enum": [
@@ -400,6 +401,9 @@
     "PercentageSimple": {
       "type": "object",
       "description": "PercentageSimple, aka, \"simple percentage\" is a percentage where the value is no less than 0% and no greater than 100%",
+      //
+      // NB: BeerJSON has a single PercentType, with no minimum or maximum.
+      //
       "properties": {
         "unit": {
           "enum": [
@@ -418,12 +422,18 @@
       ],
       "unevaluatedProperties": false
     },
-    // BeerJSON also has a pressure measure, but, AFAICT, it is not used in the schema, so we drop it from dotBeer
+    // BeerJSON also has a pressure measure, which, as of BeerJSON 3.0, is used for `vessel_pressure` on fermentation
+    // steps.  We don't (yet) support that, so we don't (yet) need the measure.
     "SpecificHeatCapacity": {
       "type": "object",
       "description": "The amount of heat that must be added to one unit of mass of the substance in order to cause an increase of one unit in temperature.<br>`c/g·C` is calories per Celsius per gram (and also kilocalories per degree Celsius per kilogram)<br>`J/kg·K` is joules per Kelvin per kilogram<br>`BTU/lb·F` is BTU per Fahrenheit per pound<br>Although SI units are \"joules per kelvin per kilogram\" (which is the same as \"joules per degree Celsius per kilogram\"), historically a measurement involving calories instead of joules was used in chemistry, nutrition and brewing.  There are two types of calorie: the \"small calorie\" (or \"gram-calorie\", \"cal\") = 4.184 J; and the \"grand calorie\" (aka \"kilocalorie\", \"kcal\" or \"Cal\") = 1000 small calories = 4184 J.  However, the specific heat measurement using \"cal\" (\"calories per degree Celsius per gram\") is the same as that for \"Cal\" (\"kilocalories per degree Celsius per kilogram\"): 1 cal / (°C × g) = 1 Cal / (°C × kg) = 4184 J / (K × kg) = the specific heat capacity of liquid water.  Note too that, because a British Thermal Unit (BTU) is defined as \"the amount of heat required to raise the temperature of one pound of water by one degree Fahrenheit\", we have 1 BTU/lb·F = 1 c/g·C.",
       "properties": {
         "unit": {
+          //
+          // BeerJSON's units here are "Cal/(g C)", "J/(kg K)" and "BTU/(lb F)".  Note that, strictly, "Cal" (with a
+          // capital C) is a kilocalorie, which would make BeerJSON's first unit 1000 times bigger than ours.  In practice,
+          // its value (eg 0.3 for stainless steel) is the same as ours, ie in (small) calories per gram per degree.
+          //
           "enum": [
             "c/g·C",
             "J/kg·K",
@@ -548,7 +558,7 @@
             "qt",
             "gal",
             "bbl",
-            // Imperial
+            // Imperial.  NB: BeerJSON does not have itsp, itbsp or icup.
             "itsp",
             "itbsp",
             "ifloz",
@@ -572,7 +582,7 @@
     },
     "VolumePerMass": {
       "type": "object",
-      "description": "For a single substance, volume-per-mass is the substance's \"specific volume\" (see https://en.wikipedia.org/wiki/Specific_volume), which is the reciprocal of its density.  However, in brewing, volume-per-mass is mostly used for ratios between two different things -- eg mash thickness (volume of water per mass of grain) or grain absorption rate (volume of water absorbed per mass of grain).  In such cases, it would be inaccurate to refer to \"specific volume\".",
+      "description": "`qt/lb` is US quarts per pound<br>`gal/lb` is US gallons per pound<br>`gal/oz` is US gallons per ounce<br>`l/g` is liters per gram<br>`l/kg` is liters per kilogram<br>`floz/oz` is US fluid ounces per ounce<br>`m^3/kg` is cubic meters per kilogram<br>`ft^3/lb` is cubic feet per pound<br>(See Volume and Mass for the sizes of these units.)\n\nFor a single substance, volume-per-mass is the substance's \"specific volume\" (see https://en.wikipedia.org/wiki/Specific_volume), which is the reciprocal of its density.  However, in brewing, volume-per-mass is mostly used for ratios between two different things -- eg mash thickness (volume of water per mass of grain) or grain absorption rate (volume of water absorbed per mass of grain).  In such cases, it would be inaccurate to refer to \"specific volume\".",
       "properties": {
         "unit": {
           "enum": [
@@ -675,6 +685,22 @@
         },
         "maximum": {
           "$ref": "#/$defs/Gravity"
+        }
+      },
+      "required": [
+        "minimum",
+        "maximum"
+      ],
+      "unevaluatedProperties": false
+    },
+    "RangeOfPercentageNoMax": {
+      "type": "object",
+      "properties": {
+        "minimum": {
+          "$ref": "#/$defs/PercentageNoMax"
+        },
+        "maximum": {
+          "$ref": "#/$defs/PercentageNoMax"
         }
       },
       "required": [

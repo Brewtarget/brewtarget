@@ -69,8 +69,8 @@
 namespace {
    // See below for more comments on this.  If and when DotBeer evolves then we will want separate constants for
    // min/max versions we can read plus whatever version we write.
-   BtStringConst  const dotBeerVersionWeSupportAsString{"0.10.0"};
-   QVersionNumber const dotBeerVersionWeSupport        {0, 10, 0};
+   BtStringConst  const dotBeerVersionWeSupportAsString{"1.0.0"};
+   QVersionNumber const dotBeerVersionWeSupport        {1, 0, 0};
 
    auto const outputDocumentName = "DotBeer";
 

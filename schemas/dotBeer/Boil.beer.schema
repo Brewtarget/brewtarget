@@ -12,7 +12,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.10.0/Boil.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Boil.beer.schema",
   "type": "object",
   "description": "A boil procedure, which can be used by multiple recipes.  Unlike in BeerJSON, a boil must have at least one step: a standard single step boil is simply a boil with one step.  (There is therefore no separate `boil_time` field, as the length of the boil comes from its steps.)",
   "properties": {
@@ -49,6 +49,7 @@
     // this newer format, we might as well insist on the steps.)
     //
     "boil_steps": {
+      "description": "The steps that make up the boil, in the order they are performed.",
       "type": "array",
       "minItems": 1,
       "items": {

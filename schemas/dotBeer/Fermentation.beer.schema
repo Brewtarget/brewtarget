@@ -14,7 +14,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.10.0/Fermentation.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Fermentation.beer.schema",
   "type": "object",
   "description": "A fermentation procedure, which can be used by multiple recipes.",
   "properties": {
@@ -36,6 +36,7 @@
       "type": "string"
     },
     "fermentation_steps": {
+      "description": "The steps that make up the fermentation, in the order they are performed.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -65,7 +66,9 @@
               "description": "Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction.",
               "type": "boolean"
             },
+            // BeerJSON (from 3.0) also has `vessel_pressure`, for fermenting under pressure, which we don't (yet) have
             "vessel": {
+              "description": "Name of the vessel the step takes place in, which is how a transfer between vessels is recorded.",
               "type": "string"
             }
           }

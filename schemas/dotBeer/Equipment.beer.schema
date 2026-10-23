@@ -12,10 +12,14 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.10.0/Equipment.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Equipment.beer.schema",
   "type": "object",
   "description": "Groups together all the vessels in a set of brewing equipment.  Note that, in some set-ups, one vessel serves multiple purposes -- eg mash tun and kettle may be the same physical vessel -- but there are nonetheless individual entries here for each \"purpose\".",
   "properties": {
+    //
+    // NB: BeerJSON has a list of `equipment_items`, each with a `form` saying what it is (eg "Mash Tun"), whereas we have
+    // a field for each vessel.  BeerJSON's `maximum_volume` and `specific_heat` are our `max_volume` and
+    // `specific_heat_capacity`, and the free text `type` of a BeerJSON equipment item is our `vessel_type`.
     //
     // We put the `"unevaluatedProperties": false` property on the individual fields rather than their types because,
     // per the $defs section below, we need to be able to combine the types.  Eg, `HotSideVessel` is `Vessel` with some
@@ -98,6 +102,7 @@
       "description": "An individual vessel (eg mash tun, boil kettle) that forms part of brewing equipment.",
       "properties": {
         "vessel_type": {
+          "description": "Free text type of the vessel, such as its material or model.",
           "type": "string"
         },
         "max_volume": {

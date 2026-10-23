@@ -10,11 +10,13 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.10.0/StepCommon.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/StepCommon.beer.schema",
   "description": "`StepCommon` is not a type itself, but a subschema holding various common parts of `MashStep`, `BoilStep` and `FermentationStep`.",
   "$defs": {
     //
     // The step types have overlapping sets of fields, as follows (where ‡ means a field is required):
+    //
+    // NB: In BeerJSON, the mash step's start temperature is called `step_temperature`.
     //
     //    MashStep             BoilStep            FermentationStep    |   Provided By
     //    --------             --------            ----------------    |   -----------
@@ -64,9 +66,11 @@
           "$ref": "Measurement.beer.schema#/$defs/Temperature"
         },
         "start_pH": {
+          "description": "The pH at the start of the step.",
           "$ref": "Measurement.beer.schema#/$defs/Acidity"
         },
         "end_pH": {
+          "description": "The pH at the end of the step.",
           "$ref": "Measurement.beer.schema#/$defs/Acidity"
         }
       },
@@ -89,9 +93,11 @@
       "description": "Common attributes of BoilStep and FermentationStep but not MashStep.",
       "properties": {
         "start_gravity": {
+          "description": "The gravity at the start of the step.",
           "$ref": "Measurement.beer.schema#/$defs/Gravity"
         },
         "end_gravity": {
+          "description": "The gravity at the end of the step, eg a fermentation step might last until the gravity reaches 1.012 (rather than for a set time).",
           "$ref": "Measurement.beer.schema#/$defs/Gravity"
         }
       }

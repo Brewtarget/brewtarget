@@ -13,7 +13,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.10.0/Water.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Water.beer.schema",
   "type": "object",
   "description": "Full definition of a brewing water profile.  NOTE that water is handled differently from other ingredients.  We don't model inventory of water, it doesn't have producers or product IDs, and the amounts needed in a recipe are already defined in its mash steps rather than by RecipeAddition amounts.",
   "properties": {
@@ -52,10 +52,15 @@
       "description": "Chloride (Cl⁻) content of the water profile.  Common in most water supplies, chloride ions contribute to the mellow, palate-full character of a beer.",
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
     },
+    // Copper, manganese, phosphate and zinc are not in BeerJSON
     "copper": {
       "description": "Copper (Cu²⁺) content of the water profile.  In concentrations as low as 0.1 mg/L, copper ions can act as catalysts of oxidants, leading to irreversible beer haze.",
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
     },
+    //
+    // BeerJSON (from 3.0) has `fluoride`, plus the deprecated misspelling `flouride`, which readers of BeerJSON should
+    // also accept.  BeerJSON also has a `producer` field (for the utility or source of the water), which we don't.
+    //
     "fluoride": {
       "description": "Fluoride (F⁻) content of the water profile",
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
