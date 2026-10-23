@@ -78,7 +78,7 @@
               "$ref": "Measurement.beer.schema#/$defs/Volume"
             },
             "water_grain_ratio": {
-              "description": "Also known as the mash thickness, this is total ratio of water to grain (eg 1.75 qt/lb or 3.65 L/kg) for this step AFTER the infusion.  Note this value must be consistent with the required infusion amount and amounts added in earlier steps.\n\nThis field is normally only meaningful when `step_type` is `infusion`.",
+              "description": "Also known as the mash thickness, this is total ratio of water to grain (eg 1.75 qt/lb or 3.65 l/kg) for this step AFTER the infusion.  Note this value must be consistent with the required infusion amount and amounts added in earlier steps.\n\nThis field is normally only meaningful when `step_type` is `infusion`.",
               "$ref": "Measurement.beer.schema#/$defs/VolumePerMass"
             },
             "infuse_temperature": {

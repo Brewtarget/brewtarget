@@ -148,7 +148,7 @@
         {
           "properties": {
             "grain_absorption_rate": {
-              "description": "The apparent volume absorbed by grain, typical values are 0.125 gal/lb (1.04 L/kg) for a mash tun, 0.08 gal/lb (0.66 L/kg) for BIAB.",
+              "description": "The apparent volume absorbed by grain, typical values are 0.125 gal/lb (1.04 l/kg) for a mash tun, 0.08 gal/lb (0.66 l/kg) for BIAB.",
               "$ref": "Measurement.beer.schema#/$defs/VolumePerMass"
             }
           }

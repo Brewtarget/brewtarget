@@ -195,6 +195,13 @@ protected:
          } else {
             selected.firstPrimary = this->getFirstSelectedPrimary();
          }
+      } else {
+         //
+         // If you click outside the tree, when something is selected, we won't have something under the cursor.  In
+         // that event, we'll assume you don't want to do anything with any selected items.
+         //
+//         this->derived().clearSelection();
+         selected = {};
       }
 
       this->m_contextMenus.showContextMenu(this->derived().mapToGlobal(point), selected);

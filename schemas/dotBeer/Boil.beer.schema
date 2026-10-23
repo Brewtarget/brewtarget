@@ -14,7 +14,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://dotbeer.org/schema/0.10.0/Boil.beer.schema",
   "type": "object",
-  "description": "A boil procedure, which can be used by multiple recipes.  A boil procedure with no steps is the same as a standard single step boil.",
+  "description": "A boil procedure, which can be used by multiple recipes.  Unlike in BeerJSON, a boil must have at least one step: a standard single step boil is simply a boil with one step.  (There is therefore no separate `boil_time` field, as the length of the boil comes from its steps.)",
   "properties": {
     "name": {
       "type": "string"
@@ -64,7 +64,7 @@
   "$defs": {
     "BoilStep": {
       "type": "object",
-      "description": "Individual step of a boil, including preboil steps, non-boiling pasteurization steps, boiling, whirlpool steps, and chilling.",
+      "description": "Individual step of a boil, including preboil steps, non-boiling pasteurization steps, boiling, whirlpool steps, and chilling.\n\nIf `start_temperature` or `end_temperature` is not given, the step is assumed to be at boiling at that point.  Steps are classified as pre-boil, boil proper or post-boil by their temperatures (see `AdditionSchedule` in [Recipe](./Recipe.md#additionschedule) for details).",
       "allOf": [
         {
           "$ref": "StepCommon.beer.schema#/$defs/StepBase"

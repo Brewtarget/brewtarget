@@ -156,24 +156,28 @@
         //
         "culture_stock_purchases": {
           "type": "array",
+          "description": "Records of acquisitions of stock of a culture (eg yeast), and of what was subsequently done with that stock.  Each refers, by local ID, to an item in the \"cultures\" section of the same dotBeer file.",
           "items": {
             "$ref": "StockPurchase.beer.schema#/$defs/StockPurchaseCulture"
           }
         },
         "fermentable_stock_purchases": {
           "type": "array",
+          "description": "Records of acquisitions of stock of a fermentable, and of what was subsequently done with that stock.  Each refers, by local ID, to an item in the \"fermentables\" section of the same dotBeer file.",
           "items": {
             "$ref": "StockPurchase.beer.schema#/$defs/StockPurchaseFermentable"
           }
         },
         "hop_stock_purchases": {
           "type": "array",
+          "description": "Records of acquisitions of stock of a hop, and of what was subsequently done with that stock.  Each refers, by local ID, to an item in the \"hops\" section of the same dotBeer file.",
           "items": {
             "$ref": "StockPurchase.beer.schema#/$defs/StockPurchaseHop"
           }
         },
         "misc_stock_purchases": {
           "type": "array",
+          "description": "Records of acquisitions of stock of a miscellaneous ingredient, and of what was subsequently done with that stock.  Each refers, by local ID, to an item in the \"miscs\" section of the same dotBeer file.",
           "items": {
             "$ref": "StockPurchase.beer.schema#/$defs/StockPurchaseMisc"
           }
@@ -213,7 +217,7 @@
       "unevaluatedProperties": false
     },
     "$schema": {
-      "description": "It is not required or expected to include this field in a dotBeer file.  However, some tools such as VS Code make use of it for syntax highlighting and autocorrect, so we allow it to be set.  If it is present, the most sensible value for it to have is \"https://json-schema.org/draft/2020-12/schema\" (ie the same as the dotBeer schema files).",
+      "description": "It is not required or expected to include this field in a dotBeer file.  However, some editors (eg VS Code) use it to find the schema against which to validate the file, and so provide autocompletion and error highlighting, so we allow it to be set.  If it is present, it should be the URL of the dotBeer root schema for the version the file was written with, ie \"https://dotbeer.org/schema/X.Y.Z/DotBeer.beer.schema\" where X.Y.Z is the value of `version`.  (Some editors also accept a local file path to a copy of the schema.)\n\nNOTE that it should *not* be the JSON Schema metaschema URL (\"https://json-schema.org/draft/2020-12/schema\").  That would tell such editors to validate the file as if it were itself a JSON Schema.",
       "type":"string"
     }
   },
@@ -231,9 +235,21 @@
       "description": "A FolderPath is typically used for the suggested slash-delimited subfolder path in which to store an object.  Any leading slash should be ignored.  Eg, if an object's folder path is \"/hum/bug\" (or \"hum/bug\") then importing the object into folder \"/foo/bar\" should result in its folder path being \"/foo/bar/hum/bug\".  If the importing software does not support folders, then it should ignore folder path fields.",
       //
       // The regular expression here is a bit convoluted so that it allows leading slashes but not trailing ones (other
-      // then the trivial case of "/").
+      // than the trivial case of "/").
       //
-      "pattern": "^[/]?([^/]+([/][^/]+)*)?$",
+      // Each segment (ie the text between slashes) must contain at least one character that is neither a space nor a
+      // control character, and must not contain any control characters at all.  Control characters are the C0 controls
+      // (U+0000–U+001F, which includes tab and newline), DEL (U+007F) and the C1 controls (U+0080–U+009F).  So a segment
+      // is:
+      //
+      //    [ ]*                             zero or more (leading) spaces
+      //    [^/ \x00-\x1F\x7F-\x9F]          one character that is not a slash, space or control character
+      //    [^/\x00-\x1F\x7F-\x9F]*          zero or more characters that are not a slash or control character
+      //
+      // We use \xHH rather than \uHHHH escapes because the latter are not supported by all regex engines (eg PCRE2, which
+      // is used by Blaze, does not understand \uHHHH by default).
+      //
+      "pattern": "^[/]?([ ]*[^/ \\x00-\\x1F\\x7F-\\x9F][^/\\x00-\\x1F\\x7F-\\x9F]*([/][ ]*[^/ \\x00-\\x1F\\x7F-\\x9F][^/\\x00-\\x1F\\x7F-\\x9F]*)*)?$",
       //
       // Although it isn't intended that a FolderPath ever be translated to a filesystem path, it feels like best
       // practice to protect any future importer that does map folder paths onto a real filesystem.  We therefore

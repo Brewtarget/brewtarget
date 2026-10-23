@@ -94,16 +94,34 @@
           ]
         },
         "value": {
-          "type": "number",
-          //
-          // 0° Lovibond (colorless) = -0.76 SRM = -1.496 EBC
-          //
-          "minimum": -1.5
+          "type": "number"
         }
       },
       "required": [
         "unit",
         "value"
+      ],
+      //
+      // The minimum depends on the unit.  Lovibond cannot be negative, as 0°L is colorless.  The usual conversion,
+      // SRM = 1.3546 × °L − 0.76, then gives 0°L = -0.76 SRM, and, with EBC = 1.97 × SRM, -0.76 SRM = -1.497 EBC.  So
+      // slightly negative SRM and EBC values are permitted, as they correspond to valid (if very pale) Lovibond values.
+      //
+      // As elsewhere with if/then, the `required` field emphasises that we need the field to be present to avoid the
+      // "if" being trivially true.
+      //
+      "allOf": [
+        {
+          "if":   { "properties": { "unit": { "const": "Lovi" } }, "required": ["unit"] },
+          "then": { "properties": { "value": { "minimum": 0.0 } } }
+        },
+        {
+          "if":   { "properties": { "unit": { "const": "SRM" } }, "required": ["unit"] },
+          "then": { "properties": { "value": { "minimum": -0.76 } } }
+        },
+        {
+          "if":   { "properties": { "unit": { "const": "EBC" } }, "required": ["unit"] },
+          "then": { "properties": { "value": { "minimum": -1.5 } } }
+        }
       ],
       "unevaluatedProperties": false
     },
@@ -194,11 +212,11 @@
     },
     "EnergyPerVolume": {
       "type": "object",
-      "description": "Energy per volume is used in nutritional labelling.\n`kcal/L` is kilocalories per liter<br>`kcal/50cl` is kilocalories per 50 centiliters<br>`kcal/33cl` is kilocalories per 33 centiliters<br>`kcal/25cl` is kilocalories per 25 centiliters<br>`kcal/100ml` is kilocalories per 100 milliliters*<br>`kcal/pt` is kilocalories per US pint (16 US fluid ounces)<br>`kcal/12floz` is kilocalories per 12 US fluid ounces<br>`kcal/ipt` is kilocalories per imperial pint<br>`kJ/100ml` is kilojoules per 100 milliliters*<br>Those marked * are EU standards for nutritional labelling.",
+      "description": "Energy per volume is used in nutritional labelling.\n`kcal/l` is kilocalories per liter<br>`kcal/50cl` is kilocalories per 50 centiliters<br>`kcal/33cl` is kilocalories per 33 centiliters<br>`kcal/25cl` is kilocalories per 25 centiliters<br>`kcal/100ml` is kilocalories per 100 milliliters*<br>`kcal/pt` is kilocalories per US pint (16 US fluid ounces)<br>`kcal/12floz` is kilocalories per 12 US fluid ounces<br>`kcal/ipt` is kilocalories per imperial pint<br>`kJ/100ml` is kilojoules per 100 milliliters*<br>Those marked * are EU standards for nutritional labelling.",
       "properties": {
         "unit": {
           "enum": [
-            "kcal/L"     ,
+            "kcal/l"     ,
             "kcal/50cl"  ,
             "kcal/33cl"  ,
             "kcal/25cl"  ,
@@ -222,7 +240,7 @@
     },
     "Gravity": {
       "type": "object",
-      "description": "In brewing, \"gravity\" is a shorthand for \"specific gravity\".  Typically, brewers measure relative gravity (aka specific gravity) to gauge percent of sugar content (ie Plato and Brix).\n\nWe assume that brewers don't need \"specific gravity\" below 0.900 SG (-30°P/°Bx) or above 2.000 SG (212.9°P/°Bx) ",
+      "description": "In brewing, \"gravity\" is a shorthand for \"specific gravity\".  Typically, brewers measure relative gravity (aka specific gravity) to gauge percent of sugar content (ie Plato and Brix).\n\nWe assume that brewers don't need \"specific gravity\" below 0.900 SG (about -30°P/°Bx).  At the other end, because degrees Plato and Brix are percentages of sugar by weight, they cannot exceed 100, which corresponds to about 1.6 SG (the density of sucrose itself), so these are the maximums.",
       "properties": {
         "unit": {
           //
@@ -250,7 +268,10 @@
       ],
       //
       // In reality, a gravity below 0.990 or above 1.200 would be pretty unusual in the context of brewing, so the
-      // [0.900, 2.000] range here is somewhat conservative.
+      // lower bound of 0.900 here is somewhat conservative.  The upper bound is a physical limit: °P and °Bx are mass
+      // percentages of (notionally) sucrose, so 100 is the most they can be.  Using the usual conversion,
+      // SG = 1 + °P / (258.6 − (°P / 258.2 × 227.1)), 100°P is 1.586 SG, which is (reassuringly) the density of solid
+      // sucrose relative to water.  We round this up to 1.6 for the SG maximum.
       //
       // NOTE: Because specific gravity is actually measuring something different (density) than plato and brix (sugar
       //       content), the conversions from SG here have a built-in assumption that, when we are converting to or from
@@ -261,8 +282,8 @@
       // required above) but it emphasises that we need the field to be present to avoid the "if" being trivially true.
       //
       "if":   { "properties": { "unit": { "const": "sg" } }, "required": ["unit"] },
-      "then": { "properties": { "value": { "minimum":   0.9, "maximum":   2.0 } } },
-      "else": { "properties": { "value": { "minimum": -30.0, "maximum": 212.9 } } },
+      "then": { "properties": { "value": { "minimum":   0.9, "maximum":   1.6 } } },
+      "else": { "properties": { "value": { "minimum": -30.0, "maximum": 100.0 } } },
       "unevaluatedProperties": false
     },
     "DiastaticPower": {
@@ -313,7 +334,7 @@
       "type": "object",
       "properties": {
         "unit": {
-          "description": "`mg` is milligrams<br>`g` is grams<br>`kg` is kilograms<br>`lb` is pounds (imperial and US customary)<br>`oz` is ounces (imperial and US customary)",
+          "description": "`mg` is milligrams<br>`g` is grams<br>`kg` is kilograms<br>`lb` is pounds (imperial and US customary, which are the same) = 453.59237 g exactly<br>`oz` is ounces (imperial and US customary, which are the same) = 1/16 lb ≈ 28.35 g.  (NB these are avoirdupois ounces, not troy ounces.)",
           "enum": [
             "mg",
             "g",
@@ -513,7 +534,7 @@
       "type": "object",
       "properties": {
         "unit": {
-          "description": "`ml` is milliliters (Metric/SI)<br>`l` is liters (Metric/SI)<br>`tsp` is US teaspoons<br>`tbsp` is US tablespoons<br>`floz` is US fluid ounces<br>`cup` is US cups<br>`pt` is US pints (liquid)<br>`qt` is US quarts (liquid)<br>`gal` is US gallons (liquid)<br>`bbl` is US barrels (beer)<br>`itsp` is Imperial teaspoons<br>`itbsp` is Imperial tablespoons<br>`ifloz` is Imperial fluid ounces<br>`icup` is Imperial cups (containing 10 Imperial fluid ounces)<br>`ipt` is Imperial pints (liquid)<br>`iqt` is Imperial quarts (liquid)<br>`igal` is Imperial gallons (liquid)<br>`ibbl` is Imperial barrels (liquid)",
+          "description": "`ml` is milliliters (Metric/SI)<br>`l` is liters (Metric/SI)<br>`tsp` is US teaspoons = ⅙ US fl oz ≈ 4.929 ml<br>`tbsp` is US tablespoons = 3 US tsp = ½ US fl oz ≈ 14.79 ml<br>`floz` is US fluid ounces = ⅛ US cup ≈ 29.57 ml<br>`cup` is US customary cups = 8 US fl oz ≈ 236.6 ml (NB not the 240 ml \"legal\" cup used for US nutrition labelling)<br>`pt` is US pints (liquid) = 16 US fl oz ≈ 473.2 ml<br>`qt` is US quarts (liquid) = 2 US pt ≈ 946.4 ml<br>`gal` is US gallons (liquid) = 4 US qt = 3.785411784 l exactly<br>`bbl` is US beer barrels = 31 US gal ≈ 117.3 l (NB not the 31.5 US gal barrel used for other liquids, nor the 42 US gal oil barrel)<br>`itsp` is Imperial teaspoons = 1 Imperial fluid drachm = ⅛ Imperial fl oz ≈ 3.552 ml<br>`itbsp` is Imperial tablespoons = 4 Imperial tsp = ½ Imperial fl oz ≈ 14.21 ml (NB 4 teaspoons to the tablespoon, unlike in the US)<br>`ifloz` is Imperial fluid ounces = 1/160 Imperial gal ≈ 28.41 ml<br>`icup` is Imperial cups = 10 Imperial fl oz = ½ Imperial pt ≈ 284.1 ml<br>`ipt` is Imperial pints (liquid) = 20 Imperial fl oz ≈ 568.3 ml<br>`iqt` is Imperial quarts (liquid) = 2 Imperial pt ≈ 1.137 l<br>`igal` is Imperial gallons (liquid) = 4 Imperial qt = 4.54609 l exactly<br>`ibbl` is Imperial beer barrels = 36 Imperial gal ≈ 163.7 l<br>\n\nWhere a unit has more than one definition in common use, these are the ones that dotBeer uses.  (The traditional Imperial spoons here are rarely used in modern British recipes, which mostly use metric spoons of 5 ml and 15 ml -- in which case, it is clearer to record amounts in `ml`.)",
           "enum": [
             // Metric
             "ml",

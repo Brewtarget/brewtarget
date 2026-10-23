@@ -85,7 +85,7 @@
       ]
     },
     "water_agent_percent_acid": {
-      "description": "Should only be set if `misc_type` is `water agent` and `water_agent_type` is `lactic acid`, `phosphoric acid` or `other`.",
+      "description": "The strength of an acid, as a percentage by weight, eg 88% for typical lactic acid or 10% for a typical phosphoric acid solution.  Acids are sold at widely varying strengths, so this should always be set for an acid, as otherwise an amount of it is ambiguous.\n\nShould only be set if `misc_type` is `water agent` and `water_agent_type` is an acid (`lactic acid`, `phosphoric acid`, `sulfuric acid` or `hydrochloric acid`) or `other`.",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
     },
     "use_for": {
@@ -115,7 +115,7 @@
     "water_agent_percent_acid": {
       "properties": {
         "misc_type":        { "const": "water agent" },
-        "water_agent_type": { "enum": ["lactic acid", "phosphoric acid", "other"] }
+        "water_agent_type": { "enum": ["lactic acid", "phosphoric acid", "sulfuric acid", "hydrochloric acid", "other"] }
       },
       //
       // As with if/then, `properties` only checks keys that are present, so we need `required` here to stop

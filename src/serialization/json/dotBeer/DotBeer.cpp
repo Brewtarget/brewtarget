@@ -226,7 +226,7 @@ namespace {
 
    JsonMeasureableUnitsMapping const DOT_BEER_ENERGY_PER_VOLUME_UNIT_MAPPER {
       // EnergyPerVolume in Measurement.beer.schema
-      {{"kcal/L"     , &Measurement::Units::kilocaloriesPerLiter     },
+      {{"kcal/l"     , &Measurement::Units::kilocaloriesPerLiter     },
        {"kcal/50cl"  , &Measurement::Units::kilocaloriesPer50cl      },
        {"kcal/33cl"  , &Measurement::Units::kilocaloriesPer33cl      },
        {"kcal/25cl"  , &Measurement::Units::kilocaloriesPer25cl      },

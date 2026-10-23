@@ -647,9 +647,9 @@ namespace Measurement::Units {
    Unit const imperial_quarts     {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("qt"  )}, defaultSanitiser,   1.1365225         , &liters};
    Unit const imperial_pints      {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("pt"  )}, defaultSanitiser,   0.56826125        , &liters};
    Unit const imperial_cups       {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("cup" )}, defaultSanitiser,   0.284130625       , &liters, 0.25};
-   Unit const imperial_fluidOunces{Measurement::UnitSystems::volume_Imperial   , {QObject::tr("floz")}, defaultSanitiser,   0.028413075003383 , &liters}; // 1/20 of imperial pint
-   Unit const imperial_tablespoons{Measurement::UnitSystems::volume_Imperial   , {QObject::tr("tbsp")}, defaultSanitiser,   0.0142065375017   , &liters}; // 1/2 imperial fluid ounce
-   Unit const imperial_teaspoons  {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("tsp" )}, defaultSanitiser,   0.00355163437542  , &liters}; // 1⁄8 imperial fluid ounce
+   Unit const imperial_fluidOunces{Measurement::UnitSystems::volume_Imperial   , {QObject::tr("floz")}, defaultSanitiser,   0.0284130625      , &liters}; // 1/20 of imperial pint
+   Unit const imperial_tablespoons{Measurement::UnitSystems::volume_Imperial   , {QObject::tr("tbsp")}, defaultSanitiser,   0.01420653125     , &liters}; // 1/2 imperial fluid ounce
+   Unit const imperial_teaspoons  {Measurement::UnitSystems::volume_Imperial   , {QObject::tr("tsp" )}, defaultSanitiser,   0.0035516328125   , &liters}; // 1⁄8 imperial fluid ounce
 
    // === Length ===
    // I suppose we could use the other official abbreviations for feet and inches -- either the real ones (see

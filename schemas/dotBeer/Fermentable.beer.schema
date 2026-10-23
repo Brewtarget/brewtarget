@@ -17,7 +17,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://dotbeer.org/schema/0.10.0/Fermentable.beer.schema",
   "type": "object",
-  "description": "An ingredient that contributes extractable sugar (and usually colour): malts and other grains, extracts, sugars, honey, fruit, juice.\n\nAs noted in descriptions, some fields are only meaningful for certain types of fermentable.  On the whole, the schema does not try to enforce this, partly in the interests of simplicity and partly because analysis sheets for unusual products do sometimes quote these values.",
+  "description": "An ingredient that contributes extractable sugar (and usually colour): malts and other grains, extracts, sugars, honey, fruit, juice.\n\nA fermentable must have at least one of `yield_fine_grind`, `yield_coarse_grind` and `yield_potential`, as otherwise its contribution to gravity cannot be calculated.  (`yield_fine_coarse_difference` does not count for this purpose, as, on its own, it does not give a yield.)\n\nAs noted in descriptions, some fields are only meaningful for certain types of fermentable.  On the whole, the schema does not try to enforce this, partly in the interests of simplicity and partly because analysis sheets for unusual products do sometimes quote these values.",
   "properties": {
     "name": {
       "type": "string"
@@ -180,7 +180,6 @@
   "required": [
     "name",
     "fermentable_type",
-    // Normally you want at least one of "yield_fine_grind", "yield_coarse_grind", "yield_fine_coarse_difference", "yield_potential"
     "color"
   ],
   //
