@@ -66,6 +66,7 @@ AddPropertyName(di_ph                 )
 AddPropertyName(dmsP_ppm              )
 AddPropertyName(fan_ppm               )
 AddPropertyName(fermentability_pct    )
+AddPropertyName(fermentableFraction_pct)
 AddPropertyName(fineGrindYield_pct    )
 AddPropertyName(friability_pct        )
 AddPropertyName(grainGroup            )
@@ -125,6 +126,7 @@ public:
    static QString localisedName_dmsP_ppm              ();
    static QString localisedName_fan_ppm               ();
    static QString localisedName_fermentability_pct    ();
+   static QString localisedName_fermentableFraction_pct();
    static QString localisedName_fineGrindYield_pct    ();
    static QString localisedName_friability_pct        ();
    static QString localisedName_grainGroup            ();
@@ -526,6 +528,18 @@ public:
     */
    Q_PROPERTY(std::optional<double> lacticAcidByWeight_pct   READ lacticAcidByWeight_pct   WRITE setLacticAcidByWeight_pct)
 
+   /**
+    * \brief The percentage of this ingredient's extract that brewing yeast can ferment.  The remainder raises OG and FG
+    *        but is not attenuated.  Unset means 100%.  Eg about 0% for lactose and ~10% for maltodextrin.
+    *
+    *        This is for wholly or largely unfermentable ingredients; it should not normally be set for malts, as yeast
+    *        attenuation figures already allow for the dextrins in a normal all-malt wort.  (Contrast
+    *        \c fermentability_pct, which is an apparent attenuation, and so already includes the effect of the yeast.)
+    *
+    *        NB: This is not part of BeerXML or BeerJSON.  It is in dotBeer as `fermentable_fraction`.
+    */
+   Q_PROPERTY(std::optional<double> fermentableFraction_pct   READ fermentableFraction_pct   WRITE setFermentableFraction_pct)
+
    SUPPORT_NUM_RECIPES_USED_IN
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
@@ -566,10 +580,17 @@ public:
    std::optional<double>     betaGlucan_ppm           () const;
 
    std::optional<double>     lacticAcidByWeight_pct   () const;
+   std::optional<double>     fermentableFraction_pct  () const;
 
    // Calculated getters.
    bool    isExtract             () const;
    bool    isSugar               () const;
+   /**
+    * \brief Returns \c true if this fermentable's extract is already present as sugar (sugars, extracts, honey, fruit,
+    *        juice) and so is \b not subject to mash efficiency; \c false if it is starch that has to be converted by
+    *        the mash (grains and, by default, "other" adjuncts such as flaked or torrified cereals).
+    */
+   bool    isExistingSugar       () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setType                     (Type                      const   val);
@@ -609,6 +630,7 @@ public:
    void setBetaGlucan_ppm           (std::optional<double>     const   val);
 
    void setLacticAcidByWeight_pct   (std::optional<double>     const   val);
+   void setFermentableFraction_pct  (std::optional<double>     const   val);
 
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;
@@ -650,6 +672,7 @@ private:
    std::optional<double>     m_betaGlucan_ppm         = std::nullopt;
 
    std::optional<double>     m_lacticAcidByWeight_pct = std::nullopt;
+   std::optional<double>     m_fermentableFraction_pct = std::nullopt;
 };
 
 BT_DECLARE_METATYPES(Fermentable)

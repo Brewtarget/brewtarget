@@ -267,8 +267,9 @@ namespace {
       {XmlRecordDefinition::FieldType::Double          , "FAN_PPM"                       , PropertyNames::Fermentable::fan_ppm                  },
       {XmlRecordDefinition::FieldType::Double          , "FERMENTABILITY"                , PropertyNames::Fermentable::fermentability_pct       },
       {XmlRecordDefinition::FieldType::Double          , "BETA_GLUCAN_PPM"               , PropertyNames::Fermentable::betaGlucan_ppm           },
-      // This is not part of BeerXML or BeerJSON, so another extension tag
+      // These are not part of BeerXML or BeerJSON, so more extension tags
       {XmlRecordDefinition::FieldType::Double          , "LACTIC_ACID_BY_WEIGHT_PCT"     , PropertyNames::Fermentable::lacticAcidByWeight_pct   },
+      {XmlRecordDefinition::FieldType::Double          , "FERMENTABLE_FRACTION_PCT"      , PropertyNames::Fermentable::fermentableFraction_pct  },
    };
    std::initializer_list<XmlRecordDefinition::FieldDefinition> const BeerXml_FermentableType_ExclBase {
       // Type                                            XPath     Q_PROPERTY               Value Decoder
@@ -936,7 +937,9 @@ namespace {
       {
          // Type                                  XPath                Q_PROPERTY                                      Value Decoder
          {XmlRecordDefinition::FieldType::Double, "AMOUNT"           , PropertyNames::IngredientAmount::quantity     },
-         {XmlRecordDefinition::FieldType::Double, "TIME"             , PropertyNames::RecipeAddition::addAtTime_mins },
+         // TIME means different things depending on USE -- see comment on RecipeAdditionHop::beerXmlTime_mins.  It's
+         // required in BeerXML, hence the default value for when there is nothing to write.
+         {XmlRecordDefinition::FieldType::Double, "TIME"             , PropertyNames::RecipeAdditionHop::beerXmlTime_mins, 0.0},
          {XmlRecordDefinition::FieldType::Enum  , "USE"              , PropertyNames::RecipeAdditionHop::use         , &RecipeAdditionHop::useStringMapping},
          {XmlRecordDefinition::FieldType::Record, ""                 , PropertyNames::RecipeAdditionHop::hop         , &BEER_XML_RECORD_DEFN_HOP_IN_RECIPE_ADDITION_HOP},
          // ⮜⮜⮜ Following are new fields that BeerJSON adds to BeerXML, so all extension tags in BeerXML ⮞⮞⮞

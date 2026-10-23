@@ -1,5 +1,5 @@
 //======================================================================================================================
-// schema/Style.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+// schema/Style.beer.schema is part of dotBeer and is copyright the following authors 2017-2026:
 //   • Mark Price <shadowchao99@gmail.com>
 //   • Matt Young <mfsy@yahoo.com>
 //   • Ricardo Rosa <rmsrosa@gmail.com>
@@ -13,9 +13,9 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.9.0/Style.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Style.beer.schema",
   "type": "object",
-  "description": "A beer style may be from the BJCP style guide, Australian, UK or local style guides.  Generally a recipe is designed to one style.",
+  "description": "A beer style may be from the BJCP style guide, Australian, UK or local style guides.  Generally a recipe is designed to one style.\n\nRange fields (`original_gravity`, `final_gravity`, `ibu`, `color`, `alcohol_by_volume`, `carbonation`) should be interpreted as typical range for the style, as given in the style guide (eg the “Vital Statistics” in the BJCP guidelines).  These are guidelines rather than hard limits: a beer slightly outside a range may still be a good example of the style.",
   "properties": {
     "name": {
       "description": "Name of the style profile – usually this is the specific name of the style – for example “Scottish Wee Heavy Ale” and not the Category which in this case might be “Scottish Ale”",
@@ -25,21 +25,25 @@
       "description": "Category that this style belongs to – usually associated with a group of styles such as “English Ales” or “American Lagers”.",
       "type": "string"
     },
+    // NB: In BeerJSON, this is an integer
     "category_number": {
-      "description": "Number or identifier associated with this style category. For example in the BJCP style guide, the “American Lager” category has a category number of “1”.  Despite the name, this needs to be a string rather than, say, an integer, because it can contain letters.  Eg BJCP mead and cider categories are M1–M4 and C1–C2.",
+      "description": "Number or identifier associated with this style category. For example in the BJCP 2021 style guide, “Czech Premium Pale Lager” is category number “3”, style letter “B”, ie “3B”.\n\nNote that, despite the name, this needs to be a string rather than, say, an integer, because it can contain letters.  Eg BJCP mead and cider categories are M1–M4 and C1–C2.",
       "type": "string"
     },
     "style_letter": {
       // In contrast with BeerJSON, we do not allow the style letter to be a space.  If no style letter is set, this
       // field should simply be omitted.
-      "description": "The specific subcategory letter associated with this particular style. For example in the BJCP style guide, an American Standard Lager would be style letter “A” under the main category.  Letters should be upper case.",
+      //
+      // Also in contrast with BeerJSON, we allow more than one character, and digits as well as letters, because not
+      // all style guides use a single letter for subcategories.  (BeerXML 2.01 described this field as "the specific
+      // style number or subcategory letter".)
+      //
+      "description": "The specific subcategory letter (or a one- or two-digit sub-style number) associated with this particular style.  For example in the BJCP 2021 style guide, an American Lager would be style letter “B” under the main category (1 = Standard American Beer).  Letters should be upper case",
       "type": "string",
-      "maxLength": 1,
-      "minLength": 1,
-      "pattern": "[A-Z]"
+      "pattern": "^([A-Z]|[0-9]{1,2})$"
     },
     "style_guide": {
-      "description": "The name of the style guide that this particular style or category belongs to. For example “BJCP” might denote the BJCP style guide, and “AHA” would be used for the AHA style guide.",
+      "description": "Who published the guidelines, ideally with the edition, eg “BJCP 2021” or “BA 2024”.  Including the edition matters because category numbers and style definitions change between editions.",
       "type": "string"
     },
     "style_type": {
@@ -63,11 +67,11 @@
       "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
     },
     "original_gravity": {
-      "description": "The range of acceptable original gravity for the style.",
+      "description": "The typical range of original gravity for the style.",
       "$ref": "Measurement.beer.schema#/$defs/RangeOfGravity"
     },
     "final_gravity": {
-      "description": "The range of acceptable final gravity for the style.",
+      "description": "The typical range of final gravity for the style.",
       "$ref": "Measurement.beer.schema#/$defs/RangeOfGravity"
     },
     //
@@ -78,49 +82,54 @@
     // what is actually measured is iso-alpha acid content.  And you almost never hear brewers saying "Would you say
     // that's within the iso-alpha acid content range for this style?" :)
     //
+    // BeerJSON calls this field `international_bitterness_units`.
+    //
     "ibu": {
-      "description": "The range of bitterness for this style.",
+      "description": "The typical range of bitterness for the style.",
       "$ref": "Measurement.beer.schema#/$defs/RangeOfBitterness"
     },
     "color": {
-      "description": "The range of color for this beer style.",
+      "description": "The typical range of colour for the style.",
       "$ref": "Measurement.beer.schema#/$defs/RangeOfColor"
     },
     "carbonation": {
-      "description": "Range of carbonation for this beer style.",
+      "description": "Note that, in contrast with the other range fields, the BJCP guidelines don’t give carbonation figures, so this usually comes from other sources.",
       "$ref": "Measurement.beer.schema#/$defs/RangeOfCarbonation"
     },
     "alcohol_by_volume": {
-      "description": "The range of alcohol by volume for this beer style.",
+      "description": "The typical range of alcohol by volume for the style.",
       "$ref": "Measurement.beer.schema#/$defs/RangeOfPercentageSimple"
     },
     "notes": {
-      "description": "Description of the style, history",
+      "description": "Anything else about the style not covered by the other fields, eg its history, or comments on what is and isn’t acceptable.  (In the BJCP guidelines, this is typically the “Comments” and “History” sections.)",
       "type": "string"
     },
     "aroma": {
-      "description": "Aroma profile for this style.",
+      "description": "The aroma expected in a good example of the style: malt, hop, fermentation and other characteristics, and how they balance.",
       "type": "string"
     },
     "appearance": {
+      "description": "Expected colour, clarity, and head (colour, texture and retention).",
       "type": "string"
     },
     "flavor": {
-      "description": "Flavor profile for this style.",
+      "description": "Expected flavour profile: malt, hop bitterness and flavour, fermentation character, balance and finish.",
       "type": "string"
     },
     "mouthfeel": {
+      "description": "Expected body, carbonation, alcohol warmth, creaminess, astringency and other sensations on the palate.",
       "type": "string"
     },
     "overall_impression": {
+      "description": "A short summary of the style’s character, ie what distinguishes it at a glance.  Corresponds to the “Overall Impression” section of the BJCP guidelines.",
       "type": "string"
     },
     "ingredients": {
-      "description": "Suggested ingredients for this style",
+      "description": "The ingredients characteristic of the style, eg particular malts, hop varieties, yeast strains or water profile. Corresponds to “Characteristic Ingredients” in the BJCP guidelines.",
       "type": "string"
     },
     "examples": {
-      "description": "Example beers of this style.",
+      "description": "Commercial beers that are good examples of the style.",
       "type": "string"
     }
   },

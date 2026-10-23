@@ -179,16 +179,6 @@ namespace {
          preInstruction.interval_mins;
       return stream;
    }
-
-
-   bool isFermentableSugar(Fermentable const * fermy) {
-      // TODO: This probably doesn't work in languages other than English!
-      if (fermy->type() == Fermentable::Type::Sugar && fermy->name() == "Milk Sugar (Lactose)") {
-         return false;
-      }
-
-      return true;
-   }
 }
 
 //
@@ -1054,6 +1044,9 @@ public:
 
       // Total sugars after accounting for efficiency and mash losses. Implicitly includes non-fermentable sugars
       sugar_kg = sugar_kg * this->m_self.efficiency_pct() / 100.0 + sugar_kg_ignoreEfficiency;
+      // Unfermentable extract from mashed ingredients is subject to efficiency in the same way as the rest of their
+      // extract.  (It will usually be zero, as Fermentable::fermentableFraction_pct is not normally set for malts.)
+      nonFermentableSugars_kg += sugars.sugarsFromStarch_nonFermentable_kg * this->m_self.efficiency_pct() / 100.0;
       double plato = Algorithms::platoFromSugarMassAndWortVolume(sugar_kg, this->m_finalVolumeNoLosses_l);
 
       double const calculatedOg = Algorithms::PlatoToSG_20C20C(plato);    // og from all sugars
@@ -2733,27 +2726,37 @@ Recipe::Sugars Recipe::sugarTotals() const {
       qDebug() <<
          Q_FUNC_INFO << "Rec" << this->key() << "(" << this->name() << ") "
          "Ferm Add" << fermentable->key() << "(" << fermentable->name() << ") equivSucrose_kg" <<
-         fermentableAddition->equivSucrose_kg() << ", isSugar?" << fermentable->isSugar() << ", isExtract?" <<
-         fermentable->isExtract() << ", addAfterBoil?" <<
-         fermentableAddition->addAfterBoil() << ", isFermentableSugar?" << isFermentableSugar(fermentable);
+         fermentableAddition->equivSucrose_kg() << ", isExistingSugar?" << fermentable->isExistingSugar() <<
+         ", addAfterBoil?" << fermentableAddition->addAfterBoil() << ", fermentableFraction_pct" <<
+         fermentable->fermentableFraction_pct();
 
-      // If we have some sort of non-grain, we have to ignore efficiency.
-      if (fermentable->isSugar() || fermentable->isExtract()) {
+      //
+      // The part of this ingredient's extract that yeast can't ferment.  It counts towards OG and FG, but is not
+      // attenuated.  Unset means 100% fermentable.
+      //
+      double const unfermentableShare = 1.0 - fermentable->fermentableFraction_pct().value_or(100.0) / 100.0;
+
+      //
+      // Sugar that is already present (sugars, extracts, honey, fruit, juice) is not subject to mash efficiency.  Only
+      // extract that has to be converted from starch in the mash is.  (Previously only Sugar, Extract and Dry_Extract
+      // were treated as existing sugar, so eg fruit or honey additions were wrongly scaled by mash efficiency.)
+      //
+      if (fermentable->isExistingSugar()) {
          ret.existingSugars_all_kg += fermentableAddition->equivSucrose_kg();
 
          if (fermentableAddition->addAfterBoil()) {
             ret.existingSugars_lateAddition_kg += fermentableAddition->equivSucrose_kg();
          }
 
-         if (!isFermentableSugar(fermentable)) {
-            ret.existingSugars_nonFermentable_kg += fermentableAddition->equivSucrose_kg();
-         }
+         ret.existingSugars_nonFermentable_kg += fermentableAddition->equivSucrose_kg() * unfermentableShare;
       } else {
          ret.sugarsFromStarch_all_kg += fermentableAddition->equivSucrose_kg();
 
          if (fermentableAddition->addAfterBoil()) {
             ret.sugarsFromStarch_lateAddition_kg += fermentableAddition->equivSucrose_kg();
          }
+
+         ret.sugarsFromStarch_nonFermentable_kg += fermentableAddition->equivSucrose_kg() * unfermentableShare;
       }
    }
 

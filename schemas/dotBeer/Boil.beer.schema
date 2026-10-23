@@ -1,5 +1,5 @@
 //======================================================================================================================
-// schema/Boil.beer.schema is part of DotBeer and is copyright the following authors 2018-2026:
+// schema/Boil.beer.schema is part of dotBeer and is copyright the following authors 2018-2026:
 //   • Mark Price <shadowchao99@gmail.com>
 //   • Matt Young <mfsy@yahoo.com>
 //   • Yuriy Krutilin <y.krutilin@gmail.com>
@@ -12,9 +12,9 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.9.0/Boil.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Boil.beer.schema",
   "type": "object",
-  "description": "A boil procedure, which can be used by multiple recipes.  A boil procedure with no steps is the same as a standard single step boil.",
+  "description": "A boil procedure, which can be used by multiple recipes.  Unlike in BeerJSON, a boil must have at least one step: a standard single step boil is simply a boil with one step.  (There is therefore no separate `boil_time` field, as the length of the boil comes from its steps.)",
   "properties": {
     "name": {
       "type": "string"
@@ -34,19 +34,24 @@
       "type": "string"
     },
     "pre_boil_size": {
+      "description": "Volume of wort at the start of the boil.",
       "$ref": "Measurement.beer.schema#/$defs/Volume"
     },
     //
-    // BeerJSON has an extra field, "boil_time" which I _think_ is a hangover from BeerXML (which doesn't model boil
-    // steps).  Now that we have boil steps, we calculate boil time from the steps rather than storing it separately,
-    // so we remove the "boil_time" field in dotBeer.
+    // BeerJSON has an extra field, "boil_time" which I _think_ is mostly a hangover from BeerXML (which doesn't model
+    // boil steps).  BeerJSON allows boil_steps to be empty, in which case, the boil is a "standard single-step boil".
+    // We take the view that it's simpler and more consistent to insist that boil steps be present and not empty (as is
+    // the case for mash_steps and fermentation_steps).  This means we can calculate boil time from the steps rather
+    // than storing it separately, so we remove the "boil_time" field in dotBeer.
     //
     // (In theory, we could allow boil_time when boil_steps is not present, to imitate BeerXML.  But, in reality, what
     // happens, when we read BeerXML, is that we create some default boil steps, based on its BOIL_TIME field, so, in
     // this newer format, we might as well insist on the steps.)
     //
     "boil_steps": {
+      "description": "The steps that make up the boil, in the order they are performed.",
       "type": "array",
+      "minItems": 1,
       "items": {
         "$ref": "#/$defs/BoilStep"
       }
@@ -60,7 +65,7 @@
   "$defs": {
     "BoilStep": {
       "type": "object",
-      "description": "Individual step of a boil, including preboil steps, non-boiling pasteurization steps, boiling, whirlpool steps, and chilling.",
+      "description": "Individual step of a boil, including preboil steps, non-boiling pasteurization steps, boiling, whirlpool steps, and chilling.\n\nIf `start_temperature` or `end_temperature` is not given, the step is assumed to be at boiling at that point.  Steps are classified as pre-boil, boil proper or post-boil by their temperatures (see `AdditionSchedule` in [Recipe](./Recipe.md#additionschedule) for details).",
       "allOf": [
         {
           "$ref": "StepCommon.beer.schema#/$defs/StepBase"

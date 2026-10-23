@@ -234,6 +234,7 @@ namespace {
          {ObjectStore::FieldType::Double, {"beta_glucan_ppm"          }, PropertyNames::Fermentable::betaGlucan_ppm            },
          //
          {ObjectStore::FieldType::Double, {"lactic_acid_by_weight_pct"}, PropertyNames::Fermentable::lacticAcidByWeight_pct    },
+         {ObjectStore::FieldType::Double, {"fermentable_fraction_pct" }, PropertyNames::Fermentable::fermentableFraction_pct   },
 
       },
       {&NAMED_ENTITY_COMMON_FIELDS}

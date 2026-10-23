@@ -31,6 +31,7 @@
 #define AddPropertyName(property) namespace PropertyNames::RecipeAdditionHop { inline BtStringConst const property{#property}; }
 AddPropertyName(hop)
 AddPropertyName(use) // Deprecated - retained only for BeerXML
+AddPropertyName(beerXmlTime_mins) // Only for BeerXML
 
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -58,6 +59,7 @@ public:
     */
    static QString localisedName();
    static QString localisedName_hop();
+   static QString localisedName_beerXmlTime_mins();
    static QString localisedName_use();
 
    /*!
@@ -116,6 +118,23 @@ public:
     *        \b deprecated for other use.
     */
    Q_PROPERTY(Use   use   READ use   WRITE setUse STORED false)
+   /**
+    * \brief The BeerXML TIME field, whose meaning depends on the BeerXML USE field:
+    *          - For "First Wort", it is the boil time, as a first wort hop stays in for the whole boil.  We don't store
+    *            it, because, in our model (as in dotBeer), a first wort addition is made at the start of the pre-boil
+    *            step, so has no \c addAtTime_mins.
+    *          - For "Aroma", it is the steeping time, which, in our model, is \c duration_mins.
+    *          - For "Dry Hop", it is how long the hops stay in, which is also \c duration_mins.
+    *          - Otherwise (ie "Mash" or "Boil"), it is \c addAtTime_mins.
+    *
+    *        This property exists only so that the BeerXML TIME field can be mapped correctly in both directions.
+    *        Nothing else should use it.  (In particular, BeerJSON and dotBeer map their time and duration fields
+    *        directly to \c addAtTime_mins and \c duration_mins.)
+    *
+    *        When reading BeerXML, the TIME value is interpreted in the \c NamedParameterBundle constructor (because we
+    *        need USE to know what it means).
+    */
+   Q_PROPERTY(std::optional<double> beerXmlTime_mins READ beerXmlTime_mins WRITE setBeerXmlTime_mins STORED false)
    //! See \c RecipeAdditionBase for getter and setter
    Q_PROPERTY(Hop * hop   READ hop   WRITE setHop             )
 
@@ -130,9 +149,11 @@ public:
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    // Ideally this too would be marked [[deprecated]], but we do need to refer to it in RecipeAdditionHop::typeLookup
    Use use() const;
+   std::optional<double> beerXmlTime_mins() const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    [[deprecated]] void setUse(Use const val);
+   void setBeerXmlTime_mins(std::optional<double> const val);
 
    /**
     * \brief With BeerJSON changes, there is no longer an explicit flag for a first wort hop addition.  You have to

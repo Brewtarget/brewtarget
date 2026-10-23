@@ -1,5 +1,5 @@
 //======================================================================================================================
-// schema/Mash.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+// schema/Mash.beer.schema is part of dotBeer and is copyright the following authors 2017-2026:
 //   • Mark Price <shadowchao99@gmail.com>
 //   • Matt Young <mfsy@yahoo.com>
 //   • Yuriy Krutilin <y.krutilin@gmail.com>
@@ -12,7 +12,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.9.0/Mash.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Mash.beer.schema",
   "type": "object",
   "description": "A mash procedure, which can be used by multiple recipes.",
   "properties": {
@@ -35,6 +35,7 @@
       "type": "string"
     },
     "mash_steps": {
+      "description": "The steps that make up the mash, in the order they are performed.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -62,7 +63,7 @@
         {
           "properties": {
             "step_type": {
-              "description": "Infusion denotes adding hot water, temperature denotes heating with an outside heat source, and decoction denotes drawing off some mash for boiling.",
+              "description": "`infusion` = raise or set the mash temperature by adding hot water (`amount` is the volume added, and `infuse_temperature` its temperature)<br>`temperature` = raise or hold the mash temperature by applying heat directly (eg a heated or recirculating mash tun), without adding water<br>`decoction` = raise the mash temperature by drawing off part of the mash, boiling it and returning it (`amount` is the volume drawn off)<br>`souring mash` = hold the mash, grain included, warm with lactic acid bacteria (whether added or naturally present on the grain) to sour it before lautering (aka sour mashing)<br>`souring wort` = hold the separated wort, without grain, warm with lactic acid bacteria to sour it before the boil (aka kettle souring)<br>`drain mash tun` = run the wort off from the mash tun into the kettle, eg collecting the first runnings, or between batch sparges<br>`sparge` = rinse the grain bed with hot water to extract remaining sugars, either continuously (fly sparge) or in batches (batch sparge)",
               "enum": [
                 "infusion",
                 "temperature",
@@ -74,15 +75,15 @@
               ]
             },
             "amount": {
-              "description": "For a infusion step, this is the volume of water to infuse in this step.  For a decoction step, this is the calculated volume of mash to decoction.",
+              "description": "For an `infusion` step, this is the volume of water to infuse in this step.  For a `decoction` step, this is the calculated volume of mash drawn off to be boiled and returned to the main mash (typically calculated from the target temperature rise).  For a `sparge` step, this is the volume of water added.\n\nThis field is normally only meaningful when `step_type` is `infusion`, `decoction` or `sparge`.",
               "$ref": "Measurement.beer.schema#/$defs/Volume"
             },
             "water_grain_ratio": {
-              "description": "Also known as the mash thickness. eg 1.75 qt/lb or 3.65 L/kg.",
+              "description": "Also known as the mash thickness, this is total ratio of water to grain (eg 1.75 qt/lb or 3.65 l/kg) for this step AFTER the infusion.  Note this value must be consistent with the required infusion amount and amounts added in earlier steps.\n\nThis field is normally only meaningful when `step_type` is `infusion`.",
               "$ref": "Measurement.beer.schema#/$defs/VolumePerMass"
             },
             "infuse_temperature": {
-              "description": "Temperature of the water for an infusion step -- typically calculated based on the current step, grain, and other settings.  Applicable only for an infusion step.",
+              "description": "Temperature of the water for an infusion step -- typically calculated based on the current step, grain, and other settings.\n\nThis field is normally only meaningful when `step_type` is `infusion`.",
               "$ref": "Measurement.beer.schema#/$defs/Temperature"
             }
           }

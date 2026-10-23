@@ -82,6 +82,7 @@ FermentableEditor::FermentableEditor(QWidget* parent, QString const editorName) 
       EDITOR_FIELD_NORM(Fermentable, label_betaGlucan            , lineEdit_betaGlucan            , Fermentable::betaGlucan_ppm        , 1),
       //
       EDITOR_FIELD_NORM(Fermentable, label_lacticAcidByWeight_pct, lineEdit_lacticAcidByWeight_pct, Fermentable::lacticAcidByWeight_pct, 1),
+      EDITOR_FIELD_NORM(Fermentable, label_fermentableFraction_pct, lineEdit_fermentableFraction_pct, Fermentable::fermentableFraction_pct, 1),
    });
    return;
 }

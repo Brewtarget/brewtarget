@@ -98,6 +98,15 @@ RecipeAdditionYeast::RecipeAdditionYeast(NamedParameterBundle const & namedParam
    //
    m_stage = namedParameterBundle.val<RecipeAddition::Stage>(PropertyNames::RecipeAddition::stage,
                                                              RecipeAddition::Stage::Fermentation);
+   //
+   // Similarly to "use" for hops and miscs, BeerXML's ADD_TO_SECONDARY tells us the fermentation step, but we can't rely
+   // on setAddToSecondary() being called, so handle it here (unless an explicit step was given).
+   //
+   if (!this->m_step && namedParameterBundle.contains(PropertyNames::RecipeAdditionYeast::addToSecondary)) {
+      auto const addToSecondary =
+         namedParameterBundle.val<std::optional<bool>>(PropertyNames::RecipeAdditionYeast::addToSecondary);
+      this->m_step = (addToSecondary && *addToSecondary) ? 2 : 1;
+   }
 
    CONSTRUCTOR_END
    return;

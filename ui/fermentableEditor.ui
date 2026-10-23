@@ -701,7 +701,7 @@
        <item row="8" column="4">
         <widget class="SmartLineEdit" name="lineEdit_lacticAcidByWeight_pct">
          <property name="toolTip">
-          <string>Fermentability</string>
+          <string>For aciduated malts (aka acid malts)</string>
          </property>
         </widget>
        </item>
@@ -719,6 +719,26 @@
         <widget class="SmartLineEdit" name="lineEdit_fan">
          <property name="toolTip">
           <string>Free Amino Nitrogen (FAN)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="3">
+        <widget class="QLabel" name="label_fermentableFraction_pct">
+         <property name="text">
+          <string>% Fermentable by yeast</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_fermentableFraction_pct</cstring>
+         </property>
+         <property name="toolTip">
+          <string>Percentage of this ingredient's extract that brewing yeast can ferment.  Leave blank for 100%.  Set to 0 for lactose, or about 10 for maltodextrin.  Not normally needed for malts.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="4">
+        <widget class="SmartLineEdit" name="lineEdit_fermentableFraction_pct">
+         <property name="toolTip">
+          <string>Percentage of this ingredient's extract that brewing yeast can ferment.  Leave blank for 100%.  Set to 0 for lactose, or about 10 for maltodextrin.  Not normally needed for malts.</string>
          </property>
         </widget>
        </item>

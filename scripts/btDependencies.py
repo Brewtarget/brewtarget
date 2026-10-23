@@ -478,7 +478,15 @@ def installDependencies():
          btLogger.log.debug('Windows')
          #
          # First thing is to detect whether we're in the MSYS2 environment, and, if so, whether we're in the right
-         # version of it.
+         # "version" of it:
+         #
+         #    - We used to build only 32-bit packages (i686 architecture) because of problems getting 64-bit versions of
+         #      NSIS plugins to work.  However, we now invoke NSIS without plugins, so the 64-bit builds are fine, which
+         #      is good, as the 32-bit MSYS2 packages/groups were being phased out circa January 2024.
+         #
+         #    - As of August 2026, the MINGW64 environment (which targets the old Windows MSVCRT = Microsoft Visual C++
+         #      Runtime Library) is deprecated and UCRT64 (which targets the newer Windows UCRT = Universal C Runtime)
+         #      replaces it.
          #
          # We take the existence of an executable `uname` in the path as a pretty good indicator that we're in MSYS2
          # or similar environment).
@@ -497,19 +505,8 @@ def installDependencies():
          msystem = os.getenv("MSYSTEM");
          mingwPrefix = os.getenv("MINGW_PREFIX");
          btLogger.log.debug('Running uname -a gives ' + unameResult + '; MSYSTEM = ' + msystem + '; MINGW_PREFIX = ' + mingwPrefix)
-###         # Output from `uname -a` will be of the form
-###         #    UCRT64_NT-10.0-19044 Matt-Virt-Win 3.4.3.x86_64 2023-01-11 20:20 UTC x86_64 Msys
-###         # We just need the bit before the first underscore, eg
-###         #    UCRT64
-###         terminalVersion = unameResult.split(sep='_', maxsplit=1)[0]
 
          if (msystem != 'UCRT64'):
-            # In the past, we built only 32-bit packages (i686 architecture) on Windows because of problems getting
-            # 64-bit versions of NSIS plugins to work.  However, we now invoke NSIS without plugins, so the 64-bit build
-            # seems to be working.
-            #
-            # As of January 2024, some of the 32-bit MSYS2 packages/groups we were previously relying on previously are
-            # no longer available.  So now, we only build 64-bit packages (x86_64 architecture) on Windows.
             btLogger.log.critical('Running in ' + msystem + ' (' + terminalVersion + ') but need to run in UCRT64')
             sys.exit(1)
 
@@ -523,17 +520,10 @@ def installDependencies():
          # bunch of Python packaging files unless we force Pacman to overwrite them.  This is somewhat less of a hack
          # than specifying --overwrite globally.
          #
-###         # We have to do both 32-bit and 64-bit versions of Python here to be certain.
-         #
          # Note that the rules for glob expansion are different when invoking a command from Python then when typing it
          # on the command line, hence why the overwrite parameter is '*python*' not '"*python*"'.
          #
-         # As of August 2026, the MINGW64 environment (which targets the old Windows MSVCRT = Microsoft Visual C++
-         # Runtime Library) is deprecated and UCRT64 (which targets the newer Windows UCRT = Universal C Runtime)
-         # replaces it.
-         #
          btLogger.log.info('Ensuring Python packaging is up-to-date')
-###         btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-ucrt-i686-python-packaging']))
          btExecute.abortOnRunFail(subprocess.run(['pacman', '-S', '--noconfirm', '--overwrite', '*python*', 'mingw-w64-ucrt-x86_64-python-packaging']))
 
          #

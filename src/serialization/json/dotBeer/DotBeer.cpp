@@ -69,8 +69,8 @@
 namespace {
    // See below for more comments on this.  If and when DotBeer evolves then we will want separate constants for
    // min/max versions we can read plus whatever version we write.
-   BtStringConst  const dotBeerVersionWeSupportAsString{"0.9.0"};
-   QVersionNumber const dotBeerVersionWeSupport        {0, 9, 0};
+   BtStringConst  const dotBeerVersionWeSupportAsString{"1.0.0"};
+   QVersionNumber const dotBeerVersionWeSupport        {1, 0, 0};
 
    auto const outputDocumentName = "DotBeer";
 
@@ -118,7 +118,7 @@ namespace {
 
    //
    // We use JsonMeasureableUnitsMapping instead of JsonSingleUnitSpecifier here because it simplifies
-   // ListOfJsonMeasureableUnitsMappings below for recipe additions, inventory and so on.
+   // ListOfJsonMeasureableUnitsMappings below for recipe additions, stock purchases/uses and so on.
    //
    // (In other places where a count is needed, we typically just use a raw integer.)
    //
@@ -226,7 +226,7 @@ namespace {
 
    JsonMeasureableUnitsMapping const DOT_BEER_ENERGY_PER_VOLUME_UNIT_MAPPER {
       // EnergyPerVolume in Measurement.beer.schema
-      {{"kcal/L"     , &Measurement::Units::kilocaloriesPerLiter     },
+      {{"kcal/l"     , &Measurement::Units::kilocaloriesPerLiter     },
        {"kcal/50cl"  , &Measurement::Units::kilocaloriesPer50cl      },
        {"kcal/33cl"  , &Measurement::Units::kilocaloriesPer33cl      },
        {"kcal/25cl"  , &Measurement::Units::kilocaloriesPer25cl      },
@@ -241,13 +241,21 @@ namespace {
    // See comment on JsonRecordDefinition::StringOutputValidator
    //
    std::optional<QString> DOT_BEER_STYLE_LETTER_VALIDATOR(QString const & str) {
-      if (!str.isEmpty()) {
-         QString const firstLetter = str.first(1).toUpper();
-         static const QRegularExpression aToZ("[A-Z]");
-         if (firstLetter.contains(aToZ)) {
-            return firstLetter;
-         }
-      };
+      //
+      // In dotBeer, the style letter can be a "specific subcategory letter (or a one- or two-digit sub-style number)",
+      // and "Letters should be upper case".  We upper-case our stored value, and write it out only if it then matches
+      // the dotBeer pattern (which we expect should be most of the time!).  Otherwise, we omit the field rather than
+      // guess (eg "21B" is probably a whole style code, and truncating it to "21" would give the category number, not
+      // the style letter).
+      //
+      static QRegularExpression const styleLetterPattern{QRegularExpression::anchoredPattern("[A-Z]|[0-9]{1,2}")};
+      QString const candidate = str.trimmed().toUpper();
+      if (styleLetterPattern.match(candidate).hasMatch()) {
+         return candidate;
+      }
+      if (!candidate.isEmpty()) {
+         qWarning() << Q_FUNC_INFO << "Omitting style letter" << str << "as it is not valid for dotBeer";
+      }
       return std::nullopt;
    }
 
@@ -326,7 +334,7 @@ namespace {
       {JsonRecordDefinition::FieldType::SingleUnitValue     , "yield_coarse_grind"          , PropertyNames::Fermentable::coarseGrindYield_pct, &DOT_BEER_PERCENT_UNIT              },
       {JsonRecordDefinition::FieldType::SingleUnitValue     , "yield_fine_coarse_difference", PropertyNames::Fermentable::coarseFineDiff_pct  , &DOT_BEER_PERCENT_UNIT              },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "yield_potential"             , PropertyNames::Fermentable::potentialYield_sg   , &DOT_BEER_DENSITY_UNIT_MAPPER       },
-      // Note that, when reading from DotBeer, we always convert things to canonical units for storage, hence why we use
+      // Note that, when reading from dotBeer, we always convert things to canonical units for storage, hence why we use
       // Fermentable::color_srm here even though we use Fermentable::color_lovibond for BeerXML and for DB storage.
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , "color"                , PropertyNames::Fermentable::color_srm           , &DOT_BEER_COLOR_UNIT_MAPPER         },
       {JsonRecordDefinition::FieldType::String                    , "notes"                , PropertyNames::Fermentable::notes                 ,                                      },
@@ -337,7 +345,7 @@ namespace {
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "kolbach_index"        , PropertyNames::Fermentable::kolbachIndex_pct      , &DOT_BEER_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "max_in_batch"         , PropertyNames::Fermentable::maxInBatch_pct        , &DOT_BEER_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::Bool                      , "recommend_mash"       , PropertyNames::Fermentable::recommendMash         ,                                      },
-      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory"            , PropertyNames::Ingredient::totalInventory         , &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER },
+      // DotBeer deliberately excludes `inventory` in favour of separate lists of stock purchases
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "hardness_prp_glassy"  , PropertyNames::Fermentable::hardnessPrpGlassy_pct , &DOT_BEER_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "hardness_prp_half"    , PropertyNames::Fermentable::hardnessPrpHalf_pct   , &DOT_BEER_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "hardness_prp_mealy"   , PropertyNames::Fermentable::hardnessPrpMealy_pct  , &DOT_BEER_PERCENT_UNIT               },
@@ -351,6 +359,7 @@ namespace {
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "fermentability"       , PropertyNames::Fermentable::fermentability_pct    , &DOT_BEER_PERCENT_UNIT               },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , "beta_glucan"          , PropertyNames::Fermentable::betaGlucan_ppm        , &DOT_BEER_MASS_FRACT_OR_CONC_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "lactic_acid_by_weight", PropertyNames::Fermentable::lacticAcidByWeight_pct, &DOT_BEER_PERCENT_UNIT               },
+      {JsonRecordDefinition::FieldType::SingleUnitValue           , "fermentable_fraction" , PropertyNames::Fermentable::fermentableFraction_pct, &DOT_BEER_PERCENT_UNIT              },
    };
 
    // As mentioned above, it would be really nice to do this at compile time, but haven't yet found a nice way to do so
@@ -394,7 +403,7 @@ namespace {
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "oil_content/nerol"                , PropertyNames::Hop::nerol_pct            , &DOT_BEER_PERCENT_UNIT},
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "polyphenols"                      , PropertyNames::Hop::polyphenols_pct      , &DOT_BEER_PERCENT_UNIT},
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "xanthohumol"                      , PropertyNames::Hop::xanthohumol_pct      , &DOT_BEER_PERCENT_UNIT},
-      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory"                        , PropertyNames::Ingredient::totalInventory, &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER},
+      // DotBeer deliberately excludes `inventory` in favour of separate lists of stock purchases
    };
    template<> JsonRecordDefinition const DOT_BEER_RECORD_DEFN<Hop> {
       std::in_place_type_t<Hop>{},
@@ -414,7 +423,7 @@ namespace {
       {JsonRecordDefinition::FieldType::SingleUnitValue, "water_agent_percent_acid", PropertyNames::Misc::waterAgentPercentAcid, &DOT_BEER_PERCENT_UNIT           },
       {JsonRecordDefinition::FieldType::String                    , "use_for"         , PropertyNames::Misc::useFor              },
       {JsonRecordDefinition::FieldType::String                    , "notes"           , PropertyNames::Misc::notes               },
-      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory"       , PropertyNames::Ingredient::totalInventory, &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER},
+      // DotBeer deliberately excludes `inventory` in favour of separate lists of stock purchases
    };
    template<> JsonRecordDefinition const DOT_BEER_RECORD_DEFN<Misc> {
       std::in_place_type_t<Misc>{},
@@ -442,7 +451,7 @@ namespace {
       {JsonRecordDefinition::FieldType::Int                       , "max_reuse"                  , PropertyNames::Yeast::maxReuse                 },
       {JsonRecordDefinition::FieldType::Bool                      , "pof"                        , PropertyNames::Yeast::phenolicOffFlavorPositive},
       {JsonRecordDefinition::FieldType::Bool                      , "glucoamylase"               , PropertyNames::Yeast::glucoamylasePositive     },
-      {JsonRecordDefinition::FieldType::OneOfMeasurementsWithUnits, "inventory"                  , PropertyNames::Ingredient::totalInventory      , &DOT_BEER_MASS_OR_VOLUME_UNIT_MAPPER},
+      // DotBeer deliberately excludes `inventory` in favour of separate lists of stock purchases
       {JsonRecordDefinition::FieldType::Bool                      , "killer/producing_K1_toxin"  , PropertyNames::Yeast::killerProducingK1Toxin   },
       {JsonRecordDefinition::FieldType::Bool                      , "killer/producing_K2_toxin"  , PropertyNames::Yeast::killerProducingK2Toxin   },
       {JsonRecordDefinition::FieldType::Bool                      , "killer/producing_K28_toxin" , PropertyNames::Yeast::killerProducingK28Toxin  },
@@ -720,7 +729,10 @@ namespace {
 
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_YeastAddition_ExclBase {
       // Type                                    XPath         Q_PROPERTY                                     Value Decoder
-      {JsonRecordDefinition::FieldType::LocalId, "culture_id", PropertyNames::IngredientAmount::ingredientId, &Yeast::staticMetaObject},
+      {JsonRecordDefinition::FieldType::LocalId        , "culture_id"         , PropertyNames::IngredientAmount::ingredientId        , &Yeast::staticMetaObject},
+      {JsonRecordDefinition::FieldType::SingleUnitValue, "attenuation"        , PropertyNames::RecipeAdditionYeast::attenuation_pct  , &DOT_BEER_PERCENT_UNIT  },
+      {JsonRecordDefinition::FieldType::Int            , "times_cultured"     , PropertyNames::RecipeAdditionYeast::timesCultured    },
+      {JsonRecordDefinition::FieldType::Int            , "cell_count_billions", PropertyNames::RecipeAdditionYeast::cellCountBillions},
    };
    template<> JsonRecordDefinition const DOT_BEER_RECORD_DEFN<RecipeAdditionYeast> {
       std::in_place_type_t<RecipeAdditionYeast>{},

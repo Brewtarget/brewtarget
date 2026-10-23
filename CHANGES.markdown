@@ -36,6 +36,8 @@ Various improvements, including:
 * Selecting a folder doesn't let you export its contents [1148](https://github.com/Brewtarget/brewtarget/issues/1148)
 * Brewtarget 5.1.2 crashes when importing BeerXML recipe containing a WATERS record [1154](https://github.com/Brewtarget/brewtarget/issues/1154)
 * Importing from BeerXML sets fermentable addition stage to boil instead of mash [1156](https://github.com/Brewtarget/brewtarget/issues/1156)
+* Creating a fermentable stock purchase with no color causes a crash [1159](https://github.com/Brewtarget/brewtarget/issues/1159)
+* Conversion amounts for imperial tablespoons and teaspoons are wrong [1160](https://github.com/Brewtarget/brewtarget/issues/1160)
 
 ### Release Timestamp
 Wed, 19 Aug 2026 05:01:02 +0100

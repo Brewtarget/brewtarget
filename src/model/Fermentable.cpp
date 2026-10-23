@@ -52,6 +52,7 @@ QString Fermentable::localisedName_di_ph                 () { return tr("DI pH" 
 QString Fermentable::localisedName_dmsP_ppm              () { return tr("DMS precursors"                ); }
 QString Fermentable::localisedName_fan_ppm               () { return tr("Free Amino Nitrogen (FAN)"     ); }
 QString Fermentable::localisedName_fermentability_pct    () { return tr("Fermentability"                ); }
+QString Fermentable::localisedName_fermentableFraction_pct() { return tr("Fermentable by yeast (%)"     ); }
 QString Fermentable::localisedName_fineGrindYield_pct    () { return tr("Yield (DBFG) %"                ); } // We'll treat this as default yield, for now at least
 QString Fermentable::localisedName_friability_pct        () { return tr("Friability"                    ); }
 QString Fermentable::localisedName_grainGroup            () { return tr("Grain Group"                   ); }
@@ -173,6 +174,7 @@ bool Fermentable::compareWith(NamedEntity const & other, QList<BtStringConst con
       AUTO_PROPERTY_COMPARE(this, rhs, m_betaGlucan_ppm        , PropertyNames::Fermentable::betaGlucan_ppm        , propertiesThatDiffer) &&
       // Non-BeerJSON fields
       AUTO_PROPERTY_COMPARE(this, rhs, m_lacticAcidByWeight_pct, PropertyNames::Fermentable::lacticAcidByWeight_pct, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_fermentableFraction_pct, PropertyNames::Fermentable::fermentableFraction_pct, propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_supplier              , PropertyNames::Fermentable::supplier              , propertiesThatDiffer)
    );
 }
@@ -226,6 +228,7 @@ TypeLookup const Fermentable::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, betaGlucan_ppm        , m_betaGlucan_ppm        , Measurement::PhysicalQuantity::MassFractionOrConcentration),
       //
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, lacticAcidByWeight_pct, m_lacticAcidByWeight_pct,           NonPhysicalQuantity::Percentage    ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentable, fermentableFraction_pct, m_fermentableFraction_pct,         NonPhysicalQuantity::Percentage    ),
    },
    // Parent classes lookup
    {&Ingredient::typeLookup,
@@ -280,7 +283,8 @@ Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_fermentability_pct                 , namedParameterBundle, PropertyNames::Fermentable::fermentability_pct    , std::nullopt),
    SET_REGULAR_FROM_NPB (m_betaGlucan_ppm                     , namedParameterBundle, PropertyNames::Fermentable::betaGlucan_ppm        , std::nullopt),
    //
-   SET_REGULAR_FROM_NPB (m_lacticAcidByWeight_pct             , namedParameterBundle, PropertyNames::Fermentable::lacticAcidByWeight_pct, std::nullopt) {
+   SET_REGULAR_FROM_NPB (m_lacticAcidByWeight_pct             , namedParameterBundle, PropertyNames::Fermentable::lacticAcidByWeight_pct, std::nullopt),
+   SET_REGULAR_FROM_NPB (m_fermentableFraction_pct            , namedParameterBundle, PropertyNames::Fermentable::fermentableFraction_pct, std::nullopt) {
 
    // The bundle should have either color_lovibond (BeerXML, DB) or color_srm (BeerJSON) set, but not both
    if (!SET_IF_PRESENT_FROM_NPB_NO_MV(Fermentable::setColor_lovibond, namedParameterBundle, PropertyNames::Fermentable::color_lovibond) &&
@@ -333,7 +337,8 @@ Fermentable::Fermentable(Fermentable const & other) :
    m_fermentability_pct    {other.m_fermentability_pct    },
    m_betaGlucan_ppm        {other.m_betaGlucan_ppm        },
    //
-   m_lacticAcidByWeight_pct{other.m_lacticAcidByWeight_pct} {
+   m_lacticAcidByWeight_pct{other.m_lacticAcidByWeight_pct},
+   m_fermentableFraction_pct{other.m_fermentableFraction_pct} {
 
    CONSTRUCTOR_END
    return;
@@ -382,6 +387,7 @@ std::optional<double>                  Fermentable::fermentability_pct       () 
 std::optional<double>                  Fermentable::betaGlucan_ppm           () const { return                    this->m_betaGlucan_ppm           ; }
 //
 std::optional<double>                  Fermentable::lacticAcidByWeight_pct   () const { return                    this->m_lacticAcidByWeight_pct   ; }
+std::optional<double>                  Fermentable::fermentableFraction_pct  () const { return                    this->m_fermentableFraction_pct  ; }
 
 bool Fermentable::isExtract() const {
    return ((type() == Fermentable::Type::Extract) || (type() == Fermentable::Type::Dry_Extract));
@@ -389,6 +395,25 @@ bool Fermentable::isExtract() const {
 
 bool Fermentable::isSugar() const {
    return (type() == Fermentable::Type::Sugar);
+}
+
+bool Fermentable::isExistingSugar() const {
+   switch (this->type()) {
+      case Fermentable::Type::Sugar      :
+      case Fermentable::Type::Extract    :
+      case Fermentable::Type::Dry_Extract:
+      case Fermentable::Type::Fruit      :
+      case Fermentable::Type::Juice      :
+      case Fermentable::Type::Honey      :
+         return true;
+
+      case Fermentable::Type::Grain        :
+      case Fermentable::Type::Other_Adjunct:
+         return false;
+
+      // No default case as we want the compiler to warn us if we missed a case above
+   }
+   Q_UNREACHABLE(); // We should never get here
 }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
@@ -434,6 +459,12 @@ void Fermentable::setFermentability_pct       (std::optional<double>     const  
 void Fermentable::setBetaGlucan_ppm           (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::betaGlucan_ppm           , this->m_betaGlucan_ppm           , val); return; }
 //
 void Fermentable::setLacticAcidByWeight_pct   (std::optional<double>     const   val) { SET_AND_NOTIFY(PropertyNames::Fermentable::lacticAcidByWeight_pct   , this->m_lacticAcidByWeight_pct   , val); return; }
+void Fermentable::setFermentableFraction_pct  (std::optional<double>     const   val) {
+   SET_AND_NOTIFY(PropertyNames::Fermentable::fermentableFraction_pct,
+                  this->m_fermentableFraction_pct,
+                  this->enforceMinAndMax(val, "fermentable fraction", 0.0, 100.0, 100.0));
+   return;
+}
 
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Fermentable)

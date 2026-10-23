@@ -151,6 +151,7 @@
       <file alias="schemas/dotBeer/Misc.beer.schema"           >schemas/dotBeer/Misc.beer.schema</file>
       <file alias="schemas/dotBeer/Recipe.beer.schema"         >schemas/dotBeer/Recipe.beer.schema</file>
       <file alias="schemas/dotBeer/StepCommon.beer.schema"     >schemas/dotBeer/StepCommon.beer.schema</file>
+      <file alias="schemas/dotBeer/StockPurchase.beer.schema"  >schemas/dotBeer/StockPurchase.beer.schema</file>
       <file alias="schemas/dotBeer/Style.beer.schema"          >schemas/dotBeer/Style.beer.schema</file>
       <file alias="schemas/dotBeer/Water.beer.schema"          >schemas/dotBeer/Water.beer.schema</file>
    </qresource>

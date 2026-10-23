@@ -71,33 +71,43 @@ EnumStringMapping const Misc::typeDisplayNames {
 };
 
 EnumStringMapping const Misc::waterAgentTypeStringMapping {
-   {Misc::WaterAgentType::CalciumChloride  , "calcium chloride"  },
-   {Misc::WaterAgentType::CalciumCarbonate , "calcium carbonate" },
-   {Misc::WaterAgentType::CalciumSulfate   , "calcium sulfate"   },
-   {Misc::WaterAgentType::MagnesiumSulfate , "magnesium sulfate" },
-   {Misc::WaterAgentType::SodiumChloride   , "sodium chloride"   },
-   {Misc::WaterAgentType::SodiumBicarbonate, "sodium bicarbonate"},
-   {Misc::WaterAgentType::LacticAcid       , "lactic acid"       },
-   {Misc::WaterAgentType::PhosphoricAcid   , "phosphoric acid"   },
-   {Misc::WaterAgentType::Other            , "other"             }
+   {Misc::WaterAgentType::CalciumChloride_Anhydrous    , "calcium chloride anhydrous"    },
+   {Misc::WaterAgentType::CalciumChloride_Dihydrate    , "calcium chloride dihydrate"    },
+   {Misc::WaterAgentType::CalciumCarbonate             , "calcium carbonate"             },
+   {Misc::WaterAgentType::CalciumSulfate_Dihydrate     , "calcium sulfate dihydrate"     },
+   {Misc::WaterAgentType::CalciumHydroxide             , "calcium hydroxide"             },
+   {Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate, "magnesium sulfate heptahydrate"},
+   {Misc::WaterAgentType::MagnesiumChloride_Hexahydrate, "magnesium chloride hexahydrate"},
+   {Misc::WaterAgentType::SodiumChloride               , "sodium chloride"               },
+   {Misc::WaterAgentType::SodiumBicarbonate            , "sodium bicarbonate"            },
+   {Misc::WaterAgentType::LacticAcid                   , "lactic acid"                   },
+   {Misc::WaterAgentType::PhosphoricAcid               , "phosphoric acid"               },
+   {Misc::WaterAgentType::SulfuricAcid                 , "sulfuric acid"                 },
+   {Misc::WaterAgentType::HydrochloricAcid             , "hydrochloric acid"             },
+   {Misc::WaterAgentType::Other                        , "other"                         },
 };
 
 EnumStringMapping const Misc::waterAgentTypeDisplayNames {
    //
    // I guess it's a matter of preference whether you want to refer to something by its molecular formula or its name.
-   // There isn't a strong reason for lactic acid to be different from the others.  In older versions of the code, we
-   // did not show its molecular formula at all, so that's the only current reason it's the other way around from the
-   // rest.
+   // We offer both, but lead with the name as, for a lot of brewers, the formula doesn't necessarily jump off the page.
+   // Similarly, for these display strings, we use the vernacular where it differs from what a chemist might say -- eg
+   // "Epsom Salt" rather than "Magnesium Sulfate Heptahydrate".
    //
-   {Misc::WaterAgentType::CalciumChloride  , tr("Calcium Chloride"  " (CaCl₂)" )},
-   {Misc::WaterAgentType::CalciumCarbonate , tr("Calcium Carbonate" " (CaCO₃)" )},
-   {Misc::WaterAgentType::CalciumSulfate   , tr("Calcium Sulfate"   " (CaSO₄)" )},
-   {Misc::WaterAgentType::MagnesiumSulfate , tr("Magnesium Sulfate" " (MgSO₄)" )},
-   {Misc::WaterAgentType::SodiumChloride   , tr("Sodium Chloride"   " (NaCl)"  )},
-   {Misc::WaterAgentType::SodiumBicarbonate, tr("Sodium Bicarbonate"" (NaHCO₃)")},
-   {Misc::WaterAgentType::LacticAcid       , tr("Lactic Acid"       " (C₃H₆O₃)")},
-   {Misc::WaterAgentType::PhosphoricAcid   , tr("Phosphoric acid"   " (H₃PO₄)" )},
-   {Misc::WaterAgentType::Other            , tr("Other")},
+   {Misc::WaterAgentType::CalciumChloride_Anhydrous    , tr("Anhydrous Calcium Chloride"     " (CaCl₂)"     )},
+   {Misc::WaterAgentType::CalciumChloride_Dihydrate    , tr("Calcium Chloride Dihydrate"     " (CaCl₂·2H₂O)")},
+   {Misc::WaterAgentType::CalciumCarbonate             , tr("Calcium Carbonate"              " (CaCO₃)"     )},
+   {Misc::WaterAgentType::CalciumSulfate_Dihydrate     , tr("Gypsum"                         " (CaSO₄·2H₂O)")},
+   {Misc::WaterAgentType::CalciumHydroxide             , tr("Pickling Lime"                  " (Ca(OH)₂)"   )},
+   {Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate, tr("Epsom Salt"                     " (MgSO₄·7H₂O)")},
+   {Misc::WaterAgentType::MagnesiumChloride_Hexahydrate, tr("Magnesium Chloride Hexahydrate" " (MgCl₂·6H₂O)")},
+   {Misc::WaterAgentType::SodiumChloride               , tr("Regular Salt"                   " (NaCl)"      )},
+   {Misc::WaterAgentType::SodiumBicarbonate            , tr("Sodium Bicarbonate"             " (NaHCO₃)"    )},
+   {Misc::WaterAgentType::LacticAcid                   , tr("Lactic Acid"                    " (C₃H₆O₃)"    )},
+   {Misc::WaterAgentType::PhosphoricAcid               , tr("Phosphoric acid"                " (H₃PO₄)"     )},
+   {Misc::WaterAgentType::SulfuricAcid                 , tr("sulfuric acid"                  " (H₂SO₄)"     )},
+   {Misc::WaterAgentType::HydrochloricAcid             , tr("hydrochloric acid"              " (HCl)"       )},
+   {Misc::WaterAgentType::Other                        , tr("Other")},
 };
 
 bool Misc::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
@@ -201,16 +211,21 @@ Misc::~Misc() = default;
 
 bool Misc::isAcid(Misc::WaterAgentType const waterAgentType) {
    switch (waterAgentType) {
-      case Misc::WaterAgentType::CalciumChloride :
-      case Misc::WaterAgentType::CalciumCarbonate :
-      case Misc::WaterAgentType::CalciumSulfate :
-      case Misc::WaterAgentType::MagnesiumSulfate :
-      case Misc::WaterAgentType::SodiumChloride  :
-      case Misc::WaterAgentType::SodiumBicarbonate:
-      case Misc::WaterAgentType::Other :
+      case Misc::WaterAgentType::CalciumChloride_Anhydrous     :
+      case Misc::WaterAgentType::CalciumChloride_Dihydrate     :
+      case Misc::WaterAgentType::CalciumCarbonate              :
+      case Misc::WaterAgentType::CalciumSulfate_Dihydrate      :
+      case Misc::WaterAgentType::CalciumHydroxide              :
+      case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate :
+      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate :
+      case Misc::WaterAgentType::SodiumChloride                :
+      case Misc::WaterAgentType::SodiumBicarbonate             :
+      case Misc::WaterAgentType::Other                         :
          return false;
-      case Misc::WaterAgentType::LacticAcid:
-      case Misc::WaterAgentType::PhosphoricAcid     :
+      case Misc::WaterAgentType::LacticAcid       :
+      case Misc::WaterAgentType::PhosphoricAcid   :
+      case Misc::WaterAgentType::SulfuricAcid     :
+      case Misc::WaterAgentType::HydrochloricAcid :
          return true;
       // No default case as we want the compiler to warn us if we missed one
    }
@@ -219,16 +234,21 @@ bool Misc::isAcid(Misc::WaterAgentType const waterAgentType) {
 
 Measurement::PhysicalQuantity Misc::suggestedMeasureFor(Misc::WaterAgentType const waterAgentType) {
    switch (waterAgentType) {
-      case Misc::WaterAgentType::CalciumChloride :
-      case Misc::WaterAgentType::CalciumCarbonate :
-      case Misc::WaterAgentType::CalciumSulfate :
-      case Misc::WaterAgentType::MagnesiumSulfate :
-      case Misc::WaterAgentType::SodiumChloride  :
-      case Misc::WaterAgentType::SodiumBicarbonate:
-      case Misc::WaterAgentType::Other :
+      case Misc::WaterAgentType::CalciumChloride_Anhydrous     :
+      case Misc::WaterAgentType::CalciumChloride_Dihydrate     :
+      case Misc::WaterAgentType::CalciumCarbonate              :
+      case Misc::WaterAgentType::CalciumSulfate_Dihydrate      :
+      case Misc::WaterAgentType::CalciumHydroxide              :
+      case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate :
+      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate :
+      case Misc::WaterAgentType::SodiumChloride                :
+      case Misc::WaterAgentType::SodiumBicarbonate             :
+      case Misc::WaterAgentType::Other                         :
          return Measurement::PhysicalQuantity::Mass;
-      case Misc::WaterAgentType::LacticAcid:
-      case Misc::WaterAgentType::PhosphoricAcid     :
+      case Misc::WaterAgentType::LacticAcid       :
+      case Misc::WaterAgentType::PhosphoricAcid   :
+      case Misc::WaterAgentType::SulfuricAcid     :
+      case Misc::WaterAgentType::HydrochloricAcid :
          return Measurement::PhysicalQuantity::Volume;
       // No default case as we want the compiler to warn us if we missed one
    }
@@ -372,17 +392,24 @@ template double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralIon
 
 template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralIon::Calcium>(Misc::WaterAgentType const waterAgentType) {
    switch (waterAgentType) {
-      case Misc::WaterAgentType::CalciumChloride  : return (MolarMass::Calcium / MolarMass::CalciumChloride ) * 1000.0;
-      case Misc::WaterAgentType::CalciumCarbonate : return (MolarMass::Calcium / MolarMass::CalciumCarbonate) * 1000.0;
-      case Misc::WaterAgentType::CalciumSulfate   : return (MolarMass::Calcium / MolarMass::CalciumSulfate  ) * 1000.0;
+      case Misc::WaterAgentType::CalciumChloride_Anhydrous  : return (MolarMass::Calcium / MolarMass::CalciumChloride_Anhydrous ) * 1000.0;
+      case Misc::WaterAgentType::CalciumChloride_Dihydrate  : return (MolarMass::Calcium / MolarMass::CalciumChloride_Dihydrate ) * 1000.0;
+      case Misc::WaterAgentType::CalciumCarbonate           : return (MolarMass::Calcium / MolarMass::CalciumCarbonate          ) * 1000.0;
+      case Misc::WaterAgentType::CalciumSulfate_Dihydrate   : return (MolarMass::Calcium / MolarMass::CalciumSulfate            ) * 1000.0;
+      case Misc::WaterAgentType::CalciumHydroxide           : return (MolarMass::Calcium / MolarMass::CalciumHydroxide          ) * 1000.0;
 
-      case Misc::WaterAgentType::MagnesiumSulfate :
-      case Misc::WaterAgentType::SodiumChloride   :
-      case Misc::WaterAgentType::SodiumBicarbonate:
-      case Misc::WaterAgentType::LacticAcid       :
-      case Misc::WaterAgentType::PhosphoricAcid   :
-      case Misc::WaterAgentType::Other            :
+      case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate :
+      case Misc::WaterAgentType::SodiumChloride                :
+      case Misc::WaterAgentType::SodiumBicarbonate             :
+      case Misc::WaterAgentType::LacticAcid                    :
+      case Misc::WaterAgentType::PhosphoricAcid                :
+      case Misc::WaterAgentType::SulfuricAcid                  :
+      case Misc::WaterAgentType::HydrochloricAcid              :
+      case Misc::WaterAgentType::Other                         :
          return 0.0;
+         break;
+      case WaterAgentType::MagnesiumChloride_Hexahydrate:
+         break;
          // No default case as we want the compiler to warn us if we missed one
    }
    Q_UNREACHABLE();
@@ -390,16 +417,21 @@ template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralI
 
 template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralIon::Chloride>(Misc::WaterAgentType const waterAgentType) {
    switch (waterAgentType) {
-      case Misc::WaterAgentType::CalciumChloride: return (MolarMass::Chloride * 2.0 / MolarMass::CalciumChloride) * 1000.0;
-      case Misc::WaterAgentType::SodiumChloride : return (MolarMass::Chloride       / MolarMass::SodiumChloride ) * 1000.0;
+      case Misc::WaterAgentType::CalciumChloride_Anhydrous: return (MolarMass::Chloride * 2.0 / MolarMass::CalciumChloride_Anhydrous) * 1000.0;
+      case Misc::WaterAgentType::CalciumChloride_Dihydrate: return (MolarMass::Chloride * 2.0 / MolarMass::CalciumChloride_Dihydrate) * 1000.0;
+      case Misc::WaterAgentType::SodiumChloride           : return (MolarMass::Chloride       / MolarMass::SodiumChloride           ) * 1000.0;
 
-      case Misc::WaterAgentType::CalciumCarbonate :
-      case Misc::WaterAgentType::CalciumSulfate   :
-      case Misc::WaterAgentType::MagnesiumSulfate :
-      case Misc::WaterAgentType::SodiumBicarbonate:
-      case Misc::WaterAgentType::LacticAcid       :
-      case Misc::WaterAgentType::PhosphoricAcid   :
-      case Misc::WaterAgentType::Other            :
+      case Misc::WaterAgentType::CalciumCarbonate              :
+      case Misc::WaterAgentType::CalciumSulfate_Dihydrate      :
+      case Misc::WaterAgentType::CalciumHydroxide              :
+      case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate :
+      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate :
+      case Misc::WaterAgentType::SodiumBicarbonate             :
+      case Misc::WaterAgentType::LacticAcid                    :
+      case Misc::WaterAgentType::PhosphoricAcid                :
+      case Misc::WaterAgentType::SulfuricAcid                  :
+      case Misc::WaterAgentType::HydrochloricAcid              :
+      case Misc::WaterAgentType::Other                         :
          return 0.0;
    }
    Q_UNREACHABLE();
@@ -409,14 +441,19 @@ template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralI
    switch (waterAgentType) {
       case Misc::WaterAgentType::CalciumCarbonate: return (MolarMass::Carbonate / MolarMass::CalciumCarbonate) * 1000.0;
 
-      case Misc::WaterAgentType::CalciumChloride  :
-      case Misc::WaterAgentType::CalciumSulfate   :
-      case Misc::WaterAgentType::MagnesiumSulfate :
-      case Misc::WaterAgentType::SodiumChloride   :
-      case Misc::WaterAgentType::SodiumBicarbonate:
-      case Misc::WaterAgentType::LacticAcid       :
-      case Misc::WaterAgentType::PhosphoricAcid   :
-      case Misc::WaterAgentType::Other            :
+      case Misc::WaterAgentType::CalciumChloride_Anhydrous     :
+      case Misc::WaterAgentType::CalciumChloride_Dihydrate     :
+      case Misc::WaterAgentType::CalciumSulfate_Dihydrate      :
+      case Misc::WaterAgentType::CalciumHydroxide              :
+      case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate :
+      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate :
+      case Misc::WaterAgentType::SodiumChloride                :
+      case Misc::WaterAgentType::SodiumBicarbonate             :
+      case Misc::WaterAgentType::LacticAcid                    :
+      case Misc::WaterAgentType::PhosphoricAcid                :
+      case Misc::WaterAgentType::SulfuricAcid                  :
+      case Misc::WaterAgentType::HydrochloricAcid              :
+      case Misc::WaterAgentType::Other                         :
          return 0.0;
    }
    Q_UNREACHABLE();
@@ -426,14 +463,19 @@ template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralI
    switch (waterAgentType) {
       case Misc::WaterAgentType::SodiumBicarbonate: return (MolarMass::Bicarbonate / MolarMass::SodiumBicarbonate) * 1000.0;
 
-      case Misc::WaterAgentType::CalciumChloride :
-      case Misc::WaterAgentType::CalciumCarbonate:
-      case Misc::WaterAgentType::CalciumSulfate  :
-      case Misc::WaterAgentType::MagnesiumSulfate:
-      case Misc::WaterAgentType::SodiumChloride  :
-      case Misc::WaterAgentType::LacticAcid      :
-      case Misc::WaterAgentType::PhosphoricAcid  :
-      case Misc::WaterAgentType::Other           :
+      case Misc::WaterAgentType::CalciumChloride_Anhydrous     :
+      case Misc::WaterAgentType::CalciumChloride_Dihydrate     :
+      case Misc::WaterAgentType::CalciumCarbonate              :
+      case Misc::WaterAgentType::CalciumSulfate_Dihydrate      :
+      case Misc::WaterAgentType::CalciumHydroxide              :
+      case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate :
+      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate :
+      case Misc::WaterAgentType::SodiumChloride                :
+      case Misc::WaterAgentType::LacticAcid                    :
+      case Misc::WaterAgentType::PhosphoricAcid                :
+      case Misc::WaterAgentType::SulfuricAcid                  :
+      case Misc::WaterAgentType::HydrochloricAcid              :
+      case Misc::WaterAgentType::Other                         :
          return 0.0;
    }
    Q_UNREACHABLE();
@@ -441,16 +483,21 @@ template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralI
 
 template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralIon::Magnesium>(Misc::WaterAgentType const waterAgentType) {
    switch (waterAgentType) {
-      case Misc::WaterAgentType::MagnesiumSulfate: return (MolarMass::Magnesium / MolarMass::MagnesiumSulfate) * 1000.0;
+      case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate: return (MolarMass::Magnesium / MolarMass::MagnesiumSulfate_Heptahydrate) * 1000.0;
+      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate: return (MolarMass::Magnesium / MolarMass::MagnesiumChloride_Hexahydrate) * 1000.0;
 
-      case Misc::WaterAgentType::CalciumChloride  :
-      case Misc::WaterAgentType::CalciumCarbonate :
-      case Misc::WaterAgentType::CalciumSulfate   :
-      case Misc::WaterAgentType::SodiumChloride   :
-      case Misc::WaterAgentType::SodiumBicarbonate:
-      case Misc::WaterAgentType::LacticAcid       :
-      case Misc::WaterAgentType::PhosphoricAcid   :
-      case Misc::WaterAgentType::Other            :
+      case Misc::WaterAgentType::CalciumChloride_Anhydrous :
+      case Misc::WaterAgentType::CalciumChloride_Dihydrate :
+      case Misc::WaterAgentType::CalciumCarbonate          :
+      case Misc::WaterAgentType::CalciumSulfate_Dihydrate  :
+      case Misc::WaterAgentType::CalciumHydroxide          :
+      case Misc::WaterAgentType::SodiumChloride            :
+      case Misc::WaterAgentType::SodiumBicarbonate         :
+      case Misc::WaterAgentType::LacticAcid                :
+      case Misc::WaterAgentType::PhosphoricAcid            :
+      case Misc::WaterAgentType::SulfuricAcid              :
+      case Misc::WaterAgentType::HydrochloricAcid          :
+      case Misc::WaterAgentType::Other                     :
          return 0.0;
    }
    Q_UNREACHABLE();
@@ -461,13 +508,18 @@ template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralI
       case Misc::WaterAgentType::SodiumChloride   : return (MolarMass::Sodium / MolarMass::SodiumChloride   ) * 1000.0;
       case Misc::WaterAgentType::SodiumBicarbonate: return (MolarMass::Sodium / MolarMass::SodiumBicarbonate) * 1000.0;
 
-      case Misc::WaterAgentType::CalciumChloride :
-      case Misc::WaterAgentType::CalciumCarbonate:
-      case Misc::WaterAgentType::CalciumSulfate  :
-      case Misc::WaterAgentType::MagnesiumSulfate:
-      case Misc::WaterAgentType::LacticAcid      :
-      case Misc::WaterAgentType::PhosphoricAcid  :
-      case Misc::WaterAgentType::Other           :
+      case Misc::WaterAgentType::CalciumChloride_Anhydrous     :
+      case Misc::WaterAgentType::CalciumChloride_Dihydrate     :
+      case Misc::WaterAgentType::CalciumCarbonate              :
+      case Misc::WaterAgentType::CalciumSulfate_Dihydrate      :
+      case Misc::WaterAgentType::CalciumHydroxide              :
+      case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate :
+      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate :
+      case Misc::WaterAgentType::LacticAcid                    :
+      case Misc::WaterAgentType::PhosphoricAcid                :
+      case Misc::WaterAgentType::SulfuricAcid                  :
+      case Misc::WaterAgentType::HydrochloricAcid              :
+      case Misc::WaterAgentType::Other                         :
          return 0.0;
    }
    Q_UNREACHABLE();
@@ -475,16 +527,21 @@ template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralI
 
 template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralIon::Sulfate>(Misc::WaterAgentType const waterAgentType) {
    switch (waterAgentType) {
-      case Misc::WaterAgentType::CalciumSulfate  : return (MolarMass::Sulfate / MolarMass::CalciumSulfate  ) * 1000.0;
-      case Misc::WaterAgentType::MagnesiumSulfate: return (MolarMass::Sulfate / MolarMass::MagnesiumSulfate) * 1000.0;
+      case Misc::WaterAgentType::CalciumSulfate_Dihydrate      : return (MolarMass::Sulfate / MolarMass::CalciumSulfate_Dihydrate     ) * 1000.0;
+      case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate : return (MolarMass::Sulfate / MolarMass::MagnesiumSulfate_Heptahydrate) * 1000.0;
 
-      case Misc::WaterAgentType::CalciumChloride  :
-      case Misc::WaterAgentType::CalciumCarbonate :
-      case Misc::WaterAgentType::SodiumChloride   :
-      case Misc::WaterAgentType::SodiumBicarbonate:
-      case Misc::WaterAgentType::LacticAcid       :
-      case Misc::WaterAgentType::PhosphoricAcid   :
-      case Misc::WaterAgentType::Other            :
+      case Misc::WaterAgentType::CalciumChloride_Anhydrous     :
+      case Misc::WaterAgentType::CalciumChloride_Dihydrate     :
+      case Misc::WaterAgentType::CalciumCarbonate              :
+      case Misc::WaterAgentType::CalciumHydroxide              :
+      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate :
+      case Misc::WaterAgentType::SodiumChloride                :
+      case Misc::WaterAgentType::SodiumBicarbonate             :
+      case Misc::WaterAgentType::LacticAcid                    :
+      case Misc::WaterAgentType::PhosphoricAcid                :
+      case Misc::WaterAgentType::SulfuricAcid                  :
+      case Misc::WaterAgentType::HydrochloricAcid              :
+      case Misc::WaterAgentType::Other                         :
          return 0.0;
    }
    Q_UNREACHABLE();

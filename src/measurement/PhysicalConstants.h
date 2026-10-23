@@ -78,20 +78,28 @@ namespace MolarMass {
 
    // ======== Polyatomic ions ========
    double constexpr Bicarbonate = Hydrogen + Carbon + 3 * Oxygen; // <- HCO₃⁻
-   double constexpr Carbonate   = Carbon + 3 * Oxygen;            // <- CO₃²⁻
-   double constexpr Sulfate     = Sulfur + 4 * Oxygen;            // <- SO₄²⁻
+   double constexpr Carbonate   = Carbon     + 3 * Oxygen;        // <- CO₃²⁻
+   double constexpr Sulfate     = Sulfur     + 4 * Oxygen;        // <- SO₄²⁻
    double constexpr Phosphate   = Phosphorus + 4 * Oxygen;        // <- PO₄³⁻
+   double constexpr Hydroxide   = Hydrogen   + 2 * Oxygen;        // <- OH⁻
 
    // ======== Molecules ========
-   double constexpr CalciumChloride   = Calcium + 2 * Chloride  ; // <- CaCl₂
+   double constexpr Water             = 2 * Hydrogen + Oxygen   ; // <- H₂O
+   double constexpr CalciumChloride_Anhydrous   = Calcium + 2 * Chloride                 ; // <- CaCl₂
+   double constexpr CalciumChloride_Dihydrate   = CalciumChloride_Anhydrous + 2 * Water  ; // <- CaCl₂·2H₂O
    double constexpr CalciumCarbonate  = Calcium + Carbonate     ; // <- CaCO₃
    double constexpr CalciumSulfate    = Calcium + Sulfate       ; // <- CaSO₄
    double constexpr LacticAcid        = 3 * Carbon + 6 * Hydrogen + 3 * Oxygen; // <- CH₃CH(OH)CO₂H (extended formula) / C₃H₆O₃ (regular formula)
    double constexpr MagnesiumSulfate  = Magnesium + Sulfate     ; // <- MgSO₄
+   double constexpr MagnesiumChloride = Magnesium + 2 * Chloride; // <- MgCl₂
    double constexpr SodiumChloride    = Sodium + Chloride       ; // <- NaCl (AKA regular salt)
    double constexpr SodiumBicarbonate = Sodium + Bicarbonate    ; // <- NaHCO₃
    double constexpr PhosphoricAcid    = 3 * Hydrogen + Phosphate; // <- H₃PO₄
 
+   double constexpr CalciumHydroxide              = Calcium + Hydroxide; // <- Ca(OH)₂ = pickling lime
+   double constexpr CalciumSulfate_Dihydrate      = CalciumSulfate    + 2 * Water; // <- CaSO₄·2H₂O = gypsum
+   double constexpr MagnesiumSulfate_Heptahydrate = MagnesiumSulfate  + 7 * Water; // <- MgSO₄·7H₂O = Epsom Salt
+   double constexpr MagnesiumChloride_Hexahydrate = MagnesiumChloride + 6 * Water; // <- MgCl₂·6H₂O
 }
 
 

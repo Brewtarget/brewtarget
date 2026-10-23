@@ -1,0 +1,298 @@
+//======================================================================================================================
+// schema/StockPurchase.beer.schema is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/StockPurchase.beer.schema",
+  "title": "StockPurchase",
+  // We use "purchase" rather than, say, "acquisition" in the interests of brevity since, for most brewers, most
+  // acquisitions will be purchases.  (StockAcquisitionFermentable would be a bit long IMHO.)
+  "description": "Each type of ingredient (Culture, Fermentable, Hop, Misc) has a corresponding stock purchase.  A \"stock purchase\" can actually be any sort of stock acquisition, including by gift or self-production.",
+  "$defs": {
+    // Shared fields; deliberately NO unevaluatedProperties here
+    "StockPurchaseCommon": {
+      "type": "object",
+      "properties": {
+        "name": {
+          //
+          // At the moment, this (in combination with date_ordered/date_received) is the only way to group multiple
+          // purchases together.   It's planned to have more structure to support such groupings in future (eg
+          // shopping lists / orders).
+          //
+          "description": "This is typically a short label for the purchase, eg \"April visit to LHBS\".",
+          "type": "string"
+        },
+        "date_ordered": {
+          "description": "The date the stock was ordered.",
+          "$ref": "Measurement.beer.schema#/$defs/Date"
+        },
+        "date_received": {
+          "description": "The date the stock was received.",
+          "$ref": "Measurement.beer.schema#/$defs/Date"
+        },
+        "date_best_before": {
+          "description": "The best-before (or use-by) date of the stock.",
+          "$ref": "Measurement.beer.schema#/$defs/Date"
+        },
+        "supplier": {
+          "description": "The shop or company the stock was acquired from (which need not be the ingredient's producer).",
+          "type": "string"
+        },
+        "note": {
+          "description": "This is intended to be a brief note (hence singular *note* rather than *notes* that we use elsewhere for more extensive text).",
+          "type": "string"
+        },
+        "purchase_price": {
+          "description": "Excludes any amount specified in `purchase_tax`.  This field is optional as a \"stock purchase\" could potentially be a stock acquisition in which no money changed hands.",
+          "$ref": "Measurement.beer.schema#/$defs/CurrencyAmount"
+        },
+        "purchase_tax": {
+          "description": "If this is present, then it represents a tax amount (eg sales tax, VAT, import duty) not included in `purchase_price` (and in particular, a `purchase_tax` of zero means no tax was paid on the purchase).  If `purchase_tax` is not present, it means `purchase_price` is inclusive of (an unspecified amount of) tax.",
+          "$ref": "Measurement.beer.schema#/$defs/CurrencyAmount"
+        },
+        "shipping_cost": {
+          "description": "This is whatever part of the shipping cost of an order that the brewer (or her brewing software) chooses to allocate to this ingredient purchase.",
+          "$ref": "Measurement.beer.schema#/$defs/CurrencyAmount"
+        }
+      },
+      //
+      // A purchase must have at least one of `date_ordered` and `date_received` (or both).
+      //
+      // TODO: We need to enforce this in Brewken/Brewtarget too!
+      //
+      "anyOf": [
+        { "required": ["date_ordered" ] },
+        { "required": ["date_received"] }
+      ]
+    },
+    "StockUseCommon": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "This is typically auto-generated, eg \"Stock Use #1\".",
+          "type": "string"
+        },
+        "date": {
+          "description": "The date the stock was used, lost or disposed of.",
+          "$ref": "Measurement.beer.schema#/$defs/Date"
+        },
+        "reason": {
+          "description": "`used` typically means \"used in a recipe\"<br>`lost` is spillage and spoilage<br>`disposed` means deliberately disposed of (eg given to someone else or thrown away because past sell-by date).",
+          //
+          // We deliberately don't have stock adjustments here.  Instead, any discrepancy between what was ordered and
+          // what it turns out we received is recorded in StockPurchaseHop etc in the amount_ordered and amount_received
+          // fields.  This is partly a simplification (eg we don't have to deal with negative amounts) and partly
+          // philosophical (using or otherwise disposing of stock is a different thing than discovering you have a
+          // different amount than you thought you did).  That said, if there were strong user demand for stock
+          // adjustments, then it would be entirely feasible to add them.
+          //
+          "enum": [
+            "used",
+            "lost",
+            "disposed"
+          ]
+        },
+        "brew_log_id": {
+          "description": "The Local ID of the brew log corresponding to this use.  (Obviously the brew log in question must be in the \"brew_logs\" section of a recipe in the same dotBeer file.)",
+          "x-refers-to": "/DotBeer/recipes/*/brew_logs",
+          "$ref": "DotBeer.beer.schema#/$defs/LocalId"
+        },
+        "note":  {
+          "description": "A brief note about this use of the stock.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "date",
+        "reason"
+      ]
+    },
+    "StockUseCulture": {
+      "allOf": [{ "$ref": "#/$defs/StockUseCommon" }],
+      "properties": {
+        "amount_used": { "description": "The amount used, lost or disposed of.", "$ref": "Culture.beer.schema#/$defs/CultureAmount" }
+      },
+      "required": ["amount_used"],
+      "unevaluatedProperties": false
+    },
+    "StockPurchaseCulture": {
+      "description": "Note that both `amount_ordered` and `amount_received` need to be the same type of measure.  Eg, it's not supported for one to be mass and the other to be volume.",
+      "allOf": [{ "$ref": "#/$defs/StockPurchaseCommon" }],
+      "properties": {
+        "culture_id":    {
+          "description": "The Local ID of the Culture purchased.  (Obviously the culture in question must be in the \"cultures\" section of the same dotBeer file.)",
+          "x-refers-to": "/DotBeer/cultures",
+          "$ref": "DotBeer.beer.schema#/$defs/LocalId"
+        },
+        "amount_ordered": {
+          "description": "The amount ordered.",
+          "$ref": "Culture.beer.schema#/$defs/CultureAmount"
+        },
+        "amount_received": {
+          "description": "The amount actually received (which may differ from the amount ordered).",
+          "$ref": "Culture.beer.schema#/$defs/CultureAmount"
+        },
+        "stock_uses":   {
+          "description": "What was subsequently done with this stock (eg used in a brew, lost or disposed of).",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StockUseCulture"
+          }
+        }
+      },
+      "required": [
+        "culture_id"
+      ],
+      //
+      // A purchase must have at least one of `amount_ordered` and `amount_received` (or both).
+      //
+      "anyOf": [
+        { "required": ["amount_ordered" ] },
+        { "required": ["amount_received"] }
+      ],
+      "unevaluatedProperties": false
+    },
+    "StockUseFermentable": {
+      "allOf": [{ "$ref": "#/$defs/StockUseCommon" }],
+      "properties": {
+        "amount_used": { "description": "The amount used, lost or disposed of.", "$ref": "Fermentable.beer.schema#/$defs/FermentableAmount" }
+      },
+      "required": ["amount_used"],
+      "unevaluatedProperties": false
+    },
+    "StockPurchaseFermentable": {
+      "description": "Note that both `amount_ordered` and `amount_received` need to be the same type of measure.  Eg, it's not supported for one to be mass and the other to be volume.",
+      "allOf": [{ "$ref": "#/$defs/StockPurchaseCommon" }],
+      "properties": {
+        "fermentable_id":    {
+          "description": "The Local ID of the fermentable purchased.  (Obviously the fermentable in question must be in the \"fermentables\" section of the same dotBeer file.)",
+          "x-refers-to": "/DotBeer/fermentables",
+          "$ref": "DotBeer.beer.schema#/$defs/LocalId"
+        },
+        "amount_ordered": {
+          "description": "The amount ordered.",
+          "$ref": "Fermentable.beer.schema#/$defs/FermentableAmount"
+        },
+        "amount_received": {
+          "description": "The amount actually received (which may differ from the amount ordered).",
+          "$ref": "Fermentable.beer.schema#/$defs/FermentableAmount"
+        },
+        "stock_uses":   {
+          "description": "What was subsequently done with this stock (eg used in a brew, lost or disposed of).",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StockUseFermentable"
+          }
+        }
+      },
+      "required": [
+        "fermentable_id"
+      ],
+      //
+      // A purchase must have at least one of `amount_ordered` and `amount_received` (or both).
+      //
+      "anyOf": [
+        { "required": ["amount_ordered" ] },
+        { "required": ["amount_received"] }
+      ],
+      "unevaluatedProperties": false
+    },
+    "StockUseHop": {
+      "allOf": [{ "$ref": "#/$defs/StockUseCommon" }],
+      "properties": {
+        "amount_used": { "description": "The amount used, lost or disposed of.", "$ref": "Hop.beer.schema#/$defs/HopAmount" }
+      },
+      "required": ["amount_used"],
+      "unevaluatedProperties": false
+    },
+    "StockPurchaseHop": {
+      "description": "Note that both `amount_ordered` and `amount_received` need to be the same type of measure.  Eg, it's not supported for one to be mass and the other to be volume.",
+      "allOf": [{ "$ref": "#/$defs/StockPurchaseCommon" }],
+      "properties": {
+        "hop_id":    {
+          "description": "The Local ID of the hop purchased.  (Obviously the hop in question must be in the \"hops\" section of the same dotBeer file.)",
+          "x-refers-to": "/DotBeer/hops",
+          "$ref": "DotBeer.beer.schema#/$defs/LocalId"
+        },
+        "amount_ordered": {
+          "description": "The amount ordered.",
+          "$ref": "Hop.beer.schema#/$defs/HopAmount"
+        },
+        "amount_received": {
+          "description": "The amount actually received (which may differ from the amount ordered).",
+          "$ref": "Hop.beer.schema#/$defs/HopAmount"
+        },
+        "stock_uses":   {
+          "description": "What was subsequently done with this stock (eg used in a brew, lost or disposed of).",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StockUseHop"
+          }
+        }
+      },
+      "required": [
+        "hop_id"
+      ],
+      //
+      // A purchase must have at least one of `amount_ordered` and `amount_received` (or both).
+      //
+      "anyOf": [
+        { "required": ["amount_ordered" ] },
+        { "required": ["amount_received"] }
+      ],
+      "unevaluatedProperties": false
+    },
+    "StockUseMisc": {
+      "allOf": [{ "$ref": "#/$defs/StockUseCommon" }],
+      "properties": {
+        "amount_used": { "description": "The amount used, lost or disposed of.", "$ref": "Misc.beer.schema#/$defs/MiscAmount" }
+      },
+      "required": ["amount_used"],
+      "unevaluatedProperties": false
+    },
+    "StockPurchaseMisc": {
+      "description": "Note that both `amount_ordered` and `amount_received` need to be the same type of measure.  Eg, it's not supported for one to be mass and the other to be volume.",
+      "allOf": [{ "$ref": "#/$defs/StockPurchaseCommon" }],
+      "properties": {
+        "misc_id":    {
+          "description": "The Local ID of the misc purchased.  (Obviously the misc in question must be in the \"miscs\" section of the same dotBeer file.)",
+          "x-refers-to": "/DotBeer/miscs",
+          "$ref": "DotBeer.beer.schema#/$defs/LocalId"
+        },
+        "amount_ordered": {
+          "description": "The amount ordered.",
+          "$ref": "Misc.beer.schema#/$defs/MiscAmount"
+        },
+        "amount_received": {
+          "description": "The amount actually received (which may differ from the amount ordered).",
+          "$ref": "Misc.beer.schema#/$defs/MiscAmount"
+        },
+        "stock_uses":   {
+          "description": "What was subsequently done with this stock (eg used in a brew, lost or disposed of).",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StockUseMisc"
+          }
+        }
+      },
+      "required": [
+        "misc_id"
+      ],
+      //
+      // A purchase must have at least one of `amount_ordered` and `amount_received` (or both).
+      //
+      "anyOf": [
+        { "required": ["amount_ordered" ] },
+        { "required": ["amount_received"] }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

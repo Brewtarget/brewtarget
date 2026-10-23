@@ -410,15 +410,17 @@ public:
    // Same goes for ABV_pct, IBU, color_srm below (which are optional BeerJSON fields but not part of BeerXML)
    //
    /**
-    * \brief The calculated OG
+    * \brief The calculated OG, in other words the expected OG
     *
-    *        In BeerXML, this is "The measured original (pre-fermentation) specific gravity of the beer."
+    *        In BeerXML, this is "The measured original (pre-fermentation) specific gravity of the beer", but we put
+    *        measured values in BrewLog, as they may differ between brews.
     */
    Q_PROPERTY(double  og                 READ og                 WRITE setOg)
    /**
-    * \brief The calculated FG
+    * \brief The calculated FG, in other words the expected FG
     *
-    *        In BeerXML, this is "The measured final gravity of the finished beer."
+    *        In BeerXML, this is "The measured final gravity of the finished beer", but, as with OG, we put measured
+    *        values in BrewLog.
     */
    Q_PROPERTY(double  fg                 READ fg                 WRITE setFg)
 
@@ -817,17 +819,18 @@ public:
       /**
        * Mass of sugars present before the mash (and is therefore *not* affected by mash efficiency).
        *
-       * At the moment, this is Fermentable additions of type:
+       * This is Fermentable additions for which \c Fermentable::isExistingSugar() is true, ie of type:
        *    Fermentable::Type::Sugar
        *    Fermentable::Type::Extract
        *    Fermentable::Type::Dry_Extract
-       *
-       * However TODO we need to extend sugarTotals and related functions to handle Fruit, Juice and Honey
+       *    Fermentable::Type::Fruit
+       *    Fermentable::Type::Juice
+       *    Fermentable::Type::Honey
        */
       double existingSugars_all_kg = 0.0;
       /**
-       * The part of \c existingSugars_all_kg that is not Fermentable::Type::Sugar
-       * and not called "Milk Sugar (Lactose)" -- TODO we need to fix that latter part for non-English locales
+       * The part of \c existingSugars_all_kg that yeast cannot ferment (eg lactose), per
+       * \c Fermentable::fermentableFraction_pct
        */
       double existingSugars_nonFermentable_kg = 0.0;
       /**
@@ -835,13 +838,19 @@ public:
        */
       double existingSugars_lateAddition_kg = 0.0;
       /**
-       * Total sugars from Fermentable additions that are not sugars or extracts
+       * Total sugars from Fermentable additions whose extract has to come from starch converted in the mash (ie for
+       * which \c Fermentable::isExistingSugar() is false: grains and "other" adjuncts)
        */
       double sugarsFromStarch_all_kg = 0.0;
       /**
        * The part of \c sugarsFromStarch_all_kg that is added after the boil
        */
       double sugarsFromStarch_lateAddition_kg = 0.0;
+      /**
+       * The part of \c sugarsFromStarch_all_kg that yeast cannot ferment, per \c Fermentable::fermentableFraction_pct.
+       * NB: Like \c sugarsFromStarch_all_kg, this is \b before applying mash efficiency.
+       */
+      double sugarsFromStarch_nonFermentable_kg = 0.0;
    };
 
    Sugars sugarTotals() const;

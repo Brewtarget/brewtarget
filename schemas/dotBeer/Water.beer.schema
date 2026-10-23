@@ -1,5 +1,5 @@
 //======================================================================================================================
-// schema/Water.beer.schema is part of DotBeer and is copyright the following authors 2017-2026:
+// schema/Water.beer.schema is part of dotBeer and is copyright the following authors 2017-2026:
 //   • Mark Price <shadowchao99@gmail.com>
 //   • Matt Young <mfsy@yahoo.com>
 //   • Ricardo Rosa <rmsrosa@gmail.com>
@@ -13,11 +13,12 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/0.9.0/Water.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.0.0/Water.beer.schema",
   "type": "object",
   "description": "Full definition of a brewing water profile.  NOTE that water is handled differently from other ingredients.  We don't model inventory of water, it doesn't have producers or product IDs, and the amounts needed in a recipe are already defined in its mash steps rather than by RecipeAddition amounts.",
   "properties": {
     "name": {
+      "description": "Usually the source, eg city/region, or ‘RO’.",
       "type": "string"
     },
     "local_id" : {
@@ -36,7 +37,7 @@
       "type": "string"
     },
     "bicarbonate": {
-      "description": "Bicarbonate (HCO₃⁻) content of the water profile",
+      "description": "Bicarbonate (HCO₃⁻) content of the water profile.  If you only have alkalinity as CaCO₃, HCO₃⁻ ≈ 1.22 × alkalinity.",
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
     },
     "calcium": {
@@ -51,10 +52,15 @@
       "description": "Chloride (Cl⁻) content of the water profile.  Common in most water supplies, chloride ions contribute to the mellow, palate-full character of a beer.",
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
     },
+    // Copper, manganese, phosphate and zinc are not in BeerJSON
     "copper": {
       "description": "Copper (Cu²⁺) content of the water profile.  In concentrations as low as 0.1 mg/L, copper ions can act as catalysts of oxidants, leading to irreversible beer haze.",
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
     },
+    //
+    // BeerJSON (from 3.0) has `fluoride`, plus the deprecated misspelling `flouride`, which readers of BeerJSON should
+    // also accept.  BeerJSON also has a `producer` field (for the utility or source of the water), which we don't.
+    //
     "fluoride": {
       "description": "Fluoride (F⁻) content of the water profile",
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
@@ -88,7 +94,7 @@
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
     },
     "sodium": {
-      "description": "Sodium (Na⁺) content of the water profile.  Although it has no chemical effect, sodium contributes to the perceived flavor of beer.  Levels from 75 to 150 mg/L give a round smoothness and accentuate sweetness, which is most pleasant when paired with chloride ions than when associated with sulfate ions.  In the presence of sulfate, sodium creates an unpleasant harshness, so the rule of thumb is that the more sulfate in the water, the less sodium there should be (and vice versa).",
+      "description": "Sodium (Na⁺) content of the water profile.  Although it has no chemical effect, sodium contributes to the perceived flavor of beer.  Levels from 75 to 150 mg/L give a round smoothness and accentuate sweetness, which is more pleasant when paired with chloride ions than when associated with sulfate ions.  In the presence of sulfate, sodium creates an unpleasant harshness, so the rule of thumb is that the more sulfate in the water, the less sodium there should be (and vice versa).",
       "$ref": "Measurement.beer.schema#/$defs/MassFractionOrConcentration"
     },
     "sulfate": {
