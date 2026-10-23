@@ -13,8 +13,8 @@
 // The remaining content in this file comes from Creative Commons content on https://www.beer-analytics.com/.  (See
 // https://creativecommons.org/licenses/by-sa/4.0/ for license.)
 //
-// This comment is not valid JSON, but we configure comments of this sort to be allowed (via the Boost.JSON
-// parse_options::allow_comments setting) so the software should be happy to import it.
+// Comments such as this one are part of the dotBeer format (which is JSON with comments allowed -- see "File format
+// details" at https://github.com/Brewken/DotBeer), so software reading the file should be happy to import it.
 //======================================================================================================================
 {
   "DotBeer": {
@@ -34,8 +34,8 @@
           "value": 79
         },
         "color": {
-          "unit": "SRM",
-          "value": 34.8984
+          "unit": "Lovi",
+          "value": 26.5
         },
         "notes": "SKU 206201. Source: https://theswaen.com/products/malt-for-beer/platinum-swaen-malts/platinum-swaen-stroopwafel-malt/ | Recommended for: Dubbel, Quadruple, Winter Warmer, Bock, Stout, Brown Ale — cookie/syrupy-caramel/cinnamon character",
         "moisture": {
@@ -64,8 +64,8 @@
           "value": 79
         },
         "color": {
-          "unit": "SRM",
-          "value": 40.9536
+          "unit": "Lovi",
+          "value": 31
         },
         "notes": "SKU 203000. Source: https://theswaen.com/products/malt-for-beer/black-swaen-malts/black-swaen-biscuit-malt/ | Recommended for: Pilsner, Lager, Ale, Kölsch, light/Export/Specialty, all other beers",
         "moisture": {
@@ -94,8 +94,8 @@
           "value": 79
         },
         "color": {
-          "unit": "SRM",
-          "value": 12.696
+          "unit": "Lovi",
+          "value": 10
         },
         "notes": "SKU 202010. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-hell-malt/ | Recommended for: Pilsner, low-alcoholic beers, Bockbier, Export, Specialty, light and dark beers",
         "moisture": {
@@ -124,8 +124,8 @@
           "value": 77
         },
         "color": {
-          "unit": "SRM",
-          "value": 90.7408
+          "unit": "Lovi",
+          "value": 68
         },
         "notes": "SKU 202080. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-brown-light-malt/ | Recommended for: Low-alcoholic beers, Bockbier, Export, Specialty, light and dark beers",
         "moisture": {
@@ -154,8 +154,8 @@
           "value": 82
         },
         "color": {
-          "unit": "SRM",
-          "value": 3.2768
+          "unit": "Lovi",
+          "value": 3
         },
         "notes": "SKU 206040. Source: https://theswaen.com/products/malt-for-beer/platinum-swaen-malts/platinum-swaen-smoke-malt/ | Recommended for: Smoked beers, Specialty, Lager, Alaskan Ale, Scottish Ale — smoked over beech wood",
         "moisture": {
@@ -184,8 +184,8 @@
           "value": 78
         },
         "color": {
-          "unit": "SRM",
-          "value": 34.8984
+          "unit": "Lovi",
+          "value": 26.5
         },
         "notes": "SKU 202040. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-amber-malt/ | Recommended for: Red Lager, Amber Ale, Altbier, Bockbier, Specialty",
         "moisture": {
@@ -210,8 +210,8 @@
           "value": 75
         },
         "color": {
-          "unit": "SRM",
-          "value": 453.38
+          "unit": "Lovi",
+          "value": 337.5
         },
         "notes": "SKU 203030. Source: https://theswaen.com/products/malt-for-beer/black-swaen-malts/black-swaen-chocolate-b-malt/ | Recommended for: Schwarzbier, dark beers, Stout, Porter, Ale, Bockbier, Altbier",
         "moisture": {
@@ -240,8 +240,8 @@
           "value": 77
         },
         "color": {
-          "unit": "SRM",
-          "value": 328.912
+          "unit": "Lovi",
+          "value": 245
         },
         "notes": "SKU 203020. Source: https://theswaen.com/products/malt-for-beer/black-swaen-malts/black-swaen-coffee-malt/ | Recommended for: Stout, Porter, Scottish Ale, dark Belgian beers, Brown Ale",
         "moisture": {
@@ -270,8 +270,8 @@
           "value": 78
         },
         "color": {
-          "unit": "SRM",
-          "value": 453.38
+          "unit": "Lovi",
+          "value": 337.5
         },
         "notes": "SKU 203040. Source: https://theswaen.com/products/malt-for-beer/black-swaen-malts/black-swaen-chocolate-wheat-malt/ | Recommended for: Dark wheat beers, Schwarzbier, Stout, Porter, Ale, Bockbier",
         "moisture": {
@@ -295,11 +295,15 @@
         "origin": "Netherlands",
         "producer": "The Swaen",
         "product_id": "206050",
+        "yield_fine_grind": {
+          "unit": "%",
+          "value": 70
+        },
         "color": {
           "unit": "Lovi",
           "value": 0
         },
-        "notes": "SKU 206050. Source: https://theswaen.com/products/malt-for-beer/flakes/flaked-oat/ | Recommended for: Oatmeal Stout, Porter, Witbier, NEIPA — additional body, head retention, haziness; silky mouthfeel (nutty/oaty/earthy) | YIELD set to 0 — extract/yield % is not published by The Swaen for this adjunct; do not use for brewhouse-efficiency math, get a lab figure or the supplier's technical contact instead. | COLOR set to 0 — °Lovibond not published by The Swaen for this unmalted adjunct.",
+        "notes": "SKU 206050. Source: https://theswaen.com/products/malt-for-beer/flakes/flaked-oat/ | Recommended for: Oatmeal Stout, Porter, Witbier, NEIPA — additional body, head retention, haziness; silky mouthfeel (nutty/oaty/earthy) | YIELD ESTIMATED — extract/yield % is not published by The Swaen for this adjunct, so the 70% here is a typical figure (as used for the generic \"Flaked Oats\" in this file).  For accurate brewhouse-efficiency math, get a lab figure or ask the supplier's technical contact. | COLOR set to 0 — °Lovibond not published by The Swaen for this unmalted adjunct.",
         "moisture": {
           "unit": "%",
           "value": 13
@@ -326,8 +330,8 @@
           "value": 81
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.86392
+          "unit": "Lovi",
+          "value": 1.95
         },
         "notes": "SKU 200020. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-pilsner-malt/ | Recommended for: Pilsner, Lager, Ale, Kölsch, Export, Specialty, IPA, Hazy IPA, and all other beers",
         "moisture": {
@@ -360,8 +364,8 @@
           "value": 81
         },
         "color": {
-          "unit": "SRM",
-          "value": 3.9496
+          "unit": "Lovi",
+          "value": 3.5
         },
         "notes": "SKU 200030. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-ale-malt/ | Recommended for: Pale Ale, IPA, bitter beers, traditional English styles, strong Export beers",
         "moisture": {
@@ -394,8 +398,8 @@
           "value": 77
         },
         "color": {
-          "unit": "SRM",
-          "value": 24.8064
+          "unit": "Lovi",
+          "value": 19
         },
         "notes": "SKU 200070. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-amber-malt/ | Recommended for: Pilsner, Lager, Ale, light beers, Specialty, all other beers",
         "moisture": {
@@ -424,8 +428,8 @@
           "value": 76
         },
         "color": {
-          "unit": "SRM",
-          "value": 150.62
+          "unit": "Lovi",
+          "value": 112.5
         },
         "notes": "SKU 202100. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-brown-supreme-malt/ | Recommended for: Low-alcoholic beers, Bockbier, Export, Specialty, light and dark beers",
         "moisture": {
@@ -454,8 +458,8 @@
           "value": 80
         },
         "color": {
-          "unit": "SRM",
-          "value": 5.2952
+          "unit": "Lovi",
+          "value": 4.5
         },
         "notes": "SKU 200040. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-vienna-malt/ | Recommended for: Vienna Lager, Pale Ale, Blond Ale, Amber Lager, Golden Ale, Märzen, Porter, Export beers",
         "moisture": {
@@ -484,8 +488,8 @@
           "value": 73
         },
         "color": {
-          "unit": "SRM",
-          "value": 567.756
+          "unit": "Lovi",
+          "value": 422.5
         },
         "notes": "SKU 203050. Source: https://theswaen.com/products/malt-for-beer/black-swaen-malts/black-swaen-black-malt/ | Recommended for: Schwarzbier, dark beers, Stout, Porter, Ale, Bockbier, Altbier",
         "moisture": {
@@ -509,11 +513,15 @@
         "origin": "Netherlands",
         "producer": "The Swaen",
         "product_id": "206030",
-        "color": {
-          "unit": "SRM",
-          "value": 4.6224
+        "yield_fine_grind": {
+          "unit": "%",
+          "value": 60
         },
-        "notes": "SKU 206030. Source: https://theswaen.com/products/malt-for-beer/platinum-swaen-malts/platinum-swaen-sauer-malt/ | Recommended for: Pilsner, Ale, light beers, Wheat beers — natural lactobacilli acidification for mash pH adjustment | YIELD set to 0 — extract/yield % is not published by The Swaen for this adjunct; do not use for brewhouse-efficiency math, get a lab figure or the supplier's technical contact instead.",
+        "color": {
+          "unit": "Lovi",
+          "value": 4
+        },
+        "notes": "SKU 206030. Source: https://theswaen.com/products/malt-for-beer/platinum-swaen-malts/platinum-swaen-sauer-malt/ | Recommended for: Pilsner, Ale, light beers, Wheat beers — natural lactobacilli acidification for mash pH adjustment | YIELD ESTIMATED — extract/yield % is not published by The Swaen for this adjunct, so the 60% here is a typical figure (as used for the generic \"Acidulated Malt\" in this file).  For accurate brewhouse-efficiency math, get a lab figure or ask the supplier's technical contact.",
         "moisture": {
           "unit": "%",
           "value": 8
@@ -540,8 +548,8 @@
           "value": 81
         },
         "color": {
-          "unit": "SRM",
-          "value": 45.6632
+          "unit": "Lovi",
+          "value": 34.5
         },
         "notes": "SKU 202140. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-wheat-light-malt/ | Recommended for: Wheat beer, Dunkelweizen, Schwarzbier, Stout, Porter, all beer types (colouration)",
         "moisture": {
@@ -570,8 +578,8 @@
           "value": 77
         },
         "color": {
-          "unit": "SRM",
-          "value": 59.792
+          "unit": "Lovi",
+          "value": 45
         },
         "notes": "SKU 202060. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-classic-malt/ | Recommended for: Low-alcoholic beers, Bockbier, Export, Specialty, light and dark beers",
         "moisture": {
@@ -600,8 +608,8 @@
           "value": 80
         },
         "color": {
-          "unit": "SRM",
-          "value": 10.0048
+          "unit": "Lovi",
+          "value": 8
         },
         "notes": "SKU 200060. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-munich-dark-malt/ | Recommended for: Amber beers, Alt, Dark Lagers/Ales, Märzen, Bockbier, Brown Ale, Stout",
         "moisture": {
@@ -630,8 +638,8 @@
           "value": 80
         },
         "color": {
-          "unit": "SRM",
-          "value": 5.2952
+          "unit": "Lovi",
+          "value": 4.5
         },
         "notes": "SKU 201020. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-wheat-dark-malt/ | Recommended for: Wheat beer, Dunkelweizen, light and low/non-alcoholic beers",
         "moisture": {
@@ -660,8 +668,8 @@
           "value": 78
         },
         "color": {
-          "unit": "SRM",
-          "value": 24.8064
+          "unit": "Lovi",
+          "value": 19
         },
         "notes": "SKU 202030. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-red-malt/ | Recommended for: Red Lager, Red Ale, Altbier, Red IPA, Amber Ale, Bockbier, Export, Specialty",
         "moisture": {
@@ -690,8 +698,8 @@
           "value": 65
         },
         "color": {
-          "unit": "SRM",
-          "value": 567.756
+          "unit": "Lovi",
+          "value": 422.5
         },
         "notes": "SKU 203060. Source: https://theswaen.com/products/malt-for-beer/black-swaen-malts/black-swaen-barley-unmalted/ | Recommended for: Schwarzbier, Stout, Porter, Ale, Bockbier, Altbier",
         "moisture": {
@@ -720,8 +728,8 @@
           "value": 82
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.9312
+          "unit": "Lovi",
+          "value": 2
         },
         "notes": "SKU 201010. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-wheat-classic-malt/ | Recommended for: Wheat beer, Wit, Weizen, light and low/non-alcoholic beers",
         "moisture": {
@@ -750,8 +758,8 @@
           "value": 80
         },
         "color": {
-          "unit": "SRM",
-          "value": 46.336
+          "unit": "Lovi",
+          "value": 35
         },
         "notes": "SKU 202050. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-munich-light-malt/ | Recommended for: Low-alcoholic beers, Bockbier, Export, Specialty, light and dark beers",
         "moisture": {
@@ -780,8 +788,8 @@
           "value": 78
         },
         "color": {
-          "unit": "SRM",
-          "value": 567.756
+          "unit": "Lovi",
+          "value": 422.5
         },
         "notes": "SKU 203110. Source: https://theswaen.com/products/malt-for-beer/black-swaen-malts/black-swaen-black-wheat-malt/ | Recommended for: Dark wheat beers, Schwarzbier, Stout, Porter, Ale, Bockbier",
         "moisture": {
@@ -805,11 +813,15 @@
         "origin": "Netherlands",
         "producer": "The Swaen",
         "product_id": "206060",
+        "yield_fine_grind": {
+          "unit": "%",
+          "value": 77
+        },
         "color": {
           "unit": "Lovi",
           "value": 0
         },
-        "notes": "SKU 206060. Source: https://theswaen.com/products/malt-for-beer/flakes/flaked-wheat/ | Recommended for: Witbier, Wheat Beer, NEIPA, Hazy IPA — increased body & head retention; spicy, bready flavour | YIELD set to 0 — extract/yield % is not published by The Swaen for this adjunct; do not use for brewhouse-efficiency math, get a lab figure or the supplier's technical contact instead. | COLOR set to 0 — °Lovibond not published by The Swaen for this unmalted adjunct.",
+        "notes": "SKU 206060. Source: https://theswaen.com/products/malt-for-beer/flakes/flaked-wheat/ | Recommended for: Witbier, Wheat Beer, NEIPA, Hazy IPA — increased body & head retention; spicy, bready flavour | YIELD ESTIMATED — extract/yield % is not published by The Swaen for this adjunct, so the 77% here is a typical figure (as used for the generic \"Flaked Wheat\" in this file).  For accurate brewhouse-efficiency math, get a lab figure or ask the supplier's technical contact. | COLOR set to 0 — °Lovibond not published by The Swaen for this unmalted adjunct.",
         "moisture": {
           "unit": "%",
           "value": 14
@@ -836,8 +848,8 @@
           "value": 80
         },
         "color": {
-          "unit": "SRM",
-          "value": 6.6408
+          "unit": "Lovi",
+          "value": 5.5
         },
         "notes": "SKU 200050. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-munich-light-malt/ | Recommended for: Amber beers, Alt, Dark Lagers/Ales, Märzen, Bockbier, Brown Ale, Stout",
         "moisture": {
@@ -866,8 +878,8 @@
           "value": 76
         },
         "color": {
-          "unit": "SRM",
-          "value": 2.40216
+          "unit": "Lovi",
+          "value": 2.35
         },
         "notes": "SKU 206020. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-naked-oat-malt/ | Recommended for: NEIPA, Hazy IPA, Milkshake IPA, Porter, Oatmeal Stout",
         "moisture": {
@@ -896,8 +908,8 @@
           "value": 80
         },
         "color": {
-          "unit": "SRM",
-          "value": 42.972
+          "unit": "Lovi",
+          "value": 32.5
         },
         "notes": "SKU 203010. Source: https://theswaen.com/products/malt-for-beer/black-swaen-malts/black-swaen-honey-biscuit-malt/ | Recommended for: Pilsner, Lager, Ale, Kölsch, light/Export/Specialty, all other beers",
         "moisture": {
@@ -926,8 +938,8 @@
           "value": 80
         },
         "color": {
-          "unit": "SRM",
-          "value": 88.0496
+          "unit": "Lovi",
+          "value": 66
         },
         "notes": "SKU 202150. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-wheat-dark-malt/ | Recommended for: Wheat beer, Dunkelweizen, Schwarzbier, Stout, Porter, all beer types (colouration)",
         "moisture": {
@@ -956,8 +968,8 @@
           "value": 82
         },
         "color": {
-          "unit": "SRM",
-          "value": 3.2768
+          "unit": "Lovi",
+          "value": 3
         },
         "notes": "SKU 206010. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-rye-malt/ | Recommended for: Rye IPA, Rye Lager, Rye Stout, multigrain beers, Roggenbier, Sahti",
         "moisture": {
@@ -986,8 +998,8 @@
           "value": 75
         },
         "color": {
-          "unit": "SRM",
-          "value": 201.08
+          "unit": "Lovi",
+          "value": 150
         },
         "notes": "SKU 202110. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-aroma-malt/ | Recommended for: Amber Ale, Dark Ale, Stout, Porter, all dark beers",
         "moisture": {
@@ -1016,8 +1028,8 @@
           "value": 81.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.86392
+          "unit": "Lovi",
+          "value": 1.95
         },
         "notes": "SKU 200044. Source: https://theswaen.com/products/malt-for-distilling/swaen-distilling-malt/ | Recommended for: Single malt whisky, Grain whisky, Gin, Jenever, Vodka, Eau de vie",
         "moisture": {
@@ -1050,8 +1062,8 @@
           "value": 77
         },
         "color": {
-          "unit": "SRM",
-          "value": 73.248
+          "unit": "Lovi",
+          "value": 55
         },
         "notes": "SKU 202070. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-munich-dark-malt/ | Recommended for: Low-alcoholic beers, Bockbier, Export, Specialty, light and dark beers",
         "moisture": {
@@ -1080,8 +1092,8 @@
           "value": 72
         },
         "color": {
-          "unit": "SRM",
-          "value": 672.04
+          "unit": "Lovi",
+          "value": 500
         },
         "notes": "SKU 203070. Source: https://theswaen.com/products/malt-for-beer/black-swaen-malts/black-swaen-black-extra-malt/ | Recommended for: Schwarzbier, dark beers, Stout, Porter, Ale, Bockbier, Altbier",
         "moisture": {
@@ -1110,8 +1122,8 @@
           "value": 82
         },
         "color": {
-          "unit": "SRM",
-          "value": 2.53672
+          "unit": "Lovi",
+          "value": 2.45
         },
         "notes": "SKU 206000. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-spelt-malt/ | Recommended for: Belgian Saison, Specialty beers, Wheat beer",
         "moisture": {
@@ -1140,8 +1152,8 @@
           "value": 75
         },
         "color": {
-          "unit": "SRM",
-          "value": 18.0784
+          "unit": "Lovi",
+          "value": 14
         },
         "notes": "SKU 202020. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-belge-malt/ | Recommended for: Belgian specialty, Blond, Brown Ale, Amber beers, Tripel, Dubbel",
         "moisture": {
@@ -1170,8 +1182,8 @@
           "value": 75
         },
         "color": {
-          "unit": "SRM",
-          "value": 7.3136
+          "unit": "Lovi",
+          "value": 6
         },
         "notes": "SKU 202000. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-light-malt/ | Recommended for: Pilsner, low-alcoholic beers, Bockbier, Export, Specialty, light and dark beers",
         "moisture": {
@@ -1200,8 +1212,8 @@
           "value": 50
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.19112
+          "unit": "Lovi",
+          "value": 1.45
         },
         "notes": "SKU 206065. Source: https://theswaen.com/products/malt-for-beer/platinum-swaen-malts/platinum-swaen-chit-malt/ | Recommended for: All beer/ale types — under-modified, boosts foam stability and mouthfeel",
         "moisture": {
@@ -1230,8 +1242,8 @@
           "value": 81
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.79664
+          "unit": "Lovi",
+          "value": 1.9
         },
         "notes": "SKU 200010. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-lager-malt/ | Recommended for: Pilsner, Lager, Ale, Kölsch, Export, Specialty, IPA, Hazy IPA, and all other beers",
         "moisture": {
@@ -1264,8 +1276,8 @@
           "value": 77
         },
         "color": {
-          "unit": "SRM",
-          "value": 34.8984
+          "unit": "Lovi",
+          "value": 26.5
         },
         "notes": "SKU 200080. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-melany-malt/ | Recommended for: Pilsner, Lager, Ale, light beers, Specialty, all other beers",
         "moisture": {
@@ -1294,8 +1306,8 @@
           "value": 79
         },
         "color": {
-          "unit": "SRM",
-          "value": 2.2676
+          "unit": "Lovi",
+          "value": 2.25
         },
         "notes": "SKU 206080. Source: https://theswaen.com/products/malt-for-beer/platinum-swaen-malts/platinum-swaen-dextrin-malt/ | Recommended for: Pale Lager, Hazy IPA, Pale Ale, non-/low-alcohol beers — unfermentable body/mouthfeel/foam, no added alcohol or colour",
         "moisture": {
@@ -1324,8 +1336,8 @@
           "value": 81
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.86392
+          "unit": "Lovi",
+          "value": 1.95
         },
         "notes": "SKU 200150. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/swaen-dutch-pilsner-malt/ | Recommended for: Pilsner, Lager, Ale, Kölsch, Export, Specialty, IPA, Hazy IPA, and all other beers",
         "moisture": {
@@ -1358,8 +1370,8 @@
           "value": 81
         },
         "color": {
-          "unit": "SRM",
-          "value": 3.9496
+          "unit": "Lovi",
+          "value": 3.5
         },
         "notes": "SKU 200100. Source: https://theswaen.com/products/malt-for-beer/swaen-malts/dutch-pale-ale-malt/ | Recommended for: Pale Ale, IPA, NEIPA, traditional English styles, strong export beers",
         "moisture": {
@@ -1392,8 +1404,8 @@
           "value": 77
         },
         "color": {
-          "unit": "SRM",
-          "value": 110.252
+          "unit": "Lovi",
+          "value": 82.5
         },
         "notes": "SKU 202090. Source: https://theswaen.com/products/malt-for-beer/gold-swaen-malts/gold-swaen-brown-malt/ | Recommended for: Low-alcoholic beers, Bockbier, Export, Specialty, light and dark beers",
         "moisture": {
@@ -1419,8 +1431,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 77.9
@@ -1430,8 +1440,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 557.664
+          "unit": "Lovi",
+          "value": 415
         },
         "notes": "Chocolate malt.  Dark beers, Alts, Bockbiers.  Adds color and aroma.",
         "moisture": {
@@ -1458,8 +1468,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 80
@@ -1469,10 +1477,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 0.5856
+          "unit": "Lovi",
+          "value": 1
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -1497,8 +1504,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 80
@@ -1508,8 +1513,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.66208
+          "unit": "Lovi",
+          "value": 1.8
         },
         "notes": "An economical all-purpose base malt. It is made from Harrington and Metcalf barley grown on the western prairies of the US and malted in Minnesota. It is low in total nitrogen, well modified, high in enzymes, and easily converts with a single step infusion mash. It has a light, clean, smooth flavor.",
         "moisture": {
@@ -1536,8 +1541,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 77.9
@@ -1547,10 +1550,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 429.559
+          "unit": "Lovi",
+          "value": 319.8
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -1575,8 +1577,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 82.23
@@ -1586,8 +1586,8 @@
           "value": 1.2
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.52752
+          "unit": "Lovi",
+          "value": 1.7
         },
         "notes": "Pilsner base malt for all pilsners, lagers.  Highly modified malt.",
         "moisture": {
@@ -1614,8 +1614,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United Kingdom",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 82.5
@@ -1625,10 +1623,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 4.6224
+          "unit": "Lovi",
+          "value": 4
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -1653,8 +1650,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 82.23
@@ -1664,8 +1659,8 @@
           "value": 1.8
         },
         "color": {
-          "unit": "SRM",
-          "value": 3.2768
+          "unit": "Lovi",
+          "value": 3
         },
         "notes": "Vienna base malt - used in many continental beer styles.  Full bodied, golden color.",
         "moisture": {
@@ -1692,8 +1687,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 75.74
@@ -1703,8 +1696,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 631.672
+          "unit": "Lovi",
+          "value": 470
         },
         "notes": "De-husked chocolate malt for a smoother flavour. Dark version.  Adds color and aroma. Dark beers, Alts, Bockbiers",
         "moisture": {
@@ -1731,8 +1724,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 81
@@ -1742,8 +1733,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.9312
+          "unit": "Lovi",
+          "value": 2
         },
         "notes": "German base for Pilsners and Bohemian Lagers",
         "moisture": {
@@ -1770,8 +1761,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 73
@@ -1781,10 +1770,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.28914
+          "unit": "Lovi",
+          "value": 1.52
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -1809,8 +1797,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 79
@@ -1820,8 +1806,8 @@
           "value": 0
         },
         "color": {
-          "unit": "SRM",
-          "value": 238.306
+          "unit": "Lovi",
+          "value": 177.66
         },
         "notes": "BEST Special X imparts to beer - depending on the amount in the grist - a smooth roasty flavor reminiscent of raisins or dried fruit. The beer possesses a chestnut to dark hue (depending on rate) and an aromatic and harmonious full- bodied character. The malt does not, however, introduce bitter roasted flavors but rather brings a mild smoothness to beer without any of the astringent qualities associated with other dark malts. BEST Special X is a cool and crafty malt - product. Any craft - brewer should try out this malt in his or her creations and impress with a rich mix of flavors.",
         "moisture": {
@@ -1848,8 +1834,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 80
@@ -1859,8 +1843,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.52752
+          "unit": "Lovi",
+          "value": 1.7
         },
         "notes": "A high-quality, economical pilsner malt from Rahr Malting. A bit lighter in color and lower in total protein than Rahr's standard 2-row. Can make up to 100% of the grist for a very pale beer. Great for lagers.",
         "moisture": {
@@ -1887,8 +1871,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 73
@@ -1898,10 +1880,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 36.9168
+          "unit": "Lovi",
+          "value": 28
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -1926,8 +1907,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United Kingdom",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 60.8696
@@ -1937,10 +1916,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 302
+          "unit": "Lovi",
+          "value": 225
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -1965,8 +1943,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 74
@@ -1976,8 +1952,8 @@
           "value": 0
         },
         "color": {
-          "unit": "SRM",
-          "value": 19.424
+          "unit": "Lovi",
+          "value": 15
         },
         "notes": "Flavor: Light caramel with a bright sweetness\nand a delicately malty flavor.\nColor: Light copper color.\nSuggested Use: IPA, Gold Lager, Gold Ale, Blonde,\nBitter & Pale Ale, Mild, Vienna,\nMärzen, Oktoberfest.",
         "moisture": {
@@ -2004,8 +1980,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United Kingdom",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 67
@@ -2015,10 +1989,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 0.230416
+          "unit": "Lovi",
+          "value": 0.74
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -2043,8 +2016,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Canada",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 83
@@ -2054,8 +2025,8 @@
           "value": 0.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 32.88
+          "unit": "Lovi",
+          "value": 25
         },
         "notes": "This malt is similar in style to German “brumalt”, but it really doesn’t compare to any other malt with its honey-like taste and residual sweetness. Best used in brown ales, porters, and stouts.",
         "moisture": {
@@ -2082,8 +2053,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 82.23
@@ -2093,8 +2062,8 @@
           "value": 1.6
         },
         "color": {
-          "unit": "SRM",
-          "value": 10.6776
+          "unit": "Lovi",
+          "value": 8.5
         },
         "notes": "Darker Munich Malt.  Used as a base malt in many German beer styles.  Fest beers, bocks and ales.  Enhances malt flavour and aroma",
         "moisture": {
@@ -2121,8 +2090,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 80.07
@@ -2132,10 +2099,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.9312
+          "unit": "Lovi",
+          "value": 2
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -2160,8 +2126,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 77
@@ -2171,10 +2135,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.52752
+          "unit": "Lovi",
+          "value": 1.7
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -2199,8 +2162,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United Kingdom",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 79
@@ -2210,8 +2171,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 2.65782
+          "unit": "Lovi",
+          "value": 2.54
         },
         "notes": "Maris Otter's superior Brewhouse performance is fantastic. The Rolls Royce of malts for the traditional brewer, this legendary heritage barley variety is the Traditional English Bitter base malt. It produces a rich malty flavour with exceptional Brewhouse performance and beer clarity, due to its low nitrogen content and high extract.",
         "moisture": {
@@ -2238,8 +2199,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 75
@@ -2249,8 +2208,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 26.152
+          "unit": "Lovi",
+          "value": 20
         },
         "notes": "Adds body, color and improves head retention.\nAlso called \"Crystal\" malt.",
         "moisture": {
@@ -2277,17 +2236,14 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "sugar",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 100
         },
         "color": {
-          "unit": "SRM",
-          "value": 12.696
+          "unit": "Lovi",
+          "value": 10
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -2308,8 +2264,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 82.23
@@ -2319,8 +2273,8 @@
           "value": 1.7
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.9312
+          "unit": "Lovi",
+          "value": 2
         },
         "notes": "Pale wheat malt, used as a base malt in many wheat styles. Wheat beers, Koelsch, Alts.",
         "moisture": {
@@ -2347,8 +2301,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 82.23
@@ -2358,10 +2310,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 8.80264
+          "unit": "Lovi",
+          "value": 7.11
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -2386,8 +2337,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "Germany",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 82.23
@@ -2397,8 +2346,8 @@
           "value": 1.8
         },
         "color": {
-          "unit": "SRM",
-          "value": 3.2768
+          "unit": "Lovi",
+          "value": 3
         },
         "notes": "Vienna base malt - used in many continental beer styles.  Full bodied, golden color.",
         "moisture": {
@@ -2425,8 +2374,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United Kingdom",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 69
@@ -2436,10 +2383,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 351.009
+          "unit": "Lovi",
+          "value": 261.42
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -2464,8 +2410,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 71.47
@@ -2475,10 +2419,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 909.538
+          "unit": "Lovi",
+          "value": 676.5
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -2503,8 +2446,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United Kingdom",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 74
@@ -2514,8 +2455,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 682.805
+          "unit": "Lovi",
+          "value": 508
         },
         "notes": "Dark chocolate malt from the UK.  Adds strong coffee flavor to your beer.",
         "moisture": {
@@ -2542,8 +2483,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 72
@@ -2553,8 +2492,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.9312
+          "unit": "Lovi",
+          "value": 2
         },
         "notes": "Significantly increases foam/head retention and body of the beer.\nAlso sold under the names \"Dextrine\" and \"Cara-Foam\"",
         "moisture": {
@@ -2581,8 +2520,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United Kingdom",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 60
@@ -2592,10 +2529,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.28914
+          "unit": "Lovi",
+          "value": 1.52
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -2620,8 +2556,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 74
@@ -2631,8 +2565,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 106.888
+          "unit": "Lovi",
+          "value": 80
         },
         "notes": "Adds body, color and improves head retention.\nAlso called \"Crystal\" malt.",
         "moisture": {
@@ -2659,8 +2593,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United Kingdom",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 82.5
@@ -2670,8 +2602,8 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 3.2768
+          "unit": "Lovi",
+          "value": 3
         },
         "notes": "Premium base malt from the UK.  Popular for many English styles of beer including ales, pale ales and bitters.",
         "moisture": {
@@ -2698,8 +2630,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "other",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 0
@@ -2729,8 +2659,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 80
@@ -2740,10 +2668,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 3.95302
+          "unit": "Lovi",
+          "value": 3.5
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -2768,8 +2695,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "fermentable_type": "grain",
         "origin": "United States",
-        "producer": "",
-        "product_id": "",
         "yield_fine_grind": {
           "unit": "%",
           "value": 77
@@ -2779,10 +2704,9 @@
           "value": 1.5
         },
         "color": {
-          "unit": "SRM",
-          "value": 1.42575
+          "unit": "Lovi",
+          "value": 1.62
         },
-        "notes": "",
         "moisture": {
           "unit": "%",
           "value": 4
@@ -5825,13 +5749,10 @@
     ],
     "hops": [
       {
-        "name": "Willamette (2)",
+        "name": "Willamette",
         "local_id": "Hop_349",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "origin": "United States",
-        "year": "",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -5846,17 +5767,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 40
-        },
-        "substitutes": ""
+        }
       },
       {
         "name": "Columbus/Tomahawk/Zeus (CTZ)",
         "local_id": "Hop_346",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
-        "origin": "",
-        "year": "",
+        "origin": "United States",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -5867,21 +5784,16 @@
           "value": 2
         },
         "hop_type": "bittering",
-        "notes": "",
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 15
-        },
-        "substitutes": ""
+        }
       },
       {
-        "name": "Sabro (1)",
+        "name": "Sabro",
         "local_id": "Hop_347",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
-        "origin": "",
-        "year": "",
+        "origin": "United States",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -5892,21 +5804,16 @@
           "value": 2
         },
         "hop_type": "bittering",
-        "notes": "",
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 15
-        },
-        "substitutes": ""
+        }
       },
       {
         "name": "Cluster Fugget",
         "local_id": "Hop_338",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "origin": "United States",
-        "year": "",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -5921,17 +5828,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 15
-        },
-        "substitutes": ""
+        }
       },
       {
         "name": "Hallertauer Mittelfrueh",
         "local_id": "Hop_341",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "origin": "Germany",
-        "year": "",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -5946,17 +5849,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 45
-        },
-        "substitutes": ""
+        }
       },
       {
-        "name": "Tettnang (1)",
+        "name": "Tettnang",
         "local_id": "Hop_344",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "origin": "Germany",
-        "year": "",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -5971,17 +5870,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 40
-        },
-        "substitutes": ""
+        }
       },
       {
-        "name": "Lemondrop (1)",
+        "name": "Lemondrop",
         "local_id": "Hop_342",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "origin": "United States",
-        "year": "",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -5996,17 +5891,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 15
-        },
-        "substitutes": ""
+        }
       },
       {
         "name": "East Kent Goldings (EKG)",
         "local_id": "Hop_336",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
-        "origin": "",
-        "year": "",
+        "origin": "Great Britain",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -6017,21 +5908,16 @@
           "value": 2
         },
         "hop_type": "bittering",
-        "notes": "",
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 15
-        },
-        "substitutes": ""
+        }
       },
       {
         "name": "Saaz",
         "local_id": "Hop_345",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "origin": "United States",
-        "year": "",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -6046,17 +5932,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 50
-        },
-        "substitutes": ""
+        }
       },
       {
-        "name": "Galena (2)",
+        "name": "Galena",
         "local_id": "Hop_337",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
-        "origin": "",
-        "year": "",
+        "origin": "United States",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -6067,21 +5949,16 @@
           "value": 2
         },
         "hop_type": "bittering",
-        "notes": "",
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 15
-        },
-        "substitutes": ""
+        }
       },
       {
         "name": "East Kent Goldings (EKG) (1)",
         "local_id": "Hop_351",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
-        "origin": "United Kingdom",
-        "year": "",
+        "origin": "Great Britain",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -6096,17 +5973,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 35
-        },
-        "substitutes": ""
+        }
       },
       {
-        "name": "Warrior (2)",
+        "name": "Warrior",
         "local_id": "Hop_350",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "origin": "United States",
-        "year": "",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -6121,17 +5994,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 24
-        },
-        "substitutes": ""
+        }
       },
       {
-        "name": "Sasquatch (1)",
+        "name": "Sasquatch",
         "local_id": "Hop_352",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "origin": "Canada",
-        "year": "",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -6146,17 +6015,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 15
-        },
-        "substitutes": ""
+        }
       },
       {
         "name": "Hallertauer Hersbrucker",
         "local_id": "Hop_340",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "origin": "Germany",
-        "year": "",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -6171,17 +6036,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 25
-        },
-        "substitutes": ""
+        }
       },
       {
-        "name": "Crystal (2)",
+        "name": "Crystal",
         "local_id": "Hop_343",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
-        "origin": "",
-        "year": "",
+        "origin": "United States",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -6192,21 +6053,16 @@
           "value": 2
         },
         "hop_type": "bittering",
-        "notes": "",
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 15
-        },
-        "substitutes": ""
+        }
       },
       {
-        "name": "Magnum (1)",
+        "name": "Magnum",
         "local_id": "Hop_339",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "origin": "United States",
-        "year": "",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -6221,17 +6077,13 @@
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 15
-        },
-        "substitutes": ""
+        }
       },
       {
-        "name": "Rakau (1)",
+        "name": "Rakau",
         "local_id": "Hop_348",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
-        "origin": "",
-        "year": "",
+        "origin": "New Zealand",
         "form": "pellet",
         "alpha_acid": {
           "unit": "%",
@@ -6242,12 +6094,10 @@
           "value": 2
         },
         "hop_type": "bittering",
-        "notes": "",
         "six_month_alpha_loss": {
           "unit": "%",
           "value": 15
-        },
-        "substitutes": ""
+        }
       },
       {
         "name": "Adeena",
@@ -19021,8 +18871,6 @@
         "name": "Whirlfloc Tablet",
         "local_id": "Misc_92",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "misc_type": "fining",
         "use_for": "Clarity",
         "notes": "Aids in clearing yeast and chill haze.  Easy to use tablet form."
@@ -19031,8 +18879,6 @@
         "name": "Ginger Root (1)",
         "local_id": "Misc_93",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "misc_type": "herb",
         "use_for": "Holiday Beer",
         "notes": "Adds distinctive ginger flavor for Ginger Ales, Holiday Beers.  Fresh grated ginger root from the grocer is best.  As little as 1/2 ounce per 5 gallons is noticable, but up to 4 oz can be used for ginger ales."
@@ -19041,25 +18887,19 @@
         "name": "Yeast Lightning",
         "local_id": "Misc_94",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
-        "misc_type": "other",
-        "use_for": "",
-        "notes": ""
+        "misc_type": "other"
       },
       {
         "name": "Irish Moss (1)",
         "local_id": "Misc_95",
         "folder_path": "Canadian Homebrewers Association",
-        "producer": "",
-        "product_id": "",
         "misc_type": "fining",
         "use_for": "Clarity",
         "notes": "Fining agent that aids in the post-boil protein break.  Reduces protein chill haze and improves beer clarity."
       },
       //
       // We don't (currently) support color in Misc ingredients, but it's in the source material so I have left it
-      // commented out here in case we we want to add support for it at a future date.
+      // commented out here in case we want to add support for it at a future date.
       //
       {
         "name": "Birch Bark",
@@ -19323,13 +19163,12 @@
         "max_reuse": 5
       },
       {
-        "name": "Foggy London Ale (1)",
+        "name": "Foggy London Ale",
         "local_id": "Yeast_597",
         "folder_path": "Canadian Homebrewers Association",
         "culture_type": "ale",
         "form": "liquid",
         "producer": "Escarpment Labs",
-        "product_id": "",
         "temperature_range": {
           "minimum": {
             "unit": "C",
@@ -19428,13 +19267,12 @@
         "best_for": "Märzen & Lager"
       },
       {
-        "name": "English Ale I (1)",
+        "name": "English Ale I",
         "local_id": "Yeast_591",
         "folder_path": "Canadian Homebrewers Association",
         "culture_type": "ale",
         "form": "liquid",
         "producer": "Escarpment Labs",
-        "product_id": "",
         "temperature_range": {
           "minimum": {
             "unit": "C",
@@ -19451,13 +19289,12 @@
         "max_reuse": 5
       },
       {
-        "name": "Irish Ale (4)",
+        "name": "Irish Ale",
         "local_id": "Yeast_599",
         "folder_path": "Canadian Homebrewers Association",
         "culture_type": "ale",
         "form": "liquid",
         "producer": "Escarpment Labs",
-        "product_id": "",
         "temperature_range": {
           "minimum": {
             "unit": "C",
@@ -19474,7 +19311,7 @@
         "max_reuse": 5
       },
       {
-        "name": "French Saison Ale (1)",
+        "name": "French Saison Ale",
         "local_id": "Yeast_478",
         "folder_path": "Canadian Homebrewers Association",
         "culture_type": "ale",
@@ -19524,8 +19361,6 @@
           }
         },
         "flocculation": "low",
-        "notes": "",
-        "best_for": "",
         "max_reuse": 5
       },
       {
@@ -19669,7 +19504,7 @@
       },
       {
         "name": "Norwegian Kveik 2",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Bio4",
         "folder_path": "Bio4",
         "product_id": "SY084",
@@ -19699,7 +19534,7 @@
       },
       {
         "name": "Norwegian Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Bio4",
         "folder_path": "Bio4",
         "product_id": "SY081",
@@ -19876,7 +19711,7 @@
       },
       {
         "name": "Oslo OSLO",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Bootleg Biology",
         "folder_path": "Bootleg Biology",
         "form": "liquid",
@@ -21104,7 +20939,7 @@
       },
       {
         "name": "Kveik & Fox",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Crescat Labs",
         "folder_path": "Crescat Labs",
         "product_id": "CL018",
@@ -22255,7 +22090,7 @@
       },
       {
         "name": "Årset Kveik Blend",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Escarpment Labs",
         "folder_path": "Escarpment Labs",
         "form": "liquid",
@@ -22491,7 +22326,7 @@
       },
       {
         "name": "Ebbegarden Kveik Blend",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Escarpment Labs",
         "folder_path": "Escarpment Labs",
         "form": "liquid",
@@ -22673,7 +22508,7 @@
       },
       {
         "name": "Hornindal Kveik Blend",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Escarpment Labs",
         "folder_path": "Escarpment Labs",
         "form": "liquid",
@@ -22789,7 +22624,7 @@
       },
       {
         "name": "Lærdal Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Escarpment Labs",
         "folder_path": "Escarpment Labs",
         "form": "liquid",
@@ -22996,7 +22831,7 @@
       },
       {
         "name": "Skare Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Escarpment Labs",
         "folder_path": "Escarpment Labs",
         "form": "liquid",
@@ -23197,7 +23032,7 @@
       },
       {
         "name": "Voss Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Escarpment Labs",
         "folder_path": "Escarpment Labs",
         "form": "liquid",
@@ -23937,7 +23772,7 @@
       },
       {
         "name": "Hornindal Kveik #5",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "GigaYeast",
         "folder_path": "GigaYeast",
         "product_id": "GY135",
@@ -24747,7 +24582,7 @@
       },
       {
         "name": "Kveiking",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Imperial Yeast",
         "folder_path": "Imperial Yeast",
         "product_id": "A44",
@@ -25909,7 +25744,7 @@
       },
       {
         "name": "LalBrew Voss Kveik Ale",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Lallemand",
         "folder_path": "Lallemand",
         "form": "dry",
@@ -26084,7 +25919,7 @@
       },
       {
         "name": "Ebbegarden Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Mainiacal Yeast Labs",
         "folder_path": "Mainiacal Yeast Labs",
         "form": "liquid",
@@ -26113,7 +25948,7 @@
       },
       {
         "name": "Espe",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Mainiacal Yeast Labs",
         "folder_path": "Mainiacal Yeast Labs",
         "form": "liquid",
@@ -26142,7 +25977,7 @@
       },
       {
         "name": "Framgarden",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Mainiacal Yeast Labs",
         "folder_path": "Mainiacal Yeast Labs",
         "form": "liquid",
@@ -26171,7 +26006,7 @@
       },
       {
         "name": "Granvin",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Mainiacal Yeast Labs",
         "folder_path": "Mainiacal Yeast Labs",
         "form": "liquid",
@@ -26229,7 +26064,7 @@
       },
       {
         "name": "Midtbust",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Mainiacal Yeast Labs",
         "folder_path": "Mainiacal Yeast Labs",
         "form": "liquid",
@@ -26592,7 +26427,7 @@
       },
       {
         "name": "Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Mangrove Jack's",
         "folder_path": "Mangrove Jack's",
         "product_id": "M12",
@@ -27771,7 +27606,7 @@
       },
       {
         "name": "Espe Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Omega Yeast Labs",
         "folder_path": "Omega Yeast Labs",
         "product_id": "OYL090",
@@ -27967,7 +27802,7 @@
       },
       {
         "name": "Hornindal Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Omega Yeast Labs",
         "folder_path": "Omega Yeast Labs",
         "product_id": "OYL-091",
@@ -28001,7 +27836,7 @@
       },
       {
         "name": "HotHead Ale",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Omega Yeast Labs",
         "folder_path": "Omega Yeast Labs",
         "product_id": "OYL-057",
@@ -28201,7 +28036,7 @@
       },
       {
         "name": "Lutra Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Omega Yeast Labs",
         "folder_path": "Omega Yeast Labs",
         "product_id": "OYL-071",
@@ -28427,7 +28262,7 @@
       },
       {
         "name": "Voss Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "Omega Yeast Labs",
         "folder_path": "Omega Yeast Labs",
         "product_id": "OYL-061",
@@ -29594,7 +29429,7 @@
       },
       {
         "name": "Framgarden Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "The Yeast Bay",
         "folder_path": "The Yeast Bay",
         "product_id": "WLP4051",
@@ -29774,7 +29609,7 @@
       },
       {
         "name": "Hornindal Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "The Yeast Bay",
         "folder_path": "The Yeast Bay",
         "product_id": "WLP4050",
@@ -29804,7 +29639,7 @@
       },
       {
         "name": "Lida Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "The Yeast Bay",
         "folder_path": "The Yeast Bay",
         "product_id": "WLP4052",
@@ -29864,7 +29699,7 @@
       },
       {
         "name": "Midtbust Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "The Yeast Bay",
         "folder_path": "The Yeast Bay",
         "product_id": "WLP4053",
@@ -30044,7 +29879,7 @@
       },
       {
         "name": "Sigmund's Voss Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "The Yeast Bay",
         "folder_path": "The Yeast Bay",
         "product_id": "WLP4045",
@@ -30253,7 +30088,7 @@
       },
       {
         "name": "Kveik",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "WHC Lab",
         "folder_path": "WHC Lab",
         "form": "liquid",
@@ -31838,7 +31673,7 @@
       },
       {
         "name": "Hornindal Kveik Ale",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "White Labs",
         "folder_path": "White Labs",
         "product_id": "WLP521",
@@ -32198,7 +32033,7 @@
       },
       {
         "name": "Opshaug Kveik Ale",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "White Labs",
         "folder_path": "White Labs",
         "product_id": "WLP518",
@@ -32408,7 +32243,7 @@
       },
       {
         "name": "Sigmund Kveik Ale",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "White Labs",
         "folder_path": "White Labs",
         "product_id": "WLP520",
@@ -32468,7 +32303,7 @@
       },
       {
         "name": "Stranda Kveik Ale",
-        "culture_type": "ale",
+        "culture_type": "kveik",
         "producer": "White Labs",
         "folder_path": "White Labs",
         "product_id": "WLP519",
@@ -35674,7 +35509,7 @@
         "notes": "The Yeast Bay's Beersel Brettanomyces Blend (WLP4603) is a liquid form of brett and bacteria. It has an attenuation of 78.0% and flocculation of medium, making it a great choice for creating complex beers with unique flavors and aromas. Its alcohol tolerance is low, but it ferments well in temperatures between 21.0°C - 27.0°C, making it suitable for most brewing environments. This blend will produce an intense ester profile and strong funk character that can be used to create some truly amazing craft beers!"
       },
       {
-        "name": "Brettanomyces bruxellensis - Strain",
+        "name": "Brettanomyces bruxellensis - Strain TYB184",
         "culture_type": "brett",
         "producer": "The Yeast Bay",
         "folder_path": "The Yeast Bay",
@@ -35704,7 +35539,7 @@
         "notes": "Brettanomyces bruxellensis - Strain TYB184 from The Yeast Bay is a liquid form of brett or bacteria strain. It has an attenuation of 85.0% and medium flocculation, while providing a high alcohol tolerance. The ideal fermentation temperature for this strain is 22.0-28.0 °C, making it suitable for brewing various styles of beer that require different temperatures to ferment properly. This strain can be used in combination with other yeast strains to create unique flavor profiles, as well as being used on its own to add complexity and depth to beers."
       },
       {
-        "name": "Brettanomyces bruxellensis - Strain",
+        "name": "Brettanomyces bruxellensis - Strain TYB207",
         "culture_type": "brett",
         "producer": "The Yeast Bay",
         "folder_path": "The Yeast Bay",
@@ -35734,7 +35569,7 @@
         "notes": "Brettanomyces bruxellensis - Strain TYB207 from The Yeast Bay is a liquid form yeast strain known for its brett or bacteria characteristics. It has an attenuation of 81.0%, low flocculation and high alcohol tolerance, making it suitable for fermenting high gravity beers like Belgian Strong Ales and Barley Wines. It ferments best within a temperature range of 22.0-28.0 °C, allowing brewers to better control the flavor profile of their brews. This strain is also known for producing complex flavors with spicy and fruity undertones that make it a great choice for sour beers and wild ales."
       },
       {
-        "name": "Brettanomyces bruxellensis - Strain",
+        "name": "Brettanomyces bruxellensis - Strain TYB261",
         "culture_type": "brett",
         "producer": "The Yeast Bay",
         "folder_path": "The Yeast Bay",
@@ -35764,7 +35599,7 @@
         "notes": "Brettanomyces bruxellensis - Strain TYB261 from The Yeast Bay is a liquid type of yeast that is ideal for fermentation. It has high attenuation, low flocculation and a high alcohol tolerance of up to 12%. This strain performs best at temperatures between 22-28 °C, making it an excellent choice for producing beers with a unique flavor profile. Its high attenuation allows brewers to achieve complete fermentation and its low flocculation ensures that it will remain suspended in the beer throughout the entire process. Additionally, its high alcohol tolerance makes it suitable for producing high ABV beers."
       },
       {
-        "name": "Brettanomyces bruxellensis - Strain",
+        "name": "Brettanomyces bruxellensis - Strain TYB307",
         "culture_type": "brett",
         "producer": "The Yeast Bay",
         "folder_path": "The Yeast Bay",
@@ -35794,7 +35629,7 @@
         "notes": "The Brettanomyces bruxellensis - Strain TYB307 from The Yeast Bay is a liquid yeast strain that is perfect for fermentation. This brett or bacteria strain has an attenuation of 82.0%, a low flocculation, and a high alcohol tolerance. It can be used in a wide range of temperatures, but the ideal fermentation temperature for this strain is between 21.0-27.0 °C. This strain produces complex flavors and aromas of tropical fruits, spices, and earthy funkiness, making it ideal for creating unique beers and other fermented beverages."
       },
       {
-        "name": "Brettanomyces bruxellensis - Strain",
+        "name": "Brettanomyces bruxellensis - Strain TYB415",
         "culture_type": "brett",
         "producer": "The Yeast Bay",
         "folder_path": "The Yeast Bay",
@@ -40933,11 +40768,7 @@
           }
         },
         "notes": "Simply called “Porter” in Britain, the name “English Porter” is used to differentiate it from other porters described in these guidelines.  A moderate-strength brown beer with a restrained roasty character and bitterness. May have a range of roasted flavors, generally without burnt qualities, and often has a chocolate-caramel-malty profile. History: Originating in London around 300 years ago, porter evolved from earlier sweet, Brown Beer popular at the time. Evolved many times with various technological and ingredient developments and consumer preferences driving these changes. Became a highly-popular, widely-exported style in the 1800s before declining around WWI and disappearing in the 1950s. It was re-introduced in the mid-1970s with the start of the craft beer era. The name is said to have been derived from its popularity with the London working class performing various load-carrying tasks of the day. Parent of various regional interpretations over time, and a predecessor to all stouts (which were originally called “stout porters”). There is no historic connection or relationship between Mild and Porter. Style Comparison: Differs from an American Porter in that it usually has softer, sweeter and more caramelly flavors, lower gravities, and usually less alcohol; the American Porter will also typically have more of a hop character. More substance and roast than a British Brown Ale. Higher in gravity than a dark mild.",
-        "aroma": "",
-        "appearance": "",
         "flavor": "Aroma: Moderate to moderately low bready, biscuity, and toasty malt aroma with mild roastiness, and may have a chocolate quality. May also show some non-roasted malt character in support (caramelly, nutty, toffee-like and/or sweet). May have up to a moderate level of floral or earthy hops. Fruity esters moderate to none. Diacetyl low to none.\nAppearance: Light brown to dark brown in color, often with ruby highlights when held up to light. Good clarity, although may approach being opaque. Moderate off-white to light tan head with good to fair retention. Flavor: Moderate bready, biscuity, and toasty malt flavor includes a mild to moderate roastiness (frequently with a chocolate character) and often a significant caramel, nutty, and/or toffee character. May have other secondary flavors such as coffee, licorice, biscuits or toast in support. Should not have a significant burnt or harsh roasted flavor, although small amounts may contribute a bitter chocolate complexity. Earthy or floral hop flavor moderate to none. Medium-low to medium hop bitterness will vary the balance from slightly malty to slightly bitter. Usually fairly well-attenuated, although can be somewhat sweet. Diacetyl moderately-low to none. Moderate to low fruity esters. Mouthfeel: Medium-light to medium body. Moderately-low to moderately-high carbonation. Light to moderate creamy texture. Comments: This style description describes the modern version of English porter, not every possible variation over time in every region where it existed. Historical re-creations should be entered in the Historical style category, with an appropriate description describing the profile of the beer. Modern craft examples in the UK are bigger and hoppier.",
-        "mouthfeel": "",
-        "overall_impression": "",
         "ingredients": "Grists vary, but something producing a dark color is always involved. Chocolate or other dark-roasted malts, caramel malt, brewing sugars, and the like are common. London-type porters often use brown malt as a characteristic flavor.",
         "examples": "Burton Bridge Burton Porter, Fuller's London Porter, Nethergate Old Growler Porter, RCH Old Slug Porter, Samuel Smith Taddy Porter"
       },
@@ -41000,7 +40831,6 @@
             "value": 3.8
           }
         },
-        "notes": "",
         "aroma": "Low to moderate malt aroma, and may have some fruitiness. The malt expression can take on a wide range of character, which can include caramel, toffee, grainy, toasted, nutty, chocolate, or lightly roasted. Low earthy or floral hop aroma optional. Very low diacetyl optional.",
         "appearance": "Copper to dark brown or mahogany color. Generally clear, although is traditionally unfiltered. Low to moderate off-white to tan head; retention may be poor.",
         "flavor": "Generally a malty beer, although may have a very wide range of malt- and yeast-based flavors (e.g., malty, sweet, caramel, toffee, toast, nutty, chocolate, coffee, roast, fruit, licorice, plum, raisin) over a bready, biscuity, or toasty base. Can finish sweet to dry. Versions with darker malts may have a dry, roasted finish. Low to moderate bitterness, enough to provide some balance but not enough to overpower the malt in the balance. Moderate fruity esters optional. Low hop flavor optional. Low diacetyl optional.",
@@ -41079,11 +40909,7 @@
           }
         },
         "notes": "Provisional Style. An American IPA with intense fruit flavors and aromas, a soft body, and smooth mouthfeel, and often opaque with substantial haze. Less perceived bitterness than traditional IPAs but always massively hop forward. This emphasis on late hopping, especially dry hopping, with hops with tropical fruit qualities lends the specific ‘juicy’ character for which this style is known. The hop flavor is high to very high, and reflects the same characteristics as the aroma (emphasis on fruit, with ripe tropical fruit, stone fruit, and citrus being most common). The perceived bitterness can be somewhat low to medium-high, often being masked by the body and finish of the beer. The hop character in the aftertaste should not be sharp or harsh. Low to medium malt flavor, generally neutral, sometimes having a bready, grainy, lightly sweet flavor. Noticeable toast or caramel flavors are a flaw. Fermentation character is neutral to fruity, but as with the aroma, supportive of the hops. Off-dry to medium finish. Creamy, starchy, or sugary-sweet flavors are inappropriate, although a high ester level and lower bitterness may give the impression of up to moderate sweetness. A moderate, supportive alcohol character is acceptable but should never be hot or dominating.",
-        "aroma": "",
-        "appearance": "",
         "flavor": "Intense hop aroma, typically with fruity qualities (stone fruit, tropical fruit, and citrus are most commonly present) reflective of newer American and New World hop varieties without being grassy or herbaceous. Clean, neutral malt in the background, potentially with a light bready sweetness without caramel or toast. Absence of any malt character is a fault. Neutral to fruity fermentation character that is well-integrated with the hops. A creamy, buttery, or acidic aroma is inappropriate. Any perceived alcohol character should be restrained and never hot.",
-        "mouthfeel": "",
-        "overall_impression": "",
         "ingredients": "Similar to many newer American IPAs but often with more oats or wheat in the grist, and less caramel or specialty malts. Restricted hop choice to American or New World varieties with a tropical fruit, stone fruit, or citrus character. Neutral to estery yeast strain. Water ranges from balanced between sulfate and chloride to using more chlorides. Heavily dry-hopped, partly during active fermentation, using a variety of hopping doses and temperatures to emphasis hop depth of aroma and flavor over bitterness. Biotransformation of hop oils during fermentation may add to the fruit character.",
         "examples": "Hill Farmstead Susan, Other Half Green Diamonds Double IPA, Tired Hands Alien Church, Tree House Julius, Trillium Congress Street, WeldWerks Juicy Bits"
       },
@@ -41146,7 +40972,6 @@
             "value": 8
           }
         },
-        "notes": "",
         "aroma": "Moderate to high intensity sweetness is prominent. Moderate to high coffee or chocolate roasty aroma, but not burnt. Medium to high fruitiness. May have a molasses, licorice, burnt sugar, dried fruit, or vinous aromatics. Stronger versions can have a subtle, clean aroma of alcohol. Low hop aroma optional. Low diacetyl optional.",
         "appearance": "Very deep brown to black in color. Clarity usually obscured by deep color. Clear, if not opaque. Large tan to brown head with good retention.",
         "flavor": "Quite sweet with a smooth dark grain flavors, and restrained, medium-low to medium bitterness. Smooth, roasty flavor, often like coffee or chocolate, although moderated in the balance by the sweet finish. No burnt malt flavor or harsh bite in the finish. Moderate to high fruity esters. Can have a sweet, dark rum, molasses, or burnt sugar-like quality. Low hop flavor optional. Medium-low diacetyl optional.",
@@ -41225,11 +41050,7 @@
           }
         },
         "notes": "A strongly flavored, hoppy brown beer, originated by American home brewers. Related to American Pale and American Amber Ales, although with more of a caramel and chocolate character, which tends to balance the hop bitterness and finish. Most commercial American Browns are not as aggressive as the original homebrewed versions, and some modern craft brewed examples. IPA-strength brown ales should be entered in the Specialty Beer category (23).",
-        "aroma": "",
-        "appearance": "",
         "flavor": "Malty, sweet and rich, which often has a chocolate, caramel, nutty and/or toasty quality. Hop aroma is typically low to moderate. Some interpretations of the style may feature a stronger hop aroma, a citrusy American hop character, and/or a fresh dry-hopped aroma (all are optional). Fruity esters are moderate to very low. The dark malt character is more robust than other brown ales, yet stops short of being overly porter-like. The malt and hops are generally balanced. Moderately low to no diacetyl.Light to very dark brown color. Clear. Low to moderate off-white to light tan head.Medium to high malty flavor (often with caramel, toasty and/or chocolate flavors), with medium to medium-high bitterness. The medium to medium-dry finish provides an aftertaste having both malt and hops. Hop flavor can be light to moderate, and may optionally have a citrusy character. Very low to moderate fruity esters. Moderately low to no diacetyl.Medium to medium-full body. More bitter versions may have a dry, resiny impression. Moderate to moderately high carbonation. Stronger versions may have some alcohol warmth in the finish.Can be considered a bigger, maltier, hoppier interpretation of Northern English brown ale or a hoppier, less malty Brown Porter, often including the citrus-accented hop presence that is characteristic of American hop varieties.",
-        "mouthfeel": "",
-        "overall_impression": "",
         "ingredients": "Well-modified pale malt, either American or Continental, plus crystal and darker malts should complete the malt bill. American hops are typical, but UK or noble hops can also be used. Moderate carbonate water would appropriately balance the dark malt acidity.",
         "examples": "Bell's Best Brown, Smuttynose Old Brown Dog Ale, Big Sky Moose Drool Brown Ale, North Coast Acme Brown, Brooklyn Brown Ale, Lost Coast Downtown Brown, Left Hand Deep Cover Brown Ale"
       },
@@ -41292,7 +41113,6 @@
             "value": 5.2
           }
         },
-        "notes": "",
         "aroma": "Moderately to moderately-high flowery, spicy, or herbal hops. Low to medium grainy, sweet, or doughy malt character, often with a light honey and toasted cracker quality. Clean fermentation profile. The hops should be forward, but not totally dominate the malt in the balance.",
         "appearance": "Straw to deep yellow, brilliant to very clear, with a creamy, long-lasting white head.",
         "flavor": "Initial malt flavor quickly overcome with hop flavor and bitterness, leading into a dry, crisp finish. Malt and hop flavors similar to aroma (same descriptors and intensities). Medium to high bitterness, lingering into the aftertaste along with a touch of malt and hops. Clean fermentation profile. Minerally water can accentuate and lengthen the dry finish. Hops and malt can fade with age, but the beer should always have a bitter balance.",
@@ -41371,11 +41191,7 @@
           }
         },
         "notes": "Easy-drinking, approachable, malt-oriented American craft beer, often with interesting fruit, hop, or character malt notes. Well-balanced and clean, is a refreshing pint without aggressive flavors. History: An American craft beer style produced by many microbreweries and brewpubs, particularly those who cannot produce lagers. Regional variations exist (many US West Coast brewpub examples are more assertive, like pale ales) but in most areas this beer is designed as the least challenging beer in their lineup. Style Comparison: Typically has more flavor than American Lagers and Cream Ales. Less bitterness than an American Pale Ale.",
-        "aroma": "",
-        "appearance": "",
         "flavor": "Aroma: Light to moderate sweet malty aroma, possibly with a light bready or caramelly note. Low to moderate fruitiness is optional, but acceptable. May have a low to medium hop aroma, and can reflect almost any hop variety although citrusy, floral, fruity, and spicy notes are common. Appearance: Light yellow to deep gold in color. Clear to brilliant. Low to medium white head with fair to good retention. Flavor: Initial soft malty sweetness, but optionally some light character malt flavor (e.g., bread, toast, biscuit, wheat) can also be present. Caramel flavors typically absent; if present, they are typically low-color caramel notes. Low to medium fruity esters optional, but are welcome. Light to moderate hop flavor (any variety), but shouldn’t be overly aggressive. Medium-low to medium bitterness, but the balance is normally towards the malt or even between malt and hops. Finishes medium-dry to slightly malty-sweet; impression of sweetness is often an expression of lower bitterness than actual residual sweetness. Mouthfeel: Medium-light to medium body. Medium to high carbonation. Smooth without being heavy. Comments: Brewpub alternative to standard American lagers, typically offered as an entry-level craft beer.",
-        "mouthfeel": "",
-        "overall_impression": "",
         "ingredients": "Generally all malt, but can include up to 25% wheat malt and some sugar adjuncts. Any hop variety can be used. Clean American, lightly fruity English, or Kölsch yeast. May also be made with lager yeast, or cold-conditioned. Some versions may have honey, spices and/or fruit added, although if any of these ingredients are stronger than a background flavor they should be entered in those specialty categories instead.",
         "examples": "Kona Big Wave Golden Ale, Pelican Kiwanda Cream Ale, Russian River Aud Blonde, Victory Summer Love, Widmer Citra Summer Blonde Brew"
       },
@@ -41449,11 +41265,7 @@
           }
         },
         "notes": "A clean, crisp, delicately-balanced beer usually with a very subtle fruit and hop character. Subdued maltiness throughout leads into a pleasantly well-attenuated and refreshing finish. Freshness makes a huge difference with this beer, as the delicate character can fade quickly with age. Brilliant clarity is characteristic. History: Cologne, Germany (Köln) has a top-fermenting brewing tradition since the Middle Ages, but developed the beer now known as Kölsch in the late 1800s to combat encroaching bottom-fermented pale lagers. Kölsch is an appellation protected by the Kölsch Konvention (1986), and is restricted to the 20 or so breweries in and around Köln. The Konvention simply defines the beer as a “light, highly attenuated, hop-accentuated, clear, top-fermenting Vollbier.”  Style Comparison: To the untrained taster, easily mistaken for a cream ale or somewhat subtle Pils.",
-        "aroma": "",
-        "appearance": "",
         "flavor": "Aroma: Low to very low malt aroma, with a grainy-sweet character. A pleasant, subtle fruit aroma from fermentation (apple, cherry or pear) is acceptable, but not always present. A low floral, spicy or herbal hop aroma is optional but not out of style. Some yeast strains may give a slight winy or sulfury character (this characteristic is also optional, but not a fault). Overall, the intensity of aromatics is fairly subtle but generally balanced, clean, and fresh. Appearance: Very pale gold to light gold. Very clear (authentic commercial versions are filtered to a brilliant clarity). Has a delicate white head that may not persist. Flavor: Soft, rounded palate comprised of a delicate flavor balance between soft yet attenuated malt, an almost imperceptible fruity sweetness from fermentation, and a medium-low to medium bitterness with a delicate dryness and slight crispness in the finish (but no harsh aftertaste). The malt tends to be grainy-sweet, possibly with a very light bready or honey quality. The hop flavor is variable, and can range from low to moderately-high; most are medium-low to medium intensity and have a floral, spicy, or herbal character. May have a malty-sweet impression at the start, but this is not required. No noticeable residual sweetness. May have a slightly winy, minerally, or sulfury accent that accentuates the dryness and flavor balance. A slight wheat taste is rare but not a fault. Otherwise, very clean. Mouthfeel: Medium-light to medium body (most are medium-light). Medium to medium-high carbonation. Smooth and generally crisp and well-attenuated. Comments: Characterized in Germany as a top-fermented, lagered beer. Each Köln brewery produces a beer of different character, and each interprets the Kölsch Konvention slightly differently. Allow for a range of variation within the style when judging. Note that drier versions may seem hoppier or more bitter than the IBU specifications might suggest. Due to its delicate flavor profile, Kölsch tends to have a relatively short shelf-life; older examples and imports can easily show some oxidation defects. Served in Köln in a tall, narrow 200ml glass called a Stange.",
-        "mouthfeel": "",
-        "overall_impression": "",
         "ingredients": "Traditional German hops (Hallertau, Tettnang, Spalt or Hersbrucker). German Pils or pale malt. Attenuative, clean ale yeast. Up to 20% wheat malt may be used, but this is quite rare in authentic versions. Current commercial practice is to ferment warm, cold condition for a short period of time, and serve young.",
         "examples": "Früh Kölsch, Gaffel Kölsch, Mühlen Kölsch, Reissdorf Kölsch, Sion Kölsch, Sünner Kölsch"
       }
@@ -41463,20 +41275,7 @@
         "name": "All Grain - Standard 5 Gal/19l Batch - Cooler",
         "local_id": "Equipment_19",
         "folder_path": "Canadian Homebrewers Association",
-        "hlt": {
-          "vessel_type": "",
-          "max_volume": {
-            "unit": "l",
-            "value": 0
-          },
-          "loss": {
-            "unit": "l",
-            "value": 0
-          },
-          "notes": ""
-        },
         "mash_tun": {
-          "vessel_type": "",
           "max_volume": {
             "unit": "l",
             "value": 18.9271
@@ -41492,11 +41291,9 @@
           "specific_heat_capacity": {
             "unit": "c/g·C",
             "value": 0.3
-          },
-          "notes": ""
+          }
         },
         "lauter_tun": {
-          "vessel_type": "",
           "max_volume": {
             "unit": "l",
             "value": 0
@@ -41504,11 +41301,9 @@
           "loss": {
             "unit": "l",
             "value": 0.946353
-          },
-          "notes": ""
+          }
         },
         "kettle": {
-          "vessel_type": "",
           "max_volume": {
             "unit": "l",
             "value": 24.7931
@@ -41520,7 +41315,6 @@
           "notes": "Popular all grain setup.  5 Gal/19 l Plastic cooler as mash tun with false bottom, and 7-9 gallon brewpot capable of boiling at least 7 gal of wort without spilling over.  Primarily used for single infusion mashes."
         },
         "fermentation_vessel": {
-          "vessel_type": "",
           "max_volume": {
             "unit": "l",
             "value": 19
@@ -41528,32 +41322,7 @@
           "loss": {
             "unit": "l",
             "value": 0
-          },
-          "notes": ""
-        },
-        "aging_vessel": {
-          "vessel_type": "",
-          "max_volume": {
-            "unit": "l",
-            "value": 0
-          },
-          "loss": {
-            "unit": "l",
-            "value": 0
-          },
-          "notes": ""
-        },
-        "packaging_vessel": {
-          "vessel_type": "",
-          "max_volume": {
-            "unit": "l",
-            "value": 0
-          },
-          "loss": {
-            "unit": "l",
-            "value": 0
-          },
-          "notes": ""
+          }
         }
       }
     ],
@@ -41585,8 +41354,7 @@
         "magnesium": {
           "unit": "ppm",
           "value": 30
-        },
-        "notes": ""
+        }
       },
       {
         "name": "Toronto",
@@ -41615,11 +41383,10 @@
         "magnesium": {
           "unit": "ppm",
           "value": 10
-        },
-        "notes": ""
+        }
       },
       {
-        "name": "Matt King",
+        "name": "Darkness English Porter target",
         "local_id": "Water_17",
         "folder_path": "Canadian Homebrewers Association",
         "calcium": {
@@ -41645,8 +41412,7 @@
         "magnesium": {
           "unit": "ppm",
           "value": 9
-        },
-        "notes": ""
+        }
       }
     ],
     "mashes": [
@@ -42015,7 +41781,6 @@
         "local_id": "Boil_35",
         "folder_path": "Canadian Homebrewers Association",
         "boil_description": "Automatically created by BeerXML import",
-        "notes": "",
         "pre_boil_size": {
           "unit": "l",
           "value": 24.7931
@@ -42068,7 +41833,6 @@
         "local_id": "Boil_36",
         "folder_path": "Canadian Homebrewers Association",
         "boil_description": "Automatically created by BeerXML import",
-        "notes": "",
         "pre_boil_size": {
           "unit": "l",
           "value": 24.7931
@@ -42112,6 +41876,10 @@
             "end_temperature": {
               "unit": "C",
               "value": 30
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 25
             }
           }
         ]
@@ -42121,7 +41889,6 @@
         "local_id": "Boil_34",
         "folder_path": "Canadian Homebrewers Association",
         "boil_description": "Automatically created by BeerXML import",
-        "notes": "",
         "pre_boil_size": {
           "unit": "l",
           "value": 24.7931
@@ -42174,7 +41941,6 @@
         "local_id": "Boil_37",
         "folder_path": "Canadian Homebrewers Association",
         "boil_description": "Automatically created by BeerXML import",
-        "notes": "",
         "pre_boil_size": {
           "unit": "l",
           "value": 24.7931
@@ -42227,7 +41993,6 @@
         "local_id": "Boil_33",
         "folder_path": "Canadian Homebrewers Association",
         "boil_description": "Automatically created by BeerXML import",
-        "notes": "",
         "pre_boil_size": {
           "unit": "l",
           "value": 24.7931
@@ -42280,7 +42045,6 @@
         "local_id": "Boil_32",
         "folder_path": "Canadian Homebrewers Association",
         "boil_description": "Automatically created by BeerXML import",
-        "notes": "",
         "pre_boil_size": {
           "unit": "l",
           "value": 23.0333
@@ -42333,7 +42097,6 @@
         "local_id": "Boil_30",
         "folder_path": "Canadian Homebrewers Association",
         "boil_description": "Automatically created by BeerXML import",
-        "notes": "",
         "pre_boil_size": {
           "unit": "l",
           "value": 24.7931
@@ -42386,7 +42149,6 @@
         "local_id": "Boil_31",
         "folder_path": "Canadian Homebrewers Association",
         "boil_description": "Automatically created by BeerXML import",
-        "notes": "",
         "pre_boil_size": {
           "unit": "l",
           "value": 20.5043
@@ -42430,6 +42192,10 @@
             "end_temperature": {
               "unit": "C",
               "value": 30
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 10
             }
           }
         ]
@@ -42439,7 +42205,6 @@
         "local_id": "Boil_38",
         "folder_path": "Canadian Homebrewers Association",
         "boil_description": "Automatically created by BeerXML import",
-        "notes": "",
         "pre_boil_size": {
           "unit": "l",
           "value": 24.7931
@@ -42494,7 +42259,6 @@
         "local_id": "Fermentation_36",
         "folder_path": "Canadian Homebrewers Association",
         "fermentation_description": "Automatically created by BeerXML import",
-        "notes": "",
         "fermentation_steps": [
           {
             "name": "Primary Fermentation Step for Love Lies Bleeding (Blue)",
@@ -42506,8 +42270,7 @@
             "step_time": {
               "unit": "min",
               "value": 14400
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Secondary Fermentation Step for Love Lies Bleeding (Blue)",
@@ -42519,8 +42282,7 @@
             "step_time": {
               "unit": "min",
               "value": 14400
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Tertiary Fermentation Step for Love Lies Bleeding (Blue)",
@@ -42528,8 +42290,7 @@
             "step_time": {
               "unit": "min",
               "value": 10080
-            },
-            "vessel": ""
+            }
           }
         ]
       },
@@ -42538,7 +42299,6 @@
         "local_id": "Fermentation_38",
         "folder_path": "Canadian Homebrewers Association",
         "fermentation_description": "Automatically created by BeerXML import",
-        "notes": "",
         "fermentation_steps": [
           {
             "name": "Primary Fermentation Step for Darkness English Porter",
@@ -42550,8 +42310,7 @@
             "step_time": {
               "unit": "min",
               "value": 7200
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Secondary Fermentation Step for Darkness English Porter",
@@ -42563,8 +42322,7 @@
             "step_time": {
               "unit": "min",
               "value": 14400
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Tertiary Fermentation Step for Darkness English Porter",
@@ -42572,8 +42330,7 @@
             "step_time": {
               "unit": "min",
               "value": 10080
-            },
-            "vessel": ""
+            }
           }
         ]
       },
@@ -42582,7 +42339,6 @@
         "local_id": "Fermentation_30",
         "folder_path": "Canadian Homebrewers Association",
         "fermentation_description": "Automatically created by BeerXML import",
-        "notes": "",
         "fermentation_steps": [
           {
             "name": "Primary Fermentation Step for Catalina Wine Mixer",
@@ -42594,8 +42350,7 @@
             "step_time": {
               "unit": "min",
               "value": 14400
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Secondary Fermentation Step for Catalina Wine Mixer",
@@ -42607,8 +42362,7 @@
             "step_time": {
               "unit": "min",
               "value": 7200
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Tertiary Fermentation Step for Catalina Wine Mixer",
@@ -42616,8 +42370,7 @@
             "step_time": {
               "unit": "min",
               "value": 10080
-            },
-            "vessel": ""
+            }
           }
         ]
       },
@@ -42626,7 +42379,6 @@
         "local_id": "Fermentation_34",
         "folder_path": "Canadian Homebrewers Association",
         "fermentation_description": "Automatically created by BeerXML import",
-        "notes": "",
         "fermentation_steps": [
           {
             "name": "Primary Fermentation Step for Diamond Park Mild",
@@ -42638,8 +42390,7 @@
             "step_time": {
               "unit": "min",
               "value": 4320
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Secondary Fermentation Step for Diamond Park Mild",
@@ -42651,8 +42402,7 @@
             "step_time": {
               "unit": "min",
               "value": 1440
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Tertiary Fermentation Step for Diamond Park Mild",
@@ -42660,8 +42410,7 @@
             "step_time": {
               "unit": "min",
               "value": 10080
-            },
-            "vessel": ""
+            }
           }
         ]
       },
@@ -42670,7 +42419,6 @@
         "local_id": "Fermentation_31",
         "folder_path": "Canadian Homebrewers Association",
         "fermentation_description": "Automatically created by BeerXML import",
-        "notes": "",
         "fermentation_steps": [
           {
             "name": "Primary Fermentation Step for Lemondrop Saison",
@@ -42682,8 +42430,7 @@
             "step_time": {
               "unit": "min",
               "value": 40320
-            },
-            "vessel": ""
+            }
           }
         ]
       },
@@ -42692,7 +42439,6 @@
         "local_id": "Fermentation_37",
         "folder_path": "Canadian Homebrewers Association",
         "fermentation_description": "Automatically created by BeerXML import",
-        "notes": "",
         "fermentation_steps": [
           {
             "name": "Primary Fermentation Step for Betty Blonde",
@@ -42704,8 +42450,7 @@
             "step_time": {
               "unit": "min",
               "value": 10080
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Secondary Fermentation Step for Betty Blonde",
@@ -42717,8 +42462,7 @@
             "step_time": {
               "unit": "min",
               "value": 14400
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Tertiary Fermentation Step for Betty Blonde",
@@ -42726,8 +42470,7 @@
             "step_time": {
               "unit": "min",
               "value": 10080
-            },
-            "vessel": ""
+            }
           }
         ]
       },
@@ -42736,7 +42479,6 @@
         "local_id": "Fermentation_32",
         "folder_path": "Canadian Homebrewers Association",
         "fermentation_description": "Automatically created by BeerXML import",
-        "notes": "",
         "fermentation_steps": [
           {
             "name": "Primary Fermentation Step for Oneborg Pilsner",
@@ -42748,8 +42490,7 @@
             "step_time": {
               "unit": "min",
               "value": 20160
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Secondary Fermentation Step for Oneborg Pilsner",
@@ -42761,8 +42502,7 @@
             "step_time": {
               "unit": "min",
               "value": 4320
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Tertiary Fermentation Step for Oneborg Pilsner",
@@ -42770,8 +42510,7 @@
             "step_time": {
               "unit": "min",
               "value": 10080
-            },
-            "vessel": ""
+            }
           }
         ]
       },
@@ -42780,7 +42519,6 @@
         "local_id": "Fermentation_33",
         "folder_path": "Canadian Homebrewers Association",
         "fermentation_description": "Automatically created by BeerXML import",
-        "notes": "",
         "fermentation_steps": [
           {
             "name": "Primary Fermentation Step for Temperanceville Tropical Stout",
@@ -42792,8 +42530,7 @@
             "step_time": {
               "unit": "min",
               "value": 20160
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Secondary Fermentation Step for Temperanceville Tropical Stout",
@@ -42805,8 +42542,7 @@
             "step_time": {
               "unit": "min",
               "value": 14400
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Tertiary Fermentation Step for Temperanceville Tropical Stout",
@@ -42814,8 +42550,7 @@
             "step_time": {
               "unit": "min",
               "value": 10080
-            },
-            "vessel": ""
+            }
           }
         ]
       },
@@ -42824,7 +42559,6 @@
         "local_id": "Fermentation_35",
         "folder_path": "Canadian Homebrewers Association",
         "fermentation_description": "Automatically created by BeerXML import",
-        "notes": "",
         "fermentation_steps": [
           {
             "name": "Primary Fermentation Step for Ginger Beer-Beer",
@@ -42836,8 +42570,7 @@
             "step_time": {
               "unit": "min",
               "value": 20160
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Secondary Fermentation Step for Ginger Beer-Beer",
@@ -42849,8 +42582,7 @@
             "step_time": {
               "unit": "min",
               "value": 7200
-            },
-            "vessel": ""
+            }
           },
           {
             "name": "Tertiary Fermentation Step for Ginger Beer-Beer",
@@ -42858,8 +42590,7 @@
             "step_time": {
               "unit": "min",
               "value": 10080
-            },
-            "vessel": ""
+            }
           }
         ]
       }
@@ -42869,8 +42600,7 @@
         "name": "Betty Blonde",
         "folder_path": "Canadian Homebrewers Association",
         "recipe_type": "all grain",
-        "author": "",
-        "coauthor": "",
+        "author": "Barley's Homebrewing Supplies",
         "created": "2022-03-30",
         "batch_size": {
           "unit": "l",
@@ -43006,7 +42736,7 @@
           "value": 0
         },
         "mash_id": "Mash_24",
-        "notes": "Barley's Homebrewing Supplies in New Westminster, BC provided this recipe as one of the official 2022 Canadian Homebrew Day recipes!\n\n\"This recipe is one of our most popular, but with a bit of a twist.\" – Barley's Homebrewing Supplies\n\nBarley's Tips\n • Abbey malt can also be used in place of the honey malt.\n • For yeast, any of the following should work: Escarpment Labs Cali Ale, Imperial Yeast A07 Flagship, Lallemand LalBrew BRY-97 West Coast Ale, Omega OYL-004 West Coast I, SafAle US-05, Whie Labs WLP001 California Ale, Wyeast WY1056)\n • OPTIONAL – add 21 g of loose earl grey tea (or 10 tea bags) for 7 minutes while the wort is chilling.\n\nBarley's is a homebrewing supply store in Metro Vancouver, BC, Canada.  They supply all of the equipment and ingredients for you to brew your own beer in the comfort of your own home.  If you can follow a recipe in the kitchen, you can homebrew!",
+        "notes": "Barley's Homebrewing Supplies in New Westminster, BC provided this recipe as one of the official 2022 Canadian Homebrew Day recipes!\n\n\"This recipe is one of our most popular, but with a bit of a twist.\" – Barley's Homebrewing Supplies\n\nBarley's Tips\n • Abbey malt can also be used in place of the honey malt.\n • For yeast, any of the following should work: Escarpment Labs Cali Ale, Imperial Yeast A07 Flagship, Lallemand LalBrew BRY-97 West Coast Ale, Omega OYL-004 West Coast I, SafAle US-05, White Labs WLP001 California Ale, Wyeast WY1056.\n • OPTIONAL – add 21 g of loose earl grey tea (or 10 tea bags) for 7 minutes while the wort is chilling.\n\nBarley's is a homebrewing supply store in Metro Vancouver, BC, Canada.  They supply all of the equipment and ingredients for you to brew your own beer in the comfort of your own home.  If you can follow a recipe in the kitchen, you can homebrew!",
         "original_gravity": {
           "unit": "sg",
           "value": 1.04280
@@ -43034,10 +42764,6 @@
         },
         "fermentation_id": "Fermentation_37",
         "boil_id": "Boil_37",
-        "taste": {
-          "notes": "",
-          "rating": 30
-        },
         "energy_content": {
           "unit": "kcal/pt",
           "value": 187.3
@@ -43048,7 +42774,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "recipe_type": "all grain",
         "author": "Victor North",
-        "coauthor": "",
         "created": "2021-03-21",
         "batch_size": {
           "unit": "l",
@@ -43107,10 +42832,6 @@
           "hop_additions": [
             {
               "schedule": {
-                "time": {
-                  "unit": "min",
-                  "value": 60
-                },
                 "step": 1,
                 "stage": "add_to_boil"
               },
@@ -43146,7 +42867,7 @@
           "value": 0
         },
         "mash_id": "Mash_20",
-        "notes": "Victor North of Niagra Brewing College provided this as one of the official 2021 Canadian Homebrew Day recipes!\n\n Victor says \"The village I live in was once called Temperanceville, and I like to name my recipes after local names and places.  I thought that it had a nice ring to it: the alliteration, and irony of naming a high ABV stout ’Temperanceville’.  This recipe was picked from a recipe done four ways with three different yeasts and four different sugars to expedite the experimentation findings!\"",
+        "notes": "Victor North of Niagara Brewing College provided this as one of the official 2021 Canadian Homebrew Day recipes!\n\n Victor says \"The village I live in was once called Temperanceville, and I like to name my recipes after local names and places.  I thought that it had a nice ring to it: the alliteration, and irony of naming a high ABV stout “Temperanceville”.  This recipe was picked from a recipe done four ways with three different yeasts and four different sugars to expedite the experimentation findings!\"",
         "original_gravity": {
           "unit": "sg",
           "value": 1.06527
@@ -43174,10 +42895,6 @@
         },
         "fermentation_id": "Fermentation_33",
         "boil_id": "Boil_33",
-        "taste": {
-          "notes": "",
-          "rating": 30
-        },
         "energy_content": {
           "unit": "kcal/pt",
           "value": 288.4
@@ -43188,7 +42905,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "recipe_type": "all grain",
         "author": "Ken Noesgaard",
-        "coauthor": "",
         "created": "2019-08-25",
         "batch_size": {
           "unit": "l",
@@ -43334,10 +43050,6 @@
         },
         "fermentation_id": "Fermentation_32",
         "boil_id": "Boil_32",
-        "taste": {
-          "notes": "",
-          "rating": 30
-        },
         "energy_content": {
           "unit": "kcal/pt",
           "value": 203.4
@@ -43348,7 +43060,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "recipe_type": "all grain",
         "author": "Third Moon Brewing",
-        "coauthor": "",
         "created": "2021-07-04",
         "batch_size": {
           "unit": "l",
@@ -43413,10 +43124,6 @@
             },
             {
               "schedule": {
-                "time": {
-                  "unit": "min",
-                  "value": 25
-                },
                 "step": 3,
                 "stage": "add_to_boil"
               },
@@ -43442,10 +43149,6 @@
             },
             {
               "schedule": {
-                "time": {
-                  "unit": "min",
-                  "value": 25
-                },
                 "step": 3,
                 "stage": "add_to_boil"
               },
@@ -43499,7 +43202,7 @@
           "value": 0
         },
         "mash_id": "Mash_23",
-        "notes": "This NEIPA recipe comes courtesy of Third Moon Brewing Co. out of Milton, ON.  This is for the blue label version, and is based on the first version that was done while homebrewing, but tweaked for how itâs now done on the large scale.",
+        "notes": "This NEIPA recipe comes courtesy of Third Moon Brewing Co. out of Milton, ON.  This is for the blue label version, and is based on the first version that was done while homebrewing, but tweaked for how it’s now done on the large scale.",
         "original_gravity": {
           "unit": "sg",
           "value": 1.05729
@@ -43513,10 +43216,6 @@
           "value": 5.5510
         },
         "ibu_estimate_formula": "Tinseth",
-        "ibu_estimate": {
-          "unit": "IBUs",
-          "value": 192.68
-        },
         "color_estimate": {
           "unit": "SRM",
           "value": 3.9178
@@ -43527,10 +43226,6 @@
         },
         "fermentation_id": "Fermentation_36",
         "boil_id": "Boil_36",
-        "taste": {
-          "notes": "",
-          "rating": 30
-        },
         "energy_content": {
           "unit": "kcal/pt",
           "value": 252.7
@@ -43541,11 +43236,10 @@
         "folder_path": "Canadian Homebrewers Association",
         "recipe_type": "all grain",
         "author": "Aaron Brown",
-        "coauthor": "",
         "created": "2018-07-05",
         "batch_size": {
-          "unit": "l",
-          "value": 13.2489
+          "unit": "gal",
+          "value": 3.5
         },
         "efficiency": {
           "brewhouse": {
@@ -43600,10 +43294,6 @@
           "hop_additions": [
             {
               "schedule": {
-                "time": {
-                  "unit": "min",
-                  "value": 10
-                },
                 "step": 3,
                 "stage": "add_to_boil"
               },
@@ -43710,10 +43400,6 @@
           "value": 5.1610
         },
         "ibu_estimate_formula": "Tinseth",
-        "ibu_estimate": {
-          "unit": "IBUs",
-          "value": 38.67
-        },
         "color_estimate": {
           "unit": "SRM",
           "value": 5.42197
@@ -43724,10 +43410,6 @@
         },
         "fermentation_id": "Fermentation_31",
         "boil_id": "Boil_31",
-        "taste": {
-          "notes": "",
-          "rating": 30
-        },
         "energy_content": {
           "unit": "kcal/pt",
           "value": 227.8
@@ -43737,8 +43419,7 @@
         "name": "Darkness English Porter",
         "folder_path": "Canadian Homebrewers Association",
         "recipe_type": "all grain",
-        "author": "",
-        "coauthor": "",
+        "author": "Matt King",
         "created": "2022-03-30",
         "batch_size": {
           "unit": "l",
@@ -43902,7 +43583,7 @@
           "value": 0
         },
         "mash_id": "Mash_25",
-        "notes": "Matt King, and avid homebrewer and member of GTA Brews provided his award winning recipe as one of the official 2022 Canadian Homebrew Day recipes!\n\n\"This recipe recently took home a gold in the 2021 Brewer of the Year competition.  It was originally inspired by Muddy York's Porter, which I thought was a great representation of the style.  The first dark beer that I ever made and I've gradually perfect the recipe over the years.  The end result is a beer that has a great malt complexity, but is easy drinking.  It has a medium body and a bready, caramelly sweetness that is balanced by the roasted malts, with just a hint of chocolate at the end.  It comes out a dark brown colour, slightly reddish around the edges and a lasting, tan coloured head.\" - Matt King\n\nMatt's Tips\n • If you can't source Sasquatch hops, just use more EKG.\n • If the recommended yeast isn't available, the following should work: Imperial Yeast A10 Darkness, Lallemand LalBrew Nottingham or Windsor, Omega OYL-005 Irish Ale, SafAle S-04, Whie Labs WLP004 Irish Ale, Wyeast WY1084 Irish Ale.\n • If youâre adjusting your water profile, aim for the following: 93 Ca / 9 Mg / 30 Na / 99 Cl / 72 SO4 / 112 HCO3\n • OPTIONAL: to make a vanilla coffee version, add 85 g of dry bean coffee (added like a dry hop) for 2 days, and 2 vanilla beans as a tincture soaked in vodka for a week. You can also use 3 tablespoons of vanilla extract, but real beans have a much nicer flavour!\n\nMatt is an avid homebrewer and member of GTA Brews, making beer from Barrie, ON. He loves experimenting with all styles of beer, but has a special place in his heart for German and English styles! He's proud to have taken home many medals from competitions across Canada, including the title of 2021 Brewer of the Year!",
+        "notes": "Matt King, an avid homebrewer and member of GTA Brews provided his award winning recipe as one of the official 2022 Canadian Homebrew Day recipes!\n\n\"This recipe recently took home a gold in the 2021 Brewer of the Year competition.  It was originally inspired by Muddy York's Porter, which I thought was a great representation of the style.  The first dark beer that I ever made and I've gradually perfected the recipe over the years.  The end result is a beer that has a great malt complexity, but is easy drinking.  It has a medium body and a bready, caramelly sweetness that is balanced by the roasted malts, with just a hint of chocolate at the end.  It comes out a dark brown colour, slightly reddish around the edges and a lasting, tan coloured head.\" - Matt King\n\nMatt's Tips\n • If you can't source Sasquatch hops, just use more EKG.\n • If the recommended yeast isn't available, the following should work: Imperial Yeast A10 Darkness, Lallemand LalBrew Nottingham or Windsor, Omega OYL-005 Irish Ale, SafAle S-04, White Labs WLP004 Irish Ale, Wyeast WY1084 Irish Ale.\n • If you’re adjusting your water profile, aim for the following: 93 Ca / 9 Mg / 30 Na / 99 Cl / 72 SO4 / 112 HCO3\n • OPTIONAL: to make a vanilla coffee version, add 85 g of dry bean coffee (added like a dry hop) for 2 days, and 2 vanilla beans as a tincture soaked in vodka for a week. You can also use 3 tablespoons of vanilla extract, but real beans have a much nicer flavour!\n\nMatt is an avid homebrewer and member of GTA Brews, making beer from Barrie, ON. He loves experimenting with all styles of beer, but has a special place in his heart for German and English styles! He's proud to have taken home many medals from competitions across Canada, including the title of 2021 Brewer of the Year!",
         "original_gravity": {
           "unit": "sg",
           "value": 1.04489
@@ -43930,10 +43611,6 @@
         },
         "fermentation_id": "Fermentation_38",
         "boil_id": "Boil_38",
-        "taste": {
-          "notes": "",
-          "rating": 30
-        },
         "energy_content": {
           "unit": "kcal/pt",
           "value": 197.7
@@ -43944,7 +43621,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "recipe_type": "all grain",
         "author": "Cory Day",
-        "coauthor": "",
         "created": "2021-02-01",
         "batch_size": {
           "unit": "l",
@@ -44018,10 +43694,6 @@
             },
             {
               "schedule": {
-                "time": {
-                  "unit": "min",
-                  "value": 60
-                },
                 "step": 1,
                 "stage": "add_to_boil"
               },
@@ -44057,7 +43729,7 @@
           "value": 0
         },
         "mash_id": "Mash_17",
-        "notes": "Cory Day's award-winning kolsch was one of the official 2021 Canadian Homebrew Day recipes!\n\nCory says \"This is my recipe for one of my favourite kolsch.  Over the years it has won several medals and is a favourite of friends and family.  It was even served at my best friend's wedding - and the first keg to kick!  The beer is named after one of the running gags in one of my favourite movies, Step Brothers.  I hope everyone enjoys this and hits me up with a #PowCatalinaWineMixer on Twitter when they're taking a drink!\"\n\nCory's Tips\n • The softer the water the better! Target a ratio of 1 gypsum to 3 calcium chloride to a minimum of 50 ppm calcium\n • If you are using tap water, ensure you use metabisulfite or Campden tablets to neutralize chlorine and/or chloramines\n • Pitch lots of healthy yeast - two packs of Wyeast or White Labs, or one pack of Imperial Yeast and a 2-3 L starter\n • Don't substitute flaked wheat for the wheat malt!\n • If the recommended strains aren't available, other kolsch strains should work, including: Escarpment Labs Kolsch, Omega Yeast OYL-044 Kolsch II, Lallemand LalBrew Koln, Fermentis Safale K-97",
+        "notes": "Cory Day's award-winning kolsch was one of the official 2021 Canadian Homebrew Day recipes!\n\nCory says \"This is my recipe for one of my favourite kolsch.  Over the years it has won several medals and is a favourite of friends and family.  It was even served at my best friend's wedding – and the first keg to kick!  The beer is named after one of the running gags in one of my favourite movies, Step Brothers.  I hope everyone enjoys this and hits me up with a #PowCatalinaWineMixer on Twitter when they're taking a drink!\"\n\nCory's Tips\n • The softer the water the better! Target a ratio of 1 gypsum to 3 calcium chloride to a minimum of 50 ppm calcium\n • If you are using tap water, ensure you use metabisulfite or Campden tablets to neutralize chlorine and/or chloramines\n • Pitch lots of healthy yeast – two packs of Wyeast or White Labs, or one pack of Imperial Yeast and a 2-3 L starter\n • Don't substitute flaked wheat for the wheat malt!\n • If the recommended strains aren't available, other kolsch strains should work, including: Escarpment Labs Kolsch, Omega Yeast OYL-044 Kolsch II, Lallemand LalBrew Koln, Fermentis Safale K-97",
         "original_gravity": {
           "unit": "sg",
           "value": 1.04500
@@ -44085,10 +43757,6 @@
         },
         "fermentation_id": "Fermentation_30",
         "boil_id": "Boil_30",
-        "taste": {
-          "notes": "",
-          "rating": 30
-        },
         "energy_content": {
           "unit": "kcal/pt",
           "value": 197.5
@@ -44099,7 +43767,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "recipe_type": "all grain",
         "author": "People's Pint",
-        "coauthor": "",
         "created": "2021-07-04",
         "batch_size": {
           "unit": "l",
@@ -44241,7 +43908,7 @@
           "value": 0
         },
         "mash_id": "Mash_21",
-        "notes": "This dark mild recipe comes courtesy of People’s Pint Brewing Company out of Toronto – Beer By The People For The People!  This beer was named after the Toronto Maple Leafs baseball team’s third stadium that stood in Liberty Village on Fraser and Liberty.  It’s a dark full-flavoured session ale with notes of toffee and toast that finishes with enough body to satisfy but dry enough to refresh at the same time.\n\nToronto's water is almost perfect for dark beers and that is why I don't adjust it. If you're going from RO water, the best advice I can give is to target the following profile:\n\nCa: 34 - 45 ppm\nMg: 10 ppm\nNa: 15 ppm\nCl: 25 - 35 ppm\nSO4: 25 - 35 ppm\nHCO: 65 ppm",
+        "notes": "This dark mild recipe comes courtesy of People’s Pint Brewing Company out of Toronto – Beer By The People For The People!  This beer was named after the Toronto Maple Leafs baseball team’s third stadium that stood in Liberty Village on Fraser and Liberty.  It’s a dark full-flavoured session ale with notes of toffee and toast that finishes with enough body to satisfy but dry enough to refresh at the same time.\n\nToronto's water is almost perfect for dark beers and that is why I don't adjust it. If you're going from RO water, the best advice I can give is to target the following profile:\n\nCa: 34 - 45 ppm\nMg: 10 ppm\nNa: 15 ppm\nCl: 25 - 35 ppm\nSO4: 25 - 35 ppm\nHCO3: 65 ppm",
         "original_gravity": {
           "unit": "sg",
           "value": 1.03390
@@ -44269,10 +43936,6 @@
         },
         "fermentation_id": "Fermentation_34",
         "boil_id": "Boil_34",
-        "taste": {
-          "notes": "",
-          "rating": 30
-        },
         "energy_content": {
           "unit": "kcal/pt",
           "value": 148.0
@@ -44283,7 +43946,6 @@
         "folder_path": "Canadian Homebrewers Association",
         "recipe_type": "all grain",
         "author": "Luisa Muhleisen - Escarpment Labs",
-        "coauthor": "",
         "created": "2021-07-04",
         "batch_size": {
           "unit": "l",
@@ -44476,10 +44138,6 @@
         },
         "fermentation_id": "Fermentation_35",
         "boil_id": "Boil_35",
-        "taste": {
-          "notes": "",
-          "rating": 30
-        },
         "energy_content": {
           "unit": "kcal/pt",
           "value": 219.8

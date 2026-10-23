@@ -698,12 +698,12 @@ namespace Measurement::Units {
    //    SRM.  However, modern analytical methods show that SRM and Lovibond diverge for darker colors.  Comparison of
    //    EBC and Lovibond data published by modern maltsters shows that the relationship between SRM and Lovibond (°L)
    //    is:
-   //       SRM = 1.3456 × °L - 0.76
+   //       SRM = 1.3546 × °L - 0.76
    //
    Unit const srm     {Measurement::UnitSystems::color_StandardReferenceMethod  , {QObject::tr("srm"     )}, defaultSanitiser};
    Unit const ebc     {Measurement::UnitSystems::color_EuropeanBreweryConvention, {QObject::tr("ebc"     )}, defaultSanitiser, 12.7/25.0, &srm};
    Unit const lovibond{Measurement::UnitSystems::color_Lovibond                 , {QObject::tr("lovibond")}, defaultSanitiser,
-                       [](double const val_lovibond){return (1.3456 * val_lovibond) - 0.76;},
+                       [](double const val_lovibond){return (1.3546 * val_lovibond) - 0.76;},
                        [](double const val_srm     ){return (val_srm + 0.76) / 1.3456;},
                        &srm};
 

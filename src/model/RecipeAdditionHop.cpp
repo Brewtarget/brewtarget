@@ -58,6 +58,7 @@ namespace {
 QString RecipeAdditionHop::localisedName() { return tr("Hop Addition"); }
 QString RecipeAdditionHop::localisedName_hop() { return tr("Hop"); }
 QString RecipeAdditionHop::localisedName_use() { return tr("Use"); }
+QString RecipeAdditionHop::localisedName_beerXmlTime_mins() { return tr("Time"); }
 
 QString RecipeAdditionHop::instanceNameTemplate() { return tr("Addition of %1 hop"); }
 
@@ -98,6 +99,7 @@ TypeLookup const RecipeAdditionHop::typeLookup {
    {
       PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionHop, hop, hop),
       PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionHop, use, use),
+      PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionHop, beerXmlTime_mins, beerXmlTime_mins, Measurement::PhysicalQuantity::Time, DisplayInfo::Precision{0}),
    },
    // Parent classes lookup.  NB: RecipeAddition not NamedEntity!
    {&RecipeAddition::typeLookup,
@@ -154,6 +156,45 @@ RecipeAdditionHop::RecipeAdditionHop(NamedParameterBundle const & namedParameter
       this->m_stage = RecipeAddition::Stage::Boil;
    }
 
+   //
+   // The BeerXML TIME field means different things depending on USE (see comment on the beerXmlTime_mins property in
+   // the header), so we can only interpret it here, where we know both.  (This only happens for BeerXML: BeerJSON and
+   // dotBeer give us addAtTime_mins and duration_mins directly.)  Note that we look at USE even if STAGE is also
+   // present, because, in a BeerXML file we wrote, TIME was written according to USE.
+   //
+   if (namedParameterBundle.contains(PropertyNames::RecipeAdditionHop::beerXmlTime_mins)) {
+      std::optional<double> const time {
+         namedParameterBundle.val<std::optional<double>>(PropertyNames::RecipeAdditionHop::beerXmlTime_mins)
+      };
+      RecipeAdditionHop::Use const use {
+         namedParameterBundle.contains(PropertyNames::RecipeAdditionHop::use) ?
+            namedParameterBundle.val<RecipeAdditionHop::Use>(PropertyNames::RecipeAdditionHop::use) :
+            RecipeAdditionHop::Use::Boil
+      };
+      switch (use) {
+         case RecipeAdditionHop::Use::First_Wort:
+            // A first wort hop is added at the start of the pre-boil step, so has no "add at" time.  BeerXML's TIME
+            // for it is the boil time, which we get from the Boil.
+            break;
+         case RecipeAdditionHop::Use::Aroma:
+            // BeerXML's TIME for an aroma (eg whirlpool) hop is the steeping time.  If we wrote the file, the
+            // DURATION_MINS extension tag will also have given us this, so we don't overwrite it.
+            [[fallthrough]];
+         case RecipeAdditionHop::Use::Dry_Hop:
+            // Similarly, BeerXML's TIME for a dry hop is how long the hops stay in, ie the duration, not the time
+            // after the start of fermentation at which they are added.
+            if (!this->m_duration_mins) {
+               this->m_duration_mins = time;
+            }
+            break;
+         case RecipeAdditionHop::Use::Mash:
+         case RecipeAdditionHop::Use::Boil:
+            this->m_addAtTime_mins = time;
+            break;
+         // No default case as we want the compiler to warn us if we missed a case above
+      }
+   }
+
    CONSTRUCTOR_END
    return;
 }
@@ -188,6 +229,31 @@ RecipeAdditionHop::Use RecipeAdditionHop::use() const {
       case RecipeAddition::Stage::Packaging:
          return RecipeAdditionHop::Use::Dry_Hop;
 
+      // No default case as we want the compiler to warn us if we missed a case above
+   }
+   Q_UNREACHABLE(); // We should never get here
+}
+
+std::optional<double> RecipeAdditionHop::beerXmlTime_mins() const {
+   // See comment in header for what's going on here.  Working out the Use requires the Recipe (which we always have when
+   // writing a BeerXML recipe), so, without one, the best we can do is the "add at" time.
+   auto const recipe = this->recipe();
+   if (!recipe) {
+      return this->m_addAtTime_mins;
+   }
+   switch (this->use()) {
+      case RecipeAdditionHop::Use::First_Wort:
+         {
+            auto const boil = recipe->boil();
+            return boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
+         }
+      case RecipeAdditionHop::Use::Aroma:
+      case RecipeAdditionHop::Use::Dry_Hop:
+         // Older data may have the steeping or dry hop time in addAtTime_mins
+         return this->m_duration_mins ? this->m_duration_mins : this->m_addAtTime_mins;
+      case RecipeAdditionHop::Use::Mash:
+      case RecipeAdditionHop::Use::Boil:
+         return this->m_addAtTime_mins;
       // No default case as we want the compiler to warn us if we missed a case above
    }
    Q_UNREACHABLE(); // We should never get here
@@ -285,6 +351,33 @@ void RecipeAdditionHop::setUse(RecipeAdditionHop::Use const val) {
    }
    if (stageAndStep.step) {
       this->setStep(stageAndStep.step);
+   }
+   return;
+}
+
+void RecipeAdditionHop::setBeerXmlTime_mins(std::optional<double> const val) {
+   //
+   // Normally, BeerXML TIME is handled in the NamedParameterBundle constructor (see comment there), so this is here
+   // mostly for completeness.  Working out the Use requires the Recipe, so, without one, we can only treat the value as
+   // an ordinary "add at" time.
+   //
+   if (!this->recipe()) {
+      this->setAddAtTime_mins(val);
+      return;
+   }
+   switch (this->use()) {
+      case RecipeAdditionHop::Use::First_Wort:
+         // Boil time is a property of the Boil, not of the addition -- see comment in header
+         break;
+      case RecipeAdditionHop::Use::Aroma:
+      case RecipeAdditionHop::Use::Dry_Hop:
+         this->setDuration_mins(val);
+         break;
+      case RecipeAdditionHop::Use::Mash:
+      case RecipeAdditionHop::Use::Boil:
+         this->setAddAtTime_mins(val);
+         break;
+      // No default case as we want the compiler to warn us if we missed a case above
    }
    return;
 }
