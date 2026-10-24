@@ -68,6 +68,20 @@ private slots:
    //! \brief Verify post-boil losses do not affect OG
    void postBoilLossOgTest();
 
+   /**
+    * \brief Verify that the timing of boil additions (including post-boil/whirlpool additions and additions with a
+    *        step but no time) is handled correctly in IBU calculations and in generated instructions.  See
+    *        https://github.com/Brewtarget/brewtarget/issues/1167 and
+    *        https://github.com/Brewtarget/brewtarget/issues/1168
+    */
+   void testBoilAdditionTiming();
+
+   /**
+    * \brief Import the dotBeer example files from testData/dotBeer/examples, then export the database to dotBeer and
+    *        check the result can be read back in (which includes validating it against the schema).
+    */
+   void testDotBeerExamples();
+
    //! \brief Verify conversion between US Customary & Metric units etc
    void testUnitConversions();
 

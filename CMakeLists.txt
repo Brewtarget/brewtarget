@@ -759,6 +759,7 @@ include(InstallRequiredSystemLibraries)
 # ${CONFIG_DATA_DIR} below when configure_file() is called.
 #
 set(CONFIG_DATA_DIR "${CMAKE_INSTALL_PREFIX}/${installSubDir_data}/")
+set(CONFIG_TEST_DATA_DIR "${PROJECT_SOURCE_DIR}/testData")
 string(TIMESTAMP BUILD_TIMESTAMP "%Y-%m-%d %H:%M:%S (UTC)" UTC)
 configure_file(src/config.in src/config.h)
 
@@ -1109,6 +1110,8 @@ add_test(NAME testNumberDisplayAndParsing COMMAND ./${fileName_unitTestRunner} t
 add_test(NAME testAlgorithms              COMMAND ./${fileName_unitTestRunner} testAlgorithms             )
 add_test(NAME testTypeLookups             COMMAND ./${fileName_unitTestRunner} testTypeLookups            )
 add_test(NAME testInventory               COMMAND ./${fileName_unitTestRunner} testInventory              )
+add_test(NAME testBoilAdditionTiming      COMMAND ./${fileName_unitTestRunner} testBoilAdditionTiming     )
+add_test(NAME testDotBeerExamples         COMMAND ./${fileName_unitTestRunner} testDotBeerExamples        )
 add_test(NAME testMultiVector             COMMAND ./${fileName_unitTestRunner} testMultiVector            )
 add_test(NAME testLogRotation             COMMAND ./${fileName_unitTestRunner} testLogRotation            )
 

@@ -1,0 +1,42 @@
+//======================================================================================================================
+// examples/invalid/WrongReferenceType.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: style_id must refer to an item in /DotBeer/styles
+//
+// A recipe's style_id is a valid local ID, but it belongs to a hop rather than a style.  JSON Schema cannot check this.
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00Z",
+    "hops": [
+      { "name": "Cascade", "local_id": "cascade", "alpha_acid": { "unit": "%", "value": 6.0 } }
+    ],
+    "fermentables": [
+      { "name": "Pale Malt", "local_id": "ferm_pale", "fermentable_type": "grain", "color": { "unit": "EBC", "value": 5 }, "yield_fine_grind": { "unit": "%", "value": 80.0 } }
+    ],
+    "recipes": [
+      {
+        "name": "Confused Style",
+        "recipe_type": "all grain",
+        "author": "A. Brewer",
+        "style_id": "cascade",
+        "batch_size": { "unit": "l", "value": 20 },
+        "efficiency": { "brewhouse": { "unit": "%", "value": 70 } },
+        "ingredients": {
+          "fermentable_additions": [
+            { "fermentable_id": "ferm_pale", "schedule": { "stage": "add_to_mash" }, "amount": { "unit": "kg", "value": 4 } }
+          ]
+        }
+      }
+    ]
+  }
+}

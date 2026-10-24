@@ -582,7 +582,7 @@ namespace {
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_temperature", PropertyNames::    StepBase::startTemp_c    , &DOT_BEER_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits,   "end_temperature", PropertyNames::        Step::  endTemp_c    , &DOT_BEER_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_time"        , PropertyNames::StepBase::stepTime_mins      , &DOT_BEER_TIME_UNIT_MAPPER       },
-         {JsonRecordDefinition::FieldType::Bool                , "free_rise  "      , PropertyNames::FermentationStep::freeRise   },
+         {JsonRecordDefinition::FieldType::Bool                , "free_rise"        , PropertyNames::FermentationStep::freeRise   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_gravity"    , PropertyNames::StepExtended::startGravity_sg,  &DOT_BEER_DENSITY_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits,   "end_gravity"    , PropertyNames::StepExtended::  endGravity_sg,  &DOT_BEER_DENSITY_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "start_pH"         , PropertyNames::Step::startAcidity_pH        ,  &DOT_BEER_ACIDITY_UNIT          },
@@ -643,6 +643,7 @@ namespace {
       {JsonRecordDefinition::FieldType::String              , "kettle/vessel_type"               , PropertyNames::Equipment::kettleType                 },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/max_volume"                , PropertyNames::Equipment::kettleBoilSize_l           , &DOT_BEER_VOLUME_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/loss"                      , PropertyNames::Equipment::kettleTrubChillerLoss_l    , &DOT_BEER_VOLUME_UNIT_MAPPER       },
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/boil_rate_per_hour"        , PropertyNames::Equipment::kettleEvaporationPerHour_l , &DOT_BEER_VOLUME_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/drain_rate_per_minute"     , PropertyNames::Equipment::kettleOutflowPerMinute_l   , &DOT_BEER_VOLUME_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/weight"                    , PropertyNames::Equipment::kettleWeight_kg            , &DOT_BEER_MASS_UNIT_MAPPER         },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/specific_heat_capacity"    , PropertyNames::Equipment::kettleSpecificHeat_calGC   , &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER},
@@ -679,7 +680,7 @@ namespace {
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , "schedule/specific_gravity", PropertyNames::RecipeAddition::addAtGravity_sg,  &DOT_BEER_DENSITY_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "schedule/pH"              , PropertyNames::RecipeAddition::addAtAcidity_pH,  &DOT_BEER_ACIDITY_UNIT              },
       {JsonRecordDefinition::FieldType::Int                       , "schedule/step"            , PropertyNames::RecipeAddition::step           },
-      {JsonRecordDefinition::FieldType::Enum                      , "schedule/use"             , PropertyNames::RecipeAddition::stage          ,  &RecipeAddition::stageStringMapping  },
+      {JsonRecordDefinition::FieldType::Enum                      , "schedule/stage"           , PropertyNames::RecipeAddition::stage          ,  &RecipeAddition::stageStringMapping  },
    };
 
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_IngredientAdditionType_Volume {
@@ -787,7 +788,7 @@ namespace {
          // Type                                   XPath         Q_PROPERTY                                 Value Decoder
          {JsonRecordDefinition::FieldType::String, "name"      , PropertyNames::NamedEntity::name           },
          {JsonRecordDefinition::FieldType::String, "directions", PropertyNames::Instruction::directions     },
-         {JsonRecordDefinition::FieldType::Double, "duration"  , PropertyNames::Instruction::interval_mins, &DOT_BEER_TIME_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "duration", PropertyNames::Instruction::interval_mins, &DOT_BEER_TIME_UNIT_MAPPER},
       }
    };
 

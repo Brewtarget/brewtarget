@@ -750,11 +750,23 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                      JsonRecordDefinition::DbId const dbId = this->m_localIdToDbId->value(value);
                      if (dbId.namedEntityClassName != metaObject->className() &&
                          0 != std::strcmp(dbId.namedEntityClassName, metaObject->className())) {
-                        userMessage <<
-                           "Field " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
-                           fieldDefinition.xPath << "Local ID" << value << "refers to" <<
-                           dbId.namedEntityClassName << "(#" << dbId.id << ").  Expected ID of a" <<
-                           metaObject->className();
+                        QString const errorMessage{
+                           QString{"Field %1, node %2: Local ID \"%3\" refers to %4 (#%5).  Expected ID of a %6"}.arg(
+                              *this->m_recordDefinition.m_namedEntityClassName
+                           ).arg(
+                              fieldDefinition.xPath.asXPath_c_str()
+                           ).arg(
+                              value
+                           ).arg(
+                              dbId.namedEntityClassName
+                           ).arg(
+                              dbId.id
+                           ).arg(
+                              metaObject->className()
+                           )
+                        };
+                        qWarning() << Q_FUNC_INFO << errorMessage;
+                        userMessage << errorMessage;
                         return false;
                      }
 
@@ -1057,6 +1069,16 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
             qDebug() << Q_FUNC_INFO << *unitsMapping;
             Measurement::Unit const * const aUnit = unitsMapping->defaultUnit();
             Measurement::Unit const & canonicalUnit = aUnit->getCanonical();
+            //
+            // A number of non-optional gravity properties (eg BrewLog::measuredOriginalGravity_sg, Style::ogMin) use
+            // 0.0 to mean "not set".  Since a specific gravity of 0 is physically meaningless (and is rejected by the
+            // dotBeer and BeerJSON schemas), we don't write it out.
+            //
+            if (canonicalUnit.getPhysicalQuantity() == Measurement::PhysicalQuantity::Gravity &&
+                value.toDouble() <= 0.0) {
+               qDebug() << Q_FUNC_INFO << "Not writing" << key.data() << "as gravity value" << value.toDouble() << "means unset";
+               break;
+            }
             qDebug() << Q_FUNC_INFO << canonicalUnit;
 
             // Now we found canonical units, we need to find the right string to represent them
@@ -1127,7 +1149,10 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
          break;
 
       case JsonRecordDefinition::FieldType::DateTimeOffset:
-         if (Optional::removeOptionalWrapperIfPresent<QDateTime>(value, propertyIsOptional)) {
+         // An invalid (ie unset) QDateTime would be written as an empty string, which is not a valid date-time, so we
+         // omit the field instead.
+         if (Optional::removeOptionalWrapperIfPresent<QDateTime>(value, propertyIsOptional) &&
+             value.toDateTime().isValid()) {
             std::string formattedDate = value.toDateTime().toString(Qt::ISODate).toStdString();
             recordDataAsObject.emplace(key, formattedDate);
          }
@@ -1135,7 +1160,10 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
 
       case JsonRecordDefinition::FieldType::Date:
       case JsonRecordDefinition::FieldType::DateOrDateTimeLocal:
-         if (Optional::removeOptionalWrapperIfPresent<QDate>(value, propertyIsOptional)) {
+         // Some non-optional date properties (eg BrewLog::fermentDate) use an invalid (null) QDate to mean "not
+         // set".  This would be written as an empty string, which is not a valid date, so we omit the field instead.
+         if (Optional::removeOptionalWrapperIfPresent<QDate>(value, propertyIsOptional) &&
+             value.toDate().isValid()) {
             //
             // DateOrDateTimeLocal corresponds to BeerJSON, DateType, which is a string matching this regexp:
             //   "\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"

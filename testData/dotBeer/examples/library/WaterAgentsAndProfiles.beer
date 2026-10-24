@@ -1,0 +1,133 @@
+//======================================================================================================================
+// examples/library/WaterAgentsAndProfiles.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+//
+// An ingredient library with no recipes, as might be exported to share a brewer's water setup.  It contains one misc
+// for every `water_agent_type`, including the ones that need `water_agent_percent_acid`, plus some classic water
+// profiles.  (The profiles are approximate, rounded figures of the kind commonly quoted in brewing literature.)
+//
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00.250+02:00",
+
+    "miscs": [
+      { "name": "Calcium Chloride",  "local_id": "wa_cacl2",    "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "calcium chloride anhydrous"    },
+      { "name": "Calcium Chloride Flake", "local_id": "wa_cacl2_flake", "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "calcium chloride dihydrate" },
+      { "name": "Pickling Lime",     "local_id": "wa_caoh2",    "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "calcium hydroxide"             },
+      { "name": "Magnesium Chloride", "local_id": "wa_mgcl2",   "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "magnesium chloride hexahydrate"},
+      { "name": "Chalk",             "local_id": "wa_caco3",    "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "calcium carbonate"             },
+      { "name": "Gypsum",            "local_id": "wa_caso4",    "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "calcium sulfate dihydrate"     },
+      { "name": "Epsom Salt",        "local_id": "wa_mgso4",    "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "magnesium sulfate heptahydrate"},
+      { "name": "Table Salt",        "local_id": "wa_nacl",     "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "sodium chloride"               },
+      { "name": "Baking Soda",       "local_id": "wa_nahco3",   "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "sodium bicarbonate"            },
+      {
+        "name": "Lactic Acid 88%",
+        "local_id": "wa_lactic_88",
+        "folder_path": "Water Agents/Acids",
+        "misc_type": "water agent",
+        "water_agent_type": "lactic acid",
+        "water_agent_percent_acid": { "unit": "%", "value": 88.0 }
+      },
+      {
+        "name": "Phosphoric Acid 10%",
+        "local_id": "wa_phosphoric_10",
+        "folder_path": "Water Agents/Acids",
+        "misc_type": "water agent",
+        "water_agent_type": "phosphoric acid",
+        "water_agent_percent_acid": { "unit": "%", "value": 10.0 }
+      },
+      {
+        "name": "Sulfuric Acid 10%",
+        "local_id": "wa_sulfuric_10",
+        "folder_path": "Water Agents/Acids",
+        "misc_type": "water agent",
+        "water_agent_type": "sulfuric acid",
+        "water_agent_percent_acid": { "unit": "%", "value": 10.0 }
+      },
+      {
+        "name": "Hydrochloric Acid 10%",
+        "local_id": "wa_hydrochloric_10",
+        "folder_path": "Water Agents/Acids",
+        "misc_type": "water agent",
+        "water_agent_type": "hydrochloric acid",
+        "water_agent_percent_acid": { "unit": "%", "value": 10.0 }
+      },
+      {
+        // "other" may also carry a percent acid -- eg citric acid
+        "name": "Citric Acid Solution",
+        "local_id": "wa_citric",
+        "folder_path": "Water Agents/Acids",
+        "misc_type": "water agent",
+        "water_agent_type": "other",
+        "water_agent_percent_acid": { "unit": "%", "value": 50.0 }
+      },
+      {
+        "name": "Campden Tablet",
+        "local_id": "wa_campden",
+        "folder_path": "Water Agents",
+        "misc_type": "water agent",
+        "water_agent_type": "other",
+        "use_for": "Removing chlorine and chloramine"
+      }
+    ],
+
+    "waters": [
+      {
+        "name": "Pilsen",
+        "local_id": "water_pilsen",
+        "folder_path": "Water/Classic",
+        "calcium":     { "unit": "ppm", "value": 7  },
+        "magnesium":   { "unit": "ppm", "value": 2  },
+        "sodium":      { "unit": "ppm", "value": 2  },
+        "sulfate":     { "unit": "ppm", "value": 5  },
+        "chloride":    { "unit": "ppm", "value": 5  },
+        "bicarbonate": { "unit": "ppm", "value": 15 }
+      },
+      {
+        "name": "Burton on Trent",
+        "local_id": "water_burton",
+        "folder_path": "Water/Classic",
+        "calcium":     { "unit": "ppm", "value": 275 },
+        "magnesium":   { "unit": "ppm", "value": 40  },
+        "sodium":      { "unit": "ppm", "value": 25  },
+        "sulfate":     { "unit": "ppm", "value": 610 },
+        "chloride":    { "unit": "ppm", "value": 35  },
+        "bicarbonate": { "unit": "ppm", "value": 270 }
+      },
+      {
+        "name": "Dublin",
+        "local_id": "water_dublin",
+        "folder_path": "Water/Classic",
+        "calcium":     { "unit": "mg/l", "value": 118 },
+        "magnesium":   { "unit": "mg/l", "value": 4   },
+        "sodium":      { "unit": "mg/l", "value": 12  },
+        "sulfate":     { "unit": "mg/l", "value": 55  },
+        "chloride":    { "unit": "mg/l", "value": 19  },
+        "bicarbonate": { "unit": "mg/l", "value": 319 }
+      },
+      {
+        "name": "Munich",
+        "local_id": "water_munich",
+        "folder_path": "Water/Classic",
+        "pH": { "unit": "pH", "value": 7.9 },
+        "calcium":     { "unit": "ppm", "value": 77  },
+        "magnesium":   { "unit": "ppm", "value": 17  },
+        "sodium":      { "unit": "ppm", "value": 4   },
+        "sulfate":     { "unit": "ppm", "value": 5   },
+        "chloride":    { "unit": "ppm", "value": 8   },
+        "bicarbonate": { "unit": "ppm", "value": 295 },
+        "notes": "High residual alkalinity: suits darker beers."
+      }
+    ]
+  }
+}

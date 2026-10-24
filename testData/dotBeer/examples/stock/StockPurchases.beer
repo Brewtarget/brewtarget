@@ -1,0 +1,250 @@
+//======================================================================================================================
+// examples/stock/StockPurchases.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// Stock purchases and uses for each type of ingredient, including:
+//   • a purchase that has been ordered but not yet received (no date_received or amount_received)
+//   • a purchase recorded only when it was received (no date_ordered or amount_ordered)
+//   • a purchase where less arrived than was ordered
+//   • uses with each `reason`, some of them linked to a brew log via brew_log_id
+//   • the different ways of measuring amounts (mass, volume and count)
+//
+// The recipe is deliberately minimal: it is only here so that it has a brew log for the stock uses to refer to.
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-21T18:00:00Z",
+    "hops": [
+      { "name": "Cascade", "local_id": "hop_cascade", "form": "pellet", "year": "2025", "alpha_acid": { "unit": "%", "value": 6.4 } }
+    ],
+    "fermentables": [
+      {
+        "name": "Maris Otter Pale Malt",
+        "local_id": "ferm_maris_otter",
+        "fermentable_type": "grain",
+        "grain_group": "base",
+        "color": { "unit": "EBC", "value": 5.5 },
+        "yield_coarse_grind": { "unit": "%", "value": 80.0 }
+      }
+    ],
+    "miscs": [
+      {
+        "name": "Lactic Acid 80%",
+        "local_id": "misc_lactic_80",
+        "misc_type": "water agent",
+        "water_agent_type": "lactic acid",
+        "water_agent_percent_acid": { "unit": "%", "value": 80.0 }
+      },
+      { "name": "Whirlfloc", "local_id": "misc_whirlfloc", "misc_type": "fining", "use_for": "Clarity" }
+    ],
+    "cultures": [
+      { "name": "SafAle US-05", "local_id": "culture_us05", "culture_type": "ale", "form": "dry", "producer": "Fermentis" }
+    ],
+    "recipes": [
+      {
+        "name": "Cascade SMaSH",
+        "recipe_type": "all grain",
+        "author": "A. Brewer",
+        "batch_size": { "unit": "l", "value": 20.0 },
+        "efficiency": { "brewhouse": { "unit": "%", "value": 72.0 } },
+        "ingredients": {
+          "fermentable_additions": [
+            {
+              "fermentable_id": "ferm_maris_otter",
+              "schedule": { "stage": "add_to_mash" },
+              "amount": { "unit": "kg", "value": 4.5 }
+            }
+          ],
+          "hop_additions": [
+            {
+              "hop_id": "hop_cascade",
+              "schedule": { "stage": "add_to_boil", "time": { "unit": "min", "value": 60 } },
+              "amount": { "unit": "g", "value": 30 }
+            }
+          ],
+          "culture_additions": [
+            {
+              "culture_id": "culture_us05",
+              "schedule": { "stage": "add_to_fermentation" },
+              "amount": { "unit": "count", "value": 1 }
+            }
+          ]
+        },
+        "brew_logs": [
+          {
+            "local_id": "brewlog_smash_1",
+            "batch_number": "SM-1",
+            "brew_date": "2026-05-09",
+            "ferment_date": "2026-05-23",
+            "expected_pre_boil_gravity": { "unit": "sg", "value": 1.042 },
+            "expected_mash_final_temperature": { "unit": "C", "value": 66.0 },
+            "expected_original_gravity": { "unit": "sg", "value": 1.050 },
+            "expected_volume_into_fv": { "unit": "l", "value": 20.0 },
+            "expected_final_gravity": { "unit": "sg", "value": 1.011 },
+            "expected_alcohol_by_volume": { "unit": "%", "value": 5.1 },
+            "expected_attenuation": { "unit": "%", "value": 78.0 },
+            "expected_efficiency": { "unit": "%", "value": 72.0 },
+            "expected_boil_off": { "unit": "l", "value": 3.5 }
+          },
+          {
+            "local_id": "brewlog_smash_2",
+            "batch_number": "SM-2",
+            "brew_date": "2026-07-04",
+            "expected_pre_boil_gravity": { "unit": "sg", "value": 1.042 },
+            "expected_mash_final_temperature": { "unit": "C", "value": 66.0 },
+            "expected_original_gravity": { "unit": "sg", "value": 1.050 },
+            "expected_volume_into_fv": { "unit": "l", "value": 20.0 },
+            "expected_final_gravity": { "unit": "sg", "value": 1.011 },
+            "expected_alcohol_by_volume": { "unit": "%", "value": 5.1 },
+            "expected_attenuation": { "unit": "%", "value": 78.0 },
+            "expected_efficiency": { "unit": "%", "value": 72.0 },
+            "expected_boil_off": { "unit": "l", "value": 3.5 }
+          }
+        ]
+      }
+    ],
+    //
+    // Stock purchases come after recipes because their uses refer to brew logs (see INDEX.md on order of processing)
+    //
+    "culture_stock_purchases": [
+      {
+        "name": "April visit to LHBS",
+        "culture_id": "culture_us05",
+        "date_received": "2026-04-18",
+        "date_best_before": "2027-09-30",
+        "supplier": "The Malt Shed",
+        "amount_received": { "unit": "count", "value": 3 },
+        "purchase_price": { "iso_alphabetic_code": "EUR", "amount": 10.50 },
+        "stock_uses": [
+          {
+            "name": "Stock Use #1",
+            "date": "2026-05-09",
+            "reason": "used",
+            "brew_log_id": "brewlog_smash_1",
+            "amount_used": { "unit": "count", "value": 1 }
+          },
+          {
+            "name": "Stock Use #2",
+            "date": "2026-07-04",
+            "reason": "used",
+            "brew_log_id": "brewlog_smash_2",
+            "amount_used": { "unit": "count", "value": 1 }
+          }
+        ]
+      }
+    ],
+    "fermentable_stock_purchases": [
+      {
+        // Ordered 25 kg, but the sack was split in transit
+        "name": "Spring grain order",
+        "fermentable_id": "ferm_maris_otter",
+        "date_ordered": "2026-04-02",
+        "date_received": "2026-04-08",
+        "supplier": "Online Brew Supplies",
+        "note": "Sack damaged in transit; supplier refunded the difference",
+        "amount_ordered": { "unit": "kg", "value": 25.0 },
+        "amount_received": { "unit": "kg", "value": 23.5 },
+        "purchase_price": { "iso_alphabetic_code": "EUR", "amount": 52.00 },
+        "purchase_tax": { "iso_alphabetic_code": "EUR", "amount": 10.40 },
+        "shipping_cost": { "iso_alphabetic_code": "EUR", "amount": 12.90 },
+        "stock_uses": [
+          {
+            "date": "2026-05-09",
+            "reason": "used",
+            "brew_log_id": "brewlog_smash_1",
+            "amount_used": { "unit": "kg", "value": 4.5 }
+          },
+          {
+            "date": "2026-06-15",
+            "reason": "lost",
+            "note": "Mice got into the bin",
+            "amount_used": { "unit": "g", "value": 800 }
+          },
+          {
+            "date": "2026-07-04",
+            "reason": "used",
+            "brew_log_id": "brewlog_smash_2",
+            "amount_used": { "unit": "kg", "value": 4.5 }
+          }
+        ]
+      }
+    ],
+    "hop_stock_purchases": [
+      {
+        "name": "Spring hop order",
+        "hop_id": "hop_cascade",
+        "date_ordered": "2026-04-02",
+        "date_received": "2026-04-06",
+        "date_best_before": "2027-12-31",
+        "supplier": "Online Brew Supplies",
+        "amount_ordered": { "unit": "g", "value": 100 },
+        "amount_received": { "unit": "g", "value": 100 },
+        "purchase_price": { "iso_alphabetic_code": "EUR", "amount": 7.90 },
+        "stock_uses": [
+          {
+            "date": "2026-05-09",
+            "reason": "used",
+            "brew_log_id": "brewlog_smash_1",
+            "amount_used": { "unit": "g", "value": 30 }
+          },
+          {
+            "date": "2026-07-04",
+            "reason": "used",
+            "brew_log_id": "brewlog_smash_2",
+            "amount_used": { "unit": "g", "value": 30 }
+          }
+        ]
+      },
+      {
+        // Ordered, but not yet arrived, so no date_received, amount_received or stock_uses
+        "name": "Autumn hop order",
+        "hop_id": "hop_cascade",
+        "date_ordered": "2026-10-15",
+        "supplier": "Online Brew Supplies",
+        "amount_ordered": { "unit": "oz", "value": 8 },
+        "purchase_price": { "iso_alphabetic_code": "USD", "amount": 14.00 }
+      }
+    ],
+    "misc_stock_purchases": [
+      {
+        "misc_id": "misc_lactic_80",
+        "date_received": "2025-11-20",
+        "date_best_before": "2026-06-30",
+        "amount_received": { "unit": "ml", "value": 100 },
+        "stock_uses": [
+          {
+            "date": "2026-05-09",
+            "reason": "used",
+            "brew_log_id": "brewlog_smash_1",
+            "amount_used": { "unit": "ml", "value": 2.5 }
+          },
+          {
+            // Uses don't have to be linked to a brew log
+            "date": "2026-07-01",
+            "reason": "disposed",
+            "note": "Past best-before date",
+            "amount_used": { "unit": "ml", "value": 97.5 }
+          }
+        ]
+      },
+      {
+        "misc_id": "misc_whirlfloc",
+        "date_received": "2026-04-18",
+        "supplier": "The Malt Shed",
+        "amount_received": { "unit": "count", "value": 10 },
+        "stock_uses": [
+          { "date": "2026-05-09", "reason": "used", "brew_log_id": "brewlog_smash_1", "amount_used": { "unit": "count", "value": 1 } },
+          { "date": "2026-07-04", "reason": "used", "brew_log_id": "brewlog_smash_2", "amount_used": { "unit": "count", "value": 1 } }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+//======================================================================================================================
+// examples/invalid/DuplicateLocalId.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: duplicate local ID "pale"
+//
+// Local IDs must be unique across the whole file, even between objects of different types (here a hop and a
+// fermentable).  JSON Schema cannot check this.
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00Z",
+    "hops": [
+      { "name": "Pale Ale Hop Blend", "local_id": "pale", "alpha_acid": { "unit": "%", "value": 7.0 } }
+    ],
+    "fermentables": [
+      { "name": "Pale Malt", "local_id": "pale", "fermentable_type": "grain", "color": { "unit": "EBC", "value": 5 }, "yield_fine_grind": { "unit": "%", "value": 80.0 } }
+    ]
+  }
+}

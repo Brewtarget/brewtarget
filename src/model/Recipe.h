@@ -127,6 +127,7 @@ class FermentationStep;
 class Instruction;
 class Mash;
 class MashStep;
+class RecipeAddition;
 class RecipeAdditionFermentable;
 class RecipeAdditionHop;
 class RecipeAdditionMisc;
@@ -793,6 +794,56 @@ public:
    // Helpers
    //! \brief Get the IBUs from a given \c hop addition.
    double ibuFromHopAddition(RecipeAdditionHop const & hopAddition) const;
+
+   /**
+    * \brief For an addition to the boil stage (ie one whose \c RecipeAddition::stage is
+    *        \c RecipeAddition::Stage::Boil), this tells us when the addition happens relative to the "boil proper" (see
+    *        \c Boil::boilTime_mins).
+    *
+    *        This matters because \c RecipeAddition::addAtTime_mins is measured backwards from the end of the
+    *        addition's \b step, not from the end of the boil proper, and because an addition with a step but no time
+    *        is made at the \b start of that step.  So, eg, with the standard three-step boil profile (pre-boil, boil
+    *        proper, post-boil), a hop addition to step 3 with addAtTime_mins of 20 is a whirlpool/steep addition 20
+    *        minutes before the end of the post-boil step; it has not spent 20 minutes in the boil.
+    */
+   struct BoilAdditionTiming {
+      /**
+       * \brief \c true if the addition is made after the end of the boil proper (eg flameout, whirlpool or hop stand
+       *        additions), \c false if it is made before or during the boil proper (including first wort additions).
+       */
+      bool postBoil = false;
+
+      /**
+       * \brief How long the addition spends in the boil proper.  Always 0 for post-boil additions.
+       */
+      double boilProper_mins = 0.0;
+
+      /**
+       * \brief For post-boil additions, how long after the end of the boil proper (ie flameout) the addition is made.
+       *        Always 0 for additions that are not post-boil.
+       */
+      double afterFlameout_mins = 0.0;
+
+      /**
+       * \brief For post-boil additions, how long the addition remains in the hot wort -- ie from when it is added
+       *        until the end of the post-boil step(s), or for \c RecipeAddition::duration_mins if that is set and
+       *        shorter.  \c std::nullopt if not known (eg because a step length is not set and there is no duration).
+       *        Always \c std::nullopt for additions that are not post-boil.
+       */
+      std::optional<double> postBoilRemaining_mins = std::nullopt;
+
+      /**
+       * \brief For post-boil additions, how long from when the addition is made until the end of the step in which it
+       *        is made.  \c std::nullopt if not known.  Always \c std::nullopt for additions that are not post-boil.
+       */
+      std::optional<double> untilEndOfStep_mins = std::nullopt;
+   };
+
+   /**
+    * \brief See comment on \c BoilAdditionTiming.  Caller's responsibility to ensure that \c addition is an addition to
+    *        the boil.  (If it is not, we log an error and return a default-constructed \c BoilAdditionTiming.)
+    */
+   BoilAdditionTiming boilAdditionTiming(RecipeAddition const & addition) const;
 
    /**
     * \brief Get names and amounts of fermentables added to the mash
