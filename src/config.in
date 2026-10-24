@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * config.in is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * config.in is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
@@ -60,5 +60,8 @@ constexpr char const * CONFIG_BUILD_TIMESTAMP = "${BUILD_TIMESTAMP}";
 // Support info
 constexpr char const * CONFIG_GITHUB_URL      = "${CONFIG_GITHUB_URL}";
 constexpr char const * CONFIG_WEBSITE_URL     = "${CONFIG_WEBSITE_URL}";
+
+// Data files for unit tests
+constexpr char const * CONFIG_TEST_DATA_DIR   = "${CONFIG_TEST_DATA_DIR}";
 
 #endif

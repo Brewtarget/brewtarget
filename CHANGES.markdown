@@ -38,6 +38,8 @@ Various improvements, including:
 * Importing from BeerXML sets fermentable addition stage to boil instead of mash [1156](https://github.com/Brewtarget/brewtarget/issues/1156)
 * Creating a fermentable stock purchase with no color causes a crash [1159](https://github.com/Brewtarget/brewtarget/issues/1159)
 * Conversion amounts for imperial tablespoons and teaspoons are wrong [1160](https://github.com/Brewtarget/brewtarget/issues/1160)
+* IBU calculation treats a post-boil addition's time as boil time [1167](https://github.com/Brewtarget/brewtarget/issues/1167)
+* Instructions use the whole boil length for a step addition with no time [1168](https://github.com/Brewtarget/brewtarget/issues/1168)
 
 ### Release Timestamp
 Wed, 19 Aug 2026 05:01:02 +0100

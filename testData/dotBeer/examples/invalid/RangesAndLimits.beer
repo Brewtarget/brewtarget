@@ -1,0 +1,77 @@
+//======================================================================================================================
+// examples/invalid/RangeAndLimits.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: /DotBeer/styles/0/original_gravity: minimum (1.06 sg) is greater than maximum (1.045 sg)
+// EXPECT-INVALID: /DotBeer/styles/0/final_gravity/minimum/value: 0.85 is less than the minimum of 0.9
+// EXPECT-INVALID: /DotBeer/styles/0/carbonation/maximum/value: -1 is less than the minimum of 0
+// EXPECT-INVALID: /DotBeer/styles/1/original_gravity/maximum/value: 150 is greater than the maximum of 100
+// EXPECT-INVALID: /DotBeer/styles/1/final_gravity/maximum/value: 1.8 is greater than the maximum of 1.6
+// EXPECT-INVALID: /DotBeer/styles/1/color/minimum/value: -0.5 is less than the minimum of 0
+// EXPECT-INVALID: /DotBeer/hops/0/folder_path: ' /Hops' does not match
+// EXPECT-INVALID: /DotBeer/hops/1/folder_path: 'Hops/US\tWest' does not match
+//
+// An inverted range (which JSON Schema cannot check), plus values outside the limits that it can check:
+//   • a final gravity below 0.900 SG, and a negative carbonation
+//   • a gravity above 100°P (which is impossible, as °P is a percentage of sugar by weight)
+//   • a gravity above 1.6 SG (which, likewise, is denser than sugar itself)
+//   • a negative Lovibond colour (0°L is colourless).  Note that -0.5 SRM, in the same range, is fine.
+//   • a folder path with a segment that is only a space, and one with a control character (a tab)
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00Z",
+    "styles": [
+      {
+        "name": "Upside Down Ale",
+        "local_id": "style_upside_down",
+        "category": "Broken",
+        "style_guide": "None",
+        "style_type": "beer",
+        "original_gravity": {
+          "minimum": { "unit": "sg", "value": 1.060 },
+          "maximum": { "unit": "sg", "value": 1.045 }
+        },
+        "final_gravity": {
+          "minimum": { "unit": "sg", "value": 0.850 },
+          "maximum": { "unit": "sg", "value": 1.010 }
+        },
+        "carbonation": {
+          "minimum": { "unit": "vols", "value": 2.0 },
+          "maximum": { "unit": "vols", "value": -1 }
+        }
+      },
+      {
+        "name": "Impossible Ale",
+        "local_id": "style_impossible",
+        "category": "Broken",
+        "style_guide": "None",
+        "style_type": "beer",
+        "original_gravity": {
+          "minimum": { "unit": "plato", "value": 12 },
+          "maximum": { "unit": "plato", "value": 150 }
+        },
+        "final_gravity": {
+          "minimum": { "unit": "sg", "value": 1.010 },
+          "maximum": { "unit": "sg", "value": 1.800 }
+        },
+        "color": {
+          "minimum": { "unit": "Lovi", "value": -0.5 },
+          "maximum": { "unit": "SRM" , "value": -0.5 }
+        }
+      }
+    ],
+    "hops": [
+      { "name": "Cascade", "local_id": "hop_space" , "folder_path": " /Hops"       , "alpha_acid": { "unit": "%", "value": 6.4 } },
+      { "name": "Citra"  , "local_id": "hop_tab"   , "folder_path": "Hops/US\tWest", "alpha_acid": { "unit": "%", "value": 12.0 } }
+    ]
+  }
+}

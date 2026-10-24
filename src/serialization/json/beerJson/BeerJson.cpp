@@ -637,7 +637,7 @@ namespace {
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_temperature", PropertyNames::    StepBase::startTemp_c    , &BEER_JSON_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits,   "end_temperature", PropertyNames::        Step::  endTemp_c    , &BEER_JSON_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_time"        , PropertyNames::StepBase::stepTime_mins      , &BEER_JSON_TIME_UNIT_MAPPER       },
-         {JsonRecordDefinition::FieldType::Bool                , "free_rise  "      , PropertyNames::FermentationStep::freeRise   },
+         {JsonRecordDefinition::FieldType::Bool                , "free_rise"        , PropertyNames::FermentationStep::freeRise   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_gravity"    , PropertyNames::StepExtended::startGravity_sg,  &BEER_JSON_DENSITY_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits,   "end_gravity"    , PropertyNames::StepExtended::  endGravity_sg,  &BEER_JSON_DENSITY_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "start_ph"         , PropertyNames::Step::startAcidity_pH        ,  &BEER_JSON_ACIDITY_UNIT          },

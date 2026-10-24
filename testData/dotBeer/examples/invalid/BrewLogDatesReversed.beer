@@ -1,0 +1,69 @@
+//======================================================================================================================
+// examples/invalid/BrewLogDatesReversed.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: ferment_date 2026-09-01 is before brew_date 2026-09-14
+// EXPECT-INVALID: /DotBeer/recipes/0/brew_logs/1/brew_date: '2026-02-30' is not a 'date'
+//
+// Dates that are well-formed but inconsistent (which JSON Schema cannot check), and a date that matches the pattern but
+// does not exist (which is only caught by the "date" format check).
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00Z",
+    "fermentables": [
+      { "name": "Pale Malt", "local_id": "ferm_pale", "fermentable_type": "grain", "color": { "unit": "EBC", "value": 5 }, "yield_fine_grind": { "unit": "%", "value": 80.0 } }
+    ],
+    "recipes": [
+      {
+        "name": "Time Travel Ale",
+        "recipe_type": "all grain",
+        "author": "A. Brewer",
+        "batch_size": { "unit": "l", "value": 20 },
+        "efficiency": { "brewhouse": { "unit": "%", "value": 70 } },
+        "ingredients": {
+          "fermentable_additions": [
+            { "fermentable_id": "ferm_pale", "schedule": { "stage": "add_to_mash" }, "amount": { "unit": "kg", "value": 4 } }
+          ]
+        },
+        "brew_logs": [
+          {
+            "batch_number": "T-1",
+            "brew_date": "2026-09-14",
+            "ferment_date": "2026-09-01",
+            "expected_pre_boil_gravity": { "unit": "sg", "value": 1.040 },
+            "expected_mash_final_temperature": { "unit": "C", "value": 66.0 },
+            "expected_original_gravity": { "unit": "sg", "value": 1.048 },
+            "expected_volume_into_fv": { "unit": "l", "value": 20.0 },
+            "expected_final_gravity": { "unit": "sg", "value": 1.010 },
+            "expected_alcohol_by_volume": { "unit": "%", "value": 5.0 },
+            "expected_attenuation": { "unit": "%", "value": 79.0 },
+            "expected_efficiency": { "unit": "%", "value": 70.0 },
+            "expected_boil_off": { "unit": "l", "value": 4.0 }
+          },
+          {
+            "batch_number": "T-2",
+            "brew_date": "2026-02-30",
+            "expected_pre_boil_gravity": { "unit": "sg", "value": 1.040 },
+            "expected_mash_final_temperature": { "unit": "C", "value": 66.0 },
+            "expected_original_gravity": { "unit": "sg", "value": 1.048 },
+            "expected_volume_into_fv": { "unit": "l", "value": 20.0 },
+            "expected_final_gravity": { "unit": "sg", "value": 1.010 },
+            "expected_alcohol_by_volume": { "unit": "%", "value": 5.0 },
+            "expected_attenuation": { "unit": "%", "value": 79.0 },
+            "expected_efficiency": { "unit": "%", "value": 70.0 },
+            "expected_boil_off": { "unit": "l", "value": 4.0 }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+//======================================================================================================================
+// examples/invalid/NonFiniteNumber.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: NaN is not valid JSON (numbers must be finite)
+//
+// NaN, Infinity and -Infinity are not valid JSON, although some parsers (eg Python's json module by default) accept
+// them.  They are not allowed in dotBeer files.
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-22T18:00:00Z",
+    "hops": [
+      { "name": "Cascade", "local_id": "hop_cascade", "alpha_acid": { "unit": "%", "value": NaN } }
+    ]
+  }
+}

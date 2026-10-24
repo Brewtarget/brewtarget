@@ -52,9 +52,11 @@
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
 #include "model/Boil.h"
+#include "model/BoilStep.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Hop.h"
+#include "model/Instruction.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/NamedParameterBundle.h"
@@ -62,9 +64,16 @@
 #include "model/RecipeAdditionFermentable.h"
 #include "model/RecipeAdditionHop.h"
 #include "model/StockPurchaseHop.h"
+#include "model/Style.h"
+#include "model/Water.h"
+#include "model/Yeast.h"
+#include "model/Misc.h"
+#include "model/Fermentation.h"
+#include "serialization/json/dotBeer/DotBeer.h"
 #include "PersistentSettings.h"
 #include "unitTests/TestMultiVector.h"
 #include "utils/ErrorCodeToStream.h"
+#include "utils/ImportRecordCount.h"
 #include "utils/FileSystemHelpers.h"
 
 namespace {
@@ -926,6 +935,225 @@ void Testing::testInventory() {
 
    QVERIFY2(fuzzyComp(inventory.quantity, 123.45,  0.00000001), "Wrong hop inventory amount");
    QVERIFY2(inventory.unit == &Measurement::Units::kilograms, "Wrong hop inventory units");
+
+   return;
+}
+
+void Testing::testDotBeerExamples() {
+   //
+   // The dotBeer example files in testData/dotBeer/examples come from the dotBeer repository
+   // (https://github.com/Brewken/DotBeer), so they need to be updated when we upgrade to newer versions of dotBeer:
+   //    DOTBEER_EXAMPLES_DIR=../../DotBeer/examples meson test 'Test dotBeer examples'
+   //
+   QString const examplesDirPath{CONFIG_TEST_DATA_DIR};
+   QDir const examplesDir{examplesDirPath};
+   QVERIFY2(examplesDir.exists(), "dotBeer examples directory not found");
+
+   auto importFile = [](QString const & filePath, QString & message) {
+      QString userMessage;
+      QTextStream userMessageAsStream{&userMessage};
+      bool const result = DotBeer::import("", filePath, userMessageAsStream);
+      userMessageAsStream.flush();
+      message = userMessage;
+      return result;
+   };
+
+   //
+   // Every valid example should import
+   //
+   for (QString const subDir : {"library", "recipes", "stock"}) {
+      QDir const dir{examplesDir.filePath(subDir)};
+      for (QFileInfo const & fileInfo : dir.entryInfoList({"*.beer"}, QDir::Files, QDir::Name)) {
+         QString message;
+         bool ok = importFile(fileInfo.absoluteFilePath(), message);
+         // A valid file with no records in it (eg Minimal.beer) is reported as a failed import, which is fine.
+         if (!ok && message == ImportRecordCount::tr("Couldn't find any recognisable data in the file!")) {
+            qInfo() << Q_FUNC_INFO << fileInfo.fileName() << "contains no records";
+            ok = true;
+         }
+         qInfo() << Q_FUNC_INFO << "Import" << fileInfo.fileName() << (ok ? "succeeded" : "FAILED") << ":" << message;
+         QVERIFY2(ok, qPrintable(QString{"Failed to import %1: %2"}.arg(fileInfo.fileName()).arg(message)));
+      }
+   }
+
+   //
+   // We don't require that we reject every invalid example (some rules are not ones Brewken needs to enforce to read
+   // a file safely), but it's useful to log what we do.
+   //
+   {
+      QDir const dir{examplesDir.filePath("invalid")};
+      for (QFileInfo const & fileInfo : dir.entryInfoList({"*.beer"}, QDir::Files, QDir::Name)) {
+         QString message;
+         bool const ok = importFile(fileInfo.absoluteFilePath(), message);
+         qInfo() <<
+            Q_FUNC_INFO << "Invalid example" << fileInfo.fileName() << (ok ? "was ACCEPTED" : "was rejected") << ":" <<
+            message;
+      }
+   }
+
+   //
+   // Now export everything in the database, and check we can read it back in -- which includes validating it against
+   // the schema.  Set DOTBEER_EXPORT_FILE to keep the exported file (eg to check it with DotBeer's validate.py).
+   //
+   QString exportFilePath = qEnvironmentVariable("DOTBEER_EXPORT_FILE");
+   if (exportFilePath.isEmpty()) {
+      exportFilePath = this->pimpl->m_tempDir.filePath("dotBeerRoundTrip.beer");
+   }
+   {
+      QFile outFile{exportFilePath};
+      QVERIFY(outFile.open(QIODevice::WriteOnly | QIODevice::Truncate));
+      QString userMessage;
+      QTextStream userMessageAsStream{&userMessage};
+      auto constAll = []<class NE>() {
+         QList<NE const *> result;
+         for (NE * ne : ObjectStoreWrapper::getAllRaw<NE>()) {
+            result.append(ne);
+         }
+         return result;
+      };
+      DotBeer::Exporter exporter{outFile, userMessageAsStream};
+      exporter.add("", constAll.template operator()<Fermentable >());
+      exporter.add("", constAll.template operator()<Hop         >());
+      exporter.add("", constAll.template operator()<Misc        >());
+      exporter.add("", constAll.template operator()<Yeast       >());
+      exporter.add("", constAll.template operator()<Style       >());
+      exporter.add("", constAll.template operator()<Equipment   >());
+      exporter.add("", constAll.template operator()<Water       >());
+      exporter.add("", constAll.template operator()<Mash        >());
+      exporter.add("", constAll.template operator()<Boil        >());
+      exporter.add("", constAll.template operator()<Fermentation>());
+      exporter.add("", constAll.template operator()<Recipe      >());
+      exporter.close();
+      outFile.close();
+   }
+   qInfo() << Q_FUNC_INFO << "Exported database to" << exportFilePath;
+   QString message;
+   bool const reimportOk = importFile(exportFilePath, message);
+   QVERIFY2(reimportOk, qPrintable(QString{"Could not re-import exported file %1: %2"}.arg(exportFilePath).arg(message)));
+
+   return;
+}
+
+void Testing::testBoilAdditionTiming() {
+   qDebug() << Q_FUNC_INFO << "Starting";
+
+   auto recipe = std::make_shared<Recipe>("Boil Addition Timing Test");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(20.0);
+   recipe->setEquipment(this->pimpl->m_equipFiveGalNoLoss);
+
+   // Standard three-step boil profile: pre-boil, 60 minute boil proper, 30 minute post-boil
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(24.0);
+   boil->setBoilTime_mins(60.0); // This also ensures the standard profile
+   auto const boilSteps = boil->boilSteps();
+   QCOMPARE(boilSteps.size(), 3);
+   boilSteps[2]->setStepTime_mins(30.0);
+   QVERIFY(fuzzyComp(boil->boilTime_mins(), 60.0, 0.001));
+
+   auto makeAddition = [&](QString const & name,
+                           std::optional<int>    const step,
+                           std::optional<double> const addAtTime_mins,
+                           std::optional<double> const duration_mins = std::nullopt) {
+      auto addition = std::make_shared<RecipeAdditionHop>(name);
+      addition->setHop(this->pimpl->m_cascade_4pct.get());
+      addition->setStage(RecipeAddition::Stage::Boil);
+      addition->setStep(step);
+      addition->setAddAtTime_mins(addAtTime_mins);
+      addition->setDuration_mins(duration_mins);
+      addition->setQuantity(0.020);
+      addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+      return recipe->addAddition(addition);
+   };
+
+   auto const boil60          = makeAddition("Boil 60"         , 2           , 60.0        );
+   auto const boil20          = makeAddition("Boil 20"         , 2           , 20.0        );
+   auto const boilNoTime      = makeAddition("Boil no time"    , 2           , std::nullopt);
+   auto const noStep15        = makeAddition("No step 15"      , std::nullopt, 15.0        );
+   // 20 minutes before the end of the 30 minute post-boil step, ie 10 minutes after flameout
+   auto const whirlpool20     = makeAddition("Whirlpool 20"    , 3           , 20.0        );
+   auto const whirlpoolNoTime = makeAddition("Whirlpool start" , 3           , std::nullopt);
+   // This is how a BeerXML aroma hop with TIME of 15 gets read in
+   auto const aromaBeerXml    = makeAddition("BeerXML aroma 15", 3           , std::nullopt, 15.0);
+
+   //
+   // Check the timing calculations
+   //
+   auto t = recipe->boilAdditionTiming(*boil60);
+   QVERIFY(!t.postBoil);
+   QVERIFY(fuzzyComp(t.boilProper_mins, 60.0, 0.001));
+
+   t = recipe->boilAdditionTiming(*boilNoTime);
+   QVERIFY(!t.postBoil);
+   QVERIFY2(fuzzyComp(t.boilProper_mins, 60.0, 0.001), "Step addition with no time should be at start of step");
+
+   t = recipe->boilAdditionTiming(*noStep15);
+   QVERIFY(!t.postBoil);
+   QVERIFY(fuzzyComp(t.boilProper_mins, 15.0, 0.001));
+
+   t = recipe->boilAdditionTiming(*whirlpool20);
+   QVERIFY(t.postBoil);
+   QVERIFY2(fuzzyComp(t.boilProper_mins   ,  0.0, 0.001), "Whirlpool addition should not be in the boil");
+   QVERIFY (fuzzyComp(t.afterFlameout_mins, 10.0, 0.001));
+   QVERIFY (t.untilEndOfStep_mins    && fuzzyComp(*t.untilEndOfStep_mins   , 20.0, 0.001));
+   QVERIFY (t.postBoilRemaining_mins && fuzzyComp(*t.postBoilRemaining_mins, 20.0, 0.001));
+
+   t = recipe->boilAdditionTiming(*whirlpoolNoTime);
+   QVERIFY(t.postBoil);
+   QVERIFY(fuzzyComp(t.afterFlameout_mins, 0.0, 0.001));
+   QVERIFY(t.untilEndOfStep_mins && fuzzyComp(*t.untilEndOfStep_mins, 30.0, 0.001));
+
+   t = recipe->boilAdditionTiming(*aromaBeerXml);
+   QVERIFY(t.postBoil);
+   QVERIFY(t.postBoilRemaining_mins && fuzzyComp(*t.postBoilRemaining_mins, 15.0, 0.001));
+
+   //
+   // Check IBUs.  We are using Tinseth (see initTestCase), which gives no IBUs for hops not in the boil.
+   //
+   double const ibuBoil60      = recipe->ibuFromHopAddition(*boil60     );
+   double const ibuBoil20      = recipe->ibuFromHopAddition(*boil20     );
+   double const ibuBoilNoTime  = recipe->ibuFromHopAddition(*boilNoTime );
+   double const ibuWhirlpool20 = recipe->ibuFromHopAddition(*whirlpool20);
+   qDebug() <<
+      Q_FUNC_INFO << "IBUs: boil60" << ibuBoil60 << ", boil20" << ibuBoil20 << ", boilNoTime" << ibuBoilNoTime <<
+      ", whirlpool20" << ibuWhirlpool20;
+   QVERIFY(ibuBoil60 > ibuBoil20);
+   QVERIFY(ibuBoil20 > 1.0);
+   QVERIFY2(fuzzyComp(ibuBoilNoTime , ibuBoil60, 0.001), "Step addition with no time should be at start of step");
+   QVERIFY2(fuzzyComp(ibuWhirlpool20, 0.0      , 0.001), "Whirlpool addition time treated as boil time");
+
+   //
+   // Check instructions.  Flameout should come before all the post-boil additions, which should show how long they
+   // steep for, not some function of the boil length.
+   //
+   recipe->generateInstructions();
+   auto const instructions = recipe->instructions();
+   QStringList summary;
+   int flameoutIndex = -1;
+   for (int ii = 0; ii < instructions.size(); ++ii) {
+      summary.append(QString("%1 (%2)").arg(instructions[ii]->name()).arg(instructions[ii]->interval_mins()));
+      if (instructions[ii]->name() == Recipe::tr("Flameout")) {
+         flameoutIndex = ii;
+      }
+   }
+   qDebug() << Q_FUNC_INFO << "Instructions:" << summary.join("; ");
+   QVERIFY2(flameoutIndex >= 0, "No flameout instruction");
+   QVERIFY(flameoutIndex + 3 < instructions.size());
+   // Post-boil additions sorted by time remaining: whirlpool start (30 mins), whirlpool 20, BeerXML aroma 15
+   QVERIFY2(fuzzyComp(instructions[flameoutIndex + 1]->interval_mins(), 30.0, 0.001), "Wrong post-boil step-start addition");
+   QVERIFY2(fuzzyComp(instructions[flameoutIndex + 2]->interval_mins(), 20.0, 0.001), "Wrong whirlpool addition");
+   QVERIFY2(fuzzyComp(instructions[flameoutIndex + 3]->interval_mins(), 15.0, 0.001), "Wrong aroma addition");
+   // Before flameout, the 15 minute addition with no step should come after the 20 minute one, and nothing should have
+   // the bogus durations we used to calculate (60 - (30 - 20) = 50 for the whirlpool addition).
+   int boil20Index = -1;
+   int noStep15Index = -1;
+   for (int ii = 0; ii < flameoutIndex; ++ii) {
+      double const interval = instructions[ii]->interval_mins();
+      QVERIFY2(!fuzzyComp(interval, 50.0, 0.001), "Whirlpool addition time treated as boil time");
+      if (fuzzyComp(interval, 20.0, 0.001)) { boil20Index   = ii; }
+      if (fuzzyComp(interval, 15.0, 0.001)) { noStep15Index = ii; }
+   }
+   QVERIFY2(boil20Index >= 0 && noStep15Index > boil20Index, "Boil addition without step sorted wrongly");
 
    return;
 }

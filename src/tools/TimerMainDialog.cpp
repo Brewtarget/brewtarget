@@ -266,10 +266,19 @@ void TimerMainDialog::on_loadRecipesButton_clicked() {
    int duplicates = 0;
    int timersGenerated = 0;
    for (auto hopAddition : recipe->hopAdditions()) {
-      if (hopAddition->stage() == RecipeAddition::Stage::Boil &&
-          hopAddition->addAtTime_mins()) {
+      //
+      // Timers count down to the end of the boil, so they only make sense for additions during the boil proper.  First
+      // wort hops are added before the boil starts, and post-boil (eg whirlpool) additions are made after it ends --
+      // and, for the latter, addAtTime_mins is time before the end of the post-boil step, not time before the end of
+      // the boil.  See https://github.com/Brewtarget/brewtarget/issues/1167
+      //
+      if (hopAddition->stage() == RecipeAddition::Stage::Boil && !hopAddition->isFirstWort()) {
+         auto const timing = recipe->boilAdditionTiming(*hopAddition);
+         if (timing.postBoil) {
+            continue;
+         }
          QString note = tr("%1 of %2").arg(Measurement::displayAmount(hopAddition->amount())).arg(hopAddition->hop()->name());
-         int const addAtTime_seconds = *hopAddition->addAtTime_mins() * 60;
+         int const addAtTime_seconds = timing.boilProper_mins * 60;
          for (TimerWidget * td : *this->m_timers) {
             if (td->getTime() == addAtTime_seconds) {
                if (!td->getNote().contains(note, Qt::CaseInsensitive)) {

@@ -1,0 +1,630 @@
+//======================================================================================================================
+// examples/recipes/AmericanPaleAle.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+//
+// A "kitchen sink" example: a complete all-grain recipe that uses every top-level section of the format, and a brew
+// log that fills in EVERY BrewLog field.  Because the schema forbids unevaluated properties, renaming or removing any
+// field that this file uses will make it fail validation -- which is the point.
+//
+// Also exercises:
+//  • Addition schedules at every stage (mash, boil, whirlpool, dry hop, package), using `step`, `time` and `duration`
+//  • A water agent (gypsum) in the mash, and a fining agent in the boil
+//  • Base and target water profiles, with a proportion of RO water
+//  • Hop oil content, culture killer properties, and equipment with every vessel type
+//
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00+02:00",
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Ingredients
+    //------------------------------------------------------------------------------------------------------------------
+    "hops": [
+      {
+        "name": "Magnum",
+        "local_id": "hop_magnum",
+        "folder_path": "/Hops/German – Noble",
+        "producer": "Hopsteiner",
+        "origin": "Germany",
+        "year": "2025",
+        "form": "pellet",
+        "alpha_acid": { "unit": "%", "value": 13.5 },
+        "alpha_acid_range": {
+          "minimum": { "unit": "%", "value": 12.0 },
+          "maximum": { "unit": "%", "value": 16.0 }
+        },
+        "beta_acid": { "unit": "%", "value": 5.5 },
+        "hop_type": "bittering",
+        "six_month_alpha_loss": { "unit": "%", "value": 15.0 },
+        "cohumulone": { "unit": "%", "value": 26.0 },
+        "notes": "Clean, neutral bittering hop.",
+        "substitutes": "Warrior, Horizon"
+      },
+      {
+        "name": "Cascade",
+        "local_id": "hop_cascade",
+        "folder_path": "/Hops/US",
+        "producer": "Yakima Chief Hops",
+        "product_id": "YCH 101",
+        "origin": "US",
+        "year": "2025",
+        "form": "pellet",
+        "alpha_acid": { "unit": "%", "value": 6.4 },
+        "beta_acid": { "unit": "%", "value": 6.0 },
+        "beta_acid_range": {
+          "minimum": { "unit": "%", "value": 4.5 },
+          "maximum": { "unit": "%", "value": 7.0 }
+        },
+        "hop_type": "aroma/bittering/flavor",
+        "cohumulone": { "unit": "%", "value": 36.0 },
+        "oil_content": {
+          "total_oil_ml_per_100g": 1.2,
+          "myrcene": { "unit": "%", "value": 50.0 },
+          "humulene": { "unit": "%", "value": 12.0 },
+          "caryophyllene": { "unit": "%", "value": 5.0 },
+          "farnesene": { "unit": "%", "value": 6.0 },
+          "geraniol": { "unit": "%", "value": 0.4 },
+          "linalool": { "unit": "%", "value": 0.5 },
+          "b_pinene": { "unit": "%", "value": 0.6 },
+          "a_pinene": { "unit": "%", "value": 0.1 },
+          "limonene": { "unit": "%", "value": 0.3 },
+          "nerol": { "unit": "%", "value": 0.1 }
+        },
+        "polyphenols": { "unit": "%", "value": 4.0 },
+        "xanthohumol": { "unit": "%", "value": 0.3 },
+        "notes": "Floral, grapefruit."
+      },
+      {
+        "name": "Centennial",
+        "local_id": "hop_centennial",
+        "folder_path": "/Hops/US",
+        "origin": "US",
+        "form": "leaf",
+        "alpha_acid": { "unit": "%", "value": 10.0 },
+        "hop_type": "aroma/flavor"
+      }
+    ],
+
+    "fermentables": [
+      {
+        "name": "Pale Ale Malt",
+        "local_id": "ferm_pale_ale_malt",
+        "folder_path": "/Grains/Base",
+        "fermentable_type": "grain",
+        "grain_group": "base",
+        "origin": "UK",
+        "producer": "Crisp",
+        "product_id": "Maris Otter",
+        "yield_fine_grind": { "unit": "%", "value": 81.0 },
+        "yield_coarse_grind": { "unit": "%", "value": 79.5 },
+        "yield_fine_coarse_difference": { "unit": "%", "value": 1.5 },
+        "yield_potential": { "unit": "sg", "value": 1.037 },
+        "color": { "unit": "EBC", "value": 6.0 },
+        "moisture": { "unit": "%", "value": 3.5 },
+        "diastatic_power": { "unit": "WK", "value": 180 },
+        "protein": { "unit": "%", "value": 9.5 },
+        "kolbach_index": { "unit": "%", "value": 40.0 },
+        "max_in_batch": { "unit": "%", "value": 100.0 },
+        "recommend_mash": true,
+        "friability": { "unit": "%", "value": 88.0 },
+        "di_pH": { "unit": "pH", "value": 5.75 },
+        "viscosity": { "unit": "mPa-s", "value": 1.5 },
+        "fan": { "unit": "mg/l", "value": 150 },
+        "beta_glucan": { "unit": "mg/l", "value": 100 },
+        "fermentability": { "unit": "%", "value": 82.0 },
+        "notes": "Classic English base malt."
+      },
+      {
+        "name": "Munich Malt",
+        "local_id": "ferm_munich",
+        "folder_path": "/Grains/Base",
+        "fermentable_type": "grain",
+        "grain_group": "base",
+        "color": { "unit": "Lovi", "value": 9.0 },
+        "yield_potential": { "unit": "sg", "value": 1.035 },
+        "diastatic_power": { "unit": "Lintner", "value": 40 }
+      },
+      {
+        "name": "Crystal 40",
+        "local_id": "ferm_crystal_40",
+        "folder_path": "/Grains/Caramel",
+        "fermentable_type": "grain",
+        "grain_group": "caramel",
+        "color": { "unit": "Lovi", "value": 40.0 },
+        "yield_potential": { "unit": "sg", "value": 1.034 },
+        "recommend_mash": false
+      }
+    ],
+
+    "miscs": [
+      {
+        "name": "Gypsum",
+        "local_id": "misc_gypsum",
+        "folder_path": "/Water Agents",
+        "misc_type": "water agent",
+        "water_agent_type": "calcium sulfate dihydrate",
+        "use_for": "Raises calcium and sulfate; accentuates hop bitterness."
+      },
+      {
+        "name": "Whirlfloc",
+        "local_id": "misc_whirlfloc",
+        "misc_type": "fining",
+        "producer": "Kerry",
+        "use_for": "Kettle fining to help protein coagulation."
+      }
+    ],
+
+    "cultures": [
+      {
+        "name": "SafAle US-05",
+        "local_id": "culture_us05",
+        "folder_path": "/Yeast/Ale",
+        "culture_type": "ale",
+        "form": "dry",
+        "producer": "Fermentis",
+        "product_id": "US-05",
+        "temperature_range": {
+          "minimum": { "unit": "C", "value": 15.0 },
+          "maximum": { "unit": "C", "value": 22.0 }
+        },
+        "alcohol_tolerance": { "unit": "%", "value": 11.0 },
+        "flocculation": "medium",
+        "attenuation_range": {
+          "minimum": { "unit": "%", "value": 78.0 },
+          "maximum": { "unit": "%", "value": 82.0 }
+        },
+        "best_for": "American ales",
+        "max_reuse": 5,
+        "pof": false,
+        "glucoamylase": false,
+        "killer": {
+          "producing_K1_toxin": false,
+          "producing_K2_toxin": false,
+          "producing_K28_toxin": false,
+          "producing_Klus_toxin": false,
+          "neutral": true
+        }
+      }
+    ],
+
+    "waters": [
+      {
+        "name": "Local Tap Water",
+        "local_id": "water_tap",
+        "folder_path": "/Water/Sources",
+        "pH": { "unit": "pH", "value": 7.6 },
+        "calcium": { "unit": "ppm", "value": 75 },
+        "magnesium": { "unit": "ppm", "value": 8 },
+        "sodium": { "unit": "ppm", "value": 12 },
+        "sulfate": { "unit": "ppm", "value": 40 },
+        "chloride": { "unit": "ppm", "value": 25 },
+        "bicarbonate": { "unit": "ppm", "value": 180 },
+        "carbonate": { "unit": "ppm", "value": 0 },
+        "potassium": { "unit": "ppm", "value": 2 },
+        "nitrate": { "unit": "mg/l", "value": 10 },
+        "iron": { "unit": "ppb", "value": 20 },
+        "notes": "From the annual water quality report."
+      },
+      {
+        "name": "Pale Ale Target",
+        "local_id": "water_pale_ale_target",
+        "folder_path": "/Water/Targets",
+        "calcium": { "unit": "ppm", "value": 110 },
+        "magnesium": { "unit": "ppm", "value": 8 },
+        "sodium": { "unit": "ppm", "value": 10 },
+        "sulfate": { "unit": "ppm", "value": 200 },
+        "chloride": { "unit": "ppm", "value": 50 },
+        "bicarbonate": { "unit": "ppm", "value": 40 }
+      }
+    ],
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Processes
+    //------------------------------------------------------------------------------------------------------------------
+    "mashes": [
+      {
+        "name": "Single Infusion, Medium Body, Batch Sparge",
+        "local_id": "mash_single_infusion",
+        "folder_path": "/Mash Profiles",
+        "grain_temperature": { "unit": "C", "value": 18.0 },
+        "notes": "Strike water calculated for a cooler mash tun.",
+        "mash_steps": [
+          {
+            "name": "Saccharification",
+            "step_description": "Add strike water and stir well to break up dough balls.",
+            "step_type": "infusion",
+            "amount": { "unit": "l", "value": 14.5 },
+            "water_grain_ratio": { "unit": "l/kg", "value": 3.0 },
+            "infuse_temperature": { "unit": "C", "value": 73.5 },
+            "start_temperature": { "unit": "C", "value": 66.0 },
+            "end_temperature": { "unit": "C", "value": 65.0 },
+            "start_pH": { "unit": "pH", "value": 5.4 },
+            "end_pH": { "unit": "pH", "value": 5.3 },
+            "step_time": { "unit": "min", "value": 60 },
+            "ramp_time": { "unit": "min", "value": 2 }
+          },
+          {
+            "name": "Mash Out",
+            "step_type": "infusion",
+            "amount": { "unit": "l", "value": 6.0 },
+            "infuse_temperature": { "unit": "C", "value": 95.0 },
+            "start_temperature": { "unit": "C", "value": 76.0 },
+            "step_time": { "unit": "min", "value": 10 }
+          },
+          {
+            "name": "Batch Sparge",
+            "step_type": "sparge",
+            "amount": { "unit": "l", "value": 12.0 },
+            "start_temperature": { "unit": "C", "value": 76.0 },
+            "step_time": { "unit": "min", "value": 15 }
+          }
+        ]
+      }
+    ],
+
+    "boils": [
+      {
+        "name": "60 Minute Boil with Whirlpool",
+        "local_id": "boil_60_whirlpool",
+        "folder_path": "/Boil Profiles",
+        "boil_description": "Standard boil, hop stand at 80°C, then immersion chill.",
+        "pre_boil_size": { "unit": "l", "value": 28.0 },
+        "boil_steps": [
+          {
+            "name": "Heat to Boil",
+            "start_temperature": { "unit": "C", "value": 70.0 },
+            "end_temperature": { "unit": "C", "value": 100.0 },
+            "ramp_time": { "unit": "min", "value": 20 }
+          },
+          {
+            "name": "Boil",
+            "step_time": { "unit": "min", "value": 60 },
+            "start_temperature": { "unit": "C", "value": 100.0 },
+            "end_temperature": { "unit": "C", "value": 100.0 },
+            "start_gravity": { "unit": "sg", "value": 1.044 },
+            "end_gravity": { "unit": "sg", "value": 1.052 }
+          },
+          {
+            "name": "Whirlpool",
+            "step_description": "Cool to 80°C before adding whirlpool hops.",
+            "step_time": { "unit": "min", "value": 20 },
+            "start_temperature": { "unit": "C", "value": 80.0 },
+            "end_temperature": { "unit": "C", "value": 76.0 }
+          },
+          {
+            "name": "Chill",
+            "step_time": { "unit": "min", "value": 15 },
+            "start_temperature": { "unit": "C", "value": 76.0 },
+            "end_temperature": { "unit": "C", "value": 18.0 },
+            "chilling_type": "batch"
+          }
+        ]
+      }
+    ],
+
+    "fermentations": [
+      {
+        "name": "Ale, Two Stage with Dry Hop",
+        "local_id": "ferm_ale_two_stage",
+        "folder_path": "/Fermentation Profiles",
+        "fermentation_description": "Primary at 18°C, free rise to finish, then condition.",
+        "fermentation_steps": [
+          {
+            "name": "Primary",
+            "step_time": { "unit": "day", "value": 7 },
+            "start_temperature": { "unit": "C", "value": 18.0 },
+            "end_temperature": { "unit": "C", "value": 20.0 },
+            "start_gravity": { "unit": "sg", "value": 1.052 },
+            "end_gravity": { "unit": "sg", "value": 1.012 },
+            "start_pH": { "unit": "pH", "value": 5.2 },
+            "end_pH": { "unit": "pH", "value": 4.3 },
+            "free_rise": true,
+            "vessel": "Plastic bucket"
+          },
+          {
+            "name": "Conditioning",
+            "step_time": { "unit": "week", "value": 1 },
+            "start_temperature": { "unit": "C", "value": 18.0 },
+            "free_rise": false,
+            "vessel": "Plastic bucket"
+          }
+        ]
+      }
+    ],
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Other objects
+    //------------------------------------------------------------------------------------------------------------------
+    "styles": [
+      {
+        "name": "American Pale Ale",
+        "local_id": "style_bjcp2021_18b",
+        "folder_path": "/Styles/BJCP 2021",
+        "category": "Pale American Beer",
+        "category_number": "18",
+        "style_letter": "B",
+        "style_guide": "BJCP 2021",
+        "style_type": "beer",
+        "original_gravity": {
+          "minimum": { "unit": "sg", "value": 1.045 },
+          "maximum": { "unit": "sg", "value": 1.060 }
+        },
+        "final_gravity": {
+          "minimum": { "unit": "sg", "value": 1.010 },
+          "maximum": { "unit": "sg", "value": 1.015 }
+        },
+        "ibu": {
+          "minimum": { "unit": "IBUs", "value": 30 },
+          "maximum": { "unit": "IBUs", "value": 50 }
+        },
+        "color": {
+          "minimum": { "unit": "SRM", "value": 5 },
+          "maximum": { "unit": "SRM", "value": 10 }
+        },
+        "carbonation": {
+          "minimum": { "unit": "vols", "value": 2.3 },
+          "maximum": { "unit": "vols", "value": 2.8 }
+        },
+        "alcohol_by_volume": {
+          "minimum": { "unit": "%", "value": 4.5 },
+          "maximum": { "unit": "%", "value": 6.2 }
+        },
+        "notes": "Summary written for this example, not the official BJCP text.",
+        "aroma": "Moderate to strong American hop aroma; low to moderate clean malt.",
+        "appearance": "Pale gold to light amber, moderately clear.",
+        "flavor": "Moderate to high hop flavour and bitterness over a supportive malt backbone.",
+        "mouthfeel": "Medium-light to medium body, moderate to high carbonation.",
+        "overall_impression": "A refreshing, hop-forward American ale with enough malt to balance.",
+        "ingredients": "Pale malt, small amounts of crystal; American hops; clean American ale yeast.",
+        "examples": "Many craft brewery flagship pale ales."
+      }
+    ],
+
+    "equipments": [
+      {
+        "name": "25 L All-Grain Cooler System",
+        "local_id": "equip_cooler_25l",
+        "folder_path": "/Equipment",
+        "hlt": {
+          "vessel_type": "Electric urn",
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 1.0 }
+        },
+        "mash_tun": {
+          "vessel_type": "Insulated cooler",
+          "max_volume": { "unit": "l", "value": 40 },
+          "loss": { "unit": "l", "value": 0.5 },
+          "weight": { "unit": "kg", "value": 4.0 },
+          "specific_heat_capacity": { "unit": "c/g·C", "value": 0.3 },
+          "grain_absorption_rate": { "unit": "l/kg", "value": 1.0 },
+          "notes": "Mash tun doubles as lauter tun."
+        },
+        "lauter_tun": {
+          "max_volume": { "unit": "l", "value": 40 },
+          "loss": { "unit": "l", "value": 0.5 }
+        },
+        "kettle": {
+          "vessel_type": "Stainless steel pot",
+          "max_volume": { "unit": "l", "value": 36 },
+          "loss": { "unit": "l", "value": 2.0 },
+          "weight": { "unit": "kg", "value": 6.5 },
+          "specific_heat_capacity": { "unit": "J/kg·K", "value": 500 },
+          "boil_rate_per_hour": { "unit": "l", "value": 4.0 },
+          "drain_rate_per_minute": { "unit": "l", "value": 1.5 },
+          "internal_diameter": { "unit": "cm", "value": 36 },
+          "opening_diameter": { "unit": "cm", "value": 36 }
+        },
+        "fermentation_vessel": {
+          "vessel_type": "Plastic bucket",
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 1.0 }
+        },
+        "aging_vessel": {
+          "max_volume": { "unit": "l", "value": 23 },
+          "loss": { "unit": "l", "value": 0.0 }
+        },
+        "packaging_vessel": {
+          "vessel_type": "Corny keg",
+          "max_volume": { "unit": "gal", "value": 5 },
+          "loss": { "unit": "l", "value": 0.3 },
+          "notes": "Mixed units are deliberate here."
+        }
+      }
+    ],
+
+    "recipes": [
+      {
+        "name": "Cascade Pale Ale",
+        "folder_path": "/Recipes/Pale Ales",
+        "recipe_type": "all grain",
+        "author": "A. Brewer",
+        "coauthor": "B. Brewer",
+        "created": "2026-09-20T14:30:00+02:00",
+        "batch_size": { "unit": "l", "value": 21.0 },
+        "efficiency": {
+          "brewhouse": { "unit": "%", "value": 72.0 }
+        },
+        "style_id": "style_bjcp2021_18b",
+        "equipment_id": "equip_cooler_25l",
+        "water_base_id": "water_tap",
+        "water_target_id": "water_pale_ale_target",
+        "ro_water_mash": { "unit": "%", "value": 50.0 },
+        "ro_water_sparge": { "unit": "%", "value": 50.0 },
+        "mash_id": "mash_single_infusion",
+        "boil_id": "boil_60_whirlpool",
+        "fermentation_id": "ferm_ale_two_stage",
+        "ingredients": {
+          "fermentable_additions": [
+            {
+              "fermentable_id": "ferm_pale_ale_malt",
+              "schedule": { "stage": "add_to_mash", "step": 1 },
+              "amount": { "unit": "kg", "value": 4.2 }
+            },
+            {
+              "fermentable_id": "ferm_munich",
+              "schedule": { "stage": "add_to_mash", "step": 1 },
+              "amount": { "unit": "kg", "value": 0.4 }
+            },
+            {
+              "fermentable_id": "ferm_crystal_40",
+              "schedule": { "stage": "add_to_mash", "step": 1 },
+              "amount": { "unit": "g", "value": 300 }
+            }
+          ],
+          "hop_additions": [
+            {
+              // Bittering: 60 minutes before the end of the boil step
+              "hop_id": "hop_magnum",
+              "schedule": {
+                "stage": "add_to_boil",
+                "step": 2,
+                "time": { "unit": "min", "value": 60 },
+                "duration": { "unit": "min", "value": 60 }
+              },
+              "amount": { "unit": "g", "value": 15 }
+            },
+            {
+              "hop_id": "hop_cascade",
+              "schedule": {
+                "stage": "add_to_boil",
+                "step": 2,
+                "time": { "unit": "min", "value": 10 },
+                "duration": { "unit": "min", "value": 10 }
+              },
+              "amount": { "unit": "g", "value": 25 }
+            },
+            {
+              // Whirlpool / hop stand
+              "hop_id": "hop_cascade",
+              "schedule": {
+                "stage": "add_to_boil",
+                "step": 3,
+                "time": { "unit": "min", "value": 20 },
+                "duration": { "unit": "min", "value": 20 }
+              },
+              "amount": { "unit": "g", "value": 30 }
+            },
+            {
+              // Dry hop: 4 days into primary, removed after 3 days
+              "hop_id": "hop_centennial",
+              "schedule": {
+                "stage": "add_to_fermentation",
+                "step": 1,
+                "time": { "unit": "day", "value": 4 },
+                "duration": { "unit": "day", "value": 3 }
+              },
+              "amount": { "unit": "oz", "value": 1.5 }
+            },
+            {
+              // Keg hop, to exercise add_to_package (which has no steps)
+              "hop_id": "hop_cascade",
+              "schedule": { "stage": "add_to_package" },
+              "amount": { "unit": "g", "value": 10 }
+            }
+          ],
+          "misc_additions": [
+            {
+              "misc_id": "misc_gypsum",
+              "schedule": { "stage": "add_to_mash", "step": 1 },
+              "amount": { "unit": "g", "value": 4.0 }
+            },
+            {
+              "misc_id": "misc_whirlfloc",
+              "schedule": {
+                "stage": "add_to_boil",
+                "step": 2,
+                "time": { "unit": "min", "value": 15 }
+              },
+              "amount": { "unit": "count", "value": 1 }
+            }
+          ],
+          "culture_additions": [
+            {
+              "culture_id": "culture_us05",
+              "attenuation": { "unit": "%", "value": 78.0 },
+              "times_cultured": 0,
+              "cell_count_billions": 66,
+              "schedule": { "stage": "add_to_fermentation", "step": 1 },
+              "amount": { "unit": "g", "value": 11.5 }
+            }
+          ]
+        },
+        "notes": "Brewed as a test of the new cooler mash tun.",
+        "original_gravity": { "unit": "sg", "value": 1.052 },
+        "final_gravity": { "unit": "sg", "value": 1.011 },
+        "alcohol_by_volume": { "unit": "%", "value": 5.4 },
+        "ibu_estimate": { "unit": "IBUs", "value": 38 },
+        "ibu_estimate_formula": "Tinseth",
+        "color_estimate": { "unit": "SRM", "value": 8.5 },
+        "beer_pH": { "unit": "pH", "value": 4.3 },
+        "carbonation": { "unit": "vols", "value": 2.5 },
+        "apparent_attenuation": { "unit": "%", "value": 78.8 },
+        "taste": {
+          "notes": "Bright citrus aroma, firm but clean bitterness.  Could use slightly more body.",
+          // Deliberately non-integer: average of two judges' scores
+          "rating": 36.5
+        },
+        "energy_content": { "unit": "kcal/100ml", "value": 45 },
+        "instructions": [
+          {
+            "name": "Step 1: Heat strike water",
+            "directions": "Heat 14.5 L of water to 73.5°C and add 4 g gypsum to the mash."
+          },
+          {
+            "name": "Step 2: Mash",
+            "directions": "Add grains and hold at 66°C.",
+            "duration": { "unit": "min", "value": 60 }
+          },
+          {
+            "name": "Step 3: Boil",
+            "directions": "Bring to the boil and follow the hop schedule.",
+            "duration": { "unit": "hr", "value": 1 }
+          }
+        ],
+        "brew_logs": [
+          {
+            "batch_number": "2026-014",
+            "brew_date": "2026-09-27",
+            "ferment_date": "2026-10-08",
+            "notes": "Strike temperature undershot slightly; recovered with a kettle of boiling water.",
+            "expected_pre_boil_gravity": { "unit": "sg", "value": 1.044 },
+            "measured_pre_boil_gravity": { "unit": "sg", "value": 1.043 },
+            "expected_pre_boil_volume": { "unit": "l", "value": 28.0 },
+            "measured_pre_boil_volume": { "unit": "l", "value": 28.5 },
+            "expected_strike_temperature": { "unit": "C", "value": 73.5 },
+            "measured_strike_temperature": { "unit": "C", "value": 72.0 },
+            "expected_mash_final_temperature": { "unit": "C", "value": 65.0 },
+            "measured_mash_final_temperature": { "unit": "C", "value": 64.5 },
+            "expected_original_gravity": { "unit": "sg", "value": 1.052 },
+            "measured_original_gravity": { "unit": "sg", "value": 1.051 },
+            "measured_post_boil_volume": { "unit": "l", "value": 24.0 },
+            "expected_volume_into_fv": { "unit": "l", "value": 21.0 },
+            "measured_volume_into_fv": { "unit": "l", "value": 21.5 },
+            "measured_pitch_temperature": { "unit": "C", "value": 18.5 },
+            "expected_final_gravity": { "unit": "sg", "value": 1.011 },
+            "measured_final_gravity": { "unit": "sg", "value": 1.010 },
+            "measured_final_volume": { "unit": "l", "value": 20.5 },
+            "expected_alcohol_by_volume": { "unit": "%", "value": 5.4 },
+            "computed_alcohol_by_volume": { "unit": "%", "value": 5.4 },
+            "expected_attenuation": { "unit": "%", "value": 78.8 },
+            "computed_attenuation": { "unit": "%", "value": 80.4 },
+            "expected_efficiency": { "unit": "%", "value": 72.0 },
+            "computed_efficiency": { "unit": "%", "value": 71.2 },
+            "computed_pre_boil_efficiency": { "unit": "%", "value": 79.0 },
+            "expected_boil_off": { "unit": "l", "value": 4.0 }
+          }
+        ]
+      }
+    ]
+  }
+}

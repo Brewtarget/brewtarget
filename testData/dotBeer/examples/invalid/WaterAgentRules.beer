@@ -1,0 +1,37 @@
+//======================================================================================================================
+// examples/invalid/WaterAgentRules.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: /DotBeer/miscs/0: 'water_agent_type' is a required property
+// EXPECT-INVALID: /DotBeer/miscs/1/misc_type: 'water agent' was expected
+// EXPECT-INVALID: /DotBeer/miscs/2/water_agent_type: 'calcium sulfate' is not one of
+//
+// Breaks each of the water-agent rules in Misc.beer.schema:
+//  0. misc_type "water agent" without a water_agent_type
+//  1. water_agent_type on something that is not a water agent
+//  2. water_agent_percent_acid on a salt
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00Z",
+    "miscs": [
+      { "name": "Mystery Salt", "local_id": "m0", "misc_type": "water agent" },
+      { "name": "Irish Moss", "local_id": "m1", "misc_type": "fining", "water_agent_type": "other" },
+      {
+        "name": "Acidic Gypsum?",
+        "local_id": "m2",
+        "misc_type": "water agent",
+        "water_agent_type": "calcium sulfate",
+        "water_agent_percent_acid": { "unit": "%", "value": 50 }
+      }
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+//======================================================================================================================
+// examples/invalid/BrewLogFieldErrors.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: 'expected_boil_off' is a required property
+// EXPECT-INVALID: 'measured_og' was unexpected
+//
+// A brew log that is missing a required field and uses a field name that is not in the schema.  This is the kind of
+// regression that the complete brew log in examples/recipes/AmericanPaleAle.beer is there to catch.
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00Z",
+    "fermentables": [
+      { "name": "Pale Malt", "local_id": "ferm_pale", "fermentable_type": "grain", "color": { "unit": "EBC", "value": 5 }, "yield_fine_grind": { "unit": "%", "value": 80.0 } }
+    ],
+    "recipes": [
+      {
+        "name": "Bad Brew Log",
+        "recipe_type": "all grain",
+        "author": "A. Brewer",
+        "batch_size": { "unit": "l", "value": 20 },
+        "efficiency": { "brewhouse": { "unit": "%", "value": 70 } },
+        "ingredients": {
+          "fermentable_additions": [
+            { "fermentable_id": "ferm_pale", "schedule": { "stage": "add_to_mash" }, "amount": { "unit": "kg", "value": 4 } }
+          ]
+        },
+        "brew_logs": [
+          {
+            "batch_number": "X-1",
+            "brew_date": "2026-09-01",
+            "expected_pre_boil_gravity": { "unit": "sg", "value": 1.040 },
+            "expected_mash_final_temperature": { "unit": "C", "value": 66.0 },
+            "expected_original_gravity": { "unit": "sg", "value": 1.048 },
+            "measured_og": { "unit": "sg", "value": 1.047 },
+            "expected_volume_into_fv": { "unit": "l", "value": 20.0 },
+            "expected_final_gravity": { "unit": "sg", "value": 1.010 },
+            "expected_alcohol_by_volume": { "unit": "%", "value": 5.0 },
+            "expected_attenuation": { "unit": "%", "value": 79.0 },
+            "expected_efficiency": { "unit": "%", "value": 70.0 }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,241 @@
+//======================================================================================================================
+// examples/recipes/DrySaisonSubUnityFG.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+//
+// A very dry saison (STA1+ yeast, plus table sugar) that finishes BELOW 1.000 SG.  This guards against anyone
+// "tightening" the Gravity minimum to 1.000, which would reject real-world data.  Also:
+//  • US customary units throughout (gal, lb, oz, °F, qt/lb)
+//  • A gravity in degrees Plato that is negative (−0.5 °P ≈ 0.998 SG), exercising the non-SG branch of Gravity
+//  • A sugar (non-grain) fermentable added to the boil
+//  • A boil with a single step (the simplest valid boil)
+//  • A culture with glucoamylase and phenolic off-flavour (POF+) flags set
+//
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T04:00:00-04:00",
+
+    "hops": [
+      {
+        "name": "Saaz",
+        "local_id": "hop_saaz",
+        "origin": "Czech Republic",
+        "form": "pellet",
+        "alpha_acid": { "unit": "%", "value": 3.5 },
+        "hop_type": "aroma"
+      }
+    ],
+
+    "fermentables": [
+      {
+        "name": "Pilsner Malt",
+        "local_id": "ferm_pils",
+        "fermentable_type": "grain",
+        "grain_group": "base",
+        "color": { "unit": "Lovi", "value": 1.6 },
+        "yield_potential": { "unit": "sg", "value": 1.037 }
+      },
+      {
+        "name": "White Wheat Malt",
+        "local_id": "ferm_wheat",
+        "fermentable_type": "grain",
+        "grain_group": "base",
+        "color": { "unit": "Lovi", "value": 2.4 },
+        "yield_potential": { "unit": "sg", "value": 1.039 }
+      },
+      {
+        "name": "Table Sugar (Sucrose)",
+        "local_id": "ferm_sucrose",
+        "fermentable_type": "sugar",
+        "color": { "unit": "SRM", "value": 0.0 },
+        "yield_potential": { "unit": "sg", "value": 1.046 },
+        "recommend_mash": false
+      }
+    ],
+
+    "cultures": [
+      {
+        "name": "LalBrew Belle Saison",
+        "local_id": "culture_belle_saison",
+        "culture_type": "ale",
+        "form": "dry",
+        "producer": "Lallemand",
+        "temperature_range": {
+          "minimum": { "unit": "F", "value": 63.0 },
+          "maximum": { "unit": "F", "value": 95.0 }
+        },
+        "attenuation_range": {
+          "minimum": { "unit": "%", "value": 86.0 },
+          "maximum": { "unit": "%", "value": 94.0 }
+        },
+        "pof": true,
+        "glucoamylase": true,
+        "notes": "STA1+ (diastaticus): keep well away from other batches."
+      }
+    ],
+
+    "mashes": [
+      {
+        "name": "Low and Long",
+        "local_id": "mash_low_long",
+        "grain_temperature": { "unit": "F", "value": 68.0 },
+        "mash_steps": [
+          {
+            "name": "Saccharification",
+            "step_type": "infusion",
+            "water_grain_ratio": { "unit": "qt/lb", "value": 1.5 },
+            "infuse_temperature": { "unit": "F", "value": 160.0 },
+            "start_temperature": { "unit": "F", "value": 148.0 },
+            "step_time": { "unit": "min", "value": 90 }
+          }
+        ]
+      }
+    ],
+
+    "boils": [
+      {
+        "name": "Default Boil",
+        "local_id": "boil_default",
+        "pre_boil_size": { "unit": "gal", "value": 6.5 },
+        "boil_steps": [
+          {
+            "name": "Boil",
+            "step_time": { "unit": "min", "value": 60 },
+            "start_temperature": { "unit": "F", "value": 212.0 },
+            "end_temperature": { "unit": "F", "value": 212.0 },
+            "start_gravity": { "unit": "sg", "value": 1.048 },
+            "end_gravity": { "unit": "sg", "value": 1.056 }
+          }
+        ]
+      }
+    ],
+
+    "fermentations": [
+      {
+        "name": "Saison Free Rise",
+        "local_id": "ferm_saison",
+        "fermentation_steps": [
+          {
+            "name": "Primary",
+            "step_time": { "unit": "week", "value": 3 },
+            "start_temperature": { "unit": "F", "value": 68.0 },
+            "end_temperature": { "unit": "F", "value": 86.0 },
+            "start_gravity": { "unit": "sg", "value": 1.056 },
+            "end_gravity": { "unit": "sg", "value": 0.998 },
+            "free_rise": true
+          }
+        ]
+      }
+    ],
+
+    "styles": [
+      {
+        "name": "Saison",
+        "local_id": "style_bjcp2021_25b",
+        "category": "Strong Belgian Ale",
+        "category_number": "25",
+        "style_letter": "B",
+        "style_guide": "BJCP 2021",
+        "style_type": "beer",
+        "final_gravity": {
+          "minimum": { "unit": "sg", "value": 1.002 },
+          "maximum": { "unit": "sg", "value": 1.008 }
+        }
+      }
+    ],
+
+    "recipes": [
+      {
+        "name": "Bone Dry Saison",
+        "recipe_type": "all grain",
+        "author": "A. Brewer",
+        "batch_size": { "unit": "gal", "value": 5.5 },
+        "efficiency": {
+          "brewhouse": { "unit": "%", "value": 75.0 }
+        },
+        "style_id": "style_bjcp2021_25b",
+        "mash_id": "mash_low_long",
+        "boil_id": "boil_default",
+        "fermentation_id": "ferm_saison",
+        "ingredients": {
+          "fermentable_additions": [
+            {
+              "fermentable_id": "ferm_pils",
+              "schedule": { "stage": "add_to_mash" },
+              "amount": { "unit": "lb", "value": 9.0 }
+            },
+            {
+              "fermentable_id": "ferm_wheat",
+              "schedule": { "stage": "add_to_mash" },
+              "amount": { "unit": "lb", "value": 1.0 }
+            },
+            {
+              // The boil has only one step, so this is the same as giving no step
+              "fermentable_id": "ferm_sucrose",
+              "schedule": {
+                "stage": "add_to_boil",
+                "step": 1,
+                "time": { "unit": "min", "value": 10 }
+              },
+              "amount": { "unit": "lb", "value": 1.0 }
+            }
+          ],
+          "hop_additions": [
+            {
+              "hop_id": "hop_saaz",
+              "schedule": {
+                "stage": "add_to_boil",
+                "time": { "unit": "min", "value": 60 }
+              },
+              "amount": { "unit": "oz", "value": 2.0 }
+            }
+          ],
+          "culture_additions": [
+            {
+              "culture_id": "culture_belle_saison",
+              "attenuation": { "unit": "%", "value": 103.6 },
+              "schedule": { "stage": "add_to_fermentation" },
+              "amount": { "unit": "g", "value": 11 }
+            }
+          ]
+        },
+        "original_gravity": { "unit": "sg", "value": 1.056 },
+        // The point of this example
+        "final_gravity": { "unit": "sg", "value": 0.998 },
+        "alcohol_by_volume": { "unit": "%", "value": 7.6 },
+        // Apparent attenuation of more than 100%: (1.056 - 0.998) / (1.056 - 1.000) = 103.6%
+        "apparent_attenuation": { "unit": "%", "value": 103.6 },
+        "brew_logs": [
+          {
+            "batch_number": "S-3",
+            "brew_date": "2026-06-21",
+            "ferment_date": "2026-07-19",
+            "expected_pre_boil_gravity": { "unit": "sg", "value": 1.048 },
+            "expected_mash_final_temperature": { "unit": "F", "value": 146.0 },
+            "expected_original_gravity": { "unit": "plato", "value": 13.8 },
+            "measured_original_gravity": { "unit": "plato", "value": 13.9 },
+            "expected_volume_into_fv": { "unit": "gal", "value": 5.5 },
+            "expected_final_gravity": { "unit": "sg", "value": 0.998 },
+            // Negative degrees Plato
+            "measured_final_gravity": { "unit": "plato", "value": -0.5 },
+            "expected_alcohol_by_volume": { "unit": "%", "value": 7.6 },
+            "expected_attenuation": { "unit": "%", "value": 103.6 },
+            // From the measured gravities (13.9 °P ≈ 1.0564 SG and −0.5 °P ≈ 0.9981 SG)
+            "computed_attenuation": { "unit": "%", "value": 103.4 },
+            "expected_efficiency": { "unit": "%", "value": 75.0 },
+            "expected_boil_off": { "unit": "gal", "value": 1.0 }
+          }
+        ]
+      }
+    ]
+  }
+}

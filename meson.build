@@ -1635,6 +1635,8 @@ exportedVariables = {
    # This is used by the Doxygen configuration file (see docs/Doxyfile.meson.in)
    'CONFIG_BUILD_DIR' : meson.project_build_root(),
 
+   # This is used by some of the unit tests for test data
+   'CONFIG_TEST_DATA_DIR' : join_paths(meson.current_source_dir(), 'testData')
 }
 
 # We need to set TargetDir in config.xml for the Qt IFW installer
@@ -1937,6 +1939,8 @@ test('Test number display and parsing'     , testRunner, args : ['testNumberDisp
 test('Test algorithms'                     , testRunner, args : ['testAlgorithms'             ])
 test('Test type lookups'                   , testRunner, args : ['testTypeLookups'            ])
 test('Test inventory'                      , testRunner, args : ['testInventory'              ])
+test('Test boil addition timing'           , testRunner, args : ['testBoilAdditionTiming'     ])
+test('Test dotBeer examples'                , testRunner, args : ['testDotBeerExamples'        ])
 test('Test MultiVector'                    , testRunner, args : ['testMultiVector'            ])
 # Need a bit longer than the default 30 second timeout for the log rotation test on some platforms
 test('Test log rotation'                   , testRunner, args : ['testLogRotation'            ], timeout : 60)
