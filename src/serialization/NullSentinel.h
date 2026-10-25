@@ -63,7 +63,12 @@ namespace Serialization {
          if (Optional::isNotNull<T>(value)) {
             return false;
          }
-         value = this->m_value;
+         //
+         // NB: Callers (eg JsonRecord::insertValue) treat the value as std::optional<T> after this call (because the
+         // property is optional), and QVariant cannot convert a plain T to std::optional<T>, so we must keep the
+         // wrapper.  Otherwise the substituted value is silently dropped (and Q_ASSERT fires in debug builds).
+         //
+         value = QVariant::fromValue(std::optional<T>{this->m_value.value<T>()});
          return true;
       }
    };

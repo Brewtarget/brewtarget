@@ -73,6 +73,8 @@
 #include "model/Yeast.h"
 #include "model/Misc.h"
 #include "model/Fermentation.h"
+#include "serialization/NullSentinel.h"
+#include "serialization/json/beerJson/BeerJson.h"
 #include "serialization/json/dotBeer/DotBeer.h"
 #include "serialization/xml/BeerXml.h"
 #include "PersistentSettings.h"
@@ -1393,6 +1395,64 @@ void Testing::testDotBeerExamples() {
                "Wrong effective yield after BeerXML round trip");
    }
 
+   return;
+}
+
+void Testing::testBeerJsonRoundTrip() {
+   //
+   // Check that a null sentinel substituted on write survives the "remove optional wrapper" step that JsonRecord does
+   // straight afterwards.  (QVariant cannot convert plain double to std::optional<double>, so, if the sentinel were
+   // substituted without the wrapper, the value would be silently dropped.)
+   //
+   {
+      Serialization::NullSentinel const sentinel{0.0};
+      QVariant unsetValue = QVariant::fromValue(std::optional<double>{});
+      QVERIFY(sentinel.replaceNullWithSentinel<double>(unsetValue));
+      QVERIFY(Optional::removeOptionalWrapperIfPresent<double>(unsetValue, true));
+      QCOMPARE(unsetValue.toDouble(), 0.0);
+      QVariant setValue = QVariant::fromValue(std::optional<double>{42.0});
+      QVERIFY(!sentinel.replaceNullWithSentinel<double>(setValue));
+      QVERIFY(Optional::removeOptionalWrapperIfPresent<double>(setValue, true));
+      QCOMPARE(setValue.toDouble(), 42.0);
+   }
+
+   QString exportFilePath = qEnvironmentVariable("BEERJSON_EXPORT_FILE");
+   if (exportFilePath.isEmpty()) {
+      exportFilePath = this->pimpl->m_tempDir.filePath("beerJsonRoundTrip.json");
+   }
+   {
+      QFile outFile{exportFilePath};
+      QVERIFY(outFile.open(QIODevice::WriteOnly | QIODevice::Truncate));
+      QString userMessage;
+      QTextStream userMessageAsStream{&userMessage};
+      auto constAll = []<class NE>() {
+         QList<NE const *> result;
+         for (NE * ne : ObjectStoreWrapper::getAllRaw<NE>()) {
+            result.append(ne);
+         }
+         return result;
+      };
+      BeerJson::Exporter exporter{outFile, userMessageAsStream};
+      exporter.add(constAll.template operator()<Fermentable >());
+      exporter.add(constAll.template operator()<Hop         >());
+      exporter.add(constAll.template operator()<Misc        >());
+      exporter.add(constAll.template operator()<Yeast       >());
+      exporter.add(constAll.template operator()<Style       >());
+      exporter.add(constAll.template operator()<Equipment   >());
+      exporter.add(constAll.template operator()<Water       >());
+      exporter.add(constAll.template operator()<Mash        >());
+      exporter.add(constAll.template operator()<Boil        >());
+      exporter.add(constAll.template operator()<Fermentation>());
+      exporter.add(constAll.template operator()<Recipe      >());
+      exporter.close();
+      outFile.close();
+   }
+   qInfo() << Q_FUNC_INFO << "Exported database to" << exportFilePath;
+   QString message;
+   QTextStream messageStream{&message};
+   bool const reimportOk = BeerJson::import("", exportFilePath, messageStream);
+   messageStream.flush();
+   QVERIFY2(reimportOk, qPrintable(QString{"Could not re-import exported file %1: %2"}.arg(exportFilePath).arg(message)));
    return;
 }
 

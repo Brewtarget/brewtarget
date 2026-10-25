@@ -82,6 +82,13 @@ private slots:
     */
    void testDotBeerExamples();
 
+   /**
+    * \brief Export the database to BeerJSON and check the result can be read back in (which includes validating it
+    *        against the BeerJSON schema).  (If this runs after \c testDotBeerExamples, the database will include the
+    *        dotBeer examples.)
+    */
+   void testBeerJsonRoundTrip();
+
    //! \brief Verify conversion between US Customary & Metric units etc
    void testUnitConversions();
 

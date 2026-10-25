@@ -1941,6 +1941,7 @@ test('Test type lookups'                   , testRunner, args : ['testTypeLookup
 test('Test inventory'                      , testRunner, args : ['testInventory'              ])
 test('Test boil addition timing'           , testRunner, args : ['testBoilAdditionTiming'     ])
 test('Test dotBeer examples'                , testRunner, args : ['testDotBeerExamples'        ])
+test('Test BeerJSON round trip'             , testRunner, args : ['testBeerJsonRoundTrip'      ])
 test('Test MultiVector'                    , testRunner, args : ['testMultiVector'            ])
 # Need a bit longer than the default 30 second timeout for the log rotation test on some platforms
 test('Test log rotation'                   , testRunner, args : ['testLogRotation'            ], timeout : 60)

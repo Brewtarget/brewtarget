@@ -1112,6 +1112,7 @@ add_test(NAME testTypeLookups             COMMAND ./${fileName_unitTestRunner} t
 add_test(NAME testInventory               COMMAND ./${fileName_unitTestRunner} testInventory              )
 add_test(NAME testBoilAdditionTiming      COMMAND ./${fileName_unitTestRunner} testBoilAdditionTiming     )
 add_test(NAME testDotBeerExamples         COMMAND ./${fileName_unitTestRunner} testDotBeerExamples        )
+add_test(NAME testBeerJsonRoundTrip       COMMAND ./${fileName_unitTestRunner} testBeerJsonRoundTrip      )
 add_test(NAME testMultiVector             COMMAND ./${fileName_unitTestRunner} testMultiVector            )
 add_test(NAME testLogRotation             COMMAND ./${fileName_unitTestRunner} testLogRotation            )
 
