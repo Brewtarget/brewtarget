@@ -56,6 +56,11 @@ XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(QString const
                                                                          containingEntity,
                                                                          userMessage,
                                                                          stats);
+   if (XmlRecord::ProcessingResult::Succeeded == result) {
+      // See comment in JsonRecord::normaliseAndStoreInDb.  (BeerXML doesn't have steps for additions, but our STEP
+      // extension tag does.)
+      recipe->correctAdditionSteps();
+   }
    if (XmlRecord::ProcessingResult::FoundDuplicate == result) {
       //
       // If the Recipe we read in turns out to be a duplicate, then (courtesy of
@@ -100,6 +105,13 @@ XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(QString const
       }
    }
 
+   //
+   // Previously we always returned Succeeded here, which meant that a failure to store one of the Recipe's child
+   // records was not reported.  We still treat finding a duplicate as success.
+   //
+   if (XmlRecord::ProcessingResult::Failed == result) {
+      return XmlRecord::ProcessingResult::Failed;
+   }
    return XmlRecord::ProcessingResult::Succeeded;
 }
 

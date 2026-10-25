@@ -846,6 +846,21 @@ public:
    BoilAdditionTiming boilAdditionTiming(RecipeAddition const & addition) const;
 
    /**
+    * \brief Checks that the step of each ingredient addition (\c RecipeAddition::step) actually exists in this Recipe's
+    *        Mash, Boil or Fermentation (as appropriate for the addition's stage).  Where it does not, we log a warning
+    *        and do our best to correct it: a step number after the last step is changed to the last step; a step
+    *        number less than 1 is changed to 1; and, if there is no Mash/Boil/Fermentation (or it has no steps), the
+    *        step is unset.  (Steps are not checked for \c RecipeAddition::Stage::Packaging, as we don't model
+    *        packaging steps.)
+    *
+    *        This is used when reading in Recipes from files (where we can't guarantee the steps make sense) and before
+    *        writing them out (as the user could have, eg, deleted a mash step after adding an ingredient to it).
+    *
+    * \return The number of additions that were corrected
+    */
+   int correctAdditionSteps();
+
+   /**
     * \brief Get names and amounts of fermentables added to the mash
     */
    QList<QString> getFermentableAdditionNameAndAmounts() const;

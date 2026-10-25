@@ -828,6 +828,14 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
             // If we do need it, we now store the value
             //
             if (!fieldDefinition.propertyPath.isNull()) {
+               // See comment in serialization/NullSentinel.h
+               if (Serialization::applyNullSentinelOnRead(fieldDefinition.nullSentinel,
+                                                          propertyIsOptional,
+                                                          parsedValue)) {
+                  qInfo() <<
+                     Q_FUNC_INFO << "Treating" << this->m_recordDefinition.m_namedEntityClassName << "node" <<
+                     fieldDefinition.xPath << "value" << parsedValue << "as \"not set\"";
+               }
                this->m_namedParameterBundle.insert(fieldDefinition.propertyPath, parsedValue);
             }
          }
@@ -903,6 +911,17 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
       // we can't cast the newly created object to OutlineableNamedEntity.
       auto createdFromOutline = static_pointer_cast<OutlineableNamedEntity>(this->m_namedEntity);
       createdFromOutline->setOutline(false);
+   }
+
+   //
+   // For a recipe, we can't rely on the steps of ingredient additions in a file making sense (eg a JSON schema can't
+   // check that an addition to mash step 3 is in a recipe whose mash has at least 3 steps).  So, now the Recipe and all
+   // its contents are stored, we correct any that don't.  (Recipe::correctAdditionSteps logs a warning for each one.)
+   //
+   // (Since suspendRecipeCalcs is only set above for recipes, we use it to check here whether we are reading a recipe.)
+   //
+   if (JsonRecord::ProcessingResult::Succeeded == processingResult && suspendRecipeCalcs) {
+      std::static_pointer_cast<Recipe>(this->m_namedEntity)->correctAdditionSteps();
    }
 
    //
@@ -1008,6 +1027,34 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
        fieldDefinition.type == JsonRecordDefinition::FieldType::LocalId) ?
          false : fieldDefinition.propertyPath.getTypeInfo(*this->m_recordDefinition.m_typeLookup).isOptional()
    };
+
+   //
+   // For fields that are required in the JSON but optional in our model, if the property is not set, we write the
+   // null sentinel instead.  (See comment in serialization/NullSentinel.h.)  The simplest way to do this is to
+   // substitute it here, so the code below writes it out in the normal way.
+   //
+   if (fieldDefinition.nullSentinel && propertyIsOptional) {
+      bool valueReplaced = false;
+      switch (fieldDefinition.type) {
+         case JsonRecordDefinition::FieldType::Int :
+            valueReplaced = fieldDefinition.nullSentinel->replaceNullWithSentinel<int>(value);
+            break;
+         case JsonRecordDefinition::FieldType::UInt:
+            valueReplaced = fieldDefinition.nullSentinel->replaceNullWithSentinel<unsigned int>(value);
+            break;
+         case JsonRecordDefinition::FieldType::Double:
+         case JsonRecordDefinition::FieldType::MeasurementWithUnits:
+         case JsonRecordDefinition::FieldType::SingleUnitValue:
+            valueReplaced = fieldDefinition.nullSentinel->replaceNullWithSentinel<double>(value);
+            break;
+         default:
+            // It's a coding error to have a nullSentinel for other field types -- see JsonRecordDefinition.cpp
+            break;
+      }
+      if (valueReplaced) {
+         qInfo() << Q_FUNC_INFO << "Writing" << value << "for unset" << std::string(key).c_str();
+      }
+   }
 
    switch(fieldDefinition.type) {
       case JsonRecordDefinition::FieldType::Bool:

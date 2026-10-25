@@ -65,6 +65,8 @@
 #include "model/Recipe.h"
 #include "model/RecipeAdditionFermentable.h"
 #include "model/RecipeAdditionHop.h"
+#include "model/RecipeAdditionYeast.h"
+#include "model/RecipeUtils.h"
 #include "model/StockPurchaseHop.h"
 #include "model/Style.h"
 #include "model/Water.h"
@@ -72,6 +74,7 @@
 #include "model/Misc.h"
 #include "model/Fermentation.h"
 #include "serialization/json/dotBeer/DotBeer.h"
+#include "serialization/xml/BeerXml.h"
 #include "PersistentSettings.h"
 #include "unitTests/TestMultiVector.h"
 #include "utils/ErrorCodeToStream.h"
@@ -1027,6 +1030,67 @@ void Testing::testDotBeerExamples() {
    QVERIFY2(numInvalidExamples > 0, "No invalid dotBeer examples found");
 
    //
+   // AdditionStepOutOfRange.beer has a mash addition for step 3 of a 1-step mash and a culture addition for step 2 of
+   // a fermentation that doesn't exist.  We accept the file, but correct the steps.
+   //
+   {
+      auto const recipe = ObjectStoreWrapper::findFirstMatching<Recipe>(
+         [](std::shared_ptr<Recipe> rec) { return rec->name() == "Step Confusion"; }
+      );
+      QVERIFY2(recipe, "Could not find Step Confusion recipe");
+      auto const fermentableAdditions = recipe->fermentableAdditions();
+      QVERIFY(fermentableAdditions.size() == 1);
+      QVERIFY2(fermentableAdditions.first()->step() == 1, "Mash addition step not corrected");
+      auto const yeastAdditions = recipe->yeastAdditions();
+      QVERIFY(yeastAdditions.size() == 1);
+      QVERIFY2(!yeastAdditions.first()->step(), "Fermentation addition step not unset");
+   }
+
+   //
+   // Check brew log calculations don't give nonsense (or NaN) when gravities have not all been measured
+   //
+   {
+      auto const recipe = ObjectStoreWrapper::findFirstMatching<Recipe>(
+         [](std::shared_ptr<Recipe> rec) { return rec->name() == "Cascade Pale Ale"; }
+      );
+      QVERIFY(recipe);
+      // This is the same way MainWindow creates a new BrewLog
+      auto brewLog = std::make_shared<BrewLog>(*recipe);
+      brewLog->populateNote(recipe.get());
+      brewLog->setName("Test Brew Log");
+      ObjectStoreWrapper::insert(brewLog);
+
+      // populateNote pre-fills measured values with expected ones, so clear them to simulate "not yet measured"
+      brewLog->setMeasuredOriginalGravity_sg(0.0);
+      brewLog->setMeasuredFinalGravity_sg(0.0);
+
+      // FG before OG
+      brewLog->setMeasuredFinalGravity_sg(1.010);
+      QVERIFY2(std::isfinite(brewLog->computedAlcoholByVolume_pct()) && brewLog->computedAlcoholByVolume_pct() == 0.0,
+               "ABV should be 0 until OG measured");
+      QVERIFY2(std::isfinite(brewLog->computedAttenuation_pct()) && brewLog->computedAttenuation_pct() == 0.0,
+               "Attenuation should be 0 until OG measured");
+      brewLog->setMeasuredFinalGravity_sg(0.0);
+
+      // OG but no FG
+      brewLog->setMeasuredVolumeIntoFv_l(21.0);
+      brewLog->setMeasuredOriginalGravity_sg(1.050);
+      QVERIFY2(brewLog->computedAlcoholByVolume_pct() == 0.0, "ABV should be 0 until FG measured");
+      QVERIFY2(brewLog->computedAttenuation_pct()     == 0.0, "Attenuation should be 0 until FG measured");
+      qInfo() << Q_FUNC_INFO << "Brewhouse efficiency" << brewLog->computedEfficiency_pct();
+      QVERIFY2(brewLog->computedEfficiency_pct() > 40.0 && brewLog->computedEfficiency_pct() < 100.0,
+               "Wrong brewhouse efficiency");
+
+      // Both
+      brewLog->setMeasuredFinalGravity_sg(1.010);
+      qInfo() <<
+         Q_FUNC_INFO << "ABV" << brewLog->computedAlcoholByVolume_pct() << ", attenuation" <<
+         brewLog->computedAttenuation_pct();
+      QVERIFY2(fuzzyComp(brewLog->computedAlcoholByVolume_pct(),  5.25, 0.2), "Wrong ABV");
+      QVERIFY2(fuzzyComp(brewLog->computedAttenuation_pct()    , 80.0 , 0.1), "Wrong attenuation");
+   }
+
+   //
    // Check we give a helpful message for files written with a newer version of dotBeer than we support.  A file from a
    // newer minor version can still be read if it doesn't use anything we don't know about; a newer major version can't.
    //
@@ -1063,6 +1127,9 @@ void Testing::testDotBeerExamples() {
    // Add some things that Brewken allows, but which used to give an invalid dotBeer file on export
    //
    {
+      // We don't want the changes below to create new versions of Recipes
+      RecipeUtils::SuspendRecipeVersioning suspendRecipeVersioning;
+
       // grain_group is only allowed for grains
       auto sugar = std::make_shared<Fermentable>();
       sugar->setName("Test Sugar With Leftover Grain Group");
@@ -1094,6 +1161,47 @@ void Testing::testDotBeerExamples() {
       auto const brewLogs = ObjectStoreWrapper::getAllRaw<BrewLog>();
       QVERIFY2(!brewLogs.isEmpty(), "No brew logs to test with");
       brewLogs.first()->setComputedAlcoholByVolume_pct(std::numeric_limits<double>::quiet_NaN());
+
+      // Optional vessels with zero volume are treated as not present, so their other attributes are not kept
+      auto vessels = std::make_shared<Equipment>("Test Equipment With Unused Lauter Tun");
+      vessels->setKettleBoilSize_l(30.0);
+      vessels->setHltVolume_l(40.0);
+      vessels->setHltNotes("Real HLT");
+      vessels->setLauterTunVolume_l(0.0);
+      vessels->setLauterTunDeadspaceLoss_l(2.0);
+      vessels->setLauterTunNotes("Leftover notes");
+      vessels->setLauterTunType("Leftover type");
+      ObjectStoreWrapper::insert(vessels);
+      // Ditto packaging vessel.  (We check below that the export omits both, because their volumes are 0, even
+      // though we haven't yet called Equipment::clearUnusedOptionalVessels.)
+      vessels->setPackagingVesselVolume_l(0.0);
+      vessels->setPackagingVesselLoss_l(1.0);
+
+      // A Mash must have at least one step
+      auto mash = std::make_shared<Mash>("Test Mash Without Steps");
+      ObjectStoreWrapper::insert(mash);
+
+      // A fermentable must have a yield
+      auto noYield = std::make_shared<Fermentable>();
+      noYield->setName("Test Fermentable Without Yield");
+      noYield->setType(Fermentable::Type::Other_Adjunct);
+      noYield->setColor_srm(1.0);
+      ObjectStoreWrapper::insert(noYield);
+
+      // An addition can have at most one of time, gravity and pH
+      auto const recipe = ObjectStoreWrapper::findFirstMatching<Recipe>(
+         [](std::shared_ptr<Recipe> rec) { return rec->name() == "Cascade Pale Ale"; }
+      );
+      QVERIFY(recipe);
+      std::shared_ptr<RecipeAdditionHop> timedHopAddition;
+      for (auto const & hopAddition : recipe->hopAdditions()) {
+         if (hopAddition->addAtTime_mins()) {
+            timedHopAddition = hopAddition;
+            break;
+         }
+      }
+      QVERIFY2(timedHopAddition, "No hop addition with a time");
+      timedHopAddition->setAddAtGravity_sg(1.020);
    }
 
    //
@@ -1146,10 +1254,144 @@ void Testing::testDotBeerExamples() {
          }
       }
       QVERIFY2(foundOtherAcid, "Test Other Acid not exported");
+
+      // Mash without steps should have been given one
+      bool foundMash = false;
+      for (auto const & mash : exported.at("DotBeer").at("mashes").as_array()) {
+         if (mash.at("name").as_string() == "Test Mash Without Steps") {
+            foundMash = true;
+            QVERIFY2(mash.at("mash_steps").as_array().size() == 1, "Mash without steps not given one");
+         }
+      }
+      QVERIFY2(foundMash, "Test Mash Without Steps not exported");
+
+      // Fermentable without yield should have been given one
+      bool foundNoYield = false;
+      for (auto const & fermentable : exported.at("DotBeer").at("fermentables").as_array()) {
+         if (fermentable.at("name").as_string() == "Test Fermentable Without Yield") {
+            foundNoYield = true;
+            QVERIFY2(fermentable.as_object().contains("yield_fine_grind"), "Fermentable without yield not given one");
+         }
+      }
+      QVERIFY2(foundNoYield, "Test Fermentable Without Yield not exported");
+
+      // No addition should have more than one of time, gravity and pH
+      for (auto const & recipe : exported.at("DotBeer").at("recipes").as_array()) {
+         for (auto const & [listName, additions] : recipe.at("ingredients").as_object()) {
+            for (auto const & addition : additions.as_array()) {
+               auto const & schedule = addition.at("schedule").as_object();
+               int const count = (schedule.contains("time") ? 1 : 0) +
+                                 (schedule.contains("specific_gravity") ? 1 : 0) +
+                                 (schedule.contains("pH") ? 1 : 0);
+               QVERIFY2(count <= 1, "Addition with more than one of time, gravity and pH");
+            }
+         }
+      }
+
+      // Equipment with only a kettle should not have other (zero-volume) vessels written
+      bool foundMinimalKettle = false;
+      for (auto const & equipment : exported.at("DotBeer").at("equipments").as_array()) {
+         if (equipment.at("name").as_string() == "Minimal Kettle") {
+            foundMinimalKettle = true;
+            for (char const * const vessel : {"hlt", "mash_tun", "lauter_tun", "fermentation_vessel", "aging_vessel",
+                                              "packaging_vessel"}) {
+               QVERIFY2(!equipment.as_object().contains(vessel), vessel);
+            }
+            QVERIFY(equipment.as_object().contains("kettle"));
+         }
+      }
+      QVERIFY2(foundMinimalKettle, "Minimal Kettle not exported");
+
+      // Optional vessels with zero volume should not be written, even if they have other attributes set
+      bool foundVessels = false;
+      for (auto const & equipment : exported.at("DotBeer").at("equipments").as_array()) {
+         if (equipment.at("name").as_string() == "Test Equipment With Unused Lauter Tun") {
+            foundVessels = true;
+            QVERIFY2(equipment.as_object().contains("hlt")              , "HLT should be written");
+            QVERIFY2(!equipment.as_object().contains("lauter_tun")      , "Zero-volume lauter tun should not be written");
+            QVERIFY2(!equipment.as_object().contains("packaging_vessel"), "Zero-volume packaging vessel should not be written");
+         }
+      }
+      QVERIFY2(foundVessels, "Test Equipment With Unused Lauter Tun not exported");
    }
    QString message;
    bool const reimportOk = importFile(exportFilePath, message);
    QVERIFY2(reimportOk, qPrintable(QString{"Could not re-import exported file %1: %2"}.arg(exportFilePath).arg(message)));
+
+   //
+   // Check Equipment::clearUnusedOptionalVessels (which the equipment editor calls on save)
+   //
+   {
+      auto const vessels = ObjectStoreWrapper::findFirstMatching<Equipment>(
+         [](std::shared_ptr<Equipment> e) { return e->name() == "Test Equipment With Unused Lauter Tun"; }
+      );
+      QVERIFY(vessels);
+      QVERIFY2(vessels->clearUnusedOptionalVessels(), "Should have cleared unused vessels");
+      QVERIFY2(vessels->lauterTunDeadspaceLoss_l() == 0.0 &&
+               vessels->lauterTunNotes().isEmpty() &&
+               vessels->lauterTunType().isEmpty(), "Unused lauter tun not cleared");
+      QVERIFY2(vessels->packagingVesselLoss_l() == 0.0, "Unused packaging vessel not cleared");
+      QVERIFY2(vessels->hltVolume_l() == 40.0 && vessels->hltNotes() == "Real HLT", "HLT should not be cleared");
+      QVERIFY2(!vessels->clearUnusedOptionalVessels(), "Nothing more to clear");
+   }
+
+   //
+   // YIELD is required in BeerXML but fineGrindYield_pct is optional for us.  If it's not set, we should write YIELD
+   // of 0, and, when reading, treat YIELD of 0 as not set.
+   //
+   {
+      auto const noYield = ObjectStoreWrapper::findFirstMatching<Fermentable>(
+         [](std::shared_ptr<Fermentable> f) { return f->name() == "Test Fermentable Without Yield"; }
+      );
+      QVERIFY(noYield && !noYield->fineGrindYield_pct());
+      QString const beerXmlFilePath = this->pimpl->m_tempDir.filePath("nullYield.xml");
+      {
+         QFile beerXmlFile{beerXmlFilePath};
+         QVERIFY(beerXmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate));
+         BeerXML::getInstance().createXmlFile(beerXmlFile);
+         // Munich Malt (from AmericanPaleAle.beer) has only a potential yield, which we write as an extension tag
+         auto const munich = ObjectStoreWrapper::findFirstMatching<Fermentable>(
+            [](std::shared_ptr<Fermentable> f) { return f->name() == "Munich Malt"; }
+         );
+         QVERIFY(munich && !munich->fineGrindYield_pct() && munich->potentialYield_sg());
+         BeerXML::getInstance().toXml(QList<Fermentable const *>{noYield.get(), munich.get()}, beerXmlFile);
+      }
+      QString beerXml;
+      {
+         QFile beerXmlFile{beerXmlFilePath};
+         QVERIFY(beerXmlFile.open(QIODevice::ReadOnly));
+         beerXml = QString::fromUtf8(beerXmlFile.readAll());
+      }
+      QVERIFY2(beerXml.contains("<YIELD>0</YIELD>"), qPrintable(beerXml));
+      QVERIFY2(beerXml.contains("<POTENTIAL_YIELD>1.035</POTENTIAL_YIELD>"), qPrintable(beerXml));
+      // Rename so the re-read fermentables aren't treated as duplicates
+      beerXml.replace("Test Fermentable Without Yield", "Test Fermentable Without Yield From BeerXML");
+      beerXml.replace("<NAME>Munich Malt</NAME>", "<NAME>Munich Malt From BeerXML</NAME>");
+      {
+         QFile beerXmlFile{beerXmlFilePath};
+         QVERIFY(beerXmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate));
+         beerXmlFile.write(beerXml.toUtf8());
+      }
+      QString beerXmlMessage;
+      QTextStream beerXmlMessageStream{&beerXmlMessage};
+      QVERIFY2(BeerXML::getInstance().importFromXML("", beerXmlFilePath, beerXmlMessageStream),
+               qPrintable(beerXmlMessage));
+      auto const reread = ObjectStoreWrapper::findFirstMatching<Fermentable>(
+         [](std::shared_ptr<Fermentable> f) { return f->name() == "Test Fermentable Without Yield From BeerXML"; }
+      );
+      QVERIFY2(reread, "Fermentable not read back from BeerXML");
+      QVERIFY2(!reread->fineGrindYield_pct(), "YIELD of 0 should be read as not set");
+      auto const rereadMunich = ObjectStoreWrapper::findFirstMatching<Fermentable>(
+         [](std::shared_ptr<Fermentable> f) { return f->name() == "Munich Malt From BeerXML"; }
+      );
+      QVERIFY2(rereadMunich, "Munich Malt not read back from BeerXML");
+      QVERIFY2(!rereadMunich->fineGrindYield_pct(), "YIELD of 0 should be read as not set");
+      QVERIFY2(rereadMunich->potentialYield_sg() && fuzzyComp(*rereadMunich->potentialYield_sg(), 1.035, 0.0001),
+               "Potential yield lost in BeerXML round trip");
+      QVERIFY2(rereadMunich->effectiveFineGrindYield_pct() &&
+               fuzzyComp(*rereadMunich->effectiveFineGrindYield_pct(), 76.1, 0.1),
+               "Wrong effective yield after BeerXML round trip");
+   }
 
    return;
 }

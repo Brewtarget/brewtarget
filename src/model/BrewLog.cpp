@@ -500,43 +500,64 @@ double BrewLog::calculateOg() {
 }
 
 double BrewLog::calculateBrewHouseEff_pct() {
-
-   Recipe const & recipe = *this->recipe();
-
-   Recipe::Sugars const sugars = recipe.sugarTotals();
-
-   // The maximum possible OG is if all the starches are converted to sugar by the mash
-   double const allPossibleSugar_kg = sugars.existingSugars_all_kg + sugars.sugarsFromStarch_all_kg;
-   // Since °Plato is the mass fraction of sucrose in the wort, the sums here are relatively easy.  We assume 1 liter of
-   // wort weighs 1 kilogram.  So, 1 degree Plato represents 10g of sugar in 1 liter of wort.
-   double const maxGravity_plato = 100.0 * allPossibleSugar_kg / this->m_expectedVolumeIntoFv_l;
-   double const measuredGravity_plato = 100.0 * Measurement::Units::plato.fromCanonical(this->m_measuredOriginalGravity_sg);
-
-
    //
-   // TBD: Not sure this is exactly the right calculation here...
+   // Brewhouse efficiency is the percentage of the sugar that could theoretically be extracted from the fermentables
+   // that actually ends up in the fermenter.
    //
-   // The standard formula is:
+   // We use the measured volume into the fermenter if we have it (which is why setMeasuredVolumeIntoFv_l calls this
+   // function), and the expected one otherwise.
    //
-   // Brewhouse efficiency (%) = [(OG – 1) × 1000 × volume into fermentor (litres)] ÷ [grain weight (kg) × maximum extract points per kg] × 100
+   // Here and elsewhere, for all the measured gravities, 0.0 means "not (yet) measured".  For OG, we also need it to be
+   // more than 1.0 for the sums to make sense.
    //
-   double const brewhouseEfficiency = measuredGravity_plato / maxGravity_plato;
+   double efficiency_pct = 0.0;
+   auto const recipe = this->recipe();
+   double const volumeIntoFv_l = this->m_measuredVolumeIntoFv_l > 0.0 ? this->m_measuredVolumeIntoFv_l :
+                                                                         this->m_expectedVolumeIntoFv_l;
+   if (recipe && volumeIntoFv_l > 0.0 && this->m_measuredOriginalGravity_sg > 1.0) {
+      Recipe::Sugars const sugars = recipe->sugarTotals();
+      // The maximum possible is if all the starches are converted to sugar by the mash
+      double const allPossibleSugar_kg = sugars.existingSugars_all_kg + sugars.sugarsFromStarch_all_kg;
+      if (allPossibleSugar_kg > 0.0) {
+         //
+         // °Plato is the percentage, by mass, of (sucrose-equivalent) sugar in the wort.  The mass of the wort is its
+         // volume times its specific gravity (as water is 1 kg/L).
+         //
+         double const measured_plato = Measurement::Units::plato.fromCanonical(this->m_measuredOriginalGravity_sg);
+         double const wortMass_kg = volumeIntoFv_l * this->m_measuredOriginalGravity_sg;
+         double const actualSugar_kg = measured_plato / 100.0 * wortMass_kg;
+         efficiency_pct = 100.0 * actualSugar_kg / allPossibleSugar_kg;
+      }
+   }
+   qDebug() <<
+      Q_FUNC_INFO << "Measured OG:" << this->m_measuredOriginalGravity_sg << ", volume into FV:" << volumeIntoFv_l <<
+      "L, so brewhouse efficiency:" << efficiency_pct << "%";
 
-
-
-   this->setComputedEfficiency_pct(brewhouseEfficiency);
-   return brewhouseEfficiency;
+   this->setComputedEfficiency_pct(efficiency_pct);
+   return efficiency_pct;
 }
 
 // Need to do some work here to figure out what the expected FG will be based
 // on the actual OG, not the calculated.
 double BrewLog::calculateABV_pct() {
+   //
+   // If we don't have a measured OG yet, we can't improve on the expected ABV we already have (from the Recipe).
+   // (Previously, we would call Algorithms::abvFromOgAndFg with OG 0, which asserts that OG >= FG.)
+   //
+   if (this->m_measuredOriginalGravity_sg <= 1.0) {
+      return this->m_expectedAlcoholByVolume_pct;
+   }
+
    double const attenuation_pct = m_expectedAttenuation_pct;
 
    // This looks weird, but the math works. (Yes, I am showing my work)
    // 1 + [(og-1) * 1000 * (1.0 - %/100)] / 1000  =
    // 1 + [(og - 1) * (1.0 - %/100)]
    double const estFg = 1 + ((m_measuredOriginalGravity_sg-1.0)*(1.0 - attenuation_pct/100.0));
+   if (estFg > this->m_measuredOriginalGravity_sg) {
+      // Can only happen with a negative attenuation
+      return this->m_expectedAlcoholByVolume_pct;
+   }
 
    double const calculatedAlcoholByVolume_pct = Algorithms::abvFromOgAndFg(this->m_measuredOriginalGravity_sg, estFg);
 
@@ -546,18 +567,35 @@ double BrewLog::calculateABV_pct() {
 }
 
 double BrewLog::calculateActualABV_pct() {
-   double const abv_pct = this->m_measuredOriginalGravity_sg > this->m_measuredFinalGravity_sg ?
-      Algorithms::abvFromOgAndFg(this->m_measuredOriginalGravity_sg, this->m_measuredFinalGravity_sg) : std::numeric_limits<double>::quiet_NaN();
+   //
+   // We can only calculate the actual ABV once we have measured both OG and FG.  Until then, we use 0.0 to mean "not
+   // known".  (Previously we used NaN, but that can't be stored in a dotBeer or BeerJSON file; and, if FG had not been
+   // measured, we would calculate ABV from an FG of 0.)
+   //
+   double abv_pct = 0.0;
+   if (this->m_measuredOriginalGravity_sg > 1.0 &&
+       this->m_measuredFinalGravity_sg > 0.0 &&
+       this->m_measuredOriginalGravity_sg >= this->m_measuredFinalGravity_sg) {
+      abv_pct = Algorithms::abvFromOgAndFg(this->m_measuredOriginalGravity_sg, this->m_measuredFinalGravity_sg);
+   }
    this->setComputedAlcoholByVolume_pct(abv_pct);
    return abv_pct;
 }
 
 double BrewLog::calculateAttenuation_pct() {
-    // Calculate measured attenuation based on user-reported values for
-    // post-boil OG and post-ferment FG
-    double const attenuation = ((m_measuredOriginalGravity_sg - m_measuredFinalGravity_sg) / (m_measuredOriginalGravity_sg - 1)) * 100;
-    this->setComputedAttenuation_pct(attenuation);
-    return attenuation;
+   //
+   // Calculate measured attenuation based on user-reported values for post-boil OG and post-ferment FG.  As with
+   // ABV, we need both to have been measured (and OG to be more than 1.0, otherwise we'd be dividing by zero or
+   // getting a nonsense answer).  Otherwise we return 0.0 to mean "not known".
+   //
+   double attenuation_pct = 0.0;
+   if (this->m_measuredOriginalGravity_sg > 1.0 &&
+       this->m_measuredFinalGravity_sg > 0.0) {
+      attenuation_pct = ((m_measuredOriginalGravity_sg - m_measuredFinalGravity_sg) /
+                         (m_measuredOriginalGravity_sg - 1.0)) * 100.0;
+   }
+   this->setComputedAttenuation_pct(attenuation_pct);
+   return attenuation_pct;
 }
 
 QList<std::shared_ptr<BrewLog>> BrewLog::ownedBy(Recipe const & recipe) {

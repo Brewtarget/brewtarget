@@ -225,7 +225,7 @@ namespace {
       {XmlRecordDefinition::FieldType::String          , "NAME"                          , PropertyNames::NamedEntity::name                     },
       {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"                       , VERSION1                                             },
       {XmlRecordDefinition::FieldType::Enum            , "TYPE"                          , PropertyNames::Fermentable::type                     , &BEER_XML_FERMENTABLE_TYPE_MAPPER},
-      {XmlRecordDefinition::FieldType::Double          , "YIELD"                         , PropertyNames::Fermentable::fineGrindYield_pct       , 0.0},
+      {XmlRecordDefinition::FieldType::Double          , "YIELD"                         , PropertyNames::Fermentable::fineGrindYield_pct       , {}, Serialization::NullSentinel{0.0}},
       // NOTE The BeerXML standard says color for fermentables is "Lovibond Units [sic] (SRM for liquid extracts)".
       //      We currently assume the color is Degrees Lovibond for all fermentables, which is technically wrong for
       //      liquid extracts if other users of BeerXML switch units for them.  However, it seems better to be correct
@@ -939,7 +939,10 @@ namespace {
          {XmlRecordDefinition::FieldType::Double, "AMOUNT"           , PropertyNames::IngredientAmount::quantity     },
          // TIME means different things depending on USE -- see comment on RecipeAdditionHop::beerXmlTime_mins.  It's
          // required in BeerXML, hence the default value for when there is nothing to write.
-         {XmlRecordDefinition::FieldType::Double, "TIME"             , PropertyNames::RecipeAdditionHop::beerXmlTime_mins, 0.0},
+         // TIME is required in BeerXML, but optional for us.  We can't treat TIME 0 as "not set" on reading though, as,
+         // eg, 0 minutes for a boil hop means "at the end of the boil".
+         {XmlRecordDefinition::FieldType::Double, "TIME"             , PropertyNames::RecipeAdditionHop::beerXmlTime_mins, {},
+          Serialization::NullSentinel{0.0, Serialization::NullSentinel::Mode::WriteOnly}},
          {XmlRecordDefinition::FieldType::Enum  , "USE"              , PropertyNames::RecipeAdditionHop::use         , &RecipeAdditionHop::useStringMapping},
          {XmlRecordDefinition::FieldType::Record, ""                 , PropertyNames::RecipeAdditionHop::hop         , &BEER_XML_RECORD_DEFN_HOP_IN_RECIPE_ADDITION_HOP},
          // ⮜⮜⮜ Following are new fields that BeerJSON adds to BeerXML, so all extension tags in BeerXML ⮞⮞⮞

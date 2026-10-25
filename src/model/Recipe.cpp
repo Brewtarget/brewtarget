@@ -63,6 +63,7 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
+#include "model/RecipeUtils.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -1389,6 +1390,67 @@ public:
          this->connectSignalForAdditionIngredient(addition);
       }
       return;
+   }
+
+   /**
+    *
+    *
+    */
+   std::optional<int> numStepsFor(RecipeAddition::Stage const stage) {
+      switch (stage) {
+         case RecipeAddition::Stage::Mash:
+            if (auto const mash = this->m_self.mash(); mash) { return static_cast<int>(mash->numSteps()); }
+            return 0;
+         case RecipeAddition::Stage::Boil:
+            if (auto const boil = this->m_self.boil(); boil) { return static_cast<int>(boil->numSteps()); }
+            return 0;
+         case RecipeAddition::Stage::Fermentation:
+            if (auto const fermentation = this->m_self.fermentation(); fermentation) {
+               return static_cast<int>(fermentation->numSteps());
+            }
+            return 0;
+         case RecipeAddition::Stage::Packaging:
+            // We don't model packaging steps, so there is nothing to check against
+            return std::nullopt;
+         // No default case as we want the compiler to warn us if we missed a case above
+      }
+      Q_UNREACHABLE();
+   };
+
+   /**
+    * \brief Does the substantive work for Recipe::correctAdditionSteps for an individual addition type
+    */
+   template<class Additions>
+   int correctStepsFor(Additions const & additions) {
+      int numCorrected = 0;
+      for (auto const & addition : additions) {
+         std::optional<int> const step = addition->step();
+         if (!step) {
+            continue;
+         }
+         std::optional<int> const numSteps = this->numStepsFor(addition->stage());
+         if (!numSteps) {
+            continue;
+         }
+         std::optional<int> correctedStep = step;
+         if (*numSteps <= 0) {
+            correctedStep = std::nullopt;
+         } else if (*step > *numSteps) {
+            correctedStep = *numSteps;
+         } else if (*step < 1) {
+            correctedStep = 1;
+         }
+         if (correctedStep != step) {
+            qWarning() <<
+               Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << "):" << *addition <<
+               "is for step" << *step << "of" << RecipeAddition::stageStringMapping[addition->stage()] <<
+               "but there are" << *numSteps << "step(s), so changing step to" << correctedStep;
+            addition->setStep(correctedStep);
+            ++numCorrected;
+         }
+      }
+
+      return numCorrected;
    }
 
 
@@ -2838,6 +2900,19 @@ Recipe::Sugars Recipe::sugarTotals() const {
 
 
 //====================================Helpers===========================================
+
+int Recipe::correctAdditionSteps() {
+   // Correcting a step should not create a new version of the Recipe
+   RecipeUtils::SuspendRecipeVersioning suspendRecipeVersioning;
+
+   int const numCorrected{
+      this->pimpl->correctStepsFor(this->fermentableAdditions()) +
+      this->pimpl->correctStepsFor(this->hopAdditions        ()) +
+      this->pimpl->correctStepsFor(this->miscAdditions       ()) +
+      this->pimpl->correctStepsFor(this->yeastAdditions      ())
+   };
+   return numCorrected;
+}
 
 Recipe::BoilAdditionTiming Recipe::boilAdditionTiming(RecipeAddition const & addition) const {
    BoilAdditionTiming timing;

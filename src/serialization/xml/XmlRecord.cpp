@@ -511,6 +511,15 @@ bool XmlRecord::load(XmlDocument & document,
                // If we do need it, we now store the value
                //
                if (!fieldDefinition.propertyPath.isNull()) {
+                  // If this is a field that is required in BeerXML but optional for us, then the null sentinel for
+                  // the field means the property should be unset.  See comment in serialization/NullSentinel.h.
+                  if (Serialization::applyNullSentinelOnRead(fieldDefinition.nullSentinel,
+                                                             propertyIsOptional,
+                                                             parsedValue)) {
+                     qDebug() <<
+                        Q_FUNC_INFO << "Treating" << this->m_recordDefinition.m_namedEntityClassName << "node" <<
+                        fieldDefinition.xPath << "=" << value << "as not set";
+                  }
                   this->m_namedParameterBundle.insert(fieldDefinition.propertyPath, parsedValue);
                }
             }
@@ -812,6 +821,9 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
                if (Optional::removeOptionalWrapperIfPresent<int>(value, propertyIsOptional)) {
                   // QVariant knows how to convert a number to a string
                   valueAsText = value.toString();
+               } else if (fieldDefinition.nullSentinel) {
+                  // See comment for Double below
+                  valueAsText = fieldDefinition.nullSentinel->m_value.toString();
                }
                break;
 
@@ -819,6 +831,9 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
                if (Optional::removeOptionalWrapperIfPresent<unsigned int>(value, propertyIsOptional)) {
                   // QVariant knows how to convert a number to a string
                   valueAsText = value.toString();
+               } else if (fieldDefinition.nullSentinel) {
+                  // See comment for Double below
+                  valueAsText = fieldDefinition.nullSentinel->m_value.toString();
                }
                break;
 
@@ -829,14 +844,13 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
                   // scientific notation.
 
                   valueAsText = QString::number(value.toDouble(), 'f', QLocale::FloatingPointShortest);
-               } else {
-                  // There is at least one field (FERMENTABLE/YIELD) that is required in BeerXML but optional in our
+               } else if (fieldDefinition.nullSentinel) {
+                  // There are some fields (eg FERMENTABLE/YIELD) that are required in BeerXML but optional in our
                   // internal data model.  In such a case, if our internal field is not set, we have to have a default
                   // value to write out for the output BeerXML to be valid.
-                  if (std::holds_alternative<double>(fieldDefinition.valueDecoder)) {
-                     double defaultValue = std::get<double>(fieldDefinition.valueDecoder);
-                     valueAsText = QString::number(defaultValue, 'f', QLocale::FloatingPointShortest);
-                  }
+                  valueAsText = QString::number(fieldDefinition.nullSentinel->m_value.toDouble(),
+                                                'f',
+                                                QLocale::FloatingPointShortest);
                }
                break;
 
@@ -891,7 +905,12 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
                break;
          }
 
-         if (propertyIsOptional && value.isNull()) {
+         //
+         // If the property is unset, we don't write the field -- unless it's one that's required in BeerXML, in which
+         // case we will have written its null sentinel above.  (Before we checked for this here, the default value for
+         // eg FERMENTABLE/YIELD was never actually written, so the output was not valid BeerXML.)
+         //
+         if (propertyIsOptional && value.isNull() && !fieldDefinition.nullSentinel) {
             qDebug() <<
                Q_FUNC_INFO << "Not writing XPath" << fieldDefinition.xPath << "as property" <<
                fieldDefinition.propertyPath.asXPath() << "is unset, ie set to std::nullopt";
