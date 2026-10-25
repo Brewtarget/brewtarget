@@ -460,7 +460,7 @@ public:
       // Now add a row for each fermentable
       for (auto const & fermentableAddition : fermentableAdditions) {
          auto const & fermentable = fermentableAddition->fermentable();
-         auto const yield = fermentable->fineGrindYield_pct();
+         auto const yield = fermentable->effectiveFineGrindYield_pct();
          ftable += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6%</td><td>%7</td></tr>")
                .arg(fermentable->name())
                .arg(Fermentable::typeDisplayNames[fermentable->type()])
@@ -507,8 +507,8 @@ public:
             amounts.append(Measurement::displayAmount(fermentableAddition->amount()));
             masheds.append(fermentableAddition->stage() == RecipeAddition::Stage::Mash ? tr("Yes") : tr("No"));
             lates.append(fermentableAddition->addAfterBoil() ? tr("Yes") : tr("No"));
-            if (fermentable->fineGrindYield_pct()) {
-               yields.append(QString("%1%").arg(Measurement::displayQuantity(*fermentable->fineGrindYield_pct(), 0)));
+            if (auto const yield = fermentable->effectiveFineGrindYield_pct(); yield) {
+               yields.append(QString("%1%").arg(Measurement::displayQuantity(*yield, 0)));
             } else {
                yields.append("?");
             }

@@ -132,3 +132,16 @@ RecipeUtils::SuspendRecipeVersioning::~SuspendRecipeVersioning() {
    }
    return;
 }
+
+RecipeUtils::SuspendRecipeCalcs::SuspendRecipeCalcs(std::shared_ptr<Recipe> recipe) :
+   m_recipe{recipe},
+   m_savedCalcsEnabled{recipe->calcsEnabled()} {
+   if (this->m_savedCalcsEnabled) {
+      this->m_recipe->setCalcsEnabled(false);
+   }
+   return;
+}
+RecipeUtils::SuspendRecipeCalcs::~SuspendRecipeCalcs() {
+   this->m_recipe->setCalcsEnabled(this->m_savedCalcsEnabled);
+   return;
+}

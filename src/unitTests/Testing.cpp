@@ -27,6 +27,7 @@
 #include <filesystem>
 #include <iostream>
 #include <iostream> // For std::cout
+#include <limits>
 #include <math.h>
 #include <sstream>
 #include <thread>
@@ -52,6 +53,7 @@
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
 #include "model/Boil.h"
+#include "model/BrewLog.h"
 #include "model/BoilStep.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -941,13 +943,14 @@ void Testing::testInventory() {
 
 void Testing::testDotBeerExamples() {
    //
-   // The dotBeer example files in testData/dotBeer/examples come from the dotBeer repository
-   // (https://github.com/Brewken/DotBeer), so they need to be updated when we upgrade to newer versions of dotBeer:
-   //    DOTBEER_EXAMPLES_DIR=../../DotBeer/examples meson test 'Test dotBeer examples'
+   // The dotBeer example files in testData/dotBeer/examples come from the examples directory of the dotBeer repository
+   // (https://github.com/Brewken/DotBeer), so they need to be updated when we upgrade to newer versions of dotBeer.
    //
-   QString const examplesDirPath{CONFIG_TEST_DATA_DIR};
-   QDir const examplesDir{examplesDirPath};
-   QVERIFY2(examplesDir.exists(), "dotBeer examples directory not found");
+   QDir const examplesDir{QDir{CONFIG_TEST_DATA_DIR}.filePath("dotBeer/examples")};
+   QVERIFY2(examplesDir.exists(), qPrintable(QString{"dotBeer examples directory %1 not found"}.arg(examplesDir.path())));
+   // Make sure we fail, rather than silently test nothing, if the examples aren't where we think they are
+   int numValidExamples = 0;
+   int numInvalidExamples = 0;
 
    auto importFile = [](QString const & filePath, QString & message) {
       QString userMessage;
@@ -973,7 +976,37 @@ void Testing::testDotBeerExamples() {
          }
          qInfo() << Q_FUNC_INFO << "Import" << fileInfo.fileName() << (ok ? "succeeded" : "FAILED") << ":" << message;
          QVERIFY2(ok, qPrintable(QString{"Failed to import %1: %2"}.arg(fileInfo.fileName()).arg(message)));
+         ++numValidExamples;
       }
+   }
+   QVERIFY2(numValidExamples > 0, "No valid dotBeer examples found");
+
+   //
+   // Check that calculated values on an imported Recipe are right, ie were worked out once all its ingredients were
+   // there, rather than (as used to happen) when it was first stored in the database without them.  These are just
+   // sanity checks -- the file says OG 1.052 and 38 IBUs, but we don't expect Brewken's calculations to match exactly.
+   //
+   {
+      auto const recipe = ObjectStoreWrapper::findFirstMatching<Recipe>(
+         [](std::shared_ptr<Recipe> rec) { return rec->name() == "Cascade Pale Ale"; }
+      );
+      QVERIFY2(recipe, "Could not find Cascade Pale Ale recipe");
+      qInfo() << Q_FUNC_INFO << "Cascade Pale Ale: OG" << recipe->og() << ", IBU" << recipe->IBU();
+      QVERIFY2(recipe->og() > 1.040 && recipe->og() < 1.065, "Wrong OG for imported recipe");
+      QVERIFY2(recipe->IBU() > 10.0                        , "Wrong IBU for imported recipe");
+   }
+   //
+   // These recipes have, respectively, a boil with no pre-boil size and no boil at all.  Boil gravity used to come out
+   // at 2.33 SG in such cases, which gave near-zero IBUs.
+   //
+   for (QString const recipeName : {"Cold Crash Pils", "Cascade SMaSH"}) {
+      auto const recipe = ObjectStoreWrapper::findFirstMatching<Recipe>(
+         [&recipeName](std::shared_ptr<Recipe> rec) { return rec->name() == recipeName; }
+      );
+      QVERIFY2(recipe, qPrintable(QString{"Could not find %1 recipe"}.arg(recipeName)));
+      qInfo() << Q_FUNC_INFO << recipeName << ": boil gravity" << recipe->boilGrav() << ", IBU" << recipe->IBU();
+      QVERIFY2(recipe->boilGrav() > 1.01 && recipe->boilGrav() < 1.1, qPrintable(QString{"Wrong boil gravity for %1"}.arg(recipeName)));
+      QVERIFY2(recipe->IBU() > 5.0, qPrintable(QString{"Wrong IBU for %1"}.arg(recipeName)));
    }
 
    //
@@ -988,7 +1021,79 @@ void Testing::testDotBeerExamples() {
          qInfo() <<
             Q_FUNC_INFO << "Invalid example" << fileInfo.fileName() << (ok ? "was ACCEPTED" : "was rejected") << ":" <<
             message;
+         ++numInvalidExamples;
       }
+   }
+   QVERIFY2(numInvalidExamples > 0, "No invalid dotBeer examples found");
+
+   //
+   // Check we give a helpful message for files written with a newer version of dotBeer than we support.  A file from a
+   // newer minor version can still be read if it doesn't use anything we don't know about; a newer major version can't.
+   //
+   {
+      auto writeMinimalFile = [this](QString const & fileName, QString const & version, QString const & extra) {
+         QString const filePath = this->pimpl->m_tempDir.filePath(fileName);
+         QFile file{filePath};
+         if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            file.write(
+               QString{"{\"DotBeer\": {\"version\": \"%1\", \"output_by\": \"Test\", "
+                       "\"timestamp\": \"2026-10-24T10:00:00Z\"%2}}"}.arg(version).arg(extra).toUtf8()
+            );
+         }
+         return filePath;
+      };
+      QString const hops{
+         ", \"hops\": [{\"name\": \"Version Test Hop\", \"alpha_acid\": {\"unit\": \"%\", \"value\": 5.0}}]"
+      };
+      QString message;
+      QVERIFY2(importFile(writeMinimalFile("newerMinor.beer", "1.9.0", hops), message),
+               qPrintable(QString{"Failed to read file from newer minor version: %1"}.arg(message)));
+      QVERIFY2(!importFile(writeMinimalFile("newerMajor.beer", "2.0.0", hops), message),
+               "Should not read file from newer major version");
+      QVERIFY2(message.contains("1.0.0") && message.contains("2.0.0"), qPrintable(message));
+      QVERIFY2(!importFile(writeMinimalFile("newerMinorUnknownField.beer",
+                                            "1.9.0",
+                                            hops + ", \"some_future_field\": true"),
+                           message),
+               "Should not read file with unknown field");
+      QVERIFY2(message.contains("1.9.0"), qPrintable(message));
+   }
+
+   //
+   // Add some things that Brewken allows, but which used to give an invalid dotBeer file on export
+   //
+   {
+      // grain_group is only allowed for grains
+      auto sugar = std::make_shared<Fermentable>();
+      sugar->setName("Test Sugar With Leftover Grain Group");
+      sugar->setType(Fermentable::Type::Grain);
+      sugar->setGrainGroup(Fermentable::GrainGroup::Base);
+      sugar->setType(Fermentable::Type::Sugar);
+      sugar->setFineGrindYield_pct(100.0);
+      sugar->setColor_srm(0.0);
+      ObjectStoreWrapper::insert(sugar);
+      QVERIFY2(!sugar->grainGroup(), "Grain group should not be returned for non-grain");
+
+      // Water agents must have a water agent type
+      auto untypedWaterAgent = std::make_shared<Misc>();
+      untypedWaterAgent->setName("Test Water Agent Without Type");
+      untypedWaterAgent->setType(Misc::Type::WaterAgent);
+      ObjectStoreWrapper::insert(untypedWaterAgent);
+
+      // Percent acid is allowed for "other" water agents (and needs to be kept)
+      auto otherAcid = std::make_shared<Misc>();
+      otherAcid->setName("Test Other Acid");
+      otherAcid->setType(Misc::Type::WaterAgent);
+      otherAcid->setWaterAgentType(Misc::WaterAgentType::Other);
+      otherAcid->setWaterAgentPercentAcid(40.0);
+      ObjectStoreWrapper::insert(otherAcid);
+      QVERIFY2(otherAcid->waterAgentPercentAcid() && fuzzyComp(*otherAcid->waterAgentPercentAcid(), 40.0, 0.001),
+               "Percent acid lost for Other water agent");
+
+      // BrewLog::calculateActualABV_pct sets NaN if FG is not less than OG (eg if neither has been measured yet)
+      auto const brewLogs = ObjectStoreWrapper::getAllRaw<BrewLog>();
+      QVERIFY2(!brewLogs.isEmpty(), "No brew logs to test with");
+      brewLogs.first()->setComputedAlcoholByVolume_pct(std::numeric_limits<double>::quiet_NaN());
    }
 
    //
@@ -1027,6 +1132,21 @@ void Testing::testDotBeerExamples() {
       outFile.close();
    }
    qInfo() << Q_FUNC_INFO << "Exported database to" << exportFilePath;
+
+   // Check that percent acid was written for the "Other" water agent
+   {
+      QFile exportedFile{exportFilePath};
+      QVERIFY(exportedFile.open(QIODevice::ReadOnly));
+      boost::json::value const exported = boost::json::parse(exportedFile.readAll().toStdString());
+      bool foundOtherAcid = false;
+      for (auto const & misc : exported.at("DotBeer").at("miscs").as_array()) {
+         if (misc.at("name").as_string() == "Test Other Acid") {
+            foundOtherAcid = true;
+            QVERIFY2(misc.as_object().contains("water_agent_percent_acid"), "Percent acid not written for Other water agent");
+         }
+      }
+      QVERIFY2(foundOtherAcid, "Test Other Acid not exported");
+   }
    QString message;
    bool const reimportOk = importFile(exportFilePath, message);
    QVERIFY2(reimportOk, qPrintable(QString{"Could not re-import exported file %1: %2"}.arg(exportFilePath).arg(message)));

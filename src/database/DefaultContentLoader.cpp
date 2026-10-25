@@ -143,18 +143,14 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
          // in the default folder.
          //
          // Starting in mid-2026, for other things (ingredients, styles, equipments, etc), we'll put them in a folder
-         // called 'New ⭐ #x' where x is DefaultContentLoader::availableContentVersion.  (This means if you, eg,
-         // import content files 1, 2, 3 and 4 at the same time, then you'll get all the contents in folders called
-         // 'New ⭐ #4', rather than a separate folder for each content file.  I think this is OK, because the main
-         // point here is to allow the user to easily see what was just loaded in.  We would expect people to drag
-         // things to other folders in due course.)
+         // called 'New ⭐'.  (At one point, I thought about this having a different name depending on
+         // DefaultContentLoader::availableContentVersion, but, on balance, I think that's more confusing than helpful.)
          //
          QList<Recipe *> allRecipesBeforeImport = ObjectStoreWrapper::getAllRaw<Recipe>();
          qDebug() << Q_FUNC_INFO << allRecipesBeforeImport.size() << "Recipes before import";
 
-         QString const importFolderPath = QString{"New ⭐ #%1"}.arg(DefaultContentLoader::availableContentVersion);
+         static QString const importFolderPath = QString{"New ⭐"};
          succeeded = ImportExport::importFromFiles(importFolderPath, inputFiles);
-
          if (succeeded) {
             //
             // Now see what Recipes exist that weren't there before the import

@@ -415,6 +415,13 @@ public:
             // If addAtTime_mins is not set, we assume addition happens at the start of the stage
             additionDuration_mins =
                this->stageLength_mins<stage>() - addition->addAfterStart_mins(stepLength_mins).value_or(0.0);
+            //
+            // We don't (yet) know the length of the fermentation or packaging stages (stageLength_mins returns 0 for
+            // them), so, eg, a dry hop addition 4 days into fermentation with no duration would otherwise come out as
+            // lasting -4 days.  Apart from being meaningless in the instructions, a negative duration is not valid in a
+            // dotBeer (or BeerJSON) file.
+            //
+            additionDuration_mins = std::max(0.0, additionDuration_mins);
          }
          //
          // When the duration is 0 -- either because we're adding something at the end of the stage or because we
@@ -607,6 +614,19 @@ public:
          std::shared_ptr<T> item{std::make_shared<T>()};
          BtStringConst const & propertyName = Recipe::propertyNameFor<T>();
          this->m_self.setAndNotify(propertyName, itemId, ObjectStoreWrapper::insert(item));
+         //
+         // A Boil or Fermentation with no steps isn't much use (and isn't valid in dotBeer or BeerJSON), so, as in
+         // MainWindow when creating a new Recipe, we give a newly-created one a minimal profile.  (This needs to happen
+         // after we've linked it to the Recipe, as Boil::ensureStandardProfile uses the Recipe's Mash and
+         // Fermentation to choose start and end temperatures.)
+         //
+         if constexpr (std::same_as<T, Boil>) {
+            item->ensureStandardProfile();
+         } else if constexpr (std::same_as<T, Fermentation>) {
+            item->add(std::make_shared<FermentationStep>(
+               Recipe::tr("Primary fermentation for %1").arg(this->m_self.name())
+            ));
+         }
       }
       return ObjectStoreWrapper::getById<T>(itemId);
    }
@@ -1196,11 +1216,21 @@ public:
          sugars.existingSugars_lateAddition_kg
       };
 
-      double const calculatedBoilGrav =
+      //
+      // Pre-boil size is optional (in BeerJSON and dotBeer as well as for us), and there might not be a Boil at all.
+      // Per the comment on Boil::preBoilSize_l, we then fall back to the batch size.  (If we used 0 here, as we
+      // previously did, the boil gravity would come out at the maximum our conversion allows (about 2.33 SG), which in
+      // turn gives near-zero IBUs.)
+      //
+      double const boilSize_l = this->boilSizeInLitersOr(this->m_self.batchSize_l());
+      double const calculatedBoilGrav{
+         (boilSize_l <= 0.0) ?
+         1.0 :
          Algorithms::PlatoToSG_20C20C(
-            Algorithms::platoFromSugarMassAndWortVolume(sugar_kg, this->boilSizeInLitersOr(0.0))
-         );
-      if (! qFuzzyCompare(calculatedBoilGrav, this->m_boilGrav)) {
+            Algorithms::platoFromSugarMassAndWortVolume(sugar_kg, boilSize_l)
+         )
+      };
+      if (!qFuzzyCompare(calculatedBoilGrav, this->m_boilGrav)) {
          qDebug() <<
             Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
             "Calculated Boil Grav: " << calculatedBoilGrav << ", stored: " << this->m_boilGrav;
@@ -1956,7 +1986,8 @@ void Recipe::generateInstructions() {
       this->pimpl->instructionsForBoilFermentables(boilTime_mins, preInstructions);
 
       // add the instructions for including Extracts to wort
-      this->pimpl->instructionsForExtracts(boilTime_mins - 1, preInstructions);
+      // (std::max is so we do not get a negative time -- which is not valid in a dotBeer file -- when there is no boil.)
+      this->pimpl->instructionsForExtracts(std::max(0.0, boilTime_mins - 1), preInstructions);
 
       // Boiled hops
       this->pimpl->instructionsForHopAdditions<RecipeAddition::Stage::Boil>(preInstructions);

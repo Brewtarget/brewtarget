@@ -271,10 +271,14 @@
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation>Mayalayıcıya giren hacim</translation>
+        <translation type="vanished">Mayalayıcıya giren hacim</translation>
     </message>
     <message>
         <source>unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume into fermentor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -358,7 +362,7 @@
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation>Mayalayıcıya giren hacim</translation>
+        <translation type="vanished">Mayalayıcıya giren hacim</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -406,6 +410,10 @@
     </message>
     <message>
         <source>n/a</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume into fermentor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -547,10 +555,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Projected Volume Into Fermentor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>SG</source>
         <translation type="obsolete">SG</translation>
     </message>
@@ -560,10 +564,6 @@
     </message>
     <message>
         <source>Volume Into Boil Kettle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Volume Into Fermentor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -592,6 +592,14 @@
     </message>
     <message>
         <source>Measured pre-boil specific gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Projected Volume Into Fermentation Vessel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume Into Fermentation Vessel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2750,22 +2758,6 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Fermenter Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermenter Loss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermenter Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermenter Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>HLT Loss</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2911,6 +2903,22 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Kettle Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentor Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentor Loss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentor Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentor Type</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3240,6 +3248,10 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Lactic Acid content (% weight)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentable by yeast (%)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4565,6 +4577,10 @@ If you need help, please open an issue at %1</source>
         <source>Brew Log for brew on %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Primary fermentation for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -5035,23 +5051,7 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Calcium Chloride (CaCl₂)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Calcium Carbonate (CaCO₃)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calcium Sulfate (CaSO₄)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Magnesium Sulfate (MgSO₄)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sodium Chloride (NaCl)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5073,6 +5073,42 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Yes</source>
         <translation type="unfinished">Evet</translation>
+    </message>
+    <message>
+        <source>Anhydrous Calcium Chloride (CaCl₂)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calcium Chloride Dihydrate (CaCl₂·2H₂O)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gypsum (CaSO₄·2H₂O)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pickling Lime (Ca(OH)₂)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Epsom Salt (MgSO₄·7H₂O)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Magnesium Chloride Hexahydrate (MgCl₂·6H₂O)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Regular Salt (NaCl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sulfuric acid (H₂SO₄)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hydrochloric acid (HCl)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6370,10 +6406,6 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Specific Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Mass or Volume</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6869,6 +6901,62 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
         <source>%1 errors found in JSON file.  First error at %2: schema condition %3 is violated because &quot;%4&quot;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Volume per Mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Energy per Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kcal/L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kcal/50cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kcal/33cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kcal/25cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kcal/100ml</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kcal/pt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kcal/12floz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kJ/100ml</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This file was written using version %1 of the dotBeer format, which is newer than the version this version of %2 supports (%3).  You may need a newer version of %2 to read it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date-Time-With-Timezone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date-or-Date-Time-Local</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Local-ID</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -6890,7 +6978,7 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>Bring </source>
-        <translation>Seviyesi </translation>
+        <translation type="vanished">Seviyesi </translation>
     </message>
     <message>
         <source>%1 water to %2, </source>
@@ -6898,7 +6986,7 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
-        <translation>olacak şekilde hazırlayın.</translation>
+        <translation type="vanished">olacak şekilde hazırlayın.</translation>
     </message>
     <message>
         <source>Add %1 water at %2 to mash to bring it to %3.</source>
@@ -6966,7 +7054,7 @@ Günlük dosyası daha fazla detay içerebilir.</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
-        <translation>İlk şotlamayı şu şekilde </translation>
+        <translation type="vanished">İlk şotlamayı şu şekilde </translation>
     </message>
     <message>
         <source>First wort hopping</source>
@@ -7431,10 +7519,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Put %1 %2 into fermenter%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source> for %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7456,10 +7540,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>%1 addition</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> to the mash tun.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7497,6 +7577,30 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Target Water Profile ID</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into fermentor%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary fermentation for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add %1 to the mash tun.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bring %1 for upcoming infusions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do first wort hopping with %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 water to %2</source>
+        <translation type="unfinished">%1 su ekleyerek %2 sıcaklığında  {1 ?} {2?}</translation>
     </message>
 </context>
 <context>
@@ -7645,6 +7749,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Use</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Süre</translation>
     </message>
 </context>
 <context>
@@ -10705,7 +10813,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Kettle to Fermenter Loss</source>
-        <translation>Kazandan Mayalayıcıya Kayıp</translation>
+        <translation type="vanished">Kazandan Mayalayıcıya Kayıp</translation>
     </message>
     <message>
         <source>Physics</source>
@@ -10904,19 +11012,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Fermenter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermenter Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>This is also known as the batch size.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermenter Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10965,6 +11061,22 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Adjustment factor for large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kettle to Fermentor Loss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentor Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentor Notes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11296,6 +11408,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>For aciduated malts (aka acid malts)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% Fermentable by yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Percentage of this ingredient&apos;s extract that brewing yeast can ferment.  Leave blank for 100%.  Set to 0 for lactose, or about 10 for maltodextrin.  Not normally needed for malts.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11660,14 +11780,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pinene %</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pinene</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Farnesene %</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11781,6 +11893,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>6 Month Alpha Loss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>α-Pinene %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>α-Pinene</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

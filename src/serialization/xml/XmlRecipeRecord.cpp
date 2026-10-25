@@ -32,30 +32,7 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
-
-namespace {
-   /**
-    * \brief RAII class to temporarily turn off Recipe calculations
-    */
-   class RecipeCalcsSuspender {
-   public:
-      RecipeCalcsSuspender(std::shared_ptr<Recipe> recipe) :
-         m_recipe{recipe},
-         m_savedCalcsEnabled{recipe->calcsEnabled()} {
-         if (this->m_savedCalcsEnabled) {
-            recipe->setCalcsEnabled(false);
-         }
-         return;
-      }
-      ~RecipeCalcsSuspender() {
-         this->m_recipe->setCalcsEnabled(this->m_savedCalcsEnabled);
-         return;
-      }
-   private:
-      std::shared_ptr<Recipe> m_recipe;
-      bool const m_savedCalcsEnabled;
-   };
-}
+#include "model/RecipeUtils.h"
 
 XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(QString const & targetFolderPath,
                                                                    std::shared_ptr<NamedEntity> const containingEntity,
@@ -69,7 +46,7 @@ XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(QString const
    // child objects such as ingredient additions, mash, boil etc, and trying to run them before all these things are
    // set causes crashes.
    //
-   RecipeCalcsSuspender recipeCalcsSuspender{recipe};
+   RecipeUtils::SuspendRecipeCalcs suspendRecipeCalcs{recipe};
 
    //
    // This call to the base class function will store the Recipe and all the objects it contains (via call to

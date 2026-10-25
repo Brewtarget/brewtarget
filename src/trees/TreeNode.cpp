@@ -617,7 +617,7 @@ template<> QString TreeItemNode<Fermentable>::getToolTip() const {
 //           .arg(Fermentable::tr("Mashed"))
 //           .arg( fermentable->stage() == RecipeAddition::Stage::Mash ? Fermentable::tr("Yes") : Fermentable::tr("No") );
    body += QString("<tr><td class=\"left\">.</td><td class=\"value\">.</td>");
-   auto const yield = this->m_underlyingItem->fineGrindYield_pct();
+   auto const yield = this->m_underlyingItem->effectiveFineGrindYield_pct();
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(Fermentable::tr("Extract Yield Dry Basis Fine Grind (DBFG)"))
            .arg(yield ? Measurement::displayQuantity(*yield, 3) : "?");

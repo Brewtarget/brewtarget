@@ -32,6 +32,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QString>
+#include <QTextStream>
 #include <QTimeZone>
 #include <QVersionNumber>
 
@@ -1015,7 +1016,33 @@ namespace {
       // read a 1.0.0 file.  But if the schema used to create the file is newer than the one compiled in the program,
       // we don't know that for sure, so emit a warning.
       //
-      if (dotBeerVersion > dotBeerVersionWeSupport) {
+      //
+      // Per the dotBeer versioning rules (see README.md in the dotBeer repository), a file written with a newer major
+      // version of the schema is not something we can expect to read.  A file written with a newer minor version
+      // might or might not validate against our schema (eg it will not if it uses fields that were added in the newer
+      // version).  Either way, if we can't read the file, we want to tell the user that it's because it's too new,
+      // rather than just showing them a schema validation error.
+      //
+      QString const tooNewMessage{
+         QObject::tr("This file was written using version %1 of the dotBeer format, which is newer than the version "
+                     "this version of %2 supports (%3).  You may need a newer version of %2 to read it.").arg(
+            dotBeerVersion.toString()
+         ).arg(
+            CONFIG_APPLICATION_NAME_UC
+         ).arg(
+            dotBeerVersionWeSupport.toString()
+         )
+      };
+      if (dotBeerVersion.majorVersion() > dotBeerVersionWeSupport.majorVersion()) {
+         qWarning() <<
+            Q_FUNC_INFO << "DotBeer version" << dotBeerVersion << "of" << fileName << "has newer major version than the "
+            "one we support (" << dotBeerVersionWeSupport << ")";
+         userMessage << tooNewMessage;
+         return false;
+      }
+
+      bool const fileIsNewer{dotBeerVersion > dotBeerVersionWeSupport};
+      if (fileIsNewer) {
          qWarning() <<
             Q_FUNC_INFO << "DotBeer version " << dotBeerVersion << "newer than the one we know about (" <<
             dotBeerVersionWeSupport << ")";
@@ -1025,7 +1052,17 @@ namespace {
       // line.
 //      qDebug() << Q_FUNC_INFO << "JSON file read in is:" << inputDocument;
 
-      return DOT_BEER_1_CODING.validateLoadAndStoreInDb(targetFolderPath, inputDocument, userMessage);
+      QString loadMessage;
+      QTextStream loadMessageStream{&loadMessage};
+      bool const succeeded = DOT_BEER_1_CODING.validateLoadAndStoreInDb(targetFolderPath,
+                                                                        inputDocument,
+                                                                        loadMessageStream);
+      loadMessageStream.flush();
+      if (!succeeded && fileIsNewer) {
+         userMessage << tooNewMessage << "\n\n";
+      }
+      userMessage << loadMessage;
+      return succeeded;
    }
 
 }

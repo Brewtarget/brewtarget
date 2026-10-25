@@ -64,6 +64,31 @@ namespace RecipeUtils {
       SuspendRecipeVersioning & operator=(SuspendRecipeVersioning &&) = delete;
    };
 
+   /**
+    * \brief Mini RAII class that turns off a Recipe's calculations for the time that it's in scope.
+    *
+    *        This is used when reading a Recipe in from a file (BeerXML, BeerJSON, dotBeer): the calculations are not
+    *        meaningful until all the Recipe's child objects (ingredient additions, mash, boil, etc) have been stored
+    *        and linked to it.  Worse, if they run before then (eg because storing the Recipe in the database reads its
+    *        calculated properties), the results get cached as if they were valid, so the Recipe would show (and
+    *        export) the OG, IBU etc of a recipe with no ingredients.  Whilst calculations are disabled,
+    *        \c Recipe::recalcAll does nothing, so the calculated values stay marked as uninitialised and are worked out
+    *        properly the first time they are needed.
+    */
+   class SuspendRecipeCalcs {
+   public:
+      SuspendRecipeCalcs(std::shared_ptr<Recipe> recipe);
+      ~SuspendRecipeCalcs();
+   private:
+      std::shared_ptr<Recipe> m_recipe;
+      bool const m_savedCalcsEnabled;
+      // RAII class shouldn't be getting copied or moved
+      SuspendRecipeCalcs(SuspendRecipeCalcs const &) = delete;
+      SuspendRecipeCalcs & operator=(SuspendRecipeCalcs const &) = delete;
+      SuspendRecipeCalcs(SuspendRecipeCalcs &&) = delete;
+      SuspendRecipeCalcs & operator=(SuspendRecipeCalcs &&) = delete;
+   };
+
 }
 
 #endif

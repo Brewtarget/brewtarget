@@ -120,6 +120,7 @@
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
+#include "model/FermentationStep.h"
 #include "model/Folder.h"
 #include "model/Mash.h"
 #include "model/Recipe.h"
@@ -2130,6 +2131,13 @@ std::shared_ptr<Recipe>  MainWindow::newRecipe() {
       std::make_shared<Fermentation>(tr("Automatically-created Fermentation for %1").arg(name));
    // NB: Recipe::setFermentation will ensure Fermentation is stored in the database
    newRec->setFermentation(newFermentation);
+   //
+   // As with the Boil, we give the new Fermentation a minimal profile -- in this case a single primary fermentation
+   // step -- which the user can then edit.  This is the same thing the database migration does for older Recipes ("we
+   // assume everything has a primary fermentation").  Apart from anything else, a Fermentation must have at least one
+   // step in dotBeer (and BeerJSON), so a new Recipe would otherwise not be exportable until the user had added one.
+   //
+   newFermentation->add(std::make_shared<FermentationStep>(tr("Primary fermentation for %1").arg(name)));
 
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
