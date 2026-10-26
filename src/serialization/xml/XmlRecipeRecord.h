@@ -52,7 +52,8 @@ protected:
     * \brief We need to override \c XmlRecord::propertiesToXml for similar reasons that we override
     *        \c normaliseAndStoreInDb()
     */
-   virtual void subRecordToXml(XmlRecordDefinition::FieldDefinition const & fieldDefinition,
+   virtual void subRecordToXml(QString const & baseFolderPath,
+                               XmlRecordDefinition::FieldDefinition const & fieldDefinition,
                                XmlRecord const & subRecord,
                                NamedEntity const & namedEntityToExport,
                                QTextStream & out,
@@ -74,7 +75,8 @@ private:
     * \brief If the supplied property names match, write all the corresponding type to XML
     */
    template<typename RecipeChildGetter>
-   bool childrenToXml(XmlRecordDefinition::FieldDefinition const & fieldDefinition,
+   bool childrenToXml(QString const & baseFolderPath,
+                      XmlRecordDefinition::FieldDefinition const & fieldDefinition,
                       XmlRecord const & subRecord,
                       Recipe const & recipe,
                       QTextStream & out,

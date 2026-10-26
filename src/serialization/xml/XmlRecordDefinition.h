@@ -63,6 +63,8 @@ public:
       Record          ,  // Single contained record
       ListOfRecords   ,  // Zero, one or more contained records
       Unit            ,  // Stored as a string in the DB.  Only used in extension tags
+      FolderPath      ,  // Only used in extension tags.  Same as JsonRecordDefinition::FieldType::FolderPath: the
+                         // (sub)folder the object is in, relative to the folder being imported into or exported from.
    };
 
    /**

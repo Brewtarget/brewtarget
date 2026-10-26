@@ -155,6 +155,35 @@
             "grain_absorption_rate": {
               "description": "The apparent volume absorbed by grain, typical values are 0.125 gal/lb (1.04 l/kg) for a mash tun, 0.08 gal/lb (0.66 l/kg) for BIAB.",
               "$ref": "Measurement.beer.schema#/$defs/VolumePerMass"
+            },
+            //
+            // BeerJSON (and BeerXML) have no equivalent of this field: the only volume they record for a mash tun is
+            // `loss`, which is not recovered.  Brewing software that does model it calls it different things -- eg
+            // "Mash-Tun Deadspace" in Brewfather, "Mash Tun Addition" in BeerSmith, and the "recoverable space below
+            // basket" in Grainfather's own calculations.  We avoid "dead space" in the name because, to many brewers
+            // (and in BeerXML's LAUTER_DEADSPACE and Brewtarget's lauter deadspace loss), dead space means volume that
+            // is lost, which is precisely what this is not.  "Foundation water" is the established brewing term for
+            // water put under the false bottom before doughing in.
+            //
+            // Summary of how the mash tun volumes relate to each other:
+            //
+            //    ┌──────────────────────────────┐ ─┬─
+            //    │                              │  │
+            //    │   mash: grain + strike water │  │
+            //    │   that is in contact with it │  │ max_volume = total usable capacity, including foundation_volume
+            //    │                              │  │              and loss
+            //    ├┄┄┄┄┄┄ false bottom ┄┄┄┄┄┄┄┄┄┄┤  │
+            //    │   foundation_volume          │  │ ← drains out with the wort (recovered)
+            //    ├────── outlet ────────────────┤  │
+            //    │   loss                       │  │ ← stays behind (not recovered)
+            //    └──────────────────────────────┘ ─┴─
+            //
+            // In an all-in-one system with a malt pipe, everything below the malt pipe's bottom plate is
+            // foundation_volume and `loss` is usually 0.
+            //
+            "foundation_volume": {
+              "description": "Volume of liquid in the mash tun that is outside the grain bed -- typically below a false bottom, screen or malt pipe -- and so is needed in addition to the water that wets the grain, but which, unlike `loss`, drains out with the wort and is recovered (eg into the boil).  Typical of all-in-one systems: eg 3.5 l for a Grainfather G30.\n\nRelationship to other fields:<br>• **`loss`** is the volume that never leaves the vessel (eg below the outlet); `foundation_volume` is the volume that does leave it.  No volume is counted in both, so, eg, for a cooler with a false bottom and an outlet above the floor, the volume below the outlet is `loss` and the volume between the outlet and the false bottom is `foundation_volume`.<br>• **`max_volume`** is the vessel's total usable capacity, so it includes both `foundation_volume` and `loss`.  Thus `foundation_volume` plus `loss` must be less than `max_volume`, and the room left for the mash itself is `max_volume` minus both.<br>• **`grain_absorption_rate`** is separate: it covers liquid retained by the grain, not by the vessel.\n\nUsing it: strike water = (grain mass × mash thickness) + `foundation_volume` + `loss`, where mash thickness is the ratio of water to grain *in the grain bed*.  `foundation_volume` is not subtracted from the wort collected, whereas `loss` is.  If absent, treat it as 0, which is also the right value where there is no separate space below the grain (eg brew-in-a-bag with no false bottom).",
+              "$ref": "Measurement.beer.schema#/$defs/Volume"
             }
           }
         }

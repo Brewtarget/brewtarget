@@ -424,10 +424,13 @@ Tabs</string>
          </property>
         </spacer>
        </item>
+       <item row="1" column="0">
+        <widget class="InfoButton" name="infoButton_mashTunVolume"></widget>
+       </item>
        <item row="1" column="1">
         <widget class="SmartLabel" name="label_mashTunVolume">
          <property name="text">
-          <string>Volume</string>
+          <string>Total Capacity</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_mashTunVolume</cstring>
@@ -437,7 +440,7 @@ Tabs</string>
        <item row="1" column="2">
         <widget class="SmartLineEdit" name="lineEdit_mashTunVolume">
          <property name="toolTip">
-          <string>Volume of mash tun</string>
+          <string>Total usable capacity of the mash tun, including any space below the false bottom or malt pipe</string>
          </property>
         </widget>
        </item>
@@ -455,37 +458,80 @@ Tabs</string>
         <widget class="SmartLineEdit" name="lineEdit_mashTunWeight">
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="InfoButton" name="infoButton_mashTunSpecificHeat"></widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="SmartLabel" name="label_mashTunSpecificHeat">
-         <property name="text">
-          <string>Specific Heat Capacity</string>
-         </property>
+       <item row="2" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_mashTunVolume">
          <property name="buddy">
-          <cstring>lineEdit_mashTunSpecificHeat</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_mashTunSpecificHeat">
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="5">
-        <widget class="InfoText" name="infoText_mashTunSpecificHeat">
-         <property name="buddy">
-          <cstring>infoButton_mashTunSpecificHeat</cstring>
+          <cstring>infoButton_mashTunVolume</cstring>
          </property>
          <property name="text">
-          <string>This is equal to the vessel's Heat Capacity divided by its weight.  Typical values are • Aluminum - 0.215 c/g·C  • Copper - 0.092 c/g·C  • Iron/Steel - 0.108 c/g·C  • Plastic - 0.359 c/g·C.</string>
+          <string>The most the mash tun can hold, including any space below the false bottom (or malt pipe / basket) and anything that stays behind in the vessel.  The space actually available for the grain and its strike water is this volume less the Foundation Water and Mash Tun Loss below.</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="3" column="0">
+        <widget class="InfoButton" name="infoButton_mashTunFoundationVolume"></widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="SmartLabel" name="label_mashTunFoundationVolume">
+         <property name="text">
+          <string>Foundation Water (recovered)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_mashTunFoundationVolume</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_mashTunFoundationVolume">
+         <property name="toolTip">
+          <string>Water below the false bottom or malt pipe that drains out with the wort</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_mashTunFoundationVolume">
+         <property name="buddy">
+          <cstring>infoButton_mashTunFoundationVolume</cstring>
+         </property>
+         <property name="text">
+          <string>The water that has to be below the false bottom (or malt pipe / basket) before the grain is covered, but which drains out with the wort and so is NOT lost.  This is common in all-in-one systems -- eg about 3.5 liters for a Grainfather G30.  It is added to the strike water, so the mash thickness you choose applies just to the grain bed, and it is taken off the sparge water, so the total water needed does not change.  Leave at 0 if there is no such space (eg brew in a bag without a false bottom).  Other software calls this, eg, &quot;Mash-Tun Deadspace&quot; (Brewfather) or &quot;Mash Tun Addition&quot; (BeerSmith).</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="InfoButton" name="infoButton_mashTunLoss"></widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="SmartLabel" name="label_mashTunLoss">
+         <property name="text">
+          <string>Mash Tun Loss (not recovered)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_mashTunLoss</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_mashTunLoss">
+         <property name="toolTip">
+          <string>Liquid that stays behind in the mash tun and is never recovered</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_mashTunLoss">
+         <property name="buddy">
+          <cstring>infoButton_mashTunLoss</cstring>
+         </property>
+         <property name="text">
+          <string>Liquid that stays behind in the mash tun (eg below the outlet or in pipework) and never reaches the boil.  It is added to the strike water and to the total water needed.  Do not include grain absorption (see below) or anything that drains out with the wort (put that under Foundation Water above).  If you do not have a separate lauter tun, include your lautering losses here.  If you do have a separate lauter tun, its losses go on the Lauter Tun tab.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
         <widget class="InfoButton" name="infoButton_mashTunGrainAbsorption"></widget>
        </item>
-       <item row="4" column="1">
+       <item row="7" column="1">
         <widget class="SmartLabel" name="label_mashTunGrainAbsorption">
          <property name="text">
           <string>Grain absorption</string>
@@ -495,58 +541,55 @@ Tabs</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="7" column="2">
         <widget class="SmartLineEdit" name="lineEdit_mashTunGrainAbsorption">
         </widget>
        </item>
-       <item row="4" column="4">
+       <item row="7" column="4">
         <widget class="QPushButton" name="pushButton_absorption">
          <property name="text">
           <string>Default Absorption</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1" colspan="5">
+       <item row="8" column="1" colspan="5">
         <widget class="InfoText" name="infoText_mashTunGrainAbsorption">
          <property name="buddy">
           <cstring>infoButton_mashTunGrainAbsorption</cstring>
          </property>
          <property name="text">
-          <string>How much water is permanently lost to each unit of weight of grain during mashing. The default value is 1.0875 liters per kilogram. This can fluctuate due to the fine-ness of your grind, humidity, brand, and other factors. Pressing the "Default Absorption" button will reset the value to this default.</string>
+          <string>How much water is permanently lost to each unit of weight of grain during mashing (ie the water the spent grain retains).  This is separate from Foundation Water and Mash Tun Loss, which are about the vessel rather than the grain.  The default value is about 1.085 liters per kilogram (0.13 US gallons per pound), which is typical for a conventional mash tun.  For an all-in-one system with a malt pipe, about 0.8 liters per kilogram is more typical, and for brew in a bag with the bag squeezed, about 0.66 liters per kilogram.  It can fluctuate due to the fineness of your grind, how well the grain is drained, the malt, and other factors.  Pressing the &quot;Default Absorption&quot; button will reset the value to the default.</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
-        <widget class="InfoButton" name="infoButton_mashTunLoss"></widget>
+       <item row="9" column="0">
+        <widget class="InfoButton" name="infoButton_mashTunSpecificHeat"></widget>
        </item>
-       <item row="6" column="1">
-        <widget class="SmartLabel" name="label_mashTunLoss">
+       <item row="9" column="1">
+        <widget class="SmartLabel" name="label_mashTunSpecificHeat">
          <property name="text">
-          <string>Other Mashing losses</string>
+          <string>Specific Heat Capacity</string>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_mashTunLoss</cstring>
+          <cstring>lineEdit_mashTunSpecificHeat</cstring>
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_mashTunLoss">
-         <property name="toolTip">
-          <string>Mashing losses not included in grain absorption</string>
-         </property>
+       <item row="9" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_mashTunSpecificHeat">
         </widget>
        </item>
-       <item row="7" column="1" colspan="5">
-        <widget class="InfoText" name="infoText_mashTunLoss">
+       <item row="10" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_mashTunSpecificHeat">
          <property name="buddy">
-          <cstring>infoButton_mashTunLoss</cstring>
+          <cstring>infoButton_mashTunSpecificHeat</cstring>
          </property>
          <property name="text">
-          <string>If you do not have a separate lauter tun, then this should include the lautering deadspace.</string>
+          <string>This is equal to the vessel's Heat Capacity divided by its weight.  Typical values are • Aluminum - 0.215 c/g·C  • Copper - 0.092 c/g·C  • Iron/Steel - 0.108 c/g·C  • Plastic - 0.359 c/g·C.</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
+       <item row="11" column="1">
         <widget class="QLabel" name="label_mashTunNotes">
          <property name="toolTip">
           <string>Mash Tun Notes</string>
@@ -556,7 +599,7 @@ Tabs</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="2" colspan="4">
+       <item row="11" column="2" colspan="4">
         <widget class="QTextEdit" name="textEdit_mashTunNotes">
         </widget>
        </item>
@@ -636,24 +679,40 @@ Tabs</string>
         <widget class="SmartLineEdit" name="lineEdit_lauterTunSpecificHeat">
         </widget>
        </item>
-       <item row="2" column="4">
+       <item row="3" column="0">
+        <widget class="InfoButton" name="infoButton_lauterTunDeadspaceLoss"></widget>
+       </item>
+       <item row="3" column="1">
         <widget class="SmartLabel" name="label_lauterTunDeadspaceLoss">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="text">
-          <string>Deadspace Losses</string>
+          <string>Lauter Tun Loss (not recovered)</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_lauterTunDeadspaceLoss</cstring>
          </property>
         </widget>
        </item>
-       <item row="2" column="5">
+       <item row="3" column="2">
         <widget class="SmartLineEdit" name="lineEdit_lauterTunDeadspaceLoss">
+         <property name="toolTip">
+          <string>Wort that stays behind in the lauter tun and is never recovered</string>
+         </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="4" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_lauterTunDeadspaceLoss">
+         <property name="buddy">
+          <cstring>infoButton_lauterTunDeadspaceLoss</cstring>
+         </property>
+         <property name="text">
+          <string>Wort that stays behind in the lauter tun and its plumbing, and never reaches the boil.  This is only used if you have a separate lauter tun (ie the lauter tun has a volume set).  Otherwise, include lautering losses in the Mash Tun Loss on the Mash Tun tab.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
         <widget class="QLabel" name="label_lauterTunNotes">
          <property name="toolTip">
           <string>Lauter Tun Notes</string>
@@ -663,7 +722,7 @@ Tabs</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="2" colspan="4">
+       <item row="5" column="2" colspan="4">
         <widget class="QTextEdit" name="textEdit_lauterTunNotes">
         </widget>
        </item>

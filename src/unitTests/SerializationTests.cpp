@@ -34,6 +34,7 @@
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
+#include "model/Folder.h"
 #include "model/Hop.h"
 #include "model/Mash.h"
 #include "model/Misc.h"
@@ -459,7 +460,7 @@ void SerializationTests::testBeerXmlNullYield() {
          [](std::shared_ptr<Fermentable> f) { return f->name() == "Munich Malt"; }
       );
       QVERIFY(munich && !munich->fineGrindYield_pct() && munich->potentialYield_sg());
-      BeerXML::getInstance().toXml(QList<Fermentable const *>{noYield.get(), munich.get()}, beerXmlFile);
+      BeerXML::getInstance().toXml("", QList<Fermentable const *>{noYield.get(), munich.get()}, beerXmlFile);
    }
    QString beerXml;
    {
@@ -548,5 +549,232 @@ void SerializationTests::testBeerJsonRoundTrip() {
    bool const reimportOk = BeerJson::import("", exportFilePath, messageStream);
    messageStream.flush();
    QVERIFY2(reimportOk, qPrintable(QString{"Could not re-import exported file %1: %2"}.arg(exportFilePath).arg(message)));
+   return;
+}
+namespace {
+   //! \brief Write \c contents to a file in the test temporary directory and return its path
+   QString writeTempFile(QString const & fileName, QString const & contents) {
+      QString const filePath = UnitTests::TestEnvironment::tempDir().filePath(fileName);
+      QFile file{filePath};
+      if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+         file.write(contents.toUtf8());
+      }
+      return filePath;
+   }
+
+   QString readFile(QString const & filePath) {
+      QFile file{filePath};
+      if (!file.open(QIODevice::ReadOnly)) {
+         return "";
+      }
+      return QString::fromUtf8(file.readAll());
+   }
+
+   std::shared_ptr<Equipment> equipmentNamed(QString const & name) {
+      return ObjectStoreWrapper::findFirstMatching<Equipment>(
+         [&name](std::shared_ptr<Equipment> e) { return e->name() == name; }
+      );
+   }
+}
+
+void SerializationTests::testAllInOneEquipmentImport() {
+   // AllInOneBrewingSystems.beer was imported (into the root folder) in initTestClass
+   auto const g30 = equipmentNamed("Grainfather G30 (v3)");
+   QVERIFY2(g30, "Grainfather G30 not imported from AllInOneBrewingSystems.beer");
+   QVERIFY(fuzzyComp(g30->mashTunFoundationVolume_l(), 3.5, 0.0001));
+   QVERIFY(fuzzyComp(g30->mashTunLoss_l()            , 0.0, 0.0001));
+   QVERIFY(fuzzyComp(g30->mashTunVolume_l()          , 30.0, 0.0001));
+   QVERIFY(g30->mashTunGrainAbsorption_LKg() && fuzzyComp(*g30->mashTunGrainAbsorption_LKg(), 0.8, 0.0001));
+   QVERIFY(fuzzyComp(g30->strikeWaterAllowance_l()   , 3.5, 0.0001));
+   QVERIFY(fuzzyComp(g30->getLauteringDeadspaceLoss_l(), 0.0, 0.0001));
+   // NB: Folder paths we get back from objects don't have a leading slash
+   QCOMPARE(g30->containedInFolderPath(), QString{"All-in-one systems/Grainfather"});
+
+   auto const g70 = equipmentNamed("Grainfather G70 (v2)");
+   QVERIFY(g70 && fuzzyComp(g70->mashTunFoundationVolume_l(), 6.8, 0.0001));
+
+   // Explicitly 0 in the file
+   auto const g40 = equipmentNamed("Grainfather G40");
+   QVERIFY(g40 && fuzzyComp(g40->mashTunFoundationVolume_l(), 0.0, 0.0001));
+
+   // Not in the file
+   auto const brewMonk = equipmentNamed("Brew Monk B40");
+   QVERIFY(brewMonk && fuzzyComp(brewMonk->mashTunFoundationVolume_l(), 0.0, 0.0001));
+
+   // US units should be converted
+   auto const anvil = equipmentNamed("Anvil Foundry 18 gal");
+   QVERIFY(anvil && fuzzyComp(anvil->mashTunVolume_l(), 18.0 * 3.785411784, 0.0001));
+   return;
+}
+
+void SerializationTests::testBeerXmlFoundationVolume() {
+   auto equipment = std::make_shared<Equipment>("BeerXML Foundation Volume Test");
+   equipment->setKettleBoilSize_l(30.0);
+   equipment->setFvBatchSize_l(23.0);
+   equipment->setMashTunVolume_l(30.0);
+   equipment->setMashTunFoundationVolume_l(3.5);
+   equipment->setMashTunLoss_l(0.25);
+   ObjectStoreWrapper::insert(equipment);
+
+   QString const filePath = UnitTests::TestEnvironment::tempDir().filePath("foundationVolume.xml");
+   {
+      QFile beerXmlFile{filePath};
+      QVERIFY(beerXmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate));
+      BeerXML::getInstance().createXmlFile(beerXmlFile);
+      BeerXML::getInstance().toXml("", QList<Equipment const *>{equipment.get()}, beerXmlFile);
+   }
+   QString beerXml = readFile(filePath);
+   QVERIFY2(beerXml.contains("<MASH_TUN_FOUNDATION_VOLUME_L>3.5</MASH_TUN_FOUNDATION_VOLUME_L>"), qPrintable(beerXml));
+   QVERIFY2(beerXml.contains("<MASH_TUN_LOSS_L>0.25</MASH_TUN_LOSS_L>"), qPrintable(beerXml));
+   // Equipment is in the root folder, so we shouldn't write a folder path
+   QVERIFY2(!beerXml.contains("FOLDER_PATH"), qPrintable(beerXml));
+
+   // Rename so the re-read equipment isn't treated as a duplicate
+   beerXml.replace("BeerXML Foundation Volume Test", "BeerXML Foundation Volume Test Reread");
+   writeTempFile("foundationVolume.xml", beerXml);
+   QString message;
+   QTextStream messageStream{&message};
+   QVERIFY2(BeerXML::getInstance().importFromXML("", filePath, messageStream), qPrintable(message));
+   auto const reread = equipmentNamed("BeerXML Foundation Volume Test Reread");
+   QVERIFY2(reread, "Equipment not read back from BeerXML");
+   QVERIFY(fuzzyComp(reread->mashTunFoundationVolume_l(), 3.5 , 0.0001));
+   QVERIFY(fuzzyComp(reread->mashTunLoss_l()            , 0.25, 0.0001));
+   return;
+}
+
+void SerializationTests::testFolderPaths() {
+   //
+   // FolderCommon::subPath should work on path, not string, prefixes
+   //
+   QCOMPARE(FolderCommon::subPath("/foo/bar" , "/foo/bar/hum/bug"), QString{"/hum/bug"   });
+   QCOMPARE(FolderCommon::subPath("/foo/bar/", "/foo/bar/hum/bug"), QString{"/hum/bug"   });
+   QCOMPARE(FolderCommon::subPath("/foo/bar" , "/foo/bar"        ), QString{""           });
+   QCOMPARE(FolderCommon::subPath("/foo/bar" , "/foo/barbie"     ), QString{"/foo/barbie"});
+   QCOMPARE(FolderCommon::subPath("/"        , "/foo/bar"        ), QString{"/foo/bar"   });
+   // Leading slashes (or lack of them) shouldn't matter
+   QCOMPARE(FolderCommon::subPath("foo/bar"  , "/foo/bar/hum/bug"), QString{"/hum/bug"   });
+   QCOMPARE(FolderCommon::subPath("/foo/bar" , "foo/bar/hum/bug" ), QString{"/hum/bug"   });
+   QCOMPARE(FolderCommon::subPath("/foo/bar" , "foo/barbie"      ), QString{"foo/barbie" });
+   QCOMPARE(FolderCommon::subPath(""         , "/foo/bar"        ), QString{"/foo/bar"   });
+
+   //
+   // dotBeer: a folder_path in the file is relative to the folder we are importing into.  (Previously, when importing
+   // into anything other than the root folder, the folder_path in the file was lost.)
+   //
+   QString const dotBeerFilePath = writeTempFile("folderPaths.beer", R"({
+      "DotBeer": {
+         "version": "1.0.0",
+         "output_by": "Brewken unit tests",
+         "timestamp": "2026-10-26T12:00:00Z",
+         "equipments": [
+            {
+               "name": "dotBeer Folder Path Test",
+               "local_id": "equip_folder_test",
+               "folder_path": "Kit/All-in-one",
+               "mash_tun": {
+                  "max_volume": { "unit": "l", "value": 30 },
+                  "loss": { "unit": "l", "value": 0 },
+                  "foundation_volume": { "unit": "l", "value": 3.5 }
+               },
+               "kettle": {
+                  "max_volume": { "unit": "l", "value": 30 },
+                  "loss": { "unit": "l", "value": 2 }
+               }
+            }
+         ]
+      }
+   })");
+   {
+      QString message;
+      QTextStream messageStream{&message};
+      QVERIFY2(DotBeer::import("/Imported dotBeer", dotBeerFilePath, messageStream), qPrintable(message));
+   }
+   auto const fromDotBeer = equipmentNamed("dotBeer Folder Path Test");
+   QVERIFY2(fromDotBeer, "Equipment not imported from dotBeer");
+   QCOMPARE(fromDotBeer->containedInFolderPath(), QString{"Imported dotBeer/Kit/All-in-one"});
+   QVERIFY(fuzzyComp(fromDotBeer->mashTunFoundationVolume_l(), 3.5, 0.0001));
+
+   //
+   // BeerXML: we write folder paths relative to the folder being exported...
+   //
+   auto equipment = std::make_shared<Equipment>("BeerXML Folder Path Test Equipment");
+   equipment->setKettleBoilSize_l(30.0);
+   equipment->setFvBatchSize_l(23.0);
+   ObjectStoreWrapper::insert(equipment);
+   equipment->setContainedInFolderPath("/Export Base/Kit");
+   QCOMPARE(equipment->containedInFolderPath(), QString{"Export Base/Kit"});
+
+   auto fermentable = std::make_shared<Fermentable>("BeerXML Folder Path Test Fermentable");
+   fermentable->setType(Fermentable::Type::Grain);
+   fermentable->setColor_srm(3.0);
+   fermentable->setFineGrindYield_pct(80.0);
+   ObjectStoreWrapper::insert(fermentable);
+   fermentable->setContainedInFolderPath("/Export Base/Malts/Base Malts");
+
+   // An object that is in the folder being exported has no folder path written
+   auto fermentableInBase = std::make_shared<Fermentable>("BeerXML Folder Path Test Fermentable In Base");
+   fermentableInBase->setType(Fermentable::Type::Grain);
+   fermentableInBase->setColor_srm(3.0);
+   fermentableInBase->setFineGrindYield_pct(80.0);
+   ObjectStoreWrapper::insert(fermentableInBase);
+   fermentableInBase->setContainedInFolderPath("/Export Base");
+
+   QString const beerXmlFilePath = UnitTests::TestEnvironment::tempDir().filePath("folderPaths.xml");
+   {
+      QFile beerXmlFile{beerXmlFilePath};
+      QVERIFY(beerXmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate));
+      BeerXML::getInstance().createXmlFile(beerXmlFile);
+      BeerXML::getInstance().toXml("/Export Base", QList<Fermentable const *>{fermentable.get(), fermentableInBase.get()}, beerXmlFile);
+      BeerXML::getInstance().toXml("/Export Base", QList<Equipment   const *>{equipment.get()  }, beerXmlFile);
+   }
+   QString beerXml = readFile(beerXmlFilePath);
+   QVERIFY2(beerXml.contains("<FOLDER_PATH>/Kit</FOLDER_PATH>"            ), qPrintable(beerXml));
+   QVERIFY2(beerXml.contains("<FOLDER_PATH>/Malts/Base Malts</FOLDER_PATH>"), qPrintable(beerXml));
+   QCOMPARE(beerXml.count("<FOLDER_PATH>"), 2);
+
+   //
+   // ...and read them relative to the folder being imported into
+   //
+   beerXml.replace("BeerXML Folder Path Test", "BeerXML Folder Path Reread");
+   writeTempFile("folderPaths.xml", beerXml);
+   {
+      QString message;
+      QTextStream messageStream{&message};
+      QVERIFY2(BeerXML::getInstance().importFromXML("/Imported BeerXML", beerXmlFilePath, messageStream),
+               qPrintable(message));
+   }
+   auto const rereadEquipment = equipmentNamed("BeerXML Folder Path Reread Equipment");
+   QVERIFY2(rereadEquipment, "Equipment not read back from BeerXML");
+   QCOMPARE(rereadEquipment->containedInFolderPath(), QString{"Imported BeerXML/Kit"});
+   auto const rereadFermentable = ObjectStoreWrapper::findFirstMatching<Fermentable>(
+      [](std::shared_ptr<Fermentable> f) { return f->name() == "BeerXML Folder Path Reread Fermentable"; }
+   );
+   QVERIFY2(rereadFermentable, "Fermentable not read back from BeerXML");
+   QCOMPARE(rereadFermentable->containedInFolderPath(), QString{"Imported BeerXML/Malts/Base Malts"});
+   auto const rereadFermentableInBase = ObjectStoreWrapper::findFirstMatching<Fermentable>(
+      [](std::shared_ptr<Fermentable> f) { return f->name() == "BeerXML Folder Path Reread Fermentable In Base"; }
+   );
+   QVERIFY2(rereadFermentableInBase, "Fermentable not read back from BeerXML");
+   QCOMPARE(rereadFermentableInBase->containedInFolderPath(), QString{"Imported BeerXML"});
+   return;
+}
+
+void SerializationTests::testEquipmentComparison() {
+   auto const original = std::make_shared<Equipment>("Equipment Comparison Test");
+   original->setMashTunVolume_l(30.0);
+   auto const same = std::make_shared<Equipment>(*original);
+   QVERIFY(*original == *same);
+
+   auto const differentLoss = std::make_shared<Equipment>(*original);
+   differentLoss->setMashTunLoss_l(1.0);
+   QVERIFY2(!(*original == *differentLoss), "Mash tun loss ignored when comparing equipment");
+
+   auto const differentFoundation = std::make_shared<Equipment>(*original);
+   differentFoundation->setMashTunFoundationVolume_l(3.5);
+   QVERIFY2(!(*original == *differentFoundation), "Foundation volume ignored when comparing equipment");
+
+   auto const differentLauterTun = std::make_shared<Equipment>(*original);
+   differentLauterTun->setLauterTunVolume_l(40.0);
+   QVERIFY2(!(*original == *differentLauterTun), "Lauter tun volume ignored when comparing equipment");
    return;
 }

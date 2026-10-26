@@ -204,7 +204,8 @@ bool XmlRecipeRecord::normaliseAndStoreChildRecordsInDb(QString const & targetFo
 }
 
 template<typename RecipeChildGetter>
-bool XmlRecipeRecord::childrenToXml(XmlRecordDefinition::FieldDefinition const & fieldDefinition,
+bool XmlRecipeRecord::childrenToXml(QString const & baseFolderPath,
+                                    XmlRecordDefinition::FieldDefinition const & fieldDefinition,
                                     XmlRecord const & subRecord,
                                     Recipe const & recipe,
                                     QTextStream & out,
@@ -220,13 +221,14 @@ bool XmlRecipeRecord::childrenToXml(XmlRecordDefinition::FieldDefinition const &
       this->writeNone(subRecord, recipe, out, indentLevel, indentString);
    } else {
       for (auto child : children) {
-         subRecord.toXml(*child, out, true, indentLevel, indentString);
+         subRecord.toXml(baseFolderPath, *child, out, true, indentLevel, indentString);
       }
    }
    return true;
 }
 
-void XmlRecipeRecord::subRecordToXml(XmlRecordDefinition::FieldDefinition const & fieldDefinition,
+void XmlRecipeRecord::subRecordToXml(QString const & baseFolderPath,
+                                     XmlRecordDefinition::FieldDefinition const & fieldDefinition,
                                      XmlRecord const & subRecord,
                                      NamedEntity const & namedEntityToExport,
                                      QTextStream & out,
@@ -238,12 +240,12 @@ void XmlRecipeRecord::subRecordToXml(XmlRecordDefinition::FieldDefinition const 
    //
    Recipe const & recipe = static_cast<Recipe const &>(namedEntityToExport);
 
-   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::hopAdditions        , &Recipe::hopAdditions        )) { return; }
-   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::fermentableAdditions, &Recipe::fermentableAdditions)) { return; }
-   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::miscAdditions       , &Recipe::miscAdditions       )) { return; }
-   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::yeastAdditions      , &Recipe::yeastAdditions      )) { return; }
-   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::instructions        , &Recipe::instructions        )) { return; }
-   if (this->childrenToXml(fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::brewLogs            , &Recipe::brewLogs            )) { return; }
+   if (this->childrenToXml(baseFolderPath, fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::hopAdditions        , &Recipe::hopAdditions        )) { return; }
+   if (this->childrenToXml(baseFolderPath, fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::fermentableAdditions, &Recipe::fermentableAdditions)) { return; }
+   if (this->childrenToXml(baseFolderPath, fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::miscAdditions       , &Recipe::miscAdditions       )) { return; }
+   if (this->childrenToXml(baseFolderPath, fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::yeastAdditions      , &Recipe::yeastAdditions      )) { return; }
+   if (this->childrenToXml(baseFolderPath, fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::instructions        , &Recipe::instructions        )) { return; }
+   if (this->childrenToXml(baseFolderPath, fieldDefinition, subRecord, recipe, out, indentLevel, indentString, PropertyNames::Recipe::brewLogs            , &Recipe::brewLogs            )) { return; }
 
    // It's a coding error if we get here
    qCritical() << Q_FUNC_INFO << "Don't know how to export Recipe property " << fieldDefinition.propertyPath.asXPath();

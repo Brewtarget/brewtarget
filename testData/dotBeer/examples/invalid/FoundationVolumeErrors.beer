@@ -1,0 +1,78 @@
+//======================================================================================================================
+// examples/invalid/FoundationVolumeErrors.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: /DotBeer/equipments/0 ("Overfilled Foundation"): mash_tun foundation_volume (29 l) plus loss (1 l) leaves no room for the mash in max_volume (30 l)
+// EXPECT-INVALID: /DotBeer/equipments/1 ("Mixed Units Overfilled"): mash_tun foundation_volume (8 l) plus loss (0 l) leaves no room for the mash in max_volume (2 gal)
+// EXPECT-INVALID: /DotBeer/equipments/2/mash_tun/foundation_volume/value: -1 is less than the minimum of 0
+// EXPECT-INVALID: /DotBeer/equipments/3/kettle: Unevaluated properties are not allowed ('foundation_volume' was unexpected)
+//
+// Misuses of a mash tun's foundation_volume:
+//   • foundation_volume plus loss that fill the whole vessel (which JSON Schema cannot check), including where they
+//     are in different units from max_volume
+//   • a negative foundation_volume
+//   • foundation_volume on a kettle (it is only defined for a mash tun)
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-26T10:00:00+01:00",
+    "equipments": [
+      {
+        "name": "Overfilled Foundation",
+        "local_id": "equip_overfilled_foundation",
+        "mash_tun": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 1 },
+          "foundation_volume": { "unit": "l", "value": 29 }
+        },
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 2 }
+        }
+      },
+      {
+        "name": "Mixed Units Overfilled",
+        "local_id": "equip_mixed_units",
+        "mash_tun": {
+          "max_volume": { "unit": "gal", "value": 2 },
+          "loss": { "unit": "l", "value": 0 },
+          "foundation_volume": { "unit": "l", "value": 8 }
+        },
+        "kettle": {
+          "max_volume": { "unit": "gal", "value": 2 },
+          "loss": { "unit": "gal", "value": 0.25 }
+        }
+      },
+      {
+        "name": "Negative Foundation",
+        "local_id": "equip_negative_foundation",
+        "mash_tun": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 0 },
+          "foundation_volume": { "unit": "l", "value": -1 }
+        },
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 2 }
+        }
+      },
+      {
+        "name": "Foundation In Kettle",
+        "local_id": "equip_foundation_in_kettle",
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 2 },
+          "foundation_volume": { "unit": "l", "value": 3.5 }
+        }
+      }
+    ]
+  }
+}

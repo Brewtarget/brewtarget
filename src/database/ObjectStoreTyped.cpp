@@ -171,6 +171,7 @@ namespace {
          {ObjectStore::FieldType::Double, {"packaging_vessel_volume_l"     }, PropertyNames::Equipment::packagingVesselVolume_l     },
          {ObjectStore::FieldType::Double, {"hlt_loss_l"                    }, PropertyNames::Equipment::hltLoss_l                   },
          {ObjectStore::FieldType::Double, {"mash_tun_loss_l"               }, PropertyNames::Equipment::mashTunLoss_l               },
+         {ObjectStore::FieldType::Double, {"mash_tun_foundation_volume_l"  }, PropertyNames::Equipment::mashTunFoundationVolume_l   },
          {ObjectStore::FieldType::Double, {"fv_loss_l"                     }, PropertyNames::Equipment::fvLoss_l                    },
          {ObjectStore::FieldType::Double, {"aging_vessel_loss_l"           }, PropertyNames::Equipment::agingVesselLoss_l           },
          {ObjectStore::FieldType::Double, {"packaging_vessel_loss_l"       }, PropertyNames::Equipment::packagingVesselLoss_l       },

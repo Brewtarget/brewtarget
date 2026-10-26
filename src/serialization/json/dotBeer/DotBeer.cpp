@@ -631,6 +631,7 @@ namespace {
       {JsonRecordDefinition::FieldType::String              , "mash_tun/vessel_type"             , PropertyNames::Equipment::mashTunType                },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/max_volume"              , PropertyNames::Equipment::mashTunVolume_l            , &DOT_BEER_VOLUME_UNIT_MAPPER         },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/loss"                    , PropertyNames::Equipment::mashTunLoss_l              , &DOT_BEER_VOLUME_UNIT_MAPPER         },
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/foundation_volume"       , PropertyNames::Equipment::mashTunFoundationVolume_l  , &DOT_BEER_VOLUME_UNIT_MAPPER         },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/grain_absorption_rate"   , PropertyNames::Equipment::mashTunGrainAbsorption_LKg , &DOT_BEER_VOLUME_PER_MASS_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/weight"                  , PropertyNames::Equipment::mashTunWeight_kg           , &DOT_BEER_MASS_UNIT_MAPPER           },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/specific_heat_capacity"  , PropertyNames::Equipment::mashTunSpecificHeat_calGC  , &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER  },

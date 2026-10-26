@@ -416,6 +416,10 @@
          <xs:element name="APPEARANCE"         type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="MOUTHFEEL"          type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="OVERALL_IMPRESSION" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <!-- Our own extension tag for the (sub)folder this record is in, relative to the folder it was exported
+              from.  (Equivalent to folder_path in dotBeer.)  Absent means the folder being exported from / imported
+              into.  -->
+         <xs:element name="FOLDER_PATH" type="xs:string" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -462,7 +466,9 @@
          <!-- ********************************************************************************************
               *** Extra fields not included in the BeerXML 1.0 standard but used by Brewtarget/Brewken ***
               ******************************************************************************************** -->
-         <xs:element name="REAL_EVAP_RATE" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <!-- NB: Despite the name, this is liters per hour, not a percentage.  (It used to be typed as SimplePercentage, which
+              meant we could not read back our own export of a kettle that boils off more than 100 liters an hour.) -->
+         <xs:element name="REAL_EVAP_RATE" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
          <xs:element name="ABSORPTION" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
          <xs:element name="BOILING_POINT" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
          <xs:element name="KETTLEINTERNALDIAMETER_CM" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
@@ -498,6 +504,14 @@
          <xs:element name="FERMENTER_NOTES"                type="xs:string"  minOccurs="0" maxOccurs="1"/>
          <xs:element name="AGING_VESSEL_NOTES"             type="xs:string"  minOccurs="0" maxOccurs="1"/>
          <xs:element name="PACKAGING_VESSEL_NOTES"         type="xs:string"  minOccurs="0" maxOccurs="1"/>
+         <!-- Our own extension tag for a field that is in dotBeer but not BeerJSON (or BeerXML).  It is the volume
+              in the mash tun below a false bottom / malt pipe, which is needed in addition to the strike water that
+              wets the grain, but which, unlike MASH_TUN_LOSS_L, is recovered with the wort.  -->
+         <xs:element name="MASH_TUN_FOUNDATION_VOLUME_L"   type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <!-- Our own extension tag for the (sub)folder this record is in, relative to the folder it was exported
+              from.  (Equivalent to folder_path in dotBeer.)  Absent means the folder being exported from / imported
+              into.  -->
+         <xs:element name="FOLDER_PATH" type="xs:string" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -588,6 +602,10 @@
          <xs:element name="ADD_AT_GRAVITY_SG" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
          <xs:element name="ADD_AT_ACIDITY_PH" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
          <xs:element name="DURATION_MINS"     type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+         <!-- Our own extension tag for the (sub)folder this record is in, relative to the folder it was exported
+              from.  (Equivalent to folder_path in dotBeer.)  Absent means the folder being exported from / imported
+              into.  -->
+         <xs:element name="FOLDER_PATH" type="xs:string" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -672,6 +690,10 @@
          <xs:element name="ADD_AT_GRAVITY_SG" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
          <xs:element name="ADD_AT_ACIDITY_PH" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
          <xs:element name="DURATION_MINS"     type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
+         <!-- Our own extension tag for the (sub)folder this record is in, relative to the folder it was exported
+              from.  (Equivalent to folder_path in dotBeer.)  Absent means the folder being exported from / imported
+              into.  -->
+         <xs:element name="FOLDER_PATH" type="xs:string" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -739,6 +761,10 @@
          <xs:element name="ADD_AT_ACIDITY_PH" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
          <xs:element name="DURATION_MINS"     type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
 
+         <!-- Our own extension tag for the (sub)folder this record is in, relative to the folder it was exported
+              from.  (Equivalent to folder_path in dotBeer.)  Absent means the folder being exported from / imported
+              into.  -->
+         <xs:element name="FOLDER_PATH" type="xs:string" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -831,6 +857,10 @@
          <xs:element name="ADD_AT_ACIDITY_PH" type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
          <xs:element name="DURATION_MINS"     type="xs:decimal"            minOccurs="0" maxOccurs="1"/>
 
+         <!-- Our own extension tag for the (sub)folder this record is in, relative to the folder it was exported
+              from.  (Equivalent to folder_path in dotBeer.)  Absent means the folder being exported from / imported
+              into.  -->
+         <xs:element name="FOLDER_PATH" type="xs:string" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -871,6 +901,10 @@
          <xs:element name="NITRATE_PPM"   type="xs:decimal" minOccurs="0" maxOccurs="1"/>
          <xs:element name="NITRITE_PPM"   type="xs:decimal" minOccurs="0" maxOccurs="1"/>
          <xs:element name="FLUORIDE_PPM"  type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <!-- Our own extension tag for the (sub)folder this record is in, relative to the folder it was exported
+              from.  (Equivalent to folder_path in dotBeer.)  Absent means the folder being exported from / imported
+              into.  -->
+         <xs:element name="FOLDER_PATH" type="xs:string" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -963,6 +997,10 @@
          <xs:element name="DISPLAY_TUN_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_SPARGE_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_TUN_WEIGHT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <!-- Our own extension tag for the (sub)folder this record is in, relative to the folder it was exported
+              from.  (Equivalent to folder_path in dotBeer.)  Absent means the folder being exported from / imported
+              into.  -->
+         <xs:element name="FOLDER_PATH" type="xs:string" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -1161,6 +1199,10 @@
          <xs:element name="DISPLAY_AGE_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="CARBONATION_USED" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_CARB_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <!-- Our own extension tag for the (sub)folder this record is in, relative to the folder it was exported
+              from.  (Equivalent to folder_path in dotBeer.)  Absent means the folder being exported from / imported
+              into.  -->
+         <xs:element name="FOLDER_PATH" type="xs:string" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 

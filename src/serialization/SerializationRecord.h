@@ -18,6 +18,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 
 #include "model/NamedEntity.h"
 #include "model/NamedParameterBundle.h"
@@ -213,7 +214,9 @@ public:
          this->setContainingEntity(containingEntity);
 
          //
-         // If this is the sort of thing that can have folders, then set its folder
+         // If this is the sort of thing that can have folders, then set its folder.  (If the record in the file said
+         // what (sub)folder it was in -- see m_folderSubPath -- then that is relative to targetFolderPath.  This is
+         // handled in NamedEntityRecordBase::doSetFolderPath.)
          //
          this->setFolderPath(targetFolderPath);
 
@@ -495,6 +498,14 @@ protected:
    // Name-value pairs containing all the field data from the XML or JSON record that will be used to construct/populate
    // this->m_namedEntity
    NamedParameterBundle m_namedParameterBundle;
+
+   /**
+    * \brief If the record we read in had a folder path (eg dotBeer \c folder_path or our BeerXML \c FOLDER_PATH
+    *        extension tag), this is it.  It is relative to the folder into which we are importing.  We store it here,
+    *        rather than in \c m_namedParameterBundle, because we can only apply it once we know the target folder (in
+    *        \c normaliseAndStoreInDb).
+    */
+   std::optional<QString> m_folderSubPath = std::nullopt;
 
    //
    // If we created a new NamedEntity (ie Hop/Yeast/Recipe/etc) object to populate with data read in from an XML or JSON

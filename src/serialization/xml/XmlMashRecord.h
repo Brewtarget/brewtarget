@@ -34,7 +34,8 @@ protected:
     *        that we do not need to override \c SerializationRecord::normaliseAndStoreInDb as the connection between a
     *        \c MashStep and its \c Mash is handled in \c Serialization::NamedEntityRecordBase::doSetContainingEntity.)
     */
-   virtual void subRecordToXml(XmlRecordDefinition::FieldDefinition const & fieldDefinition,
+   virtual void subRecordToXml(QString const & baseFolderPath,
+                               XmlRecordDefinition::FieldDefinition const & fieldDefinition,
                                XmlRecord const & subRecord,
                                NamedEntity const & namedEntityToExport,
                                QTextStream & out,

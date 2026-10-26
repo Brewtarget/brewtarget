@@ -134,6 +134,7 @@ namespace {
       // Type                                            XPath                    Q_PROPERTY                                 Value Decoder
       {XmlRecordDefinition::FieldType::String          , "NAME"                 , PropertyNames::NamedEntity::name         },
       {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"              , VERSION1                                 },
+      {XmlRecordDefinition::FieldType::FolderPath      , "FOLDER_PATH"          , PropertyNames::FolderPropertyBase::containedInFolderPath}, // Extension tag
       {XmlRecordDefinition::FieldType::Double          , "ALPHA"                , PropertyNames::Hop::alpha_pct            },
       {XmlRecordDefinition::FieldType::String          , "NOTES"                , PropertyNames::Hop::notes                },
       {XmlRecordDefinition::FieldType::Enum            , "TYPE"                 , PropertyNames::Hop::type                 , &BEER_XML_HOP_TYPE_MAPPER},
@@ -224,6 +225,7 @@ namespace {
       // Type                                            XPath                             Q_PROPERTY                                             Value Decoder
       {XmlRecordDefinition::FieldType::String          , "NAME"                          , PropertyNames::NamedEntity::name                     },
       {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"                       , VERSION1                                             },
+      {XmlRecordDefinition::FieldType::FolderPath      , "FOLDER_PATH"                   , PropertyNames::FolderPropertyBase::containedInFolderPath}, // Extension tag
       {XmlRecordDefinition::FieldType::Enum            , "TYPE"                          , PropertyNames::Fermentable::type                     , &BEER_XML_FERMENTABLE_TYPE_MAPPER},
       {XmlRecordDefinition::FieldType::Double          , "YIELD"                         , PropertyNames::Fermentable::fineGrindYield_pct       , {}, Serialization::NullSentinel{0.0}},
       // NOTE The BeerXML standard says color for fermentables is "Lovibond Units [sic] (SRM for liquid extracts)".
@@ -337,6 +339,7 @@ namespace {
       // Type                                            XPath                           Q_PROPERTY                                          Value Decoder
       {XmlRecordDefinition::FieldType::String          , "NAME"                        , PropertyNames::NamedEntity::name                  },
       {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"                     , VERSION1                                          },
+      {XmlRecordDefinition::FieldType::FolderPath      , "FOLDER_PATH"                 , PropertyNames::FolderPropertyBase::containedInFolderPath}, // Extension tag
       {XmlRecordDefinition::FieldType::Enum            , "TYPE"                        , PropertyNames::Yeast::type                        , &BEER_XML_YEAST_TYPE_MAPPER},
       {XmlRecordDefinition::FieldType::Enum            , "FORM"                        , PropertyNames::Yeast::form                        , &BEER_XML_YEAST_FORM_MAPPER},
       {XmlRecordDefinition::FieldType::String          , "LABORATORY"                  , PropertyNames::Yeast::laboratory                  },
@@ -408,6 +411,7 @@ namespace {
       // Type                                            XPath                           Q_PROPERTY                                          Value Decoder
       {XmlRecordDefinition::FieldType::String          , "NAME"            , PropertyNames::NamedEntity::name   },
       {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"         , VERSION1                           },
+      {XmlRecordDefinition::FieldType::FolderPath      , "FOLDER_PATH"     , PropertyNames::FolderPropertyBase::containedInFolderPath}, // Extension tag
       {XmlRecordDefinition::FieldType::Enum            , "TYPE"            , PropertyNames::Misc::type          , &BEER_XML_MISC_TYPE_MAPPER},
       {XmlRecordDefinition::FieldType::String          , "USE_FOR"         , PropertyNames::Misc::useFor        },
       {XmlRecordDefinition::FieldType::String          , "NOTES"           , PropertyNames::Misc::notes         },
@@ -443,6 +447,7 @@ namespace {
       // Type                                            XPath             Q_PROPERTY                             Value Decoder
       {XmlRecordDefinition::FieldType::String          , "NAME"          , PropertyNames::NamedEntity::name     },
       {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"       , VERSION1                             },
+      {XmlRecordDefinition::FieldType::FolderPath      , "FOLDER_PATH"   , PropertyNames::FolderPropertyBase::containedInFolderPath}, // Extension tag
       {XmlRecordDefinition::FieldType::Double          , "CALCIUM"       , PropertyNames::Water::calcium_ppm    },
       {XmlRecordDefinition::FieldType::Double          , "BICARBONATE"   , PropertyNames::Water::bicarbonate_ppm},
       {XmlRecordDefinition::FieldType::Double          , "SULFATE"       , PropertyNames::Water::sulfate_ppm    },
@@ -501,6 +506,7 @@ namespace {
          {XmlRecordDefinition::FieldType::String          , "NAME"              , PropertyNames::NamedEntity::name       },
          {XmlRecordDefinition::FieldType::String          , "CATEGORY"          , PropertyNames::Style::category         },
          {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"           , VERSION1                               },
+         {XmlRecordDefinition::FieldType::FolderPath      , "FOLDER_PATH"       , PropertyNames::FolderPropertyBase::containedInFolderPath}, // Extension tag
          {XmlRecordDefinition::FieldType::String          , "CATEGORY_NUMBER"   , PropertyNames::Style::categoryNumber   }, // NB: Despite the name, this is specified as Text in the BeerXML 1.0 standard
          {XmlRecordDefinition::FieldType::String          , "STYLE_LETTER"      , PropertyNames::Style::styleLetter      },
          {XmlRecordDefinition::FieldType::String          , "STYLE_GUIDE"       , PropertyNames::Style::styleGuide       },
@@ -601,6 +607,7 @@ namespace {
          // Type                                            XPath                   Q_PROPERTY                                      Value Decoder
          {XmlRecordDefinition::FieldType::String          , "NAME"                , PropertyNames::NamedEntity::name              },
          {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"             , VERSION1                                      },
+         {XmlRecordDefinition::FieldType::FolderPath      , "FOLDER_PATH"         , PropertyNames::FolderPropertyBase::containedInFolderPath}, // Extension tag
          {XmlRecordDefinition::FieldType::Double          , "GRAIN_TEMP"          , PropertyNames::Mash::grainTemp_c              },
          {XmlRecordDefinition::FieldType::ListOfRecords   , "MASH_STEPS/MASH_STEP", PropertyNames::StepOwnerBase::steps        , &BEER_XML_RECORD_DEFN<MashStep>}, // Additional logic for "MASH-STEPS" is handled in code
          {XmlRecordDefinition::FieldType::String          , "NOTES"               , PropertyNames::Mash::notes                    },
@@ -743,6 +750,7 @@ namespace {
          // Type                                            XPath                             Q_PROPERTY                                             Value Decoder
          {XmlRecordDefinition::FieldType::String          , "NAME"                          , PropertyNames::NamedEntity::name                     },
          {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"                       , VERSION1                                             },
+         {XmlRecordDefinition::FieldType::FolderPath      , "FOLDER_PATH"                   , PropertyNames::FolderPropertyBase::containedInFolderPath}, // Extension tag
          {XmlRecordDefinition::FieldType::Double          , "BOIL_SIZE"                     , PropertyNames::Equipment::kettleBoilSize_l           },
          {XmlRecordDefinition::FieldType::Double          , "BATCH_SIZE"                    , PropertyNames::Equipment::fvBatchSize_l       },
          {XmlRecordDefinition::FieldType::Double          , "TUN_VOLUME"                    , PropertyNames::Equipment::mashTunVolume_l            },
@@ -783,6 +791,11 @@ namespace {
          {XmlRecordDefinition::FieldType::Double          , "PACKAGING_VESSEL_VOLUME_L"     , PropertyNames::Equipment::packagingVesselVolume_l    },
          {XmlRecordDefinition::FieldType::Double          , "HLT_LOSS_L"                    , PropertyNames::Equipment::hltLoss_l                  },
          {XmlRecordDefinition::FieldType::Double          , "MASH_TUN_LOSS_L"               , PropertyNames::Equipment::mashTunLoss_l              },
+         // ⮜⮜⮜ Following are our own extension tags for fields that are not in BeerJSON either ⮞⮞⮞
+         // mashTunFoundationVolume_l is in dotBeer (as mash_tun/foundation_volume) but neither BeerXML nor BeerJSON.  See
+         // comments in model/Equipment.h.  NB: As with all extension tags, other programs reading the file will ignore
+         // this.  So, for them, the equipment will be treated as having no volume below the false bottom / malt pipe.
+         {XmlRecordDefinition::FieldType::Double          , "MASH_TUN_FOUNDATION_VOLUME_L"  , PropertyNames::Equipment::mashTunFoundationVolume_l  },
          {XmlRecordDefinition::FieldType::Double          , "FERMENTER_LOSS_L"              , PropertyNames::Equipment::fvLoss_l            },
          {XmlRecordDefinition::FieldType::Double          , "AGING_VESSEL_LOSS_L"           , PropertyNames::Equipment::agingVesselLoss_l          },
          {XmlRecordDefinition::FieldType::Double          , "PACKAGING_VESSEL_LOSS_L"       , PropertyNames::Equipment::packagingVesselLoss_l      },
@@ -1073,6 +1086,7 @@ namespace {
          // Type                                            XPath                       Q_PROPERTY                                 Value Decoder
          {XmlRecordDefinition::FieldType::String          , "NAME"                    , PropertyNames::NamedEntity::name         },
          {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"                 , VERSION1                                 },
+         {XmlRecordDefinition::FieldType::FolderPath      , "FOLDER_PATH"             , PropertyNames::FolderPropertyBase::containedInFolderPath}, // Extension tag
          {XmlRecordDefinition::FieldType::Enum            , "TYPE"                    , PropertyNames::Recipe::type              , &BEER_XML_RECIPE_STEP_TYPE_MAPPER},
          {XmlRecordDefinition::FieldType::Record          , "STYLE"                   , PropertyNames::Recipe::style             , &BEER_XML_RECORD_DEFN<Style>},
          {XmlRecordDefinition::FieldType::Record          , "EQUIPMENT"               , PropertyNames::Recipe::equipment         , &BEER_XML_RECORD_DEFN<Equipment>},
@@ -1367,7 +1381,9 @@ void BeerXML::createXmlFile(QFile & outFile) const {
    return;
 }
 
-template<class NE> void BeerXML::toXml(QList<NE const *> const & nes, QFile & outFile) const {
+template<class NE> void BeerXML::toXml(QString const & baseFolderPath,
+                                       QList<NE const *> const & nes,
+                                       QFile & outFile) const {
    // We don't want to output empty container records
    if (nes.empty()) {
       return;
@@ -1386,7 +1402,7 @@ template<class NE> void BeerXML::toXml(QList<NE const *> const & nes, QFile & ou
       std::unique_ptr<XmlRecord> xmlRecord{
          BEER_XML_RECORD_DEFN<NE>.makeRecord(BEER_XML_1_CODING)
       };
-      xmlRecord->toXml(*ne, out, true);
+      xmlRecord->toXml(baseFolderPath, *ne, out, true);
    }
    out << "</" << BEER_XML_RECORD_DEFN<NE>.m_recordName << "S>\n";
    return;
@@ -1396,18 +1412,18 @@ template<class NE> void BeerXML::toXml(QList<NE const *> const & nes, QFile & ou
 // (This is all just a trick to allow the template definition to be here in the .cpp file and not in the header, which
 // means, amongst other things, that we can reference the pimpl.)
 //
-template void BeerXML::toXml(QList<Hop         const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Fermentable const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Yeast       const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Misc        const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Water       const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Style       const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<MashStep    const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Mash        const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Equipment   const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Instruction const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<BrewLog    const *> const & nes, QFile & outFile) const;
-template void BeerXML::toXml(QList<Recipe      const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<Hop         const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<Fermentable const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<Yeast       const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<Misc        const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<Water       const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<Style       const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<MashStep    const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<Mash        const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<Equipment   const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<Instruction const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<BrewLog    const *> const & nes, QFile & outFile) const;
+template void BeerXML::toXml(QString const & baseFolderPath, QList<Recipe      const *> const & nes, QFile & outFile) const;
 
 // fromXml ====================================================================
 bool BeerXML::importFromXML(QString const & targetFolderPath, QString const & filename, QTextStream & userMessage) {

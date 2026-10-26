@@ -427,7 +427,17 @@ void MashDesigner::updateFullness() {
 
    this->progressBar_fullness->setValue(static_cast<int>(ratio*progressBar_fullness->maximum()));
    this->label_mashVol->setText(Measurement::displayAmount(Measurement::Amount{vol_l, Measurement::Units::liters}));
-   this->label_thickness->setText(Measurement::displayThickness((m_addedWater_l + (isInfusion() ? selectedAmount_l() : 0))/m_grain_kg));
+   //
+   // Mash thickness is the ratio of water to grain in the grain bed, so we must not count any water that is in the
+   // mash tun outside the grain bed (eg foundation water below a false bottom or malt pipe).  See
+   // Equipment::strikeWaterAllowance_l.
+   //
+   double const waterInTun_l = m_addedWater_l + (isInfusion() ? selectedAmount_l() : 0);
+   this->label_thickness->setText(
+      Measurement::displayThickness(
+         m_recObs->mashThicknessForStrikeWater_LKg(waterInTun_l).value_or(waterInTun_l/m_grain_kg)
+      )
+   );
    return;
 }
 

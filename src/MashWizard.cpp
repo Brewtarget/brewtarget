@@ -149,7 +149,6 @@ void MashWizard::wizardry() {
          m_recObs->equipment()->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) :
          PhysicalConstants::grainAbsorption_Lkg;
    double const boilingPoint_c = hasEquipment ? m_recObs->equipment()->boilingPoint_c() : 100.0;
-   double const lauterDeadspace_l = hasEquipment ? m_recObs->equipment()->getLauteringDeadspaceLoss_l() : 0.0;
 
    double const grainsInMash_kg = this->m_recObs->grainsInMash_kg();
    if (Utils::FuzzyCompare(grainsInMash_kg, 0.0)) {
@@ -214,16 +213,23 @@ void MashWizard::wizardry() {
 
    QList<std::shared_ptr<MashStep>> const steps = mash->mashSteps();
 
-   // For no sparge, get the thickness of the first mash step
+   //
+   // For no sparge, get the thickness of the first mash step.  Note that mash thickness is the ratio of water to grain
+   // in the grain bed, so it does not include any water that has to be in the mash tun outside the grain bed (ie
+   // foundation water and mash tun loss -- see Equipment::strikeWaterAllowance_l).  We have to take this into account
+   // when going from strike water to thickness (here) and back again (below).  (Otherwise, each time the wizard was
+   // run on a no-sparge mash, the strike water would grow.)
+   //
    double const thickNum      =
-      noSparge ? firstMashStep->amount_l()/grainsInMash_kg : this->doubleSpinBox_thickness->value();
+      noSparge ? this->m_recObs->mashThicknessForStrikeWater_LKg(firstMashStep->amount_l()).value_or(0.0) :
+                 this->doubleSpinBox_thickness->value();
    double const thickness_LKg =
       noSparge ? thickNum :
                  thickNum * this->m_volumeUnit->toCanonical(1.0).quantity /
                             this->m_weightUnit->toCanonical(1.0).quantity;
    qDebug() <<
       Q_FUNC_INFO << "grainsInMash_kg:" << grainsInMash_kg << ", thickNum:" << thickNum << ", thickness_LKg:" <<
-      thickness_LKg << ", lauterDeadspace_l:" << lauterDeadspace_l;
+      thickness_LKg;
 
    if (thickness_LKg <= 0.0) {
       QMessageBox::information(this,
@@ -234,8 +240,15 @@ void MashWizard::wizardry() {
 
    double grainHeatCapacity_kcalC = PhysicalConstants::grainSpecificHeat_calGC * grainsInMash_kg;
 
+   //
    // Do first step
-   double waterMass_kg = thickness_LKg * grainsInMash_kg;
+   //
+   // The strike water is what the grain bed needs (thickness × grain) plus any foundation water (eg below the false
+   // bottom or malt pipe of an all-in-one system) and mash tun loss.  These have to be in the mash tun too, and get
+   // heated along with the rest of the strike water.  (The foundation water drains back out with the wort, so it does
+   // not change the total water needed, just means less is needed for sparging.)
+   //
+   double waterMass_kg = this->m_recObs->targetStrikeWater_l(thickness_LKg);
    {
       //
       // We use a lot of the same variable names in different places for each step.  Rather than try to come up with
@@ -446,14 +459,17 @@ void MashWizard::wizardry() {
          }
       }
 
+      //
+      // NB: targetTotalMashVol_l already includes lautering losses, so we must not add them on again here.  (We used
+      // to, but, because Recipe::targetCollectedWortVol_l used to subtract them, it came out the same as not allowing
+      // for them at all.)
+      //
       double const targetTotalMashVol_l = m_recObs->targetTotalMashVol_l();
-      double const targetWortFromMash_l = targetTotalMashVol_l + lauterDeadspace_l;
       qDebug() <<
-         Q_FUNC_INFO << "targetWortFromMash_l:" << targetWortFromMash_l << ", targetTotalMashVol_l:" <<
-         targetTotalMashVol_l << ", lauterDeadspace_l:" << lauterDeadspace_l << ", otherMashStepsTotal_l:" <<
+         Q_FUNC_INFO << "targetTotalMashVol_l:" << targetTotalMashVol_l << ", otherMashStepsTotal_l:" <<
          otherMashStepsTotal_l;
 
-      waterMass_kg = (targetWortFromMash_l - otherMashStepsTotal_l) * Algorithms::getWaterDensity_kgL(0.0);
+      waterMass_kg = (targetTotalMashVol_l - otherMashStepsTotal_l) * Algorithms::getWaterDensity_kgL(0.0);
 
       if (waterMass_kg < 0.0) {
          QMessageBox::information(this,
@@ -493,15 +509,17 @@ void MashWizard::wizardry() {
       lastMashStep->setInfuseTemp_c(waterTemp_c);
    }
 
-   // Now, do a sparge step, using just enough water that the total
-   // volume sums up to the target pre-boil size. We need to account for the potential
-   // lauter dead space, I think?
+   //
+   // Now, do a sparge step, using just enough water that the total volume sums up to the target pre-boil size.
+   //
+   // Recipe::targetTotalMashVol_l already allows for lautering losses (and any foundation water was included in the
+   // strike water above, so is in totalMashWater_l), so we don't need to add anything here.
+   //
    double spargeWater_l = m_recObs->targetTotalMashVol_l() - m_recObs->mash()->totalMashWater_l();
 
    // If I've done my math right, we should never get here on nosparge
    // not sure why I am inferring this when I could just check the button group?
    if (spargeWater_l >= 0.001) {
-      spargeWater_l += lauterDeadspace_l;
       int const lastMashStepIndex = steps.size() - 1;
       double const tempFinal_c = mash->spargeTemp_c().value_or(0.0); // TODO We should have some better logic if spargeTemp_c is unset or 0.
       if (lastMashStepIndex  < 0) {

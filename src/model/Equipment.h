@@ -73,6 +73,7 @@ AddPropertyName(lauterTunSpecificHeat_calGC)
 AddPropertyName(lauterTunType              )
 AddPropertyName(lauterTunVolume_l          )
 AddPropertyName(lauterTunWeight_kg         )
+AddPropertyName(mashTunFoundationVolume_l   )
 AddPropertyName(mashTunGrainAbsorption_LKg )
 AddPropertyName(mashTunLoss_l              )
 AddPropertyName(mashTunNotes               )
@@ -122,8 +123,25 @@ AddPropertyName(topUpWater_l               )
  *        NOTE: Now that we support hot liquor tanks, lauter tuns and so on, we need to be careful about places in the
  *              code & UI where there was previously an implicit assumption about the (maximum) number of vessels.  Eg,
  *              in a system with no separate lautering tun, the lautering losses are part of the mash tun losses, but,
- *              where there is a separate lautering tun, lautering losses will be associated with that tun.
- * TODO: Make the above NOTE true!
+ *              where there is a separate lautering tun, lautering losses will be associated with that tun.  Code that
+ *              needs to know about mash/lauter volumes should therefore go through \c getLauteringDeadspaceLoss_l and
+ *              \c strikeWaterAllowance_l rather than reading the individual vessel fields, so that it does not need to
+ *              know how many vessels the brewer is using.
+ *
+ *        Volumes in the mash tun (and, where there is one, the lauter tun) relate to each other as follows:
+ *
+ *              ┌──────────────────────────────┐ ─┬─
+ *              │   mash: grain + the water    │  │
+ *              │   that is in contact with it │  │ mashTunVolume_l = total usable capacity, including
+ *              │                              │  │                   mashTunFoundationVolume_l and mashTunLoss_l
+ *              ├┄┄┄┄┄┄ false bottom ┄┄┄┄┄┄┄┄┄┄┤  │
+ *              │   mashTunFoundationVolume_l  │  │ ← drains out with the wort (recovered)
+ *              ├────── outlet ────────────────┤  │
+ *              │   mashTunLoss_l              │  │ ← stays behind (not recovered)
+ *              └──────────────────────────────┘ ─┴─
+ *
+ *        Grain absorption (\c mashTunGrainAbsorption_LKg) is separate from all of these: it is water retained by the
+ *        grain rather than by the vessel.
  */
 class Equipment : public NamedEntity,
                   public FolderPropertyBase<Equipment> {
@@ -171,6 +189,7 @@ public:
    static QString localisedName_lauterTunType              ();
    static QString localisedName_lauterTunVolume_l          ();
    static QString localisedName_lauterTunWeight_kg         ();
+   static QString localisedName_mashTunFoundationVolume_l  ();
    static QString localisedName_mashTunGrainAbsorption_LKg ();
    static QString localisedName_mashTunLoss_l              ();
    static QString localisedName_mashTunNotes               ();
@@ -278,6 +297,10 @@ public:
    /**
     * \brief The evaporation rate in percent of the boil size per hour. *** DO NOT USE. *** Only for BeerXML compatibility.  ⮜⮜⮜ Optional in BeerXML.  Not supported in BeerJSON. ⮞⮞⮞
     *
+    *        We keep this in step with \c kettleEvaporationPerHour_l (which is what we use in calculations), as a
+    *        percentage of \c kettleBoilSize_l.  When reading a BeerXML file from another program, this may be the only
+    *        evaporation rate we have, in which case we use it to set \c kettleEvaporationPerHour_l.
+    *
     *        .:TBD:. Can we drop this from the DB?
     */
    Q_PROPERTY(std::optional<double> evapRate_pctHr        READ evapRate_pctHr        WRITE setEvapRate_pctHr        )
@@ -331,6 +354,24 @@ public:
     *        0.08 gal/lb (0.66 L/kg) for BIAB.
     */
    Q_PROPERTY(std::optional<double> mashTunGrainAbsorption_LKg   READ mashTunGrainAbsorption_LKg   WRITE setMashTunGrainAbsorption_LKg   )
+   /**
+    * \brief Volume of liquid in the mash tun that is outside the grain bed -- typically below a false bottom, screen or
+    *        malt pipe.  It is needed as well as the water that wets the grain, but, unlike \c mashTunLoss_l, it drains
+    *        out with the wort and so is recovered (eg into the boil).  Typical of all-in-one systems -- eg 3.5 l for a
+    *        Grainfather G30.  0 if there is no such space (eg brew-in-a-bag with no false bottom).
+    *
+    *        In dotBeer, this is \c foundation_volume on \c mash_tun.  (In brewing, "foundation water" is the water put
+    *        under the false bottom before doughing in.)  BeerJSON and BeerXML have no equivalent field: in BeerXML we
+    *        write it as an extension tag; in BeerJSON it is not written, and is therefore lost.  (Brewfather calls it
+    *        "Mash-Tun Deadspace" and BeerSmith "Mash Tun Addition".  We avoid the term "dead space" because, to many
+    *        brewers, as in BeerXML's LAUTER_DEADSPACE, dead space means volume that is lost.)
+    *
+    *        It does not change how much water is needed in total, only how that water is split between strike water
+    *        and sparge water.  See \c strikeWaterAllowance_l.
+    *
+    *        NB: Not part of BeerXML or BeerJSON
+    */
+   Q_PROPERTY(double                mashTunFoundationVolume_l    READ mashTunFoundationVolume_l    WRITE setMashTunFoundationVolume_l    )
    /**
     * \brief The boiling point of water in Celsius.  NB: Not part of BeerXML or BeerJSON
     *
@@ -418,6 +459,7 @@ public:
    std::optional<double> hopUtilization_pct         () const;
    QString               kettleNotes                () const;
    std::optional<double> mashTunGrainAbsorption_LKg () const;
+   double                mashTunFoundationVolume_l  () const;
    double                boilingPoint_c             () const;
    std::optional<double> kettleInternalDiameter_cm  () const;
    std::optional<double> kettleOpeningDiameter_cm   () const;
@@ -467,6 +509,7 @@ public:
    void setHopUtilization_pct         (std::optional<double> const   val);
    void setKettleNotes                (QString               const & val);
    void setMashTunGrainAbsorption_LKg (std::optional<double> const   val);
+   void setMashTunFoundationVolume_l  (double                const   val);
    void setBoilingPoint_c             (double                const   val);
    void setKettleInternalDiameter_cm  (std::optional<double> const   val);
    void setKettleOpeningDiameter_cm   (std::optional<double> const   val);
@@ -504,8 +547,28 @@ public:
    /**
     * \brief Gives the Lautering Deadspace Loss + any mash losses not related to grain absorption, without the caller
     *        having to know whether a separate lauter tun is used.
+    *
+    *        This is wort that is lost between the mash and the boil, so it has to be allowed for in the total water
+    *        for the mash, and is subtracted from the wort that reaches the boil.  Note that it does \b not include
+    *        \c mashTunFoundationVolume_l, which is recovered.
     */
    double getLauteringDeadspaceLoss_l() const;
+
+   /**
+    * \brief How much water needs to be in the mash tun, on top of what the grain bed itself needs (ie grain mass ×
+    *        mash thickness), when the grain goes in.  This is \c mashTunFoundationVolume_l plus \c mashTunLoss_l.
+    *
+    *        So, strike water = (grain mass × mash thickness) + strikeWaterAllowance_l().  This keeps "mash thickness"
+    *        meaning the ratio of water to grain in the grain bed, whatever the equipment.
+    *
+    *        Note that this is only about where the water goes, not how much is needed in total: the foundation volume
+    *        is recovered with the wort and the mash tun loss is already allowed for in the total water (via
+    *        \c getLauteringDeadspaceLoss_l).  Thus, the more of the total water that goes in as strike water, the less
+    *        is needed for sparging.
+    *
+    *        Lauter tun losses are not included, because they are not in the mash tun.
+    */
+   double strikeWaterAllowance_l() const;
 
    /**
     * \brief The hot liquor tank, lauter tun, aging vessel and packaging vessel are "optional" vessels, ie ones the user
@@ -547,6 +610,7 @@ private:
    std::optional<double> m_hopUtilization_pct        ;
    QString               m_kettleNotes               ;
    std::optional<double> m_mashTunGrainAbsorption_LKg;
+   double                m_mashTunFoundationVolume_l ;
    double                m_boilingPoint_c            ;
    std::optional<double> m_kettleInternalDiameter_cm ;
    std::optional<double> m_kettleOpeningDiameter_cm  ;

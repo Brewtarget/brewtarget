@@ -671,13 +671,32 @@ public:
     */
    double        postMashAdditionVolume_l() const;
    /**
-    * \brief
+    * \brief The volume of wort that needs to reach the boil kettle from the mash (ie after any lautering losses) to give
+    *        the target pre-boil volume, allowing for any kettle top-up and post-mash additions (see
+    *        \c postMashAdditionVolume_l).
     */
    double        targetCollectedWortVol_l() const;
    /**
-    * \brief
+    * \brief The total volume of water (strike water, plus any further infusions, plus sparge water) that needs to go
+    *        into the mash to give \c targetCollectedWortVol_l.  This is \c targetCollectedWortVol_l plus what the grain
+    *        absorbs plus what is lost in the mash/lauter tun(s) (\c Equipment::getLauteringDeadspaceLoss_l).
+    *
+    *        Note that \c Equipment::mashTunFoundationVolume_l does not affect this, as it is recovered with the wort.
+    *        It only affects how the total is split between strike water and sparge water (see \c targetStrikeWater_l).
     */
    double        targetTotalMashVol_l    () const;
+   /**
+    * \brief The strike water (ie first infusion) needed for the supplied mash thickness, where the thickness is the
+    *        ratio of water to grain in the grain bed.  This is the water for the grain bed plus
+    *        \c Equipment::strikeWaterAllowance_l (ie the foundation water and mash tun loss, which have to be in the
+    *        mash tun too).
+    */
+   double        targetStrikeWater_l(double const mashThickness_LKg) const;
+   /**
+    * \brief The inverse of \c targetStrikeWater_l: for the supplied strike water volume, what is the thickness of the
+    *        grain bed?  Returns \c std::nullopt if there are no grains in the mash.
+    */
+   std::optional<double> mashThicknessForStrikeWater_LKg(double const strikeWater_l) const;
 
    double        wortFromMash_l          () const;
    double        boilVolume_l            () const;

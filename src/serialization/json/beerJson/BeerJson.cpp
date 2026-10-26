@@ -691,6 +691,21 @@ namespace {
 
          // TODO PropertyNames::Equipment::kettleInternalDiameter_cm
          //      PropertyNames::Equipment::kettleOpeningDiameter_cm
+         //
+         // BeerJSON has no equivalent of PropertyNames::Equipment::mashTunFoundationVolume_l (the volume below a false
+         // bottom or malt pipe that has to be filled before the grain is covered, but which drains out with the wort --
+         // see comments in model/Equipment.h).  The only volume BeerJSON records for a vessel, apart from its maximum,
+         // is "loss", which means wort that is NOT recovered.  So we cannot write it as part of the mash tun's loss
+         // without changing the meaning of the data.  Instead, we do not write it at all, which means that:
+         //   - Exporting to BeerJSON and reading the file back in will give a foundation volume of 0.
+         //   - Total water, and the wort that reaches the boil, will be calculated correctly from the BeerJSON data.
+         //   - However, strike water will be calculated as if there were no space below the false bottom / malt pipe,
+         //     so the mash will be thicker than intended (or, equivalently, the brewer needs to add the foundation
+         //     volume to the strike water by hand and take it off the sparge water).
+         // (Equally, other programs reading the file will not be able to know about the foundation volume, but most of
+         // them would not use it anyway.)  To keep the field, use dotBeer (or, with Brewken/Brewtarget, BeerXML, where
+         // we write it as an extension tag).
+         //
 
          // Type                                                 XPath / Q_PROPERTY / Value Decoder
          {JsonRecordDefinition::FieldType::String              , "name"                                               ,

@@ -81,6 +81,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
       EDITOR_FIELD_NORM(Equipment, label_name                    , lineEdit_name                    , NamedEntity::name                      ),
       EDITOR_FIELD_NORM(Equipment, label_mashTunSpecificHeat     , lineEdit_mashTunSpecificHeat     , Equipment::mashTunSpecificHeat_calGC   ),
       EDITOR_FIELD_NORM(Equipment, label_mashTunGrainAbsorption  , lineEdit_mashTunGrainAbsorption  , Equipment::mashTunGrainAbsorption_LKg  ),
+      EDITOR_FIELD_NORM(Equipment, label_mashTunFoundationVolume , lineEdit_mashTunFoundationVolume , Equipment::mashTunFoundationVolume_l   ),
       EDITOR_FIELD_NORM(Equipment, label_hopUtilization          , lineEdit_hopUtilization          , Equipment::hopUtilization_pct       , 0),
       EDITOR_FIELD_NORM(Equipment, label_mashTunWeight           , lineEdit_mashTunWeight           , Equipment::mashTunWeight_kg            ),
       EDITOR_FIELD_NORM(Equipment, label_boilingPoint            , lineEdit_boilingPoint            , Equipment::boilingPoint_c           , 1),
@@ -158,22 +159,44 @@ bool EquipmentEditor::validateBeforeSave() {
    // accidentally entered nonsensical field values.
    //
    QString message = tr("This equipment profile may break %1's maths").arg(CONFIG_APPLICATION_NAME_UC);
-   QString inform = QString("%1%2").arg(tr("The following values are not set:")).arg(QString("<ul>"));
+   QString notSet;
    if (qFuzzyIsNull(lineEdit_mashTunVolume->getNonOptCanonicalQty()))    {
-      problems = true;
-      inform = inform + QString("<li>%1</li>").arg(tr("mash tun volume (all-grain and BIAB only)"));
+      notSet += QString("<li>%1</li>").arg(tr("mash tun volume (all-grain and BIAB only)"));
    }
 
    if (qFuzzyIsNull(lineEdit_fvBatchSize->getNonOptCanonicalQty())) {
-      problems = true;
-      inform = inform + QString("<li>%1</li>").arg(tr("batch size"));
+      notSet += QString("<li>%1</li>").arg(tr("batch size"));
    }
 
    if (qFuzzyIsNull(lineEdit_hopUtilization->getOptValue<double>().value_or(0.0))) {
-      problems = true;
-      inform = inform + QString("<li>%1</li>").arg(tr("hop utilization"));
+      notSet += QString("<li>%1</li>").arg(tr("hop utilization"));
    }
-   inform = inform + QString("</ul>");
+
+   QString inform;
+   if (!notSet.isEmpty()) {
+      problems = true;
+      inform = QString("%1<ul>%2</ul>").arg(tr("The following values are not set:"), notSet);
+   }
+
+   //
+   // The foundation water and mash tun loss both take up room in the mash tun (see comments in model/Equipment.h), so,
+   // if they fill it, there is no room for the mash.  (This is the same check as DotBeer's validate.py makes.)  This
+   // most likely means the user has put something other than the volumes we are asking for in one of these fields.
+   //
+   double const mashTunVolume_l  = lineEdit_mashTunVolume          ->getNonOptCanonicalQty();
+   double const foundation_l     = lineEdit_mashTunFoundationVolume->getNonOptCanonicalQty();
+   double const mashTunLoss_l    = lineEdit_mashTunLoss            ->getNonOptCanonicalQty();
+   if (mashTunVolume_l > 0.0 && foundation_l + mashTunLoss_l >= mashTunVolume_l) {
+      problems = true;
+      inform += QString("<p>%1</p>").arg(
+         tr("Foundation water (%1) plus mash tun loss (%2) leaves no room for the mash in a mash tun with total "
+            "capacity %3.").arg(
+            Measurement::displayAmount(Measurement::Amount{foundation_l   , Measurement::Units::liters}),
+            Measurement::displayAmount(Measurement::Amount{mashTunLoss_l  , Measurement::Units::liters}),
+            Measurement::displayAmount(Measurement::Amount{mashTunVolume_l, Measurement::Units::liters})
+         )
+      );
+   }
 
    if (problems) {
       QMessageBox theQuestion;
@@ -195,6 +218,9 @@ bool EquipmentEditor::validateBeforeSave() {
    // (and thus, by default, hidden in the UI).  We are rather less worried about, say, lauter tun notes being set in
    // this circumstance, as it won't break anything.
    //
+   // (We need to reset problems here, otherwise any problem found above would mean we always showed this second box,
+   // even if there was nothing in it.)
+   problems = false;
    message = tr("Numerical values on zero-sized \"optional\" vessels will be unset or zeroed when you save");
    inform = QString("%1%2").arg(tr("The following values will be discarded:")).arg(QString("<ul>"));
    if (qFuzzyIsNull(lineEdit_hltVolume->getNonOptCanonicalQty())) {

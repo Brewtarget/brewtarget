@@ -3068,6 +3068,8 @@ namespace {
     *        columns.
     *
     *        And we add typical ranges for alpha and beta acid to hop.
+    *
+    *        And we add equipment.mash_tun_foundation_volume_l (see comments in model/Equipment.h).
     */
    bool migrate_to_21([[maybe_unused]] Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> const migrationQueries{
@@ -3371,6 +3373,16 @@ namespace {
          // change the calculated FG of users' existing recipes; they can set the field themselves in the editor.
          //
          {QString("UPDATE fermentable SET fermentable_fraction_pct = 0 WHERE LOWER(name) LIKE '%lactose%'")},
+
+         //
+         // New field for the volume of liquid in the mash tun that is outside the grain bed (eg below a false bottom or
+         // malt pipe) and which, unlike mash_tun_loss_l, is recovered with the wort.  See comments in model/Equipment.h.
+         // We don't have a reliable way to tell, for an existing equipment record, how much (if any) of its mash tun
+         // loss is actually recoverable, so we start everything at 0, which means calculations are unchanged until the
+         // user sets a value.
+         //
+         {QString("ALTER TABLE equipment ADD COLUMN mash_tun_foundation_volume_l %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("UPDATE equipment SET mash_tun_foundation_volume_l = 0")},
       };
 
       return executeSqlQueries(q, migrationQueries);
