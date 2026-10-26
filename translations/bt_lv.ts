@@ -5598,6 +5598,14 @@ Log file may contain more details.</source>
         <source>Local-ID</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Mash step for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary fermentation for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -8469,10 +8477,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Optional Vessels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Hot Liquor Tank</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8486,10 +8490,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Packaging Vessel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Attributes of &quot;optional&quot; vessels will not be saved if their volumes are set to 0.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8666,6 +8666,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Fermentor Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Optional Vessel
+Tabs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>These checkboxes control which vessel tabs are shown.  An asterisk after a vessel means it has a volume set, and so is used in calculations, even if its tab is hidden.  Attributes of &quot;optional&quot; vessels will not be saved if their volumes are left blank or set to 0.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
