@@ -63,6 +63,7 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
+#include "model/RecipeUtils.h"
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
@@ -397,13 +398,32 @@ public:
             stepLength_mins = this->stageLength_mins<stage>();
          }
 
-         double const additionDuration_mins{
+         double additionDuration_mins{0.0};
+         if (addition->duration_mins()) {
             // If we have a duration, this will take precedence over the calculated one
-            addition->duration_mins().value_or(
-               // If addAtTime_mins is not set, we assume addition happens at the start of the stage
-               this->stageLength_mins<stage>() - addition->addAfterStart_mins(stepLength_mins).value_or(0.0)
-            )
-         };
+            additionDuration_mins = *addition->duration_mins();
+         } else if constexpr (RecipeAddition::Stage::Boil == stage) {
+            //
+            // For the boil, addAtTime_mins is measured back from the end of the addition's step, and an addition with a
+            // step but no time is made at the start of that step.  For additions before or during the boil proper,
+            // what we want to show is how long the addition spends in the boil; for post-boil additions (eg whirlpool),
+            // it's how long the addition steeps in its step.  See https://github.com/Brewtarget/brewtarget/issues/1168
+            //
+            auto const timing = this->m_self.boilAdditionTiming(*addition);
+            additionDuration_mins = timing.postBoil ? timing.untilEndOfStep_mins.value_or(0.0) :
+                                                      timing.boilProper_mins;
+         } else {
+            // If addAtTime_mins is not set, we assume addition happens at the start of the stage
+            additionDuration_mins =
+               this->stageLength_mins<stage>() - addition->addAfterStart_mins(stepLength_mins).value_or(0.0);
+            //
+            // We don't (yet) know the length of the fermentation or packaging stages (stageLength_mins returns 0 for
+            // them), so, eg, a dry hop addition 4 days into fermentation with no duration would otherwise come out as
+            // lasting -4 days.  Apart from being meaningless in the instructions, a negative duration is not valid in a
+            // dotBeer (or BeerJSON) file.
+            //
+            additionDuration_mins = std::max(0.0, additionDuration_mins);
+         }
          //
          // When the duration is 0 -- either because we're adding something at the end of the stage or because we
          // don't have a length for the stage, we want to show "at end of [stage name]" rather than "for 0 minutes",
@@ -459,9 +479,23 @@ public:
                   .arg(addition->ingredientRaw()->name())
                   .arg(durationString);
 
+         //
+         // A boil addition without a step is treated as being in the boil proper (see Recipe::boilAdditionTiming), so,
+         // for sorting, we put it in the (last) boil proper step.  Otherwise, because std::nullopt sorts before all
+         // other step values, it would come before "Start boil".
+         //
+         std::optional<int> sortStep = step;
+         if constexpr (RecipeAddition::Stage::Boil == stage) {
+            if (!sortStep) {
+               if (auto const boil = this->m_self.boil(); boil) {
+                  sortStep = boil->boilProperSteps().second;
+               }
+            }
+         }
+
          preInstructions.push_back(
             PreInstruction(addition->stage(),
-                           addition->step(),
+                           sortStep,
                            additionDuration_mins,
                            // localisedName() gives tr("Hop"), tr("Misc"), etc
                            tr("%1 addition").arg(addition->ingredientRaw()->localisedName()),
@@ -581,6 +615,19 @@ public:
          std::shared_ptr<T> item{std::make_shared<T>()};
          BtStringConst const & propertyName = Recipe::propertyNameFor<T>();
          this->m_self.setAndNotify(propertyName, itemId, ObjectStoreWrapper::insert(item));
+         //
+         // A Boil or Fermentation with no steps isn't much use (and isn't valid in dotBeer or BeerJSON), so, as in
+         // MainWindow when creating a new Recipe, we give a newly-created one a minimal profile.  (This needs to happen
+         // after we've linked it to the Recipe, as Boil::ensureStandardProfile uses the Recipe's Mash and
+         // Fermentation to choose start and end temperatures.)
+         //
+         if constexpr (std::same_as<T, Boil>) {
+            item->ensureStandardProfile();
+         } else if constexpr (std::same_as<T, Fermentation>) {
+            item->add(std::make_shared<FermentationStep>(
+               Recipe::tr("Primary fermentation for %1").arg(this->m_self.name())
+            ));
+         }
       }
       return ObjectStoreWrapper::getById<T>(itemId);
    }
@@ -1170,11 +1217,21 @@ public:
          sugars.existingSugars_lateAddition_kg
       };
 
-      double const calculatedBoilGrav =
+      //
+      // Pre-boil size is optional (in BeerJSON and dotBeer as well as for us), and there might not be a Boil at all.
+      // Per the comment on Boil::preBoilSize_l, we then fall back to the batch size.  (If we used 0 here, as we
+      // previously did, the boil gravity would come out at the maximum our conversion allows (about 2.33 SG), which in
+      // turn gives near-zero IBUs.)
+      //
+      double const boilSize_l = this->boilSizeInLitersOr(this->m_self.batchSize_l());
+      double const calculatedBoilGrav{
+         (boilSize_l <= 0.0) ?
+         1.0 :
          Algorithms::PlatoToSG_20C20C(
-            Algorithms::platoFromSugarMassAndWortVolume(sugar_kg, this->boilSizeInLitersOr(0.0))
-         );
-      if (! qFuzzyCompare(calculatedBoilGrav, this->m_boilGrav)) {
+            Algorithms::platoFromSugarMassAndWortVolume(sugar_kg, boilSize_l)
+         )
+      };
+      if (!qFuzzyCompare(calculatedBoilGrav, this->m_boilGrav)) {
          qDebug() <<
             Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << ") "
             "Calculated Boil Grav: " << calculatedBoilGrav << ", stored: " << this->m_boilGrav;
@@ -1333,6 +1390,67 @@ public:
          this->connectSignalForAdditionIngredient(addition);
       }
       return;
+   }
+
+   /**
+    *
+    *
+    */
+   std::optional<int> numStepsFor(RecipeAddition::Stage const stage) {
+      switch (stage) {
+         case RecipeAddition::Stage::Mash:
+            if (auto const mash = this->m_self.mash(); mash) { return static_cast<int>(mash->numSteps()); }
+            return 0;
+         case RecipeAddition::Stage::Boil:
+            if (auto const boil = this->m_self.boil(); boil) { return static_cast<int>(boil->numSteps()); }
+            return 0;
+         case RecipeAddition::Stage::Fermentation:
+            if (auto const fermentation = this->m_self.fermentation(); fermentation) {
+               return static_cast<int>(fermentation->numSteps());
+            }
+            return 0;
+         case RecipeAddition::Stage::Packaging:
+            // We don't model packaging steps, so there is nothing to check against
+            return std::nullopt;
+         // No default case as we want the compiler to warn us if we missed a case above
+      }
+      Q_UNREACHABLE();
+   };
+
+   /**
+    * \brief Does the substantive work for Recipe::correctAdditionSteps for an individual addition type
+    */
+   template<class Additions>
+   int correctStepsFor(Additions const & additions) {
+      int numCorrected = 0;
+      for (auto const & addition : additions) {
+         std::optional<int> const step = addition->step();
+         if (!step) {
+            continue;
+         }
+         std::optional<int> const numSteps = this->numStepsFor(addition->stage());
+         if (!numSteps) {
+            continue;
+         }
+         std::optional<int> correctedStep = step;
+         if (*numSteps <= 0) {
+            correctedStep = std::nullopt;
+         } else if (*step > *numSteps) {
+            correctedStep = *numSteps;
+         } else if (*step < 1) {
+            correctedStep = 1;
+         }
+         if (correctedStep != step) {
+            qWarning() <<
+               Q_FUNC_INFO << "Recipe #" << this->m_self.key() << "(" << this->m_self.name() << "):" << *addition <<
+               "is for step" << *step << "of" << RecipeAddition::stageStringMapping[addition->stage()] <<
+               "but there are" << *numSteps << "step(s), so changing step to" << correctedStep;
+            addition->setStep(correctedStep);
+            ++numCorrected;
+         }
+      }
+
+      return numCorrected;
    }
 
 
@@ -1903,10 +2021,20 @@ void Recipe::generateInstructions() {
       // Find boil time.
       double const boilTime_mins = boil->boilTime_mins();
 
+      //
+      // Find the first and last steps of the boil proper (numbered from 1), so that "Start boil" comes after anything
+      // done during the ramp-up (eg first wort hopping, topping up the kettle) and "Flameout" comes before any
+      // post-boil (eg whirlpool) additions.  If there's no step that's identifiably the boil proper, we fall back to
+      // the first and last steps of the boil.  (Same test for "boil proper" as Boil::boilTime_mins().)
+      //
+      auto const [firstBoilProperStep, lastBoilProperStep] = boil->boilProperSteps();
+
+      // NB: Because we use a stable sort below, this will come before boil additions made at the start of the boil
+      // proper (which have the same step and interval).
       preInstructions.push_back(
       PreInstruction(
          RecipeAddition::Stage::Boil,
-         1,
+         firstBoilProperStep,
          boilTime_mins,
          tr("Start boil"),
          tr("Bring the wort to a boil and hold for %1.").arg(
@@ -1920,7 +2048,8 @@ void Recipe::generateInstructions() {
       this->pimpl->instructionsForBoilFermentables(boilTime_mins, preInstructions);
 
       // add the instructions for including Extracts to wort
-      this->pimpl->instructionsForExtracts(boilTime_mins - 1, preInstructions);
+      // (std::max is so we do not get a negative time -- which is not valid in a dotBeer file -- when there is no boil.)
+      this->pimpl->instructionsForExtracts(std::max(0.0, boilTime_mins - 1), preInstructions);
 
       // Boiled hops
       this->pimpl->instructionsForHopAdditions<RecipeAddition::Stage::Boil>(preInstructions);
@@ -1929,9 +2058,13 @@ void Recipe::generateInstructions() {
       this->pimpl->instructionsForMiscAdditions<RecipeAddition::Stage::Boil>(preInstructions);
 
       // FLAMEOUT
+      //
+      // Flameout is the end of the boil proper, so it comes after any additions at the end of the boil (which, because
+      // we use a stable sort below, will have been added to preInstructions before this) and before any post-boil
+      // additions (which are in later steps).
       preInstructions.push_back(
          PreInstruction(RecipeAddition::Stage::Boil,
-                        boil->numSteps(),  // Flameout is end of the last boil step
+                        lastBoilProperStep,
                         0.0,
                         tr("Flameout"),
                         tr("Stop boiling the wort."))
@@ -2005,8 +2138,9 @@ void Recipe::generateInstructions() {
 
    }
 
-   // Add instructions in correct order
-   std::ranges::sort(preInstructions, std::less<PreInstruction>());
+   // Add instructions in correct order.  NB: This needs to be a stable sort, so that, eg, "Flameout" comes after hop
+   // additions at the end of the boil.
+   std::ranges::stable_sort(preInstructions, std::less<PreInstruction>());
    for (auto const & preInstruction: preInstructions) {
       this->m_instructions.add(preInstruction.toInstruction());
    }
@@ -2767,6 +2901,142 @@ Recipe::Sugars Recipe::sugarTotals() const {
 
 //====================================Helpers===========================================
 
+int Recipe::correctAdditionSteps() {
+   // Correcting a step should not create a new version of the Recipe
+   RecipeUtils::SuspendRecipeVersioning suspendRecipeVersioning;
+
+   int const numCorrected{
+      this->pimpl->correctStepsFor(this->fermentableAdditions()) +
+      this->pimpl->correctStepsFor(this->hopAdditions        ()) +
+      this->pimpl->correctStepsFor(this->miscAdditions       ()) +
+      this->pimpl->correctStepsFor(this->yeastAdditions      ())
+   };
+   return numCorrected;
+}
+
+Recipe::BoilAdditionTiming Recipe::boilAdditionTiming(RecipeAddition const & addition) const {
+   BoilAdditionTiming timing;
+   if (addition.stage() != RecipeAddition::Stage::Boil) {
+      // It's a coding error to call this function for a non-boil addition
+      qCritical() << Q_FUNC_INFO << "Called for non-boil addition" << addition;
+      return timing;
+   }
+
+   auto const boil = this->boil();
+   double const boilTime_mins = boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
+   std::optional<double> const addAtTime_mins = addition.addAtTime_mins();
+   std::optional<int>    const step           = addition.step();
+
+   //
+   // If we can't relate the addition to a step of the boil, the best we can do is to assume it's in the boil proper,
+   // with addAtTime_mins measured back from the end of the boil, and no time meaning the start of the boil.
+   //
+   auto const boilProperOnly = [&]() {
+      timing.boilProper_mins = addAtTime_mins.value_or(boilTime_mins);
+      return timing;
+   };
+
+   if (!boil || !step) {
+      return boilProperOnly();
+   }
+
+   auto const boilSteps = boil->boilSteps();
+   int const numBoilSteps = boilSteps.size();
+   if (*step < 1 || *step > numBoilSteps) {
+      qWarning() <<
+         Q_FUNC_INFO << "Addition" << addition << "has boil step #" << *step << "but boil only has" << numBoilSteps <<
+         "steps";
+      return boilProperOnly();
+   }
+
+   // Same test as Boil::boilTime_mins() uses for "boil proper"
+   auto const isBoilProper = [](BoilStep const & boilStep) {
+      return boilStep.startTemp_c() && *boilStep.startTemp_c() > Boil::minimumBoilTemperature_c &&
+             boilStep.  endTemp_c() && *boilStep.  endTemp_c() > Boil::minimumBoilTemperature_c;
+   };
+
+   // Remember RecipeAddition steps are numbered from 1, but lists are indexed from 0
+   int const stepIndex = *step - 1;
+   int lastBoilProperIndex = -1;
+   for (int ii = 0; ii < numBoilSteps; ++ii) {
+      if (isBoilProper(*boilSteps[ii])) {
+         lastBoilProperIndex = ii;
+      }
+   }
+   if (lastBoilProperIndex < 0) {
+      // No step of the boil is a boil proper, so we can't really make sense of the steps
+      return boilProperOnly();
+   }
+
+   auto const & additionStep = boilSteps[stepIndex];
+   std::optional<double> const stepLength_mins = additionStep->stepTime_mins();
+
+   if (stepIndex > lastBoilProperIndex) {
+      //
+      // Addition is after the end of the boil proper -- eg flameout, whirlpool or hop stand.  So no time in the boil,
+      // and addAtTime_mins is time before the end of this post-boil step.  No time means start of the step.
+      //
+      timing.postBoil = true;
+      timing.boilProper_mins = 0.0;
+
+      double minsIntoStep = 0.0;
+      if (addAtTime_mins) {
+         timing.untilEndOfStep_mins = *addAtTime_mins;
+         if (stepLength_mins) {
+            minsIntoStep = std::max(0.0, *stepLength_mins - *addAtTime_mins);
+         }
+      } else {
+         timing.untilEndOfStep_mins = stepLength_mins;
+      }
+
+      timing.afterFlameout_mins = minsIntoStep;
+      for (int ii = lastBoilProperIndex + 1; ii < stepIndex; ++ii) {
+         timing.afterFlameout_mins += boilSteps[ii]->stepTime_mins().value_or(0.0);
+      }
+
+      // Time remaining in the hot wort is the rest of this step plus all subsequent steps
+      timing.postBoilRemaining_mins = timing.untilEndOfStep_mins;
+      for (int ii = stepIndex + 1; ii < numBoilSteps && timing.postBoilRemaining_mins; ++ii) {
+         auto const subsequentStepLength_mins = boilSteps[ii]->stepTime_mins();
+         if (subsequentStepLength_mins) {
+            *timing.postBoilRemaining_mins += *subsequentStepLength_mins;
+         } else {
+            timing.postBoilRemaining_mins = std::nullopt;
+         }
+      }
+
+      // If the addition has an explicit duration (eg the steep time of a BeerXML aroma hop), it can't be in the hot
+      // wort for longer than that.
+      if (auto const duration_mins = addition.duration_mins(); duration_mins) {
+         timing.postBoilRemaining_mins = timing.postBoilRemaining_mins ?
+            std::min(*timing.postBoilRemaining_mins, *duration_mins) : *duration_mins;
+      }
+      return timing;
+   }
+
+   //
+   // Addition is before or during the boil proper.  The time spent in the boil proper is the time from the addition to
+   // the end of this step (if this step is boil proper) plus the length of any subsequent boil proper steps.
+   //
+   // If the addition is in a step before the boil proper (eg first wort hops added during the ramp up to the boil)
+   // then the time in the boil proper is just the length of the boil proper.
+   //
+   double subsequentBoilProper_mins = 0.0;
+   for (int ii = stepIndex + 1; ii <= lastBoilProperIndex; ++ii) {
+      if (isBoilProper(*boilSteps[ii])) {
+         subsequentBoilProper_mins += boilSteps[ii]->stepTime_mins().value_or(0.0);
+      }
+   }
+   if (isBoilProper(*additionStep)) {
+      timing.boilProper_mins =
+         // No time means start of the step
+         addAtTime_mins.value_or(stepLength_mins.value_or(0.0)) + subsequentBoilProper_mins;
+   } else {
+      timing.boilProper_mins = subsequentBoilProper_mins;
+   }
+   return timing;
+}
+
 double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) const {
    auto const equipment = this->equipment();
    double ibus = 0.0;
@@ -2797,7 +3067,6 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) const {
       qCritical() << Q_FUNC_INFO << "Using Hop volume as weight - THIS IS PROBABLY WRONG!";
    }
    double const grams = hopAddition.quantity() * 1000.0;
-   double const hopTimeInBoil_mins = hopAddition.addAtTime_mins().value_or(0.0);
 
    // NOTE: we used to carefully calculate the average boil gravity and use it in the
    // IBU calculations. However, due to John Palmer
@@ -2812,10 +3081,12 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) const {
 
    auto const boil = this->boil();
 
-   // This looks a bit complicated, but is really just saying:
-   //    - If we have a Boil, that can tell us the boil time
-   //    - If we don't have a Boil but do have Equipment, use the Equipment's boil time, if it is set
-   //    - Otherwise, use the default time
+   //
+   // TBD: At the moment, we assume a default boil time if there is no boil on the recipe.  This is almost certainly
+   //      wrong.  For the moment, we leave it as a bit of a hack and say "You won't get valid numbers without a boil".
+   //      However, in future we should get rid of Boil::default_boilTime_mins and add proper support for no-boil
+   //      recipes.
+   //
    double const boilTime_mins = boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
 
    double const coolTime_mins = getValueOrDefault<Boil,
@@ -2825,8 +3096,7 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) const {
    qDebug() <<
       Q_FUNC_INFO << "Equipment" << (equipment ? "set" : "not set") << ", Boil" << (boil ? "present" : "not present") <<
       ", Hop Utilization =" << hopUtilization << ", Boil Time (Mins) =" << boilTime_mins << ", Hop Addition" <<
-      hopAddition << ", stage =" << hopAddition.stage() << ", grams =" << grams << ", hopTimeInBoil_mins = " <<
-      hopTimeInBoil_mins << ", AArating = " << AArating;
+      hopAddition << ", stage =" << hopAddition.stage() << ", grams =" << grams << ", AArating = " << AArating;
 
    IbuMethods::IbuCalculationParms parms = {
       .AArating              = AArating,
@@ -2847,7 +3117,26 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) const {
    if (hopAddition.isFirstWort()) {
       ibus = fwhAdjust * IbuMethods::getIbus(parms);
    } else if (hopAddition.stage() == RecipeAddition::Stage::Boil) {
-      parms.timeInBoil_minutes = hopTimeInBoil_mins;
+      //
+      // Note that we cannot just use hopAddition.addAtTime_mins() here, because that is measured from the end of the
+      // addition's step, which is not necessarily the boil proper.  Eg a whirlpool addition 20 minutes before the end
+      // of the post-boil step has not spent 20 minutes in the boil!  Similarly, if the addition has a step but no time,
+      // it is made at the start of that step.  See https://github.com/Brewtarget/brewtarget/issues/1167
+      //
+      auto const timing = this->boilAdditionTiming(hopAddition);
+      qDebug() <<
+         Q_FUNC_INFO << "Boil addition: postBoil =" << timing.postBoil << ", boilProper_mins =" <<
+         timing.boilProper_mins << ", afterFlameout_mins =" << timing.afterFlameout_mins <<
+         ", postBoilRemaining_mins =" << timing.postBoilRemaining_mins;
+      parms.timeInBoil_minutes = timing.boilProper_mins;
+      if (timing.postBoil) {
+         // The hops are only in the hot wort from when they are added until the end of the post-boil cooling.  (This
+         // only matters for formulae, such as mIBU, that model post-boil isomerization.)
+         parms.postBoilDelay_minutes = timing.afterFlameout_mins;
+         parms.coolTime_minutes = timing.postBoilRemaining_mins.value_or(
+            std::max(0.0, coolTime_mins - timing.afterFlameout_mins)
+         );
+      }
       ibus = IbuMethods::getIbus(parms);
    } else if (hopAddition.stage() == RecipeAddition::Stage::Mash && mashHopAdjust > 0.0) {
       ibus = mashHopAdjust * IbuMethods::getIbus(parms);

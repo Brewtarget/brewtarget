@@ -1,0 +1,31 @@
+//======================================================================================================================
+// examples/invalid/DuplicateKey.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: duplicate key "alpha_acid" in object
+//
+// An object with the same key twice.  Plain JSON (RFC 8259) only says names SHOULD be unique, and parsers differ over
+// which value they keep (eg Boost.JSON and Python keep the last, some others keep the first), so dotBeer forbids
+// duplicate keys outright.  Schema validation cannot catch this, as it only sees the parsed result.
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-22T18:00:00Z",
+    "hops": [
+      {
+        "name": "Cascade",
+        "local_id": "hop_cascade",
+        "alpha_acid": { "unit": "%", "value": 5.5 },
+        "alpha_acid": { "unit": "%", "value": 7.0 }
+      }
+    ]
+  }
+}

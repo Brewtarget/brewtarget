@@ -268,7 +268,13 @@ std::optional<Misc::WaterAgentType> Misc::waterAgentType() const {
       qWarning() << Q_FUNC_INFO << Misc::typeStringMapping[this->m_type] << "is not water agent";
       return std::nullopt;
    }
-   return this->m_waterAgentType;
+   //
+   // A water agent should always have a water agent type (and dotBeer requires one), but we can end up without one --
+   // eg if the Misc was read in from BeerXML or BeerJSON, neither of which has the field, or if the user changed the
+   // type of an existing Misc to water agent.  In that case, "Other" is the right answer, as it covers everything we
+   // don't model explicitly.
+   //
+   return this->m_waterAgentType.value_or(Misc::WaterAgentType::Other);
 }
 std::optional<int> Misc::waterAgentTypeAsInt() const {
    return Optional::toOptInt(this->waterAgentType());
@@ -286,8 +292,18 @@ bool Misc::waterAgentIsAcid() const {
    return Misc::isAcid(*this->m_waterAgentType);
 }
 
+bool Misc::canHavePercentAcid(Misc::WaterAgentType const waterAgentType) {
+   return waterAgentType == Misc::WaterAgentType::Other || Misc::isAcid(waterAgentType);
+}
+
 std::optional<double> Misc::waterAgentPercentAcid() const {
-   if (!this->waterAgentIsAcid()) {
+   //
+   // As well as for acids, we allow percent acid for "Other" water agents (eg a user-defined citric acid solution).
+   // RecipeAdditionMiscTableModel::totalAcid_kg relies on this, and it's the same rule as dotBeer uses.
+   //
+   if (this->m_type != Misc::Type::WaterAgent ||
+       !this->m_waterAgentType ||
+       !Misc::canHavePercentAcid(*this->m_waterAgentType)) {
       return std::nullopt;
    }
    return this->m_waterAgentPercentAcid;

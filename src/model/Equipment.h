@@ -508,6 +508,17 @@ public:
    double getLauteringDeadspaceLoss_l() const;
 
    /**
+    * \brief The hot liquor tank, lauter tun, aging vessel and packaging vessel are "optional" vessels, ie ones the user
+    *        might not have.  An optional vessel with a volume of 0 is treated as not being present (eg see
+    *        \c getLauteringDeadspaceLoss_l), so its other attributes (loss, weight, specific heat, type and notes) are
+    *        meaningless.  This function resets them, so that we don't store them.  (The equipment editor tells the user
+    *        that "Attributes of 'optional' vessels will not be saved if their volumes are left blank or set to 0".)
+    *
+    * \return \c true if anything was changed, \c false otherwise
+    */
+   bool clearUnusedOptionalVessels();
+
+   /**
     * \brief Calculate how much wort is left immediately at knockout.
     *
     * \param kettleWort_l

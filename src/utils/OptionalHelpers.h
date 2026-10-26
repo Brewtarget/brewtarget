@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/OptionalHelpers.h is part of Brewtarget, and is copyright the following authors 2022-2025:
+ * utils/OptionalHelpers.h is part of Brewtarget, and is copyright the following authors 2022-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -33,6 +33,18 @@ struct TypeInfo;
  * \brief A set of utilities that help us deal with std::optional values
  */
 namespace Optional {
+   /**
+    * \brief Helper function used eg by Serialization::NullSentinel
+    *
+    * @tparam T
+    * @param propertyValue
+    */
+   template<typename T>
+   bool isNotNull(QVariant & propertyValue) {
+      auto const val = propertyValue.value<std::optional<T> >();
+      return val.has_value();
+   }
+
    /**
     * \brief Helper function called from \c ObjectStore::impl::unwrapAndMapAsNeeded and other places to convert a
     *        \c QVariant containing \c std::optional<T> to either a \c QVariant containing \c T or a null \c QVariant

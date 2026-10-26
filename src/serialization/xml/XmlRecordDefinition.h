@@ -17,11 +17,14 @@
 #define SERIALIZATION_XML_XMLRECORDDEFINITION_H
 #pragma once
 
+#include <optional>
+
 #include <memory>
 #include <utility> // For std::in_place_type_t
 #include <variant>
 
 #include "measurement/Unit.h"
+#include "serialization/NullSentinel.h"
 #include "serialization/SerializationRecordDefinition.h"
 #include "utils/EnumStringMapping.h"
 #include "utils/PropertyPath.h"
@@ -75,17 +78,23 @@ public:
          std::variant<std::monostate,
                       EnumStringMapping              const *,  // FieldType::Enum
                       Measurement::UnitStringMapping const *,  // FieldType::Unit
-                      XmlRecordDefinition            const *,  // FieldType::Array
-                      double                         >;        // Default value (for fields that are required in the XML
-                                                               // but optional in our internal data model).
+                      XmlRecordDefinition            const *>; // FieldType::Array
       ValueDecoder valueDecoder;
       /**
-       * Defining a constructor allows us to control the default value of valueDecoder
+       * \brief For fields that are required in the XML but optional in our internal data model, this is what to write
+       *        if the property is not set (and, depending on \c Serialization::NullSentinel::mode, what to treat as
+       *        "not set" when reading).  See \c Serialization::NullSentinel.  Only supported for Double, Int and UInt
+       *        fields.
+       */
+      std::optional<Serialization::NullSentinel> nullSentinel;
+      /**
+       * Defining a constructor allows us to control the default value of valueDecoder and nullSentinel
        */
       FieldDefinition(FieldType    type,
                       QString      xPath,
                       PropertyPath propertyPath,
-                      ValueDecoder valueDecoder = ValueDecoder{});
+                      ValueDecoder valueDecoder = ValueDecoder{},
+                      std::optional<Serialization::NullSentinel> nullSentinel = std::nullopt);
    };
 
    /**

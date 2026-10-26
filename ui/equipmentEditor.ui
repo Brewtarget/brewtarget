@@ -89,7 +89,11 @@
        <item row="2" column="1">
         <widget class="QLabel" name="label_optionalVessels">
          <property name="text">
-          <string>Optional Vessels</string>
+          <string>Optional Vessel
+Tabs</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
          </property>
         </widget>
        </item>
@@ -127,7 +131,7 @@
           <cstring>infoButton_optionalVessels</cstring>
          </property>
          <property name="text">
-          <string>Attributes of "optional" vessels will not be saved if their volumes are set to 0.</string>
+          <string>These checkboxes control which vessel tabs are shown.  An asterisk after a vessel means it has a volume set, and so is used in calculations, even if its tab is hidden.  Attributes of "optional" vessels will not be saved if their volumes are left blank or set to 0.</string>
          </property>
         </widget>
        </item>

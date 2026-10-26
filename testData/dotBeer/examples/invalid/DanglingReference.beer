@@ -1,0 +1,45 @@
+//======================================================================================================================
+// examples/invalid/DanglingReference.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: local ID "hop_citra" is not defined anywhere in this file
+//
+// A recipe refers to a hop that is not exported in the same file.  JSON Schema cannot check this.
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00Z",
+    "fermentables": [
+      { "name": "Pale Malt", "local_id": "ferm_pale", "fermentable_type": "grain", "color": { "unit": "EBC", "value": 5 }, "yield_fine_grind": { "unit": "%", "value": 80.0 } }
+    ],
+    "recipes": [
+      {
+        "name": "Missing Hop",
+        "recipe_type": "all grain",
+        "author": "A. Brewer",
+        "batch_size": { "unit": "l", "value": 20 },
+        "efficiency": { "brewhouse": { "unit": "%", "value": 70 } },
+        "ingredients": {
+          "fermentable_additions": [
+            { "fermentable_id": "ferm_pale", "schedule": { "stage": "add_to_mash" }, "amount": { "unit": "kg", "value": 4 } }
+          ],
+          "hop_additions": [
+            {
+              "hop_id": "hop_citra",
+              "schedule": { "stage": "add_to_boil", "time": { "unit": "min", "value": 10 } },
+              "amount": { "unit": "g", "value": 30 }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

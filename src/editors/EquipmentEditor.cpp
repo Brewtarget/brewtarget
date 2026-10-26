@@ -50,6 +50,28 @@
 // user to grab this value (and that of other common materials if we can find them).
 //
 
+namespace {
+   /**
+    * \brief Decide whether vessel should be shown or not.
+    *
+    *        These aren't fields we store in the DB, rather they control which bits of the editor are visible.  As well
+    *        as showing the tabs for vessels that are in use (ie have a non-zero volume), we put an asterisk after the
+    *        name of each such vessel, so the user can see that it is in use even if s/he has hidden the tab.  (See
+    *        infoText_optionalVessels.)
+    */
+   void showOptionalVesselIfPresent(QCheckBox * const checkBox, double const volume_l) {
+      bool const inUse{volume_l != 0.0};
+      checkBox->setChecked(inUse);
+      QString text = checkBox->text();
+      if (text.endsWith(" *")) {
+         text.chop(2);
+      }
+      checkBox->setText(inUse ? text + " *" : text);
+      return;
+   };
+
+}
+
 EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
    QDialog(parent),
    EditorBase<EquipmentEditor, Equipment, EquipmentEditorOptions>(editorName) {
@@ -233,11 +255,10 @@ bool EquipmentEditor::validateBeforeSave() {
 
 void EquipmentEditor::postReadFieldsFromEditItem([[maybe_unused]] std::optional<QString> propName) {
 
-   // These aren't fields we store in the DB, rather they control which bits of the editor are visible
-   this->checkBox_showHlt            ->setChecked(m_editItem->hltVolume_l            () != 0);
-   this->checkBox_showLauterTun      ->setChecked(m_editItem->lauterTunVolume_l      () != 0);
-   this->checkBox_showAgingVessel    ->setChecked(m_editItem->agingVesselVolume_l    () != 0);
-   this->checkBox_showPackagingVessel->setChecked(m_editItem->packagingVesselVolume_l() != 0);
+   showOptionalVesselIfPresent(this->checkBox_showHlt            , m_editItem->hltVolume_l            ());
+   showOptionalVesselIfPresent(this->checkBox_showLauterTun      , m_editItem->lauterTunVolume_l      ());
+   showOptionalVesselIfPresent(this->checkBox_showAgingVessel    , m_editItem->agingVesselVolume_l    ());
+   showOptionalVesselIfPresent(this->checkBox_showPackagingVessel, m_editItem->packagingVesselVolume_l());
 
    this->hideOrShowOptionalVessels();
 
@@ -247,6 +268,13 @@ void EquipmentEditor::postReadFieldsFromEditItem([[maybe_unused]] std::optional<
    );
    this->checkBox_defaultEquipment->blockSignals(false);
 
+   return;
+}
+
+void EquipmentEditor::postWriteLateFieldsToEditItem() {
+   // As we tell the user in infoText_optionalVessels, we don't save the attributes of an optional vessel whose volume
+   // is blank or zero.
+   this->m_editItem->clearUnusedOptionalVessels();
    return;
 }
 

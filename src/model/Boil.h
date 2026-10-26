@@ -199,6 +199,13 @@ public:
     */
    void ensureStandardProfile();
 
+   /**
+    * \brief Returns the numbers (counting from 1) of the first and last steps of the boil proper.  If there's no step
+    *        that's identifiably the boil proper, we return the first and last steps of the boil.  (Same test for "boil
+    *        proper" as \c Boil::boilTime_mins.)
+    */
+   std::pair<int, int> boilProperSteps() const;
+
 public slots:
    void acceptSetMemberChange(QMetaProperty, QVariant);
 

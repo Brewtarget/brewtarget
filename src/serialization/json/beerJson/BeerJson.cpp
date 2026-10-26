@@ -18,7 +18,9 @@
 #include <cstdlib>
 
 // We could just include <boost/json.hpp> which pulls all the Boost.JSON headers in, but that seems overkill
+#include <boost/json/array.hpp>
 #include <boost/json/kind.hpp>
+#include <boost/json/object.hpp>
 #include <boost/json/parse_options.hpp>
 #include <boost/json/parse.hpp>
 #include <boost/json/string.hpp>
@@ -637,7 +639,7 @@ namespace {
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_temperature", PropertyNames::    StepBase::startTemp_c    , &BEER_JSON_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits,   "end_temperature", PropertyNames::        Step::  endTemp_c    , &BEER_JSON_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_time"        , PropertyNames::StepBase::stepTime_mins      , &BEER_JSON_TIME_UNIT_MAPPER       },
-         {JsonRecordDefinition::FieldType::Bool                , "free_rise  "      , PropertyNames::FermentationStep::freeRise   },
+         {JsonRecordDefinition::FieldType::Bool                , "free_rise"        , PropertyNames::FermentationStep::freeRise   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_gravity"    , PropertyNames::StepExtended::startGravity_sg,  &BEER_JSON_DENSITY_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits,   "end_gravity"    , PropertyNames::StepExtended::  endGravity_sg,  &BEER_JSON_DENSITY_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "start_ph"         , PropertyNames::Step::startAcidity_pH        ,  &BEER_JSON_ACIDITY_UNIT          },
@@ -1244,6 +1246,38 @@ namespace {
       return BEER_JSON_1_CODING.validateLoadAndStoreInDb(targetFolderPath, inputDocument, userMessage);
    }
 
+   //
+   // Post-processing of the generated JSON for top-level records, for things that are required in BeerJSON but which
+   // we can't easily express in the JsonRecordDefinition (see DotBeer.cpp for the dotBeer equivalent).  Default does
+   // nothing.
+   //
+   template<class NE> void tidyJson([[maybe_unused]] boost::json::array & outputArray) {
+      return;
+   }
+
+   //
+   // A BeerJSON fermentable must have a yield object, with at least one of fine_grind, coarse_grind,
+   // fine_coarse_difference and potential.  All of these are optional for us, and, eg, a fermentable with a yield of 0
+   // (such as rice hulls) read in from BeerXML will have none of them set (because we treat BeerXML YIELD of 0 as "not
+   // set").  So, if there is no yield, we write a fine grind yield of 0, which is what
+   // Fermentable::effectiveFineGrindYield_pct and the calculations assume anyway.
+   //
+   template<> void tidyJson<Fermentable>(boost::json::array & outputArray) {
+      for (auto & fermentableValue : outputArray) {
+         auto & fermentable = fermentableValue.as_object();
+         auto const yield = fermentable.find("yield");
+         if (yield == fermentable.end() || !yield->value().is_object() || yield->value().as_object().empty()) {
+            qWarning() <<
+               Q_FUNC_INFO << "Fermentable" << fermentable.at("name").as_string().c_str() << "has no yield, so writing "
+               "fine grind yield of 0";
+            fermentable["yield"] = boost::json::object{
+               {"fine_grind", boost::json::object{{"unit", "%"}, {"value", 0.0}}}
+            };
+         }
+      }
+      return;
+   }
+
 }
 
 
@@ -1332,6 +1366,7 @@ namespace BeerJson {
       boost::json::array outputArray;
       // BeerJSON doesn't support folder paths, so we just hard-code the first argument here, as it won't be used
       JsonRecord::listToJson(QString{""}, objectsToWrite, outputArray, BEER_JSON_1_CODING, BEER_JSON_RECORD_DEFN<NE>);
+      tidyJson<NE>(outputArray);
       this->pimpl->outputDocument["beerjson"].get_object()[*BEER_JSON_RECORD_DEFN<NE>.m_recordName] = outputArray;
       return;
    }

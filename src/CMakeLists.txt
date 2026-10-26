@@ -32,7 +32,7 @@
 # of src/unitTests.
 #
 # You can recreate the body of this list by running the following from the bash prompt in the build directory:
-#    find ../src -name '*.cpp' | LC_ALL=C sort | sed 's+^../src+    ${repoDir}/src+' | grep -v Testing.cpp | grep -v main.cpp
+#    find ../src -name '*.cpp' | LC_ALL=C sort | sed 's+^../src+    ${repoDir}/src+' | grep -v unitTests/ | grep -v main.cpp
 #
 # It is tempting to ask ourselves why we don't have CMake figure out this list itself.  Well, according to the
 # documentation (https://cmake.org/cmake/help/latest/command/file.html#filesystem) "We do not recommend using GLOB to
@@ -294,6 +294,12 @@ set(filesToCompile_cpp
 # Extra files we compile for unit testing
 #
 set(unitTestFiles_cpp
-    ${repoDir}/src/unitTests/Testing.cpp
-    ${repoDir}/src/unitTests/TestMultiVector.cpp
+    ${repoDir}/src/unitTests/CoreTests.cpp
+    ${repoDir}/src/unitTests/MeasurementTests.cpp
+    ${repoDir}/src/unitTests/RecipeCalcTests.cpp
+    ${repoDir}/src/unitTests/SerializationTests.cpp
+    ${repoDir}/src/unitTests/TestClassBase.cpp
+    ${repoDir}/src/unitTests/TestData.cpp
+    ${repoDir}/src/unitTests/TestEnvironment.cpp
+    ${repoDir}/src/unitTests/TestMain.cpp
 )

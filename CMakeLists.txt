@@ -759,6 +759,7 @@ include(InstallRequiredSystemLibraries)
 # ${CONFIG_DATA_DIR} below when configure_file() is called.
 #
 set(CONFIG_DATA_DIR "${CMAKE_INSTALL_PREFIX}/${installSubDir_data}/")
+set(CONFIG_TEST_DATA_DIR "${PROJECT_SOURCE_DIR}/testData")
 string(TIMESTAMP BUILD_TIMESTAMP "%Y-%m-%d %H:%M:%S (UTC)" UTC)
 configure_file(src/config.in src/config.h)
 
@@ -1100,17 +1101,28 @@ target_link_libraries(${fileName_unitTestRunner} PRIVATE ${appAndTestCommonLibra
 
 message("Unit Test Runner: ./${fileName_unitTestRunner}")
 
-add_test(NAME pstdintTest                 COMMAND ./${fileName_unitTestRunner} pstdintTest                )
-add_test(NAME recipeCalcTest_allGrain     COMMAND ./${fileName_unitTestRunner} recipeCalcTest_allGrain    )
-add_test(NAME postBoilLossOgTest          COMMAND ./${fileName_unitTestRunner} postBoilLossOgTest         )
-add_test(NAME testUnitConversions         COMMAND ./${fileName_unitTestRunner} testUnitConversions        )
-add_test(NAME testNamedParameterBundle    COMMAND ./${fileName_unitTestRunner} testNamedParameterBundle   )
-add_test(NAME testNumberDisplayAndParsing COMMAND ./${fileName_unitTestRunner} testNumberDisplayAndParsing)
-add_test(NAME testAlgorithms              COMMAND ./${fileName_unitTestRunner} testAlgorithms             )
-add_test(NAME testTypeLookups             COMMAND ./${fileName_unitTestRunner} testTypeLookups            )
-add_test(NAME testInventory               COMMAND ./${fileName_unitTestRunner} testInventory              )
-add_test(NAME testMultiVector             COMMAND ./${fileName_unitTestRunner} testMultiVector            )
-add_test(NAME testLogRotation             COMMAND ./${fileName_unitTestRunner} testLogRotation            )
+add_test(NAME CoreTests.pstdintTest                                COMMAND ./${fileName_unitTestRunner} CoreTests          pstdintTest                      )
+add_test(NAME CoreTests.testNamedParameterBundle                   COMMAND ./${fileName_unitTestRunner} CoreTests          testNamedParameterBundle         )
+add_test(NAME CoreTests.testTypeLookups                            COMMAND ./${fileName_unitTestRunner} CoreTests          testTypeLookups                  )
+add_test(NAME CoreTests.testMultiVector                            COMMAND ./${fileName_unitTestRunner} CoreTests          testMultiVector                  )
+add_test(NAME CoreTests.testLogRotation                            COMMAND ./${fileName_unitTestRunner} CoreTests          testLogRotation                  )
+add_test(NAME MeasurementTests.testUnitConversions                 COMMAND ./${fileName_unitTestRunner} MeasurementTests   testUnitConversions              )
+add_test(NAME MeasurementTests.testUnitInverses                    COMMAND ./${fileName_unitTestRunner} MeasurementTests   testUnitInverses                 )
+add_test(NAME MeasurementTests.testNumberDisplayAndParsing         COMMAND ./${fileName_unitTestRunner} MeasurementTests   testNumberDisplayAndParsing      )
+add_test(NAME MeasurementTests.testAlgorithms                      COMMAND ./${fileName_unitTestRunner} MeasurementTests   testAlgorithms                   )
+add_test(NAME RecipeCalcTests.recipeCalcTest_allGrain              COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    recipeCalcTest_allGrain          )
+add_test(NAME RecipeCalcTests.postBoilLossOgTest                   COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    postBoilLossOgTest               )
+add_test(NAME RecipeCalcTests.testBoilAdditionTiming               COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testBoilAdditionTiming           )
+add_test(NAME RecipeCalcTests.testInventory                        COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testInventory                    )
+add_test(NAME SerializationTests.testDotBeerImportedRecipeCalcs    COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerImportedRecipeCalcs   )
+add_test(NAME SerializationTests.testDotBeerAdditionStepCorrection COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerAdditionStepCorrection)
+add_test(NAME SerializationTests.testBrewLogCalcs                  COMMAND ./${fileName_unitTestRunner} SerializationTests testBrewLogCalcs                 )
+add_test(NAME SerializationTests.testDotBeerVersionHandling        COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerVersionHandling       )
+add_test(NAME SerializationTests.testDotBeerExport                 COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerExport                )
+add_test(NAME SerializationTests.testClearUnusedOptionalVessels    COMMAND ./${fileName_unitTestRunner} SerializationTests testClearUnusedOptionalVessels   )
+add_test(NAME SerializationTests.testBeerXmlNullYield              COMMAND ./${fileName_unitTestRunner} SerializationTests testBeerXmlNullYield             )
+add_test(NAME SerializationTests.testNullSentinel                  COMMAND ./${fileName_unitTestRunner} SerializationTests testNullSentinel                 )
+add_test(NAME SerializationTests.testBeerJsonRoundTrip             COMMAND ./${fileName_unitTestRunner} SerializationTests testBeerJsonRoundTrip            )
 
 #=================================Installs=====================================
 

@@ -253,8 +253,9 @@ public:
     */
    Q_PROPERTY(bool waterAgentIsAcid   READ waterAgentIsAcid   STORED false)
    /**
-    * \brief What percent is acid - valid only for lactic acid, H3PO4 (ie when \c waterAgentIsAcid() returns
-    *        \c true).
+    * \brief What percent is acid - valid only for acids (ie when \c waterAgentIsAcid() returns \c true) or for
+    *        \c WaterAgentType::Other (eg a user-defined acid solution, such as citric acid, that we don't model
+    *        explicitly).  This is the same rule as dotBeer uses.  See \c canHavePercentAcid.
     */
    Q_PROPERTY(std::optional<double> waterAgentPercentAcid   READ waterAgentPercentAcid   WRITE setWaterAgentPercentAcid)
 
@@ -263,6 +264,11 @@ public:
    //=== Helper functions for water agents ===
    //! \brief It's useful in other places (eg WaterAgentEditor.cpp) to be able to check whether a WaterAgentType is an acid
    static bool isAcid(WaterAgentType const waterAgentType);
+   /**
+    * \brief Whether \c waterAgentPercentAcid is meaningful for a given \c WaterAgentType -- ie it's an acid, or it's
+    *        \c WaterAgentType::Other (which might be some other acid).
+    */
+   static bool canHavePercentAcid(WaterAgentType const waterAgentType);
    static Measurement::PhysicalQuantity suggestedMeasureFor(WaterAgentType const waterAgentType);
 
    /**

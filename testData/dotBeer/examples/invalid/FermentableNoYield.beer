@@ -1,0 +1,39 @@
+//======================================================================================================================
+// examples/invalid/FermentableNoYield.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: /DotBeer/fermentables/1: must have at least one of 'yield_fine_grind', 'yield_coarse_grind', 'yield_potential'
+//
+// A fermentable must have at least one of yield_fine_grind, yield_coarse_grind and yield_potential:
+//   • the first fermentable is valid, as it has only yield_potential
+//   • the second has only yield_fine_coarse_difference, which on its own does not give a yield, so is invalid
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-22T18:00:00Z",
+    "fermentables": [
+      {
+        "name": "Corn Sugar",
+        "local_id": "ferm_dextrose",
+        "fermentable_type": "sugar",
+        "color": { "unit": "SRM", "value": 0 },
+        "yield_potential": { "unit": "sg", "value": 1.042 }
+      },
+      {
+        "name": "Mystery Malt",
+        "local_id": "ferm_mystery",
+        "fermentable_type": "grain",
+        "color": { "unit": "EBC", "value": 5 },
+        "yield_fine_coarse_difference": { "unit": "%", "value": 1.2 }
+      }
+    ]
+  }
+}

@@ -56,6 +56,7 @@ public:
 
 private:
    void postReadFieldsFromEditItem(std::optional<QString> propName);
+   void postWriteLateFieldsToEditItem();
 };
 
 #endif

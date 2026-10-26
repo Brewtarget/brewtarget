@@ -32,6 +32,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QString>
+#include <QTextStream>
 #include <QTimeZone>
 #include <QVersionNumber>
 
@@ -582,7 +583,7 @@ namespace {
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_temperature", PropertyNames::    StepBase::startTemp_c    , &DOT_BEER_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits,   "end_temperature", PropertyNames::        Step::  endTemp_c    , &DOT_BEER_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "step_time"        , PropertyNames::StepBase::stepTime_mins      , &DOT_BEER_TIME_UNIT_MAPPER       },
-         {JsonRecordDefinition::FieldType::Bool                , "free_rise  "      , PropertyNames::FermentationStep::freeRise   },
+         {JsonRecordDefinition::FieldType::Bool                , "free_rise"        , PropertyNames::FermentationStep::freeRise   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "start_gravity"    , PropertyNames::StepExtended::startGravity_sg,  &DOT_BEER_DENSITY_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits,   "end_gravity"    , PropertyNames::StepExtended::  endGravity_sg,  &DOT_BEER_DENSITY_UNIT_MAPPER   },
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "start_pH"         , PropertyNames::Step::startAcidity_pH        ,  &DOT_BEER_ACIDITY_UNIT          },
@@ -643,6 +644,7 @@ namespace {
       {JsonRecordDefinition::FieldType::String              , "kettle/vessel_type"               , PropertyNames::Equipment::kettleType                 },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/max_volume"                , PropertyNames::Equipment::kettleBoilSize_l           , &DOT_BEER_VOLUME_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/loss"                      , PropertyNames::Equipment::kettleTrubChillerLoss_l    , &DOT_BEER_VOLUME_UNIT_MAPPER       },
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/boil_rate_per_hour"        , PropertyNames::Equipment::kettleEvaporationPerHour_l , &DOT_BEER_VOLUME_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/drain_rate_per_minute"     , PropertyNames::Equipment::kettleOutflowPerMinute_l   , &DOT_BEER_VOLUME_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/weight"                    , PropertyNames::Equipment::kettleWeight_kg            , &DOT_BEER_MASS_UNIT_MAPPER         },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/specific_heat_capacity"    , PropertyNames::Equipment::kettleSpecificHeat_calGC   , &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER},
@@ -679,7 +681,7 @@ namespace {
       {JsonRecordDefinition::FieldType::MeasurementWithUnits      , "schedule/specific_gravity", PropertyNames::RecipeAddition::addAtGravity_sg,  &DOT_BEER_DENSITY_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::SingleUnitValue           , "schedule/pH"              , PropertyNames::RecipeAddition::addAtAcidity_pH,  &DOT_BEER_ACIDITY_UNIT              },
       {JsonRecordDefinition::FieldType::Int                       , "schedule/step"            , PropertyNames::RecipeAddition::step           },
-      {JsonRecordDefinition::FieldType::Enum                      , "schedule/use"             , PropertyNames::RecipeAddition::stage          ,  &RecipeAddition::stageStringMapping  },
+      {JsonRecordDefinition::FieldType::Enum                      , "schedule/stage"           , PropertyNames::RecipeAddition::stage          ,  &RecipeAddition::stageStringMapping  },
    };
 
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_IngredientAdditionType_Volume {
@@ -787,7 +789,7 @@ namespace {
          // Type                                   XPath         Q_PROPERTY                                 Value Decoder
          {JsonRecordDefinition::FieldType::String, "name"      , PropertyNames::NamedEntity::name           },
          {JsonRecordDefinition::FieldType::String, "directions", PropertyNames::Instruction::directions     },
-         {JsonRecordDefinition::FieldType::Double, "duration"  , PropertyNames::Instruction::interval_mins, &DOT_BEER_TIME_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::MeasurementWithUnits, "duration", PropertyNames::Instruction::interval_mins, &DOT_BEER_TIME_UNIT_MAPPER},
       }
    };
 
@@ -1014,7 +1016,33 @@ namespace {
       // read a 1.0.0 file.  But if the schema used to create the file is newer than the one compiled in the program,
       // we don't know that for sure, so emit a warning.
       //
-      if (dotBeerVersion > dotBeerVersionWeSupport) {
+      //
+      // Per the dotBeer versioning rules (see README.md in the dotBeer repository), a file written with a newer major
+      // version of the schema is not something we can expect to read.  A file written with a newer minor version
+      // might or might not validate against our schema (eg it will not if it uses fields that were added in the newer
+      // version).  Either way, if we can't read the file, we want to tell the user that it's because it's too new,
+      // rather than just showing them a schema validation error.
+      //
+      QString const tooNewMessage{
+         QObject::tr("This file was written using version %1 of the dotBeer format, which is newer than the version "
+                     "this version of %2 supports (%3).  You may need a newer version of %2 to read it.").arg(
+            dotBeerVersion.toString()
+         ).arg(
+            CONFIG_APPLICATION_NAME_UC
+         ).arg(
+            dotBeerVersionWeSupport.toString()
+         )
+      };
+      if (dotBeerVersion.majorVersion() > dotBeerVersionWeSupport.majorVersion()) {
+         qWarning() <<
+            Q_FUNC_INFO << "DotBeer version" << dotBeerVersion << "of" << fileName << "has newer major version than the "
+            "one we support (" << dotBeerVersionWeSupport << ")";
+         userMessage << tooNewMessage;
+         return false;
+      }
+
+      bool const fileIsNewer{dotBeerVersion > dotBeerVersionWeSupport};
+      if (fileIsNewer) {
          qWarning() <<
             Q_FUNC_INFO << "DotBeer version " << dotBeerVersion << "newer than the one we know about (" <<
             dotBeerVersionWeSupport << ")";
@@ -1024,7 +1052,17 @@ namespace {
       // line.
 //      qDebug() << Q_FUNC_INFO << "JSON file read in is:" << inputDocument;
 
-      return DOT_BEER_1_CODING.validateLoadAndStoreInDb(targetFolderPath, inputDocument, userMessage);
+      QString loadMessage;
+      QTextStream loadMessageStream{&loadMessage};
+      bool const succeeded = DOT_BEER_1_CODING.validateLoadAndStoreInDb(targetFolderPath,
+                                                                        inputDocument,
+                                                                        loadMessageStream);
+      loadMessageStream.flush();
+      if (!succeeded && fileIsNewer) {
+         userMessage << tooNewMessage << "\n\n";
+      }
+      userMessage << loadMessage;
+      return succeeded;
    }
 
 }
@@ -1052,6 +1090,184 @@ bool DotBeer::import(QString const & targetFolderPath,
    bool const result = validateAndLoad(targetFolderPath, filename, userMessage);
    QApplication::restoreOverrideCursor();
    return result;
+}
+
+namespace {
+   //
+   // There are a few things that we allow (or, at least, don't make impossible) in our internal model, but which are
+   // not valid in dotBeer, or which the JSON Schema can't check.
+   // Some of these we fix in the model before we write it out (logging a warning in each case)...
+   //
+   template<class NE> void prepareForExport([[maybe_unused]] NE & ne) {
+      return;
+   }
+
+   // In dotBeer, a Mash must have at least one step
+   template<> void prepareForExport(Mash & mash) {
+      if (mash.numSteps() > 0) {
+         return;
+      }
+      qWarning() << Q_FUNC_INFO << mash << "has no steps, so adding a default one";
+      auto mashStep = std::make_shared<MashStep>(QObject::tr("Mash step for %1").arg(mash.name()));
+      // A temperature step rather than an infusion, as we don't know how much water would be used for an infusion
+      mashStep->setType(MashStep::Type::Temperature);
+      mashStep->setStartTemp_c(65.0);
+      mashStep->setStepTime_mins(60.0);
+      mash.add(mashStep);
+      return;
+   }
+
+   // Similarly for Boil and Fermentation.  (In practice, we now try to make sure these always have steps -- see
+   // Recipe::impl::nonOptionalItem and MainWindow::newRecipe -- but older data might not.)
+   template<> void prepareForExport(Boil & boil) {
+      if (boil.numSteps() > 0) {
+         return;
+      }
+      qWarning() << Q_FUNC_INFO << boil << "has no steps, so adding standard profile";
+      boil.ensureStandardProfile();
+      return;
+   }
+
+   template<> void prepareForExport(Fermentation & fermentation) {
+      if (fermentation.numSteps() > 0) {
+         return;
+      }
+      qWarning() << Q_FUNC_INFO << fermentation << "has no steps, so adding a primary fermentation step";
+      fermentation.add(
+         std::make_shared<FermentationStep>(QObject::tr("Primary fermentation for %1").arg(fermentation.name()))
+      );
+      return;
+   }
+
+   // Ingredient additions must refer to steps that exist.  (This needs to be done after the Mash, Boil and Fermentation
+   // have been prepared, which it will be because they are exported before Recipes.)
+   template<> void prepareForExport(Recipe & recipe) {
+      recipe.correctAdditionSteps();
+      return;
+   }
+
+   //
+   // ...and others we deal with in the JSON we have generated.
+   //
+   template<class NE> void tidyJson([[maybe_unused]] boost::json::array & outputArray) {
+      return;
+   }
+
+   //
+   // In the schedule for an addition, dotBeer allows at most one of time, gravity and pH.  We allow any combination.
+   // We give priority to time, then gravity, as time is by far the most common way of specifying an addition.
+   //
+   template<> void tidyJson<Recipe>(boost::json::array & outputArray) {
+      for (auto & recipeValue : outputArray) {
+         auto & recipe = recipeValue.as_object();
+         auto * ingredients = recipe.if_contains("ingredients");
+         if (!ingredients || !ingredients->is_object()) {
+            continue;
+         }
+         for (auto & [listName, additions] : ingredients->as_object()) {
+            if (!additions.is_array()) {
+               continue;
+            }
+            for (auto & addition : additions.as_array()) {
+               auto * schedule = addition.is_object() ? addition.as_object().if_contains("schedule") : nullptr;
+               if (!schedule || !schedule->is_object()) {
+                  continue;
+               }
+               auto & scheduleObject = schedule->as_object();
+               bool keyWritten = false;
+               for (char const * const key : {"time", "specific_gravity", "pH"}) {
+                  if (!scheduleObject.contains(key)) {
+                     continue;
+                  }
+                  if (!keyWritten) {
+                     keyWritten = true;
+                     continue;
+                  }
+                  qWarning() <<
+                     Q_FUNC_INFO << "Not writing" << key << "for addition in" << std::string(listName).c_str() <<
+                     "of recipe" << recipe.at("name").as_string().c_str() << "as dotBeer only allows one of time, "
+                     "specific gravity and pH";
+                  scheduleObject.erase(key);
+               }
+            }
+         }
+      }
+      return;
+   }
+
+   //
+   // A dotBeer fermentable must have at least one of yield_fine_grind, yield_coarse_grind and yield_potential.  All
+   // three are optional for us, and, eg, a fermentable with a yield of 0 (such as rice hulls) read in from BeerXML will
+   // have none of them set (because we treat BeerXML YIELD of 0 as "not set").  So, if none is set, we write a fine
+   // grind yield of 0, which is what Fermentable::effectiveFineGrindYield_pct and the calculations assume anyway.
+   //
+   template<> void tidyJson<Fermentable>(boost::json::array & outputArray) {
+      for (auto & fermentableValue : outputArray) {
+         auto & fermentable = fermentableValue.as_object();
+         if (!fermentable.contains("yield_fine_grind"  ) &&
+             !fermentable.contains("yield_coarse_grind") &&
+             !fermentable.contains("yield_potential"   )) {
+            qWarning() <<
+               Q_FUNC_INFO << "Fermentable" << fermentable.at("name").as_string().c_str() << "has no yield, so writing "
+               "yield_fine_grind of 0";
+            fermentable["yield_fine_grind"] = boost::json::object{{"unit", "%"}, {"value", 0.0}};
+         }
+      }
+      return;
+   }
+
+   //
+   // Our Equipment has a value for every vessel, even if it's not used -- eg if the user only has a kettle, the mash
+   // tun etc will have zero volume.  Rather than write out a lot of zero-volume vessels:
+   //    - We omit any "optional" vessel (HLT, lauter tun, aging vessel, packaging vessel) that has zero volume, as
+   //      it is treated as not being present (see Equipment::clearUnusedOptionalVessels).
+   //    - We omit any other vessel (apart from the kettle, which is required) that has no non-default values.
+   // When reading in, a missing vessel gives us the same zero values, so this round-trips correctly.
+   //
+   template<> void tidyJson<Equipment>(boost::json::array & outputArray) {
+      auto vesselIsEmpty = [](boost::json::object const & vessel) {
+         for (auto const & [key, value] : vessel) {
+            if (value.is_string()) {
+               if (!value.as_string().empty()) {
+                  return false;
+               }
+            } else if (value.is_object() && value.as_object().contains("value") &&
+                       value.as_object().at("value").is_number()) {
+               if (value.as_object().at("value").to_number<double>() != 0.0) {
+                  return false;
+               }
+            } else {
+               return false;
+            }
+         }
+         return true;
+      };
+      auto vesselHasNoVolume = [](boost::json::object const & vessel) {
+         auto const * maxVolume = vessel.if_contains("max_volume");
+         return !maxVolume ||
+                (maxVolume->is_object() && maxVolume->as_object().contains("value") &&
+                 maxVolume->as_object().at("value").is_number() &&
+                 maxVolume->as_object().at("value").to_number<double>() <= 0.0);
+      };
+      for (auto & equipmentValue : outputArray) {
+         auto & equipment = equipmentValue.as_object();
+         for (char const * const vesselName : {"hlt", "lauter_tun", "aging_vessel", "packaging_vessel"}) {
+            if (auto const * vessel = equipment.if_contains(vesselName);
+                vessel && vessel->is_object() && vesselHasNoVolume(vessel->as_object())) {
+               qDebug() << Q_FUNC_INFO << "Not writing optional vessel" << vesselName << "as it has zero volume";
+               equipment.erase(vesselName);
+            }
+         }
+         for (char const * const vesselName : {"mash_tun", "fermentation_vessel"}) {
+            if (auto const * vessel = equipment.if_contains(vesselName);
+                vessel && vessel->is_object() && vesselIsEmpty(vessel->as_object())) {
+               qDebug() << Q_FUNC_INFO << "Not writing" << vesselName << "as it has no non-default values";
+               equipment.erase(vesselName);
+            }
+         }
+      }
+      return;
+   }
 }
 
 namespace DotBeer {
@@ -1120,20 +1336,25 @@ namespace DotBeer {
 
    template<class NE> void Exporter::add(QString const & baseFolderPath,
                                          QList<NE const *> const & nes) {
+      // Any corrections we make in prepareForExport should not create new versions of Recipes
+      RecipeUtils::SuspendRecipeVersioning suspendRecipeVersioning;
+
       QList< std::shared_ptr<NamedEntity> > objectsToWrite;
       objectsToWrite.reserve(nes.size());
       for (NE const * ne : nes) {
          //
          // We have to cast away const on ne, as otherwise we'll end up with static_pointer to const that's harder to
          // cast away.  Or we'd have to write const and non-const versions of all the functions we're calling, which
-         // is strictly correct but a bit overkill here.
+         // is strictly correct but a bit overkill here.  (It also allows prepareForExport to make any corrections that
+         // are needed for the output to be valid.)
          //
-         objectsToWrite.append(
-            std::static_pointer_cast<NamedEntity>(ObjectStoreWrapper::getSharedFromRaw(const_cast<NE *>(ne)))
-         );
+         auto neToWrite = ObjectStoreWrapper::getSharedFromRaw(const_cast<NE *>(ne));
+         prepareForExport(*neToWrite);
+         objectsToWrite.append(std::static_pointer_cast<NamedEntity>(neToWrite));
       }
       boost::json::array outputArray;
       JsonRecord::listToJson(baseFolderPath, objectsToWrite, outputArray, DOT_BEER_1_CODING, DOT_BEER_RECORD_DEFN<NE>);
+      tidyJson<NE>(outputArray);
       this->pimpl->outputDocument[outputDocumentName].get_object()[*DOT_BEER_RECORD_DEFN<NE>.m_recordName] = outputArray;
       return;
    }

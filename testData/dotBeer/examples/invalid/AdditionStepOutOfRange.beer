@@ -1,0 +1,57 @@
+//======================================================================================================================
+// examples/invalid/AdditionStepOutOfRange.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+//
+// EXPECT-INVALID: schedule is for step 3 of add_to_mash, but "Single Step" only has 1 step(s)
+// EXPECT-INVALID: schedule is for step 2 of add_to_fermentation, but recipe "Step Confusion" has no fermentation_id
+//
+// Addition schedules that refer to procedure steps that do not exist.  JSON Schema cannot check this.
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00Z",
+    "fermentables": [
+      { "name": "Pale Malt", "local_id": "ferm_pale", "fermentable_type": "grain", "color": { "unit": "EBC", "value": 5 }, "yield_fine_grind": { "unit": "%", "value": 80.0 } }
+    ],
+    "cultures": [
+      { "name": "Generic Ale Yeast", "local_id": "yeast", "culture_type": "ale", "form": "dry" }
+    ],
+    "mashes": [
+      {
+        "name": "Single Step",
+        "local_id": "mash_single",
+        "grain_temperature": { "unit": "C", "value": 18 },
+        "mash_steps": [
+          { "name": "Mash", "step_type": "infusion", "start_temperature": { "unit": "C", "value": 66 }, "step_time": { "unit": "min", "value": 60 } }
+        ]
+      }
+    ],
+    "recipes": [
+      {
+        "name": "Step Confusion",
+        "recipe_type": "all grain",
+        "author": "A. Brewer",
+        "mash_id": "mash_single",
+        "batch_size": { "unit": "l", "value": 20 },
+        "efficiency": { "brewhouse": { "unit": "%", "value": 70 } },
+        "ingredients": {
+          "fermentable_additions": [
+            { "fermentable_id": "ferm_pale", "schedule": { "stage": "add_to_mash", "step": 3 }, "amount": { "unit": "kg", "value": 4 } }
+          ],
+          "culture_additions": [
+            { "culture_id": "yeast", "schedule": { "stage": "add_to_fermentation", "step": 2 }, "amount": { "unit": "count", "value": 1 } }
+          ]
+        }
+      }
+    ]
+  }
+}

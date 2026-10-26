@@ -17,6 +17,8 @@
 #define SERIALIZATION_JSON_JSONRECORDDEFINITION_H
 #pragma once
 
+#include <optional>
+
 #include <memory>
 #include <utility> // For std::in_place_type_t
 #include <variant>
@@ -25,6 +27,7 @@
 #include <QVector>
 
 #include "model/NamedEntity.h"
+#include "serialization/NullSentinel.h"
 #include "serialization/SerializationRecordDefinition.h"
 #include "serialization/json/JsonMeasureableUnitsMapping.h"
 #include "serialization/json/JsonSingleUnitSpecifier.h"
@@ -360,13 +363,21 @@ public:
                       StringOutputValidator                     >; // FieldType::String
       ValueDecoder valueDecoder;
       /**
+       * \brief For fields that are required in the JSON but optional in our internal data model, this is what to
+       *        write if the property is not set (and, depending on \c Serialization::NullSentinel::mode, what to treat
+       *        as "not set" when reading).  See \c Serialization::NullSentinel.  Only supported for Double, Int, UInt,
+       *        MeasurementWithUnits and SingleUnitValue fields.
+       */
+      std::optional<Serialization::NullSentinel> nullSentinel;
+      /**
        * \brief Trivial constructor allows us to default \c valueDecoder and saves us having to put & before every
        *        property name!
        */
       FieldDefinition(FieldType type,
                       JsonXPath xPath,
                       PropertyPath propertyPath,
-                      ValueDecoder valueDecoder = ValueDecoder{});
+                      ValueDecoder valueDecoder = ValueDecoder{},
+                      std::optional<Serialization::NullSentinel> nullSentinel = std::nullopt);
    };
 
    /**

@@ -38,11 +38,13 @@ namespace {
 XmlRecordDefinition::FieldDefinition::FieldDefinition(FieldType    const type,
                                                       QString      const xPath,
                                                       PropertyPath const propertyPath,
-                                                      ValueDecoder const valueDecoder) :
+                                                      ValueDecoder const valueDecoder,
+                                                      std::optional<Serialization::NullSentinel> const nullSentinel) :
    type{type},
    xPath{xPath},
    propertyPath{propertyPath},
-   valueDecoder{valueDecoder} {
+   valueDecoder{valueDecoder},
+   nullSentinel{nullSentinel} {
    // An XmlRecordDefinition address should be in the valueDecoder if and only if the record type is Record or
    // ListOfRecords.  Otherwise there's a coding error in the mappings in BeerXML.cpp.  We assert this also when we're
    // processing an XML file, but the advantage of doing so here is that we'll get a start-up error, so bugs will be
@@ -53,6 +55,11 @@ XmlRecordDefinition::FieldDefinition::FieldDefinition(FieldType    const type,
    Q_ASSERT((XmlRecordDefinition::FieldType::Record        == this->type ||
              XmlRecordDefinition::FieldType::ListOfRecords == this->type) ==
             std::holds_alternative<XmlRecordDefinition const *>(this->valueDecoder));
+   // We assert that nullSentinel can only be set for the types supported by Serialization::NullSentinel
+   Q_ASSERT(!this->nullSentinel ||
+            XmlRecordDefinition::FieldType::Double == this->type ||
+            XmlRecordDefinition::FieldType::Int    == this->type ||
+            XmlRecordDefinition::FieldType::UInt   == this->type);
    return;
 }
 

@@ -132,6 +132,11 @@ namespace IbuMethods {
     * \param kettleOpeningDiameter_cm - (Only used in mIbu)  This is the interior diameter of the opening in the kettle
     *                                   through which steam can escape, and is used to calculate the surface area of
     *                                   that same opening.
+    * \param postBoilDelay_minutes - (Only used in mIbu)  For hops added after flameout (eg whirlpool or hop stand
+    *                                additions), how many minutes after flameout they are added.  In this case,
+    *                                \c timeInBoil_minutes should be 0 and \c coolTime_minutes should be the time from
+    *                                when the hops are added until forced cooling.  The delay matters because the wort
+    *                                will already have cooled somewhat by the time the hops are added.
     */
    struct IbuCalculationParms {
       double AArating;
@@ -142,6 +147,7 @@ namespace IbuMethods {
       std::optional<double> coolTime_minutes          = std::nullopt;
       std::optional<double> kettleInternalDiameter_cm = std::nullopt;
       std::optional<double> kettleOpeningDiameter_cm  = std::nullopt;
+      double                postBoilDelay_minutes     = 0.0;
    };
 
    /*!
@@ -156,7 +162,8 @@ template<class S> S & operator<<(S & stream, IbuMethods::IbuCalculationParms con
       "[AA Rating:" << parms.AArating << "; Hops (g):" << parms.hops_grams << "Post-boil volume (l):" <<
       parms.postBoilVolume_liters << "; Wort Gravity (SG):" << parms.wortGravity_sg << "; Time in Boil (mins):" <<
       parms.timeInBoil_minutes << "; Cool Time (mins):" << parms.coolTime_minutes << "; Kettle Int Diameter (cm):" <<
-      parms.kettleInternalDiameter_cm << "; Kettle Opening (cm):" << parms.kettleOpeningDiameter_cm << "]";
+      parms.kettleInternalDiameter_cm << "; Kettle Opening (cm):" << parms.kettleOpeningDiameter_cm <<
+      "; Post-boil delay (mins):" << parms.postBoilDelay_minutes << "]";
    return stream;
 }
 

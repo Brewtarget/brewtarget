@@ -44,11 +44,20 @@ namespace {
 JsonRecordDefinition::FieldDefinition::FieldDefinition(FieldType    const type,
                                                        JsonXPath    const xPath,
                                                        PropertyPath const propertyPath,
-                                                       ValueDecoder const valueDecoder) :
+                                                       ValueDecoder const valueDecoder,
+                                                       std::optional<Serialization::NullSentinel> const nullSentinel) :
    type{type},
    xPath{xPath},
    propertyPath{propertyPath},
-   valueDecoder{valueDecoder} {
+   valueDecoder{valueDecoder},
+   nullSentinel{nullSentinel} {
+   // We assert that nullSentinel can only be set for the types supported by Serialization::NullSentinel
+   Q_ASSERT(!this->nullSentinel ||
+            JsonRecordDefinition::FieldType::Double               == this->type ||
+            JsonRecordDefinition::FieldType::Int                  == this->type ||
+            JsonRecordDefinition::FieldType::UInt                 == this->type ||
+            JsonRecordDefinition::FieldType::MeasurementWithUnits == this->type ||
+            JsonRecordDefinition::FieldType::SingleUnitValue      == this->type);
    return;
 }
 

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * config.in.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * config.in.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
@@ -52,13 +52,16 @@ constexpr char const * CONFIG_ORGANIZATION_DOMAIN = "@CONFIG_ORGANIZATION_DOMAIN
 #define CONFIG_VERSION_STRING "@CONFIG_VERSION_STRING@"
 
 // Build info
-constexpr char const * CONFIG_BUILD_SYSTEM        = "@CONFIG_BUILD_SYSTEM@";
-constexpr char const * CONFIG_RUN_SYSTEM          = "@CONFIG_RUN_SYSTEM@";
-constexpr char const * CONFIG_CXX_COMPILER_ID     = "@CONFIG_CXX_COMPILER_ID@";
-constexpr char const * CONFIG_BUILD_TIMESTAMP     = "@CONFIG_BUILD_TIMESTAMP@";
+constexpr char const * CONFIG_BUILD_SYSTEM    = "@CONFIG_BUILD_SYSTEM@";
+constexpr char const * CONFIG_RUN_SYSTEM      = "@CONFIG_RUN_SYSTEM@";
+constexpr char const * CONFIG_CXX_COMPILER_ID = "@CONFIG_CXX_COMPILER_ID@";
+constexpr char const * CONFIG_BUILD_TIMESTAMP = "@CONFIG_BUILD_TIMESTAMP@";
 
 // Support info
-constexpr char const * CONFIG_GITHUB_URL         = "@CONFIG_GITHUB_URL@";
-constexpr char const * CONFIG_WEBSITE_URL        = "@CONFIG_WEBSITE_URL@";
+constexpr char const * CONFIG_GITHUB_URL      = "@CONFIG_GITHUB_URL@";
+constexpr char const * CONFIG_WEBSITE_URL     = "@CONFIG_WEBSITE_URL@";
+
+// Data files for unit tests
+constexpr char const * CONFIG_TEST_DATA_DIR   = "@CONFIG_TEST_DATA_DIR@";
 
 #endif

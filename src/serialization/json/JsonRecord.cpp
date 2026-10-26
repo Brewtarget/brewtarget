@@ -15,6 +15,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "serialization/json/JsonRecord.h"
 
+#include <cmath>
 #include <optional>
 #include <string_view>
 #include <system_error>
@@ -32,6 +33,8 @@
 #include "model/NamedEntity.h"
 #include "model/NamedParameterBundle.h"
 #include "model/OutlineableNamedEntity.h"
+#include "model/Recipe.h"
+#include "model/RecipeUtils.h"
 #include "utils/ErrorCodeToStream.h"
 #include "utils/ImportRecordCount.h"
 #include "utils/OptionalHelpers.h"
@@ -288,6 +291,33 @@ namespace {
       }
       return value;
    }
+
+   /**
+    * \brief If supplied value is not a number (NaN) or infinity, log a warning and return false.  This is intended to
+    *        be used to stop such numbers being written to JSON.
+    *
+    *        JSON has no representation for NaN or infinity.  Boost.JSON writes NaN as null and infinity as 1e99999,
+    *        neither of which is valid in a dotBeer or BeerJSON file.  Some calculated values can legitimately be NaN
+    *        (eg BrewLog::computedAlcoholByVolume_pct before both gravities have been measured) or come out infinite (eg
+    *        after a division by a zero volume), so rather than write an invalid file, we skip such values.
+    *
+    * \param recordDefinition Used for logging.
+    * \param key    The JSON key we would be writing. Used for logging.
+    * \param value  The value (or the floating point part of a compound value) we would be writing.  (Caller is expected
+    *               to have already removed any optional wrappers.)
+    *
+    * \return \c true if it's OK to write out for this key, \c false if it should be skipped
+    */
+   bool okToWrite(SerializationRecordDefinition const & recordDefinition, std::string_view const & key, double const value) {
+      bool const valueIsFinite = std::isfinite(value);
+      if (!valueIsFinite) {
+         qWarning() <<
+            Q_FUNC_INFO << "Not writing" << std::string(key).c_str() << "for" <<
+            *recordDefinition.m_namedEntityClassName << "as value" << value << "is not finite";
+      }
+      return valueIsFinite;
+   }
+
 
 }
 
@@ -750,11 +780,23 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
                      JsonRecordDefinition::DbId const dbId = this->m_localIdToDbId->value(value);
                      if (dbId.namedEntityClassName != metaObject->className() &&
                          0 != std::strcmp(dbId.namedEntityClassName, metaObject->className())) {
-                        userMessage <<
-                           "Field " << this->m_recordDefinition.m_namedEntityClassName << " node " <<
-                           fieldDefinition.xPath << "Local ID" << value << "refers to" <<
-                           dbId.namedEntityClassName << "(#" << dbId.id << ").  Expected ID of a" <<
-                           metaObject->className();
+                        QString const errorMessage{
+                           QString{"Field %1, node %2: Local ID \"%3\" refers to %4 (#%5).  Expected ID of a %6"}.arg(
+                              *this->m_recordDefinition.m_namedEntityClassName
+                           ).arg(
+                              fieldDefinition.xPath.asXPath_c_str()
+                           ).arg(
+                              value
+                           ).arg(
+                              dbId.namedEntityClassName
+                           ).arg(
+                              dbId.id
+                           ).arg(
+                              metaObject->className()
+                           )
+                        };
+                        qWarning() << Q_FUNC_INFO << errorMessage;
+                        userMessage << errorMessage;
                         return false;
                      }
 
@@ -786,6 +828,14 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
             // If we do need it, we now store the value
             //
             if (!fieldDefinition.propertyPath.isNull()) {
+               // See comment in serialization/NullSentinel.h
+               if (Serialization::applyNullSentinelOnRead(fieldDefinition.nullSentinel,
+                                                          propertyIsOptional,
+                                                          parsedValue)) {
+                  qInfo() <<
+                     Q_FUNC_INFO << "Treating" << this->m_recordDefinition.m_namedEntityClassName << "node" <<
+                     fieldDefinition.xPath << "value" << parsedValue << "as \"not set\"";
+               }
                this->m_namedParameterBundle.insert(fieldDefinition.propertyPath, parsedValue);
             }
          }
@@ -834,6 +884,17 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
    QTextStream & userMessage,
    ImportRecordCount & stats
 ) {
+   //
+   // If this is a Recipe, we need to turn its calculations off until we have stored and linked all its child objects
+   // (ingredient additions, mash, boil, etc).  Otherwise, when storing the Recipe in the database reads its calculated
+   // properties (OG, IBU, etc), they get calculated -- and cached -- for a recipe with no ingredients.  (See comment
+   // in model/RecipeUtils.h.  This is the same as we do for BeerXML in XmlRecipeRecord::normaliseAndStoreInDb.)
+   //
+   std::optional<RecipeUtils::SuspendRecipeCalcs> suspendRecipeCalcs;
+   if (auto recipe = std::dynamic_pointer_cast<Recipe>(this->m_namedEntity); recipe) {
+      suspendRecipeCalcs.emplace(recipe);
+   }
+
    // Most of the work is done in the base class
    auto const processingResult = this->SerializationRecord::normaliseAndStoreInDb(targetFolderPath,
                                                                                   containingEntity,
@@ -850,6 +911,17 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
       // we can't cast the newly created object to OutlineableNamedEntity.
       auto createdFromOutline = static_pointer_cast<OutlineableNamedEntity>(this->m_namedEntity);
       createdFromOutline->setOutline(false);
+   }
+
+   //
+   // For a recipe, we can't rely on the steps of ingredient additions in a file making sense (eg a JSON schema can't
+   // check that an addition to mash step 3 is in a recipe whose mash has at least 3 steps).  So, now the Recipe and all
+   // its contents are stored, we correct any that don't.  (Recipe::correctAdditionSteps logs a warning for each one.)
+   //
+   // (Since suspendRecipeCalcs is only set above for recipes, we use it to check here whether we are reading a recipe.)
+   //
+   if (JsonRecord::ProcessingResult::Succeeded == processingResult && suspendRecipeCalcs) {
+      std::static_pointer_cast<Recipe>(this->m_namedEntity)->correctAdditionSteps();
    }
 
    //
@@ -956,6 +1028,34 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
          false : fieldDefinition.propertyPath.getTypeInfo(*this->m_recordDefinition.m_typeLookup).isOptional()
    };
 
+   //
+   // For fields that are required in the JSON but optional in our model, if the property is not set, we write the
+   // null sentinel instead.  (See comment in serialization/NullSentinel.h.)  The simplest way to do this is to
+   // substitute it here, so the code below writes it out in the normal way.
+   //
+   if (fieldDefinition.nullSentinel && propertyIsOptional) {
+      bool valueReplaced = false;
+      switch (fieldDefinition.type) {
+         case JsonRecordDefinition::FieldType::Int :
+            valueReplaced = fieldDefinition.nullSentinel->replaceNullWithSentinel<int>(value);
+            break;
+         case JsonRecordDefinition::FieldType::UInt:
+            valueReplaced = fieldDefinition.nullSentinel->replaceNullWithSentinel<unsigned int>(value);
+            break;
+         case JsonRecordDefinition::FieldType::Double:
+         case JsonRecordDefinition::FieldType::MeasurementWithUnits:
+         case JsonRecordDefinition::FieldType::SingleUnitValue:
+            valueReplaced = fieldDefinition.nullSentinel->replaceNullWithSentinel<double>(value);
+            break;
+         default:
+            // It's a coding error to have a nullSentinel for other field types -- see JsonRecordDefinition.cpp
+            break;
+      }
+      if (valueReplaced) {
+         qInfo() << Q_FUNC_INFO << "Writing" << value << "for unset" << std::string(key).c_str();
+      }
+   }
+
    switch(fieldDefinition.type) {
       case JsonRecordDefinition::FieldType::Bool:
          if (Optional::removeOptionalWrapperIfPresent<bool>(value, propertyIsOptional)) {
@@ -976,7 +1076,8 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
          break;
 
       case JsonRecordDefinition::FieldType::Double:
-         if (Optional::removeOptionalWrapperIfPresent<double>(value, propertyIsOptional)) {
+         if (Optional::removeOptionalWrapperIfPresent<double>(value, propertyIsOptional) &&
+             okToWrite(this->m_recordDefinition, key, value.toDouble())) {
             recordDataAsObject.emplace(key, value.toDouble());
          }
          break;
@@ -1047,7 +1148,8 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
          // the list, and, from that, we can trivially get the corresponding canonical Measurement::Unit which will,
          // by the above-mentioned convention, be the right one for the NamedEntity property.
          //
-         if (Optional::removeOptionalWrapperIfPresent<double>(value, propertyIsOptional)) {
+         if (Optional::removeOptionalWrapperIfPresent<double>(value, propertyIsOptional) &&
+             okToWrite(this->m_recordDefinition, key, value.toDouble())) {
             // It's definitely a coding error if there is no unit decoder mapping for a field declared to require
             // one
             Q_ASSERT(std::holds_alternative<JsonMeasureableUnitsMapping const *>(fieldDefinition.valueDecoder));
@@ -1057,6 +1159,16 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
             qDebug() << Q_FUNC_INFO << *unitsMapping;
             Measurement::Unit const * const aUnit = unitsMapping->defaultUnit();
             Measurement::Unit const & canonicalUnit = aUnit->getCanonical();
+            //
+            // A number of non-optional gravity properties (eg BrewLog::measuredOriginalGravity_sg, Style::ogMin) use
+            // 0.0 to mean "not set".  Since a specific gravity of 0 is physically meaningless (and is rejected by the
+            // dotBeer and BeerJSON schemas), we don't write it out.
+            //
+            if (canonicalUnit.getPhysicalQuantity() == Measurement::PhysicalQuantity::Gravity &&
+                value.toDouble() <= 0.0) {
+               qDebug() << Q_FUNC_INFO << "Not writing" << key.data() << "as gravity value" << value.toDouble() << "means unset";
+               break;
+            }
             qDebug() << Q_FUNC_INFO << canonicalUnit;
 
             // Now we found canonical units, we need to find the right string to represent them
@@ -1078,35 +1190,38 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
                nullptr != std::get<ListOfJsonMeasureableUnitsMappings const *>(fieldDefinition.valueDecoder)
             );
 
-            Measurement::Amount amount = value.value<Measurement::Amount>();
-
-            //
-            // Logic is similar to MeasurementWithUnits above, except we already have the canonical units
-            //
-            for (auto const unitsMapping :
-                 *std::get<ListOfJsonMeasureableUnitsMappings const *>(fieldDefinition.valueDecoder)) {
+            if (Measurement::Amount const amount = value.value<Measurement::Amount>();
+                okToWrite(this->m_recordDefinition, key, amount.quantity)) {
                //
-               // Each JsonMeasureableUnitsMapping in the ListOfJsonMeasureableUnitsMappings holds units for a single
-               // PhysicalQuantity -- ie we have a list of units for mass and another list of units for volume.
+               // Logic is similar to MeasurementWithUnits above, except we already have the canonical units
                //
-               // So the first thing to do is to find the right JsonMeasureableUnitsMapping
-               //
-               if (unitsMapping->getPhysicalQuantity() == amount.unit->getPhysicalQuantity()) {
-                  // Now we have the right PhysicalQuantity, we just need the entry for our Units
-                  auto unitName = unitsMapping->getNameForUnit(*amount.unit);
-                  qDebug() << Q_FUNC_INFO << std::string(unitName).c_str();
-                  recordDataAsObject[key].emplace_object();
-                  auto & measurementWithUnits = recordDataAsObject[key].as_object();
-                  measurementWithUnits.emplace(unitsMapping->unitField.asKey(),  unitName);
-                  measurementWithUnits.emplace(unitsMapping->valueField.asKey(), amount.quantity);
-                  break;
+               for (auto const unitsMapping :
+                    *std::get<ListOfJsonMeasureableUnitsMappings const *>(fieldDefinition.valueDecoder)) {
+                  //
+                  // Each JsonMeasureableUnitsMapping in the ListOfJsonMeasureableUnitsMappings holds units for a single
+                  // PhysicalQuantity -- ie we have a list of units for mass and another list of units for volume.
+                  //
+                  // So the first thing to do is to find the right JsonMeasureableUnitsMapping
+                  //
+                  if (unitsMapping->getPhysicalQuantity() == amount.unit->getPhysicalQuantity()) {
+                     // Now we have the right PhysicalQuantity, we just need the entry for our Units
+                     auto unitName = unitsMapping->getNameForUnit(*amount.unit);
+                     qDebug() << Q_FUNC_INFO << std::string(unitName).c_str();
+                     recordDataAsObject[key].emplace_object();
+                     auto & measurementWithUnits = recordDataAsObject[key].as_object();
+                     measurementWithUnits.emplace(unitsMapping->unitField.asKey(),  unitName);
+                     measurementWithUnits.emplace(unitsMapping->valueField.asKey(), amount.quantity);
+                     break;
+                  }
                }
             }
+
          }
          break;
 
       case JsonRecordDefinition::FieldType::SingleUnitValue:
-         if (Optional::removeOptionalWrapperIfPresent<double>(value, propertyIsOptional)) {
+         if (Optional::removeOptionalWrapperIfPresent<double>(value, propertyIsOptional) &&
+             okToWrite(this->m_recordDefinition, key, value.toDouble())) {
             // It's definitely a coding error if there is no unit specifier for a field declared to require one
             JsonSingleUnitSpecifier const * const jsonSingleUnitSpecifier =
                std::get<JsonSingleUnitSpecifier const *>(fieldDefinition.valueDecoder);
@@ -1127,7 +1242,10 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
          break;
 
       case JsonRecordDefinition::FieldType::DateTimeOffset:
-         if (Optional::removeOptionalWrapperIfPresent<QDateTime>(value, propertyIsOptional)) {
+         // An invalid (ie unset) QDateTime would be written as an empty string, which is not a valid date-time, so we
+         // omit the field instead.
+         if (Optional::removeOptionalWrapperIfPresent<QDateTime>(value, propertyIsOptional) &&
+             value.toDateTime().isValid()) {
             std::string formattedDate = value.toDateTime().toString(Qt::ISODate).toStdString();
             recordDataAsObject.emplace(key, formattedDate);
          }
@@ -1135,7 +1253,10 @@ void JsonRecord::insertValue(QString const & baseFolderPath,
 
       case JsonRecordDefinition::FieldType::Date:
       case JsonRecordDefinition::FieldType::DateOrDateTimeLocal:
-         if (Optional::removeOptionalWrapperIfPresent<QDate>(value, propertyIsOptional)) {
+         // Some non-optional date properties (eg BrewLog::fermentDate) use an invalid (null) QDate to mean "not
+         // set".  This would be written as an empty string, which is not a valid date, so we omit the field instead.
+         if (Optional::removeOptionalWrapperIfPresent<QDate>(value, propertyIsOptional) &&
+             value.toDate().isValid()) {
             //
             // DateOrDateTimeLocal corresponds to BeerJSON, DateType, which is a string matching this regexp:
             //   "\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"

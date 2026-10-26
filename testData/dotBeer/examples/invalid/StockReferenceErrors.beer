@@ -1,0 +1,84 @@
+//======================================================================================================================
+// examples/invalid/StockReferenceErrors.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: hop_id must refer to an item in /DotBeer/hops
+// EXPECT-INVALID: brew_log_id must refer to an item in /DotBeer/recipes/*/brew_logs
+// EXPECT-INVALID: local ID "brewlog_missing" is not defined anywhere in this file
+//
+// Cross-reference errors in stock purchases, none of which JSON Schema can check:
+//   • a hop stock purchase whose hop_id is the local ID of a fermentable
+//   • a stock use whose brew_log_id is the local ID of a hop rather than of a brew log
+//   • a stock use whose brew_log_id is not defined anywhere in the file
+// The first stock use is valid, and checks that a brew log inside a recipe satisfies "/DotBeer/recipes/*/brew_logs".
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-21T18:00:00Z",
+    "hops": [
+      { "name": "Cascade", "local_id": "hop_cascade", "alpha_acid": { "unit": "%", "value": 6.4 } }
+    ],
+    "fermentables": [
+      { "name": "Pale Malt", "local_id": "ferm_pale", "fermentable_type": "grain", "color": { "unit": "EBC", "value": 5 }, "yield_fine_grind": { "unit": "%", "value": 80.0 } }
+    ],
+    "recipes": [
+      {
+        "name": "Simple Pale",
+        "recipe_type": "all grain",
+        "author": "A. Brewer",
+        "batch_size": { "unit": "l", "value": 20.0 },
+        "efficiency": { "brewhouse": { "unit": "%", "value": 72.0 } },
+        "ingredients": {
+          "fermentable_additions": [
+            { "fermentable_id": "ferm_pale", "schedule": { "stage": "add_to_mash" }, "amount": { "unit": "kg", "value": 4.0 } }
+          ]
+        },
+        "brew_logs": [
+          {
+            "local_id": "brewlog_1",
+            "batch_number": "P-1",
+            "brew_date": "2026-05-09",
+            "expected_pre_boil_gravity": { "unit": "sg", "value": 1.040 },
+            "expected_mash_final_temperature": { "unit": "C", "value": 66.0 },
+            "expected_original_gravity": { "unit": "sg", "value": 1.046 },
+            "expected_volume_into_fv": { "unit": "l", "value": 20.0 },
+            "expected_final_gravity": { "unit": "sg", "value": 1.010 },
+            "expected_alcohol_by_volume": { "unit": "%", "value": 4.7 },
+            "expected_attenuation": { "unit": "%", "value": 78.0 },
+            "expected_efficiency": { "unit": "%", "value": 72.0 },
+            "expected_boil_off": { "unit": "l", "value": 3.5 }
+          }
+        ]
+      }
+    ],
+    "hop_stock_purchases": [
+      {
+        "hop_id": "hop_cascade",
+        "date_received": "2026-04-06",
+        "amount_received": { "unit": "g", "value": 100 },
+        "stock_uses": [
+          // Valid
+          { "date": "2026-05-09", "reason": "used", "brew_log_id": "brewlog_1", "amount_used": { "unit": "g", "value": 30 } },
+          // ERROR: hop_cascade is a hop, not a brew log
+          { "date": "2026-05-10", "reason": "used", "brew_log_id": "hop_cascade", "amount_used": { "unit": "g", "value": 30 } },
+          // ERROR: no such local ID
+          { "date": "2026-05-11", "reason": "used", "brew_log_id": "brewlog_missing", "amount_used": { "unit": "g", "value": 30 } }
+        ]
+      },
+      {
+        // ERROR: ferm_pale is a fermentable, not a hop
+        "hop_id": "ferm_pale",
+        "date_received": "2026-04-06",
+        "amount_received": { "unit": "g", "value": 50 }
+      }
+    ]
+  }
+}

@@ -232,6 +232,25 @@ void Boil::ensureStandardProfile() {
    return;
 }
 
+std::pair<int, int> Boil::boilProperSteps() const {
+   int firstBoilProperStep = 1;
+   int lastBoilProperStep  = std::max(1, static_cast<int>(this->numSteps()));
+   bool foundBoilProper = false;
+   int stepNumber = 0;
+   for (auto const & boilStep : this->boilSteps()) {
+      ++stepNumber;
+      if (boilStep->startTemp_c() && *boilStep->startTemp_c() > Boil::minimumBoilTemperature_c &&
+          boilStep->  endTemp_c() && *boilStep->  endTemp_c() > Boil::minimumBoilTemperature_c) {
+         if (!foundBoilProper) {
+            firstBoilProperStep = stepNumber;
+            foundBoilProper = true;
+         }
+         lastBoilProperStep = stepNumber;
+      }
+   }
+   return {firstBoilProperStep, lastBoilProperStep};
+}
+
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Boil)
 

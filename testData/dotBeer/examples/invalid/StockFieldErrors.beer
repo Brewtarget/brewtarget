@@ -1,0 +1,75 @@
+//======================================================================================================================
+// examples/invalid/StockFieldErrors.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: /DotBeer/hop_stock_purchases/0: must have at least one of 'date_ordered', 'date_received'
+// EXPECT-INVALID: /DotBeer/hop_stock_purchases/1: must have at least one of 'amount_ordered', 'amount_received'
+// EXPECT-INVALID: /DotBeer/hop_stock_purchases/2/stock_uses/0/reason: 'borrowed' is not one of
+// EXPECT-INVALID: /DotBeer/hop_stock_purchases/2/stock_uses/1: 'amount_used' is a required property
+// EXPECT-INVALID: /DotBeer/hop_stock_purchases/2/stock_uses/2/amount_used
+// EXPECT-INVALID: /DotBeer/hop_stock_purchases/2/purchase_price: Unevaluated properties are not allowed ('currency'
+// EXPECT-INVALID: /DotBeer/culture_stock_purchases/0: Unevaluated properties are not allowed ('Culture_id'
+//
+// Errors in stock purchase and stock use fields that JSON Schema does catch:
+//   • a purchase with neither date_ordered nor date_received
+//   • a purchase with neither amount_ordered nor amount_received
+//   • a stock use with a `reason` that is not in the enum
+//   • a stock use with no amount_used
+//   • a hop stock use measured by count (hops can only be measured by mass or volume)
+//   • a price with a misspelt field name
+//   • a culture purchase using the old, capitalised, `Culture_id` field name
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-21T18:00:00Z",
+    "hops": [
+      { "name": "Cascade", "local_id": "hop_cascade", "alpha_acid": { "unit": "%", "value": 6.4 } }
+    ],
+    "cultures": [
+      { "name": "SafAle US-05", "local_id": "culture_us05", "culture_type": "ale", "form": "dry" }
+    ],
+    "hop_stock_purchases": [
+      {
+        // ERROR: neither date_ordered nor date_received
+        "hop_id": "hop_cascade",
+        "amount_received": { "unit": "g", "value": 100 }
+      },
+      {
+        // ERROR: neither amount_ordered nor amount_received
+        "hop_id": "hop_cascade",
+        "date_received": "2026-04-06"
+      },
+      {
+        "hop_id": "hop_cascade",
+        "date_received": "2026-04-06",
+        "amount_received": { "unit": "g", "value": 100 },
+        // ERROR: should be "iso_alphabetic_code"
+        "purchase_price": { "currency": "EUR", "amount": 7.90 },
+        "stock_uses": [
+          // ERROR: not a valid reason
+          { "date": "2026-05-09", "reason": "borrowed", "amount_used": { "unit": "g", "value": 30 } },
+          // ERROR: no amount_used
+          { "date": "2026-05-10", "reason": "used" },
+          // ERROR: hops can't be measured by count
+          { "date": "2026-05-11", "reason": "lost", "amount_used": { "unit": "count", "value": 2 } }
+        ]
+      }
+    ],
+    "culture_stock_purchases": [
+      {
+        // ERROR: should be culture_id
+        "Culture_id": "culture_us05",
+        "date_received": "2026-04-18",
+        "amount_received": { "unit": "count", "value": 3 }
+      }
+    ]
+  }
+}

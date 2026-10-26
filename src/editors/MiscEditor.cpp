@@ -78,7 +78,7 @@ void MiscEditor::hideOrShowWaterAgentFields() {
    this->groupBox_waterAgentFields->setVisible(showWaterAgentFields);
    if (showWaterAgentFields) {
       auto const waterAgentType = this->comboBox_waterAgentType->getOptValue<Misc::WaterAgentType>();
-      bool const percentAcidEnabled {waterAgentType && Misc::isAcid(*waterAgentType)};
+      bool const percentAcidEnabled {waterAgentType && Misc::canHavePercentAcid(*waterAgentType)};
       this->label_waterAgentPercentAcid->setEnabled(percentAcidEnabled);
       this->lineEdit_waterAgentPercentAcid->setEnabled(percentAcidEnabled);
    }

@@ -190,13 +190,17 @@ namespace {
 
    /**
     * \brief Intermediate step used by mIBU formula
+    *
+    * \param postBoilDelay_minutes For hops added after flameout, how long after flameout they were added.  The wort
+    *                              temperature curve is measured from flameout, not from when the hops were added.
     */
    double computePostBoilUtilization(double const timeInBoil_minutes,
                                      double const wortGravity_sg,
                                      double const postBoilVolume_liters,
                                      double const coolTime_minutes,
                                      double const kettleInternalDiameter_cm,
-                                     double const kettleOpeningDiameter_cm) {
+                                     double const kettleOpeningDiameter_cm,
+                                     double const postBoilDelay_minutes) {
 
       double const surfaceArea_cm2 = circleAreaFromRadius(kettleInternalDiameter_cm/2.0);
       double const openingArea_cm2 = circleAreaFromRadius(kettleOpeningDiameter_cm/2.0);
@@ -209,7 +213,8 @@ namespace {
            time_minutes < timeInBoil_minutes + coolTime_minutes;
            time_minutes += integrationTime) {
          double const dU = -1.65 * pow(0.000125, (wortGravity_sg-1.0)) * -0.04 * exp(-0.04*time_minutes) / 4.15;
-         double const temp_degK = 53.70 * exp(-1.0 * b * (time_minutes - timeInBoil_minutes)) + 319.55;
+         double const timeSinceFlameout_minutes = time_minutes - timeInBoil_minutes + postBoilDelay_minutes;
+         double const temp_degK = 53.70 * exp(-1.0 * b * timeSinceFlameout_minutes) + 319.55;
          double const degreeOfUtilization =
             // The 1.0 case accounts for nonIAA components
             (time_minutes < 5.0) ? 1.0 : 2.39*pow(10.0,11.0)*exp(-9773.0/temp_degK);
@@ -238,7 +243,8 @@ namespace {
                                                                     parms.postBoilVolume_liters,
                                                                     parms.coolTime_minutes.value_or(0.0),
                                                                     parms.kettleInternalDiameter_cm.value_or(45.0),
-                                                                    parms.kettleOpeningDiameter_cm.value_or(45.0));
+                                                                    parms.kettleOpeningDiameter_cm.value_or(45.0),
+                                                                    parms.postBoilDelay_minutes);
 
       double const totalUtilization = decimalAlphaAcidUtilization + postBoilUtilization;
       double const ibu = (totalUtilization * parms.AArating * parms.hops_grams * 1000.0) / parms.postBoilVolume_liters;

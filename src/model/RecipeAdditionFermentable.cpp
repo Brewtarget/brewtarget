@@ -142,7 +142,7 @@ double RecipeAdditionFermentable::equivSucrose_kg() const {
    }
    auto const & fermentable = this->fermentable();
    double const ret =
-      amount.quantity * fermentable->fineGrindYield_pct().value_or(0.0) *
+      amount.quantity * fermentable->effectiveFineGrindYield_pct().value_or(0.0) *
       (1.0 - fermentable->moisture_pct().value_or(0.0) / 100.0) / 100.0;
 
    // If this is a steeped grain...

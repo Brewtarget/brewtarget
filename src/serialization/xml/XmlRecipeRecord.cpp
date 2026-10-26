@@ -32,30 +32,7 @@
 #include "model/RecipeAdditionHop.h"
 #include "model/RecipeAdditionMisc.h"
 #include "model/RecipeAdditionYeast.h"
-
-namespace {
-   /**
-    * \brief RAII class to temporarily turn off Recipe calculations
-    */
-   class RecipeCalcsSuspender {
-   public:
-      RecipeCalcsSuspender(std::shared_ptr<Recipe> recipe) :
-         m_recipe{recipe},
-         m_savedCalcsEnabled{recipe->calcsEnabled()} {
-         if (this->m_savedCalcsEnabled) {
-            recipe->setCalcsEnabled(false);
-         }
-         return;
-      }
-      ~RecipeCalcsSuspender() {
-         this->m_recipe->setCalcsEnabled(this->m_savedCalcsEnabled);
-         return;
-      }
-   private:
-      std::shared_ptr<Recipe> m_recipe;
-      bool const m_savedCalcsEnabled;
-   };
-}
+#include "model/RecipeUtils.h"
 
 XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(QString const & targetFolderPath,
                                                                    std::shared_ptr<NamedEntity> const containingEntity,
@@ -69,7 +46,7 @@ XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(QString const
    // child objects such as ingredient additions, mash, boil etc, and trying to run them before all these things are
    // set causes crashes.
    //
-   RecipeCalcsSuspender recipeCalcsSuspender{recipe};
+   RecipeUtils::SuspendRecipeCalcs suspendRecipeCalcs{recipe};
 
    //
    // This call to the base class function will store the Recipe and all the objects it contains (via call to
@@ -79,6 +56,11 @@ XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(QString const
                                                                          containingEntity,
                                                                          userMessage,
                                                                          stats);
+   if (XmlRecord::ProcessingResult::Succeeded == result) {
+      // See comment in JsonRecord::normaliseAndStoreInDb.  (BeerXML doesn't have steps for additions, but our STEP
+      // extension tag does.)
+      recipe->correctAdditionSteps();
+   }
    if (XmlRecord::ProcessingResult::FoundDuplicate == result) {
       //
       // If the Recipe we read in turns out to be a duplicate, then (courtesy of
@@ -123,6 +105,13 @@ XmlRecord::ProcessingResult XmlRecipeRecord::normaliseAndStoreInDb(QString const
       }
    }
 
+   //
+   // Previously we always returned Succeeded here, which meant that a failure to store one of the Recipe's child
+   // records was not reported.  We still treat finding a duplicate as success.
+   //
+   if (XmlRecord::ProcessingResult::Failed == result) {
+      return XmlRecord::ProcessingResult::Failed;
+   }
    return XmlRecord::ProcessingResult::Succeeded;
 }
 

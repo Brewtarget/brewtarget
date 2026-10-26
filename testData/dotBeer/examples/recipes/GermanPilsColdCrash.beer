@@ -1,0 +1,369 @@
+//======================================================================================================================
+// examples/recipes/GermanPilsColdCrash.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+//
+// A lager with a multistep fermentation ending in a cold crash below 0°C, so that a negative Celsius temperature is
+// exercised.  Also:
+//  • A step mash with a decoction
+//  • A 90-minute boil with inline (counterflow) chilling
+//  • Mostly-RO water, adjusted with calcium chloride and lactic acid (ie a water agent with a percent acid)
+//  • A fining (gelatin) added during a specific fermentation step
+//  • A brew log containing only the required fields
+//
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-16T10:00:00Z",
+
+    "hops": [
+      {
+        "name": "Hallertauer Mittelfrüh",
+        "local_id": "hop_hallertau_mf",
+        "origin": "Germany",
+        "form": "pellet",
+        "alpha_acid": { "unit": "%", "value": 4.0 },
+        "hop_type": "aroma"
+      },
+      {
+        "name": "Tettnanger",
+        "local_id": "hop_tettnang",
+        "origin": "Germany",
+        "form": "leaf",
+        "alpha_acid": { "unit": "%", "value": 4.5 },
+        "hop_type": "aroma/flavor"
+      }
+    ],
+
+    "fermentables": [
+      {
+        "name": "Pilsner Malt",
+        "local_id": "ferm_pils",
+        "fermentable_type": "grain",
+        "grain_group": "base",
+        "producer": "Weyermann",
+        "color": { "unit": "EBC", "value": 3.5 },
+        "yield_potential": { "unit": "sg", "value": 1.037 }
+      },
+      {
+        "name": "Carafoam",
+        "local_id": "ferm_carafoam",
+        "fermentable_type": "grain",
+        "grain_group": "specialty",
+        "producer": "Weyermann",
+        "color": { "unit": "EBC", "value": 5.0 },
+        "yield_fine_grind": { "unit": "%", "value": 75.0 },
+        "max_in_batch": { "unit": "%", "value": 10.0 }
+      }
+    ],
+
+    "miscs": [
+      {
+        "name": "Calcium Chloride",
+        "local_id": "misc_cacl2",
+        "misc_type": "water agent",
+        "water_agent_type": "calcium chloride anhydrous"
+      },
+      {
+        "name": "Lactic Acid 80%",
+        "local_id": "misc_lactic_80",
+        "misc_type": "water agent",
+        "water_agent_type": "lactic acid",
+        "water_agent_percent_acid": { "unit": "%", "value": 80.0 }
+      },
+      {
+        "name": "Gelatin",
+        "local_id": "misc_gelatin",
+        "misc_type": "fining",
+        "use_for": "Clearing after cold crash."
+      }
+    ],
+
+    "cultures": [
+      {
+        "name": "SafLager W-34/70",
+        "local_id": "culture_w3470",
+        "culture_type": "lager",
+        "form": "dry",
+        "producer": "Fermentis",
+        "product_id": "W-34/70",
+        "temperature_range": {
+          "minimum": { "unit": "C", "value": 9.0 },
+          "maximum": { "unit": "C", "value": 22.0 }
+        },
+        "flocculation": "high",
+        "attenuation_range": {
+          "minimum": { "unit": "%", "value": 80.0 },
+          "maximum": { "unit": "%", "value": 84.0 }
+        }
+      }
+    ],
+
+    "waters": [
+      {
+        "name": "Reverse Osmosis",
+        "local_id": "water_ro",
+        "calcium": { "unit": "ppm", "value": 0 },
+        "magnesium": { "unit": "ppm", "value": 0 },
+        "sodium": { "unit": "ppm", "value": 0 },
+        "sulfate": { "unit": "ppm", "value": 0 },
+        "chloride": { "unit": "ppm", "value": 0 },
+        "bicarbonate": { "unit": "ppm", "value": 0 }
+      },
+      {
+        "name": "Soft Pils Target",
+        "local_id": "water_pils_target",
+        "calcium": { "unit": "ppm", "value": 50 },
+        "magnesium": { "unit": "ppm", "value": 5 },
+        "sodium": { "unit": "ppm", "value": 5 },
+        "sulfate": { "unit": "ppm", "value": 50 },
+        "chloride": { "unit": "ppm", "value": 60 },
+        "bicarbonate": { "unit": "ppm", "value": 10 }
+      }
+    ],
+
+    "mashes": [
+      {
+        "name": "Single Decoction",
+        "local_id": "mash_single_decoction",
+        "grain_temperature": { "unit": "C", "value": 15.0 },
+        "mash_steps": [
+          {
+            "name": "Protein Rest",
+            "step_type": "infusion",
+            "amount": { "unit": "l", "value": 16.0 },
+            "start_temperature": { "unit": "C", "value": 52.0 },
+            "step_time": { "unit": "min", "value": 10 }
+          },
+          {
+            "name": "Beta Rest",
+            "step_type": "temperature",
+            "start_temperature": { "unit": "C", "value": 63.0 },
+            "step_time": { "unit": "min", "value": 40 },
+            "ramp_time": { "unit": "min", "value": 12 }
+          },
+          {
+            "name": "Decoction to Alpha Rest",
+            "step_description": "Pull a thick third of the mash, boil 15 minutes, return.",
+            "step_type": "decoction",
+            "amount": { "unit": "l", "value": 6.5 },
+            "start_temperature": { "unit": "C", "value": 72.0 },
+            "step_time": { "unit": "min", "value": 20 },
+            "ramp_time": { "unit": "min", "value": 30 }
+          },
+          {
+            "name": "Mash Out",
+            "step_type": "temperature",
+            "start_temperature": { "unit": "C", "value": 78.0 },
+            "step_time": { "unit": "min", "value": 10 }
+          }
+        ]
+      }
+    ],
+
+    "boils": [
+      {
+        "name": "90 Minute Boil, Counterflow Chill",
+        "local_id": "boil_90_counterflow",
+        "boil_steps": [
+          {
+            "name": "Boil",
+            "step_time": { "unit": "min", "value": 90 }
+          },
+          {
+            "name": "Chill",
+            "step_time": { "unit": "min", "value": 25 },
+            "end_temperature": { "unit": "C", "value": 9.0 },
+            "chilling_type": "inline"
+          }
+        ]
+      }
+    ],
+
+    "fermentations": [
+      {
+        "name": "Lager with Diacetyl Rest and Cold Crash",
+        "local_id": "ferm_lager_cold_crash",
+        "fermentation_steps": [
+          {
+            "name": "Primary",
+            "step_time": { "unit": "day", "value": 10 },
+            "start_temperature": { "unit": "C", "value": 10.0 },
+            "end_temperature": { "unit": "C", "value": 10.0 },
+            "vessel": "Conical fermenter"
+          },
+          {
+            "name": "Diacetyl Rest",
+            "step_time": { "unit": "day", "value": 3 },
+            "start_temperature": { "unit": "C", "value": 10.0 },
+            "end_temperature": { "unit": "C", "value": 17.0 },
+            "free_rise": true,
+            "vessel": "Conical fermenter"
+          },
+          {
+            "name": "Cold Crash",
+            "step_description": "Drop temperature as fast as the chamber allows.",
+            "step_time": { "unit": "day", "value": 2 },
+            "start_temperature": { "unit": "C", "value": 17.0 },
+            // Below freezing point of water, but not of beer
+            "end_temperature": { "unit": "C", "value": -1.0 },
+            "free_rise": false,
+            "vessel": "Conical fermenter"
+          },
+          {
+            "name": "Lagering",
+            "step_time": { "unit": "week", "value": 4 },
+            "start_temperature": { "unit": "C", "value": 0.0 },
+            "end_temperature": { "unit": "C", "value": 0.0 },
+            "vessel": "Corny keg"
+          }
+        ]
+      }
+    ],
+
+    "styles": [
+      {
+        "name": "German Pils",
+        "local_id": "style_bjcp2021_5d",
+        "category": "Pale Bitter European Beer",
+        "category_number": "5",
+        "style_letter": "D",
+        "style_guide": "BJCP 2021",
+        "style_type": "beer",
+        "original_gravity": {
+          "minimum": { "unit": "sg", "value": 1.044 },
+          "maximum": { "unit": "sg", "value": 1.050 }
+        },
+        "final_gravity": {
+          "minimum": { "unit": "sg", "value": 1.008 },
+          "maximum": { "unit": "sg", "value": 1.013 }
+        },
+        "ibu": {
+          "minimum": { "unit": "IBUs", "value": 22 },
+          "maximum": { "unit": "IBUs", "value": 40 }
+        },
+        "color": {
+          "minimum": { "unit": "SRM", "value": 2 },
+          "maximum": { "unit": "SRM", "value": 4 }
+        }
+      }
+    ],
+
+    "equipments": [
+      {
+        "name": "Minimal Kettle",
+        "local_id": "equip_minimal",
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 40 },
+          "loss": { "unit": "l", "value": 1.5 }
+        }
+      }
+    ],
+
+    "recipes": [
+      {
+        "name": "Cold Crash Pils",
+        "recipe_type": "all grain",
+        "author": "A. Brewer",
+        "batch_size": { "unit": "l", "value": 20.0 },
+        "efficiency": {
+          "brewhouse": { "unit": "%", "value": 70.0 }
+        },
+        "style_id": "style_bjcp2021_5d",
+        "equipment_id": "equip_minimal",
+        "water_base_id": "water_ro",
+        "water_target_id": "water_pils_target",
+        "ro_water_mash": { "unit": "%", "value": 100.0 },
+        "ro_water_sparge": { "unit": "%", "value": 100.0 },
+        "mash_id": "mash_single_decoction",
+        "boil_id": "boil_90_counterflow",
+        "fermentation_id": "ferm_lager_cold_crash",
+        "ingredients": {
+          "fermentable_additions": [
+            {
+              "fermentable_id": "ferm_pils",
+              "schedule": { "stage": "add_to_mash" },
+              "amount": { "unit": "kg", "value": 4.3 }
+            },
+            {
+              "fermentable_id": "ferm_carafoam",
+              "schedule": { "stage": "add_to_mash" },
+              "amount": { "unit": "g", "value": 200 }
+            }
+          ],
+          "hop_additions": [
+            {
+              "hop_id": "hop_hallertau_mf",
+              "schedule": {
+                "stage": "add_to_boil",
+                "step": 1,
+                "time": { "unit": "min", "value": 60 }
+              },
+              "amount": { "unit": "g", "value": 45 }
+            },
+            {
+              "hop_id": "hop_tettnang",
+              "schedule": {
+                "stage": "add_to_boil",
+                "step": 1,
+                "time": { "unit": "min", "value": 5 }
+              },
+              "amount": { "unit": "g", "value": 30 }
+            }
+          ],
+          "misc_additions": [
+            {
+              "misc_id": "misc_cacl2",
+              "schedule": { "stage": "add_to_mash", "step": 1 },
+              "amount": { "unit": "g", "value": 3.5 }
+            },
+            {
+              "misc_id": "misc_lactic_80",
+              "schedule": { "stage": "add_to_mash", "step": 1 },
+              "amount": { "unit": "ml", "value": 2.0 }
+            },
+            {
+              // Gelatin added at the start of the lagering step, ie once the beer is cold
+              "misc_id": "misc_gelatin",
+              "schedule": { "stage": "add_to_fermentation", "step": 4 },
+              "amount": { "unit": "g", "value": 5 }
+            }
+          ],
+          "culture_additions": [
+            {
+              "culture_id": "culture_w3470",
+              "schedule": { "stage": "add_to_fermentation", "step": 1 },
+              "amount": { "unit": "count", "value": 2 }
+            }
+          ]
+        },
+        "original_gravity": { "unit": "sg", "value": 1.048 },
+        "final_gravity": { "unit": "sg", "value": 1.009 },
+        "brew_logs": [
+          {
+            // Only the required fields
+            "batch_number": "L-07",
+            "brew_date": "2026-08-02",
+            "expected_pre_boil_gravity": { "unit": "sg", "value": 1.040 },
+            "expected_mash_final_temperature": { "unit": "C", "value": 78.0 },
+            "expected_original_gravity": { "unit": "sg", "value": 1.048 },
+            "expected_volume_into_fv": { "unit": "l", "value": 20.0 },
+            "expected_final_gravity": { "unit": "sg", "value": 1.009 },
+            "expected_alcohol_by_volume": { "unit": "%", "value": 5.1 },
+            "expected_attenuation": { "unit": "%", "value": 81.0 },
+            "expected_efficiency": { "unit": "%", "value": 70.0 },
+            "expected_boil_off": { "unit": "l", "value": 6.0 }
+          }
+        ]
+      }
+    ]
+  }
+}

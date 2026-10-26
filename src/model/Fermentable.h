@@ -564,6 +564,17 @@ public:
    std::optional<double>     fineGrindYield_pct       () const;
    std::optional<double>     coarseGrindYield_pct     () const;
    std::optional<double>     potentialYield_sg        () const;
+
+   /**
+    * \brief The yield to use in calculations, expressed as a fine grind yield (ie what \c fineGrindYield_pct would
+    *        be).  If \c fineGrindYield_pct is not set, this is derived from \c coarseGrindYield_pct (plus
+    *        \c coarseFineDiff_pct if set), or, failing that, from \c potentialYield_sg.
+    *
+    *        A fermentable needs at least one of these to contribute to gravity, and dotBeer requires at least one of
+    *        them (but not any particular one) to be present.  Returns \c std::nullopt if none of them is set.
+    */
+   std::optional<double>     effectiveFineGrindYield_pct() const;
+
    std::optional<double>     alphaAmylase_dextUnits   () const;
    std::optional<double>     kolbachIndex_pct         () const;
    std::optional<double>     hardnessPrpGlassy_pct    () const;

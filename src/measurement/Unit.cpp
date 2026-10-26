@@ -704,7 +704,7 @@ namespace Measurement::Units {
    Unit const ebc     {Measurement::UnitSystems::color_EuropeanBreweryConvention, {QObject::tr("ebc"     )}, defaultSanitiser, 12.7/25.0, &srm};
    Unit const lovibond{Measurement::UnitSystems::color_Lovibond                 , {QObject::tr("lovibond")}, defaultSanitiser,
                        [](double const val_lovibond){return (1.3546 * val_lovibond) - 0.76;},
-                       [](double const val_srm     ){return (val_srm + 0.76) / 1.3456;},
+                       [](double const val_srm     ){return (val_srm + 0.76) / 1.3546;}, // NB: Must be inverse of the line above
                        &srm};
 
    // == Density ===
