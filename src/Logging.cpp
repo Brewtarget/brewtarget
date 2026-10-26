@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Logging.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * Logging.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
@@ -512,6 +512,18 @@ QFileInfoList Logging::getLogFileList() {
 
 
 void Logging::terminateLogging() {
+   //
+   // Stop using our message handler (if it is the current one -- eg in unit tests it might not be).  Otherwise, any
+   // messages logged after this -- eg by Qt during QApplication destruction or at static destruction time -- would
+   // still come to logMessageHandler(), which relies on global and thread_local variables (errStream, threadId, etc)
+   // that might already have been destroyed by then, which can give a crash on exit.  Messages logged after this point
+   // go to Qt's default message handler (ie stderr).
+   //
+   QtMessageHandler const previousHandler = qInstallMessageHandler(nullptr);
+   if (previousHandler != logMessageHandler) {
+      qInstallMessageHandler(previousHandler);
+   }
+
    QMutexLocker locker(&mutex);
    closeLogFile();
    return;

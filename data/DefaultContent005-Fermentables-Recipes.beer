@@ -10,7 +10,10 @@
 // In both the above cases, original material was in BeerXML format.  We have converted it to dotBeer in part so we can
 // use it as test data for that format.
 //
-// The remaining content in this file comes from Creative Commons content on https://www.beer-analytics.com/.  (See
+// Some items (equipment Profiles for all-in-one brewing systems, and water agents) come from dotBeer example files:
+//  - https://github.com/Brewken/DotBeer/blob/main/examples/library/WaterAgentsAndProfiles.beer
+//
+// The remaining content in this file originates from Creative Commons content on https://www.beer-analytics.com/.  (See
 // https://creativecommons.org/licenses/by-sa/4.0/ for license.)
 //
 // Comments such as this one are part of the dotBeer format (which is JSON with comments allowed -- see "File format
@@ -18867,6 +18870,68 @@
       }
     ],
     "miscs": [
+      //================================================================================================================
+      //=== One misc for every `water_agent_type`, including the ones that need `water_agent_percent_acid`           ===
+      //================================================================================================================
+      { "name": "Calcium Chloride",  "local_id": "wa_cacl2",    "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "calcium chloride anhydrous"    },
+      { "name": "Calcium Chloride Flake", "local_id": "wa_cacl2_flake", "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "calcium chloride dihydrate" },
+      { "name": "Pickling Lime",     "local_id": "wa_caoh2",    "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "calcium hydroxide"             },
+      { "name": "Magnesium Chloride", "local_id": "wa_mgcl2",   "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "magnesium chloride hexahydrate"},
+      { "name": "Chalk",             "local_id": "wa_caco3",    "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "calcium carbonate"             },
+      { "name": "Gypsum",            "local_id": "wa_caso4",    "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "calcium sulfate dihydrate"     },
+      { "name": "Epsom Salt",        "local_id": "wa_mgso4",    "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "magnesium sulfate heptahydrate"},
+      { "name": "Table Salt",        "local_id": "wa_nacl",     "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "sodium chloride"               },
+      { "name": "Baking Soda",       "local_id": "wa_nahco3",   "folder_path": "Water Agents/Salts", "misc_type": "water agent", "water_agent_type": "sodium bicarbonate"            },
+      {
+        "name": "Lactic Acid 88%",
+        "local_id": "wa_lactic_88",
+        "folder_path": "Water Agents/Acids",
+        "misc_type": "water agent",
+        "water_agent_type": "lactic acid",
+        "water_agent_percent_acid": { "unit": "%", "value": 88.0 }
+      },
+      {
+        "name": "Phosphoric Acid 10%",
+        "local_id": "wa_phosphoric_10",
+        "folder_path": "Water Agents/Acids",
+        "misc_type": "water agent",
+        "water_agent_type": "phosphoric acid",
+        "water_agent_percent_acid": { "unit": "%", "value": 10.0 }
+      },
+      {
+        "name": "Sulfuric Acid 10%",
+        "local_id": "wa_sulfuric_10",
+        "folder_path": "Water Agents/Acids",
+        "misc_type": "water agent",
+        "water_agent_type": "sulfuric acid",
+        "water_agent_percent_acid": { "unit": "%", "value": 10.0 }
+      },
+      {
+        "name": "Hydrochloric Acid 10%",
+        "local_id": "wa_hydrochloric_10",
+        "folder_path": "Water Agents/Acids",
+        "misc_type": "water agent",
+        "water_agent_type": "hydrochloric acid",
+        "water_agent_percent_acid": { "unit": "%", "value": 10.0 }
+      },
+      {
+        // "other" may also carry a percent acid -- eg citric acid
+        "name": "Citric Acid Solution",
+        "local_id": "wa_citric",
+        "folder_path": "Water Agents/Acids",
+        "misc_type": "water agent",
+        "water_agent_type": "other",
+        "water_agent_percent_acid": { "unit": "%", "value": 50.0 }
+      },
+      {
+        "name": "Campden Tablet",
+        "local_id": "wa_campden",
+        "folder_path": "Water Agents",
+        "misc_type": "water agent",
+        "water_agent_type": "other",
+        "use_for": "Removing chlorine and chloramine"
+      },
+      //================================================================================================================
       {
         "name": "Whirlfloc Tablet",
         "local_id": "Misc_92",

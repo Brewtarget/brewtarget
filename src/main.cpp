@@ -288,6 +288,9 @@ int main(int argc, char **argv) {
 
       qDebug() << Q_FUNC_INFO << "Returning " << mainAppReturnValue;
 
+      // See comment in Logging::terminateLogging for why we need to do this before we return
+      Logging::terminateLogging();
+
       return mainAppReturnValue;
    }
    catch (const QString & error)
