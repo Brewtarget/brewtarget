@@ -1055,8 +1055,14 @@ applicationMainSourceFile = files([
 # Extra files we compile for unit testing
 #
 unitTestExtraSourceFiles = files([
-   'src/unitTests/Testing.cpp',
-   'src/unitTests/TestMultiVector.cpp'
+   'src/unitTests/CoreTests.cpp',
+   'src/unitTests/MeasurementTests.cpp',
+   'src/unitTests/RecipeCalcTests.cpp',
+   'src/unitTests/SerializationTests.cpp',
+   'src/unitTests/TestClassBase.cpp',
+   'src/unitTests/TestData.cpp',
+   'src/unitTests/TestEnvironment.cpp',
+   'src/unitTests/TestMain.cpp',
 ])
 
 #
@@ -1257,7 +1263,11 @@ mocHeaders = files([
 ])
 
 unitTestMocHeaders = files([
-   'src/unitTests/Testing.h'
+   'src/unitTests/CoreTests.h',
+   'src/unitTests/MeasurementTests.h',
+   'src/unitTests/RecipeCalcTests.h',
+   'src/unitTests/SerializationTests.h',
+   'src/unitTests/TestClassBase.h',
 ])
 
 #
@@ -1930,21 +1940,35 @@ testRunner = executable(testRunnerTargetName,
 #=======================================================================================================================
 #===================================================== Unit Tests ======================================================
 #=======================================================================================================================
-test('Test integer sizes'                  , testRunner, args : ['pstdintTest'                ])
-test('Test recipe calculations - all grain', testRunner, args : ['recipeCalcTest_allGrain'    ])
-test('Test post boil loss OG'              , testRunner, args : ['postBoilLossOgTest'         ])
-test('Test unit conversions'               , testRunner, args : ['testUnitConversions'        ])
-test('Test NamedParameterBundle'           , testRunner, args : ['testNamedParameterBundle'   ])
-test('Test number display and parsing'     , testRunner, args : ['testNumberDisplayAndParsing'])
-test('Test algorithms'                     , testRunner, args : ['testAlgorithms'             ])
-test('Test type lookups'                   , testRunner, args : ['testTypeLookups'            ])
-test('Test inventory'                      , testRunner, args : ['testInventory'              ])
-test('Test boil addition timing'           , testRunner, args : ['testBoilAdditionTiming'     ])
-test('Test dotBeer examples'                , testRunner, args : ['testDotBeerExamples'        ])
-test('Test BeerJSON round trip'             , testRunner, args : ['testBeerJsonRoundTrip'      ])
-test('Test MultiVector'                    , testRunner, args : ['testMultiVector'            ])
+#
+# Each test is a separate run of the test runner, so gets its own fresh database etc.  The first argument to the test
+# runner is the test class; the second is the test function.  See comment in src/unitTests/TestRegistry.h for more
+# details.  Tests are grouped into suites, so you can run, eg, just the serialization tests with:
+#    meson test --suite serialization
+#
+test('Test integer sizes'                    , testRunner, args : ['CoreTests', 'pstdintTest'                                ], suite : 'core')
+test('Test NamedParameterBundle'             , testRunner, args : ['CoreTests', 'testNamedParameterBundle'                   ], suite : 'core')
+test('Test type lookups'                     , testRunner, args : ['CoreTests', 'testTypeLookups'                            ], suite : 'core')
+test('Test MultiVector'                      , testRunner, args : ['CoreTests', 'testMultiVector'                            ], suite : 'core')
 # Need a bit longer than the default 30 second timeout for the log rotation test on some platforms
-test('Test log rotation'                   , testRunner, args : ['testLogRotation'            ], timeout : 60)
+test('Test log rotation'                     , testRunner, args : ['CoreTests', 'testLogRotation'                            ], suite : 'core', timeout : 60)
+test('Test unit conversions'                 , testRunner, args : ['MeasurementTests', 'testUnitConversions'                 ], suite : 'measurement')
+test('Test unit inverses'                    , testRunner, args : ['MeasurementTests', 'testUnitInverses'                    ], suite : 'measurement')
+test('Test number display and parsing'       , testRunner, args : ['MeasurementTests', 'testNumberDisplayAndParsing'         ], suite : 'measurement')
+test('Test algorithms'                       , testRunner, args : ['MeasurementTests', 'testAlgorithms'                      ], suite : 'measurement')
+test('Test recipe calculations - all grain'  , testRunner, args : ['RecipeCalcTests', 'recipeCalcTest_allGrain'              ], suite : 'recipe')
+test('Test post boil loss OG'                , testRunner, args : ['RecipeCalcTests', 'postBoilLossOgTest'                   ], suite : 'recipe')
+test('Test boil addition timing'             , testRunner, args : ['RecipeCalcTests', 'testBoilAdditionTiming'               ], suite : 'recipe')
+test('Test inventory'                        , testRunner, args : ['RecipeCalcTests', 'testInventory'                        ], suite : 'recipe')
+test('Test dotBeer imported recipe calcs'    , testRunner, args : ['SerializationTests', 'testDotBeerImportedRecipeCalcs'    ], suite : 'serialization')
+test('Test dotBeer addition step correction' , testRunner, args : ['SerializationTests', 'testDotBeerAdditionStepCorrection' ], suite : 'serialization')
+test('Test brew log calcs'                   , testRunner, args : ['SerializationTests', 'testBrewLogCalcs'                  ], suite : 'serialization')
+test('Test dotBeer version handling'         , testRunner, args : ['SerializationTests', 'testDotBeerVersionHandling'        ], suite : 'serialization')
+test('Test dotBeer export'                   , testRunner, args : ['SerializationTests', 'testDotBeerExport'                 ], suite : 'serialization')
+test('Test clear unused optional vessels'    , testRunner, args : ['SerializationTests', 'testClearUnusedOptionalVessels'    ], suite : 'serialization')
+test('Test BeerXML null yield'               , testRunner, args : ['SerializationTests', 'testBeerXmlNullYield'              ], suite : 'serialization')
+test('Test NullSentinel'                     , testRunner, args : ['SerializationTests', 'testNullSentinel'                  ], suite : 'serialization')
+test('Test BeerJSON round trip'              , testRunner, args : ['SerializationTests', 'testBeerJsonRoundTrip'             ], suite : 'serialization')
 
 #===
 

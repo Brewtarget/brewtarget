@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * unitTests/TestMultiVector.h is part of Brewtarget, and is copyright the following authors 2025:
+ * unitTests/TestClassBase.cpp is part of Brewtarget, and is copyright the following authors 2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -13,13 +13,32 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  =====================================================================================================================*/
-#ifndef TESTMULTIVECTOR_H
-#define TESTMULTIVECTOR_H
-#pragma once
+#include "unitTests/TestClassBase.h"
 
-namespace UnitTests {
-   void doTestsForMultiVector();
+#include "unitTests/TestEnvironment.h"
 
-};
+UnitTests::TestClassBase::TestClassBase() : QObject() {
+   return;
+}
 
-#endif
+UnitTests::TestClassBase::~TestClassBase() = default;
+
+void UnitTests::TestClassBase::initTestClass() {
+   return;
+}
+
+void UnitTests::TestClassBase::cleanupTestClass() {
+   return;
+}
+
+void UnitTests::TestClassBase::initTestCase() {
+   // See comment in header file for why we need to do this here
+   TestEnvironment::useApplicationLogging();
+   this->initTestClass();
+   return;
+}
+
+void UnitTests::TestClassBase::cleanupTestCase() {
+   this->cleanupTestClass();
+   return;
+}
