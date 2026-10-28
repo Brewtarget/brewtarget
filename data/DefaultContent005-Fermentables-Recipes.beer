@@ -41346,7 +41346,7 @@
       {
         "name": "Grainfather G30 (v3)",
         "local_id": "grainfather_g30",
-        "folder_path": "/All-in-one systems/Grainfather",
+        "folder_path": "All-in-one systems/Grainfather",
         "default_batch_size": { "unit": "l", "value": 25 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "foundation_volume": { "unit": "l", "value": 3.5 },
@@ -41361,8 +41361,8 @@
       {
         "name": "Grainfather G40",
         "local_id": "grainfather_g40",
-        "folder_path": "/All-in-one systems/Grainfather",
-        "default_batch_size": { "unit": "l", "value": 40 },
+        "folder_path": "All-in-one systems/Grainfather",
+        "default_batch_size": { "unit": "l", "value": 39.5 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "foundation_volume": { "unit": "l", "value": 0 },
         "kettle": {
@@ -41374,14 +41374,14 @@
           "boil_rate_per_hour": { "unit": "l", "value": 4.0 },
           "internal_diameter": { "unit": "cm", "value": 53 },
           "opening_diameter": { "unit": "cm", "value": 53 },
-          "notes": "Max pre-boil 46 L; batch 10-40 L.  Weight 29 kg empty.  Estimated (no manufacturer figure) -- calibrate on your own system: loss 2.5 L, boil-off 4 L/h, internal diameter ~53 cm (from 555 mm overall width).  Mash: Dished centre drain means essentially no volume below the plate (per Grainfather), hence foundation_volume of 0.  Grain bill 3-13 kg."
+          "notes": "Max pre-boil 46 L; batch 10-40 L.  Weight 29 kg empty.  Estimated (no manufacturer figure) -- calibrate on your own system: loss 2.5 L, boil-off 4 L/h, internal diameter ~53 cm (from 555 mm overall width).  Mash: Dished centre drain means essentially no volume below the plate (per Grainfather), hence foundation_volume of 0.  Grain bill 3-13 kg.  default_batch_size is 39.5 L rather than the manufacturer's 40 L, as 40 L plus a 60 minute boil-off (4 L) and kettle loss (2.5 L) would not fit in the 46 L kettle."
         }
       },
       {
         "name": "Grainfather G70 (v2)",
         "local_id": "grainfather_g70",
-        "folder_path": "/All-in-one systems/Grainfather",
-        "default_batch_size": { "unit": "l", "value": 58 },
+        "folder_path": "All-in-one systems/Grainfather",
+        "default_batch_size": { "unit": "l", "value": 52.5 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "foundation_volume": { "unit": "l", "value": 6.8 },
         "kettle": {
@@ -41391,13 +41391,13 @@
           "boil_rate_per_hour": { "unit": "l", "value": 4.5 },
           "internal_diameter": { "unit": "cm", "value": 53 },
           "opening_diameter": { "unit": "cm", "value": 53 },
-          "notes": "Max pre-boil 60 L; batch 30-58 L.  Estimated (no manufacturer figure) -- calibrate on your own system: loss 3 L, boil-off 4.5 L/h, internal diameter ~53 cm (from 555 mm overall width).  Mash: foundation_volume is Grainfather's figure for the space below the basket.  Grain bill 8-16 kg (17 kg with top plate extension)."
+          "notes": "Max pre-boil 60 L; batch 30-58 L.  Estimated (no manufacturer figure) -- calibrate on your own system: loss 3 L, boil-off 4.5 L/h, internal diameter ~53 cm (from 555 mm overall width).  Mash: foundation_volume is Grainfather's figure for the space below the basket.  Grain bill 8-16 kg (17 kg with top plate extension).  default_batch_size is 52.5 L rather than the manufacturer's 58 L, as 58 L plus a 60 minute boil-off (4.5 L) and kettle loss (3 L) would not fit in the 60 L kettle."
         }
       },
       {
         "name": "BrewZilla 35 L (Gen 4)",
         "local_id": "brewzilla_35l_gen4",
-        "folder_path": "/All-in-one systems/BrewZilla",
+        "folder_path": "All-in-one systems/BrewZilla",
         "default_batch_size": { "unit": "l", "value": 25 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41411,7 +41411,7 @@
       {
         "name": "BrewZilla 65 L (Gen 4)",
         "local_id": "brewzilla_65l_gen4",
-        "folder_path": "/All-in-one systems/BrewZilla",
+        "folder_path": "All-in-one systems/BrewZilla",
         "default_batch_size": { "unit": "l", "value": 50 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "foundation_volume": { "unit": "l", "value": 3.5 },
@@ -41426,8 +41426,8 @@
       {
         "name": "BrewZilla 100 L (Gen 4)",
         "local_id": "brewzilla_100l_gen4",
-        "folder_path": "/All-in-one systems/BrewZilla",
-        "default_batch_size": { "unit": "l", "value": 90 },
+        "folder_path": "All-in-one systems/BrewZilla",
+        "default_batch_size": { "unit": "l", "value": 88 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
           "vessel_type": "KegLand BrewZilla Gen 4.1 100 L -- stainless, 3 x 2200 W (32 A)",
@@ -41436,13 +41436,13 @@
           "weight": { "unit": "kg", "value": 20 },
           "specific_heat_capacity": { "unit": "J/kg·K", "value": 500 },
           "boil_rate_per_hour": { "unit": "l", "value": 8.0 },
-          "notes": "Max 100 L (107 L brimful); batches up to ~90 L.  Dry weight ~20 kg; ~52 cm outside diameter.  Estimated (no manufacturer figure) -- calibrate on your own system: loss 4 L, boil-off 8 L/h.  Mash: Malt pipe 72 L, up to 25 kg grain (20-23 kg typical); minimum 20 L liquid in the boiler."
+          "notes": "Max 100 L (107 L brimful); batches up to ~90 L.  Dry weight ~20 kg; ~52 cm outside diameter.  Estimated (no manufacturer figure) -- calibrate on your own system: loss 4 L, boil-off 8 L/h.  Mash: Malt pipe 72 L, up to 25 kg grain (20-23 kg typical); minimum 20 L liquid in the boiler.  default_batch_size is 88 L rather than the manufacturer's 90 L, as 90 L plus a 60 minute boil-off (8 L) and kettle loss (4 L) would not fit in the 100 L kettle."
         }
       },
       {
         "name": "Brew Monk B40",
         "local_id": "brewmonk_b40",
-        "folder_path": "/All-in-one systems/Brew Monk",
+        "folder_path": "All-in-one systems/Brew Monk",
         "default_batch_size": { "unit": "l", "value": 30 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41458,7 +41458,7 @@
       {
         "name": "Brew Monk B50",
         "local_id": "brewmonk_b50",
-        "folder_path": "/All-in-one systems/Brew Monk",
+        "folder_path": "All-in-one systems/Brew Monk",
         "default_batch_size": { "unit": "l", "value": 40 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41472,22 +41472,22 @@
       {
         "name": "Brew Monk B70",
         "local_id": "brewmonk_b70",
-        "folder_path": "/All-in-one systems/Brew Monk",
-        "default_batch_size": { "unit": "l", "value": 65 },
+        "folder_path": "All-in-one systems/Brew Monk",
+        "default_batch_size": { "unit": "l", "value": 63 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
           "vessel_type": "Brouwland Brew Monk B70 Wi-Fi -- AISI 304 stainless, 3000 W",
           "max_volume": { "unit": "l", "value": 70 },
           "loss": { "unit": "l", "value": 3.0 },
           "boil_rate_per_hour": { "unit": "l", "value": 4.0 },
-          "notes": "70 L total; batch 25-65 L.  Estimated (no manufacturer figure) -- calibrate on your own system: loss 3 L, boil-off 4 L/h.  Mash: Malt pipe takes up to 18 kg."
+          "notes": "70 L total; batch 25-65 L.  Estimated (no manufacturer figure) -- calibrate on your own system: loss 3 L, boil-off 4 L/h.  Mash: Malt pipe takes up to 18 kg.  default_batch_size is 63 L rather than the manufacturer's 65 L, as 65 L plus a 60 minute boil-off (4 L) and kettle loss (3 L) would not fit in the 70 L kettle."
         }
       },
       {
         "name": "Speidel Braumeister PLUS 10 L",
         "local_id": "braumeister_plus_10",
-        "folder_path": "/All-in-one systems/Speidel Braumeister",
-        "default_batch_size": { "unit": "l", "value": 11 },
+        "folder_path": "All-in-one systems/Speidel Braumeister",
+        "default_batch_size": { "unit": "l", "value": 10.5 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
           "vessel_type": "Speidel Braumeister PLUS 10 L -- stainless (1.0 mm), 1200 W",
@@ -41498,14 +41498,14 @@
           "boil_rate_per_hour": { "unit": "l", "value": 1.0 },
           "internal_diameter": { "unit": "cm", "value": 30 },
           "opening_diameter": { "unit": "cm", "value": 30 },
-          "notes": "Max fill 12 L; ~11 L wort, ~10 L finished beer.  Weight 12 kg; diameter 30 cm (outside).  Estimated (no manufacturer figure) -- calibrate on your own system: loss 0.5 L, boil-off 1 L/h.  Mash: Max 2.8 kg malt; 12 L water filled for mashing, 15-20 L brewing water per batch."
+          "notes": "Max fill 12 L; ~11 L wort, ~10 L finished beer.  Weight 12 kg; diameter 30 cm (outside).  Estimated (no manufacturer figure) -- calibrate on your own system: loss 0.5 L, boil-off 1 L/h.  Mash: Max 2.8 kg malt; 12 L water filled for mashing, 15-20 L brewing water per batch.  default_batch_size is 10.5 L rather than the manufacturer's 11 L, as 11 L plus a 60 minute boil-off (1 L) and kettle loss (0.5 L) would not fit in the 12 L kettle."
         }
       },
       {
         "name": "Speidel Braumeister PLUS 20 L",
         "local_id": "braumeister_plus_20",
-        "folder_path": "/All-in-one systems/Speidel Braumeister",
-        "default_batch_size": { "unit": "l", "value": 23 },
+        "folder_path": "All-in-one systems/Speidel Braumeister",
+        "default_batch_size": { "unit": "l", "value": 21.5 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
           "vessel_type": "Speidel Braumeister PLUS 20 L -- stainless (1.5 mm), 2000 W",
@@ -41516,14 +41516,14 @@
           "boil_rate_per_hour": { "unit": "l", "value": 2.0 },
           "internal_diameter": { "unit": "cm", "value": 40 },
           "opening_diameter": { "unit": "cm", "value": 40 },
-          "notes": "Max fill 25 L; ~23 L wort, ~20 L finished beer.  Weight 19 kg; diameter 40 cm (outside).  Estimated (no manufacturer figure) -- calibrate on your own system: loss 1.5 L, boil-off 2 L/h.  Mash: Max 6 kg malt; 23 L water filled for mashing, 25-30 L brewing water per batch."
+          "notes": "Max fill 25 L; ~23 L wort, ~20 L finished beer.  Weight 19 kg; diameter 40 cm (outside).  Estimated (no manufacturer figure) -- calibrate on your own system: loss 1.5 L, boil-off 2 L/h.  Mash: Max 6 kg malt; 23 L water filled for mashing, 25-30 L brewing water per batch.  default_batch_size is 21.5 L rather than the manufacturer's 23 L, as 23 L plus a 60 minute boil-off (2 L) and kettle loss (1.5 L) would not fit in the 25 L kettle."
         }
       },
       {
         "name": "Speidel Braumeister PLUS 50 L",
         "local_id": "braumeister_plus_50",
-        "folder_path": "/All-in-one systems/Speidel Braumeister",
-        "default_batch_size": { "unit": "l", "value": 53 },
+        "folder_path": "All-in-one systems/Speidel Braumeister",
+        "default_batch_size": { "unit": "l", "value": 49.5 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
           "vessel_type": "Speidel Braumeister PLUS 50 L -- stainless (1.5 mm), 3200 W",
@@ -41534,14 +41534,14 @@
           "boil_rate_per_hour": { "unit": "l", "value": 3.0 },
           "internal_diameter": { "unit": "cm", "value": 50 },
           "opening_diameter": { "unit": "cm", "value": 50 },
-          "notes": "Max fill 55 L; ~53 L wort, ~50 L finished beer.  Weight 24 kg (manual; Speidel's comparison page says 30 kg); diameter 50 cm (outside).  Estimated (no manufacturer figure) -- calibrate on your own system: loss 2.5 L, boil-off 3 L/h.  Mash: Max 13 kg malt; 55 L water filled for mashing, 55-60 L brewing water per batch."
+          "notes": "Max fill 55 L; ~53 L wort, ~50 L finished beer.  Weight 24 kg (manual; Speidel's comparison page says 30 kg); diameter 50 cm (outside).  Estimated (no manufacturer figure) -- calibrate on your own system: loss 2.5 L, boil-off 3 L/h.  Mash: Max 13 kg malt; 55 L water filled for mashing, 55-60 L brewing water per batch.  default_batch_size is 49.5 L rather than the manufacturer's 53 L, as 53 L plus a 60 minute boil-off (3 L) and kettle loss (2.5 L) would not fit in the 55 L kettle."
         }
       },
       {
         "name": "Speidel Braumeister 100 L",
         "local_id": "braumeister_100",
-        "folder_path": "/All-in-one systems/Speidel Braumeister",
-        "default_batch_size": { "unit": "l", "value": 100 },
+        "folder_path": "All-in-one systems/Speidel Braumeister",
+        "default_batch_size": { "unit": "l", "value": 99 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
           "vessel_type": "Speidel Braumeister 100 L -- stainless (1.5 mm), 3 x 2000 W (400 V)",
@@ -41550,13 +41550,13 @@
           "weight": { "unit": "kg", "value": 77 },
           "specific_heat_capacity": { "unit": "J/kg·K", "value": 500 },
           "boil_rate_per_hour": { "unit": "l", "value": 6.0 },
-          "notes": "Nominal 100 L.  Weight 77 kg.  Estimated (no manufacturer figure) -- calibrate on your own system: max volume 110 L (by analogy with the smaller models), loss 5 L, boil-off 6 L/h.  Mash: Max 21 kg malt."
+          "notes": "Nominal 100 L.  Weight 77 kg.  Estimated (no manufacturer figure) -- calibrate on your own system: max volume 110 L (by analogy with the smaller models), loss 5 L, boil-off 6 L/h.  Mash: Max 21 kg malt.  default_batch_size is 99 L rather than the manufacturer's 100 L, as 100 L plus a 60 minute boil-off (6 L) and kettle loss (5 L) would not fit in the 110 L kettle."
         }
       },
       {
         "name": "Speidel Braumeister 200 L",
         "local_id": "braumeister_200",
-        "folder_path": "/All-in-one systems/Speidel Braumeister",
+        "folder_path": "All-in-one systems/Speidel Braumeister",
         "default_batch_size": { "unit": "l", "value": 200 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41572,7 +41572,7 @@
       {
         "name": "Speidel Braumeister 500 L",
         "local_id": "braumeister_500",
-        "folder_path": "/All-in-one systems/Speidel Braumeister",
+        "folder_path": "All-in-one systems/Speidel Braumeister",
         "default_batch_size": { "unit": "l", "value": 500 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41588,7 +41588,7 @@
       {
         "name": "Speidel Braumeister 1000 L",
         "local_id": "braumeister_1000",
-        "folder_path": "/All-in-one systems/Speidel Braumeister",
+        "folder_path": "All-in-one systems/Speidel Braumeister",
         "default_batch_size": { "unit": "l", "value": 1000 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41604,7 +41604,7 @@
       {
         "name": "Brewtools B40pro",
         "local_id": "brewtools_b40pro",
-        "folder_path": "/All-in-one systems/Brewtools",
+        "folder_path": "All-in-one systems/Brewtools",
         "default_batch_size": { "unit": "l", "value": 35.0 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41622,7 +41622,7 @@
       {
         "name": "Brewtools B50",
         "local_id": "brewtools_b50",
-        "folder_path": "/All-in-one systems/Brewtools",
+        "folder_path": "All-in-one systems/Brewtools",
         "default_batch_size": { "unit": "l", "value": 40 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41638,7 +41638,7 @@
       {
         "name": "Brewtools B80pro",
         "local_id": "brewtools_b80pro",
-        "folder_path": "/All-in-one systems/Brewtools",
+        "folder_path": "All-in-one systems/Brewtools",
         "default_batch_size": { "unit": "l", "value": 71.0 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41656,7 +41656,7 @@
       {
         "name": "Brewtools B150pro",
         "local_id": "brewtools_b150pro",
-        "folder_path": "/All-in-one systems/Brewtools",
+        "folder_path": "All-in-one systems/Brewtools",
         "default_batch_size": { "unit": "l", "value": 138.0 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41674,7 +41674,7 @@
       {
         "name": "Brewster Beacon 40",
         "local_id": "brewster_beacon_40",
-        "folder_path": "/All-in-one systems/Brewster",
+        "folder_path": "All-in-one systems/Brewster",
         "default_batch_size": { "unit": "l", "value": 30 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41692,8 +41692,8 @@
       {
         "name": "Brewster Beacon 70",
         "local_id": "brewster_beacon_70",
-        "folder_path": "/All-in-one systems/Brewster",
-        "default_batch_size": { "unit": "l", "value": 65 },
+        "folder_path": "All-in-one systems/Brewster",
+        "default_batch_size": { "unit": "l", "value": 63 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
           "vessel_type": "Brewster Beacon 70 -- stainless, 3000 W (adjustable)",
@@ -41702,13 +41702,13 @@
           "boil_rate_per_hour": { "unit": "l", "value": 4.0 },
           "internal_diameter": { "unit": "cm", "value": 40 },
           "opening_diameter": { "unit": "cm", "value": 40 },
-          "notes": "70 L total; batch 25-65 L.  Estimated (no manufacturer figure) -- calibrate on your own system: loss 3 L, boil-off 4 L/h, Ø ~40 cm (from 40.5 cm outside dimension).  Mash: Malt pipe takes up to 18 kg."
+          "notes": "70 L total; batch 25-65 L.  Estimated (no manufacturer figure) -- calibrate on your own system: loss 3 L, boil-off 4 L/h, Ø ~40 cm (from 40.5 cm outside dimension).  Mash: Malt pipe takes up to 18 kg.  default_batch_size is 63 L rather than the manufacturer's 65 L, as 65 L plus a 60 minute boil-off (4 L) and kettle loss (3 L) would not fit in the 70 L kettle."
         }
       },
       {
         "name": "Brewferm Beer Brew 25",
         "local_id": "brewferm_beer_brew_25",
-        "folder_path": "/All-in-one systems/Brewferm",
+        "folder_path": "All-in-one systems/Brewferm",
         "default_batch_size": { "unit": "l", "value": 29.5 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41722,7 +41722,7 @@
       {
         "name": "Brewferm Brewer 30 L",
         "local_id": "brewferm_brewer_30",
-        "folder_path": "/All-in-one systems/Brewferm",
+        "folder_path": "All-in-one systems/Brewferm",
         "default_batch_size": { "unit": "l", "value": 20 },
         "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
         "kettle": {
@@ -41736,7 +41736,7 @@
       {
         "name": "Anvil Foundry 6.5 gal",
         "local_id": "anvil_foundry_6_5",
-        "folder_path": "/All-in-one systems/Anvil Foundry",
+        "folder_path": "All-in-one systems/Anvil Foundry",
         "default_batch_size": { "unit": "gal", "value": 3 },
         "grain_absorption_rate": { "unit": "gal/lb", "value": 0.1 },
         "kettle": {
@@ -41750,7 +41750,7 @@
       {
         "name": "Anvil Foundry 10.5 gal",
         "local_id": "anvil_foundry_10_5",
-        "folder_path": "/All-in-one systems/Anvil Foundry",
+        "folder_path": "All-in-one systems/Anvil Foundry",
         "default_batch_size": { "unit": "gal", "value": 5 },
         "grain_absorption_rate": { "unit": "gal/lb", "value": 0.1 },
         "kettle": {
@@ -41764,7 +41764,7 @@
       {
         "name": "Anvil Foundry 18 gal",
         "local_id": "anvil_foundry_18",
-        "folder_path": "/All-in-one systems/Anvil Foundry",
+        "folder_path": "All-in-one systems/Anvil Foundry",
         "default_batch_size": { "unit": "gal", "value": 10 },
         "grain_absorption_rate": { "unit": "gal/lb", "value": 0.1 },
         "kettle": {

@@ -606,6 +606,24 @@ void SerializationTests::testAllInOneEquipmentImport() {
 
    auto const g70 = equipmentNamed("Grainfather G70 (v2)");
    QVERIFY(g70 && fuzzyComp(g70->foundationVolume_l(), 6.8, 0.0001));
+   // Default batch size is capped below the manufacturer's 58 L so that the pre-boil volume fits in the 60 L kettle
+   QVERIFY(fuzzyComp(g70->fvBatchSize_l(), 52.5, 0.0001));
+
+   //
+   // For every profile in the file, the default pre-boil volume we calculate (for a 60 minute boil) should fit in the
+   // kettle.  (DotBeer's validate.py makes the same check.)
+   //
+   int numAllInOne = 0;
+   for (Equipment const * equipment : ObjectStoreWrapper::getAllRaw<Equipment>()) {
+      if (!equipment->containedInFolderPath().startsWith("All-in-one systems")) {
+         continue;
+      }
+      ++numAllInOne;
+      QVERIFY2(equipment->kettleBoilSize_l() <= equipment->kettleVolume_l() + 0.0001,
+               qPrintable(QString("%1: default pre-boil %2 L is more than kettle volume %3 L").arg(
+                  equipment->name()).arg(equipment->kettleBoilSize_l()).arg(equipment->kettleVolume_l())));
+   }
+   QVERIFY(numAllInOne >= 27);
 
    // Explicitly 0 in the file
    auto const g40 = equipmentNamed("Grainfather G40");
@@ -967,6 +985,15 @@ void SerializationTests::testClearUnusedMashTun() {
    equipment->setMashTunNotes("Leftover notes");
    equipment->setFoundationVolume_l(3.5);
    equipment->setGrainAbsorption_LKg(0.8);
+   //
+   // Even before we clear them, the mash tun's loss and heat capacity should be ignored in calculations, because, with
+   // no mash tun, the mash happens in the kettle.  (This is the case for equipment from before we treated a zero mash
+   // tun volume this way, as we don't zero such fields in the DB migration.)
+   //
+   QVERIFY(equipment->mashesInKettle());
+   QVERIFY(fuzzyComp(equipment->strikeWaterAllowance_l()     , 3.5, 0.0001));
+   QVERIFY(fuzzyComp(equipment->getLauteringDeadspaceLoss_l(), 0.0, 0.0001));
+   QVERIFY(equipment->mashVesselHeatCapacity_kcalC() && fuzzyComp(*equipment->mashVesselHeatCapacity_kcalC(), 0.0, 0.0001));
    QVERIFY(equipment->clearUnusedOptionalVessels());
    QVERIFY(fuzzyComp(equipment->mashTunLoss_l(), 0.0, 0.0001));
    QVERIFY(!equipment->mashTunWeight_kg());

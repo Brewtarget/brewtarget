@@ -291,6 +291,8 @@ bool EquipmentEditor::validateBeforeSave() {
       if (lineEdit_agingVesselLoss       ->getNonOptCanonicalQty()            > 0.0) { problems = true; inform = inform + QString("<li>%1</li>").arg(tr("Aging vessel losses"                   )); }
    }
 
+   inform += QString("</ul>");
+
    if (problems) {
       QMessageBox theQuestion;
       theQuestion.setWindowTitle( tr("Data Discard Warnings") );

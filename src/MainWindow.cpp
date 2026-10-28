@@ -1830,7 +1830,8 @@ void MainWindow::droppedRecipeEquipment(Equipment * kitRaw) {
       new SimpleUndoableUpdate(*this->pimpl->m_recipeObs, TYPE_INFO(Recipe, batchSize_l), kit->fvBatchSize_l(), tr("Change Batch Size"), equipmentUpdate);
 
       auto const boil = this->pimpl->m_recipeObs->nonOptBoil();
-      new SimpleUndoableUpdate(*boil, TYPE_INFO(Boil, preBoilSize_l), kit->kettleBoilSize_l(), tr("Change Boil Size"), equipmentUpdate);
+      // See comment in Equipment::defaultPreBoilSize_l for why we pass in the boil time
+      new SimpleUndoableUpdate(*boil, TYPE_INFO(Boil, preBoilSize_l), kit->defaultPreBoilSize_l(boil->boilTime_mins()), tr("Change Boil Size"), equipmentUpdate);
    }
 
    // This will do the equipment update and any related updates - see above
@@ -2152,7 +2153,7 @@ std::shared_ptr<Recipe>  MainWindow::newRecipe() {
       // database
       if (auto const equipment = ObjectStoreWrapper::getById<Equipment>(defEquipKey.toInt())) {
          newRec->setBatchSize_l( equipment->fvBatchSize_l() );
-         newBoil->setPreBoilSize_l( equipment->kettleBoilSize_l() );
+         newBoil->setPreBoilSize_l( equipment->defaultPreBoilSize_l(newBoil->boilTime_mins()) );
          newRec->setEquipment(equipment);
       }
    }

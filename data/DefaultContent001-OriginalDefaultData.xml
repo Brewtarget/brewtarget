@@ -10309,7 +10309,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: American Barleywine - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>American Barleywine</NAME>
       <CATEGORY>Strong Ale</CATEGORY>
@@ -11079,7 +11079,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: American IPA - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>American IPA</NAME>
       <CATEGORY>India Pale Ale</CATEGORY>
@@ -11808,7 +11808,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: American Pale Ale - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>American Pale Ale</NAME>
       <CATEGORY>American Ale</CATEGORY>
@@ -12482,7 +12482,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: Belgian Blonde Ale - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>Belgian Blond Ale</NAME>
       <CATEGORY>Belgian Strong Ale</CATEGORY>
@@ -13012,7 +13012,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: Berliner Weisse - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>Berliner Weisse</NAME>
       <CATEGORY>Sour Ale</CATEGORY>
@@ -13499,7 +13499,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: Blonde Ale - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>Blonde Ale</NAME>
       <CATEGORY>Light Hybrid Beer</CATEGORY>
@@ -14103,7 +14103,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: California Common - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>California Common Beer</NAME>
       <CATEGORY>Amber Hybrid Beer</CATEGORY>
@@ -14749,7 +14749,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: Extra Special Bitter - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>Extra Special/Strong Bitter (English Pale Ale)</NAME>
       <CATEGORY>English Pale Ale</CATEGORY>
@@ -15370,7 +15370,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: Nut Brown - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>Northern English Brown Ale</NAME>
       <CATEGORY>English Brown Ale</CATEGORY>
@@ -16032,7 +16032,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: Oatmeal Stout - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>Oatmeal Stout</NAME>
       <CATEGORY>Stout</CATEGORY>
@@ -17095,7 +17095,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: Robust Porter - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>Robust Porter</NAME>
       <CATEGORY>Porter</CATEGORY>
@@ -17765,7 +17765,7 @@ Malted in small batches, making it an excellent fit for small batch craft brewin
     <NAME>Bt: Saison - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>Saison</NAME>
       <CATEGORY>Belgian and French Ale</CATEGORY>
@@ -18429,7 +18429,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <NAME>Bt: Scottish 70 Shilling - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>Scottish Heavy 70/-</NAME>
       <CATEGORY>Scottish and Irish Ale</CATEGORY>
@@ -19002,7 +19002,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
     <NAME>Bt: Weizen - Extract</NAME>
     <VERSION>1</VERSION>
     <FOLDER_PATH>default</FOLDER_PATH>
-    <TYPE>All Grain</TYPE>
+    <TYPE>Extract</TYPE>
     <STYLE>
       <NAME>Weizen/Weissbier</NAME>
       <CATEGORY>German Wheat and Rye Beer</CATEGORY>

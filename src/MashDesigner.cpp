@@ -489,9 +489,14 @@ void MashDesigner::updateCollectedWort() {
       return;
    }
 
-   // double wort_l = this->m_recObs->wortFromMash_l();
-   double wort_l = this->waterFromMash_l();
-   double targetCollectedWort_l = this->m_recObs->targetCollectedWortVol_l();
+   //
+   // Recipe::targetCollectedWortVol_l is the wort that reaches the kettle, so, to compare like with like, we need to
+   // take off any wort lost between the mash and the kettle (see Equipment::getLauteringDeadspaceLoss_l), as
+   // Recipe::recalcVolumeEstimates does.
+   //
+   double const lauteringDeadspaceLoss_l = this->m_equipment ? this->m_equipment->getLauteringDeadspaceLoss_l() : 0.0;
+   double const wort_l = std::max(0.0, this->waterFromMash_l() - lauteringDeadspaceLoss_l);
+   double const targetCollectedWort_l = this->m_recObs->targetCollectedWortVol_l();
 
    double ratio = wort_l / targetCollectedWort_l;
    qDebug() <<

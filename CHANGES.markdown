@@ -30,6 +30,8 @@ Various improvements, including:
 * BeerXML export and import now keep folders (via an extension tag)
 * Additional ingredients, including malts from The Swaen malthouse in The Netherlands (https://theswaen.com/)
 * Equipment profiles for several popular all-in-one (single vessel) electric brewing systems
+* When a recipe's pre-boil size is set from equipment whose default pre-boil volume was calculated (eg on import from
+  dotBeer or BeerJSON), it is now adjusted for the recipe's boil time
 
 ### Bug Fixes
 * Exporting a style with no style letter to BeerJSON creates a file that cannot be imported [1121](https://github.com/Brewtarget/brewtarget/issues/1121)

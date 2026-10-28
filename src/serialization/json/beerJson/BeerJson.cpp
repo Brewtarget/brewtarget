@@ -689,8 +689,6 @@ namespace {
          //     we read a BeerJSON file.
          //
 
-         // TODO PropertyNames::Equipment::kettleInternalDiameter_cm
-         //      PropertyNames::Equipment::kettleOpeningDiameter_cm
          //
          // BeerJSON has no equivalent of PropertyNames::Equipment::foundationVolume_l (the volume below a false
          // bottom or malt pipe that has to be filled before the grain is covered, but which drains out with the wort --

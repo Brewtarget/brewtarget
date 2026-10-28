@@ -20,6 +20,7 @@
 #include "model/Equipment.h"
 
 #include <algorithm>  // std::copy_n
+#include <cmath>      // std::abs
 #include <cstddef>    // std::size_t
 
 #include "database/ObjectStoreWrapper.h"
@@ -426,15 +427,18 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    bool const hasFvBatchSize    = namedParameterBundle.contains(PropertyNames::Equipment::fvBatchSize_l   );
    bool const hasKettleVolume   = namedParameterBundle.contains(PropertyNames::Equipment::kettleVolume_l  );
    bool const hasFvVolume       = namedParameterBundle.contains(PropertyNames::Equipment::fvVolume_l      );
+   //
+   // NB: Order matters here.  We must read whichever of fvBatchSize_l and fvVolume_l we have from the bundle before we
+   // use it to fill in the other.  (Previously, we copied m_fvVolume_l into m_fvBatchSize_l before m_fvVolume_l had
+   // been read, so, for BeerJSON, we lost the fallback batch size.)
+   //
+   ASSIGN_REGULAR_FROM_NPB(m_fvBatchSize_l, namedParameterBundle, PropertyNames::Equipment::fvBatchSize_l, 0.0);
+   ASSIGN_REGULAR_FROM_NPB(m_fvVolume_l   , namedParameterBundle, PropertyNames::Equipment::fvVolume_l   , 0.0);
    if (!hasFvBatchSize && hasFvVolume) {
       this->m_fvBatchSize_l = this->m_fvVolume_l;
-   } else {
-      ASSIGN_REGULAR_FROM_NPB(m_fvBatchSize_l   , namedParameterBundle, PropertyNames::Equipment::fvBatchSize_l , 0.0);
    }
    if (!hasFvVolume && hasFvBatchSize) {
       this->m_fvVolume_l = this->m_fvBatchSize_l;
-   } else {
-      ASSIGN_REGULAR_FROM_NPB(m_fvVolume_l      , namedParameterBundle, PropertyNames::Equipment::fvVolume_l    , 0.0);
    }
    if (!hasKettleVolume && hasKettleBoilSize) {
       this->m_kettleVolume_l = this->m_kettleBoilSize_l;
@@ -462,6 +466,27 @@ Equipment::Equipment(NamedParameterBundle const & namedParameterBundle) :
    //
    if (!hasKettleBoilSize && this->m_fvBatchSize_l > 0.0) {
       this->m_kettleBoilSize_l = this->calculatedPreBoilSize_l();
+   }
+
+   //
+   // If the default pre-boil volume won't fit in the kettle, something is wrong.  Most likely, when we calculated the
+   // pre-boil volume above, the default batch size is too big (eg because it is a manufacturer's nominal figure that
+   // assumes a shorter boil or a lower boil-off rate).  We don't try to fix things here, as we don't know which figure
+   // is wrong, but we can at least log it.  (The equipment editor will also warn the user about this if they edit the
+   // equipment.)
+   //
+   if (this->m_kettleVolume_l > 0.0 && this->m_kettleBoilSize_l > this->m_kettleVolume_l) {
+      if (!hasKettleBoilSize) {
+         qWarning() <<
+            Q_FUNC_INFO << "Equipment" << this->name() << ": default batch size (" << this->m_fvBatchSize_l <<
+            "L) plus kettle loss (" << this->m_kettleTrubChillerLoss_l << "L) plus an hour's boil-off needs a "
+            "pre-boil volume of" << this->m_kettleBoilSize_l << "L, which is more than the kettle volume (" <<
+            this->m_kettleVolume_l << "L).  The default batch size is probably too big.";
+      } else {
+         qWarning() <<
+            Q_FUNC_INFO << "Equipment" << this->name() << ": default pre-boil volume (" << this->m_kettleBoilSize_l <<
+            "L) is more than the kettle volume (" << this->m_kettleVolume_l << "L)";
+      }
    }
 
    CONSTRUCTOR_END
@@ -720,8 +745,29 @@ bool Equipment::clearUnusedOptionalVessels() {
    return changed;
 }
 
+double Equipment::effectiveMashTunLoss_l() const {
+   if (!this->mashesInKettle()) {
+      return this->m_mashTunLoss_l;
+   }
+   //
+   // There's no separate mash tun, so there's no mash tun loss.  Normally, clearUnusedOptionalVessels will have
+   // zeroed m_mashTunLoss_l when the user saved the equipment in the editor.  But equipment from before we treated a
+   // zero mash tun volume as "mash in the kettle" might still have a loss set.  We deliberately don't zero it in the DB
+   // migration (as that would be hard for the user to see or undo), so we just ignore it here.  We only log this once
+   // per object, as this function gets called a lot during recipe recalculations.
+   //
+   if (this->m_mashTunLoss_l > 0.0 && !this->m_loggedIgnoringMashTunLoss) {
+      qWarning() <<
+         Q_FUNC_INFO << "Equipment" << this->name() << "(#" << this->key() << ") has mash tun loss of" <<
+         this->m_mashTunLoss_l << "L but no mash tun volume.  Ignoring the loss, as, with no separate mash tun, the "
+         "mash happens in the kettle.";
+      this->m_loggedIgnoringMashTunLoss = true;
+   }
+   return 0.0;
+}
+
 double Equipment::getLauteringDeadspaceLoss_l() const {
-   return this->m_mashTunLoss_l + (this->m_lauterTunVolume_l > 0 ? this->m_lauterTunDeadspaceLoss_l : 0.0);
+   return this->effectiveMashTunLoss_l() + (this->m_lauterTunVolume_l > 0 ? this->m_lauterTunDeadspaceLoss_l : 0.0);
 }
 
 bool Equipment::mashesInKettle() const {
@@ -752,7 +798,21 @@ double Equipment::calculatedPreBoilSize_l(double const boilTime_mins) const {
 }
 
 double Equipment::strikeWaterAllowance_l() const {
-   return this->m_foundationVolume_l + this->m_mashTunLoss_l;
+   return this->m_foundationVolume_l + this->effectiveMashTunLoss_l();
+}
+
+double Equipment::defaultPreBoilSize_l(double const boilTime_mins) const {
+   //
+   // kettleBoilSize_l is a single figure, with no boil time attached.  If it is what we would calculate for a 60 minute
+   // boil (eg because we calculated it when reading dotBeer or BeerJSON, neither of which has a default pre-boil
+   // volume), then we know how to adjust it for a different boil time.  Otherwise, it was set by the user (or read from
+   // BeerXML), and we don't know what boil time it was meant for, so we leave it alone.
+   //
+   static constexpr double tolerance_l = 0.01;
+   if (std::abs(this->m_kettleBoilSize_l - this->calculatedPreBoilSize_l(60.0)) < tolerance_l) {
+      return this->calculatedPreBoilSize_l(boilTime_mins);
+   }
+   return this->m_kettleBoilSize_l;
 }
 
 double Equipment::wortEndOfBoil_l(double const kettleWort_l, double const boilTime_mins) const {

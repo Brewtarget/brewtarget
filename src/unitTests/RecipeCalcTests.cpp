@@ -607,6 +607,9 @@ void RecipeCalcTests::testEquipmentDefaultVolumes() {
       QVERIFY(fuzzyComp(equipment.fvVolume_l()      , 23.0, 0.0001));
       QVERIFY(fuzzyComp(equipment.kettleBoilSize_l(), 28.0, 0.0001));
       QVERIFY(fuzzyComp(equipment.fvBatchSize_l()   , 23.0, 0.0001));
+      // The pre-boil volume was given (not calculated by us), so we don't know what boil time it was for, and don't
+      // adjust it
+      QVERIFY(fuzzyComp(equipment.defaultPreBoilSize_l(90.0), 28.0, 0.0001));
    }
    //
    // BeerJSON: capacities but no default volumes, so the batch size falls back to the fermenter capacity, and the
@@ -645,6 +648,9 @@ void RecipeCalcTests::testEquipmentDefaultVolumes() {
       QVERIFY(fuzzyComp(equipment.kettleBoilSize_l(), 21.0 + 1.0 - 2.0 + 4.0, 0.0001));
       // Longer boil, more boil-off
       QVERIFY(fuzzyComp(equipment.calculatedPreBoilSize_l(90.0), 21.0 + 1.0 - 2.0 + 6.0, 0.0001));
+      // We calculated the default pre-boil volume, so we know how to adjust it for a recipe's boil time
+      QVERIFY(fuzzyComp(equipment.defaultPreBoilSize_l(90.0), 21.0 + 1.0 - 2.0 + 6.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.defaultPreBoilSize_l(60.0), 21.0 + 1.0 - 2.0 + 4.0, 0.0001));
    }
    //
    // Loading from the database: all fields are present, so an explicit 0 (eg a capacity the user doesn't know) is

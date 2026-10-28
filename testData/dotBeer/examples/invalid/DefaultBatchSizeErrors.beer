@@ -1,0 +1,69 @@
+//======================================================================================================================
+// examples/invalid/DefaultBatchSizeErrors.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: /DotBeer/equipments/0 ("Nominal Batch Too Big"): default_batch_size (58 l) plus kettle loss (3 l) plus 60 minutes' boil-off (4.5 l) needs a pre-boil volume of 65.5 l, which is more than kettle max_volume (60 l)
+// EXPECT-INVALID: /DotBeer/equipments/1 ("Mixed Units Too Big"): default_batch_size (5 gal) plus kettle loss (1 l) plus 60 minutes' boil-off (4 l) needs a pre-boil volume of 23.9271 l, which is more than kettle max_volume (22 l)
+// EXPECT-INVALID: /DotBeer/equipments/2 ("No Boil-Off Given"): default_batch_size (30 l) plus kettle loss (2 l) needs a pre-boil volume of 32 l, which is more than kettle max_volume (30 l)
+//
+// Default batch sizes that, with the kettle loss and an hour's boil-off, need more pre-boil wort than the kettle can
+// hold (which JSON Schema cannot check):
+//   • all in the same units
+//   • in different units
+//   • with no boil-off rate given (so we only check batch size plus kettle loss)
+// The last equipment record is fine: its pre-boil volume (25 + 2 + 3 = 30 l) exactly fills the kettle.
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-28T10:00:00+01:00",
+    "equipments": [
+      {
+        "name": "Nominal Batch Too Big",
+        "local_id": "equip_nominal_batch_too_big",
+        "default_batch_size": { "unit": "l", "value": 58 },
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 60 },
+          "loss": { "unit": "l", "value": 3 },
+          "boil_rate_per_hour": { "unit": "l", "value": 4.5 }
+        }
+      },
+      {
+        "name": "Mixed Units Too Big",
+        "local_id": "equip_mixed_units_too_big",
+        "default_batch_size": { "unit": "gal", "value": 5 },
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 22 },
+          "loss": { "unit": "l", "value": 1 },
+          "boil_rate_per_hour": { "unit": "l", "value": 4 }
+        }
+      },
+      {
+        "name": "No Boil-Off Given",
+        "local_id": "equip_no_boil_off_given",
+        "default_batch_size": { "unit": "l", "value": 30 },
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 2 }
+        }
+      },
+      {
+        "name": "Exactly Full",
+        "local_id": "equip_exactly_full",
+        "default_batch_size": { "unit": "l", "value": 25 },
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 2 },
+          "boil_rate_per_hour": { "unit": "l", "value": 3 }
+        }
+      }
+    ]
+  }
+}

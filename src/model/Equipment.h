@@ -645,13 +645,15 @@ public:
     *
     *        This is wort that is lost between the mash and the boil, so it has to be allowed for in the total water
     *        for the mash, and is subtracted from the wort that reaches the boil.  Note that it does \b not include
-    *        \c foundationVolume_l, which is recovered.
+    *        \c foundationVolume_l, which is recovered.  Also, \c mashTunLoss_l is only included if there is a separate mash
+    *        tun (see \c mashesInKettle).
     */
    double getLauteringDeadspaceLoss_l() const;
 
    /**
     * \brief How much water needs to be in the mash tun, on top of what the grain bed itself needs (ie grain mass ×
-    *        mash thickness), when the grain goes in.  This is \c foundationVolume_l plus \c mashTunLoss_l.
+    *        mash thickness), when the grain goes in.  This is \c foundationVolume_l plus \c mashTunLoss_l (the latter
+    *        only if there is a separate mash tun -- see \c mashesInKettle).
     *
     *        So, strike water = (grain mass × mash thickness) + strikeWaterAllowance_l().  This keeps "mash thickness"
     *        meaning the ratio of water to grain in the grain bed, whatever the equipment.
@@ -719,6 +721,17 @@ public:
    double calculatedPreBoilSize_l(double const boilTime_mins = 60.0) const;
 
    /**
+    * \brief The pre-boil volume to use for a recipe with this equipment and the given boil time (eg when the user
+    *        sets a recipe's equipment, or creates a new recipe).
+    *
+    *        If \c kettleBoilSize_l is what \c calculatedPreBoilSize_l gives for a 60 minute boil (which it will be if
+    *        we calculated it, eg on reading dotBeer or BeerJSON), then we recalculate it for \c boilTime_mins.
+    *        Otherwise, \c kettleBoilSize_l was set by the user (or read from BeerXML), and we don't know what boil time
+    *        it was meant for, so we return it unchanged.
+    */
+   double defaultPreBoilSize_l(double const boilTime_mins) const;
+
+   /**
     * \brief Calculate how much wort is left immediately at knockout.
     *
     * \param kettleWort_l
@@ -784,6 +797,17 @@ private:
    QString               m_agingVesselNotes           ;
    QString               m_packagingVesselNotes       ;
 
+   /**
+    * \brief Not stored.  Just so that \c effectiveMashTunLoss_l only logs once per object.  (Deliberately not copied by
+    *        the copy constructor, where it gets this default value.)
+    */
+   mutable bool m_loggedIgnoringMashTunLoss = false;
+
+   /**
+    * \return \c mashTunLoss_l, unless the mash happens in the kettle (see \c mashesInKettle), in which case 0 (and we
+    *         log a warning, once, if this means ignoring a non-zero loss).
+    */
+   double effectiveMashTunLoss_l() const;
 };
 
 BT_DECLARE_METATYPES(Equipment)
