@@ -62,7 +62,7 @@ std::shared_ptr<Equipment> UnitTests::makeEquipment_FiveGalNoLoss() {
    equipment->setMashTunLoss_l(0); // This is lautering deadspace loss as no separate lautering tun
    equipment->setTopUpKettle_l(0);
    equipment->setHopUtilization_pct(100);
-   equipment->setMashTunGrainAbsorption_LKg(1.0);
+   equipment->setGrainAbsorption_LKg(1.0);
    equipment->setBoilingPoint_c(100);
    return equipment;
 }

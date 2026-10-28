@@ -146,7 +146,7 @@ void MashWizard::wizardry() {
    bool const hasEquipment = m_recObs->equipment() ? true : false;
    double const absorption_LKg =
       hasEquipment ?
-         m_recObs->equipment()->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) :
+         m_recObs->equipment()->grainAbsorption_LKg().value_or(Equipment::default_grainAbsorption_LKg) :
          PhysicalConstants::grainAbsorption_Lkg;
    double const boilingPoint_c = hasEquipment ? m_recObs->equipment()->boilingPoint_c() : 100.0;
 
@@ -293,17 +293,17 @@ void MashWizard::wizardry() {
       //
       // Of course we have to convert the temperatures from Celsius to Kelvin, but that's a small price to pay.
       //
-      // NOTE that we are specifically ignoring BeerXML's request to only adjust strike temperatures to account for the
-      // tun if mash->equipAdjust() is set.  (This setting was dropped in BeerJSON.)  If the mash tun weight is zero,
-      // this will effectively give it zero contribution to the calculation.
+      // The tun's heat capacity comes from the equipment if possible (and is 0 if the mash happens in the kettle, as
+      // then the strike water is heated in the same vessel) -- see Recipe::mashTunHeatCapacity_kcalC.  NOTE that, as
+      // everywhere else, we are ignoring BeerXML's request to only adjust strike temperatures to account for the tun
+      // if mash->equipAdjust() is set.  (This setting was dropped in BeerJSON.)
       //
-      double const tunHeatCapacity_kcalC =
-         (mash->mashTunSpecificHeat_calGC().value_or(0.0)*mash->mashTunWeight_kg().value_or(0.0));
+      double const tunHeatCapacity_kcalC = this->m_recObs->mashTunHeatCapacity_kcalC();
       double const totalHeatCapacity_kcalC = waterHeatCapacity_kcalC +
                                              grainHeatCapacity_kcalC +
                                                tunHeatCapacity_kcalC;
       // If we can't get a temperature for the tun, assume it's the same as the grain
-      double const tunTemp_c = mash->tunTemp_c().value_or(grainTemp_c);
+      double const tunTemp_c = this->m_recObs->mashTunTemp_c();
       if (stepTemp_c < tunTemp_c) {
          qWarning() <<
             Q_FUNC_INFO << "Mash Step temperature (" << stepTemp_c << "°C) is below tun temperature (" <<
@@ -350,9 +350,9 @@ void MashWizard::wizardry() {
 
    //
    // Add thermal mass of equipment to grainHeatCapacity_kcalC.
-   // I am specifically ignoring BeerXML's request to only do this if mash->getEquipAdjust() is set.
+   // As above, we are ignoring BeerXML's request to only do this if mash->getEquipAdjust() is set.
    //
-   grainHeatCapacity_kcalC += mash->mashTunSpecificHeat_calGC().value_or(0.0) * mash->mashTunWeight_kg().value_or(0.0);
+   grainHeatCapacity_kcalC += this->m_recObs->mashTunHeatCapacity_kcalC();
 
    //
    // As elsewhere, we take 1 liter of water = 1 kg of water.  Per https://en.wikipedia.org/wiki/Litre, this is a very
@@ -396,11 +396,12 @@ void MashWizard::wizardry() {
 
          double const waterAndGrainHeatCapacity_CalC = priorStepsWaterHeatCapacity_CalC + grainHeatCapacity_CalC;
 
-         // Only include the mash tun in the calculations if asked to
-         double const mashTunHeatCapacity_CalC =
-            mash->equipAdjust() ?
-               (mash->mashTunWeight_kg         ().value_or(0.0) *
-                mash->mashTunSpecificHeat_calGC().value_or(0.0)) : 0.0;
+         //
+         // The mash tun is heated along with the rest of the mash.  (Previously, this was the only place we took
+         // account of BeerXML's EQUIP_ADJUST flag, so a decoction could be calculated differently from an infusion
+         // for the same mash.  We now ignore the flag everywhere -- see Recipe::mashTunHeatCapacity_kcalC.)
+         //
+         double const mashTunHeatCapacity_CalC = this->m_recObs->mashTunHeatCapacity_kcalC();
 
          //
          // ratio is the ratio of water and grain to take out for decoction.
@@ -532,7 +533,7 @@ void MashWizard::wizardry() {
       grainHeatCapacity_kcalC =
          m_recObs->grainsInMash_kg() * PhysicalConstants::grainSpecificHeat_calGC +
          absorption_LKg * m_recObs->grainsInMash_kg() * PhysicalConstants::waterSpecificHeat_calGC +
-         mash->mashTunWeight_kg().value_or(0.0) * mash->mashTunSpecificHeat_calGC().value_or(0.0);
+         this->m_recObs->mashTunHeatCapacity_kcalC();
 
       waterMass_kg = spargeWater_l;
 

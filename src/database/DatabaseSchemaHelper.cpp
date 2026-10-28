@@ -3069,7 +3069,12 @@ namespace {
     *
     *        And we add typical ranges for alpha and beta acid to hop.
     *
-    *        And we add equipment.mash_tun_foundation_volume_l (see comments in model/Equipment.h).
+    *        And, for equipment (see comments in model/Equipment.h):
+    *           - we add foundation_volume_l;
+    *           - we rename mash_tun_grain_absorption_lkg to grain_absorption_lkg (because, as in dotBeer, it applies to
+    *             whichever vessel the mash happens in, which is the kettle if there is no mash tun);
+    *           - we add kettle_volume_l and fv_volume_l for the capacities of the kettle and fermentation vessel,
+    *             which were previously conflated with the default pre-boil volume and batch size.
     */
    bool migrate_to_21([[maybe_unused]] Database & db, BtSqlQuery & q) {
       QVector<QueryAndParameters> const migrationQueries{
@@ -3381,8 +3386,38 @@ namespace {
          // loss is actually recoverable, so we start everything at 0, which means calculations are unchanged until the
          // user sets a value.
          //
-         {QString("ALTER TABLE equipment ADD COLUMN mash_tun_foundation_volume_l %1").arg(db.getDbNativeTypeName<double>())},
-         {QString("UPDATE equipment SET mash_tun_foundation_volume_l = 0")},
+         {QString("ALTER TABLE equipment ADD COLUMN foundation_volume_l %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("UPDATE equipment SET foundation_volume_l = 0")},
+         //
+         // Grain absorption applies to whichever vessel the mash happens in (which, if there is no mash tun, is the
+         // kettle), so it is no longer named as an attribute of the mash tun.
+         //
+         {QString("ALTER TABLE equipment RENAME COLUMN mash_tun_grain_absorption_lkg TO grain_absorption_lkg")},
+         //
+         // Previously, kettle_boil_size_l and fv_batch_size_l were used both for the default pre-boil volume and batch
+         // size (as in BeerXML's BOIL_SIZE and BATCH_SIZE) and for the capacities of the kettle and fermentation
+         // vessel (as in BeerJSON's maximum_volume).  We now have separate fields for the capacities.  For existing
+         // records, we don't know the capacities, but the vessels must be at least as big as the default volumes, so
+         // that's our best starting point.  (Users can correct them in the equipment editor.)
+         //
+         {QString("ALTER TABLE equipment ADD COLUMN kettle_volume_l %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("UPDATE equipment SET kettle_volume_l = kettle_boil_size_l")},
+         {QString("ALTER TABLE equipment ADD COLUMN fv_volume_l %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("UPDATE equipment SET fv_volume_l = fv_batch_size_l")},
+         //
+         // The Mash default constructor used to set the tun temperature to 0°C rather than "not set".  Since nobody
+         // mashes in a tun at freezing point, we can safely treat 0 as "not set", which means calculations will
+         // assume the tun starts at the same temperature as the grain.  (Otherwise, where there is a mash tun weight and
+         // specific heat, the strike water temperature would be calculated as though the tun had to be heated up from
+         // 0°C.)
+         //
+         {QString("UPDATE mash SET tun_temp = NULL WHERE tun_temp = 0")},
+         //
+         // Whilst we're at it, we rename a couple of columns to make the meaning clearer
+         //
+         {QString("ALTER TABLE mash RENAME COLUMN tun_temp          TO initial_tun_temp_c"     )},
+         {QString("ALTER TABLE mash RENAME COLUMN tun_weight        TO tun_weight_kg"          )},
+         {QString("ALTER TABLE mash RENAME COLUMN tun_specific_heat TO tun_specific_heat_calgc")},
       };
 
       return executeSqlQueries(q, migrationQueries);

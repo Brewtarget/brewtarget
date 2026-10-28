@@ -609,13 +609,13 @@ namespace {
          {XmlRecordDefinition::FieldType::RequiredConstant, "VERSION"             , VERSION1                                      },
          {XmlRecordDefinition::FieldType::FolderPath      , "FOLDER_PATH"         , PropertyNames::FolderPropertyBase::containedInFolderPath}, // Extension tag
          {XmlRecordDefinition::FieldType::Double          , "GRAIN_TEMP"          , PropertyNames::Mash::grainTemp_c              },
-         {XmlRecordDefinition::FieldType::ListOfRecords   , "MASH_STEPS/MASH_STEP", PropertyNames::StepOwnerBase::steps        , &BEER_XML_RECORD_DEFN<MashStep>}, // Additional logic for "MASH-STEPS" is handled in code
+         {XmlRecordDefinition::FieldType::ListOfRecords   , "MASH_STEPS/MASH_STEP", PropertyNames::StepOwnerBase::steps           , &BEER_XML_RECORD_DEFN<MashStep>}, // Additional logic for "MASH-STEPS" is handled in code
          {XmlRecordDefinition::FieldType::String          , "NOTES"               , PropertyNames::Mash::notes                    },
-         {XmlRecordDefinition::FieldType::Double          , "TUN_TEMP"            , PropertyNames::Mash::tunTemp_c                },
+         {XmlRecordDefinition::FieldType::Double          , "TUN_TEMP"            , PropertyNames::Mash::initialTunTemp_c         },
          {XmlRecordDefinition::FieldType::Double          , "SPARGE_TEMP"         , PropertyNames::Mash::spargeTemp_c             },
          {XmlRecordDefinition::FieldType::Double          , "PH"                  , PropertyNames::Mash::ph                       },
-         {XmlRecordDefinition::FieldType::Double          , "TUN_WEIGHT"          , PropertyNames::Mash::mashTunWeight_kg         },
-         {XmlRecordDefinition::FieldType::Double          , "TUN_SPECIFIC_HEAT"   , PropertyNames::Mash::mashTunSpecificHeat_calGC},
+         {XmlRecordDefinition::FieldType::Double          , "TUN_WEIGHT"          , PropertyNames::Mash::tunWeight_kg             },
+         {XmlRecordDefinition::FieldType::Double          , "TUN_SPECIFIC_HEAT"   , PropertyNames::Mash::tunSpecificHeat_calGC    },
          {XmlRecordDefinition::FieldType::Bool            , "EQUIP_ADJUST"        , PropertyNames::Mash::equipAdjust              },
          {XmlRecordDefinition::FieldType::String          , "DISPLAY_GRAIN_TEMP"  , BtString::NULL_STR                            }, // Extension tag
          {XmlRecordDefinition::FieldType::String          , "DISPLAY_TUN_TEMP"    , BtString::NULL_STR                            }, // Extension tag
@@ -773,7 +773,7 @@ namespace {
          {XmlRecordDefinition::FieldType::String          , "DISPLAY_LAUTER_DEADSPACE"      , BtString::NULL_STR                                   }, // Extension tag
          {XmlRecordDefinition::FieldType::String          , "DISPLAY_TOP_UP_KETTLE"         , BtString::NULL_STR                                   }, // Extension tag
          {XmlRecordDefinition::FieldType::Double          , "REAL_EVAP_RATE"                , PropertyNames::Equipment::kettleEvaporationPerHour_l }, // ‡
-         {XmlRecordDefinition::FieldType::Double          , "ABSORPTION"                    , PropertyNames::Equipment::mashTunGrainAbsorption_LKg }, // ‡
+         {XmlRecordDefinition::FieldType::Double          , "ABSORPTION"                    , PropertyNames::Equipment::grainAbsorption_LKg        }, // ‡
          {XmlRecordDefinition::FieldType::Double          , "BOILING_POINT"                 , PropertyNames::Equipment::boilingPoint_c             }, // ‡
          {XmlRecordDefinition::FieldType::Double          , "KETTLEINTERNALDIAMETER_CM"     , PropertyNames::Equipment::kettleInternalDiameter_cm  }, // ‡
          {XmlRecordDefinition::FieldType::Double          , "KETTLEOPENINGDIAMETER_CM"      , PropertyNames::Equipment::kettleOpeningDiameter_cm   }, // ‡
@@ -792,10 +792,16 @@ namespace {
          {XmlRecordDefinition::FieldType::Double          , "HLT_LOSS_L"                    , PropertyNames::Equipment::hltLoss_l                  },
          {XmlRecordDefinition::FieldType::Double          , "MASH_TUN_LOSS_L"               , PropertyNames::Equipment::mashTunLoss_l              },
          // ⮜⮜⮜ Following are our own extension tags for fields that are not in BeerJSON either ⮞⮞⮞
-         // mashTunFoundationVolume_l is in dotBeer (as mash_tun/foundation_volume) but neither BeerXML nor BeerJSON.  See
+         // foundationVolume_l is in dotBeer (as foundation_volume) but neither BeerXML nor BeerJSON.  See
          // comments in model/Equipment.h.  NB: As with all extension tags, other programs reading the file will ignore
          // this.  So, for them, the equipment will be treated as having no volume below the false bottom / malt pipe.
-         {XmlRecordDefinition::FieldType::Double          , "MASH_TUN_FOUNDATION_VOLUME_L"  , PropertyNames::Equipment::mashTunFoundationVolume_l  },
+         {XmlRecordDefinition::FieldType::Double          , "FOUNDATION_VOLUME_L"           , PropertyNames::Equipment::foundationVolume_l         },
+         // BOIL_SIZE and BATCH_SIZE are the default pre-boil volume and batch size for new recipes using this
+         // equipment.  The capacities of the kettle and fermentation vessel are separate things, which BeerXML does not
+         // have, so we use extension tags.  (When these are absent, eg in a file from another program, we use BOIL_SIZE
+         // and BATCH_SIZE as the best guess for the capacities -- see the Equipment NamedParameterBundle constructor.)
+         {XmlRecordDefinition::FieldType::Double          , "KETTLE_VOLUME_L"               , PropertyNames::Equipment::kettleVolume_l             },
+         {XmlRecordDefinition::FieldType::Double          , "FERMENTER_VOLUME_L"            , PropertyNames::Equipment::fvVolume_l                 },
          {XmlRecordDefinition::FieldType::Double          , "FERMENTER_LOSS_L"              , PropertyNames::Equipment::fvLoss_l            },
          {XmlRecordDefinition::FieldType::Double          , "AGING_VESSEL_LOSS_L"           , PropertyNames::Equipment::agingVesselLoss_l          },
          {XmlRecordDefinition::FieldType::Double          , "PACKAGING_VESSEL_LOSS_L"       , PropertyNames::Equipment::packagingVesselLoss_l      },

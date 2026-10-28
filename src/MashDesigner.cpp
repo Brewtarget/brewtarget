@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * MashDesigner.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * MashDesigner.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Dan Cavanagh <dan@dancavanagh.com>
  *   • Greg Meess <Daedalus12@gmail.com>
@@ -130,16 +130,21 @@ bool MashDesigner::nextStep(int step) {
       this->saveStep();
    }
 
+   //
+   // If there was no step before the one we're just finishing, then the one we're just finishing is the first step,
+   // and, after it, the tun will be at the mash temperature, so needs to be included in the thermal mass of the mash
+   // from now on.  (Previously, we checked m_prevStep for this _after_ setting it to m_mashStep, so it was never null
+   // at that point and the tun was never included.)
+   //
+   bool const finishingFirstStep = !this->m_prevStep;
    this->m_prevStep = this->m_mashStep;
    if (this->m_mashStep) {
       // NOTE: This needs to be changed. Assumes 1L of water is 1 kg.
       this->m_MC += this->m_mashStep->amount_l() * PhysicalConstants::waterSpecificHeat_calGC;
       this->m_addedWater_l += this->m_mashStep->amount_l();
 
-      if (!this->m_prevStep) {
-         // If the last step is null, we need to add the influence of the tun.
-         this->m_MC += this->m_mash->mashTunSpecificHeat_calGC().value_or(0.0) *
-                     this->m_mash->mashTunWeight_kg().value_or(0.0);
+      if (finishingFirstStep) {
+         this->m_MC += this->m_recObs->mashTunHeatCapacity_kcalC();
       }
    }
 
@@ -238,9 +243,9 @@ double MashDesigner::maxAmt_l() {
 
    // However much more we can fit in the tun.
    if (!isSparge()) {
-      amt = m_equipment->mashTunVolume_l() - mashVolume_l();
+      amt = m_equipment->mashVesselVolume_l() - mashVolume_l();
    } else {
-      amt = m_equipment->mashTunVolume_l() - grainVolume_l();
+      amt = m_equipment->mashVesselVolume_l() - grainVolume_l();
    }
 
    return std::min(amt, m_recObs->targetTotalMashVol_l() - m_addedWater_l);
@@ -258,11 +263,11 @@ double MashDesigner::volFromTemp_l(double temp_c) {
    double tf = this->stepTemp_c();
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
    double t1 = (!this->m_prevStep) ? m_mash->grainTemp_c() : this->m_prevStep->startTemp_c();
-   double mt = m_mash->mashTunSpecificHeat_calGC().value_or(0.0);
-   double ct = m_mash->mashTunWeight_kg().value_or(0.0);
+   // Heat capacity of the tun (see Recipe::mashTunHeatCapacity_kcalC), which only matters for the first step
+   double const tunHeatCapacity_kcalC = this->m_recObs->mashTunHeatCapacity_kcalC();
 
    double mw = 1/(PhysicalConstants::waterSpecificHeat_calGC * (tw - tf)) *
-      (m_MC * (tf - t1) + ((!this->m_prevStep) ? mt * ct * (tf - this->m_mash->tunTemp_c().value_or(0.0)) : 0));
+      (m_MC * (tf - t1) + ((!this->m_prevStep) ? tunHeatCapacity_kcalC * (tf - this->m_recObs->mashTunTemp_c()) : 0));
 
    // Sanity check for unlikely edge cases
    mw = std::max(0.0, mw);
@@ -280,7 +285,7 @@ double MashDesigner::tempFromVolume_c(double vol_l) {
 
    double absorption_LKg;
    if (this->m_equipment) {
-      absorption_LKg = this->m_equipment->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg);
+      absorption_LKg = this->m_equipment->grainAbsorption_LKg().value_or(Equipment::default_grainAbsorption_LKg);
    } else {
       absorption_LKg = PhysicalConstants::grainAbsorption_Lkg;
    }
@@ -299,15 +304,16 @@ double MashDesigner::tempFromVolume_c(double vol_l) {
    if (isSparge()) {
       t1 = (!this->m_prevStep) ? this->m_mash->grainTemp_c() : this->m_prevStep->startTemp_c() - 10;
    }
-   double const mt = this->m_mash->mashTunSpecificHeat_calGC().value_or(0.0);
-   double const ct = this->m_mash->mashTunWeight_kg().value_or(0.0);
+   // Heat capacity of the tun -- see Recipe::mashTunHeatCapacity_kcalC
+   double const tunHeatCapacity_kcalC = this->m_recObs->mashTunHeatCapacity_kcalC();
 
    double batchMC = m_grain_kg * PhysicalConstants::grainSpecificHeat_calGC
                     + absorption_LKg * m_grain_kg * PhysicalConstants::waterSpecificHeat_calGC
-                    + this->m_mash->mashTunWeight_kg().value_or(0.0) * this->m_mash->mashTunSpecificHeat_calGC().value_or(0.0);
+                    + tunHeatCapacity_kcalC;
 
    double tw = 1 / (mw * cw) * (
-      (this->isSparge() ? batchMC : m_MC) * (tf - t1) + (!this->m_prevStep ? mt * ct * (tf - this->m_mash->tunTemp_c().value_or(0.0)) : 0.0)
+      (this->isSparge() ? batchMC : m_MC) * (tf - t1) +
+      (!this->m_prevStep ? tunHeatCapacity_kcalC * (tf - this->m_recObs->mashTunTemp_c()) : 0.0)
    ) + tf;
 
    // Sanity check this value
@@ -338,7 +344,7 @@ bool MashDesigner::initializeMash() {
    }
 
    bool ok = false;
-   QString dialogText = QInputDialog::getText(
+   QString const dialogText = QInputDialog::getText(
       this,
       tr("Tun Temp"),
       tr("Enter the temperature of the tun before your first infusion."),
@@ -354,7 +360,7 @@ bool MashDesigner::initializeMash() {
       return false;
    }
 
-   auto mash = this->m_recObs->mash();
+   auto const mash = this->m_recObs->mash();
    if (!mash) {
       qDebug() << Q_FUNC_INFO << "Create new Mash";
       this->m_mash = std::make_shared<Mash>("");
@@ -364,12 +370,20 @@ bool MashDesigner::initializeMash() {
       this->m_mash->removeAllSteps();
    }
 
+   //
    // Order matters. Don't do this until every that could return false has
-   this->m_mash->setMashTunSpecificHeat_calGC(
-      this->m_equipment->mashTunSpecificHeat_calGC().value_or(Equipment::default_mashTunSpecificHeat_calGC)
-   );
-   this->m_mash->setTunWeight_kg(this->m_equipment->mashTunWeight_kg().value_or(Equipment::default_mashTunWeight_kg)); // TBD: Maybe Mash::setTunWeight_kg should take an optional value
-   this->m_mash->setTunTemp_c(Measurement::qStringToSI(dialogText, Measurement::PhysicalQuantity::Temperature).quantity);
+   //
+   // NB: We used to copy the mash tun weight and specific heat from the equipment to the mash here.  We no longer need
+   // to, as calculations take them from the equipment -- see Recipe::mashTunHeatCapacity_kcalC.
+   //
+   // If the user didn't enter a tun temperature, we leave it unset, which means we'll assume the tun is at the same
+   // temperature as the grain (see Recipe::mashTunTemp_c).
+   //
+   if (dialogText.trimmed().isEmpty()) {
+      this->m_mash->setInitialTunTemp_c(std::nullopt);
+   } else {
+      this->m_mash->setInitialTunTemp_c(Measurement::qStringToSI(dialogText, Measurement::PhysicalQuantity::Temperature).quantity);
+   }
 
    this->m_curStep = 0;
    this->m_addedWater_l = 0;
@@ -380,7 +394,7 @@ bool MashDesigner::initializeMash() {
    this->m_grain_kg = m_recObs->grainsInMash_kg();
 
    this->label_tunVol->setText(
-      Measurement::displayAmount(Measurement::Amount{m_equipment->mashTunVolume_l(), Measurement::Units::liters})
+      Measurement::displayAmount(Measurement::Amount{m_equipment->mashVesselVolume_l(), Measurement::Units::liters})
    );
    this->label_wortMax->setText(
       Measurement::displayAmount(Measurement::Amount{m_recObs->targetCollectedWortVol_l(), Measurement::Units::liters})
@@ -418,7 +432,7 @@ void MashDesigner::updateFullness() {
       vol_l = grainVolume_l() + selectedAmount_l();
    }
 
-   double ratio = vol_l / m_equipment->mashTunVolume_l();
+   double ratio = vol_l / m_equipment->mashVesselVolume_l();
    if (ratio < 0) {
      ratio = 0;
    } else if (ratio > 1) {
@@ -457,7 +471,7 @@ double MashDesigner::waterFromMash_l() {
 
    double absorption_lKg;
    if (m_equipment) {
-      absorption_lKg = m_equipment->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg);
+      absorption_lKg = m_equipment->grainAbsorption_LKg().value_or(Equipment::default_grainAbsorption_LKg);
    } else {
       absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
    }

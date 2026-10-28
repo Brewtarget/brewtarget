@@ -505,9 +505,14 @@
          <xs:element name="AGING_VESSEL_NOTES"             type="xs:string"  minOccurs="0" maxOccurs="1"/>
          <xs:element name="PACKAGING_VESSEL_NOTES"         type="xs:string"  minOccurs="0" maxOccurs="1"/>
          <!-- Our own extension tag for a field that is in dotBeer but not BeerJSON (or BeerXML).  It is the volume
-              in the mash tun below a false bottom / malt pipe, which is needed in addition to the strike water that
-              wets the grain, but which, unlike MASH_TUN_LOSS_L, is recovered with the wort.  -->
-         <xs:element name="MASH_TUN_FOUNDATION_VOLUME_L"   type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+              below a false bottom / malt pipe in the vessel where the mash happens (the mash tun or, if there is no
+              mash tun, the kettle), which is needed in addition to the strike water that wets the grain, but which,
+              unlike MASH_TUN_LOSS_L, is recovered with the wort.  -->
+         <xs:element name="FOUNDATION_VOLUME_L"            type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <!-- Our own extension tags for the capacities of the kettle and fermentation vessel (maximum_volume in
+              BeerJSON).  These are distinct from BOIL_SIZE and BATCH_SIZE, which are the volumes normally used.  -->
+         <xs:element name="KETTLE_VOLUME_L"                type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FERMENTER_VOLUME_L"             type="xs:decimal" minOccurs="0" maxOccurs="1"/>
          <!-- Our own extension tag for the (sub)folder this record is in, relative to the folder it was exported
               from.  (Equivalent to folder_path in dotBeer.)  Absent means the folder being exported from / imported
               into.  -->

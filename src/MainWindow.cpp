@@ -1810,12 +1810,11 @@ void MainWindow::droppedRecipeEquipment(Equipment * kitRaw) {
                                                       &MainWindow::updateEquipmentInUi,
                                                       tr("Change Recipe Kit"));
 
-   // Keep the mash tun weight and specific heat up to date.
-   auto mash = this->pimpl->m_recipeObs->mash();
-   if (mash) {
-      new SimpleUndoableUpdate(*mash, TYPE_INFO(Mash, mashTunWeight_kg         ), kit->mashTunWeight_kg()         , tr("Change Tun Weight")       , equipmentUpdate);
-      new SimpleUndoableUpdate(*mash, TYPE_INFO(Mash, mashTunSpecificHeat_calGC), kit->mashTunSpecificHeat_calGC(), tr("Change Tun Specific Heat"), equipmentUpdate);
-   }
+   //
+   // NB: We used to copy the mash tun weight and specific heat from the equipment to the mash here.  We no longer need
+   // to, as calculations now take them from the recipe's equipment (falling back to the deprecated fields on the Mash
+   // only if the equipment doesn't have them) -- see Recipe::mashTunHeatCapacity_kcalC.
+   //
 
    if (QMessageBox::question(this,
                              tr("Equipment request"),

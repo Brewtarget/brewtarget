@@ -881,7 +881,7 @@ public:
       } else {
          double const waterAdded_l = this->m_self.mash()->totalMashWater_l();
          double const absorption_lKg{
-            equipment ? equipment->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) :
+            equipment ? equipment->grainAbsorption_LKg().value_or(Equipment::default_grainAbsorption_LKg) :
                         PhysicalConstants::grainAbsorption_Lkg
          };
 
@@ -3382,14 +3382,14 @@ double Recipe::targetTotalMashVol_l() const {
    bool const hasEquipment = this->equipment() ? true : false;
    double const absorption_lKg =
       hasEquipment ?
-         equipment()->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) :
+         equipment()->grainAbsorption_LKg().value_or(Equipment::default_grainAbsorption_LKg) :
          PhysicalConstants::grainAbsorption_Lkg;
    double const lauteringDeadspaceLoss_l = hasEquipment ? this->equipment()->getLauteringDeadspaceLoss_l() : 0.0;
 
    double const grainsInMash_kg = this->grainsInMash_kg();
 
    //
-   // NB: We do not add on Equipment::mashTunFoundationVolume_l here, because it is recovered with the wort.  See
+   // NB: We do not add on Equipment::foundationVolume_l here, because it is recovered with the wort.  See
    // comments in model/Equipment.h.
    //
    double const returnValue = targetCollectedWortVol_l + absorption_lKg * grainsInMash_kg + lauteringDeadspaceLoss_l;
@@ -3412,6 +3412,26 @@ std::optional<double> Recipe::mashThicknessForStrikeWater_LKg(double const strik
    }
    double const strikeWaterAllowance_l = this->equipment() ? this->equipment()->strikeWaterAllowance_l() : 0.0;
    return (strikeWater_l - strikeWaterAllowance_l) / grainsInMash_kg;
+}
+
+double Recipe::mashTunHeatCapacity_kcalC() const {
+   if (auto const equipment = this->equipment()) {
+      if (auto const heatCapacity_kcalC = equipment->mashVesselHeatCapacity_kcalC()) {
+         return *heatCapacity_kcalC;
+      }
+   }
+   if (auto const mash = this->mash()) {
+      // kg × cal/(g·°C) = kcal/°C
+      return mash->tunWeight_kg().value_or(0.0) * mash->tunSpecificHeat_calGC().value_or(0.0);
+   }
+   return 0.0;
+}
+
+double Recipe::mashTunTemp_c() const {
+   if (auto const mash = this->mash()) {
+      return mash->initialTunTemp_c().value_or(mash->grainTemp_c());
+   }
+   return 20.0;
 }
 
 void Recipe::hardDeleteOwnedEntities() {

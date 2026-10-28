@@ -612,16 +612,20 @@ namespace {
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_Equipment_ExclBase {
       //
-      // This is cleaned up and simplified in comparison with how BeerJSON does things, but still not perfect.  In
-      // particular, we write out all possible vessels even when some of them do not exist.  It would be nice to add
-      // more logic to our export to avoid this.
-      //   - In DotBeer, each individual vessel (EquipmentItemType) must have a name, as well the group of vessels
-      //     (EquipmentType) needing to have one.  Internally, we only have a name for the group (Equipment).
-      //     For the moment, we get round this by writing a fixed name for each vessel and ignoring vessel names when
-      //     we read a DotBeer file.
+      // This is cleaned up and simplified in comparison with how BeerJSON does things.  In particular:
+      //   - Individual vessels do not have names, only the equipment as a whole.
+      //   - Vessels that are not present are omitted (see tidyJson<Equipment> below for how we handle this on export).
+      //     In particular, if there is no mash tun, the mash happens in the kettle (see Equipment::mashesInKettle), so
+      //     grain_absorption_rate and foundation_volume are at the top level rather than on the mash tun.
+      //   - max_volume is the capacity of a vessel (eg kettleVolume_l), not the volume normally used in it.  The default
+      //     batch size is a separate top-level field.  There is no default pre-boil volume, so kettleBoilSize_l is not
+      //     written (and is calculated on import -- see the Equipment NamedParameterBundle constructor).
       //
 
       // Type                                                 XPath                                Q_PROPERTY                                             Value Decoder
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "default_batch_size"               , PropertyNames::Equipment::fvBatchSize_l              , &DOT_BEER_VOLUME_UNIT_MAPPER         },
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "grain_absorption_rate"            , PropertyNames::Equipment::grainAbsorption_LKg        , &DOT_BEER_VOLUME_PER_MASS_UNIT_MAPPER},
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "foundation_volume"                , PropertyNames::Equipment::foundationVolume_l         , &DOT_BEER_VOLUME_UNIT_MAPPER         },
       {JsonRecordDefinition::FieldType::String              , "hlt/vessel_type"                  , PropertyNames::Equipment::hltType                    },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/max_volume"                   , PropertyNames::Equipment::hltVolume_l                , &DOT_BEER_VOLUME_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "hlt/loss"                         , PropertyNames::Equipment::hltLoss_l                  , &DOT_BEER_VOLUME_UNIT_MAPPER       },
@@ -631,8 +635,6 @@ namespace {
       {JsonRecordDefinition::FieldType::String              , "mash_tun/vessel_type"             , PropertyNames::Equipment::mashTunType                },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/max_volume"              , PropertyNames::Equipment::mashTunVolume_l            , &DOT_BEER_VOLUME_UNIT_MAPPER         },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/loss"                    , PropertyNames::Equipment::mashTunLoss_l              , &DOT_BEER_VOLUME_UNIT_MAPPER         },
-      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/foundation_volume"       , PropertyNames::Equipment::mashTunFoundationVolume_l  , &DOT_BEER_VOLUME_UNIT_MAPPER         },
-      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/grain_absorption_rate"   , PropertyNames::Equipment::mashTunGrainAbsorption_LKg , &DOT_BEER_VOLUME_PER_MASS_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/weight"                  , PropertyNames::Equipment::mashTunWeight_kg           , &DOT_BEER_MASS_UNIT_MAPPER           },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "mash_tun/specific_heat_capacity"  , PropertyNames::Equipment::mashTunSpecificHeat_calGC  , &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER  },
       {JsonRecordDefinition::FieldType::String              , "mash_tun/notes"                   , PropertyNames::Equipment::mashTunNotes               },
@@ -643,7 +645,7 @@ namespace {
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "lauter_tun/specific_heat_capacity", PropertyNames::Equipment::lauterTunSpecificHeat_calGC, &DOT_BEER_SPECIFIC_HEAT_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::String              , "lauter_tun/notes"                 , PropertyNames::Equipment::lauterTunNotes             },
       {JsonRecordDefinition::FieldType::String              , "kettle/vessel_type"               , PropertyNames::Equipment::kettleType                 },
-      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/max_volume"                , PropertyNames::Equipment::kettleBoilSize_l           , &DOT_BEER_VOLUME_UNIT_MAPPER       },
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/max_volume"                , PropertyNames::Equipment::kettleVolume_l             , &DOT_BEER_VOLUME_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/loss"                      , PropertyNames::Equipment::kettleTrubChillerLoss_l    , &DOT_BEER_VOLUME_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/boil_rate_per_hour"        , PropertyNames::Equipment::kettleEvaporationPerHour_l , &DOT_BEER_VOLUME_UNIT_MAPPER       },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/drain_rate_per_minute"     , PropertyNames::Equipment::kettleOutflowPerMinute_l   , &DOT_BEER_VOLUME_UNIT_MAPPER       },
@@ -653,7 +655,7 @@ namespace {
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "kettle/opening_diameter"          , PropertyNames::Equipment::kettleOpeningDiameter_cm   , &DOT_BEER_LENGTH_MAPPER            },
       {JsonRecordDefinition::FieldType::String              , "kettle/notes"                     , PropertyNames::Equipment::kettleNotes                },
       {JsonRecordDefinition::FieldType::String              , "fermentation_vessel/vessel_type"  , PropertyNames::Equipment::fvType                     },
-      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "fermentation_vessel/max_volume"   , PropertyNames::Equipment::fvBatchSize_l              , &DOT_BEER_VOLUME_UNIT_MAPPER},
+      {JsonRecordDefinition::FieldType::MeasurementWithUnits, "fermentation_vessel/max_volume"   , PropertyNames::Equipment::fvVolume_l                 , &DOT_BEER_VOLUME_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "fermentation_vessel/loss"         , PropertyNames::Equipment::fvLoss_l                   , &DOT_BEER_VOLUME_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::String              , "fermentation_vessel/notes"        , PropertyNames::Equipment::fvNotes                    },
       {JsonRecordDefinition::FieldType::String              , "aging_vessel/vessel_type"         , PropertyNames::Equipment::agingVesselType            },
@@ -1220,9 +1222,11 @@ namespace {
    //
    // Our Equipment has a value for every vessel, even if it's not used -- eg if the user only has a kettle, the mash
    // tun etc will have zero volume.  Rather than write out a lot of zero-volume vessels:
-   //    - We omit any "optional" vessel (HLT, lauter tun, aging vessel, packaging vessel) that has zero volume, as
-   //      it is treated as not being present (see Equipment::clearUnusedOptionalVessels).
-   //    - We omit any other vessel (apart from the kettle, which is required) that has no non-default values.
+   //    - We omit any "optional" vessel (HLT, mash tun, lauter tun, aging vessel, packaging vessel) that has zero
+   //      volume, as it is treated as not being present (see Equipment::clearUnusedOptionalVessels).  In particular,
+   //      in dotBeer, as for us, the absence of a mash tun means the mash happens in the kettle (see
+   //      Equipment::mashesInKettle).
+   //    - We omit the fermentation vessel if it has no non-default values.  (The kettle is required.)
    // When reading in, a missing vessel gives us the same zero values, so this round-trips correctly.
    //
    template<> void tidyJson<Equipment>(boost::json::array & outputArray) {
@@ -1252,14 +1256,14 @@ namespace {
       };
       for (auto & equipmentValue : outputArray) {
          auto & equipment = equipmentValue.as_object();
-         for (char const * const vesselName : {"hlt", "lauter_tun", "aging_vessel", "packaging_vessel"}) {
+         for (char const * const vesselName : {"hlt", "mash_tun", "lauter_tun", "aging_vessel", "packaging_vessel"}) {
             if (auto const * vessel = equipment.if_contains(vesselName);
                 vessel && vessel->is_object() && vesselHasNoVolume(vessel->as_object())) {
                qDebug() << Q_FUNC_INFO << "Not writing optional vessel" << vesselName << "as it has zero volume";
                equipment.erase(vesselName);
             }
          }
-         for (char const * const vesselName : {"mash_tun", "fermentation_vessel"}) {
+         for (char const * const vesselName : {"fermentation_vessel"}) {
             if (auto const * vessel = equipment.if_contains(vesselName);
                 vessel && vessel->is_object() && vesselIsEmpty(vessel->as_object())) {
                qDebug() << Q_FUNC_INFO << "Not writing" << vesselName << "as it has no non-default values";

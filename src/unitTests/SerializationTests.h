@@ -114,6 +114,18 @@ private slots:
     *        treated as duplicates (eg on import).
     */
    void testEquipmentComparison();
+
+   /**
+    * \brief Check vessel capacities are kept separate from default batch size and pre-boil volume in dotBeer and
+    *        BeerXML, and that equipment with no mash tun (ie where the mash happens in the kettle) is read and written
+    *        correctly in dotBeer.
+    */
+   void testEquipmentVolumes();
+
+   /**
+    * \brief Check \c Equipment::clearUnusedOptionalVessels treats the mash tun as an optional vessel
+    */
+   void testClearUnusedMashTun();
 };
 
 #endif

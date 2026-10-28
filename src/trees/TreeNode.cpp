@@ -466,13 +466,13 @@ template<> QString TreeItemNode<Equipment>::getToolTip() const {
    body += QString("<caption>%1</caption>")
          .arg( this->m_underlyingItem->name() );
 
-   // First row -- batchsize and boil time
+   // First row -- default pre-boil volume and batch size
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(Equipment::tr("Preboil"))
            .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->kettleBoilSize_l(), Measurement::Units::liters}) );
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
-           .arg(Equipment::tr("Kettle Boil Size"))
-           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->kettleBoilSize_l(), Measurement::Units::liters}) );
+           .arg(Equipment::tr("Batch Size"))
+           .arg(Measurement::displayAmount(Measurement::Amount{this->m_underlyingItem->fvBatchSize_l(), Measurement::Units::liters}) );
 
    body += "</table></body></html>";
 

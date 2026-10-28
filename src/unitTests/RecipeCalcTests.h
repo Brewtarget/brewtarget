@@ -76,6 +76,19 @@ private slots:
     *        consistent with the evaporation rate we actually use (liters per hour).
     */
    void testEvaporationRate();
+
+   /**
+    * \brief Check that vessel capacities are kept separate from default batch size and pre-boil volume, including the
+    *        fallbacks we use when a file only gives us some of them.
+    */
+   void testEquipmentDefaultVolumes();
+
+   /**
+    * \brief Check where we get the mash tun's heat capacity and temperature from for strike water calculations: the
+    *        equipment in preference to the (deprecated) fields on the Mash, and nothing at all if the mash happens in
+    *        the kettle.
+    */
+   void testMashTunHeatCapacity();
 };
 
 #endif

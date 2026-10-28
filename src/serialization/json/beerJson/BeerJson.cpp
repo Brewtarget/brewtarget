@@ -692,7 +692,7 @@ namespace {
          // TODO PropertyNames::Equipment::kettleInternalDiameter_cm
          //      PropertyNames::Equipment::kettleOpeningDiameter_cm
          //
-         // BeerJSON has no equivalent of PropertyNames::Equipment::mashTunFoundationVolume_l (the volume below a false
+         // BeerJSON has no equivalent of PropertyNames::Equipment::foundationVolume_l (the volume below a false
          // bottom or malt pipe that has to be filled before the grain is covered, but which drains out with the wort --
          // see comments in model/Equipment.h).  The only volume BeerJSON records for a vessel, apart from its maximum,
          // is "loss", which means wort that is NOT recovered.  So we cannot write it as part of the mash tun's loss
@@ -705,6 +705,19 @@ namespace {
          // (Equally, other programs reading the file will not be able to know about the foundation volume, but most of
          // them would not use it anyway.)  To keep the field, use dotBeer (or, with Brewken/Brewtarget, BeerXML, where
          // we write it as an extension tag).
+         //
+         // Similarly, BeerJSON's "maximum_volume" is the capacity of a vessel (kettleVolume_l, fvVolume_l etc).
+         // BeerJSON has nowhere to record the default batch size (fvBatchSize_l) or pre-boil volume
+         // (kettleBoilSize_l) that a new recipe using this equipment should start with, so these are lost on export.
+         // On import, we use the fermenter capacity as the default batch size (which is what we used to do, when we
+         // treated the two as the same thing) and calculate a default pre-boil volume from it -- see the Equipment
+         // NamedParameterBundle constructor.
+         //
+         // In BeerJSON, grain_absorption_rate is on the individual vessels, and we read and write it on the "Mash Tun".
+         // Internally (as in dotBeer), we don't require a separate mash tun -- if there isn't one, the mash happens in
+         // the kettle (see Equipment::mashesInKettle).  But, because BeerJSON has nowhere else for grain absorption, we
+         // still write a "Mash Tun" item in this case, with a maximum_volume of 0.  (When we read it back in, a mash tun
+         // of 0 volume means, as before, that there is no separate mash tun.)
          //
 
          // Type                                                 XPath / Q_PROPERTY / Value Decoder
@@ -746,7 +759,7 @@ namespace {
                                                                  PropertyNames::Equipment::mashTunLoss_l              ,
                                                                  &BEER_JSON_VOLUME_UNIT_MAPPER                        },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Mash Tun\"]/grain_absorption_rate",
-                                                                 PropertyNames::Equipment::mashTunGrainAbsorption_LKg      ,
+                                                                 PropertyNames::Equipment::grainAbsorption_LKg             ,
                                                                  &BEER_JSON_SPECIFIC_VOLUME_UNIT_MAPPER                    },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Mash Tun\"]/boil_rate_per_hour"   ,
                                                                  BtString::NULL_STR                                        ,
@@ -792,7 +805,7 @@ namespace {
          {JsonRecordDefinition::FieldType::String              , "equipment_items[form=\"Brew Kettle\"]/type"                ,
                                                                  PropertyNames::Equipment::kettleType                        },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Brew Kettle\"]/maximum_volume"      ,
-                                                                 PropertyNames::Equipment::kettleBoilSize_l                  ,
+                                                                 PropertyNames::Equipment::kettleVolume_l                    ,
                                                                  &BEER_JSON_VOLUME_UNIT_MAPPER                               },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Brew Kettle\"]/loss"                ,
                                                                  PropertyNames::Equipment::kettleTrubChillerLoss_l           ,
@@ -829,7 +842,7 @@ namespace {
          {JsonRecordDefinition::FieldType::String              , "equipment_items[form=\"Fermenter\"]/type"           ,
                                                                  PropertyNames::Equipment::fvType              },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Fermenter\"]/maximum_volume" ,
-                                                                 PropertyNames::Equipment::fvBatchSize_l       ,
+                                                                 PropertyNames::Equipment::fvVolume_l          ,
                                                                  &BEER_JSON_VOLUME_UNIT_MAPPER                        },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "equipment_items[form=\"Fermenter\"]/loss"           ,
                                                                  PropertyNames::Equipment::fvLoss_l            ,
