@@ -407,8 +407,8 @@ if(APPLE)
    # CMAKE_PREFIX_PATH environment variable to the Qt 5 installation prefix.  In theory, setting the corresponding CMake
    # variable should do the same job (per https://cmake.org/cmake/help/latest/variable/CMAKE_PREFIX_PATH.html).
    #
-   # It seems this is only needed on MacOS.  According to ./third-party/valijson/README.md we are not the only ones to
-   # experience this!
+   # It seems this is only needed on MacOS.  (According to the README.md of Valijson, which we used to use for JSON schema
+   # validation, we are not the only ones to experience this!)
    #
    execute_process(COMMAND brew --prefix qt6 OUTPUT_VARIABLE CMAKE_PREFIX_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
    message(STATUS "CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}")
@@ -1113,6 +1113,7 @@ add_test(NAME MeasurementTests.testAlgorithms                      COMMAND ./${f
 add_test(NAME RecipeCalcTests.recipeCalcTest_allGrain              COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    recipeCalcTest_allGrain          )
 add_test(NAME RecipeCalcTests.postBoilLossOgTest                   COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    postBoilLossOgTest               )
 add_test(NAME RecipeCalcTests.testBoilAdditionTiming               COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testBoilAdditionTiming           )
+add_test(NAME RecipeCalcTests.testBoilStepsWithoutTemperatures     COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testBoilStepsWithoutTemperatures )
 add_test(NAME RecipeCalcTests.testInventory                        COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testInventory                    )
 add_test(NAME RecipeCalcTests.testMashWaterVolumes                 COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testMashWaterVolumes             )
 add_test(NAME RecipeCalcTests.testEvaporationRate                  COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testEvaporationRate              )

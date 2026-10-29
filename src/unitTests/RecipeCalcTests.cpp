@@ -368,6 +368,74 @@ void RecipeCalcTests::testBoilAdditionTiming() {
    }
    QVERIFY2(boil20Index >= 0 && noStep15Index > boil20Index, "Boil addition without step sorted wrongly");
 
+   //
+   // First wort and aroma additions are identified by step temperatures, not step numbers
+   //
+   auto const firstWort   = makeAddition("First wort"       , 1, std::nullopt);
+   // Additions migrated from older DBs kept their old Hop time
+   auto const firstWort60 = makeAddition("Migrated FWH 60"  , 1, 60.0        );
+   QVERIFY2( firstWort  ->isFirstWort(), "Addition in pre-boil step not first wort");
+   QVERIFY2( firstWort60->isFirstWort(), "Migrated first wort addition with time not first wort");
+   QVERIFY2(!boil60     ->isFirstWort(), "Boil proper addition treated as first wort");
+   QVERIFY2(!whirlpool20->isFirstWort(), "Post-boil addition treated as first wort");
+   QVERIFY2( whirlpool20->isAroma    (), "Post-boil addition not aroma");
+   QVERIFY2(!boil60     ->isAroma    (), "Boil proper addition treated as aroma");
+   QVERIFY2(!firstWort  ->isAroma    (), "Pre-boil addition treated as aroma");
+
+   return;
+}
+
+void RecipeCalcTests::testBoilStepsWithoutTemperatures() {
+   //
+   // Per dotBeer, a boil step whose start or end temperature is not set is at boiling at that point.  See
+   // https://github.com/Brewtarget/brewtarget/issues/1165
+   //
+   auto recipe = std::make_shared<Recipe>("Boil Steps Without Temperatures Test");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(20.0);
+   recipe->setEquipment(this->pimpl->m_equipFiveGalNoLoss);
+
+   auto boil = std::make_shared<Boil>("Single step boil without temperatures");
+   ObjectStoreWrapper::insert(boil);
+   auto mainStep = std::make_shared<BoilStep>("Boil");
+   mainStep->setStepTime_mins(60.0);
+   boil->add(mainStep);
+   recipe->setBoil(boil);
+
+   QVERIFY2(fuzzyComp(boil->boilTime_mins(), 60.0, 0.001), "Step without temperatures not counted as boil proper");
+   QVERIFY2(!boil->coolTime_mins(), "Step without temperatures treated as cooling");
+   auto const [firstBoilProperStep, lastBoilProperStep] = boil->boilProperSteps();
+   QCOMPARE(firstBoilProperStep, 1);
+   QCOMPARE(lastBoilProperStep , 1);
+
+   // A cooling step with no start temperature starts at boiling, so is a cooling step
+   auto coolStep = std::make_shared<BoilStep>("Cool");
+   coolStep->setEndTemp_c(20.0);
+   coolStep->setStepTime_mins(15.0);
+   boil->add(coolStep);
+   QVERIFY2(boil->coolTime_mins() && fuzzyComp(*boil->coolTime_mins(), 15.0, 0.001), "Cooling step not recognised");
+   QVERIFY2(fuzzyComp(boil->boilTime_mins(), 60.0, 0.001), "Cooling step counted as boil proper");
+
+   // ensureStandardProfile should add a pre-boil step, but not an extra "main boil" step
+   boil->ensureStandardProfile();
+   auto const boilSteps = boil->boilSteps();
+   QCOMPARE(boilSteps.size(), 3);
+   QVERIFY2(!Boil::startsAtBoil(*boilSteps[0]), "First step should be pre-boil");
+   QVERIFY2(Boil::isBoilProper(*boilSteps[1]), "Second step should be the original boil step");
+   QVERIFY2(fuzzyComp(boil->boilTime_mins(), 60.0, 0.001), "Boil time changed by ensureStandardProfile");
+
+   // A boil addition in the boil proper with no time is at the start of the step
+   auto addition = std::make_shared<RecipeAdditionHop>("Start of boil");
+   addition->setHop(this->pimpl->m_cascade_4pct.get());
+   addition->setStage(RecipeAddition::Stage::Boil);
+   addition->setStep(2);
+   addition->setQuantity(0.020);
+   addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(addition);
+   auto const timing = recipe->boilAdditionTiming(*addition);
+   QVERIFY(!timing.postBoil);
+   QVERIFY2(fuzzyComp(timing.boilProper_mins, 60.0, 0.001), "Addition in step without temperatures not in boil");
+
    return;
 }
 

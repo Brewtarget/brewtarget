@@ -16,6 +16,37 @@
   // acquisitions will be purchases.  (StockAcquisitionFermentable would be a bit long IMHO.)
   "description": "Each type of ingredient (Culture, Fermentable, Hop, Misc) has a corresponding stock purchase.  A \"stock purchase\" can actually be any sort of stock acquisition, including by gift or self-production.",
   "$defs": {
+    //
+    // A stock purchase's amounts (ordered, received and used) must all be the same kind of measure (eg all mass) --
+    // otherwise, for one thing, there is no way of knowing how much stock is left.  Each of the following schemas
+    // requires that whichever of these amounts are present are all of one kind of measure.  (As with if/then,
+    // `properties` only checks keys that are present, so none of the amounts is required here.)  Each type of stock
+    // purchase then requires that its amounts satisfy one of the schemas for the kinds of measure that it allows (eg
+    // mass or volume for a fermentable).
+    //
+    // Deliberately NO unevaluatedProperties on these, as they are combined with others
+    //
+    "AmountsAllMass": {
+      "properties": {
+        "amount_ordered" : { "$ref": "Measurement.beer.schema#/$defs/Mass" },
+        "amount_received": { "$ref": "Measurement.beer.schema#/$defs/Mass" },
+        "stock_uses"     : { "items": { "properties": { "amount_used": { "$ref": "Measurement.beer.schema#/$defs/Mass" } } } }
+      }
+    },
+    "AmountsAllVolume": {
+      "properties": {
+        "amount_ordered" : { "$ref": "Measurement.beer.schema#/$defs/Volume" },
+        "amount_received": { "$ref": "Measurement.beer.schema#/$defs/Volume" },
+        "stock_uses"     : { "items": { "properties": { "amount_used": { "$ref": "Measurement.beer.schema#/$defs/Volume" } } } }
+      }
+    },
+    "AmountsAllCount": {
+      "properties": {
+        "amount_ordered" : { "$ref": "Measurement.beer.schema#/$defs/Count" },
+        "amount_received": { "$ref": "Measurement.beer.schema#/$defs/Count" },
+        "stock_uses"     : { "items": { "properties": { "amount_used": { "$ref": "Measurement.beer.schema#/$defs/Count" } } } }
+      }
+    },
     // Shared fields; deliberately NO unevaluatedProperties here
     "StockPurchaseCommon": {
       "type": "object",
@@ -123,8 +154,11 @@
       "unevaluatedProperties": false
     },
     "StockPurchaseCulture": {
-      "description": "Note that both `amount_ordered` and `amount_received` need to be the same type of measure.  Eg, it's not supported for one to be mass and the other to be volume.",
-      "allOf": [{ "$ref": "#/$defs/StockPurchaseCommon" }],
+      "description": "Note that `amount_ordered`, `amount_received` and the `amount_used` of each of the `stock_uses` must all be the same kind of measure.  Eg, it's not supported for one to be mass and another to be volume.",
+      "allOf": [
+        { "$ref": "#/$defs/StockPurchaseCommon" },
+        { "anyOf": [{ "$ref": "#/$defs/AmountsAllMass" }, { "$ref": "#/$defs/AmountsAllVolume" }, { "$ref": "#/$defs/AmountsAllCount" }] }
+      ],
       "properties": {
         "culture_id":    {
           "description": "The Local ID of the Culture purchased.  (Obviously the culture in question must be in the \"cultures\" section of the same dotBeer file.)",
@@ -168,8 +202,11 @@
       "unevaluatedProperties": false
     },
     "StockPurchaseFermentable": {
-      "description": "Note that both `amount_ordered` and `amount_received` need to be the same type of measure.  Eg, it's not supported for one to be mass and the other to be volume.",
-      "allOf": [{ "$ref": "#/$defs/StockPurchaseCommon" }],
+      "description": "Note that `amount_ordered`, `amount_received` and the `amount_used` of each of the `stock_uses` must all be the same kind of measure.  Eg, it's not supported for one to be mass and another to be volume.",
+      "allOf": [
+        { "$ref": "#/$defs/StockPurchaseCommon" },
+        { "anyOf": [{ "$ref": "#/$defs/AmountsAllMass" }, { "$ref": "#/$defs/AmountsAllVolume" }] }
+      ],
       "properties": {
         "fermentable_id":    {
           "description": "The Local ID of the fermentable purchased.  (Obviously the fermentable in question must be in the \"fermentables\" section of the same dotBeer file.)",
@@ -213,8 +250,11 @@
       "unevaluatedProperties": false
     },
     "StockPurchaseHop": {
-      "description": "Note that both `amount_ordered` and `amount_received` need to be the same type of measure.  Eg, it's not supported for one to be mass and the other to be volume.",
-      "allOf": [{ "$ref": "#/$defs/StockPurchaseCommon" }],
+      "description": "Note that `amount_ordered`, `amount_received` and the `amount_used` of each of the `stock_uses` must all be the same kind of measure.  Eg, it's not supported for one to be mass and another to be volume.",
+      "allOf": [
+        { "$ref": "#/$defs/StockPurchaseCommon" },
+        { "anyOf": [{ "$ref": "#/$defs/AmountsAllMass" }, { "$ref": "#/$defs/AmountsAllVolume" }] }
+      ],
       "properties": {
         "hop_id":    {
           "description": "The Local ID of the hop purchased.  (Obviously the hop in question must be in the \"hops\" section of the same dotBeer file.)",
@@ -258,8 +298,11 @@
       "unevaluatedProperties": false
     },
     "StockPurchaseMisc": {
-      "description": "Note that both `amount_ordered` and `amount_received` need to be the same type of measure.  Eg, it's not supported for one to be mass and the other to be volume.",
-      "allOf": [{ "$ref": "#/$defs/StockPurchaseCommon" }],
+      "description": "Note that `amount_ordered`, `amount_received` and the `amount_used` of each of the `stock_uses` must all be the same kind of measure.  Eg, it's not supported for one to be mass and another to be volume.",
+      "allOf": [
+        { "$ref": "#/$defs/StockPurchaseCommon" },
+        { "anyOf": [{ "$ref": "#/$defs/AmountsAllMass" }, { "$ref": "#/$defs/AmountsAllVolume" }, { "$ref": "#/$defs/AmountsAllCount" }] }
+      ],
       "properties": {
         "misc_id":    {
           "description": "The Local ID of the misc purchased.  (Obviously the misc in question must be in the \"miscs\" section of the same dotBeer file.)",

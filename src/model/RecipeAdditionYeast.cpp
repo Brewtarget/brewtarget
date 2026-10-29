@@ -55,7 +55,7 @@ TypeLookup const RecipeAdditionYeast::typeLookup {
       PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionYeast, yeast            , yeast              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, attenuation_pct  , m_attenuation_pct  , NonPhysicalQuantity::Percentage    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, timesCultured    , m_timesCultured    , NonPhysicalQuantity::OrdinalNumeral),
-      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, cellCountBillions, m_cellCountBillions, NonPhysicalQuantity::OrdinalNumeral),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, cellCountBillions, m_cellCountBillions, NonPhysicalQuantity::Dimensionless ),
       PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionYeast, addToSecondary   , addToSecondary     , BOOL_INFO(tr("No"), tr("Yes"))     ),
    },
    // Parent classes lookup.  NB: RecipeAddition not NamedEntity!
@@ -129,7 +129,7 @@ RecipeAdditionYeast::~RecipeAdditionYeast() = default;
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
 std::optional<double> RecipeAdditionYeast::attenuation_pct  () const { return m_attenuation_pct; }
 std::optional<int>    RecipeAdditionYeast::timesCultured    () const { return m_timesCultured  ; }
-std::optional<int>    RecipeAdditionYeast::cellCountBillions() const { return m_cellCountBillions  ; }
+std::optional<double> RecipeAdditionYeast::cellCountBillions() const { return m_cellCountBillions  ; }
 std::optional<bool>   RecipeAdditionYeast::addToSecondary   () const {
    if (1 == this->step()) {
       return false;
@@ -164,7 +164,7 @@ void RecipeAdditionYeast::setAttenuation_pct(std::optional<double> const val) {
    return;
 }
 void RecipeAdditionYeast::setTimesCultured(std::optional<int>     const val) { SET_AND_NOTIFY(PropertyNames::RecipeAdditionYeast::timesCultured    , m_timesCultured    , this->enforceMin      (val, "times cultured" )); return; }
-void RecipeAdditionYeast::setCellCountBillions(std::optional<int> const val) { SET_AND_NOTIFY(PropertyNames::RecipeAdditionYeast::cellCountBillions, m_cellCountBillions, this->enforceMin      (val, "cell count billions" )); return; }
+void RecipeAdditionYeast::setCellCountBillions(std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::RecipeAdditionYeast::cellCountBillions, m_cellCountBillions, this->enforceMin      (val, "cell count billions" )); return; }
 
 
 void RecipeAdditionYeast::setAddToSecondary (std::optional<bool  > const val) {

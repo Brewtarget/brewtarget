@@ -581,6 +581,24 @@ public:
                this->movedFolder(item);
             } else if (className == Folder<NE>::staticClassName()) {
                auto droppedFolder = ObjectStoreWrapper::getById<Folder<NE>>(id);
+               if (!droppedFolder) {
+                  qDebug() << Q_FUNC_INFO << "Could not find" << Folder<NE>::staticClassName() << "with ID" << id;
+                  return false;
+               }
+               //
+               // A folder cannot be moved into itself or into one of its own subfolders, as this would create a loop in
+               // the folder hierarchy (which, amongst other things, would make Folder::parentFolders() loop forever).
+               //
+               // Note that we can't rely on Qt to stop this, because it only checks for dropping an item onto itself
+               // for move drags, and TreeView starts a copy drag (presumably because, in general, you can drag things
+               // outside the tree, eg to add an ingredient to the current recipe).
+               //
+               if (targetFolder && droppedFolder->isSelfOrAncestorOf(*targetFolder)) {
+                  qInfo() <<
+                     Q_FUNC_INFO << "Ignoring drop of" << droppedFolder << "into" << targetFolder << "as that is the "
+                     "folder itself or one of its subfolders";
+                  continue;
+               }
                auto folder = droppedFolder->containedInFolder();
                qDebug() <<
                   Q_FUNC_INFO << "Moving" << droppedFolder << "from folder" << folder << "to folder" << targetFolder;

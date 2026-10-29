@@ -262,8 +262,14 @@ std::optional<double> RecipeAdditionHop::beerXmlTime_mins() const {
 bool RecipeAdditionHop::isFirstWort() const {
    //
    // In switching from Hop::use to RecipeAddition::stage, there is no longer an explicit flag for First Wort Hops.
-   // Instead, a first wort addition is simply(!) one that occurs at the beginning of step 1 of the boil if that step
-   // ramps from mash end temperature to boil temperature.
+   // Instead, per dotBeer (see AdditionSchedule in Recipe.beer.schema), a first wort addition is one made in a boil
+   // step that ramps up from mash temperature -- ie one that starts at or below Boil::minimumBoilTemperature_c and
+   // comes before the boil proper.  We identify the step by its temperatures rather than its number (which is usually,
+   // but not necessarily, 1).
+   //
+   // NB: dotBeer says a first wort addition has no `time` (as it is added at the start of the step), but we do not
+   //     insist on that here, because additions migrated from older versions of the database kept their old Hop time
+   //     (typically the boil length).
    //
    // We could work this out in a single if statement, but it would be too horrible to look at, so we simply go through
    // all the conditions that have to be satisfied.
@@ -272,8 +278,7 @@ bool RecipeAdditionHop::isFirstWort() const {
       return false;
    }
 
-   // First Wort must be the first step of the boil, during ramp-up from mashout and before the boil proper
-   if (!this->step() || *this->step() != 1) {
+   if (!this->step()) {
       return false;
    }
 
@@ -283,9 +288,23 @@ bool RecipeAdditionHop::isFirstWort() const {
       return false;
    }
 
-   auto boilStep = boil->boilSteps().first();
-   if (!boilStep->startTemp_c() || *boilStep->startTemp_c() > Boil::minimumBoilTemperature_c) {
+   auto const boilSteps = boil->boilSteps();
+   // Remember RecipeAddition steps are numbered from 1, but lists are indexed from 0
+   int const stepIndex = *this->step() - 1;
+   if (stepIndex < 0 || stepIndex >= static_cast<int>(boilSteps.size())) {
       return false;
+   }
+
+   // The step must start below boiling (with an unset start temperature meaning boiling -- see Boil::startsAtBoil)...
+   if (Boil::startsAtBoil(*boilSteps[stepIndex])) {
+      return false;
+   }
+
+   // ...and must come before the boil proper (otherwise it's a post-boil step that has somehow cooled and been reheated)
+   for (int ii = 0; ii < stepIndex; ++ii) {
+      if (Boil::isBoilProper(*boilSteps[ii])) {
+         return false;
+      }
    }
 
    return true;
@@ -317,10 +336,18 @@ bool RecipeAdditionHop::isAroma() const {
    }
 
    // Remember RecipeAddition steps are numbered from 1, but vectors are indexed from 0
-   auto boilStep = boil->boilSteps()[*this->step() - 1];
-   if (!boilStep->endTemp_c() || *boilStep->endTemp_c() > Boil::minimumBoilTemperature_c) { return false; }
+   auto const boilSteps = boil->boilSteps();
+   auto boilStep = boilSteps[*this->step() - 1];
+   // Unset end temperature means boiling -- see Boil::endsAtBoil
+   if (Boil::endsAtBoil(*boilStep)) { return false; }
 
-   return true;
+   // Same as for isFirstWort, we go by temperatures: an aroma addition is in a step that comes after the boil proper
+   for (int ii = 0; ii < *this->step() - 1; ++ii) {
+      if (Boil::isBoilProper(*boilSteps[ii])) {
+         return true;
+      }
+   }
+   return false;
 }
 
 NamedEntity * RecipeAdditionHop::ensureExists(BtStringConst const & property) {

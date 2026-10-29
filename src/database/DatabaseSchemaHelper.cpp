@@ -3127,8 +3127,13 @@ namespace {
                                     "mtype, "
                                     "water_agent_type, "
                                     "water_agent_percent_acid) "
+                  //
+                  // NB: We use || rather than CONCAT(), as the latter only arrived in SQLite 3.44 (2023), which is
+                  //     newer than the SQLite on, eg, Debian 12 or Ubuntu 22.04.  Unlike CONCAT(), || gives NULL if
+                  //     either argument is NULL, hence the COALESCE().
+                  //
                   "SELECT id, "
-                         "CONCAT(name, ' (migrated from salts)') AS name, "
+                         "COALESCE(name, '') || ' (migrated from salts)' AS name, "
                          "deleted, "
                          "'water agent', "
                          "stype, "
@@ -3418,6 +3423,16 @@ namespace {
          {QString("ALTER TABLE mash RENAME COLUMN tun_temp          TO initial_tun_temp_c"     )},
          {QString("ALTER TABLE mash RENAME COLUMN tun_weight        TO tun_weight_kg"          )},
          {QString("ALTER TABLE mash RENAME COLUMN tun_specific_heat TO tun_specific_heat_calgc")},
+         //
+         // Cell count (in billions) need not be a whole number (eg 2.5 billion cells), and is not required to be one in
+         // dotBeer, so we change the column from integer to double.  There isn't a common syntax for changing a
+         // column's type in SQLite and PostgreSQL, so we make a new column, copy the data across, and then replace
+         // the old column with the new one.
+         //
+         {QString("ALTER TABLE yeast_in_recipe ADD COLUMN cell_count_billions_tmp %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("UPDATE yeast_in_recipe SET cell_count_billions_tmp = cell_count_billions")},
+         {QString("ALTER TABLE yeast_in_recipe DROP COLUMN cell_count_billions")},
+         {QString("ALTER TABLE yeast_in_recipe RENAME COLUMN cell_count_billions_tmp TO cell_count_billions")},
       };
 
       return executeSqlQueries(q, migrationQueries);

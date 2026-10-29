@@ -511,12 +511,8 @@ qtTestRunnerDependencies = dependency('qt6', version : minVersionOfQt, modules: 
 #    Boost.Core, part of collection of the Boost C++ Libraries, is a collection of core utilities used by other Boost
 #    libraries.  Boost JSON needs a more recent version than 1.71.
 #
-#    *******************
-#    *** Boost.Regex ***
-#    *******************
-#
-#    We use this header-only library to provide an alternative to std::regex for Valijson (see
-#    https://github.com/tristanpenman/valijson#regular-expression-engine).
+#    (We used to use Boost.Regex as an alternative to std::regex for Valijson, but we no longer use Valijson -- see
+#    "Sourcemeta Blaze" below.)
 #
 # For Boost, per https://mesonbuild.com/Dependencies.html#boost, we only need to supply module names for libraries we
 # need to link against.  For the header-only Boost libraries, the 'boost' dependency suffices.
@@ -1959,6 +1955,7 @@ test('Test algorithms'                       , testRunner, args : ['MeasurementT
 test('Test recipe calculations - all grain'  , testRunner, args : ['RecipeCalcTests', 'recipeCalcTest_allGrain'              ], suite : 'recipe')
 test('Test post boil loss OG'                , testRunner, args : ['RecipeCalcTests', 'postBoilLossOgTest'                   ], suite : 'recipe')
 test('Test boil addition timing'             , testRunner, args : ['RecipeCalcTests', 'testBoilAdditionTiming'               ], suite : 'recipe')
+test('Test boil steps without temperatures'  , testRunner, args : ['RecipeCalcTests', 'testBoilStepsWithoutTemperatures'     ], suite : 'recipe')
 test('Test inventory'                        , testRunner, args : ['RecipeCalcTests', 'testInventory'                        ], suite : 'recipe')
 test('Test mash water volumes'               , testRunner, args : ['RecipeCalcTests', 'testMashWaterVolumes'                 ], suite : 'recipe')
 test('Test evaporation rate'                 , testRunner, args : ['RecipeCalcTests', 'testEvaporationRate'                  ], suite : 'recipe')

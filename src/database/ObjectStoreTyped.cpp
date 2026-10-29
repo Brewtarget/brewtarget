@@ -676,7 +676,7 @@ namespace {
          {ObjectStore::FieldType::Int   , {"yeast_id"           }, PropertyNames::IngredientAmount::ingredientId      , &PRIMARY_TABLE<Yeast>   },
          {ObjectStore::FieldType::Double, {"attenuation_pct"    }, PropertyNames::RecipeAdditionYeast::attenuation_pct  },
          {ObjectStore::FieldType::Int   , {"times_cultured"     }, PropertyNames::RecipeAdditionYeast::timesCultured    },
-         {ObjectStore::FieldType::Int   , {"cell_count_billions"}, PropertyNames::RecipeAdditionYeast::cellCountBillions},
+         {ObjectStore::FieldType::Double, {"cell_count_billions"}, PropertyNames::RecipeAdditionYeast::cellCountBillions},
       },
       {&NAMED_ENTITY_COMMON_FIELDS, &INGREDIENT_AMOUNT_COMMON_FIELDS, &RECIPE_ADDITION_COMMON_FIELDS}
    };

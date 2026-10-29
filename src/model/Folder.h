@@ -227,6 +227,26 @@ public:
    }
 
    /**
+    * @brief Check whether we are the same as another folder or one of its ancestors
+    *
+    * @param other
+    * @return \c true if this folder is \c other or is one of its parents (or grandparents etc).  Used to stop a folder
+    *         being moved into itself or into one of its own subfolders, which would create a loop in the folder
+    *         hierarchy.
+    */
+   bool isSelfOrAncestorOf(Folder<NE> const & other) const {
+      if (other.key() == this->key()) {
+         return true;
+      }
+      for (Folder<NE> const * ancestor : other.parentFolders()) {
+         if (ancestor->key() == this->key()) {
+            return true;
+         }
+      }
+      return false;
+   }
+
+   /**
     * @return As \c parentFolders, but with the current folder (ie this) appended
     */
    QList<Folder<NE> *> folderPath() const {

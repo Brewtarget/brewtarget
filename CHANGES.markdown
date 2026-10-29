@@ -23,7 +23,7 @@ Various improvements, including:
 * Water Calculator improvements [252](https://github.com/Brewtarget/brewtarget/issues/252)
 * Salts (aka water agents) are now a subcategory of Miscellaneous ingredients
 * Hops now support optional min/max values for alpha acid and beta acid
-* Import to folder [1133]https://github.com/Brewtarget/brewtarget/issues/1133
+* Import to folder [1133](https://github.com/Brewtarget/brewtarget/issues/1133)
 * Equipment: new "Foundation Water" field for the mash tun, for the space below a false bottom or malt pipe (eg in
   all-in-one systems) that has to be filled before the grain is covered but which drains out with the wort
 * Mash and lauter tun losses are now correctly allowed for in the mash wizard's total water
@@ -48,6 +48,10 @@ Various improvements, including:
 * Conversion amounts for imperial tablespoons and teaspoons are wrong [1160](https://github.com/Brewtarget/brewtarget/issues/1160)
 * IBU calculation treats a post-boil addition's time as boil time [1167](https://github.com/Brewtarget/brewtarget/issues/1167)
 * Instructions use the whole boil length for a step addition with no time [1168](https://github.com/Brewtarget/brewtarget/issues/1168)
+* A boil step with no start/end temperature should be treated as being at boiling [1165](https://github.com/Brewtarget/brewtarget/issues/1165)
+* Possible to drag-and-drop a folder onto itself or one of its subfolders [1157](https://github.com/Brewtarget/brewtarget/issues/1157)
+* Exporting a hop, yeast or style with only one end of a range set (eg minimum but not maximum alpha acid) no longer
+  creates a dotBeer or BeerJSON file that cannot be imported
 
 ### Release Timestamp
 Wed, 19 Aug 2026 05:01:02 +0100

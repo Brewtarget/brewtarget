@@ -2949,17 +2949,11 @@ Recipe::BoilAdditionTiming Recipe::boilAdditionTiming(RecipeAddition const & add
       return boilProperOnly();
    }
 
-   // Same test as Boil::boilTime_mins() uses for "boil proper"
-   auto const isBoilProper = [](BoilStep const & boilStep) {
-      return boilStep.startTemp_c() && *boilStep.startTemp_c() > Boil::minimumBoilTemperature_c &&
-             boilStep.  endTemp_c() && *boilStep.  endTemp_c() > Boil::minimumBoilTemperature_c;
-   };
-
    // Remember RecipeAddition steps are numbered from 1, but lists are indexed from 0
    int const stepIndex = *step - 1;
    int lastBoilProperIndex = -1;
    for (int ii = 0; ii < numBoilSteps; ++ii) {
-      if (isBoilProper(*boilSteps[ii])) {
+      if (Boil::isBoilProper(*boilSteps[ii])) {
          lastBoilProperIndex = ii;
       }
    }
@@ -3023,11 +3017,11 @@ Recipe::BoilAdditionTiming Recipe::boilAdditionTiming(RecipeAddition const & add
    //
    double subsequentBoilProper_mins = 0.0;
    for (int ii = stepIndex + 1; ii <= lastBoilProperIndex; ++ii) {
-      if (isBoilProper(*boilSteps[ii])) {
+      if (Boil::isBoilProper(*boilSteps[ii])) {
          subsequentBoilProper_mins += boilSteps[ii]->stepTime_mins().value_or(0.0);
       }
    }
-   if (isBoilProper(*additionStep)) {
+   if (Boil::isBoilProper(*additionStep)) {
       timing.boilProper_mins =
          // No time means start of the step
          addAtTime_mins.value_or(stepLength_mins.value_or(0.0)) + subsequentBoilProper_mins;

@@ -346,3 +346,30 @@ S & operator<<(S & stream, boost::json::value const & val) {
 
 template QDebug & operator<<(QDebug & stream, boost::json::value const & val);
 template QTextStream & operator<<(QTextStream & stream, boost::json::value const & val);
+
+void JsonUtils::removeIncompleteRanges(boost::json::array & records, std::initializer_list<char const *> rangeKeys) {
+   for (auto & recordValue : records) {
+      if (!recordValue.is_object()) {
+         continue;
+      }
+      auto & record = recordValue.as_object();
+      for (char const * const rangeKey : rangeKeys) {
+         auto const range = record.find(rangeKey);
+         if (range == record.end() || !range->value().is_object()) {
+            continue;
+         }
+         auto const & rangeObject = range->value().as_object();
+         bool const hasMinimum = rangeObject.contains("minimum");
+         bool const hasMaximum = rangeObject.contains("maximum");
+         if (hasMinimum != hasMaximum) {
+            auto const name = record.find("name");
+            qWarning() <<
+               Q_FUNC_INFO << "Not writing" << rangeKey << "for" <<
+               ((name != record.end() && name->value().is_string()) ? name->value().as_string().c_str() : "record") <<
+               "as only its" << (hasMinimum ? "minimum" : "maximum") << "is set";
+            record.erase(range);
+         }
+      }
+   }
+   return;
+}

@@ -59,6 +59,12 @@ private slots:
     */
    void testBoilAdditionTiming();
 
+   /**
+    * \brief Verify that a boil step with no start/end temperature is treated as being at boiling.  See
+    *        https://github.com/Brewtarget/brewtarget/issues/1165
+    */
+   void testBoilStepsWithoutTemperatures();
+
    //! \brief Unit test: verify we can set and read inventory via Qt Properties
    void testInventory();
 
