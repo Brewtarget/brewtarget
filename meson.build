@@ -1960,6 +1960,10 @@ test('Test recipe calculations - all grain'  , testRunner, args : ['RecipeCalcTe
 test('Test post boil loss OG'                , testRunner, args : ['RecipeCalcTests', 'postBoilLossOgTest'                   ], suite : 'recipe')
 test('Test boil addition timing'             , testRunner, args : ['RecipeCalcTests', 'testBoilAdditionTiming'               ], suite : 'recipe')
 test('Test inventory'                        , testRunner, args : ['RecipeCalcTests', 'testInventory'                        ], suite : 'recipe')
+test('Test mash water volumes'               , testRunner, args : ['RecipeCalcTests', 'testMashWaterVolumes'                 ], suite : 'recipe')
+test('Test evaporation rate'                 , testRunner, args : ['RecipeCalcTests', 'testEvaporationRate'                  ], suite : 'recipe')
+test('Test equipment default volumes'        , testRunner, args : ['RecipeCalcTests', 'testEquipmentDefaultVolumes'          ], suite : 'recipe')
+test('Test mash tun heat capacity'           , testRunner, args : ['RecipeCalcTests', 'testMashTunHeatCapacity'              ], suite : 'recipe')
 test('Test dotBeer imported recipe calcs'    , testRunner, args : ['SerializationTests', 'testDotBeerImportedRecipeCalcs'    ], suite : 'serialization')
 test('Test dotBeer addition step correction' , testRunner, args : ['SerializationTests', 'testDotBeerAdditionStepCorrection' ], suite : 'serialization')
 test('Test brew log calcs'                   , testRunner, args : ['SerializationTests', 'testBrewLogCalcs'                  ], suite : 'serialization')
@@ -1969,6 +1973,12 @@ test('Test clear unused optional vessels'    , testRunner, args : ['Serializatio
 test('Test BeerXML null yield'               , testRunner, args : ['SerializationTests', 'testBeerXmlNullYield'              ], suite : 'serialization')
 test('Test NullSentinel'                     , testRunner, args : ['SerializationTests', 'testNullSentinel'                  ], suite : 'serialization')
 test('Test BeerJSON round trip'              , testRunner, args : ['SerializationTests', 'testBeerJsonRoundTrip'             ], suite : 'serialization')
+test('Test all-in-one equipment import'      , testRunner, args : ['SerializationTests', 'testAllInOneEquipmentImport'       ], suite : 'serialization')
+test('Test BeerXML foundation volume'        , testRunner, args : ['SerializationTests', 'testBeerXmlFoundationVolume'       ], suite : 'serialization')
+test('Test folder paths'                     , testRunner, args : ['SerializationTests', 'testFolderPaths'                   ], suite : 'serialization')
+test('Test equipment comparison'             , testRunner, args : ['SerializationTests', 'testEquipmentComparison'           ], suite : 'serialization')
+test('Test equipment volumes'                , testRunner, args : ['SerializationTests', 'testEquipmentVolumes'              ], suite : 'serialization')
+test('Test clear unused mash tun'            , testRunner, args : ['SerializationTests', 'testClearUnusedMashTun'            ], suite : 'serialization')
 
 #===
 

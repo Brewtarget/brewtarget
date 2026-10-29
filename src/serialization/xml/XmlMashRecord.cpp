@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/XmlMashRecord.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * serialization/xml/XmlMashRecord.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -15,7 +15,8 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "serialization/xml/XmlMashRecord.h"
 
-void XmlMashRecord::subRecordToXml(XmlRecordDefinition::FieldDefinition const & fieldDefinition,
+void XmlMashRecord::subRecordToXml(QString const & baseFolderPath,
+                                   XmlRecordDefinition::FieldDefinition const & fieldDefinition,
                                    XmlRecord const & subRecord,
                                    NamedEntity const & namedEntityToExport,
                                    QTextStream & out,
@@ -35,7 +36,7 @@ void XmlMashRecord::subRecordToXml(XmlRecordDefinition::FieldDefinition const & 
       this->writeNone(subRecord, mash, out, indentLevel, indentString);
    } else {
       for (auto child : children) {
-         subRecord.toXml(*child, out, true, indentLevel, indentString);
+         subRecord.toXml(baseFolderPath, *child, out, true, indentLevel, indentString);
       }
    }
    return;

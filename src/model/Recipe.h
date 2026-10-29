@@ -671,13 +671,54 @@ public:
     */
    double        postMashAdditionVolume_l() const;
    /**
-    * \brief
+    * \brief The volume of wort that needs to reach the boil kettle from the mash (ie after any lautering losses) to give
+    *        the target pre-boil volume, allowing for any kettle top-up and post-mash additions (see
+    *        \c postMashAdditionVolume_l).
     */
    double        targetCollectedWortVol_l() const;
    /**
-    * \brief
+    * \brief The total volume of water (strike water, plus any further infusions, plus sparge water) that needs to go
+    *        into the mash to give \c targetCollectedWortVol_l.  This is \c targetCollectedWortVol_l plus what the grain
+    *        absorbs plus what is lost in the mash/lauter tun(s) (\c Equipment::getLauteringDeadspaceLoss_l).
+    *
+    *        Note that \c Equipment::foundationVolume_l does not affect this, as it is recovered with the wort.
+    *        It only affects how the total is split between strike water and sparge water (see \c targetStrikeWater_l).
     */
    double        targetTotalMashVol_l    () const;
+   /**
+    * \brief The strike water (ie first infusion) needed for the supplied mash thickness, where the thickness is the
+    *        ratio of water to grain in the grain bed.  This is the water for the grain bed plus
+    *        \c Equipment::strikeWaterAllowance_l (ie the foundation water and mash tun loss, which have to be in the
+    *        mash tun too).
+    */
+   double        targetStrikeWater_l(double const mashThickness_LKg) const;
+   /**
+    * \brief The inverse of \c targetStrikeWater_l: for the supplied strike water volume, what is the thickness of the
+    *        grain bed?  Returns \c std::nullopt if there are no grains in the mash.
+    */
+   std::optional<double> mashThicknessForStrikeWater_LKg(double const strikeWater_l) const;
+
+   /**
+    * \brief The heat capacity (aka thermal mass) in kcal/°C of the vessel the mash happens in, for strike and infusion
+    *        temperature calculations.
+    *
+    *        We prefer the figures on the recipe's equipment (see \c Equipment::mashVesselHeatCapacity_kcalC), which,
+    *        in particular, give 0 when the mash happens in the kettle (because the strike water is heated in the same
+    *        vessel).  Only if there is no equipment, or it has a mash tun with no weight or specific heat, do we fall
+    *        back to the deprecated (BeerXML-only) TUN_WEIGHT and TUN_SPECIFIC_HEAT figures on the Mash.  If we don't
+    *        have figures from either, we return 0, ie we ignore the tun.
+    *
+    *        NB: Following BeerJSON (which dropped it), we ignore BeerXML's EQUIP_ADJUST flag (\c Mash::equipAdjust).
+    *        Previously we ignored it in some calculations but not others, which was inconsistent.
+    */
+   double mashTunHeatCapacity_kcalC() const;
+
+   /**
+    * \brief The temperature of the mash tun before the strike water goes in.  If not set on the Mash (\c tunTemp_c),
+    *        we assume it is the same as the grain (\c Mash::grainTemp_c), ie at room temperature.  If there is no mash,
+    *        we assume 20°C.
+    */
+   double mashTunTemp_c() const;
 
    double        wortFromMash_l          () const;
    double        boilVolume_l            () const;

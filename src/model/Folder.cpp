@@ -99,11 +99,33 @@ FolderCommon::~FolderCommon() = default;
 }
 
 [[nodiscard]] QString FolderCommon::subPath(QString const & basePath, QString const & fullPath) {
-   if (basePath.isEmpty() || basePath == "/" || !fullPath.startsWith(basePath)) {
+   //
+   // Folder paths come from different places (eg Folder::fullPath() and Folder::path() don't have a leading slash,
+   // whereas one typed in or read from a file might), so we ignore any leading or trailing slash when comparing.
+   //
+   // We also have to be careful here that basePath is a path prefix of fullPath, not just a string prefix.  Eg
+   // "/foo/bar" is a string prefix of "/foo/barbie", but it is not a path prefix of it, so subPath("/foo/bar",
+   // "/foo/barbie") should give "/foo/barbie" (rather than "bie", which is what we used to return).
+   //
+   auto const normalised = [](QString const & path) {
+      QString result = path.trimmed();
+      while (result.startsWith('/')) { result.remove(0, 1); }
+      while (result.endsWith  ('/')) { result.chop(1);      }
+      return result;
+   };
+   QString const base = normalised(basePath);
+   QString const full = normalised(fullPath);
+   if (base.isEmpty()) {
+      return fullPath;
+   }
+   if (full == base) {
+      return "";
+   }
+   if (!full.startsWith(base + '/')) {
       return fullPath;
    }
 
-   return fullPath.sliced(basePath.length());
+   return full.sliced(base.length());
 }
 
 void FolderCommon::commonPathPrefix(QString & baseFolderPath, QString const & folderPath) {

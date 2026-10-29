@@ -693,15 +693,15 @@ SerializationRecordDefinition const & JsonRecord::recordDefinition() const {
 
                case JsonRecordDefinition::FieldType::FolderPath:
                   Q_ASSERT(container->is_string());
-                  {
-                     QString subFolderPath{container->get_string().c_str()};
-                     QString fullFolderPath{FolderCommon::joinPaths(targetFolderPath, subFolderPath)};
-                     // We actually know folder paths are not optional (though they can be blank), but there's no harm
-                     // in using the propertyIsOptional flag.  And it might conceivably serve us in future.
-                     parsedValue = Optional::variantFromRaw(fullFolderPath, propertyIsOptional);
-                     parsedValueOk = true;
-                  }
-                  break;
+                  //
+                  // We don't put the folder path in the NamedParameterBundle, because it is relative to the folder we
+                  // are importing into, and that gets applied when we store the object in the database.  See comments
+                  // on SerializationRecord::m_folderSubPath and NamedEntityRecordBase::doSetFolderPath.
+                  //
+                  this->m_folderSubPath = QString{container->get_string().c_str()};
+                  // NB: _NOT_break here.  We already stored the value and we want to jump straight to the next run
+                  //     through the for loop.
+                  continue;
 
                case JsonRecordDefinition::FieldType::LocalId:
                   Q_ASSERT(container->is_string());

@@ -18,7 +18,8 @@
 //  • Addition schedules at every stage (mash, boil, whirlpool, dry hop, package), using `step`, `time` and `duration`
 //  • A water agent (gypsum) in the mash, and a fining agent in the boil
 //  • Base and target water profiles, with a proportion of RO water
-//  • Hop oil content, culture killer properties, and equipment with every vessel type
+//  • Hop oil content, culture killer properties, and equipment with every vessel type except a separate lauter tun
+//    (because the mash tun is also used for lautering), plus default batch size and foundation volume
 //
 {
   "DotBeer": {
@@ -395,6 +396,9 @@
         "name": "25 L All-Grain Cooler System",
         "local_id": "equip_cooler_25l",
         "folder_path": "/Equipment",
+        "default_batch_size": { "unit": "l", "value": 21 },
+        "grain_absorption_rate": { "unit": "l/kg", "value": 1.0 },
+        "foundation_volume": { "unit": "l", "value": 1.5 },
         "hlt": {
           "vessel_type": "Electric urn",
           "max_volume": { "unit": "l", "value": 30 },
@@ -403,15 +407,10 @@
         "mash_tun": {
           "vessel_type": "Insulated cooler",
           "max_volume": { "unit": "l", "value": 40 },
-          "loss": { "unit": "l", "value": 0.5 },
+          "loss": { "unit": "l", "value": 1.0 },
           "weight": { "unit": "kg", "value": 4.0 },
           "specific_heat_capacity": { "unit": "c/g·C", "value": 0.3 },
-          "grain_absorption_rate": { "unit": "l/kg", "value": 1.0 },
-          "notes": "Mash tun doubles as lauter tun."
-        },
-        "lauter_tun": {
-          "max_volume": { "unit": "l", "value": 40 },
-          "loss": { "unit": "l", "value": 0.5 }
+          "notes": "Mash tun doubles as lauter tun (hence no lauter_tun), so loss includes lautering losses.  The 1.5 l between the false bottom and the outlet is foundation_volume."
         },
         "kettle": {
           "vessel_type": "Stainless steel pot",

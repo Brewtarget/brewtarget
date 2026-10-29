@@ -166,7 +166,7 @@
           <cstring>infoButton_tunTemp</cstring>
          </property>
          <property name="text">
-          <string>Initial temperature of the mash tun.  Used in the Mash Wizard and the Mash Designer.</string>
+          <string>Initial temperature of the mash tun.  Used in the Mash Wizard and the Mash Designer, when calculating strike water temperature, to allow for the strike water heating up the mash tun.  If left blank, the tun is assumed to be at the same temperature as the grain.</string>
          </property>
         </widget>
        </item>
@@ -262,7 +262,7 @@
           <cstring>infoButton_tunMass</cstring>
          </property>
          <property name="text">
-          <string>It is better to set this directly on the Equipment.</string>
+          <string>It is better to set this on the Equipment (Mash Tun tab).  This value is only used if the recipe's equipment has a mash tun with no weight and specific heat set.  It is ignored if the equipment has no separate mash tun (ie the mash happens in the kettle), because the strike water is then heated in the same vessel as the mash.</string>
          </property>
         </widget>
        </item>
@@ -293,7 +293,7 @@
           <cstring>infoButton_tunSpHeat</cstring>
          </property>
          <property name="text">
-          <string>It is better to set this directly on the Equipment.</string>
+          <string>It is better to set this on the Equipment (Mash Tun tab).  This value is only used if the recipe's equipment has a mash tun with no weight and specific heat set.  It is ignored if the equipment has no separate mash tun (ie the mash happens in the kettle), because the strike water is then heated in the same vessel as the mash.</string>
          </property>
         </widget>
        </item>

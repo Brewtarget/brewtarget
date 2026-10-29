@@ -471,13 +471,13 @@ bool ImportExport::exportToFile(QString const & baseFolderPath, ImportExport::Li
       //    RECIPES
       //    EQUIPMENTS
       //
-      if (exportLists.hops          && exportLists.hops         ->size() > 0) { bxml.toXml(*exportLists.hops        , outFile); }
-      if (exportLists.fermentables  && exportLists.fermentables ->size() > 0) { bxml.toXml(*exportLists.fermentables, outFile); }
-      if (exportLists.yeasts        && exportLists.yeasts       ->size() > 0) { bxml.toXml(*exportLists.yeasts      , outFile); }
-      if (exportLists.miscs         && exportLists.miscs        ->size() > 0) { bxml.toXml(*exportLists.miscs       , outFile); }
-      if (exportLists.waters        && exportLists.waters       ->size() > 0) { bxml.toXml(*exportLists.waters      , outFile); }
-      if (exportLists.styles        && exportLists.styles       ->size() > 0) { bxml.toXml(*exportLists.styles      , outFile); }
-      if (exportLists.mashes        && exportLists.mashes       ->size() > 0) { bxml.toXml(*exportLists.mashes      , outFile); }
+      if (exportLists.hops          && exportLists.hops         ->size() > 0) { bxml.toXml(baseFolderPath, *exportLists.hops        , outFile); }
+      if (exportLists.fermentables  && exportLists.fermentables ->size() > 0) { bxml.toXml(baseFolderPath, *exportLists.fermentables, outFile); }
+      if (exportLists.yeasts        && exportLists.yeasts       ->size() > 0) { bxml.toXml(baseFolderPath, *exportLists.yeasts      , outFile); }
+      if (exportLists.miscs         && exportLists.miscs        ->size() > 0) { bxml.toXml(baseFolderPath, *exportLists.miscs       , outFile); }
+      if (exportLists.waters        && exportLists.waters       ->size() > 0) { bxml.toXml(baseFolderPath, *exportLists.waters      , outFile); }
+      if (exportLists.styles        && exportLists.styles       ->size() > 0) { bxml.toXml(baseFolderPath, *exportLists.styles      , outFile); }
+      if (exportLists.mashes        && exportLists.mashes       ->size() > 0) { bxml.toXml(baseFolderPath, *exportLists.mashes      , outFile); }
       //
       // BeerXML has no standalone boil or fermentation records -- they are only written as part of a recipe.  (These
       // lines used to export the mashes instead, which would crash if there were boils/fermentations but no mashes.)
@@ -490,8 +490,8 @@ bool ImportExport::exportToFile(QString const & baseFolderPath, ImportExport::Li
             Q_FUNC_INFO << "Not exporting" << exportLists.fermentations->size() << "fermentation(s) as BeerXML does "
             "not support them";
       }
-      if (exportLists.recipes       && exportLists.recipes      ->size() > 0) { bxml.toXml(*exportLists.recipes     , outFile); }
-      if (exportLists.equipments    && exportLists.equipments   ->size() > 0) { bxml.toXml(*exportLists.equipments  , outFile); }
+      if (exportLists.recipes       && exportLists.recipes      ->size() > 0) { bxml.toXml(baseFolderPath, *exportLists.recipes     , outFile); }
+      if (exportLists.equipments    && exportLists.equipments   ->size() > 0) { bxml.toXml(baseFolderPath, *exportLists.equipments  , outFile); }
 
       succeeded = true;
    } else {

@@ -91,6 +91,41 @@ private slots:
     *        against the BeerJSON schema).  Set environment variable BEERJSON_EXPORT_FILE to keep the exported file.
     */
    void testBeerJsonRoundTrip();
+
+   /**
+    * \brief Check the equipment profiles in the dotBeer AllInOneBrewingSystems.beer example are read correctly,
+    *        including mash tun foundation volume and folder paths.
+    */
+   void testAllInOneEquipmentImport();
+
+   /**
+    * \brief Check mash tun foundation volume survives a BeerXML round trip (via our extension tag)
+    */
+   void testBeerXmlFoundationVolume();
+
+   /**
+    * \brief Check folder paths: dotBeer import into a folder other than the root; BeerXML export (relative to the
+    *        folder being exported) and import (relative to the folder being imported into); and path prefixes.
+    */
+   void testFolderPaths();
+
+   /**
+    * \brief Check that two equipment records that differ only in a field added for BeerJSON (eg mash tun loss) are not
+    *        treated as duplicates (eg on import).
+    */
+   void testEquipmentComparison();
+
+   /**
+    * \brief Check vessel capacities are kept separate from default batch size and pre-boil volume in dotBeer and
+    *        BeerXML, and that equipment with no mash tun (ie where the mash happens in the kettle) is read and written
+    *        correctly in dotBeer.
+    */
+   void testEquipmentVolumes();
+
+   /**
+    * \brief Check \c Equipment::clearUnusedOptionalVessels treats the mash tun as an optional vessel
+    */
+   void testClearUnusedMashTun();
 };
 
 #endif

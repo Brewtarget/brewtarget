@@ -79,7 +79,7 @@
           <cstring>infoButton_name</cstring>
          </property>
          <property name="text">
-          <string>Use a different name for each equipment profile.  If you brew different batch sizes on the same equipment, you need a separate equipment profile for each batch size.</string>
+          <string>Use a different name for each equipment profile.</string>
          </property>
         </widget>
        </item>
@@ -105,20 +105,27 @@ Tabs</string>
         </widget>
        </item>
        <item row="3" column="2" colspan="4">
+        <widget class="QCheckBox" name="checkBox_showMashTun">
+         <property name="text">
+           <string>Mash Tun</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2" colspan="4">
         <widget class="QCheckBox" name="checkBox_showLauterTun">
          <property name="text">
            <string>Lauter Tun</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="2" colspan="4">
+       <item row="5" column="2" colspan="4">
         <widget class="QCheckBox" name="checkBox_showAgingVessel">
          <property name="text">
            <string>Aging Vessel</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="2" colspan="4">
+       <item row="6" column="2" colspan="4">
         <widget class="QCheckBox" name="checkBox_showPackagingVessel">
          <property name="text">
            <string>Packaging Vessel</string>
@@ -131,7 +138,7 @@ Tabs</string>
           <cstring>infoButton_optionalVessels</cstring>
          </property>
          <property name="text">
-          <string>These checkboxes control which vessel tabs are shown.  An asterisk after a vessel means it has a volume set, and so is used in calculations, even if its tab is hidden.  Attributes of "optional" vessels will not be saved if their volumes are left blank or set to 0.</string>
+          <string>These checkboxes control which vessel tabs are shown.  An asterisk after a vessel means it has a volume set, and so is used in calculations, even if its tab is hidden.  Attributes of "optional" vessels will not be saved if their volumes are left blank or set to 0.  If there is no mash tun, the mash happens in the boil kettle (as on all-in-one systems and for brew in a bag).  If there is no lauter tun, lautering happens wherever the mash happens.</string>
          </property>
         </widget>
        </item>
@@ -147,6 +154,59 @@ Tabs</string>
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="8" column="0">
+        <widget class="InfoButton" name="infoButton_defaultSizes"></widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="SmartLabel" name="label_fvBatchSize">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Default Batch Size</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_fvBatchSize</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_fvBatchSize">
+         <property name="toolTip">
+          <string>Volume into the fermentor that new recipes using this equipment start with</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="SmartLabel" name="label_kettleBoilSize">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Default Pre-boil Volume</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_kettleBoilSize</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_kettleBoilSize">
+         <property name="toolTip">
+          <string>Volume in the kettle at the start of the boil that new recipes using this equipment start with</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1" colspan="6">
+        <widget class="InfoText" name="infoText_defaultSizes">
+         <property name="buddy">
+          <cstring>infoButton_defaultSizes</cstring>
+         </property>
+         <property name="text">
+          <string>The batch size (ie the volume going into the fermentor) and pre-boil volume that a recipe starts with when you choose this equipment for it.  These are not the capacities of the fermentor and kettle, which are set on their own tabs.  If you brew different batch sizes on the same equipment, you can either change the batch size in each recipe, or have a separate equipment profile for each batch size.</string>
+         </property>
+        </widget>
        </item>
        <item row="8" column="5">
         <widget class="SmartLabel" name="label_topUpWater">
@@ -272,6 +332,113 @@ Tabs</string>
        </item>
        <item row="15" column="1">
         <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_mash">
+      <attribute name="title">
+       <string>Mash</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_mash">
+       <item row="0" column="0" colspan="5">
+        <widget class="QLabel" name="label_mashTabInfo">
+         <property name="text">
+          <string>These settings apply to whichever vessel the mash happens in: the mash tun or, if you do not have a separate mash tun (eg on an all-in-one system such as the Grainfather, or for brew in a bag), the boil kettle.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="InfoButton" name="infoButton_foundationVolume"></widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="SmartLabel" name="label_foundationVolume">
+         <property name="text">
+          <string>Foundation Water (recovered)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_foundationVolume</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_foundationVolume">
+         <property name="toolTip">
+          <string>Water below the false bottom or malt pipe that drains out with the wort</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_foundationVolume">
+         <property name="buddy">
+          <cstring>infoButton_foundationVolume</cstring>
+         </property>
+         <property name="text">
+          <string>The water that has to be below the false bottom (or malt pipe / basket) before the grain is covered, but which drains out with the wort and so is NOT lost.  (It is part of the Total Capacity of the mash tun or, if there is no mash tun, of the kettle.)  This is common in all-in-one systems -- eg about 3.5 liters for a Grainfather G30.  It is added to the strike water, so the mash thickness you choose applies just to the grain bed, and it is taken off the sparge water, so the total water needed does not change.  Leave at 0 if there is no such space (eg brew in a bag without a false bottom).  Other software calls this, eg, &quot;Mash-Tun Deadspace&quot; (Brewfather) or &quot;Mash Tun Addition&quot; (BeerSmith).</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="InfoButton" name="infoButton_grainAbsorption"></widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="SmartLabel" name="label_grainAbsorption">
+         <property name="text">
+          <string>Grain absorption</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_grainAbsorption</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_grainAbsorption">
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <widget class="QPushButton" name="pushButton_absorption">
+         <property name="text">
+          <string>Default Absorption</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_grainAbsorption">
+         <property name="buddy">
+          <cstring>infoButton_grainAbsorption</cstring>
+         </property>
+         <property name="text">
+          <string>How much water is permanently lost to each unit of weight of grain during mashing (ie the water the spent grain retains).  This is separate from Foundation Water and Mash Tun Loss, which are about the vessel rather than the grain.  (For an all-in-one system, anything that does not drain from the malt pipe should be included here.)  The default value is about 1.085 liters per kilogram (0.13 US gallons per pound), which is typical for a conventional mash tun.  For an all-in-one system with a malt pipe, about 0.8 liters per kilogram is more typical, and for brew in a bag with the bag squeezed, about 0.66 liters per kilogram.  It can fluctuate due to the fineness of your grind, how well the grain is drained, the malt, and other factors.  Pressing the &quot;Default Absorption&quot; button will reset the value to the default.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <spacer name="horizontalSpacer_mash">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="5" column="1">
+        <spacer name="verticalSpacer_mash">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -424,10 +591,13 @@ Tabs</string>
          </property>
         </spacer>
        </item>
+       <item row="1" column="0">
+        <widget class="InfoButton" name="infoButton_mashTunVolume"></widget>
+       </item>
        <item row="1" column="1">
         <widget class="SmartLabel" name="label_mashTunVolume">
          <property name="text">
-          <string>Volume</string>
+          <string>Total Capacity</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_mashTunVolume</cstring>
@@ -437,7 +607,7 @@ Tabs</string>
        <item row="1" column="2">
         <widget class="SmartLineEdit" name="lineEdit_mashTunVolume">
          <property name="toolTip">
-          <string>Volume of mash tun</string>
+          <string>Total usable capacity of the mash tun, including any space below the false bottom or malt pipe</string>
          </property>
         </widget>
        </item>
@@ -455,10 +625,50 @@ Tabs</string>
         <widget class="SmartLineEdit" name="lineEdit_mashTunWeight">
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="2" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_mashTunVolume">
+         <property name="buddy">
+          <cstring>infoButton_mashTunVolume</cstring>
+         </property>
+         <property name="text">
+          <string>The most the mash tun can hold, including any space below the false bottom (or malt pipe / basket) and anything that stays behind in the vessel.  The space actually available for the grain and its strike water is this volume less the Foundation Water (on the Mash tab) and Mash Tun Loss below.  If you do not have a separate mash tun -- eg on an all-in-one system such as the Grainfather, or for brew in a bag -- leave this blank (and untick Mash Tun on the General tab): the mash then happens in the boil kettle.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="InfoButton" name="infoButton_mashTunLoss"></widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="SmartLabel" name="label_mashTunLoss">
+         <property name="text">
+          <string>Mash Tun Loss (not recovered)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_mashTunLoss</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="SmartLineEdit" name="lineEdit_mashTunLoss">
+         <property name="toolTip">
+          <string>Liquid that stays behind in the mash tun and is never recovered</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_mashTunLoss">
+         <property name="buddy">
+          <cstring>infoButton_mashTunLoss</cstring>
+         </property>
+         <property name="text">
+          <string>Liquid that stays behind in the mash tun (eg below the outlet or in pipework) and never reaches the boil.  It is added to the strike water and to the total water needed.  Do not include grain absorption or anything that drains out with the wort (put those under Grain Absorption and Foundation Water on the Mash tab).  If you do not have a separate lauter tun, include your lautering losses here.  If you do have a separate lauter tun, its losses go on the Lauter Tun tab.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
         <widget class="InfoButton" name="infoButton_mashTunSpecificHeat"></widget>
        </item>
-       <item row="2" column="1">
+       <item row="9" column="1">
         <widget class="SmartLabel" name="label_mashTunSpecificHeat">
          <property name="text">
           <string>Specific Heat Capacity</string>
@@ -468,11 +678,11 @@ Tabs</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item row="9" column="2">
         <widget class="SmartLineEdit" name="lineEdit_mashTunSpecificHeat">
         </widget>
        </item>
-       <item row="3" column="1" colspan="5">
+       <item row="10" column="1" colspan="5">
         <widget class="InfoText" name="infoText_mashTunSpecificHeat">
          <property name="buddy">
           <cstring>infoButton_mashTunSpecificHeat</cstring>
@@ -482,71 +692,7 @@ Tabs</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="InfoButton" name="infoButton_mashTunGrainAbsorption"></widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="SmartLabel" name="label_mashTunGrainAbsorption">
-         <property name="text">
-          <string>Grain absorption</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_mashTunGrainAbsorption</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_mashTunGrainAbsorption">
-        </widget>
-       </item>
-       <item row="4" column="4">
-        <widget class="QPushButton" name="pushButton_absorption">
-         <property name="text">
-          <string>Default Absorption</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1" colspan="5">
-        <widget class="InfoText" name="infoText_mashTunGrainAbsorption">
-         <property name="buddy">
-          <cstring>infoButton_mashTunGrainAbsorption</cstring>
-         </property>
-         <property name="text">
-          <string>How much water is permanently lost to each unit of weight of grain during mashing. The default value is 1.0875 liters per kilogram. This can fluctuate due to the fine-ness of your grind, humidity, brand, and other factors. Pressing the "Default Absorption" button will reset the value to this default.</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="InfoButton" name="infoButton_mashTunLoss"></widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="SmartLabel" name="label_mashTunLoss">
-         <property name="text">
-          <string>Other Mashing losses</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_mashTunLoss</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_mashTunLoss">
-         <property name="toolTip">
-          <string>Mashing losses not included in grain absorption</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1" colspan="5">
-        <widget class="InfoText" name="infoText_mashTunLoss">
-         <property name="buddy">
-          <cstring>infoButton_mashTunLoss</cstring>
-         </property>
-         <property name="text">
-          <string>If you do not have a separate lauter tun, then this should include the lautering deadspace.</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
+       <item row="11" column="1">
         <widget class="QLabel" name="label_mashTunNotes">
          <property name="toolTip">
           <string>Mash Tun Notes</string>
@@ -556,7 +702,7 @@ Tabs</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="2" colspan="4">
+       <item row="11" column="2" colspan="4">
         <widget class="QTextEdit" name="textEdit_mashTunNotes">
         </widget>
        </item>
@@ -636,24 +782,40 @@ Tabs</string>
         <widget class="SmartLineEdit" name="lineEdit_lauterTunSpecificHeat">
         </widget>
        </item>
-       <item row="2" column="4">
+       <item row="3" column="0">
+        <widget class="InfoButton" name="infoButton_lauterTunDeadspaceLoss"></widget>
+       </item>
+       <item row="3" column="1">
         <widget class="SmartLabel" name="label_lauterTunDeadspaceLoss">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="text">
-          <string>Deadspace Losses</string>
+          <string>Lauter Tun Loss (not recovered)</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_lauterTunDeadspaceLoss</cstring>
          </property>
         </widget>
        </item>
-       <item row="2" column="5">
+       <item row="3" column="2">
         <widget class="SmartLineEdit" name="lineEdit_lauterTunDeadspaceLoss">
+         <property name="toolTip">
+          <string>Wort that stays behind in the lauter tun and is never recovered</string>
+         </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="4" column="1" colspan="5">
+        <widget class="InfoText" name="infoText_lauterTunDeadspaceLoss">
+         <property name="buddy">
+          <cstring>infoButton_lauterTunDeadspaceLoss</cstring>
+         </property>
+         <property name="text">
+          <string>Wort that stays behind in the lauter tun and its plumbing, and never reaches the boil.  This is only used if you have a separate lauter tun (ie the lauter tun has a volume set).  Otherwise, include lautering losses in the Mash Tun Loss on the Mash Tun tab.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
         <widget class="QLabel" name="label_lauterTunNotes">
          <property name="toolTip">
           <string>Lauter Tun Notes</string>
@@ -663,7 +825,7 @@ Tabs</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="2" colspan="4">
+       <item row="5" column="2" colspan="4">
         <widget class="QTextEdit" name="textEdit_lauterTunNotes">
         </widget>
        </item>
@@ -705,20 +867,23 @@ Tabs</string>
         </spacer>
        </item>
        <item row="1" column="0">
-        <widget class="SmartLabel" name="label_kettleBoilSize">
+        <widget class="SmartLabel" name="label_kettleVolume">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="text">
-          <string>Pre-boil Volume</string>
+          <string>Total Capacity</string>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_kettleBoilSize</cstring>
+          <cstring>lineEdit_kettleVolume</cstring>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="SmartLineEdit" name="lineEdit_kettleBoilSize">
+        <widget class="SmartLineEdit" name="lineEdit_kettleVolume">
+         <property name="toolTip">
+          <string>The most the kettle can hold (not the pre-boil volume, which is on the General tab).  If there is no separate mash tun, this is also the space available for the mash.</string>
+         </property>
         </widget>
        </item>
        <item row="2" column="0">
@@ -882,23 +1047,23 @@ Tabs</string>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="InfoButton" name="infoButton_fvBatchSize"></widget>
+        <widget class="InfoButton" name="infoButton_fvVolume"></widget>
        </item>
        <item row="2" column="1">
-        <widget class="SmartLabel" name="label_fvBatchSize">
+        <widget class="SmartLabel" name="label_fvVolume">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="text">
-          <string>Volume</string>
+          <string>Total Capacity</string>
          </property>
          <property name="buddy">
-          <cstring>lineEdit_fvBatchSize</cstring>
+          <cstring>lineEdit_fvVolume</cstring>
          </property>
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="SmartLineEdit" name="lineEdit_fvBatchSize">
+        <widget class="SmartLineEdit" name="lineEdit_fvVolume">
         </widget>
        </item>
        <item row="2" column="4">
@@ -916,12 +1081,12 @@ Tabs</string>
         </widget>
        </item>
        <item row="3" column="1" colspan="5">
-        <widget class="InfoText" name="infoText_fvBatchSize">
+        <widget class="InfoText" name="infoText_fvVolume">
          <property name="buddy">
-          <cstring>infoButton_fvBatchSize</cstring>
+          <cstring>infoButton_fvVolume</cstring>
          </property>
          <property name="text">
-          <string>This is also known as the batch size.</string>
+          <string>The most the fermentor can hold, including headspace.  This is NOT the batch size, which is set on the General tab (as Default Batch Size).</string>
          </property>
         </widget>
        </item>
@@ -1202,7 +1367,7 @@ Tabs</string>
   <tabstop>lineEdit_mashTunVolume</tabstop>
   <tabstop>lineEdit_hopUtilization</tabstop>
   <tabstop>lineEdit_boilingPoint</tabstop>
-  <tabstop>lineEdit_mashTunGrainAbsorption</tabstop>
+  <tabstop>lineEdit_grainAbsorption</tabstop>
   <tabstop>pushButton_absorption</tabstop>
   <tabstop>lineEdit_mashTunWeight</tabstop>
   <tabstop>lineEdit_mashTunSpecificHeat</tabstop>

@@ -80,7 +80,8 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
    this->postSetupUiInit({
       EDITOR_FIELD_NORM(Equipment, label_name                    , lineEdit_name                    , NamedEntity::name                      ),
       EDITOR_FIELD_NORM(Equipment, label_mashTunSpecificHeat     , lineEdit_mashTunSpecificHeat     , Equipment::mashTunSpecificHeat_calGC   ),
-      EDITOR_FIELD_NORM(Equipment, label_mashTunGrainAbsorption  , lineEdit_mashTunGrainAbsorption  , Equipment::mashTunGrainAbsorption_LKg  ),
+      EDITOR_FIELD_NORM(Equipment, label_grainAbsorption         , lineEdit_grainAbsorption         , Equipment::grainAbsorption_LKg         ),
+      EDITOR_FIELD_NORM(Equipment, label_foundationVolume        , lineEdit_foundationVolume        , Equipment::foundationVolume_l          ),
       EDITOR_FIELD_NORM(Equipment, label_hopUtilization          , lineEdit_hopUtilization          , Equipment::hopUtilization_pct       , 0),
       EDITOR_FIELD_NORM(Equipment, label_mashTunWeight           , lineEdit_mashTunWeight           , Equipment::mashTunWeight_kg            ),
       EDITOR_FIELD_NORM(Equipment, label_boilingPoint            , lineEdit_boilingPoint            , Equipment::boilingPoint_c           , 1),
@@ -101,6 +102,8 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
       EDITOR_FIELD_NORM(Equipment, label_agingVesselType         , lineEdit_agingVesselType         , Equipment::agingVesselType             ),
       EDITOR_FIELD_NORM(Equipment, label_packagingVesselType     , lineEdit_packagingVesselType     , Equipment::packagingVesselType         ),
       EDITOR_FIELD_NORM(Equipment, label_hltVolume               , lineEdit_hltVolume               , Equipment::hltVolume_l                 ),
+      EDITOR_FIELD_NORM(Equipment, label_kettleVolume            , lineEdit_kettleVolume            , Equipment::kettleVolume_l              ),
+      EDITOR_FIELD_NORM(Equipment, label_fvVolume                , lineEdit_fvVolume                , Equipment::fvVolume_l                  ),
       EDITOR_FIELD_NORM(Equipment, label_lauterTunVolume         , lineEdit_lauterTunVolume         , Equipment::lauterTunVolume_l           ),
       EDITOR_FIELD_NORM(Equipment, label_agingVesselVolume       , lineEdit_agingVesselVolume       , Equipment::agingVesselVolume_l         ),
       EDITOR_FIELD_NORM(Equipment, label_packagingVesselVolume   , lineEdit_packagingVesselVolume   , Equipment::packagingVesselVolume_l     ),
@@ -123,12 +126,14 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
    // Connect all the boxen
 #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
    connect(this->checkBox_showHlt                  , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showMashTun              , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_showLauterTun            , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_showAgingVessel          , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_showPackagingVessel      , &QCheckBox::checkStateChanged, this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_defaultEquipment         , &QCheckBox::checkStateChanged, this, &EquipmentEditor::updateDefaultEquipment   );
 #else
    connect(this->checkBox_showHlt                  , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
+   connect(this->checkBox_showMashTun              , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_showLauterTun            , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_showAgingVessel          , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
    connect(this->checkBox_showPackagingVessel      , &QCheckBox::stateChanged     , this, &EquipmentEditor::hideOrShowOptionalVessels);
@@ -158,22 +163,86 @@ bool EquipmentEditor::validateBeforeSave() {
    // accidentally entered nonsensical field values.
    //
    QString message = tr("This equipment profile may break %1's maths").arg(CONFIG_APPLICATION_NAME_UC);
-   QString inform = QString("%1%2").arg(tr("The following values are not set:")).arg(QString("<ul>"));
-   if (qFuzzyIsNull(lineEdit_mashTunVolume->getNonOptCanonicalQty()))    {
-      problems = true;
-      inform = inform + QString("<li>%1</li>").arg(tr("mash tun volume (all-grain and BIAB only)"));
-   }
-
+   QString notSet;
+   //
+   // Note that we no longer warn about the mash tun volume not being set, because that just means there is no separate
+   // mash tun, so the mash happens in the kettle (see Equipment::mashesInKettle).
+   //
    if (qFuzzyIsNull(lineEdit_fvBatchSize->getNonOptCanonicalQty())) {
-      problems = true;
-      inform = inform + QString("<li>%1</li>").arg(tr("batch size"));
+      notSet += QString("<li>%1</li>").arg(tr("default batch size"));
    }
 
    if (qFuzzyIsNull(lineEdit_hopUtilization->getOptValue<double>().value_or(0.0))) {
-      problems = true;
-      inform = inform + QString("<li>%1</li>").arg(tr("hop utilization"));
+      notSet += QString("<li>%1</li>").arg(tr("hop utilization"));
    }
-   inform = inform + QString("</ul>");
+
+   QString inform;
+   if (!notSet.isEmpty()) {
+      problems = true;
+      inform = QString("%1<ul>%2</ul>").arg(tr("The following values are not set:"), notSet);
+   }
+
+   //
+   // The foundation water and mash tun loss both take up room in the vessel where the mash happens (see comments in
+   // model/Equipment.h), so, if they fill it, there is no room for the mash.  (This is the same check as DotBeer's
+   // validate.py makes.)  This most likely means the user has put something other than the volumes we are asking for
+   // in one of these fields.  If there is no mash tun, the mash happens in the kettle, and the kettle's loss is about
+   // what is left after the boil, so is not relevant here.
+   //
+   double const mashTunVolume_l = lineEdit_mashTunVolume   ->getNonOptCanonicalQty();
+   double const foundation_l    = lineEdit_foundationVolume->getNonOptCanonicalQty();
+   if (mashTunVolume_l > 0.0) {
+      double const mashTunLoss_l = lineEdit_mashTunLoss->getNonOptCanonicalQty();
+      if (foundation_l + mashTunLoss_l >= mashTunVolume_l) {
+         problems = true;
+         inform += QString("<p>%1</p>").arg(
+            tr("Foundation water (%1) plus mash tun loss (%2) leaves no room for the mash in a mash tun with total "
+               "capacity %3.").arg(
+               Measurement::displayAmount(Measurement::Amount{foundation_l   , Measurement::Units::liters}),
+               Measurement::displayAmount(Measurement::Amount{mashTunLoss_l  , Measurement::Units::liters}),
+               Measurement::displayAmount(Measurement::Amount{mashTunVolume_l, Measurement::Units::liters})
+            )
+         );
+      }
+   } else {
+      double const kettleVolume_l = lineEdit_kettleVolume->getNonOptCanonicalQty();
+      if (kettleVolume_l > 0.0 && foundation_l >= kettleVolume_l) {
+         problems = true;
+         inform += QString("<p>%1</p>").arg(
+            tr("Foundation water (%1) leaves no room for the mash in the kettle (total capacity %2).  (As there is no "
+               "separate mash tun, the mash happens in the kettle.)").arg(
+               Measurement::displayAmount(Measurement::Amount{foundation_l  , Measurement::Units::liters}),
+               Measurement::displayAmount(Measurement::Amount{kettleVolume_l, Measurement::Units::liters})
+            )
+         );
+      }
+   }
+
+   //
+   // Capacities should be at least as big as the default volumes that go in them
+   //
+   double const kettleVolume_l = lineEdit_kettleVolume  ->getNonOptCanonicalQty();
+   double const boilSize_l     = lineEdit_kettleBoilSize->getNonOptCanonicalQty();
+   if (kettleVolume_l > 0.0 && boilSize_l > kettleVolume_l) {
+      problems = true;
+      inform += QString("<p>%1</p>").arg(
+         tr("The default pre-boil volume (%1) is more than the kettle can hold (%2).").arg(
+            Measurement::displayAmount(Measurement::Amount{boilSize_l    , Measurement::Units::liters}),
+            Measurement::displayAmount(Measurement::Amount{kettleVolume_l, Measurement::Units::liters})
+         )
+      );
+   }
+   double const fvVolume_l  = lineEdit_fvVolume   ->getNonOptCanonicalQty();
+   double const batchSize_l = lineEdit_fvBatchSize->getNonOptCanonicalQty();
+   if (fvVolume_l > 0.0 && batchSize_l > fvVolume_l) {
+      problems = true;
+      inform += QString("<p>%1</p>").arg(
+         tr("The default batch size (%1) is more than the fermentor can hold (%2).").arg(
+            Measurement::displayAmount(Measurement::Amount{batchSize_l, Measurement::Units::liters}),
+            Measurement::displayAmount(Measurement::Amount{fvVolume_l , Measurement::Units::liters})
+         )
+      );
+   }
 
    if (problems) {
       QMessageBox theQuestion;
@@ -195,12 +264,20 @@ bool EquipmentEditor::validateBeforeSave() {
    // (and thus, by default, hidden in the UI).  We are rather less worried about, say, lauter tun notes being set in
    // this circumstance, as it won't break anything.
    //
+   // (We need to reset problems here, otherwise any problem found above would mean we always showed this second box,
+   // even if there was nothing in it.)
+   problems = false;
    message = tr("Numerical values on zero-sized \"optional\" vessels will be unset or zeroed when you save");
    inform = QString("%1%2").arg(tr("The following values will be discarded:")).arg(QString("<ul>"));
    if (qFuzzyIsNull(lineEdit_hltVolume->getNonOptCanonicalQty())) {
       if (lineEdit_hltLoss               ->getNonOptCanonicalQty()            > 0.0) { problems = true; inform = inform + QString("<li>%1</li>").arg(tr("Hot liquor tank losses"                )); }
       if (lineEdit_hltWeight             ->getOptCanonicalQty().value_or(0.0) > 0.0) { problems = true; inform = inform + QString("<li>%1</li>").arg(tr("Hot liquor tank weight"                )); }
       if (lineEdit_hltSpecificHeat       ->getOptCanonicalQty().value_or(0.0) > 0.0) { problems = true; inform = inform + QString("<li>%1</li>").arg(tr("Hot liquor tank specific heat capacity")); }
+   }
+   if (qFuzzyIsNull(lineEdit_mashTunVolume->getNonOptCanonicalQty())) {
+      if (lineEdit_mashTunLoss           ->getNonOptCanonicalQty()            > 0.0) { problems = true; inform = inform + QString("<li>%1</li>").arg(tr("Mash tun losses"                       )); }
+      if (lineEdit_mashTunWeight         ->getOptCanonicalQty().value_or(0.0) > 0.0) { problems = true; inform = inform + QString("<li>%1</li>").arg(tr("Mash tun weight"                       )); }
+      if (lineEdit_mashTunSpecificHeat   ->getOptCanonicalQty().value_or(0.0) > 0.0) { problems = true; inform = inform + QString("<li>%1</li>").arg(tr("Mash tun specific heat capacity"       )); }
    }
    if (qFuzzyIsNull(lineEdit_lauterTunVolume->getNonOptCanonicalQty())) {
       if (lineEdit_lauterTunDeadspaceLoss->getNonOptCanonicalQty()            > 0.0) { problems = true; inform = inform + QString("<li>%1</li>").arg(tr("Lauter tun losses"                     )); }
@@ -213,6 +290,8 @@ bool EquipmentEditor::validateBeforeSave() {
    if (qFuzzyIsNull(lineEdit_agingVesselVolume->getNonOptCanonicalQty())) {
       if (lineEdit_agingVesselLoss       ->getNonOptCanonicalQty()            > 0.0) { problems = true; inform = inform + QString("<li>%1</li>").arg(tr("Aging vessel losses"                   )); }
    }
+
+   inform += QString("</ul>");
 
    if (problems) {
       QMessageBox theQuestion;
@@ -233,6 +312,12 @@ bool EquipmentEditor::validateBeforeSave() {
       lineEdit_hltLoss        ->setQuantity(0.0);
       lineEdit_hltWeight      ->setQuantity<double>(std::nullopt);
       lineEdit_hltSpecificHeat->setQuantity<double>(std::nullopt);
+   }
+   if (qFuzzyIsNull(lineEdit_mashTunVolume->getNonOptCanonicalQty())) {
+      lineEdit_mashTunVolume      ->setQuantity(0.0);
+      lineEdit_mashTunLoss        ->setQuantity(0.0);
+      lineEdit_mashTunWeight      ->setQuantity<double>(std::nullopt);
+      lineEdit_mashTunSpecificHeat->setQuantity<double>(std::nullopt);
    }
    if (qFuzzyIsNull(lineEdit_lauterTunVolume->getNonOptCanonicalQty())) {
       lineEdit_lauterTunVolume       ->setQuantity(0.0);
@@ -256,6 +341,7 @@ bool EquipmentEditor::validateBeforeSave() {
 void EquipmentEditor::postReadFieldsFromEditItem([[maybe_unused]] std::optional<QString> propName) {
 
    showOptionalVesselIfPresent(this->checkBox_showHlt            , m_editItem->hltVolume_l            ());
+   showOptionalVesselIfPresent(this->checkBox_showMashTun        , m_editItem->mashTunVolume_l        ());
    showOptionalVesselIfPresent(this->checkBox_showLauterTun      , m_editItem->lauterTunVolume_l      ());
    showOptionalVesselIfPresent(this->checkBox_showAgingVessel    , m_editItem->agingVesselVolume_l    ());
    showOptionalVesselIfPresent(this->checkBox_showPackagingVessel, m_editItem->packagingVesselVolume_l());
@@ -285,6 +371,11 @@ void EquipmentEditor::hideOrShowOptionalVessels() {
                                             this->checkBox_showHlt            ->isChecked());
       if (sender) { return; }
    }
+   if (!sender || sender == this->checkBox_showMashTun        ) {
+      this->tabWidget_editor->setTabVisible(this->tabWidget_editor->indexOf(this->tab_mashTun        ),
+                                            this->checkBox_showMashTun        ->isChecked());
+      if (sender) { return; }
+   }
    if (!sender || sender == this->checkBox_showLauterTun      ) {
       this->tabWidget_editor->setTabVisible(this->tabWidget_editor->indexOf(this->tab_lauterTun      ),
                                             this->checkBox_showLauterTun      ->isChecked());
@@ -308,7 +399,7 @@ void EquipmentEditor::resetAbsorption() {
       return;
    }
 
-   lineEdit_mashTunGrainAbsorption->setQuantity(PhysicalConstants::grainAbsorption_Lkg);
+   lineEdit_grainAbsorption->setQuantity(PhysicalConstants::grainAbsorption_Lkg);
    return;
 }
 

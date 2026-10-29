@@ -30,7 +30,6 @@
 #include "serialization/ImportExport.h"
 
 namespace {
-   // TODO It would be neat to be able to supply folder name as a parameter to XML/JSON import
    char const * const FOLDER_PATH_FOR_SUPPLIED_RECIPES = CONFIG_APPLICATION_NAME_LC;
 }
 
@@ -138,54 +137,54 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
 
       if (inputFiles.size() > 0) {
          //
-         // We'd like to put any newly-imported default Recipes in the same folder as the other default ones.  To do
-         // this, we first make a note of which Recipes exist already, then, after the import, any new ones need to go
-         // in the default folder.
+         // For recipes that are considered "default" ones, we want to put them in a top-level folder that corresponds
+         // to the application's name (either "brewken" or "brewtarget").
          //
-         // Starting in mid-2026, for other things (ingredients, styles, equipments, etc), we'll put them in a folder
-         // called 'New ⭐'.  (At one point, I thought about this having a different name depending on
+         // For other things (ingredients, styles, equipments, etc), we'll put them in a folder called "New ⭐".  (At one
+         // point, I thought about this having a different name depending on
          // DefaultContentLoader::availableContentVersion, but, on balance, I think that's more confusing than helpful.)
          //
-         QList<Recipe *> allRecipesBeforeImport = ObjectStoreWrapper::getAllRaw<Recipe>();
-         qDebug() << Q_FUNC_INFO << allRecipesBeforeImport.size() << "Recipes before import";
-
+         // Now that we have folder paths in dotBeer and (by extension tags) in BeerXML, we can get what we want by:
+         //    - Importing everything into the top-level folder "New ⭐"
+         //    - Looking for any recipes in the subfolder "default" (ie in folder "/New ⭐/default") and moving them to
+         //      the top-level folder "brewken" or "brewtarget".
+         //
          static QString const importFolderPath = QString{"New ⭐"};
          succeeded = ImportExport::importFromFiles(importFolderPath, inputFiles);
          if (succeeded) {
-            //
-            // Now see what Recipes exist that weren't there before the import
-            //
-            QList<Recipe *> allRecipesAfterImport = ObjectStoreWrapper::getAllRaw<Recipe>();
-            qDebug() << Q_FUNC_INFO << allRecipesAfterImport.size() << "Recipes after import";
+            QString const importedDefaultsFolderPath = FolderCommon::joinPaths(importFolderPath, "default");
+            if (Folder<Recipe> * const importedDefaultRecipesFolder = Folder<Recipe>::get(importedDefaultsFolderPath)) {
+               int const importedDefaultRecipesFolderKey = importedDefaultRecipesFolder->key();
+               QList<Recipe *> const allNewDefaultRecipes = ObjectStoreWrapper::findAllMatching<Recipe>(
+                  [importedDefaultRecipesFolderKey](Recipe const * recipe) {
+                     return recipe->containedInFolderId() == importedDefaultRecipesFolderKey;
+                  }
+               );
+               qDebug() <<
+                  Q_FUNC_INFO << "Moving" << allNewDefaultRecipes.size() << "Recipes from" <<
+                  importedDefaultsFolderPath << "to" << FOLDER_PATH_FOR_SUPPLIED_RECIPES;
+               if (!allNewDefaultRecipes.isEmpty()) {
+                  // TODO: It would be neat, at some point, to to have a mechanism for setting a property on multiple
+                  //       objects of the same type, so that we could do it in a single DB update.
+                  Folder<Recipe> const * folder = Folder<Recipe>::ensure(FOLDER_PATH_FOR_SUPPLIED_RECIPES);
+                  for (auto const recipe : allNewDefaultRecipes) {
+                     recipe->setContainedInFolderId(folder->key());
+                  }
+               }
 
-            //
-            // Once the lists are sorted, finding the difference is just a library call
-            // (Note that std::set_difference requires the longer list as its first parameter pair.)
-            //
-            std::sort(allRecipesBeforeImport.begin(), allRecipesBeforeImport.end());
-            std::sort(allRecipesAfterImport.begin(), allRecipesAfterImport.end());
-            QList<Recipe *> newlyImportedRecipes;
-            std::set_difference(allRecipesAfterImport.begin(), allRecipesAfterImport.end(),
-                                allRecipesBeforeImport.begin(), allRecipesBeforeImport.end(),
-                                std::back_inserter(newlyImportedRecipes));
-            qDebug() << Q_FUNC_INFO << newlyImportedRecipes.size() << "newly imported Recipes";
-            // TODO: It would be neat, at some point, to to have a mechanism for setting a property on multiple objects
-            //       of the same type, so that we could do it in a single DB update.
-            for (auto const recipe : newlyImportedRecipes) {
-               Folder<Recipe> const * folder = Folder<Recipe>::ensure(FOLDER_PATH_FOR_SUPPLIED_RECIPES);
-               recipe->setContainedInFolderId(folder->key());
-            }
-
-            //
-            // Now that we moved all the newly-imported Recipes, we should delete the 'New ⭐ #x' Recipe folder if it
-            // is empty.  (Any 'New ⭐ #x' Hop folder, or Yeast folder etc can be assumed either non-empty or
-            // user-created.)
-            //
-            auto const recipeImportFolder = Folder<Recipe>::get(importFolderPath);
-            qDebug() << Q_FUNC_INFO << recipeImportFolder << "has" << recipeImportFolder->numChildren() << "children";
-            if (recipeImportFolder && recipeImportFolder->empty()) {
-               qDebug() << Q_FUNC_INFO << "Deleting empty folder:" << recipeImportFolder;
-               ObjectStoreWrapper::hardDelete(*recipeImportFolder);
+               //
+               // Now that we moved the newly-imported default Recipes, we remove the "default" Recipe subfolder and
+               // then its parent (the "New ⭐" folder).  Any "New ⭐" Hop folder, or Yeast folder etc can be assumed
+               // either non-empty or user-created.
+               //
+               for (Folder<Recipe> * folder : {importedDefaultRecipesFolder, Folder<Recipe>::get(importFolderPath)}) {
+                  if (folder) {
+                     if (folder->empty()) {
+                        qDebug() << Q_FUNC_INFO << "Deleting empty folder:" << folder;
+                        ObjectStoreWrapper::hardDelete(*folder);
+                     }
+                  }
+               }
             }
 
             //

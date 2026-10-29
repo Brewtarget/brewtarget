@@ -102,7 +102,7 @@ void RecipeCalcTests::recipeCalcTest_allGrain() {
    singleConversion_sparge->setType(MashStep::Type::Infusion);
    singleConversion_sparge->setAmount_l(
       rec->boil()->preBoilSize_l().value_or(0.0)
-      + this->pimpl->m_equipFiveGalNoLoss->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) * grain_kg // Grain absorption
+      + this->pimpl->m_equipFiveGalNoLoss->grainAbsorption_LKg().value_or(Equipment::default_grainAbsorption_LKg) * grain_kg // Grain absorption
       - conversion_l // Water we already added
    );
    singleConversion->add(singleConversion_sparge);
@@ -193,10 +193,10 @@ void RecipeCalcTests::postBoilLossOgTest() {
    recLoss->setEfficiency_pct(70.0);
 
    double mashWaterNoLoss_l = *recNoLoss->nonOptBoil()->preBoilSize_l()
-      + this->pimpl->m_equipFiveGalNoLoss->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) * grain_kg
+      + this->pimpl->m_equipFiveGalNoLoss->grainAbsorption_LKg().value_or(Equipment::default_grainAbsorption_LKg) * grain_kg
    ;
    double mashWaterLoss_l = *recLoss->nonOptBoil()->preBoilSize_l()
-      + eLoss->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) * grain_kg
+      + eLoss->grainAbsorption_LKg().value_or(Equipment::default_grainAbsorption_LKg) * grain_kg
    ;
 
    // Add equipment
@@ -385,5 +385,378 @@ void RecipeCalcTests::testInventory() {
    QVERIFY2(fuzzyComp(inventory.quantity, 123.45,  0.00000001), "Wrong hop inventory amount");
    QVERIFY2(inventory.unit == &Measurement::Units::kilograms, "Wrong hop inventory units");
 
+   return;
+}
+
+void RecipeCalcTests::testMashWaterVolumes() {
+   double const grain_kg          =  5.0;
+   double const preBoil_l         = 30.0;
+   double const absorption_LKg    =  0.8;
+   double const thickness_LKg     =  2.7;
+   double const foundation_l      =  3.5;
+   double const mashTunLoss_l     =  1.0;
+   double const lauterTunLoss_l   =  2.0;
+
+   auto twoRow = this->pimpl->m_twoRow;
+   ObjectStoreWrapper::insert(twoRow);
+
+   auto makeEquipment = [&](QString const & name,
+                            double const foundationVolume_l,
+                            double const lauterTunVolume_l) {
+      auto equipment = std::make_shared<Equipment>(name);
+      equipment->setKettleBoilSize_l(preBoil_l);
+      equipment->setFvBatchSize_l(23.0);
+      equipment->setMashTunVolume_l(40.0);
+      equipment->setGrainAbsorption_LKg(absorption_LKg);
+      equipment->setFoundationVolume_l(foundationVolume_l);
+      equipment->setMashTunLoss_l(mashTunLoss_l);
+      equipment->setLauterTunVolume_l(lauterTunVolume_l);
+      equipment->setLauterTunDeadspaceLoss_l(lauterTunLoss_l);
+      equipment->setTopUpKettle_l(0.0);
+      equipment->setTopUpWater_l(0.0);
+      equipment->setKettleTrubChillerLoss_l(0.0);
+      equipment->setKettleEvaporationPerHour_l(3.0);
+      ObjectStoreWrapper::insert(equipment);
+      return equipment;
+   };
+
+   auto makeRecipe = [&](QString const & name, std::shared_ptr<Equipment> equipment) {
+      auto recipe = std::make_shared<Recipe>(name);
+      ObjectStoreWrapper::insert(recipe);
+      recipe->setBatchSize_l(23.0);
+      recipe->setEquipment(equipment);
+      auto boil = recipe->nonOptBoil();
+      boil->setPreBoilSize_l(preBoil_l);
+      boil->setBoilTime_mins(60.0);
+      auto grain = std::make_shared<RecipeAdditionFermentable>(name + " grain");
+      grain->setFermentable(twoRow.get());
+      grain->setStage(RecipeAddition::Stage::Mash);
+      grain->setQuantity(grain_kg);
+      grain->setMeasure(Measurement::PhysicalQuantity::Mass);
+      recipe->addAddition(grain);
+      return recipe;
+   };
+
+   //
+   // Single-step infusion with a batch sparge, with the strike and sparge water set the same way MashWizard does it
+   //
+   auto addMash = [&](Recipe & recipe) {
+      auto mash = std::make_shared<Mash>(recipe.name() + " mash");
+      ObjectStoreWrapper::insert(mash);
+      auto strike = std::make_shared<MashStep>("Strike");
+      strike->setType(MashStep::Type::Infusion);
+      strike->setStartTemp_c(66.0);
+      strike->setStepTime_mins(60.0);
+      strike->setAmount_l(recipe.targetStrikeWater_l(thickness_LKg));
+      mash->add(strike);
+      auto sparge = std::make_shared<MashStep>("Sparge");
+      sparge->setType(MashStep::Type::BatchSparge);
+      sparge->setStartTemp_c(76.0);
+      sparge->setStepTime_mins(15.0);
+      sparge->setAmount_l(recipe.targetTotalMashVol_l() - strike->amount_l());
+      mash->add(sparge);
+      recipe.setMash(mash);
+      return mash;
+   };
+
+   //
+   // Three set-ups: an all-in-one with no foundation volume, the same with a foundation volume (eg the space below the
+   // malt pipe), and a three-vessel set-up with a separate lauter tun.
+   //
+   auto const allInOneNoFoundation = makeEquipment("All-in-one, no foundation" , 0.0         ,  0.0);
+   auto const allInOne             = makeEquipment("All-in-one with foundation", foundation_l,  0.0);
+   auto const threeVessel          = makeEquipment("Separate lauter tun"       , 0.0         , 40.0);
+
+   QVERIFY(fuzzyComp(allInOneNoFoundation->strikeWaterAllowance_l(), mashTunLoss_l               , 0.0001));
+   QVERIFY(fuzzyComp(allInOne            ->strikeWaterAllowance_l(), mashTunLoss_l + foundation_l, 0.0001));
+   QVERIFY2(fuzzyComp(threeVessel        ->strikeWaterAllowance_l(), mashTunLoss_l               , 0.0001),
+            "Lauter tun losses are not in the mash tun, so do not belong in the strike water");
+   QVERIFY2(fuzzyComp(allInOne->getLauteringDeadspaceLoss_l(), mashTunLoss_l, 0.0001),
+            "Foundation volume is recovered, so is not a lautering loss");
+   QVERIFY2(fuzzyComp(allInOneNoFoundation->getLauteringDeadspaceLoss_l(), mashTunLoss_l, 0.0001),
+            "Lauter tun loss should be ignored when there is no lauter tun");
+   QVERIFY(fuzzyComp(threeVessel->getLauteringDeadspaceLoss_l(), mashTunLoss_l + lauterTunLoss_l, 0.0001));
+
+   auto const recipeNoFoundation = makeRecipe("Mash water - no foundation", allInOneNoFoundation);
+   auto const recipeFoundation   = makeRecipe("Mash water - foundation"   , allInOne            );
+   auto const recipeThreeVessel  = makeRecipe("Mash water - three vessel" , threeVessel         );
+   QVERIFY(fuzzyComp(recipeFoundation->grainsInMash_kg(), grain_kg, 0.0001));
+
+   //
+   // Total water is what reaches the boil, plus what the grain absorbs, plus what is lost in the vessel(s).  Foundation
+   // volume does not change it, because it is recovered.
+   //
+   double const expectedTotalAllInOne_l = preBoil_l + absorption_LKg * grain_kg + mashTunLoss_l;
+   double const expectedTotalThreeVessel_l = expectedTotalAllInOne_l + lauterTunLoss_l;
+   qDebug() <<
+      Q_FUNC_INFO << "Target total mash water: no foundation" << recipeNoFoundation->targetTotalMashVol_l() <<
+      ", foundation" << recipeFoundation->targetTotalMashVol_l() << ", three vessel" <<
+      recipeThreeVessel->targetTotalMashVol_l();
+   QVERIFY2(fuzzyComp(recipeNoFoundation->targetTotalMashVol_l(), expectedTotalAllInOne_l   , 0.0001),
+            "Mash tun loss not allowed for (exactly once) in total water");
+   QVERIFY2(fuzzyComp(recipeFoundation  ->targetTotalMashVol_l(), expectedTotalAllInOne_l   , 0.0001),
+            "Foundation volume should not change the total water needed");
+   QVERIFY2(fuzzyComp(recipeThreeVessel ->targetTotalMashVol_l(), expectedTotalThreeVessel_l, 0.0001),
+            "Lauter tun loss not allowed for (exactly once) in total water");
+   QVERIFY2(fuzzyComp(recipeFoundation->targetCollectedWortVol_l(), preBoil_l, 0.0001),
+            "Wort collected from the mash should be the pre-boil volume (no top-up or post-mash additions here)");
+
+   //
+   // Strike water: the grain bed's water plus the foundation volume plus the mash tun loss
+   //
+   QVERIFY(fuzzyComp(recipeNoFoundation->targetStrikeWater_l(thickness_LKg),
+                     thickness_LKg * grain_kg + mashTunLoss_l, 0.0001));
+   QVERIFY2(fuzzyComp(recipeFoundation->targetStrikeWater_l(thickness_LKg) -
+                      recipeNoFoundation->targetStrikeWater_l(thickness_LKg), foundation_l, 0.0001),
+            "Foundation volume should be added to the strike water");
+   QVERIFY(fuzzyComp(recipeThreeVessel->targetStrikeWater_l(thickness_LKg),
+                     thickness_LKg * grain_kg + mashTunLoss_l, 0.0001));
+   // And going back the other way should give us the same thickness (otherwise MashWizard would change the strike
+   // water each time it was run on a no-sparge mash)
+   auto const thickness = recipeFoundation->mashThicknessForStrikeWater_LKg(
+      recipeFoundation->targetStrikeWater_l(thickness_LKg)
+   );
+   QVERIFY(thickness && fuzzyComp(*thickness, thickness_LKg, 0.0001));
+
+   //
+   // Now put the water in the mashes, and check that, in all three cases, we hit the pre-boil volume.  This checks that
+   // the foundation volume is not counted as lost (it is in the mash water, but not subtracted from the wort) and that
+   // the mash/lauter losses are.
+   //
+   addMash(*recipeNoFoundation);
+   addMash(*recipeFoundation  );
+   addMash(*recipeThreeVessel );
+   for (auto const & recipe : {recipeNoFoundation, recipeFoundation, recipeThreeVessel}) {
+      qDebug() <<
+         Q_FUNC_INFO << recipe->name() << ": total mash water" << recipe->mash()->totalMashWater_l() <<
+         ", wort from mash" << recipe->wortFromMash_l() << ", boil volume" << recipe->boilVolume_l();
+      QVERIFY2(fuzzyComp(recipe->mash()->totalMashWater_l(), recipe->targetTotalMashVol_l(), 0.0001),
+               qPrintable(recipe->name()));
+      QVERIFY2(fuzzyComp(recipe->wortFromMash_l(),
+                         recipe->targetTotalMashVol_l() - absorption_LKg * grain_kg,
+                         0.0001),
+               qPrintable(recipe->name() + ": wort from mash should be total water less grain absorption"));
+      QVERIFY2(fuzzyComp(recipe->boilVolume_l(), preBoil_l, 0.0001),
+               qPrintable(recipe->name() + ": did not hit pre-boil volume"));
+   }
+
+   //
+   // With a foundation volume, the strike water is more, and the sparge water is correspondingly less
+   //
+   auto const strikeNoFoundation = recipeNoFoundation->mash()->mashSteps().first()->amount_l();
+   auto const strikeFoundation   = recipeFoundation  ->mash()->mashSteps().first()->amount_l();
+   auto const spargeNoFoundation = recipeNoFoundation->mash()->mashSteps().last ()->amount_l();
+   auto const spargeFoundation   = recipeFoundation  ->mash()->mashSteps().last ()->amount_l();
+   QVERIFY(fuzzyComp(strikeFoundation - strikeNoFoundation, foundation_l, 0.0001));
+   QVERIFY(fuzzyComp(spargeNoFoundation - spargeFoundation, foundation_l, 0.0001));
+   return;
+}
+
+void RecipeCalcTests::testEvaporationRate() {
+   auto equipment = std::make_shared<Equipment>("Evaporation Rate Test");
+   equipment->setKettleBoilSize_l(30.0);
+   equipment->setFvBatchSize_l(23.0);
+
+   // BeerXML EVAP_RATE is a percentage of the boil size (not the batch size) per hour
+   equipment->setEvapRate_pctHr(10.0);
+   QVERIFY(equipment->kettleEvaporationPerHour_l());
+   QVERIFY2(fuzzyComp(*equipment->kettleEvaporationPerHour_l(), 3.0, 0.0001),
+            "Evaporation percentage should be relative to boil size");
+
+   equipment->setKettleEvaporationPerHour_l(4.5);
+   QVERIFY(equipment->evapRate_pctHr());
+   QVERIFY(fuzzyComp(*equipment->evapRate_pctHr(), 15.0, 0.0001));
+
+   // If the boil size changes, the percentage should follow (as the liters per hour is what we actually use)
+   equipment->setKettleBoilSize_l(45.0);
+   QVERIFY(equipment->evapRate_pctHr());
+   QVERIFY(fuzzyComp(*equipment->evapRate_pctHr(), 10.0, 0.0001));
+
+   // No batch size (eg equipment read from a file with no fermentation vessel) should not give us infinity or NaN
+   equipment->setFvBatchSize_l(0.0);
+   equipment->setKettleEvaporationPerHour_l(4.0);
+   QVERIFY(equipment->evapRate_pctHr() && std::isfinite(*equipment->evapRate_pctHr()));
+
+   //
+   // If we only have the percentage (as when reading a BeerXML file written by another program, which won't have our
+   // REAL_EVAP_RATE extension tag), we should still get the liters per hour.
+   //
+   NamedParameterBundle npb{NamedParameterBundle::OperationMode::NotStrict};
+   npb.insert(PropertyNames::NamedEntity::name              , QString{"Evaporation Rate From Percentage"});
+   npb.insert(PropertyNames::Equipment::kettleBoilSize_l    , 25.0);
+   npb.insert(PropertyNames::Equipment::fvBatchSize_l       , 20.0);
+   npb.insert(PropertyNames::Equipment::evapRate_pctHr      , QVariant::fromValue(std::optional<double>{12.0}));
+   Equipment const fromPercentage{npb};
+   QVERIFY2(fromPercentage.kettleEvaporationPerHour_l(), "Evaporation rate percentage ignored");
+   QVERIFY(fuzzyComp(*fromPercentage.kettleEvaporationPerHour_l(), 3.0, 0.0001));
+   return;
+}
+
+void RecipeCalcTests::testEquipmentDefaultVolumes() {
+   //
+   // BeerXML from another program: BOIL_SIZE and BATCH_SIZE but no capacities, so the capacities are taken to be (at
+   // least) the default volumes.
+   //
+   {
+      NamedParameterBundle npb{NamedParameterBundle::OperationMode::NotStrict};
+      npb.insert(PropertyNames::NamedEntity::name          , QString{"Default Volumes - BeerXML"});
+      npb.insert(PropertyNames::Equipment::kettleBoilSize_l, 28.0);
+      npb.insert(PropertyNames::Equipment::fvBatchSize_l   , 23.0);
+      Equipment const equipment{npb};
+      QVERIFY(fuzzyComp(equipment.kettleVolume_l()  , 28.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.fvVolume_l()      , 23.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.kettleBoilSize_l(), 28.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.fvBatchSize_l()   , 23.0, 0.0001));
+      // The pre-boil volume was given (not calculated by us), so we don't know what boil time it was for, and don't
+      // adjust it
+      QVERIFY(fuzzyComp(equipment.defaultPreBoilSize_l(90.0), 28.0, 0.0001));
+   }
+   //
+   // BeerJSON: capacities but no default volumes, so the batch size falls back to the fermenter capacity, and the
+   // pre-boil volume is calculated from it.
+   //
+   {
+      NamedParameterBundle npb{NamedParameterBundle::OperationMode::NotStrict};
+      npb.insert(PropertyNames::NamedEntity::name                    , QString{"Default Volumes - BeerJSON"});
+      npb.insert(PropertyNames::Equipment::kettleVolume_l            , 40.0);
+      npb.insert(PropertyNames::Equipment::fvVolume_l                , 25.0);
+      npb.insert(PropertyNames::Equipment::kettleTrubChillerLoss_l   , 1.5);
+      npb.insert(PropertyNames::Equipment::kettleEvaporationPerHour_l, QVariant::fromValue(std::optional<double>{3.5}));
+      Equipment const equipment{npb};
+      QVERIFY(fuzzyComp(equipment.kettleVolume_l()  , 40.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.fvVolume_l()      , 25.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.fvBatchSize_l()   , 25.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.kettleBoilSize_l(), 25.0 + 1.5 + 3.5, 0.0001));
+   }
+   //
+   // dotBeer: capacities and default batch size
+   //
+   {
+      NamedParameterBundle npb{NamedParameterBundle::OperationMode::NotStrict};
+      npb.insert(PropertyNames::NamedEntity::name                    , QString{"Default Volumes - dotBeer"});
+      npb.insert(PropertyNames::Equipment::kettleVolume_l            , 40.0);
+      npb.insert(PropertyNames::Equipment::fvVolume_l                , 30.0);
+      npb.insert(PropertyNames::Equipment::fvBatchSize_l             , 21.0);
+      npb.insert(PropertyNames::Equipment::kettleTrubChillerLoss_l   , 1.0);
+      npb.insert(PropertyNames::Equipment::topUpWater_l              , QVariant::fromValue(std::optional<double>{2.0}));
+      npb.insert(PropertyNames::Equipment::kettleEvaporationPerHour_l, QVariant::fromValue(std::optional<double>{4.0}));
+      Equipment const equipment{npb};
+      QVERIFY(fuzzyComp(equipment.kettleVolume_l()  , 40.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.fvVolume_l()      , 30.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.fvBatchSize_l()   , 21.0, 0.0001));
+      // Top-up water in the fermentor means less needs to come out of the kettle
+      QVERIFY(fuzzyComp(equipment.kettleBoilSize_l(), 21.0 + 1.0 - 2.0 + 4.0, 0.0001));
+      // Longer boil, more boil-off
+      QVERIFY(fuzzyComp(equipment.calculatedPreBoilSize_l(90.0), 21.0 + 1.0 - 2.0 + 6.0, 0.0001));
+      // We calculated the default pre-boil volume, so we know how to adjust it for a recipe's boil time
+      QVERIFY(fuzzyComp(equipment.defaultPreBoilSize_l(90.0), 21.0 + 1.0 - 2.0 + 6.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.defaultPreBoilSize_l(60.0), 21.0 + 1.0 - 2.0 + 4.0, 0.0001));
+   }
+   //
+   // Loading from the database: all fields are present, so an explicit 0 (eg a capacity the user doesn't know) is
+   // respected rather than replaced by a guess.
+   //
+   {
+      NamedParameterBundle npb{NamedParameterBundle::OperationMode::NotStrict};
+      npb.insert(PropertyNames::NamedEntity::name                    , QString{"Default Volumes - explicit zeros"});
+      npb.insert(PropertyNames::Equipment::kettleBoilSize_l          , 28.0);
+      npb.insert(PropertyNames::Equipment::fvBatchSize_l             , 23.0);
+      npb.insert(PropertyNames::Equipment::kettleVolume_l            ,  0.0);
+      npb.insert(PropertyNames::Equipment::fvVolume_l                ,  0.0);
+      Equipment const equipment{npb};
+      QVERIFY(fuzzyComp(equipment.kettleVolume_l()  ,  0.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.fvVolume_l()      ,  0.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.kettleBoilSize_l(), 28.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.fvBatchSize_l()   , 23.0, 0.0001));
+   }
+   {
+      NamedParameterBundle npb{NamedParameterBundle::OperationMode::NotStrict};
+      npb.insert(PropertyNames::NamedEntity::name                    , QString{"Default Volumes - explicit zero defaults"});
+      npb.insert(PropertyNames::Equipment::kettleBoilSize_l          ,  0.0);
+      npb.insert(PropertyNames::Equipment::fvBatchSize_l             ,  0.0);
+      npb.insert(PropertyNames::Equipment::kettleVolume_l            , 40.0);
+      npb.insert(PropertyNames::Equipment::fvVolume_l                , 30.0);
+      Equipment const equipment{npb};
+      QVERIFY(fuzzyComp(equipment.kettleVolume_l()  , 40.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.fvVolume_l()      , 30.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.kettleBoilSize_l(),  0.0, 0.0001));
+      QVERIFY(fuzzyComp(equipment.fvBatchSize_l()   ,  0.0, 0.0001));
+   }
+   return;
+}
+
+void RecipeCalcTests::testMashTunHeatCapacity() {
+   auto makeEquipment = [](QString const & name, double const mashTunVolume_l) {
+      auto equipment = std::make_shared<Equipment>(name);
+      equipment->setKettleVolume_l(35.0);
+      equipment->setMashTunVolume_l(mashTunVolume_l);
+      ObjectStoreWrapper::insert(equipment);
+      return equipment;
+   };
+   auto makeRecipe = [](QString const & name, std::shared_ptr<Equipment> equipment) {
+      auto recipe = std::make_shared<Recipe>(name);
+      ObjectStoreWrapper::insert(recipe);
+      if (equipment) {
+         recipe->setEquipment(equipment);
+      }
+      auto mash = std::make_shared<Mash>(name + " mash");
+      mash->setGrainTemp_c(18.0);
+      ObjectStoreWrapper::insert(mash);
+      recipe->setMash(mash);
+      return recipe;
+   };
+
+   // A new Mash has no tun figures, rather than a tun at 0°C
+   {
+      Mash const newMash{"New Mash"};
+      QVERIFY2(!newMash.initialTunTemp_c(), "New Mash should not have a tun temperature");
+      QVERIFY(!newMash.tunWeight_kg());
+      QVERIFY(!newMash.tunSpecificHeat_calGC());
+   }
+
+   // Mash tun with weight and specific heat on the equipment: these are used in preference to the Mash ones
+   auto const withTunFigures = makeEquipment("Mash Tun With Figures", 40.0);
+   withTunFigures->setMashTunWeight_kg(5.0);
+   withTunFigures->setMashTunSpecificHeat_calGC(0.12);
+   auto const recipeEquipmentFigures = makeRecipe("Tun heat capacity - equipment", withTunFigures);
+   recipeEquipmentFigures->mash()->setTunWeight_kg(10.0);
+   recipeEquipmentFigures->mash()->setTunSpecificHeat_calGC(0.3);
+   QVERIFY(fuzzyComp(recipeEquipmentFigures->mashTunHeatCapacity_kcalC(), 5.0 * 0.12, 0.0001));
+
+   // Mash tun with no figures on the equipment: fall back to the Mash ones (eg from a BeerXML MASH record)
+   auto const withoutTunFigures = makeEquipment("Mash Tun Without Figures", 40.0);
+   auto const recipeMashFigures = makeRecipe("Tun heat capacity - mash", withoutTunFigures);
+   recipeMashFigures->mash()->setTunWeight_kg(10.0);
+   recipeMashFigures->mash()->setTunSpecificHeat_calGC(0.3);
+   QVERIFY(fuzzyComp(recipeMashFigures->mashTunHeatCapacity_kcalC(), 10.0 * 0.3, 0.0001));
+
+   // No figures anywhere: tun is ignored
+   auto const recipeNoFigures = makeRecipe("Tun heat capacity - none", withoutTunFigures);
+   QVERIFY(fuzzyComp(recipeNoFigures->mashTunHeatCapacity_kcalC(), 0.0, 0.0001));
+
+   // No equipment: use the Mash figures
+   auto const recipeNoEquipment = makeRecipe("Tun heat capacity - no equipment", nullptr);
+   recipeNoEquipment->mash()->setTunWeight_kg(10.0);
+   recipeNoEquipment->mash()->setTunSpecificHeat_calGC(0.3);
+   QVERIFY(fuzzyComp(recipeNoEquipment->mashTunHeatCapacity_kcalC(), 10.0 * 0.3, 0.0001));
+
+   //
+   // No mash tun, so the mash happens in the kettle, where the strike water is heated: no allowance for the vessel,
+   // even if the Mash has tun figures (eg from a BeerXML file).
+   //
+   auto const allInOne = makeEquipment("All-in-one For Tun Heat Capacity", 0.0);
+   allInOne->setKettleWeight_kg(29.0);
+   allInOne->setKettleSpecificHeat_calGC(0.12);
+   QVERIFY(allInOne->mashesInKettle());
+   QVERIFY(fuzzyComp(allInOne->mashVesselVolume_l(), 35.0, 0.0001));
+   auto const recipeInKettle = makeRecipe("Tun heat capacity - kettle", allInOne);
+   recipeInKettle->mash()->setTunWeight_kg(10.0);
+   recipeInKettle->mash()->setTunSpecificHeat_calGC(0.3);
+   QVERIFY(fuzzyComp(recipeInKettle->mashTunHeatCapacity_kcalC(), 0.0, 0.0001));
+
+   // Tun temperature: grain temperature unless set
+   QVERIFY(fuzzyComp(recipeInKettle->mashTunTemp_c(), 18.0, 0.0001));
+   recipeInKettle->mash()->setInitialTunTemp_c(25.0);
+   QVERIFY(fuzzyComp(recipeInKettle->mashTunTemp_c(), 25.0, 0.0001));
    return;
 }

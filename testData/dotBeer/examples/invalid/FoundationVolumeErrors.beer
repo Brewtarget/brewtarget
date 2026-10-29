@@ -1,0 +1,90 @@
+//======================================================================================================================
+// examples/invalid/FoundationVolumeErrors.beer is part of dotBeer and is copyright the following authors 2026:
+//   • Matt Young <mfsy@yahoo.com>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License (MPL), version 2.0.  If a copy of the MPL
+// was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// DotBeer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
+//======================================================================================================================
+
+// EXPECT-INVALID: /DotBeer/equipments/0 ("Overfilled Foundation"): foundation_volume (29 l) plus mash_tun loss (1 l) leaves no room for the mash in mash_tun max_volume (30 l)
+// EXPECT-INVALID: /DotBeer/equipments/1 ("Mixed Units Overfilled"): foundation_volume (8 l) plus mash_tun loss (0 l) leaves no room for the mash in mash_tun max_volume (2 gal)
+// EXPECT-INVALID: /DotBeer/equipments/2 ("Overfilled Single Vessel"): foundation_volume (35 l) leaves no room for the mash in kettle max_volume (35 l)
+// EXPECT-INVALID: /DotBeer/equipments/3/foundation_volume/value: -1 is less than the minimum of 0
+// EXPECT-INVALID: /DotBeer/equipments/4/mash_tun: Unevaluated properties are not allowed ('foundation_volume', 'grain_absorption_rate' were unexpected)
+//
+// Misuses of foundation_volume:
+//   • foundation_volume plus mash tun loss that fill the whole mash tun (which JSON Schema cannot check), including
+//     where they are in different units from max_volume
+//   • foundation_volume that fills the whole kettle, where there is no mash tun (so the mash happens in the kettle)
+//   • a negative foundation_volume
+//   • foundation_volume and grain_absorption_rate on a vessel (they are only allowed at the top level)
+{
+  "DotBeer": {
+    "version": "1.0.0",
+    "output_by": "DotBeer examples (hand-written)",
+    "timestamp": "2026-10-27T10:00:00+01:00",
+    "equipments": [
+      {
+        "name": "Overfilled Foundation",
+        "local_id": "equip_overfilled_foundation",
+        "foundation_volume": { "unit": "l", "value": 29 },
+        "mash_tun": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 1 }
+        },
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 2 }
+        }
+      },
+      {
+        "name": "Mixed Units Overfilled",
+        "local_id": "equip_mixed_units",
+        "foundation_volume": { "unit": "l", "value": 8 },
+        "mash_tun": {
+          "max_volume": { "unit": "gal", "value": 2 },
+          "loss": { "unit": "l", "value": 0 }
+        },
+        "kettle": {
+          "max_volume": { "unit": "gal", "value": 2 },
+          "loss": { "unit": "gal", "value": 0.25 }
+        }
+      },
+      {
+        "name": "Overfilled Single Vessel",
+        "local_id": "equip_overfilled_single_vessel",
+        "foundation_volume": { "unit": "l", "value": 35 },
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 35 },
+          "loss": { "unit": "l", "value": 2 }
+        }
+      },
+      {
+        "name": "Negative Foundation",
+        "local_id": "equip_negative_foundation",
+        "foundation_volume": { "unit": "l", "value": -1 },
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 2 }
+        }
+      },
+      {
+        "name": "Mash Properties On Vessel",
+        "local_id": "equip_mash_properties_on_vessel",
+        "mash_tun": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 0 },
+          "foundation_volume": { "unit": "l", "value": 3.5 },
+          "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 }
+        },
+        "kettle": {
+          "max_volume": { "unit": "l", "value": 30 },
+          "loss": { "unit": "l", "value": 2 }
+        }
+      }
+    ]
+  }
+}

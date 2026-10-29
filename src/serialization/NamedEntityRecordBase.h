@@ -54,9 +54,24 @@ namespace Serialization {
          return;
       }
 
-      //! Substantive version
+      /**
+       * \brief Substantive version
+       *
+       *        If the record in the file said what (sub)folder it was in (see \c SerializationRecord::m_folderSubPath),
+       *        then that is relative to the folder we are importing into.  Eg, if the user is importing into folder
+       *        "/foo" and the record says it is in "hum/bug", then it goes in "/foo/hum/bug".
+       *
+       *        NOTE that it is important that the record's own folder path is not also applied when the object is
+       *        constructed (ie via the \c NamedParameterBundle), as it would then get overwritten here.  (This used to
+       *        happen for dotBeer, with the result that subfolders were lost when importing into anything other than
+       *        the root folder.)
+       */
       void doSetFolderPath(QString const & targetFolderPath) requires HasFolder<NE> {
-         if (Folder<NE> * folder = Folder<NE>::ensure(targetFolderPath)) {
+         QString const fullFolderPath{
+            this->derived().m_folderSubPath ?
+               FolderCommon::joinPaths(targetFolderPath, *this->derived().m_folderSubPath) : targetFolderPath
+         };
+         if (Folder<NE> * folder = Folder<NE>::ensure(fullFolderPath)) {
             auto namedEntity = std::static_pointer_cast<NE>(this->derived().m_namedEntity);
             namedEntity->setContainedInFolder(folder);
          }

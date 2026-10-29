@@ -98,8 +98,8 @@ public:
    [[nodiscard]] static QString joinPaths(QString const & leftPath, QString const & rightPath);
 
    /**
-    * Converts \c fullPath to a sub-path of \c basePath if \c basePath is a prefix of \c fullPath.  Otherwise returns
-    * \c fullPath unchanged.
+    * Converts \c fullPath to a sub-path of \c basePath if \c basePath is a path prefix of \c fullPath.  Otherwise
+    * returns \c fullPath unchanged.  NB: "/foo/bar" is a path prefix of "/foo/bar/hum" but not of "/foo/barbie".
     *
     * @param basePath
     * @param fullPath

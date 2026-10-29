@@ -881,7 +881,7 @@ public:
       } else {
          double const waterAdded_l = this->m_self.mash()->totalMashWater_l();
          double const absorption_lKg{
-            equipment ? equipment->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) :
+            equipment ? equipment->grainAbsorption_LKg().value_or(Equipment::default_grainAbsorption_LKg) :
                         PhysicalConstants::grainAbsorption_Lkg
          };
 
@@ -3349,16 +3349,21 @@ double Recipe::targetCollectedWortVol_l() const {
    double const postMashAdditionVolume_l = this->postMashAdditionVolume_l();
 
    bool const hasEquipment = this->equipment() ? true : false;
-   double const lauteringDeadspaceLoss_l = hasEquipment ? this->equipment()->getLauteringDeadspaceLoss_l() : 0.0;
    double const topUpKettle_l =
       hasEquipment ? this->equipment()->topUpKettle_l().value_or(Equipment::default_topUpKettle_l) : 0.0;
 
-   double const returnValue = boilSize_liters - lauteringDeadspaceLoss_l - topUpKettle_l - postMashAdditionVolume_l;
+   //
+   // NOTE: We used to subtract Equipment::getLauteringDeadspaceLoss_l() here.  But this is the wrong way round: wort
+   // that is lost in the mash/lauter tun means we need to collect _more_ from the mash, not less.  (MashWizard then
+   // added the loss back on when working out sparge water, so the two cancelled out, and the loss was never actually
+   // allowed for.  Thus the pre-boil volume came out short by the amount of the loss.)  Now, this function is about
+   // what reaches the kettle, and targetTotalMashVol_l adds on the losses.
+   //
+   double const returnValue = boilSize_liters - topUpKettle_l - postMashAdditionVolume_l;
 
    qDebug() <<
       Q_FUNC_INFO << "boilSize_liters:" << boilSize_liters << ", postMashAdditionVolume_l:" <<
-      postMashAdditionVolume_l << ", lauteringDeadspaceLoss_l:" << lauteringDeadspaceLoss_l << ", topUpKettle_l:" <<
-      topUpKettle_l << ", returnValue:" << returnValue;
+      postMashAdditionVolume_l << ", topUpKettle_l:" << topUpKettle_l << ", returnValue:" << returnValue;
 
    if (returnValue < 0.0) {
       //
@@ -3377,16 +3382,56 @@ double Recipe::targetTotalMashVol_l() const {
    bool const hasEquipment = this->equipment() ? true : false;
    double const absorption_lKg =
       hasEquipment ?
-         equipment()->mashTunGrainAbsorption_LKg().value_or(Equipment::default_mashTunGrainAbsorption_LKg) :
+         equipment()->grainAbsorption_LKg().value_or(Equipment::default_grainAbsorption_LKg) :
          PhysicalConstants::grainAbsorption_Lkg;
+   double const lauteringDeadspaceLoss_l = hasEquipment ? this->equipment()->getLauteringDeadspaceLoss_l() : 0.0;
 
    double const grainsInMash_kg = this->grainsInMash_kg();
 
-   double const returnValue = targetCollectedWortVol_l + absorption_lKg * grainsInMash_kg;
+   //
+   // NB: We do not add on Equipment::foundationVolume_l here, because it is recovered with the wort.  See
+   // comments in model/Equipment.h.
+   //
+   double const returnValue = targetCollectedWortVol_l + absorption_lKg * grainsInMash_kg + lauteringDeadspaceLoss_l;
    qDebug() <<
       Q_FUNC_INFO << "targetCollectedWortVol_l:" << targetCollectedWortVol_l << ", absorption_lKg:" <<
-      absorption_lKg << ", grainsInMash_kg:" << grainsInMash_kg << ", returnValue:" << returnValue;
+      absorption_lKg << ", grainsInMash_kg:" << grainsInMash_kg << ", lauteringDeadspaceLoss_l:" <<
+      lauteringDeadspaceLoss_l << ", returnValue:" << returnValue;
    return returnValue;
+}
+
+double Recipe::targetStrikeWater_l(double const mashThickness_LKg) const {
+   double const strikeWaterAllowance_l = this->equipment() ? this->equipment()->strikeWaterAllowance_l() : 0.0;
+   return mashThickness_LKg * this->grainsInMash_kg() + strikeWaterAllowance_l;
+}
+
+std::optional<double> Recipe::mashThicknessForStrikeWater_LKg(double const strikeWater_l) const {
+   double const grainsInMash_kg = this->grainsInMash_kg();
+   if (grainsInMash_kg <= 0.0) {
+      return std::nullopt;
+   }
+   double const strikeWaterAllowance_l = this->equipment() ? this->equipment()->strikeWaterAllowance_l() : 0.0;
+   return (strikeWater_l - strikeWaterAllowance_l) / grainsInMash_kg;
+}
+
+double Recipe::mashTunHeatCapacity_kcalC() const {
+   if (auto const equipment = this->equipment()) {
+      if (auto const heatCapacity_kcalC = equipment->mashVesselHeatCapacity_kcalC()) {
+         return *heatCapacity_kcalC;
+      }
+   }
+   if (auto const mash = this->mash()) {
+      // kg × cal/(g·°C) = kcal/°C
+      return mash->tunWeight_kg().value_or(0.0) * mash->tunSpecificHeat_calGC().value_or(0.0);
+   }
+   return 0.0;
+}
+
+double Recipe::mashTunTemp_c() const {
+   if (auto const mash = this->mash()) {
+      return mash->initialTunTemp_c().value_or(mash->grainTemp_c());
+   }
+   return 20.0;
 }
 
 void Recipe::hardDeleteOwnedEntities() {

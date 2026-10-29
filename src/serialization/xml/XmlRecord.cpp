@@ -19,6 +19,7 @@
 #include <QDebug>
 #include <QXmlStreamWriter>
 
+#include "model/Folder.h"
 #include "serialization/xml/XmlCoding.h"
 #include "utils/OptionalHelpers.h"
 #include "utils/ObjectAddressStringMapping.h"
@@ -451,6 +452,16 @@ bool XmlRecord::load(XmlDocument & document,
                      }
                      break;
 
+                  case XmlRecordDefinition::FieldType::FolderPath:
+                     //
+                     // As for JSON, we don't put the folder path in the NamedParameterBundle, because it is relative
+                     // to the folder we are importing into, and that gets applied when we store the object in the
+                     // database.  See comments on SerializationRecord::m_folderSubPath and
+                     // NamedEntityRecordBase::doSetFolderPath.
+                     //
+                     this->m_folderSubPath = static_cast<QString>(value).trimmed();
+                     continue; // NB: _NOT_break here.  We want to jump straight to the next run through the for loop.
+
                   case XmlRecordDefinition::FieldType::RequiredConstant:
                      //
                      // This is a field that is required to be in the XML, but whose value we don't need (and for which
@@ -613,7 +624,8 @@ bool XmlRecord::load(XmlDocument & document,
    return true;
 }
 
-void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
+void XmlRecord::toXml(QString const & baseFolderPath,
+                      NamedEntity const & namedEntityToExport,
                       QTextStream & out,
                       bool const includeRecordNameTags,
                       int indentLevel,
@@ -716,7 +728,8 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
 
             if (childNamedEntity) {
                // For a "base record", having numContainingTags == -1 means the fourth parameter here is still correct!
-               subRecord->toXml(*childNamedEntity,
+               subRecord->toXml(baseFolderPath,
+                                *childNamedEntity,
                                 out,
                                 numContainingTags >= 0,
                                 indentLevel + numContainingTags + 1,
@@ -732,7 +745,8 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
             //
             // Instead, we get the subclass of this class (eg XmlRecipeRecord) to do the work
             //
-            this->subRecordToXml(fieldDefinition,
+            this->subRecordToXml(baseFolderPath,
+                                 fieldDefinition,
                                  *subRecord,
                                  namedEntityToExport,
                                  out,
@@ -876,6 +890,26 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
                }
                break;
 
+            case XmlRecordDefinition::FieldType::FolderPath:
+               //
+               // As in JsonRecord::insertValue, we write the folder path relative to baseFolderPath.  If the user right
+               // clicked on, say, folder /foo/bar and clicked "Export", then an element with folder path "/foo/bar"
+               // should be written with no folder path and an element with folder path "/foo/bar/hum/bug" should be
+               // written with path "hum/bug".  Since this is an extension tag, we don't write it at all if there is
+               // no (sub)folder to write.
+               //
+               if (Optional::removeOptionalWrapperIfPresent<QString>(value, propertyIsOptional)) {
+                  QString const subFolderPath = FolderCommon::subPath(baseFolderPath, value.toString().trimmed());
+                  if (subFolderPath.isEmpty() || subFolderPath == "/") {
+                     continue;
+                  }
+                  QXmlStreamWriter qXmlStreamWriter(&valueAsText);
+                  qXmlStreamWriter.writeCharacters(subFolderPath);
+               } else {
+                  continue;
+               }
+               break;
+
             case XmlRecordDefinition::FieldType::Unit:
                // It's definitely a coding error if there is no mapping for a field declared as Unit!
                Q_ASSERT(std::holds_alternative<Measurement::UnitStringMapping const *>(fieldDefinition.valueDecoder));
@@ -929,7 +963,8 @@ void XmlRecord::toXml(NamedEntity const & namedEntityToExport,
    return;
 }
 
-void XmlRecord::subRecordToXml(XmlRecordDefinition::FieldDefinition const & fieldDefinition,
+void XmlRecord::subRecordToXml([[maybe_unused]] QString const & baseFolderPath,
+                               XmlRecordDefinition::FieldDefinition const & fieldDefinition,
                                [[maybe_unused]] XmlRecord const & subRecord,
                                NamedEntity const & namedEntityToExport,
                                [[maybe_unused]] QTextStream & out,

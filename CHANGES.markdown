@@ -24,6 +24,14 @@ Various improvements, including:
 * Salts (aka water agents) are now a subcategory of Miscellaneous ingredients
 * Hops now support optional min/max values for alpha acid and beta acid
 * Import to folder [1133]https://github.com/Brewtarget/brewtarget/issues/1133
+* Equipment: new "Foundation Water" field for the mash tun, for the space below a false bottom or malt pipe (eg in
+  all-in-one systems) that has to be filled before the grain is covered but which drains out with the wort
+* Mash and lauter tun losses are now correctly allowed for in the mash wizard's total water
+* BeerXML export and import now keep folders (via an extension tag)
+* Additional ingredients, including malts from The Swaen malthouse in The Netherlands (https://theswaen.com/)
+* Equipment profiles for several popular all-in-one (single vessel) electric brewing systems
+* When a recipe's pre-boil size is set from equipment whose default pre-boil volume was calculated (eg on import from
+  dotBeer or BeerJSON), it is now adjusted for the recipe's boil time
 
 ### Bug Fixes
 * Exporting a style with no style letter to BeerJSON creates a file that cannot be imported [1121](https://github.com/Brewtarget/brewtarget/issues/1121)

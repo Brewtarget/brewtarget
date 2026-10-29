@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * serialization/xml/BeerXml.h is part of Brewtarget, and is copyright the following authors 2020-2022:
+ * serialization/xml/BeerXml.h is part of Brewtarget, and is copyright the following authors 2020-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *
@@ -49,8 +49,12 @@ public:
 
    /**
     * \brief Write a list of objects to the supplied file
+    *
+    * \param baseFolderPath Folder paths (which we write in our FOLDER_PATH extension tag) are written relative to this.
+    *                       Eg if the user right-clicked on folder "/foo/bar" and chose "Export", then an object in
+    *                       "/foo/bar/hum/bug" will be written with folder path "hum/bug".  Pass "" to write full paths.
     */
-   template<class NE> void toXml(QList<NE const *> const & nes, QFile & outFile) const;
+   template<class NE> void toXml(QString const & baseFolderPath, QList<NE const *> const & nes, QFile & outFile) const;
 
    /**
     * Import ingredients, recipes, etc from BeerXML documents.

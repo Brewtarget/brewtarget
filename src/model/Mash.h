@@ -49,14 +49,14 @@ class MashTableModel;
 #define AddPropertyName(property) namespace PropertyNames::Mash { inline BtStringConst const property{#property}; }
 AddPropertyName(equipAdjust              )
 AddPropertyName(grainTemp_c              )
-AddPropertyName(mashTunSpecificHeat_calGC)
-AddPropertyName(mashTunWeight_kg         )
+AddPropertyName(tunSpecificHeat_calGC)
+AddPropertyName(tunWeight_kg         )
 AddPropertyName(notes                    )
 AddPropertyName(ph                       )
 AddPropertyName(spargeTemp_c             )
 AddPropertyName(totalMashWater_l         )
 AddPropertyName(totalTime_mins           )
-AddPropertyName(tunTemp_c                )
+AddPropertyName(initialTunTemp_c                )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -89,14 +89,14 @@ public:
    static QString localisedName();
    static QString localisedName_equipAdjust              ();
    static QString localisedName_grainTemp_c              ();
-   static QString localisedName_mashTunSpecificHeat_calGC();
-   static QString localisedName_mashTunWeight_kg         ();
+   static QString localisedName_tunSpecificHeat_calGC();
+   static QString localisedName_tunWeight_kg         ();
    static QString localisedName_notes                    ();
    static QString localisedName_ph                       ();
    static QString localisedName_spargeTemp_c             ();
    static QString localisedName_totalMashWater_l         ();
    static QString localisedName_totalTime_mins           ();
-   static QString localisedName_tunTemp_c                ();
+   static QString localisedName_initialTunTemp_c                ();
 
    //
    // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
@@ -127,17 +127,54 @@ public:
    //! \brief The notes.
    Q_PROPERTY(QString               notes                     READ notes                     WRITE setNotes  )
 
-   //! \brief The initial tun temp in Celsius.  ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
-   Q_PROPERTY(std::optional<double> tunTemp_c                 READ tunTemp_c                 WRITE setTunTemp_c  )
+   /**
+    * \brief The initial tun temp in Celsius.  ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
+    *
+    *        If not set, we assume the tun is at the same temperature as the grain (see \c Recipe::mashTunTemp_c).  This
+    *        only matters for the first infusion, and only when the mash happens in a separate mash tun with a known
+    *        weight and specific heat.  It is, in effect, the "start temperature" of the tun, just as \c grainTemp_c is
+    *        for the grain, and is quite separate from the start temperature of the first mash step (which is the
+    *        target temperature of the mash after the strike water has been added).
+    *
+    *        BeerJSON dropped this field, along with TUN_WEIGHT, TUN_SPECIFIC_HEAT and EQUIP_ADJUST, presumably because
+    *        they describe the equipment and how it is used on the day rather than the recipe.
+    */
+   Q_PROPERTY(std::optional<double> initialTunTemp_c          READ initialTunTemp_c          WRITE setInitialTunTemp_c)
    //! \brief The sparge temp in C.             ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
    Q_PROPERTY(std::optional<double> spargeTemp_c              READ spargeTemp_c              WRITE setSpargeTemp_c  )
    //! \brief The pH of the sparge.             ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
    Q_PROPERTY(std::optional<double> ph                        READ ph                        WRITE setPh  )
-   //! \brief The mass of the tun in kg.        ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
-   Q_PROPERTY(std::optional<double> mashTunWeight_kg          READ mashTunWeight_kg          WRITE setTunWeight_kg  )
-   //! \brief The tun's specific heat in kcal/(g*C).   ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
-   Q_PROPERTY(std::optional<double> mashTunSpecificHeat_calGC READ mashTunSpecificHeat_calGC WRITE setMashTunSpecificHeat_calGC  )
-   //! \brief Whether to adjust strike temperatures to account for the tun.   ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
+   /**
+    * \brief DEPRECATED: Retained only for BeerXML support.  Use \c Equipment::mashTunWeight_kg instead.
+    *
+    *        The mass of the tun in kg.  ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
+    *
+    *        The tun is part of the equipment, not the mash, and that's where BeerJSON and dotBeer put its weight.  We
+    *        keep this so that we can read and write the TUN_WEIGHT field of BeerXML MASH records, and, in calculations,
+    *        only use it as a fallback when the recipe's equipment has a mash tun but no weight for it -- see
+    *        \c Recipe::mashTunHeatCapacity_kcalC.
+    */
+   Q_PROPERTY(std::optional<double> tunWeight_kg          READ tunWeight_kg          WRITE setTunWeight_kg  )
+   /**
+    * \brief DEPRECATED: Retained only for BeerXML support.  Use \c Equipment::mashTunSpecificHeat_calGC instead.
+    *
+    *        The tun's specific heat in cal/(g·°C).   ⮜⮜⮜ Optional in BeerXML.  Not part of BeerJSON. ⮞⮞⮞
+    *
+    *        See comment on \c tunWeight_kg.
+    */
+   Q_PROPERTY(std::optional<double> tunSpecificHeat_calGC READ tunSpecificHeat_calGC WRITE setTunSpecificHeat_calGC  )
+   /**
+    * \brief DEPRECATED: Retained only for BeerXML support, and not used in calculations.
+    *
+    *        Whether to adjust strike temperatures to account for the tun.   ⮜⮜⮜ Optional in BeerXML.  Not part of
+    *        BeerJSON. ⮞⮞⮞
+    *
+    *        We always take account of the tun, where we have figures for it (and where the mash happens in a separate
+    *        mash tun -- see \c Recipe::mashTunHeatCapacity_kcalC).  Previously we ignored this flag for infusions but
+    *        honoured it for decoctions, which was inconsistent.
+    *
+    *        TODO: Since we don't use this field, I think we can drop it (here and from the database).
+    */
    Q_PROPERTY(bool                  equipAdjust               READ equipAdjust               WRITE setEquipAdjust  )
 
    //! \brief The total water that went into the mash (ie all the mash water, sparge and strike) in liters. Calculated.
@@ -152,21 +189,21 @@ public:
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    double                grainTemp_c              () const;
    QString               notes                    () const;
-   std::optional<double> tunTemp_c                () const;
+   std::optional<double> initialTunTemp_c                () const;
    std::optional<double> spargeTemp_c             () const;
    std::optional<double> ph                       () const;
-   std::optional<double> mashTunWeight_kg         () const;
-   std::optional<double> mashTunSpecificHeat_calGC() const;
+   std::optional<double> tunWeight_kg         () const;
+   std::optional<double> tunSpecificHeat_calGC() const;
    bool                  equipAdjust              () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setGrainTemp_c              (double                const   val);
    void setNotes                    (QString               const & val);
-   void setTunTemp_c                (std::optional<double> const   val);
+   void setInitialTunTemp_c                (std::optional<double> const   val);
    void setSpargeTemp_c             (std::optional<double> const   val);
    void setPh                       (std::optional<double> const   val);
    void setTunWeight_kg             (std::optional<double> const   val);
-   void setMashTunSpecificHeat_calGC(std::optional<double> const   val);
+   void setTunSpecificHeat_calGC(std::optional<double> const   val);
    void setEquipAdjust              (bool                  const   val);
 
    // Calculated getters
@@ -193,11 +230,11 @@ protected:
 private:
    double                m_grainTemp_c              ;
    QString               m_notes                    ;
-   std::optional<double> m_tunTemp_c                ;
+   std::optional<double> m_initialTunTemp_c                ;
    std::optional<double> m_spargeTemp_c             ;
    std::optional<double> m_ph                       ;
-   std::optional<double> m_mashTunWeight_kg         ;
-   std::optional<double> m_mashTunSpecificHeat_calGC;
+   std::optional<double> m_tunWeight_kg         ;
+   std::optional<double> m_tunSpecificHeat_calGC;
    bool                  m_equipAdjust              ;
 };
 

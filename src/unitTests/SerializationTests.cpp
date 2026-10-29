@@ -23,17 +23,21 @@
 #include <QDir>
 #include <QFile>
 #include <QString>
+#include <QRegularExpression>
 #include <QTextStream>
 #include <QtTest/QtTest>
 
 #include <boost/json.hpp>
 
+#include "config.h"
+#include "database/DefaultContentLoader.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Boil.h"
 #include "model/BrewLog.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
+#include "model/Folder.h"
 #include "model/Hop.h"
 #include "model/Mash.h"
 #include "model/Misc.h"
@@ -459,7 +463,7 @@ void SerializationTests::testBeerXmlNullYield() {
          [](std::shared_ptr<Fermentable> f) { return f->name() == "Munich Malt"; }
       );
       QVERIFY(munich && !munich->fineGrindYield_pct() && munich->potentialYield_sg());
-      BeerXML::getInstance().toXml(QList<Fermentable const *>{noYield.get(), munich.get()}, beerXmlFile);
+      BeerXML::getInstance().toXml("", QList<Fermentable const *>{noYield.get(), munich.get()}, beerXmlFile);
    }
    QString beerXml;
    {
@@ -548,5 +552,455 @@ void SerializationTests::testBeerJsonRoundTrip() {
    bool const reimportOk = BeerJson::import("", exportFilePath, messageStream);
    messageStream.flush();
    QVERIFY2(reimportOk, qPrintable(QString{"Could not re-import exported file %1: %2"}.arg(exportFilePath).arg(message)));
+   return;
+}
+namespace {
+   //! \brief Write \c contents to a file in the test temporary directory and return its path
+   QString writeTempFile(QString const & fileName, QString const & contents) {
+      QString const filePath = UnitTests::TestEnvironment::tempDir().filePath(fileName);
+      QFile file{filePath};
+      if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+         file.write(contents.toUtf8());
+      }
+      return filePath;
+   }
+
+   QString readFile(QString const & filePath) {
+      QFile file{filePath};
+      if (!file.open(QIODevice::ReadOnly)) {
+         return "";
+      }
+      return QString::fromUtf8(file.readAll());
+   }
+
+   std::shared_ptr<Equipment> equipmentNamed(QString const & name) {
+      return ObjectStoreWrapper::findFirstMatching<Equipment>(
+         [&name](std::shared_ptr<Equipment> e) { return e->name() == name; }
+      );
+   }
+}
+
+void SerializationTests::testAllInOneEquipmentImport() {
+   // AllInOneBrewingSystems.beer was imported (into the root folder) in initTestClass
+   auto const g30 = equipmentNamed("Grainfather G30 (v3)");
+   QVERIFY2(g30, "Grainfather G30 not imported from AllInOneBrewingSystems.beer");
+   QVERIFY(fuzzyComp(g30->foundationVolume_l()         , 3.5, 0.0001));
+   QVERIFY(g30->grainAbsorption_LKg() && fuzzyComp(*g30->grainAbsorption_LKg(), 0.8, 0.0001));
+   // There's no mash tun in the file, so the mash happens in the kettle
+   QVERIFY(fuzzyComp(g30->mashTunVolume_l()            ,  0.0, 0.0001));
+   QVERIFY(fuzzyComp(g30->mashTunLoss_l()              ,  0.0, 0.0001));
+   QVERIFY(g30->mashesInKettle());
+   QVERIFY(fuzzyComp(g30->kettleVolume_l()             , 30.0, 0.0001));
+   QVERIFY(fuzzyComp(g30->mashVesselVolume_l()         , 30.0, 0.0001));
+   QVERIFY(g30->mashVesselHeatCapacity_kcalC() && fuzzyComp(*g30->mashVesselHeatCapacity_kcalC(), 0.0, 0.0001));
+   QVERIFY(fuzzyComp(g30->strikeWaterAllowance_l()     ,  3.5, 0.0001));
+   QVERIFY(fuzzyComp(g30->getLauteringDeadspaceLoss_l(),  0.0, 0.0001));
+   // Default batch size is in the file; default pre-boil volume is calculated from it plus kettle loss (2 l) plus an
+   // hour's boil-off (3 l/h)
+   QVERIFY(fuzzyComp(g30->fvBatchSize_l()              , 25.0, 0.0001));
+   QVERIFY(fuzzyComp(g30->kettleBoilSize_l()           , 30.0, 0.0001));
+   // There's no fermentation vessel in the file, so we use the batch size as the best guess for its capacity
+   QVERIFY(fuzzyComp(g30->fvVolume_l()                 , 25.0, 0.0001));
+   // NB: Folder paths we get back from objects don't have a leading slash
+   QCOMPARE(g30->containedInFolderPath(), QString{"All-in-one systems/Grainfather"});
+
+   auto const g70 = equipmentNamed("Grainfather G70 (v2)");
+   QVERIFY(g70 && fuzzyComp(g70->foundationVolume_l(), 6.8, 0.0001));
+   // Default batch size is capped below the manufacturer's 58 L so that the pre-boil volume fits in the 60 L kettle
+   QVERIFY(fuzzyComp(g70->fvBatchSize_l(), 52.5, 0.0001));
+
+   //
+   // For every profile in the file, the default pre-boil volume we calculate (for a 60 minute boil) should fit in the
+   // kettle.  (DotBeer's validate.py makes the same check.)
+   //
+   int numAllInOne = 0;
+   for (Equipment const * equipment : ObjectStoreWrapper::getAllRaw<Equipment>()) {
+      if (!equipment->containedInFolderPath().startsWith("All-in-one systems")) {
+         continue;
+      }
+      ++numAllInOne;
+      QVERIFY2(equipment->kettleBoilSize_l() <= equipment->kettleVolume_l() + 0.0001,
+               qPrintable(QString("%1: default pre-boil %2 L is more than kettle volume %3 L").arg(
+                  equipment->name()).arg(equipment->kettleBoilSize_l()).arg(equipment->kettleVolume_l())));
+   }
+   QVERIFY(numAllInOne >= 27);
+
+   // Explicitly 0 in the file
+   auto const g40 = equipmentNamed("Grainfather G40");
+   QVERIFY(g40 && fuzzyComp(g40->foundationVolume_l(), 0.0, 0.0001));
+
+   // Not in the file
+   auto const brewMonk = equipmentNamed("Brew Monk B40");
+   QVERIFY(brewMonk && fuzzyComp(brewMonk->foundationVolume_l(), 0.0, 0.0001));
+
+   // US units should be converted
+   auto const anvil = equipmentNamed("Anvil Foundry 18 gal");
+   QVERIFY(anvil && fuzzyComp(anvil->kettleVolume_l(), 18.0 * 3.785411784, 0.0001));
+   return;
+}
+
+void SerializationTests::testBeerXmlFoundationVolume() {
+   auto equipment = std::make_shared<Equipment>("BeerXML Foundation Volume Test");
+   equipment->setKettleBoilSize_l(30.0);
+   equipment->setFvBatchSize_l(23.0);
+   equipment->setMashTunVolume_l(30.0);
+   equipment->setFoundationVolume_l(3.5);
+   equipment->setMashTunLoss_l(0.25);
+   ObjectStoreWrapper::insert(equipment);
+
+   QString const filePath = UnitTests::TestEnvironment::tempDir().filePath("foundationVolume.xml");
+   {
+      QFile beerXmlFile{filePath};
+      QVERIFY(beerXmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate));
+      BeerXML::getInstance().createXmlFile(beerXmlFile);
+      BeerXML::getInstance().toXml("", QList<Equipment const *>{equipment.get()}, beerXmlFile);
+   }
+   QString beerXml = readFile(filePath);
+   QVERIFY2(beerXml.contains("<FOUNDATION_VOLUME_L>3.5</FOUNDATION_VOLUME_L>"), qPrintable(beerXml));
+   QVERIFY2(beerXml.contains("<MASH_TUN_LOSS_L>0.25</MASH_TUN_LOSS_L>"), qPrintable(beerXml));
+   // Equipment is in the root folder, so we shouldn't write a folder path
+   QVERIFY2(!beerXml.contains("FOLDER_PATH"), qPrintable(beerXml));
+
+   // Rename so the re-read equipment isn't treated as a duplicate
+   beerXml.replace("BeerXML Foundation Volume Test", "BeerXML Foundation Volume Test Reread");
+   writeTempFile("foundationVolume.xml", beerXml);
+   QString message;
+   QTextStream messageStream{&message};
+   QVERIFY2(BeerXML::getInstance().importFromXML("", filePath, messageStream), qPrintable(message));
+   auto const reread = equipmentNamed("BeerXML Foundation Volume Test Reread");
+   QVERIFY2(reread, "Equipment not read back from BeerXML");
+   QVERIFY(fuzzyComp(reread->foundationVolume_l(), 3.5 , 0.0001));
+   QVERIFY(fuzzyComp(reread->mashTunLoss_l()            , 0.25, 0.0001));
+   return;
+}
+
+void SerializationTests::testFolderPaths() {
+   //
+   // FolderCommon::subPath should work on path, not string, prefixes
+   //
+   QCOMPARE(FolderCommon::subPath("/foo/bar" , "/foo/bar/hum/bug"), QString{"/hum/bug"   });
+   QCOMPARE(FolderCommon::subPath("/foo/bar/", "/foo/bar/hum/bug"), QString{"/hum/bug"   });
+   QCOMPARE(FolderCommon::subPath("/foo/bar" , "/foo/bar"        ), QString{""           });
+   QCOMPARE(FolderCommon::subPath("/foo/bar" , "/foo/barbie"     ), QString{"/foo/barbie"});
+   QCOMPARE(FolderCommon::subPath("/"        , "/foo/bar"        ), QString{"/foo/bar"   });
+   // Leading slashes (or lack of them) shouldn't matter
+   QCOMPARE(FolderCommon::subPath("foo/bar"  , "/foo/bar/hum/bug"), QString{"/hum/bug"   });
+   QCOMPARE(FolderCommon::subPath("/foo/bar" , "foo/bar/hum/bug" ), QString{"/hum/bug"   });
+   QCOMPARE(FolderCommon::subPath("/foo/bar" , "foo/barbie"      ), QString{"foo/barbie" });
+   QCOMPARE(FolderCommon::subPath(""         , "/foo/bar"        ), QString{"/foo/bar"   });
+
+   //
+   // dotBeer: a folder_path in the file is relative to the folder we are importing into.  (Previously, when importing
+   // into anything other than the root folder, the folder_path in the file was lost.)
+   //
+   QString const dotBeerFilePath = writeTempFile("folderPaths.beer", R"({
+      "DotBeer": {
+         "version": "1.0.0",
+         "output_by": "Brewken unit tests",
+         "timestamp": "2026-10-26T12:00:00Z",
+         "equipments": [
+            {
+               "name": "dotBeer Folder Path Test",
+               "local_id": "equip_folder_test",
+               "folder_path": "Kit/All-in-one",
+               "foundation_volume": { "unit": "l", "value": 3.5 },
+               "kettle": {
+                  "max_volume": { "unit": "l", "value": 30 },
+                  "loss": { "unit": "l", "value": 2 }
+               }
+            }
+         ]
+      }
+   })");
+   {
+      QString message;
+      QTextStream messageStream{&message};
+      QVERIFY2(DotBeer::import("/Imported dotBeer", dotBeerFilePath, messageStream), qPrintable(message));
+   }
+   auto const fromDotBeer = equipmentNamed("dotBeer Folder Path Test");
+   QVERIFY2(fromDotBeer, "Equipment not imported from dotBeer");
+   QCOMPARE(fromDotBeer->containedInFolderPath(), QString{"Imported dotBeer/Kit/All-in-one"});
+   QVERIFY(fuzzyComp(fromDotBeer->foundationVolume_l(), 3.5, 0.0001));
+
+   //
+   // BeerXML: we write folder paths relative to the folder being exported...
+   //
+   auto equipment = std::make_shared<Equipment>("BeerXML Folder Path Test Equipment");
+   equipment->setKettleBoilSize_l(30.0);
+   equipment->setFvBatchSize_l(23.0);
+   ObjectStoreWrapper::insert(equipment);
+   equipment->setContainedInFolderPath("/Export Base/Kit");
+   QCOMPARE(equipment->containedInFolderPath(), QString{"Export Base/Kit"});
+
+   auto fermentable = std::make_shared<Fermentable>("BeerXML Folder Path Test Fermentable");
+   fermentable->setType(Fermentable::Type::Grain);
+   fermentable->setColor_srm(3.0);
+   fermentable->setFineGrindYield_pct(80.0);
+   ObjectStoreWrapper::insert(fermentable);
+   fermentable->setContainedInFolderPath("/Export Base/Malts/Base Malts");
+
+   // An object that is in the folder being exported has no folder path written
+   auto fermentableInBase = std::make_shared<Fermentable>("BeerXML Folder Path Test Fermentable In Base");
+   fermentableInBase->setType(Fermentable::Type::Grain);
+   fermentableInBase->setColor_srm(3.0);
+   fermentableInBase->setFineGrindYield_pct(80.0);
+   ObjectStoreWrapper::insert(fermentableInBase);
+   fermentableInBase->setContainedInFolderPath("/Export Base");
+
+   QString const beerXmlFilePath = UnitTests::TestEnvironment::tempDir().filePath("folderPaths.xml");
+   {
+      QFile beerXmlFile{beerXmlFilePath};
+      QVERIFY(beerXmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate));
+      BeerXML::getInstance().createXmlFile(beerXmlFile);
+      BeerXML::getInstance().toXml("/Export Base", QList<Fermentable const *>{fermentable.get(), fermentableInBase.get()}, beerXmlFile);
+      BeerXML::getInstance().toXml("/Export Base", QList<Equipment   const *>{equipment.get()  }, beerXmlFile);
+   }
+   QString beerXml = readFile(beerXmlFilePath);
+   QVERIFY2(beerXml.contains("<FOLDER_PATH>/Kit</FOLDER_PATH>"            ), qPrintable(beerXml));
+   QVERIFY2(beerXml.contains("<FOLDER_PATH>/Malts/Base Malts</FOLDER_PATH>"), qPrintable(beerXml));
+   QCOMPARE(beerXml.count("<FOLDER_PATH>"), 2);
+
+   //
+   // ...and read them relative to the folder being imported into
+   //
+   beerXml.replace("BeerXML Folder Path Test", "BeerXML Folder Path Reread");
+   writeTempFile("folderPaths.xml", beerXml);
+   {
+      QString message;
+      QTextStream messageStream{&message};
+      QVERIFY2(BeerXML::getInstance().importFromXML("/Imported BeerXML", beerXmlFilePath, messageStream),
+               qPrintable(message));
+   }
+   auto const rereadEquipment = equipmentNamed("BeerXML Folder Path Reread Equipment");
+   QVERIFY2(rereadEquipment, "Equipment not read back from BeerXML");
+   QCOMPARE(rereadEquipment->containedInFolderPath(), QString{"Imported BeerXML/Kit"});
+   auto const rereadFermentable = ObjectStoreWrapper::findFirstMatching<Fermentable>(
+      [](std::shared_ptr<Fermentable> f) { return f->name() == "BeerXML Folder Path Reread Fermentable"; }
+   );
+   QVERIFY2(rereadFermentable, "Fermentable not read back from BeerXML");
+   QCOMPARE(rereadFermentable->containedInFolderPath(), QString{"Imported BeerXML/Malts/Base Malts"});
+   auto const rereadFermentableInBase = ObjectStoreWrapper::findFirstMatching<Fermentable>(
+      [](std::shared_ptr<Fermentable> f) { return f->name() == "BeerXML Folder Path Reread Fermentable In Base"; }
+   );
+   QVERIFY2(rereadFermentableInBase, "Fermentable not read back from BeerXML");
+   QCOMPARE(rereadFermentableInBase->containedInFolderPath(), QString{"Imported BeerXML"});
+   return;
+}
+
+void SerializationTests::testEquipmentComparison() {
+   auto const original = std::make_shared<Equipment>("Equipment Comparison Test");
+   original->setMashTunVolume_l(30.0);
+   auto const same = std::make_shared<Equipment>(*original);
+   QVERIFY(*original == *same);
+
+   auto const differentLoss = std::make_shared<Equipment>(*original);
+   differentLoss->setMashTunLoss_l(1.0);
+   QVERIFY2(!(*original == *differentLoss), "Mash tun loss ignored when comparing equipment");
+
+   auto const differentFoundation = std::make_shared<Equipment>(*original);
+   differentFoundation->setFoundationVolume_l(3.5);
+   QVERIFY2(!(*original == *differentFoundation), "Foundation volume ignored when comparing equipment");
+
+   auto const differentLauterTun = std::make_shared<Equipment>(*original);
+   differentLauterTun->setLauterTunVolume_l(40.0);
+   QVERIFY2(!(*original == *differentLauterTun), "Lauter tun volume ignored when comparing equipment");
+   return;
+}
+
+void SerializationTests::testEquipmentVolumes() {
+   //
+   // dotBeer: max_volume is the capacity of a vessel; default_batch_size is the default batch size; there is no
+   // default pre-boil volume, so we calculate one.  No mash tun means the mash happens in the kettle.
+   //
+   QString const dotBeerFilePath = writeTempFile("equipmentVolumes.beer", R"({
+      "DotBeer": {
+         "version": "1.0.0",
+         "output_by": "Brewken unit tests",
+         "timestamp": "2026-10-27T12:00:00Z",
+         "equipments": [
+            {
+               "name": "dotBeer Volumes Test",
+               "local_id": "equip_volumes_test",
+               "default_batch_size": { "unit": "l", "value": 23 },
+               "grain_absorption_rate": { "unit": "l/kg", "value": 0.8 },
+               "foundation_volume": { "unit": "l", "value": 3.5 },
+               "kettle": {
+                  "max_volume": { "unit": "l", "value": 35 },
+                  "loss": { "unit": "l", "value": 2 },
+                  "boil_rate_per_hour": { "unit": "l", "value": 4 }
+               },
+               "fermentation_vessel": {
+                  "max_volume": { "unit": "l", "value": 30 },
+                  "loss": { "unit": "l", "value": 1 }
+               }
+            },
+            {
+               "name": "dotBeer Volumes Test No Batch Size",
+               "local_id": "equip_volumes_test_no_batch_size",
+               "mash_tun": {
+                  "max_volume": { "unit": "l", "value": 40 },
+                  "loss": { "unit": "l", "value": 1.5 }
+               },
+               "kettle": {
+                  "max_volume": { "unit": "l", "value": 50 },
+                  "loss": { "unit": "l", "value": 2 },
+                  "boil_rate_per_hour": { "unit": "l", "value": 4 }
+               },
+               "fermentation_vessel": {
+                  "max_volume": { "unit": "l", "value": 30 },
+                  "loss": { "unit": "l", "value": 1 }
+               }
+            }
+         ]
+      }
+   })");
+   {
+      QString message;
+      QTextStream messageStream{&message};
+      QVERIFY2(DotBeer::import("", dotBeerFilePath, messageStream), qPrintable(message));
+   }
+   auto const allInOne = equipmentNamed("dotBeer Volumes Test");
+   QVERIFY2(allInOne, "Equipment not imported from dotBeer");
+   QVERIFY(fuzzyComp(allInOne->kettleVolume_l()    , 35.0, 0.0001));
+   QVERIFY(fuzzyComp(allInOne->fvVolume_l()        , 30.0, 0.0001));
+   QVERIFY(fuzzyComp(allInOne->fvBatchSize_l()     , 23.0, 0.0001));
+   // 23 l batch + 2 l kettle loss + 4 l boil-off in an hour
+   QVERIFY(fuzzyComp(allInOne->kettleBoilSize_l()  , 29.0, 0.0001));
+   QVERIFY(allInOne->mashesInKettle());
+   QVERIFY(fuzzyComp(allInOne->mashVesselVolume_l(), 35.0, 0.0001));
+   QVERIFY(fuzzyComp(allInOne->foundationVolume_l(),  3.5, 0.0001));
+   QVERIFY(allInOne->grainAbsorption_LKg() && fuzzyComp(*allInOne->grainAbsorption_LKg(), 0.8, 0.0001));
+
+   auto const noBatchSize = equipmentNamed("dotBeer Volumes Test No Batch Size");
+   QVERIFY2(noBatchSize, "Equipment not imported from dotBeer");
+   QVERIFY(!noBatchSize->mashesInKettle());
+   QVERIFY(fuzzyComp(noBatchSize->mashVesselVolume_l(), 40.0, 0.0001));
+   // With no default_batch_size, we fall back to the fermentation vessel capacity (which is what we used to do)
+   QVERIFY(fuzzyComp(noBatchSize->fvBatchSize_l()     , 30.0, 0.0001));
+   QVERIFY(fuzzyComp(noBatchSize->kettleBoilSize_l()  , 36.0, 0.0001));
+
+   //
+   // dotBeer export: no mash tun written when there isn't one; top-level grain absorption and foundation volume;
+   // capacities as max_volume; default batch size but not default pre-boil volume.
+   //
+   QString const exportFilePath = UnitTests::TestEnvironment::tempDir().filePath("equipmentVolumesExport.beer");
+   {
+      QFile outFile{exportFilePath};
+      QVERIFY(outFile.open(QIODevice::WriteOnly | QIODevice::Truncate));
+      QString userMessage;
+      QTextStream userMessageAsStream{&userMessage};
+      DotBeer::Exporter exporter{outFile, userMessageAsStream};
+      exporter.add("", QList<Equipment const *>{allInOne.get(), noBatchSize.get()});
+      exporter.close();
+      outFile.close();
+   }
+   {
+      boost::json::value const exported = boost::json::parse(readFile(exportFilePath).toStdString());
+      auto const & equipments = exported.at("DotBeer").at("equipments").as_array();
+      QCOMPARE(equipments.size(), std::size_t{2});
+      for (auto const & equipmentValue : equipments) {
+         auto const & equipment = equipmentValue.as_object();
+         auto const valueOf = [](boost::json::value const & measurement) {
+            return measurement.at("value").to_number<double>();
+         };
+         if (equipment.at("name").as_string() == "dotBeer Volumes Test") {
+            QVERIFY2(!equipment.contains("mash_tun"), "Mash tun written when mash happens in kettle");
+            QVERIFY(fuzzyComp(valueOf(equipment.at("foundation_volume"    )),  3.5, 0.0001));
+            QVERIFY(fuzzyComp(valueOf(equipment.at("grain_absorption_rate")),  0.8, 0.0001));
+            QVERIFY(fuzzyComp(valueOf(equipment.at("default_batch_size"   )), 23.0, 0.0001));
+            QVERIFY(fuzzyComp(valueOf(equipment.at("kettle"             ).at("max_volume")), 35.0, 0.0001));
+            QVERIFY(fuzzyComp(valueOf(equipment.at("fermentation_vessel").at("max_volume")), 30.0, 0.0001));
+         } else {
+            QVERIFY2(equipment.contains("mash_tun"), "Mash tun not written");
+            QVERIFY(fuzzyComp(valueOf(equipment.at("mash_tun").at("max_volume")), 40.0, 0.0001));
+         }
+      }
+   }
+
+   //
+   // BeerXML: BOIL_SIZE and BATCH_SIZE are the defaults; capacities are extension tags...
+   //
+   QString const beerXmlFilePath = UnitTests::TestEnvironment::tempDir().filePath("equipmentVolumes.xml");
+   {
+      QFile beerXmlFile{beerXmlFilePath};
+      QVERIFY(beerXmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate));
+      BeerXML::getInstance().createXmlFile(beerXmlFile);
+      BeerXML::getInstance().toXml("", QList<Equipment const *>{allInOne.get()}, beerXmlFile);
+   }
+   QString beerXml = readFile(beerXmlFilePath);
+   QVERIFY2(beerXml.contains("<BOIL_SIZE>29</BOIL_SIZE>"                  ), qPrintable(beerXml));
+   QVERIFY2(beerXml.contains("<BATCH_SIZE>23</BATCH_SIZE>"                ), qPrintable(beerXml));
+   QVERIFY2(beerXml.contains("<KETTLE_VOLUME_L>35</KETTLE_VOLUME_L>"      ), qPrintable(beerXml));
+   QVERIFY2(beerXml.contains("<FERMENTER_VOLUME_L>30</FERMENTER_VOLUME_L>"), qPrintable(beerXml));
+   QVERIFY2(beerXml.contains("<TUN_VOLUME>0</TUN_VOLUME>"                 ), qPrintable(beerXml));
+   {
+      QString reread = beerXml;
+      reread.replace("dotBeer Volumes Test", "BeerXML Volumes Reread");
+      writeTempFile("equipmentVolumes.xml", reread);
+      QString message;
+      QTextStream messageStream{&message};
+      QVERIFY2(BeerXML::getInstance().importFromXML("", beerXmlFilePath, messageStream), qPrintable(message));
+      auto const fromBeerXml = equipmentNamed("BeerXML Volumes Reread");
+      QVERIFY2(fromBeerXml, "Equipment not read back from BeerXML");
+      QVERIFY(fuzzyComp(fromBeerXml->kettleVolume_l()  , 35.0, 0.0001));
+      QVERIFY(fuzzyComp(fromBeerXml->fvVolume_l()      , 30.0, 0.0001));
+      QVERIFY(fuzzyComp(fromBeerXml->fvBatchSize_l()   , 23.0, 0.0001));
+      QVERIFY(fuzzyComp(fromBeerXml->kettleBoilSize_l(), 29.0, 0.0001));
+      QVERIFY(fromBeerXml->mashesInKettle());
+   }
+   //
+   // ...so, for a BeerXML file from another program, which won't have the extension tags, we use the default volumes
+   // as the best guess for the capacities.
+   //
+   {
+      QString reread = beerXml;
+      reread.replace("dotBeer Volumes Test", "BeerXML Volumes Without Extension Tags");
+      reread.remove(QRegularExpression{"<KETTLE_VOLUME_L>[^<]*</KETTLE_VOLUME_L>"});
+      reread.remove(QRegularExpression{"<FERMENTER_VOLUME_L>[^<]*</FERMENTER_VOLUME_L>"});
+      writeTempFile("equipmentVolumes.xml", reread);
+      QString message;
+      QTextStream messageStream{&message};
+      QVERIFY2(BeerXML::getInstance().importFromXML("", beerXmlFilePath, messageStream), qPrintable(message));
+      auto const fromBeerXml = equipmentNamed("BeerXML Volumes Without Extension Tags");
+      QVERIFY2(fromBeerXml, "Equipment not read back from BeerXML");
+      QVERIFY(fuzzyComp(fromBeerXml->kettleVolume_l()  , 29.0, 0.0001));
+      QVERIFY(fuzzyComp(fromBeerXml->fvVolume_l()      , 23.0, 0.0001));
+      QVERIFY(fuzzyComp(fromBeerXml->fvBatchSize_l()   , 23.0, 0.0001));
+      QVERIFY(fuzzyComp(fromBeerXml->kettleBoilSize_l(), 29.0, 0.0001));
+   }
+   return;
+}
+
+void SerializationTests::testClearUnusedMashTun() {
+   //
+   // The mash tun is now an "optional" vessel, like the HLT and lauter tun.  If it has no volume, its loss etc are
+   // cleared, but grain absorption and foundation volume (which apply to whichever vessel the mash happens in) are not.
+   //
+   auto equipment = std::make_shared<Equipment>("Test Equipment With Unused Mash Tun");
+   equipment->setKettleVolume_l(30.0);
+   equipment->setMashTunVolume_l(0.0);
+   equipment->setMashTunLoss_l(1.0);
+   equipment->setMashTunWeight_kg(5.0);
+   equipment->setMashTunSpecificHeat_calGC(0.12);
+   equipment->setMashTunNotes("Leftover notes");
+   equipment->setFoundationVolume_l(3.5);
+   equipment->setGrainAbsorption_LKg(0.8);
+   //
+   // Even before we clear them, the mash tun's loss and heat capacity should be ignored in calculations, because, with
+   // no mash tun, the mash happens in the kettle.  (This is the case for equipment from before we treated a zero mash
+   // tun volume this way, as we don't zero such fields in the DB migration.)
+   //
+   QVERIFY(equipment->mashesInKettle());
+   QVERIFY(fuzzyComp(equipment->strikeWaterAllowance_l()     , 3.5, 0.0001));
+   QVERIFY(fuzzyComp(equipment->getLauteringDeadspaceLoss_l(), 0.0, 0.0001));
+   QVERIFY(equipment->mashVesselHeatCapacity_kcalC() && fuzzyComp(*equipment->mashVesselHeatCapacity_kcalC(), 0.0, 0.0001));
+   QVERIFY(equipment->clearUnusedOptionalVessels());
+   QVERIFY(fuzzyComp(equipment->mashTunLoss_l(), 0.0, 0.0001));
+   QVERIFY(!equipment->mashTunWeight_kg());
+   QVERIFY(!equipment->mashTunSpecificHeat_calGC());
+   QVERIFY(equipment->mashTunNotes().isEmpty());
+   QVERIFY(fuzzyComp(equipment->foundationVolume_l(), 3.5, 0.0001));
+   QVERIFY(equipment->grainAbsorption_LKg() && fuzzyComp(*equipment->grainAbsorption_LKg(), 0.8, 0.0001));
+   QVERIFY(fuzzyComp(equipment->strikeWaterAllowance_l(), 3.5, 0.0001));
    return;
 }

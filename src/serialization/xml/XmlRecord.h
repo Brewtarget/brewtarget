@@ -83,6 +83,7 @@ public:
 
    /**
     * \brief Export to XML
+    * \param baseFolderPath Folder paths are written relative to this (see \c XmlRecordDefinition::FieldType::FolderPath)
     * \param namedEntityToExport The object that we want to export to XML
     * \param out Where to write the XML
     * \param includeRecordNameTags Normally this should be \c true but, when we're writing a sub-record as though it
@@ -91,7 +92,8 @@ public:
     * \param indentLevel Current number of indents to put before each opening tag (default 1)
     * \param indentString String to use for each indent (default two spaces)
     */
-   void toXml(NamedEntity const & namedEntityToExport,
+   void toXml(QString const & baseFolderPath,
+              NamedEntity const & namedEntityToExport,
               QTextStream & out,
               bool const includeRecordNameTags,
               int indentLevel = 1,
@@ -113,6 +115,7 @@ protected:
    /**
     * \brief Called by \c toXml to write out any fields that are themselves records.
     *        Subclasses should provide the obvious recursive implementation.
+    * \param baseFolderPath See \c toXml
     * \param fieldDefinition Which of the fields we're trying to export.  It will be of type \c XmlRecord::Record
     * \param subRecord A suitably constructed subclass of \c XmlRecord that can do the export.  (Note that because
     *                  exporting to XML is const on \c XmlRecord, we only need one of these even if there are multiple
@@ -120,7 +123,8 @@ protected:
     * \param namedEntityToExport The object containing (or referencing) the data we want to export to XML
     * \param out Where to write the XML
     */
-   virtual void subRecordToXml(XmlRecordDefinition::FieldDefinition const & fieldDefinition,
+   virtual void subRecordToXml(QString const & baseFolderPath,
+                               XmlRecordDefinition::FieldDefinition const & fieldDefinition,
                                XmlRecord const & subRecord,
                                NamedEntity const & namedEntityToExport,
                                QTextStream & out,

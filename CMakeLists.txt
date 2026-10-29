@@ -1114,6 +1114,10 @@ add_test(NAME RecipeCalcTests.recipeCalcTest_allGrain              COMMAND ./${f
 add_test(NAME RecipeCalcTests.postBoilLossOgTest                   COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    postBoilLossOgTest               )
 add_test(NAME RecipeCalcTests.testBoilAdditionTiming               COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testBoilAdditionTiming           )
 add_test(NAME RecipeCalcTests.testInventory                        COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testInventory                    )
+add_test(NAME RecipeCalcTests.testMashWaterVolumes                 COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testMashWaterVolumes             )
+add_test(NAME RecipeCalcTests.testEvaporationRate                  COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testEvaporationRate              )
+add_test(NAME RecipeCalcTests.testEquipmentDefaultVolumes          COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testEquipmentDefaultVolumes      )
+add_test(NAME RecipeCalcTests.testMashTunHeatCapacity              COMMAND ./${fileName_unitTestRunner} RecipeCalcTests    testMashTunHeatCapacity          )
 add_test(NAME SerializationTests.testDotBeerImportedRecipeCalcs    COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerImportedRecipeCalcs   )
 add_test(NAME SerializationTests.testDotBeerAdditionStepCorrection COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerAdditionStepCorrection)
 add_test(NAME SerializationTests.testBrewLogCalcs                  COMMAND ./${fileName_unitTestRunner} SerializationTests testBrewLogCalcs                 )
@@ -1123,6 +1127,12 @@ add_test(NAME SerializationTests.testClearUnusedOptionalVessels    COMMAND ./${f
 add_test(NAME SerializationTests.testBeerXmlNullYield              COMMAND ./${fileName_unitTestRunner} SerializationTests testBeerXmlNullYield             )
 add_test(NAME SerializationTests.testNullSentinel                  COMMAND ./${fileName_unitTestRunner} SerializationTests testNullSentinel                 )
 add_test(NAME SerializationTests.testBeerJsonRoundTrip             COMMAND ./${fileName_unitTestRunner} SerializationTests testBeerJsonRoundTrip            )
+add_test(NAME SerializationTests.testAllInOneEquipmentImport       COMMAND ./${fileName_unitTestRunner} SerializationTests testAllInOneEquipmentImport      )
+add_test(NAME SerializationTests.testBeerXmlFoundationVolume       COMMAND ./${fileName_unitTestRunner} SerializationTests testBeerXmlFoundationVolume      )
+add_test(NAME SerializationTests.testFolderPaths                   COMMAND ./${fileName_unitTestRunner} SerializationTests testFolderPaths                  )
+add_test(NAME SerializationTests.testEquipmentComparison           COMMAND ./${fileName_unitTestRunner} SerializationTests testEquipmentComparison          )
+add_test(NAME SerializationTests.testEquipmentVolumes              COMMAND ./${fileName_unitTestRunner} SerializationTests testEquipmentVolumes             )
+add_test(NAME SerializationTests.testClearUnusedMashTun            COMMAND ./${fileName_unitTestRunner} SerializationTests testClearUnusedMashTun           )
 
 #=================================Installs=====================================
 
