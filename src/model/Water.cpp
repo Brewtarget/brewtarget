@@ -19,6 +19,7 @@
 #include "model/Water.h"
 
 #include "database/ObjectStoreWrapper.h"
+#include "measurement/PhysicalConstants.h"
 #include "model/Folder.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
@@ -330,6 +331,24 @@ void Water::setIron_ppm        (std::optional<double> const val) { SET_AND_NOTIF
 void Water::setNitrate_ppm     (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Water::nitrate_ppm     , m_nitrate_ppm       , val); return; }
 void Water::setNitrite_ppm     (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Water::nitrite_ppm     , m_nitrite_ppm       , val); return; }
 void Water::setFluoride_ppm    (std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::Water::fluoride_ppm    , m_fluoride_ppm      , val); return; }
+
+double Water::alkalinity_mEqPerL() const {
+   if (this->m_alkalinity_ppm) {
+      //
+      // Alkalinity is either given "as HCO₃⁻" or "as CaCO₃".  The equivalent weights (molar mass divided by valence)
+      // are about 61 and 50 respectively, hence the familiar conversion factor of 61 ÷ 50 = 1.22 from the latter to the
+      // former.
+      //
+      double const alkalinityAsHco3_ppm = this->m_alkalinity_as_hco3 ?
+         *this->m_alkalinity_ppm : *this->m_alkalinity_ppm * MolarMass::Bicarbonate / (MolarMass::CalciumCarbonate / 2.0);
+      return alkalinityAsHco3_ppm / MolarMass::Bicarbonate;
+   }
+   //
+   // Bicarbonate has a valence of 1 and carbonate a valence of 2, so mEq/L is mg/L ÷ (molar mass ÷ valence).
+   //
+   return this->m_bicarbonate_ppm / MolarMass::Bicarbonate +
+          this->m_carbonate_ppm.value_or(0.0) / (MolarMass::Carbonate / 2.0);
+}
 
 std::optional<double> Water::ionConcentration_ppm(Water::MineralIon const ion) const {
    switch (ion) {

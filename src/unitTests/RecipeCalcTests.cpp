@@ -40,6 +40,7 @@
 #include "model/RecipeAdditionFermentable.h"
 #include "model/RecipeAdditionHop.h"
 #include "model/StockPurchaseHop.h"
+#include "model/Water.h"
 #include "unitTests/TestData.h"
 #include "unitTests/TestRegistry.h"
 
@@ -826,5 +827,26 @@ void RecipeCalcTests::testMashTunHeatCapacity() {
    QVERIFY(fuzzyComp(recipeInKettle->mashTunTemp_c(), 18.0, 0.0001));
    recipeInKettle->mash()->setInitialTunTemp_c(25.0);
    QVERIFY(fuzzyComp(recipeInKettle->mashTunTemp_c(), 25.0, 0.0001));
+   return;
+}
+void RecipeCalcTests::testWaterAlkalinity() {
+   // 122 ppm HCO₃⁻ is (very nearly) 2 mEq/L
+   Water water{"Alkalinity Test Water"};
+   water.setBicarbonate_ppm(122.0);
+   QVERIFY2(fuzzyComp(water.alkalinity_mEqPerL(), 2.0, 0.01), "Alkalinity not calculated from bicarbonate");
+
+   // 30 ppm CO₃²⁻ adds (very nearly) 1 mEq/L, as carbonate has a valence of 2
+   water.setCarbonate_ppm(30.0);
+   QVERIFY2(fuzzyComp(water.alkalinity_mEqPerL(), 3.0, 0.01), "Carbonate not included in alkalinity");
+
+   // If alkalinity is set, it takes precedence.  100 ppm as CaCO₃ is (very nearly) 2 mEq/L...
+   water.setAlkalinity_ppm(100.0);
+   water.setAlkalinityAsHCO3(false);
+   QVERIFY2(fuzzyComp(water.alkalinity_mEqPerL(), 2.0, 0.01), "Alkalinity as CaCO3 not used");
+
+   // ...and 61 ppm as HCO₃⁻ is (very nearly) 1 mEq/L
+   water.setAlkalinity_ppm(61.0);
+   water.setAlkalinityAsHCO3(true);
+   QVERIFY2(fuzzyComp(water.alkalinity_mEqPerL(), 1.0, 0.01), "Alkalinity as HCO3 not used");
    return;
 }

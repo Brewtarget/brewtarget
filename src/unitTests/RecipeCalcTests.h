@@ -95,6 +95,12 @@ private slots:
     *        the kettle.
     */
    void testMashTunHeatCapacity();
+
+   /**
+    * \brief Verify that water alkalinity (used for residual alkalinity in the water adjuster) comes from bicarbonate and
+    *        carbonate when alkalinity itself is not set (as is the case for all imported water profiles)
+    */
+   void testWaterAlkalinity();
 };
 
 #endif
