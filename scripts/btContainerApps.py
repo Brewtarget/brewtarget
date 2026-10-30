@@ -141,7 +141,11 @@ def doAppImage():
    # marked ❇ are ones we need to relocate, generate or modify:
    #
    #    [projectName]-[version]   <── dir_appDir
-   #    ├── AppRun ❇   <── Shell script that acts as the entry point for the AppImage
+   #    ├── AppRun   <── Shell script that acts as the entry point for the AppImage  ❇
+   #    ├── .DirIcon <── PNG icon in one of the standard image sizes, eg, 128x128 or 256x256 pixels  ❇
+   #    ├── [projectName].png <── Not explicitly required, but typically .DirIcon is a SYMLINK to this  ❇
+   #    ├── [projectName].svg <── Required but allowed to be SYMLINK to, eg,
+   #    │                         usr/share/icons/hicolor/scalable/apps/[projectName].svg  ❇
    #    ├── [reverseDomain].[projectName].desktop = SYMLINK to file in usr/share/applications  ❇
    #    └── usr
    #        ├── bin
@@ -173,11 +177,26 @@ def doAppImage():
    dir_applications = dir_appDir.joinpath('usr').joinpath('share').joinpath('applications')
    os.symlink(dir_applications.relative_to(dir_appDir).joinpath(appId + '.desktop'),
               dir_appDir.joinpath(appId + '.desktop'))
-   # Move [projectName].svg to the correct place for AppImage
+   # Make the [projectName].svg symlink
    dir_icons = dir_appDir.joinpath('usr').joinpath('share').joinpath('icons')
-   shutil.move(dir_icons.joinpath('hicolor').joinpath('scalable').joinpath('apps').joinpath(projectName + '.svg'),
-               dir_appDir.as_posix())
-   shutil.rmtree(dir_icons)
+   dir_svgIcon = dir_icons.joinpath('hicolor').joinpath('scalable').joinpath('apps')
+   os.symlink(dir_svgIcon.relative_to(dir_appDir).joinpath(projectName + '.svg'),
+              dir_appDir.joinpath(projectName + '.svg'))
+
+   # Generate .png icon file from the .svg one (via its symlink that we just created above)
+   btExecute.abortOnRunFail(
+      subprocess.run(
+         [
+            'rsvg-convert', '-w', '256', '-h', '256',
+            '-o', dir_appDir.joinpath(projectName + '.png').as_posix(),
+            dir_appDir.joinpath(projectName + '.svg').as_posix()
+         ],
+         capture_output=False
+      )
+   )
+   # Now make the .DirIcon symlink to the PNG file we just generated
+   os.symlink(dir_appDir.joinpath(projectName + '.png'),
+              dir_appDir.joinpath('.DirIcon'))
 
    #
    # One of the warning messages from the AppImage generator is "AppStream upstream metadata is missing" if it can't
@@ -205,9 +224,10 @@ def doAppImage():
       appRunFile.write('#!/bin/bash\n')
       appRunFile.write('export LD_LIBRARY_PATH="${APPIMAGE_LIBRARY_PATH}:${APPDIR}/usr/lib:${LD_LIBRARY_PATH}"\n')
       appRunFile.write('exec $APPDIR/usr/bin/' + projectName + '\n')
-   # ...and make it executable
+   # ...and make it executable.  (Note that it "must be executable for all users (owner, group and others)", otherwise
+   # the AppImage tool will complain.
    stat_appRun = os.stat(file_appRun)
-   os.chmod(file_appRun, stat_appRun.st_mode | stat.S_IEXEC)
+   os.chmod(file_appRun, stat_appRun.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
    #
    # AppImage requires the application to be relocatable -- ie able to load its shared libraries relative to its main
