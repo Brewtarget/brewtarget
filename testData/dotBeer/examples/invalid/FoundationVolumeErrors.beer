@@ -9,16 +9,18 @@
 // warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Mozilla Public License for more details.
 //======================================================================================================================
 
-// EXPECT-INVALID: /DotBeer/equipments/0 ("Overfilled Foundation"): foundation_volume (29 l) plus mash_tun loss (1 l) leaves no room for the mash in mash_tun max_volume (30 l)
-// EXPECT-INVALID: /DotBeer/equipments/1 ("Mixed Units Overfilled"): foundation_volume (8 l) plus mash_tun loss (0 l) leaves no room for the mash in mash_tun max_volume (2 gal)
-// EXPECT-INVALID: /DotBeer/equipments/2 ("Overfilled Single Vessel"): foundation_volume (35 l) leaves no room for the mash in kettle max_volume (35 l)
+// EXPECT-WARNING: /DotBeer/equipments/0 ("Overfilled Foundation"): foundation_volume (29 l) plus mash_tun loss (1 l) leaves no room for the mash in mash_tun max_volume (30 l)
+// EXPECT-WARNING: /DotBeer/equipments/1 ("Mixed Units Overfilled"): foundation_volume (8 l) plus mash_tun loss (0 l) leaves no room for the mash in mash_tun max_volume (2 gal)
+// EXPECT-WARNING: /DotBeer/equipments/2 ("Overfilled Single Vessel"): foundation_volume (35 l) leaves no room for the mash in kettle max_volume (35 l)
 // EXPECT-INVALID: /DotBeer/equipments/3/foundation_volume/value: -1 is less than the minimum of 0
 // EXPECT-INVALID: /DotBeer/equipments/4/mash_tun: Unevaluated properties are not allowed ('foundation_volume', 'grain_absorption_rate' were unexpected)
 //
-// Misuses of foundation_volume:
-//   • foundation_volume plus mash tun loss that fill the whole mash tun (which JSON Schema cannot check), including
-//     where they are in different units from max_volume
+// Misuses of foundation_volume.  The first three are not invalid as such (and JSON Schema cannot check them anyway),
+// but are almost certainly mistakes, so scripts/validate.py gives warnings for them:
+//   • foundation_volume plus mash tun loss that fill the whole mash tun, including where they are in different units
+//     from max_volume
 //   • foundation_volume that fills the whole kettle, where there is no mash tun (so the mash happens in the kettle)
+// The others are invalid:
 //   • a negative foundation_volume
 //   • foundation_volume and grain_absorption_rate on a vessel (they are only allowed at the top level)
 {

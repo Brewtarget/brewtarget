@@ -17,6 +17,10 @@
 // EXPECT-INVALID: /DotBeer/styles/1/color/minimum/value: -0.5 is less than the minimum of 0
 // EXPECT-INVALID: /DotBeer/hops/0/folder_path: ' /Hops' does not match
 // EXPECT-INVALID: /DotBeer/hops/1/folder_path: 'Hops/US\tWest' does not match
+// EXPECT-INVALID: /DotBeer/fermentations/0/fermentation_steps/0/vessel_pressure/value: 15 is greater than the maximum of 10
+// EXPECT-INVALID: /DotBeer/fermentations/0/fermentation_steps/1/vessel_pressure/value: 1500 is greater than the maximum of 1000
+// EXPECT-INVALID: /DotBeer/fermentations/0/fermentation_steps/2/vessel_pressure/value: -2 is less than the minimum of 0
+// EXPECT-INVALID: /DotBeer/fermentations/0/fermentation_steps/3/vessel_pressure/unit: 'psig' is not one of
 //
 // An inverted range (which JSON Schema cannot check), plus values outside the limits that it can check:
 //   • a final gravity below 0.900 SG, and a negative carbonation
@@ -24,6 +28,9 @@
 //   • a gravity above 1.6 SG (which, likewise, is denser than sugar itself)
 //   • a negative Lovibond colour (0°L is colourless).  Note that -0.5 SRM, in the same range, is fine.
 //   • a folder path with a segment that is only a space, and one with a control character (a tab)
+//   • fermentation vessel pressures that are too high (in bar and in kPa) or negative (pressures are gauge pressures, so
+//     a negative one would be a partial vacuum), and one in an unsupported unit
+// The last fermentation step is fine: 145 psi is (just) within the limit.
 {
   "DotBeer": {
     "version": "1.0.0",
@@ -72,6 +79,19 @@
     "hops": [
       { "name": "Cascade", "local_id": "hop_space" , "folder_path": " /Hops"       , "alpha_acid": { "unit": "%", "value": 6.4 } },
       { "name": "Citra"  , "local_id": "hop_tab"   , "folder_path": "Hops/US\tWest", "alpha_acid": { "unit": "%", "value": 12.0 } }
+    ],
+    "fermentations": [
+      {
+        "name": "Bad Pressures",
+        "local_id": "fermentation_bad_pressures",
+        "fermentation_steps": [
+          { "name": "Way too high"  , "vessel_pressure": { "unit": "bar" , "value": 15   } },
+          { "name": "kPa too high"  , "vessel_pressure": { "unit": "kPa" , "value": 1500 } },
+          { "name": "Partial vacuum", "vessel_pressure": { "unit": "psi" , "value": -2   } },
+          { "name": "Unknown unit"  , "vessel_pressure": { "unit": "psig", "value": 15   } },
+          { "name": "At the limit"  , "vessel_pressure": { "unit": "psi" , "value": 145  } }
+        ]
+      }
     ]
   }
 }
