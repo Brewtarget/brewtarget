@@ -17,6 +17,7 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 ## v5.2.0
 Various improvements, including:
 * Migrate to new XML libraries (libxml2 replaces Xerces and Xalan) [1131](https://github.com/Brewtarget/brewtarget/issues/1131)
+* Migrate to new JSON schema validation library [1150](https://github.com/Brewtarget/brewtarget/issues/1150)
 
 ### New Features
 * DotBeer file format support [1122](https://github.com/Brewtarget/brewtarget/issues/1122)
@@ -46,6 +47,7 @@ Various improvements, including:
 * Importing from BeerXML sets fermentable addition stage to boil instead of mash [1156](https://github.com/Brewtarget/brewtarget/issues/1156)
 * Creating a fermentable stock purchase with no color causes a crash [1159](https://github.com/Brewtarget/brewtarget/issues/1159)
 * Conversion amounts for imperial tablespoons and teaspoons are wrong [1160](https://github.com/Brewtarget/brewtarget/issues/1160)
+* Brewhouse efficiency is applied to honey, juice, fruit and “other” fermentables [1161](https://github.com/Brewtarget/brewtarget/issues/1161)
 * IBU calculation treats a post-boil addition's time as boil time [1167](https://github.com/Brewtarget/brewtarget/issues/1167)
 * Instructions use the whole boil length for a step addition with no time [1168](https://github.com/Brewtarget/brewtarget/issues/1168)
 * A boil step with no start/end temperature should be treated as being at boiling [1165](https://github.com/Brewtarget/brewtarget/issues/1165)
