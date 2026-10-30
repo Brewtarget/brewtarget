@@ -126,27 +126,27 @@
         <translation type="vanished">Kogetid</translation>
     </message>
     <message>
-        <location filename="../src/model/Boil.cpp" line="184"/>
+        <location filename="../src/model/Boil.cpp" line="197"/>
         <source>a recipe</source>
         <translation>en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/model/Boil.cpp" line="189"/>
+        <location filename="../src/model/Boil.cpp" line="207"/>
         <source>Pre-boil for %1</source>
         <translation>Forkogning for %1</translation>
     </message>
     <message>
-        <location filename="../src/model/Boil.cpp" line="208"/>
+        <location filename="../src/model/Boil.cpp" line="235"/>
         <source>Main boil for %1</source>
         <translation>Kogning for %1</translation>
     </message>
     <message>
-        <location filename="../src/model/Boil.cpp" line="217"/>
+        <location filename="../src/model/Boil.cpp" line="245"/>
         <source>Post-boil for %1</source>
         <translation>Efterkogning for %1</translation>
     </message>
     <message>
-        <location filename="../src/model/Boil.cpp" line="190"/>
+        <location filename="../src/model/Boil.cpp" line="208"/>
         <source>Automatically-generated pre-boil step for %1</source>
         <translation>Automatisk generet forkogningstrin for %1</translation>
     </message>
@@ -156,12 +156,12 @@
         <translation type="unfinished">Varighed kogning</translation>
     </message>
     <message>
-        <location filename="../src/model/Boil.cpp" line="209"/>
+        <location filename="../src/model/Boil.cpp" line="236"/>
         <source>Automatically-generated boil proper step for %1</source>
         <translation>Automatisk genereret almindeligt kogetrin for %1</translation>
     </message>
     <message>
-        <location filename="../src/model/Boil.cpp" line="218"/>
+        <location filename="../src/model/Boil.cpp" line="246"/>
         <source>Automatically-generated post-boil step for %1</source>
         <translation>Automatisk genereret efterkogningstrin for %1</translation>
     </message>
@@ -3760,32 +3760,32 @@ Logfil indeholder måske flere detaljer.</translation>
 <context>
     <name>Equipment</name>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="120"/>
+        <location filename="../src/model/Equipment.cpp" line="121"/>
         <source>Equipment</source>
         <translation>Udstyr</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="121"/>
+        <location filename="../src/model/Equipment.cpp" line="122"/>
         <source>Aging Vessel Loss</source>
         <translation>Tab i lagringsbeholder</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="122"/>
+        <location filename="../src/model/Equipment.cpp" line="123"/>
         <source>Aging Vessel Notes</source>
         <translation>Lagringsbeholder notater</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="123"/>
+        <location filename="../src/model/Equipment.cpp" line="124"/>
         <source>Aging Vessel Type</source>
         <translation>Type lagringsbeholder</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="124"/>
+        <location filename="../src/model/Equipment.cpp" line="125"/>
         <source>Aging Vessel Volume</source>
         <translation>Volumen af lagringsbeholder</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="125"/>
+        <location filename="../src/model/Equipment.cpp" line="126"/>
         <source>Boiling Point</source>
         <translation>Kogepunkt</translation>
     </message>
@@ -3794,7 +3794,7 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Beregn volumen til kogning</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="126"/>
+        <location filename="../src/model/Equipment.cpp" line="127"/>
         <source>Evaporation Rate</source>
         <translation>Fordampningshastighed</translation>
     </message>
@@ -3815,207 +3815,229 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Gæringskar type</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="131"/>
+        <location filename="../src/model/Equipment.cpp" line="133"/>
         <source>HLT Loss</source>
         <translation>Varmtvandsbeholder tab</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="132"/>
+        <location filename="../src/model/Equipment.cpp" line="134"/>
         <source>HLT Notes</source>
         <translation>Varmtvandsbeholder notater</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="133"/>
+        <location filename="../src/model/Equipment.cpp" line="135"/>
         <source>HLT Specific Heat</source>
         <translation>Varmtvandsbeholder specifik varmekapacitet</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="134"/>
+        <location filename="../src/model/Equipment.cpp" line="136"/>
         <source>HLT Type</source>
         <translation>Varmtvandsbeholder type</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="135"/>
+        <location filename="../src/model/Equipment.cpp" line="137"/>
         <source>HLT Volume</source>
         <translation>Varmtvandsbeholder volumen</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="136"/>
+        <location filename="../src/model/Equipment.cpp" line="138"/>
         <source>HLT Weight</source>
         <translation>Varmtvandsbeholder masse</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="137"/>
+        <location filename="../src/model/Equipment.cpp" line="139"/>
         <source>Hop Utilization</source>
         <translation>Udnyttelse af humle</translation>
     </message>
     <message>
-        <location filename="../src/trees/TreeNode.cpp" line="474"/>
         <source>Kettle Boil Size</source>
-        <translation>Kogekar størrelse</translation>
+        <translation type="vanished">Kogekar størrelse</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="127"/>
-        <source>Fermentor Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/model/Equipment.cpp" line="128"/>
+        <location filename="../src/model/Equipment.cpp" line="129"/>
         <source>Fermentor Loss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="129"/>
+        <location filename="../src/model/Equipment.cpp" line="130"/>
         <source>Fermentor Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="130"/>
+        <location filename="../src/model/Equipment.cpp" line="131"/>
         <source>Fermentor Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="138"/>
         <source>Boil Size</source>
-        <translation>Kogning mængde</translation>
+        <translation type="vanished">Kogning mængde</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="139"/>
+        <location filename="../src/model/Equipment.cpp" line="128"/>
+        <source>Default Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/model/Equipment.cpp" line="132"/>
+        <source>Fermentor Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/model/Equipment.cpp" line="140"/>
+        <source>Default Pre-Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/model/Equipment.cpp" line="141"/>
         <source>Kettle Evaporation Per Hour</source>
         <translation>Kogekar fordampning pr. time</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="140"/>
+        <location filename="../src/model/Equipment.cpp" line="142"/>
         <source>Kettle Internal Diameter</source>
         <translation>Kogekar indre diameter</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="141"/>
+        <location filename="../src/model/Equipment.cpp" line="143"/>
         <source>Kettle Notes</source>
         <translation>Kogekar notater</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="142"/>
+        <location filename="../src/model/Equipment.cpp" line="144"/>
         <source>Kettle Opening Diameter</source>
         <translation>Kogekar ydre diameter</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="143"/>
+        <location filename="../src/model/Equipment.cpp" line="145"/>
         <source>Kettle Outflow Per Minute</source>
         <translation>Kogekar tappevolumen pr. minut</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="144"/>
+        <location filename="../src/model/Equipment.cpp" line="146"/>
         <source>Kettle Specific Heat</source>
         <translation>Kogekar specifik varmekapacitet</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="145"/>
+        <location filename="../src/model/Equipment.cpp" line="147"/>
         <source>Kettle Trub Chiller Loss</source>
         <translation>Kogekar kølespiral tab</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="146"/>
+        <location filename="../src/model/Equipment.cpp" line="148"/>
         <source>Kettle Type</source>
         <translation>Kogekar type</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="147"/>
+        <location filename="../src/model/Equipment.cpp" line="149"/>
+        <source>Kettle Volume</source>
+        <translation type="unfinished">Kogekar Volumen</translation>
+    </message>
+    <message>
+        <location filename="../src/model/Equipment.cpp" line="150"/>
         <source>Kettle Weight</source>
         <translation>Kogekar masse</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="148"/>
+        <location filename="../src/model/Equipment.cpp" line="151"/>
         <source>Lauter Tun Deadspace Loss</source>
         <translation>Urtfiltreringsbeholder dødvolumen tab</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="149"/>
+        <location filename="../src/model/Equipment.cpp" line="152"/>
         <source>Lauter Tun Notes</source>
         <translation>Urtfiltreringsbeholder notater</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="150"/>
+        <location filename="../src/model/Equipment.cpp" line="153"/>
         <source>Lauter Tun Specific Heat</source>
         <translation>Urtfiltreringsbeholder specifik varmekapacitet</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="151"/>
+        <location filename="../src/model/Equipment.cpp" line="154"/>
         <source>Lauter Tun Type</source>
         <translation>Urtfiltreringsbeholder type</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="152"/>
+        <location filename="../src/model/Equipment.cpp" line="155"/>
         <source>Lauter Tun Volume</source>
         <translation>Urtfiltreringsbeholder volumen</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="153"/>
+        <location filename="../src/model/Equipment.cpp" line="156"/>
         <source>Lauter Tun Weight</source>
         <translation>Urtfiltreringsbeholder masse</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="154"/>
-        <source>Mash Tun Grain Absorption</source>
-        <translation>Mæskningsbeholder absorption i korn</translation>
+        <location filename="../src/model/Equipment.cpp" line="157"/>
+        <source>Foundation Volume</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="155"/>
+        <location filename="../src/model/Equipment.cpp" line="158"/>
+        <source>Grain Absorption</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Tun Grain Absorption</source>
+        <translation type="vanished">Mæskningsbeholder absorption i korn</translation>
+    </message>
+    <message>
+        <location filename="../src/model/Equipment.cpp" line="159"/>
         <source>Mash Tun Loss</source>
         <translation>Mæskningsbeholder tab</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="156"/>
+        <location filename="../src/model/Equipment.cpp" line="160"/>
         <source>Mash Tun Notes</source>
         <translation>Mæskningsbeholder notater</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="157"/>
+        <location filename="../src/model/Equipment.cpp" line="161"/>
         <source>Mash Tun Specific Heat</source>
         <translation>Mæskningsbeholder specifik varmekapacitet</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="158"/>
+        <location filename="../src/model/Equipment.cpp" line="162"/>
         <source>Mash Tun Type</source>
         <translation>Mæskningsbeholder type</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="159"/>
+        <location filename="../src/model/Equipment.cpp" line="163"/>
         <source>Mash Tun Volume</source>
         <translation>Mæskningsbeholder volumen</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="160"/>
+        <location filename="../src/model/Equipment.cpp" line="164"/>
         <source>Mash Tun Weight</source>
         <translation>Mæskningsbeholder masse</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="161"/>
+        <location filename="../src/model/Equipment.cpp" line="165"/>
         <source>Packaging Vessel Loss</source>
         <translation>Opbevaringsbeholder tab</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="162"/>
+        <location filename="../src/model/Equipment.cpp" line="166"/>
         <source>Packaging Vessel Notes</source>
         <translation>Opbevaringsbeholder notater</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="163"/>
+        <location filename="../src/model/Equipment.cpp" line="167"/>
         <source>Packaging Vessel Type</source>
         <translation>Opbevaringsbeholder type</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="164"/>
+        <location filename="../src/model/Equipment.cpp" line="168"/>
         <source>Packaging Vessel Volume</source>
         <translation>Opbevaringsbeholder volumen</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="165"/>
+        <location filename="../src/model/Equipment.cpp" line="169"/>
         <source>Top Up Kettle</source>
         <translation>Opfyldning kogekar</translation>
     </message>
     <message>
-        <location filename="../src/model/Equipment.cpp" line="166"/>
+        <location filename="../src/model/Equipment.cpp" line="170"/>
         <source>Top Up Water</source>
         <translation>Opfyldning vand</translation>
     </message>
@@ -4031,6 +4053,11 @@ Logfil indeholder måske flere detaljer.</translation>
         <location filename="../src/trees/TreeNode.cpp" line="471"/>
         <source>Preboil</source>
         <translation>Før kogning</translation>
+    </message>
+    <message>
+        <location filename="../src/trees/TreeNode.cpp" line="474"/>
+        <source>Batch Size</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BoilTime</source>
@@ -4089,87 +4116,125 @@ Logfil indeholder måske flere detaljer.</translation>
         <translation type="vanished">Gem</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="161"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="182"/>
         <source>The following values are not set:</source>
         <translation>Følgende værdier er ikke angivet:</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="164"/>
         <source>mash tun volume (all-grain and BIAB only)</source>
-        <translation>mæskekar volumen (kun med malt eller færdige kits)</translation>
+        <translation type="vanished">mæskekar volumen (kun med malt eller færdige kits)</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="169"/>
         <source>batch size</source>
-        <translation>Volumen af portion</translation>
+        <translation type="vanished">Volumen af portion</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="174"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="176"/>
         <source>hop utilization</source>
         <translation>Humleanvendelse</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="180"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="249"/>
         <source>Calculation Warnings</source>
         <translation>Beregning Advarsel</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="160"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="165"/>
         <source>This equipment profile may break %1&apos;s maths</source>
         <translation>Denne udstyrsprofil ødelægger måske %1&apos;s beregninger</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="198"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="172"/>
+        <source>default batch size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="199"/>
+        <source>Foundation water (%1) plus mash tun loss (%2) leaves no room for the mash in a mash tun with total capacity %3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="212"/>
+        <source>Foundation water (%1) leaves no room for the mash in the kettle (total capacity %2).  (As there is no separate mash tun, the mash happens in the kettle.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="229"/>
+        <source>The default pre-boil volume (%1) is more than the kettle can hold (%2).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="240"/>
+        <source>The default batch size (%1) is more than the fermentor can hold (%2).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="270"/>
         <source>Numerical values on zero-sized &quot;optional&quot; vessels will be unset or zeroed when you save</source>
         <translation>Numeriske værdier på &quot;valgfri&quot; beholdere med nulvolumen får ingen værdi eller bliver sat til 0, når du gemmer</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="199"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="271"/>
         <source>The following values will be discarded:</source>
         <translation>Følgende værdier glemmes:</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="201"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="273"/>
         <source>Hot liquor tank losses</source>
         <translation>Tab fra beholder med varm væske</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="202"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="274"/>
         <source>Hot liquor tank weight</source>
         <translation>Masse af beholder med varm væske</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="203"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="275"/>
         <source>Hot liquor tank specific heat capacity</source>
         <translation>Specifik varmekapacietet af beholder med varm væske</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="206"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="278"/>
+        <source>Mash tun losses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="279"/>
+        <source>Mash tun weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="280"/>
+        <source>Mash tun specific heat capacity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="283"/>
         <source>Lauter tun losses</source>
         <translation>Tab i filtreringsbeholder</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="207"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="284"/>
         <source>Lauter tun weight</source>
         <translation>Masse af filtreringsbeholder</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="208"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="285"/>
         <source>Lauter tun specific heat capacity</source>
         <translation>Specifik varmekapacitet af filtreringsbeholder</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="211"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="288"/>
         <source>Packaging vessel losses</source>
         <translation>Tab i lagerbeholder</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="214"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="291"/>
         <source>Aging vessel losses</source>
         <translation>Tab i lagringsbeholder</translation>
     </message>
     <message>
-        <location filename="../src/editors/EquipmentEditor.cpp" line="219"/>
+        <location filename="../src/editors/EquipmentEditor.cpp" line="298"/>
         <source>Data Discard Warnings</source>
         <translation>Advarsel om at data glemmes</translation>
     </message>
@@ -5463,12 +5528,12 @@ Antal opskrifter</translation>
         <translation type="vanished">Gem</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1821"/>
+        <location filename="../src/MainWindow.cpp" line="1820"/>
         <source>Equipment request</source>
         <translation>Udstyr forespørgsel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1822"/>
+        <location filename="../src/MainWindow.cpp" line="1821"/>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
         <translation>Ønsker du at sætte volumen af portion, volumen før kogning og varighed til udstyrets værdier?</translation>
     </message>
@@ -5725,17 +5790,15 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation>Ændr opskriftskit</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1816"/>
         <source>Change Tun Weight</source>
-        <translation>Ændr karrets masse</translation>
+        <translation type="vanished">Ændr karrets masse</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1817"/>
         <source>Change Tun Specific Heat</source>
-        <translation>Ændr karrets specifikke varmefylde</translation>
+        <translation type="vanished">Ændr karrets specifikke varmefylde</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1831"/>
+        <location filename="../src/MainWindow.cpp" line="1830"/>
         <location filename="../src/MainWindow.cpp" line="1957"/>
         <source>Change Batch Size</source>
         <translation>Ændr volumen af portion</translation>
@@ -5972,27 +6035,27 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Din opskrift må have gærbare for at bestemme et mæsk</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="335"/>
+        <location filename="../src/MashDesigner.cpp" line="341"/>
         <source>No Equipment</source>
         <translation>Intet udstyr</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="336"/>
+        <location filename="../src/MashDesigner.cpp" line="342"/>
         <source>You have not set an equipment for this recipe. We really cannot continue without one.</source>
         <translation>Du har ikke udstyr til denne opskrift. Kan ikke fortsætte uden.</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="343"/>
+        <location filename="../src/MashDesigner.cpp" line="349"/>
         <source>Tun Temp</source>
         <translation>Tun temperatur</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="344"/>
+        <location filename="../src/MashDesigner.cpp" line="350"/>
         <source>Enter the temperature of the tun before your first infusion.</source>
         <translation>Indtast temperatur af beholder før første infusion.</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="641"/>
+        <location filename="../src/MashDesigner.cpp" line="670"/>
         <source>Decoction error</source>
         <translation>Fejl ved dekoktion</translation>
     </message>
@@ -6006,7 +6069,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation>Din opskrift skal have gærbare ingredienser for at du kan designe en mæskning.</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="641"/>
+        <location filename="../src/MashDesigner.cpp" line="670"/>
         <source>The first m_mash step cannot be a decoction.</source>
         <translation>Første mæskningstrin kan ikke være dekoktion.</translation>
     </message>
@@ -6187,12 +6250,12 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation>Mæsk tykkelse (%1/%2)</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="230"/>
+        <location filename="../src/MashWizard.cpp" line="236"/>
         <source>Bad thickness</source>
         <translation>Forkert tykkelse</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="231"/>
+        <location filename="../src/MashWizard.cpp" line="237"/>
         <source>You must have a positive mash thickness.</source>
         <translation>Mæsk tykkelsen skal være positiv.</translation>
     </message>
@@ -6207,52 +6270,52 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation>Der skal være mindst et mæsketrin for at køre guiden.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="158"/>
+        <location filename="../src/MashWizard.cpp" line="157"/>
         <source>No grains in the mash</source>
         <translation>Antal malte i mæskningen</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="159"/>
+        <location filename="../src/MashWizard.cpp" line="158"/>
         <source>Check the &apos;Fermentables&apos; tab.  You need some mash-stage grain additions before you can run the wizard.</source>
         <translation>Tjek fanebladet med &quot;Gærbare ingredienser&quot;.  Du skal have tilsat malt til mæskningen, før guiden kan afvikles.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="180"/>
+        <location filename="../src/MashWizard.cpp" line="179"/>
         <source>First step</source>
         <translation>Første trin</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="180"/>
+        <location filename="../src/MashWizard.cpp" line="179"/>
         <source>Your first mash step must be an infusion.</source>
         <translation>Dit første mæsketrin skal være en infusion.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="195"/>
+        <location filename="../src/MashWizard.cpp" line="194"/>
         <source>No mash steps</source>
         <translation>Ingen mæskningstrin</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="196"/>
+        <location filename="../src/MashWizard.cpp" line="195"/>
         <source>You need to have mash steps before you can run the wizard.</source>
         <translation>Du skal have mæskningstrin, før guiden kan afvikles.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="320"/>
+        <location filename="../src/MashWizard.cpp" line="333"/>
         <source>Mash too thick</source>
         <translation>Mæsken er for tyktflydende</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="321"/>
+        <location filename="../src/MashWizard.cpp" line="334"/>
         <source>Your mash is too thick for desired temperature at first step.</source>
         <translation>Din mæsk er for tyktflydende til den ønskede temperatur i første trin.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="529"/>
+        <location filename="../src/MashWizard.cpp" line="548"/>
         <source>In order to hit your sparge temp, the sparge water must be above boiling.  Lower your sparge temp, or allow for more sparge water.</source>
         <translation>For at ramme din spargningstemperatur skal spargevandet være over kogepunktet. Nedsæt din spargningstemperatur, eller tillad mere spargevand.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="573"/>
+        <location filename="../src/MashWizard.cpp" line="592"/>
         <source>You have too much wort from the mash for your boil size.  Try increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
         <translation>Du har for meget urt fra mæskningen til dit kogevolumen. Det foreslås at øge kogevolumen ved at øge kogetiden eller reducere, hvor tyktflydende din mæsk er.</translation>
     </message>
@@ -6261,32 +6324,32 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Din mæsk er for tyktflydende til den ønskede temperatur i første trin.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="402"/>
+        <location filename="../src/MashWizard.cpp" line="416"/>
         <source>Decoction error</source>
         <translation>Fejl ved dekoktion</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="402"/>
+        <location filename="../src/MashWizard.cpp" line="416"/>
         <source>Something went wrong in decoction calculation.</source>
         <translation>Noget gik galt i beregning af dekoktionen.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="460"/>
+        <location filename="../src/MashWizard.cpp" line="477"/>
         <source>Too much water</source>
         <translation>For meget vand</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="461"/>
+        <location filename="../src/MashWizard.cpp" line="478"/>
         <source>Cannot adjust volume of last step to meet target runoff volume</source>
         <translation>Kan ikke justere volumen for sidste trin så ønsket slutvolumen nås</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="483"/>
+        <location filename="../src/MashWizard.cpp" line="500"/>
         <source>In order to hit your target temp on the final step, the infusion water would need to be above boiling.  Lower your initial infusion volume.</source>
         <translation>For at ramme din sluttemperatur i sluttrinnet, skal infusionsvandet være over kogepunktet. Nedsæt dit startvolumen for infusionen.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="528"/>
+        <location filename="../src/MashWizard.cpp" line="547"/>
         <source>Sparge temp.</source>
         <translation>Eftergydningstemperatur</translation>
     </message>
@@ -6295,7 +6358,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">For at ramme din spargningstemperatur skal spargevandet være over kogepunktet. Nedsæt din spargningstemperatur, eller tillad mere spargevand.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="572"/>
+        <location filename="../src/MashWizard.cpp" line="591"/>
         <source>Too much wort</source>
         <translation>For meget urt</translation>
     </message>
@@ -6304,17 +6367,17 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Du har for meget urt fra mæskningen til dit kogevolumen. Det foreslås at øge kogevolumen ved at øge kogetiden eller reducere, hvor tyktflydende din mæsk er.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="537"/>
+        <location filename="../src/MashWizard.cpp" line="556"/>
         <source>Batch Sparge %1</source>
         <translation>Portionsvis spargning %1</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="554"/>
+        <location filename="../src/MashWizard.cpp" line="573"/>
         <source>Fly Sparge</source>
         <translation>Kontinuert spargning</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="482"/>
+        <location filename="../src/MashWizard.cpp" line="499"/>
         <source>Infusion temp.</source>
         <translation>Infusions-temp.</translation>
     </message>
@@ -7221,15 +7284,15 @@ Tryk OK for at stoppe.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="296"/>
-        <location filename="../src/main.cpp" line="302"/>
-        <location filename="../src/main.cpp" line="308"/>
+        <location filename="../src/main.cpp" line="299"/>
+        <location filename="../src/main.cpp" line="305"/>
+        <location filename="../src/main.cpp" line="311"/>
         <source>Application terminates</source>
         <translation>Program stopper</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="297"/>
-        <location filename="../src/main.cpp" line="303"/>
+        <location filename="../src/main.cpp" line="300"/>
+        <location filename="../src/main.cpp" line="306"/>
         <source>The application encountered a fatal error.
 Error message:
 %1</source>
@@ -7238,7 +7301,7 @@ Fejlmeddelelse:
 %</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="309"/>
+        <location filename="../src/main.cpp" line="312"/>
         <source>The application encountered a fatal error.</source>
         <translation>Programmet løb ind i en fatal fejl.</translation>
     </message>
@@ -7486,32 +7549,32 @@ Se detaljer i logfil.
 Programmet lukkes nu.</translation>
     </message>
     <message>
-        <location filename="../src/database/DefaultContentLoader.cpp" line="112"/>
+        <location filename="../src/database/DefaultContentLoader.cpp" line="111"/>
         <source>Merge Database</source>
         <translation>Kombiner databaser</translation>
     </message>
     <message>
-        <location filename="../src/database/DefaultContentLoader.cpp" line="113"/>
+        <location filename="../src/database/DefaultContentLoader.cpp" line="112"/>
         <source>New ingredients etc are available. Would you like to add them to your database?</source>
         <translation>Nye ingredienser mv. er tilgængelige. Vil du føje dem til din database?</translation>
     </message>
     <message>
-        <location filename="../src/database/DefaultContentLoader.cpp" line="131"/>
+        <location filename="../src/database/DefaultContentLoader.cpp" line="130"/>
         <source>Error matching %1 file pattern in %2 directory</source>
         <translation>Ikke muligt at finde filmønstret %1 i mappen %2</translation>
     </message>
     <message>
-        <location filename="../src/database/DefaultContentLoader.cpp" line="216"/>
+        <location filename="../src/database/DefaultContentLoader.cpp" line="215"/>
         <source>New Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/database/DefaultContentLoader.cpp" line="217"/>
+        <location filename="../src/database/DefaultContentLoader.cpp" line="216"/>
         <source>Stop bothering you about new data?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/database/ObjectStoreTyped.cpp" line="1048"/>
+        <location filename="../src/database/ObjectStoreTyped.cpp" line="1051"/>
         <source>There were errors loading the following object store(s): %1</source>
         <translation>Der opstod fejl ved hentning af følgende objektsamling(er): %1</translation>
     </message>
@@ -8675,17 +8738,17 @@ Logfil indeholder evt. flere detaljer.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/serialization/json/dotBeer/DotBeer.cpp" line="1027"/>
+        <location filename="../src/serialization/json/dotBeer/DotBeer.cpp" line="1030"/>
         <source>This file was written using version %1 of the dotBeer format, which is newer than the version this version of %2 supports (%3).  You may need a newer version of %2 to read it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/serialization/json/dotBeer/DotBeer.cpp" line="1111"/>
+        <location filename="../src/serialization/json/dotBeer/DotBeer.cpp" line="1114"/>
         <source>Mash step for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/serialization/json/dotBeer/DotBeer.cpp" line="1137"/>
+        <location filename="../src/serialization/json/dotBeer/DotBeer.cpp" line="1140"/>
         <source>Primary fermentation for %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9131,7 +9194,7 @@ The final volume in the primary is %1.</source>
         <translation>Sukkertilsætning sukkernavn</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="3217"/>
+        <location filename="../src/model/Recipe.cpp" line="3211"/>
         <source>%1 water to %2</source>
         <translation type="unfinished">%1 vand til %2  {1 ?} {2?}</translation>
     </message>
@@ -10746,22 +10809,22 @@ The final volume in the primary is %1.</source>
 <context>
     <name>ScaleRecipeEquipmentPage</name>
     <message>
-        <location filename="../src/tools/ScaleRecipeTool.cpp" line="204"/>
+        <location filename="../src/tools/ScaleRecipeTool.cpp" line="206"/>
         <source>Select Equipment</source>
         <translation>Vælg udstyr</translation>
     </message>
     <message>
-        <location filename="../src/tools/ScaleRecipeTool.cpp" line="205"/>
+        <location filename="../src/tools/ScaleRecipeTool.cpp" line="207"/>
         <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
         <translation>Opskriften skaleres til at passe til udstyrets volumen for portion og effektivitet</translation>
     </message>
     <message>
-        <location filename="../src/tools/ScaleRecipeTool.cpp" line="207"/>
+        <location filename="../src/tools/ScaleRecipeTool.cpp" line="209"/>
         <source>New Equipment</source>
         <translation>Nyt udstyr</translation>
     </message>
     <message>
-        <location filename="../src/tools/ScaleRecipeTool.cpp" line="208"/>
+        <location filename="../src/tools/ScaleRecipeTool.cpp" line="210"/>
         <source>New Efficiency (%)</source>
         <translation>Ny effektivitet (%)</translation>
     </message>
@@ -10769,12 +10832,12 @@ The final volume in the primary is %1.</source>
 <context>
     <name>ScaleRecipeIntroPage</name>
     <message>
-        <location filename="../src/tools/ScaleRecipeTool.cpp" line="160"/>
+        <location filename="../src/tools/ScaleRecipeTool.cpp" line="162"/>
         <source>Scale Recipe</source>
         <translation>Skaler opskrift</translation>
     </message>
     <message>
-        <location filename="../src/tools/ScaleRecipeTool.cpp" line="161"/>
+        <location filename="../src/tools/ScaleRecipeTool.cpp" line="163"/>
         <source>This wizard will help you scale a recipe to another size or efficiency.  Select another equipment with the new batch size and/or efficiency and the wizard will scale the recipe ingredients automatically.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10786,12 +10849,12 @@ The final volume in the primary is %1.</source>
 <context>
     <name>ScaleRecipeTool</name>
     <message>
-        <location filename="../src/tools/ScaleRecipeTool.cpp" line="131"/>
+        <location filename="../src/tools/ScaleRecipeTool.cpp" line="133"/>
         <source>Recipe Scaled</source>
         <translation>Opskrift skaleret</translation>
     </message>
     <message>
-        <location filename="../src/tools/ScaleRecipeTool.cpp" line="132"/>
+        <location filename="../src/tools/ScaleRecipeTool.cpp" line="134"/>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
         <translation>Udstyret og mæskningen er tilbagestillet, da mæskningstemperaturen ikke uden videre kan skaleres. Gennemfør mæskningsguiden igen.</translation>
     </message>
@@ -13264,8 +13327,8 @@ The final volume in the primary is %1.</source>
 <context>
     <name>equipmentEditor</name>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="993"/>
-        <location filename="../ui/equipmentEditor.ui" line="1069"/>
+        <location filename="../ui/equipmentEditor.ui" line="1158"/>
+        <location filename="../ui/equipmentEditor.ui" line="1234"/>
         <source>Losses</source>
         <translation>Tab</translation>
     </message>
@@ -13295,9 +13358,8 @@ The final volume in the primary is %1.</source>
         <translation>Navn til identifikation af denne udstyrsprofil</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="82"/>
         <source>Use a different name for each equipment profile.  If you brew different batch sizes on the same equipment, you need a separate equipment profile for each batch size.</source>
-        <translation>Anvend forskellige navne for udstyrsprofiler.  Hvis du brygger forskellige volumener af portion på samme udstyr, har du brug for forskellige profiler for hvert volumen.</translation>
+        <translation type="vanished">Anvend forskellige navne for udstyrsprofiler.  Hvis du brygger forskellige volumener af portion på samme udstyr, har du brug for forskellige profiler for hvert volumen.</translation>
     </message>
     <message>
         <source>Optional Vessels</source>
@@ -13305,25 +13367,25 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="103"/>
-        <location filename="../ui/equipmentEditor.ui" line="290"/>
+        <location filename="../ui/equipmentEditor.ui" line="457"/>
         <source>Hot Liquor Tank</source>
         <translation>Varm væske beholder</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="110"/>
-        <location filename="../ui/equipmentEditor.ui" line="567"/>
+        <location filename="../ui/equipmentEditor.ui" line="117"/>
+        <location filename="../ui/equipmentEditor.ui" line="713"/>
         <source>Lauter Tun</source>
         <translation>Urtfiltreringsbeholder</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="117"/>
-        <location filename="../ui/equipmentEditor.ui" line="946"/>
+        <location filename="../ui/equipmentEditor.ui" line="124"/>
+        <location filename="../ui/equipmentEditor.ui" line="1111"/>
         <source>Aging Vessel</source>
         <translation>Lagertank</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="124"/>
-        <location filename="../ui/equipmentEditor.ui" line="1022"/>
+        <location filename="../ui/equipmentEditor.ui" line="131"/>
+        <location filename="../ui/equipmentEditor.ui" line="1187"/>
         <source>Packaging Vessel</source>
         <translation>Opbevaringstank</translation>
     </message>
@@ -13340,197 +13402,306 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Tid</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="157"/>
+        <location filename="../ui/equipmentEditor.ui" line="217"/>
         <source>Default final top-up water</source>
         <translation>Standardmængde sluttilsætning af vand</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="174"/>
+        <location filename="../ui/equipmentEditor.ui" line="234"/>
         <source>Default Kettle top-up water</source>
         <translation>Standardmængde tilsætning til kogekar vand</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="192"/>
+        <location filename="../ui/equipmentEditor.ui" line="252"/>
         <source>Hop % Utilization</source>
         <translation>Humleudnyttelse %</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="212"/>
+        <location filename="../ui/equipmentEditor.ui" line="272"/>
         <source>Boiling Point of Water</source>
         <translation>Kogepunkt for vand</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="229"/>
+        <location filename="../ui/equipmentEditor.ui" line="289"/>
         <source>Adjustment factor for large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="239"/>
+        <location filename="../ui/equipmentEditor.ui" line="299"/>
         <source>The default value is 100°C (212°F), but the actual value will vary with altitude.</source>
         <translation>Standardværdi er 100°C (212°F), men aktuel værdi varierer med højde over havet.</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="249"/>
+        <location filename="../ui/equipmentEditor.ui" line="309"/>
         <source>ID in database</source>
         <translation>ID i database</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="269"/>
+        <location filename="../ui/equipmentEditor.ui" line="329"/>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
         <translation>Du kan normalt ignorere dette, men det er nogle gange nyttigt til fejlfinding.</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="296"/>
+        <location filename="../ui/equipmentEditor.ui" line="350"/>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="356"/>
+        <source>These settings apply to whichever vessel the mash happens in: the mash tun or, if you do not have a separate mash tun (eg on an all-in-one system such as the Grainfather, or for brew in a bag), the boil kettle.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="369"/>
+        <source>Foundation Water (recovered)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="379"/>
+        <source>Water below the false bottom or malt pipe that drains out with the wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="389"/>
+        <source>The water that has to be below the false bottom (or malt pipe / basket) before the grain is covered, but which drains out with the wort and so is NOT lost.  (It is part of the Total Capacity of the mash tun or, if there is no mash tun, of the kettle.)  This is common in all-in-one systems -- eg about 3.5 liters for a Grainfather G30.  It is added to the strike water, so the mash thickness you choose applies just to the grain bed, and it is taken off the sparge water, so the total water needed does not change.  Leave at 0 if there is no such space (eg brew in a bag without a false bottom).  Other software calls this, eg, &quot;Mash-Tun Deadspace&quot; (Brewfather) or &quot;Mash Tun Addition&quot; (BeerSmith).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="423"/>
+        <source>How much water is permanently lost to each unit of weight of grain during mashing (ie the water the spent grain retains).  This is separate from Foundation Water and Mash Tun Loss, which are about the vessel rather than the grain.  (For an all-in-one system, anything that does not drain from the malt pipe should be included here.)  The default value is about 1.085 liters per kilogram (0.13 US gallons per pound), which is typical for a conventional mash tun.  For an all-in-one system with a malt pipe, about 0.8 liters per kilogram is more typical, and for brew in a bag with the bag squeezed, about 0.66 liters per kilogram.  It can fluctuate due to the fineness of your grind, how well the grain is drained, the malt, and other factors.  Pressing the &quot;Default Absorption&quot; button will reset the value to the default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="463"/>
         <source>Hot Liquor Tank Type</source>
         <translation>Varm væske beholdertype</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="323"/>
-        <location filename="../ui/equipmentEditor.ui" line="430"/>
-        <location filename="../ui/equipmentEditor.ui" line="893"/>
-        <location filename="../ui/equipmentEditor.ui" line="979"/>
-        <location filename="../ui/equipmentEditor.ui" line="1055"/>
+        <location filename="../ui/equipmentEditor.ui" line="490"/>
+        <location filename="../ui/equipmentEditor.ui" line="1144"/>
+        <location filename="../ui/equipmentEditor.ui" line="1220"/>
         <source>Volume</source>
         <translation>Volumen</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="337"/>
+        <location filename="../ui/equipmentEditor.ui" line="504"/>
         <source>Evaporation Loss</source>
         <translation>Fordampningstab</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="351"/>
-        <location filename="../ui/equipmentEditor.ui" line="447"/>
-        <location filename="../ui/equipmentEditor.ui" line="614"/>
-        <location filename="../ui/equipmentEditor.ui" line="764"/>
+        <location filename="../ui/equipmentEditor.ui" line="518"/>
+        <location filename="../ui/equipmentEditor.ui" line="617"/>
+        <location filename="../ui/equipmentEditor.ui" line="760"/>
+        <location filename="../ui/equipmentEditor.ui" line="929"/>
         <source>Weight</source>
         <translation>Masse</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="365"/>
-        <location filename="../ui/equipmentEditor.ui" line="464"/>
-        <location filename="../ui/equipmentEditor.ui" line="628"/>
-        <location filename="../ui/equipmentEditor.ui" line="781"/>
+        <location filename="../ui/equipmentEditor.ui" line="532"/>
+        <location filename="../ui/equipmentEditor.ui" line="674"/>
+        <location filename="../ui/equipmentEditor.ui" line="774"/>
+        <location filename="../ui/equipmentEditor.ui" line="946"/>
         <source>Specific Heat Capacity</source>
         <translation>Specifik varmekapacitet</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="379"/>
+        <location filename="../ui/equipmentEditor.ui" line="546"/>
         <source>HLT Notes</source>
         <translation>Varm væskebeholder notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="382"/>
-        <location filename="../ui/equipmentEditor.ui" line="555"/>
-        <location filename="../ui/equipmentEditor.ui" line="662"/>
-        <location filename="../ui/equipmentEditor.ui" line="843"/>
-        <location filename="../ui/equipmentEditor.ui" line="934"/>
-        <location filename="../ui/equipmentEditor.ui" line="1010"/>
-        <location filename="../ui/equipmentEditor.ui" line="1086"/>
+        <location filename="../ui/equipmentEditor.ui" line="549"/>
+        <location filename="../ui/equipmentEditor.ui" line="701"/>
+        <location filename="../ui/equipmentEditor.ui" line="824"/>
+        <location filename="../ui/equipmentEditor.ui" line="1008"/>
+        <location filename="../ui/equipmentEditor.ui" line="1099"/>
+        <location filename="../ui/equipmentEditor.ui" line="1175"/>
+        <location filename="../ui/equipmentEditor.ui" line="1251"/>
         <source>Notes</source>
         <translation>Notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="394"/>
+        <location filename="../ui/equipmentEditor.ui" line="110"/>
+        <location filename="../ui/equipmentEditor.ui" line="561"/>
         <source>Mash Tun</source>
         <translation>Mæskekar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="400"/>
-        <location filename="../ui/equipmentEditor.ui" line="403"/>
-        <location filename="../ui/equipmentEditor.ui" line="410"/>
+        <location filename="../ui/equipmentEditor.ui" line="567"/>
+        <location filename="../ui/equipmentEditor.ui" line="570"/>
+        <location filename="../ui/equipmentEditor.ui" line="577"/>
         <source>Mash Tun Type</source>
         <translation>Type af mæskekar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="440"/>
         <source>Volume of mash tun</source>
-        <translation>Volumen af mæskekar</translation>
+        <translation type="vanished">Volumen af mæskekar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="481"/>
+        <location filename="../ui/equipmentEditor.ui" line="691"/>
         <source>This is equal to the vessel&apos;s Heat Capacity divided by its weight.  Typical values are • Aluminum - 0.215 c/g·C  • Copper - 0.092 c/g·C  • Iron/Steel - 0.108 c/g·C  • Plastic - 0.359 c/g·C.</source>
         <translation>Dette er lig med beholderens varmekapacitet divideret med dens masse.  Typiske værdier er • Aluminum - 0.900 J/g·°C  • Kobber - 0.385 J/g·°C • Jern/stål- 0.444 J/g·°C • Plastik - 0.92 J/g·°C.</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="491"/>
+        <location filename="../ui/equipmentEditor.ui" line="399"/>
         <source>Grain absorption</source>
         <translation>Absorption i malt</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="505"/>
+        <location filename="../ui/equipmentEditor.ui" line="413"/>
         <source>Default Absorption</source>
         <translation>Standardabsorption</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="515"/>
         <source>How much water is permanently lost to each unit of weight of grain during mashing. The default value is 1.0875 liters per kilogram. This can fluctuate due to the fine-ness of your grind, humidity, brand, and other factors. Pressing the &quot;Default Absorption&quot; button will reset the value to this default.</source>
-        <translation>Hvor meget vand mistes pr. masseenhed af malt under mæskningen. Standardværdien er 1.0875 L/kg. Dette kan variere afhængigt af formalingsgraden, leverandør og andre faktorer. Ved klik på &quot;Standardabsorption&quot; vil værdien blive sat til denne standard.</translation>
+        <translation type="vanished">Hvor meget vand mistes pr. masseenhed af malt under mæskningen. Standardværdien er 1.0875 L/kg. Dette kan variere afhængigt af formalingsgraden, leverandør og andre faktorer. Ved klik på &quot;Standardabsorption&quot; vil værdien blive sat til denne standard.</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="525"/>
         <source>Other Mashing losses</source>
-        <translation>Andre tab under mæskning</translation>
+        <translation type="vanished">Andre tab under mæskning</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="535"/>
         <source>Mashing losses not included in grain absorption</source>
-        <translation>Tab under mæskning, som ikke er indregnet i absorption</translation>
+        <translation type="vanished">Tab under mæskning, som ikke er indregnet i absorption</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="545"/>
         <source>If you do not have a separate lauter tun, then this should include the lautering deadspace.</source>
-        <translation>Hvis du ikke har en særskilt urtfiltrerinsbeholder, skal denne inkludere dødvolumen ved urtfiltreringen.</translation>
+        <translation type="vanished">Hvis du ikke har en særskilt urtfiltrerinsbeholder, skal denne inkludere dødvolumen ved urtfiltreringen.</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="552"/>
+        <location filename="../ui/equipmentEditor.ui" line="698"/>
         <source>Mash Tun Notes</source>
         <translation>Mæskekar notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="573"/>
+        <location filename="../ui/equipmentEditor.ui" line="719"/>
         <source>Lauter Tun Type</source>
         <translation>Urtfiltreringsbeholder type</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="600"/>
+        <location filename="../ui/equipmentEditor.ui" line="746"/>
         <source>Lauter Tun Volume</source>
         <translation>Urtfiltreringsbeholder volumen</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="645"/>
-        <location filename="../ui/equipmentEditor.ui" line="907"/>
+        <location filename="../ui/equipmentEditor.ui" line="885"/>
+        <source>The most the kettle can hold (not the pre-boil volume, which is on the General tab).  If there is no separate mash tun, this is also the space available for the mash.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="1072"/>
         <source>Deadspace Losses</source>
         <translation>Dødvolumentab</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="659"/>
+        <location filename="../ui/equipmentEditor.ui" line="821"/>
         <source>Lauter Tun Notes</source>
         <translation>Urtfiltreringsbeholder notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="674"/>
+        <location filename="../ui/equipmentEditor.ui" line="82"/>
+        <source>Use a different name for each equipment profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="141"/>
+        <source>These checkboxes control which vessel tabs are shown.  An asterisk after a vessel means it has a volume set, and so is used in calculations, even if its tab is hidden.  Attributes of &quot;optional&quot; vessels will not be saved if their volumes are left blank or set to 0.  If there is no mash tun, the mash happens in the boil kettle (as on all-in-one systems and for brew in a bag).  If there is no lauter tun, lautering happens wherever the mash happens.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="167"/>
+        <source>Default Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="177"/>
+        <source>Volume into the fermentor that new recipes using this equipment start with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="187"/>
+        <source>Default Pre-boil Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="197"/>
+        <source>Volume in the kettle at the start of the boil that new recipes using this equipment start with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="207"/>
+        <source>The batch size (ie the volume going into the fermentor) and pre-boil volume that a recipe starts with when you choose this equipment for it.  These are not the capacities of the fermentor and kettle, which are set on their own tabs.  If you brew different batch sizes on the same equipment, you can either change the batch size in each recipe, or have a separate equipment profile for each batch size.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="600"/>
+        <location filename="../ui/equipmentEditor.ui" line="875"/>
+        <location filename="../ui/equipmentEditor.ui" line="1058"/>
+        <source>Total Capacity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="610"/>
+        <source>Total usable capacity of the mash tun, including any space below the false bottom or malt pipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="634"/>
+        <source>The most the mash tun can hold, including any space below the false bottom (or malt pipe / basket) and anything that stays behind in the vessel.  The space actually available for the grain and its strike water is this volume less the Foundation Water (on the Mash tab) and Mash Tun Loss below.  If you do not have a separate mash tun -- eg on an all-in-one system such as the Grainfather, or for brew in a bag -- leave this blank (and untick Mash Tun on the General tab): the mash then happens in the boil kettle.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="644"/>
+        <source>Mash Tun Loss (not recovered)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="654"/>
+        <source>Liquid that stays behind in the mash tun and is never recovered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="664"/>
+        <source>Liquid that stays behind in the mash tun (eg below the outlet or in pipework) and never reaches the boil.  It is added to the strike water and to the total water needed.  Do not include grain absorption or anything that drains out with the wort (put those under Grain Absorption and Foundation Water on the Mash tab).  If you do not have a separate lauter tun, include your lautering losses here.  If you do have a separate lauter tun, its losses go on the Lauter Tun tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="794"/>
+        <source>Lauter Tun Loss (not recovered)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="804"/>
+        <source>Wort that stays behind in the lauter tun and is never recovered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="814"/>
+        <source>Wort that stays behind in the lauter tun and its plumbing, and never reaches the boil.  This is only used if you have a separate lauter tun (ie the lauter tun has a volume set).  Otherwise, include lautering losses in the Mash Tun Loss on the Mash Tun tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="836"/>
         <source>Boil Kettle</source>
         <translation>Kogekar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="680"/>
-        <location filename="../ui/equipmentEditor.ui" line="683"/>
-        <location filename="../ui/equipmentEditor.ui" line="690"/>
+        <location filename="../ui/equipmentEditor.ui" line="842"/>
+        <location filename="../ui/equipmentEditor.ui" line="845"/>
+        <location filename="../ui/equipmentEditor.ui" line="852"/>
         <source>Boil Kettle Type</source>
         <translation>Kogekar type</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="713"/>
         <source>Pre-boil Volume</source>
-        <translation>Voumen før kogning</translation>
+        <translation type="vanished">Voumen før kogning</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
         <translation type="vanished">Beregn volumen før kogning</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="730"/>
+        <location filename="../ui/equipmentEditor.ui" line="895"/>
         <source>Evaporation rate per hour</source>
         <translation>Fordampningshastighed pr. time</translation>
     </message>
@@ -13539,12 +13710,12 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Tab ved overførsel kogekar til gærkar</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="798"/>
+        <location filename="../ui/equipmentEditor.ui" line="963"/>
         <source>Outflow per minute</source>
         <translation>Aftapningshastighed pr. min</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="840"/>
+        <location filename="../ui/equipmentEditor.ui" line="1005"/>
         <source>Brew Kettle Notes</source>
         <translation>Bryggekar notater</translation>
     </message>
@@ -13557,52 +13728,51 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Gærkar type</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="924"/>
         <source>This is also known as the batch size.</source>
-        <translation>Dette er det samme som volumen af portion.</translation>
+        <translation type="vanished">Dette er det samme som volumen af portion.</translation>
     </message>
     <message>
         <source>Fermenter Notes</source>
         <translation type="vanished">Gærkar notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="952"/>
+        <location filename="../ui/equipmentEditor.ui" line="1117"/>
         <source>Aging Vessel Type</source>
         <translation>Lagringsbeholder type</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1007"/>
-        <location filename="../ui/equipmentEditor.ui" line="1083"/>
+        <location filename="../ui/equipmentEditor.ui" line="1172"/>
+        <location filename="../ui/equipmentEditor.ui" line="1248"/>
         <source>Packaging Vessel Notes</source>
         <translation>Opbevaringsbeholder notater</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1028"/>
+        <location filename="../ui/equipmentEditor.ui" line="1193"/>
         <source>Packaging Vessel Type</source>
         <translation>Opbevaringsbeholder type</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1103"/>
+        <location filename="../ui/equipmentEditor.ui" line="1268"/>
         <source>Set as Default</source>
         <translation>Vælg som standard</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1123"/>
+        <location filename="../ui/equipmentEditor.ui" line="1288"/>
         <source>New equipment</source>
         <translation>Nyt udstyr</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1137"/>
+        <location filename="../ui/equipmentEditor.ui" line="1302"/>
         <source>Save and close</source>
         <translation>Gem og luk</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1151"/>
+        <location filename="../ui/equipmentEditor.ui" line="1316"/>
         <source>Discard and close</source>
         <translation>Annuller og luk</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="812"/>
+        <location filename="../ui/equipmentEditor.ui" line="977"/>
         <source>Internal Diameter</source>
         <translation>Indre diameter</translation>
     </message>
@@ -13613,47 +13783,47 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="134"/>
-        <source>These checkboxes control which vessel tabs are shown.  An asterisk after a vessel means it has a volume set, and so is used in calculations, even if its tab is hidden.  Attributes of &quot;optional&quot; vessels will not be saved if their volumes are left blank or set to 0.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/equipmentEditor.ui" line="747"/>
+        <location filename="../ui/equipmentEditor.ui" line="912"/>
         <source>Kettle to Fermentor Loss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="826"/>
+        <location filename="../ui/equipmentEditor.ui" line="991"/>
         <source>Opening Diameter</source>
         <translation>Diameter af åbning</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="867"/>
+        <location filename="../ui/equipmentEditor.ui" line="1032"/>
         <source>Fermentor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="873"/>
+        <location filename="../ui/equipmentEditor.ui" line="1038"/>
         <source>Fermentor Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="931"/>
+        <location filename="../ui/equipmentEditor.ui" line="1089"/>
+        <source>The most the fermentor can hold, including headspace.  This is NOT the batch size, which is set on the General tab (as Default Batch Size).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/equipmentEditor.ui" line="1096"/>
         <source>Fermentor Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1126"/>
+        <location filename="../ui/equipmentEditor.ui" line="1291"/>
         <source>New</source>
         <translation>Ny</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1140"/>
+        <location filename="../ui/equipmentEditor.ui" line="1305"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>
     <message>
-        <location filename="../ui/equipmentEditor.ui" line="1154"/>
+        <location filename="../ui/equipmentEditor.ui" line="1319"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
@@ -15817,9 +15987,8 @@ Tabs</source>
         <translation>Dette er gamle værdier, som stadig fungerer, men som evt. fjernes i fremtidige versioner af programmet, idet der nu er andre veje til at opnå samme resultat.</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="169"/>
         <source>Initial temperature of the mash tun.  Used in the Mash Wizard and the Mash Designer.</source>
-        <translation>Starttemperatur for mæskningsbeholder. Anvendes i Mæskningsguide og Mæskningsdesigner.</translation>
+        <translation type="vanished">Starttemperatur for mæskningsbeholder. Anvendes i Mæskningsguide og Mæskningsdesigner.</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="183"/>
@@ -15848,10 +16017,8 @@ Tabs</source>
         <translation>Det anbefales at vælge denne i eftergydningstrinet.</translation>
     </message>
     <message>
-        <location filename="../ui/mashEditor.ui" line="265"/>
-        <location filename="../ui/mashEditor.ui" line="296"/>
         <source>It is better to set this directly on the Equipment.</source>
-        <translation>Det anbefales at vælge denne i forbindelse med udstyr.</translation>
+        <translation type="vanished">Det anbefales at vælge denne i forbindelse med udstyr.</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="76"/>
@@ -15876,6 +16043,17 @@ Tabs</source>
     <message>
         <source>Use for</source>
         <translation type="obsolete">Anvend til</translation>
+    </message>
+    <message>
+        <location filename="../ui/mashEditor.ui" line="169"/>
+        <source>Initial temperature of the mash tun.  Used in the Mash Wizard and the Mash Designer, when calculating strike water temperature, to allow for the strike water heating up the mash tun.  If left blank, the tun is assumed to be at the same temperature as the grain.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mashEditor.ui" line="265"/>
+        <location filename="../ui/mashEditor.ui" line="296"/>
+        <source>It is better to set this on the Equipment (Mash Tun tab).  This value is only used if the recipe&apos;s equipment has a mash tun with no weight and specific heat set.  It is ignored if the equipment has no separate mash tun (ie the mash happens in the kettle), because the strike water is then heated in the same vessel as the mash.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="276"/>
