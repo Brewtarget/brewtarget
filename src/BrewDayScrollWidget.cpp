@@ -462,7 +462,7 @@ QString BrewDayScrollWidget::buildInstructionTable() {
       if ( instruction->name() == tr("Add grains") ) {
          reagents = this->m_recObs->getFermentableAdditionNameAndAmounts();
       } else if ( instruction->name() == tr("Heat water") ) {
-         reagents = this->m_recObs->getMashHeatingSteps();
+         reagents = this->m_recObs->getInfusionWaterToHeat();
       } else {
          reagents = instruction->reagents();
       }

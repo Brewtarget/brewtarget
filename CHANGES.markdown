@@ -57,7 +57,7 @@ Various improvements, including:
   creates a dotBeer or BeerJSON file that cannot be imported
 
 ### Release Timestamp
-Fri, 30 Oct 2026 05:02:00 +0100
+Sat, 31 Oct 2026 05:02:00 +0100
 
 ## v5.1.1
 Bug fixes.

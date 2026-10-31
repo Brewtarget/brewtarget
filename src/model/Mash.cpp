@@ -123,6 +123,17 @@ Mash::Mash(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB(m_tunSpecificHeat_calGC, namedParameterBundle, PropertyNames::Mash::tunSpecificHeat_calGC),
    SET_REGULAR_FROM_NPB(m_equipAdjust          , namedParameterBundle, PropertyNames::Mash::equipAdjust          ) {
 
+   //
+   // TUN_TEMP is a required field in BeerXML, and Brewtarget 5.1.x and earlier wrote 0°C when it was not set (because
+   // that's what the old Mash default constructor set it to).  As in the database migration to schema 21 (see
+   // DatabaseSchemaHelper.cpp), we treat exactly 0°C as "not set", so that an imported recipe gives the same strike
+   // temperature as its migrated database equivalent, rather than one calculated as though the tun had to be heated up
+   // from freezing point.
+   //
+   if (this->m_initialTunTemp_c && *this->m_initialTunTemp_c == 0.0) {
+      this->m_initialTunTemp_c = std::nullopt;
+   }
+
    CONSTRUCTOR_END
    return;
 }

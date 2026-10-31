@@ -740,9 +740,9 @@ public:
       if (!this->m_self.mash()) {
          return;
       }
-      QList<QString> const heatingSteps = this->m_self.getMashHeatingSteps();
-      if (heatingSteps.empty()) {
-         qWarning() << Q_FUNC_INFO << "No heating steps in Mash for" << this->m_self;
+      QList<QString> const waterToHeat = this->m_self.getInfusionWaterToHeat();
+      if (waterToHeat.empty()) {
+         qWarning() << Q_FUNC_INFO << "No infusion steps in Mash for" << this->m_self;
          return;
       }
       preInstructions.push_back(
@@ -750,7 +750,7 @@ public:
                         std::nullopt,
                         0.0,
                         tr("Heat water"),
-                        tr("Bring %1 for upcoming infusions.").arg(heatingSteps.join(", ")))
+                        tr("Bring %1 for upcoming infusions.").arg(waterToHeat.join(", ")))
       );
       return;
    }
@@ -1213,8 +1213,8 @@ public:
       // we need to adjust for that here.
       double const sugar_kg{
          this->m_self.efficiency_pct() / 100.0 *
-         sugars.sugarsFromStarch_all_kg - sugars.sugarsFromStarch_lateAddition_kg + sugars.existingSugars_all_kg -
-         sugars.existingSugars_lateAddition_kg
+         (sugars.sugarsFromStarch_all_kg - sugars.sugarsFromStarch_lateAddition_kg) +
+         sugars.existingSugars_all_kg - sugars.existingSugars_lateAddition_kg
       };
 
       //
@@ -3198,13 +3198,14 @@ QList<QString> Recipe::getHopAdditionNameAndAmounts(bool const firstWort) const 
    return result;
 }
 
-QList<QString> Recipe::getMashHeatingSteps() const {
+QList<QString> Recipe::getInfusionWaterToHeat() const {
    QList<QString> result;
 
    auto const mash{ this->mash() };
    if (mash) {
       for (auto const & mashStep : mash->mashSteps()) {
-         if (mashStep->isInfusion()) {
+         // Only infusion (including sparge) steps add water that needs heating
+         if (!mashStep->isInfusion()) {
             continue;
          }
          result.append(

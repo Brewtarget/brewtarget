@@ -221,7 +221,7 @@ QString BrewDayFormatter::buildInstructionHtml() {
       if (instruction->name() == tr("Add grains")) {
          reagents = recObs->getFermentableAdditionNameAndAmounts();
       } else if (instruction->name() == tr("Heat water")) {
-         reagents = recObs->getMashHeatingSteps();
+         reagents = recObs->getInfusionWaterToHeat();
       } else {
          reagents = instruction->reagents();
       }
@@ -277,7 +277,7 @@ QList<QStringList> BrewDayFormatter::buildInstructionList() {
       if (instruction->name() == tr("Add grains")) {
          reagents = recObs->getFermentableAdditionNameAndAmounts();
       } else if (instruction->name() == tr("Heat water")) {
-         reagents = recObs->getMashHeatingSteps();
+         reagents = recObs->getInfusionWaterToHeat();
       } else {
          reagents = instruction->reagents();
       }

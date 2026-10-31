@@ -3077,7 +3077,7 @@ namespace {
     *             which were previously conflated with the default pre-boil volume and batch size.
     */
    bool migrate_to_21([[maybe_unused]] Database & db, BtSqlQuery & q) {
-      QVector<QueryAndParameters> const migrationQueries{
+      QVector<QueryAndParameters> migrationQueries{
          //
          // Since we're moving them to another table, and introducing DotBeer support, this is a good time to clean up
          // the type names for water agents (previously salts).
@@ -3260,10 +3260,9 @@ namespace {
          {QString("ALTER TABLE fermentable ADD COLUMN lactic_acid_by_weight_pct %1").arg(db.getDbNativeTypeName<double>())},
 
          //
-         // Now we drop the columns that we stopped using in an earlier release
+         // (We also drop equipment.boil_time and equipment.calc_boil_volume, which we stopped using in an earlier
+         // release, but see below for why that's not done here.)
          //
-         {QString("ALTER TABLE equipment DROP COLUMN boil_time")},
-         {QString("ALTER TABLE equipment DROP COLUMN calc_boil_volume")},
 
          //
          // Now we sort out water profiles on Recipe.
@@ -3276,16 +3275,43 @@ namespace {
          // is not really exposed in the UI and is no longer needed.  The names of the new water profile fields on
          // Recipe now fulfil this purpose.
          //
-         {QString("ALTER TABLE water DROP COLUMN mash_ro")},
-         {QString("ALTER TABLE water DROP COLUMN sparge_ro")},
-         {QString("ALTER TABLE water DROP COLUMN wtype")},
-
          // DB-specific version of ALTER TABLE recipe ADD COLUMN water_base INTEGER REFERENCES water(id)
          {QString(db.getSqlToAddColumnAsForeignKey()).arg("recipe", "water_base", "water", "id")},
          // DB-specific version of ALTER TABLE recipe ADD COLUMN water_target INTEGER REFERENCES water(id)
          {QString(db.getSqlToAddColumnAsForeignKey()).arg("recipe", "water_target", "water", "id")},
          {QString("ALTER TABLE recipe ADD COLUMN ro_water_mash_pct   %1").arg(db.getDbNativeTypeName<double>())},
          {QString("ALTER TABLE recipe ADD COLUMN ro_water_sparge_pct %1").arg(db.getDbNativeTypeName<double>())},
+         //
+         // Before we drop water_in_recipe and water.wtype, carry across the base and target water profiles that older
+         // versions of the water tool saved on recipes.  The tool looked through the recipe's water_in_recipe rows and
+         // took the (last) one whose water had wtype 0 (base) or 1 (target) -- see WaterProfileAdjustmentTool::setRecipe
+         // in Brewtarget 5.1.x -- so we do the same.  (Note that wtype used to default to 0, so a recipe's only water
+         // will often be treated as its base water, which is also what Brewtarget 5.1.x did.)
+         //
+         {QString("UPDATE recipe SET water_base = ("
+                     "SELECT wir.water_id FROM water_in_recipe AS wir, water AS w "
+                     "WHERE wir.recipe_id = recipe.id AND wir.water_id = w.id AND w.wtype = 0 AND wir.deleted = ? "
+                     "ORDER BY wir.id DESC LIMIT 1"
+                  ")"), {QVariant{false}}},
+         {QString("UPDATE recipe SET water_target = ("
+                     "SELECT wir.water_id FROM water_in_recipe AS wir, water AS w "
+                     "WHERE wir.recipe_id = recipe.id AND wir.water_id = w.id AND w.wtype = 1 AND wir.deleted = ? "
+                     "ORDER BY wir.id DESC LIMIT 1"
+                  ")"), {QVariant{false}}},
+         //
+         // Similarly, the water tool stored the proportions of RO water in the mash and sparge on the base water.
+         // Despite the property names (mashRo_pct, spargeRo_pct), these were stored as fractions (0 to 1) rather than
+         // percentages.
+         //
+         {QString("UPDATE recipe SET ro_water_mash_pct = ("
+                     "SELECT 100.0 * w.mash_ro FROM water AS w WHERE w.id = recipe.water_base"
+                  ") WHERE water_base IS NOT NULL")},
+         {QString("UPDATE recipe SET ro_water_sparge_pct = ("
+                     "SELECT 100.0 * w.sparge_ro FROM water AS w WHERE w.id = recipe.water_base"
+                  ") WHERE water_base IS NOT NULL")},
+         {QString("ALTER TABLE water DROP COLUMN mash_ro")},
+         {QString("ALTER TABLE water DROP COLUMN sparge_ro")},
+         {QString("ALTER TABLE water DROP COLUMN wtype")},
 
          //
          // I never did get to the bottom of how to make use of BeerJSON's RecipeType.ingredients.water_additions.  As
@@ -3434,6 +3460,20 @@ namespace {
          {QString("ALTER TABLE yeast_in_recipe DROP COLUMN cell_count_billions")},
          {QString("ALTER TABLE yeast_in_recipe RENAME COLUMN cell_count_billions_tmp TO cell_count_billions")},
       };
+
+      //
+      // Now we drop the equipment columns that we stopped using in an earlier release.  These columns only exist in
+      // databases that were upgraded from an older schema.  A database that was created from scratch (by
+      // DatabaseSchemaHelper::create, which makes tables from the ObjectStore definitions rather than by running the
+      // migrations) never had them, and trying to drop a non-existent column is an error that would make the whole
+      // migration fail.  SQLite does not support DROP COLUMN IF EXISTS, so we have to check ourselves.
+      //
+      QSqlRecord const equipmentColumns = q.driver()->record("equipment");
+      for (char const * const columnName : {"boil_time", "calc_boil_volume"}) {
+         if (equipmentColumns.contains(columnName)) {
+            migrationQueries.append({QString("ALTER TABLE equipment DROP COLUMN %1").arg(columnName)});
+         }
+      }
 
       return executeSqlQueries(q, migrationQueries);
    }
