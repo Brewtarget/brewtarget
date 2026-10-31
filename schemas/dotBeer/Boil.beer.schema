@@ -64,6 +64,14 @@
   "unevaluatedProperties": false,
   "$defs": {
     "BoilStep": {
+      //
+      // BeerJSON's BoilStepType has the same optional `start_temperature` and `end_temperature`, but does not say what
+      // it means if they are absent, nor how to tell pre-boil, boil proper and post-boil steps apart.  It doesn't need
+      // to as much as we do, because a BeerJSON boil has a separate (required) `boil_time`, whereas we derive the length
+      // of the boil from the steps (see comment on `boil_steps` above).  So the rule below that a missing temperature
+      // means "at boiling" (and the temperature-based classification of steps described in AdditionSchedule in
+      // Recipe.beer.schema) is a dotBeer addition, rather than something that BeerJSON files can be assumed to follow.
+      //
       "type": "object",
       "description": "Individual step of a boil, including preboil steps, non-boiling pasteurization steps, boiling, whirlpool steps, and chilling.\n\nIf `start_temperature` or `end_temperature` is not given, the step is assumed to be at boiling at that point.  Steps are classified as pre-boil, boil proper or post-boil by their temperatures (see `AdditionSchedule` in [Recipe](./Recipe.md#additionschedule) for details).",
       "allOf": [

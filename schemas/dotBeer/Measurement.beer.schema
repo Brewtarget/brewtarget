@@ -422,8 +422,56 @@
       ],
       "unevaluatedProperties": false
     },
-    // BeerJSON also has a pressure measure, which, as of BeerJSON 3.0, is used for `vessel_pressure` on fermentation
-    // steps.  We don't (yet) support that, so we don't (yet) need the measure.
+    "Pressure": {
+      "type": "object",
+      "description": "A *gauge* pressure, ie the pressure above atmospheric pressure, which is what the gauges on fermenters, kegs, regulators and spunding valves show.  (So 0 means atmospheric pressure, eg an unpressurised vessel.)<br>`kPa` is kilopascals<br>`bar` is bar = 100 kPa<br>`psi` is pounds per square inch ≈ 6.895 kPa<br>We assume that brewers never need a gauge pressure above 10 bar (1000 kPa, ≈ 145 psi).",
+      //
+      // BeerJSON (from 3.0) has the same units, but does not say whether its pressures are gauge or absolute.  In
+      // brewing, pressures are almost always quoted as gauge pressures (eg "ferment at 15 psi" or "1 bar"), so that's
+      // what we use.  (An absolute pressure would be about 1 bar or 14.7 psi higher, depending on altitude and weather.)
+      //
+      // Since we use gauge pressure, a negative value would be a partial vacuum, which is not something that a brewer
+      // would do to a fermentation, hence the minimum of 0.  At the other end, pressure-rated homebrew fermenters are
+      // typically rated to 2-3 bar (≈ 30-45 psi), and commercial unitanks to similar pressures.  So a maximum of 10
+      // bar is very generous, but should still catch errors such as entering a value in kPa with a unit of bar.
+      //
+      "properties": {
+        "unit": {
+          "enum": [
+            "kPa",
+            "bar",
+            "psi"
+          ]
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "unit",
+        "value"
+      ],
+      //
+      // As elsewhere with if/then, the `required` field emphasises that we need the field to be present to avoid the
+      // "if" being trivially true.
+      //
+      "allOf": [
+        {
+          "if":   { "properties": { "unit": { "const": "kPa" } }, "required": ["unit"] },
+          "then": { "properties": { "value": { "maximum": 1000.0 } } }
+        },
+        {
+          "if":   { "properties": { "unit": { "const": "bar" } }, "required": ["unit"] },
+          "then": { "properties": { "value": { "maximum": 10.0 } } }
+        },
+        {
+          "if":   { "properties": { "unit": { "const": "psi" } }, "required": ["unit"] },
+          "then": { "properties": { "value": { "maximum": 145.0 } } }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
     "SpecificHeatCapacity": {
       "type": "object",
       "description": "The amount of heat that must be added to one unit of mass of the substance in order to cause an increase of one unit in temperature.<br>`c/g·C` is calories per Celsius per gram (and also kilocalories per degree Celsius per kilogram)<br>`J/kg·K` is joules per Kelvin per kilogram<br>`BTU/lb·F` is BTU per Fahrenheit per pound<br>Although SI units are \"joules per kelvin per kilogram\" (which is the same as \"joules per degree Celsius per kilogram\"), historically a measurement involving calories instead of joules was used in chemistry, nutrition and brewing.  There are two types of calorie: the \"small calorie\" (or \"gram-calorie\", \"cal\") = 4.184 J; and the \"grand calorie\" (aka \"kilocalorie\", \"kcal\" or \"Cal\") = 1000 small calories = 4184 J.  However, the specific heat measurement using \"cal\" (\"calories per degree Celsius per gram\") is the same as that for \"Cal\" (\"kilocalories per degree Celsius per kilogram\"): 1 cal / (°C × g) = 1 Cal / (°C × kg) = 4184 J / (K × kg) = the specific heat capacity of liquid water.  Note too that, because a British Thermal Unit (BTU) is defined as \"the amount of heat required to raise the temperature of one pound of water by one degree Fahrenheit\", we have 1 BTU/lb·F = 1 c/g·C.",

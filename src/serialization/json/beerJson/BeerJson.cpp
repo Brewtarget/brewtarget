@@ -1304,6 +1304,22 @@ namespace {
       return;
    }
 
+   //
+   // BeerJSON ranges require both minimum and maximum, but we allow either to be unset (eg BeerXML's MIN_TEMPERATURE and
+   // MAX_TEMPERATURE on YEAST are each optional).  See JsonUtils::removeIncompleteRanges.
+   //
+   template<> void tidyJson<Yeast>(boost::json::array & outputArray) {
+      JsonUtils::removeIncompleteRanges(outputArray, {"temperature_range", "attenuation_range"});
+      return;
+   }
+
+   template<> void tidyJson<Style>(boost::json::array & outputArray) {
+      JsonUtils::removeIncompleteRanges(outputArray, {"original_gravity", "final_gravity",
+                                                      "international_bitterness_units", "color", "carbonation",
+                                                      "alcohol_by_volume"});
+      return;
+   }
+
 }
 
 

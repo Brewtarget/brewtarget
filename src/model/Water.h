@@ -234,6 +234,17 @@ public:
    //! Get the concentration (or, strictly speaking, the mass fraction) of the specified ion
    std::optional<double> ionConcentration_ppm(MineralIon const ion) const;
 
+   /**
+    * \brief The alkalinity of this water, in milliequivalents per liter (mEq/L), as used in residual alkalinity
+    *        calculations.
+    *
+    *        If \c alkalinity_ppm is set, we use it (as HCO₃⁻ or as CaCO₃ according to \c alkalinityAsHCO3).  Otherwise,
+    *        we work it out from the bicarbonate (HCO₃⁻) and carbonate (CO₃²⁻) content.  This matters because none of
+    *        BeerXML, BeerJSON or dotBeer has a field for alkalinity, so imported water profiles (including all our
+    *        default ones) only have bicarbonate and carbonate.
+    */
+   double alkalinity_mEqPerL() const;
+
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setCalcium_ppm     (double                const   val);
    void setSulfate_ppm     (double                const   val);

@@ -80,6 +80,46 @@ namespace {
       ObjectStoreWrapper::insert(brewLog);
       return brewLog;
    }
+
+   //
+   // Our model allows either end of a range to be set without the other, but both dotBeer and BeerJSON require both
+   // ends.  These are the names of objects with half-set ranges that addHalfSetRanges() creates.
+   //
+   QString const halfRangeHopName  {"Test Hop With Only Alpha Min"   };
+   QString const halfRangeYeastName{"Test Yeast With Only Min Temp"  };
+   QString const halfRangeStyleName{"Test Style With Only ABV Max"   };
+
+   void addHalfSetRanges() {
+      auto hop = std::make_shared<Hop>(halfRangeHopName);
+      hop->setAlpha_pct(5.0);
+      hop->setAlphaMin_pct(4.0);
+      ObjectStoreWrapper::insert(hop);
+
+      auto yeast = std::make_shared<Yeast>(halfRangeYeastName);
+      yeast->setMinTemperature_c(15.0);
+      yeast->setAttenuationMin_pct(70.0);
+      yeast->setAttenuationMax_pct(80.0);
+      ObjectStoreWrapper::insert(yeast);
+
+      auto style = std::make_shared<Style>(halfRangeStyleName);
+      style->setCategory("Test");
+      style->setStyleGuide("Test");
+      style->setAbvMax_pct(6.0);
+      ObjectStoreWrapper::insert(style);
+      return;
+   }
+
+   //! \brief Find the record with the given name in the given top-level list of an exported file
+   boost::json::object const * findExported(boost::json::object const & root,
+                                            char const * const listName,
+                                            QString const & name) {
+      for (auto const & record : root.at(listName).as_array()) {
+         if (record.at("name").as_string() == name.toStdString()) {
+            return &record.as_object();
+         }
+      }
+      return nullptr;
+   }
 }
 
 class SerializationTests::impl {
@@ -306,6 +346,9 @@ void SerializationTests::testDotBeerExport() {
       }
       QVERIFY2(timedHopAddition, "No hop addition with a time");
       timedHopAddition->setAddAtGravity_sg(1.020);
+
+      // Ranges must have both minimum and maximum
+      addHalfSetRanges();
    }
    //
    // Now export everything in the database, and check we can read it back in -- which includes validating it against
@@ -409,6 +452,19 @@ void SerializationTests::testDotBeerExport() {
          }
       }
       QVERIFY2(foundVessels, "Test Equipment With Unused Lauter Tun not exported");
+
+      // Half-set ranges should be omitted, but complete ones kept
+      auto const & root = exported.at("DotBeer").as_object();
+      auto const * const hop = findExported(root, "hops", halfRangeHopName);
+      QVERIFY2(hop, "Hop with half-set range not exported");
+      QVERIFY2(!hop->contains("alpha_acid_range"), "Half-set alpha acid range written");
+      auto const * const yeast = findExported(root, "cultures", halfRangeYeastName);
+      QVERIFY2(yeast, "Yeast with half-set range not exported");
+      QVERIFY2(!yeast->contains("temperature_range"), "Half-set temperature range written");
+      QVERIFY2( yeast->contains("attenuation_range"), "Complete attenuation range not written");
+      auto const * const style = findExported(root, "styles", halfRangeStyleName);
+      QVERIFY2(style, "Style with half-set range not exported");
+      QVERIFY2(!style->contains("alcohol_by_volume"), "Half-set ABV range written");
    }
    QString message;
    bool const reimportOk = importDotBeerFile(exportFilePath, message);
@@ -522,6 +578,9 @@ void SerializationTests::testNullSentinel() {
 }
 
 void SerializationTests::testBeerJsonRoundTrip() {
+   // BeerJSON ranges, like dotBeer ones, must have both minimum and maximum
+   addHalfSetRanges();
+
    QString exportFilePath = qEnvironmentVariable("BEERJSON_EXPORT_FILE");
    if (exportFilePath.isEmpty()) {
       exportFilePath = UnitTests::TestEnvironment::tempDir().filePath("beerJsonRoundTrip.json");
@@ -688,6 +747,22 @@ void SerializationTests::testFolderPaths() {
    QCOMPARE(FolderCommon::subPath("/foo/bar" , "foo/bar/hum/bug" ), QString{"/hum/bug"   });
    QCOMPARE(FolderCommon::subPath("/foo/bar" , "foo/barbie"      ), QString{"foo/barbie" });
    QCOMPARE(FolderCommon::subPath(""         , "/foo/bar"        ), QString{"/foo/bar"   });
+
+   //
+   // A folder must not be moved into itself or one of its subfolders.  See
+   // https://github.com/Brewtarget/brewtarget/issues/1157
+   //
+   {
+      Folder<Equipment> const * const outer   = Folder<Equipment>::ensure("/Loop Test");
+      Folder<Equipment> const * const inner   = Folder<Equipment>::ensure("/Loop Test/Inner/Innermost");
+      Folder<Equipment> const * const sibling = Folder<Equipment>::ensure("/Loop Test Sibling");
+      QVERIFY(outer && inner && sibling);
+      QVERIFY2( outer  ->isSelfOrAncestorOf(*outer  ), "Folder should count as its own ancestor");
+      QVERIFY2( outer  ->isSelfOrAncestorOf(*inner  ), "Grandparent not recognised as ancestor");
+      QVERIFY2(!inner  ->isSelfOrAncestorOf(*outer  ), "Subfolder treated as ancestor");
+      QVERIFY2(!sibling->isSelfOrAncestorOf(*inner  ), "Unrelated folder treated as ancestor");
+      QVERIFY2(!outer  ->isSelfOrAncestorOf(*sibling), "Prefix of folder name treated as ancestor");
+   }
 
    //
    // dotBeer: a folder_path in the file is relative to the folder we are importing into.  (Previously, when importing

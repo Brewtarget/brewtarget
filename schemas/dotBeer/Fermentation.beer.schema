@@ -66,10 +66,24 @@
               "description": "Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction.",
               "type": "boolean"
             },
-            // BeerJSON (from 3.0) also has `vessel_pressure`, for fermenting under pressure, which we don't (yet) have
             "vessel": {
               "description": "Name of the vessel the step takes place in, which is how a transfer between vessels is recorded.",
               "type": "string"
+            },
+            //
+            // BeerJSON (from 3.0) has `vessel_pressure`, described as "the pressure applied within the fermentation
+            // vessel", but without saying whether this is a gauge or an absolute pressure (see Pressure in
+            // Measurement.beer.schema), whether it is a target or a measured value, or what it means if it is absent.
+            // We use the same name and units, but spell these things out.
+            //
+            // We deliberately have a single value rather than start_pressure and end_pressure (cf temperature, gravity
+            // and pH), because what the brewer controls is the pressure the vessel is held at, eg by a spunding valve or
+            // a regulator.  During a step, the actual pressure in the vessel builds up to this as fermentation produces
+            // CO₂, and how quickly it does so is not something we can usefully specify.
+            //
+            "vessel_pressure": {
+              "description": "The (gauge) pressure at which the fermentation vessel is held during this step, eg by a spunding valve or a regulator -- ie the pressure that the CO₂ produced by fermentation is allowed to build up to, but not beyond.  Typical values for fermenting under pressure are around 0.5–1 bar (7–15 psi).  If this field is absent, the step is not under pressure (ie the vessel is vented to the atmosphere, eg via an airlock), or the pressure is not known.\n\nA change of pressure part way through fermentation (eg closing a spunding valve towards the end of fermentation to naturally carbonate the beer) is recorded by starting a new step.",
+              "$ref": "Measurement.beer.schema#/$defs/Pressure"
             }
           }
         }

@@ -17,13 +17,14 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 ## v5.2.0
 Various improvements, including:
 * Migrate to new XML libraries (libxml2 replaces Xerces and Xalan) [1131](https://github.com/Brewtarget/brewtarget/issues/1131)
+* Migrate to new JSON schema validation library [1150](https://github.com/Brewtarget/brewtarget/issues/1150)
 
 ### New Features
 * DotBeer file format support [1122](https://github.com/Brewtarget/brewtarget/issues/1122)
 * Water Calculator improvements [252](https://github.com/Brewtarget/brewtarget/issues/252)
 * Salts (aka water agents) are now a subcategory of Miscellaneous ingredients
 * Hops now support optional min/max values for alpha acid and beta acid
-* Import to folder [1133]https://github.com/Brewtarget/brewtarget/issues/1133
+* Import to folder [1133](https://github.com/Brewtarget/brewtarget/issues/1133)
 * Equipment: new "Foundation Water" field for the mash tun, for the space below a false bottom or malt pipe (eg in
   all-in-one systems) that has to be filled before the grain is covered but which drains out with the wort
 * Mash and lauter tun losses are now correctly allowed for in the mash wizard's total water
@@ -46,11 +47,17 @@ Various improvements, including:
 * Importing from BeerXML sets fermentable addition stage to boil instead of mash [1156](https://github.com/Brewtarget/brewtarget/issues/1156)
 * Creating a fermentable stock purchase with no color causes a crash [1159](https://github.com/Brewtarget/brewtarget/issues/1159)
 * Conversion amounts for imperial tablespoons and teaspoons are wrong [1160](https://github.com/Brewtarget/brewtarget/issues/1160)
+* Brewhouse efficiency is applied to honey, juice, fruit and “other” fermentables [1161](https://github.com/Brewtarget/brewtarget/issues/1161)
+* Whirlpool / hop-stand additions are counted as boiling for their time [1162](https://github.com/Brewtarget/brewtarget/issues/1162)
 * IBU calculation treats a post-boil addition's time as boil time [1167](https://github.com/Brewtarget/brewtarget/issues/1167)
 * Instructions use the whole boil length for a step addition with no time [1168](https://github.com/Brewtarget/brewtarget/issues/1168)
+* A boil step with no start/end temperature should be treated as being at boiling [1165](https://github.com/Brewtarget/brewtarget/issues/1165)
+* Possible to drag-and-drop a folder onto itself or one of its subfolders [1157](https://github.com/Brewtarget/brewtarget/issues/1157)
+* Exporting a hop, yeast or style with only one end of a range set (eg minimum but not maximum alpha acid) no longer
+  creates a dotBeer or BeerJSON file that cannot be imported
 
 ### Release Timestamp
-Wed, 19 Aug 2026 05:01:02 +0100
+Sat, 31 Oct 2026 05:02:00 +0100
 
 ## v5.1.1
 Bug fixes.

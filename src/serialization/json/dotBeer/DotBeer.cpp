@@ -737,7 +737,7 @@ namespace {
       {JsonRecordDefinition::FieldType::LocalId        , "culture_id"         , PropertyNames::IngredientAmount::ingredientId        , &Yeast::staticMetaObject},
       {JsonRecordDefinition::FieldType::SingleUnitValue, "attenuation"        , PropertyNames::RecipeAdditionYeast::attenuation_pct  , &DOT_BEER_PERCENT_UNIT  },
       {JsonRecordDefinition::FieldType::Int            , "times_cultured"     , PropertyNames::RecipeAdditionYeast::timesCultured    },
-      {JsonRecordDefinition::FieldType::Int            , "cell_count_billions", PropertyNames::RecipeAdditionYeast::cellCountBillions},
+      {JsonRecordDefinition::FieldType::Double         , "cell_count_billions", PropertyNames::RecipeAdditionYeast::cellCountBillions},
    };
    template<> JsonRecordDefinition const DOT_BEER_RECORD_DEFN<RecipeAdditionYeast> {
       std::in_place_type_t<RecipeAdditionYeast>{},
@@ -1216,6 +1216,27 @@ namespace {
             fermentable["yield_fine_grind"] = boost::json::object{{"unit", "%"}, {"value", 0.0}};
          }
       }
+      return;
+   }
+
+   //
+   // dotBeer ranges (as in BeerJSON) require both minimum and maximum, but we allow either to be unset (eg a hop with only
+   // a minimum alpha acid).  For now at least, we don't think half-ranges are likely to be needed in practice, so we
+   // just omit them on output.  See JsonUtils::removeIncompleteRanges.
+   //
+   template<> void tidyJson<Hop>(boost::json::array & outputArray) {
+      JsonUtils::removeIncompleteRanges(outputArray, {"alpha_acid_range", "beta_acid_range"});
+      return;
+   }
+
+   template<> void tidyJson<Yeast>(boost::json::array & outputArray) {
+      JsonUtils::removeIncompleteRanges(outputArray, {"temperature_range", "attenuation_range"});
+      return;
+   }
+
+   template<> void tidyJson<Style>(boost::json::array & outputArray) {
+      JsonUtils::removeIncompleteRanges(outputArray, {"original_gravity", "final_gravity", "ibu", "color",
+                                                      "carbonation", "alcohol_by_volume"});
       return;
    }
 

@@ -19,6 +19,7 @@
  =====================================================================================================================*/
 #include "widgets/WaterAdjuster.h"
 
+#include <algorithm>
 #include <limits>
 
 #include <Algorithms.h>
@@ -267,20 +268,28 @@ public:
    }
 
    /**
-    * \brief Calculates the residual alkalinity of the mash water.
+    * \brief The fraction of the mash (strike) water that is base water rather than RO water.
+    *
+    *        NB: This is different from \c WaterVolumes::waterBase_fraction, which is over all the water (mash and
+    *        sparge).  For mash pH, only the mash water matters.  Note too that \c Recipe::roWaterMash_pct is a
+    *        percentage (0-100), not a fraction.
+    */
+   double mashBaseWaterFraction() const {
+      return std::clamp(1.0 - this->m_rec->roWaterMash_pct() / 100.0, 0.0, 1.0);
+   }
+
+   /**
+    * \brief Calculates the alkalinity (in mEq/L) of the mash water due to the base water.
+    *
+    *        Previously this only looked at Water::alkalinity_ppm, which is not set for water profiles read in from
+    *        BeerXML, BeerJSON or dotBeer (including all the default ones), so the bicarbonate in the base water was
+    *        ignored.  See Water::alkalinity_mEqPerL.
     */
    double calculateRA() const {
-      double residual = 0.0;
-      if (this->m_base) {
-
-         double base_alk = ( 1.0 - this->m_rec->roWaterMash_pct()) * this->m_base->alkalinity_ppm().value_or(0.0);
-         if (!this->m_base->alkalinityAsHCO3()) {
-            base_alk = 1.22 * base_alk;
-         }
-         residual = base_alk/61;
+      if (!this->m_base) {
+         return 0.0;
       }
-
-      return residual;
+      return this->mashBaseWaterFraction() * this->m_base->alkalinity_mEqPerL();
    }
 
    /**
@@ -336,17 +345,21 @@ public:
     * \brief Calculates the pH of the base water caused by any Ca or Mg
     *        including figuring out the residual alkalinity.
     */
-   double calculateWaterAdjustmentpH(WaterVolumes const & waters) {
+   double calculateWaterAdjustmentpH([[maybe_unused]] WaterVolumes const & waters) {
       if (!this->m_rec || !this->m_rec->mash()) {
          return 0.0;
       }
 
-      // I have no idea where the 2 comes from, but Kai did it. I wish I knew why
-      // we get the initial numbers from the base water
+      //
+      // We get the initial numbers from the base water.  The 2 is the valence of Ca²⁺ and Mg²⁺, to convert from mmol/L
+      // to mEq/L.  As in calculateRA, we use the proportion of the *mash* water that is base water, because the result
+      // is multiplied by the mash (infusion) water volume below.
+      //
+      double const baseFraction = this->mashBaseWaterFraction();
       double const ca_ppm =
-         this->m_base ? waters.waterBase_fraction * this->m_base->calcium_ppm  ()/MolarMass::Calcium * 2 : 0.0;
+         this->m_base ? baseFraction * this->m_base->calcium_ppm  ()/MolarMass::Calcium * 2 : 0.0;
       double const mg_ppm =
-         this->m_base ? waters.waterBase_fraction * this->m_base->magnesium_ppm()/MolarMass::Magnesium * 2 : 0.0;
+         this->m_base ? baseFraction * this->m_base->magnesium_ppm()/MolarMass::Magnesium * 2 : 0.0;
 
       // I need mass of the salts, and all the previous math gave me
       // ppm. Multiplying by the water volume gives me the mass
@@ -367,13 +380,16 @@ public:
       // added salts, but not the base.
       double const ca   = this->m_miscAdditionsVeriTable.m_tableModel->concentrationPerLiter_massConcPpm<Water::MineralIon::Calcium>    ()/MolarMass::Calcium * 2.0;
       double const mg   = this->m_miscAdditionsVeriTable.m_tableModel->concentrationPerLiter_massConcPpm<Water::MineralIon::Magnesium>  ()/MolarMass::Magnesium * 2.0;
+      // Valence of HCO₃⁻ is 1 and of CO₃²⁻ is 2, hence the latter is multiplied by 2 to get mEq
       double const hco3 = this->m_miscAdditionsVeriTable.m_tableModel->concentrationPerLiter_massConcPpm<Water::MineralIon::Bicarbonate>()/MolarMass::Bicarbonate;
-      double const co3  = this->m_miscAdditionsVeriTable.m_tableModel->concentrationPerLiter_massConcPpm<Water::MineralIon::Carbonate>  ()/MolarMass::Carbonate;
+      double const co3  = this->m_miscAdditionsVeriTable.m_tableModel->concentrationPerLiter_massConcPpm<Water::MineralIon::Carbonate>  ()/MolarMass::Carbonate * 2.0;
 
-      // The 61 is another magic number from Kai. Sigh
-      // unlike previous calculations, I am getting a mass here so I do not
-      // need to convert from mg/L
-      double const totalDelta = 0.0 - ca/3.5 - mg/7 + (hco3+co3)/61.0;
+      //
+      // As for the base water (see calculateWaterAdjustmentpH and calculateRA), this is Kolbach's residual alkalinity,
+      // ie alkalinity - Ca/3.5 - Mg/7, with everything in milliequivalents.  NB: hco3 and co3 are already in mEq (having
+      // been divided by molar mass above), just like ca and mg.
+      //
+      double const totalDelta = 0.0 - ca/3.5 - mg/7 + (hco3 + co3);
       return totalDelta/this->m_thickness_LKg/mEq;
    }
 

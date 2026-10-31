@@ -55,7 +55,7 @@ TypeLookup const RecipeAdditionYeast::typeLookup {
       PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionYeast, yeast            , yeast              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, attenuation_pct  , m_attenuation_pct  , NonPhysicalQuantity::Percentage    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, timesCultured    , m_timesCultured    , NonPhysicalQuantity::OrdinalNumeral),
-      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, cellCountBillions, m_cellCountBillions, NonPhysicalQuantity::OrdinalNumeral),
+      PROPERTY_TYPE_LOOKUP_ENTRY(RecipeAdditionYeast, cellCountBillions, m_cellCountBillions, NonPhysicalQuantity::Dimensionless ),
       PROPERTY_TYPE_LOOKUP_NO_MV(RecipeAdditionYeast, addToSecondary   , addToSecondary     , BOOL_INFO(tr("No"), tr("Yes"))     ),
    },
    // Parent classes lookup.  NB: RecipeAddition not NamedEntity!
@@ -129,7 +129,7 @@ RecipeAdditionYeast::~RecipeAdditionYeast() = default;
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
 std::optional<double> RecipeAdditionYeast::attenuation_pct  () const { return m_attenuation_pct; }
 std::optional<int>    RecipeAdditionYeast::timesCultured    () const { return m_timesCultured  ; }
-std::optional<int>    RecipeAdditionYeast::cellCountBillions() const { return m_cellCountBillions  ; }
+std::optional<double> RecipeAdditionYeast::cellCountBillions() const { return m_cellCountBillions  ; }
 std::optional<bool>   RecipeAdditionYeast::addToSecondary   () const {
    if (1 == this->step()) {
       return false;
@@ -158,13 +158,27 @@ NamedEntity * RecipeAdditionYeast::ensureExists(BtStringConst const & property) 
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
 void RecipeAdditionYeast::setAttenuation_pct(std::optional<double> const val) {
+   //
+   // We set 125% here as the maximum rather than 100% to allow for diastatic yeasts (which can break down complex
+   // carbohydrates into fermentable sugars, leading to higher alcohol content and drier beers).  Apparent attenuation
+   // can go over 100% because alcohol is less dense than water, so the hydrometer reads below 1.000 even though there’s
+   // still something dissolved.
+   //
+   // In practice
+   //    - Diastatic ale yeasts (e.g. Belle Saison, or a brut IPA with glucoamylase): typically about 95–105% apparent.
+   //      A 1.060 wort finishing at 0.998 is 103%.
+   //    - Mead, wine and cider, where nearly everything is simple sugar: about 105–120%. A 1.050 cider finishing at
+   //      0.995 is 110%; one finishing at 0.990 is 120%.
+   //
+   // So we take 125% as a sensible upper bound.
+   //
    SET_AND_NOTIFY(PropertyNames::RecipeAdditionYeast::attenuation_pct,
                   m_attenuation_pct,
-                  this->enforceMinAndMax(val, "pct attenuation", 0.0, 100.0, 0.0));
+                  this->enforceMinAndMax(val, "pct attenuation", 0.0, 125.0, 0.0));
    return;
 }
 void RecipeAdditionYeast::setTimesCultured(std::optional<int>     const val) { SET_AND_NOTIFY(PropertyNames::RecipeAdditionYeast::timesCultured    , m_timesCultured    , this->enforceMin      (val, "times cultured" )); return; }
-void RecipeAdditionYeast::setCellCountBillions(std::optional<int> const val) { SET_AND_NOTIFY(PropertyNames::RecipeAdditionYeast::cellCountBillions, m_cellCountBillions, this->enforceMin      (val, "cell count billions" )); return; }
+void RecipeAdditionYeast::setCellCountBillions(std::optional<double> const val) { SET_AND_NOTIFY(PropertyNames::RecipeAdditionYeast::cellCountBillions, m_cellCountBillions, this->enforceMin      (val, "cell count billions" )); return; }
 
 
 void RecipeAdditionYeast::setAddToSecondary (std::optional<bool  > const val) {

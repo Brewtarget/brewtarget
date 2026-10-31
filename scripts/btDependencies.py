@@ -149,6 +149,7 @@ def installDependencies():
             'libqt6svg6',
             'libqt6svgwidgets6',
             'libssl-dev', # For OpenSSL headers
+            'librsvg2-bin', # For rsvg-convert (which we use in AppImage generation)
             # On Linux, 'libxml2' is only what you need to run applications that use libxml2, and 'libxml2-dev' is the
             # superset of this that also allows you to compile such applications.  On other platforms, 'libxml2'
             # contains everything for building and running.

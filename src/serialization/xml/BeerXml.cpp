@@ -1040,7 +1040,7 @@ namespace {
          {XmlRecordDefinition::FieldType::Record, ""                   , PropertyNames::RecipeAdditionYeast::yeast            , &BEER_XML_RECORD_DEFN_YEAST_IN_RECIPE_ADDITION_YEAST},
          {XmlRecordDefinition::FieldType::Double, "ATTENUATION"        , PropertyNames::RecipeAdditionYeast::attenuation_pct  }, // ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
          {XmlRecordDefinition::FieldType::Int   , "TIMES_CULTURED"     , PropertyNames::RecipeAdditionYeast::timesCultured    }, // ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
-         {XmlRecordDefinition::FieldType::Int   , "CELL_COUNT_BILLIONS", PropertyNames::RecipeAdditionYeast::cellCountBillions}, // Non-standard: not part of BeerXML 1.0
+         {XmlRecordDefinition::FieldType::Double, "CELL_COUNT_BILLIONS", PropertyNames::RecipeAdditionYeast::cellCountBillions}, // Non-standard: not part of BeerXML 1.0
          {XmlRecordDefinition::FieldType::Bool  , "ADD_TO_SECONDARY"   , PropertyNames::RecipeAdditionYeast::addToSecondary   }, // ⮜⮜⮜ Optional in BeerXML ⮞⮞⮞
          // ⮜⮜⮜ Following are new fields that BeerJSON adds to BeerXML, so all extension tags in BeerXML ⮞⮞⮞
          {XmlRecordDefinition::FieldType::Double, "TIME"               , PropertyNames::RecipeAddition::addAtTime_mins        },

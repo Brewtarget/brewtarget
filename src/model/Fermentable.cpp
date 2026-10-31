@@ -296,6 +296,19 @@ Fermentable::Fermentable(NamedParameterBundle const & namedParameterBundle) :
       this->m_color_lovibond = 0.0;
    }
 
+   //
+   // Neither BeerXML nor BeerJSON has a field for the fermentable fraction.  Brewtarget 5.1.x and earlier treated any
+   // Sugar called "Milk Sugar (Lactose)" as unfermentable, and the database migration to schema 21 sets this field to
+   // 0 for anything with "lactose" in its name.  So, to keep imported recipes giving the same FG as they did before
+   // (and as their database equivalents do), we do the same when the field was not supplied.  This does not affect
+   // reading from the database, which always supplies the field, even when it's NULL.  It does also apply to a dotBeer
+   // file that omits fermentable_fraction for lactose, but that is what the user would want anyway.
+   //
+   if (!namedParameterBundle.contains(PropertyNames::Fermentable::fermentableFraction_pct) &&
+       this->name().contains("lactose", Qt::CaseInsensitive)) {
+      this->m_fermentableFraction_pct = 0.0;
+   }
+
    CONSTRUCTOR_END
    return;
 }

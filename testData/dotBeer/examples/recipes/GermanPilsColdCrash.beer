@@ -206,7 +206,9 @@
             "start_temperature": { "unit": "C", "value": 10.0 },
             "end_temperature": { "unit": "C", "value": 17.0 },
             "free_rise": true,
-            "vessel": "Conical fermenter"
+            "vessel": "Conical fermenter",
+            // Close the spunding valve for the end of fermentation, to start carbonating the beer
+            "vessel_pressure": { "unit": "bar", "value": 1.0 }
           },
           {
             "name": "Cold Crash",
@@ -216,14 +218,17 @@
             // Below freezing point of water, but not of beer
             "end_temperature": { "unit": "C", "value": -1.0 },
             "free_rise": false,
-            "vessel": "Conical fermenter"
+            "vessel": "Conical fermenter",
+            // Staying under pressure also stops the fermenter sucking in air (or airlock liquid) as the beer cools
+            "vessel_pressure": { "unit": "bar", "value": 1.0 }
           },
           {
             "name": "Lagering",
             "step_time": { "unit": "week", "value": 4 },
             "start_temperature": { "unit": "C", "value": 0.0 },
             "end_temperature": { "unit": "C", "value": 0.0 },
-            "vessel": "Corny keg"
+            "vessel": "Corny keg",
+            "vessel_pressure": { "unit": "psi", "value": 12 }
           }
         ]
       }

@@ -13,14 +13,21 @@
 // EXPECT-INVALID: /DotBeer/hop_stock_purchases/1/stock_uses/0: date 2026-03-30 is before the purchase's date_received 2026-04-06
 // EXPECT-INVALID: /DotBeer/hop_stock_purchases/2/stock_uses/0: date 2026-10-01 is before the purchase's date_ordered 2026-10-15
 // EXPECT-INVALID: /DotBeer/hop_stock_purchases/3 ("Mixed measures"): amounts must all be the same kind of measure, but there is a mix of mass, volume
+// EXPECT-INVALID: /DotBeer/hop_stock_purchases/3/
+// EXPECT-INVALID: /DotBeer/hop_stock_purchases/4 ("Used by volume"): amounts must all be the same kind of measure, but there is a mix of mass, volume
+// EXPECT-INVALID: /DotBeer/hop_stock_purchases/4/
 // EXPECT-INVALID: /DotBeer/fermentable_stock_purchases/0 ("Used too much"): stock uses total 5.5 kg, which is more than the 5 kg of amount_received
 // EXPECT-INVALID: /DotBeer/misc_stock_purchases/0 ("Not yet received"): stock uses total 3 count, which is more than the 2 count of amount_ordered
 //
-// Stock purchase errors that JSON Schema can't catch, and that validate.py checks instead:
+// Stock purchase errors, most of which JSON Schema can't catch, and that validate.py checks instead:
 //   • stock received before it was ordered
 //   • stock used before it was received
 //   • stock used before it was ordered (where it hasn't been received)
-//   • a purchase ordered by mass but received by volume
+//   • a purchase ordered by mass but received by volume (which the schema does catch, but validate.py gives a clearer
+//     message)
+//   • a purchase received by mass but used by volume (ditto)
+// (The "/3/" and "/4/" expectations above are just the paths of the schema errors for these last two, as which part of
+// the schema the validator blames for a failed "anyOf" is a matter of heuristics.)
 //   • uses (in different units of mass) adding up to more than was received
 //   • uses adding up to more than was ordered (where nothing has been received)
 // The last purchase is valid: its uses add up to exactly what was received, but in different units.
@@ -74,6 +81,16 @@
         "date_received": "2026-04-06",
         "amount_ordered": { "unit": "g", "value": 100 },
         "amount_received": { "unit": "l", "value": 1 }
+      },
+      {
+        // ERROR: received by mass, but used by volume
+        "name": "Used by volume",
+        "hop_id": "hop_cascade",
+        "date_received": "2026-04-06",
+        "amount_received": { "unit": "g", "value": 100 },
+        "stock_uses": [
+          { "date": "2026-05-09", "reason": "used", "amount_used": { "unit": "l", "value": 0.1 } }
+        ]
       }
     ],
     "fermentable_stock_purchases": [

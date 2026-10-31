@@ -740,9 +740,9 @@ public:
       if (!this->m_self.mash()) {
          return;
       }
-      QList<QString> const heatingSteps = this->m_self.getMashHeatingSteps();
-      if (heatingSteps.empty()) {
-         qWarning() << Q_FUNC_INFO << "No heating steps in Mash for" << this->m_self;
+      QList<QString> const waterToHeat = this->m_self.getInfusionWaterToHeat();
+      if (waterToHeat.empty()) {
+         qWarning() << Q_FUNC_INFO << "No infusion steps in Mash for" << this->m_self;
          return;
       }
       preInstructions.push_back(
@@ -750,7 +750,7 @@ public:
                         std::nullopt,
                         0.0,
                         tr("Heat water"),
-                        tr("Bring %1 for upcoming infusions.").arg(heatingSteps.join(", ")))
+                        tr("Bring %1 for upcoming infusions.").arg(waterToHeat.join(", ")))
       );
       return;
    }
@@ -1213,8 +1213,8 @@ public:
       // we need to adjust for that here.
       double const sugar_kg{
          this->m_self.efficiency_pct() / 100.0 *
-         sugars.sugarsFromStarch_all_kg - sugars.sugarsFromStarch_lateAddition_kg + sugars.existingSugars_all_kg -
-         sugars.existingSugars_lateAddition_kg
+         (sugars.sugarsFromStarch_all_kg - sugars.sugarsFromStarch_lateAddition_kg) +
+         sugars.existingSugars_all_kg - sugars.existingSugars_lateAddition_kg
       };
 
       //
@@ -2949,17 +2949,11 @@ Recipe::BoilAdditionTiming Recipe::boilAdditionTiming(RecipeAddition const & add
       return boilProperOnly();
    }
 
-   // Same test as Boil::boilTime_mins() uses for "boil proper"
-   auto const isBoilProper = [](BoilStep const & boilStep) {
-      return boilStep.startTemp_c() && *boilStep.startTemp_c() > Boil::minimumBoilTemperature_c &&
-             boilStep.  endTemp_c() && *boilStep.  endTemp_c() > Boil::minimumBoilTemperature_c;
-   };
-
    // Remember RecipeAddition steps are numbered from 1, but lists are indexed from 0
    int const stepIndex = *step - 1;
    int lastBoilProperIndex = -1;
    for (int ii = 0; ii < numBoilSteps; ++ii) {
-      if (isBoilProper(*boilSteps[ii])) {
+      if (Boil::isBoilProper(*boilSteps[ii])) {
          lastBoilProperIndex = ii;
       }
    }
@@ -3023,11 +3017,11 @@ Recipe::BoilAdditionTiming Recipe::boilAdditionTiming(RecipeAddition const & add
    //
    double subsequentBoilProper_mins = 0.0;
    for (int ii = stepIndex + 1; ii <= lastBoilProperIndex; ++ii) {
-      if (isBoilProper(*boilSteps[ii])) {
+      if (Boil::isBoilProper(*boilSteps[ii])) {
          subsequentBoilProper_mins += boilSteps[ii]->stepTime_mins().value_or(0.0);
       }
    }
-   if (isBoilProper(*additionStep)) {
+   if (Boil::isBoilProper(*additionStep)) {
       timing.boilProper_mins =
          // No time means start of the step
          addAtTime_mins.value_or(stepLength_mins.value_or(0.0)) + subsequentBoilProper_mins;
@@ -3204,13 +3198,14 @@ QList<QString> Recipe::getHopAdditionNameAndAmounts(bool const firstWort) const 
    return result;
 }
 
-QList<QString> Recipe::getMashHeatingSteps() const {
+QList<QString> Recipe::getInfusionWaterToHeat() const {
    QList<QString> result;
 
    auto const mash{ this->mash() };
    if (mash) {
       for (auto const & mashStep : mash->mashSteps()) {
-         if (mashStep->isInfusion()) {
+         // Only infusion (including sparge) steps add water that needs heating
+         if (!mashStep->isInfusion()) {
             continue;
          }
          result.append(

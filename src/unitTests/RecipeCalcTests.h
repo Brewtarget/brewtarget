@@ -59,6 +59,12 @@ private slots:
     */
    void testBoilAdditionTiming();
 
+   /**
+    * \brief Verify that a boil step with no start/end temperature is treated as being at boiling.  See
+    *        https://github.com/Brewtarget/brewtarget/issues/1165
+    */
+   void testBoilStepsWithoutTemperatures();
+
    //! \brief Unit test: verify we can set and read inventory via Qt Properties
    void testInventory();
 
@@ -89,6 +95,12 @@ private slots:
     *        the kettle.
     */
    void testMashTunHeatCapacity();
+
+   /**
+    * \brief Verify that water alkalinity (used for residual alkalinity in the water adjuster) comes from bicarbonate and
+    *        carbonate when alkalinity itself is not set (as is the case for all imported water profiles)
+    */
+   void testWaterAlkalinity();
 };
 
 #endif

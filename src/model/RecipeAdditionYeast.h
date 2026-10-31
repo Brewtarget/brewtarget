@@ -104,7 +104,8 @@ public:
    //! \brief The number of times recultured (moved from \c Yeast).       ⮜⮜⮜ Optional in BeerXML and BeerJSON ⮞⮞⮞
    Q_PROPERTY(std::optional<int>     timesCultured             READ timesCultured             WRITE setTimesCultured    )
    //! \brief A more fundamental way of measuring how much yeast is being added.  ⮜⮜⮜ Optional in BeerJSON, not part of BeerXML ⮞⮞⮞
-   Q_PROPERTY(std::optional<int>     cellCountBillions         READ cellCountBillions         WRITE setCellCountBillions)
+   //!        NB: This is not necessarily an integer (eg 2.5 billion cells).  (In BeerJSON it is an integer; in dotBeer it is not.)
+   Q_PROPERTY(std::optional<double>  cellCountBillions         READ cellCountBillions         WRITE setCellCountBillions)
 
    //! \brief Whether the yeast is added to secondary or primary.  ⮜⮜⮜ Optional in BeerXML, not part of BeerJSON ⮞⮞⮞
    Q_PROPERTY(std::optional<bool>    addToSecondary            READ addToSecondary            WRITE setAddToSecondary   )
@@ -112,13 +113,13 @@ public:
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    std::optional<double> attenuation_pct  () const;
    std::optional<int   > timesCultured    () const;
-   std::optional<int   > cellCountBillions() const;
+   std::optional<double> cellCountBillions() const;
    std::optional<bool  > addToSecondary   () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setAttenuation_pct  (std::optional<double> const val);
    void setTimesCultured    (std::optional<int   > const val);
-   void setCellCountBillions(std::optional<int   > const val);
+   void setCellCountBillions(std::optional<double> const val);
    void setAddToSecondary   (std::optional<bool  > const val);
 
    virtual NamedEntity * ensureExists(BtStringConst const & property) override;
@@ -130,7 +131,7 @@ protected:
 private:
    std::optional<double> m_attenuation_pct  ;
    std::optional<int   > m_timesCultured    ;
-   std::optional<int   > m_cellCountBillions;
+   std::optional<double> m_cellCountBillions;
 };
 
 BT_DECLARE_METATYPES(RecipeAdditionYeast)

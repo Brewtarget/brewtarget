@@ -119,12 +119,22 @@ QString               Boil::description  () const { return this->m_description  
 QString               Boil::notes        () const { return this->m_notes        ; }
 std::optional<double> Boil::preBoilSize_l() const { return this->m_preBoilSize_l; }
 
+bool Boil::startsAtBoil(BoilStep const & boilStep) {
+   return boilStep.startTemp_c().value_or(100.0) > Boil::minimumBoilTemperature_c;
+}
+
+bool Boil::endsAtBoil(BoilStep const & boilStep) {
+   return boilStep.endTemp_c().value_or(100.0) > Boil::minimumBoilTemperature_c;
+}
+
+bool Boil::isBoilProper(BoilStep const & boilStep) {
+   return Boil::startsAtBoil(boilStep) && Boil::endsAtBoil(boilStep);
+}
+
 double Boil::boilTime_mins() const {
    double boilTimeProper_mins = 0.0;
    for (auto const & step : this->steps()) {
-      if (step->startTemp_c() && *step->startTemp_c() > Boil::minimumBoilTemperature_c &&
-          step->  endTemp_c() && *step->  endTemp_c() > Boil::minimumBoilTemperature_c &&
-          step->stepTime_mins()) {
+      if (Boil::isBoilProper(*step) && step->stepTime_mins()) {
           boilTimeProper_mins += *step->stepTime_mins();
       }
    }
@@ -132,10 +142,14 @@ double Boil::boilTime_mins() const {
 }
 
 std::optional<double> Boil::coolTime_mins() const {
+   //
+   // NB: We used to compare std::optional<double> directly with a double here, which meant an unset start
+   //     temperature was treated as below boiling (because std::nullopt compares less than any value).
+   //
    auto boilSteps = this->steps();
    if (boilSteps.size() > 0 &&
-       boilSteps.last()->startTemp_c() > Boil::minimumBoilTemperature_c &&
-       boilSteps.last()->endTemp_c  () < Boil::minimumBoilTemperature_c) {
+       Boil::startsAtBoil(*boilSteps.last()) &&
+       !Boil::endsAtBoil(*boilSteps.last())) {
       return boilSteps.last()->stepTime_mins();
    }
    return std::nullopt;
@@ -154,8 +168,7 @@ void Boil::setPreBoilSize_l(std::optional<double> const   val) { SET_AND_NOTIFY(
 void Boil::setBoilTime_mins(double const val) {
    this->ensureStandardProfile();
    for (auto step : this->steps()) {
-      if (step->startTemp_c() && *step->startTemp_c() > Boil::minimumBoilTemperature_c &&
-          step->  endTemp_c() && *step->  endTemp_c() > Boil::minimumBoilTemperature_c) {
+      if (Boil::isBoilProper(*step)) {
          step->setStepTime_mins(val);
          break;
       }
@@ -183,8 +196,13 @@ void Boil::ensureStandardProfile() {
    auto recipe = ObjectStoreWrapper::findFirstMatching<Recipe>([this](Recipe * rec) {return rec->uses(*this);});
    QString const recipeStrippedName = recipe ? recipe->strippedName() : tr("a recipe");
 
+   //
+   // We classify the existing steps by their temperatures (see Boil::startsAtBoil etc) rather than by their positions,
+   // and we re-read the steps after each insertion.  (Previously, we used positions, from a list of steps taken before
+   // any insertions, so, eg, a boil of [boil proper, cooling] would get a pre-boil step and then a second cooling step.)
+   //
    auto boilSteps = this->steps();
-   if (boilSteps.size() == 0 || boilSteps.at(0)->startTemp_c().value_or(100.0) > Boil::minimumBoilTemperature_c) {
+   if (boilSteps.size() == 0 || Boil::startsAtBoil(*boilSteps.first())) {
       // We need to add a ramp-up (aka pre-boil) step
       auto preBoil = std::make_shared<BoilStep>(tr("Pre-boil for %1").arg(recipeStrippedName));
       preBoil->setDescription(tr("Automatically-generated pre-boil step for %1").arg(recipeStrippedName));
@@ -203,16 +221,26 @@ void Boil::ensureStandardProfile() {
       this->insert(preBoil, 1);
    }
 
-   if (boilSteps.size() < 2 || boilSteps.at(1)->startTemp_c().value_or(0.0) < Boil::minimumBoilTemperature_c) {
-      // We need to add a main (aka boil proper) step
+   boilSteps = this->steps();
+   if (std::none_of(boilSteps.cbegin(), boilSteps.cend(), [](auto const & step) { return Boil::isBoilProper(*step); })) {
+      // We need to add a main (aka boil proper) step.  It goes before the first step that cools down from the boil, or
+      // at the end if there isn't one.  (Remember step numbers start from 1.)
+      int position = static_cast<int>(boilSteps.size()) + 1;
+      for (int ii = 0; ii < static_cast<int>(boilSteps.size()); ++ii) {
+         if (Boil::startsAtBoil(*boilSteps[ii]) && !Boil::endsAtBoil(*boilSteps[ii])) {
+            position = ii + 1;
+            break;
+         }
+      }
       auto mainBoil = std::make_shared<BoilStep>(tr("Main boil for %1").arg(recipeStrippedName));
       mainBoil->setDescription(tr("Automatically-generated boil proper step for %1").arg(recipeStrippedName));
       mainBoil->setStartTemp_c(100.0);
       mainBoil->setEndTemp_c(100.0);
-      this->insert(mainBoil, 2);
+      this->insert(mainBoil, position);
    }
 
-   if (boilSteps.size() < 3 || boilSteps.at(2)->endTemp_c().value_or(100.0) > Boil::minimumBoilTemperature_c) {
+   boilSteps = this->steps();
+   if (Boil::endsAtBoil(*boilSteps.last())) {
       // We need to add a post-boil step
       auto postBoil = std::make_shared<BoilStep>(tr("Post-boil for %1").arg(recipeStrippedName));
       postBoil->setDescription(tr("Automatically-generated post-boil step for %1").arg(recipeStrippedName));
@@ -226,7 +254,7 @@ void Boil::ensureStandardProfile() {
       }
       postBoil->setStartTemp_c(100.0);
       postBoil->setEndTemp_c(endingTemp);
-      this->insert(postBoil, 3);
+      this->insert(postBoil, static_cast<int>(boilSteps.size()) + 1);
    }
 
    return;
@@ -239,8 +267,7 @@ std::pair<int, int> Boil::boilProperSteps() const {
    int stepNumber = 0;
    for (auto const & boilStep : this->boilSteps()) {
       ++stepNumber;
-      if (boilStep->startTemp_c() && *boilStep->startTemp_c() > Boil::minimumBoilTemperature_c &&
-          boilStep->  endTemp_c() && *boilStep->  endTemp_c() > Boil::minimumBoilTemperature_c) {
+      if (Boil::isBoilProper(*boilStep)) {
          if (!foundBoilProper) {
             firstBoilProperStep = stepNumber;
             foundBoilProper = true;

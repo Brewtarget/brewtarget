@@ -17,6 +17,8 @@
 #define SERIALIZATION_JSON_JSONUTILS_H
 #pragma once
 
+#include <initializer_list>
+
 #include <boost/json/value.hpp>
 
 class QDebug;
@@ -62,6 +64,17 @@ namespace JsonUtils {
                   boost::json::value const & val,
                   std::string_view const tabString = "",
                   std::string * currentIndent = nullptr);
+
+   /**
+    * \brief In both dotBeer and BeerJSON, a range (eg a hop's `alpha_acid_range` or a style's `alcohol_by_volume`) must
+    *        have both `minimum` and `maximum`, whereas, in our model, the two ends of a range are separate optional
+    *        values.  So, for each record in \c records, we remove any of the \c rangeKeys objects that has only one
+    *        end set (logging a warning), as otherwise the output would not be valid.
+    *
+    * \param records The top-level array of records we generated (eg of hops)
+    * \param rangeKeys The keys in each record that hold ranges
+    */
+   void removeIncompleteRanges(boost::json::array & records, std::initializer_list<char const *> rangeKeys);
 }
 
 /**

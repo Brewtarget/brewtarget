@@ -914,9 +914,11 @@ public:
    QList<QString> getHopAdditionNameAndAmounts(bool firstWort) const;
 
    /**
-    * \brief Formats the mashsteps for instructions
+    * \brief For the "Heat water" brew instruction, lists the water that needs to be heated for the mash's infusion
+    *        (including sparge) steps, as "<amount> water to <temperature>", one entry per step.  Non-infusion steps
+    *        (temperature, decoction, etc) add no water, so are not included.
     */
-   QList<QString> getMashHeatingSteps() const;
+   QList<QString> getInfusionWaterToHeat() const;
 
    /**
     * This structure holds some intermediate values that are used for calculating brewhouse efficiency etc.
