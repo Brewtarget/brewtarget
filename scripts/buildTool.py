@@ -58,6 +58,7 @@ import btLogger
 import btExecute
 import btFileSystem
 import btContainerApps
+import btMacBundle
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Global constants
@@ -1209,12 +1210,6 @@ def doPackage():
             'libbz2'              , # BZip2 compression -- see https://en.wikipedia.org/wiki/Bzip2
             'libdouble-conversion', # Binary-decimal & decimal-binary routines for IEEE doubles -- see https://github.com/google/double-conversion
             'libfreetype'         , # Font rendering -- see https://freetype.org/
-            #
-            # 32-bit and 64-bit MinGW use different exception handling (see
-            # https://sourceforge.net/p/mingw-w64/wiki2/Exception%20Handling/) hence the different naming of libgcc in
-            # the 32-bit and 64-bit environments.
-            #
-#            'libgcc_s_dw2' , # 32-bit GCC library
             'libgcc_s_seh' , # 64-bit GCC library
             'libglib-2.0'  ,
             'libgraphite'  ,
@@ -1824,13 +1819,9 @@ def doPackage():
          # folder (otherwise, eg, the dmg name it creates will be wrong, as explained at
          # https://doc.qt.io/qt-6/macos-deployment.html.
          #
-         # In a previous iteration of this script, I skipped the -dmg option and tried to build the disk image with
-         # dmgbuild (code at https://github.com/dmgbuild/dmgbuild, docs at
-         # https://dmgbuild.readthedocs.io/en/latest/index.html).  The advantages of this would be that it would make it
-         # possible to do further fix-up work on the directory tree (if needed) and, potentially, give us more control
-         # over the disk image (eg to specify an icon for it).  However, it seemed to be fiddly to get it to work.  It's
-         # a lot simpler to let macdeployqt create the disk image, and we currently don't think we need to do further
-         # fix-up work after it's run.  A custom icon on the disk image would be nice, but is far from essential.
+         # NB: Although it might seem simplest to let macdeployqt create the disk image with the `-dmg` flag, there are
+         # things macdeployqt doesn't get right, which we have to fix-up afterwards, so we do the disk image later the
+         # hard way.
          #
          # .:TBD:. Ideally we would sign our application here using the `-codesign=<ident>` command line option to
          #         macdeployqt.  For the GitHub builds, we would have to import a code signing certificate using
@@ -1890,11 +1881,23 @@ def doPackage():
          )
 
          #
-         # The result of specifying the `-dmg' flag should be a [projectName]_[versionNumber].dmg file
+         # As noted above, We don't use macdeployqt's `-dmg` option, because we have further fix-up to do on the bundle
+         # (see comments in btMacBundle.py and https://github.com/Brewtarget/brewtarget/issues/1176).  This will exit
+         # with an error if the bundle is not self-contained, so we find out on CI rather than from users.
          #
-         btLogger.log.debug('Directory tree under ' + os.getcwd() + ' after running macdeployqt')
-         btExecute.abortOnRunFail(subprocess.run(['tree', '-sh'], capture_output=False))
+         btMacBundle.fixUpAppBundle(btFileSystem.dir_packages_platform.joinpath(macBundleDirName),
+                                    capitalisedProjectName,
+                                    [qtFrameworksDir, dir_packages_mac_bin.as_posix()])
          dmgFileName = macBundleDirName.replace('.app', '.dmg')
+         btMacBundle.createDmg(btFileSystem.dir_packages_platform.joinpath(macBundleDirName),
+                               btFileSystem.dir_packages_platform.joinpath(dmgFileName),
+                               macBundleDirName.replace('.app', ''))
+
+         #
+         # We should now have a [projectName]_[versionNumber]_MacOS.dmg file
+         #
+         btLogger.log.debug('Directory tree under ' + os.getcwd() + ' after running macdeployqt and fix-up')
+         btExecute.abortOnRunFail(subprocess.run(['tree', '-sh'], capture_output=False))
 
          #
          # otool -l = Display the load commands
@@ -1904,9 +1907,6 @@ def doPackage():
          os.chdir(dir_packages_mac_bin)
          btExecute.abortOnRunFail(subprocess.run(['otool', '-L', capitalisedProjectName], capture_output=False))
          btExecute.abortOnRunFail(subprocess.run(['otool', '-l', capitalisedProjectName], capture_output=False))
-###         btLogger.log.debug('Running otool on ' + xalanDir + xalanLibName + ' library after macdeployqt')
-###         os.chdir(dir_packages_mac_frm)
-###         btExecute.abortOnRunFail(subprocess.run(['otool', '-L', xalanDir + xalanLibName], capture_output=False))
 
          btLogger.log.info('Created ' + dmgFileName + ' in directory ' + btFileSystem.dir_packages_platform.as_posix())
 
@@ -1927,6 +1927,15 @@ def doPackage():
          btExecute.abortOnRunFail(
             subprocess.run(['tree', '-sh', mountPoint], capture_output=False)
          )
+
+         #
+         # Check the app as shipped actually starts.  (dyld problems abort before main(), so this catches the sort of
+         # failures reported in https://github.com/Brewtarget/brewtarget/issues/1176.)
+         #
+         btMacBundle.smokeTest(
+            pathlib.Path(mountPoint).joinpath(macBundleDirName, 'Contents', 'MacOS', capitalisedProjectName)
+         )
+
          btLogger.log.debug('Running hdiutil to unmount ' + mountPoint)
          os.chdir(btFileSystem.dir_packages_platform)
          btExecute.abortOnRunFail(

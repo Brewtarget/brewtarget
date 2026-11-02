@@ -14,6 +14,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Shopping Lists
 * We'll list other new features here...
 
+## v5.2.1
+Fix Mac packaging
+
+### New Features
+None
+
+### Bug Fixes
+* macOS release bundles fail to launch on clean Apple Silicon systems [1176](https://github.com/Brewtarget/brewtarget/issues/1176)
+
+### Release Timestamp
+Mon, 1 Nov 2026 05:02:01 +0100
+
 ## v5.2.0
 Various improvements, including:
 * Migrate to new XML libraries (libxml2 replaces Xerces and Xalan) [1131](https://github.com/Brewtarget/brewtarget/issues/1131)
