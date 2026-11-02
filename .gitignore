@@ -1,15 +1,36 @@
-# Build directory. Ignore everything but dummyfile
-build/*
-!build/dummyfile
+#-----------------------------------------------------------------------------------------------------------------------
+# .gitignore is part of Brewtarget, and is copyright the following authors 2026:
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#-----------------------------------------------------------------------------------------------------------------------
+# Build directories
+/build/
+/mbuild/
 
-# Kate project
-.kateproject.d/
-.idea
+# CLion
+.idea/
+cmake-build-*/
 
-.vagrant
-*.user
+# Kate
+*.kate-swp
 
-# ccls files
-.ccls-cache/
-src/.ccls-cache/
-src/compile_commands.json
+# KDevelop
+*.kdev4
+.kdev4/
+
+# Python virtual environments etc
+.venv/
+__pycache__/
+
+# Signpath
+.signpath/

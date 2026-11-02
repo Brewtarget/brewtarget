@@ -9194,7 +9194,7 @@ The final volume in the primary is %1.</source>
         <translation>Sukkertilsætning sukkernavn</translation>
     </message>
     <message>
-        <location filename="../src/model/Recipe.cpp" line="3211"/>
+        <location filename="../src/model/Recipe.cpp" line="3212"/>
         <source>%1 water to %2</source>
         <translation type="unfinished">%1 vand til %2  {1 ?} {2?}</translation>
     </message>
@@ -9286,7 +9286,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../src/model/Recipe.cpp" line="2069"/>
-        <location filename="../src/unitTests/RecipeCalcTests.cpp" line="348"/>
+        <location filename="../src/unitTests/RecipeCalcTests.cpp" line="349"/>
         <source>Flameout</source>
         <translation>Slut på opvarmning</translation>
     </message>
@@ -11832,127 +11832,127 @@ The final volume in the primary is %1.</source>
 <context>
     <name>Water</name>
     <message>
-        <location filename="../src/model/Water.cpp" line="34"/>
+        <location filename="../src/model/Water.cpp" line="35"/>
         <source>Water</source>
         <translation>Vand</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="35"/>
+        <location filename="../src/model/Water.cpp" line="36"/>
         <source>Alkalinity</source>
         <translation>Basicitet</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="36"/>
+        <location filename="../src/model/Water.cpp" line="37"/>
         <source>Alkalinity As HCO3</source>
         <translation>Basicitet som HCO₃</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="37"/>
+        <location filename="../src/model/Water.cpp" line="38"/>
         <source>Bicarbonate</source>
         <translation>Hydrogencarbonat</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="38"/>
+        <location filename="../src/model/Water.cpp" line="39"/>
         <source>Calcium</source>
         <translation>Calcium</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="39"/>
+        <location filename="../src/model/Water.cpp" line="40"/>
         <source>Carbonate</source>
         <translation>Carbonat</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="40"/>
+        <location filename="../src/model/Water.cpp" line="41"/>
         <source>Chloride</source>
         <translation>Chlorid</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="41"/>
+        <location filename="../src/model/Water.cpp" line="42"/>
         <source>Fluoride</source>
         <translation>Fluorid</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="42"/>
+        <location filename="../src/model/Water.cpp" line="43"/>
         <source>Iron</source>
         <translation>Jern</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="43"/>
+        <location filename="../src/model/Water.cpp" line="44"/>
         <source>Magnesium</source>
         <translation>Magnesium</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="71"/>
+        <location filename="../src/model/Water.cpp" line="72"/>
         <source>Bicarbonate (HCO₃⁻)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="72"/>
+        <location filename="../src/model/Water.cpp" line="73"/>
         <source>Calcium (Ca²⁺)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="73"/>
+        <location filename="../src/model/Water.cpp" line="74"/>
         <source>Carbonate (CO₃²⁻)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="74"/>
+        <location filename="../src/model/Water.cpp" line="75"/>
         <source>Chloride (Cl⁻)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="75"/>
+        <location filename="../src/model/Water.cpp" line="76"/>
         <source>Copper (Cu²⁺)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="76"/>
+        <location filename="../src/model/Water.cpp" line="77"/>
         <source>Iron (Fe²⁺)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="77"/>
+        <location filename="../src/model/Water.cpp" line="78"/>
         <source>Magnesium (Mg²⁺)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="78"/>
+        <location filename="../src/model/Water.cpp" line="79"/>
         <source>Manganese (Mn²⁺)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="79"/>
+        <location filename="../src/model/Water.cpp" line="80"/>
         <source>Nitrate (NO₃⁻)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="80"/>
+        <location filename="../src/model/Water.cpp" line="81"/>
         <source>Nitrite (NO₂⁻)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="81"/>
+        <location filename="../src/model/Water.cpp" line="82"/>
         <source>Phosphate (PO₄³⁻)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="82"/>
+        <location filename="../src/model/Water.cpp" line="83"/>
         <source>Potassium (K⁺)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="83"/>
+        <location filename="../src/model/Water.cpp" line="84"/>
         <source>Sodium (Na⁺)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="84"/>
+        <location filename="../src/model/Water.cpp" line="85"/>
         <source>Sulfate (SO₄²⁻)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="85"/>
+        <location filename="../src/model/Water.cpp" line="86"/>
         <source>Zinc (Zn²⁺)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11961,27 +11961,27 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Omvendt osmose i mæskning</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="44"/>
+        <location filename="../src/model/Water.cpp" line="45"/>
         <source>Nitrate</source>
         <translation>Nitrat</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="45"/>
+        <location filename="../src/model/Water.cpp" line="46"/>
         <source>Nitrite</source>
         <translation>Nitrit</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="46"/>
+        <location filename="../src/model/Water.cpp" line="47"/>
         <source>Notes</source>
         <translation>Notater</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="48"/>
+        <location filename="../src/model/Water.cpp" line="49"/>
         <source>Potassium</source>
         <translation>Kalium</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="49"/>
+        <location filename="../src/model/Water.cpp" line="50"/>
         <source>Sodium</source>
         <translation>Natrium</translation>
     </message>
@@ -11990,7 +11990,7 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">Eftergydning omvendt osmose</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="50"/>
+        <location filename="../src/model/Water.cpp" line="51"/>
         <source>Sulfate</source>
         <translation>sulfat</translation>
     </message>
@@ -12031,12 +12031,12 @@ The final volume in the primary is %1.</source>
         <translation type="vanished">SO₄ </translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="138"/>
+        <location filename="../src/model/Water.cpp" line="139"/>
         <source>No</source>
         <translation>Nej</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="138"/>
+        <location filename="../src/model/Water.cpp" line="139"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
@@ -12069,7 +12069,7 @@ The final volume in the primary is %1.</source>
         <translation>Mg</translation>
     </message>
     <message>
-        <location filename="../src/model/Water.cpp" line="47"/>
+        <location filename="../src/model/Water.cpp" line="48"/>
         <source>pH</source>
         <translation>pH</translation>
     </message>
@@ -12092,33 +12092,33 @@ The final volume in the primary is %1.</source>
 <context>
     <name>WaterAdjuster</name>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="260"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="261"/>
         <source>Minimum expected concentration is %1 ppm</source>
         <translation type="unfinished">Minimum forventet koncentration er %1 ppm</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="261"/>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="487"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="262"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="503"/>
         <source>In range for target profile.</source>
         <translation type="unfinished">Passende til anvendt profil.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="262"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="263"/>
         <source>Maximum expected concentration is %1 ppm</source>
         <translation type="unfinished">Maksimum forventet koncentration er %1 ppm</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="468"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="484"/>
         <source>PPM</source>
         <translation type="unfinished">ppm</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="486"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="502"/>
         <source>Too low for target profile.</source>
         <translation type="unfinished">For lav til anvendt profil.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="488"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="504"/>
         <source>Too high for target profile.</source>
         <translation type="unfinished">For høj til anvendt profil.</translation>
     </message>
@@ -12202,17 +12202,17 @@ The final volume in the primary is %1.</source>
         <translation>HCO₃</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="160"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="161"/>
         <source>Base Profile</source>
         <translation type="unfinished">Basisprofil</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="161"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="162"/>
         <source>Target Profile</source>
         <translation type="unfinished">Anvendt profil</translation>
     </message>
     <message>
-        <location filename="../src/widgets/WaterAdjuster.cpp" line="162"/>
+        <location filename="../src/widgets/WaterAdjuster.cpp" line="163"/>
         <source>Actual Profile</source>
         <translation type="unfinished"></translation>
     </message>

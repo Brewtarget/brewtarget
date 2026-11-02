@@ -257,7 +257,7 @@ jobs:
         if: ${{ success()}}
         uses: actions/upload-artifact@v7
         with:
-          name: brewtarget-dev-${{ matrix.msystem }}
+          name: brewtarget-dev-windows-${{ matrix.msystem }}
           path: |
             C:/_/mbuild/packages/windows/Brewtarget*Installer.exe
             C:/_/mbuild/packages/windows/Brewtarget*Installer.exe.sha256sum
@@ -357,7 +357,7 @@ jobs:
         if: ${{ success() }}
         uses: actions/upload-artifact@v7
         with:
-          name: brewtarget-dev-${{ matrix.msystem }}-signed
+          name: brewtarget-dev-windows-${{ matrix.msystem }}-signed
           # Hopefully the same relative path we use in the signing step works here
           path: |
             windows/signed/*.*
