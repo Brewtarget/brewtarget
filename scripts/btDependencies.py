@@ -1221,22 +1221,19 @@ def installDependencies():
          '-S', '.', '-B', './build',
          #
          # These are mostly the same flags that get explicitly set the Blaze nightly builds -- see
-         # https://github.com/sourcemeta/blaze/blob/main/.github/workflows/ci.yml.  However, there are a few things we
-         # can turn off (eg benchmarks).
+         # https://github.com/sourcemeta/blaze/blob/main/.github/workflows/ci.yml.  List of BLAZE_ flags is at
+         # https://blaze.sourcemeta.com/.
+         # Several things that are on in the Blaze nightly builds can be safely turned off here -- eg tests, benchmarks.
          #
          # In the native Blaze builds, warnings are treated as errors.  But on some platforms we're using different
          # (versions of) different compilers.  So it's easier for us to turn them off.
          #
          '-DCMAKE_BUILD_TYPE:STRING=Release',
-         '-DBLAZE_TESTS:BOOL=ON',
-         '-DBLAZE_BENCHMARK:BOOL=OFF',
-         '-DBLAZE_CONTRIB:BOOL=ON',
-         '-DBLAZE_DOCS:BOOL=OFF',
-         '-DBUILD_SHARED_LIBS:BOOL=OFF',
          '-DCMAKE_COMPILE_WARNING_AS_ERROR:BOOL=OFF',
-         #
-         # These flags are listed at https://blaze.sourcemeta.com/
-         #
+         '-DBUILD_SHARED_LIBS:BOOL=OFF',
+         '-DBLAZE_BENCHMARK:BOOL=OFF',
+         '-DBLAZE_CONTRIB:BOOL=OFF',
+         '-DBLAZE_DOCS:BOOL=OFF',
          '-DBLAZE_TEST:BOOL=OFF', # 'ON' would build the Blaze test runner library
       ])
    )

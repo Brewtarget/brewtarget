@@ -47,6 +47,18 @@ jobs:
         #
         os: [ubuntu-24.04, ubuntu-26.04]
     steps:
+      #
+      # Building flatpak etc below takes a fair bit of disk space, we start out by removing preinstalled software that
+      # we don't need
+      #
+      - name: Free disk space
+        shell: bash
+        run: |
+          df -h /
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force || true
+          df -h /
+
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
@@ -130,6 +142,12 @@ jobs:
       #
       # Note that, although we continue to support CMake for local builds and installs, we no longer support packaging
       # with CPack/CMake.  The bt build script packaging gives us better control over the packaging process.
+      #
+      # This means, at this point, if the CMake build and tests succeeded, we could delete the build directory here if
+      # we need more disk space in future.  For the moment, we don't, and we allow the build directory to be a
+      # downloadable artifact even when the build succeeds (see below).
+      #
+
       #
       # I did also have the idea of doing a subsequent step to try installing the package (eg via
       # `sudo apt -f install ./brew*.deb`) but, in practice this gives errors about the following packages not being

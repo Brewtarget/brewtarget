@@ -737,7 +737,12 @@ def doFlatpak():
                            'src',
                            'translations',
                            'ui']:
-      shutil.copytree(btFileSystem.dir_base.joinpath(directoryToCopy), dir_copyOfSource.joinpath(directoryToCopy))
+      shutil.copytree(
+         btFileSystem.dir_base.joinpath(directoryToCopy),
+         dir_copyOfSource.joinpath(directoryToCopy),
+         # This is to skip copying the Blaze build directory
+         ignore = lambda dir, names: ['build'] if pathlib.Path(dir).name == 'blaze' and 'build' in names else []
+      )
    for fileToCopy in ['CHANGES.markdown',
                       'CMakeLists.txt',
                       'configure',
