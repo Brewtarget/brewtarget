@@ -25,20 +25,35 @@
       <attribute name="title">
        <string>Units &amp;&amp; Precision</string>
       </attribute>
-      <layout class="QFormLayout" name="formLayout_5">
+      <layout class="QGridLayout" name="gridLayout_units">
        <!--
-          The rows for each Measurement::PhysicalQuantity that has a choice of UnitSystem are generated in code (see
-          OptionDialog::impl::configure_unitCombos()) and inserted above the Date row.  Date lives here because it
-          doesn't have a better home, but it is not a PhysicalQuantity, so is hard-coded.
+          Row 0 is the column headings.  The rows for each Measurement::PhysicalQuantity are generated in code (see
+          OptionDialog::impl::configure_unitCombos()), which also moves the Date row below them.  Date lives on this
+          tab because it doesn't have a better home, but it is not a PhysicalQuantity, so is hard-coded, and has
+          nothing in the decimal places column.
        -->
-       <item row="0" column="0">
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_unitSystemHeading">
+         <property name="text">
+          <string>Units</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_decimalPlacesHeading">
+         <property name="text">
+          <string>Decimal places</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
         <widget class="QLabel" name="dateLabel">
          <property name="text">
           <string>Date</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="1" column="1">
         <widget class="QComboBox" name="dateComboBox">
          <property name="minimumSize">
           <size>

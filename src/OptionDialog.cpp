@@ -28,7 +28,6 @@
 
 #include <algorithm>
 #include <optional>
-#include <utility>
 #include <vector>
 
 #include <QAbstractButton>
@@ -36,7 +35,7 @@
 #include <QComboBox>
 #include <QDebug>
 #include <QFileDialog>
-#include <QFormLayout>
+#include <QGridLayout>
 #include <QIcon>
 #include <QLabel>
 #include <QMap>
@@ -102,6 +101,34 @@ namespace {
          Q_FUNC_INFO << "Unable to interpret value " << selection << "of combo box as UnitSystem name for" <<
          physicalQuantity;
       return false;
+   }
+
+   /**
+    * \brief Item data for the "Default" option in the decimal places combo boxes.  (Other options have the number of
+    *        decimal places as their item data.)
+    */
+   int constexpr decimalPlacesDefault = -1;
+
+   /**
+    * \brief For a given QComboBox, save the number of decimal places (or default) it has selected
+    *
+    * \return \c true if succeeded, \c false otherwise
+    */
+   bool saveComboBoxChoiceOfDecimalPlaces(QComboBox const & comboBox,
+                                          Measurement::PhysicalQuantity const physicalQuantity) {
+      bool okay = false;
+      int const selection = comboBox.currentData().toInt(&okay);
+      if (!okay || selection < decimalPlacesDefault || selection > Measurement::NumDecimalPlaces::maxValue) {
+         qWarning() <<
+            Q_FUNC_INFO << "Unable to interpret value" << comboBox.currentData() << "of combo box as number of "
+            "decimal places for" << physicalQuantity;
+         return false;
+      }
+      Measurement::setUserSpecifiedDecimalPlaces(
+         physicalQuantity,
+         selection == decimalPlacesDefault ? std::nullopt : std::optional<Measurement::NumDecimalPlaces>{selection}
+      );
+      return true;
    }
 
 }
@@ -226,35 +253,56 @@ public:
 
    void configure_unitCombos() {
       //
-      // Populate the "Units" tab.  We generate one row for each PhysicalQuantity that has more than one UnitSystem
-      // (there's nothing for the user to choose if there is only one).  The rows go above the Date row, which is
-      // defined in the .ui file because date format isn't a PhysicalQuantity.
+      // Populate the "Units & Precision" tab.  Row 0 holds the column headings (from the .ui file).  We then generate
+      // one row for each PhysicalQuantity, with a combo box for the UnitSystem and one for the number of decimal
+      // places.  Where a PhysicalQuantity has only one UnitSystem, there's nothing to choose, so we disable that combo
+      // box, but we still show the row because the user can choose the number of decimal places.  Finally we move the
+      // Date row (defined in the .ui file because date format isn't a PhysicalQuantity) below all the generated rows.
       //
-      int row = 0;
+      QGridLayout & layout = *this->m_self.gridLayout_units;
+      int row = 1;
       for (auto const & ii : Measurement::physicalQuantityDisplayNames) {
          auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.key);
+
+         auto * label = new QLabel{ii.value, this->m_self.tab_units};
+
+         auto * unitSystemComboBox = new QComboBox{this->m_self.tab_units};
          auto unitSystems = Measurement::UnitSystem::getUnitSystems(physicalQuantity);
-         if (unitSystems.size() < 2) {
-            continue;
-         }
          // QMultiMap::values() returns the most recently inserted value first, so reverse to get UnitSystems in the
          // order they are defined in measurement/UnitSystem.cpp
          std::reverse(unitSystems.begin(), unitSystems.end());
-
-         auto * label    = new QLabel{ii.value, this->m_self.tab_units};
-         auto * comboBox = new QComboBox{this->m_self.tab_units};
          for (auto const * unitSystem : unitSystems) {
-            comboBox->addItem(Measurement::getDisplayName(unitSystem->systemOfMeasurement),
-                              QVariant(unitSystem->uniqueName));
+            unitSystemComboBox->addItem(Measurement::getDisplayName(unitSystem->systemOfMeasurement),
+                                        QVariant(unitSystem->uniqueName));
          }
-         label->setBuddy(comboBox);
-         this->m_self.formLayout_5->insertRow(row++, label, comboBox);
-         this->m_unitSystemComboBoxes.emplace_back(physicalQuantity, comboBox);
+         unitSystemComboBox->setEnabled(unitSystems.size() > 1);
+
+         auto * decimalPlacesComboBox = new QComboBox{this->m_self.tab_units};
+         decimalPlacesComboBox->addItem(tr("Default"), QVariant(decimalPlacesDefault));
+         for (int numDecimalPlaces = 0; numDecimalPlaces <= Measurement::NumDecimalPlaces::maxValue; ++numDecimalPlaces) {
+            decimalPlacesComboBox->addItem(QString::number(numDecimalPlaces), QVariant(numDecimalPlaces));
+         }
+
+         label->setBuddy(unitSystemComboBox->isEnabled() ? unitSystemComboBox : decimalPlacesComboBox);
+         layout.addWidget(label                , row, 0);
+         layout.addWidget(unitSystemComboBox   , row, 1);
+         layout.addWidget(decimalPlacesComboBox, row, 2);
+         this->m_physicalQuantityRows.push_back({physicalQuantity, unitSystemComboBox, decimalPlacesComboBox});
+         ++row;
       }
 
+      // Removing the widgets before re-adding them avoids a "moved to new layout" warning from Qt
+      layout.removeWidget(this->m_self.dateLabel);
+      layout.removeWidget(this->m_self.dateComboBox);
+      layout.addWidget(this->m_self.dateLabel   , row, 0);
+      layout.addWidget(this->m_self.dateComboBox, row, 1);
       this->m_self.dateComboBox->addItem(tr("mm-dd-YYYY"), QVariant(Localization::NumericDateFormat::MonthDayYear));
       this->m_self.dateComboBox->addItem(tr("dd-mm-YYYY"), QVariant(Localization::NumericDateFormat::DayMonthYear));
       this->m_self.dateComboBox->addItem(tr("YYYY-mm-dd"), QVariant(Localization::NumericDateFormat::YearMonthDay));
+      ++row;
+
+      // Stop the grid spreading its rows out over the full height of the tab
+      layout.setRowStretch(row, 1);
 
       return;
    }
@@ -463,9 +511,14 @@ public:
          this->m_self.comboBox_lang->setCurrentIndex(index);
       }
 
-      for (auto const & [physicalQuantity, comboBox] : this->m_unitSystemComboBoxes) {
-         comboBox->setCurrentIndex(
-            comboBox->findData(Measurement::getDisplayUnitSystem(physicalQuantity).uniqueName)
+      for (auto const & [physicalQuantity, unitSystemComboBox, decimalPlacesComboBox] : this->m_physicalQuantityRows) {
+         unitSystemComboBox->setCurrentIndex(
+            unitSystemComboBox->findData(Measurement::getDisplayUnitSystem(physicalQuantity).uniqueName)
+         );
+         std::optional<Measurement::NumDecimalPlaces> const numDecimalPlaces =
+            Measurement::getUserSpecifiedDecimalPlaces(physicalQuantity);
+         decimalPlacesComboBox->setCurrentIndex(
+            decimalPlacesComboBox->findData(numDecimalPlaces ? numDecimalPlaces->value() : decimalPlacesDefault)
          );
       }
       this->m_self.dateComboBox->setCurrentIndex(this->m_self.dateComboBox->findData(Localization::getDateFormat()));
@@ -611,10 +664,15 @@ public:
    DbConnectionTestStates dbConnectionTestState;
 
    /**
-    * \brief The combo boxes we generated on the "Units" tab, and the \c PhysicalQuantity each one is for.  (The
-    *        widgets themselves are owned by their Qt parent.)
+    * \brief The widgets we generated for one \c PhysicalQuantity on the "Units & Precision" tab.  (The widgets
+    *        themselves are owned by their Qt parent.)
     */
-   std::vector<std::pair<Measurement::PhysicalQuantity, QComboBox *>> m_unitSystemComboBoxes;
+   struct PhysicalQuantityRow {
+      Measurement::PhysicalQuantity physicalQuantity;
+      QComboBox *                   unitSystemComboBox;
+      QComboBox *                   decimalPlacesComboBox;
+   };
+   std::vector<PhysicalQuantityRow> m_physicalQuantityRows;
 
 };
 
@@ -882,8 +940,9 @@ void OptionDialog::saveAndClose() {
 bool OptionDialog::saveDefaultUnits() {
    bool okay = true;
 
-   for (auto const & [physicalQuantity, comboBox] : this->pimpl->m_unitSystemComboBoxes) {
-      okay &= saveComboBoxChoiceOfUnitSystem(*comboBox, physicalQuantity);
+   for (auto const & [physicalQuantity, unitSystemComboBox, decimalPlacesComboBox] : this->pimpl->m_physicalQuantityRows) {
+      okay &= saveComboBoxChoiceOfUnitSystem(*unitSystemComboBox, physicalQuantity);
+      okay &= saveComboBoxChoiceOfDecimalPlaces(*decimalPlacesComboBox, physicalQuantity);
    }
    okay &= saveDateFormat();
 
