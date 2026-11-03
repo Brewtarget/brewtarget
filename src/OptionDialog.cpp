@@ -26,13 +26,19 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "OptionDialog.h"
 
+#include <algorithm>
 #include <optional>
+#include <utility>
+#include <vector>
 
 #include <QAbstractButton>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QDebug>
 #include <QFileDialog>
+#include <QFormLayout>
 #include <QIcon>
+#include <QLabel>
 #include <QMap>
 #include <QMessageBox>
 #include <QSizePolicy>
@@ -74,19 +80,16 @@ namespace {
     * \brief For a given QComboBox, save the UnitSystem it has selected
     *
     * \param comboBox
-    * \param comboBoxName Used only for logging
     * \param physicalQuantity
     *
     * \return \c true if succeeded, \c false otherwise
     */
    bool saveComboBoxChoiceOfUnitSystem(QComboBox const & comboBox,
-                                       char const * const comboBoxName,
                                        Measurement::PhysicalQuantity physicalQuantity) {
       // A QVariant can always be converted to a QString (albeit sometimes an empty one!) so there is no success/failure
       // notification from QVariant::toString()
-      QString selection = comboBox.itemData(comboBox.currentIndex()).toString();
-      auto unitSystems = Measurement::UnitSystem::getUnitSystems(physicalQuantity);
-      for (auto unitSystem : unitSystems) {
+      QString const selection = comboBox.itemData(comboBox.currentIndex()).toString();
+      for (auto const unitSystem : Measurement::UnitSystem::getUnitSystems(physicalQuantity)) {
          if (selection == unitSystem->uniqueName) {
             qDebug() <<
                Q_FUNC_INFO << "Setting UnitSystem for" << physicalQuantity << "to" << unitSystem->uniqueName;
@@ -96,7 +99,7 @@ namespace {
       }
 
       qWarning() <<
-         Q_FUNC_INFO << "Unable to interpret value " << selection << "of" << comboBoxName << "as UnitSystem name for" <<
+         Q_FUNC_INFO << "Unable to interpret value " << selection << "of combo box as UnitSystem name for" <<
          physicalQuantity;
       return false;
    }
@@ -222,35 +225,36 @@ public:
    ~impl() = default;
 
    void configure_unitCombos() {
-      // Populate combo boxes on the "Units" tab
-      this->m_self.weightComboBox->addItem(tr("Metric / SI units"     ), QVariant(Measurement::UnitSystems::mass_Metric.uniqueName));
-      this->m_self.weightComboBox->addItem(tr("US traditional units"  ), QVariant(Measurement::UnitSystems::mass_UsCustomary.uniqueName));
-      this->m_self.weightComboBox->addItem(tr("British imperial units"), QVariant(Measurement::UnitSystems::mass_Imperial.uniqueName));
+      //
+      // Populate the "Units" tab.  We generate one row for each PhysicalQuantity that has more than one UnitSystem
+      // (there's nothing for the user to choose if there is only one).  The rows go above the Date row, which is
+      // defined in the .ui file because date format isn't a PhysicalQuantity.
+      //
+      int row = 0;
+      for (auto const & ii : Measurement::physicalQuantityDisplayNames) {
+         auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.key);
+         auto unitSystems = Measurement::UnitSystem::getUnitSystems(physicalQuantity);
+         if (unitSystems.size() < 2) {
+            continue;
+         }
+         // QMultiMap::values() returns the most recently inserted value first, so reverse to get UnitSystems in the
+         // order they are defined in measurement/UnitSystem.cpp
+         std::reverse(unitSystems.begin(), unitSystems.end());
 
-      this->m_self.temperatureComboBox->addItem(tr("Celsius"   ), QVariant(Measurement::UnitSystems::temperature_MetricIsCelsius.uniqueName));
-      this->m_self.temperatureComboBox->addItem(tr("Fahrenheit"), QVariant(Measurement::UnitSystems::temperature_UsCustomaryIsFahrenheit.uniqueName));
-
-      this->m_self.volumeComboBox->addItem(tr("Metric / SI units"     ), QVariant(Measurement::UnitSystems::volume_Metric.uniqueName));
-      this->m_self.volumeComboBox->addItem(tr("US traditional units"  ), QVariant(Measurement::UnitSystems::volume_UsCustomary.uniqueName));
-      this->m_self.volumeComboBox->addItem(tr("British imperial units"), QVariant(Measurement::UnitSystems::volume_Imperial.uniqueName));
-
-      this->m_self.gravityComboBox->addItem(tr("20C/20C Specific Gravity"), QVariant(Measurement::UnitSystems::density_SpecificGravity.uniqueName));
-      this->m_self.gravityComboBox->addItem(tr("Plato/Brix/Balling"      ), QVariant(Measurement::UnitSystems::density_Plato.uniqueName));
+         auto * label    = new QLabel{ii.value, this->m_self.tab_units};
+         auto * comboBox = new QComboBox{this->m_self.tab_units};
+         for (auto const * unitSystem : unitSystems) {
+            comboBox->addItem(Measurement::getDisplayName(unitSystem->systemOfMeasurement),
+                              QVariant(unitSystem->uniqueName));
+         }
+         label->setBuddy(comboBox);
+         this->m_self.formLayout_5->insertRow(row++, label, comboBox);
+         this->m_unitSystemComboBoxes.emplace_back(physicalQuantity, comboBox);
+      }
 
       this->m_self.dateComboBox->addItem(tr("mm-dd-YYYY"), QVariant(Localization::NumericDateFormat::MonthDayYear));
       this->m_self.dateComboBox->addItem(tr("dd-mm-YYYY"), QVariant(Localization::NumericDateFormat::DayMonthYear));
       this->m_self.dateComboBox->addItem(tr("YYYY-mm-dd"), QVariant(Localization::NumericDateFormat::YearMonthDay));
-
-      this->m_self.colorComboBox->addItem(tr("SRM"     ), QVariant(Measurement::UnitSystems::color_StandardReferenceMethod.uniqueName));
-      this->m_self.colorComboBox->addItem(tr("EBC"     ), QVariant(Measurement::UnitSystems::color_EuropeanBreweryConvention.uniqueName));
-      this->m_self.colorComboBox->addItem(tr("Lovibond"), QVariant(Measurement::UnitSystems::color_Lovibond.uniqueName));
-
-      return;
-   }
-
-   void configure_formulaCombos() {
-      this->m_self.diastaticPowerComboBox->addItem(tr("Lintner"), QVariant(Measurement::UnitSystems::diastaticPower_Lintner.uniqueName));
-      this->m_self.diastaticPowerComboBox->addItem(tr("WK"     ), QVariant(Measurement::UnitSystems::diastaticPower_WindischKolbach.uniqueName));
 
       return;
    }
@@ -459,37 +463,12 @@ public:
          this->m_self.comboBox_lang->setCurrentIndex(index);
       }
 
-      this->m_self.weightComboBox->setCurrentIndex(
-         this->m_self.weightComboBox->findData(
-            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Mass).uniqueName
-         )
-      );
-      this->m_self.temperatureComboBox->setCurrentIndex(
-         this->m_self.temperatureComboBox->findData(
-            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Temperature).uniqueName
-         )
-      );
-      this->m_self.volumeComboBox->setCurrentIndex(
-         this->m_self.volumeComboBox->findData(
-            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Volume).uniqueName
-         )
-      );
-      this->m_self.gravityComboBox->setCurrentIndex(
-         this->m_self.gravityComboBox->findData(
-            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Gravity).uniqueName
-         )
-      );
+      for (auto const & [physicalQuantity, comboBox] : this->m_unitSystemComboBoxes) {
+         comboBox->setCurrentIndex(
+            comboBox->findData(Measurement::getDisplayUnitSystem(physicalQuantity).uniqueName)
+         );
+      }
       this->m_self.dateComboBox->setCurrentIndex(this->m_self.dateComboBox->findData(Localization::getDateFormat()));
-      this->m_self.colorComboBox->setCurrentIndex(
-         this->m_self.colorComboBox->findData(
-            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Color).uniqueName
-         )
-      );
-      this->m_self.diastaticPowerComboBox->setCurrentIndex(
-         this->m_self.diastaticPowerComboBox->findData(
-            Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::DiastaticPower).uniqueName
-         )
-      );
 
       this->m_self.colorFormulaComboBox->setValue(ColorMethods::formula);
       this->m_self.  ibuFormulaComboBox->setValue(  IbuMethods::formula);
@@ -631,6 +610,12 @@ public:
 
    DbConnectionTestStates dbConnectionTestState;
 
+   /**
+    * \brief The combo boxes we generated on the "Units" tab, and the \c PhysicalQuantity each one is for.  (The
+    *        widgets themselves are owned by their Qt parent.)
+    */
+   std::vector<std::pair<Measurement::PhysicalQuantity, QComboBox *>> m_unitSystemComboBoxes;
+
 };
 
 OptionDialog::OptionDialog(QWidget * parent) :
@@ -660,8 +645,6 @@ OptionDialog::OptionDialog(QWidget * parent) :
    SMART_FIELD_INIT_FS(OptionDialog, label_defaultPreBoilSize_l, lineEdit_defaultPreBoilSize_l, double, Measurement::PhysicalQuantity::Volume, 2);
    SMART_FIELD_INIT_FS(OptionDialog, label_defaultBoilTime     , lineEdit_defaultBoilTime     , double, Measurement::PhysicalQuantity::Time  , 0);
    SMART_FIELD_INIT_FS(OptionDialog, label_defaultEfficiency   , lineEdit_defaultEfficiency   , double, NonPhysicalQuantity::Percentage      , 1);
-
-   this->pimpl->configure_formulaCombos();
 
    // populate the combo boxes on the logging tab
    this->pimpl->configure_logging();
@@ -899,13 +882,10 @@ void OptionDialog::saveAndClose() {
 bool OptionDialog::saveDefaultUnits() {
    bool okay = true;
 
-   okay &= saveWeightUnits();
-   okay &= saveTemperatureUnits();
-   okay &= saveVolumeUnits();
-   okay &= saveGravityUnits();
+   for (auto const & [physicalQuantity, comboBox] : this->pimpl->m_unitSystemComboBoxes) {
+      okay &= saveComboBoxChoiceOfUnitSystem(*comboBox, physicalQuantity);
+   }
    okay &= saveDateFormat();
-   okay &= saveColorUnits();
-   okay &= saveDiastaticUnits();
 
    return okay;
 }
@@ -1069,22 +1049,6 @@ void OptionDialog::saveSqliteConfig() {
    return;
 }
 
-bool OptionDialog::saveWeightUnits() {
-   return saveComboBoxChoiceOfUnitSystem(*weightComboBox, "weightComboBox", Measurement::PhysicalQuantity::Mass);
-}
-
-bool OptionDialog::saveTemperatureUnits() {
-   return saveComboBoxChoiceOfUnitSystem(*temperatureComboBox, "temperatureComboBox", Measurement::PhysicalQuantity::Temperature);
-}
-
-bool OptionDialog::saveVolumeUnits() {
-   return saveComboBoxChoiceOfUnitSystem(*volumeComboBox, "volumeComboBox", Measurement::PhysicalQuantity::Volume);
-}
-
-bool OptionDialog::saveGravityUnits() {
-   return saveComboBoxChoiceOfUnitSystem(*gravityComboBox, "gravityComboBox", Measurement::PhysicalQuantity::Gravity);
-}
-
 bool OptionDialog::saveDateFormat() {
    bool okay = false;
    Localization::NumericDateFormat numericDateFormat =
@@ -1098,12 +1062,4 @@ bool OptionDialog::saveDateFormat() {
 
    Localization::setDateFormat(numericDateFormat);
    return okay;
-}
-
-bool OptionDialog::saveColorUnits() {
-   return saveComboBoxChoiceOfUnitSystem(*colorComboBox, "colorComboBox", Measurement::PhysicalQuantity::Color);
-}
-
-bool OptionDialog::saveDiastaticUnits() {
-   return saveComboBoxChoiceOfUnitSystem(*diastaticPowerComboBox, "diastaticPowerComboBox", Measurement::PhysicalQuantity::DiastaticPower);
 }
