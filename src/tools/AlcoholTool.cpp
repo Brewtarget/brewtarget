@@ -246,8 +246,8 @@ public:
       // Hydrometer calibration temperature -- default is 20°C, or 68°F in the old money.
       // Working out which units to use is already solved elsewhere in the code base, but you just have to be careful
       // not to do the conversion twice (ie 20°C -> 68°F ... 68°C -> 154°F) as both SmartLineEdit::setAmount() and
-      // Measurement::amountDisplay() take SI unit and convert them to whatever the user has chosen to display.  So you
-      // just need SmartLineEdit::setAmount().
+      // Measurement::quantityOfDisplayAmount() take SI unit and convert them to whatever the user has chosen to
+      // display.  So you just need SmartLineEdit::setAmount().
       this->input_calibration_temperature->setQuantity(
          PersistentSettings::value_ck(hydrometerCalibrationTemperatureInC,
                                       20.0,

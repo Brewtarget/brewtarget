@@ -155,7 +155,7 @@ public:
    [[nodiscard]] SmartAmountSettings const & settings() const;
 
    /**
-    * \brief This is called by \c SmartBase and just wraps \c changedSystemOfMeasurementOrScale
+    * \brief This is called by \c SmartBase and just wraps \c changedUnitsOrPrecision
     */
    void correctEnteredText(SmartAmounts::ScaleInfo previousScaleInfo);
 
@@ -218,7 +218,7 @@ signals:
     *        There will always be an old \c SystemOfMeasurement, even if it's the global default for this field's
     *        \c PhysicalQuantity.  There might not be an old \c RelativeScale though, hence the \c std::optional.
     */
-   void changedSystemOfMeasurementOrScale(SmartAmounts::ScaleInfo previousScaleInfo);
+   void changedUnitsOrPrecision(SmartAmounts::ScaleInfo previousScaleInfo);
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

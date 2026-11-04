@@ -41,25 +41,27 @@ public:
                        Measurement::Unit const * fixedDisplayUnit);
    ~SmartAmountSettings();
 
-   TypeInfo const & getTypeInfo() const;
+   [[nodiscard]] TypeInfo const & getTypeInfo() const;
 
-   void setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> systemOfMeasurement);
-   void setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> relativeScale);
-   std::optional<Measurement::SystemOfMeasurement> getForcedSystemOfMeasurement() const;
-   std::optional<Measurement::UnitSystem::RelativeScale> getForcedRelativeScale() const;
+   void setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> systemOfMeasurement) const;
+   void setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> relativeScale) const;
+   void setForcedDecimalPlaces(std::optional<Measurement::NumDecimalPlaces> decimalPlaces) const;
+   [[nodiscard]] std::optional<Measurement::SystemOfMeasurement> getForcedSystemOfMeasurement() const;
+   [[nodiscard]] std::optional<Measurement::UnitSystem::RelativeScale> getForcedRelativeScale() const;
+   [[nodiscard]] std::optional<Measurement::NumDecimalPlaces> getForcedDecimalPlaces() const;
 
    /**
     * \brief Get the current settings (which may come from system-wide defaults) for \c SystemOfMeasurement and
     *        \c RelativeScale.
     */
-   SmartAmounts::ScaleInfo getScaleInfo() const;
+   [[nodiscard]] SmartAmounts::ScaleInfo getScaleInfo() const;
 
    /**
     * \brief Returns the \c UnitSystem that should be used to display this field, based on the forced
     *        \c SystemOfMeasurement for the field if there is one or otherwise on the the system-wide default
     *        \c UnitSystem for the field's \c PhysicalQuantity.
     */
-   Measurement::UnitSystem const & getDisplayUnitSystem() const;
+   [[nodiscard]] Measurement::UnitSystem const & getDisplayUnitSystem() const;
 
    /**
     * \brief Returns what type of field this is - except that, if it is \c Measurement::ChoiceOfPhysicalQuantity, will
@@ -68,7 +70,7 @@ public:
     *
     *        It is a coding error to call this function if our field type is \c NonPhysicalQuantity.)
     */
-   Measurement::PhysicalQuantity getPhysicalQuantity() const;
+   [[nodiscard]] Measurement::PhysicalQuantity getPhysicalQuantity() const;
 
    /**
     * \brief If the \c Measurement::PhysicalQuantities supplied in the \c init call was not a single
@@ -84,13 +86,14 @@ public:
     * \brief Use this when you want to do something with the returned QString
     *
     * \param quantity Must be in canonical units eg kilograms for mass, liters for volume
+    * \param defaultPrecision
     */
-   [[nodiscard]] QString displayQuantity(double quantity, unsigned int precision) const;
+   [[nodiscard]] QString displayQuantity(double quantity, unsigned int defaultPrecision) const;
 
    /**
     * \brief This version is not const as we'll set the field's \c PhysicalQuantity based on the \c Unit in \c amount.
     */
-   [[nodiscard]] QString displayAmount(Measurement::Amount const & amount, unsigned int precision);
+   [[nodiscard]] QString displayAmount(Measurement::Amount const & amount, unsigned int defaultPrecision);
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

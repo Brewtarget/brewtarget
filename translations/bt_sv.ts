@@ -5581,27 +5581,27 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>US traditional units</source>
-        <translation>Amerikanska enheter</translation>
+        <translation type="vanished">Amerikanska enheter</translation>
     </message>
     <message>
         <source>British imperial units</source>
-        <translation>brittiska enheter</translation>
+        <translation type="vanished">brittiska enheter</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation>Celsius</translation>
+        <translation type="vanished">Celsius</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation>Fahrenheit</translation>
+        <translation type="vanished">Fahrenheit</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
-        <translation>20C/68F</translation>
+        <translation type="vanished">20C/68F</translation>
     </message>
     <message>
         <source>Plato/Brix/Balling</source>
-        <translation>Plato/Brix/Balling</translation>
+        <translation type="vanished">Plato/Brix/Balling</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -5617,11 +5617,11 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>SRM</source>
-        <translation>SRM</translation>
+        <translation type="vanished">SRM</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation>EBC</translation>
+        <translation type="vanished">EBC</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -5716,18 +5716,6 @@ If you need help, please open an issue at %1</source>
         <translation type="vanished">Starta om Brewtarget för att koppla upp dig mot den nya databasen</translation>
     </message>
     <message>
-        <source>Metric / SI units</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lintner</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>WK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Choose User Data Directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5756,16 +5744,16 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Lovibond</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Conversion Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Data transfer failed.  See log file for more details.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Förvalt</translation>
     </message>
 </context>
 <context>
@@ -13463,19 +13451,19 @@ Tabs</source>
     </message>
     <message>
         <source>Weight</source>
-        <translation>Vikt</translation>
+        <translation type="vanished">Vikt</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Temperatur</translation>
+        <translation type="vanished">Temperatur</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volym</translation>
+        <translation type="vanished">Volym</translation>
     </message>
     <message>
         <source>Gravity</source>
-        <translation>Gravitation</translation>
+        <translation type="vanished">Gravitation</translation>
     </message>
     <message>
         <source>Color</source>
@@ -13642,10 +13630,6 @@ Tabs</source>
         <translation type="vanished">Hur ofta ska säkerhetskopior tas: 1 betyder Alltid ta säkerhetskopia</translation>
     </message>
     <message>
-        <source>Diastatic power</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Logging</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13733,6 +13717,14 @@ Tabs</source>
     </message>
     <message>
         <source>Show snapshots by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Units &amp;&amp; Precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decimal places</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

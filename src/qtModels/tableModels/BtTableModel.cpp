@@ -99,8 +99,8 @@ void BtTableModel::restoreUiState(BtStringConst const & property, BtStringConst 
 
 void BtTableModel::contextMenu(QPoint const & point) {
    qDebug() << Q_FUNC_INFO;
-   QHeaderView * hView = qobject_cast<QHeaderView *>(this->sender());
-   int selected = hView->logicalIndexAt(point);
+   auto const hView = qobject_cast<QHeaderView const *>(this->sender());
+   int const selected = hView->logicalIndexAt(point);
    ColumnInfo const & columnInfo = this->columnInfo(selected);
 
    // .:TBD:. The logic from here on is similar to that in SmartLabel::popContextMenu, but I didn't yet figure out how
@@ -115,11 +115,12 @@ void BtTableModel::contextMenu(QPoint const & point) {
    //
    // Note that UnitAndScalePopUpMenu::create handles the case where there are two possible physical quantities
    //
-   std::unique_ptr<QMenu> menu =
+   std::unique_ptr<QMenu> const menu =
       UnitAndScalePopUpMenu::create(this->m_parentTableWidget,
                                     ConvertToPhysicalQuantities(fieldType),
                                     columnInfo.getForcedSystemOfMeasurement(),
-                                    columnInfo.getForcedRelativeScale());
+                                    columnInfo.getForcedRelativeScale(),
+                                    columnInfo.getForcedDecimalPlaces());
 
    // If the pop-up menu has no entries, then we can bail out here
    if (menu->actions().size() == 0) {
@@ -129,28 +130,18 @@ void BtTableModel::contextMenu(QPoint const & point) {
    //
    // This shows the context menu and returns when the user either selects something or dismisses the menu
    //
-   QAction * invoked = menu->exec(hView->mapToGlobal(point));
-   if (invoked == nullptr) {
+   std::optional<UnitAndScalePopUpMenu::Selection> const selection =
+      UnitAndScalePopUpMenu::exec(*menu, hView->mapToGlobal(point));
+   if (!selection) {
       return;
    }
+   qDebug() << Q_FUNC_INFO << "Column" << selected << "updated";
+   UnitAndScalePopUpMenu::applySelection(*selection, columnInfo);
 
-   // User will either have selected a SystemOfMeasurement or a UnitSystem::RelativeScale.  We can know which based
-   // on whether it's the menu or the sub-menu that it came from.
-   bool const isTopMenu{invoked->parent() == menu.get()};
-   if (isTopMenu) {
-      // It's the menu, so SystemOfMeasurement
-      std::optional<Measurement::SystemOfMeasurement> const whatSelected =
-         UnitAndScalePopUpMenu::dataFromQAction<Measurement::SystemOfMeasurement>(*invoked);
-      qDebug() << Q_FUNC_INFO << "Column" << selected << ", selected SystemOfMeasurement" << whatSelected;
-      columnInfo.setForcedSystemOfMeasurement(whatSelected);
-      // Choosing a forced SystemOfMeasurement resets any selection of forced RelativeScale, but this is handled by
-      // unsetForcedSystemOfMeasurementForColumn() and setForcedSystemOfMeasurementForColumn()
-   } else {
-      // It's the sub-menu, so UnitSystem::RelativeScale
-      std::optional<Measurement::UnitSystem::RelativeScale> whatSelected =
-         UnitAndScalePopUpMenu::dataFromQAction<Measurement::UnitSystem::RelativeScale>(*invoked);
-      qDebug() << Q_FUNC_INFO << "Column" << selected << ", selected RelativeScale" << whatSelected;
-      columnInfo.setForcedRelativeScale(whatSelected);
+   // Make sure the column is redisplayed with the new settings
+   emit this->headerDataChanged(Qt::Horizontal, selected, selected);
+   if (this->rowCount() > 0) {
+      emit this->dataChanged(this->index(0, selected), this->index(this->rowCount() - 1, selected));
    }
 
    return;

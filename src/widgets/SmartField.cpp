@@ -144,6 +144,27 @@ public:
 //         previousScaleInfo.systemOfMeasurement << ", old RelativeScale: " << previousScaleInfo.relativeScale;
 
       auto const physicalQuantity{this->m_self.settings().getPhysicalQuantity()};
+
+      //
+      // If the text hasn't changed since we displayed an amount we were given, then we return that amount, rather than
+      // parsing the text.  This matters because the text is rounded to however many decimal places we are showing.
+      // Eg, if we were given 1.2345 kg and showed it to 1 decimal place as "1.2 kg", we don't want to change the
+      // underlying amount to 1.2 kg (eg when the user saves an editor, or increases the number of decimal places to
+      // show) unless the user actually edits the field.
+      //
+      // We check the physical quantity because, for a field where the user can choose between, say, mass and volume,
+      // choosing the other one means we want to reinterpret the number shown.  (Changing SystemOfMeasurement or
+      // RelativeScale doesn't matter here, because we store the amount in canonical units.)
+      //
+      if (this->m_lastDisplayedCanonicalAmount &&
+          enteredText == this->m_lastDisplayedText &&
+          this->m_lastDisplayedCanonicalAmount->unit->getPhysicalQuantity() == physicalQuantity) {
+         if (ok) {
+            *ok = true;
+         }
+         return *this->m_lastDisplayedCanonicalAmount;
+      }
+
       Measurement::UnitSystem const & unitSystem{
          Measurement::UnitSystem::getInstance(previousScaleInfo.systemOfMeasurement, physicalQuantity)
       };
@@ -180,6 +201,18 @@ public:
       return amount;
    }
 
+   /**
+    * \brief Show \c text, which is the display version of \c canonicalAmount, and remember both (see comment in
+    *        \c toCanonical for why).
+    */
+   void showAndRemember(QString const & text, Measurement::Amount const & canonicalAmount) {
+      this->m_self.setRawText(text);
+      // We read the text back rather than just storing what we were given, in case the subclass did something to it
+      this->m_lastDisplayedText = this->m_self.getRawText();
+      this->m_lastDisplayedCanonicalAmount = canonicalAmount;
+      return;
+   }
+
    SmartField &                         m_self;
    bool                                 m_initialised;
    char const *                         m_fieldFqName;
@@ -189,6 +222,9 @@ public:
    // int, it must always be 0.
    unsigned int              m_precision;
    QString                   m_maximalDisplayString;
+   // See comment in toCanonical
+   QString                            m_lastDisplayedText;
+   std::optional<Measurement::Amount> m_lastDisplayedCanonicalAmount;
 };
 
 
@@ -347,7 +383,11 @@ template<typename T, typename> void SmartField::setQuantity(T quantity) {
 //         Q_FUNC_INFO << this->pimpl->m_fieldFqName << "forcedSystemOfMeasurement:" <<
 //         this->getForcedSystemOfMeasurement() << ", forcedRelativeScale:" <<
 //         this->getForcedRelativeScale();
-      this->setRawText(this->displayQuantity(quantity, this->pimpl->m_precision));
+      this->pimpl->showAndRemember(
+         this->displayQuantity(quantity, this->pimpl->m_precision),
+         Measurement::Amount{static_cast<double>(quantity),
+                             Measurement::Unit::getCanonicalUnit(this->getPhysicalQuantity())}
+      );
    }
 
    return;
@@ -377,7 +417,7 @@ void SmartField::setAmount(Measurement::Amount const & amount) {
 
    // Usually leave this debug log commented out unless trouble-shooting as it generates a lot of logging
 //   qDebug() << Q_FUNC_INFO << this->pimpl->m_fieldFqName << "amount:" << amount;
-   this->setRawText(this->displayAmount(amount, this->pimpl->m_precision));
+   this->pimpl->showAndRemember(this->displayAmount(amount, this->pimpl->m_precision), amount.toCanonical());
    return;
 }
 
@@ -639,7 +679,7 @@ void SmartField::correctEnteredText(SmartAmounts::ScaleInfo const previousScaleI
       Q_FUNC_INFO << this->pimpl->m_fieldFqName << "Interpreted" << enteredText << "as" << amountAsCanonical <<
       "and corrected to" << correctedText;
 
-   this->setRawText(correctedText);
+   this->pimpl->showAndRemember(correctedText, amountAsCanonical);
    return;
 }
 

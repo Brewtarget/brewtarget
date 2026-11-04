@@ -919,11 +919,15 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
       }
       if (bail) {
          // Either the user clicked Close, or we're not interactive.  Either way, we quit in the same way as above.
+         //
+         // NB: We are still inside the MainWindow constructor, ie before QApplication::exec() has been called, so
+         //     QCoreApplication::quit() / exit() would be no-ops and exit(1) is what actually terminates the program.
+         //     That bypasses Application::cleanup(), so we must close the DB connections ourselves here, otherwise
+         //     the static Database object is destroyed with connections still open.
+         //
+         qDebug() << Q_FUNC_INFO << "Unloading database...";
+         Database::instance().unload();
          qDebug() << Q_FUNC_INFO << "Exiting...";
-         QCoreApplication::quit();
-         qDebug() << Q_FUNC_INFO << "Still Exiting...";
-         QCoreApplication::exit(1);
-         qDebug() << Q_FUNC_INFO << "Really Exiting now...";
          exit(1);
       }
    }
@@ -1329,12 +1333,12 @@ void MainWindow::setupTextEdit() {
    return;
 }
 
-// anything using a SmartLabel::changedSystemOfMeasurementOrScale signal should go in here
+// anything using a SmartLabel::changedUnitsOrPrecision signal should go in here
 void MainWindow::setupLabels() {
    // These are the sliders. I need to consider these harder, but small steps
-   connect(this->label_og,       &SmartLabel::changedSystemOfMeasurementOrScale, this, &MainWindow::redisplayLabel);
-   connect(this->label_fg,       &SmartLabel::changedSystemOfMeasurementOrScale, this, &MainWindow::redisplayLabel);
-   connect(this->label_color, &SmartLabel::changedSystemOfMeasurementOrScale, this, &MainWindow::redisplayLabel);
+   connect(this->label_og,       &SmartLabel::changedUnitsOrPrecision, this, &MainWindow::redisplayLabel);
+   connect(this->label_fg,       &SmartLabel::changedUnitsOrPrecision, this, &MainWindow::redisplayLabel);
+   connect(this->label_color, &SmartLabel::changedUnitsOrPrecision, this, &MainWindow::redisplayLabel);
    return;
 }
 

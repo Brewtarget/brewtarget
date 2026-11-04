@@ -19,6 +19,7 @@
 
 #include <QString>
 
+#include "measurement/Measurement.h"
 #include "measurement/PhysicalQuantity.h"
 #include "measurement/SystemOfMeasurement.h"
 #include "measurement/UnitSystem.h"
@@ -95,8 +96,10 @@ struct ColumnInfo {
    // I know it looks odd to have const setters, but they are const because they do not change the data in the struct
    void setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement) const;
    void setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) const;
+   void setForcedDecimalPlaces(std::optional<Measurement::NumDecimalPlaces> forcedDecimalPlaces) const;
    std::optional<Measurement::SystemOfMeasurement> getForcedSystemOfMeasurement() const;
    std::optional<Measurement::UnitSystem::RelativeScale> getForcedRelativeScale() const;
+   std::optional<Measurement::NumDecimalPlaces> getForcedDecimalPlaces() const;
 };
 
 /**

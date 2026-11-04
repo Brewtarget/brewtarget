@@ -569,7 +569,8 @@ protected:
                                                        role,
                                                        columnInfo.extras.has_value(),
                                                        columnInfo.getForcedSystemOfMeasurement(),
-                                                       columnInfo.getForcedRelativeScale());
+                                                       columnInfo.getForcedRelativeScale(),
+                                                       columnInfo.getForcedDecimalPlaces());
 
    }
 

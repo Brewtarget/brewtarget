@@ -140,7 +140,7 @@ void SmartLineEdit::setRawText(QString const & text) {
 }
 
 void SmartLineEdit::connectSmartLabelSignal(SmartLabel & smartLabel) {
-   connect(&smartLabel, &SmartLabel::changedSystemOfMeasurementOrScale, this, &SmartLineEdit::lineChanged);
+   connect(&smartLabel, &SmartLabel::changedUnitsOrPrecision, this, &SmartLineEdit::lineChanged);
    return;
 }
 

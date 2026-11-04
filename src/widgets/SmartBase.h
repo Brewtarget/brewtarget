@@ -58,13 +58,18 @@ public:
       return this->derived().settings().getTypeInfo();
    }
 
-   void setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> systemOfMeasurement) {
-      this->mutableSettings().setForcedSystemOfMeasurement(systemOfMeasurement);
+   void setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> const forcedSystemOfMeasurement) {
+      this->mutableSettings().setForcedSystemOfMeasurement(forcedSystemOfMeasurement);
       return;
    }
 
-   void setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> relativeScale) {
-      this->mutableSettings().setForcedRelativeScale(relativeScale);
+   void setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> const forcedRelativeScale) {
+      this->mutableSettings().setForcedRelativeScale(forcedRelativeScale);
+      return;
+   }
+
+   void setForcedDecimalPlaces(std::optional<Measurement::NumDecimalPlaces> const forcedDecimalPlaces) {
+      this->mutableSettings().setForcedDecimalPlaces(forcedDecimalPlaces);
       return;
    }
 
@@ -74,6 +79,10 @@ public:
 
    std::optional<Measurement::UnitSystem::RelativeScale> getForcedRelativeScale() const {
       return this->derived().settings().getForcedRelativeScale();
+   }
+
+   std::optional<Measurement::NumDecimalPlaces> getForcedDecimalPlaces() const {
+      return this->derived().settings().getForcedDecimalPlaces();
    }
 
    SmartAmounts::ScaleInfo getScaleInfo() const {

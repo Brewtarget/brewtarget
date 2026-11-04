@@ -5221,28 +5221,12 @@ If you need help, please open an issue at %1</source>
         <translation type="vanished">Кинески</translation>
     </message>
     <message>
-        <source>US traditional units</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>British imperial units</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Celsius</source>
-        <translation type="unfinished">Целзијус</translation>
+        <translation type="obsolete">Целзијус</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished">Фаренхајт</translation>
-    </message>
-    <message>
-        <source>20C/20C Specific Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Plato/Brix/Balling</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Фаренхајт</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -5258,11 +5242,11 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>SRM</source>
-        <translation type="unfinished">SRM</translation>
+        <translation type="obsolete">SRM</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished">EBC</translation>
+        <translation type="obsolete">EBC</translation>
     </message>
     <message>
         <source>SQLite (default)</source>
@@ -5278,18 +5262,6 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Transfer database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Metric / SI units</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lintner</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>WK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5321,16 +5293,16 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Lovibond</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Conversion Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Data transfer failed.  See log file for more details.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Подразумевано</translation>
     </message>
 </context>
 <context>
@@ -12150,11 +12122,11 @@ Tabs</source>
     </message>
     <message>
         <source>Weight</source>
-        <translation>Тежина</translation>
+        <translation type="vanished">Тежина</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Температура</translation>
+        <translation type="vanished">Температура</translation>
     </message>
     <message>
         <source>Celsius</source>
@@ -12166,11 +12138,7 @@ Tabs</source>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Запремина</translation>
-    </message>
-    <message>
-        <source>Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Запремина</translation>
     </message>
     <message>
         <source>Color</source>
@@ -12325,10 +12293,6 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Diastatic power</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Logging</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12416,6 +12380,14 @@ Tabs</source>
     </message>
     <message>
         <source>Show snapshots by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Units &amp;&amp; Precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decimal places</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
