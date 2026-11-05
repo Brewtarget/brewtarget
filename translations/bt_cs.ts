@@ -9059,6 +9059,10 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Default</source>
         <translation type="unfinished">Výchozí</translation>
     </message>
+    <message>
+        <source>Decimal Places</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UnitConversionTool</name>

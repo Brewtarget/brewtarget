@@ -9260,6 +9260,10 @@ El volum final al primari és de %1.</translation>
         <source>Default</source>
         <translation type="unfinished">Defecte</translation>
     </message>
+    <message>
+        <source>Decimal Places</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UnitConversionTool</name>

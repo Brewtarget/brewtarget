@@ -187,7 +187,11 @@ void PersistentSettings::initialise(QString const & customUserDataDir) {
          PersistentSettings::value_ck(
             PersistentSettings::Names::UserDataDirectory,
             QStandardPaths::writableLocation(
+#ifdef   BUILDING_BREWKEN
                QStandardPaths::AppDataLocation // = Default for Brewken (AppConfigLocation for Brewtarget)
+#elifdef BUILDING_BREWTARGET
+               QStandardPaths::AppConfigLocation // = Default for Brewtarget (AppDataLocation for Brewken)
+#endif
             )
          ).toString()
       );

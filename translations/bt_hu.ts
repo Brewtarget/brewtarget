@@ -9140,6 +9140,10 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <source>Default</source>
         <translation type="unfinished">Alapértelmezett</translation>
     </message>
+    <message>
+        <source>Decimal Places</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UnitConversionTool</name>

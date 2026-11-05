@@ -26,7 +26,10 @@
  *
  * (Note that src/config.in serves the same purpose for CMake builds and should be retired if/when we stop using CMake.)
  *
- * This is a way to pass Meson variables into the code
+ * This is a way to pass Meson variables into the code.
+ *
+ * NOTE: if you change one of the config values (eg in meson.build), you will want to do a full build to make sure the
+ *       new value appears everywhere it is used.
  */
 
 //! Used on Linux as a fallback way of determining where to look for resources - see Application.cpp
@@ -37,6 +40,18 @@ constexpr char const * CONFIG_DATA_DIR            = "@CONFIG_DATA_DIR@";
 constexpr char const * CONFIG_APPLICATION_NAME_UC = "@CONFIG_APPLICATION_NAME_UC@";
 constexpr char const * CONFIG_APPLICATION_NAME_LC = "@CONFIG_APPLICATION_NAME_LC@";
 constexpr char const * CONFIG_ORGANIZATION_DOMAIN = "@CONFIG_ORGANIZATION_DOMAIN@";
+
+//
+// In a couple of places we have code that intentionally differs between Brewken and Brewtarget -- eg for file
+// locations.  ()So the string constants above are not enough.)  In the past this was a source of errors when merging
+// fixes back and forth between the two code bases.  So we now use #ifdefs to have both versions in both projects and
+// conditionally compile the one we want.  _AC stands for "all upper case".  We should have either BUILDING_BREWKEN or
+// BUILDING_BREWTARGET defined, but not both.  We check this with the magic of XOR (^) below.
+//
+#define BUILDING_@CONFIG_APPLICATION_NAME_AC@
+#if !(defined(BUILDING_BREWKEN) ^ defined(BUILDING_BREWTARGET))
+   #error "Exactly one of BUILDING_BREWKEN or BUILDING_BREWTARGET must be defined"
+#endif
 
 /**
  * Sometimes it is useful to have #define versions of constants for compile-time string concatenation with the

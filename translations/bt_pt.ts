@@ -9144,6 +9144,10 @@ O volume final do fermentador primário é %1.</translation>
         <source>Default</source>
         <translation type="unfinished">Padrão</translation>
     </message>
+    <message>
+        <source>Decimal Places</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UnitConversionTool</name>

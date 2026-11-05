@@ -9026,6 +9026,10 @@ The final volume in the primary is %1.</source>
         <source>Default</source>
         <translation type="unfinished">По умолчанию</translation>
     </message>
+    <message>
+        <source>Decimal Places</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UnitConversionTool</name>
