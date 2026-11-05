@@ -135,26 +135,29 @@ namespace Measurement {
        *        should also be recognised by \c qstringToSI()
        *
        * \param amount
-       * \param precision
-       * \param scale
+       * \param precision  It's the caller's job to figure out which precision to use from per-field / per-physical
+       *                   quantity defaults and user preferences.
+       * \param forcedScale
        *
        * \return
        */
-      QString displayAmount(Measurement::Amount const & amount,
-                            int precision = -1,
-                            std::optional<Measurement::UnitSystem::RelativeScale> forcedScale = std::nullopt) const;
+      [[nodiscard]] QString displayAmount(
+         Measurement::Amount const & amount,
+         int const precision,
+         std::optional<Measurement::UnitSystem::RelativeScale> forcedScale = std::nullopt
+      ) const;
 
       /*!
        * \brief Converts the supplied the appropriate unit and scale to an amount in this \c UnitSystem. Similar in
        *        nature to \c displayAmount(), but just returning raw doubles.
        *
        * \param amount The amount to convert
-       * \param scale  Optional: the scale of this \c UnitSystem to use for the output
+       * \param forcedScale  Optional: the scale of this \c UnitSystem to use for the output
        *
        * \return
        */
-      double amountDisplay(Measurement::Amount const & amount,
-                           std::optional<Measurement::UnitSystem::RelativeScale> forcedScale = std::nullopt) const;
+      double quantityOfDisplayAmount(Measurement::Amount const & amount,
+                                     std::optional<Measurement::UnitSystem::RelativeScale> forcedScale = std::nullopt) const;
 
       /*!
        * \brief Converts 'qstr' (consisting of a decimal amount, optionally followed by a unit string) to the

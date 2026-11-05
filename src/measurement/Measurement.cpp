@@ -47,24 +47,23 @@ namespace {
     */
    QMap<Measurement::PhysicalQuantity, Measurement::UnitSystem const *> physicalQuantityToDisplayUnitSystem;
 
-   //
-   // Load the previous stored setting for which UnitSystem we use for a particular physical quantity
-   //
-   void loadDisplayScale(Measurement::PhysicalQuantity const physicalQuantity,
-                         BtStringConst const &               settingName,
-                         Measurement::UnitSystem    const &  defaultUnitSystem) {
-      QString unitSystemName = PersistentSettings::value_ck(settingName, defaultUnitSystem.uniqueName).toString();
-      Measurement::UnitSystem const * unitSystem = Measurement::UnitSystem::getInstanceByUniqueName(unitSystemName);
-      if (nullptr == unitSystem) {
-         qWarning() <<
-            Q_FUNC_INFO << "Unrecognised unit system," << unitSystemName << "for" << physicalQuantity <<
-            ", defaulting to" << defaultUnitSystem.uniqueName << "(" <<
-            Measurement::getDisplayName(defaultUnitSystem.systemOfMeasurement) << ")";
-         unitSystem = &defaultUnitSystem;
-      }
-      Measurement::setDisplayUnitSystem(physicalQuantity, *unitSystem);
-      return;
-   }
+   /**
+    * \brief Stores the optional default number of decimal places to use for each \c Measurement::PhysicalQuantity.
+    *        Note that this is slightly different from \c physicalQuantityToDisplayUnitSystem, because, for historical
+    *        reasons, we have a more complicated hierarchy of values.  The precedence, from top to bottom, is:
+    *
+    *           - Per-field user-specified number (if set)
+    *           - Per-physical quantity user-specified number (if set)
+    *           - Per-field default (if present)
+    *           - Per-physical quantity default (which must always exist!)
+    *
+    *        We want to take care that the second and fourth items in this list do not get confused.  In particular, we
+    *        never want to end up writing out the fourth item (ie global default) to the .conf file as though it were
+    *        the second one (ie user preference).  This would silently override the per-field defaults (which are mostly
+    *        sensible for metric system users).
+    */
+   QMap<Measurement::PhysicalQuantity,
+        std::optional<Measurement::NumDecimalPlaces>> physicalQuantityToUserSpecifiedDecimalPlaces;
 
 }
 
@@ -124,21 +123,49 @@ template<> [[nodiscard]] double       Measurement::extractRawFromString<double> 
 }
 
 
-void Measurement::loadDisplayScales() {
+void Measurement::loadMeasurementDisplayPreferences() {
    for (auto const & ii : Measurement::physicalQuantityStringMapping) {
       auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.key);
-      loadDisplayScale(physicalQuantity,
-                       Measurement::getSettingsName(physicalQuantity),
-                       Measurement::Unit::getCanonicalUnit(physicalQuantity).getUnitSystem());
+
+      //
+      // Load the previous stored setting for which UnitSystem we use for a particular physical quantity
+      //
+      BtStringConst const & unitSystemSettingName = Measurement::getSettingsNameUnitSystem(physicalQuantity);
+      Measurement::UnitSystem const & defaultUnitSystem = Measurement::Unit::getCanonicalUnit(physicalQuantity).getUnitSystem();
+      QString const unitSystemName = PersistentSettings::value_ck(unitSystemSettingName, defaultUnitSystem.uniqueName).toString();
+      Measurement::UnitSystem const * unitSystem = Measurement::UnitSystem::getInstanceByUniqueName(unitSystemName);
+      if (nullptr == unitSystem) {
+         qWarning() <<
+            Q_FUNC_INFO << "Unrecognised unit system," << unitSystemName << "for" << physicalQuantity <<
+            ", defaulting to" << defaultUnitSystem.uniqueName << "(" <<
+            Measurement::getDisplayName(defaultUnitSystem.systemOfMeasurement) << ")";
+         unitSystem = &defaultUnitSystem;
+      }
+      Measurement::setDisplayUnitSystem(physicalQuantity, *unitSystem);
+
+      //
+      // Load the previous stored setting for how many decimal places to show for a particular physical quantity
+      //
+      std::optional<Measurement::NumDecimalPlaces> const numDecimalPlaces{
+         NumDecimalPlaces::fromOptInt(
+            PersistentSettings::value_ck<int>(Measurement::getSettingsNameDecimalPlaces(physicalQuantity),
+                                              std::nullopt)
+         )
+      };
+      Measurement::setUserSpecifiedDecimalPlaces(physicalQuantity, numDecimalPlaces);
    }
    return;
 }
 
-void Measurement::saveDisplayScales() {
+void Measurement::saveMeasurementDisplayPreferences() {
    for (auto const & ii : Measurement::physicalQuantityStringMapping) {
       auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.key);
-      PersistentSettings::insert_ck(Measurement::getSettingsName(physicalQuantity),
+      PersistentSettings::insert_ck(Measurement::getSettingsNameUnitSystem(physicalQuantity),
                                     Measurement::getDisplayUnitSystem(physicalQuantity).uniqueName);
+      PersistentSettings::insert_ck(
+         Measurement::getSettingsNameDecimalPlaces(physicalQuantity),
+         Measurement::NumDecimalPlaces::toOptInt(Measurement::getUserSpecifiedDecimalPlaces(physicalQuantity))
+      );
    }
    return;
 }
@@ -149,6 +176,13 @@ void Measurement::setDisplayUnitSystem(Measurement::PhysicalQuantity const physi
    Q_ASSERT(physicalQuantity == unitSystem.getPhysicalQuantity());
    qDebug() << Q_FUNC_INFO << "Setting UnitSystem for" << physicalQuantity << "to" << unitSystem.uniqueName;
    physicalQuantityToDisplayUnitSystem.insert(physicalQuantity, &unitSystem);
+   return;
+}
+
+void Measurement::setUserSpecifiedDecimalPlaces(Measurement::PhysicalQuantity const physicalQuantity,
+                                                std::optional<Measurement::NumDecimalPlaces> const & numDecimalPlaces) {
+   qDebug() << Q_FUNC_INFO << "Setting" << physicalQuantity << "decimal places to" << numDecimalPlaces;
+   physicalQuantityToUserSpecifiedDecimalPlaces.insert(physicalQuantity, numDecimalPlaces);
    return;
 }
 
@@ -166,6 +200,37 @@ Measurement::UnitSystem const & Measurement::getDisplayUnitSystem(Measurement::P
    return *unitSystem;
 }
 
+std::optional<Measurement::NumDecimalPlaces> Measurement::getUserSpecifiedDecimalPlaces(Measurement::PhysicalQuantity const physicalQuantity) {
+   // Logic here is similar to getDisplayUnitSystem() above
+   Q_ASSERT(!physicalQuantityToUserSpecifiedDecimalPlaces.isEmpty());
+   if (!physicalQuantityToUserSpecifiedDecimalPlaces.contains(physicalQuantity)) {
+      qCritical() << Q_FUNC_INFO << "Unable to find decimal places setting for physical quantity" << physicalQuantity;
+      Q_ASSERT(false);
+   }
+
+   return physicalQuantityToUserSpecifiedDecimalPlaces.value(physicalQuantity);
+}
+
+[[nodiscard]] Measurement::NumDecimalPlaces Measurement::getNumDecimalPlaces(
+   PhysicalQuantity const physicalQuantity,
+   std::optional<NumDecimalPlaces> const userSpecifiedForField,
+   std::optional<NumDecimalPlaces> const defaultForField
+) {
+   if (userSpecifiedForField) {
+      return *userSpecifiedForField;
+   }
+   std::optional<NumDecimalPlaces> const userSpecifiedPerPhysicalQuantity{
+      Measurement::getUserSpecifiedDecimalPlaces(physicalQuantity)
+   };
+   if (userSpecifiedPerPhysicalQuantity) {
+      return *userSpecifiedPerPhysicalQuantity;
+   }
+   if (defaultForField) {
+      return *defaultForField;
+   }
+   return Measurement::NumDecimalPlaces{Measurement::getUltimateDefaultDecimalPlaces(physicalQuantity)};
+}
+
 QString Measurement::displayQuantity(double quantity, int precision) {
    return QString("%L1").arg(quantity, fieldWidth, format, precision);
 }
@@ -181,9 +246,10 @@ QString Measurement::displayQuantity(double quantity, int precision, NonPhysical
 }
 
 QString Measurement::displayAmount(Measurement::Amount const & amount,
-                                   int precision,
-                                   std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
-                                   std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) {
+                                   std::optional<int> const defaultFieldPrecision,
+                                   std::optional<Measurement::SystemOfMeasurement      > const forcedSystemOfMeasurement,
+                                   std::optional<Measurement::UnitSystem::RelativeScale> const forcedScale,
+                                   std::optional<NumDecimalPlaces                      > const forcedFieldPrecision) {
    // Check for insane values.
    if (std::isnan(amount.quantity) || std::isinf(amount.quantity)) {
       return "-";
@@ -195,12 +261,17 @@ QString Measurement::displayAmount(Measurement::Amount const & amount,
    Measurement::UnitSystem const & displayUnitSystem =
       forcedSystemOfMeasurement ? UnitSystem::getInstance(*forcedSystemOfMeasurement, physicalQuantity) :
                                   Measurement::getDisplayUnitSystem(physicalQuantity);
-   return displayUnitSystem.displayAmount(amount, precision, forcedScale);
+   // Decimal places are a bit more complicated as, for historical reasons, there are per-field defaults.
+   NumDecimalPlaces const precision = Measurement::getNumDecimalPlaces(physicalQuantity,
+                                                                       forcedFieldPrecision,
+                                                                       NumDecimalPlaces::fromOptInt(defaultFieldPrecision));
+
+   return displayUnitSystem.displayAmount(amount, precision.value(), forcedScale);
 }
 
-double Measurement::amountDisplay(Measurement::Amount const & amount,
-                                  std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
-                                  std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) {
+double Measurement::quantityOfDisplayAmount(Measurement::Amount const & amount,
+                                            std::optional<Measurement::SystemOfMeasurement      > const forcedSystemOfMeasurement,
+                                            std::optional<Measurement::UnitSystem::RelativeScale> const forcedScale) {
 
    // Check for insane values.
    if (std::isnan(amount.quantity) || std::isinf(amount.quantity)) {
@@ -214,7 +285,7 @@ double Measurement::amountDisplay(Measurement::Amount const & amount,
       forcedSystemOfMeasurement ? UnitSystem::getInstance(*forcedSystemOfMeasurement, physicalQuantity) :
                                   Measurement::getDisplayUnitSystem(physicalQuantity);
 
-   return displayUnitSystem.amountDisplay(amount, forcedScale);
+   return displayUnitSystem.quantityOfDisplayAmount(amount, forcedScale);
 }
 
 void Measurement::getThicknessUnits(Unit const ** volumeUnit, Unit const ** weightUnit) {

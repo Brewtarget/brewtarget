@@ -86,8 +86,8 @@ void SmartAmounts::initFixed(char const * const editorName,
 }
 
 void SmartAmounts::setForcedSystemOfMeasurement(char const * const owningWindowName,
-                                              char const * const fieldName,
-                                              std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement) {
+                                                char const * const fieldName,
+                                                std::optional<Measurement::SystemOfMeasurement> const forcedSystemOfMeasurement) {
    if (forcedSystemOfMeasurement) {
       PersistentSettings::insert(fieldName,
                                  Measurement::getUniqueName(*forcedSystemOfMeasurement),
@@ -103,7 +103,7 @@ void SmartAmounts::setForcedSystemOfMeasurement(char const * const owningWindowN
 
 void SmartAmounts::setForcedRelativeScale(char const * const owningWindowName,
                                           char const * const fieldName,
-                                          std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) {
+                                          std::optional<Measurement::UnitSystem::RelativeScale> const forcedScale) {
    if (forcedScale) {
       PersistentSettings::insert(fieldName,
                                  Measurement::UnitSystem::getUniqueName(*forcedScale),
@@ -114,6 +114,17 @@ void SmartAmounts::setForcedRelativeScale(char const * const owningWindowName,
                                  owningWindowName,
                                  PersistentSettings::Extension::SCALE);
    }
+   return;
+}
+
+void SmartAmounts::setForcedDecimalPlaces(char const * const owningWindowName,
+                                          char const * const fieldName,
+                                          std::optional<Measurement::NumDecimalPlaces> const forcedDecimalPlaces) {
+   // Setting std::nullopt removes the setting
+   PersistentSettings::insert(fieldName,
+                              Measurement::NumDecimalPlaces::toOptInt(forcedDecimalPlaces),
+                              owningWindowName,
+                              PersistentSettings::Extension::PRECISION);
    return;
 }
 
@@ -134,6 +145,16 @@ std::optional<Measurement::UnitSystem::RelativeScale> SmartAmounts::getForcedRel
                                 "None", // This, or any invalid name, will give "no value" return from getFromUniqueName()
                                 owningWindowName,
                                 PersistentSettings::Extension::SCALE).toString()
+   );
+}
+
+std::optional<Measurement::NumDecimalPlaces> SmartAmounts::getForcedDecimalPlaces(char const * const owningWindowName,
+                                                                                  char const * const fieldName) {
+   return Measurement::NumDecimalPlaces::fromOptInt(
+      PersistentSettings::value<int>(fieldName,
+                                     std::nullopt,
+                                     owningWindowName,
+                                     PersistentSettings::Extension::PRECISION)
    );
 }
 
@@ -164,8 +185,8 @@ Measurement::UnitSystem const & SmartAmounts::getUnitSystem(char const * const o
 }
 
 SmartAmounts::ScaleInfo SmartAmounts::getScaleInfo(char const * const owningWindowName,
-                                               char const * const fieldName,
-                                               Measurement::PhysicalQuantities physicalQuantities) {
+                                                   char const * const fieldName,
+                                                   Measurement::PhysicalQuantities physicalQuantities) {
    return SmartAmounts::ScaleInfo{
       SmartAmounts::getSystemOfMeasurement(owningWindowName, fieldName, physicalQuantities),
       SmartAmounts::getForcedRelativeScale(owningWindowName, fieldName)

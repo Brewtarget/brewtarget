@@ -66,6 +66,19 @@ enum class NonPhysicalQuantity {
 };
 
 /**
+ * \brief Where it makes sense, this gives the number of decimal places to use when displaying a given non-physical
+ *        quantity if no other user preference overrides it (see hierarchy of preferences in comment of
+ *        \c physicalQuantityToUserSpecifiedDecimalPlaces in measurement/Measurement.cpp).
+ *
+ *        See also function with almost the same name (but NB different return type) for Measurement::PhysicalQuantity).
+ *
+ * @param nonPhysicalQuantity
+ * @return std::nullopt if it does not make sense for nonPhysicalQuantity to be shown with decimal places (which is the
+ *         case for most values)
+ */
+std::optional<int> GetUltimateDefaultDecimalPlaces(NonPhysicalQuantity const nonPhysicalQuantity);
+
+/**
  * \brief Return the (untranslated) name of a \c NonPhysicalQuantity suitable for logging
  */
 QString GetLoggableName(NonPhysicalQuantity nonPhysicalQuantity);

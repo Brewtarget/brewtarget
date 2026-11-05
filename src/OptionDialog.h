@@ -93,13 +93,7 @@ private:
    void saveSqliteConfig();
    void saveFormulae();
 
-   bool saveWeightUnits();
-   bool saveTemperatureUnits();
-   bool saveVolumeUnits();
-   bool saveGravityUnits();
    bool saveDateFormat();
-   bool saveColorUnits();
-   bool saveDiastaticUnits();
 
    void signalAncestors();
 };

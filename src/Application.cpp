@@ -435,7 +435,7 @@ void Application::readSystemOptions() {
    tellUserAboutNewRelease = PersistentSettings::value_ck(PersistentSettings::Names::check_version, QVariant(true)).toBool();
    qDebug() << Q_FUNC_INFO << "tellUserAboutNewRelease=" << tellUserAboutNewRelease;
 
-   Measurement::loadDisplayScales();
+   Measurement::loadMeasurementDisplayPreferences();
 
      IbuMethods::loadFormula();
    ColorMethods::loadFormula();
@@ -456,7 +456,7 @@ void Application::saveSystemOptions() {
      IbuMethods::saveFormula();
    ColorMethods::saveFormula();
 
-   Measurement::saveDisplayScales();
+   Measurement::saveMeasurementDisplayPreferences();
 
    return;
 }

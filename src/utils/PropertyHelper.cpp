@@ -35,7 +35,8 @@ QVariant PropertyHelper::readDataFromPropertyValue(
    int const role,
    bool const showChoiceOfPhysicalQuantity,
    std::optional<Measurement::SystemOfMeasurement> const forcedSystemOfMeasurement,
-   std::optional<Measurement::UnitSystem::RelativeScale> const forcedRelativeScale
+   std::optional<Measurement::UnitSystem::RelativeScale> const forcedRelativeScale,
+   std::optional<Measurement::NumDecimalPlaces> const forcedDecimalPlaces
 ) {
    // Uncomment this log statement if asserts below are firing
 //   qDebug() <<
@@ -207,7 +208,8 @@ QVariant PropertyHelper::readDataFromPropertyValue(
          return QVariant(Measurement::displayAmount(amount,
                                                     precision,
                                                     forcedSystemOfMeasurement,
-                                                    forcedRelativeScale));
+                                                    forcedRelativeScale,
+                                                    forcedDecimalPlaces));
       }
 
       //
@@ -267,7 +269,8 @@ QVariant PropertyHelper::readDataFromPropertyValue(
          Measurement::displayAmount(amount,
                                     precision,
                                     forcedSystemOfMeasurement,
-                                    forcedRelativeScale)
+                                    forcedRelativeScale,
+                                    forcedDecimalPlaces)
       );
    }
 

@@ -21,9 +21,13 @@
 
 #include <memory>
 #include <optional>
+#include <type_traits>
+#include <variant>
 
 #include <QMenu>
+#include <QPoint>
 
+#include "measurement/Measurement.h"
 #include "measurement/SystemOfMeasurement.h"
 #include "measurement/UnitSystem.h"
 
@@ -33,6 +37,10 @@ namespace UnitAndScalePopUpMenu {
     *        (and thus \c UnitSystem) and/or \c RelativeScale used to display a particular UI field.  This allows it to
     *        be different from the global default (eg so the user can specify a particular weight field is shown in
     *        metric even though they have set US Customary as the default for weight fields).
+    *
+    *        It also allows the user to select whether to override the number of decimal places displayed in this field.
+    *        (Strictly speaking we should have renamed the namespace to UnitScaleAndPrecisionPopUpMenu when we added
+    *        this feature, but that's starting to get a bit of a mouthful.)
     *
     *        Note that the \c UnitAndScalePopUpMenu itself has no knowledge of the field; it is for the creator to
     *        manage the effects of menu choices on how the field is displayed.
@@ -45,6 +53,7 @@ namespace UnitAndScalePopUpMenu {
     *                                  is specified then the global default is used.)
     * \param forcedRelativeScale the forced scale, if any, for displaying the field.  (NB: Should always be
     *                            \c std::nullopt if \c physicalQuantities is \c Measurement::ChoiceOfPhysicalQuantity.)
+    * \param forcedDecimalPlaces if set, the number of decimal places to use when displaying this field
     *
     * \return New \c QMenu "owned" by \c parent, but see comment in \c widgets/SmartLabel.cpp for why we return
     *         unique pointer so that caller really owns the object -- essentially the returned object typically has a
@@ -53,16 +62,64 @@ namespace UnitAndScalePopUpMenu {
    std::unique_ptr<QMenu> create(QWidget * parent,
                                  Measurement::PhysicalQuantities physicalQuantities,
                                  std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
-                                 std::optional<Measurement::UnitSystem::RelativeScale> forcedRelativeScale);
+                                 std::optional<Measurement::UnitSystem::RelativeScale> forcedRelativeScale,
+                                 std::optional<Measurement::NumDecimalPlaces> forcedDecimalPlaces);
 
    /**
-    * \brief When a pop-up \c QMenu is displayed, by calling its \c exec function, the return value is a \c QAction
-    *        corresponding to the menu item the user selected.  This function then retrieves the
-    *        \c std::optional<Measurement::SystemOfMeasurement> or
-    *        \c std::optional<Measurement::UnitSystem::RelativeScale> from that \c QAction.
+    * \brief What the user selected from a menu created by \c create.  The alternative held tells you which (sub-)menu
+    *        the selection came from.  Each alternative is a \c std::optional because \c std::nullopt means the user
+    *        chose "Default" (ie to remove any forced setting).
     */
-   template<typename T>
-   std::optional<T> dataFromQAction(QAction const & action);
+   using Selection = std::variant<std::optional<Measurement::SystemOfMeasurement      >,
+                                  std::optional<Measurement::UnitSystem::RelativeScale>,
+                                  std::optional<Measurement::NumDecimalPlaces         >>;
+
+   /**
+    * \brief Shows a menu created by \c create and returns what the user selected
+    *
+    * \param menu
+    * \param globalPosition Where to show the menu, in global coordinates
+    *
+    * \return \c std::nullopt if the user dismissed the menu without selecting anything
+    */
+   [[nodiscard]] std::optional<Selection> exec(QMenu & menu, QPoint const & globalPosition);
+
+   /**
+    * \brief Anything we can apply a \c Selection to -- in practice \c SmartLabel and \c ColumnInfo
+    */
+   template<class T>
+   concept CanHaveForcedDisplaySettings = requires (T & target) {
+      target.setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement      >{});
+      target.setForcedRelativeScale      (std::optional<Measurement::UnitSystem::RelativeScale>{});
+      target.setForcedDecimalPlaces      (std::optional<Measurement::NumDecimalPlaces         >{});
+   };
+
+   /**
+    * \brief Stores the user's \c Selection via the relevant "forced" setter on \c target.  Note that this only stores
+    *        the new setting; it is for the caller to redisplay the field(s) concerned.
+    */
+   template<CanHaveForcedDisplaySettings T>
+   void applySelection(Selection const & selection, T & target) {
+      std::visit(
+         [&target](auto const & selected) {
+            using SelectedType = std::decay_t<decltype(selected)>;
+            if constexpr (std::is_same_v<SelectedType, std::optional<Measurement::SystemOfMeasurement>>) {
+               target.setForcedSystemOfMeasurement(selected);
+               // Any forced RelativeScale relates to the old UnitSystem, so choosing a forced SystemOfMeasurement
+               // resets it.
+               target.setForcedRelativeScale(std::nullopt);
+            } else if constexpr (std::is_same_v<SelectedType, std::optional<Measurement::UnitSystem::RelativeScale>>) {
+               target.setForcedRelativeScale(selected);
+            } else {
+               static_assert(std::is_same_v<SelectedType, std::optional<Measurement::NumDecimalPlaces>>);
+               target.setForcedDecimalPlaces(selected);
+            }
+            return;
+         },
+         selection
+      );
+      return;
+   }
 }
 
 #endif

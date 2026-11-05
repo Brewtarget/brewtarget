@@ -21,6 +21,7 @@
 
 #include <QString>
 
+#include "measurement/Measurement.h"
 #include "measurement/SystemOfMeasurement.h"
 #include "measurement/UnitSystem.h"
 
@@ -93,6 +94,13 @@ namespace SmartAmounts {
                                std::optional<Measurement::UnitSystem::RelativeScale> forcedScale);
 
    /**
+    * \brief Similar to setForcedSystemOfMeasurement and setForcedRelativeScale
+    */
+   void setForcedDecimalPlaces(char const * const owningWindowName,
+                               char const * const fieldName,
+                               std::optional<Measurement::NumDecimalPlaces> forcedDecimalPlaces);
+
+   /**
     * \brief Called by \c SmartLabel or subclasses of \c BtTableModel
     *
     * \param owningWindowName The class name of the editor (eg \c HopEditor) or \c BtTableModel (eg \c HopTableModel)
@@ -107,6 +115,12 @@ namespace SmartAmounts {
     */
    std::optional<Measurement::UnitSystem::RelativeScale> getForcedRelativeScale(char const * const owningWindowName,
                                                                                 char const * const fieldName);
+
+   /**
+    * \brief Similar to getForcedSystemOfMeasurement and getForcedRelativeScale
+    */
+   std::optional<Measurement::NumDecimalPlaces> getForcedDecimalPlaces(char const * const owningWindowName,
+                                                                       char const * const fieldName);
 
    /**
     * \brief Returns the forced \c SystemOfMeasurement or, if there is none, the \c SystemOfMeasurement of the
@@ -126,7 +140,11 @@ namespace SmartAmounts {
                                                  Measurement::PhysicalQuantity physicalQuantity);
 
    /**
-    * \brief It's sometimes useful to have \c SystemOfMeasurement and \c UnitSystem::RelativeScale in a single variable
+    * \brief It's sometimes useful to have \c SystemOfMeasurement and \c UnitSystem::RelativeScale in a single variable.
+    *
+    *        NB: We deliberately don't include the number of decimal places here.  This struct is mostly used to tell a
+    *            field how to interpret the text it is currently showing, and that doesn't depend on how many decimal
+    *            places were used to display it.
     */
    struct ScaleInfo {
       Measurement::SystemOfMeasurement systemOfMeasurement;

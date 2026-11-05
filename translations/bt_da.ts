@@ -6897,18 +6897,18 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
 <context>
     <name>OptionDialog</name>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="1051"/>
+        <location filename="../src/OptionDialog.cpp" line="1090"/>
         <source>Copy Data</source>
         <translation>Kopier data</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="1052"/>
+        <location filename="../src/OptionDialog.cpp" line="1091"/>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
         <translation>Der kan ikke findes en datafil i denne mappe, så dine seneste data kopieres hertil.</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="1029"/>
-        <location filename="../src/OptionDialog.cpp" line="1060"/>
+        <location filename="../src/OptionDialog.cpp" line="1068"/>
+        <location filename="../src/OptionDialog.cpp" line="1099"/>
         <source>Restart</source>
         <translation>Genstart</translation>
     </message>
@@ -6969,61 +6969,51 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Kinesisk</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="227"/>
-        <location filename="../src/OptionDialog.cpp" line="234"/>
         <source>US traditional units</source>
-        <translation>Amerikanske normale enheder</translation>
+        <translation type="vanished">Amerikanske normale enheder</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="228"/>
-        <location filename="../src/OptionDialog.cpp" line="235"/>
         <source>British imperial units</source>
-        <translation>Britiske gamle enheder</translation>
+        <translation type="vanished">Britiske gamle enheder</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="230"/>
         <source>Celsius</source>
-        <translation>Celsius</translation>
+        <translation type="vanished">Celsius</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="231"/>
         <source>Fahrenheit</source>
-        <translation>Fahrenheit</translation>
+        <translation type="vanished">Fahrenheit</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="237"/>
         <source>20C/20C Specific Gravity</source>
-        <translation>20°C/20°C Specifik massefylde</translation>
+        <translation type="vanished">20°C/20°C Specifik massefylde</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="238"/>
         <source>Plato/Brix/Balling</source>
-        <translation>Plato/Brix/Balling</translation>
+        <translation type="vanished">Plato/Brix/Balling</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="240"/>
+        <location filename="../src/OptionDialog.cpp" line="299"/>
         <source>mm-dd-YYYY</source>
         <translation>mm-dd-yyyy</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="241"/>
+        <location filename="../src/OptionDialog.cpp" line="300"/>
         <source>dd-mm-YYYY</source>
         <translation>dd-mm-yyyy</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="242"/>
+        <location filename="../src/OptionDialog.cpp" line="301"/>
         <source>YYYY-mm-dd</source>
         <translation>yyyy-mm-dd</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="244"/>
         <source>SRM</source>
-        <translation>SRM</translation>
+        <translation type="vanished">SRM</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="245"/>
         <source>EBC</source>
-        <translation>EBC</translation>
+        <translation type="vanished">EBC</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -7050,12 +7040,12 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Morey&apos;s approksimation</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="670"/>
+        <location filename="../src/OptionDialog.cpp" line="711"/>
         <source>SQLite (default)</source>
         <translation>SQLite (standard)</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="671"/>
+        <location filename="../src/OptionDialog.cpp" line="712"/>
         <source>PostgreSQL</source>
         <translation>PostgreSQL</translation>
     </message>
@@ -7100,78 +7090,78 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Tyrkisk</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="962"/>
+        <location filename="../src/OptionDialog.cpp" line="1001"/>
         <source>Test connection or cancel</source>
         <translation>Test forbindelse eller annuller</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="998"/>
+        <location filename="../src/OptionDialog.cpp" line="1037"/>
         <source>Transfer database</source>
         <translation>Overfør database</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="226"/>
-        <location filename="../src/OptionDialog.cpp" line="233"/>
         <source>Metric / SI units</source>
-        <translation>SI-enheder (metrisk)</translation>
+        <translation type="vanished">SI-enheder (metrisk)</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="246"/>
         <source>Lovibond</source>
-        <translation>Lovibond</translation>
+        <translation type="vanished">Lovibond</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="252"/>
         <source>Lintner</source>
-        <translation>Lintner</translation>
+        <translation type="vanished">Lintner</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="253"/>
         <source>WK</source>
-        <translation>WK</translation>
+        <translation type="vanished">WK</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="741"/>
+        <location filename="../src/OptionDialog.cpp" line="281"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/OptionDialog.cpp" line="782"/>
         <source>Choose User Data Directory</source>
         <translation>Vælg mappe til brugerdata</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="750"/>
+        <location filename="../src/OptionDialog.cpp" line="791"/>
         <source>Choose Backups Directory</source>
         <translation>Vælg mappe til sikkerhedskopier</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="759"/>
+        <location filename="../src/OptionDialog.cpp" line="800"/>
         <source>Choose Logging Directory</source>
         <translation>Vælg mappe til logfiler</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="963"/>
+        <location filename="../src/OptionDialog.cpp" line="1002"/>
         <source>Saving the options without testing the connection can cause %1 to not restart.  Your changes have been discarded, which is likely really, really crappy UX.  Please open a bug explaining exactly how you got to this message.</source>
         <translation>At gemme indstillinger uden at teste forbindelsen kan betyde, at %1 ikke genstarter. Dine ændringer er mistet, hvilket er meget uheldigt. Åbn venligst venligst en fejlsag og forklar, hvordan du har fået denne fejlmeddelelse.</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="996"/>
+        <location filename="../src/OptionDialog.cpp" line="1035"/>
         <source>Would you like %1 to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
         <translation>Ønsker du, at %1 overfører dine data til den nye database? BEMÆRK: Sig nej, hvis du allerede har indlæst data</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="1011"/>
+        <location filename="../src/OptionDialog.cpp" line="1050"/>
         <source>Conversion Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="1012"/>
+        <location filename="../src/OptionDialog.cpp" line="1051"/>
         <source>Data transfer failed.  See log file for more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="1030"/>
+        <location filename="../src/OptionDialog.cpp" line="1069"/>
         <source>Please restart %1 to connect to the new database</source>
         <translation>Genstart %1 for at forbinde til den nye database</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="1061"/>
+        <location filename="../src/OptionDialog.cpp" line="1100"/>
         <source>Please restart %1.</source>
         <translation>Genstart %1.</translation>
     </message>
@@ -7429,22 +7419,22 @@ Fejlmeddelelse:
         <translation>Fejl ved oprettelse af mappe &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="844"/>
+        <location filename="../src/OptionDialog.cpp" line="885"/>
         <source>Connection Test</source>
         <translation>Test af forbindelse</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="845"/>
+        <location filename="../src/OptionDialog.cpp" line="886"/>
         <source>Connection to database was successful</source>
         <translation>Forbindelse til database lykkedes</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="866"/>
+        <location filename="../src/OptionDialog.cpp" line="907"/>
         <source>Plaintext</source>
         <translation>Ren tekst</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="867"/>
+        <location filename="../src/OptionDialog.cpp" line="908"/>
         <source>Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems.</source>
         <translation>Adgangskoder gemmes som ren tekst. Adganskoden forsøges ikke skjult, krypteret eller på anden måde beskyttet. Ved at vælge denne indstilling har du selv ansvaret for evt. problemer.</translation>
     </message>
@@ -16772,19 +16762,17 @@ Tabs</source>
         <translation>Valgmuligheder</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="26"/>
+        <location filename="../ui/optionsDialog.ui" line="38"/>
         <source>Units</source>
         <translation>Enheder</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="32"/>
         <source>Weight</source>
-        <translation>Masse</translation>
+        <translation type="vanished">Masse</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="42"/>
         <source>Temperature</source>
-        <translation>Temperatur</translation>
+        <translation type="vanished">Temperatur</translation>
     </message>
     <message>
         <source>Celsius</source>
@@ -16795,33 +16783,30 @@ Tabs</source>
         <translation type="vanished">Fahrenheit</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="52"/>
         <source>Volume</source>
-        <translation>Volumen</translation>
+        <translation type="vanished">Volumen</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="62"/>
         <source>Gravity</source>
-        <translation>Massefylde</translation>
+        <translation type="vanished">Massefylde</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="92"/>
-        <location filename="../ui/optionsDialog.ui" line="136"/>
+        <location filename="../ui/optionsDialog.ui" line="96"/>
         <source>Color</source>
         <translation>Farve</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="114"/>
+        <location filename="../ui/optionsDialog.ui" line="74"/>
         <source>Formulas</source>
         <translation>Formler</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="126"/>
+        <location filename="../ui/optionsDialog.ui" line="86"/>
         <source>IBU</source>
         <translation>IBU</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="149"/>
+        <location filename="../ui/optionsDialog.ui" line="109"/>
         <source>IBU Adjustments</source>
         <translation>IBU justeringer</translation>
     </message>
@@ -16830,9 +16815,9 @@ Tabs</source>
         <translation type="vanished">Første vørter</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="387"/>
-        <location filename="../src/OptionDialog.cpp" line="380"/>
-        <location filename="../src/OptionDialog.cpp" line="382"/>
+        <location filename="../ui/optionsDialog.ui" line="347"/>
+        <location filename="../src/OptionDialog.cpp" line="432"/>
+        <location filename="../src/OptionDialog.cpp" line="434"/>
         <source>Browse</source>
         <translation>Gennemse</translation>
     </message>
@@ -16841,167 +16826,176 @@ Tabs</source>
         <translation type="vanished">Forvalg</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="206"/>
+        <location filename="../ui/optionsDialog.ui" line="166"/>
         <source>Language</source>
         <translation>Sprog</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="72"/>
+        <location filename="../ui/optionsDialog.ui" line="52"/>
         <source>Date</source>
         <translation>Dato</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="120"/>
+        <location filename="../ui/optionsDialog.ui" line="26"/>
+        <source>Units &amp;&amp; Precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/optionsDialog.ui" line="45"/>
+        <source>Decimal places</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/optionsDialog.ui" line="80"/>
         <source>Forumulas</source>
         <translation>Formler</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="155"/>
+        <location filename="../ui/optionsDialog.ui" line="115"/>
         <source>Mash Hop (%)</source>
         <translation>Mæskning humle (%)</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="178"/>
+        <location filename="../ui/optionsDialog.ui" line="138"/>
         <source>First Wort (%)</source>
         <translation>Første urt (%)</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="260"/>
+        <location filename="../ui/optionsDialog.ui" line="220"/>
         <source>Databases</source>
         <translation>Databaser</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="266"/>
+        <location filename="../ui/optionsDialog.ui" line="226"/>
         <source>Engines</source>
         <translation>Databasesystem</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="272"/>
+        <location filename="../ui/optionsDialog.ui" line="232"/>
         <source>RDBMS Engine</source>
         <translation>RDBMS databasesystem</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="282"/>
+        <location filename="../ui/optionsDialog.ui" line="242"/>
         <source>Test Connection</source>
         <translation>Test forbindelse</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="295"/>
+        <location filename="../ui/optionsDialog.ui" line="255"/>
         <source>Configuration</source>
         <translation>Konfiguration</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="318"/>
+        <location filename="../ui/optionsDialog.ui" line="278"/>
         <source>Restore defaults</source>
         <translation>Genskab standard</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="370"/>
+        <location filename="../src/OptionDialog.cpp" line="422"/>
         <source>Hostname</source>
         <translation>Værtsnavn</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="371"/>
+        <location filename="../src/OptionDialog.cpp" line="423"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="372"/>
+        <location filename="../src/OptionDialog.cpp" line="424"/>
         <source>Schema</source>
         <translation>Felter</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="373"/>
+        <location filename="../src/OptionDialog.cpp" line="425"/>
         <source>Database</source>
         <translation>Database</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="374"/>
+        <location filename="../src/OptionDialog.cpp" line="426"/>
         <source>Username</source>
         <translation>Brugernavn</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="375"/>
+        <location filename="../src/OptionDialog.cpp" line="427"/>
         <source>Password</source>
         <translation>Adgangskode</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="376"/>
+        <location filename="../src/OptionDialog.cpp" line="428"/>
         <source>Save password</source>
         <translation>Gem adgangskode</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="379"/>
+        <location filename="../src/OptionDialog.cpp" line="431"/>
         <source>Data Directory</source>
         <translation>Datamappe</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="381"/>
+        <location filename="../src/OptionDialog.cpp" line="433"/>
         <source>Backup Directory</source>
         <translation>Sikkerhedskopieringsmappe</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="383"/>
+        <location filename="../src/OptionDialog.cpp" line="435"/>
         <source>Number of Backups</source>
         <translation>Antal sikkerhedskopier</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="384"/>
+        <location filename="../src/OptionDialog.cpp" line="436"/>
         <source>Frequency of Backups</source>
         <translation>Frekvens for sikkerhedskopiering</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="388"/>
+        <location filename="../src/OptionDialog.cpp" line="440"/>
         <source>PostgresSQL&apos;s host name or IP address</source>
         <translation>PostgresSQL&apos;s værtsnavn eller IP-adresse</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="390"/>
+        <location filename="../src/OptionDialog.cpp" line="442"/>
         <source>Port the PostgreSQL is listening on</source>
         <translation>Port som PostgresSQL lytter på</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="392"/>
+        <location filename="../src/OptionDialog.cpp" line="444"/>
         <source>The schema containing the database</source>
         <translation>Felterne i databasen</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="394"/>
+        <location filename="../src/OptionDialog.cpp" line="446"/>
         <source>User with create/delete table access</source>
         <translation>Bruger med adgang til at oprette/slette adgang til tabel</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="396"/>
+        <location filename="../src/OptionDialog.cpp" line="448"/>
         <source>Password for the user</source>
         <translation>Adgangskode for brugeren</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="397"/>
+        <location filename="../src/OptionDialog.cpp" line="449"/>
         <source>The name of the database</source>
         <translation>Navn på databasen</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="398"/>
+        <location filename="../src/OptionDialog.cpp" line="450"/>
         <source>Where your database file is</source>
         <translation>Hvor din databasefil er</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="399"/>
+        <location filename="../src/OptionDialog.cpp" line="451"/>
         <source>Where to save your backups</source>
         <translation>Hvor skal sikkerhedskopier gemmes</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="400"/>
+        <location filename="../src/OptionDialog.cpp" line="452"/>
         <source>Number of backups to keep: -1 means never remove, 0 means never backup</source>
         <translation>Antal sikkerhedskopier der gemmes: -1 betyder aldrig fjerne kopi, 0 betyder aldrig sikkerskopiere</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="102"/>
         <source>Diastatic power</source>
-        <translation>Diastatisk kraft</translation>
+        <translation type="vanished">Diastatisk kraft</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="227"/>
+        <location filename="../ui/optionsDialog.ui" line="187"/>
         <source>&lt;qt&gt;
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
@@ -17018,52 +17012,52 @@ Tabs</source>
 &lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="332"/>
+        <location filename="../ui/optionsDialog.ui" line="292"/>
         <source>Logging</source>
         <translation>Logning</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="338"/>
+        <location filename="../ui/optionsDialog.ui" line="298"/>
         <source>Logging Level</source>
         <translation>Logningsniveau</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="356"/>
+        <location filename="../ui/optionsDialog.ui" line="316"/>
         <source>Log file location</source>
         <translation>Placering af logfil</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="365"/>
+        <location filename="../ui/optionsDialog.ui" line="325"/>
         <source>Use Default location</source>
         <translation>Anvend standardplacering</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="414"/>
+        <location filename="../ui/optionsDialog.ui" line="374"/>
         <source>Recipe Snapshots</source>
         <translation>Opskrift snapshot</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="420"/>
+        <location filename="../ui/optionsDialog.ui" line="380"/>
         <source>Enable Automatic Snapshots</source>
         <translation>Aktiver automatisk snapshot</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="427"/>
+        <location filename="../ui/optionsDialog.ui" line="387"/>
         <source>Deleting a recipe</source>
         <translation>Slette en opskrift</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="433"/>
+        <location filename="../ui/optionsDialog.ui" line="393"/>
         <source>Deletes all the snapshots too</source>
         <translation>Sletter også alle snapshots</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="440"/>
+        <location filename="../ui/optionsDialog.ui" line="400"/>
         <source>Deletes only the recipe</source>
         <translation>Sletter kun opskriften</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="450"/>
+        <location filename="../ui/optionsDialog.ui" line="410"/>
         <source>Show snapshots by default</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17072,52 +17066,52 @@ Tabs</source>
         <translation type="vanished">Vis altid snapshots</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="472"/>
+        <location filename="../ui/optionsDialog.ui" line="432"/>
         <source>Default Values</source>
         <translation>Standardværdier</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="478"/>
+        <location filename="../ui/optionsDialog.ui" line="438"/>
         <source>Batch Size</source>
         <translation>Volumen af portion</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="488"/>
+        <location filename="../ui/optionsDialog.ui" line="448"/>
         <source>Default batch size to set on new recipes</source>
         <translation>Standardvolumen for portion til nye opskrifter</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="496"/>
+        <location filename="../ui/optionsDialog.ui" line="456"/>
         <source>Pre-Boil Size</source>
         <translation>Volumen før kogning</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="506"/>
+        <location filename="../ui/optionsDialog.ui" line="466"/>
         <source>Default pre-boil size to set on new recipes</source>
         <translation>Standardvolumen før kogning til nye opskrifter</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="517"/>
+        <location filename="../ui/optionsDialog.ui" line="477"/>
         <source>Boil Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="524"/>
+        <location filename="../ui/optionsDialog.ui" line="484"/>
         <source>Default boil time to set on new recipes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="535"/>
+        <location filename="../ui/optionsDialog.ui" line="495"/>
         <source>Efficiency</source>
         <translation>Effektivitet</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="542"/>
+        <location filename="../ui/optionsDialog.ui" line="502"/>
         <source>Default efficiency to set on new recipes</source>
         <translation>Standardeffektivitet til nye opskrifter</translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="403"/>
+        <location filename="../src/OptionDialog.cpp" line="455"/>
         <source>How many times %1 needs to be run to trigger another backup: 1 means always backup</source>
         <translation>Hvor man gange %1 skal anvendes for at starte en ny sikkerhedskopiering: 1 betyder altid sikkerhedskopiering</translation>
     </message>

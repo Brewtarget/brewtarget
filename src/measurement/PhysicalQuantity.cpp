@@ -26,7 +26,28 @@
 // Settings we only use in this file.  Strictly we could put these as literals in Measurement::getSettingsName, but
 // doing it this way is consistent with how we define other persistent setting name constants.
 //
+// It's a bit clunky having separate setting names for unit system and number of decimal places, but I think it will
+// have to wait until we have a better versioning approach to config files before we refactor.
+//
 #define AddSettingName(name) namespace { BtStringConst const name{#name}; }
+AddSettingName(decimalPlaces_acidity             )
+AddSettingName(decimalPlaces_bitterness          )
+AddSettingName(decimalPlaces_carbonation         )
+AddSettingName(decimalPlaces_color               )
+AddSettingName(decimalPlaces_count               )
+AddSettingName(decimalPlaces_density             )
+AddSettingName(decimalPlaces_diastaticPower      )
+AddSettingName(decimalPlaces_energyPerVolume     )
+AddSettingName(decimalPlaces_heatCapacity        )
+AddSettingName(decimalPlaces_length              )
+AddSettingName(decimalPlaces_massFractionOrConc  )
+AddSettingName(decimalPlaces_specificHeatCapacity)
+AddSettingName(decimalPlaces_temperature         )
+AddSettingName(decimalPlaces_time                )
+AddSettingName(decimalPlaces_viscosity           )
+AddSettingName(decimalPlaces_volume              )
+AddSettingName(decimalPlaces_volumePerMass       )
+AddSettingName(decimalPlaces_weight              )
 AddSettingName(unitSystem_acidity             )
 AddSettingName(unitSystem_bitterness          )
 AddSettingName(unitSystem_carbonation         )
@@ -117,7 +138,7 @@ EnumStringMapping const Measurement::physicalQuantityDisplayNames {
 };
 
 
-BtStringConst const & Measurement::getSettingsName(PhysicalQuantity const physicalQuantity) {
+BtStringConst const & Measurement::getSettingsNameUnitSystem(PhysicalQuantity const physicalQuantity) {
    // Some physical quantities, such as Time, only have one UnitSystem, so we don't strictly need to store those in
    // PersistentSettings.  However, it's simpler to keep the same logic for everything.
    switch (physicalQuantity) {
@@ -141,10 +162,69 @@ BtStringConst const & Measurement::getSettingsName(PhysicalQuantity const physic
       case Measurement::PhysicalQuantity::HeatCapacity                : return unitSystem_heatCapacity        ;
       case Measurement::PhysicalQuantity::VolumePerMass               : return unitSystem_volumePerMass       ;
       case Measurement::PhysicalQuantity::EnergyPerVolume             : return unitSystem_energyPerVolume     ;
+      // As usual, we don't want a default case here as we want the compiler to warn us if we missed a physical quantity
    }
    // It's a coding error if we get here
    Q_UNREACHABLE();
 }
+
+BtStringConst const & Measurement::getSettingsNameDecimalPlaces(Measurement::PhysicalQuantity const physicalQuantity) {
+   // This is essentially the same logic as getSettingsNameUnitSystem
+   switch (physicalQuantity) {
+      // As above, decimalPlaces_weight should be decimalPlaces_mass.  However, I think it's better to stay consistent
+      // with unitSystem_weight -- especially if someone needs/wants to manually edit their settings file.
+      case Measurement::PhysicalQuantity::Mass                        : return decimalPlaces_weight              ;
+      case Measurement::PhysicalQuantity::Volume                      : return decimalPlaces_volume              ;
+      case Measurement::PhysicalQuantity::Length                      : return decimalPlaces_length              ;
+      case Measurement::PhysicalQuantity::Time                        : return decimalPlaces_time                ;
+      case Measurement::PhysicalQuantity::Count                       : return decimalPlaces_count               ;
+      case Measurement::PhysicalQuantity::Temperature                 : return decimalPlaces_temperature         ;
+      case Measurement::PhysicalQuantity::Color                       : return decimalPlaces_color               ;
+      case Measurement::PhysicalQuantity::Gravity                     : return decimalPlaces_density             ;
+      case Measurement::PhysicalQuantity::DiastaticPower              : return decimalPlaces_diastaticPower      ;
+      case Measurement::PhysicalQuantity::Acidity                     : return decimalPlaces_acidity             ;
+      case Measurement::PhysicalQuantity::Bitterness                  : return decimalPlaces_bitterness          ;
+      case Measurement::PhysicalQuantity::Carbonation                 : return decimalPlaces_carbonation         ;
+      case Measurement::PhysicalQuantity::MassFractionOrConcentration : return decimalPlaces_massFractionOrConc  ;
+      case Measurement::PhysicalQuantity::Viscosity                   : return decimalPlaces_viscosity           ;
+      case Measurement::PhysicalQuantity::SpecificHeatCapacity        : return decimalPlaces_specificHeatCapacity;
+      case Measurement::PhysicalQuantity::HeatCapacity                : return decimalPlaces_heatCapacity        ;
+      case Measurement::PhysicalQuantity::VolumePerMass               : return decimalPlaces_volumePerMass       ;
+      case Measurement::PhysicalQuantity::EnergyPerVolume             : return decimalPlaces_energyPerVolume     ;
+      // As usual, we don't want a default case here as we want the compiler to warn us if we missed a physical quantity
+   }
+   // It's a coding error if we get here
+   Q_UNREACHABLE();
+}
+
+int Measurement::getUltimateDefaultDecimalPlaces(Measurement::PhysicalQuantity const physicalQuantity) {
+   switch (physicalQuantity) {
+      // We start off with 3 for a lot of things, as that used to be the global default, but we'll likely tweak this
+      // over time.
+      case Measurement::PhysicalQuantity::Mass                        : return 3;
+      case Measurement::PhysicalQuantity::Volume                      : return 3;
+      case Measurement::PhysicalQuantity::Length                      : return 3;
+      case Measurement::PhysicalQuantity::Time                        : return 1;
+      case Measurement::PhysicalQuantity::Count                       : return 1;
+      case Measurement::PhysicalQuantity::Temperature                 : return 1;
+      case Measurement::PhysicalQuantity::Color                       : return 3;
+      case Measurement::PhysicalQuantity::Gravity                     : return 3;
+      case Measurement::PhysicalQuantity::DiastaticPower              : return 3;
+      case Measurement::PhysicalQuantity::Acidity                     : return 3;
+      case Measurement::PhysicalQuantity::Bitterness                  : return 3;
+      case Measurement::PhysicalQuantity::Carbonation                 : return 3;
+      case Measurement::PhysicalQuantity::MassFractionOrConcentration : return 3;
+      case Measurement::PhysicalQuantity::Viscosity                   : return 3;
+      case Measurement::PhysicalQuantity::SpecificHeatCapacity        : return 3;
+      case Measurement::PhysicalQuantity::HeatCapacity                : return 3;
+      case Measurement::PhysicalQuantity::VolumePerMass               : return 3;
+      case Measurement::PhysicalQuantity::EnergyPerVolume             : return 3;
+      // As usual, we don't want a default case here as we want the compiler to warn us if we missed a physical quantity
+   }
+   // It's a coding error if we get here
+   Q_UNREACHABLE();
+}
+
 
 EnumStringMapping const Measurement::choiceOfPhysicalQuantityStringMapping {
    {Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        , "Mass_Volume"        },

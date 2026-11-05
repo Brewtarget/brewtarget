@@ -78,21 +78,27 @@ TypeInfo const & SmartAmountSettings::getTypeInfo() const {
    return this->pimpl->m_typeInfo;
 }
 
-void SmartAmountSettings::setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement) {
+void SmartAmountSettings::setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> const systemOfMeasurement) const {
    // It's a coding error to call this when we have a fixed display unit
    Q_ASSERT(!this->pimpl->m_fixedDisplayUnit);
 
    SmartAmounts::setForcedSystemOfMeasurement(this->pimpl->m_editorName,
                                               this->pimpl->m_labelOrFieldName,
-                                              forcedSystemOfMeasurement);
+                                              systemOfMeasurement);
    return;
 }
 
-void SmartAmountSettings::setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) {
+void SmartAmountSettings::setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> const relativeScale) const {
    // It's a coding error to call this when we have a fixed display unit
    Q_ASSERT(!this->pimpl->m_fixedDisplayUnit);
 
-   SmartAmounts::setForcedRelativeScale(this->pimpl->m_editorName, this->pimpl->m_labelOrFieldName, forcedScale);
+   SmartAmounts::setForcedRelativeScale(this->pimpl->m_editorName, this->pimpl->m_labelOrFieldName, relativeScale);
+   return;
+}
+
+void SmartAmountSettings::setForcedDecimalPlaces(std::optional<Measurement::NumDecimalPlaces> const decimalPlaces) const {
+   // We don't (yet) have any fields where we have an unchangeable number of decimal places, so no assert here
+   SmartAmounts::setForcedDecimalPlaces(this->pimpl->m_editorName, this->pimpl->m_labelOrFieldName, decimalPlaces);
    return;
 }
 
@@ -114,6 +120,12 @@ std::optional<Measurement::UnitSystem::RelativeScale> SmartAmountSettings::getFo
       return std::nullopt;
    }
    return SmartAmounts::getForcedRelativeScale(this->pimpl->m_editorName, this->pimpl->m_labelOrFieldName);
+}
+
+std::optional<Measurement::NumDecimalPlaces> SmartAmountSettings::getForcedDecimalPlaces() const {
+   // We don't (yet) have any fields where we have an unchangeable number of decimal places, so nothing to check on that
+   // front.
+   return SmartAmounts::getForcedDecimalPlaces(this->pimpl->m_editorName, this->pimpl->m_labelOrFieldName);
 }
 
 SmartAmounts::ScaleInfo SmartAmountSettings::getScaleInfo() const {
@@ -172,7 +184,7 @@ void SmartAmountSettings::selectPhysicalQuantity(Measurement::PhysicalQuantity c
    return;
 }
 
-[[nodiscard]] QString SmartAmountSettings::displayQuantity(double quantity, unsigned int precision) const {
+[[nodiscard]] QString SmartAmountSettings::displayQuantity(double quantity, unsigned int defaultPrecision) const {
    // It's a coding error to call this for NonPhysicalQuantity
    Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType));
 
@@ -181,14 +193,15 @@ void SmartAmountSettings::selectPhysicalQuantity(Measurement::PhysicalQuantity c
    // unit and scale.
    return Measurement::displayAmount(
       Measurement::Amount{quantity, Measurement::Unit::getCanonicalUnit(*this->pimpl->m_currentPhysicalQuantity)},
-      precision,
+      defaultPrecision,
       this->getForcedSystemOfMeasurement(),
-      this->getForcedRelativeScale()
+      this->getForcedRelativeScale(),
+      this->getForcedDecimalPlaces()
    );
 }
 
 [[nodiscard]] QString SmartAmountSettings::displayAmount(Measurement::Amount const & amount,
-                                                         unsigned int precision) {
+                                                         unsigned int defaultPrecision) {
    auto const & fieldType = *this->pimpl->m_typeInfo.fieldType;
    // Per comment on SmartField::setAmount, it's a coding error to call this for NonPhysicalQuantity
    Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(fieldType));
@@ -200,12 +213,13 @@ void SmartAmountSettings::selectPhysicalQuantity(Measurement::PhysicalQuantity c
 
    QString const retVal{
       Measurement::displayAmount(amount,
-                                 precision,
+                                 defaultPrecision,
                                  this->getForcedSystemOfMeasurement(),
-                                 this->getForcedRelativeScale())
+                                 this->getForcedRelativeScale(),
+                                 this->getForcedDecimalPlaces())
    };
 
-   qDebug() << Q_FUNC_INFO << "Amount:" << amount << "Precision:" << precision << "Displays as:" << retVal;
+   qDebug() << Q_FUNC_INFO << "Amount:" << amount << "Precision:" << defaultPrecision << "Displays as:" << retVal;
 
    return retVal;
 }

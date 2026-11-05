@@ -94,7 +94,7 @@ void SmartLabel::init(char const * const   editorName,
 }
 
 void SmartLabel::correctEnteredText(SmartAmounts::ScaleInfo previousScaleInfo) {
-   emit changedSystemOfMeasurementOrScale(previousScaleInfo);
+   emit changedUnitsOrPrecision(previousScaleInfo);
    return;
 }
 
@@ -107,7 +107,7 @@ double SmartLabel::getAmountToDisplay(double const canonicalValue) const {
    auto const & canonicalUnit{
       Measurement::Unit::getCanonicalUnit(std::get<Measurement::PhysicalQuantity>(*this->getTypeInfo().fieldType))
    };
-   return Measurement::amountDisplay(
+   return Measurement::quantityOfDisplayAmount(
       Measurement::Amount{canonicalValue, canonicalUnit},
       this->getForcedSystemOfMeasurement(),
       this->getForcedRelativeScale()
@@ -131,8 +131,8 @@ QPair<double,double> SmartLabel::getRangeToDisplay(double const canonicalValueMi
    auto const forcedSystemOfMeasurement = this->getForcedSystemOfMeasurement();
    auto const forcedRelativeScale       = this->getForcedRelativeScale();
    return QPair<double, double>(
-      Measurement::amountDisplay(Measurement::Amount{canonicalValueMin, canonicalUnit}, forcedSystemOfMeasurement, forcedRelativeScale),
-      Measurement::amountDisplay(Measurement::Amount{canonicalValueMax, canonicalUnit}, forcedSystemOfMeasurement, forcedRelativeScale)
+      Measurement::quantityOfDisplayAmount(Measurement::Amount{canonicalValueMin, canonicalUnit}, forcedSystemOfMeasurement, forcedRelativeScale),
+      Measurement::quantityOfDisplayAmount(Measurement::Amount{canonicalValueMax, canonicalUnit}, forcedSystemOfMeasurement, forcedRelativeScale)
    );
 }
 
@@ -170,23 +170,27 @@ void SmartLabel::textEffect(bool enabled) {
    return;
 }
 
-void SmartLabel::popContextMenu(const QPoint& point) {
+void SmartLabel::popContextMenu(QPoint const & point) {
    Q_ASSERT(this->pimpl->m_initialised);
 
+   //
    // For the moment, at least, we do not allow people to choose date formats per-field.  (Although you might want to
    // mix and match metric and imperial systems in certain circumstances, it's less clear that there's a benefit to
    // mixing and matching date formats.)
+   //
+   // TODO: We probably want to allow choice of number of decimal places for percentages though...
+   //
    if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {
       return;
    }
 
    QObject * calledBy = this->sender();
-   if (calledBy == nullptr) {
+   if (!calledBy) {
       return;
    }
 
-   QWidget * widgie = qobject_cast<QWidget*>(calledBy);
-   if (widgie == nullptr) {
+   auto const widgie = qobject_cast<QWidget*>(calledBy);
+   if (!widgie) {
       return;
    }
 
@@ -199,62 +203,45 @@ void SmartLabel::popContextMenu(const QPoint& point) {
    // destructor, delete the menu if it still exists.
    //
 
-   auto forcedSystemOfMeasurement = this->getForcedSystemOfMeasurement();
-   auto forcedRelativeScale       = this->getForcedRelativeScale();
+   auto const forcedSystemOfMeasurement = this->getForcedSystemOfMeasurement();
+   auto const forcedRelativeScale       = this->getForcedRelativeScale();
+   auto const forcedDecimalPlaces       = this->getForcedDecimalPlaces();
    qDebug() <<
       Q_FUNC_INFO << this->pimpl->m_labelFqName << "forcedSystemOfMeasurement=" << forcedSystemOfMeasurement <<
-      ", forcedRelativeScale=" << forcedRelativeScale;
+      ", forcedRelativeScale=" << forcedRelativeScale << ", forcedDecimalPlaces=" << forcedDecimalPlaces;
 
    auto const physicalQuantity = this->getPhysicalQuantity();
-   std::unique_ptr<QMenu> menu = UnitAndScalePopUpMenu::create(this->pimpl->m_parent,
-                                                               physicalQuantity,
-                                                               forcedSystemOfMeasurement,
-                                                               forcedRelativeScale);
+   std::unique_ptr<QMenu> const menu = UnitAndScalePopUpMenu::create(this->pimpl->m_parent,
+                                                                     physicalQuantity,
+                                                                     forcedSystemOfMeasurement,
+                                                                     forcedRelativeScale,
+                                                                     forcedDecimalPlaces);
 
    // If the pop-up menu has no entries, then we can bail out here
    if (menu->actions().size() == 0) {
       qDebug() << Q_FUNC_INFO << "Nothing to show for" << this->getPhysicalQuantity();
    }
 
-   // Show the pop-up menu and get back whatever the user seleted
-   QAction * invoked = menu->exec(widgie->mapToGlobal(point));
-   if (invoked == nullptr) {
+   // Show the pop-up menu and get back whatever the user selected
+   std::optional<UnitAndScalePopUpMenu::Selection> const selection =
+      UnitAndScalePopUpMenu::exec(*menu, widgie->mapToGlobal(point));
+   if (!selection) {
       return;
    }
 
    // Save the current settings (which may come from system-wide defaults) for the signal below
-   Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType));
    SmartAmounts::ScaleInfo const previousScaleInfo = this->getScaleInfo();
 
-   // User will either have selected a SystemOfMeasurement or a UnitSystem::RelativeScale.  We can know which based on
-   // whether it's the menu or the sub-menu that it came from.
-   bool isTopMenu{invoked->parent() == menu.get()};
-   if (isTopMenu) {
-      // It's the menu, so SystemOfMeasurement
-      std::optional<Measurement::SystemOfMeasurement> whatSelected =
-         UnitAndScalePopUpMenu::dataFromQAction<Measurement::SystemOfMeasurement>(*invoked);
-      qDebug() << Q_FUNC_INFO << this->pimpl->m_labelFqName << "Selected SystemOfMeasurement" << whatSelected;
-      // This stores the new SystemOfMeasurement (if any), but modification of the field contents
-      // won't happen until it receives the signal sent below.
-      this->setForcedSystemOfMeasurement(whatSelected);
-      // Choosing a forced SystemOfMeasurement resets any selection of forced RelativeScale
-      this->setForcedRelativeScale(std::nullopt);
-   } else {
-      // It's the sub-menu, so UnitSystem::RelativeScale
-      std::optional<Measurement::UnitSystem::RelativeScale> whatSelected =
-         UnitAndScalePopUpMenu::dataFromQAction<Measurement::UnitSystem::RelativeScale>(*invoked);
-      qDebug() << Q_FUNC_INFO << this->pimpl->m_labelFqName << "Selected RelativeScale" << whatSelected;
-      // This stores the new SystemOfMeasurement (if any), but modification of the field contents
-      // won't happen until it receives the signal sent below.
-      this->setForcedRelativeScale(whatSelected);
-   }
+   // This stores the new setting, but modification of the field contents won't happen until it receives the signal
+   // sent below.
+   UnitAndScalePopUpMenu::applySelection(*selection, *this);
 
    // Remember, we need the original unit, not the new one.
    //
-   // Note that the changedSystemOfMeasurementOrScale signal can also be received by other slots than the
+   // Note that the changedUnitsOrPrecision signal can also be received by other slots than the
    // SmartField::lineChanged.  This is why we use a signal and why we include the SmartAmounts::ScaleInfo data (which
    // SmartField could work out itself).
-   emit changedSystemOfMeasurementOrScale(previousScaleInfo);
+   emit changedUnitsOrPrecision(previousScaleInfo);
 
    return;
 }

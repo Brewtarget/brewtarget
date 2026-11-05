@@ -5585,27 +5585,27 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>US traditional units</source>
-        <translation>US traditional eenheden</translation>
+        <translation type="vanished">US traditional eenheden</translation>
     </message>
     <message>
         <source>British imperial units</source>
-        <translation>Gebruik British imperial eenheden</translation>
+        <translation type="vanished">Gebruik British imperial eenheden</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation>Celsius</translation>
+        <translation type="vanished">Celsius</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation>Fahrenheit</translation>
+        <translation type="vanished">Fahrenheit</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
-        <translation>20°C/20°C SG</translation>
+        <translation type="vanished">20°C/20°C SG</translation>
     </message>
     <message>
         <source>Plato/Brix/Balling</source>
-        <translation>Plato/Brix/Balling</translation>
+        <translation type="vanished">Plato/Brix/Balling</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -5621,11 +5621,11 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>SRM</source>
-        <translation>SRM</translation>
+        <translation type="vanished">SRM</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation>EBC</translation>
+        <translation type="vanished">EBC</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -5721,15 +5721,11 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Lintner</source>
-        <translation>Lintner</translation>
+        <translation type="vanished">Lintner</translation>
     </message>
     <message>
         <source>WK</source>
-        <translation>°WK</translation>
-    </message>
-    <message>
-        <source>Metric / SI units</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">°WK</translation>
     </message>
     <message>
         <source>Choose User Data Directory</source>
@@ -5760,16 +5756,16 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Lovibond</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Conversion Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Data transfer failed.  See log file for more details.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Standaard</translation>
     </message>
 </context>
 <context>
@@ -13491,19 +13487,19 @@ Tabs</source>
     </message>
     <message>
         <source>Weight</source>
-        <translation>Gewicht</translation>
+        <translation type="vanished">Gewicht</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Temperatuur</translation>
+        <translation type="vanished">Temperatuur</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation type="vanished">Volume</translation>
     </message>
     <message>
         <source>Gravity</source>
-        <translation>SG</translation>
+        <translation type="vanished">SG</translation>
     </message>
     <message>
         <source>Color</source>
@@ -13671,7 +13667,7 @@ Tabs</source>
     </message>
     <message>
         <source>Diastatic power</source>
-        <translation>Diastatische kracht</translation>
+        <translation type="vanished">Diastatische kracht</translation>
     </message>
     <message>
         <source>Logging</source>
@@ -13761,6 +13757,14 @@ Tabs</source>
     </message>
     <message>
         <source>Show snapshots by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Units &amp;&amp; Precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decimal places</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

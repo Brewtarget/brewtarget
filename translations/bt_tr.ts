@@ -5515,27 +5515,23 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>US traditional units</source>
-        <translation>ABD geleneksel birimleri</translation>
+        <translation type="vanished">ABD geleneksel birimleri</translation>
     </message>
     <message>
         <source>British imperial units</source>
-        <translation>İngiliz kraliyet birimleri</translation>
+        <translation type="vanished">İngiliz kraliyet birimleri</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation>Santigrat</translation>
+        <translation type="vanished">Santigrat</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation>Fahrenhayt</translation>
+        <translation type="vanished">Fahrenhayt</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
-        <translation>20C/20C Spesifik Ağırlık</translation>
-    </message>
-    <message>
-        <source>Plato/Brix/Balling</source>
-        <translation></translation>
+        <translation type="vanished">20C/20C Spesifik Ağırlık</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -5548,14 +5544,6 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>YYYY-mm-dd</source>
         <translation>YYYY-aa-gg</translation>
-    </message>
-    <message>
-        <source>SRM</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>EBC</source>
-        <translation></translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -5630,18 +5618,6 @@ If you need help, please open an issue at %1</source>
         <translation>Veri tabanını taşı</translation>
     </message>
     <message>
-        <source>Metric / SI units</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Lintner</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>WK</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Choose User Data Directory</source>
         <translation>Kullanıcı Verisi Klasörünü Seç</translation>
     </message>
@@ -5682,16 +5658,16 @@ If you need help, please open an issue at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Lovibond</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Conversion Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Data transfer failed.  See log file for more details.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Varsayılan</translation>
     </message>
 </context>
 <context>
@@ -13597,19 +13573,19 @@ Tabs</source>
     </message>
     <message>
         <source>Weight</source>
-        <translation>Ağırlık</translation>
+        <translation type="vanished">Ağırlık</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Sıcaklık</translation>
+        <translation type="vanished">Sıcaklık</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Hacim</translation>
+        <translation type="vanished">Hacim</translation>
     </message>
     <message>
         <source>Gravity</source>
-        <translation>Ağırlık</translation>
+        <translation type="vanished">Ağırlık</translation>
     </message>
     <message>
         <source>Color</source>
@@ -13757,7 +13733,7 @@ Tabs</source>
     </message>
     <message>
         <source>Diastatic power</source>
-        <translation>Diastatik güç</translation>
+        <translation type="vanished">Diastatik güç</translation>
     </message>
     <message>
         <source>Logging</source>
@@ -13875,6 +13851,14 @@ Tabs</source>
     </message>
     <message>
         <source>Show snapshots by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Units &amp;&amp; Precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decimal places</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

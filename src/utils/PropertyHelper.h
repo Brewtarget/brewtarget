@@ -56,6 +56,8 @@ namespace PropertyHelper {
     *                                      of that field (eg whether it is mass or volume).
     * \param forcedSystemOfMeasurement
     * \param forcedRelativeScale
+    * \param forcedDecimalPlaces  If set, overrides the number of decimal places specified in \c typeInfo (and any
+    *                             global preference for the physical quantity) when displaying an amount
     */
    QVariant readDataFromPropertyValue(
       QVariant modelData,
@@ -63,7 +65,8 @@ namespace PropertyHelper {
       int const role = Qt::DisplayRole,
       bool const showChoiceOfPhysicalQuantity = false,
       std::optional<Measurement::SystemOfMeasurement> const forcedSystemOfMeasurement = std::nullopt,
-      std::optional<Measurement::UnitSystem::RelativeScale> const forcedRelativeScale = std::nullopt
+      std::optional<Measurement::UnitSystem::RelativeScale> const forcedRelativeScale = std::nullopt,
+      std::optional<Measurement::NumDecimalPlaces> const forcedDecimalPlaces = std::nullopt
    );
 
    /**

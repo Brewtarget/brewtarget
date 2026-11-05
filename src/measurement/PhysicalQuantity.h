@@ -237,7 +237,25 @@ namespace Measurement {
     * \brief Return the \c PersistentSettings name for looking up the display \c UnitSystem for the specified
     *        \c PhysicalQuantity
     */
-   BtStringConst const & getSettingsName(Measurement::PhysicalQuantity const physicalQuantity);
+   BtStringConst const & getSettingsNameUnitSystem(Measurement::PhysicalQuantity const physicalQuantity);
+
+   /**
+    * \brief Return the \c PersistentSettings name for looking up the number of decimal places for the specified
+    *        \c PhysicalQuantity
+    */
+   BtStringConst const & getSettingsNameDecimalPlaces(Measurement::PhysicalQuantity const physicalQuantity);
+
+   /**
+    * \brief This gives the number of decimal places to use when displaying a given physical quantity if no other
+    *        user preference overrides it (see hierarchy of preferences in comment of
+    *        \c physicalQuantityToUserSpecifiedDecimalPlaces in measurement/Measurement.cpp).
+    *
+    *        See also function with almost the same name (but NB different return type) for NonPhysicalQuantity).
+    *
+    * @param physicalQuantity
+    * @return
+    */
+   [[nodiscard]] int getUltimateDefaultDecimalPlaces(Measurement::PhysicalQuantity const physicalQuantity);
 
    /**
     * \brief In a few cases, we want to be able to handle two or three different ways of measuring a thing (eg \c Mass,

@@ -1220,6 +1220,16 @@ def installDependencies():
          'cmake',
          '-S', '.', '-B', './build',
          #
+         # By default, Blaze enables a lot of compiler optimisations.  Some of it we turn off here, because it
+         # generates instructions that aren't valid on older processors.  Users see errors such as "CPU ISA level is
+         # lower than required" and "terminated by signal SIGILL (Illegal instruction)".
+         #
+         # We therefore override some of these optimisation flags here.  (These particular flags only affect Intel
+         # architecture CPUs.  They have no effect on Apple Silicon.)
+         #
+         '-DCOMPILER_SUPPORTS_AVX2=OFF',
+         '-DCOMPILER_SUPPORTS_SSE42=OFF',
+         #
          # These are mostly the same flags that get explicitly set the Blaze nightly builds -- see
          # https://github.com/sourcemeta/blaze/blob/main/.github/workflows/ci.yml.  List of BLAZE_ flags is at
          # https://blaze.sourcemeta.com/.
@@ -1239,7 +1249,14 @@ def installDependencies():
    )
    # I don't think we need to build clang_format_test, and it gives errors on Windows, so commented out for now.
 #   btExecute.abortOnRunFail(subprocess.run(['cmake', '--build', './build', '--config', 'Release', '--target', 'clang_format_test']))
-   btExecute.abortOnRunFail(subprocess.run(['cmake', '--build', 'build', '--config', 'Release', '--parallel', '4']))
+   btExecute.abortOnRunFail(
+      subprocess.run([
+         'cmake',
+         '--build', 'build',
+         '--config', 'Release',
+         '--parallel', '4'
+      ])
+   )
    #
    # In Blaze's own nightly builds, they use the `--prefix ./build/dist` option to "install" to a subdirectory of the
    # build directory.  This is attractive, given that Blaze is a static library, and we don't inherently need to install

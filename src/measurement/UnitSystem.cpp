@@ -102,12 +102,15 @@ public:
    }
 
    /**
-    * \brief This does most of the work for displayAmount() and amountDisplay()
+    * \brief This does most of the work for displayAmount() and quantityOfDisplayAmount()
+    *
+    *        Note that decimal places are handled higher up the call chain.
     *
     * \param amount the amount to display
     * \param forcedScale  if specified, the \c RelativeScale from this \c UnitSystem to use for displaying
     *
-    * \return
+    * \return A pair consisting of a quantity (eg 1.23) and a displayable abbreviation of the units of that quantity (eg
+    *         "gal")
     */
    std::pair<double, QString> displayableAmount(Measurement::Amount const & amount,
                                                 std::optional<Measurement::UnitSystem::RelativeScale> const forcedScale) const {
@@ -251,28 +254,26 @@ Measurement::Amount Measurement::UnitSystem::qstringToSI(QString qstr, Unit cons
    return siAmount;
 }
 
-QString Measurement::UnitSystem::displayAmount(Measurement::Amount const & amount,
-                                               int precision,
-                                               std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) const {
-   // If the precision is not specified, we take the default one
-   if (precision < 0) {
-      precision = defaultPrecision;
-   }
-
-   auto result = this->pimpl->displayableAmount(amount, forcedScale);
-
-   if (result.second.isEmpty()) {
-      return QString("%L1").arg(this->amountDisplay(Measurement::Amount{result.first, *amount.unit}, forcedScale),
+[[nodiscard]] QString Measurement::UnitSystem::displayAmount(
+   Measurement::Amount const & amount,
+   int precision,
+   std::optional<Measurement::UnitSystem::RelativeScale> const forcedScale
+) const {
+   auto const [quantity, abbreviation] = this->pimpl->displayableAmount(amount, forcedScale);
+   if (abbreviation.isEmpty()) {
+      return QString("%L1").arg(this->quantityOfDisplayAmount(Measurement::Amount{quantity, *amount.unit}, forcedScale),
                                 fieldWidth,
                                 format,
                                 precision);
    }
 
-   return QString("%L1 %2").arg(result.first, fieldWidth, format, precision).arg(result.second);
+   return QString("%L1 %2").arg(quantity, fieldWidth, format, precision).arg(abbreviation);
 }
 
-double Measurement::UnitSystem::amountDisplay(Measurement::Amount const & amount,
-                                              std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) const {
+double Measurement::UnitSystem::quantityOfDisplayAmount(
+   Measurement::Amount const & amount,
+   std::optional<Measurement::UnitSystem::RelativeScale> const forcedScale
+) const {
    // Essentially we're just returning the numeric part of the displayable amount
    return this->pimpl->displayableAmount(amount, forcedScale).first;
 }

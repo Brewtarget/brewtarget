@@ -100,8 +100,8 @@ BrewLogWidget::BrewLogWidget(QWidget *parent) : QWidget(parent) {
 
    // A few labels on this page need special handling, so I connect them here
    // instead of how we would normally do this.
-   connect(this->label_expectedOriginalGravity, &SmartLabel::changedSystemOfMeasurementOrScale, this, &BrewLogWidget::updateExpectedOg);
-   connect(this->label_forecastOriginalGravity, &SmartLabel::changedSystemOfMeasurementOrScale, this, &BrewLogWidget::updateForecastOg);
+   connect(this->label_expectedOriginalGravity, &SmartLabel::changedUnitsOrPrecision, this, &BrewLogWidget::updateExpectedOg);
+   connect(this->label_forecastOriginalGravity, &SmartLabel::changedUnitsOrPrecision, this, &BrewLogWidget::updateForecastOg);
 
    // I think this might work
    this->updateDateFormat();

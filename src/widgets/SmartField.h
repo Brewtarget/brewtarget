@@ -89,7 +89,7 @@ public:
    /**
     * \brief This needs to be called before the object is used, typically in constructor of whatever editor is using the
     *        widget.  As well as passing in a bunch of info that cannot easily be given to the constructor (per comment
-    *        above), it also ensures, if necessary, that the \c changedSystemOfMeasurementOrScale signal from the
+    *        above), it also ensures, if necessary, that the \c changedUnitsOrPrecision signal from the
     *        \c SmartLabel buddy is connected to the \c lineChanged slot of this \c SmartField.
     *
     *        Note, in reality, you actually use the \c SMART_FIELD_INIT macro (see \c widgets/SmartAmounts.h).
@@ -185,7 +185,7 @@ public:
     *        (directly or indirectly) from \c QObject as then the subclass would be inheriting twice from \c QObject,
     *        which is (a) bad in general and (b) not supported by the Qt meta-object compiler (MOC).
     *
-    *        When we are dealing with a \c PhysicalQuantity, we want to receive the \c changedSystemOfMeasurementOrScale
+    *        When we are dealing with a \c PhysicalQuantity, we want to receive the \c changedUnitsOrPrecision
     *        signal from \c SmartLabel.
     *
     *        This member function is called from the base class to tell the subclass to make that connection.

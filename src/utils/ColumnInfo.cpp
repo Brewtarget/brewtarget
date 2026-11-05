@@ -37,13 +37,18 @@ ColumnInfo::ColumnInfo(char const * const   modelName   ,
 
 ColumnInfo::~ColumnInfo() = default;
 
-void ColumnInfo::setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement) const {
+void ColumnInfo::setForcedSystemOfMeasurement(std::optional<Measurement::SystemOfMeasurement> const forcedSystemOfMeasurement) const {
    SmartAmounts::setForcedSystemOfMeasurement(this->modelName, this->columnName, forcedSystemOfMeasurement);
    return;
 }
 
-void ColumnInfo::setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> forcedScale) const {
+void ColumnInfo::setForcedRelativeScale(std::optional<Measurement::UnitSystem::RelativeScale> const forcedScale) const {
    SmartAmounts::setForcedRelativeScale(this->modelName, this->columnName, forcedScale);
+   return;
+}
+
+void ColumnInfo::setForcedDecimalPlaces(std::optional<Measurement::NumDecimalPlaces> const forcedDecimalPlaces) const {
+   SmartAmounts::setForcedDecimalPlaces(this->modelName, this->columnName, forcedDecimalPlaces);
    return;
 }
 
@@ -53,4 +58,8 @@ std::optional<Measurement::SystemOfMeasurement> ColumnInfo::getForcedSystemOfMea
 
 std::optional<Measurement::UnitSystem::RelativeScale> ColumnInfo::getForcedRelativeScale() const {
    return SmartAmounts::getForcedRelativeScale(this->modelName, this->columnName);
+}
+
+std::optional<Measurement::NumDecimalPlaces> ColumnInfo::getForcedDecimalPlaces() const {
+   return SmartAmounts::getForcedDecimalPlaces(this->modelName, this->columnName);
 }
