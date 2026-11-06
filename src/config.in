@@ -34,7 +34,7 @@ constexpr char const * CONFIG_DATA_DIR = "${CONFIG_DATA_DIR}";
 
 //! These constants makes sharing code between Brewtarget and Brewken slightly easier
 // (Here, UC means upper case first letter, LC means lower case first letter)
-constexpr char const * CONFIG_APPLICATION_NAME_UC = "${capitalisedProjectName}";
+constexpr char const * CONFIG_APPLICATION_NAME_UC = "${CONFIG_APPLICATION_NAME_UC}";
 constexpr char const * CONFIG_APPLICATION_NAME_LC = "${CMAKE_PROJECT_NAME}";
 constexpr char const * CONFIG_ORGANIZATION_DOMAIN = "${CONFIG_ORGANIZATION_DOMAIN}";
 
