@@ -122,10 +122,18 @@ endif()
 project(brewtarget VERSION 5.2.2 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION} with CMake ${CMAKE_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
-# Sometimes we do need the capitalised version of the project name
-set(capitalisedProjectName Brewtarget)
+
+# (a) First letter capitalised: "myproject" -> "Myproject"
+string(SUBSTRING "${CMAKE_PROJECT_NAME}" 0 1 firstLetter)
+string(TOUPPER "${firstLetter}" firstLetter)
+string(SUBSTRING "${CMAKE_PROJECT_NAME}" 1 -1 remainder)   # -1 = to end of string
+set(CONFIG_APPLICATION_NAME_UC "${firstLetter}${remainder}")
+
+# (b) Whole thing upper case: "myproject" -> "MYPROJECT"
+string(TOUPPER "${CMAKE_PROJECT_NAME}" CONFIG_APPLICATION_NAME_AC)
+
 # We use this in the program, to tell users where to get support.
-set(CONFIG_GITHUB_URL "https://github.com/${capitalisedProjectName}/${projectName}")
+set(CONFIG_GITHUB_URL "https://github.com/${CONFIG_APPLICATION_NAME_UC}/${projectName}")
 set(CONFIG_WEBSITE_URL "https://www.brewtarget.beer/")
 set(CONFIG_ORGANIZATION_DOMAIN "brewtarget.beer")
 
@@ -214,7 +222,7 @@ endif()
 #=======================================================================================================================
 if(APPLE)
    # Use capital letters. Don't question the APPLE.
-   set(fileName_executable "${capitalisedProjectName}")
+   set(fileName_executable "${CONFIG_APPLICATION_NAME_UC}")
 else()
    set(fileName_executable "${PROJECT_NAME}")
 endif()
@@ -316,6 +324,15 @@ endif()
 # flag for both Clang and GCC.
 #
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto=auto")
+
+#
+# On x86-64, build for the baseline instruction set so that the binaries run on older CPUs, rather than relying on the
+# compiler's default target on the build machine.  See comments in meson.build for more details.  Because we use LTO,
+# CMAKE_CXX_FLAGS is the right place, as it is used for linking as well as compiling.
+#
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|AMD64|amd64)$" AND NOT MSVC)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=x86-64 -mtune=generic")
+endif()
 
 #
 # On Ubuntu 22.04, the packages for Qt6 differ from those for Qt5 in that they require you to build with the PIC option,
@@ -982,7 +999,7 @@ if(APPLE)
 
    # Sets the CFBundleName bundle property.  "This name can contain up to 15 characters. The system may display it to
    # users if CFBundleDisplayName isn't set."  (I can't see a way in CMake for us to set CFBundleDisplayName.)
-   set(MACOSX_BUNDLE_BUNDLE_NAME "${capitalisedProjectName}")
+   set(MACOSX_BUNDLE_BUNDLE_NAME "${CONFIG_APPLICATION_NAME_UC}")
 
    # Sets the CFBundleIdentifier bundle property which is a case-insensitive string that "uniquely identifies a single
    # app throughout the system ... Typically ... a reverse-DNS format".  It is used when "applying specified

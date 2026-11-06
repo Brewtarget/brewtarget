@@ -34,8 +34,14 @@ permissions: read-all
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
+    container: ${{ matrix.container }}
+    env:
+      # Needed for apt in the container (otherwise eg tzdata can stop and wait for input)
+      DEBIAN_FRONTEND: noninteractive
+      TZ: Etc/UTC
     strategy:
+      fail-fast: false
       matrix:
         #
         # See https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
@@ -45,13 +51,33 @@ jobs:
         # LTS release and the update of ubuntu-latest (eg in October 2022, it was still Ubuntu 20.04 rather than 22.04).
         # So we explicitly specify here which versions we want to build on.
         #
-        os: [ubuntu-24.04, ubuntu-26.04]
+        # 'os' is the name we use for the build (eg in artifact names).
+        #
+        # The GitHub ubuntu-26.04 runner image is an amd64v3 install, ie its toolchain and libraries target x86-64-v3
+        # (AVX2 etc).  Binaries built directly on it will not run on older CPUs (see
+        # https://github.com/Brewtarget/brewtarget/issues/1179).  Setting -march on our own code is not sufficient,
+        # because pre-built objects from the system (static libraries, C runtime objects) still get linked in.  So,
+        # for Ubuntu 26.04, we build inside the official ubuntu:26.04 Docker image, which is a baseline amd64 install.
+        #
+        # Inside the container, we don't have the setup needed for building AppImage or Flatpak (eg FUSE, and the
+        # privileges that bubblewrap needs).  Those are portable formats, so we only build them on Ubuntu 24.04.
+        #
+        include:
+          - os: ubuntu-24.04
+            runner: ubuntu-24.04
+            container: ''
+            buildContainerApps: true
+          - os: ubuntu-26.04
+            runner: ubuntu-24.04
+            container: ubuntu:26.04
+            buildContainerApps: false
     steps:
       #
       # Building flatpak etc below takes a fair bit of disk space, we start out by removing preinstalled software that
-      # we don't need
+      # we don't need.  (Inside a container, we can't get at the host file system to do this.)
       #
       - name: Free disk space
+        if: ${{ matrix.container == '' }}
         shell: bash
         run: |
           df -h /
@@ -59,9 +85,41 @@ jobs:
           sudo docker image prune --all --force || true
           df -h /
 
+      #
+      # The ubuntu Docker images are minimal, so we need to install a few things that GitHub runner images have by
+      # default.  In particular:
+      #   - git, before checkout, so that actions/checkout does a proper clone (with history and submodules) rather than
+      #     downloading a tarball
+      #   - sudo, because the bt scripts use it (running as root in the container, it doesn't need a password)
+      #   - lsb-release, which bt uses to determine the distro and release
+      #   - Python and the bits that btInit.py would otherwise try to install interactively
+      #
+      # The checkout is owned by a different user than the one (root) the job runs as in the container, so we need to
+      # tell git that's OK.
+      #
+      - name: Prepare container
+        if: ${{ matrix.container != '' }}
+        shell: bash
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+             ca-certificates curl file git lsb-release sudo xz-utils \
+             python3 python3-dev python3-pip python3-setuptools python3-venv
+          git config --global --add safe.directory '*'
+
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      #
+      # Log what the toolchain targets by default, as this is useful for diagnosing ISA-level problems.  (On an amd64v3
+      # install, `dpkg --print-architecture` still says amd64, so we look at the compiler too.)
+      #
+      - name: Show build environment architecture
+        shell: bash
+        run: |
+          dpkg --print-architecture || true
+          if command -v gcc >/dev/null; then gcc -Q --help=target | grep -E '^\s+-march=' || true; fi
 
       #
       # See https://github.com/Brewtarget/brewtarget/wiki/Development:-Getting-Started for more on what is needed to build
@@ -77,7 +135,9 @@ jobs:
       # have only Python 3.6.7 and Ubuntu 20.04 only have Python 3.8.2.  However Ubuntu 22.04 has Python 3.10.6.)  There
       # are ways to get around this, but, in this context, it's simplest to use a canned GitHub action.
       #
+      # In the container, we use the distro's own Python (installed above), which is new enough on Ubuntu 26.04
       - uses: actions/setup-python@v6
+        if: ${{ matrix.container == '' }}
         with:
           python-version: '3.10'
       - name: Install Frameworks and Libraries, and set up Meson build environment
@@ -171,7 +231,21 @@ jobs:
           umask 022
           ../bt package
 
+      #
+      # Make sure what we built will run on any x86-64 CPU.  See comments in scripts/checkIsaLevel.sh.  If this fails,
+      # it's probably because something in the build environment (eg the GitHub runner image) has changed to target a
+      # newer instruction set.
+      #
+      - name: Check packaged binaries run on baseline x86-64
+        working-directory: ${{github.workspace}}/mbuild
+        shell: bash
+        run: |
+          # The binary in the build directory normally still has its full symbol table, which lets the script say
+          # exactly which functions contain any problem instructions.  The one in the .deb is what we actually ship.
+          ../scripts/checkIsaLevel.sh brewtarget packages/linux/brewtarget*.deb
+
       - name: AppImage
+        if: ${{ matrix.buildContainerApps }}
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
         run: |
@@ -179,6 +253,7 @@ jobs:
           ../bt -v appimage
 
       - name: Flatpak
+        if: ${{ matrix.buildContainerApps }}
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
         run: |

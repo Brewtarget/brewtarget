@@ -9306,6 +9306,10 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <source>Default</source>
         <translation type="unfinished">Standaard</translation>
     </message>
+    <message>
+        <source>Decimal Places</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UnitConversionTool</name>

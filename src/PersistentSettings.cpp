@@ -187,10 +187,25 @@ void PersistentSettings::initialise(QString const & customUserDataDir) {
          PersistentSettings::value_ck(
             PersistentSettings::Names::UserDataDirectory,
             QStandardPaths::writableLocation(
+#ifdef   BUILDING_BREWKEN
                QStandardPaths::AppDataLocation // = Default for Brewken (AppConfigLocation for Brewtarget)
+#elifdef BUILDING_BREWTARGET
+               QStandardPaths::AppConfigLocation // = Default for Brewtarget (AppDataLocation for Brewken)
+#endif
             )
          ).toString()
       );
+   }
+
+   //
+   // Most of the time, userDataDir already exists, eg from the last time the program was run.  But there will be times
+   // when it does not: eg, on a fresh install, not even the QStandardPaths are guaranteed to exist.  So we create it
+   // if necessary here.
+   //
+   if (!userDataDir.exists()) {
+      if (!userDataDir.mkpath(".")) {
+         qCritical() << Q_FUNC_INFO << "Error creating directory" << userDataDir;
+      }
    }
 
    return;

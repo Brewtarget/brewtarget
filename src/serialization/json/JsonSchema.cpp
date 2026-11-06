@@ -381,7 +381,7 @@ bool JsonSchema::validate(boost::json::value const & document, QTextStream & use
    qDebug() <<
       Q_FUNC_INFO << "\"Fast\" schema validation via Blaze" << (succeededFastValidation ? "succeeded": "failed");
    if (!succeededFastValidation) {
-      sourcemeta::blaze::SimpleOutput blazeSimpleOutput{blazeDocument};
+      sourcemeta::blaze::SimpleOutput blazeSimpleOutput{this->pimpl->m_compiledSchemaExhaustive, blazeDocument};
       bool const succeededExhaustive{
          evaluator.validate(
             this->pimpl->m_compiledSchemaExhaustive,

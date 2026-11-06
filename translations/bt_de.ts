@@ -9141,6 +9141,10 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Default</source>
         <translation type="unfinished">Standard</translation>
     </message>
+    <message>
+        <source>Decimal Places</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UnitConversionTool</name>

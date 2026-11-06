@@ -1184,6 +1184,16 @@ def installDependencies():
    # the easiest approach seems to be to bring it in as a Git submodule and compile from source.
    #
    btUtils.ensureSubmodulesPresent()
+
+   #
+   # On x86-64, we want the libraries we build from source to target the baseline instruction set (rather than whatever
+   # the compiler on the build machine defaults to), so that the resulting binaries run on older CPUs.  See comments in
+   # meson.build and https://github.com/Brewtarget/brewtarget/issues/1179.  (MSVC doesn't use these flags, but we
+   # don't use MSVC.)
+   #
+   isX86_64 = platform.machine().lower() in ['x86_64', 'amd64']
+   x86_64BaselineFlags = '-march=x86-64 -mtune=generic'
+
    btLogger.log.info('Checking libbacktrace is built')
    previousWorkingDirectory = pathlib.Path.cwd().as_posix()
    backtraceDir = btFileSystem.dir_gitSubmodules.joinpath('libbacktrace')
@@ -1203,7 +1213,14 @@ def installDependencies():
    # (I haven't delved deeply into this but, confusingly, if you run `sh ./configure` it puts 'SHELL = /bin/bash' in the
    # Makefile, whereas, if you run `bash ./configure`, it puts the line 'SHELL = /bin/sh' in the Makefile.)
    #
-   btExecute.abortOnRunFail(subprocess.run(['sh', './configure']))
+   #
+   # On x86-64, we pass explicit flags to target the baseline instruction set, for the reasons explained in meson.build.
+   # (Passing CFLAGS replaces autoconf's default of "-g -O2", so we include those too.)
+   #
+   configureArgs = ['sh', './configure']
+   if isX86_64:
+      configureArgs.append('CFLAGS=-g -O2 ' + x86_64BaselineFlags)
+   btExecute.abortOnRunFail(subprocess.run(configureArgs))
    btExecute.abortOnRunFail(subprocess.run(['make']))
    os.chdir(previousWorkingDirectory)
 
@@ -1215,18 +1232,25 @@ def installDependencies():
    blazeDir = btFileSystem.dir_gitSubmodules.joinpath('blaze')
    os.chdir(blazeDir)
    btLogger.log.debug('Run cmake in ' + blazeDir.as_posix())
+   #
+   # Older versions of Blaze enabled AVX2 etc based on what the compiler supported, which generated instructions that
+   # aren't valid on older processors.  Users saw errors such as "CPU ISA level is lower than required" and "terminated
+   # by signal SIGILL (Illegal instruction)".  Newer versions of Blaze choose SIMD code paths at run-time instead (see
+   # https://github.com/sourcemeta/blaze/issues/1181), so the COMPILER_SUPPORTS_ flags below should no longer be
+   # needed, but they are harmless, so we keep them as belt-and-braces.
+   #
+   # Additionally, on x86-64, we explicitly target the baseline instruction set (for the reasons explained in
+   # meson.build).  Values passed in CMAKE_C_FLAGS / CMAKE_CXX_FLAGS on the command line are the initial values, which
+   # Blaze's own CMake files then add to.
+   #
+   blazeArchFlags = []
+   if isX86_64:
+      blazeArchFlags = ['-DCMAKE_C_FLAGS=' + x86_64BaselineFlags, '-DCMAKE_CXX_FLAGS=' + x86_64BaselineFlags]
    btExecute.abortOnRunFail(
       subprocess.run([
          'cmake',
          '-S', '.', '-B', './build',
-         #
-         # By default, Blaze enables a lot of compiler optimisations.  Some of it we turn off here, because it
-         # generates instructions that aren't valid on older processors.  Users see errors such as "CPU ISA level is
-         # lower than required" and "terminated by signal SIGILL (Illegal instruction)".
-         #
-         # We therefore override some of these optimisation flags here.  (These particular flags only affect Intel
-         # architecture CPUs.  They have no effect on Apple Silicon.)
-         #
+         *blazeArchFlags,
          '-DCOMPILER_SUPPORTS_AVX2=OFF',
          '-DCOMPILER_SUPPORTS_SSE42=OFF',
          #

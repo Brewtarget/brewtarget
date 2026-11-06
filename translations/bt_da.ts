@@ -5528,12 +5528,12 @@ Antal opskrifter</translation>
         <translation type="vanished">Gem</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1820"/>
+        <location filename="../src/MainWindow.cpp" line="1824"/>
         <source>Equipment request</source>
         <translation>Udstyr forespørgsel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1821"/>
+        <location filename="../src/MainWindow.cpp" line="1825"/>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
         <translation>Ønsker du at sætte volumen af portion, volumen før kogning og varighed til udstyrets værdier?</translation>
     </message>
@@ -5558,38 +5558,38 @@ Antal opskrifter</translation>
         <translation type="vanished">Brewtarget database (*.sqlite)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2102"/>
+        <location filename="../src/MainWindow.cpp" line="2106"/>
         <source>Recipe name</source>
         <translation>Opskrift navn</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2102"/>
+        <location filename="../src/MainWindow.cpp" line="2106"/>
         <source>Recipe name:</source>
         <translation>Opskrift navn:</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2215"/>
+        <location filename="../src/MainWindow.cpp" line="2219"/>
         <source>Backup Database</source>
         <translation>Sikkerhedskopier database</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2224"/>
-        <location filename="../src/MainWindow.cpp" line="2242"/>
+        <location filename="../src/MainWindow.cpp" line="2228"/>
+        <location filename="../src/MainWindow.cpp" line="2246"/>
         <source>Oops!</source>
         <translation>Hovsa!</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2224"/>
+        <location filename="../src/MainWindow.cpp" line="2228"/>
         <source>Could not copy the files for some reason.</source>
         <translation>Kan ikke kopiere filer.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2231"/>
+        <location filename="../src/MainWindow.cpp" line="2235"/>
         <source>A Warning</source>
         <translation>Advarsel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2232"/>
+        <location filename="../src/MainWindow.cpp" line="2236"/>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
         <translation>Dette vil destruere det nuværende sæt af opskrifter og ingredienser. Fortsæt?</translation>
     </message>
@@ -5622,7 +5622,7 @@ Antal opskrifter</translation>
         <translation type="vanished">Giv din mæsk et navn før du gemmer.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2244"/>
+        <location filename="../src/MainWindow.cpp" line="2248"/>
         <source>Restart</source>
         <translation>Genstart</translation>
     </message>
@@ -5631,27 +5631,27 @@ Antal opskrifter</translation>
         <translation type="vanished">Genstart Brewtarget.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2258"/>
+        <location filename="../src/MainWindow.cpp" line="2262"/>
         <source>No equipment</source>
         <translation>Intet udstyr</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2258"/>
+        <location filename="../src/MainWindow.cpp" line="2262"/>
         <source>You must select or define an equipment profile first.</source>
         <translation>Vælg eller definer en udstyrsprofil først.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2268"/>
+        <location filename="../src/MainWindow.cpp" line="2272"/>
         <source>No style</source>
         <translation>Ingen stilart</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2268"/>
+        <location filename="../src/MainWindow.cpp" line="2272"/>
         <source>You must select a style first.</source>
         <translation>Vælg en stilart først.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2238"/>
+        <location filename="../src/MainWindow.cpp" line="2242"/>
         <source>Choose File</source>
         <translation>Vælg fil</translation>
     </message>
@@ -5676,7 +5676,7 @@ Antal opskrifter</translation>
         <translation type="vanished">Ændr opskriftens gæringsprofil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2238"/>
+        <location filename="../src/MainWindow.cpp" line="2242"/>
         <source>SQLite (*.sqlite)</source>
         <translation>SQLite (*.sqlite)</translation>
     </message>
@@ -5717,7 +5717,7 @@ Antal opskrifter</translation>
         <translation type="vanished">Fejl ved kopiering af opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2113"/>
+        <location filename="../src/MainWindow.cpp" line="2117"/>
         <source>An error was returned while creating %1</source>
         <translation>Der opstod en fejl ved dannelse af %1</translation>
     </message>
@@ -5757,13 +5757,13 @@ Se log for flere detaljer.
 Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="934"/>
-        <location filename="../src/MainWindow.cpp" line="935"/>
+        <location filename="../src/MainWindow.cpp" line="938"/>
+        <location filename="../src/MainWindow.cpp" line="939"/>
         <source>About %1</source>
         <translation>Om %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1692"/>
+        <location filename="../src/MainWindow.cpp" line="1696"/>
         <source>Change Recipe Name</source>
         <translation>Ændr opskriftnavn</translation>
     </message>
@@ -5772,7 +5772,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Ændr %1 for opskrift %2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1857"/>
+        <location filename="../src/MainWindow.cpp" line="1861"/>
         <source>Change Recipe Style</source>
         <translation>Ændr opskriftens stilart</translation>
     </message>
@@ -5785,7 +5785,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Ændr udstyr for opskriften</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1811"/>
+        <location filename="../src/MainWindow.cpp" line="1815"/>
         <source>Change Recipe Kit</source>
         <translation>Ændr opskriftskit</translation>
     </message>
@@ -5798,13 +5798,13 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Ændr karrets specifikke varmefylde</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1830"/>
-        <location filename="../src/MainWindow.cpp" line="1957"/>
+        <location filename="../src/MainWindow.cpp" line="1834"/>
+        <location filename="../src/MainWindow.cpp" line="1961"/>
         <source>Change Batch Size</source>
         <translation>Ændr volumen af portion</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1834"/>
+        <location filename="../src/MainWindow.cpp" line="1838"/>
         <source>Change Boil Size</source>
         <translation>Ændr kogevolumen</translation>
     </message>
@@ -5813,22 +5813,22 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Ændr varighed af kogning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1881"/>
+        <location filename="../src/MainWindow.cpp" line="1885"/>
         <source>Drop fermentable(s) on a recipe</source>
         <translation>Træk gærbar(e) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1902"/>
+        <location filename="../src/MainWindow.cpp" line="1906"/>
         <source>Drop hop(s) on a recipe</source>
         <translation>Træk humle(r) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1923"/>
+        <location filename="../src/MainWindow.cpp" line="1927"/>
         <source>Drop misc(s) on a recipe</source>
         <translation>Træk diverse ingrediens(er) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1944"/>
+        <location filename="../src/MainWindow.cpp" line="1948"/>
         <source>Drop yeast(s) on a recipe</source>
         <translation>Træk gær til en opskrift</translation>
     </message>
@@ -5837,62 +5837,62 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Træk salt(e) til en opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1970"/>
+        <location filename="../src/MainWindow.cpp" line="1974"/>
         <source>Change Recipe Efficiency</source>
         <translation>Ændr effektivitet for opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2044"/>
+        <location filename="../src/MainWindow.cpp" line="2048"/>
         <source>Wrote recipe to file</source>
         <translation>Opskriften blev skrevet til fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2046"/>
+        <location filename="../src/MainWindow.cpp" line="2050"/>
         <source>Error writing recipe to file</source>
         <translation>Fejl ved skrivning af opskrift til fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2060"/>
+        <location filename="../src/MainWindow.cpp" line="2064"/>
         <source>Undo %1</source>
         <translation>Fortryd %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2061"/>
+        <location filename="../src/MainWindow.cpp" line="2065"/>
         <source>Redo %1</source>
         <translation>Gentag %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2112"/>
+        <location filename="../src/MainWindow.cpp" line="2116"/>
         <source>Error creating recipe</source>
         <translation>Fejl ved dannelse af opskrift</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2140"/>
+        <location filename="../src/MainWindow.cpp" line="2144"/>
         <source>Primary fermentation for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2242"/>
+        <location filename="../src/MainWindow.cpp" line="2246"/>
         <source>Operation failed.  See log file for more details.</source>
         <translation>Handlingen mislykkedes. Se detaljer i logfil.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2244"/>
+        <location filename="../src/MainWindow.cpp" line="2248"/>
         <source>Please restart %1.</source>
         <translation>Genstart venligst %1.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2467"/>
+        <location filename="../src/MainWindow.cpp" line="2471"/>
         <source>Nothing to export</source>
         <translation>Intet at eksportere</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2468"/>
+        <location filename="../src/MainWindow.cpp" line="2472"/>
         <source>None of the selected items is exportable</source>
         <translation>Ingen af de markerede kan eksporteres</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2522"/>
+        <location filename="../src/MainWindow.cpp" line="2526"/>
         <source>Change Brew Date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5905,7 +5905,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Du skal først definere en mæskning.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2124"/>
+        <location filename="../src/MainWindow.cpp" line="2128"/>
         <source>Automatically-created Boil for %1</source>
         <translation>Automatisk genereret kogning for %1</translation>
     </message>
@@ -5920,7 +5920,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2131"/>
+        <location filename="../src/MainWindow.cpp" line="2135"/>
         <source>Automatically-created Fermentation for %1</source>
         <translation>Automatisk genereret gæring for %1</translation>
     </message>
@@ -6716,7 +6716,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
 <context>
     <name>NE</name>
     <message>
-        <location filename="../src/utils/PropertyHelper.h" line="205"/>
+        <location filename="../src/utils/PropertyHelper.h" line="208"/>
         <source>Change %1 %2</source>
         <translation>Skift %1 %2</translation>
     </message>
@@ -6725,7 +6725,7 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <translation type="vanished">Uden navn %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1730"/>
+        <location filename="../src/MainWindow.cpp" line="1734"/>
         <source>Change %1 on %2 Recipe</source>
         <translation type="unfinished">Ændr %1 for opskrift %2</translation>
     </message>
@@ -7356,7 +7356,7 @@ Fejlmeddelelse:
         <translation type="vanished">Adjunk</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="103"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="124"/>
         <source>Temperature</source>
         <translation>Temperatur</translation>
     </message>
@@ -7605,87 +7605,87 @@ Programmet lukkes nu.</translation>
         <translation type="vanished">SMPH-modellen</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="99"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="120"/>
         <source>Weight (Mass)</source>
         <translation>Masse</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="100"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="121"/>
         <source>Volume</source>
         <translation>Volumen</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="101"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="122"/>
         <source>Length</source>
         <translation>Længde</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="102"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="123"/>
         <source>Count</source>
         <translation>Antal</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="104"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="125"/>
         <source>Time</source>
         <translation>Tid</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="105"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="126"/>
         <source>Color</source>
         <translation>Farve</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="106"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="127"/>
         <source>Density</source>
         <translation>Massefylde</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="107"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="128"/>
         <source>Diastatic Power</source>
         <translation>Diastatisk kraft</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="108"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="129"/>
         <source>Acidity</source>
         <translation>Surhedsgrad</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="109"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="130"/>
         <source>Bitterness</source>
         <translation>Bitterhed</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="110"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="131"/>
         <source>Carbonation</source>
         <translation>Carbondioxidindhold</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="111"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="132"/>
         <source>Mass Fraction or Concentration</source>
         <translation>Massebrøkdel eller koncentration</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="112"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="133"/>
         <source>Viscosity</source>
         <translation>Viskositet</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="113"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="134"/>
         <source>Specific Heat Capacity</source>
         <translation>Specifik varmekapacitet</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="114"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="135"/>
         <source>Heat Capacity</source>
         <translation>Varmekapacitet</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="115"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="136"/>
         <source>Volume per Mass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="116"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="137"/>
         <source>Energy per Volume</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7694,12 +7694,12 @@ Programmet lukkes nu.</translation>
         <translation type="vanished">Specifik volumen</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="155"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="235"/>
         <source>Mass or Volume</source>
         <translation>Masse eller volumen</translation>
     </message>
     <message>
-        <location filename="../src/measurement/PhysicalQuantity.cpp" line="156"/>
+        <location filename="../src/measurement/PhysicalQuantity.cpp" line="236"/>
         <source>Mass, Volume or Count</source>
         <translation>Masse, volumen eller antal</translation>
     </message>
@@ -11762,10 +11762,16 @@ The final volume in the primary is %1.</source>
 <context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
-        <location filename="../src/widgets/UnitAndScalePopUpMenu.cpp" line="149"/>
-        <location filename="../src/widgets/UnitAndScalePopUpMenu.cpp" line="179"/>
+        <location filename="../src/widgets/UnitAndScalePopUpMenu.cpp" line="134"/>
+        <location filename="../src/widgets/UnitAndScalePopUpMenu.cpp" line="165"/>
+        <location filename="../src/widgets/UnitAndScalePopUpMenu.cpp" line="186"/>
         <source>Default</source>
         <translation>Standardvalg</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/UnitAndScalePopUpMenu.cpp" line="197"/>
+        <source>Decimal Places</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11814,7 +11820,7 @@ The final volume in the primary is %1.</source>
 <context>
     <name>UnitSystem</name>
     <message>
-        <location filename="../src/widgets/UnitAndScalePopUpMenu.cpp" line="190"/>
+        <location filename="../src/widgets/UnitAndScalePopUpMenu.cpp" line="176"/>
         <source>Scale</source>
         <translation>Skaler</translation>
     </message>
