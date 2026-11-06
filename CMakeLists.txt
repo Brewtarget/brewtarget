@@ -318,6 +318,15 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto=auto")
 
 #
+# On x86-64, build for the baseline instruction set so that the binaries run on older CPUs, rather than relying on the
+# compiler's default target on the build machine.  See comments in meson.build for more details.  Because we use LTO,
+# CMAKE_CXX_FLAGS is the right place, as it is used for linking as well as compiling.
+#
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|AMD64|amd64)$" AND NOT MSVC)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=x86-64 -mtune=generic")
+endif()
+
+#
 # On Ubuntu 22.04, the packages for Qt6 differ from those for Qt5 in that they require you to build with the PIC option,
 # otherwise we'll get the error: "You must build your code with position independent code if Qt was built with
 # -reduce-relocations. " "Compile your code with -fPIC (and not with -fPIE)."

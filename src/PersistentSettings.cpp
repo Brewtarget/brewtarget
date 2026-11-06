@@ -197,6 +197,17 @@ void PersistentSettings::initialise(QString const & customUserDataDir) {
       );
    }
 
+   //
+   // Most of the time, userDataDir already exists, eg from the last time the program was run.  But there will be times
+   // when it does not: eg, on a fresh install, not even the QStandardPaths are guaranteed to exist.  So we create it
+   // if necessary here.
+   //
+   if (!userDataDir.exists()) {
+      if (!userDataDir.mkpath(".", std::nullopt)) { // std::nullopt = default platform-specific permissions
+         qCritical() << Q_FUNC_INFO << "Error creating directory" << userDataDir;
+      }
+   }
+
    return;
 }
 
