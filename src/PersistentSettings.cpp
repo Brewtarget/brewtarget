@@ -203,7 +203,7 @@ void PersistentSettings::initialise(QString const & customUserDataDir) {
    // if necessary here.
    //
    if (!userDataDir.exists()) {
-      if (!userDataDir.mkpath(".", std::nullopt)) { // std::nullopt = default platform-specific permissions
+      if (!userDataDir.mkpath(".")) {
          qCritical() << Q_FUNC_INFO << "Error creating directory" << userDataDir;
       }
    }
