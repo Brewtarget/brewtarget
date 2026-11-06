@@ -240,7 +240,9 @@ jobs:
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
         run: |
-          ../scripts/checkIsaLevel.sh packages/linux/brewtarget*.deb
+          # The binary in the build directory normally still has its full symbol table, which lets the script say
+          # exactly which functions contain any problem instructions.  The one in the .deb is what we actually ship.
+          ../scripts/checkIsaLevel.sh brewtarget packages/linux/brewtarget*.deb
 
       - name: AppImage
         if: ${{ matrix.buildContainerApps }}
