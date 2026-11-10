@@ -25,19 +25,45 @@
 #include <QTextStream>
 #include <QtTest/QtTest>
 #include <QVector>
+#include <QWidget>
 
-#include "Algorithms.h"
+#include "calculations/Algorithms.h"
 #include "Localization.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
+#include "model/BrewLog.h"
+#include "model/Fermentable.h"
 #include "unitTests/TestData.h"
 #include "unitTests/TestRegistry.h"
+#include "utils/TypeInfo.h"
+#include "widgets/SmartAmounts.h"
+#include "widgets/SmartLabel.h"
+#include "widgets/SmartLineEdit.h"
+#include "widgets/UnitAndScalePopUpMenu.h"
 
 REGISTER_TEST_CLASS(MeasurementTests)
 
 namespace {
    using UnitTests::fuzzyComp;
+
+   /**
+    * \brief Minimal stand-in for an editor with a percentage field, for \c testPercentageDecimalPlaces.  (We need the
+    *        member names for SMART_FIELD_INIT_FS.)
+    */
+   class PercentageTestWidget : public QWidget {
+   public:
+      PercentageTestWidget() :
+         QWidget{},
+         label_percentage   {new SmartLabel   {this}},
+         lineEdit_percentage{new SmartLineEdit{this}} {
+         SMART_FIELD_INIT_FS(PercentageTestWidget, label_percentage, lineEdit_percentage, double, NonPhysicalQuantity::Percentage);
+         return;
+      }
+
+      SmartLabel    * label_percentage;
+      SmartLineEdit * lineEdit_percentage;
+   };
 
    struct SgBrixEquivalance {
       double sg;
@@ -391,5 +417,70 @@ void MeasurementTests::testAlgorithms() {
          "Error converting Specific Gravity to Brix"
       );
    }
+   return;
+}
+
+void MeasurementTests::testPercentageDecimalPlaces() {
+   //
+   // First check which fields have a menu.  We use fields from model classes as a convenient source of TypeInfo.
+   //
+   QVERIFY( UnitAndScalePopUpMenu::isAvailableFor(Fermentable::typeLookup.getType(PropertyNames::Fermentable::moisture_pct)));
+   QVERIFY( UnitAndScalePopUpMenu::isAvailableFor(Fermentable::typeLookup.getType(PropertyNames::Fermentable::color_srm   )));
+   QVERIFY(!UnitAndScalePopUpMenu::isAvailableFor(Fermentable::typeLookup.getType(PropertyNames::NamedEntity::name       )));
+   QVERIFY(!UnitAndScalePopUpMenu::isAvailableFor(    BrewLog::typeLookup.getType(PropertyNames::BrewLog::brewDate        )));
+
+   PercentageTestWidget widget;
+   SmartLabel    & label = *widget.label_percentage;
+   SmartLineEdit & field = *widget.lineEdit_percentage;
+
+   // Start from a known state, in case a previous test run left something in the persistent settings
+   label.setForcedDecimalPlaces(std::nullopt);
+
+   //
+   // By default a percentage is shown to 1 decimal place.  Note that we don't hard-code the expected text, as it
+   // depends on the locale (eg decimal separator).
+   //
+   double const value = 4.25;
+   field.setQuantity(value);
+   QCOMPARE(field.text(), Measurement::displayQuantity(value, 1, NonPhysicalQuantity::Percentage));
+
+   // Although the field shows a rounded value, reading it back should give the unrounded one, since the user didn't
+   // change the text
+   QCOMPARE(field.getNonOptValue<double>(), value);
+
+   //
+   // Now simulate the user choosing 3 decimal places from the pop-up menu on the label.  (UnitAndScalePopUpMenu::exec
+   // would block waiting for the user, so we do the rest of what SmartLabel::popContextMenu does.)  We should see the
+   // full value, not the rounded one padded with zeroes.
+   //
+   UnitAndScalePopUpMenu::applySelection(
+      UnitAndScalePopUpMenu::Selection{std::optional<Measurement::NumDecimalPlaces>{Measurement::NumDecimalPlaces{3}}},
+      label
+   );
+   emit label.changedPrecision();
+   QVERIFY(label.getForcedDecimalPlaces() == std::optional<Measurement::NumDecimalPlaces>{Measurement::NumDecimalPlaces{3}});
+   QCOMPARE(field.text(), Measurement::displayQuantity(value, 3, NonPhysicalQuantity::Percentage));
+   QCOMPARE(field.getNonOptValue<double>(), value);
+
+   // Setting a new value should also use the chosen number of decimal places
+   double const newValue = 12.3456;
+   field.setQuantity(newValue);
+   QCOMPARE(field.text(), Measurement::displayQuantity(newValue, 3, NonPhysicalQuantity::Percentage));
+
+   // If the user changes the text, then we should read back what they typed
+   field.setText(Measurement::displayQuantity(5.5, 1, NonPhysicalQuantity::Percentage));
+   QCOMPARE(field.getNonOptValue<double>(), 5.5);
+
+   //
+   // Going back to "Default" should remove the setting and redisplay with 1 decimal place
+   //
+   UnitAndScalePopUpMenu::applySelection(
+      UnitAndScalePopUpMenu::Selection{std::optional<Measurement::NumDecimalPlaces>{std::nullopt}},
+      label
+   );
+   emit label.changedPrecision();
+   QVERIFY(!label.getForcedDecimalPlaces());
+   QCOMPARE(field.text(), Measurement::displayQuantity(5.5, 1, NonPhysicalQuantity::Percentage));
+
    return;
 }

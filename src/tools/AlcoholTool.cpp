@@ -25,7 +25,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include "Algorithms.h"
+#include "calculations/Algorithms.h"
 #include "widgets/SmartLabel.h"
 #include "widgets/SmartLineEdit.h"
 #include "Localization.h"

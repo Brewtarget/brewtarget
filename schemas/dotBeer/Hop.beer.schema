@@ -15,7 +15,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/1.0.0/Hop.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.1.0/Hop.beer.schema",
   "type": "object",
   "description": "Full definition of a hop variety.",
   "properties": {

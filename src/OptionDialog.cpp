@@ -45,18 +45,18 @@
 #include <QVector>
 #include <QWidget>
 
-#include "config.h"
-#include "database/Database.h"
 #include "Localization.h"
 #include "Logging.h"
 #include "MainWindow.h"
-#include "measurement/ColorMethods.h"
-#include "measurement/IbuMethods.h"
+#include "PersistentSettings.h"
+#include "calculations/ColorMethods.h"
+#include "calculations/IbuMethods.h"
+#include "config.h"
+#include "database/Database.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
 #include "model/RecipeUtils.h"
-#include "PersistentSettings.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -612,6 +612,7 @@ public:
          PersistentSettings::value_ck(PersistentSettings::Names::defaultEfficiency_pct,
                                       QVariant::fromValue(Recipe::default_efficiency_pct)).toDouble()
       );
+      this->m_self.checkBox_defaultFgCalcUsesMash->setChecked(Recipe::defaultFgCalcUsesMash());
 
       return;
    }
@@ -625,6 +626,8 @@ public:
                                     this->m_self.lineEdit_defaultBoilTime->getNonOptCanonicalAmt().quantity);
       PersistentSettings::insert_ck(PersistentSettings::Names::defaultEfficiency_pct,
                                     this->m_self.lineEdit_defaultEfficiency->getNonOptValue<double>());
+      PersistentSettings::insert_ck(PersistentSettings::Names::defaultFgCalcUsesMash,
+                                    this->m_self.checkBox_defaultFgCalcUsesMash->isChecked());
       return;
    }
 

@@ -25,7 +25,7 @@
 #include <QSizePolicy>
 
 #include "config.h"
-#include "measurement/ColorMethods.h"
+#include "calculations/ColorMethods.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake

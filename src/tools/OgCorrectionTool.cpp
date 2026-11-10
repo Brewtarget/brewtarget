@@ -22,7 +22,7 @@
 
 #include <QMessageBox>
 
-#include "Algorithms.h"
+#include "calculations/Algorithms.h"
 #include "MainWindow.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"

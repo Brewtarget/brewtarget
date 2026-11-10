@@ -142,6 +142,30 @@
        </property>
       </widget>
      </item>
+     <item row="6" column="3">
+      <layout class="QHBoxLayout" name="horizontalLayout_amountFixed">
+       <item>
+        <widget class="QCheckBox" name="checkBox_amountFixed">
+         <property name="toolTip">
+          <string>If ticked, adjusting the mash (in the Mash Editor) will not change this amount (but will use it to work out other values, eg the water temperature).</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_amountFixed">
+         <property name="text">
+          <string>Pinned</string>
+         </property>
+         <property name="toolTip">
+          <string>If ticked, adjusting the mash (in the Mash Editor) will not change this amount (but will use it to work out other values, eg the water temperature).</string>
+         </property>
+         <property name="buddy">
+          <cstring>checkBox_amountFixed</cstring>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
      <item row="6" column="4">
       <widget class="SmartLabel" name="label_rampTime">
        <property name="contextMenuPolicy">
@@ -181,6 +205,30 @@
           <string>Temperature of infusion water</string>
          </property>
         </widget>
+     </item>
+     <item row="8" column="3">
+      <layout class="QHBoxLayout" name="horizontalLayout_infuseTempFixed">
+       <item>
+        <widget class="QCheckBox" name="checkBox_infuseTempFixed">
+         <property name="toolTip">
+          <string>If ticked, adjusting the mash (in the Mash Editor) will not change this temperature (but will use it to work out other values, eg the amount of water).</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_infuseTempFixed">
+         <property name="text">
+          <string>Pinned</string>
+         </property>
+         <property name="toolTip">
+          <string>If ticked, adjusting the mash (in the Mash Editor) will not change this temperature (but will use it to work out other values, eg the amount of water).</string>
+         </property>
+         <property name="buddy">
+          <cstring>checkBox_infuseTempFixed</cstring>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="8" column="4">
       <widget class="SmartLabel" name="label_endTemp">

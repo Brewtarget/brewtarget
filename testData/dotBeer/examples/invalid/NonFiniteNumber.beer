@@ -15,7 +15,7 @@
 // them.  They are not allowed in dotBeer files.
 {
   "DotBeer": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "output_by": "DotBeer examples (hand-written)",
     "timestamp": "2026-10-22T18:00:00Z",
     "hops": [

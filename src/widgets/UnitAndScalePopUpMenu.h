@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/UnitAndScalePopUpMenu.h is part of Brewtarget, and is copyright the following authors 2012-2024:
+ * widgets/UnitAndScalePopUpMenu.h is part of Brewtarget, and is copyright the following authors 2012-2026:
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -27,7 +27,10 @@
 #include <QMenu>
 #include <QPoint>
 
+struct TypeInfo;
+
 #include "measurement/Measurement.h"
+#include "measurement/NonPhysicalQuantity.h"
 #include "measurement/SystemOfMeasurement.h"
 #include "measurement/UnitSystem.h"
 
@@ -64,6 +67,29 @@ namespace UnitAndScalePopUpMenu {
                                  std::optional<Measurement::SystemOfMeasurement> forcedSystemOfMeasurement,
                                  std::optional<Measurement::UnitSystem::RelativeScale> forcedRelativeScale,
                                  std::optional<Measurement::NumDecimalPlaces> forcedDecimalPlaces);
+
+   /**
+    * \brief Version of \c create for a field holding a \c NonPhysicalQuantity.  The only thing the user can choose for
+    *        such a field is the number of decimal places to show, so the menu has just that sub-menu.
+    *
+    *        It is a coding error to call this if \c isAvailableFor returns \c false for the field.
+    *
+    * \param parent As for the other version of \c create
+    * \param nonPhysicalQuantity Used only for logging (and to check it's a coding error per above)
+    * \param forcedDecimalPlaces As for the other version of \c create
+    */
+   std::unique_ptr<QMenu> create(QWidget * parent,
+                                 NonPhysicalQuantity nonPhysicalQuantity,
+                                 std::optional<Measurement::NumDecimalPlaces> forcedDecimalPlaces);
+
+   /**
+    * \return \c true if there is anything for the user to choose (and therefore a menu to show) for a field of the
+    *         given type.  This is always the case for a \c PhysicalQuantity (or \c ChoiceOfPhysicalQuantity), as
+    *         the user can at least choose the number of decimal places.  For a \c NonPhysicalQuantity, it is the case
+    *         only if the field shows decimal places -- ie it is stored as a \c double, and the
+    *         \c NonPhysicalQuantity is one where decimal places make sense (in practice, \c Percentage).
+    */
+   [[nodiscard]] bool isAvailableFor(TypeInfo const & typeInfo);
 
    /**
     * \brief What the user selected from a menu created by \c create.  The alternative held tells you which (sub-)menu

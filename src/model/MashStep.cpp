@@ -34,9 +34,11 @@
 
 QString MashStep::localisedName() { return tr("Mash Step"); }
 QString MashStep::localisedName_amount_l              () { return tr("Amount"            ); }
+QString MashStep::localisedName_amountFixed           () { return tr("Amount Fixed"      ); }
 QString MashStep::localisedName_decoctionAmount_l     () { return tr("Decoction Amount"  ); }
 QString MashStep::localisedName_infuseAmount_l        () { return tr("Infuse Amount"     ); }
 QString MashStep::localisedName_infuseTemp_c          () { return tr("Infuse Temperature"); }
+QString MashStep::localisedName_infuseTempFixed       () { return tr("Infuse Temperature Fixed"); }
 QString MashStep::localisedName_liquorToGristRatio_lKg() { return tr("Water:Grain"       ); } // Shorter than "Liquor To Grist Ratio"
 QString MashStep::localisedName_type                  () { return tr("Type"              ); }
 
@@ -91,6 +93,8 @@ TypeLookup const MashStep::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, infuseTemp_c          , m_infuseTemp_c          , Measurement::PhysicalQuantity::Temperature   , DisplayInfo::Precision{1}),
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
       PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, liquorToGristRatio_lKg, m_liquorToGristRatio_lKg, Measurement::PhysicalQuantity::VolumePerMass),
+      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, amountFixed           , m_amountFixed           , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, infuseTempFixed       , m_infuseTempFixed       , BOOL_INFO(tr("No"), tr("Yes"))               ),
    },
    // Parent class lookup.  NB: Step not NamedEntity!
    {&Step::typeLookup,
@@ -109,7 +113,9 @@ MashStep::MashStep(QString name) :
    m_amount_l              {0.0                     },
    m_infuseTemp_c          {std::nullopt            },
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   m_liquorToGristRatio_lKg{std::nullopt            } {
+   m_liquorToGristRatio_lKg{std::nullopt            },
+   m_amountFixed           {false                   },
+   m_infuseTempFixed       {false                   } {
 
    CONSTRUCTOR_END
    return;
@@ -124,7 +130,9 @@ MashStep::MashStep(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_amount_l              , namedParameterBundle, PropertyNames::MashStep::amount_l              , 0.0),
    SET_REGULAR_FROM_NPB (m_infuseTemp_c          , namedParameterBundle, PropertyNames::MashStep::infuseTemp_c          ),
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   SET_REGULAR_FROM_NPB (m_liquorToGristRatio_lKg, namedParameterBundle, PropertyNames::MashStep::liquorToGristRatio_lKg) {
+   SET_REGULAR_FROM_NPB (m_liquorToGristRatio_lKg, namedParameterBundle, PropertyNames::MashStep::liquorToGristRatio_lKg),
+   SET_REGULAR_FROM_NPB (m_amountFixed           , namedParameterBundle, PropertyNames::MashStep::amountFixed           , false),
+   SET_REGULAR_FROM_NPB (m_infuseTempFixed       , namedParameterBundle, PropertyNames::MashStep::infuseTempFixed       , false) {
    //
    // If we were constructed from BeerXML, it will have set decoctionAmount_l or infuseAmount_l instead of amount_l
    //
@@ -149,7 +157,9 @@ MashStep::MashStep(MashStep const & other) :
    m_amount_l              {other.m_amount_l              },
    m_infuseTemp_c          {other.m_infuseTemp_c          },
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   m_liquorToGristRatio_lKg{other.m_liquorToGristRatio_lKg} {
+   m_liquorToGristRatio_lKg{other.m_liquorToGristRatio_lKg},
+   m_amountFixed           {other.m_amountFixed           },
+   m_infuseTempFixed       {other.m_infuseTempFixed       } {
 
    CONSTRUCTOR_END
    return;
@@ -163,6 +173,8 @@ double                MashStep::amount_l              () const { return this->m_
 std::optional<double> MashStep::infuseTemp_c          () const { return this->m_infuseTemp_c          ; }
 // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
 std::optional<double> MashStep::liquorToGristRatio_lKg() const { return this->m_liquorToGristRatio_lKg; }
+bool                  MashStep::amountFixed           () const { return this->m_amountFixed           ; }
+bool                  MashStep::infuseTempFixed       () const { return this->m_infuseTempFixed       ; }
 
 // TBD: Do we need to add type-checking logic in these legacy functions?
 [[deprecated]] double MashStep::infuseAmount_l   () const { return this->m_amount_l; }
@@ -174,6 +186,8 @@ void MashStep::setAmount_l    (double                const   val) { SET_AND_NOTI
 void MashStep::setInfuseTemp_c(std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::infuseTemp_c, this->m_infuseTemp_c, val); return; }
 // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
 void MashStep::setLiquorToGristRatio_lKg(std::optional<double> const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::liquorToGristRatio_lKg, this->m_liquorToGristRatio_lKg, val                                                                ); return; }
+void MashStep::setAmountFixed    (bool                  const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::amountFixed    , this->m_amountFixed    , val); return; }
+void MashStep::setInfuseTempFixed(bool                  const   val) { SET_AND_NOTIFY(PropertyNames::MashStep::infuseTempFixed, this->m_infuseTempFixed, val); return; }
 
 //=============================================== OTHER MEMBER FUNCTIONS ===============================================
 bool MashStep::isInfusion() const {

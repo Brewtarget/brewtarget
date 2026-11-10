@@ -33,6 +33,7 @@
 #include <QVector>
 
 #include "model/FolderPropertyBase.h"
+#include "model/LockablePropertyBase.h"
 #include "model/NamedEntity.h"
 #include "model/MashStep.h"
 #include "model/StepOwnerBase.h"
@@ -47,16 +48,17 @@ class MashTableModel;
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Mash { inline BtStringConst const property{#property}; }
-AddPropertyName(equipAdjust              )
-AddPropertyName(grainTemp_c              )
+AddPropertyName(equipAdjust          )
+AddPropertyName(grainTemp_c          )
+AddPropertyName(initialTunTemp_c     )
+AddPropertyName(keptInSync           )
+AddPropertyName(notes                )
+AddPropertyName(ph                   )
+AddPropertyName(spargeTemp_c         )
+AddPropertyName(totalMashWater_l     )
+AddPropertyName(totalTime_mins       )
 AddPropertyName(tunSpecificHeat_calGC)
 AddPropertyName(tunWeight_kg         )
-AddPropertyName(notes                    )
-AddPropertyName(ph                       )
-AddPropertyName(spargeTemp_c             )
-AddPropertyName(totalMashWater_l         )
-AddPropertyName(totalTime_mins           )
-AddPropertyName(initialTunTemp_c                )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -71,13 +73,17 @@ AddPropertyName(initialTunTemp_c                )
  */
 class Mash : public NamedEntity,
              public FolderPropertyBase<Mash>,
+             public LockablePropertyBase<Mash>,
              public StepOwnerBase<Mash, MashStep> {
    Q_OBJECT
    FOLDER_BASE_DECL(Mash)
+   LOCKABLE_BASE_DECL(Mash)
    STEP_OWNER_COMMON_DECL(Mash, mash)
    // See model/FolderPropertyBase.h for info, getters and setters for these properties
    Q_PROPERTY(int     containedInFolderId     READ containedInFolderId     WRITE setContainedInFolderId  )
    Q_PROPERTY(QString containedInFolderPath   READ containedInFolderPath   WRITE setContainedInFolderPath)
+   // See model/LockablePropertyBase.h for info, getters and setters for this property
+   Q_PROPERTY(bool    locked                  READ locked                  WRITE setLocked               )
    // See model/StepOwnerBase.h for info, getters and setters for these properties
    Q_PROPERTY(QList<std::shared_ptr<MashStep>> steps   READ steps   WRITE setSteps   STORED false)
    Q_PROPERTY(unsigned int numSteps   READ numSteps   STORED false)
@@ -87,16 +93,17 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
-   static QString localisedName_equipAdjust              ();
-   static QString localisedName_grainTemp_c              ();
+   static QString localisedName_equipAdjust          ();
+   static QString localisedName_grainTemp_c          ();
+   static QString localisedName_initialTunTemp_c     ();
+   static QString localisedName_keptInSync           ();
+   static QString localisedName_notes                ();
+   static QString localisedName_ph                   ();
+   static QString localisedName_spargeTemp_c         ();
+   static QString localisedName_totalMashWater_l     ();
+   static QString localisedName_totalTime_mins       ();
    static QString localisedName_tunSpecificHeat_calGC();
    static QString localisedName_tunWeight_kg         ();
-   static QString localisedName_notes                    ();
-   static QString localisedName_ph                       ();
-   static QString localisedName_spargeTemp_c             ();
-   static QString localisedName_totalMashWater_l         ();
-   static QString localisedName_totalTime_mins           ();
-   static QString localisedName_initialTunTemp_c                ();
 
    //
    // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity
@@ -115,11 +122,11 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
-   Mash(QString name = "");
-   Mash(NamedParameterBundle const & namedParameterBundle);
+   explicit Mash(QString name = "");
+   explicit Mash(NamedParameterBundle const & namedParameterBundle);
    Mash(Mash const & other);
 
-   virtual ~Mash();
+   ~Mash() override;
 
    //=================================================== PROPERTIES ====================================================
    //! \brief The initial grain temp in Celsius.
@@ -177,6 +184,20 @@ public:
     */
    Q_PROPERTY(bool                  equipAdjust               READ equipAdjust               WRITE setEquipAdjust  )
 
+   /**
+    * \brief Whether the mash should be automatically adjusted (eg infusion amounts and temperatures recalculated) when
+    *        the \c Recipe that uses it changes (eg when the grain bill changes).  ⮜⮜⮜ Not part of BeerXML or BeerJSON,
+    *        and deliberately not part of dotBeer. ⮞⮞⮞
+    *
+    *        Since the adjustments depend on the \c Recipe, a kept-in-sync mash should be used by at most one
+    *        \c Recipe.  It is the UI's job to enforce this (eg by offering to make a copy when the user tries to use a
+    *        kept-in-sync mash in a second recipe).  It doesn't break anything if this flag is set on a mash that is not
+    *        used by any recipe (eg because the recipe was deleted) -- the Mash Editor turns it off in that case.
+    *
+    *        We could have called this feature auto-auto-adjust, but that makes my head hurt!
+    */
+   Q_PROPERTY(bool                  keptInSync                READ keptInSync                WRITE setKeptInSync   )
+
    //! \brief The total water that went into the mash (ie all the mash water, sparge and strike) in liters. Calculated.
    Q_PROPERTY(double totalMashWater_l   READ totalMashWater_l  STORED false )
    //! \brief The total mash time in minutes. Calculated.
@@ -195,6 +216,7 @@ public:
    std::optional<double> tunWeight_kg         () const;
    std::optional<double> tunSpecificHeat_calGC() const;
    bool                  equipAdjust              () const;
+   bool                  keptInSync               () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setGrainTemp_c              (double                const   val);
@@ -205,6 +227,7 @@ public:
    void setTunWeight_kg             (std::optional<double> const   val);
    void setTunSpecificHeat_calGC(std::optional<double> const   val);
    void setEquipAdjust              (bool                  const   val);
+   void setKeptInSync               (bool                  const   val);
 
    // Calculated getters
    double totalMashWater_l() const;
@@ -228,14 +251,15 @@ protected:
    virtual ObjectStore & getObjectStoreTypedInstance() const override;
 
 private:
-   double                m_grainTemp_c              ;
-   QString               m_notes                    ;
-   std::optional<double> m_initialTunTemp_c                ;
-   std::optional<double> m_spargeTemp_c             ;
-   std::optional<double> m_ph                       ;
+   double                m_grainTemp_c          ;
+   QString               m_notes                ;
+   std::optional<double> m_initialTunTemp_c     ;
+   std::optional<double> m_spargeTemp_c         ;
+   std::optional<double> m_ph                   ;
    std::optional<double> m_tunWeight_kg         ;
    std::optional<double> m_tunSpecificHeat_calGC;
-   bool                  m_equipAdjust              ;
+   bool                  m_equipAdjust          ;
+   bool                  m_keptInSync           ;
 };
 
 BT_DECLARE_METATYPES(Mash)

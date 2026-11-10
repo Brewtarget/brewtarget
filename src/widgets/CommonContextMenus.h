@@ -27,6 +27,7 @@
 #include <QMessageBox>
 
 #include "database/ObjectStoreUtils.h"
+#include "model/LockablePropertyBase.h" // For IsLockable
 #include "model/Recipe.h"
 #include "serialization/ImportExport.h"
 #include "undoRedo/Undoable.h"
@@ -277,8 +278,8 @@ public:
          }
       } else {
 
-         if constexpr (std::same_as<NE, Recipe>) {
-            // You cannot delete a locked recipe
+         if constexpr (IsLockable<NE>) {
+            // You cannot delete a locked recipe (or locked mash etc)
             this->m_action_delete.setEnabled((selected.numPrimary >= 1 && !selected.firstPrimary->locked()) ||
                                              selected.numFolders >= 1);
          } else {
@@ -478,8 +479,8 @@ public:
       auto confirmDelete = QMessageBox::NoButton;
 
       for (auto const & item : items) {
-         if constexpr (std::same_as<NE, Recipe>) {
-            // You cannot delete a locked recipe
+         if constexpr (IsLockable<NE>) {
+            // You cannot delete a locked recipe (or locked mash etc)
             if  (item->locked()) {
                continue;
             }

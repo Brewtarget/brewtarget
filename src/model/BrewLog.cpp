@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QString>
 
-#include "Algorithms.h"
+#include "calculations/Algorithms.h"
 #include "database/ObjectStoreWrapper.h"
 #include "Localization.h"
 #include "model/Boil.h"

@@ -52,6 +52,9 @@ MashStepEditor::MashStepEditor(QWidget* parent, QString const editorName) :
       EDITOR_FIELD_NORM(MashStep, label_endAcidity  , lineEdit_endAcidity  , Step::endAcidity_pH             , 1),
       EDITOR_FIELD_NORM(MashStep, label_thickness   , lineEdit_thickness   , MashStep::liquorToGristRatio_lKg, 1),
       EDITOR_FIELD_ENUM(MashStep, label_mashStepType, comboBox_mashStepType, MashStep::type                     ),
+      // These are only used when calculating the mash in MashEditor (see MashAutoAdjuster)
+      EDITOR_FIELD_NORM(MashStep, label_amountFixed       , checkBox_amountFixed    , MashStep::amountFixed    ),
+      EDITOR_FIELD_NORM(MashStep, label_infuseTempFixed   , checkBox_infuseTempFixed, MashStep::infuseTempFixed),
    });
 
    // This is extra for this editor
@@ -70,11 +73,15 @@ void MashStepEditor::grayOutStuff([[maybe_unused]] QString const & text) {
       case MashStep::Type::SouringMash:
       case MashStep::Type::SouringWort:
          lineEdit_infuseTemp->setEnabled(true);
+         checkBox_infuseTempFixed->setEnabled(true);
+         label_infuseTempFixed->setEnabled(true);
          break;
 
       case MashStep::Type::Decoction:
       case MashStep::Type::Temperature:
          lineEdit_infuseTemp->setEnabled(false);
+         checkBox_infuseTempFixed->setEnabled(false);
+         label_infuseTempFixed->setEnabled(false);
          break;
 
       // No default case as we want the compiler to warn us if we missed one

@@ -81,7 +81,7 @@ namespace MolarMass {
    double constexpr Carbonate   = Carbon     + 3 * Oxygen;        // <- CO₃²⁻
    double constexpr Sulfate     = Sulfur     + 4 * Oxygen;        // <- SO₄²⁻
    double constexpr Phosphate   = Phosphorus + 4 * Oxygen;        // <- PO₄³⁻
-   double constexpr Hydroxide   = Hydrogen   + 2 * Oxygen;        // <- OH⁻
+   double constexpr Hydroxide   = Hydrogen   + Oxygen;            // <- OH⁻
 
    // ======== Molecules ========
    double constexpr Water             = 2 * Hydrogen + Oxygen   ; // <- H₂O
@@ -95,8 +95,10 @@ namespace MolarMass {
    double constexpr SodiumChloride    = Sodium + Chloride       ; // <- NaCl (AKA regular salt)
    double constexpr SodiumBicarbonate = Sodium + Bicarbonate    ; // <- NaHCO₃
    double constexpr PhosphoricAcid    = 3 * Hydrogen + Phosphate; // <- H₃PO₄
+   double constexpr SulfuricAcid      = 2 * Hydrogen + Sulfate  ; // <- H₂SO₄
+   double constexpr HydrochloricAcid  = Hydrogen + Chloride     ; // <- HCl
 
-   double constexpr CalciumHydroxide              = Calcium + Hydroxide; // <- Ca(OH)₂ = pickling lime
+   double constexpr CalciumHydroxide              = Calcium + 2 * Hydroxide; // <- Ca(OH)₂ = pickling lime
    double constexpr CalciumSulfate_Dihydrate      = CalciumSulfate    + 2 * Water; // <- CaSO₄·2H₂O = gypsum
    double constexpr MagnesiumSulfate_Heptahydrate = MagnesiumSulfate  + 7 * Water; // <- MgSO₄·7H₂O = Epsom Salt
    double constexpr MagnesiumChloride_Hexahydrate = MagnesiumChloride + 6 * Water; // <- MgCl₂·6H₂O

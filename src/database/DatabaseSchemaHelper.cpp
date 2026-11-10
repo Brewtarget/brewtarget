@@ -38,7 +38,7 @@
 #include "database/DbTransaction.h"
 #include "database/ObjectStoreTyped.h"
 
-int constexpr DatabaseSchemaHelper::latestVersion = 22;
+int constexpr DatabaseSchemaHelper::latestVersion = 23;
 
 // Default namespace hides functions from everything outside this file.
 namespace {
@@ -3503,6 +3503,43 @@ namespace {
       return executeSqlQueries(q, migrationQueries);
    }
 
+   /**
+    * \brief Add:
+    *          - "locked" flag to mash, boil and fermentation (see model/LockablePropertyBase.h)
+    *          - "auto adjust" flag to mash
+    *          - "amount fixed" and "infuse temp fixed" flags to mash_step
+    *
+    *        All of these default to false for existing records.
+    *
+    *        Add to recipe:
+    *          - "target mash pH" (see Recipe::targetMashAcidity_pH), which is NULL (ie not set) for existing records,
+    *            meaning water auto-adjust leaves acids alone
+    *          - "water kept in sync" flag (see Recipe::waterKeptInSync), which is false for existing records
+    *          - "FG calculation uses mash" flag (see Recipe::fgCalcUsesMash), which is false for existing records, so
+    *            that upgrading does not change the FG (and ABV etc) of anyone's existing recipes
+    */
+   bool migrate_to_23(Database & db, BtSqlQuery & q) {
+      QString const boolType = db.getDbNativeTypeName<bool>();
+      QVector<QueryAndParameters> const migrationQueries{
+         {QString("ALTER TABLE mash         ADD COLUMN locked            %1").arg(boolType)},
+         {QString("ALTER TABLE mash         ADD COLUMN auto_adjust       %1").arg(boolType)},
+         {QString("ALTER TABLE boil         ADD COLUMN locked            %1").arg(boolType)},
+         {QString("ALTER TABLE fermentation ADD COLUMN locked            %1").arg(boolType)},
+         {QString("ALTER TABLE mash_step    ADD COLUMN amount_fixed      %1").arg(boolType)},
+         {QString("ALTER TABLE mash_step    ADD COLUMN infuse_temp_fixed %1").arg(boolType)},
+         {QString("UPDATE mash         SET locked = ?, auto_adjust = ?"            ), {QVariant{false}, QVariant{false}}},
+         {QString("UPDATE boil         SET locked = ?"                             ), {QVariant{false}}},
+         {QString("UPDATE fermentation SET locked = ?"                             ), {QVariant{false}}},
+         {QString("UPDATE mash_step    SET amount_fixed = ?, infuse_temp_fixed = ?"), {QVariant{false}, QVariant{false}}},
+         {QString("ALTER TABLE recipe ADD COLUMN target_mash_ph     %1").arg(db.getDbNativeTypeName<double>())},
+         {QString("ALTER TABLE recipe ADD COLUMN water_kept_in_sync %1").arg(db.getDbNativeTypeName<bool>  ())},
+         {QString("UPDATE recipe SET water_kept_in_sync = ?"), {QVariant{false}}},
+         {QString("ALTER TABLE recipe ADD COLUMN fg_calc_uses_mash  %1").arg(db.getDbNativeTypeName<bool>  ())},
+         {QString("UPDATE recipe SET fg_calc_uses_mash = ?"), {QVariant{false}}},
+      };
+      return executeSqlQueries(q, migrationQueries);
+   }
+
    //
    // At some future point:
    //   - maybe fix remaining issues listed in ObjectStore legacyBadTypes
@@ -3540,6 +3577,7 @@ namespace {
          case 19: ret &= migrate_to_20 (database, sqlQuery); break;
          case 20: ret &= migrate_to_21 (database, sqlQuery); break;
          case 21: ret &= migrate_to_22 (database, sqlQuery); break;
+         case 22: ret &= migrate_to_23 (database, sqlQuery); break;
          default:
             qCritical() << QString("Unknown version %1").arg(oldVersion);
             return false;

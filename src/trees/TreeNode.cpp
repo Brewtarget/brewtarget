@@ -32,8 +32,8 @@
 #include "Html.h"
 #include "Localization.h"
 #include "PersistentSettings.h"
-#include "measurement/ColorMethods.h"
-#include "measurement/IbuMethods.h"
+#include "calculations/ColorMethods.h"
+#include "calculations/IbuMethods.h"
 #include "measurement/Measurement.h"
 #include "model/BrewLog.h"
 #include "model/Equipment.h"
@@ -402,7 +402,7 @@ template<> QString TreeItemNode<Recipe>::getToolTip() const {
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td></tr>")
            .arg(Recipe::tr("IBU"))
            .arg(Measurement::displayQuantity(this->m_underlyingItem->IBU(), 1))
-           .arg(IbuMethods::formulaName() );
+           .arg(IbuMethods::localisedFormulaName() );
    // Third row: DB ID
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(Recipe::tr("ID in DB"))

@@ -35,6 +35,7 @@
 #include "utils/TypeLookup.h"
 #include "widgets/SmartAmountSettings.h"
 #include "widgets/SmartLabel.h"
+#include "widgets/UnitAndScalePopUpMenu.h"
 
 // This private implementation class holds all private non-virtual members of SmartField
 class SmartField::impl {
@@ -45,7 +46,7 @@ public:
       m_fieldFqName            {"Uninitialised m_fieldFqName!"},
       m_settings               {nullptr},
       m_smartBuddyLabel        {nullptr},
-      m_precision              {3},
+      m_precision              {std::nullopt},
       m_maximalDisplayString   {"100.000 srm"} {
       return;
    }
@@ -104,16 +105,15 @@ public:
       }
       this->m_maximalDisplayString = maximalDisplayString;
 
-      if (std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
-         // It's a coding error to have a smartBuddyLabel for a NonPhysicalQuantity
-         Q_ASSERT(!this->m_smartBuddyLabel);
-      } else {
-         // It's only meaningful to have a SmartBuddyLabel if we are dealing with a PhysicalQuantity, but it's not
-         // required to have one if the scale and units are not changeable by the user.
-         if (this->m_smartBuddyLabel) {
-            this->m_self.connectSmartLabelSignal(*this->m_smartBuddyLabel);
-         }
-
+      //
+      // It's only meaningful to have a SmartBuddyLabel if there is something for the user to choose (units, scale
+      // and/or decimal places), but it's not required to have one even then.  (Eg it's not required if the units are
+      // not changeable by the user.)
+      //
+      if (this->m_smartBuddyLabel) {
+         // It's a coding error to have a SmartBuddyLabel for a field with nothing to choose, eg a date or a string
+         Q_ASSERT(UnitAndScalePopUpMenu::isAvailableFor(typeInfo));
+         this->m_self.connectSmartLabelSignal(*this->m_smartBuddyLabel);
       }
 
       this->m_initialised = true;
@@ -202,6 +202,30 @@ public:
    }
 
    /**
+    * \brief For a \c NonPhysicalQuantity field, returns the number of decimal places to show.  (For a
+    *        \c PhysicalQuantity field, we pass \c m_precision down to \c Measurement::displayAmount, which knows about
+    *        user preferences.)
+    */
+   unsigned int nonPhysicalPrecision(NonPhysicalQuantity const nonPhysicalQuantity) const {
+      // For integers, there are no decimal places to show, regardless of anything else
+      TypeInfo const & typeInfo = this->m_self.getTypeInfo();
+      if (typeInfo.typeIndex == TypeInfo::Index::Int ||
+          typeInfo.typeIndex == TypeInfo::Index::UnsignedInt) {
+         return 0;
+      }
+      std::optional<Measurement::NumDecimalPlaces> const defaultForField{
+         this->m_precision.transform(
+            [](unsigned int const precision) { return Measurement::NumDecimalPlaces{static_cast<int>(precision)}; }
+         )
+      };
+      return static_cast<unsigned int>(
+         Measurement::getNumDecimalPlaces(nonPhysicalQuantity,
+                                          this->m_self.getForcedDecimalPlaces(),
+                                          defaultForField).value()
+      );
+   }
+
+   /**
     * \brief Show \c text, which is the display version of \c canonicalAmount, and remember both (see comment in
     *        \c toCanonical for why).
     */
@@ -210,7 +234,32 @@ public:
       // We read the text back rather than just storing what we were given, in case the subclass did something to it
       this->m_lastDisplayedText = this->m_self.getRawText();
       this->m_lastDisplayedCanonicalAmount = canonicalAmount;
+      this->m_lastDisplayedNonPhysicalValue.reset();
       return;
+   }
+
+   /**
+    * \brief Version of \c showAndRemember for \c NonPhysicalQuantity.  The same logic applies: eg if we show a
+    *        percentage of 4.25 rounded to 1 decimal place, we don't want to change the value to 4.3 (eg when the user
+    *        saves an editor) unless the user actually edits the field.
+    */
+   void showAndRemember(QString const & text, double const value) {
+      this->m_self.setRawText(text);
+      this->m_lastDisplayedText = this->m_self.getRawText();
+      this->m_lastDisplayedNonPhysicalValue = value;
+      this->m_lastDisplayedCanonicalAmount.reset();
+      return;
+   }
+
+   /**
+    * \brief For a \c NonPhysicalQuantity, if \c text is what we last displayed, return the (unrounded) value we were
+    *        displaying.  Otherwise return \c std::nullopt, meaning the caller should parse \c text.
+    */
+   std::optional<double> unchangedNonPhysicalValue(QString const & text) const {
+      if (this->m_lastDisplayedNonPhysicalValue && text == this->m_lastDisplayedText) {
+         return this->m_lastDisplayedNonPhysicalValue;
+      }
+      return std::nullopt;
    }
 
    SmartField &                         m_self;
@@ -219,12 +268,16 @@ public:
    std::unique_ptr<SmartAmountSettings> m_settings;
    SmartLabel *                         m_smartBuddyLabel;
    // "Precision" (ie number of decimal places to show) is used if and only the field is numeric.  For int and unsigned
-   // int, it must always be 0.
-   unsigned int              m_precision;
+   // int, it must always be 0.  Otherwise, if not set, we use the defaults for the field's (physical or non-physical)
+   // quantity.  For a PhysicalQuantity, it is only a default, as user preferences (for the field or for the
+   // PhysicalQuantity) override it.  See comment on physicalQuantityToUserSpecifiedDecimalPlaces in
+   // measurement/Measurement.cpp for the full hierarchy.
+   std::optional<unsigned int> m_precision;
    QString                   m_maximalDisplayString;
    // See comment in toCanonical
    QString                            m_lastDisplayedText;
    std::optional<Measurement::Amount> m_lastDisplayedCanonicalAmount;
+   std::optional<double>              m_lastDisplayedNonPhysicalValue;
 };
 
 
@@ -245,10 +298,10 @@ template<> void SmartField::init<SmartLabel>([[maybe_unused]] char const * const
                                              QString                       const & maximalDisplayString) {
 //   qDebug() << Q_FUNC_INFO << fieldFqName << ":" << typeInfo << ", precision=" << precision;
 
-   // It's a coding error to call this version of init with a NonPhysicalQuantity
-   // Note that one way to trigger this assert is to put a SmartLabel where you need a QLabel.  (One day, we'll make it
-   // so you don't have to think about this.)
-   Q_ASSERT(typeInfo.fieldType && !std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType));
+   // It's a coding error to call this version of init for a field where there's nothing for the user to choose via the
+   // SmartLabel -- eg a date or a string.  (Note that one way to trigger this assert is to put a SmartLabel where you
+   // need a QLabel.)
+   Q_ASSERT(typeInfo.fieldType && UnitAndScalePopUpMenu::isAvailableFor(typeInfo));
 
    // It's a coding error if SmartLabel not initialised first
    Q_ASSERT(smartBuddyLabel.isInitialised());
@@ -372,9 +425,12 @@ template<typename T, typename> void SmartField::setQuantity(T quantity) {
       // It's a coding error if we're trying to pass a number in to a string field
       Q_ASSERT(nonPhysicalQuantity != NonPhysicalQuantity::String);
 
-      this->setRawText(
+      this->pimpl->showAndRemember(
          // This handles showing the % symbol after the number
-         Measurement::displayQuantity(quantity, this->pimpl->m_precision, nonPhysicalQuantity)
+         Measurement::displayQuantity(quantity,
+                                      this->pimpl->nonPhysicalPrecision(nonPhysicalQuantity),
+                                      nonPhysicalQuantity),
+         static_cast<double>(quantity)
       );
    } else {
       // The field is measuring a physical quantity
@@ -540,12 +596,12 @@ QVariant SmartField::getAsVariant() const {
    return QVariant{};
 }
 
-void SmartField::setPrecision(unsigned int const precision) {
+void SmartField::setPrecision(std::optional<unsigned int> const precision) {
    this->pimpl->m_precision = precision;
    return;
 }
 
-[[nodiscard]] unsigned int SmartField::getPrecision() const {
+[[nodiscard]] std::optional<unsigned int> SmartField::getPrecision() const {
    return this->pimpl->m_precision;
 }
 
@@ -598,6 +654,13 @@ template<typename T> T SmartField::getNonOptValue(bool * const ok) const {
    Q_ASSERT(!this->getTypeInfo().isOptional());
 
    if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {
+      // If the user hasn't changed the text, use the value we displayed rather than the rounded version of it
+      if (auto const unchangedValue = this->pimpl->unchangedNonPhysicalValue(rawText)) {
+         if (ok) {
+            *ok = true;
+         }
+         return static_cast<T>(*unchangedValue);
+      }
       // Note that Measurement::extractRawFromString returns 0 if it can't parse the text
       return Measurement::extractRawFromString<T>(rawText, ok);
    }
@@ -629,6 +692,13 @@ template<typename T> std::optional<T> SmartField::getOptValue(bool * const ok) c
    }
 
    if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {
+      // As in getNonOptValue, if the user hasn't changed the text, use the value we displayed
+      if (auto const unchangedValue = this->pimpl->unchangedNonPhysicalValue(rawText)) {
+         if (ok) {
+            *ok = true;
+         }
+         return std::make_optional<T>(static_cast<T>(*unchangedValue));
+      }
       bool parseOk = false;
       T value = Measurement::extractRawFromString<T>(rawText, &parseOk);
 //      qDebug() <<
@@ -680,6 +750,21 @@ void SmartField::correctEnteredText(SmartAmounts::ScaleInfo const previousScaleI
       "and corrected to" << correctedText;
 
    this->pimpl->showAndRemember(correctedText, amountAsCanonical);
+   return;
+}
+
+void SmartField::redisplayWithNewPrecision() {
+   Q_ASSERT(this->pimpl->m_initialised);
+   Q_ASSERT(std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType));
+
+   // If the field is blank, there's nothing to redisplay -- and we don't want correctEnteredText to turn it into 0
+   if (this->getRawText().trimmed().isEmpty()) {
+      return;
+   }
+
+   // Note that, if the user hasn't edited the field, correctEnteredText will pick up the unrounded value we last
+   // displayed, so increasing the number of decimal places shows the extra digits rather than just extra zeroes.
+   this->correctEnteredText();
    return;
 }
 

@@ -23,7 +23,7 @@
 //
 {
   "DotBeer": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "output_by": "DotBeer examples (hand-written)",
     "timestamp": "2026-10-16T10:00:00+02:00",
 
@@ -237,6 +237,7 @@
         "name": "Single Infusion, Medium Body, Batch Sparge",
         "local_id": "mash_single_infusion",
         "folder_path": "/Mash Profiles",
+        "locked": true,
         "grain_temperature": { "unit": "C", "value": 18.0 },
         "notes": "Strike water calculated for a cooler mash tun.",
         "mash_steps": [
@@ -278,6 +279,7 @@
         "name": "60 Minute Boil with Whirlpool",
         "local_id": "boil_60_whirlpool",
         "folder_path": "/Boil Profiles",
+        "locked": false,
         "boil_description": "Standard boil, hop stand at 80°C, then immersion chill.",
         "pre_boil_size": { "unit": "l", "value": 28.0 },
         "boil_steps": [
@@ -459,6 +461,7 @@
         "water_target_id": "water_pale_ale_target",
         "ro_water_mash": { "unit": "%", "value": 50.0 },
         "ro_water_sparge": { "unit": "%", "value": 50.0 },
+        "target_mash_pH": { "unit": "pH", "value": 5.35 },
         "mash_id": "mash_single_infusion",
         "boil_id": "boil_60_whirlpool",
         "fermentation_id": "ferm_ale_two_stage",

@@ -14,7 +14,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/1.0.0/Recipe.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.1.0/Recipe.beer.schema",
   "type": "object",
   "description": "The information stored in a beer recipe.",
   "properties": {
@@ -147,6 +147,12 @@
     "ro_water_sparge": {
       "description": "Percentage of the sparge water that is reverse-osmosis (rather than the same profile as `water_base_id`).  If this field is not present, a value of 0.0 may be assumed.",
       "$ref": "Measurement.beer.schema#/$defs/PercentageSimple"
+    },
+    // Not in BeerJSON
+    "target_mash_pH": {
+      "description": "The mash pH the brewer is aiming for, as measured on a sample cooled to room temperature, which is the convention for brewing pH targets.  (pH measured at mash temperature typically reads 0.2 to 0.3 lower.)  Software can use this to work out how much acid to add to the mash.  It is a property of the recipe, rather than of the mash, because the mash pH depends on the grain bill and the water, and a mash procedure can be shared between recipes.  Compare `start_pH` and `end_pH` in mash steps, which record (or set targets for) the pH of a particular step.  If this field is not present, there is no target.",
+      "x-since": "1.1.0",
+      "$ref": "Measurement.beer.schema#/$defs/Acidity"
     },
     "mash_id": {
       "description": "Local ID of the mash procedure used in this recipe.  (Obviously the mash in question must be in the \"mashes\" section of the same dotBeer file.)",

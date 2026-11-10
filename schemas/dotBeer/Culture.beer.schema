@@ -14,7 +14,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/1.0.0/Culture.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.1.0/Culture.beer.schema",
   "type": "object",
   "description": "Collects the attributes of a microbial culture such as a yeast.",
   "properties": {

@@ -10,7 +10,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/1.0.0/StockPurchase.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.1.0/StockPurchase.beer.schema",
   "title": "StockPurchase",
   // We use "purchase" rather than, say, "acquisition" in the interests of brevity since, for most brewers, most
   // acquisitions will be purchases.  (StockAcquisitionFermentable would be a bit long IMHO.)

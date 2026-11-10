@@ -106,6 +106,12 @@ public slots:
     */
    void lineChanged(SmartAmounts::ScaleInfo previousScaleInfo);
 
+   /**
+    * \brief Receives the \c SmartLabel::changedPrecision signal when the user has changed the number of decimal
+    *        places to show for a field holding a \c NonPhysicalQuantity (eg a percentage).
+    */
+   void precisionChanged();
+
 signals:
    /**
     * \brief Where we want "instant updates", this signal should be picked up by the editor or widget object using this

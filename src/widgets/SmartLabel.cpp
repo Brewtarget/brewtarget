@@ -158,9 +158,9 @@ void SmartLabel::textEffect(bool enabled) {
 //   qDebug().noquote() << Q_FUNC_INFO << "Text:" << this->text() << ", Stack trace:" << Logging::getStackTrace();
    Q_ASSERT(this->pimpl->m_initialised);
 
-   // If we are a label for a NonPhysicalQuantity, then we don't want the underline effect as there are no scale choices
-   // for the user to make.
-   if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {
+   // If there are no choices for the user to make (eg we are the label for a date), then we don't want the underline
+   // effect.
+   if (!UnitAndScalePopUpMenu::isAvailableFor(this->getTypeInfo())) {
       return;
    }
 
@@ -174,13 +174,11 @@ void SmartLabel::popContextMenu(QPoint const & point) {
    Q_ASSERT(this->pimpl->m_initialised);
 
    //
-   // For the moment, at least, we do not allow people to choose date formats per-field.  (Although you might want to
-   // mix and match metric and imperial systems in certain circumstances, it's less clear that there's a benefit to
-   // mixing and matching date formats.)
+   // Not every field has something for the user to choose.  Eg, for the moment, at least, we do not allow people to
+   // choose date formats per-field.  (Although you might want to mix and match metric and imperial systems in certain
+   // circumstances, it's less clear that there's a benefit to mixing and matching date formats.)
    //
-   // TODO: We probably want to allow choice of number of decimal places for percentages though...
-   //
-   if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {
+   if (!UnitAndScalePopUpMenu::isAvailableFor(this->getTypeInfo())) {
       return;
    }
 
@@ -202,6 +200,28 @@ void SmartLabel::popContextMenu(QPoint const & point) {
    // delete it here.  The Qt ownership in this context merely guarantees that this->m_parent will, in its own
    // destructor, delete the menu if it still exists.
    //
+
+   //
+   // For a NonPhysicalQuantity (eg a percentage) the only thing the user can choose is the number of decimal places
+   //
+   if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {
+      auto const nonPhysicalQuantity = std::get<NonPhysicalQuantity>(*this->getTypeInfo().fieldType);
+      auto const forcedDecimalPlaces = this->getForcedDecimalPlaces();
+      qDebug() <<
+         Q_FUNC_INFO << this->pimpl->m_labelFqName << GetLoggableName(nonPhysicalQuantity) << "forcedDecimalPlaces=" <<
+         forcedDecimalPlaces;
+      std::unique_ptr<QMenu> const menu = UnitAndScalePopUpMenu::create(this->pimpl->m_parent,
+                                                                        nonPhysicalQuantity,
+                                                                        forcedDecimalPlaces);
+      std::optional<UnitAndScalePopUpMenu::Selection> const selection =
+         UnitAndScalePopUpMenu::exec(*menu, widgie->mapToGlobal(point));
+      if (!selection) {
+         return;
+      }
+      UnitAndScalePopUpMenu::applySelection(*selection, *this);
+      emit changedPrecision();
+      return;
+   }
 
    auto const forcedSystemOfMeasurement = this->getForcedSystemOfMeasurement();
    auto const forcedRelativeScale       = this->getForcedRelativeScale();

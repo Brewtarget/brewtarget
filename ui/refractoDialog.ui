@@ -193,7 +193,10 @@
        </widget>
       </item>
       <item row="5" column="0">
-       <widget class="QLabel" name="label_abv">
+       <widget class="SmartLabel" name="label_abv">
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
         <property name="text">
          <string>ABV</string>
         </property>
@@ -216,7 +219,10 @@
        </widget>
       </item>
       <item row="6" column="0">
-       <widget class="QLabel" name="label_abw">
+       <widget class="SmartLabel" name="label_abw">
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
         <property name="text">
          <string>ABW</string>
         </property>
@@ -300,6 +306,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>SmartLabel</class>
+   <extends>QLabel</extends>
+   <header>widgets/SmartLabel.h</header>
+  </customwidget>
   <customwidget>
    <class>SmartLineEdit</class>
    <extends>QLineEdit</extends>

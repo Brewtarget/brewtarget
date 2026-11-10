@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+   Small push-pin icon, used to show a value that is "pinned" (ie fixed), eg a mash step amount or temperature that is
+   not changed when calculating the mash.  Drawn for Brewken, and licensed under the same terms as the rest of that
+   project.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" version="1.1">
+  <g transform="rotate(40 8 8)">
+    <!-- Needle -->
+    <path d="M 7.4,9.5 L 8,15.5 L 8.6,9.5 Z" fill="#6b6b6b" stroke="#4a4a4a" stroke-width="0.4" stroke-linejoin="round"/>
+    <!-- Collar -->
+    <path d="M 4.2,9.6 L 11.8,9.6 L 10.6,7.8 L 5.4,7.8 Z" fill="#c62828" stroke="#7f1414" stroke-width="0.6" stroke-linejoin="round"/>
+    <!-- Body -->
+    <path d="M 6,7.9 L 6.4,3.2 L 9.6,3.2 L 10,7.9 Z" fill="#e53935" stroke="#7f1414" stroke-width="0.6" stroke-linejoin="round"/>
+    <!-- Head -->
+    <rect x="4.9" y="0.9" width="6.2" height="2.4" rx="1" ry="1" fill="#c62828" stroke="#7f1414" stroke-width="0.6"/>
+    <!-- Highlight -->
+    <path d="M 7,3.6 L 6.8,7.4" stroke="#ffffff" stroke-opacity="0.6" stroke-width="0.7" stroke-linecap="round"/>
+  </g>
+</svg>

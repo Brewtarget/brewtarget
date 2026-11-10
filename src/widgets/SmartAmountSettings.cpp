@@ -184,7 +184,8 @@ void SmartAmountSettings::selectPhysicalQuantity(Measurement::PhysicalQuantity c
    return;
 }
 
-[[nodiscard]] QString SmartAmountSettings::displayQuantity(double quantity, unsigned int defaultPrecision) const {
+[[nodiscard]] QString SmartAmountSettings::displayQuantity(double quantity,
+                                                           std::optional<unsigned int> const defaultPrecision) const {
    // It's a coding error to call this for NonPhysicalQuantity
    Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(*this->pimpl->m_typeInfo.fieldType));
 
@@ -201,7 +202,7 @@ void SmartAmountSettings::selectPhysicalQuantity(Measurement::PhysicalQuantity c
 }
 
 [[nodiscard]] QString SmartAmountSettings::displayAmount(Measurement::Amount const & amount,
-                                                         unsigned int defaultPrecision) {
+                                                         std::optional<unsigned int> const defaultPrecision) {
    auto const & fieldType = *this->pimpl->m_typeInfo.fieldType;
    // Per comment on SmartField::setAmount, it's a coding error to call this for NonPhysicalQuantity
    Q_ASSERT(!std::holds_alternative<NonPhysicalQuantity>(fieldType));

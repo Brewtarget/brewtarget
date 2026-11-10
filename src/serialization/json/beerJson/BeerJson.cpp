@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QDebug>
 
+#include "calculations/IbuMethods.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Boil.h"
 #include "model/Equipment.h"
@@ -1073,6 +1074,26 @@ namespace {
       }
    };
 
+   /**
+    * \brief BeerJSON's IBUMethodType only has "Rager", "Tinseth", "Garetz" and "Other", so we map our other formulae to
+    *        "Other".  (BeerJSON also asks that "Other" be used if a formula is modified in any way, eg to support
+    *        whirlpool/flameout additions.  We take the view that it is more useful to say which formula the IBUs are
+    *        based on, even though we make some generic adjustments, eg for hop form and first wort hopping.)
+    *
+    *        Because several of our formulae map to "Other", the mapping from string to enum isn't well-defined: reading
+    *        "Other" gives the first match (Noonan).  This doesn't matter, as, per the comments in the Recipe record
+    *        definition below, we ignore the formula when reading in.
+    */
+   EnumStringMapping const BEER_JSON_IBU_FORMULA_MAPPER {
+      {IbuMethods::IbuFormula::Tinseth, "Tinseth"},
+      {IbuMethods::IbuFormula::Rager  , "Rager"  },
+      {IbuMethods::IbuFormula::Noonan , "Other"  },
+      {IbuMethods::IbuFormula::Garetz , "Garetz" },
+      {IbuMethods::IbuFormula::Daniels, "Other"  },
+      {IbuMethods::IbuFormula::mIbu   , "Other"  },
+      {IbuMethods::IbuFormula::Smph   , "Other"  },
+   };
+
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    // Field mappings for recipes BeerJSON records
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
@@ -1113,10 +1134,16 @@ namespace {
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "original_gravity"       , PropertyNames::Recipe::og            , &BEER_JSON_DENSITY_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "final_gravity"          , PropertyNames::Recipe::fg            , &BEER_JSON_DENSITY_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "alcohol_by_volume"      , PropertyNames::Recipe::ABV_pct       , &BEER_JSON_PERCENT_UNIT       },
-         // TODO: BeerJSON ibu_estimate field of recipe is IBUEstimateType ("Rager", "Tinseth", "Garetz", "Other").  We have more
-         //       methods than this, so would need to do a mapping to support it.  Also, it ideally should be renamed
-         //       per https://github.com/beerjson/beerjson/issues/223
-         {JsonRecordDefinition::FieldType::Enum                , "ibu_estimate"           , BtString::NULL_STR                   },
+         //
+         // BeerJSON's ibu_estimate field is an IBUEstimateType object, whose only field is method (which ideally should
+         // be renamed per https://github.com/beerjson/beerjson/issues/223).  There is nowhere for the estimated IBUs
+         // themselves.
+         //
+         // As with dotBeer, we write out the formula, but ignore it on reading in (by dint of the Recipe constructor not
+         // looking for it in the NamedParameterBundle -- per comments in JsonRecord::load), because the formula is a
+         // global setting rather than an attribute of the recipe.  See BEER_JSON_IBU_FORMULA_MAPPER above.
+         //
+         {JsonRecordDefinition::FieldType::Enum                , "ibu_estimate/method"    , PropertyNames::Recipe::ibuFormula    , &BEER_JSON_IBU_FORMULA_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "color_estimate"         , PropertyNames::Recipe::color_srm     , &BEER_JSON_COLOR_UNIT_MAPPER  },
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "beer_pH"                , PropertyNames::Recipe::beerAcidity_pH, &BEER_JSON_ACIDITY_UNIT       },
          // TBD: IDK why this has no units in contrast with styles/carbonation/minimum and styles/carbonation/maximum

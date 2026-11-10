@@ -17,7 +17,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   // I have oscillated between `Misc` and `MiscIngredient` for this.  The latter is "better" in terms of being more
   // descriptive, but both brevity and consistency with Brewtarget/Brewken push us towards the former.
-  "$id": "https://dotbeer.org/schema/1.0.0/Misc.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.1.0/Misc.beer.schema",
   "type": "object",
   "description": "Miscellaneous ingredients that are not hops, fermentables, yeasts/cultures or water.  Some people would call these \"non-fermentable adjuncts\", but there are also narrower definitions of \"adjunct\", so we do not use that term.  Also often referred to as \"other ingredients\", but we already use \"other\" in a lot of classifications, so we prefer \"miscellaneous\" as abbreviated to \"misc\".",
   "properties": {

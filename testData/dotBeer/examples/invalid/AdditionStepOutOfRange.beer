@@ -16,7 +16,7 @@
 // Addition schedules that refer to procedure steps that do not exist.  JSON Schema cannot check this.
 {
   "DotBeer": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "output_by": "DotBeer examples (hand-written)",
     "timestamp": "2026-10-16T10:00:00Z",
     "fermentables": [

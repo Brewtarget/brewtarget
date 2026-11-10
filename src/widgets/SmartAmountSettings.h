@@ -86,14 +86,14 @@ public:
     * \brief Use this when you want to do something with the returned QString
     *
     * \param quantity Must be in canonical units eg kilograms for mass, liters for volume
-    * \param defaultPrecision
+    * \param defaultPrecision Default number of decimal places for this field, if any.  (User preferences override it.)
     */
-   [[nodiscard]] QString displayQuantity(double quantity, unsigned int defaultPrecision) const;
+   [[nodiscard]] QString displayQuantity(double quantity, std::optional<unsigned int> defaultPrecision) const;
 
    /**
     * \brief This version is not const as we'll set the field's \c PhysicalQuantity based on the \c Unit in \c amount.
     */
-   [[nodiscard]] QString displayAmount(Measurement::Amount const & amount, unsigned int defaultPrecision);
+   [[nodiscard]] QString displayAmount(Measurement::Amount const & amount, std::optional<unsigned int> defaultPrecision);
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

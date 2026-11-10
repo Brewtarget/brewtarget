@@ -27,7 +27,7 @@
 //   • a culture purchase using the old, capitalised, `Culture_id` field name
 {
   "DotBeer": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "output_by": "DotBeer examples (hand-written)",
     "timestamp": "2026-10-21T18:00:00Z",
     "hops": [

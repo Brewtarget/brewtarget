@@ -321,7 +321,14 @@ public:
          // We do parsing in double here, even if it's going to end up in an int as (a) it's reasonably safe and (b)
          // that's what's happening under the hood in Measurement::extractRawFromString anyway.
          //
+         // As below, we only write back if the user changed the text.  For numbers, this is important because we may
+         // have shown the value rounded (eg a percentage to 1 decimal place), and we don't want to overwrite the stored
+         // value with the rounded one just because the user opened and closed the editor.
+         //
          QLineEdit* line = qobject_cast<QLineEdit*>(editor);
+         if (!line->isModified()) {
+            return;
+         }
          QString rawValue = line->text();
          if (fieldType != NonPhysicalQuantity::String) {
             model->setData(index, Measurement::extractRawFromString(rawValue, typeInfo), Qt::EditRole);
@@ -340,7 +347,8 @@ public:
 
       // Note that we handle any conversions to and from canonical amounts in the table model class, as we sometimes
       // need to look at multiple columns (eg "amount" and "is weight").  This means we also handle optional values
-      // there too.  All that we do here is pass in the raw text.
+      // there too.  All that we do here is pass in the raw text -- and only if the user changed it, because the text
+      // we showed will have been rounded to however many decimal places are being displayed.
       QLineEdit* line = qobject_cast<QLineEdit*>(editor);
       if (line->isModified()) {
          model->setData(index, line->text(), Qt::EditRole);

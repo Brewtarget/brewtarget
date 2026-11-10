@@ -26,7 +26,7 @@
 #include <QMessageBox>
 #include <QString>
 
-#include "Algorithms.h"
+#include "calculations/Algorithms.h"
 #include "measurement/Measurement.h"
 
 #ifdef MANUALLY_INCLUDE_MOC

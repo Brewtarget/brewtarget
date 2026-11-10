@@ -29,7 +29,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include "Algorithms.h"
+#include "calculations/Algorithms.h"
 #include "measurement/Unit.h"
 
 #ifdef MANUALLY_INCLUDE_MOC

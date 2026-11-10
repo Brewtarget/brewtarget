@@ -37,8 +37,8 @@
 #include <QVersionNumber>
 
 #include "config.h"
+#include "calculations/IbuMethods.h"
 #include "database/ObjectStoreWrapper.h"
-#include "measurement/IbuMethods.h"
 #include "model/Boil.h"
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
@@ -70,8 +70,8 @@
 namespace {
    // See below for more comments on this.  If and when DotBeer evolves then we will want separate constants for
    // min/max versions we can read plus whatever version we write.
-   BtStringConst  const dotBeerVersionWeSupportAsString{"1.0.0"};
-   QVersionNumber const dotBeerVersionWeSupport        {1, 0, 0};
+   BtStringConst  const dotBeerVersionWeSupportAsString{"1.1.0"};
+   QVersionNumber const dotBeerVersionWeSupport        {1, 1, 0};
 
    auto const outputDocumentName = "DotBeer";
 
@@ -557,6 +557,7 @@ namespace {
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_Mash_ExclBase {
       // Type                                                 XPath                Q_PROPERTY                        Value Decoder
+      {JsonRecordDefinition::FieldType::Bool                , "locked"           , PropertyNames::LockablePropertyBase::locked},  // Added in dotBeer 1.1.0
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "grain_temperature", PropertyNames::Mash::grainTemp_c, &DOT_BEER_TEMPERATURE_UNIT_MAPPER},
       {JsonRecordDefinition::FieldType::String              , "notes"            , PropertyNames::Mash::notes      },
       {JsonRecordDefinition::FieldType::ListOfRecords       , "mash_steps"       , PropertyNames::StepOwnerBase::steps, &DOT_BEER_RECORD_DEFN<MashStep>  },
@@ -597,6 +598,7 @@ namespace {
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_Fermentation_ExclBase {
       // Type                                          XPath                       Q_PROPERTY                                Value Decoder
+      {JsonRecordDefinition::FieldType::Bool         , "locked"                  , PropertyNames::LockablePropertyBase::locked},  // Added in dotBeer 1.1.0
       {JsonRecordDefinition::FieldType::String       , "fermentation_description", PropertyNames::Fermentation::description},
       {JsonRecordDefinition::FieldType::String       , "notes"                   , PropertyNames::Fermentation::notes      },
       {JsonRecordDefinition::FieldType::ListOfRecords, "fermentation_steps"      , PropertyNames::StepOwnerBase::steps     , &DOT_BEER_RECORD_DEFN<FermentationStep>},
@@ -769,6 +771,7 @@ namespace {
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
    std::initializer_list<JsonRecordDefinition::FieldDefinition> const DotBeer_Boil_ExclBase {
       // Type                                                 XPath               Q_PROPERTY                           Value Decoder
+      {JsonRecordDefinition::FieldType::Bool                , "locked"          , PropertyNames::LockablePropertyBase::locked},  // Added in dotBeer 1.1.0
       {JsonRecordDefinition::FieldType::String              , "boil_description", PropertyNames::Boil::description   },
       {JsonRecordDefinition::FieldType::String              , "notes"           , PropertyNames::Boil::notes         },
       {JsonRecordDefinition::FieldType::MeasurementWithUnits, "pre_boil_size"   , PropertyNames::Boil::preBoilSize_l , &DOT_BEER_VOLUME_UNIT_MAPPER   },
@@ -870,6 +873,10 @@ namespace {
          {JsonRecordDefinition::FieldType::LocalId             , "water_target_id"        , PropertyNames::Recipe::waterTargetId    , &Water::staticMetaObject},
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "ro_water_mash"          , PropertyNames::Recipe::roWaterMash_pct  , &DOT_BEER_PERCENT_UNIT      },
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "ro_water_sparge"        , PropertyNames::Recipe::roWaterSparge_pct, &DOT_BEER_PERCENT_UNIT      },
+         // NB: Recipe::waterKeptInSync is deliberately not stored in dotBeer, in the same way as Mash::keptInSync
+         // NB: Recipe::fgCalcUsesMash is also deliberately not stored in dotBeer, as it is a preference about how we
+         //     calculate FG, not part of the recipe
+         {JsonRecordDefinition::FieldType::SingleUnitValue     , "target_mash_pH"         , PropertyNames::Recipe::targetMashAcidity_pH, &DOT_BEER_ACIDITY_UNIT   },
          {JsonRecordDefinition::FieldType::LocalId             , "mash_id"                , PropertyNames::Recipe::mashId        , &Mash::staticMetaObject},
          {JsonRecordDefinition::FieldType::String              , "notes"                  , PropertyNames::Recipe::notes         },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "original_gravity"       , PropertyNames::Recipe::og            , &DOT_BEER_DENSITY_UNIT_MAPPER},

@@ -126,12 +126,17 @@ QVariant PropertyHelper::readDataFromPropertyValue(
       }
 
       if (nonPhysicalQuantity == NonPhysicalQuantity::Percentage) {
-         unsigned int precision = 3;
+         // The user's choice for the column, if any, overrides the column's precision, if any, which in turn
+         // overrides the default for percentages.
+         std::optional<Measurement::NumDecimalPlaces> defaultForColumn;
          if (typeInfo.displayAs) {
             Q_ASSERT(std::holds_alternative<DisplayInfo::Precision>(*typeInfo.displayAs));
             DisplayInfo::Precision const & precisionInfo = std::get<DisplayInfo::Precision>(*typeInfo.displayAs);
-            precision = precisionInfo.precision;
+            defaultForColumn = Measurement::NumDecimalPlaces{static_cast<int>(precisionInfo.precision)};
          }
+         int const precision = Measurement::getNumDecimalPlaces(nonPhysicalQuantity,
+                                                                forcedDecimalPlaces,
+                                                                defaultForColumn).value();
          // We assert that percentages are numbers and therefore either are double or convertible to double
          Q_ASSERT(modelData.canConvert<double>());
          return QVariant(Measurement::displayQuantity(modelData.toDouble(), precision, nonPhysicalQuantity));
@@ -173,8 +178,12 @@ QVariant PropertyHelper::readDataFromPropertyValue(
       // We don't need this in every case below, but we might as well pull it out here to save repeating ourselves in
       // different branches below.
       //
-      unsigned int const precision {
-         typeInfo.displayAs ? std::get<DisplayInfo::Precision>(*typeInfo.displayAs).precision : 3
+      // If the column doesn't specify a precision, Measurement::displayAmount will use the default for the
+      // PhysicalQuantity.  Either way, user preferences (for the column or the PhysicalQuantity) take precedence.
+      std::optional<int> const precision {
+         typeInfo.displayAs ?
+            std::optional<int>{static_cast<int>(std::get<DisplayInfo::Precision>(*typeInfo.displayAs).precision)} :
+            std::nullopt
       };
 
       //

@@ -22,7 +22,7 @@
 // The last equipment record is fine: its pre-boil volume (25 + 2 + 3 = 30 l) exactly fills the kettle.
 {
   "DotBeer": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "output_by": "DotBeer examples (hand-written)",
     "timestamp": "2026-10-28T10:00:00+01:00",
     "equipments": [

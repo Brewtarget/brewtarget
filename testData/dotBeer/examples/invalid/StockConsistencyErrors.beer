@@ -33,7 +33,7 @@
 // The last purchase is valid: its uses add up to exactly what was received, but in different units.
 {
   "DotBeer": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "output_by": "DotBeer examples (hand-written)",
     "timestamp": "2026-10-21T19:30:00Z",
     "hops": [

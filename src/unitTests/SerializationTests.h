@@ -70,6 +70,12 @@ private slots:
     */
    void testDotBeerExport();
 
+   //! \brief Check that we read the "locked" field (added in dotBeer 1.1.0) for mashes and boils
+   void testDotBeerLocked();
+
+   //! \brief Check that we read and write the recipe "target_mash_pH" field (added in dotBeer 1.1.0)
+   void testDotBeerTargetMashPh();
+
    //! \brief Check \c Equipment::clearUnusedOptionalVessels (which the equipment editor calls on save)
    void testClearUnusedOptionalVessels();
 

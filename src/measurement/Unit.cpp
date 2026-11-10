@@ -27,7 +27,7 @@
 #include <QRegularExpression>
 #include <QDebug>
 
-#include "Algorithms.h"
+#include "calculations/Algorithms.h"
 #include "Localization.h"
 #include "Logging.h"
 #include "measurement/Measurement.h"

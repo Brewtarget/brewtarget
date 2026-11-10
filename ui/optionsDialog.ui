@@ -77,27 +77,48 @@
        <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
-          <string>Forumulas</string>
+          <string>Formulas</string>
          </property>
-         <layout class="QFormLayout" name="formLayout">
+         <layout class="QGridLayout" name="gridLayout_formulas" columnstretch="0,0,1">
           <item row="0" column="0">
+           <widget class="InfoButton" name="infoButton_ibuFormula"></widget>
+          </item>
+          <item row="0" column="1">
            <widget class="QLabel" name="ibuFormulaLabel">
             <property name="text">
              <string>IBU</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="0" column="2">
            <widget class="BtComboBoxEnum" name="ibuFormulaComboBox"/>
           </item>
-          <item row="1" column="0">
+          <item row="1" column="1" colspan="2">
+           <widget class="InfoText" name="infoText_ibuFormula">
+            <property name="buddy">
+             <cstring>infoButton_ibuFormula</cstring>
+            </property>
+            <property name="text">
+             <string>How bitterness (IBUs) is estimated from the recipe's hop additions.
+ • Tinseth: the most widely used formula.  Allows for boil time and wort gravity.
+ • Rager: older; generally gives higher IBUs than Tinseth.
+ • Noonan: from Greg Noonan's "New Brewing Lager Beer".
+ • Garetz: from Mark Garetz's "Using Hops".  Generally lower IBUs, none for 10 minutes' boil or less, and allows for high hopping rates.
+ • Daniels: from Ray Daniels' "Designing Great Beers".  Separate figures for pellets and whole hops.
+ • mIBU: John-Paul Hosom's extension of Tinseth, adding bitterness from hops in hot wort after flameout.
+ • SMPH: Hosom's detailed model, which also allows for oxidized alpha acids, polyphenols, hopping rate, wort pH and yeast flocculation.
+Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using the post-boil steps of the boil profile.  For formulas other than Garetz, Daniels and SMPH, pellets are assumed to give 10% more IBUs than whole hops (plugs 2%).</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
            <widget class="QLabel" name="colorFormulaLabel">
             <property name="text">
              <string>Color</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="2">
            <widget class="BtComboBoxEnum" name="colorFormulaComboBox"/>
           </item>
          </layout>
@@ -108,15 +129,18 @@
          <property name="title">
           <string>IBU Adjustments</string>
          </property>
-         <layout class="QFormLayout" name="formLayout_3">
+         <layout class="QGridLayout" name="gridLayout_ibuAdjustments" columnstretch="0,0,1">
           <item row="0" column="0">
+           <widget class="InfoButton" name="infoButton_mashHop"></widget>
+          </item>
+          <item row="0" column="1">
            <widget class="QLabel" name="mashHopLabel_2">
             <property name="text">
              <string>Mash Hop (%)</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="0" column="2">
            <widget class="QDoubleSpinBox" name="ibuAdjustmentMashHopDoubleSpinBox">
             <property name="decimals">
              <number>1</number>
@@ -132,14 +156,27 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="1" column="1" colspan="2">
+           <widget class="InfoText" name="infoText_mashHop">
+            <property name="buddy">
+             <cstring>infoButton_mashHop</cstring>
+            </property>
+            <property name="text">
+             <string>IBUs from hops added to the mash, as a percentage of what the same hops would give if they were added at the start of the boil and boiled for its full length.  Mash hops contribute little or no bitterness, because alpha acids isomerize very slowly at mash temperatures and much of the hop material stays behind with the grain.  The default is 0%, ie mash hops are assumed to give no IBUs.  This applies whichever IBU formula is selected.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="InfoButton" name="infoButton_firstWort"></widget>
+          </item>
+          <item row="2" column="1">
            <widget class="QLabel" name="firstWortLabel">
             <property name="text">
              <string>First Wort (%)</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="2">
            <widget class="QDoubleSpinBox" name="ibuAdjustmentFirstWortDoubleSpinBox">
             <property name="decimals">
              <number>1</number>
@@ -152,6 +189,16 @@
             </property>
             <property name="value">
              <double>100.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="2">
+           <widget class="InfoText" name="infoText_firstWort">
+            <property name="buddy">
+             <cstring>infoButton_firstWort</cstring>
+            </property>
+            <property name="text">
+             <string>IBUs from first wort hops (hops put in the kettle as the wort is run off, before the boil starts), as a percentage of what the same hops would give if they were added at the start of the boil.  The default of 110% reflects the commonly reported finding that first wort hopping gives about 10% more bitterness than a full-length boil addition.  This applies whichever IBU formula is selected.</string>
             </property>
            </widget>
           </item>
@@ -487,7 +534,10 @@
        </item>
 
        <item row="7" column="0">
-        <widget class="QLabel" name="label_defaultEfficiency">
+        <widget class="SmartLabel" name="label_defaultEfficiency">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="buddy">
           <cstring>lineEdit_defaultEfficiency</cstring>
          </property>
@@ -500,6 +550,17 @@
         <widget class="SmartLineEdit" name="lineEdit_defaultEfficiency">
          <property name="toolTip">
           <string>Default efficiency to set on new recipes</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="9" column="0" colspan="2">
+        <widget class="QCheckBox" name="checkBox_defaultFgCalcUsesMash">
+         <property name="text">
+          <string>By default, use mash profile in FG calculation for new and imported recipes</string>
+         </property>
+         <property name="toolTip">
+          <string>Whether new and imported recipes take account of the mash temperatures and times when estimating final gravity.  (This can be changed for each recipe on its Mash tab.)</string>
          </property>
         </widget>
        </item>
@@ -520,6 +581,16 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>InfoButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/InfoButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>InfoText</class>
+   <extends>QLabel</extends>
+   <header>widgets/InfoText.h</header>
+  </customwidget>
   <customwidget>
    <class>BtComboBoxEnum</class>
    <extends>QComboBox</extends>

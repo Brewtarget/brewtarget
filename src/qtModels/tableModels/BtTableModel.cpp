@@ -106,21 +106,26 @@ void BtTableModel::contextMenu(QPoint const & point) {
    // .:TBD:. The logic from here on is similar to that in SmartLabel::popContextMenu, but I didn't yet figure out how
    // to have more of the code be shared.
 
-   // Only makes sense to offer the pop-up "select scale" menu for physical quantities
-   QuantityFieldType const fieldType = *columnInfo.typeInfo.fieldType;
-   if (std::holds_alternative<NonPhysicalQuantity>(fieldType)) {
+   // Only makes sense to offer the pop-up menu if there is something for the user to choose -- ie units, scale and/or
+   // decimal places for physical quantities, and decimal places for some non-physical ones (eg percentages).
+   if (!UnitAndScalePopUpMenu::isAvailableFor(columnInfo.typeInfo)) {
       return;
    }
 
    //
    // Note that UnitAndScalePopUpMenu::create handles the case where there are two possible physical quantities
    //
+   QuantityFieldType const fieldType = *columnInfo.typeInfo.fieldType;
    std::unique_ptr<QMenu> const menu =
-      UnitAndScalePopUpMenu::create(this->m_parentTableWidget,
-                                    ConvertToPhysicalQuantities(fieldType),
-                                    columnInfo.getForcedSystemOfMeasurement(),
-                                    columnInfo.getForcedRelativeScale(),
-                                    columnInfo.getForcedDecimalPlaces());
+      std::holds_alternative<NonPhysicalQuantity>(fieldType) ?
+         UnitAndScalePopUpMenu::create(this->m_parentTableWidget,
+                                       std::get<NonPhysicalQuantity>(fieldType),
+                                       columnInfo.getForcedDecimalPlaces()) :
+         UnitAndScalePopUpMenu::create(this->m_parentTableWidget,
+                                       ConvertToPhysicalQuantities(fieldType),
+                                       columnInfo.getForcedSystemOfMeasurement(),
+                                       columnInfo.getForcedRelativeScale(),
+                                       columnInfo.getForcedDecimalPlaces());
 
    // If the pop-up menu has no entries, then we can bail out here
    if (menu->actions().size() == 0) {

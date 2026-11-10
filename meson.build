@@ -189,7 +189,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '5.2.3',
+        version: '5.3.0',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.63.0',
         default_options : ['cpp_std=c++23',
@@ -813,9 +813,9 @@ endif
 #
 commonSourceFiles = files([
    'src/AboutDialog.cpp',
-   'src/Algorithms.cpp',
    'src/Application.cpp',
    'src/BeerColorWidget.cpp',
+   'src/BoilTimer.cpp',
    'src/BrewDayFormatter.cpp',
    'src/BrewDayScrollWidget.cpp',
    'src/BrewLogWidget.cpp',
@@ -832,8 +832,7 @@ commonSourceFiles = files([
    'src/Localization.cpp',
    'src/Logging.cpp',
    'src/MainWindow.cpp',
-   'src/MashDesigner.cpp',
-   'src/MashWizard.cpp',
+   'src/MashAutoAdjuster.cpp',
    'src/OptionDialog.cpp',
    'src/PersistentSettings.cpp',
    'src/PrintAndPreviewDialog.cpp',
@@ -846,13 +845,17 @@ commonSourceFiles = files([
    'src/StyleRangeWidget.cpp',
    'src/TimerListDialog.cpp',
    'src/TimerWidget.cpp',
-   'src/BoilTimer.cpp',
+   'src/WaterAutoAdjuster.cpp',
    'src/buttons/BoilButton.cpp',
    'src/buttons/EquipmentButton.cpp',
    'src/buttons/FermentationButton.cpp',
    'src/buttons/MashButton.cpp',
    'src/buttons/RecipeAttributeButton.cpp',
    'src/buttons/StyleButton.cpp',
+   'src/calculations/Algorithms.cpp',
+   'src/calculations/ColorMethods.cpp',
+   'src/calculations/IbuMethods.cpp',
+   'src/calculations/MashFermentability.cpp',
    'src/catalogs/BoilCatalog.cpp',
    'src/catalogs/EquipmentCatalog.cpp',
    'src/catalogs/FermentableCatalog.cpp',
@@ -889,9 +892,7 @@ commonSourceFiles = files([
    'src/editors/WaterEditor.cpp',
    'src/editors/YeastEditor.cpp',
    'src/measurement/Amount.cpp',
-   'src/measurement/ColorMethods.cpp',
    'src/measurement/CurrencyAmount.cpp',
-   'src/measurement/IbuMethods.cpp',
    'src/measurement/Measurement.cpp',
    'src/measurement/NonPhysicalQuantity.cpp',
    'src/measurement/PhysicalQuantity.cpp',
@@ -978,8 +979,6 @@ commonSourceFiles = files([
    'src/qtModels/tableModels/WaterTableModel.cpp',
    'src/qtModels/tableModels/YeastTableModel.cpp',
    'src/serialization/ImportExport.cpp',
-   'src/serialization/json/beerJson/BeerJson.cpp',
-   'src/serialization/json/dotBeer/DotBeer.cpp',
    'src/serialization/json/JsonCoding.cpp',
    'src/serialization/json/JsonMeasureableUnitsMapping.cpp',
    'src/serialization/json/JsonRecord.cpp',
@@ -987,6 +986,8 @@ commonSourceFiles = files([
    'src/serialization/json/JsonSchema.cpp',
    'src/serialization/json/JsonUtils.cpp',
    'src/serialization/json/JsonXPath.cpp',
+   'src/serialization/json/beerJson/BeerJson.cpp',
+   'src/serialization/json/dotBeer/DotBeer.cpp',
    'src/serialization/xml/BeerXml.cpp',
    'src/serialization/xml/XmlCoding.cpp',
    'src/serialization/xml/XmlDocument.cpp',
@@ -999,7 +1000,6 @@ commonSourceFiles = files([
    'src/serialization/xml/XmlSchema.cpp',
    'src/tools/AlcoholTool.cpp',
    'src/tools/AncestorDialog.cpp',
-   'src/tools/UnitConversionTool.cpp',
    'src/tools/HydrometerTool.cpp',
    'src/tools/OgCorrectionTool.cpp',
    'src/tools/PitchDialog.cpp',
@@ -1008,6 +1008,7 @@ commonSourceFiles = files([
    'src/tools/ScaleRecipeTool.cpp',
    'src/tools/StrikeWaterDialog.cpp',
    'src/tools/TimerMainDialog.cpp',
+   'src/tools/UnitConversionTool.cpp',
    'src/trees/NamedEntityTreeModel.cpp',
    'src/trees/NamedEntityTreeSortFilterProxyModel.cpp',
    'src/trees/NamedEntityTreeView.cpp',
@@ -1019,6 +1020,7 @@ commonSourceFiles = files([
    'src/trees/TreeView.cpp',
    'src/undoRedo/SimpleUndoableUpdate.cpp',
    'src/undoRedo/Undoable.cpp',
+   'src/undoRedo/UndoableAutoAdjust.cpp',
    'src/utils/BtException.cpp',
    'src/utils/BtStringConst.cpp',
    'src/utils/BtStringStream.cpp',
@@ -1048,6 +1050,7 @@ commonSourceFiles = files([
    'src/widgets/EnumeratedItemsWidget.cpp',
    'src/widgets/InfoButton.cpp',
    'src/widgets/InfoText.cpp',
+   'src/widgets/LockAndShareBar.cpp',
    'src/widgets/SelectionControl.cpp',
    'src/widgets/SmartAmountSettings.cpp',
    'src/widgets/SmartAmounts.cpp',
@@ -1056,8 +1059,8 @@ commonSourceFiles = files([
    'src/widgets/SmartLabel.cpp',
    'src/widgets/SmartLineEdit.cpp',
    'src/widgets/SmartValueDisplay.cpp',
-   'src/widgets/StockManagerIngredient.cpp',
    'src/widgets/StockManager.cpp',
+   'src/widgets/StockManagerIngredient.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
    'src/widgets/WaterAdjuster.cpp',
@@ -1072,6 +1075,9 @@ applicationMainSourceFile = files([
 #
 unitTestExtraSourceFiles = files([
    'src/unitTests/CoreTests.cpp',
+   'src/unitTests/DatabaseTests.cpp',
+   'src/unitTests/MashAutoAdjusterTests.cpp',
+   'src/unitTests/MashFermentabilityTests.cpp',
    'src/unitTests/MeasurementTests.cpp',
    'src/unitTests/RecipeCalcTests.cpp',
    'src/unitTests/SerializationTests.cpp',
@@ -1079,6 +1085,7 @@ unitTestExtraSourceFiles = files([
    'src/unitTests/TestData.cpp',
    'src/unitTests/TestEnvironment.cpp',
    'src/unitTests/TestMain.cpp',
+   'src/unitTests/WaterAutoAdjusterTests.cpp',
 ])
 
 #
@@ -1104,8 +1111,6 @@ mocHeaders = files([
    'src/IbuGuSlider.h',
    'src/LatestReleaseFinder.h',
    'src/MainWindow.h',
-   'src/MashDesigner.h',
-   'src/MashWizard.h',
    'src/OptionDialog.h',
    'src/PrintAndPreviewDialog.h',
    'src/RangedSlider.h',
@@ -1267,6 +1272,7 @@ mocHeaders = files([
    'src/widgets/BtOptionalDateEdit.h',
    'src/widgets/EnumeratedItemsWidget.h',
    'src/widgets/InfoButton.h',
+   'src/widgets/LockAndShareBar.h',
    'src/widgets/InfoText.h',
    'src/widgets/SelectionControl.h',
    'src/widgets/SmartDigitWidget.h',
@@ -1280,10 +1286,14 @@ mocHeaders = files([
 
 unitTestMocHeaders = files([
    'src/unitTests/CoreTests.h',
+   'src/unitTests/DatabaseTests.h',
+   'src/unitTests/MashAutoAdjusterTests.h',
+   'src/unitTests/MashFermentabilityTests.h',
    'src/unitTests/MeasurementTests.h',
    'src/unitTests/RecipeCalcTests.h',
    'src/unitTests/SerializationTests.h',
    'src/unitTests/TestClassBase.h',
+   'src/unitTests/WaterAutoAdjusterTests.h',
 ])
 
 #
@@ -1305,10 +1315,8 @@ uiFiles = files([
    'ui/fermentationStepEditor.ui',
    'ui/hopEditor.ui',
    'ui/mainWindow.ui',
-   'ui/mashDesigner.ui',
    'ui/mashEditor.ui',
    'ui/mashStepEditor.ui',
-   'ui/mashWizard.ui',
    'ui/miscEditor.ui',
    'ui/ogCorrectionTool.ui',
    'ui/optionsDialog.ui',
@@ -1378,6 +1386,7 @@ filesToInstall_data = files([
    'data/DefaultContent003-Ingredients-Hops-Yeasts.json',
    'data/DefaultContent004-MoreYeasts.json',
    'data/DefaultContent005-Fermentables-Recipes.beer',
+   'data/DefaultContent006-MashAndWaterProfiles.beer',
 ])
 
 filesToInstall_icons = files([
@@ -1968,14 +1977,54 @@ test('Test type lookups'                     , testRunner, args : ['CoreTests', 
 test('Test MultiVector'                      , testRunner, args : ['CoreTests', 'testMultiVector'                            ], suite : 'core')
 # Need a bit longer than the default 30 second timeout for the log rotation test on some platforms
 test('Test log rotation'                     , testRunner, args : ['CoreTests', 'testLogRotation'                            ], suite : 'core', timeout : 60)
+test('Test DB upgrade from Brewtarget 2.3.1' , testRunner, args : ['DatabaseTests', 'testUpgradeBrewtarget231Database'       ], suite : 'database')
+test('Test locking and sharing'              , testRunner, args : ['DatabaseTests', 'testLockingAndSharing'                  ], suite : 'database')
+test('Test automatic recipe versioning'      , testRunner, args : ['DatabaseTests', 'testAutomaticVersioning'                ], suite : 'database')
+test('Test mash auto strike water'           , testRunner, args : ['MashAutoAdjusterTests', 'testStrikeWater'                ], suite : 'mash')
+test('Test mash auto fixed values'           , testRunner, args : ['MashAutoAdjusterTests', 'testFixedValues'                ], suite : 'mash')
+test('Test mash auto step infusions'         , testRunner, args : ['MashAutoAdjusterTests', 'testStepInfusions'              ], suite : 'mash')
+test('Test mash auto decoction'              , testRunner, args : ['MashAutoAdjusterTests', 'testDecoction'                  ], suite : 'mash')
+test('Test mash auto sparge'                 , testRunner, args : ['MashAutoAdjusterTests', 'testSparge'                     ], suite : 'mash')
+test('Test mash auto no sparge'              , testRunner, args : ['MashAutoAdjusterTests', 'testNoSparge'                   ], suite : 'mash')
+test('Test mash auto errors and warnings'    , testRunner, args : ['MashAutoAdjusterTests', 'testErrorsAndWarnings'          ], suite : 'mash')
+test('Test mash auto sensible temperatures'  , testRunner, args : ['MashAutoAdjusterTests', 'testSensibleTemperatures'       ], suite : 'mash')
+test('Test mash auto check'                  , testRunner, args : ['MashAutoAdjusterTests', 'testCheck'                      ], suite : 'mash')
+test('Test mash auto rounded values'         , testRunner, args : ['MashAutoAdjusterTests', 'testRoundedValues'              ], suite : 'mash')
+test('Test mash auto with recipe'            , testRunner, args : ['MashAutoAdjusterTests', 'testWithRecipe'                 ], suite : 'mash')
+test('Test mash auto example profiles'       , testRunner, args : ['MashAutoAdjusterTests', 'testExampleProfiles'            ], suite : 'mash')
+test('Test mash auto adjust'                 , testRunner, args : ['MashAutoAdjusterTests', 'testAutoAdjust'                 ], suite : 'mash')
+test('Test mash auto undo'                   , testRunner, args : ['MashAutoAdjusterTests', 'testUndo'                       ], suite : 'mash')
+test('Test mash fermentability paper'        , testRunner, args : ['MashFermentabilityTests', 'testReproducesPaper'          ], suite : 'mash')
+test('Test mash fermentability temp and time', testRunner, args : ['MashFermentabilityTests', 'testTemperatureAndTime'       ], suite : 'mash')
+test('Test mash fermentability profile'      , testRunner, args : ['MashFermentabilityTests', 'testBuildProfile'             ], suite : 'mash')
+test('Test mash fermentability step mashes'  , testRunner, args : ['MashFermentabilityTests', 'testStepMashes'               ], suite : 'mash')
+test('Test mash fermentability continuity'   , testRunner, args : ['MashFermentabilityTests', 'testNoDiscontinuities'        ], suite : 'mash')
+test('Test mash fermentability enzymes'      , testRunner, args : ['MashFermentabilityTests', 'testEnzymeLevels'             ], suite : 'mash')
+test('Test mash fermentability limits'       , testRunner, args : ['MashFermentabilityTests', 'testLimits'                   ], suite : 'mash')
+test('Test water auto salt chemistry'        , testRunner, args : ['WaterAutoAdjusterTests', 'testSaltChemistry'             ], suite : 'water')
+test('Test water auto exact amounts'         , testRunner, args : ['WaterAutoAdjusterTests', 'testExactAmounts'              ], suite : 'water')
+test('Test water auto default salts'         , testRunner, args : ['WaterAutoAdjusterTests', 'testDefaultSalts'              ], suite : 'water')
+test('Test water auto base water and fixed'  , testRunner, args : ['WaterAutoAdjusterTests', 'testBaseWaterAndFixedAdditions'], suite : 'water')
+test('Test water auto unreachable target'    , testRunner, args : ['WaterAutoAdjusterTests', 'testUnreachableTarget'         ], suite : 'water')
+test('Test water auto minimum addition'      , testRunner, args : ['WaterAutoAdjusterTests', 'testMinimumAddition'           ], suite : 'water')
+test('Test water auto errors'                , testRunner, args : ['WaterAutoAdjusterTests', 'testErrors'                    ], suite : 'water')
+test('Test water auto acid chemistry'        , testRunner, args : ['WaterAutoAdjusterTests', 'testAcidChemistry'             ], suite : 'water')
+test('Test water auto mash pH'               , testRunner, args : ['WaterAutoAdjusterTests', 'testMashPh'                    ], suite : 'water')
+test('Test water auto acid amounts'          , testRunner, args : ['WaterAutoAdjusterTests', 'testAcidAmounts'               ], suite : 'water')
+test('Test water auto undo and keep in sync' , testRunner, args : ['WaterAutoAdjusterTests', 'testRecipeUndoAndKeepInSync'   ], suite : 'water')
+test('Test water auto suggested target pH'   , testRunner, args : ['WaterAutoAdjusterTests', 'testSuggestedTargetMashPh'     ], suite : 'water')
+test('Test water auto example profiles'      , testRunner, args : ['WaterAutoAdjusterTests', 'testExampleProfiles'           ], suite : 'water')
 test('Test unit conversions'                 , testRunner, args : ['MeasurementTests', 'testUnitConversions'                 ], suite : 'measurement')
 test('Test unit inverses'                    , testRunner, args : ['MeasurementTests', 'testUnitInverses'                    ], suite : 'measurement')
 test('Test number display and parsing'       , testRunner, args : ['MeasurementTests', 'testNumberDisplayAndParsing'         ], suite : 'measurement')
 test('Test algorithms'                       , testRunner, args : ['MeasurementTests', 'testAlgorithms'                      ], suite : 'measurement')
+test('Test percentage decimal places'        , testRunner, args : ['MeasurementTests', 'testPercentageDecimalPlaces'         ], suite : 'measurement')
 test('Test recipe calculations - all grain'  , testRunner, args : ['RecipeCalcTests', 'recipeCalcTest_allGrain'              ], suite : 'recipe')
 test('Test post boil loss OG'                , testRunner, args : ['RecipeCalcTests', 'postBoilLossOgTest'                   ], suite : 'recipe')
 test('Test boil addition timing'             , testRunner, args : ['RecipeCalcTests', 'testBoilAdditionTiming'               ], suite : 'recipe')
 test('Test boil steps without temperatures'  , testRunner, args : ['RecipeCalcTests', 'testBoilStepsWithoutTemperatures'     ], suite : 'recipe')
+test('Test post-boil IBUs'                   , testRunner, args : ['RecipeCalcTests', 'testPostBoilIbus'                     ], suite : 'recipe')
+test('Test IBU formulas'                     , testRunner, args : ['RecipeCalcTests', 'testIbuFormulas'                      ], suite : 'recipe')
 test('Test inventory'                        , testRunner, args : ['RecipeCalcTests', 'testInventory'                        ], suite : 'recipe')
 test('Test mash water volumes'               , testRunner, args : ['RecipeCalcTests', 'testMashWaterVolumes'                 ], suite : 'recipe')
 test('Test evaporation rate'                 , testRunner, args : ['RecipeCalcTests', 'testEvaporationRate'                  ], suite : 'recipe')
@@ -1987,6 +2036,8 @@ test('Test dotBeer addition step correction' , testRunner, args : ['Serializatio
 test('Test brew log calcs'                   , testRunner, args : ['SerializationTests', 'testBrewLogCalcs'                  ], suite : 'serialization')
 test('Test dotBeer version handling'         , testRunner, args : ['SerializationTests', 'testDotBeerVersionHandling'        ], suite : 'serialization')
 test('Test dotBeer export'                   , testRunner, args : ['SerializationTests', 'testDotBeerExport'                 ], suite : 'serialization')
+test('Test dotBeer locked'                   , testRunner, args : ['SerializationTests', 'testDotBeerLocked'                 ], suite : 'serialization')
+test('Test dotBeer target mash pH'           , testRunner, args : ['SerializationTests', 'testDotBeerTargetMashPh'           ], suite : 'serialization')
 test('Test clear unused optional vessels'    , testRunner, args : ['SerializationTests', 'testClearUnusedOptionalVessels'    ], suite : 'serialization')
 test('Test BeerXML null yield'               , testRunner, args : ['SerializationTests', 'testBeerXmlNullYield'              ], suite : 'serialization')
 test('Test NullSentinel'                     , testRunner, args : ['SerializationTests', 'testNullSentinel'                  ], suite : 'serialization')
@@ -1999,7 +2050,6 @@ test('Test equipment volumes'                , testRunner, args : ['Serializatio
 test('Test clear unused mash tun'            , testRunner, args : ['SerializationTests', 'testClearUnusedMashTun'            ], suite : 'serialization')
 
 #===
-
 
 doxygen = find_program('doxygen', required : false)
 if not doxygen.found()

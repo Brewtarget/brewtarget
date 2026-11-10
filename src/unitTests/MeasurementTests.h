@@ -60,6 +60,12 @@ private slots:
     *        function because there isn't a non-horrible formula in that direction.
     */
    void testAlgorithms();
+
+   /**
+    * \brief Verify that the user can choose the number of decimal places for a percentage field (via its
+    *        \c SmartLabel), and that showing a value rounded does not change the value we read back from the field.
+    */
+   void testPercentageDecimalPlaces();
 };
 
 #endif
