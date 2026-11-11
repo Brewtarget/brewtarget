@@ -33,7 +33,7 @@ namespace {
    char const * const FOLDER_PATH_FOR_SUPPLIED_RECIPES = CONFIG_APPLICATION_NAME_LC;
 }
 
-int constexpr DefaultContentLoader::availableContentVersion = 5;
+int constexpr DefaultContentLoader::availableContentVersion = 6;
 
 DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessary(QSqlDatabase & db,
                                                                                   QTextStream  & userMessage) {
@@ -81,6 +81,7 @@ DefaultContentLoader::UpdateResult DefaultContentLoader::updateContentIfNecessar
    //    DefaultContent003-Yeasts.json
    //    DefaultContent004-MoreYeasts.json
    //    DefaultContent005-Fermentables-Recipes.beer
+   //    DefaultContent006-MashAndWaterProfiles.beer
    //    etc
    //
    // *******************************************************************************************************

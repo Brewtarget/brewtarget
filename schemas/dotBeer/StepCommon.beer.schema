@@ -10,7 +10,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/1.0.0/StepCommon.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.1.0/StepCommon.beer.schema",
   "description": "`StepCommon` is not a type itself, but a subschema holding various common parts of `MashStep`, `BoilStep` and `FermentationStep`.",
   "$defs": {
     //

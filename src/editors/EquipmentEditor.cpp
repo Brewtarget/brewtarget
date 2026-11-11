@@ -24,11 +24,16 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "editors/EquipmentEditor.h"
 
+#include <algorithm>
+#include <cmath>
+#include <vector>
+
 #include <QCloseEvent>
 #include <QDebug>
 #include <QIcon>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QStringList>
 
 #include "config.h"
 #include "BtHorizontalTabs.h"
@@ -37,6 +42,9 @@
 #include "measurement/Measurement.h"
 #include "measurement/PhysicalConstants.h"
 #include "measurement/Unit.h"
+#include "model/Boil.h"
+#include "model/Recipe.h"
+#include "model/RecipeUtils.h"
 #include "PersistentSettings.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
@@ -334,7 +342,137 @@ bool EquipmentEditor::validateBeforeSave() {
       lineEdit_agingVesselLoss  ->setQuantity(0.0);
    }
 
+   // We're going to save, so this is our last chance to see what the equipment said before the user's changes
+   this->rememberRecipeSizesBeforeSave();
+
    return true;
+}
+
+void EquipmentEditor::rememberRecipeSizesBeforeSave() {
+   this->m_recipeSizesBeforeSave.clear();
+   // A new equipment profile isn't used by any recipe yet
+   if (!this->m_editItem || this->m_editItem->key() <= 0) {
+      return;
+   }
+   for (Recipe * recipe : RecipeUtils::recipesUsing(*this->m_editItem)) {
+      auto const boil = recipe->boil();
+      // See comment in Equipment::defaultPreBoilSize_l for why we pass in the boil time
+      double const boilTime_mins = boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
+      this->m_recipeSizesBeforeSave.push_back({
+         .recipe        = recipe,
+         .batchSize_l   = this->m_editItem->fvBatchSize_l(),
+         .preBoilSize_l = this->m_editItem->defaultPreBoilSize_l(boilTime_mins)
+      });
+   }
+   return;
+}
+
+void EquipmentEditor::offerToUpdateRecipeSizes() {
+   // Same tolerance as MainWindow::setForRecipe
+   static constexpr double tolerance_l = 0.001;
+   auto same = [](double const lhs, double const rhs) { return std::abs(lhs - rhs) < tolerance_l; };
+
+   struct RecipeUpdate {
+      Recipe * recipe;
+      std::optional<double> newBatchSize_l;
+      std::optional<double> newPreBoilSize_l;
+   };
+   std::vector<RecipeUpdate> updates;
+   for (auto const & before : this->m_recipeSizesBeforeSave) {
+      Recipe & recipe = *before.recipe;
+      // We can't change a locked recipe
+      if (recipe.locked()) {
+         continue;
+      }
+      RecipeUpdate update{.recipe = &recipe, .newBatchSize_l = std::nullopt, .newPreBoilSize_l = std::nullopt};
+      double const newBatchSize_l = this->m_editItem->fvBatchSize_l();
+      if (same(recipe.batchSize_l(), before.batchSize_l) && !same(newBatchSize_l, before.batchSize_l)) {
+         update.newBatchSize_l = newBatchSize_l;
+      }
+      if (auto const boil = recipe.boil(); boil && boil->preBoilSize_l()) {
+         double const newPreBoilSize_l = this->m_editItem->defaultPreBoilSize_l(boil->boilTime_mins());
+         if (same(*boil->preBoilSize_l(), before.preBoilSize_l) && !same(newPreBoilSize_l, before.preBoilSize_l)) {
+            update.newPreBoilSize_l = newPreBoilSize_l;
+         }
+      }
+      if (update.newBatchSize_l || update.newPreBoilSize_l) {
+         updates.push_back(update);
+      }
+   }
+
+   //
+   // The pre-boil size is on the recipe's Boil, which might be locked, or shared with other recipes.  We can't change a
+   // locked boil, and we only change a shared one if all the recipes sharing it are also getting the new pre-boil size
+   // (because otherwise we'd be changing recipes the user hasn't been asked about).
+   //
+   for (auto & update : updates) {
+      if (!update.newPreBoilSize_l) {
+         continue;
+      }
+      auto const boil = update.recipe->boil();
+      bool canChange = (RecipeUtils::lockReason(*boil) == RecipeUtils::LockReason::NotLocked);
+      for (Recipe const * sharer : RecipeUtils::recipesUsing(*boil)) {
+         if (!canChange) {
+            break;
+         }
+         canChange = std::ranges::any_of(
+            updates,
+            [sharer](RecipeUpdate const & other) { return other.recipe == sharer && other.newPreBoilSize_l; }
+         );
+      }
+      if (!canChange) {
+         qInfo() <<
+            Q_FUNC_INFO << "Not offering to change pre-boil size of Boil #" << boil->key() << "on Recipe #" <<
+            update.recipe->key() << "as boil is locked or shared with recipes not being updated";
+         update.newPreBoilSize_l = std::nullopt;
+      }
+   }
+   std::erase_if(updates,
+                 [](RecipeUpdate const & update) { return !update.newBatchSize_l && !update.newPreBoilSize_l; });
+   if (updates.empty()) {
+      return;
+   }
+
+   auto displayVolume = [](double const volume_l) {
+      return Measurement::displayAmount(Measurement::Amount{volume_l, Measurement::Units::liters});
+   };
+   QString details;
+   for (auto const & update : updates) {
+      QStringList changes;
+      if (update.newBatchSize_l) {
+         changes << tr("batch size %1").arg(displayVolume(*update.newBatchSize_l));
+      }
+      if (update.newPreBoilSize_l) {
+         changes << tr("pre-boil size %1").arg(displayVolume(*update.newPreBoilSize_l));
+      }
+      details += QString("<li>%1: %2</li>").arg(update.recipe->name().toHtmlEscaped(), changes.join(", "));
+   }
+
+   QMessageBox theQuestion{this};
+   theQuestion.setWindowTitle(tr("Update recipes?"));
+   theQuestion.setIcon(QMessageBox::Question);
+   theQuestion.setText(
+      tr("The following recipes use equipment \"%1\" and have the batch size and/or pre-boil size that it previously "
+         "specified.  Would you like to update them to match the changes you just made?").arg(
+         this->m_editItem->name().toHtmlEscaped()
+      )
+   );
+   theQuestion.setInformativeText(QString("<ul>%1</ul>").arg(details));
+   theQuestion.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+   theQuestion.setDefaultButton(QMessageBox::Yes);
+   if (theQuestion.exec() != QMessageBox::Yes) {
+      return;
+   }
+
+   for (auto const & update : updates) {
+      if (update.newBatchSize_l) {
+         update.recipe->setBatchSize_l(*update.newBatchSize_l);
+      }
+      if (update.newPreBoilSize_l) {
+         update.recipe->boil()->setPreBoilSize_l(*update.newPreBoilSize_l);
+      }
+   }
+   return;
 }
 
 
@@ -361,6 +499,9 @@ void EquipmentEditor::postWriteLateFieldsToEditItem() {
    // As we tell the user in infoText_optionalVessels, we don't save the attributes of an optional vessel whose volume
    // is blank or zero.
    this->m_editItem->clearUnusedOptionalVessels();
+
+   this->offerToUpdateRecipeSizes();
+   this->m_recipeSizesBeforeSave.clear();
    return;
 }
 

@@ -592,7 +592,10 @@
                     </item>
 
                     <item row="5" column="0" colspan="2">
-                     <widget class="QLabel" name="label_efficiency">
+                     <widget class="SmartLabel" name="label_efficiency">
+                      <property name="contextMenuPolicy">
+                       <enum>Qt::CustomContextMenu</enum>
+                      </property>
                       <property name="text">
                        <string>Efficienc&amp;y</string>
                       </property>
@@ -1315,6 +1318,17 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="QLabel" name="label_mashStatus">
+                  <property name="toolTip">
+                   <string>Info about, and any problems with, this mash</string>
+                  </property>
+                  <!-- Temporarily add colour for debugging
+                  <property name="styleSheet">
+                   <string notr="true">color: white; background-color: #148263;</string>
+                  </property -->
+                 </widget>
+                </item>
+                <item>
                  <spacer name="horizontalSpacer_mashCombo">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -1328,19 +1342,12 @@
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton_mashDesigner">
+                 <widget class="QCheckBox" name="checkBox_fgCalcUsesMash">
                   <property name="text">
-                   <string>Mash Designer</string>
+                   <string>Use mash profile in FG calculation</string>
                   </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_mashWizard">
                   <property name="toolTip">
-                   <string>Invoke the mash wizard</string>
-                  </property>
-                  <property name="text">
-                   <string>Mash Wizard</string>
+                   <string>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</string>
                   </property>
                  </widget>
                 </item>
@@ -1400,6 +1407,13 @@
                   <property name="icon">
                    <iconset resource="../resources.qrc">
                     <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_boilStatus">
+                  <property name="toolTip">
+                   <string>Info about, and any problems with, this boil</string>
                   </property>
                  </widget>
                 </item>
@@ -1472,6 +1486,13 @@
                   <property name="icon">
                    <iconset resource="../resources.qrc">
                     <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_fermentationStatus">
+                  <property name="toolTip">
+                   <string>Info about, and any problems with, this fermentation</string>
                   </property>
                  </widget>
                 </item>
@@ -2301,8 +2322,7 @@
   <tabstop>mashStepsWidget</tabstop>
   <tabstop>mashComboBox</tabstop>
   <tabstop>pushButton_editMash</tabstop>
-  <tabstop>pushButton_mashDesigner</tabstop>
-  <tabstop>pushButton_mashWizard</tabstop>
+  <tabstop>pushButton_calculateMash</tabstop>
   <tabstop>boilComboBox</tabstop>
   <tabstop>pushButton_editBoil</tabstop>
   <tabstop>fermentationComboBox</tabstop>

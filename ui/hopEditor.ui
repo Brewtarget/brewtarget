@@ -77,7 +77,10 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_alpha">
           <item>
-           <widget class="QLabel" name="label_alpha">
+           <widget class="SmartLabel" name="label_alpha">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="toolTip">
              <string>Required</string>
             </property>
@@ -115,7 +118,10 @@
           <item>
            <!-- The label_alphaMin / label_alphaMax label names are very slightly misleading, but not too much so
                 IMHO. -->
-           <widget class="QLabel" name="label_alphaMin">
+           <widget class="SmartLabel" name="label_alphaMin">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>Typical Range</string>
             </property>
@@ -132,7 +138,10 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_alphaMax">
+           <widget class="SmartLabel" name="label_alphaMax">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>-</string>
             </property>
@@ -365,7 +374,10 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_beta">
           <item>
-           <widget class="QLabel" name="label_beta">
+           <widget class="SmartLabel" name="label_beta">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="toolTip">
              <string>Required</string>
             </property>
@@ -401,7 +413,10 @@
            </spacer>
           </item>
           <item>
-           <widget class="QLabel" name="label_betaMin">
+           <widget class="SmartLabel" name="label_betaMin">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>Typical Range</string>
             </property>
@@ -418,7 +433,10 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_betaMax">
+           <widget class="SmartLabel" name="label_betaMax">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>-</string>
             </property>
@@ -439,7 +457,10 @@
        </item>
 
        <item row="2" column="0">
-        <widget class="QLabel" name="label_sixMonthAlphaLoss">
+        <widget class="SmartLabel" name="label_sixMonthAlphaLoss">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>6 Month Alpha Loss</string>
          </property>
@@ -457,7 +478,10 @@
        </item>
 
        <item row="4" column="0">
-        <widget class="QLabel" name="label_humulene">
+        <widget class="SmartLabel" name="label_humulene">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Humulene %</string>
          </property>
@@ -480,7 +504,10 @@
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QLabel" name="label_linalool">
+        <widget class="SmartLabel" name="label_linalool">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -510,7 +537,10 @@
        </item>
 
        <item row="6" column="0">
-        <widget class="QLabel" name="label_caryophyllene">
+        <widget class="SmartLabel" name="label_caryophyllene">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -539,7 +569,10 @@
         </widget>
        </item>
        <item row="6" column="2">
-        <widget class="QLabel" name="label_limonene">
+        <widget class="SmartLabel" name="label_limonene">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -569,7 +602,10 @@
        </item>
 
        <item row="8" column="0">
-        <widget class="QLabel" name="label_cohumulone">
+        <widget class="SmartLabel" name="label_cohumulone">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -598,7 +634,10 @@
         </widget>
        </item>
        <item row="8" column="2">
-        <widget class="QLabel" name="label_nerol">
+        <widget class="SmartLabel" name="label_nerol">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -628,7 +667,10 @@
        </item>
 
        <item row="10" column="0">
-        <widget class="QLabel" name="label_myrcene">
+        <widget class="SmartLabel" name="label_myrcene">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -657,7 +699,10 @@
         </widget>
        </item>
        <item row="10" column="2">
-        <widget class="QLabel" name="label_pinene">
+        <widget class="SmartLabel" name="label_pinene">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -687,7 +732,10 @@
        </item>
 
        <item row="12" column="0">
-        <widget class="QLabel" name="label_farnesene">
+        <widget class="SmartLabel" name="label_farnesene">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -716,7 +764,10 @@
         </widget>
        </item>
        <item row="12" column="2">
-        <widget class="QLabel" name="label_polyphenols">
+        <widget class="SmartLabel" name="label_polyphenols">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -746,7 +797,10 @@
        </item>
 
        <item row="14" column="0">
-        <widget class="QLabel" name="label_geraniol">
+        <widget class="SmartLabel" name="label_geraniol">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -775,7 +829,10 @@
         </widget>
        </item>
        <item row="14" column="2">
-        <widget class="QLabel" name="label_xanthohumol">
+        <widget class="SmartLabel" name="label_xanthohumol">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -805,7 +862,10 @@
        </item>
 
        <item row="16" column="0">
-        <widget class="QLabel" name="label_bPinene">
+        <widget class="SmartLabel" name="label_bPinene">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>

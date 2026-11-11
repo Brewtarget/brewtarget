@@ -40,9 +40,11 @@ class MashStepTableModel;
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::MashStep { inline BtStringConst const property{#property}; }
 AddPropertyName(amount_l              )
+AddPropertyName(amountFixed           )
 AddPropertyName(decoctionAmount_l     ) // Should only be used for BeerXML
 AddPropertyName(infuseAmount_l        ) // Should only be used for BeerXML
 AddPropertyName(infuseTemp_c          )
+AddPropertyName(infuseTempFixed       )
 AddPropertyName(liquorToGristRatio_lKg)
 AddPropertyName(type                  )
 #undef AddPropertyName
@@ -80,9 +82,11 @@ public:
     */
    static QString localisedName();
    static QString localisedName_amount_l              ();
+   static QString localisedName_amountFixed           ();
    static QString localisedName_decoctionAmount_l     ();
    static QString localisedName_infuseAmount_l        ();
    static QString localisedName_infuseTemp_c          ();
+   static QString localisedName_infuseTempFixed       ();
    static QString localisedName_liquorToGristRatio_lKg();
    static QString localisedName_type                  ();
 
@@ -200,6 +204,15 @@ public:
     */
    Q_PROPERTY(std::optional<double> liquorToGristRatio_lKg READ liquorToGristRatio_lKg WRITE setLiquorToGristRatio_lKg          )
 
+   /**
+    * \brief Whether \c amount_l was set by the user (\c true) or can be calculated by the mash tool (\c false).  This
+    *        allows the user to have the tool work out "all or part" of the mash: eg to fix the amount of water for one
+    *        infusion and have the tool work out its temperature.  ⮜⮜⮜ Not part of BeerXML, BeerJSON or dotBeer. ⮞⮞⮞
+    */
+   Q_PROPERTY(bool                  amountFixed            READ amountFixed            WRITE setAmountFixed                     )
+   //! \brief As \c amountFixed, but for \c infuseTemp_c.  ⮜⮜⮜ Not part of BeerXML, BeerJSON or dotBeer. ⮞⮞⮞
+   Q_PROPERTY(bool                  infuseTempFixed        READ infuseTempFixed        WRITE setInfuseTempFixed                 )
+
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    [[nodiscard]] Type type() const;
    [[nodiscard]] double                amount_l              () const; // ⮜⮜⮜ Added, to replace infuseAmount_l & decoctionAmount_l, for BeerJSON support ⮞⮞⮞
@@ -208,6 +221,8 @@ public:
    [[nodiscard]] std::optional<double> infuseTemp_c          () const;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    [[nodiscard]] std::optional<double> liquorToGristRatio_lKg() const;
+   [[nodiscard]] bool                  amountFixed           () const;
+   [[nodiscard]] bool                  infuseTempFixed       () const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setType                  (Type                  val);
@@ -215,6 +230,8 @@ public:
    void setInfuseTemp_c          (std::optional<double> val);
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    void setLiquorToGristRatio_lKg(std::optional<double> val);
+   void setAmountFixed           (bool                  val);
+   void setInfuseTempFixed       (bool                  val);
 
    //! some convenience methods
    [[nodiscard]] bool isInfusion   () const;
@@ -249,6 +266,8 @@ private:
    std::optional<double> m_infuseTemp_c          ;
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
    std::optional<double> m_liquorToGristRatio_lKg;
+   bool                  m_amountFixed           ;
+   bool                  m_infuseTempFixed       ;
 };
 
 

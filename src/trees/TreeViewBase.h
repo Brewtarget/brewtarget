@@ -32,6 +32,7 @@
 #include <QWidget>
 
 #include "model/Folder.h"
+#include "model/LockablePropertyBase.h" // For IsLockable
 #include "model/StockPurchase.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/WindowDistributor.h"
@@ -522,8 +523,8 @@ public:
             continue;
          }
 
-         if constexpr (std::same_as<NE, Recipe>) {
-            // You cannot delete a locked recipe
+         if constexpr (IsLockable<NE>) {
+            // You cannot delete a locked recipe (or locked mash etc)
             if  (treeNode->classifier() == TreeNodeClassifier::PrimaryItem) {
                if (TreeItemNode<NE> const & primaryTreeNode = static_cast<TreeItemNode<NE> &>(*treeNode);
                    primaryTreeNode.underlyingItem()->locked()) {

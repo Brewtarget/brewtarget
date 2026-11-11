@@ -15,7 +15,8 @@
  =====================================================================================================================*/
 #include "utils/TypeInfo.h"
 
-#include "measurement/ColorMethods.h"
+#include "calculations/ColorMethods.h"
+#include "calculations/IbuMethods.h"
 #include "model/BoilStep.h"
 #include "model/Fermentable.h"
 #include "model/Hop.h"

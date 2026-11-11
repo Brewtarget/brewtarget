@@ -89,6 +89,55 @@ namespace RecipeUtils {
       SuspendRecipeCalcs & operator=(SuspendRecipeCalcs &&) = delete;
    };
 
+   //===================================================================================================================
+   // The following functions are for things that can be shared between Recipes (\c Mash, \c Boil, \c Fermentation),
+   // to help the UI make clear when changing something will affect more than one Recipe, and to protect things that
+   // should not be changed (see model/LockablePropertyBase.h).
+   //
+   // Implementations are in the .cpp file, with explicit instantiations for Mash, Boil and Fermentation.
+   //===================================================================================================================
+
+   /**
+    * \return The (non-deleted) Recipes that use \c item.  Order is not significant.
+    */
+   template<class NE> QList<Recipe *> recipesUsing(NE const & item);
+
+   /**
+    * \brief Why, if at all, the user should not be able to change something
+    */
+   enum class LockReason {
+      //! The item can be changed (although, if it is shared, the user should be told that the change will affect all
+      //! the recipes that use it)
+      NotLocked,
+      //! The item's own "locked" flag is set
+      ItemLocked,
+      //! The item is not itself locked, but is used by at least one locked Recipe -- eg a Recipe that has been brewed
+      //! and then had a new version made.  Changing the item would change what the locked Recipe records.
+      UsedByLockedRecipe,
+   };
+
+   template<class NE> LockReason lockReason(NE const & item);
+
+   /**
+    * \brief Make a copy of \c recipe's \c NE (ie \c Mash, \c Boil or \c Fermentation), and set \c recipe to use the
+    *        copy rather than the original.  The copy is not locked (see \c LockablePropertyBase copy constructor), and
+    *        its name says what it is a copy for.
+    *
+    *        It is a coding error to call this if \c recipe does not have an \c NE or if \c recipe is locked.
+    *
+    * \return The copy
+    */
+   template<class NE> std::shared_ptr<NE> useCopyFor(Recipe & recipe);
+
+   /**
+    * \return Text describing which recipes use \c item and whether it can be changed, suitable for showing to the user
+    *         (eg in an editor).
+    *
+    * \param currentRecipe The Recipe from which the user is looking at \c item, if any.  Used to say "this recipe and
+    *                      2 others" rather than "3 recipes", and to omit this recipe from the list of names.
+    */
+   template<class NE> QString describeSharingAndLocking(NE const & item, Recipe const * currentRecipe = nullptr);
+
 }
 
 #endif

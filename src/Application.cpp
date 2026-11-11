@@ -45,15 +45,16 @@
 #include <QThread>
 #include <QUrl>
 
-#include "Algorithms.h"
 #include "BtSplashScreen.h"
-#include "config.h"
-#include "database/Database.h"
 #include "LatestReleaseFinder.h"
 #include "Localization.h"
 #include "MainWindow.h"
-#include "measurement/ColorMethods.h"
-#include "measurement/IbuMethods.h"
+#include "PersistentSettings.h"
+#include "calculations/Algorithms.h"
+#include "calculations/ColorMethods.h"
+#include "calculations/IbuMethods.h"
+#include "config.h"
+#include "database/Database.h"
 #include "measurement/Measurement.h"
 #include "model/BrewLog.h"
 #include "model/Equipment.h"
@@ -65,7 +66,6 @@
 #include "model/Style.h"
 #include "model/Water.h"
 #include "model/Yeast.h"
-#include "PersistentSettings.h"
 
 // Needed for kill(2)
 #if defined(Q_OS_UNIX)

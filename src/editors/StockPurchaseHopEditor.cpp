@@ -48,8 +48,10 @@ StockPurchaseHopEditor::StockPurchaseHopEditor(QWidget* parent, QString const ed
    this->gridLayout_extras->addWidget(this->   label_year, 2, 1, 1, 1);
    this->gridLayout_extras->addWidget(this->lineEdit_year, 2, 2, 1, 1);
 
-   this->   label_alpha = new QLabel       {this->tab_extras};
+   this->   label_alpha = new SmartLabel   {this->tab_extras};
    this->lineEdit_alpha = new SmartLineEdit{this->tab_extras};
+   // This is what the .ui files do for SmartLabel, so that right-click brings up the menu for choosing decimal places
+   this->label_alpha->setContextMenuPolicy(Qt::CustomContextMenu);
    this->label_alpha->setBuddy(this->lineEdit_alpha);
    this->gridLayout_extras->addWidget(this->   label_alpha, 2, 4, 1, 1);
    this->gridLayout_extras->addWidget(this->lineEdit_alpha, 2, 5, 1, 1);

@@ -39,6 +39,7 @@
 #endif
 
 #include <algorithm>
+#include <cmath>
 #include <memory>
 #include <mutex> // For std::once_flag etc
 
@@ -69,7 +70,6 @@
 #include <QWidget>
 
 #include "AboutDialog.h"
-#include "Algorithms.h"
 #include "Application.h"
 #include "BrewLogWidget.h"
 #include "BtDatePopup.h"
@@ -77,8 +77,6 @@
 #include "BtTabWidget.h"
 #include "HelpDialog.h"
 #include "Html.h"
-#include "MashDesigner.h"
-#include "MashWizard.h"
 #include "OptionDialog.h"
 #include "PersistentSettings.h"
 #include "PrintAndPreviewDialog.h"
@@ -86,6 +84,8 @@
 #include "RecipeFormatter.h"
 #include "StockFormatter.h"
 #include "StockWindow.h"
+#include "calculations/Algorithms.h"
+#include "calculations/ColorMethods.h"
 #include "catalogs/BoilCatalog.h"
 #include "catalogs/EquipmentCatalog.h"
 #include "catalogs/FermentableCatalog.h"
@@ -112,9 +112,9 @@
 #include "editors/StyleEditor.h"
 #include "editors/WaterEditor.h"
 #include "editors/YeastEditor.h"
-#include "measurement/ColorMethods.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
+#include "model/RecipeUtils.h"
 #include "model/Boil.h"
 #include "model/BrewLog.h"
 #include "model/Equipment.h"
@@ -344,7 +344,6 @@ public:
       // Other
       m_aboutDialog                = std::make_unique<AboutDialog               >(&m_self);
       m_helpDialog                 = std::make_unique<HelpDialog                >(&m_self);
-      m_mashWizard                 = std::make_unique<MashWizard                >(&m_self);
       m_stockWindow                = std::make_unique<StockWindow               >(&m_self);
       m_optionDialog               = std::make_unique<OptionDialog              >(&m_self);
       m_recipeScaler               = std::make_unique<ScaleRecipeTool           >(&m_self);
@@ -358,7 +357,6 @@ public:
       m_primingDialog              = std::make_unique<PrimingDialog             >(&m_self);
       m_strikeWaterDialog          = std::make_unique<StrikeWaterDialog         >(&m_self);
       m_refractoDialog             = std::make_unique<RefractoDialog            >(&m_self);
-      m_mashDesigner               = std::make_unique<MashDesigner              >(&m_self);
       m_pitchDialog                = std::make_unique<PitchDialog               >(&m_self);
       m_btDatePopup                = std::make_unique<BtDatePopup               >(&m_self);
       m_ancestorDialog             = std::make_unique<AncestorDialog            >(&m_self);
@@ -425,6 +423,100 @@ public:
    template<class StepClass> auto & getStepEditor() const { return this->stepEditor(Identifier<StepClass>{}); }
 
    // Here we have a parameter anyway, so we can just use overloading directly
+   //
+   // For each of Mash, Boil and Fermentation, the widgets we use to show whether the Recipe's one is shared and/or
+   // locked, and to disable changes to it when it is locked.  (Same Identifier trick as for stepEditor.)
+   //
+   QLabel & statusLabel(Identifier<Mash        > const) const { return *this->m_self.label_mashStatus        ; }
+   QLabel & statusLabel(Identifier<Boil        > const) const { return *this->m_self.label_boilStatus        ; }
+   QLabel & statusLabel(Identifier<Fermentation> const) const { return *this->m_self.label_fermentationStatus; }
+   QWidget & stepsWidget(Identifier<Mash        > const) const { return *this->m_self.mashStepsWidget        ; }
+   QWidget & stepsWidget(Identifier<Boil        > const) const { return *this->m_self.boilStepsWidget        ; }
+   QWidget & stepsWidget(Identifier<Fermentation> const) const { return *this->m_self.fermentationStepsWidget; }
+   QWidget & comboBox(Identifier<Mash        > const) const { return *this->m_self.mashComboBox        ; }
+   QWidget & comboBox(Identifier<Boil        > const) const { return *this->m_self.boilComboBox        ; }
+   QWidget & comboBox(Identifier<Fermentation> const) const { return *this->m_self.fermentationComboBox; }
+   QMetaObject::Connection & sharingConnection(Identifier<Mash        > const) { return this->m_mashSharingConnection        ; }
+   QMetaObject::Connection & sharingConnection(Identifier<Boil        > const) { return this->m_boilSharingConnection        ; }
+   QMetaObject::Connection & sharingConnection(Identifier<Fermentation> const) { return this->m_fermentationSharingConnection; }
+
+   /**
+    * \brief Show whether the current Recipe's Mash / Boil / Fermentation is shared with other recipes and/or locked,
+    *        and stop the user changing its steps on the Recipe's tab if it is locked (including because it is used by
+    *        a locked recipe -- see \c RecipeUtils::lockReason).
+    *
+    *        Should be called whenever the Recipe changes (including when it is locked/unlocked).
+    */
+   template<class NE> void updateProcessStatus() {
+      QLabel & label = this->statusLabel(Identifier<NE>{});
+      QWidget & steps = this->stepsWidget(Identifier<NE>{});
+      QMetaObject::Connection & connection = this->sharingConnection(Identifier<NE>{});
+      QObject::disconnect(connection);
+
+      bool const recipeLocked = this->m_recipeObs && this->m_recipeObs->locked();
+      // You can't change which mash etc a locked recipe uses
+      this->comboBox(Identifier<NE>{}).setEnabled(this->m_recipeObs && !recipeLocked);
+
+      // See comment in buttons/RecipeAttributeButton.h for why we need template keyword here for Clang
+      std::shared_ptr<NE> const item = this->m_recipeObs ? this->m_recipeObs->template get<NE>() : nullptr;
+      if (!item) {
+         label.clear();
+         label.setToolTip("");
+         steps.setEnabled(this->m_recipeObs && !recipeLocked);
+         return;
+      }
+
+      //
+      // Watch the item so that we update if, eg, it gets locked or unlocked in its editor
+      //
+      connection = this->m_self.connect(
+         item.get(),
+         &NamedEntity::changed,
+         &this->m_self,
+         [this](QMetaProperty prop, [[maybe_unused]] QVariant val) {
+            if (prop.name() == PropertyNames::LockablePropertyBase::locked) {
+               this->updateProcessStatus<NE>();
+            }
+            return;
+         }
+      );
+
+      RecipeUtils::LockReason const lockReason = RecipeUtils::lockReason(*item);
+      qsizetype const numOtherRecipes = RecipeUtils::recipesUsing(*item).size() - 1;
+      QStringList summary;
+      if (lockReason == RecipeUtils::LockReason::ItemLocked) {
+         summary.append(MainWindow::tr("Locked"));
+      } else if (lockReason == RecipeUtils::LockReason::UsedByLockedRecipe && !recipeLocked) {
+         // If the current recipe is locked, that's already shown elsewhere, so we don't need to say it here
+         summary.append(MainWindow::tr("Used by a locked recipe"));
+      }
+      if (numOtherRecipes > 0) {
+         summary.append(MainWindow::tr("Shared with %n other recipe(s)", "", numOtherRecipes));
+      } else {
+         summary.append(MainWindow::tr("Used only by this recipe"));
+      }
+      QString toolTip = RecipeUtils::describeSharingAndLocking(*item, this->m_recipeObs);
+      if constexpr (std::is_same_v<NE, Mash>) {
+         // See MashStepTableModel::validate
+         MashStepTableModel const * const model = this->m_self.mashStepsWidget->tableModel();
+         if (model && model->hasProblems()) {
+            summary.append(MainWindow::tr("⚠ Problems found"));
+            toolTip += "\n\n" + model->allProblemsDisplayable();
+         }
+      }
+      label.setText(summary.join(MainWindow::tr(" · ")));
+      label.setToolTip(toolTip);
+      steps.setEnabled(lockReason == RecipeUtils::LockReason::NotLocked);
+      return;
+   }
+
+   void updateAllProcessStatuses() {
+      this->updateProcessStatus<Mash        >();
+      this->updateProcessStatus<Boil        >();
+      this->updateProcessStatus<Fermentation>();
+      return;
+   }
+
    void setStepOwner(std::shared_ptr<Mash> stepOwner) {
       this->m_recipeObs->setMash(stepOwner);
       this->m_mashStepEditor->setOwner(stepOwner);
@@ -816,8 +908,11 @@ public:
    std::unique_ptr<UnitConversionTool   > m_unitConversionTool   ;
    std::unique_ptr<HelpDialog           > m_helpDialog           ;
    std::unique_ptr<HydrometerTool       > m_hydrometerTool       ;
-   std::unique_ptr<MashDesigner         > m_mashDesigner         ;
-   std::unique_ptr<MashWizard           > m_mashWizard           ;
+
+   // See updateProcessStatus
+   QMetaObject::Connection m_mashSharingConnection;
+   QMetaObject::Connection m_boilSharingConnection;
+   QMetaObject::Connection m_fermentationSharingConnection;
    std::unique_ptr<OgCorrectionTool     > m_ogCorrectionTool     ;
    std::unique_ptr<OptionDialog         > m_optionDialog         ;
    std::unique_ptr<PitchDialog          > m_pitchDialog          ;
@@ -1225,7 +1320,7 @@ void MainWindow::restoreSavedState() {
 void MainWindow::setupTriggers() {
    // Connect actions defined in *.ui files to methods in code
    connect(actionExit                      , &QAction::triggered, this                                      , &QWidget::close                    ); // > File > Exit
-   connect(actionAbout                     , &QAction::triggered, this->pimpl->m_aboutDialog.get()          , &QWidget::show                     ); // > About > About Brewtarget
+   connect(actionAbout                     , &QAction::triggered, this->pimpl->m_aboutDialog.get()          , &QWidget::show                     ); // > About > About Brewken
    connect(actionHelp                      , &QAction::triggered, this->pimpl->m_helpDialog.get()           , &QWidget::show                     ); // > About > Help
 
    connect(actionNewRecipe                 , &QAction::triggered, this                                      , &MainWindow::newRecipe             ); // > File > New Recipe
@@ -1292,6 +1387,8 @@ void MainWindow::setupClicks() {
    connect(this->pushButton_editMash        , &QAbstractButton::clicked, this, &MainWindow::editRecipeMash        );
    connect(this->pushButton_editBoil        , &QAbstractButton::clicked, this, &MainWindow::editRecipeBoil        );
    connect(this->pushButton_editFermentation, &QAbstractButton::clicked, this, &MainWindow::editRecipeFermentation);
+   // NB: clicked() is only emitted when the user changes the checkbox, not when we call setChecked() in showChanges()
+   connect(this->checkBox_fgCalcUsesMash    , &QAbstractButton::clicked, this, &MainWindow::updateRecipeFgCalcUsesMash);
 
    connect(this->pushButton_addFerm       , &QAbstractButton::clicked, this->pimpl-> m_fermentableCatalog.get(), &QWidget::show);
    connect(this->pushButton_addHop        , &QAbstractButton::clicked, this->pimpl->         m_hopCatalog.get(), &QWidget::show);
@@ -1309,8 +1406,11 @@ void MainWindow::setupClicks() {
    connect(this->pushButton_editMisc      , &QAbstractButton::clicked, this, &MainWindow::editMiscOfSelectedMiscAddition              );
    connect(this->pushButton_editYeast     , &QAbstractButton::clicked, this, &MainWindow::editYeastOfSelectedYeastAddition            );
 
-   connect(this->pushButton_mashWizard, &QAbstractButton::clicked, this->pimpl->m_mashWizard.get()  , &MashWizard::show  );
-   connect(this->pushButton_mashDesigner   , &QAbstractButton::clicked, this->pimpl->m_mashDesigner.get(), &MashDesigner::show);
+   // Show in the summary next to the mash if any of its steps don't make sense (see MashStepTableModel::validate)
+   connect(this->mashStepsWidget->tableModel(),
+           &MashStepTableModel::validationChanged,
+           this,
+           [this]() { this->pimpl->updateProcessStatus<Mash>(); return; });
 
    return;
 }
@@ -1420,13 +1520,11 @@ void MainWindow::setRecipe(Recipe * recipe) {
    this->pimpl->closeAllBrewLogTabs();
 
    // Tell some of our other widgets to observe the new recipe.
-   this->pimpl->m_mashWizard->setRecipe(recipe);
    this->brewDayScrollWidget->setRecipe(recipe);
    this->pimpl->m_recipeFormatter->setRecipe(recipe);
    this->pimpl->m_ogCorrectionTool->setRecipe(recipe);
    this->recipeExtrasWidget->setRecipe(recipe);
    this->waterAdjuster->setRecipe(recipe);
-   this->pimpl->m_mashDesigner->setRecipe(recipe);
    this->equipmentComboBox->setItem(recipe->equipment());
    if (recipe->equipment()) {
       this->pimpl->m_equipmentEditor->setEditItem(recipe->equipment());
@@ -1512,6 +1610,7 @@ void MainWindow::lockRecipe(int const state) {
    qWidget_equipmentBox->setEnabled(enabled);
    lineEdit_batchSize->setEnabled(enabled);
    lineEdit_efficiency->setEnabled(enabled);
+   checkBox_fgCalcUsesMash->setEnabled(enabled);
 
    // locked recipes cannot be deleted
    actionDeleteSelected->setEnabled(enabled);
@@ -1556,8 +1655,11 @@ void MainWindow::lockRecipe(int const state) {
    this->pimpl-> m_miscCatalog->setEnableAddToRecipe(enabled);
    this->pimpl->m_yeastCatalog->setEnableAddToRecipe(enabled);
 
-   // TODO: mashes still need dealing with
    //
+   // A locked recipe's mash, boil and fermentation are, in effect, locked too (see RecipeUtils::lockReason), as is
+   // the choice of which mash etc the recipe uses.
+   //
+   this->pimpl->updateAllProcessStatuses();
    return;
 }
 
@@ -1602,6 +1704,7 @@ void MainWindow::showChanges(QMetaProperty* prop) {
    this->lineEdit_name      ->setCursorPosition(0);
    this->lineEdit_batchSize ->setCursorPosition(0);
    this->lineEdit_efficiency->setCursorPosition(0);
+   this->checkBox_fgCalcUsesMash->setChecked(this->pimpl->m_recipeObs->fgCalcUsesMash());
 /*
    lineEdit_calcBatchSize->setText(this->pimpl->m_recipeObs);
    lineEdit_calcBoilSize->setText(this->pimpl->m_recipeObs);
@@ -1719,22 +1822,123 @@ void MainWindow::displayRangesEtcForCurrentRecipeStyle() {
 }
 
 //
-// TODO: Would be good to harmonise how these updateRecipeFoo and dropRecipeFoo functions work
+// This is used both when the user picks something from one of the drop-downs on the recipe tab (via
+// updateRecipeFromSelected) and when they drag it onto the recipe (via droppedRecipeEquipment etc), so that the two
+// behave the same way.
 //
-
 template<class NE> void MainWindow::setForRecipe(std::shared_ptr<NE> val) {
-   if (val) {
-      Undoable::doOrRedoUpdate(
-         newRelationalUndoableUpdate(
-            *this->pimpl->m_recipeObs,
-            &Recipe::set<NE>,
-            this->pimpl->m_recipeObs->get<NE>(),
-            val,
-            callbackFunctionFor<NE>(),
-            tr("Change %1 on %2 Recipe").arg(NE::localisedName()).arg(this->pimpl->m_recipeObs->name())
-         )
-      );
+   if (!val || !this->pimpl->m_recipeObs) {
+      return;
    }
+
+   //
+   // The drop-downs emit QComboBox::activated even when the user re-selects the item already chosen.  Nothing would
+   // change, but we don't want to put a no-op on the undo stack, or (for equipment) ask about batch size etc.
+   //
+   if (auto const current = this->pimpl->m_recipeObs->get<NE>(); current && current->key() == val->key()) {
+      return;
+   }
+
+   if constexpr (std::is_same_v<NE, Mash>) {
+      //
+      // A mash that adjusts automatically to the recipe that uses it (see Mash::autoAdjust) can't be shared with another
+      // recipe, so we offer to use a copy instead.
+      //
+      if (val && this->pimpl->m_recipeObs && val->keptInSync()) {
+         QList<Recipe *> otherRecipes = RecipeUtils::recipesUsing(*val);
+         otherRecipes.removeAll(this->pimpl->m_recipeObs);
+         if (!otherRecipes.isEmpty()) {
+            QMessageBox messageBox{this};
+            messageBox.setIcon(QMessageBox::Question);
+            messageBox.setWindowTitle(tr("Use a copy of mash?"));
+            messageBox.setText(
+               tr("The mash \"%1\" adjusts automatically to the recipe that uses it (\"%2\"), so it can't be shared "
+                  "with another recipe.").arg(val->name(), otherRecipes.first()->name())
+            );
+            messageBox.setInformativeText(tr("Do you want to use a copy of it for this recipe?"));
+            QPushButton * copyButton = messageBox.addButton(tr("Use a copy"), QMessageBox::AcceptRole);
+            messageBox.addButton(QMessageBox::Cancel);
+            messageBox.setDefaultButton(copyButton);
+            messageBox.exec();
+            if (messageBox.clickedButton() != copyButton) {
+               // Put the drop-down back to showing the recipe's current mash
+               this->updateMashInUi();
+               return;
+            }
+            std::shared_ptr<Mash> copy = ObjectStoreWrapper::insertCopyOf(*val);
+            copy->setName(Mash::tr("%1 (copy for %2)").arg(val->name(), this->pimpl->m_recipeObs->name()));
+            val = copy;
+         }
+      }
+   }
+
+   // We need to hang on to this QUndoCommand pointer because there might be other updates linked to it - see below
+   auto update = newRelationalUndoableUpdate(
+      *this->pimpl->m_recipeObs,
+      &Recipe::set<NE>,
+      this->pimpl->m_recipeObs->get<NE>(),
+      val,
+      callbackFunctionFor<NE>(),
+      tr("Change %1 on %2 Recipe").arg(NE::localisedName()).arg(this->pimpl->m_recipeObs->name())
+   );
+
+   if constexpr (std::is_same_v<NE, Equipment>) {
+      //
+      // Offer to make the recipe's batch size and pre-boil size match the new equipment.  (We don't ask if they already
+      // match.)
+      //
+      // NB: We used to copy the mash tun weight and specific heat from the equipment to the mash here.  We no longer
+      // need to, as calculations now take them from the recipe's equipment (falling back to the deprecated fields on
+      // the Mash only if the equipment doesn't have them) -- see Recipe::mashTunHeatCapacity_kcalC.
+      //
+      Recipe & recipe = *this->pimpl->m_recipeObs;
+      auto const existingBoil = recipe.boil();
+      // See comment in Equipment::defaultPreBoilSize_l for why we pass in the boil time
+      double const boilTime_mins = existingBoil ? existingBoil->boilTime_mins() : Boil::default_boilTime_mins;
+      double const newBatchSize_l   = val->fvBatchSize_l();
+      double const newPreBoilSize_l = val->defaultPreBoilSize_l(boilTime_mins);
+
+      static constexpr double tolerance_l = 0.001;
+      bool const batchSizeMatches   = std::abs(recipe.batchSize_l() - newBatchSize_l) < tolerance_l;
+      std::optional<double> const existingPreBoilSize_l =
+         existingBoil ? existingBoil->preBoilSize_l() : std::nullopt;
+      bool const preBoilSizeMatches =
+         existingPreBoilSize_l && std::abs(*existingPreBoilSize_l - newPreBoilSize_l) < tolerance_l;
+
+      if (!batchSizeMatches || !preBoilSizeMatches) {
+         QMessageBox::StandardButton const answer = QMessageBox::question(
+            this,
+            tr("Use equipment sizes?"),
+            tr("Would you like to set the recipe's batch size to %1 and pre-boil size to %2, as specified by the "
+               "equipment \"%3\"?").arg(
+               Measurement::displayAmount(Measurement::Amount{newBatchSize_l  , Measurement::Units::liters}),
+               Measurement::displayAmount(Measurement::Amount{newPreBoilSize_l, Measurement::Units::liters}),
+               val->name()
+            ),
+            QMessageBox::Yes | QMessageBox::No,
+            QMessageBox::Yes
+         );
+         if (answer == QMessageBox::Yes) {
+            //
+            // We want these updates to undo/redo if and when the equipment change is undone/redone.  Setting the parent
+            // field on a QUndoCommand makes that parent the owner, responsible for invoking, deleting, etc.
+            // Technically the descriptions of these subcommands won't ever be seen by the user, but there's no harm in
+            // setting them.
+            //
+            if (!batchSizeMatches) {
+               new SimpleUndoableUpdate(recipe, TYPE_INFO(Recipe, batchSize_l), newBatchSize_l,
+                                        tr("Change Batch Size"), update);
+            }
+            if (!preBoilSizeMatches) {
+               new SimpleUndoableUpdate(*recipe.nonOptBoil(), TYPE_INFO(Boil, preBoilSize_l), newPreBoilSize_l,
+                                        tr("Change Boil Size"), update);
+            }
+         }
+      }
+   }
+
+   // This will do the update and any related ones - see above
+   Undoable::doOrRedoUpdate(update);
    return;
 }
 
@@ -1790,56 +1994,36 @@ void MainWindow::updateEquipmentInUi() {
    return;
 }
 
-void MainWindow::updateMashInUi        () { if (this->pimpl->m_recipeObs) { this->        mashComboBox->setItem(this->pimpl->m_recipeObs->        mash()); } return; }
-void MainWindow::updateBoilInUi        () { if (this->pimpl->m_recipeObs) { this->        boilComboBox->setItem(this->pimpl->m_recipeObs->        boil()); } return; }
-void MainWindow::updateFermentationInUi() { if (this->pimpl->m_recipeObs) { this->fermentationComboBox->setItem(this->pimpl->m_recipeObs->fermentation()); } return; }
+void MainWindow::updateMashInUi() {
+   if (this->pimpl->m_recipeObs) {
+      this->mashComboBox->setItem(this->pimpl->m_recipeObs->mash());
+   }
+   this->pimpl->updateProcessStatus<Mash>();
+   return;
+}
+void MainWindow::updateBoilInUi() {
+   if (this->pimpl->m_recipeObs) {
+      this->boilComboBox->setItem(this->pimpl->m_recipeObs->boil());
+   }
+   this->pimpl->updateProcessStatus<Boil>();
+   return;
+}
+void MainWindow::updateFermentationInUi() {
+   if (this->pimpl->m_recipeObs) {
+      this->fermentationComboBox->setItem(this->pimpl->m_recipeObs->fermentation());
+   }
+   this->pimpl->updateProcessStatus<Fermentation>();
+   return;
+}
 
 void MainWindow::droppedRecipeEquipment(Equipment * kitRaw) {
-   if (this->pimpl->m_recipeObs == nullptr) {
-      return;
-   }
-
    // equip may be null.
    if (!kitRaw) {
       return;
    }
 
-   auto kit = ObjectStoreWrapper::getSharedFromRaw(kitRaw);
-
-   // We need to hang on to this QUndoCommand pointer because there might be other updates linked to it - see below
-   auto equipmentUpdate = newRelationalUndoableUpdate(*this->pimpl->m_recipeObs,
-                                                      &Recipe::setEquipment,
-                                                      this->pimpl->m_recipeObs->equipment(),
-                                                      kit,
-                                                      &MainWindow::updateEquipmentInUi,
-                                                      tr("Change Recipe Kit"));
-
-   //
-   // NB: We used to copy the mash tun weight and specific heat from the equipment to the mash here.  We no longer need
-   // to, as calculations now take them from the recipe's equipment (falling back to the deprecated fields on the Mash
-   // only if the equipment doesn't have them) -- see Recipe::mashTunHeatCapacity_kcalC.
-   //
-
-   if (QMessageBox::question(this,
-                             tr("Equipment request"),
-                             tr("Would you like to set the batch size, boil size and time to that requested by the equipment?"),
-                             QMessageBox::Yes,
-                             QMessageBox::No) == QMessageBox::Yes) {
-      // If we do update batch size etc as a result of the equipment change, then we want those updates to undo/redo
-      // if and when the equipment change is undone/redone.  Setting the parent field on a QUndoCommand makes that
-      // parent the owner, responsible for invoking, deleting, etc.  Technically the descriptions of these subcommands
-      // won't ever be seen by the user, but there's no harm in setting them.
-      // (The previous call here to this->pimpl->m_mashEditor->setRecipe() was a roundabout way of calling setTunWeight_kg() and
-      // setMashTunSpecificHeat_calGC() on the mash.)
-      new SimpleUndoableUpdate(*this->pimpl->m_recipeObs, TYPE_INFO(Recipe, batchSize_l), kit->fvBatchSize_l(), tr("Change Batch Size"), equipmentUpdate);
-
-      auto const boil = this->pimpl->m_recipeObs->nonOptBoil();
-      // See comment in Equipment::defaultPreBoilSize_l for why we pass in the boil time
-      new SimpleUndoableUpdate(*boil, TYPE_INFO(Boil, preBoilSize_l), kit->defaultPreBoilSize_l(boil->boilTime_mins()), tr("Change Boil Size"), equipmentUpdate);
-   }
-
-   // This will do the equipment update and any related updates - see above
-   Undoable::doOrRedoUpdate(equipmentUpdate);
+   // Same behaviour as choosing the equipment from the drop-down on the recipe tab
+   this->setForRecipe(ObjectStoreWrapper::getSharedFromRaw(kitRaw));
    return;
 }
 
@@ -1962,6 +2146,18 @@ void MainWindow::updateRecipeBatchSize() {
    return;
 }
 
+void MainWindow::updateRecipeFgCalcUsesMash(bool const checked) {
+   if (!this->pimpl->m_recipeObs) {
+      return;
+   }
+
+   Undoable::doOrRedoUpdate(*this->pimpl->m_recipeObs,
+                        TYPE_INFO(Recipe, fgCalcUsesMash),
+                        checked,
+                        tr("Change Use Mash Profile in FG Calculation"));
+   return;
+}
+
 void MainWindow::updateRecipeEfficiency() {
    qDebug() << Q_FUNC_INFO << lineEdit_efficiency->getNonOptValue<double>();
    if (!this->pimpl->m_recipeObs) {
@@ -1970,7 +2166,7 @@ void MainWindow::updateRecipeEfficiency() {
 
    Undoable::doOrRedoUpdate(*this->pimpl->m_recipeObs,
                         TYPE_INFO(Recipe, efficiency_pct),
-                        lineEdit_efficiency->getNonOptValue<unsigned int>(),
+                        lineEdit_efficiency->getNonOptValue<double>(),
                         tr("Change Recipe Efficiency"));
    return;
 }
@@ -2278,27 +2474,33 @@ void MainWindow::editRecipeStyle() {
 }
 
 void MainWindow::editRecipeMash() {
-   this->pimpl->m_mashEditor->setEditItem(this->pimpl->m_recipeObs->mash());
-   this->pimpl->m_mashEditor->setRecipe(this->pimpl->m_recipeObs);
-   this->pimpl->m_mashEditor->showEditor();
+   // If the recipe doesn't have a mash, this will create one for the user to edit
+   this->pimpl->m_mashEditor->doEditForRecipe(this->pimpl->m_recipeObs);
    return;
 }
 
 void MainWindow::editRecipeBoil() {
-   this->pimpl->m_boilEditor->setEditItem(this->pimpl->m_recipeObs->boil());
-   this->pimpl->m_boilEditor->setRecipe(this->pimpl->m_recipeObs);
-   this->pimpl->m_boilEditor->showEditor();
+   // If the recipe doesn't have a boil, this will create one for the user to edit
+   this->pimpl->m_boilEditor->doEditForRecipe(this->pimpl->m_recipeObs);
    return;
 }
 
 void MainWindow::editRecipeFermentation() {
-   this->pimpl->m_fermentationEditor->setEditItem(this->pimpl->m_recipeObs->fermentation());
-   this->pimpl->m_fermentationEditor->setRecipe(this->pimpl->m_recipeObs);
-   this->pimpl->m_fermentationEditor->showEditor();
+   // If the recipe doesn't have a fermentation, this will create one for the user to edit
+   this->pimpl->m_fermentationEditor->doEditForRecipe(this->pimpl->m_recipeObs);
    return;
 }
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/) {
+   //
+   // If the user quits with the mash, boil or fermentation editor still open, treat it as Cancel.  In particular, if the
+   // editor is showing a new item that it created for the current recipe (see EditorBase::doEditForRecipe), and the
+   // user has not saved it, this means it gets deleted rather than being left in the database, unused by any recipe.
+   //
+   if (this->pimpl->m_mashEditor        ->isVisible()) { this->pimpl->m_mashEditor        ->clearAndClose(); }
+   if (this->pimpl->m_boilEditor        ->isVisible()) { this->pimpl->m_boilEditor        ->clearAndClose(); }
+   if (this->pimpl->m_fermentationEditor->isVisible()) { this->pimpl->m_fermentationEditor->clearAndClose(); }
+
    Application::saveSystemOptions();
    PersistentSettings::insert_ck(PersistentSettings::Names::geometry, saveGeometry());
    PersistentSettings::insert_ck(PersistentSettings::Names::windowState, saveState());
@@ -2548,15 +2750,13 @@ void MainWindow::brewLogDeleted([[maybe_unused]] int brewLogId, std::shared_ptr<
    // This function receives the ObjectStore::signalObjectDeleted signal when a BrewLog is deleted
    //
    BrewLog * deletedBrewLog = std::static_pointer_cast<BrewLog>(object).get();
-   Recipe * recipe = ObjectStoreWrapper::getByIdRaw<Recipe>(deletedBrewLog->recipeId());
-   qDebug() << Q_FUNC_INFO << "BrewLog" << *deletedBrewLog << "deleted on Recipe" << *recipe;
+   qDebug() << Q_FUNC_INFO << "BrewLog" << *deletedBrewLog << "deleted on Recipe #" << deletedBrewLog->recipeId();
 
-   // If this isn't the focused recipe, do nothing because there are no tabs
-   // to close.
-   if (recipe != this->pimpl->m_recipeObs) {
-      return;
-   }
-
+   //
+   // We don't check whether the BrewLog belongs to the current Recipe, because, with versioning, BrewLogs belong to
+   // the version of the Recipe that was brewed -- ie, often, one of the current Recipe's ancestors -- and those can
+   // also be open in tabs (see setBrewLogByIndex).  If the BrewLog isn't open in a tab, closeBrewLogTab does nothing.
+   //
    this->pimpl->closeBrewLogTab(*deletedBrewLog);
 
    return;

@@ -47,6 +47,7 @@ bool Boil::compareWith(NamedEntity const & other, QList<BtStringConst const *> *
       AUTO_PROPERTY_COMPARE(this, rhs, m_preBoilSize_l, PropertyNames::Boil::preBoilSize_l, propertiesThatDiffer) &&
       // Parent classes have to be equal too
       this->FolderPropertyBase<Boil>             ::doCompareWith(rhs, propertiesThatDiffer) &&
+      this->LockablePropertyBase<Boil>::doCompareWith(rhs, propertiesThatDiffer) &&
       this->StepOwnerBase<Boil, BoilStep>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
@@ -67,6 +68,7 @@ TypeLookup const Boil::typeLookup {
    // Parent classes lookup
    {&NamedEntity::typeLookup,
     std::addressof(FolderPropertyBase<Boil>::typeLookup),
+    std::addressof(LockablePropertyBase<Boil>::typeLookup),
     std::addressof(StepOwnerBase<Boil, BoilStep>::typeLookup)}
 };
 static_assert(std::is_base_of<FolderPropertyBase<Boil>, Boil>::value);
@@ -76,6 +78,7 @@ static_assert(std::is_base_of<FolderPropertyBase<Boil>, Boil>::value);
 Boil::Boil(QString name) :
    NamedEntity{name},
    FolderPropertyBase<Boil>{},
+   LockablePropertyBase<Boil>{},
    StepOwnerBase<Boil, BoilStep>{},
    m_description  {""          },
    m_notes        {""          },
@@ -88,6 +91,7 @@ Boil::Boil(QString name) :
 Boil::Boil(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity     {namedParameterBundle},
    FolderPropertyBase<Boil>{namedParameterBundle},
+   LockablePropertyBase<Boil>{namedParameterBundle},
    StepOwnerBase<Boil, BoilStep>{namedParameterBundle},
    SET_REGULAR_FROM_NPB (m_description  , namedParameterBundle, PropertyNames::Boil::description  ),
    SET_REGULAR_FROM_NPB (m_notes        , namedParameterBundle, PropertyNames::Boil::notes        ),
@@ -103,6 +107,7 @@ Boil::Boil(NamedParameterBundle const & namedParameterBundle) :
 Boil::Boil(Boil const & other) :
    NamedEntity{other},
    FolderPropertyBase<Boil>{other},
+   LockablePropertyBase<Boil>{other},
    StepOwnerBase<Boil, BoilStep>{other},
    m_description  {other.m_description  },
    m_notes        {other.m_notes        },
@@ -278,11 +283,57 @@ std::pair<int, int> Boil::boilProperSteps() const {
    return {firstBoilProperStep, lastBoilProperStep};
 }
 
+Boil::PostBoilProfile Boil::postBoilProfile() const {
+   PostBoilProfile profile;
+
+   auto const boilSteps = this->boilSteps();
+   int const numBoilSteps = boilSteps.size();
+   int lastBoilProperIndex = -1;
+   for (int ii = 0; ii < numBoilSteps; ++ii) {
+      if (Boil::isBoilProper(*boilSteps[ii])) {
+         lastBoilProperIndex = ii;
+      }
+   }
+   if (lastBoilProperIndex < 0 || lastBoilProperIndex == numBoilSteps - 1) {
+      // Either we can't make sense of the steps, or there are no post-boil steps.  Either way, we don't know anything
+      // about what happens after flameout.
+      return profile;
+   }
+
+   double duration_mins = 0.0;
+   for (int ii = lastBoilProperIndex + 1; ii < numBoilSteps; ++ii) {
+      auto const & step = boilSteps[ii];
+      std::optional<double> const stepTime_mins = step->stepTime_mins();
+      if (!stepTime_mins) {
+         // We can't place any subsequent steps in time, so this is the end of what we know
+         return profile;
+      }
+      // Per dotBeer, an unset boil step temperature means boiling
+      std::optional<double> const startTemp_c = step->startTemp_c();
+      std::optional<double> const endTemp_c   = step->endTemp_c  ();
+      profile.segments.push_back({
+         .duration_minutes = *stepTime_mins,
+         .startTemp_c      = startTemp_c.value_or(100.0),
+         .endTemp_c        = endTemp_c  .value_or(100.0),
+         // A step that starts at the boil and ends below it is what Boil::coolTime_mins regards as cooling time, ie
+         // the time before forced cooling, during which the wort cools naturally.
+         .naturalCooling   = Boil::startsAtBoil(*step) && !Boil::endsAtBoil(*step),
+      });
+      duration_mins += *stepTime_mins;
+   }
+   profile.duration_mins = duration_mins;
+   return profile;
+}
+
+
 // This class supports NamedEntity::numRecipesUsedIn
 IMPLEMENT_NUM_RECIPES_USED_IN(Boil)
 
 // Boilerplate code for FolderPropertyBase
 FOLDER_BASE_COMMON_CODE(Boil)
+
+// Boilerplate code for LockablePropertyBase
+LOCKABLE_BASE_COMMON_CODE(Boil)
 
 // Insert boiler-plate wrapper functions that call down to StepOwnerBase
 STEP_OWNER_COMMON_CODE(Boil, boil)

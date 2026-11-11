@@ -127,6 +127,17 @@ namespace Measurement {
       std::optional<NumDecimalPlaces> const defaultForField
    );
 
+   /**
+    * \brief Get the number of decimal places to show for the specified \c NonPhysicalQuantity.  This is the same as
+    *        for \c PhysicalQuantity, except that there is (currently) no global per-quantity user preference, and the
+    *        final fallback is 3 for quantities that have no default (see \c GetUltimateDefaultDecimalPlaces).
+    */
+   [[nodiscard]] NumDecimalPlaces getNumDecimalPlaces(
+      NonPhysicalQuantity const nonPhysicalQuantity,
+      std::optional<NumDecimalPlaces> const userSpecifiedForField,
+      std::optional<NumDecimalPlaces> const defaultForField
+   );
+
    /*!
     * \brief Converts a quantity without units to a displayable string
     *

@@ -841,7 +841,7 @@ def installDependencies():
          # TBD: For the moment we hard-code the version of MacPorts, but we should probably find it out from GitHub in
          #      a similar way that we check our own latest releases in the C++ code.
          #
-         macPortsVersion = '2.11.6'
+         macPortsVersion = '2.12.6'
          macPortsName = 'MacPorts-' + macPortsVersion
          #
          # The instructions for binary install at https://guide.macports.org/#installing.macports.binary require user
@@ -852,8 +852,35 @@ def installDependencies():
          btExecute.abortOnRunFail(subprocess.run(['pwd']))
          btExecute.abortOnRunFail(subprocess.run(['ls', '-l']))
          macPortsPackage = macPortsName + '-' + macOsVersion + '-' + macOsReleaseName + '.pkg'
-         downloadUrl = 'https://github.com/macports/macports-base/releases/download/v' + macPortsVersion + '/' + macPortsPackage
-         btExecute.abortOnRunFail(subprocess.run(['curl', '-L', '-O', downloadUrl]))
+         #
+         # We try GitHub first and then fall back to the MacPorts distfiles server, which hosts the same packages.  (In
+         # 2026-11, we saw GitHub returning HTTP 504 for the Tahoe packages whilst serving the Sequoia ones fine.)
+         #
+         # Additional curl options here:
+         #    -f = Fail on HTTP errors (4xx/5xx) rather than silently saving the error page as macPortsPackage.
+         #         Without this, a failed download only shows up later as a confusing error from `installer`.
+         #    --retry 3 --retry-all-errors = Retry transient failures (eg 5xx) a few times before giving up.
+         #
+         downloadUrls = [
+            'https://github.com/macports/macports-base/releases/download/v' + macPortsVersion + '/' + macPortsPackage,
+            'https://distfiles.macports.org/MacPorts/' + macPortsPackage,
+         ]
+         downloadSucceeded = False
+         for downloadUrl in downloadUrls:
+            btLogger.log.debug('Trying to download ' + downloadUrl)
+            curlResult = subprocess.run(['curl', '-f', '-L', '--retry', '3', '--retry-all-errors', '-O', downloadUrl])
+            if (curlResult.returncode == 0 and os.path.isfile(macPortsPackage)):
+               downloadSucceeded = True
+               break
+            btLogger.log.warning(
+               'Download of ' + downloadUrl + ' failed (curl return code ' + str(curlResult.returncode) + ')'
+            )
+            # Don't leave a partial file lying around for the next attempt or for `installer`
+            if os.path.isfile(macPortsPackage):
+               os.remove(macPortsPackage)
+         if (not downloadSucceeded):
+            btLogger.log.critical('Unable to download ' + macPortsPackage + ' from any of: ' + ', '.join(downloadUrls))
+            sys.exit(1)
          btExecute.abortOnRunFail(subprocess.run(['sudo', 'installer', '-package', macPortsPackage, '-target', '/']))
          btExecute.abortOnRunFail(subprocess.run(['ls', '-l']))
 

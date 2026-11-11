@@ -36,8 +36,8 @@
 #include "Html.h"
 #include "Localization.h"
 #include "MainWindow.h"
-#include "measurement/ColorMethods.h"
-#include "measurement/IbuMethods.h"
+#include "calculations/ColorMethods.h"
+#include "calculations/IbuMethods.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/BrewLog.h"
@@ -349,7 +349,7 @@ public:
                      "<td class=\"value\">%2 (%3)</td></tr>")
             .arg(tr("IBU"))
             .arg(Measurement::displayQuantity(rec->IBU(), 1))
-            .arg(IbuMethods::formulaName() );
+            .arg(IbuMethods::localisedFormulaName() );
 
       // Fifth row: Color and calories.  Set up the color string first
       body += QString("<tr>"
@@ -408,7 +408,7 @@ public:
       entry.append(tr("Bitterness"));
       value.append(QString("%1 %2 (%3)").arg(Measurement::displayQuantity(rec->IBU(), 1))
                                         .arg(tr("IBU"))
-                                        .arg(IbuMethods::formulaName()));
+                                        .arg(IbuMethods::localisedFormulaName()));
       entry.append(tr("Color"));
       value.append(QString("%1 (%2)").arg(Measurement::displayAmount(Measurement::Amount{rec->color_srm(),
                                                                                          Measurement::Units::srm}, 1))

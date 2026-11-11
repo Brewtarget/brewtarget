@@ -55,6 +55,12 @@ public slots:
     */
    void displayChanged(SmartAmounts::ScaleInfo previousScaleInfo);
 
+   /**
+    * \brief Received from \c SmartLabel when the user has changed the number of decimal places to show for a field
+    *        holding a \c NonPhysicalQuantity (eg a percentage)
+    */
+   void precisionChanged();
+
 };
 
 #endif

@@ -15,7 +15,14 @@
  =====================================================================================================================*/
 #include "RecipeUtils.h"
 
+#include <type_traits>
+
 #include "PersistentSettings.h"
+#include "database/ObjectStoreWrapper.h"
+#include "model/Boil.h"
+#include "model/Equipment.h"
+#include "model/Fermentation.h"
+#include "model/Mash.h"
 
 QList<std::shared_ptr<BrewLog>> RecipeUtils::brewLogsForRecipeAndAncestors(Recipe const & recipe) {
    QList<std::shared_ptr<BrewLog>> brewLogs = recipe.brewLogs();
@@ -38,6 +45,15 @@ void RecipeUtils::prepareForPropertyChange(NamedEntity & ne, BtStringConst const
       Q_FUNC_INFO << "Modifying: " << ne.metaObject()->className() << "#" << ne.key() << "property" << propertyName;
 
    //
+   // A BrewLog belongs to a Recipe, but it is a record of brewing the Recipe rather than part of the Recipe itself.  So
+   // filling in a BrewLog (eg with measurements on brew day) is not a change to the Recipe and must not create a new
+   // version of it.  (Amongst other things, this used to cause https://github.com/Brewtarget/brewtarget/issues/730.)
+   //
+   if (qobject_cast<BrewLog const *>(&ne)) {
+      return;
+   }
+
+   //
    // If the object we're about to change a property on is a Recipe or is used in a Recipe, then it might need a new
    // version -- unless it's already being versioned.
    //
@@ -53,6 +69,9 @@ void RecipeUtils::prepareForPropertyChange(NamedEntity & ne, BtStringConst const
    //
    // Automatic versioning means that, once a recipe is brewed, it is "soft locked" and the first change should spawn a
    // new version.  Any subsequent change should not spawn a new version until it is brewed again.
+   //
+   // Because we move the BrewLogs to the snapshot when we version (see below), "has BrewLogs" means "has been brewed
+   // since the last time it was versioned".
    //
    if (owningRecipe->brewLogs().empty()) {
       // Recipe hasn't been brewed
@@ -91,6 +110,21 @@ void RecipeUtils::prepareForPropertyChange(NamedEntity & ne, BtStringConst const
    // We assert that the newly created version of the recipe has not yet been brewed (and therefore will not get
    // automatically versioned on subsequent changes before it is brewed).
    Q_ASSERT(spawn->brewLogs().empty());
+
+   //
+   // The BrewLogs are records of brewing the Recipe as it was before the change we're about to make, so they belong
+   // with the snapshot (which is what was actually brewed) rather than with the Recipe that's about to change.  This
+   // also means the Recipe now has no BrewLogs, so the check above stops further changes spawning more versions until
+   // the Recipe is brewed again.
+   //
+   // (Changing the BrewLog's Recipe ID won't trigger versioning, because of the check for BrewLog above, and anyway
+   // owningRecipe is marked as being modified.)
+   //
+   for (auto const & brewLog : owningRecipe->brewLogs()) {
+      qDebug() << Q_FUNC_INFO << "Moving" << *brewLog << "to Recipe #" << spawn->key();
+      brewLog->setRecipeId(spawn->key());
+   }
+   Q_ASSERT(owningRecipe->brewLogs().empty());
 
    //
    // By default, copying a Recipe does not copy all its ancestry.  Here, we want the copy to become our ancestor (ie
@@ -145,3 +179,118 @@ RecipeUtils::SuspendRecipeCalcs::~SuspendRecipeCalcs() {
    this->m_recipe->setCalcsEnabled(this->m_savedCalcsEnabled);
    return;
 }
+
+template<class NE> QList<Recipe *> RecipeUtils::recipesUsing(NE const & item) {
+   return ObjectStoreWrapper::findAllMatching<Recipe>(
+      [&item](Recipe const * recipe) { return !recipe->deleted() && recipe->uses(item); }
+   );
+}
+
+template<class NE> RecipeUtils::LockReason RecipeUtils::lockReason(NE const & item) {
+   if (item.locked()) {
+      return RecipeUtils::LockReason::ItemLocked;
+   }
+   for (Recipe const * recipe : RecipeUtils::recipesUsing(item)) {
+      if (recipe->locked()) {
+         return RecipeUtils::LockReason::UsedByLockedRecipe;
+      }
+   }
+   return RecipeUtils::LockReason::NotLocked;
+}
+
+template<class NE> std::shared_ptr<NE> RecipeUtils::useCopyFor(Recipe & recipe) {
+   std::shared_ptr<NE> const original = recipe.get<NE>();
+   // It's a coding error to call this function if the recipe has nothing to copy or cannot be changed
+   Q_ASSERT(original);
+   Q_ASSERT(!recipe.locked());
+
+   std::shared_ptr<NE> copy = ObjectStoreWrapper::insertCopyOf(*original);
+   copy->setName(NE::tr("%1 (copy for %2)").arg(original->name(), recipe.name()));
+   qInfo() << Q_FUNC_INFO << "Recipe #" << recipe.key() << "now using" << *copy << "instead of" << *original;
+   recipe.set<NE>(copy);
+   return copy;
+}
+
+template<class NE> QString RecipeUtils::describeSharingAndLocking(NE const & item, Recipe const * currentRecipe) {
+   QList<Recipe *> const recipes = RecipeUtils::recipesUsing(item);
+
+   QStringList otherRecipeNames;
+   QStringList otherLockedRecipeNames;
+   bool usedByCurrentRecipe = false;
+   for (Recipe const * recipe : recipes) {
+      if (recipe == currentRecipe) {
+         usedByCurrentRecipe = true;
+      } else {
+         otherRecipeNames.append(recipe->name());
+         if (recipe->locked()) {
+            otherLockedRecipeNames.append(recipe->name());
+         }
+      }
+   }
+   otherRecipeNames.sort(Qt::CaseInsensitive);
+   otherLockedRecipeNames.sort(Qt::CaseInsensitive);
+   bool const currentRecipeLocked = usedByCurrentRecipe && currentRecipe->locked();
+
+   //
+   // First say who uses the item
+   //
+   QString const itemType = NE::localisedName().toLower();
+   QStringList sentences;
+   if (recipes.isEmpty()) {
+      sentences.append(NE::tr("This %1 is not used by any recipe.").arg(itemType));
+   } else if (recipes.size() == 1) {
+      sentences.append(NE::tr("This %1 is used only by one recipe (%2).").arg(itemType, recipes.first()->name()));
+      if constexpr (std::is_same_v<NE, Mash>) {
+         // See MashStepTableModel::validate
+         sentences.append(NE::tr("Step validation highlighting is therefore enabled."));
+      }
+   } else if (usedByCurrentRecipe) {
+      sentences.append(
+         NE::tr("This %1 is also used by %n other recipe(s): %2.", "", otherRecipeNames.size()).arg(
+            itemType, otherRecipeNames.join(", ")
+         )
+      );
+   } else {
+      sentences.append(
+         NE::tr("This %1 is used by %n recipe(s): %2.", "", otherRecipeNames.size()).arg(
+            itemType, otherRecipeNames.join(", ")
+         )
+      );
+   }
+
+   //
+   // Then say whether it can be changed
+   //
+   if (item.locked()) {
+      sentences.append(NE::tr("It is locked, so it cannot be changed."));
+   } else if (currentRecipeLocked) {
+      sentences.append(NE::tr("It cannot be changed because the recipe \"%1\" is locked.").arg(currentRecipe->name()));
+   } else if (!otherLockedRecipeNames.isEmpty()) {
+      sentences.append(
+         NE::tr("It cannot be changed because it is used by %n locked recipe(s): %1.", "", otherLockedRecipeNames.size()).arg(
+            otherLockedRecipeNames.join(", ")
+         )
+      );
+   } else if (recipes.size() > 1) {
+      sentences.append(NE::tr("Any changes you make here will affect all of them."));
+   }
+
+   return sentences.join(" ");
+}
+
+//
+// Instantiate the above templates for the types that are going to use them
+//
+template QList<Recipe *> RecipeUtils::recipesUsing<Mash        >(Mash         const & item);
+template QList<Recipe *> RecipeUtils::recipesUsing<Boil        >(Boil         const & item);
+template QList<Recipe *> RecipeUtils::recipesUsing<Fermentation>(Fermentation const & item);
+template QList<Recipe *> RecipeUtils::recipesUsing<Equipment   >(Equipment    const & item);
+template RecipeUtils::LockReason RecipeUtils::lockReason<Mash        >(Mash         const & item);
+template RecipeUtils::LockReason RecipeUtils::lockReason<Boil        >(Boil         const & item);
+template RecipeUtils::LockReason RecipeUtils::lockReason<Fermentation>(Fermentation const & item);
+template std::shared_ptr<Mash        > RecipeUtils::useCopyFor<Mash        >(Recipe & recipe);
+template std::shared_ptr<Boil        > RecipeUtils::useCopyFor<Boil        >(Recipe & recipe);
+template std::shared_ptr<Fermentation> RecipeUtils::useCopyFor<Fermentation>(Recipe & recipe);
+template QString RecipeUtils::describeSharingAndLocking<Mash        >(Mash         const & item, Recipe const * currentRecipe);
+template QString RecipeUtils::describeSharingAndLocking<Boil        >(Boil         const & item, Recipe const * currentRecipe);
+template QString RecipeUtils::describeSharingAndLocking<Fermentation>(Fermentation const & item, Recipe const * currentRecipe);

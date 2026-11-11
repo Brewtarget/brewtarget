@@ -25,6 +25,7 @@
 #include "measurement/SystemOfMeasurement.h"
 #include "measurement/Unit.h"
 #include "measurement/UnitSystem.h"
+#include "utils/TypeInfo.h"
 
 namespace {
    /**
@@ -68,6 +69,56 @@ namespace {
    QActionGroup & newActionGroup(QMenu & menu) {
       return *new QActionGroup{&menu};
    }
+
+   /**
+    * \brief Add a sub-menu to allow the user to override the number of decimal places shown in a field.  (See comment
+    *        on physicalQuantityToUserSpecifiedDecimalPlaces in measurement/Measurement.cpp for the hierarchy of
+    *        preferences for number of decimal places shown.)
+    */
+   void addDecimalPlacesSubMenu(QMenu & menu, std::optional<Measurement::NumDecimalPlaces> const forcedDecimalPlaces) {
+      // As in UnitAndScalePopUpMenu::create, menu owns the sub-menu, so it's fine to use new here
+      QMenu & decimalPlacesSubMenu = *new QMenu(&menu);
+      QActionGroup & actionGroup = newActionGroup(decimalPlacesSubMenu);
+      generateAction(decimalPlacesSubMenu,
+                     QApplication::translate("UnitAndScalePopUpMenu", "Default"),
+                     std::optional<Measurement::NumDecimalPlaces>{std::nullopt},
+                     forcedDecimalPlaces,
+                     actionGroup);
+      for (int numDecimalPlaces = 0; numDecimalPlaces <= Measurement::NumDecimalPlaces::maxValue; ++numDecimalPlaces) {
+         generateAction(decimalPlacesSubMenu,
+                        QString::number(numDecimalPlaces),
+                        std::optional<Measurement::NumDecimalPlaces>{Measurement::NumDecimalPlaces{numDecimalPlaces}},
+                        forcedDecimalPlaces,
+                        actionGroup);
+      }
+      decimalPlacesSubMenu.setTitle(QApplication::translate("UnitAndScalePopUpMenu", "Decimal Places"));
+      menu.addMenu(&decimalPlacesSubMenu);
+      return;
+   }
+}
+
+bool UnitAndScalePopUpMenu::isAvailableFor(TypeInfo const & typeInfo) {
+   // It's a coding error to call this for a field with no type
+   Q_ASSERT(typeInfo.fieldType);
+   if (!std::holds_alternative<NonPhysicalQuantity>(*typeInfo.fieldType)) {
+      return true;
+   }
+   NonPhysicalQuantity const nonPhysicalQuantity = std::get<NonPhysicalQuantity>(*typeInfo.fieldType);
+   // GetUltimateDefaultDecimalPlaces returns std::nullopt for NonPhysicalQuantity values that don't have decimal places
+   return typeInfo.typeIndex == TypeInfo::Index::Double &&
+          GetUltimateDefaultDecimalPlaces(nonPhysicalQuantity).has_value();
+}
+
+std::unique_ptr<QMenu> UnitAndScalePopUpMenu::create(
+   QWidget * parent,
+   [[maybe_unused]] NonPhysicalQuantity const nonPhysicalQuantity,
+   std::optional<Measurement::NumDecimalPlaces> const forcedDecimalPlaces
+) {
+   // It's a coding error to ask for a menu for something that can't have decimal places
+   Q_ASSERT(GetUltimateDefaultDecimalPlaces(nonPhysicalQuantity).has_value());
+   std::unique_ptr<QMenu> menu = std::make_unique<QMenu>(parent);
+   addDecimalPlacesSubMenu(*menu, forcedDecimalPlaces);
+   return menu;
 }
 
 std::optional<UnitAndScalePopUpMenu::Selection> UnitAndScalePopUpMenu::exec(QMenu & menu,
@@ -144,21 +195,19 @@ std::unique_ptr<QMenu> UnitAndScalePopUpMenu::create(
       }
    }
 
-   // Don't even think about a scale menu for "mixed" as there isn't a sensible way to combine the Mass and Volume
-   // scales (or the MassConcentration and VolumeConcentration ones)!
-   if (std::holds_alternative<Measurement::ChoiceOfPhysicalQuantity>(physicalQuantities)) {
-      return menu;
-   }
-
    // If the UnitSystem/SystemOfMeasurement currently used to display the field has more than one Unit, allow the user
-   // to select a forced Unit for the scale
+   // to select a forced Unit for the scale.
+   //
+   // But don't even think about a scale menu for "mixed" as there isn't a sensible way to combine the Mass and Volume
+   // scales (or the MassConcentration and VolumeConcentration ones)!  (We do still want the decimal places sub-menu
+   // below though.)
    Measurement::UnitSystem const & unitSystem{
       forcedSystemOfMeasurement ?
          Measurement::UnitSystem::getInstance(*forcedSystemOfMeasurement, physicalQuantity) :
          Measurement::getDisplayUnitSystem(physicalQuantity)
    };
    if (auto const relativeScales = unitSystem.getRelativeScales();
-       relativeScales.size() > 1) {
+       std::holds_alternative<Measurement::PhysicalQuantity>(physicalQuantities) && relativeScales.size() > 1) {
       QMenu & scalesSubMenu = *new QMenu(menu.get());
       QActionGroup & actionGroup = newActionGroup(scalesSubMenu);
       generateAction(scalesSubMenu,
@@ -177,25 +226,8 @@ std::unique_ptr<QMenu> UnitAndScalePopUpMenu::create(
       menu->addMenu(&scalesSubMenu);
    }
 
-   // Allow the user to override the number of decimal places shown in this field.  (See comment on
-   // physicalQuantityToUserSpecifiedDecimalPlaces in measurement/Measurement.cpp for the hierarchy of preferences for
-   // number of decimal places shown.)
-   QMenu & decimalPlacesSubMenu = *new QMenu(menu.get());
-   QActionGroup & decimalPlacesActionGroup = newActionGroup(decimalPlacesSubMenu);
-   generateAction(decimalPlacesSubMenu,
-                  QApplication::translate("UnitAndScalePopUpMenu", "Default"),
-                  std::optional<Measurement::NumDecimalPlaces>{std::nullopt},
-                  forcedDecimalPlaces,
-                  decimalPlacesActionGroup);
-   for (int numDecimalPlaces = 0; numDecimalPlaces <= Measurement::NumDecimalPlaces::maxValue; ++numDecimalPlaces) {
-      generateAction(decimalPlacesSubMenu,
-                     QString::number(numDecimalPlaces),
-                     std::optional<Measurement::NumDecimalPlaces>{Measurement::NumDecimalPlaces{numDecimalPlaces}},
-                     forcedDecimalPlaces,
-                     decimalPlacesActionGroup);
-   }
-   decimalPlacesSubMenu.setTitle(QApplication::translate("UnitAndScalePopUpMenu", "Decimal Places"));
-   menu->addMenu(&decimalPlacesSubMenu);
+   // Allow the user to override the number of decimal places shown in this field
+   addDecimalPlacesSubMenu(*menu, forcedDecimalPlaces);
 
    return menu;
 }

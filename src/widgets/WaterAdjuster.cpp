@@ -20,20 +20,25 @@
 #include "widgets/WaterAdjuster.h"
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 
-#include <Algorithms.h>
 #include <QButtonGroup>
 #include <QComboBox>
 #include <QFont>
 #include <QInputDialog>
+#include <QSignalBlocker>
+#include <QUndoStack>
 #include <QVector>
 
 #include "MainWindow.h"
+#include "WaterAutoAdjuster.h"
+#include "calculations/ColorMethods.h"
+#include "calculations/Algorithms.h"
 #include "catalogs/FermentableCatalog.h"
 #include "catalogs/MiscCatalog.h"
+#include "database/ObjectStoreWrapper.h"
 #include "editors/WaterEditor.h"
-#include "measurement/ColorMethods.h"
 #include "measurement/PhysicalConstants.h"
 #include "measurement/Unit.h"
 #include "model/Fermentable.h"
@@ -47,6 +52,8 @@
 #include "qtModels/sortFilterProxyModels/RecipeAdditionMiscSortFilterProxyModel.h"
 #include "qtModels/tableModels/RecipeAdditionFermentableTableModel.h"
 #include "qtModels/tableModels/RecipeAdditionMiscTableModel.h"
+#include "undoRedo/Undoable.h"
+#include "undoRedo/UndoableAutoAdjust.h"
 #include "utils/VeriTable.h"
 #include "widgets/SmartDigitWidget.h"
 
@@ -57,36 +64,11 @@
 
 
 //
-// All the pH calculations are taken from the work done by Kai Troester and originally published at
-// http://braukaiser.com/wiki/index.php/Beer_color_to_mash_pH_(v2.0) with additional information being gleaned from the
-// spreadsheet associated with that link.
+// The mash pH and ion calculations are now in WaterAutoAdjuster, so that what we show here agrees with what Auto-Adjust
+// calculates.
 //
 
-
 namespace {
-
-   struct WaterVolumes {
-      double const totalMashWater_l  ;
-      double const roWaterInfuse_l   ;
-      double const roWaterSparge_l   ;
-      double const roWaterTotal_l    ;
-      double const waterBaseTotal_l  ;
-      double const waterBase_fraction;
-      double const roWater_fraction  ;
-
-      WaterVolumes(double const totalMashWater_l,
-                   double const roWaterInfuse_l,
-                   double const roWaterSparge_l) :
-         totalMashWater_l  {totalMashWater_l},
-         roWaterInfuse_l   {roWaterInfuse_l},
-         roWaterSparge_l   {roWaterSparge_l},
-         roWaterTotal_l    {roWaterInfuse_l + roWaterSparge_l},
-         waterBaseTotal_l  {totalMashWater_l - roWaterTotal_l  },
-         waterBase_fraction{waterBaseTotal_l / totalMashWater_l},
-         roWater_fraction  {roWaterTotal_l / totalMashWater_l} {
-         return;
-      }
-   };
 
    //
    // For water chemistry, we often need to think about ions and valences.
@@ -137,26 +119,8 @@ namespace {
    //
    //    mEq/L = C ÷ EW = C ÷ (MW ÷ V) = (C × V) ÷ MW
    //
-   // In the original code here, there was an assumption that we only needed one EW for all our calculations and its
-   // value was 50.0.  IDK if this is true, or close enough, but it's confusing.
+   // See WaterAutoAdjuster for where this is used.
    //
-   // TODO: Refactor things to be a bit more explicit.
-   //
-
-   //
-   //
-   // So you divide a mass concentration (in
-   // mg/L) by this number to convert it to mEq/L.
-   //
-
-   // I've seen some confusion over this constant. 50 mEq/l is what Kai uses.
-   double constexpr mEq = 50.0;
-
-   // The pH of a beer with no color
-   double constexpr noColorBeer_ph = 5.6;
-   // Magic constants Kai derives in the document above.
-   double constexpr pHSlopeLight = 0.21;
-   double constexpr pHSlopeDark  = 0.06;
 
    auto const seriesNameBase  {WaterEditor::tr("Base Profile" )};
    auto const seriesNameTarget{WaterEditor::tr("Target Profile")};
@@ -267,174 +231,6 @@ public:
       return;
    }
 
-   /**
-    * \brief The fraction of the mash (strike) water that is base water rather than RO water.
-    *
-    *        NB: This is different from \c WaterVolumes::waterBase_fraction, which is over all the water (mash and
-    *        sparge).  For mash pH, only the mash water matters.  Note too that \c Recipe::roWaterMash_pct is a
-    *        percentage (0-100), not a fraction.
-    */
-   double mashBaseWaterFraction() const {
-      return std::clamp(1.0 - this->m_rec->roWaterMash_pct() / 100.0, 0.0, 1.0);
-   }
-
-   /**
-    * \brief Calculates the alkalinity (in mEq/L) of the mash water due to the base water.
-    *
-    *        Previously this only looked at Water::alkalinity_ppm, which is not set for water profiles read in from
-    *        BeerXML, BeerJSON or dotBeer (including all the default ones), so the bicarbonate in the base water was
-    *        ignored.  See Water::alkalinity_mEqPerL.
-    */
-   double calculateRA() const {
-      if (!this->m_base) {
-         return 0.0;
-      }
-      return this->mashBaseWaterFraction() * this->m_base->alkalinity_mEqPerL();
-   }
-
-   /**
-    * \brief Calculates the theoretical distilled water mash pH. I make some
-    *        rather rash assumptions about a crystal v roasted malt.
-    */
-   double calculateGristpH() {
-      double gristPh = noColorBeer_ph;
-      double pHAdjustment = 0.0;
-
-      if ( this->m_rec && this->m_rec->fermentableAdditions().size() ) {
-
-         double const platoRatio = 1/Measurement::Units::plato.fromCanonical(this->m_rec->og());
-         double const color = this->m_rec->color_srm();
-         double colorFromGrain = 0.0;
-
-         for (auto const & fermentableAddition : this->m_rec->fermentableAdditions() ) {
-            switch (fermentableAddition->fermentable()->type()) {
-               case Fermentable::Type::Grain:
-               case Fermentable::Type::Extract:
-               case Fermentable::Type::Dry_Extract:
-                  // I am counting anything that doesn't have diastatic
-                  // power as a roasted/crystal malt. I am sure my assumption will
-                  // haunt me later, but I have no way of knowing what kind of malt
-                  // (base, crystal, roasted) this is.
-                  if (fermentableAddition->fermentable()->diastaticPower_lintner() < 1 ) {
-                     double lovi = 19.0;
-                     if (fermentableAddition->fermentable()->color_srm() <= 120 ) {
-                        lovi = (fermentableAddition->fermentable()->color_srm() + 0.6)/1.35;
-                     }
-                     colorFromGrain = (fermentableAddition->amount().quantity / this->m_totalGrains_kg ) * lovi;
-                  }
-                  break;
-               case Fermentable::Type::Sugar:
-               case Fermentable::Type::Other_Adjunct:
-               case Fermentable::Type::Fruit:
-               case Fermentable::Type::Juice:
-               case Fermentable::Type::Honey:
-                  // For the moment, at least, assume these types of fermentables do not affect color.  .:TBD:. This is
-                  // probably wrong!
-                  break;
-            }
-         }
-         double const colorRatio = colorFromGrain/this->m_weightedColor_lovibond;
-         pHAdjustment = platoRatio * ( pHSlopeLight * (1-colorRatio) + pHSlopeDark * colorRatio) *color;
-
-         gristPh = gristPh - pHAdjustment;
-      }
-      return gristPh;
-   }
-
-   /**
-    * \brief Calculates the pH of the base water caused by any Ca or Mg
-    *        including figuring out the residual alkalinity.
-    */
-   double calculateWaterAdjustmentpH([[maybe_unused]] WaterVolumes const & waters) {
-      if (!this->m_rec || !this->m_rec->mash()) {
-         return 0.0;
-      }
-
-      //
-      // We get the initial numbers from the base water.  The 2 is the valence of Ca²⁺ and Mg²⁺, to convert from mmol/L
-      // to mEq/L.  As in calculateRA, we use the proportion of the *mash* water that is base water, because the result
-      // is multiplied by the mash (infusion) water volume below.
-      //
-      double const baseFraction = this->mashBaseWaterFraction();
-      double const ca_ppm =
-         this->m_base ? baseFraction * this->m_base->calcium_ppm  ()/MolarMass::Calcium * 2 : 0.0;
-      double const mg_ppm =
-         this->m_base ? baseFraction * this->m_base->magnesium_ppm()/MolarMass::Magnesium * 2 : 0.0;
-
-      // I need mass of the salts, and all the previous math gave me
-      // ppm. Multiplying by the water volume gives me the mass
-      // The 3.5 and 7 come from Paul Kohlbach's work from the 1940's.
-      double const totalDelta = (this->calculateRA() - ca_ppm/3.5 - mg_ppm/7) * this->m_rec->mash()->totalInfusionAmount_l();
-      // note: The referenced paper says the formula is
-      // gristpH + strikepH * thickness/mEq. I could never get that to work.
-      // the spreadsheet gave me this formula, and  it works much better.
-      return totalDelta/this->m_thickness_LKg/mEq;
-   }
-
-   /**
-    * \brief Calculates the pH delta caused by any salt additions.
-    */
-   double calculateAddedWaterAdjustmentpH() {
-
-      // We need the value from the salt table model, because we need all the
-      // added salts, but not the base.
-      double const ca   = this->m_miscAdditionsVeriTable.m_tableModel->concentrationPerLiter_massConcPpm<Water::MineralIon::Calcium>    ()/MolarMass::Calcium * 2.0;
-      double const mg   = this->m_miscAdditionsVeriTable.m_tableModel->concentrationPerLiter_massConcPpm<Water::MineralIon::Magnesium>  ()/MolarMass::Magnesium * 2.0;
-      // Valence of HCO₃⁻ is 1 and of CO₃²⁻ is 2, hence the latter is multiplied by 2 to get mEq
-      double const hco3 = this->m_miscAdditionsVeriTable.m_tableModel->concentrationPerLiter_massConcPpm<Water::MineralIon::Bicarbonate>()/MolarMass::Bicarbonate;
-      double const co3  = this->m_miscAdditionsVeriTable.m_tableModel->concentrationPerLiter_massConcPpm<Water::MineralIon::Carbonate>  ()/MolarMass::Carbonate * 2.0;
-
-      //
-      // As for the base water (see calculateWaterAdjustmentpH and calculateRA), this is Kolbach's residual alkalinity,
-      // ie alkalinity - Ca/3.5 - Mg/7, with everything in milliequivalents.  NB: hco3 and co3 are already in mEq (having
-      // been divided by molar mass above), just like ca and mg.
-      //
-      double const totalDelta = 0.0 - ca/3.5 - mg/7 + (hco3 + co3);
-      return totalDelta/this->m_thickness_LKg/mEq;
-   }
-
-   /**
-    * \brief Calculates the pH adjustment caused by lactic acid, H3PO4 and/or acid malts
-    */
-   double calculateAcidpH() {
-      double const H3PO4_gpm = 98.0;
-      double const lactic_gpm = 90.0;
-      double totalDelta = 0.0;
-
-      double const lactic_kg   = this->m_miscAdditionsVeriTable.m_tableModel->totalAcid_kg(Misc::WaterAgentType::LacticAcid);
-      double const lacticFromMalt_kg = this->m_fermentableAdditionsVeriTable.m_tableModel->totalLacticAcid_kg();
-
-      double const phosphoric_kg    = this->m_miscAdditionsVeriTable.m_tableModel->totalAcid_kg(Misc::WaterAgentType::PhosphoricAcid);
-
-      if ( lactic_kg + lacticFromMalt_kg > 0.0 ) {
-         totalDelta += 1000.0 * (lactic_kg + lacticFromMalt_kg) / lactic_gpm;
-      }
-      if ( phosphoric_kg > 0.0 ) {
-         totalDelta += 1000.0 * phosphoric_kg / H3PO4_gpm;
-      }
-
-      return totalDelta/mEq/this->m_thickness_LKg;
-   }
-
-   /**
-    * \brief This figures out the expected mash pH. It really just calls all the other pieces to get those calculations
-    *        and then sums them all up.
-    */
-   double calculateMashpH(WaterVolumes const & waters) {
-      if (this->m_rec && this->m_rec->fermentableAdditions().size()) {
-         double const grist_pH   = this->calculateGristpH();
-         double const base_pH    = this->calculateWaterAdjustmentpH(waters);
-         double const salt_pH    = this->calculateAddedWaterAdjustmentpH();
-         double const acids     = this->calculateAcidpH();
-
-         // qDebug() << "base_pH =" << base_pH << "grist_pH =" << grist_pH << "salt_pH =" << salt_pH << "acids =" << acids;
-         // residual alkalinity is handled by base_pH
-         return base_pH + grist_pH + salt_pH - acids;
-      }
-
-      return 0.0;
-   }
-
    //============================================ Member variables for impl ============================================
    WaterAdjuster &         m_self;
    VeriTable<RecipeAdditionMisc>        m_miscAdditionsVeriTable;
@@ -454,9 +250,12 @@ public:
 
    double m_roWaterMash_pct        = 0.0;
    double m_roWaterSparge_pct      = 0.0;
-   double m_totalGrains_kg         = 0.0;
-   double m_thickness_LKg          = 0.0;
-   double m_weightedColor_lovibond = 0.0;
+
+   //! Position on the undo stack just after our last auto-adjust, so we know when it's been undone, or -1 if none
+   int m_autoAdjustUndoIndex = -1;
+
+   //! The tool tip for the target mash pH spin box from the .ui file, to which we sometimes add more information
+   QString m_targetMashPhToolTip;
 };
 
 WaterAdjuster::WaterAdjuster(QWidget* parent) :
@@ -508,6 +307,14 @@ WaterAdjuster::WaterAdjuster(QWidget* parent) :
    this->btDigit_ph->setHighLim(5.5);
    this->btDigit_ph->setQuantity(7.0);
 
+   // Enabled once we have a recipe -- see setRecipe
+   for (QWidget * widget : std::initializer_list<QWidget *>{this->pushButton_autoAdjust,
+                                                            this->checkBox_keptInSync,
+                                                            this->checkBox_targetMashPh,
+                                                            this->doubleSpinBox_targetMashPh}) {
+      widget->setEnabled(false);
+   }
+
    this->pimpl->m_editorForBase   = new WaterEditor(this, "Base");
    this->pimpl->m_editorForTarget = new WaterEditor(this, "Target");
 
@@ -544,6 +351,23 @@ void WaterAdjuster::init() {
    connect(combo_waterTarget, QOverload<int>::of(&QComboBox::activated)  , this, &WaterAdjuster::updateTargetProfile);
    connect(spinBox_mashRO   , QOverload<int>::of(&QSpinBox::valueChanged), this, &WaterAdjuster::updateRoWaterMash_pct  );
    connect(spinBox_spargeRO , QOverload<int>::of(&QSpinBox::valueChanged), this, &WaterAdjuster::updateRoWaterSparge_pct);
+
+   connect(pushButton_autoAdjust     , &QAbstractButton::clicked , this, &WaterAdjuster::autoAdjust        );
+   connect(checkBox_keptInSync       , &QAbstractButton::toggled , this, &WaterAdjuster::keptInSyncToggled );
+   connect(checkBox_targetMashPh     , &QAbstractButton::toggled , this, &WaterAdjuster::targetMashPhChanged);
+   connect(doubleSpinBox_targetMashPh, &QDoubleSpinBox::valueChanged, this, &WaterAdjuster::targetMashPhChanged);
+   //
+   // Undo and redo can turn keep in sync on and off (see UndoableAutoAdjust).  Also, if our last auto-adjust has been
+   // undone, the message about it no longer applies.
+   //
+   connect(&Undoable::getStack(), &QUndoStack::indexChanged, this, [this](int const index) {
+      if (this->pimpl->m_autoAdjustUndoIndex >= 0 && index < this->pimpl->m_autoAdjustUndoIndex) {
+         this->showAutoAdjustMessage(tr("Auto-Adjust undone."));
+         this->pimpl->m_autoAdjustUndoIndex = -1;
+      }
+      this->refreshAutoAdjustControls();
+      return;
+   });
 
    connect(pushButton_editBaseProfile,   &QPushButton::clicked, this->pimpl->m_editorForBase,   &QWidget::show);
    connect(pushButton_editTargetProfile, &QPushButton::clicked, this->pimpl->m_editorForTarget, &QWidget::show);
@@ -589,7 +413,15 @@ void WaterAdjuster::setRecipe(Recipe * rec) {
       return;
    }
 
+   if (this->pimpl->m_rec) {
+      this->disconnect(this->pimpl->m_rec, nullptr, this, nullptr);
+   }
    this->pimpl->m_rec = rec;
+   // Changes to eg the grain bill or the mash affect the predicted mash pH and ion concentrations
+   this->connect(this->pimpl->m_rec, &NamedEntity::changed, this, &WaterAdjuster::recipeChanged);
+   this->showAutoAdjustMessage("");
+   this->pimpl->m_autoAdjustUndoIndex = -1;
+   this->refreshAutoAdjustControls();
 
    auto const mash = this->pimpl->m_rec->mash();
    this->pimpl->       m_miscAdditionsVeriTable.m_tableModel->observeRecipe(this->pimpl->m_rec);
@@ -612,56 +444,7 @@ void WaterAdjuster::setRecipe(Recipe * rec) {
    this->pimpl->m_roWaterSparge_pct = this->pimpl->m_rec->roWaterSparge_pct();
    spinBox_spargeRO->setValue( QVariant(this->pimpl->m_roWaterSparge_pct).toInt());
 
-   // I need these numbers before we set the ranges
-   for (auto const & fermentableAddition : this->pimpl->m_rec->fermentableAdditions() ) {
-      // .:TBD:. This almost certainly needs some refinement
-      switch (fermentableAddition->fermentable()->type()) {
-         case Fermentable::Type::Grain:
-         case Fermentable::Type::Extract:
-         case Fermentable::Type::Dry_Extract:
-            if (fermentableAddition->getMeasure() == Measurement::PhysicalQuantity::Mass) {
-               this->pimpl->m_totalGrains_kg += fermentableAddition->amount().quantity;
-            }
-            break;
-         case Fermentable::Type::Sugar:
-         case Fermentable::Type::Other_Adjunct:
-         case Fermentable::Type::Fruit:
-         case Fermentable::Type::Juice:
-         case Fermentable::Type::Honey:
-            // For the moment, at least, assume these types of fermentables do not affect color.  .:TBD:. This is
-            // probably wrong!
-            break;
-      }
-   }
-
-   // Now we've got this->pimpl->m_total_grains, we need to loop over fermentable again
-   for (auto const & fermentableAddition : this->pimpl->m_rec->fermentableAdditions() ) {
-      // .:TBD:. This almost certainly needs some refinement
-      switch (fermentableAddition->fermentable()->type()) {
-         case Fermentable::Type::Grain:
-         case Fermentable::Type::Extract:
-         case Fermentable::Type::Dry_Extract:
-            if (fermentableAddition->getMeasure() == Measurement::PhysicalQuantity::Mass) {
-               double lovi = (fermentableAddition->fermentable()->color_srm() +0.6 ) / 1.35;
-               this->pimpl->m_weightedColor_lovibond   += (fermentableAddition->amount().quantity/this->pimpl->m_totalGrains_kg)*lovi;
-            }
-            break;
-         case Fermentable::Type::Sugar:
-         case Fermentable::Type::Other_Adjunct:
-         case Fermentable::Type::Fruit:
-         case Fermentable::Type::Juice:
-         case Fermentable::Type::Honey:
-            // For the moment, at least, assume these types of fermentables do not affect color.  .:TBD:. This is
-            // probably wrong!
-            break;
-      }
-   }
-
-   this->pimpl->m_thickness_LKg = this->pimpl->m_rec->mash()->totalInfusionAmount_l()/this->pimpl->m_totalGrains_kg;
-
-
    if (this->pimpl->m_base) {
-
       this->pimpl->m_editorForBase->setEditItem(this->pimpl->m_base);
       // all of the magic to set the sliders happens in newTotals(). So don't do it twice
    }
@@ -702,50 +485,219 @@ void WaterAdjuster::updateTargetProfile(int const selected) const {
 }
 
 void WaterAdjuster::newTotals() {
-   if (!this->pimpl->m_rec || !this->pimpl->m_rec->mash()) {
-      qDebug() << Q_FUNC_INFO << "¥¥¥¥¥¥¥¥¥¥ Bailing ¥¥¥¥¥¥¥¥¥¥¥";
+   if (!this->pimpl->m_rec) {
       return;
    }
 
-   // Two major things need to happen here:
-   //   o the totals need to be updated
-   //   o the digits need to be updated
-
-   auto const mash = this->pimpl->m_rec->mash();
-   if (qFuzzyCompare(mash->totalMashWater_l(), 0.0)) {
-      qWarning() << Q_FUNC_INFO << "Cannot set strike water chemistry without a mash";
+   std::optional<WaterAutoAdjuster::Prediction> const prediction = WaterAutoAdjuster::predict(*this->pimpl->m_rec);
+   if (!prediction) {
+      qDebug() << Q_FUNC_INFO << "Cannot set water chemistry without water in the mash";
       return;
    }
-   WaterVolumes const waters{mash->totalMashWater_l(),
-                             (this->pimpl->m_roWaterMash_pct / 100.0) * mash->totalInfusionAmount_l(),
-                             (this->pimpl->m_roWaterSparge_pct / 100.0) * mash->totalSpargeAmount_l()};
 
    for (auto const & [ion, digitWidget] : this->pimpl->m_waterIonDisplays) {
-      //
-      // If the base water is, say, a quarter of all the water then, without any other additions, the total ion
-      // concentration in all the water is also a quarter of what it is in the base water.
-      //
-      // If no base water is specified then we assume it is RO water -- ie with no ions.
-      //
-      double const ionFromBaseWater_ppm =
-         this->pimpl->m_base ? waters.waterBase_fraction * *this->pimpl->m_base->ionConcentration_ppm(ion) : 0.0;
-
-      //
-      // RecipeAdditionMiscTableModel::concentrationPerLiter_massConcPpm gives us the concentration of an ion if the
-      // all the Misc additions are dissolved in 1 liter of water, so we have to divide it by the total number of
-      // liters of water.
-      //
-      double const ionFromWaterAgents_ppm =
-         this->pimpl->m_miscAdditionsVeriTable.m_tableModel->concentrationPerLiter_massConcPpm(ion) / waters.totalMashWater_l;
-
-      double const ionTotal_ppm = ionFromWaterAgents_ppm + ionFromBaseWater_ppm;
+      double const ionTotal_ppm = prediction->ions_ppm.value(ion, 0.0);
       digitWidget->setQuantity(ionTotal_ppm);
       this->pimpl->m_actual.setIonConcentration_ppm(ion, ionTotal_ppm);
    }
 
-   btDigit_ph->setQuantity(this->pimpl->calculateMashpH(waters));
+   // If there's a target mash pH, we show whether we're close to it, otherwise we use the range most brewers aim for
+   std::optional<double> const target_pH = this->pimpl->m_rec->targetMashAcidity_pH();
+   if (target_pH) {
+      this->btDigit_ph->setLowLim (*target_pH - 0.1);
+      this->btDigit_ph->setHighLim(*target_pH + 0.1);
+   } else {
+      this->btDigit_ph->setLowLim (5.2);
+      this->btDigit_ph->setHighLim(5.6);
+   }
+   this->btDigit_ph->setQuantity(prediction->mash_pH.value_or(0.0));
 
    this->radarChart->replot();
+   return;
+}
+
+void WaterAdjuster::recipeChanged(QMetaProperty prop, [[maybe_unused]] QVariant val) {
+   QString const propName = prop.name();
+   if (propName == *PropertyNames::Recipe::waterKeptInSync ||
+       propName == *PropertyNames::Recipe::targetMashAcidity_pH) {
+      this->refreshAutoAdjustControls();
+   }
+   this->newTotals();
+   return;
+}
+
+void WaterAdjuster::showAutoAdjustMessage(QString const & heading, QStringList const & details) {
+   //
+   // The one-line summary goes under the Auto-Adjust button, and the details go in the Auto-Adjust Notes tab, as there
+   // can be quite a lot of them, and they would otherwise make the top of the display rather crowded.
+   //
+   // NB: We don't put the number of notes in the tab title, as it then doesn't fit alongside the other tabs
+   if (details.isEmpty()) {
+      this->label_autoAdjustInfo->setText(heading.toHtmlEscaped());
+      this->textBrowser_autoAdjustNotes->clear();
+      return;
+   }
+
+   this->label_autoAdjustInfo->setText(
+      QString{"%1 %2"}.arg(heading.toHtmlEscaped(),
+                           tr("See the <i>Auto-Adjust Notes</i> tab below for details (%n item(s)).", "", details.size()))
+   );
+   QString notes = QString{"<p>%1</p><ul>"}.arg(heading.toHtmlEscaped());
+   for (auto const & detail : details) {
+      notes += QString{"<li>%1</li>"}.arg(detail.toHtmlEscaped());
+   }
+   notes += "</ul>";
+   this->textBrowser_autoAdjustNotes->setHtml(notes);
+   return;
+}
+
+void WaterAdjuster::refreshAutoAdjustControls() {
+   Recipe const * const recipe = this->pimpl->m_rec;
+   bool const enabled = recipe && !recipe->locked();
+   for (QWidget * widget : std::initializer_list<QWidget *>{this->pushButton_autoAdjust,
+                                                            this->checkBox_keptInSync,
+                                                            this->checkBox_targetMashPh}) {
+      widget->setEnabled(enabled);
+   }
+
+   std::optional<double> const target_pH = recipe ? recipe->targetMashAcidity_pH() : std::nullopt;
+   {
+      QSignalBlocker const blockKeptInSync{this->checkBox_keptInSync       };
+      QSignalBlocker const blockTargetPh  {this->checkBox_targetMashPh     };
+      QSignalBlocker const blockSpinBox   {this->doubleSpinBox_targetMashPh};
+      this->checkBox_keptInSync  ->setChecked(recipe && recipe->waterKeptInSync());
+      this->checkBox_targetMashPh->setChecked(target_pH.has_value());
+      //
+      // If the recipe doesn't have a target, but its mash has a pH set on one of its steps, show that, so it's what we
+      // use if the user ticks the box.  (We never write anything back to the mash -- see
+      // WaterAutoAdjuster::suggestedTargetMashPh.)
+      //
+      std::optional<double> const suggested_pH =
+         (recipe && !target_pH) ? WaterAutoAdjuster::suggestedTargetMashPh(*recipe) : std::nullopt;
+      if (target_pH) {
+         this->doubleSpinBox_targetMashPh->setValue(*target_pH);
+      } else if (suggested_pH) {
+         this->doubleSpinBox_targetMashPh->setValue(*suggested_pH);
+      }
+      if (this->pimpl->m_targetMashPhToolTip.isNull()) {
+         this->pimpl->m_targetMashPhToolTip = this->doubleSpinBox_targetMashPh->toolTip();
+      }
+      this->doubleSpinBox_targetMashPh->setToolTip(
+         suggested_pH ? this->pimpl->m_targetMashPhToolTip + "\n\n" +
+                        tr("The value shown is the pH set on the recipe's mash.") :
+                        this->pimpl->m_targetMashPhToolTip
+      );
+   }
+   this->doubleSpinBox_targetMashPh->setEnabled(enabled && target_pH.has_value());
+   return;
+}
+
+void WaterAdjuster::targetMashPhChanged() {
+   if (!this->pimpl->m_rec) {
+      return;
+   }
+   // As with the RO percentages, this takes effect straight away.  If keep in sync is on, it will trigger an adjustment.
+   std::optional<double> const target_pH =
+      this->checkBox_targetMashPh->isChecked() ? std::optional<double>{this->doubleSpinBox_targetMashPh->value()} :
+                                                 std::nullopt;
+   this->pimpl->m_rec->setTargetMashAcidity_pH(target_pH);
+   this->doubleSpinBox_targetMashPh->setEnabled(target_pH.has_value());
+   return;
+}
+
+void WaterAdjuster::keptInSyncToggled(bool const checked) {
+   Recipe * const recipe = this->pimpl->m_rec;
+   if (!recipe) {
+      // Check box should have been disabled
+      return;
+   }
+   if (checked) {
+      this->doAutoAdjust(true);
+   } else {
+      Undoable::doOrRedoUpdate(*recipe,
+                               TYPE_INFO(Recipe, waterKeptInSync),
+                               false,
+                               tr("Turn off keeping water agents in sync"));
+   }
+   // In case the change wasn't made
+   this->refreshAutoAdjustControls();
+   return;
+}
+
+void WaterAdjuster::autoAdjust() {
+   this->doAutoAdjust(false);
+   return;
+}
+
+void WaterAdjuster::doAutoAdjust(bool const turnOnKeepInSync) {
+   Recipe * const recipe = this->pimpl->m_rec;
+   if (!recipe) {
+      // Button should have been disabled
+      qWarning() << Q_FUNC_INFO << "No recipe";
+      return;
+   }
+
+   auto showMessage = [this](QString const & heading, QStringList const & details = {}) {
+      this->showAutoAdjustMessage(heading, details);
+      return;
+   };
+
+   //
+   // Make all the changes (including turning on keep in sync if that's what we're doing) a single undoable step.  See
+   // UndoableAutoAdjust for how undo interacts with keep in sync.  We hold a shared pointer to the recipe so the command
+   // remains valid for as long as it's on the undo stack.
+   //
+   std::shared_ptr<Recipe> const recipePtr = ObjectStoreWrapper::getSharedFromRaw(recipe);
+   QString const description = turnOnKeepInSync ? tr("Turn on keeping water agents in sync") :
+                                                  tr("Auto-adjust water agents");
+   auto command = std::make_unique<UndoableAutoAdjust>(
+      description,
+      [recipePtr]() { return recipePtr->waterKeptInSync(); },
+      [recipePtr](bool const val) { recipePtr->setWaterKeptInSync(val); return; }
+   );
+   if (turnOnKeepInSync) {
+      new SimpleUndoableUpdate(*recipe, TYPE_INFO(Recipe, waterKeptInSync), true, description, command.get());
+   }
+
+   WaterAutoAdjuster::Preparation const preparation = WaterAutoAdjuster::prepare(*recipe, *command);
+   if (!preparation.ok()) {
+      if (turnOnKeepInSync) {
+         // We still turn on keep in sync, as the user asked for it.  The adjustment will happen when the problem is fixed.
+         Undoable::doOrRedoUpdate(command.release());
+         this->pimpl->m_autoAdjustUndoIndex = Undoable::getStack().index();
+         showMessage(tr("Could not adjust the water agents yet: %1").arg(preparation.result.error));
+      } else {
+         showMessage(tr("Could not adjust the water agents, so nothing has been changed: %1").arg(preparation.result.error));
+      }
+      return;
+   }
+
+   bool const changed = command->childCount() > 0;
+   if (changed) {
+      Undoable::doOrRedoUpdate(command.release());
+      this->pimpl->m_autoAdjustUndoIndex = Undoable::getStack().index();
+   }
+
+   // The table model will normally have told us about the changes, but it doesn't hurt to make sure
+   this->newTotals();
+
+   WaterAutoAdjuster::Result const & result = preparation.result;
+   QStringList details = result.warnings;
+   details.append(preparation.notes);
+   QString const what = recipe->waterTarget() ? tr("target profile \"%1\"").arg(recipe->waterTarget()->name()) :
+                                                tr("target mash pH");
+   QString heading;
+   if (!changed) {
+      heading = tr("The water agents already match %1 as closely as they can.").arg(what);
+   } else if (result.warnings.isEmpty()) {
+      heading = tr("Water agents adjusted to match %1.").arg(what);
+   } else {
+      heading = tr("Water agents adjusted for %1, but some things need checking.").arg(what);
+   }
+   if (result.predictedMash_pH) {
+      heading += " " + tr("Predicted mash pH is %1.").arg(QString::number(*result.predictedMash_pH, 'f', 2));
+   }
+   showMessage(heading, details);
    return;
 }
 

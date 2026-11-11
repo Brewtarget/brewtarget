@@ -140,7 +140,9 @@ void SmartLineEdit::setRawText(QString const & text) {
 }
 
 void SmartLineEdit::connectSmartLabelSignal(SmartLabel & smartLabel) {
-   connect(&smartLabel, &SmartLabel::changedUnitsOrPrecision, this, &SmartLineEdit::lineChanged);
+   // Only one of these signals will be sent, depending on whether we hold a PhysicalQuantity or a NonPhysicalQuantity
+   connect(&smartLabel, &SmartLabel::changedUnitsOrPrecision, this, &SmartLineEdit::lineChanged     );
+   connect(&smartLabel, &SmartLabel::changedPrecision       , this, &SmartLineEdit::precisionChanged);
    return;
 }
 
@@ -168,6 +170,13 @@ void SmartLineEdit::onLineChanged() {
    Q_ASSERT(this->isInitialised());
 
    if (std::holds_alternative<NonPhysicalQuantity>(*this->getTypeInfo().fieldType)) {
+      // As in lineChanged, editingFinished happens on focus being lost, regardless of anything being changed.  If
+      // nothing changed, we don't want to do anything -- in particular, we don't want correctEnteredText to replace
+      // the value with the rounded version we are displaying, or to send a textModified signal.
+      if (this->sender() == this && !this->isModified()) {
+         return;
+      }
+
       // The field is not measuring a physical quantity so there are no units or unit conversions to handle
       // However, for anything other than a string, we still want to parse out the numeric part of the input
       this->correctEnteredText();
@@ -184,6 +193,11 @@ void SmartLineEdit::onLineChanged() {
    auto const previousScaleInfo = this->getScaleInfo();
 
    this->lineChanged(previousScaleInfo);
+   return;
+}
+
+void SmartLineEdit::precisionChanged() {
+   this->redisplayWithNewPrecision();
    return;
 }
 

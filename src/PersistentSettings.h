@@ -62,6 +62,7 @@ AddSettingName(defaultPreBoilSize_l)
 AddSettingName(defaultBoilTime_mins)
 AddSettingName(defaultEfficiency_pct)
 AddSettingName(defaultEquipmentKey)
+AddSettingName(defaultFgCalcUsesMash)          // See Recipe::defaultFgCalcUsesMash
 AddSettingName(deletewhat)
 AddSettingName(directory)                        // backups section
 AddSettingName(files)                            // backups section

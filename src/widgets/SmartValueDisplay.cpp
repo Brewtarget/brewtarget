@@ -35,7 +35,9 @@ void SmartValueDisplay::setRawText(QString const & text) {
 }
 
 void SmartValueDisplay::connectSmartLabelSignal(SmartLabel & smartLabel) {
-   connect(&smartLabel, &SmartLabel::changedUnitsOrPrecision, this, &SmartValueDisplay::displayChanged);
+   // Only one of these signals will be sent, depending on whether we hold a PhysicalQuantity or a NonPhysicalQuantity
+   connect(&smartLabel, &SmartLabel::changedUnitsOrPrecision, this, &SmartValueDisplay::displayChanged  );
+   connect(&smartLabel, &SmartLabel::changedPrecision       , this, &SmartValueDisplay::precisionChanged);
    return;
 }
 
@@ -45,5 +47,10 @@ void SmartValueDisplay::doPostInitWork() {
 
 void SmartValueDisplay::displayChanged(SmartAmounts::ScaleInfo previousScaleInfo) {
    this->correctEnteredText(previousScaleInfo);
+   return;
+}
+
+void SmartValueDisplay::precisionChanged() {
+   this->redisplayWithNewPrecision();
    return;
 }

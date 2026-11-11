@@ -381,7 +381,10 @@
               <enum>QFormLayout::ExpandingFieldsGrow</enum>
              </property>
              <item row="0" column="0">
-              <widget class="QLabel" name="label_computedPreBoilEfficiency">
+              <widget class="SmartLabel" name="label_computedPreBoilEfficiency">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="statusTip">
                 <string>Percent efficiency into boil kettle</string>
                </property>
@@ -438,7 +441,10 @@
               </widget>
              </item>
              <item row="6" column="0">
-              <widget class="QLabel" name="label_computedEfficiency">
+              <widget class="SmartLabel" name="label_computedEfficiency">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="statusTip">
                 <string>Brewhouse efficiency</string>
                </property>
@@ -455,7 +461,10 @@
               </widget>
              </item>
              <item row="8" column="0">
-              <widget class="QLabel" name="label_expectedAlcoholByVolume">
+              <widget class="SmartLabel" name="label_expectedAlcoholByVolume">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="statusTip">
                 <string>Expected ABV based on recipe OG</string>
                </property>
@@ -472,7 +481,10 @@
               </widget>
              </item>
              <item row="10" column="0">
-              <widget class="QLabel" name="label_computedAlcoholByVolume">
+              <widget class="SmartLabel" name="label_computedAlcoholByVolume">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="statusTip">
                 <string>ABV based on user-reported FG</string>
                </property>
@@ -489,7 +501,10 @@
               </widget>
              </item>
              <item row="12" column="0">
-              <widget class="QLabel" name="label_expectedAttenuation">
+              <widget class="SmartLabel" name="label_expectedAttenuation">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="statusTip">
                 <string>Yeast attenuation based on yeast specified in recipe</string>
                </property>
@@ -506,7 +521,10 @@
               </widget>
              </item>
              <item row="14" column="0">
-              <widget class="QLabel" name="label_computedAttenuation">
+              <widget class="SmartLabel" name="label_computedAttenuation">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="statusTip">
                 <string>Yeast attenuation based on user-reported OG and FG</string>
                </property>

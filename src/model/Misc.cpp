@@ -299,7 +299,8 @@ bool Misc::canHavePercentAcid(Misc::WaterAgentType const waterAgentType) {
 std::optional<double> Misc::waterAgentPercentAcid() const {
    //
    // As well as for acids, we allow percent acid for "Other" water agents (eg a user-defined citric acid solution).
-   // RecipeAdditionMiscTableModel::totalAcid_kg relies on this, and it's the same rule as dotBeer uses.
+   // This is the same rule as dotBeer uses.  (NB: WaterAutoAdjuster only uses percent acid for the acids it knows about,
+   // as it needs the molar mass.)
    //
    if (this->m_type != Misc::Type::WaterAgent ||
        !this->m_waterAgentType ||
@@ -411,10 +412,11 @@ template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralI
       case Misc::WaterAgentType::CalciumChloride_Anhydrous  : return (MolarMass::Calcium / MolarMass::CalciumChloride_Anhydrous ) * 1000.0;
       case Misc::WaterAgentType::CalciumChloride_Dihydrate  : return (MolarMass::Calcium / MolarMass::CalciumChloride_Dihydrate ) * 1000.0;
       case Misc::WaterAgentType::CalciumCarbonate           : return (MolarMass::Calcium / MolarMass::CalciumCarbonate          ) * 1000.0;
-      case Misc::WaterAgentType::CalciumSulfate_Dihydrate   : return (MolarMass::Calcium / MolarMass::CalciumSulfate            ) * 1000.0;
+      case Misc::WaterAgentType::CalciumSulfate_Dihydrate   : return (MolarMass::Calcium / MolarMass::CalciumSulfate_Dihydrate  ) * 1000.0;
       case Misc::WaterAgentType::CalciumHydroxide           : return (MolarMass::Calcium / MolarMass::CalciumHydroxide          ) * 1000.0;
 
       case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate :
+      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate :
       case Misc::WaterAgentType::SodiumChloride                :
       case Misc::WaterAgentType::SodiumBicarbonate             :
       case Misc::WaterAgentType::LacticAcid                    :
@@ -423,10 +425,7 @@ template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralI
       case Misc::WaterAgentType::HydrochloricAcid              :
       case Misc::WaterAgentType::Other                         :
          return 0.0;
-         break;
-      case WaterAgentType::MagnesiumChloride_Hexahydrate:
-         break;
-         // No default case as we want the compiler to warn us if we missed one
+      // No default case as we want the compiler to warn us if we missed one
    }
    Q_UNREACHABLE();
 }
@@ -436,12 +435,12 @@ template<> double Misc::concentrationPerGramPerLiter_massConcPpm<Water::MineralI
       case Misc::WaterAgentType::CalciumChloride_Anhydrous: return (MolarMass::Chloride * 2.0 / MolarMass::CalciumChloride_Anhydrous) * 1000.0;
       case Misc::WaterAgentType::CalciumChloride_Dihydrate: return (MolarMass::Chloride * 2.0 / MolarMass::CalciumChloride_Dihydrate) * 1000.0;
       case Misc::WaterAgentType::SodiumChloride           : return (MolarMass::Chloride       / MolarMass::SodiumChloride           ) * 1000.0;
+      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate: return (MolarMass::Chloride * 2.0 / MolarMass::MagnesiumChloride_Hexahydrate) * 1000.0;
 
       case Misc::WaterAgentType::CalciumCarbonate              :
       case Misc::WaterAgentType::CalciumSulfate_Dihydrate      :
       case Misc::WaterAgentType::CalciumHydroxide              :
       case Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate :
-      case Misc::WaterAgentType::MagnesiumChloride_Hexahydrate :
       case Misc::WaterAgentType::SodiumBicarbonate             :
       case Misc::WaterAgentType::LacticAcid                    :
       case Misc::WaterAgentType::PhosphoricAcid                :

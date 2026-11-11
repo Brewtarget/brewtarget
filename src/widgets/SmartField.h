@@ -114,18 +114,23 @@ public:
     *                 units if it is a \c PhysicalQuantity) and, whether this is an optional field (in which case we
     *                 need to handle blank / empty string as a valid value).
     *
-    * \param buddyLabel Usually needs to be \c QLabel if \c fieldType is a \c NonPhysicalQuantity and \c SmartLabel if
-    *                   it is not.  However, a \c PhysicalQuantity (or \c Measurement::ChoiceOfPhysicalQuantity) field
+    * \param buddyLabel Usually needs to be \c SmartLabel if the user can choose anything about how the field is
+    *                   displayed (see \c UnitAndScalePopUpMenu::isAvailableFor) and \c QLabel if not.  In
+    *                   particular, a field holding a \c PhysicalQuantity can have units, scale and decimal places
+    *                   chosen; one holding a decimal \c NonPhysicalQuantity::Percentage can have decimal places
+    *                   chosen; and others (eg dates and strings) have nothing to choose and must have a \c QLabel.
+    *                   However, a \c PhysicalQuantity (or \c Measurement::ChoiceOfPhysicalQuantity) field
     *                   can have a \c QLabel (rather than a \c SmartLabel) where the user does \b not have a choice
     *                   about units or scales (even though they otherwise would for this sort of \c PhysicalQuantity).
     *                   This is typically used on conversion dialogs, eg \c RefractoDialog, where we are asking the user
     *                   to give us inputs in specific units in order to convert them to other units measuring the same
     *                   physical quantity.
     *
-    * \param precision For a decimal field, this determines the number of decimal places to show.  If not specified, we
-    *                  show 3 decimal places.  TBD: IDK if one day we might need to be more sophisticated about this, ie
-    *                  with number of decimal places dependent on the units that the user has chosen, but for now we
-    *                  assume it's the same for everything, but allow modification via \c setPrecision.
+    * \param precision For a decimal field, this determines the default number of decimal places to show.  If not
+    *                  specified, we use the default for the field's quantity -- see \c getUltimateDefaultDecimalPlaces
+    *                  in measurement/PhysicalQuantity.h and \c GetUltimateDefaultDecimalPlaces in
+    *                  measurement/NonPhysicalQuantity.h.  For a \c PhysicalQuantity field, user preferences (for the
+    *                  field or for the \c PhysicalQuantity) override this.  Can be modified via \c setPrecision.
     *
     * \param maximalDisplayString Used for determining the width of the widget (because a fixed pixel width isn't great
     *                             in a world where there are varying display DPIs).
@@ -263,10 +268,11 @@ public:
    /**
     * \brief Normally, you set precision once when \c init is called via \c SMART_FIELD_INIT or similar.  However, if
     *        you really want to modify it on the fly, eg to have different precision for different units, this is what
-    *        you call.  Note that you should call this before calling \c setQuantity.
+    *        you call.  Note that you should call this before calling \c setQuantity.  Setting \c std::nullopt means
+    *        we use the default for the field's quantity (see \c init).
     */
-   void setPrecision(unsigned int const precision);
-   [[nodiscard]] unsigned int getPrecision() const;
+   void setPrecision(std::optional<unsigned int> const precision);
+   [[nodiscard]] std::optional<unsigned int> getPrecision() const;
 
    /**
     * \brief If our field type is \b not \c NonPhysicalQuantity, then this returns the field converted to canonical
@@ -342,6 +348,14 @@ public:
     * \brief Version of \c correctEnteredText to call when field type is \c NonPhysicalQuantity
     */
    void correctEnteredText();
+
+   /**
+    * \brief For a field holding a \c NonPhysicalQuantity, redisplay the current value after the user has changed the
+    *        number of decimal places to show (via the \c SmartLabel buddy).  Subclasses call this from their slot that
+    *        receives \c SmartLabel::changedPrecision.  (For a field holding a \c PhysicalQuantity, this is handled by
+    *        \c correctEnteredText(SmartAmounts::ScaleInfo), via \c SmartLabel::changedUnitsOrPrecision.)
+    */
+   void redisplayWithNewPrecision();
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

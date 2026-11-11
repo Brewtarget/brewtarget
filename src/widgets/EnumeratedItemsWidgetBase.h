@@ -235,6 +235,11 @@ public:
       return;
    }
 
+   //! The table model, eg so that the owner of this widget can connect to its signals
+   NeTableModelClass * tableModel() const {
+      return this->m_itemTableModel.get();
+   }
+
 protected:
    Recipe *                           m_recipe         = nullptr;
    std::shared_ptr<Owner>             m_owner          = nullptr;

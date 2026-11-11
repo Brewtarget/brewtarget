@@ -22,6 +22,8 @@
 #define EDITORS_EQUIPMENTEDITOR_H
 #pragma once
 
+#include <vector>
+
 #include <QMetaProperty>
 #include <QVariant>
 
@@ -57,6 +59,29 @@ public:
 private:
    void postReadFieldsFromEditItem(std::optional<QString> propName);
    void postWriteLateFieldsToEditItem();
+
+   /**
+    * \brief Remember, for each recipe using the equipment we are about to save, the batch size and pre-boil size that
+    *        the equipment specified for it \b before the changes the user made in the editor -- so that, after saving,
+    *        we can offer to update the recipes whose sizes matched (see \c offerToUpdateRecipeSizes).
+    */
+   void rememberRecipeSizesBeforeSave();
+
+   /**
+    * \brief For recipes using the equipment we just saved, whose batch size and/or pre-boil size matched what the
+    *        equipment previously specified (and so, presumably, came from it), offer to update them to what the
+    *        equipment now specifies.  See https://github.com/Brewtarget/brewtarget/issues/531.
+    */
+   void offerToUpdateRecipeSizes();
+
+   struct RecipeSizesBeforeSave {
+      Recipe * recipe;
+      //! What the equipment specified for the recipe's batch size before the save
+      double batchSize_l;
+      //! What the equipment specified for the recipe's pre-boil size (for its boil time) before the save
+      double preBoilSize_l;
+   };
+   std::vector<RecipeSizesBeforeSave> m_recipeSizesBeforeSave;
 };
 
 #endif

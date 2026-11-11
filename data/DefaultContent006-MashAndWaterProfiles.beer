@@ -1,0 +1,1216 @@
+//======================================================================================================================
+// data/DefaultContent006-MashAndWaterProfiles.beer
+//
+// Example mash profiles.  They are locked (so they can be shared between recipes without being changed by accident) and
+// they don't specify water amounts or temperatures, as these depend on the recipe.  The user adjusts these in the
+// Mash Editor (which, for a locked mash, means making a copy for the recipe).
+//
+// Water profiles:
+//   - Style target profiles, for use as the target profile on a recipe's Water tab (eg with Auto-Adjust).  These are
+//     based on widely-published guidance (see the notes on each), and are ionically balanced so they can be made from
+//     RO or distilled water with ordinary brewing salts.  (The classic historic city profiles -- Burton, Dortmund,
+//     Dublin, etc -- are in DefaultContent001.)
+//   - Starting profiles, ie the tap water of some well-known cities, from the water suppliers' own published figures
+//     (see the notes on each for the source and date), for use as the base profile.
+//
+// Comments such as this one are part of the dotBeer format (which is JSON with comments allowed -- see "File format
+// details" at https://github.com/Brewken/DotBeer), so software reading the file should be happy to import it.
+//======================================================================================================================
+{
+  "DotBeer": {
+    "version": "1.1.0",
+    "output_by": "Brewken",
+    "timestamp": "2026-11-09T12:00:00+01:00",
+    "mashes": [
+      {
+        "name": "Single Infusion, Light Body, Batch Sparge",
+        "folder_path": "Example Mash Profiles",
+        "locked": true,
+        "grain_temperature": {
+          "unit": "C",
+          "value": 20
+        },
+        "notes": "Single infusion at the low end of the saccharification range, favouring beta amylase, for a more fermentable wort and a drier, lighter-bodied beer.  Suitable for most modern well-modified malts.\n\nWater amounts and temperatures depend on the recipe, so are not set here.  To use this profile, select it on a recipe's Mash tab and click \"Adjust Mash…\".  (As the profile is locked, you will be asked whether to make a copy for the recipe, which you can then change as you wish.)",
+        "mash_steps": [
+          {
+            "name": "Saccharification rest",
+            "step_type": "infusion",
+            "water_grain_ratio": {
+              "unit": "l/kg",
+              "value": 2.6
+            },
+            "start_temperature": {
+              "unit": "C",
+              "value": 65
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 60
+            },
+            "step_description": "Mash in and hold at 65 °C for a fermentable wort"
+          },
+          {
+            "name": "Batch Sparge 1",
+            "step_type": "drain mash tun",
+            "start_temperature": {
+              "unit": "C",
+              "value": 76
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 15
+            },
+            "step_description": "Add sparge water, stir, rest, then drain"
+          },
+          {
+            "name": "Batch Sparge 2",
+            "step_type": "drain mash tun",
+            "start_temperature": {
+              "unit": "C",
+              "value": 76
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 15
+            },
+            "step_description": "Add sparge water, stir, rest, then drain"
+          }
+        ]
+      },
+      {
+        "name": "Single Infusion, Medium Body, Batch Sparge",
+        "folder_path": "Example Mash Profiles",
+        "locked": true,
+        "grain_temperature": {
+          "unit": "C",
+          "value": 20
+        },
+        "notes": "Single infusion in the middle of the saccharification range, for a balanced wort.  Suitable for most modern well-modified malts and most beer styles.\n\nWater amounts and temperatures depend on the recipe, so are not set here.  To use this profile, select it on a recipe's Mash tab and click \"Adjust Mash…\".  (As the profile is locked, you will be asked whether to make a copy for the recipe, which you can then change as you wish.)",
+        "mash_steps": [
+          {
+            "name": "Saccharification rest",
+            "step_type": "infusion",
+            "water_grain_ratio": {
+              "unit": "l/kg",
+              "value": 2.6
+            },
+            "start_temperature": {
+              "unit": "C",
+              "value": 67
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 60
+            },
+            "step_description": "Mash in and hold at 67 °C for a balanced wort"
+          },
+          {
+            "name": "Batch Sparge 1",
+            "step_type": "drain mash tun",
+            "start_temperature": {
+              "unit": "C",
+              "value": 76
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 15
+            },
+            "step_description": "Add sparge water, stir, rest, then drain"
+          },
+          {
+            "name": "Batch Sparge 2",
+            "step_type": "drain mash tun",
+            "start_temperature": {
+              "unit": "C",
+              "value": 76
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 15
+            },
+            "step_description": "Add sparge water, stir, rest, then drain"
+          }
+        ]
+      },
+      {
+        "name": "Single Infusion, Full Body, Batch Sparge",
+        "folder_path": "Example Mash Profiles",
+        "locked": true,
+        "grain_temperature": {
+          "unit": "C",
+          "value": 20
+        },
+        "notes": "Single infusion at the high end of the saccharification range, favouring alpha amylase, for a less fermentable wort and a sweeter, fuller-bodied beer.\n\nWater amounts and temperatures depend on the recipe, so are not set here.  To use this profile, select it on a recipe's Mash tab and click \"Adjust Mash…\".  (As the profile is locked, you will be asked whether to make a copy for the recipe, which you can then change as you wish.)",
+        "mash_steps": [
+          {
+            "name": "Saccharification rest",
+            "step_type": "infusion",
+            "water_grain_ratio": {
+              "unit": "l/kg",
+              "value": 2.6
+            },
+            "start_temperature": {
+              "unit": "C",
+              "value": 69
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 60
+            },
+            "step_description": "Mash in and hold at 69 °C for a less fermentable wort"
+          },
+          {
+            "name": "Batch Sparge 1",
+            "step_type": "drain mash tun",
+            "start_temperature": {
+              "unit": "C",
+              "value": 76
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 15
+            },
+            "step_description": "Add sparge water, stir, rest, then drain"
+          },
+          {
+            "name": "Batch Sparge 2",
+            "step_type": "drain mash tun",
+            "start_temperature": {
+              "unit": "C",
+              "value": 76
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 15
+            },
+            "step_description": "Add sparge water, stir, rest, then drain"
+          }
+        ]
+      },
+      {
+        "name": "Single Infusion, Medium Body, Fly Sparge",
+        "folder_path": "Example Mash Profiles",
+        "locked": true,
+        "grain_temperature": {
+          "unit": "C",
+          "value": 20
+        },
+        "notes": "As \"Single Infusion, Medium Body, Batch Sparge\" but with a continuous (fly) sparge.\n\nWater amounts and temperatures depend on the recipe, so are not set here.  To use this profile, select it on a recipe's Mash tab and click \"Adjust Mash…\".  (As the profile is locked, you will be asked whether to make a copy for the recipe, which you can then change as you wish.)",
+        "mash_steps": [
+          {
+            "name": "Saccharification rest",
+            "step_type": "infusion",
+            "water_grain_ratio": {
+              "unit": "l/kg",
+              "value": 2.6
+            },
+            "start_temperature": {
+              "unit": "C",
+              "value": 67
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 60
+            },
+            "step_description": "Mash in and hold at 67 °C for a balanced wort"
+          },
+          {
+            "name": "Fly Sparge",
+            "step_type": "sparge",
+            "start_temperature": {
+              "unit": "C",
+              "value": 76
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 45
+            },
+            "step_description": "Sprinkle sparge water over the grain bed while slowly draining the wort"
+          }
+        ]
+      },
+      {
+        "name": "Single Infusion, Medium Body, No Sparge",
+        "folder_path": "Example Mash Profiles",
+        "locked": true,
+        "grain_temperature": {
+          "unit": "C",
+          "value": 20
+        },
+        "notes": "Full-volume mash with no sparge, eg for brew-in-a-bag (BIAB) or some all-in-one systems: all the water goes into the mash.  The mash out is by direct heat.\n\nWater amounts and temperatures depend on the recipe, so are not set here.  To use this profile, select it on a recipe's Mash tab and click \"Adjust Mash…\".  (As the profile is locked, you will be asked whether to make a copy for the recipe, which you can then change as you wish.)",
+        "mash_steps": [
+          {
+            "name": "Saccharification rest",
+            "step_type": "infusion",
+            "start_temperature": {
+              "unit": "C",
+              "value": 67
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 60
+            },
+            "step_description": "Mash in with all the water and hold at 67 °C"
+          },
+          {
+            "name": "Mash out",
+            "step_type": "temperature",
+            "start_temperature": {
+              "unit": "C",
+              "value": 76
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 10
+            },
+            "ramp_time": {
+              "unit": "min",
+              "value": 10
+            },
+            "step_description": "Heat to 76 °C and hold before removing the grain"
+          }
+        ]
+      },
+      {
+        "name": "Step Mash with Protein Rest, Fly Sparge",
+        "folder_path": "Example Mash Profiles",
+        "locked": true,
+        "grain_temperature": {
+          "unit": "C",
+          "value": 20
+        },
+        "notes": "Infusion step mash for less well-modified malts, or grain bills with a lot of wheat, oats or other adjuncts.  Starts thick, with each later step raised by adding boiling water.\n\nWater amounts and temperatures depend on the recipe, so are not set here.  To use this profile, select it on a recipe's Mash tab and click \"Adjust Mash…\".  (As the profile is locked, you will be asked whether to make a copy for the recipe, which you can then change as you wish.)",
+        "mash_steps": [
+          {
+            "name": "Protein rest",
+            "step_type": "infusion",
+            "water_grain_ratio": {
+              "unit": "l/kg",
+              "value": 2.0
+            },
+            "start_temperature": {
+              "unit": "C",
+              "value": 52
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 15
+            },
+            "step_description": "Mash in thick and hold at 52 °C"
+          },
+          {
+            "name": "Saccharification rest",
+            "step_type": "infusion",
+            "start_temperature": {
+              "unit": "C",
+              "value": 66
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 45
+            },
+            "step_description": "Add boiling water to raise to 66 °C"
+          },
+          {
+            "name": "Mash out",
+            "step_type": "infusion",
+            "start_temperature": {
+              "unit": "C",
+              "value": 76
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 10
+            },
+            "step_description": "Add boiling water to raise to 76 °C"
+          },
+          {
+            "name": "Fly Sparge",
+            "step_type": "sparge",
+            "start_temperature": {
+              "unit": "C",
+              "value": 77
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 45
+            },
+            "step_description": "Sprinkle sparge water over the grain bed while slowly draining the wort"
+          }
+        ]
+      },
+      {
+        "name": "Step Mash, Direct Heat, No Sparge",
+        "folder_path": "Example Mash Profiles",
+        "locked": true,
+        "grain_temperature": {
+          "unit": "C",
+          "value": 20
+        },
+        "notes": "Step mash for systems that can heat the mash directly (eg recirculating or all-in-one systems), with all the water in the mash.\n\nWater amounts and temperatures depend on the recipe, so are not set here.  To use this profile, select it on a recipe's Mash tab and click \"Adjust Mash…\".  (As the profile is locked, you will be asked whether to make a copy for the recipe, which you can then change as you wish.)",
+        "mash_steps": [
+          {
+            "name": "Protein rest",
+            "step_type": "infusion",
+            "start_temperature": {
+              "unit": "C",
+              "value": 52
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 15
+            },
+            "step_description": "Mash in with all the water and hold at 52 °C"
+          },
+          {
+            "name": "Beta amylase rest",
+            "step_type": "temperature",
+            "start_temperature": {
+              "unit": "C",
+              "value": 63
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 30
+            },
+            "ramp_time": {
+              "unit": "min",
+              "value": 10
+            },
+            "step_description": "Heat to 63 °C and hold"
+          },
+          {
+            "name": "Alpha amylase rest",
+            "step_type": "temperature",
+            "start_temperature": {
+              "unit": "C",
+              "value": 72
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 30
+            },
+            "ramp_time": {
+              "unit": "min",
+              "value": 10
+            },
+            "step_description": "Heat to 72 °C and hold"
+          },
+          {
+            "name": "Mash out",
+            "step_type": "temperature",
+            "start_temperature": {
+              "unit": "C",
+              "value": 78
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 10
+            },
+            "ramp_time": {
+              "unit": "min",
+              "value": 6
+            },
+            "step_description": "Heat to 78 °C and hold"
+          }
+        ]
+      },
+      {
+        "name": "Double Decoction, Fly Sparge",
+        "folder_path": "Example Mash Profiles",
+        "locked": true,
+        "grain_temperature": {
+          "unit": "C",
+          "value": 20
+        },
+        "notes": "Traditional decoction mash, eg for continental lagers.  Each later step is reached by drawing off part of the mash (mostly grain), boiling it and returning it to the main mash.\n\nWater amounts and temperatures depend on the recipe, so are not set here.  To use this profile, select it on a recipe's Mash tab and click \"Adjust Mash…\".  (As the profile is locked, you will be asked whether to make a copy for the recipe, which you can then change as you wish.)",
+        "mash_steps": [
+          {
+            "name": "Protein rest",
+            "step_type": "infusion",
+            "water_grain_ratio": {
+              "unit": "l/kg",
+              "value": 3.0
+            },
+            "start_temperature": {
+              "unit": "C",
+              "value": 52
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 15
+            },
+            "step_description": "Mash in and hold at 52 °C"
+          },
+          {
+            "name": "Saccharification rest",
+            "step_type": "decoction",
+            "start_temperature": {
+              "unit": "C",
+              "value": 64
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 40
+            },
+            "step_description": "Draw off, boil and return part of the mash to raise to 64 °C"
+          },
+          {
+            "name": "Dextrinization rest",
+            "step_type": "decoction",
+            "start_temperature": {
+              "unit": "C",
+              "value": 72
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 20
+            },
+            "step_description": "Draw off, boil and return part of the mash to raise to 72 °C"
+          },
+          {
+            "name": "Fly Sparge",
+            "step_type": "sparge",
+            "start_temperature": {
+              "unit": "C",
+              "value": 77
+            },
+            "step_time": {
+              "unit": "min",
+              "value": 45
+            },
+            "step_description": "Sprinkle sparge water over the grain bed while slowly draining the wort"
+          }
+        ]
+      }
+    ],
+    "waters": [
+      {
+        "name": "Light and malty",
+        "local_id": "water_target_01",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 60
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 5
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 95
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 55
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 0
+        },
+        "notes": "For light-coloured beers (about 2–5 SRM) with a malt-forward profile: low residual alkalinity and more chloride than sulfate.  Companion to the \"Light and hoppy\" profile.\n\nResidual alkalinity is about -46 ppm as CaCO₃."
+      },
+      {
+        "name": "Pale, Soft (Pilsner, Helles)",
+        "local_id": "water_target_02",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 50
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 5
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 65
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 65
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 15
+        },
+        "notes": "Soft water for delicate pale lagers such as Bohemian and German Pilsner, Helles and Kölsch, with just enough calcium for the yeast and an even sulfate to chloride balance.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about -26 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Pale, Balanced (Blonde, Kölsch, Wheat)",
+        "local_id": "water_target_03",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 60
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 8
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 15
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 75
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 85
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 30
+        },
+        "notes": "For pale beers that are neither especially hoppy nor especially malty, eg Blonde Ale, Cream Ale, Kölsch and wheat beers.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about -23 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Pale, Hoppy (Pale Ale, West Coast IPA)",
+        "local_id": "water_target_04",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 110
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 50
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 255
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 0
+        },
+        "notes": "High sulfate (about 5:1 sulfate to chloride) for a crisp, dry finish that accentuates hop bitterness, eg American Pale Ale, West Coast IPA and Double IPA.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about -84 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Pale, Juicy (New England IPA)",
+        "local_id": "water_target_05",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 110
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 15
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 175
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 95
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 0
+        },
+        "notes": "More chloride than sulfate for the fuller, softer mouthfeel of hazy / New England IPAs, where the hops are mostly late or dry-hop additions.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about -84 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Amber, Hoppy (Bitter, ESB, Amber Ale)",
+        "local_id": "water_target_06",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 100
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 30
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 65
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 200
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 70
+        },
+        "notes": "For amber beers with assertive bitterness, eg English Bitter, ESB, American Amber Ale and Red IPA.  The modest bicarbonate balances the acidity of the crystal malt.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about -20 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Amber, Balanced (Vienna, Altbier)",
+        "local_id": "water_target_07",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 70
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 35
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 90
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 90
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 90
+        },
+        "notes": "For amber beers with a balance of malt and hops, eg Vienna Lager, Altbier, Irish Red Ale and Bière de Garde.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about +18 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Amber, Malty (Märzen, Scottish, Bock)",
+        "local_id": "water_target_08",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 65
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 35
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 100
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 60
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 90
+        },
+        "notes": "For malt-forward amber beers, eg Märzen, Scottish Ales, Bock and Wee Heavy.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about +22 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Brown, Balanced (Brown Ale, Porter)",
+        "local_id": "water_target_09",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 80
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 55
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 105
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 95
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 140
+        },
+        "notes": "For brown beers, eg English and American Brown Ale and Porter.  The higher bicarbonate balances the acidity of the darker malts.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about +52 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Brown, Malty (Dunkel, Dubbel)",
+        "local_id": "water_target_10",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 70
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 50
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 115
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 55
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 125
+        },
+        "notes": "For malt-forward brown beers, eg Munich Dunkel, Dunkelweizen, Dubbel and Brown Porter.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about +47 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Black, Dry (Dry Stout, Black IPA)",
+        "local_id": "water_target_11",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 90
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 65
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 75
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 155
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 170
+        },
+        "notes": "For black beers with a dry or bitter finish, eg Irish Dry Stout, Black IPA and Schwarzbier.  High bicarbonate balances the acidity of roasted malts.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about +69 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Black, Full (Sweet & Imperial Stout)",
+        "local_id": "water_target_12",
+        "folder_path": "Target Profiles (Styles)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 80
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 12
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 70
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 130
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 70
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 180
+        },
+        "notes": "For full-bodied black beers, eg Sweet Stout, Oatmeal Stout, Imperial Stout and Baltic Porter.\n\nThis target profile is based on widely-published guidance: calcium of at least 50 ppm, sulfate to chloride ratio according to whether the beer is hoppy, balanced or malty, and bicarbonate (ie residual alkalinity) increasing with colour, to balance the acidity of darker malts.  The cations and anions balance (to within 3%), and there is enough sodium for the bicarbonate to come from baking soda, so the profile can be made exactly from RO or distilled water with the salts Auto-Adjust uses (gypsum, calcium chloride, Epsom salt, magnesium chloride, table salt and baking soda).  If you use chalk or pickling lime for the bicarbonate instead, you will end up with less sodium and more calcium.  Residual alkalinity is about +83 ppm as CaCO₃.  Use the Auto-Adjust button on a recipe's Water tab to work out the salts (and, if you set a target mash pH, acid) needed."
+      },
+      {
+        "name": "Paris tap water (2026)",
+        "local_id": "water_city_01",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 100.5
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 3.1
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 9.1
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 26.3
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 22.7
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 275
+        },
+        "pH": {
+          "unit": "pH",
+          "value": 7.6
+        },
+        "notes": "Source: Eau de Paris, distribution unit \"Centre\" (arrondissements 1–13, 15 and 16), from the French government's sanitary monitoring results (data.gouv.fr, \"Résultats du contrôle sanitaire de l'eau distribuée\"), analyses dated June 2026 (bicarbonate July 2025).\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      },
+      {
+        "name": "Amsterdam tap water (2025)",
+        "local_id": "water_city_02",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 44.05
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 6.83
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 54.5
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 58
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 6.7
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 207
+        },
+        "pH": {
+          "unit": "pH",
+          "value": 8.04
+        },
+        "notes": "Source: Waternet, Weesperkarspel production location (which supplies most of Amsterdam), 2025 annual averages (\"drinkwater-weesperkarspel-wettelijk-2025-jaar\").  The west of the city is supplied from Leiduin, whose water is slightly different.\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      },
+      {
+        "name": "Berlin tap water (2025)",
+        "local_id": "water_city_03",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 94
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 9.8
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 37
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 52
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 89
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 232
+        },
+        "pH": {
+          "unit": "pH",
+          "value": 7.5
+        },
+        "notes": "Source: Berliner Wasserbetriebe, Tegel waterworks (one of nine, which supplies much of the north-west of the city; the others are broadly similar, but calcium ranges from about 93 to 143 ppm and sulfate from about 62 to 175 ppm), 2025 annual medians.  Bicarbonate calculated from the published acid capacity (KS 4.3) of 3.80 mmol/L.\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      },
+      {
+        "name": "Munich tap water (2026)",
+        "local_id": "water_city_04",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 78.0
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 20.9
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 5.9
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 10.6
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 14.8
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 324
+        },
+        "pH": {
+          "unit": "pH",
+          "value": 7.56
+        },
+        "notes": "Source: Stadtwerke München (SWM), city-wide medians, data as of January 2026.  Compare the historic \"Munich Dark\" profile, which is similar.  The high bicarbonate suits dark lagers; for pale beers, dilute with RO water and/or add acid.\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      },
+      {
+        "name": "New York City tap water (2024)",
+        "local_id": "water_city_05",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 7
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 1.8
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 13
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 15
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 6
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 26.8
+        },
+        "pH": {
+          "unit": "pH",
+          "value": 7.3
+        },
+        "notes": "Source: NYC Department of Environmental Protection, 2024 Drinking Water Supply and Quality Report, average values for the Catskill/Delaware and Croton supplies combined.  Very soft water, which makes a good base for most styles once salts are added.  Bicarbonate calculated from total alkalinity of 22 ppm as CaCO₃ (× 1.22).\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      },
+      {
+        "name": "Denver tap water, South system (2025)",
+        "local_id": "water_city_06",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 32
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 8
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 24
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 25
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 66
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 82.9
+        },
+        "notes": "Source: Denver Water, \"Brewing Beer at Home\" page, averages of treatment plant effluent samples in 2025 for the South system (Marston and Foothills treatment plants).  Bicarbonate calculated from total alkalinity of 68 ppm as CaCO₃ (× 1.22).\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      },
+      {
+        "name": "Denver tap water, North system (2025)",
+        "local_id": "water_city_07",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 18
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 2
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 12
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 6
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 20
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 63.4
+        },
+        "notes": "Source: Denver Water, \"Brewing Beer at Home\" page, averages of treatment plant effluent samples in 2025 for the North system (Moffat treatment plant).  Bicarbonate calculated from total alkalinity of 52 ppm as CaCO₃ (× 1.22).\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      },
+      {
+        "name": "San Diego tap water (2025)",
+        "local_id": "water_city_08",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 57.0
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 23.1
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 87.8
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 94.9
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 154
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 144
+        },
+        "pH": {
+          "unit": "pH",
+          "value": 8.29
+        },
+        "notes": "Source: City of San Diego Public Utilities Department, Alvarado treatment plant, 2025 averages (2025 Annual Drinking Water Quality Report, and its \"additional characteristics\" table for calcium, magnesium and bicarbonate).  The Miramar plant is similar; Otay has more sodium and chloride.\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      },
+      {
+        "name": "Seattle tap water (2026)",
+        "local_id": "water_city_09",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 10.6
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 1.33
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 2.52
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 3.1
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 2.1
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 36.5
+        },
+        "pH": {
+          "unit": "pH",
+          "value": 7.89
+        },
+        "notes": "Source: Seattle Public Utilities, quarterly surface water analysis, Cedar River supply, May 2026.  The Tolt supply (north Seattle) is similar.  Very soft water.  Bicarbonate calculated from total alkalinity of 29.9 ppm as CaCO₃ (× 1.22).\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      },
+      {
+        "name": "San Francisco tap water (2025)",
+        "local_id": "water_city_10",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 16
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 5.9
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 18
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 10
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 16
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 78.0
+        },
+        "pH": {
+          "unit": "pH",
+          "value": 9.3
+        },
+        "notes": "Source: San Francisco Public Utilities Commission, 2025 Annual Water Quality Report, San Francisco regional water system (mostly Hetch Hetchy) averages.  NB: At this pH, a little of the alkalinity is carbonate rather than bicarbonate.  Bicarbonate calculated from total alkalinity of 64 ppm as CaCO₃ (× 1.22).\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      },
+      {
+        "name": "Melbourne tap water (2025)",
+        "local_id": "water_city_11",
+        "folder_path": "Starting Profiles (City Tap Water)",
+        "calcium": {
+          "unit": "ppm",
+          "value": 5.2
+        },
+        "magnesium": {
+          "unit": "ppm",
+          "value": 1.2
+        },
+        "sodium": {
+          "unit": "ppm",
+          "value": 5.1
+        },
+        "chloride": {
+          "unit": "ppm",
+          "value": 9
+        },
+        "sulfate": {
+          "unit": "ppm",
+          "value": 3.1
+        },
+        "bicarbonate": {
+          "unit": "ppm",
+          "value": 17.1
+        },
+        "pH": {
+          "unit": "pH",
+          "value": 7.4
+        },
+        "notes": "Source: South East Water (one of Melbourne's three retailers, all supplied by Melbourne Water), Annual Drinking Water Quality Report 2024–25, averages across its supply area.  Very soft water.  Bicarbonate calculated from total alkalinity of 14 ppm as CaCO₃ (× 1.22).\n\nWater supplies change over time and can vary across a city, so, if you live there, check your own water supplier's latest report (or have your water tested) before relying on these figures."
+      }
+    ]
+  }
+}

@@ -56,7 +56,7 @@ public:
     */
    QLabel         *       label_year = nullptr;
    QLineEdit      *    lineEdit_year = nullptr;
-   QLabel         *      label_alpha = nullptr;
+   SmartLabel     *      label_alpha = nullptr;
    SmartLineEdit  *   lineEdit_alpha = nullptr;
    QLabel         *    label_hopForm = nullptr;
    BtComboBoxEnum * comboBox_hopForm = nullptr;

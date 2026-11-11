@@ -222,7 +222,10 @@
         </widget>
        </item>
        <item row="7" column="4">
-        <widget class="QLabel" name="label_protein">
+        <widget class="SmartLabel" name="label_protein">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Protein (%)</string>
          </property>
@@ -256,7 +259,10 @@
         </widget>
        </item>
        <item row="8" column="4">
-        <widget class="QLabel" name="label_maxInBatch">
+        <widget class="SmartLabel" name="label_maxInBatch">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Max In Batch (%)</string>
          </property>
@@ -273,7 +279,10 @@
         </widget>
        </item>
        <item row="9" column="1">
-        <widget class="QLabel" name="label_moisture">
+        <widget class="SmartLabel" name="label_moisture">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Moisture (%)</string>
          </property>
@@ -290,7 +299,10 @@
         </widget>
        </item>
        <item row="9" column="4">
-        <widget class="QLabel" name="label_coarseFineDiff">
+        <widget class="SmartLabel" name="label_coarseFineDiff">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Coarse/Fine Diff (%)</string>
          </property>
@@ -431,7 +443,10 @@
         </spacer>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_fineGrindYield_pct">
+        <widget class="SmartLabel" name="label_fineGrindYield_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Extract Yield Dry Basis Fine Grind</string>
          </property>
@@ -448,7 +463,10 @@
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="QLabel" name="label_coarseGrindYield_pct">
+        <widget class="SmartLabel" name="label_coarseGrindYield_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Extract Yield Dry Basis Coarse Grind</string>
          </property>
@@ -499,7 +517,10 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_kolbachIndex_pct">
+        <widget class="SmartLabel" name="label_kolbachIndex_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Kolbach Index</string>
          </property>
@@ -516,7 +537,10 @@
         </widget>
        </item>
        <item row="3" column="3">
-        <widget class="QLabel" name="label_hardnessPrpGlassy_pct">
+        <widget class="SmartLabel" name="label_hardnessPrpGlassy_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Percentage of malt that is "glassy"</string>
          </property>
@@ -533,7 +557,10 @@
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_hardnessPrpHalf_pct">
+        <widget class="SmartLabel" name="label_hardnessPrpHalf_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Percentage of malt that is "half glassy"</string>
          </property>
@@ -550,7 +577,10 @@
         </widget>
        </item>
        <item row="4" column="3">
-        <widget class="QLabel" name="label_hardnessPrpMealy_pct">
+        <widget class="SmartLabel" name="label_hardnessPrpMealy_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Percentage of malt that is "mealy"</string>
          </property>
@@ -567,7 +597,10 @@
         </widget>
        </item>
        <item row="5" column="0">
-        <widget class="QLabel" name="label_kernelSizePrpPlump_pct">
+        <widget class="SmartLabel" name="label_kernelSizePrpPlump_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Percentage of grain that is "plump"</string>
          </property>
@@ -584,7 +617,10 @@
         </widget>
        </item>
        <item row="5" column="3">
-        <widget class="QLabel" name="label_kernelSizePrpThin_pct">
+        <widget class="SmartLabel" name="label_kernelSizePrpThin_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Percentage of grain that is "tine"</string>
          </property>
@@ -601,7 +637,10 @@
         </widget>
        </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="label_friability_pct">
+        <widget class="SmartLabel" name="label_friability_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Friability</string>
          </property>
@@ -652,7 +691,10 @@
         </widget>
        </item>
        <item row="7" column="3">
-        <widget class="QLabel" name="label_fermentability_pct">
+        <widget class="SmartLabel" name="label_fermentability_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Fermentability</string>
          </property>
@@ -686,7 +728,10 @@
         </widget>
        </item>
        <item row="8" column="3">
-        <widget class="QLabel" name="label_lacticAcidByWeight_pct">
+        <widget class="SmartLabel" name="label_lacticAcidByWeight_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>% Lactic Acid (by weight)</string>
          </property>
@@ -723,7 +768,10 @@
         </widget>
        </item>
        <item row="9" column="3">
-        <widget class="QLabel" name="label_fermentableFraction_pct">
+        <widget class="SmartLabel" name="label_fermentableFraction_pct">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>% Fermentable by yeast</string>
          </property>

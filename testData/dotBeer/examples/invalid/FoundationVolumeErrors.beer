@@ -25,7 +25,7 @@
 //   • foundation_volume and grain_absorption_rate on a vessel (they are only allowed at the top level)
 {
   "DotBeer": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "output_by": "DotBeer examples (hand-written)",
     "timestamp": "2026-10-27T10:00:00+01:00",
     "equipments": [

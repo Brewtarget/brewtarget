@@ -152,6 +152,8 @@ public slots:
    void updateRecipeBatchSize();
    //! \brief Update Recipe efficiency to that given by the relevant widget.
    void updateRecipeEfficiency();
+   //! \brief Turn on or off "Use mash profile in FG calculation" (see \c Recipe::fgCalcUsesMash)
+   void updateRecipeFgCalcUsesMash(bool const checked);
    //! \brief Update Recipe's mash
    void updateRecipeMash();
    //! \brief Update Recipe's boil

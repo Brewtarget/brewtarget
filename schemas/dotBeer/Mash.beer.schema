@@ -12,7 +12,7 @@
 //======================================================================================================================
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dotbeer.org/schema/1.0.0/Mash.beer.schema",
+  "$id": "https://dotbeer.org/schema/1.1.0/Mash.beer.schema",
   "type": "object",
   "description": "A mash procedure, which can be used by multiple recipes.",
   "properties": {
@@ -26,6 +26,11 @@
     "folder_path": {
       "description": "The suggested slash-delimited subfolder path in which to store this Mash object.",
       "$ref": "DotBeer.beer.schema#/$defs/FolderPath"
+    },
+    "locked": {
+      "description": "If `true`, this mash has been marked as one that should not be changed -- eg a standard mash profile used by many recipes.  Software that supports locking should not allow a locked mash to be changed or deleted unless the user first explicitly unlocks it.  It should, however, allow a locked mash to be used in recipes and to be copied (with the copy not being locked).  Software that does not support locking can ignore this field.  If the field is absent, the mash is not locked.",
+      "x-since": "1.1.0",
+      "type": "boolean"
     },
     "grain_temperature": {
       "description": "Initial grain temperature prior to the start of the mash.",

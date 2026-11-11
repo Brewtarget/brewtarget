@@ -18,7 +18,11 @@
 #include "unitTests/RecipeCalcTests.h"
 
 #include <cmath>
+#include <numbers> // For std::numbers::pi
 #include <optional>
+#include <tuple>
+#include <utility>
+#include <vector>
 
 #include <QDebug>
 #include <QString>
@@ -26,6 +30,7 @@
 #include <QtTest/QtTest>
 
 #include "database/ObjectStoreWrapper.h"
+#include "calculations/IbuMethods.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Boil.h"
@@ -440,6 +445,596 @@ void RecipeCalcTests::testBoilStepsWithoutTemperatures() {
    return;
 }
 
+void RecipeCalcTests::testPostBoilIbus() {
+   qDebug() << Q_FUNC_INFO << "Starting";
+
+   //
+   // Make sure we put the IBU formula back to what TestEnvironment set, however we exit this function
+   //
+   struct RestoreIbuFormula {
+      IbuMethods::IbuFormula const saved = IbuMethods::formula;
+      ~RestoreIbuFormula() { IbuMethods::formula = saved; }
+   } restoreIbuFormula;
+
+   //
+   // Part 1: The IBU formulae themselves.
+   //
+   // The inputs here are those of John-Paul Hosom's worked example at
+   // https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/: 2 oz
+   // (56.7 g) of 10% AA hops in 5.25 gallons (19.87 litres) of wort at 1.060.  For an addition 6 minutes before flameout
+   // he gives a boil utilization of 0.0493 (14 IBU) and, with 10 minutes of natural cooling before forced cooling, a
+   // post-flameout utilization of 0.0431, giving 26 IBU in total.  He doesn't give the kettle dimensions, but a kettle
+   // with a 38 cm diameter, fully open, gives a matching result.
+   //
+   // Other expected values below come from a separate, straightforward, implementation of the equations in that post
+   // (with integration steps of 0.0001 minutes).
+   //
+   double const mgPerLiter = 0.10 * 56.7 * 1000.0 / 19.87;
+   auto makeParms = [](double const timeInBoil_minutes) {
+      return IbuMethods::IbuCalculationParms{
+         .AArating                  = 0.10,
+         .hops_grams                = 56.7,
+         .postBoilVolume_liters     = 19.87,
+         .wortGravity_sg            = 1.060,
+         .timeInBoil_minutes        = timeInBoil_minutes,
+         .kettleInternalDiameter_cm = 38.0,
+         .kettleOpeningDiameter_cm  = 38.0,
+      };
+   };
+
+   IbuMethods::formula = IbuMethods::IbuFormula::Tinseth;
+   auto parms = makeParms(6.0);
+   double const tinseth6 = IbuMethods::getIbus(parms);
+   QVERIFY2(fuzzyComp(tinseth6 / mgPerLiter, 0.0493, 0.0005), "Tinseth utilization does not match Hosom's example");
+   parms.coolTime_minutes = 10.0;
+   QVERIFY2(fuzzyComp(IbuMethods::getIbus(parms), tinseth6, 0.0001), "Tinseth should ignore cool time");
+
+   IbuMethods::formula = IbuMethods::IbuFormula::mIbu;
+   // With no cool time, mIBU assumes immediate forced cooling, and so gives the same results as Tinseth
+   parms.coolTime_minutes = std::nullopt;
+   auto breakdown = IbuMethods::getIbuBreakdown(parms);
+   QVERIFY2(fuzzyComp(breakdown.boil_ibus    , tinseth6, 0.0001), "mIBU boil IBUs differ from Tinseth");
+   QVERIFY2(fuzzyComp(breakdown.postBoil_ibus, 0.0     , 0.0001), "mIBU with unknown cool time gave post-boil IBUs");
+   parms.coolTime_minutes = 0.0;
+   QVERIFY2(fuzzyComp(IbuMethods::getIbus(parms), tinseth6, 0.0001), "mIBU with zero cool time differs from Tinseth");
+   // Hosom's example: 10 minutes of natural cooling
+   parms.coolTime_minutes = 10.0;
+   breakdown = IbuMethods::getIbuBreakdown(parms);
+   qDebug() << Q_FUNC_INFO << "Hosom example: boil" << breakdown.boil_ibus << ", post-boil" << breakdown.postBoil_ibus;
+   QVERIFY2(fuzzyComp(breakdown.boil_ibus    , tinseth6, 0.0001), "mIBU boil IBUs differ from Tinseth");
+   QVERIFY2(fuzzyComp(breakdown.postBoil_ibus / mgPerLiter, 0.0431, 0.0005), "Post-boil utilization not as Hosom");
+   QVERIFY2(fuzzyComp(breakdown.postBoil_ibus, 12.355, 0.02), "Post-boil IBUs not as reference");
+   QVERIFY2(fuzzyComp(breakdown.total(), 26.0, 0.6), "Total IBUs not as Hosom");
+
+   //
+   // Hops added at flameout (ie a post-boil addition with no delay), with 30 minutes before forced cooling and a
+   // partly-covered kettle.  Here, Hosom's 5-minute rule (relative utilization of 1.0 for the first 5 minutes after
+   // the addition) applies.
+   //
+   parms = makeParms(0.0);
+   parms.postBoilAddition         = true;
+   parms.coolTime_minutes         = 30.0;
+   parms.kettleOpeningDiameter_cm = 25.0;
+   breakdown = IbuMethods::getIbuBreakdown(parms);
+   QVERIFY2(fuzzyComp(breakdown.boil_ibus    ,  0.0  , 0.0001), "Post-boil addition gave boil IBUs");
+   QVERIFY2(fuzzyComp(breakdown.postBoil_ibus, 27.742, 0.05  ), "Flameout addition IBUs not as reference");
+   // Formulae that don't model post-boil isomerization give nothing for post-boil additions.  (In particular, Rager and
+   // Noonan would otherwise give IBUs as for a 0-minute boil addition.)
+   for (auto const formula : {IbuMethods::IbuFormula::Tinseth,
+                              IbuMethods::IbuFormula::Rager  ,
+                              IbuMethods::IbuFormula::Noonan }) {
+      IbuMethods::formula = formula;
+      QVERIFY(!IbuMethods::modelsPostBoilIsomerization(formula));
+      QVERIFY2(fuzzyComp(IbuMethods::getIbus(parms), 0.0, 0.0001), "Post-boil addition gave IBUs");
+   }
+   QVERIFY(IbuMethods::modelsPostBoilIsomerization(IbuMethods::IbuFormula::mIbu));
+   IbuMethods::formula = IbuMethods::IbuFormula::mIbu;
+
+   // Hop stand 10 minutes after flameout, for 20 minutes, with natural cooling
+   parms = makeParms(0.0);
+   parms.postBoilAddition      = true;
+   parms.postBoilDelay_minutes = 10.0;
+   parms.coolTime_minutes      = 20.0;
+   QVERIFY2(fuzzyComp(IbuMethods::getIbus(parms), 17.644, 0.05), "Natural cooling hop stand IBUs not as reference");
+
+   //
+   // Same hop stand, but with the wort held at 80°C.  Here we can work out the answer exactly: the first 5 minutes are
+   // at the boiling rate (per Hosom's 5-minute rule) and the rest at the relative rate for 80°C.
+   //
+   parms.postBoilTemperatureProfile = {{.duration_minutes = 60.0, .startTemp_c = 80.0, .endTemp_c = 80.0, .naturalCooling = false}};
+   auto tinsethUtilization = [](double const time_minutes) {
+      return 1.65 * std::pow(0.000125, 0.060) * (1.0 - std::exp(-0.04 * time_minutes)) / 4.15;
+   };
+   double const expectedHold80 = mgPerLiter * (
+      (tinsethUtilization(5.0) - tinsethUtilization(0.0)) +
+      IbuMethods::relativeUtilization(80.0) * (tinsethUtilization(20.0) - tinsethUtilization(5.0))
+   );
+   QVERIFY2(fuzzyComp(expectedHold80, 17.591, 0.01), "Test's own calculation is wrong");
+   QVERIFY2(fuzzyComp(IbuMethods::getIbus(parms), expectedHold80, 0.01), "Hop stand at 80°C gave wrong IBUs");
+   // Holding at a lower temperature gives fewer IBUs
+   parms.postBoilTemperatureProfile = {{.duration_minutes = 60.0, .startTemp_c = 70.0, .endTemp_c = 70.0, .naturalCooling = false}};
+   QVERIFY2(IbuMethods::getIbus(parms) < expectedHold80, "Hop stand at 70°C gave more IBUs than at 80°C");
+
+   //
+   // Temperature profile
+   //
+   double const b = IbuMethods::naturalCoolingRate(19.87, 38.0, 38.0);
+   QVERIFY(fuzzyComp(b, 0.0002925 * (std::numbers::pi * 19.0 * 19.0) / 19.87 + 0.00538, 0.000001));
+   // Empty profile is Hosom's natural cooling curve
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(15.0, {}, b),
+                     53.70 * std::exp(-b * 15.0) + 319.55 - 273.15,
+                     0.001));
+   // Linear segment
+   std::vector<IbuMethods::PostBoilTemperatureSegment> const chillProfile{
+      {.duration_minutes = 20.0, .startTemp_c = 80.0, .endTemp_c = 20.0, .naturalCooling = false}
+   };
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(10.0, chillProfile, b), 50.0, 0.001));
+   // Natural cooling segment: follows Hosom's curve, but doesn't go below the step's end temperature
+   std::vector<IbuMethods::PostBoilTemperatureSegment> const coolTo90{
+      {.duration_minutes = 30.0, .startTemp_c = 100.0, .endTemp_c = 90.0, .naturalCooling = true}
+   };
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c( 1.0, coolTo90, b),
+                     IbuMethods::postBoilWortTemperature_c( 1.0, {}      , b), 0.001));
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(25.0, coolTo90, b), 90.0, 0.001));
+   // After the end of the profile, natural cooling from wherever we got to
+   std::vector<IbuMethods::PostBoilTemperatureSegment> const hold80{
+      {.duration_minutes = 10.0, .startTemp_c = 80.0, .endTemp_c = 80.0, .naturalCooling = false}
+   };
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(15.0, hold80, b),
+                     46.40 + (80.0 - 46.40) * std::exp(-b * 5.0),
+                     0.001));
+   // If the wort boils at a lower temperature (eg at altitude), natural cooling follows the same curve, shifted down by
+   // the difference, and nothing is hotter than boiling
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(15.0, {}, b, 95.0),
+                     IbuMethods::postBoilWortTemperature_c(15.0, {}, b) - 5.0,
+                     0.001));
+   std::vector<IbuMethods::PostBoilTemperatureSegment> const holdAtBoil{
+      {.duration_minutes = 10.0, .startTemp_c = 100.0, .endTemp_c = 100.0, .naturalCooling = false}
+   };
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c( 5.0, holdAtBoil, b, 95.0), 95.0, 0.001));
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c( 5.0, hold80    , b, 95.0), 80.0, 0.001));
+
+   //
+   // Part 2: Recipe-level calculations.
+   //
+   // Boil profile: pre-boil, 60 minute boil proper, 10 minutes of natural cooling, 20 minute hop stand at 80°C, 15
+   // minutes of forced cooling down to 20°C.
+   //
+   auto recipe = std::make_shared<Recipe>("Post-boil IBU Test");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(20.0);
+   recipe->setEquipment(this->pimpl->m_equipFiveGalNoLoss);
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(24.0);
+   boil->setBoilTime_mins(60.0); // This also ensures the standard profile
+   QCOMPARE(boil->boilSteps().size(), 3);
+   boil->boilSteps()[2]->setStepTime_mins(10.0);
+   auto hopStand = std::make_shared<BoilStep>("Hop stand");
+   hopStand->setStartTemp_c(80.0);
+   hopStand->setEndTemp_c(80.0);
+   hopStand->setStepTime_mins(20.0);
+   boil->add(hopStand);
+   auto chill = std::make_shared<BoilStep>("Chill");
+   chill->setStartTemp_c(80.0);
+   chill->setEndTemp_c(20.0);
+   chill->setStepTime_mins(15.0);
+   boil->add(chill);
+   QCOMPARE(boil->boilSteps().size(), 5);
+
+   auto const profile = boil->postBoilProfile();
+   QCOMPARE(profile.segments.size(), static_cast<size_t>(3));
+   QVERIFY(profile.duration_mins && fuzzyComp(*profile.duration_mins, 45.0, 0.001));
+   QVERIFY2( profile.segments[0].naturalCooling, "Step from boil to below boil not treated as natural cooling");
+   QVERIFY2(!profile.segments[1].naturalCooling, "Hop stand treated as natural cooling");
+   QVERIFY2(!profile.segments[2].naturalCooling, "Chill step treated as natural cooling");
+
+   auto makeAddition = [&](QString const & name, int const step, std::optional<double> const addAtTime_mins) {
+      auto addition = std::make_shared<RecipeAdditionHop>(name);
+      addition->setHop(this->pimpl->m_cascade_4pct.get());
+      addition->setStage(RecipeAddition::Stage::Boil);
+      addition->setStep(step);
+      addition->setAddAtTime_mins(addAtTime_mins);
+      addition->setQuantity(0.020);
+      addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+      return recipe->addAddition(addition);
+   };
+   auto const boil60        = makeAddition("Boil 60"        , 2, 60.0        );
+   auto const hopStandStart = makeAddition("Hop stand start", 4, std::nullopt);
+   auto const chillStart    = makeAddition("Chill start"    , 5, std::nullopt);
+
+   auto const hopStandTiming = recipe->boilAdditionTiming(*hopStandStart);
+   QVERIFY(hopStandTiming.postBoil);
+   QVERIFY(fuzzyComp(hopStandTiming.afterFlameout_mins, 10.0, 0.001));
+   QVERIFY(hopStandTiming.postBoilRemaining_mins && fuzzyComp(*hopStandTiming.postBoilRemaining_mins, 35.0, 0.001));
+
+   IbuMethods::formula = IbuMethods::IbuFormula::Tinseth;
+   double const tinsethBoil60 = recipe->ibuFromHopAddition(*boil60);
+   QVERIFY(tinsethBoil60 > 1.0);
+   QVERIFY2(fuzzyComp(recipe->ibuFromHopAddition(*hopStandStart), 0.0, 0.0001), "Tinseth gave IBUs for hop stand");
+
+   IbuMethods::formula = IbuMethods::IbuFormula::mIbu;
+   auto const boil60Breakdown = recipe->ibuBreakdownFromHopAddition(*boil60);
+   QVERIFY2(fuzzyComp(boil60Breakdown.boil_ibus, tinsethBoil60, 0.0001), "mIBU boil IBUs differ from Tinseth");
+   QVERIFY2(boil60Breakdown.postBoil_ibus > 0.0, "No post-boil IBUs for boil addition");
+   QVERIFY(fuzzyComp(recipe->ibuFromHopAddition(*boil60), boil60Breakdown.total(), 0.0001));
+
+   auto const hopStandBreakdown = recipe->ibuBreakdownFromHopAddition(*hopStandStart);
+   auto const chillBreakdown    = recipe->ibuBreakdownFromHopAddition(*chillStart   );
+   qDebug() <<
+      Q_FUNC_INFO << "mIBU: boil60" << boil60Breakdown.boil_ibus << "+" << boil60Breakdown.postBoil_ibus <<
+      ", hop stand" << hopStandBreakdown.postBoil_ibus << ", chill" << chillBreakdown.postBoil_ibus;
+   QVERIFY2(fuzzyComp(hopStandBreakdown.boil_ibus, 0.0, 0.0001), "Hop stand addition gave boil IBUs");
+   QVERIFY2(hopStandBreakdown.postBoil_ibus > 1.0, "Hop stand addition gave (almost) no IBUs");
+   QVERIFY2(chillBreakdown.postBoil_ibus < hopStandBreakdown.postBoil_ibus, "Addition at chill gave more IBUs than hop stand");
+
+   //
+   // If we don't know how long the post-boil steps are, mIBU falls back to assuming immediate forced cooling, ie it
+   // gives the same results as Tinseth.
+   //
+   boil->boilSteps()[2]->setStepTime_mins(std::nullopt);
+   QVERIFY(!boil->postBoilProfile().duration_mins);
+   QVERIFY2(fuzzyComp(recipe->ibuFromHopAddition(*boil60), tinsethBoil60, 0.0001),
+            "mIBU with unknown cool time differs from Tinseth");
+
+   return;
+}
+
+void RecipeCalcTests::testIbuFormulas() {
+   qDebug() << Q_FUNC_INFO << "Starting";
+
+   //
+   // Make sure we put the IBU formula back to what TestEnvironment set, however we exit this function
+   //
+   struct RestoreIbuFormula {
+      IbuMethods::IbuFormula const saved = IbuMethods::formula;
+      ~RestoreIbuFormula() { IbuMethods::formula = saved; }
+   } restoreIbuFormula;
+
+   //
+   // Part 1: Garetz.  2 oz (56.7 g) of 10% AA whole hops in 19.87 l.  With no concentration (ie pre-boil volume not
+   // set), OG 1.050 and a hopping rate factor of 1, IBUs are just Garetz utilization × mg/l of alpha acids.
+   //
+   double const mgPerLiter = 0.10 * 56.7 * 1000.0 / 19.87;
+   auto makeParms = [](double const timeInBoil_minutes) {
+      return IbuMethods::IbuCalculationParms{
+         .AArating              = 0.10,
+         .hops_grams            = 56.7,
+         .postBoilVolume_liters = 19.87,
+         .wortGravity_sg        = 1.050,
+         .timeInBoil_minutes    = timeInBoil_minutes,
+         .hopForm               = IbuMethods::HopForm::Whole,
+         .originalGravity_sg    = 1.050,
+      };
+   };
+
+   IbuMethods::formula = IbuMethods::IbuFormula::Garetz;
+   QVERIFY(!IbuMethods::modelsPostBoilIsomerization(IbuMethods::IbuFormula::Garetz));
+   QVERIFY( IbuMethods::usesHoppingRateFactor      (IbuMethods::IbuFormula::Garetz));
+   for (auto const & [minutes, utilization_pct] : {std::pair{ 5.0,  0.0}, std::pair{10.0,  0.0}, std::pair{12.0,  2.0},
+                                                   std::pair{20.0,  5.0}, std::pair{30.0, 11.0}, std::pair{45.0, 18.0},
+                                                   std::pair{60.0, 20.0}, std::pair{75.0, 22.0}, std::pair{90.0, 23.0},
+                                                   std::pair{120.0, 23.0}}) {
+      auto const parms = makeParms(minutes);
+      QVERIFY2(fuzzyComp(IbuMethods::getIbus(parms), mgPerLiter * utilization_pct / 100.0, 0.001),
+               QString("Garetz at %1 minutes").arg(minutes).toLocal8Bit().constData());
+   }
+   // Pellet factor of 1.10 applies up to 30 minutes but not beyond
+   auto parms = makeParms(20.0);
+   parms.hopForm = IbuMethods::HopForm::Pellet;
+   QVERIFY(fuzzyComp(IbuMethods::getIbus(parms), mgPerLiter * 0.05 * 1.10, 0.001));
+   parms = makeParms(60.0);
+   parms.hopForm = IbuMethods::HopForm::Pellet;
+   QVERIFY(fuzzyComp(IbuMethods::getIbus(parms), mgPerLiter * 0.20, 0.001));
+   // Concentration factor and gravity factor: 23.66 l pre-boil, 19.87 l post-boil, OG 1.060.  CF = 0.8398, so boil
+   // gravity = 1.05039 and gravity factor = 1.00194
+   parms = makeParms(60.0);
+   parms.originalGravity_sg   = 1.060;
+   parms.preBoilVolume_liters = 23.66;
+   QVERIFY(fuzzyComp(IbuMethods::getIbus(parms), mgPerLiter * 0.20 / 1.0019442, 0.001));
+   // Hopping rate factor divides everything
+   parms = makeParms(60.0);
+   parms.hoppingRateFactor = 1.25;
+   QVERIFY(fuzzyComp(IbuMethods::getIbus(parms), mgPerLiter * 0.20 / 1.25, 0.001));
+   // Post-boil additions give nothing
+   parms = makeParms(0.0);
+   parms.postBoilAddition = true;
+   parms.coolTime_minutes = 30.0;
+   QVERIFY(fuzzyComp(IbuMethods::getIbus(parms), 0.0, 0.0001));
+
+   //
+   // The hopping rate factor solves HF = 1 + CF × (U / HF) / 260
+   //
+   for (auto const & [totalIbus, concentrationFactor] : {std::pair{57.071, 1.0}, std::pair{120.0, 0.84},
+                                                         std::pair{0.0, 1.0}}) {
+      double const hoppingRateFactor = IbuMethods::garetzHoppingRateFactor(totalIbus, concentrationFactor);
+      QVERIFY(fuzzyComp(hoppingRateFactor,
+                        1.0 + concentrationFactor * (totalIbus / hoppingRateFactor) / 260.0,
+                        0.000001));
+   }
+   QVERIFY(fuzzyComp(IbuMethods::garetzHoppingRateFactor(57.071, 1.0), 1.185203, 0.00001));
+
+   //
+   // Part 2: Daniels.  Separate tables for whole and pellet hops, plus Rager's gravity correction.
+   //
+   IbuMethods::formula = IbuMethods::IbuFormula::Daniels;
+   QVERIFY(!IbuMethods::modelsPostBoilIsomerization(IbuMethods::IbuFormula::Daniels));
+   QVERIFY( IbuMethods::usesHoppingRateFactor      (IbuMethods::IbuFormula::Daniels));
+   for (auto const & [minutes, whole_pct, pellet_pct] : {std::tuple{ 0.0,  5.0,  6.0}, std::tuple{ 9.9,  5.0,  6.0},
+                                                         std::tuple{10.0, 12.0, 15.0}, std::tuple{25.0, 15.0, 19.0},
+                                                         std::tuple{30.0, 19.0, 24.0}, std::tuple{50.0, 22.0, 27.0},
+                                                         std::tuple{60.0, 24.0, 30.0}, std::tuple{90.0, 27.0, 34.0}}) {
+      parms = makeParms(minutes);
+      QVERIFY2(fuzzyComp(IbuMethods::getIbus(parms), mgPerLiter * whole_pct / 100.0, 0.001),
+               QString("Daniels whole at %1 minutes").arg(minutes).toLocal8Bit().constData());
+      parms.hopForm = IbuMethods::HopForm::Pellet;
+      QVERIFY2(fuzzyComp(IbuMethods::getIbus(parms), mgPerLiter * pellet_pct / 100.0, 0.001),
+               QString("Daniels pellet at %1 minutes").arg(minutes).toLocal8Bit().constData());
+   }
+   parms = makeParms(60.0);
+   parms.wortGravity_sg = 1.060;
+   QVERIFY(fuzzyComp(IbuMethods::getIbus(parms), mgPerLiter * 0.24 / 1.05, 0.001));
+
+   //
+   // For formulae that don't handle hop form themselves, we apply the generic adjustment
+   //
+   IbuMethods::formula = IbuMethods::IbuFormula::Tinseth;
+   parms = makeParms(60.0);
+   double const tinsethWhole = IbuMethods::getIbus(parms);
+   parms.hopForm = IbuMethods::HopForm::Pellet;
+   QVERIFY(fuzzyComp(IbuMethods::getIbus(parms), tinsethWhole * 1.10, 0.0001));
+   parms.hopForm = IbuMethods::HopForm::Plug;
+   QVERIFY(fuzzyComp(IbuMethods::getIbus(parms), tinsethWhole * 1.02, 0.0001));
+
+   //
+   // Part 3: SMPH, against John-Paul Hosom's worked examples in section 4.4 of "A Summary of Factors Affecting IBUs"
+   // (https://jphosom.github.io/alchemyoverlord/blog/11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html):
+   // OG 1.055, post-boil volume 5.25 gallons (19.87 l), 8.8% AA well-preserved hop cones, 10 minutes natural cooling
+   // after flameout, and IBUs one week after the start of fermentation.  He gives:
+   //
+   //    2 oz (56.7 g) added at flameout:  14.65 IBU (of which 8.35 ppm IAA, 7.27 IBU from oAA, 0.35 from hop
+   //                                      polyphenols and 1.04 from malt polyphenols)
+   //    2 oz added at 60 minutes:         44.6 IBU
+   //    6 oz (170.1 g) at 60 minutes:     90.90 IBU
+   //    6 oz added at flameout:           27.8 IBU
+   //
+   // and, with 2 oz of 5.26% AA hops added at flameout and instant cooling, 5.98 IBU.
+   //
+   // He doesn't give the kettle dimensions or the pre-boil volume.  We assume a kettle 33 cm across (fully open), and
+   // 1 US gallon per hour of evaporation, which matter for the flameout and 60 minute additions respectively.
+   //
+   // The definitive reference for SMPH is Hosom's own calculator (https://jphosom.github.io/alchemyoverlord/ibu_SMPH.html,
+   // source at https://github.com/jphosom/alchemyoverlord/blob/master/js/ibu_SMPH.js), so we also check against the
+   // results it gives (version 1.0.7, run with the same inputs, and natural cooling at the same rate) -- both for
+   // Hosom's worked examples and for some other cases that exercise parts of the model that the worked examples don't.
+   // We expect to be within 0.5% or so of the calculator (the main difference being that its natural cooling curve
+   // starts at 100.00°C rather than 100.10°C) and within 1% or so of the worked examples (which presumably come from an
+   // earlier version of the calculator).
+   //
+   IbuMethods::formula = IbuMethods::IbuFormula::Smph;
+   QVERIFY(IbuMethods::modelsPostBoilIsomerization(IbuMethods::IbuFormula::Smph));
+   QVERIFY(!IbuMethods::usesHoppingRateFactor     (IbuMethods::IbuFormula::Smph));
+   double const maltIbus = IbuMethods::recipeLevelIbus(1.055);
+   QVERIFY2(fuzzyComp(maltIbus, 1.045, 0.001), "Malt polyphenol IBUs");
+   // Malt-derived IBUs increase as the pH is lowered
+   QVERIFY2(fuzzyComp(IbuMethods::recipeLevelIbus(1.055, 5.25), 2.340, 0.001), "Malt polyphenol IBUs at pH 5.25");
+   auto kettleVolume_l = [](double const timeInBoil_minutes) {
+      return 19.87 + 3.785412 * timeInBoil_minutes / 60.0;
+   };
+   auto makeSmphParms = [&](double const aa, double const grams, double const timeInBoil_minutes) {
+      IbuMethods::IbuCalculationParms smphParms{
+         .AArating                  = aa,
+         .hops_grams                = grams,
+         .postBoilVolume_liters     = 19.87,
+         .wortGravity_sg            = 1.055,
+         .timeInBoil_minutes        = timeInBoil_minutes,
+         .coolTime_minutes          = 10.0,
+         .kettleInternalDiameter_cm = 33.0,
+         .kettleOpeningDiameter_cm  = 33.0,
+         .hopForm                   = IbuMethods::HopForm::Whole,
+         .originalGravity_sg        = 1.055,
+         .kettleVolumeAtAddition_liters = kettleVolume_l(timeInBoil_minutes),
+      };
+      return smphParms;
+   };
+   struct HosomExample {
+      char const * description;
+      double aa;
+      double grams;
+      double timeInBoil_minutes;
+      double coolTime_minutes;
+      double hosomTotalIbus;
+      double calculatorTotalIbus; // From Hosom's calculator
+   };
+   for (auto const & example : {HosomExample{"2 oz at flameout"            , 0.088 ,  56.7,  0.0, 10.0, 14.65, 14.635},
+                                HosomExample{"2 oz at 60 minutes"          , 0.088 ,  56.7, 60.0, 10.0, 44.6 , 44.798},
+                                HosomExample{"6 oz at 60 minutes"          , 0.088 , 170.1, 60.0, 10.0, 90.90, 91.076},
+                                HosomExample{"6 oz at flameout"            , 0.088 , 170.1,  0.0, 10.0, 27.8 , 27.702},
+                                HosomExample{"5.26% AA, instant cooling"   , 0.0526,  56.7,  0.0,  0.0,  5.98,  5.983}}) {
+      auto smphParms = makeSmphParms(example.aa, example.grams, example.timeInBoil_minutes);
+      smphParms.coolTime_minutes = example.coolTime_minutes;
+      double const total = IbuMethods::getIbus(smphParms) + maltIbus;
+      qDebug() <<
+         Q_FUNC_INFO << example.description << ": SMPH" << total << ", Hosom" << example.hosomTotalIbus <<
+         ", calculator" << example.calculatorTotalIbus;
+      QVERIFY2(fuzzyComp(total, example.calculatorTotalIbus, example.calculatorTotalIbus * 0.005), example.description);
+      QVERIFY2(fuzzyComp(total, example.hosomTotalIbus, example.hosomTotalIbus * 0.01), example.description);
+   }
+
+   //
+   // Other cases, against Hosom's calculator.  In all cases, the post-boil volume is 19.87 l, there is 1 US gallon per
+   // hour of evaporation, the kettle is 33 cm across (fully open), and the hops are well preserved.  The
+   // multiple-addition cases check that the alpha-acid solubility limit is applied incrementally, addition by
+   // addition, and that, in a tie, additions are taken in order.
+   //
+   struct CalculatorAddition {
+      double aa;
+      double grams;
+      double timeInBoil_minutes;
+      bool   pellets;
+      double calculatorIbus;
+   };
+   struct CalculatorCase {
+      char const * description;
+      double originalGravity_sg;
+      double postBoilPh;
+      double coolTime_minutes;
+      IbuMethods::YeastFlocculation flocculation;
+      std::vector<CalculatorAddition> additions;
+      double calculatorTotalIbus; // Including malt polyphenols
+      double boilingPoint_c = 100.0;
+   };
+   for (auto const & calculatorCase : {
+      CalculatorCase{"Pellets, pH 5.25", 1.055, 5.25, 10.0, IbuMethods::YeastFlocculation::Medium,
+                     {{0.088, 56.7, 60.0, true, 41.181}}, 43.521},
+      CalculatorCase{"High flocculation, OG 1.080", 1.080, 5.75, 10.0, IbuMethods::YeastFlocculation::High,
+                     {{0.088, 56.7, 60.0, false, 36.920}}, 38.440},
+      // The gravity loss factor applies here only because of the time in hot wort after flameout
+      CalculatorCase{"35 minutes + 15 minutes cooling, OG 1.080", 1.080, 5.75, 15.0, IbuMethods::YeastFlocculation::Medium,
+                     {{0.10, 50.0, 35.0, false, 31.257}}, 32.777},
+      CalculatorCase{"Flameout + 45 minutes cooling, OG 1.080", 1.080, 5.75, 45.0, IbuMethods::YeastFlocculation::Medium,
+                     {{0.10, 100.0, 0.0, false, 29.703}}, 31.223},
+      CalculatorCase{"Heavy hopping, four additions", 1.065, 5.4, 15.0, IbuMethods::YeastFlocculation::Medium,
+                     {{0.12,  80.0, 60.0, false, 62.077},
+                      {0.12,  80.0, 30.0, false, 25.647},
+                      {0.10,  60.0, 10.0, true ,  9.898},
+                      {0.10, 100.0,  0.0, true ,  7.322}}, 107.250},
+      CalculatorCase{"Two additions at 60 minutes", 1.050, 5.75, 5.0, IbuMethods::YeastFlocculation::Medium,
+                     {{0.14, 60.0, 60.0, false, 63.874},
+                      {0.14, 60.0, 60.0, false, 30.345}}, 95.170},
+      // At altitude, where the wort boils at 95°C (about 1,500 m or 5,000 ft), there is less isomerization.  (In the
+      // calculator, we set "Boiling Temperature" and lower the exponential temperature-decay parameter C to match.)
+      CalculatorCase{"60 minutes, boiling at 95°C", 1.055, 5.75, 10.0, IbuMethods::YeastFlocculation::Medium,
+                     {{0.088, 56.7, 60.0, false, 35.570}}, 36.615, 95.0},
+      CalculatorCase{"Flameout, boiling at 95°C", 1.055, 5.75, 10.0, IbuMethods::YeastFlocculation::Medium,
+                     {{0.088, 56.7, 0.0, false, 11.546}}, 12.591, 95.0},
+      CalculatorCase{"Heavy hopping, four additions, boiling at 95°C", 1.065, 5.4, 15.0, IbuMethods::YeastFlocculation::Medium,
+                     {{0.12,  80.0, 60.0, false, 49.805},
+                      {0.12,  80.0, 30.0, false, 19.088},
+                      {0.10,  60.0, 10.0, true ,  6.283},
+                      {0.10, 100.0,  0.0, true ,  4.690}}, 82.172, 95.0},
+   }) {
+      IbuMethods::IbuCalculationParms commonParms = makeSmphParms(0.0, 0.0, 0.0);
+      commonParms.wortGravity_sg     = calculatorCase.originalGravity_sg;
+      commonParms.originalGravity_sg = calculatorCase.originalGravity_sg;
+      commonParms.postBoilPh         = calculatorCase.postBoilPh;
+      commonParms.coolTime_minutes   = calculatorCase.coolTime_minutes;
+      commonParms.yeastFlocculation  = calculatorCase.flocculation;
+      commonParms.boilingPoint_c     = calculatorCase.boilingPoint_c;
+      std::vector<IbuMethods::KettleAlphaAcidAddition> kettleAdditions;
+      for (auto const & addition : calculatorCase.additions) {
+         kettleAdditions.push_back({.minutesBeforeFlameout = addition.timeInBoil_minutes,
+                                    .alphaAcids_mg         = addition.aa * addition.grams * 1000.0,
+                                    .kettleVolume_liters   = kettleVolume_l(addition.timeInBoil_minutes)});
+      }
+      auto const dissolvedBefore_ppm =
+         IbuMethods::smphDissolvedAlphaAcidsBeforeAdditions_ppm(kettleAdditions, commonParms);
+      QCOMPARE(dissolvedBefore_ppm.size(), calculatorCase.additions.size());
+      QVERIFY(fuzzyComp(dissolvedBefore_ppm[0], 0.0, 0.0001));
+      double total = IbuMethods::recipeLevelIbus(calculatorCase.originalGravity_sg, calculatorCase.postBoilPh);
+      for (std::size_t ii = 0; ii < calculatorCase.additions.size(); ++ii) {
+         auto const & addition = calculatorCase.additions[ii];
+         auto smphParms = commonParms;
+         smphParms.AArating                      = addition.aa;
+         smphParms.hops_grams                    = addition.grams;
+         smphParms.timeInBoil_minutes            = addition.timeInBoil_minutes;
+         smphParms.hopForm                       = addition.pellets ? IbuMethods::HopForm::Pellet :
+                                                                      IbuMethods::HopForm::Whole;
+         smphParms.kettleVolumeAtAddition_liters = kettleAdditions[ii].kettleVolume_liters;
+         smphParms.kettleDissolvedAlphaAcids_ppm = dissolvedBefore_ppm[ii];
+         double const ibus = IbuMethods::getIbus(smphParms);
+         qDebug() <<
+            Q_FUNC_INFO << calculatorCase.description << "addition" << ii << ": SMPH" << ibus << ", calculator" <<
+            addition.calculatorIbus;
+         QVERIFY2(fuzzyComp(ibus, addition.calculatorIbus, addition.calculatorIbus * 0.005), calculatorCase.description);
+         total += ibus;
+      }
+      qDebug() <<
+         Q_FUNC_INFO << calculatorCase.description << ": SMPH" << total << ", calculator" <<
+         calculatorCase.calculatorTotalIbus;
+      QVERIFY2(fuzzyComp(total, calculatorCase.calculatorTotalIbus, calculatorCase.calculatorTotalIbus * 0.005),
+               calculatorCase.description);
+   }
+
+   // Breakdown for 2 oz at flameout: 8.35 ppm IAA is 5.99 IBU; non-IAA (excluding malt) is 7.27 + 0.35 IBU
+   auto smphParms = makeSmphParms(0.088, 56.7, 0.0);
+   auto breakdown = IbuMethods::getIbuBreakdown(smphParms);
+   QVERIFY(fuzzyComp(breakdown.boil_ibus    , 0.0         , 0.0001));
+   QVERIFY(fuzzyComp(breakdown.postBoil_ibus, 8.35 * 50.0/69.68, 0.05));
+   QVERIFY(fuzzyComp(breakdown.nonIaa_ibus  , 7.27 + 0.35 , 0.05));
+
+   // Pellets produce twice as much oAA during the boil, but the same IAA
+   smphParms.hopForm = IbuMethods::HopForm::Pellet;
+   auto const pelletBreakdown = IbuMethods::getIbuBreakdown(smphParms);
+   QVERIFY(fuzzyComp(pelletBreakdown.postBoil_ibus, breakdown.postBoil_ibus, 0.0001));
+   QVERIFY(fuzzyComp(pelletBreakdown.nonIaa_ibus - 0.35, (breakdown.nonIaa_ibus - 0.35) * 2.0, 0.02));
+
+   // Lower pH reduces IBUs, mostly from non-IAA; high flocculation reduces IBUs
+   smphParms = makeSmphParms(0.088, 56.7, 60.0);
+   double const neutralIbus = IbuMethods::getIbus(smphParms);
+   smphParms.postBoilPh = 5.25;
+   QVERIFY(IbuMethods::getIbus(smphParms) < neutralIbus);
+   smphParms.postBoilPh = std::nullopt;
+   smphParms.yeastFlocculation = IbuMethods::YeastFlocculation::High;
+   QVERIFY(fuzzyComp(IbuMethods::getIbus(smphParms), neutralIbus * 0.95, 0.05));
+
+   // With well-preserved hops (which is what we assume), there are no oxidized beta acids, so the beta-acid rating
+   // makes no difference
+   smphParms = makeSmphParms(0.088, 56.7, 60.0);
+   smphParms.betaAcidRating = 0.08;
+   QVERIFY(fuzzyComp(IbuMethods::getIbus(smphParms), neutralIbus, 0.0001));
+
+   // A hop stand at 80°C gives IAA after flameout, but less than one at boiling
+   smphParms = makeSmphParms(0.088, 56.7, 0.0);
+   smphParms.postBoilAddition = true;
+   smphParms.coolTime_minutes = 20.0;
+   smphParms.postBoilTemperatureProfile = {{.duration_minutes = 20.0, .startTemp_c =  80.0, .endTemp_c =  80.0, .naturalCooling = false}};
+   double const at80 = IbuMethods::getIbuBreakdown(smphParms).postBoil_ibus;
+   smphParms.postBoilTemperatureProfile = {{.duration_minutes = 20.0, .startTemp_c = 100.0, .endTemp_c = 100.0, .naturalCooling = false}};
+   double const at100 = IbuMethods::getIbuBreakdown(smphParms).postBoil_ibus;
+   qDebug() << Q_FUNC_INFO << "SMPH 20 minute hop stand: at 80°C" << at80 << ", at 100°C" << at100;
+   QVERIFY(at80 > 0.5);
+   QVERIFY(at80 < at100 / 2.0);
+
+   //
+   // Part 4: Recipe level.  With Garetz, doubling the hops gives less than double the IBUs (because of the hopping rate
+   // factor), whereas with Tinseth it gives exactly double.
+   //
+   auto recipe = std::make_shared<Recipe>("IBU Formulas Test");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(20.0);
+   recipe->setEquipment(this->pimpl->m_equipFiveGalNoLoss);
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(24.0);
+   boil->setBoilTime_mins(60.0);
+   auto addition = std::make_shared<RecipeAdditionHop>("Boil 60");
+   addition->setHop(this->pimpl->m_cascade_4pct.get());
+   addition->setStage(RecipeAddition::Stage::Boil);
+   addition->setStep(2);
+   addition->setAddAtTime_mins(60.0);
+   addition->setQuantity(0.050);
+   addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+   addition = recipe->addAddition(addition);
+
+   auto ibusAt = [&](IbuMethods::IbuFormula const formula, double const quantity_kg) {
+      IbuMethods::formula = formula;
+      addition->setQuantity(quantity_kg);
+      return recipe->ibuFromHopAddition(*addition);
+   };
+   double const tinseth50 = ibusAt(IbuMethods::IbuFormula::Tinseth, 0.050);
+   double const tinseth100 = ibusAt(IbuMethods::IbuFormula::Tinseth, 0.100);
+   QVERIFY(fuzzyComp(tinseth100, 2.0 * tinseth50, 0.0001));
+   double const garetz50  = ibusAt(IbuMethods::IbuFormula::Garetz, 0.050);
+   double const garetz100 = ibusAt(IbuMethods::IbuFormula::Garetz, 0.100);
+   qDebug() << Q_FUNC_INFO << "Garetz: 50 g gives" << garetz50 << ", 100 g gives" << garetz100;
+   QVERIFY(garetz50 > 1.0);
+   QVERIFY(garetz100 > garetz50);
+   QVERIFY(garetz100 < 2.0 * garetz50);
+   double const smph50  = ibusAt(IbuMethods::IbuFormula::Smph, 0.050);
+   QVERIFY(smph50 > 1.0);
+
+   return;
+}
+
 void RecipeCalcTests::testInventory() {
    qDebug() << Q_FUNC_INFO << "Starting";
    Measurement::Amount amountOfHop{123.45, Measurement::Units::kilograms};
@@ -507,7 +1102,7 @@ void RecipeCalcTests::testMashWaterVolumes() {
    };
 
    //
-   // Single-step infusion with a batch sparge, with the strike and sparge water set the same way MashWizard does it
+   // Single-step infusion with a batch sparge, with the strike and sparge water set the same way MashAutoAdjuster does it
    //
    auto addMash = [&](Recipe & recipe) {
       auto mash = std::make_shared<Mash>(recipe.name() + " mash");
@@ -580,8 +1175,8 @@ void RecipeCalcTests::testMashWaterVolumes() {
             "Foundation volume should be added to the strike water");
    QVERIFY(fuzzyComp(recipeThreeVessel->targetStrikeWater_l(thickness_LKg),
                      thickness_LKg * grain_kg + mashTunLoss_l, 0.0001));
-   // And going back the other way should give us the same thickness (otherwise MashWizard would change the strike
-   // water each time it was run on a no-sparge mash)
+   // And going back the other way should give us the same thickness (otherwise recalculating the mash would change the
+   // strike water each time)
    auto const thickness = recipeFoundation->mashThicknessForStrikeWater_LKg(
       recipeFoundation->targetStrikeWater_l(thickness_LKg)
    );

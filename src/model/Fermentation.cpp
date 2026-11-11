@@ -39,6 +39,7 @@ bool Fermentation::compareWith(NamedEntity const & other, QList<BtStringConst co
       AUTO_PROPERTY_COMPARE(this, rhs, m_notes      , PropertyNames::Fermentation::notes      , propertiesThatDiffer) &&
       // Parent classes have to be equal too
       this->FolderPropertyBase<Fermentation>                     ::doCompareWith(rhs, propertiesThatDiffer) &&
+      this->LockablePropertyBase<Fermentation>::doCompareWith(rhs, propertiesThatDiffer) &&
       this->StepOwnerBase<Fermentation, FermentationStep>::doCompareWith(rhs, propertiesThatDiffer)
    );
 }
@@ -59,6 +60,7 @@ TypeLookup const Fermentation::typeLookup {
    // Parent classes lookup
    {&NamedEntity::typeLookup,
     std::addressof(FolderPropertyBase<Fermentation>::typeLookup),
+    std::addressof(LockablePropertyBase<Fermentation>::typeLookup),
     std::addressof(StepOwnerBase<Fermentation, FermentationStep>::typeLookup)
    }
 };
@@ -69,6 +71,7 @@ static_assert(std::is_base_of<FolderPropertyBase<Fermentation>, Fermentation>::v
 Fermentation::Fermentation(QString name) :
    NamedEntity{name},
    FolderPropertyBase<Fermentation>{},
+   LockablePropertyBase<Fermentation>{},
    StepOwnerBase<Fermentation, FermentationStep>{},
    m_description  {""},
    m_notes        {""} {
@@ -80,6 +83,7 @@ Fermentation::Fermentation(QString name) :
 Fermentation::Fermentation(NamedParameterBundle const & namedParameterBundle) :
    NamedEntity             {namedParameterBundle},
    FolderPropertyBase<Fermentation>{namedParameterBundle},
+   LockablePropertyBase<Fermentation>{namedParameterBundle},
    StepOwnerBase<Fermentation, FermentationStep>{},
    SET_REGULAR_FROM_NPB (m_description, namedParameterBundle, PropertyNames::Fermentation::description),
    SET_REGULAR_FROM_NPB (m_notes      , namedParameterBundle, PropertyNames::Fermentation::notes      ) {
@@ -91,6 +95,7 @@ Fermentation::Fermentation(NamedParameterBundle const & namedParameterBundle) :
 Fermentation::Fermentation(Fermentation const & other) :
    NamedEntity{other},
    FolderPropertyBase<Fermentation>{other},
+   LockablePropertyBase<Fermentation>{other},
    StepOwnerBase<Fermentation, FermentationStep>{other},
    m_description  {other.m_description},
    m_notes        {other.m_notes      } {
@@ -126,6 +131,9 @@ IMPLEMENT_NUM_RECIPES_USED_IN(Fermentation)
 
 // Boilerplate code for FolderPropertyBase
 FOLDER_BASE_COMMON_CODE(Fermentation)
+
+// Boilerplate code for LockablePropertyBase
+LOCKABLE_BASE_COMMON_CODE(Fermentation)
 
 // Insert fermentationer-plate wrapper functions that call down to StepOwnerBase
 STEP_OWNER_COMMON_CODE(Fermentation, fermentation)

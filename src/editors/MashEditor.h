@@ -23,9 +23,12 @@
 
 #include <QDialog>
 #include <QMetaProperty>
+#include <QShowEvent>
+#include <QStringList>
 #include <QVariant>
 #include "ui_mashEditor.h"
 
+#include "MashAutoAdjuster.h"
 #include "editors/EditorBase.h"
 #include "model/Mash.h"
 
@@ -41,6 +44,87 @@ class MashEditor : public QDialog,
    Q_OBJECT
 
    EDITOR_COMMON_DECL(Mash, MashEditorOptions)
+
+public:
+   //! Called by \c EditorBase after the edit item is set
+   void postSetEditItem();
+
+   /**
+    * \brief Show the "Auto Adjust" part of the editor, with the focus on the Auto-Adjust button.  Used when the user
+    *        asks to calculate the mash from the main window.
+    */
+   void focusAutoAdjust();
+
+public slots:
+   /**
+    * \brief Use \c MashAutoAdjuster to work out the water amounts and temperatures (etc) for the mash being edited, for
+    *        the current recipe.  If the mash is locked or shared with other recipes, we first offer to make a copy for
+    *        the current recipe.
+    *
+    *        The changes are a single undoable step (see \c UndoableAutoAdjust).
+    */
+   void autoAdjust();
+
+   //! Enable/disable the auto-adjust controls that depend on the selected sparge method
+   void updateAutoAdjustControls();
+
+   //! Show (or hide) the summary of any problems found when checking the steps (see \c MashStepTableModel::validate)
+   //  and highlight any of the mash's own fields that have problems
+   void updateMashProblems();
+
+   /**
+    * \brief Turn on or off "Keep in sync with recipe" (see \c Mash::keepInSync).  When turning it on, if the
+    *        mash is locked or shared, we first offer to make a copy (as for \c autoAdjust), and we adjust the mash
+    *        straight away.  Turning it on and the resulting adjustment are a single undoable step, so undo turns it
+    *        off and puts the mash back how it was.  Turning it off is also undoable.
+    */
+   void keptInSyncToggled(bool const checked);
+
+   //! Called when anything is done, undone or redone, as the "Keep in sync" check box might need updating
+   void undoStackChanged();
+
+protected:
+   virtual void showEvent(QShowEvent * event) override;
+
+private:
+   /**
+    * \return The recipe whose grain bill and equipment we use to auto-adjust the mash -- ie the current recipe, if it
+    *         uses the mash being edited (or the mash is a new one for the recipe) -- or \c nullptr if there isn't one.
+    */
+   Recipe * recipeForAutoAdjust() const;
+
+   //! Set up the auto-adjust controls for the current edit item and recipe
+   void refreshAutoAdjust();
+
+   /**
+    * \brief Does the work for \c autoAdjust and \c keptInSyncToggled
+    *
+    * \param turnOnKeepInSync If \c true, the change to turn on keep in sync is part of the same undoable step
+    */
+   void doAutoAdjust(bool const turnOnKeepInSync);
+
+   /**
+    * \brief Replace values in \c inputs that come from the mash's own fields (eg initial grain temperature) with what
+    *        the user has entered in the editor, which might not yet have been saved.
+    */
+   void useFieldValues(MashAutoAdjuster::Inputs & inputs) const;
+
+   /**
+    * \brief Before adjusting the mash for \c recipe, check that it can be changed and is not shared with another
+    *        recipe.  If it is locked or shared, offer the user a copy for \c recipe.
+    *
+    * \return \c true if the mash being edited can now be adjusted, \c false if not (eg the user declined the copy)
+    */
+   bool ensureChangeableForRecipe(Recipe & recipe);
+
+   //! Highlight \c field (with \c problems in its tool tip) or, if \c problems is empty, remove any highlighting
+   static void highlightField(QWidget & field, QStringList const & problems);
+
+   //! Show the result of an auto-adjust (or why it couldn't be done)
+   void showAutoAdjustMessage(QString const & heading, QStringList const & details = {});
+
+   //! Position on the undo stack just after our last auto-adjust, so we know when it's been undone, or -1 if none
+   int m_autoAdjustUndoIndex = -1;
 
    //
    // TBD: We used to have the following function invoked by a button:

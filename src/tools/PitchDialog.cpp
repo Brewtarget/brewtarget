@@ -24,7 +24,7 @@
 
 #include <QChar>
 
-#include "Algorithms.h"
+#include "calculations/Algorithms.h"
 #include "Localization.h"
 #include "measurement/Unit.h"
 #include "PersistentSettings.h"

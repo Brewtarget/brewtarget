@@ -493,7 +493,7 @@ public:
    //
    // In other words, these are the later links in the chain of volumes from water heated, to mash, to boil, to
    // fermentation vessel, to packaging, of which we currently only calculate the earlier links.  (mashTunLoss_l,
-   // lauterTunDeadspaceLoss_l and kettleTrubChillerLoss_l are all used -- see Recipe.cpp and MashWizard.cpp.)
+   // lauterTunDeadspaceLoss_l and kettleTrubChillerLoss_l are all used -- see Recipe.cpp and MashAutoAdjuster.cpp.)
    //
    Q_PROPERTY(double                hltLoss_l                         READ hltLoss_l                         WRITE setHltLoss_l                        ) // Required in BeerJSON (when HLT record present)
    Q_PROPERTY(double                mashTunLoss_l                     READ mashTunLoss_l                     WRITE setMashTunLoss_l                    ) // Required in BeerJSON (when Mash Tun record present)

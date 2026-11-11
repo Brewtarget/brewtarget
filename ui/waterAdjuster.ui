@@ -117,6 +117,68 @@
            </property>
           </widget>
          </item>
+         <item row="6" column="0" colspan="3">
+          <widget class="QCheckBox" name="checkBox_targetMashPh">
+           <property name="toolTip">
+            <string>If ticked, Auto-Adjust also works out how much acid to add to get this mash pH.  It uses the acid already in the recipe if there is one, otherwise lactic acid (or another acid if there's no lactic acid in the database).  If not ticked, acids are left alone.</string>
+           </property>
+           <property name="text">
+            <string>Adjust acid for mash pH of</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="3">
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_targetMashPh">
+           <property name="toolTip">
+            <string>Target mash pH.  Most brewers aim for between 5.2 and 5.6, often 5.4.</string>
+           </property>
+           <property name="decimals">
+            <number>2</number>
+           </property>
+           <property name="minimum">
+            <double>4.80</double>
+           </property>
+           <property name="maximum">
+            <double>6.00</double>
+           </property>
+           <property name="singleStep">
+            <double>0.05</double>
+           </property>
+           <property name="value">
+            <double>5.40</double>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0" colspan="2">
+          <widget class="QPushButton" name="pushButton_autoAdjust">
+           <property name="toolTip">
+            <string>Work out the amounts of brewing salts to add to get as close as possible to the target profile and, if ticked above, the amount of acid to get the target mash pH.  If the recipe already has salts, only those are used and their amounts are changed (so remove any you don't want, or add just the ones you do want, first).  Otherwise, commonly-used salts are added as needed.  Chalk and pickling lime are left alone.  You can undo the changes in one go.</string>
+           </property>
+           <property name="text">
+            <string>Auto-Adjust</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="2" colspan="4">
+          <widget class="QCheckBox" name="checkBox_keptInSync">
+           <property name="toolTip">
+            <string>Automatically redo Auto-Adjust whenever something it depends on changes, eg the water profiles, the amount of water in the mash or the grain bill.  Changes you make to the amounts of salts or acid yourself will then be overwritten, so this is best used once you have chosen which salts to use.  Undoing an Auto-Adjust turns this off.</string>
+           </property>
+           <property name="text">
+            <string>Keep water agents in sync with recipe changes</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="0" colspan="6">
+          <widget class="QLabel" name="label_autoAdjustInfo">
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::RichText</enum>
+           </property>
+          </widget>
+         </item>
 
         </layout>
 
@@ -250,6 +312,9 @@
         <widget class="BtTabWidget" name="tabWidget_adjustments">
          <widget class="QWidget" name="tab_waterAgents">
           <attribute name="title">
+           <string>Water Agents</string>
+          </attribute>
+          <attribute name="toolTip">
            <string>Water Agents (Miscellaneous)</string>
           </attribute>
           <layout class="QHBoxLayout" name="horizontalLayout_waterAgents">
@@ -300,6 +365,9 @@
 
          <widget class="QWidget" name="tab_acidMalts">
           <attribute name="title">
+           <string>Acid Malts</string>
+          </attribute>
+          <attribute name="toolTip">
            <string>Acid Malts (Fermentables)</string>
           </attribute>
           <layout class="QHBoxLayout" name="horizontalLayout_acidMalts">
@@ -344,6 +412,23 @@
               </widget>
              </item>
             </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_autoAdjustNotes">
+          <attribute name="title">
+           <string>Auto-Adjust Notes</string>
+          </attribute>
+          <attribute name="toolTip">
+           <string>Things to check after the last Auto-Adjust, eg ions that couldn't be brought close to the target, and why</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_autoAdjustNotes">
+           <item>
+            <widget class="QTextBrowser" name="textBrowser_autoAdjustNotes">
+             <property name="openLinks">
+              <bool>false</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

@@ -44,6 +44,11 @@ class SmartField;
  *               for a weight field) - all done via \c Measurement::SystemOfMeasurement
  *           (b) which units within that system to use for the field (eg kg, g, mg if the user has selected Metric/SI on
  *               a weight field) - all done via \c Measurement::UnitSystem::RelativeScale.
+ *           (c) how many decimal places to show for the field.
+ *        For a field holding a \c NonPhysicalQuantity, only (c) is applicable, and only for some values of
+ *        \c NonPhysicalQuantity (see \c UnitAndScalePopUpMenu::isAvailableFor).  Eg, for a percentage field, the user
+ *        can choose the number of decimal places, but there's nothing to choose for a date field.
+ *
  *        Moreover, the settings for each label‡ are remembered (via \c PersistentSettings) for future times the program
  *        is run.
  *
@@ -219,6 +224,14 @@ signals:
     *        \c PhysicalQuantity.  There might not be an old \c RelativeScale though, hence the \c std::optional.
     */
    void changedUnitsOrPrecision(SmartAmounts::ScaleInfo previousScaleInfo);
+
+   /**
+    * \brief Signal to say we changed the forced number of decimal places for a field (or group of fields) holding a
+    *        \c NonPhysicalQuantity (eg a percentage).  This is the \c NonPhysicalQuantity equivalent of
+    *        \c changedUnitsOrPrecision.  We need a separate signal because there is no \c SmartAmounts::ScaleInfo
+    *        for a \c NonPhysicalQuantity (and nor does a field need any "old" settings to redisplay its value).
+    */
+   void changedPrecision();
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

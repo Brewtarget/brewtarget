@@ -104,11 +104,11 @@ public:
       return;
    }
 
-   [[nodiscard]] QString displayQuantity(double quantity, unsigned int precision) const {
+   [[nodiscard]] QString displayQuantity(double quantity, std::optional<unsigned int> const precision) const {
       return this->derived().settings().displayQuantity(quantity, precision);
    }
 
-   [[nodiscard]] QString displayAmount(Measurement::Amount const & amount, unsigned int precision) {
+   [[nodiscard]] QString displayAmount(Measurement::Amount const & amount, std::optional<unsigned int> const precision) {
       return this->mutableSettings().displayAmount(amount, precision);
    }
 };

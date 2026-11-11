@@ -24,7 +24,7 @@
 #include <QMap>
 #include <QString>
 
-#include "Algorithms.h"
+#include "calculations/Algorithms.h"
 #include "Localization.h"
 #include "measurement/PhysicalQuantity.h"
 #include "measurement/UnitSystem.h"
@@ -229,6 +229,21 @@ std::optional<Measurement::NumDecimalPlaces> Measurement::getUserSpecifiedDecima
       return *defaultForField;
    }
    return Measurement::NumDecimalPlaces{Measurement::getUltimateDefaultDecimalPlaces(physicalQuantity)};
+}
+
+[[nodiscard]] Measurement::NumDecimalPlaces Measurement::getNumDecimalPlaces(
+   NonPhysicalQuantity const nonPhysicalQuantity,
+   std::optional<NumDecimalPlaces> const userSpecifiedForField,
+   std::optional<NumDecimalPlaces> const defaultForField
+) {
+   if (userSpecifiedForField) {
+      return *userSpecifiedForField;
+   }
+   if (defaultForField) {
+      return *defaultForField;
+   }
+   // If there is no default for this type of quantity, fall back to 3, which used to be the default for everything
+   return Measurement::NumDecimalPlaces{GetUltimateDefaultDecimalPlaces(nonPhysicalQuantity).value_or(3)};
 }
 
 QString Measurement::displayQuantity(double quantity, int precision) {

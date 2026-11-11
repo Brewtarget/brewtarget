@@ -227,7 +227,10 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_attenuationMin">
+        <widget class="SmartLabel" name="label_attenuationMin">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Min Attenuation (%)</string>
          </property>
@@ -244,7 +247,10 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLabel" name="label_attenuationMax">
+        <widget class="SmartLabel" name="label_attenuationMax">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Max Attenuation (%)</string>
          </property>
@@ -318,7 +324,10 @@
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QLabel" name="label_alcoholTolerance">
+        <widget class="SmartLabel" name="label_alcoholTolerance">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
           <string>Alcohol Tolerance</string>
          </property>
