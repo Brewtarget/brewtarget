@@ -159,12 +159,15 @@ class Recipe : public NamedEntity,
    /**
     * \brief \c MainWindow is a friend so it can access \c Recipe::recalcAll() and \c Recipe::recalcIfNeeded()
     *        \c BrewDayScrollWidget is a friend so it can access \c Recipe::m_instructions
+    *        \c RecipeCalcTests is a friend so it can call \c Recipe::recalcAll() to check that our cached calculated
+    *        values are what a full recalculation would give.
     *
     *        In the long run, we should fix this, so that \c MainWindow doesn't need to call private member functions on
     *        \c Recipe.
     */
    friend class MainWindow;
    friend class BrewDayScrollWidget;
+   friend class RecipeCalcTests;
 
 public:
    /**

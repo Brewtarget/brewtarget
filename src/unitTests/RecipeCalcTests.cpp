@@ -1188,6 +1188,155 @@ void RecipeCalcTests::testBoilStepPhases() {
    return;
 }
 
+void RecipeCalcTests::testBoilChangesRecalculate() {
+   qDebug() << Q_FUNC_INFO << "Starting";
+
+   struct RestoreIbuFormula {
+      Ibu::Formula const saved = IbuMethods::formula;
+      ~RestoreIbuFormula() { IbuMethods::formula = saved; }
+   } restoreIbuFormula;
+   // mIBU, so that post-boil step temperatures affect IBUs as well as the boil time
+   IbuMethods::formula = Ibu::Formula::mIbu;
+
+   //
+   // A recipe whose boil is created by nonOptBoil() (as for a new recipe), with some grain, a 60 minute hop addition
+   // and a hop stand addition.
+   //
+   // The fixtures need to be in the object store for additions to refer to them (by ID), but other tests might already
+   // have put them there
+   if (this->pimpl->m_twoRow->key() <= 0) {
+      ObjectStoreWrapper::insert(this->pimpl->m_twoRow);
+   }
+   if (this->pimpl->m_cascade_4pct->key() <= 0) {
+      ObjectStoreWrapper::insert(this->pimpl->m_cascade_4pct);
+   }
+   auto recipe = std::make_shared<Recipe>("Boil Changes Recalculate Test");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(20.0);
+   recipe->setEfficiency_pct(70.0);
+   recipe->setEquipment(this->pimpl->m_equipFiveGalNoLoss);
+   auto grain = std::make_shared<RecipeAdditionFermentable>("Two Row");
+   grain->setFermentable(this->pimpl->m_twoRow.get());
+   grain->setStage(RecipeAddition::Stage::Mash);
+   grain->setQuantity(4.5);
+   grain->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(grain);
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(25.0);
+   boil->setBoilTime_mins(60.0); // This also ensures the standard profile
+   QCOMPARE(boil->boilSteps().size(), 3);
+   boil->boilSteps()[2]->setStepTime_mins(10.0);
+   auto hopStand = std::make_shared<BoilStep>("Hop stand");
+   hopStand->setStartTemp_c(80.0);
+   hopStand->setEndTemp_c(80.0);
+   hopStand->setStepTime_mins(20.0);
+   boil->add(hopStand);
+   auto addHops = [&](QString const & name, int const step, std::optional<double> const addAtTime_mins) {
+      auto addition = std::make_shared<RecipeAdditionHop>(name);
+      addition->setHop(this->pimpl->m_cascade_4pct.get());
+      addition->setStage(RecipeAddition::Stage::Boil);
+      addition->setStep(step);
+      addition->setAddAtTime_mins(addAtTime_mins);
+      addition->setQuantity(0.030);
+      addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+      recipe->addAddition(addition);
+      return;
+   };
+   addHops("Boil 60"  , 2, 60.0        );
+   addHops("Hop stand", 4, std::nullopt);
+   recipe->recalcAll();
+
+   //
+   // After each change to the boil, the recipe's cached values should already be what a full recalculation gives,
+   // without anyone having to call Recipe::recalcAll.
+   //
+   struct Calcs {
+      double ibu;
+      double postBoilVolume_l;
+      double og;
+      double boilGrav;
+   };
+   auto cachedCalcs = [&]() {
+      return Calcs{recipe->IBU(), recipe->postBoilVolume_l(), recipe->og(), recipe->boilGrav()};
+   };
+   //
+   // Checks that the cached values match a full recalculation, and returns them, so the caller can check that the change
+   // made the expected difference (otherwise the check here proves nothing).
+   //
+   auto checkUpToDate = [&](Calcs const & before, char const * const description) {
+      Calcs const cached = cachedCalcs();
+      recipe->recalcAll();
+      Calcs const fresh = cachedCalcs();
+      qDebug() <<
+         Q_FUNC_INFO << description << ": IBU" << before.ibu << "->" << cached.ibu << "(fresh" << fresh.ibu <<
+         "), post-boil volume" << before.postBoilVolume_l << "->" << cached.postBoilVolume_l << "(fresh" <<
+         fresh.postBoilVolume_l << "), OG" << before.og << "->" << cached.og << "(fresh" << fresh.og <<
+         "), boil gravity" << before.boilGrav << "->" << cached.boilGrav << "(fresh" << fresh.boilGrav << ")";
+      bool const upToDate = fuzzyComp(cached.ibu             , fresh.ibu             , 0.0001) &&
+                            fuzzyComp(cached.postBoilVolume_l, fresh.postBoilVolume_l, 0.0001) &&
+                            fuzzyComp(cached.og              , fresh.og              , 0.0001) &&
+                            fuzzyComp(cached.boilGrav        , fresh.boilGrav        , 0.0001);
+      return std::pair{upToDate, fresh};
+   };
+   auto changed = [](double const lhs, double const rhs) { return !fuzzyComp(lhs, rhs, 0.0001); };
+
+   // Editing the length of the boil proper in place (ie changing a BoilStep) changes the evaporation
+   auto before = cachedCalcs();
+   boil->boilSteps()[1]->setStepTime_mins(90.0);
+   auto [upToDate, after] = checkUpToDate(before, "Boil step time changed");
+   QVERIFY2(upToDate, "Boil step time changed");
+   QVERIFY(changed(after.postBoilVolume_l, before.postBoilVolume_l));
+
+   // Editing a post-boil step's temperature changes the IBUs from the hop stand (with mIBU)
+   before = cachedCalcs();
+   boil->boilSteps()[3]->setStartTemp_c(90.0);
+   boil->boilSteps()[3]->setEndTemp_c  (90.0);
+   std::tie(upToDate, after) = checkUpToDate(before, "Hop stand temperature changed");
+   QVERIFY2(upToDate, "Hop stand temperature changed");
+   QVERIFY(changed(after.ibu, before.ibu));
+
+   // Editing a property of the Boil itself
+   before = cachedCalcs();
+   boil->setPreBoilSize_l(27.0);
+   std::tie(upToDate, after) = checkUpToDate(before, "Pre-boil size changed");
+   QVERIFY2(upToDate, "Pre-boil size changed");
+   QVERIFY(changed(after.postBoilVolume_l, before.postBoilVolume_l));
+   QVERIFY(changed(after.boilGrav        , before.boilGrav        ));
+
+   // Removing a step (the natural cooling before the hop stand, so the hop stand starts at flameout)
+   before = cachedCalcs();
+   boil->remove(boil->boilSteps()[2]);
+   QCOMPARE(boil->boilSteps().size(), 3);
+   std::tie(upToDate, after) = checkUpToDate(before, "Step removed");
+   QVERIFY2(upToDate, "Step removed");
+   QVERIFY(changed(after.ibu, before.ibu));
+
+   //
+   // If we switch the recipe to a different boil, changes to the new one should be picked up, and changes to the old
+   // one should no longer affect the recipe.
+   //
+   auto newBoil = std::make_shared<Boil>("Replacement Boil");
+   ObjectStoreWrapper::insert(newBoil);
+   recipe->setBoil(newBoil);
+   newBoil->setPreBoilSize_l(25.0);
+   newBoil->setBoilTime_mins(60.0);
+   QCOMPARE(recipe->boil(), newBoil);
+   before = cachedCalcs();
+   newBoil->boilSteps()[1]->setStepTime_mins(75.0);
+   std::tie(upToDate, after) = checkUpToDate(before, "Replacement boil step time changed");
+   QVERIFY2(upToDate, "Replacement boil step time changed");
+   QVERIFY(changed(after.postBoilVolume_l, before.postBoilVolume_l));
+
+   before = cachedCalcs();
+   QSignalSpy recipeChangedSpy(recipe.get(), &NamedEntity::changed);
+   boil->boilSteps()[1]->setStepTime_mins(45.0);
+   boil->setPreBoilSize_l(30.0);
+   QCOMPARE(recipeChangedSpy.count(), 0);
+   QVERIFY(fuzzyComp(cachedCalcs().ibu, before.ibu, 0.0001));
+
+   return;
+}
+
 void RecipeCalcTests::testInventory() {
    qDebug() << Q_FUNC_INFO << "Starting";
    Measurement::Amount amountOfHop{123.45, Measurement::Units::kilograms};

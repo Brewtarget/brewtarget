@@ -31,6 +31,7 @@ Several new features, and bug fixes for some long-standing issues.
 
 ### Bug Fixes
 * A whirlpool or hop stand step that stays above 81°C (eg 100°C → 92°C, or held at 92°C after a cooling step) is now treated as post-boil, rather than being counted as part of the boil (which made the boil time too long and treated hops added in it as boil additions).  The boil proper now ends as soon as the wort starts to cool, per the dotBeer 1.1.0 rules for boil steps, which also work at altitude.
+* Editing a recipe's boil (eg the length of a boil step, the temperature of a hop stand, the pre-boil size, or adding or removing steps) now immediately updates the recipe's calculated volumes, gravities and IBUs.  Previously, these were only updated when something else in the recipe changed.  Also, changes to a boil, mash or fermentation created automatically for a new recipe are now picked up straight away, rather than only after restarting.
 * Predicted mash pH on the Water tab was wildly wrong if the recipe had any lactic acid (or acidulated malt or phosphoric acid), as acid amounts were converted with the wrong units.  The mash pH model has also been corrected to scale by the weight of grain rather than mash thickness, and to count all specialty malts rather than just the last one.
 * Water agent figures for gypsum (calcium overstated by about 26%), magnesium chloride (no chloride, and a possible crash) and pickling lime were wrong
 * Water tab didn't update predicted mash pH when the grain bill changed, and could give wrong figures after switching between recipes

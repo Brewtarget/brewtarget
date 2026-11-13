@@ -624,6 +624,12 @@ public:
          BtStringConst const & propertyName = Recipe::propertyNameFor<T>();
          this->m_self.setAndNotify(propertyName, itemId, ObjectStoreWrapper::insert(item));
          //
+         // As in set() above, we need to know when the new item changes (eg so that changes to a Boil's steps update
+         // our volumes, gravities and IBUs).  Otherwise, we would only find out after the Recipe was next loaded from
+         // the DB (see Recipe::connectSignals).
+         //
+         this->m_self.connect(item.get(), &NamedEntity::changed, &this->m_self, &Recipe::acceptChangeToContainedObject);
+         //
          // A Boil or Fermentation with no steps isn't much use (and isn't valid in dotBeer or BeerJSON), so, as in
          // MainWindow when creating a new Recipe, we give a newly-created one a minimal profile.  (This needs to happen
          // after we've linked it to the Recipe, as Boil::ensureStandardProfile uses the Recipe's Mash and
@@ -3320,10 +3326,17 @@ void Recipe::recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged) {
       return;
    }
 
+   //
+   // NB: Changes to a boil include changes to its steps (because Boil emits a changed signal when one of its steps
+   // changes -- see OwnedSet::acceptItemChange) and adding or removing steps.  Pretty much everything can depend on the
+   // boil: the length of the boil proper determines evaporation, and hence volumes and gravities; the pre-boil size
+   // determines the boil gravity; and the post-boil steps determine post-boil IBUs (for formulae that model them).
+   //
    if (classNameOfWhatWasAddedOrChanged ==                 Equipment::staticMetaObject.className() ||
        classNameOfWhatWasAddedOrChanged ==               Fermentable::staticMetaObject.className() ||
        classNameOfWhatWasAddedOrChanged == RecipeAdditionFermentable::staticMetaObject.className() ||
-       classNameOfWhatWasAddedOrChanged ==                      Mash::staticMetaObject.className()) {
+       classNameOfWhatWasAddedOrChanged ==                      Mash::staticMetaObject.className() ||
+       classNameOfWhatWasAddedOrChanged ==                      Boil::staticMetaObject.className()) {
       this->recalcAll();
       return;
    }
