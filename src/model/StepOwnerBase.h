@@ -26,7 +26,6 @@
 #include <QVector>
 
 #include "database/ObjectStoreWrapper.h"
-#include "model/Recipe.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "model/OwnedSet.h"
 

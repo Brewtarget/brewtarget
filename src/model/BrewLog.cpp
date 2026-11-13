@@ -72,6 +72,7 @@ QString BrewLog::localisedName_measuredPreBoilGravity_sg    () { return tr("Meas
 QString BrewLog::localisedName_measuredPreBoilVolume_l      () { return tr("Volume Into Boil Kettle"           ); }
 QString BrewLog::localisedName_measuredStrikeTemp_c         () { return tr("Strike Temperature"                ); }
 QString BrewLog::localisedName_measuredVolumeIntoFv_l       () { return tr("Volume Into Fermentation Vessel"   ); }
+QString BrewLog::localisedName_measuredWortClarity          () { return tr("Wort Clarity"                      ); }
 QString BrewLog::localisedName_notes                        () { return tr("Notes"                             ); }
 QString BrewLog::localisedName_projFermPoints               () { return tr("Projected Fermentation Points"     ); }
 
@@ -126,6 +127,7 @@ TypeLookup const BrewLog::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, measuredPreBoilVolume_l      , m_measuredPreBoilVolume_l      , Measurement::PhysicalQuantity::Volume     ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, measuredStrikeTemp_c         , m_measuredStrikeTemp_c         , Measurement::PhysicalQuantity::Temperature),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, measuredVolumeIntoFv_l, m_measuredVolumeIntoFv_l, Measurement::PhysicalQuantity::Volume     ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, measuredWortClarity   , m_measuredWortClarity   , ENUM_INFO(Measurement::Qualitative::wortClarity)            ),
       PROPERTY_TYPE_LOOKUP_ENTRY(BrewLog, notes                        , m_notes                        ,           NonPhysicalQuantity::String     ),
    },
    // Parent class lookup
@@ -189,7 +191,8 @@ BrewLog::BrewLog(NamedParameterBundle const & namedParameterBundle) :
    SET_REGULAR_FROM_NPB (m_expectedFinalGravity_sg      , namedParameterBundle, PropertyNames::BrewLog::expectedFinalGravity_sg      ),
    SET_REGULAR_FROM_NPB (m_expectedEfficiency_pct       , namedParameterBundle, PropertyNames::BrewLog::expectedEfficiency_pct       ),
    SET_REGULAR_FROM_NPB (m_expectedAlcoholByVolume_pct  , namedParameterBundle, PropertyNames::BrewLog::expectedAlcoholByVolume_pct  ),
-   SET_REGULAR_FROM_NPB (m_expectedAttenuation_pct      , namedParameterBundle, PropertyNames::BrewLog::expectedAttenuation_pct      ) {
+   SET_REGULAR_FROM_NPB (m_expectedAttenuation_pct      , namedParameterBundle, PropertyNames::BrewLog::expectedAttenuation_pct      ),
+   SET_OPT_ENUM_FROM_NPB(m_measuredWortClarity          , Measurement::Qualitative::WortClarity, namedParameterBundle, PropertyNames::BrewLog::measuredWortClarity) {
 
    CONSTRUCTOR_END
    return;
@@ -225,7 +228,8 @@ BrewLog::BrewLog(BrewLog const & other) :
    m_expectedFinalGravity_sg      {other.m_expectedFinalGravity_sg      },
    m_expectedEfficiency_pct       {other.m_expectedEfficiency_pct       },
    m_expectedAlcoholByVolume_pct  {other.m_expectedAlcoholByVolume_pct  },
-   m_expectedAttenuation_pct      {other.m_expectedAttenuation_pct      } {
+   m_expectedAttenuation_pct      {other.m_expectedAttenuation_pct      },
+   m_measuredWortClarity          {other.m_measuredWortClarity          } {
 
    CONSTRUCTOR_END
    return;
@@ -249,6 +253,8 @@ void BrewLog::populateNote(Recipe * recipe) {
    this->setExpectedVolumeIntoFv_l(recipe->finalVolume_l());
    this->setMeasuredVolumeIntoFv_l(recipe->finalVolume_l());
    this->setMeasuredFinalVolume_l        (recipe->finalVolume_l());
+   // As with other measured values, we start from what the recipe expects
+   this->setMeasuredWortClarity(recipe->wortClarity());
 
    if (auto const equip = recipe->equipment()) {
       double const boilTime_mins = recipe->boil() ? recipe->boil()->boilTime_mins() : Boil::default_boilTime_mins;
@@ -343,6 +349,8 @@ double  BrewLog::measuredStrikeTemp_c         () const { return this->m_measured
 double  BrewLog::measuredMashFinalTemp_c      () const { return this->m_measuredMashFinalTemp_c      ; }
 double  BrewLog::measuredOriginalGravity_sg   () const { return this->m_measuredOriginalGravity_sg   ; }
 double  BrewLog::measuredVolumeIntoFv_l() const { return this->m_measuredVolumeIntoFv_l; }
+std::optional<Measurement::Qualitative::WortClarity> BrewLog::measuredWortClarity     () const { return this->m_measuredWortClarity; }
+std::optional<int>                                   BrewLog::measuredWortClarityAsInt() const { return Optional::toOptInt(this->m_measuredWortClarity); }
 double  BrewLog::measuredPostBoilVolume_l     () const { return this->m_measuredPostBoilVolume_l     ; }
 double  BrewLog::measuredPitchTemp_c          () const { return this->m_measuredPitchTemp_c          ; }
 double  BrewLog::measuredFinalGravity_sg      () const { return this->m_measuredFinalGravity_sg      ; }
@@ -425,6 +433,16 @@ void BrewLog::setMeasuredVolumeIntoFv_l(double var) {
    if (!this->loading) {
       this->calculateBrewHouseEff_pct();
    }
+   return;
+}
+
+void BrewLog::setMeasuredWortClarity(std::optional<Measurement::Qualitative::WortClarity> const val) {
+   SET_AND_NOTIFY(PropertyNames::BrewLog::measuredWortClarity, this->m_measuredWortClarity, val);
+   return;
+}
+
+void BrewLog::setMeasuredWortClarityAsInt(std::optional<int> const val) {
+   this->setMeasuredWortClarity(Optional::fromOptInt<Measurement::Qualitative::WortClarity>(val));
    return;
 }
 

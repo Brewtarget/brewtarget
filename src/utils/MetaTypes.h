@@ -25,6 +25,7 @@
 #include "measurement/Amount.h"
 #include "measurement/CurrencyAmount.h"
 #include "measurement/PhysicalQuantity.h"
+#include "measurement/Qualitative.h"
 #include "measurement/Unit.h"
 
 //
@@ -81,6 +82,7 @@ Q_DECLARE_METATYPE(std::optional<Measurement::Amount>)
 // do it here and use Q_DECLARE_METATYPE instead.
 Q_DECLARE_METATYPE(Measurement::PhysicalQuantity)
 Q_DECLARE_METATYPE(Measurement::ChoiceOfPhysicalQuantity)
+Q_DECLARE_METATYPE(Measurement::Qualitative::WortClarity)
 
 // Measurement::Unit does not inherit from QObject, so we need this for Measurement::Units::unitStringMapping to work
 Q_DECLARE_OPAQUE_POINTER(Measurement::Unit *)

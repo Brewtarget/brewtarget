@@ -3517,6 +3517,12 @@ namespace {
     *          - "water kept in sync" flag (see Recipe::waterKeptInSync), which is false for existing records
     *          - "FG calculation uses mash" flag (see Recipe::fgCalcUsesMash), which is false for existing records, so
     *            that upgrading does not change the FG (and ABV etc) of anyone's existing recipes
+    *          - "wort clarity" (see Recipe::wortClarity), which is NULL (ie not set) for existing records
+    *
+    *        Add "measured wort clarity" to brew_log (see BrewLog::measuredWortClarity), and "krausen handling" to
+    *        fermentation (see Fermentation::krausenHandling), both of which are NULL (ie not set) for existing records.
+    *        (For both these and Recipe::wortClarity, not set means the SMPH IBU calculation assumes the same "average"
+    *        values as before.)
     */
    bool migrate_to_23(Database & db, BtSqlQuery & q) {
       QString const boolType = db.getDbNativeTypeName<bool>();
@@ -3536,6 +3542,9 @@ namespace {
          {QString("UPDATE recipe SET water_kept_in_sync = ?"), {QVariant{false}}},
          {QString("ALTER TABLE recipe ADD COLUMN fg_calc_uses_mash  %1").arg(db.getDbNativeTypeName<bool>  ())},
          {QString("UPDATE recipe SET fg_calc_uses_mash = ?"), {QVariant{false}}},
+         {QString("ALTER TABLE recipe       ADD COLUMN wort_clarity          %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE brew_log     ADD COLUMN measured_wort_clarity %1").arg(db.getDbNativeTypeName<QString>())},
+         {QString("ALTER TABLE fermentation ADD COLUMN krausen_handling      %1").arg(db.getDbNativeTypeName<QString>())},
       };
       return executeSqlQueries(q, migrationQueries);
    }

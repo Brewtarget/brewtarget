@@ -37,6 +37,7 @@
 #include "model/Equipment.h"
 #include "model/Fermentable.h"
 #include "model/Fermentation.h"
+#include "model/FermentationStep.h"
 #include "model/Folder.h"
 #include "model/Hop.h"
 #include "model/Mash.h"
@@ -306,6 +307,17 @@ void SerializationTests::testDotBeerExport() {
       auto const nanBrewLog = makeBrewLog(*nanRecipe, "Test Brew Log With NaN ABV");
       nanBrewLog->setComputedAlcoholByVolume_pct(std::numeric_limits<double>::quiet_NaN());
 
+      // Wort clarity (expected on the recipe, measured on the brew log) and krausen handling (on the fermentation) were
+      // added in dotBeer 1.1.0
+      nanRecipe->setWortClarity(Measurement::Qualitative::WortClarity::Cloudy);
+      nanBrewLog->setMeasuredWortClarity(Measurement::Qualitative::WortClarity::VeryCloudy);
+      auto blowOff = std::make_shared<Fermentation>("Test Fermentation With Krausen Blown Off");
+      blowOff->setKrausenHandling(Fermentation::KrausenHandling::BlownOffVigorousFermentation);
+      ObjectStoreWrapper::insert(blowOff);
+      auto blowOffStep = std::make_shared<FermentationStep>("Primary");
+      blowOffStep->setStartTemp_c(19.0);
+      blowOff->add(blowOffStep);
+
       // Optional vessels with zero volume are treated as not present, so their other attributes are not kept
       auto vessels = std::make_shared<Equipment>("Test Equipment With Unused Lauter Tun");
       vessels->setKettleBoilSize_l(30.0);
@@ -475,6 +487,23 @@ void SerializationTests::testDotBeerExport() {
       QVERIFY2(!recipe->contains("water_kept_in_sync"), "Keep water in sync should not be written");
       // Nor is "use mash profile in FG calculation"
       QVERIFY2(!recipe->contains("fg_calc_uses_mash"), "Use mash profile in FG calculation should not be written");
+
+      // Wort clarity and krausen handling (added in dotBeer 1.1.0) should be written if set
+      QVERIFY2(recipe->contains("wort_clarity"), "Wort clarity not written");
+      QVERIFY(recipe->at("wort_clarity").as_string() == "cloudy");
+      bool foundClarityBrewLog = false;
+      for (auto const & brewLog : recipe->at("brew_logs").as_array()) {
+         if (brewLog.at("batch_number").as_string() == "Test Brew Log With NaN ABV") {
+            foundClarityBrewLog = true;
+            QVERIFY2(brewLog.as_object().contains("measured_wort_clarity"), "Measured wort clarity not written");
+            QVERIFY(brewLog.at("measured_wort_clarity").as_string() == "very cloudy");
+         }
+      }
+      QVERIFY2(foundClarityBrewLog, "Test Brew Log With NaN ABV not exported");
+      auto const * const blowOff = findExported(root, "fermentations", "Test Fermentation With Krausen Blown Off");
+      QVERIFY2(blowOff, "Test Fermentation With Krausen Blown Off not exported");
+      QVERIFY2(blowOff->contains("krausen_handling"), "Krausen handling not written");
+      QVERIFY(blowOff->at("krausen_handling").as_string() == "blown off, vigorous fermentation");
    }
    QString message;
    bool const reimportOk = importDotBeerFile(exportFilePath, message);

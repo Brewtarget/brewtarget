@@ -592,6 +592,19 @@ public:
       //
       // This is a bit more work to implement because it's a PNG image in a QLabel object
       //
+#ifdef   BUILDING_BREWKEN
+      qDebug() <<
+         Q_FUNC_INFO << "Logo default size:" << this->m_self.label_Brewken->width() << "×" <<
+         this->m_self.label_Brewken->height();
+      this->m_self.label_Brewken->setScaledContents(true);
+      this->m_self.label_Brewken->setFixedSize(
+         static_cast<int>((265.0/66.0) * dpiX/2),  // width = 265/66 × height = 265/66 × half an inch = (265/66) × (dpiX/2)
+         dpiY/2                                    // height = half an inch = dpiY/2
+      );
+      qDebug() <<
+         Q_FUNC_INFO << "Logo new size:" << this->m_self.label_Brewken->width() << "×" <<
+         this->m_self.label_Brewken->height();
+#elifdef BUILDING_BREWTARGET
       qDebug() <<
          Q_FUNC_INFO << "Logo default size:" << this->m_self.label_Brewtarget->width() << "×" <<
          this->m_self.label_Brewtarget->height();
@@ -603,7 +616,7 @@ public:
       qDebug() <<
          Q_FUNC_INFO << "Logo new size:" << this->m_self.label_Brewtarget->width() << "×" <<
          this->m_self.label_Brewtarget->height();
-
+#endif
       return;
    }
 
@@ -944,7 +957,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
    SMART_FIELD_INIT(MainWindow, label_name           , lineEdit_name       , Recipe, PropertyNames::NamedEntity::name        );
    SMART_FIELD_INIT(MainWindow, label_targetBatchSize, lineEdit_batchSize  , Recipe, PropertyNames::Recipe::batchSize_l   , 2);
    SMART_FIELD_INIT(MainWindow, label_finalVolume    , value_finalVolume   , Recipe, PropertyNames::Recipe::finalVolume_l , 2);
-   SMART_FIELD_INIT(MainWindow, label_targetBoilSize , value_preBoilSize, Boil  , PropertyNames::Boil::preBoilSize_l   , 2);
+   SMART_FIELD_INIT(MainWindow, label_targetBoilSize , value_preBoilSize   , Boil  , PropertyNames::Boil::preBoilSize_l   , 2);
    SMART_FIELD_INIT(MainWindow, label_efficiency     , lineEdit_efficiency , Recipe, PropertyNames::Recipe::efficiency_pct, 1);
    SMART_FIELD_INIT(MainWindow, label_boilTime       , value_boilTime      , Boil  , PropertyNames::Boil::boilTime_mins   , 0);
    SMART_FIELD_INIT(MainWindow, label_boilSg         , value_boilSg        , Recipe, PropertyNames::Recipe::boilGrav      , 3);
@@ -1095,8 +1108,11 @@ void MainWindow::initialiseAndMakeVisible() {
    // Set up the pretty tool tip. It doesn't really belong anywhere, so here it is
    // .:TODO:. When we allow users to change databases without restarting, we'll need to make sure to call this whenever
    // the database is changed (as setToolTip() just takes static text as its parameter).
+#ifdef   BUILDING_BREWKEN
+   label_Brewken->setToolTip(getLabelToolTip());
+#elifdef BUILDING_BREWTARGET
    label_Brewtarget->setToolTip(getLabelToolTip());
-
+#endif
    this->setVisible(true);
 
    emit initialisedAndVisible();

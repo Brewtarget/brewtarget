@@ -66,6 +66,18 @@ private slots:
    void testBoilStepsWithoutTemperatures();
 
    /**
+    * \brief Verify that boil steps are classified as pre-boil, boil proper and post-boil by their temperatures and
+    *        order, per the dotBeer rules (see \c Boil::stepPhases).
+    */
+   void testBoilStepPhases();
+
+   /**
+    * \brief Verify that changes to a recipe's boil, and to its boil steps, are reflected in the recipe's calculated
+    *        values (IBUs, volumes, gravities) without an explicit recalculation.
+    */
+   void testBoilChangesRecalculate();
+
+   /**
     * \brief Verify IBU calculations for hops in hot wort after flameout -- eg flameout, whirlpool and hop stand
     *        additions, and boil additions while the wort cools.  See https://github.com/Brewtarget/brewtarget/issues/774
     */

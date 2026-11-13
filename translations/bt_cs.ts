@@ -638,6 +638,10 @@
         <source>Volume Into Fermentation Vessel</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Wort Clarity</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewNote</name>
@@ -3631,6 +3635,42 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <source>Tertiary</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Krausen Handling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mixed In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minor Deposits on Fermenter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Medium Deposits on Fermenter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heavy Deposits on Fermenter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Very Heavy Deposits on Fermenter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blown Off, Slow Fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blown Off, Normal Fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blown Off, Vigorous Fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentationStep</name>
@@ -4668,6 +4708,10 @@ If you need help, please open an issue at %1</source>
     </message>
     <message>
         <source>Change Use Mash Profile in FG Calculation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Expected Wort Clarity</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7290,6 +7334,38 @@ Log file may contain more details.</source>
         <source>SMPH</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Very Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Somewhat Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Average</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Somewhat Cloudy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cloudy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Very Cloudy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extremely Cloudy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -7929,6 +8005,10 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Use Mash Profile in FG Calculation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expected Wort Clarity</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10844,6 +10924,18 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Yeast attenuation based on user-reported OG and FG</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>How clear the wort was when it went into the fermenter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wort clarity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How clear the wort was, judged by eye, when it went into the fermenter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>brewNoteWidget</name>
@@ -11768,6 +11860,18 @@ Tabs</source>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  Only used by the SMPH IBU formula.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Krausen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  If the krausen is skimmed, choose one of the &quot;blown off&quot; options, according to how much is removed.  Only used by the SMPH IBU formula.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -13066,6 +13170,14 @@ Tabs</source>
     </message>
     <message>
         <source>Info about, and any problems with, this fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expected wort clarity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).  Cloudier wort loses more bitterness during fermentation.  Only used by the SMPH IBU formula.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

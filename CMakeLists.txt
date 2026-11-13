@@ -1157,6 +1157,8 @@ add_test(NAME RecipeCalcTests.recipeCalcTest_allGrain               COMMAND ./${
 add_test(NAME RecipeCalcTests.postBoilLossOgTest                    COMMAND ./${fileName_unitTestRunner} RecipeCalcTests postBoilLossOgTest                   )
 add_test(NAME RecipeCalcTests.testBoilAdditionTiming                COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testBoilAdditionTiming               )
 add_test(NAME RecipeCalcTests.testBoilStepsWithoutTemperatures      COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testBoilStepsWithoutTemperatures     )
+add_test(NAME RecipeCalcTests.testBoilStepPhases                    COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testBoilStepPhases                   )
+add_test(NAME RecipeCalcTests.testBoilChangesRecalculate            COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testBoilChangesRecalculate           )
 add_test(NAME RecipeCalcTests.testPostBoilIbus                      COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testPostBoilIbus                     )
 add_test(NAME RecipeCalcTests.testIbuFormulas                       COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testIbuFormulas                      )
 add_test(NAME RecipeCalcTests.testInventory                         COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testInventory                        )

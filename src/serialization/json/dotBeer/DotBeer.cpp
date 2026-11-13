@@ -601,6 +601,7 @@ namespace {
       {JsonRecordDefinition::FieldType::Bool         , "locked"                  , PropertyNames::LockablePropertyBase::locked},  // Added in dotBeer 1.1.0
       {JsonRecordDefinition::FieldType::String       , "fermentation_description", PropertyNames::Fermentation::description},
       {JsonRecordDefinition::FieldType::String       , "notes"                   , PropertyNames::Fermentation::notes      },
+      {JsonRecordDefinition::FieldType::Enum         , "krausen_handling"        , PropertyNames::Fermentation::krausenHandling, &Fermentation::krausenHandlingStringMapping},  // Added in dotBeer 1.1.0
       {JsonRecordDefinition::FieldType::ListOfRecords, "fermentation_steps"      , PropertyNames::StepOwnerBase::steps     , &DOT_BEER_RECORD_DEFN<FermentationStep>},
    };
    template<> JsonRecordDefinition const DOT_BEER_RECORD_DEFN<Fermentation> {
@@ -824,6 +825,7 @@ namespace {
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "measured_post_boil_volume"      , PropertyNames::BrewLog::measuredPostBoilVolume_l     , &DOT_BEER_VOLUME_UNIT_MAPPER     },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "expected_volume_into_fv"        , PropertyNames::BrewLog::expectedVolumeIntoFv_l       , &DOT_BEER_VOLUME_UNIT_MAPPER     },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "measured_volume_into_fv"        , PropertyNames::BrewLog::measuredVolumeIntoFv_l       , &DOT_BEER_VOLUME_UNIT_MAPPER     },
+         {JsonRecordDefinition::FieldType::Enum                , "measured_wort_clarity"          , PropertyNames::BrewLog::measuredWortClarity          , &Measurement::Qualitative::wortClarityStringMapping}, // Added in dotBeer 1.1.0
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "measured_pitch_temperature"     , PropertyNames::BrewLog::measuredPitchTemp_c          , &DOT_BEER_TEMPERATURE_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "expected_final_gravity"         , PropertyNames::BrewLog::expectedFinalGravity_sg      , &DOT_BEER_DENSITY_UNIT_MAPPER    },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "measured_final_gravity"         , PropertyNames::BrewLog::measuredFinalGravity_sg      , &DOT_BEER_DENSITY_UNIT_MAPPER    },
@@ -880,6 +882,7 @@ namespace {
          {JsonRecordDefinition::FieldType::LocalId             , "mash_id"                , PropertyNames::Recipe::mashId        , &Mash::staticMetaObject},
          {JsonRecordDefinition::FieldType::String              , "notes"                  , PropertyNames::Recipe::notes         },
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "original_gravity"       , PropertyNames::Recipe::og            , &DOT_BEER_DENSITY_UNIT_MAPPER},
+         {JsonRecordDefinition::FieldType::Enum                , "wort_clarity"           , PropertyNames::Recipe::wortClarity   , &Measurement::Qualitative::wortClarityStringMapping}, // Added in dotBeer 1.1.0
          {JsonRecordDefinition::FieldType::MeasurementWithUnits, "final_gravity"          , PropertyNames::Recipe::fg            , &DOT_BEER_DENSITY_UNIT_MAPPER},
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "alcohol_by_volume"      , PropertyNames::Recipe::ABV_pct       , &DOT_BEER_PERCENT_UNIT       },
          // Note that we output 'ibu_estimate' and 'ibu_estimate_formula', but ignore them on reading in (by dint of the
@@ -895,8 +898,7 @@ namespace {
          {JsonRecordDefinition::FieldType::SingleUnitValue     , "apparent_attenuation"   , PropertyNames::Recipe::apparentAttenuation_pct,
                                                                                             &DOT_BEER_PERCENT_UNIT                       },
          {JsonRecordDefinition::FieldType::LocalId             , "fermentation_id"        , PropertyNames::Recipe::fermentationId, &Fermentation::staticMetaObject},
-//         {JsonRecordDefinition::FieldType::Record              , "packaging"              , BtString::NULL_STR                }, // .:TODO:. We should add support for this
-         {JsonRecordDefinition::FieldType::LocalId             , "boil_id"                , PropertyNames::Recipe::boilId       , &Boil::staticMetaObject},
+         {JsonRecordDefinition::FieldType::LocalId             , "boil_id"                , PropertyNames::Recipe::boilId        , &Boil::staticMetaObject},
          {JsonRecordDefinition::FieldType::String              , "taste/notes"            , PropertyNames::Recipe::tasteNotes},
          {JsonRecordDefinition::FieldType::Double              , "taste/rating"           , PropertyNames::Recipe::tasteRating},
          // Note that we write this out but ignore it on reading in (by dint of the Recipe constructor not looking for

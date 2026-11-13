@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RecipeExtrasWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * RecipeExtrasWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -36,7 +36,7 @@
 
 RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) :
    QWidget(parent),
-   recipe(nullptr),
+   m_recipeObs(nullptr),
    ratingChanged{false} {
 
    this->setupUi(this);
@@ -51,22 +51,24 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) :
    SMART_FIELD_INIT(RecipeExtrasWidget, label_acidity    , lineEdit_acidity    , Recipe, PropertyNames::Recipe::beerAcidity_pH         , 1);
    SMART_FIELD_INIT(RecipeExtrasWidget, label_attenuation, lineEdit_attenuation, Recipe, PropertyNames::Recipe::apparentAttenuation_pct, 1);
 
+   BT_COMBO_BOX_INIT_EXT(MainWindow, comboBox_wortClarity, Measurement::Qualitative::wortClarity, Recipe, wortClarity);
+
    // See comment in model/Recipe.cpp about things we measure in days.  If we switched them from Dimensionless to Time,
    // we would need something like this
    // this->lineEdit_age       ->getSmartField().setForcedRelativeScale(Measurement::UnitSystem::RelativeScale::Large);
-   connect(this->lineEdit_age         , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAge          );
-
-   connect(this->lineEdit_ageTemp     , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAgeTemp      );
-   connect(this->lineEdit_assistantBrewer  , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateBrewerAsst   );
-   connect(this->lineEdit_brewer      , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateBrewer       );
-   connect(this->lineEdit_carbVols    , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateCarbonation  );
-   connect(this->spinBox_tasteRating  , QOverload<int>::of(&QSpinBox::valueChanged), this, &RecipeExtrasWidget::changeRatings      );
-   connect(this->spinBox_tasteRating  , &QAbstractSpinBox::editingFinished         , this, &RecipeExtrasWidget::updateTasteRating  );
-   connect(this->dateEdit_date        , &BtOptionalDateEdit::optionalDateChanged   , this, &RecipeExtrasWidget::updateDate         );
-   connect(this->btTextEdit_notes     , &BtTextEdit::textModified                  , this, &RecipeExtrasWidget::updateNotes        );
-   connect(this->btTextEdit_tasteNotes, &BtTextEdit::textModified                  , this, &RecipeExtrasWidget::updateTasteNotes   );
-   connect(this->lineEdit_acidity     , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAcidity      );
-   connect(this->lineEdit_attenuation , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAttenuation  );
+   connect(this->comboBox_wortClarity    , QOverload<int>::of(&QComboBox::activated)  , this, &RecipeExtrasWidget::updateRecipeWortClarity);
+   connect(this->lineEdit_age            , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAge          );
+   connect(this->lineEdit_ageTemp        , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAgeTemp      );
+   connect(this->lineEdit_assistantBrewer, &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateBrewerAsst   );
+   connect(this->lineEdit_brewer         , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateBrewer       );
+   connect(this->lineEdit_carbVols       , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateCarbonation  );
+   connect(this->spinBox_tasteRating     , QOverload<int>::of(&QSpinBox::valueChanged), this, &RecipeExtrasWidget::changeRatings      );
+   connect(this->spinBox_tasteRating     , &QAbstractSpinBox::editingFinished         , this, &RecipeExtrasWidget::updateTasteRating  );
+   connect(this->dateEdit_date           , &BtOptionalDateEdit::optionalDateChanged   , this, &RecipeExtrasWidget::updateDate         );
+   connect(this->btTextEdit_notes        , &BtTextEdit::textModified                  , this, &RecipeExtrasWidget::updateNotes        );
+   connect(this->btTextEdit_tasteNotes   , &BtTextEdit::textModified                  , this, &RecipeExtrasWidget::updateTasteNotes   );
+   connect(this->lineEdit_acidity        , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAcidity      );
+   connect(this->lineEdit_attenuation    , &SmartLineEdit::textModified               , this, &RecipeExtrasWidget::updateAttenuation  );
 
    return;
 }
@@ -74,56 +76,68 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) :
 RecipeExtrasWidget::~RecipeExtrasWidget() = default;
 
 void RecipeExtrasWidget::setRecipe(Recipe* rec) {
-   if (this->recipe) {
-      disconnect(this->recipe, 0, this, 0);
+   if (this->m_recipeObs) {
+      disconnect(this->m_recipeObs, nullptr, this, nullptr);
    }
 
    if (rec) {
-      this->recipe = rec;
-      connect(this->recipe, &NamedEntity::changed, this, &RecipeExtrasWidget::changed);
+      this->m_recipeObs = rec;
+      connect(this->m_recipeObs, &NamedEntity::changed, this, &RecipeExtrasWidget::changed);
       this->showChanges();
    }
    return;
 }
 
 void RecipeExtrasWidget::updateBrewer() {
-   if (!this->recipe) { return; }
-   Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, brewer), lineEdit_brewer->text(), tr("Change Brewer"));
+   if (!this->m_recipeObs) { return; }
+   Undoable::doOrRedoUpdate(*m_recipeObs, TYPE_INFO(Recipe, brewer), lineEdit_brewer->text(), tr("Change Brewer"));
    return;
 }
 
 void RecipeExtrasWidget::updateBrewerAsst() {
-   if (!this->recipe) { return; }
+   if (!this->m_recipeObs) { return; }
    if ( lineEdit_assistantBrewer->isModified() ) {
-      Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, assistantBrewer), lineEdit_assistantBrewer->text(), tr("Change Assistant Brewer"));
+      Undoable::doOrRedoUpdate(*m_recipeObs, TYPE_INFO(Recipe, assistantBrewer), lineEdit_assistantBrewer->text(), tr("Change Assistant Brewer"));
    }
+   return;
+}
+
+void RecipeExtrasWidget::updateRecipeWortClarity() {
+   if (!this->m_recipeObs) {
+      return;
+   }
+
+   Undoable::doOrRedoUpdate(*this->m_recipeObs,
+                            TYPE_INFO(Recipe, wortClarity),
+                            this->comboBox_wortClarity->getAsVariant(),
+                            tr("Change Expected Wort Clarity"));
    return;
 }
 
 void RecipeExtrasWidget::changeRatings([[maybe_unused]] int rating) { ratingChanged = true; }
 
 void RecipeExtrasWidget::updateTasteRating() {
-   if (!this->recipe) { return; }
+   if (!this->m_recipeObs) { return; }
    if ( ratingChanged )
    {
-      Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, tasteRating), spinBox_tasteRating->value(), tr("Change Taste Rating"));
+      Undoable::doOrRedoUpdate(*m_recipeObs, TYPE_INFO(Recipe, tasteRating), spinBox_tasteRating->value(), tr("Change Taste Rating"));
       ratingChanged = false;
    }
    return;
 }
 
 void RecipeExtrasWidget::updateAge() {
-   if (!this->recipe) { return; }
-   Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, age_days), lineEdit_age->getNonOptValue<double>(), tr("Change Age"));
+   if (!this->m_recipeObs) { return; }
+   Undoable::doOrRedoUpdate(*m_recipeObs, TYPE_INFO(Recipe, age_days), lineEdit_age->getNonOptValue<double>(), tr("Change Age"));
 }
 
 void RecipeExtrasWidget::updateAgeTemp() {
-   if (!this->recipe) { return; }
-   Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, ageTemp_c), lineEdit_ageTemp->getNonOptCanonicalQty(), tr("Change Age Temp"));
+   if (!this->m_recipeObs) { return; }
+   Undoable::doOrRedoUpdate(*m_recipeObs, TYPE_INFO(Recipe, ageTemp_c), lineEdit_ageTemp->getNonOptCanonicalQty(), tr("Change Age Temp"));
 }
 
 void RecipeExtrasWidget::updateDate(std::optional<QDate> const date) {
-   if (!this->recipe) { return; }
+   if (!this->m_recipeObs) { return; }
 
    qDebug() << Q_FUNC_INFO;
    if (date) {
@@ -137,17 +151,17 @@ void RecipeExtrasWidget::updateDate(std::optional<QDate> const date) {
    // We have to be careful to avoid going round in circles here.  When we call
    // this->dateEdit_date->setOptionalDate(this->recipe->date()) to show the Recipe date in the UI, that will generate a
    // signal that ends up calling this function to say the date on the Recipe has changed, which it hasn't.
-   if (date != this->recipe->date()) {
+   if (date != this->m_recipeObs->date()) {
       qDebug() << Q_FUNC_INFO;
-      Undoable::doOrRedoUpdate(*recipe, TYPE_INFO(Recipe, date), date, tr("Change Date"));
+      Undoable::doOrRedoUpdate(*m_recipeObs, TYPE_INFO(Recipe, date), date, tr("Change Date"));
    }
    return;
 }
 
 void RecipeExtrasWidget::updateCarbonation() {
-   if (!this->recipe) { return; }
+   if (!this->m_recipeObs) { return; }
 
-   Undoable::doOrRedoUpdate(*recipe,
+   Undoable::doOrRedoUpdate(*m_recipeObs,
                             TYPE_INFO(Recipe, carbonation_vols),
                             lineEdit_carbVols->getOptCanonicalQty(),
                             tr("Change Carbonation"));
@@ -155,43 +169,43 @@ void RecipeExtrasWidget::updateCarbonation() {
 }
 
 void RecipeExtrasWidget::updateTasteNotes() {
-   if (!this->recipe) { return; }
+   if (!this->m_recipeObs) { return; }
 
-   Undoable::doOrRedoUpdate(*recipe,
+   Undoable::doOrRedoUpdate(*m_recipeObs,
                                          TYPE_INFO(Recipe, tasteNotes),
                                          btTextEdit_tasteNotes->toPlainText(),
                                          tr("Edit Taste Notes"));
 }
 
 void RecipeExtrasWidget::updateNotes() {
-   if (!this->recipe) { return; }
+   if (!this->m_recipeObs) { return; }
 
-   Undoable::doOrRedoUpdate(*recipe,
+   Undoable::doOrRedoUpdate(*m_recipeObs,
                                          TYPE_INFO(Recipe, notes),
                                          btTextEdit_notes->toPlainText(),
                                          tr("Edit Notes"));
 }
 
 void RecipeExtrasWidget::updateAcidity() {
-   if (!this->recipe) { return; }
+   if (!this->m_recipeObs) { return; }
 
-   Undoable::doOrRedoUpdate(*recipe,
+   Undoable::doOrRedoUpdate(*m_recipeObs,
                                          TYPE_INFO(Recipe, beerAcidity_pH),
                                          lineEdit_acidity->getOptCanonicalQty(),
                                          tr("Change pH"));
 }
 
 void RecipeExtrasWidget::updateAttenuation() {
-   if (!this->recipe) { return; }
+   if (!this->m_recipeObs) { return; }
 
-   Undoable::doOrRedoUpdate(*recipe,
+   Undoable::doOrRedoUpdate(*m_recipeObs,
                                          TYPE_INFO(Recipe, apparentAttenuation_pct),
                                          lineEdit_attenuation->getOptValue<double>(),
                                          tr("Change Apparent Attenuation"));
 }
 
 void RecipeExtrasWidget::changed(QMetaProperty prop, QVariant /*val*/) {
-   if (sender() != this->recipe) {
+   if (sender() != this->m_recipeObs) {
       return;
    }
 
@@ -222,7 +236,7 @@ void RecipeExtrasWidget::saveAll() {
 }
 
 void RecipeExtrasWidget::showChanges(QMetaProperty* prop) {
-   if (!this->recipe) { return; }
+   if (!this->m_recipeObs) { return; }
 
    bool updateAll = true;
    QString propName;
@@ -237,18 +251,18 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop) {
    // "change is made" ... rinse, lather, repeat
    // Unlike other editors, this one needs to read from recipe when it gets an
    // updateAll
-   if (updateAll || propName == PropertyNames::Recipe::age_days        ) { this->lineEdit_age         ->setQuantity (recipe->age_days        ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::ageTemp_c       ) { this->lineEdit_ageTemp     ->setQuantity (recipe->ageTemp_c       ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::assistantBrewer      ) { this->lineEdit_assistantBrewer  ->setText     (recipe->assistantBrewer      ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::brewer          ) { this->lineEdit_brewer      ->setText     (recipe->brewer          ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::carbonation_vols) { this->lineEdit_carbVols    ->setQuantity (recipe->carbonation_vols()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::tasteRating     ) { this->spinBox_tasteRating  ->setValue       (recipe->tasteRating  ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::date            ) { this->dateEdit_date        ->setOptionalDate(recipe->date         ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::notes           ) { this->btTextEdit_notes     ->setPlainText(recipe->notes           ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::tasteNotes      ) { this->btTextEdit_tasteNotes->setPlainText(recipe->tasteNotes      ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::beerAcidity_pH  ) { this->lineEdit_acidity     ->setQuantity (recipe->beerAcidity_pH  ()); if (!updateAll) { return; } }
-   if (updateAll || propName == PropertyNames::Recipe::apparentAttenuation_pct) { this->lineEdit_attenuation->setQuantity (recipe->apparentAttenuation_pct()); if (!updateAll) { return; } }
-
+   if (updateAll || propName == PropertyNames::Recipe::age_days        ) { this->lineEdit_age         ->setQuantity (m_recipeObs->age_days        ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::ageTemp_c       ) { this->lineEdit_ageTemp     ->setQuantity (m_recipeObs->ageTemp_c       ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::assistantBrewer ) { this->lineEdit_assistantBrewer->setText  (m_recipeObs->assistantBrewer ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::brewer          ) { this->lineEdit_brewer      ->setText     (m_recipeObs->brewer          ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::carbonation_vols) { this->lineEdit_carbVols    ->setQuantity (m_recipeObs->carbonation_vols()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::wortClarity     ) { this->comboBox_wortClarity ->setValue    (m_recipeObs->wortClarity     ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::tasteRating     ) { this->spinBox_tasteRating  ->setValue       (m_recipeObs->tasteRating  ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::date            ) { this->dateEdit_date        ->setOptionalDate(m_recipeObs->date         ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::notes           ) { this->btTextEdit_notes     ->setPlainText(m_recipeObs->notes           ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::tasteNotes      ) { this->btTextEdit_tasteNotes->setPlainText(m_recipeObs->tasteNotes      ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::beerAcidity_pH  ) { this->lineEdit_acidity     ->setQuantity (m_recipeObs->beerAcidity_pH  ()); if (!updateAll) { return; } }
+   if (updateAll || propName == PropertyNames::Recipe::apparentAttenuation_pct) { this->lineEdit_attenuation->setQuantity (m_recipeObs->apparentAttenuation_pct()); if (!updateAll) { return; } }
 
    bool const volumesAreMetric{
       Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Volume) == Measurement::UnitSystems::volume_Metric
@@ -257,7 +271,7 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop) {
    volumesAreMetric ? tr("Calories/33cl") : tr("Calories/12oz")
    );
    this->label_calories->setText(
-      QString("%1").arg(volumesAreMetric ? this->recipe->caloriesPer33cl() : this->recipe->caloriesPerUs12oz(),
+      QString("%1").arg(volumesAreMetric ? this->m_recipeObs->caloriesPer33cl() : this->m_recipeObs->caloriesPerUs12oz(),
                         0,
                         'f',
                         0)

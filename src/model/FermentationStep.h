@@ -19,11 +19,11 @@
 
 #include <optional>
 
-#include "model/Fermentation.h"
 #include "model/StepBase.h"
 #include "model/StepExtended.h"
 #include "utils/EnumStringMapping.h"
 
+class Fermentation;
 class FermentationStepEditor;
 class FermentationStepItemDelegate;
 class FermentationStepTableModel;

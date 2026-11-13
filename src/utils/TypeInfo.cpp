@@ -19,7 +19,9 @@
 #include "calculations/IbuMethods.h"
 #include "model/BoilStep.h"
 #include "model/Fermentable.h"
+#include "model/Fermentation.h"
 #include "model/Hop.h"
+#include "model/Ibu.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
 #include "model/RecipeAddition.h"
@@ -61,12 +63,14 @@ template<> TypeInfo::Index TypeInfo::indexOf<Empty                              
 template<> TypeInfo::Index TypeInfo::indexOf<Fermentable *                                    >() { return Index::FermentablePtr                      ; }
 template<> TypeInfo::Index TypeInfo::indexOf<Fermentable::GrainGroup                          >() { return Index::FermentableGrainGroup               ; }
 template<> TypeInfo::Index TypeInfo::indexOf<Fermentable::Type                                >() { return Index::FermentableType                     ; }
+template<> TypeInfo::Index TypeInfo::indexOf<Fermentation::KrausenHandling                    >() { return Index::FermentationKrausenHandling         ; }
 template<> TypeInfo::Index TypeInfo::indexOf<Hop *                                            >() { return Index::HopPtr                              ; }
 template<> TypeInfo::Index TypeInfo::indexOf<Hop::Form                                        >() { return Index::HopForm                             ; }
 template<> TypeInfo::Index TypeInfo::indexOf<Hop::Type                                        >() { return Index::HopType                             ; }
-template<> TypeInfo::Index TypeInfo::indexOf<IbuMethods::IbuFormula                           >() { return Index::IbuMethodsIbuFormula                ; }
+template<> TypeInfo::Index TypeInfo::indexOf<Ibu::Formula                                     >() { return Index::IbuMethodsIbuFormula                ; }
 template<> TypeInfo::Index TypeInfo::indexOf<MashStep::Type                                   >() { return Index::MashStepType                        ; }
 template<> TypeInfo::Index TypeInfo::indexOf<Measurement::PhysicalQuantity                    >() { return Index::MeasurementPhysicalQuantity         ; }
+template<> TypeInfo::Index TypeInfo::indexOf<Measurement::Qualitative::WortClarity            >() { return Index::QualitativeWortClarity              ; }
 template<> TypeInfo::Index TypeInfo::indexOf<Measurement::Unit const *                        >() { return Index::MeasurementUnit                     ; }
 template<> TypeInfo::Index TypeInfo::indexOf<Misc *                                           >() { return Index::MiscPtr                             ; }
 template<> TypeInfo::Index TypeInfo::indexOf<Misc::Type                                       >() { return Index::MiscType                            ; }
@@ -112,6 +116,7 @@ QString TypeInfo::indexName(Index const index) {
       case TypeInfo::Index::FermentableGrainGroup               : return "FermentableGrainGroup"               ;
       case TypeInfo::Index::FermentablePtr                      : return "FermentablePtr"                      ;
       case TypeInfo::Index::FermentableType                     : return "FermentableType"                     ;
+      case TypeInfo::Index::FermentationKrausenHandling         : return "FermentationKrausenHandling"         ;
       case TypeInfo::Index::HopForm                             : return "HopForm"                             ;
       case TypeInfo::Index::HopPtr                              : return "HopPtr"                              ;
       case TypeInfo::Index::HopType                             : return "HopType"                             ;
@@ -133,6 +138,7 @@ QString TypeInfo::indexName(Index const index) {
       case TypeInfo::Index::QListOfSptrRecipeAdditionMisc       : return "QListOfSptrRecipeAdditionMisc"       ;
       case TypeInfo::Index::QListOfSptrRecipeAdditionYeast      : return "QListOfSptrRecipeAdditionYeast"      ;
       case TypeInfo::Index::QString                             : return "QString"                             ;
+      case TypeInfo::Index::QualitativeWortClarity              : return "QualitativeWortClarity"              ;
       case TypeInfo::Index::RecipeAdditionHopUse                : return "RecipeAdditionHopUse"                ;
       case TypeInfo::Index::RecipeAdditionMiscUse               : return "RecipeAdditionMiscUse"               ;
       case TypeInfo::Index::RecipeAdditionStage                 : return "RecipeAdditionStage"                 ;

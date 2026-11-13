@@ -99,7 +99,7 @@ struct TypeInfo {
       Double                              ,
       Int                                 ,
       UnsignedInt                         ,
-      // Classes (in alphabetical order)
+      // Classes and enum classes (in alphabetical order)
       BoilStepChillingType                ,  // BoilStep::ChillingType
       ColorFormula                        ,  // ColorMethods::ColorFormula
       CurrencyAmount                      ,  // CurrencyAmount
@@ -107,10 +107,11 @@ struct TypeInfo {
       FermentableGrainGroup               ,  // Fermentable::GrainGroup
       FermentablePtr                      ,  // Fermentable *
       FermentableType                     ,  // Fermentable::Type
+      FermentationKrausenHandling         ,  // Fermentation::KrausenHandling
       HopForm                             ,  // Hop::Form
       HopPtr                              ,  // Hop *
       HopType                             ,  // Hop::Type
-      IbuMethodsIbuFormula                ,  // IbuMethods::IbuFormula
+      IbuMethodsIbuFormula                ,  // Ibu::Formula
       MashStepType                        ,  // MashStep::Type
       MeasurementAmount                   ,  // Measurement::Amount
       MeasurementPhysicalQuantity         ,  // Measurement::PhysicalQuantity
@@ -128,6 +129,7 @@ struct TypeInfo {
       QListOfSptrRecipeAdditionMisc       ,  // QList<std::shared_ptr<RecipeAdditionMisc>       >
       QListOfSptrRecipeAdditionYeast      ,  // QList<std::shared_ptr<RecipeAdditionYeast>      >
       QString                             ,  // QString
+      QualitativeWortClarity              ,  // Measurement::Qualitative::WortClarity
       RecipeAdditionHopUse                ,  // RecipeAdditionHop::Use
       RecipeAdditionMiscUse               ,  // RecipeAdditionMisc::Use
       RecipeAdditionStage                 ,  // RecipeAddition::Stage
@@ -147,7 +149,6 @@ struct TypeInfo {
       YeastForm                           ,  // Yeast::Form
       YeastPtr                            ,  // Yeast *
       YeastType                           ,  // Yeast::Type
-
    };
 
    // See below for specialisations.  Second version is to automatically strip out `std::optional` wrapper

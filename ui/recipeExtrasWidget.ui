@@ -48,7 +48,7 @@
           <widget class="SmartLineEdit" name="lineEdit_brewer">
           </widget>
          </item>
-         <item row="1" column="0">
+         <item row="2" column="0">
           <widget class="QLabel" name="label_assistantBrewer">
            <property name="text">
             <string>Assistant Brewer</string>
@@ -58,11 +58,11 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1" colspan="2">
+         <item row="2" column="1" colspan="2">
           <widget class="SmartLineEdit" name="lineEdit_assistantBrewer">
           </widget>
          </item>
-         <item row="2" column="0">
+         <item row="4" column="0">
           <widget class="QLabel" name="label_tasteRating">
            <property name="text">
             <string>Taste Rating</string>
@@ -72,7 +72,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="4" column="1">
           <widget class="QSpinBox" name="spinBox_tasteRating">
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::UpDownArrows</enum>
@@ -82,7 +82,23 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_wortClarity">
+           <property name="text">
+            <string>Expected wort clarity</string>
+           </property>
+           <property name="buddy">
+            <cstring>comboBox_wortClarity</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="BtComboBoxEnum" name="comboBox_wortClarity">
+           <property name="toolTip">
+            <string>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</string>           </property>
+          </widget>
+         </item>
+         <item row="8" column="0">
           <widget class="QLabel" name="label_age">
            <property name="contextMenuPolicy">
             <enum>Qt::CustomContextMenu</enum>
@@ -95,7 +111,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item row="8" column="1">
           <widget class="SmartLineEdit" name="lineEdit_age">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -105,7 +121,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="2">
+         <item row="8" column="2">
           <spacer name="horizontalSpacer_1">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -118,7 +134,7 @@
            </property>
           </spacer>
          </item>
-         <item row="4" column="0">
+         <item row="10" column="0">
           <widget class="SmartLabel" name="label_ageTemp">
            <property name="contextMenuPolicy">
             <enum>Qt::CustomContextMenu</enum>
@@ -131,7 +147,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item row="10" column="1">
           <widget class="SmartLineEdit" name="lineEdit_ageTemp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -147,7 +163,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item row="12" column="0">
           <widget class="QLabel" name="label_date">
            <property name="text">
             <string>Date Created</string>
@@ -157,7 +173,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item row="12" column="1">
           <widget class="BtOptionalDateEdit" name="dateEdit_date">
            <property name="displayFormat">
             <string>dd MMM yyyy</string>
@@ -168,7 +184,7 @@
           </widget>
          </item>
 
-         <item row="6" column="0">
+         <item row="14" column="0">
           <widget class="SmartLabel" name="label_carbVols">
            <property name="text">
             <string>Carbonation Volumes</string>
@@ -178,7 +194,7 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item row="14" column="1">
           <widget class="SmartLineEdit" name="lineEdit_carbVols">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -192,7 +208,7 @@
           </widget>
          </item>
 
-         <item row="7" column="0">
+         <item row="16" column="0">
           <widget class="SmartLabel" name="label_acidity">
            <property name="text">
             <string>Final beer pH</string>
@@ -202,7 +218,7 @@
            </property>
           </widget>
          </item>
-         <item row="7" column="1">
+         <item row="16" column="1">
           <widget class="SmartLineEdit" name="lineEdit_acidity">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -213,7 +229,7 @@
           </widget>
          </item>
 
-         <item row="8" column="0">
+         <item row="18" column="0">
           <widget class="SmartLabel" name="label_attenuation">
            <property name="contextMenuPolicy">
             <enum>Qt::CustomContextMenu</enum>
@@ -226,7 +242,7 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="1">
+         <item row="18" column="1">
           <widget class="SmartLineEdit" name="lineEdit_attenuation">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -237,14 +253,14 @@
           </widget>
          </item>
 
-         <item row="9" column="0">
+         <item row="20" column="0">
           <widget class="QLabel" name="label_caloriesPer">
            <property name="text">
             <string>Calories/12oz</string>
            </property>
           </widget>
          </item>
-         <item row="9" column="1">
+         <item row="20" column="1">
           <widget class="QLabel" name="label_calories">
            <property name="font">
             <font>
@@ -330,6 +346,11 @@
    <slots>
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxEnum</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBoxEnum.h</header>
   </customwidget>
   <customwidget>
    <class>BtTextEdit</class>

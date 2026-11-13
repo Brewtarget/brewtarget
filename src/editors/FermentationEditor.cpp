@@ -34,6 +34,7 @@ FermentationEditor::FermentationEditor(QWidget* parent, QString const editorName
    this->postSetupUiInit({
       EDITOR_FIELD_NORM(Fermentation, label_name       , lineEdit_name       , NamedEntity::name        ),
       EDITOR_FIELD_NORM(Fermentation, label_description, textEdit_description, Fermentation::description),
+      EDITOR_FIELD_ENUM(Fermentation, label_krausenHandling, comboBox_krausenHandling, Fermentation::krausenHandling),
       EDITOR_FIELD_NORM(Fermentation, label_notes      , textEdit_notes      , Fermentation::notes      ),
    });
    return;

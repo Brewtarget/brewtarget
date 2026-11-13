@@ -291,6 +291,32 @@
                </property>
               </widget>
              </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_measuredWortClarity">
+               <property name="toolTip">
+                <string>How clear the wort was when it went into the fermenter</string>
+               </property>
+               <property name="text">
+                <string>Wort clarity</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="buddy">
+                <cstring>comboBox_measuredWortClarity</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="BtComboBoxEnum" name="comboBox_measuredWortClarity">
+               <property name="toolTip">
+                <string>How clear the wort was, judged by eye, when it went into the fermenter</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
            <widget class="QWidget" name="page_postferment">
@@ -637,6 +663,11 @@
    <slots>
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtComboBoxEnum</class>
+   <extends>QComboBox</extends>
+   <header>widgets/BtComboBoxEnum.h</header>
   </customwidget>
   <customwidget>
    <class>SmartDigitWidget</class>

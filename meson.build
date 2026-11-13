@@ -896,6 +896,7 @@ commonSourceFiles = files([
    'src/measurement/Measurement.cpp',
    'src/measurement/NonPhysicalQuantity.cpp',
    'src/measurement/PhysicalQuantity.cpp',
+   'src/measurement/Qualitative.cpp',
    'src/measurement/QuantityFieldType.cpp',
    'src/measurement/SucroseConversion.cpp',
    'src/measurement/SystemOfMeasurement.cpp',
@@ -2023,6 +2024,8 @@ test('Test recipe calculations - all grain'  , testRunner, args : ['RecipeCalcTe
 test('Test post boil loss OG'                , testRunner, args : ['RecipeCalcTests', 'postBoilLossOgTest'                   ], suite : 'recipe')
 test('Test boil addition timing'             , testRunner, args : ['RecipeCalcTests', 'testBoilAdditionTiming'               ], suite : 'recipe')
 test('Test boil steps without temperatures'  , testRunner, args : ['RecipeCalcTests', 'testBoilStepsWithoutTemperatures'     ], suite : 'recipe')
+test('Test boil step phases'                 , testRunner, args : ['RecipeCalcTests', 'testBoilStepPhases'                   ], suite : 'recipe')
+test('Test boil changes recalculate'         , testRunner, args : ['RecipeCalcTests', 'testBoilChangesRecalculate'           ], suite : 'recipe')
 test('Test post-boil IBUs'                   , testRunner, args : ['RecipeCalcTests', 'testPostBoilIbus'                     ], suite : 'recipe')
 test('Test IBU formulas'                     , testRunner, args : ['RecipeCalcTests', 'testIbuFormulas'                      ], suite : 'recipe')
 test('Test inventory'                        , testRunner, args : ['RecipeCalcTests', 'testInventory'                        ], suite : 'recipe')
