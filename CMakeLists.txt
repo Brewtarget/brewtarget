@@ -1167,6 +1167,7 @@ add_test(NAME RecipeCalcTests.testEvaporationRate                   COMMAND ./${
 add_test(NAME RecipeCalcTests.testEquipmentDefaultVolumes           COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testEquipmentDefaultVolumes          )
 add_test(NAME RecipeCalcTests.testMashTunHeatCapacity               COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testMashTunHeatCapacity              )
 add_test(NAME RecipeCalcTests.testWaterAlkalinity                   COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testWaterAlkalinity                  )
+add_test(NAME RecipeCalcTests.testLateFermentableAdditions          COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testLateFermentableAdditions         )
 add_test(NAME SerializationTests.testDotBeerImportedRecipeCalcs     COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerImportedRecipeCalcs    )
 add_test(NAME SerializationTests.testDotBeerAdditionStepCorrection  COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerAdditionStepCorrection )
 add_test(NAME SerializationTests.testBrewLogCalcs                   COMMAND ./${fileName_unitTestRunner} SerializationTests testBrewLogCalcs                  )

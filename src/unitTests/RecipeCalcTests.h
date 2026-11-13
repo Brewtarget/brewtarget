@@ -125,6 +125,13 @@ private slots:
     *        carbonate when alkalinity itself is not set (as is the case for all imported water profiles)
     */
    void testWaterAlkalinity();
+
+   /**
+    * \brief Verify that fermentables added after the boil proper (in a post-boil step, during fermentation or at
+    *        packaging) do not contribute to the boil gravity (and hence do not affect IBUs), whereas ones added during
+    *        the boil proper do.  See https://github.com/Brewtarget/brewtarget/issues/438
+    */
+   void testLateFermentableAdditions();
 };
 
 #endif

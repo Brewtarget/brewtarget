@@ -52,10 +52,7 @@ YeastTableModel::YeastTableModel(QTableView * parent, bool editable) :
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &YeastTableModel::contextMenu);
-   connect(&ObjectStoreTyped<StockPurchaseYeast>::getInstance(),
-           &ObjectStoreTyped<StockPurchaseYeast>::signalPropertyChanged,
-           this,
-           &YeastTableModel::changedInventory);
+   this->connectInventorySignals<StockPurchaseYeast>();
    return;
 }
 

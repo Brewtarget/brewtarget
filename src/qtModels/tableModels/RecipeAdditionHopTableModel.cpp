@@ -35,7 +35,7 @@
 #include "calculations/IbuMethods.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "model/StockPurchase.h"
+#include "model/StockPurchaseHop.h"
 #include "model/Recipe.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
@@ -75,8 +75,7 @@ RecipeAdditionHopTableModel::RecipeAdditionHopTableModel(QTableView * parent, bo
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionHopTableModel::contextMenu);
-   connect(&ObjectStoreTyped<StockPurchaseHop>::getInstance(), &ObjectStoreTyped<StockPurchaseHop>::signalPropertyChanged, this,
-           &RecipeAdditionHopTableModel::changedInventory);
+   this->connectInventorySignals<StockPurchaseHop>();
    return;
 }
 

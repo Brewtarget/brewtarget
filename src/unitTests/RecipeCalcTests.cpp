@@ -1747,3 +1747,98 @@ void RecipeCalcTests::testWaterAlkalinity() {
    QVERIFY2(fuzzyComp(water.alkalinity_mEqPerL(), 1.0, 0.01), "Alkalinity as HCO3 not used");
    return;
 }
+void RecipeCalcTests::testLateFermentableAdditions() {
+   qDebug() << Q_FUNC_INFO << "Starting";
+
+   struct RestoreIbuFormula {
+      Ibu::Formula const saved = IbuMethods::formula;
+      ~RestoreIbuFormula() { IbuMethods::formula = saved; }
+   } restoreIbuFormula;
+   // Tinseth, as it uses the boil gravity
+   IbuMethods::formula = Ibu::Formula::Tinseth;
+
+   // The fixtures need to be in the object store for additions to refer to them (by ID), but other tests might already
+   // have put them there
+   if (this->pimpl->m_twoRow->key() <= 0) {
+      ObjectStoreWrapper::insert(this->pimpl->m_twoRow);
+   }
+   if (this->pimpl->m_cascade_4pct->key() <= 0) {
+      ObjectStoreWrapper::insert(this->pimpl->m_cascade_4pct);
+   }
+
+   //
+   // A recipe with some grain in the mash, a standard 60 minute boil (ramp-up, boil proper, cool-down) and a 60 minute
+   // hop addition.
+   //
+   auto recipe = std::make_shared<Recipe>("Late Fermentable Additions Test");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(20.0);
+   recipe->setEfficiency_pct(70.0);
+   recipe->setEquipment(this->pimpl->m_equipFiveGalNoLoss);
+   auto grain = std::make_shared<RecipeAdditionFermentable>("Two Row");
+   grain->setFermentable(this->pimpl->m_twoRow.get());
+   grain->setStage(RecipeAddition::Stage::Mash);
+   grain->setQuantity(4.5);
+   grain->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(grain);
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(25.0);
+   boil->setBoilTime_mins(60.0); // This also ensures the standard profile
+   QCOMPARE(boil->boilSteps().size(), 3);
+   auto hops = std::make_shared<RecipeAdditionHop>("Boil 60");
+   hops->setHop(this->pimpl->m_cascade_4pct.get());
+   hops->setStage(RecipeAddition::Stage::Boil);
+   hops->setStep(2);
+   hops->setAddAtTime_mins(60.0);
+   hops->setQuantity(0.030);
+   hops->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(hops);
+   recipe->recalcAll();
+
+   double const baseBoilGrav = recipe->boilGrav();
+   double const baseIbu      = recipe->IBU();
+   qDebug() << Q_FUNC_INFO << "Base boil gravity" << baseBoilGrav << ", IBU" << baseIbu;
+   QVERIFY(baseBoilGrav > 1.010);
+   QVERIFY(baseIbu > 1.0);
+
+   //
+   // Now add a fermentable that is not in the wort during the boil proper.  It should not change the boil gravity, and
+   // therefore not change the IBUs.  See https://github.com/Brewtarget/brewtarget/issues/438
+   //
+   auto lateAddition = std::make_shared<RecipeAdditionFermentable>("Late Two Row");
+   lateAddition->setFermentable(this->pimpl->m_twoRow.get());
+   lateAddition->setStage(RecipeAddition::Stage::Fermentation);
+   lateAddition->setQuantity(1.0);
+   lateAddition->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(lateAddition);
+
+   auto checkUnchanged = [&](char const * const description) {
+      recipe->recalcAll();
+      qDebug() <<
+         Q_FUNC_INFO << description << ": boil gravity" << recipe->boilGrav() << ", IBU" << recipe->IBU();
+      QVERIFY2(fuzzyComp(recipe->boilGrav(), baseBoilGrav, 0.0001), description);
+      QVERIFY2(fuzzyComp(recipe->IBU()     , baseIbu     , 0.0001), description);
+      return;
+   };
+   checkUnchanged("Fermentation addition");
+
+   lateAddition->setStage(RecipeAddition::Stage::Packaging);
+   checkUnchanged("Packaging addition");
+
+   // Step 3 is the cool-down after the boil proper (ie a flameout addition)
+   lateAddition->setStage(RecipeAddition::Stage::Boil);
+   lateAddition->setStep(3);
+   checkUnchanged("Post-boil addition");
+
+   //
+   // But, if the same fermentable is added during the boil proper, it raises the boil gravity, which lowers the IBUs
+   //
+   lateAddition->setStep(2);
+   lateAddition->setAddAtTime_mins(15.0);
+   recipe->recalcAll();
+   qDebug() <<
+      Q_FUNC_INFO << "Boil addition: boil gravity" << recipe->boilGrav() << ", IBU" << recipe->IBU();
+   QVERIFY(recipe->boilGrav() > baseBoilGrav + 0.001);
+   QVERIFY(recipe->IBU() < baseIbu);
+   return;
+}

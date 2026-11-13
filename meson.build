@@ -2034,6 +2034,7 @@ test('Test evaporation rate'                 , testRunner, args : ['RecipeCalcTe
 test('Test equipment default volumes'        , testRunner, args : ['RecipeCalcTests', 'testEquipmentDefaultVolumes'          ], suite : 'recipe')
 test('Test mash tun heat capacity'           , testRunner, args : ['RecipeCalcTests', 'testMashTunHeatCapacity'              ], suite : 'recipe')
 test('Test water alkalinity'                 , testRunner, args : ['RecipeCalcTests', 'testWaterAlkalinity'                  ], suite : 'recipe')
+test('Test late fermentable additions'      , testRunner, args : ['RecipeCalcTests', 'testLateFermentableAdditions'         ], suite : 'recipe')
 test('Test dotBeer imported recipe calcs'    , testRunner, args : ['SerializationTests', 'testDotBeerImportedRecipeCalcs'    ], suite : 'serialization')
 test('Test dotBeer addition step correction' , testRunner, args : ['SerializationTests', 'testDotBeerAdditionStepCorrection' ], suite : 'serialization')
 test('Test brew log calcs'                   , testRunner, args : ['SerializationTests', 'testBrewLogCalcs'                  ], suite : 'serialization')

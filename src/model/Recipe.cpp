@@ -3463,10 +3463,19 @@ Recipe::Sugars Recipe::sugarTotals() const {
       // extract that has to be converted from starch in the mash is.  (Previously only Sugar, Extract and Dry_Extract
       // were treated as existing sugar, so eg fruit or honey additions were wrongly scaled by mash efficiency.)
       //
+      //
+      // For the boil gravity, what matters is whether this addition is in the wort during the boil proper.  As well as
+      // additions in a post-boil step (eg at flameout), that excludes additions during fermentation (eg fruit in
+      // secondary) or packaging (eg lactose or priming sugar).
+      //
+      bool const lateAddition = fermentableAddition->addAfterBoil() ||
+                                fermentableAddition->stage() == RecipeAddition::Stage::Fermentation ||
+                                fermentableAddition->stage() == RecipeAddition::Stage::Packaging;
+
       if (fermentable->isExistingSugar()) {
          ret.existingSugars_all_kg += fermentableAddition->equivSucrose_kg();
 
-         if (fermentableAddition->addAfterBoil()) {
+         if (lateAddition) {
             ret.existingSugars_lateAddition_kg += fermentableAddition->equivSucrose_kg();
          }
 
@@ -3474,7 +3483,7 @@ Recipe::Sugars Recipe::sugarTotals() const {
       } else {
          ret.sugarsFromStarch_all_kg += fermentableAddition->equivSucrose_kg();
 
-         if (fermentableAddition->addAfterBoil()) {
+         if (lateAddition) {
             ret.sugarsFromStarch_lateAddition_kg += fermentableAddition->equivSucrose_kg();
          }
 
