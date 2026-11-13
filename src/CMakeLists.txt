@@ -124,6 +124,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/measurement/Measurement.cpp
     ${repoDir}/src/measurement/NonPhysicalQuantity.cpp
     ${repoDir}/src/measurement/PhysicalQuantity.cpp
+    ${repoDir}/src/measurement/Qualitative.cpp
     ${repoDir}/src/measurement/QuantityFieldType.cpp
     ${repoDir}/src/measurement/SucroseConversion.cpp
     ${repoDir}/src/measurement/SystemOfMeasurement.cpp

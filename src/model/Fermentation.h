@@ -25,6 +25,7 @@
 #include <QString>
 #include <QVariant>
 
+#include "utils/EnumStringMapping.h"
 #include "model/FermentationStep.h"
 #include "model/FolderPropertyBase.h"
 #include "model/LockablePropertyBase.h"
@@ -40,11 +41,12 @@ class FermentationTableModel;
 //========================================== Start of property name constants ==========================================
 // See comment in model/NamedEntity.h
 #define AddPropertyName(property) namespace PropertyNames::Fermentation { inline BtStringConst const property{#property}; }
-AddPropertyName(description)
-AddPropertyName(notes      )
-AddPropertyName(primary    )
-AddPropertyName(secondary  )
-AddPropertyName(tertiary   )
+AddPropertyName(description    )
+AddPropertyName(krausenHandling)
+AddPropertyName(notes          )
+AddPropertyName(primary        )
+AddPropertyName(secondary      )
+AddPropertyName(tertiary       )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
 //======================================================================================================================
@@ -75,7 +77,8 @@ public:
     * \brief See comment in model/NamedEntity.h
     */
    static QString localisedName();
-   static QString localisedName_description();
+   static QString localisedName_description    ();
+   static QString localisedName_krausenHandling();
    static QString localisedName_notes      ();
    static QString localisedName_primary    ();
    static QString localisedName_secondary  ();
@@ -97,6 +100,38 @@ public:
    static TypeLookup const typeLookup;
    TYPE_LOOKUP_GETTER
 
+   /**
+    * \brief What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness
+    *        compounds.  This is an input to the SMPH model of IBUs (see \c IbuMethods::KrausenHandling).
+    *
+    *        The values correspond one-to-one with the categories in John-Paul Hosom's SMPH calculator, and with the
+    *        \c krausen_handling field in dotBeer (see Fermentation.beer.schema).  Skimming the krausen can be recorded as
+    *        one of the "blown off" values, according to how much is removed.
+    */
+   enum class KrausenHandling {
+      MixedIn                      , // Mixed back into the beer (or suppressed, eg with anti-foam), so nothing is lost
+      MinorDeposits                , // Some of the krausen is left stuck to the walls of the fermenter...
+      MediumDeposits               ,
+      HeavyDeposits                ,
+      VeryHeavyDeposits            ,
+      BlownOffSlowFermentation     , // Lost through a blow-off tube, more being lost the more vigorous the fermentation
+      BlownOffNormalFermentation   ,
+      BlownOffVigorousFermentation ,
+   };
+   // This allows us to store the above enum class in a QVariant
+   Q_ENUM(KrausenHandling)
+
+   /*!
+    * \brief Mapping between \c Fermentation::KrausenHandling and string values suitable for serialisation in DB,
+    *        dotBeer, etc
+    */
+   static EnumStringMapping const krausenHandlingStringMapping;
+
+   /*!
+    * \brief Localised names of \c Fermentation::KrausenHandling values suitable for displaying to the end user
+    */
+   static EnumStringMapping const krausenHandlingDisplayNames;
+
    Fermentation(QString name = "");
    Fermentation(NamedParameterBundle const & namedParameterBundle);
    Fermentation(Fermentation const & other);
@@ -106,6 +141,13 @@ public:
    //=================================================== PROPERTIES ====================================================
    Q_PROPERTY(QString description   READ description   WRITE setDescription)
    Q_PROPERTY(QString notes         READ notes         WRITE setNotes      )
+   /**
+    * \brief See \c KrausenHandling.  If not set, the SMPH IBU calculation assumes \c KrausenHandling::MediumDeposits.
+    *
+    *        NB: This is optional, so we need to access it via \c std::optional<int> rather than
+    *            \c std::optional<KrausenHandling>.
+    */
+   Q_PROPERTY(std::optional<int> krausenHandling READ krausenHandlingAsInt WRITE setKrausenHandlingAsInt)
 
    //! \brief Convenience property for accessing the first fermentation step
    Q_PROPERTY(std::shared_ptr<FermentationStep>   primary     READ primary     WRITE setPrimary     STORED false)
@@ -119,10 +161,14 @@ public:
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    QString description() const;
    QString notes      () const;
+   std::optional<KrausenHandling> krausenHandling     () const;
+   std::optional<int>             krausenHandlingAsInt() const;
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setDescription(QString const & val);
    void setNotes      (QString const & val);
+   void setKrausenHandling     (std::optional<KrausenHandling> const val);
+   void setKrausenHandlingAsInt(std::optional<int>             const val);
 
    /**
     * \brief  A set of convenience functions for accessing the first, second and third steps.  Note that calling
@@ -153,6 +199,7 @@ protected:
 private:
    QString m_description;
    QString m_notes      ;
+   std::optional<KrausenHandling> m_krausenHandling;
 };
 
 BT_DECLARE_METATYPES(Fermentation)

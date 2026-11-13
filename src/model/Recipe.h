@@ -38,7 +38,8 @@
 
 #include "config.h"
 #include "database/ObjectStoreWrapper.h"
-#include "calculations/IbuMethods.h"
+#include "measurement/Qualitative.h"
+#include "model/Ibu.h"
 #include "model/Ingredient.h"
 #include "model/FolderPropertyBase.h"
 #include "model/NamedEntity.h"
@@ -113,6 +114,7 @@ AddPropertyName(waterBase              )
 AddPropertyName(waterBaseId            )
 AddPropertyName(waterTarget            )
 AddPropertyName(waterTargetId          )
+AddPropertyName(wortClarity            )
 AddPropertyName(wortFromMash_l         )
 AddPropertyName(yeastAdditions         )
 #undef AddPropertyName
@@ -234,6 +236,7 @@ public:
    static QString localisedName_waterBaseId            ();
    static QString localisedName_waterTarget            ();
    static QString localisedName_waterTargetId          ();
+   static QString localisedName_wortClarity            ();
    static QString localisedName_wortFromMash_l         ();
    static QString localisedName_yeastAdditions         ();
 
@@ -300,7 +303,6 @@ public:
     * \brief Localised names of \c Recipe::Type values suitable for displaying to the end user
     */
    static EnumStringMapping const typeDisplayNames;
-
 
    //=============================================== REGULAR PROPERTIES ================================================
    //
@@ -452,7 +454,7 @@ public:
    //! \brief The calculated IBUs.
    Q_PROPERTY(double  IBU                 READ IBU                 STORED false)
    //! \brief The formula used to calculate IBUs.
-   Q_PROPERTY(IbuMethods::IbuFormula  ibuFormula   READ ibuFormula   STORED false)
+   Q_PROPERTY(Ibu::Formula  ibuFormula   READ ibuFormula   STORED false)
 
    //! \brief IBU contributions from each hop.
    Q_PROPERTY(QList<double> IBUs          READ IBUs                STORED false)
@@ -544,6 +546,16 @@ public:
     *        so that upgrading does not change their FG.  New and imported recipes get \c defaultFgCalcUsesMash.
     */
    Q_PROPERTY(bool fgCalcUsesMash READ fgCalcUsesMash WRITE setFgCalcUsesMash)
+   /**
+    * \brief The \b expected clarity of the wort when it is transferred to the fermenter -- ie what the brewer
+    *        anticipates, given the recipe, equipment and process (eg whether kettle finings are used, or whether the
+    *        wort is whirlpooled).  If not set, the SMPH IBU calculation assumes \c WortClarity::Average.  What was
+    *        actually seen on a given brew day goes in \c BrewLog::measuredWortClarity.
+    *
+    *        NB: This is optional, so we need to access it via \c std::optional<int> rather than
+    *            \c std::optional<Measurement::Qualitative::WortClarity>.
+    */
+   Q_PROPERTY(std::optional<int> wortClarity READ wortClarityAsInt WRITE setWortClarityAsInt)
 
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
@@ -694,6 +706,8 @@ public:
    std::optional<double> targetMashAcidity_pH() const;
    bool waterKeptInSync() const;
    bool fgCalcUsesMash() const;
+   std::optional<Measurement::Qualitative::WortClarity> wortClarity     () const;
+   std::optional<int>                                   wortClarityAsInt() const;
 
    // === Calculated getters ===
    double        points                  () const;
@@ -702,7 +716,7 @@ public:
    double        color_srm               () const;
    double        boilGrav                () const;
    double        IBU                     () const;
-   IbuMethods::IbuFormula  ibuFormula() const;
+   Ibu::Formula  ibuFormula() const;
    /**
     * \brief For a grain-based recipe, returns the part of the boil water that comes from post-mash top-up.
     *
@@ -871,6 +885,8 @@ public:
    void setTargetMashAcidity_pH(std::optional<double> const val);
    void setWaterKeptInSync(bool const val);
    void setFgCalcUsesMash(bool const val);
+   void setWortClarity     (std::optional<Measurement::Qualitative::WortClarity> const val);
+   void setWortClarityAsInt(std::optional<int>                                   const val);
 
    // Other junk.
    bool hasAncestors() const;
@@ -885,7 +901,7 @@ public:
     * \brief Get the IBUs from a given \c hop addition, split between those from isomerization during the boil and those
     *        from isomerization after flameout.  (The sum of the two is what \c ibuFromHopAddition returns.)
     */
-   IbuMethods::IbuBreakdown ibuBreakdownFromHopAddition(RecipeAdditionHop const & hopAddition) const;
+   Ibu::Breakdown ibuBreakdownFromHopAddition(RecipeAdditionHop const & hopAddition) const;
 
    /**
     * \brief For an addition to the boil stage (ie one whose \c RecipeAddition::stage is
@@ -1136,6 +1152,7 @@ private:
    std::optional<double> m_targetMashAcidity_pH = std::nullopt;
    bool m_waterKeptInSync       = false;
    bool m_fgCalcUsesMash        = false;
+   std::optional<Measurement::Qualitative::WortClarity> m_wortClarity = std::nullopt;
 
    OwnedSet<Recipe, RecipeAdditionFermentable, PropertyNames::Recipe::fermentableAdditions, &Recipe::acceptChangeToRecipeAdditionFermentable> m_fermentableAdditions;
    OwnedSet<Recipe, RecipeAdditionHop        , PropertyNames::Recipe::hopAdditions        , &Recipe::acceptChangeToRecipeAdditionHop        > m_hopAdditions        ;

@@ -398,6 +398,7 @@ namespace {
          {ObjectStore::FieldType::Bool  , {"locked"                }, PropertyNames::LockablePropertyBase::locked           },
          {ObjectStore::FieldType::String, {"description"           }, PropertyNames::Fermentation::description              },
          {ObjectStore::FieldType::String, {"notes"                 }, PropertyNames::Fermentation::notes                    },
+         {ObjectStore::FieldType::Enum  , {"krausen_handling"      }, PropertyNames::Fermentation::krausenHandling          , &Fermentation::krausenHandlingStringMapping},
       },
       {&NAMED_ENTITY_COMMON_FIELDS}
    };
@@ -601,6 +602,7 @@ namespace {
          {ObjectStore::FieldType::Double, {"target_mash_ph"          }, PropertyNames::Recipe::targetMashAcidity_pH           },
          {ObjectStore::FieldType::Bool  , {"water_kept_in_sync"      }, PropertyNames::Recipe::waterKeptInSync                },
          {ObjectStore::FieldType::Bool  , {"fg_calc_uses_mash"       }, PropertyNames::Recipe::fgCalcUsesMash                 },
+         {ObjectStore::FieldType::Enum  , {"wort_clarity"            }, PropertyNames::Recipe::wortClarity                    , &Measurement::Qualitative::wortClarityStringMapping},
       },
       {&NAMED_ENTITY_COMMON_FIELDS}
    };
@@ -725,6 +727,7 @@ namespace {
          {ObjectStore::FieldType::Double, {"expected_alcohol_by_volume_pct"  }, PropertyNames::BrewLog::expectedAlcoholByVolume_pct  },
          {ObjectStore::FieldType::Double, {"computed_alcohol_by_volume_pct"  }, PropertyNames::BrewLog::computedAlcoholByVolume_pct  },
          {ObjectStore::FieldType::Double, {"expected_attenuation_pct"        }, PropertyNames::BrewLog::expectedAttenuation_pct      },
+         {ObjectStore::FieldType::Enum  , {"measured_wort_clarity"           }, PropertyNames::BrewLog::measuredWortClarity          , &Measurement::Qualitative::wortClarityStringMapping},
          {ObjectStore::FieldType::Double, {"computed_attenuation_pct"        }, PropertyNames::BrewLog::computedAttenuation_pct      },
          {ObjectStore::FieldType::Double, {"expected_efficiency_pct"         }, PropertyNames::BrewLog::expectedEfficiency_pct       },
          {ObjectStore::FieldType::Double, {"computed_efficiency_pct"         }, PropertyNames::BrewLog::computedEfficiency_pct       },

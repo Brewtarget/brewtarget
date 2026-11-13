@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * RecipeExtrasWidget.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * RecipeExtrasWidget.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -39,14 +39,15 @@ class RecipeExtrasWidget : public QWidget, public Ui::recipeExtrasWidget {
    Q_OBJECT
 
 public:
-   RecipeExtrasWidget(QWidget * parent = nullptr);
-   virtual ~RecipeExtrasWidget();
+   explicit RecipeExtrasWidget(QWidget * parent = nullptr);
+   ~RecipeExtrasWidget() override;
    //! \brief Set the recipe to view/edit.
    void setRecipe(Recipe* rec);
 
 private slots:
    void updateBrewer();
    void updateBrewerAsst();
+   void updateRecipeWortClarity();
    void updateTasteRating();
    void updateAge();
    void updateAgeTemp();
@@ -63,7 +64,7 @@ private slots:
    void changed(QMetaProperty, QVariant);
 
 private:
-   Recipe* recipe;
+   Recipe* m_recipeObs;
    bool ratingChanged;
 
    void showChanges(QMetaProperty * prop = nullptr);

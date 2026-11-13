@@ -33,6 +33,7 @@
 
 #include "calculations/Algorithms.h"
 #include "measurement/Unit.h"
+#include "model/Fermentation.h"
 #include "PersistentSettings.h"
 
 namespace {
@@ -100,7 +101,7 @@ namespace {
    /*!
     * \brief Calculates the IBU by Tinseth's formula, as described at http://www.realbeer.com/hops/research.html
     */
-   IbuMethods::IbuBreakdown tinseth(IbuMethods::IbuCalculationParms const & parms) {
+   Ibu::Breakdown tinseth(IbuMethods::IbuCalculationParms const & parms) {
       //
       // Tinseth's formula only models isomerization during the boil
       //
@@ -159,7 +160,7 @@ namespace {
       return {.boil_ibus = result};
    }
 
-   IbuMethods::IbuBreakdown rager(IbuMethods::IbuCalculationParms const & parms) {
+   Ibu::Breakdown rager(IbuMethods::IbuCalculationParms const & parms) {
       //
       // Rager's formula only models isomerization during the boil.  Note that, because of the shape of the tanh curve,
       // it gives a non-zero utilization (about 5%) at 0 minutes in the boil.  That's part of the formula for additions
@@ -182,7 +183,7 @@ namespace {
    /*!
     * \brief Calculates the IBU by Greg Noonan's formula
     */
-   IbuMethods::IbuBreakdown noonan(IbuMethods::IbuCalculationParms const & parms) {
+   Ibu::Breakdown noonan(IbuMethods::IbuCalculationParms const & parms) {
       //
       // As with Rager, Noonan's formula gives non-zero IBUs at 0 minutes in the boil, but does not model post-boil
       // isomerization, so we don't want to apply it to hops added after flameout.
@@ -274,7 +275,7 @@ namespace {
     *        omit any that don't seem necessary".  We do not currently have the information to set them, so we omit
     *        them.
     */
-   IbuMethods::IbuBreakdown garetz(IbuMethods::IbuCalculationParms const & parms) {
+   Ibu::Breakdown garetz(IbuMethods::IbuCalculationParms const & parms) {
       // Garetz does not model post-boil isomerization
       if (parms.postBoilAddition) {
          return {};
@@ -335,7 +336,7 @@ namespace {
     *              against a second source.  It is consistent with the other pellet values being about 125% of the
     *              whole-hop ones (which also matches Daniels' recommendation to use a factor of 1 to 1.25 for pellets).
     */
-   IbuMethods::IbuBreakdown daniels(IbuMethods::IbuCalculationParms const & parms) {
+   Ibu::Breakdown daniels(IbuMethods::IbuCalculationParms const & parms) {
       // Daniels does not model post-boil isomerization
       if (parms.postBoilAddition) {
          return {};
@@ -431,7 +432,7 @@ namespace {
     * \brief Calculates the IBU by the mIBU formula, developed by John-Paul Hosom, and described at
     *        https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/
     */
-   IbuMethods::IbuBreakdown mIbu(IbuMethods::IbuCalculationParms const & parms) {
+   Ibu::Breakdown mIbu(IbuMethods::IbuCalculationParms const & parms) {
       //
       // If we don't know how long the hops are in hot wort after flameout, we assume immediate forced cooling, in which
       // case, per Hosom, mIBU gives the same results as Tinseth.
@@ -516,11 +517,14 @@ namespace {
     *        profile.  The other components dissolve quickly and so don't depend on boil time.  Each component is
     *        then reduced by various loss factors (LF_xxx).
     *
+    *        Wort clarity and krausen handling come from \c IbuCalculationParms::wortClarity and
+    *        \c IbuCalculationParms::krausenHandling.  If these are not set, we assume average clarity and medium
+    *        krausen deposits on the fermenter walls (ie neither mixed back in nor blown off), both of which give a loss
+    *        factor of 1.0, as in [Calculator].
+    *
     *        Where the model has inputs that we do not currently have in Brewken, we use the following assumptions (all
     *        of which give a loss factor of 1.0, except beer age):
     *
-    *         - Wort clarity: average
-    *         - Krausen: medium deposits on the fermenter walls (ie neither mixed back in nor blown off)
     *         - Finings: none
     *         - Filtering: none
     *         - Age of beer: 1 week, which is the default in [Calculator] and what Hosom uses in his worked examples
@@ -625,14 +629,69 @@ namespace {
       //! From "The Effect of pH on Utilization and IBUs", per [Calculator].  (Clamped as above.)
       double lossFactorPhOAA(double const pH) { return std::max(0.0, 1.178506 * pH - 5.776411); }
 
+      /**
+       * \brief Wort clarity loss factor for IAA, per \c getWortClarityValue in [Calculator]'s ibu.js.  (Per
+       *        [Calculator], clarity affects only IAA, not the other bittering compounds.)
+       */
+      double lossFactorWortClarity(std::optional<Measurement::Qualitative::WortClarity> const wortClarity) {
+         if (wortClarity) {
+            switch (*wortClarity) {
+               case Measurement::Qualitative::WortClarity::VeryClear      : return 1.30;
+               case Measurement::Qualitative::WortClarity::Clear          : return 1.20;
+               case Measurement::Qualitative::WortClarity::SomewhatClear  : return 1.10;
+               case Measurement::Qualitative::WortClarity::Average        : return 1.00;
+               case Measurement::Qualitative::WortClarity::SomewhatCloudy : return 0.90;
+               case Measurement::Qualitative::WortClarity::Cloudy         : return 0.80;
+               case Measurement::Qualitative::WortClarity::VeryCloudy     : return 0.70;
+               case Measurement::Qualitative::WortClarity::ExtremelyCloudy: return 0.60;
+            }
+         }
+         return 1.0;
+      }
+
+      /**
+       * \brief Krausen loss factor for IAA, per \c getKrausenValue in [Calculator]'s ibu.js.  The values are normalised
+       *        so that medium deposits on the fermenter walls (the default) is 1.0.
+       */
+      double lossFactorKrausenIaa(std::optional<Fermentation::KrausenHandling> const krausenHandling) {
+         if (krausenHandling) {
+            switch (*krausenHandling) {
+               case Fermentation::KrausenHandling::MixedIn                     : return 1.1268; // = 1.0/0.8875
+               case Fermentation::KrausenHandling::MinorDeposits               : return 1.05  ;
+               case Fermentation::KrausenHandling::MediumDeposits              : return 1.00  ;
+               case Fermentation::KrausenHandling::HeavyDeposits               : return 0.95  ;
+               case Fermentation::KrausenHandling::VeryHeavyDeposits           : return 0.90  ;
+               case Fermentation::KrausenHandling::BlownOffSlowFermentation    : return 0.938 ;
+               case Fermentation::KrausenHandling::BlownOffNormalFermentation  : return 0.833 ;
+               case Fermentation::KrausenHandling::BlownOffVigorousFermentation: return 0.729 ;
+            }
+         }
+         return 1.0;
+      }
+
+      /**
+       * \brief Krausen loss factor for the non-IAA bittering compounds (oAA, oBA and hop polyphenols), per
+       *        \c compute_LF_nonIAA_krausen in [Calculator].  Hosom found that krausen losses of these compounds are
+       *        about three times the IAA losses (which can make this factor quite a bit more or less than 1.0).
+       */
+      double lossFactorKrausenNonIaa(std::optional<Fermentation::KrausenHandling> const krausenHandling) {
+         double constexpr nonIaaKrausenFactor = 3.0;
+         return 1.0 - nonIaaKrausenFactor * (1.0 - lossFactorKrausenIaa(krausenHandling));
+      }
+
       //! Per Garetz, as cited in [Summary] Section 3.3
-      double lossFactorFlocculation(std::optional<IbuMethods::YeastFlocculation> const flocculation) {
+      double lossFactorFlocculation(std::optional<Yeast::Flocculation> const flocculation) {
          if (flocculation) {
             switch (*flocculation) {
-               case IbuMethods::YeastFlocculation::Low   : return 1.05;
-               case IbuMethods::YeastFlocculation::Medium: return 1.00;
-               case IbuMethods::YeastFlocculation::High  : return 0.95;
+               case Yeast::Flocculation::VeryLow   :
+               case Yeast::Flocculation::Low       : return 1.05;
+               case Yeast::Flocculation::MediumLow :
+               case Yeast::Flocculation::Medium    :
+               case Yeast::Flocculation::MediumHigh: return 1.00;
+               case Yeast::Flocculation::High      :
+               case Yeast::Flocculation::VeryHigh  : return 0.95;
             }
+
          }
          return 1.0;
       }
@@ -685,7 +744,7 @@ namespace {
    /*!
     * \brief Calculates the IBU by the SMPH model -- see comments on \c Smph namespace above.
     */
-   IbuMethods::IbuBreakdown smph(IbuMethods::IbuCalculationParms const & parms) {
+   Ibu::Breakdown smph(IbuMethods::IbuCalculationParms const & parms) {
       //
       // Per [17], concentrations are relative to the post-boil volume of wort in the kettle (since any losses after the
       // end of the boil don't change concentrations).
@@ -753,26 +812,32 @@ namespace {
       //
       // Loss factors.  Note that the gravity loss factor depends on how long the hops were in hot wort.
       //
-      double const lossFactorGravity      = Smph::lossFactorGravity(originalGravity_sg, effectiveSteepTime_minutes);
-      double const lossFactorFlocculation = Smph::lossFactorFlocculation(parms.yeastFlocculation);
-      double const lossFactorAge          = Smph::lossFactorAge(Smph::beerAge_weeks);
-      // Wort clarity, krausen, finings and filtering loss factors are all 1.0 -- see comments above
-      double const lossFactorFerment      = Smph::lossFactorFerment * lossFactorFlocculation;
+      double const lossFactorGravity       = Smph::lossFactorGravity(originalGravity_sg, effectiveSteepTime_minutes);
+      double const lossFactorFlocculation  = Smph::lossFactorFlocculation(parms.yeastFlocculation);
+      double const lossFactorAge           = Smph::lossFactorAge(Smph::beerAge_weeks);
+      double const lossFactorWortClarity   = Smph::lossFactorWortClarity(parms.wortClarity);
+      double const lossFactorKrausenIaa    = Smph::lossFactorKrausenIaa(parms.krausenHandling);
+      double const lossFactorKrausenNonIaa = Smph::lossFactorKrausenNonIaa(parms.krausenHandling);
+      // Finings and filtering loss factors are 1.0 -- see comments above
+      double const lossFactorFerment       = Smph::lossFactorFerment * lossFactorFlocculation;
 
       double const lossFactorIaa =
-         Smph::lossFactorBoil * lossFactorGravity * Smph::lossFactorPhIaa(postBoilPh) * lossFactorFerment *
-         lossFactorAge;
+         Smph::lossFactorBoil * lossFactorGravity * Smph::lossFactorPhIaa(postBoilPh) * lossFactorWortClarity *
+         lossFactorFerment * lossFactorKrausenIaa * lossFactorAge;
 
+      // Per [Calculator], wort clarity does not affect oAA, but krausen does (more so than for IAA)
       double const lossFactorOAA =
          Smph::lossFactorBoil * lossFactorGravity * Smph::lossFactorPhOAA(postBoilPh) * lossFactorFerment *
-         lossFactorAge;
+         lossFactorKrausenNonIaa * lossFactorAge;
 
       // Per [Calculator], "Assume that pH and OG have little effect on oBA" (and oBA_boilFactor already accounts for
       // the boil)
-      double const lossFactorOBA = lossFactorFerment * lossFactorAge;
+      double const lossFactorOBA = lossFactorFerment * lossFactorKrausenNonIaa * lossFactorAge;
 
-      // Per [Calculator], "Assume hop [PP] doesn't change much with age, pH, or OG"
-      double const lossFactorPPHops = Smph::lossFactorPPPrecipitate * Smph::lossFactorPPFerment;
+      // Per [Calculator], "Assume hop [PP] doesn't change much with age, pH, or OG", but "assume krausen, finings,
+      // filtering affect hop PP the same as other nonIAA"
+      double const lossFactorPPHops =
+         Smph::lossFactorPPPrecipitate * Smph::lossFactorPPFerment * lossFactorKrausenNonIaa;
 
       //
       // Oxidized alpha acids, cf [35], [36] and [37].  Per [Summary] Section 3.4.2, these are produced quickly when
@@ -803,7 +868,7 @@ namespace {
          parms.polyphenolRating.value_or(Smph::defaultPolyphenolRating) * parms.hops_grams * ppmPerGramOfHops *
          lossFactorPPHops;
 
-      IbuMethods::IbuBreakdown result{
+      Ibu::Breakdown result{
          .boil_ibus     = Smph::ibuPerIaaPpm * iaaAtFlameout_ppm * lossFactorIaa,
          .postBoil_ibus = Smph::ibuPerIaaPpm * (iaa_ppm - iaaAtFlameout_ppm) * lossFactorIaa,
          .nonIaa_ibus   = Smph::ibuPerIaaPpm * (oAABeer_ppm    * Smph::scaleOAA +
@@ -843,15 +908,15 @@ namespace {
     * \return \c true if the formula takes account of hop form itself, \c false if we should apply
     *         \c genericHopFormFactor
     */
-   bool handlesHopForm(IbuMethods::IbuFormula const ibuFormula) {
+   bool handlesHopForm(Ibu::Formula const ibuFormula) {
       switch (ibuFormula) {
-         case IbuMethods::IbuFormula::Tinseth: return false;
-         case IbuMethods::IbuFormula::Rager  : return false;
-         case IbuMethods::IbuFormula::Noonan : return false;
-         case IbuMethods::IbuFormula::Garetz : return true;
-         case IbuMethods::IbuFormula::Daniels: return true;
-         case IbuMethods::IbuFormula::mIbu   : return false;
-         case IbuMethods::IbuFormula::Smph   : return true;
+         case Ibu::Formula::Tinseth: return false;
+         case Ibu::Formula::Rager  : return false;
+         case Ibu::Formula::Noonan : return false;
+         case Ibu::Formula::Garetz : return true;
+         case Ibu::Formula::Daniels: return true;
+         case Ibu::Formula::mIbu   : return false;
+         case Ibu::Formula::Smph   : return true;
       }
       Q_UNREACHABLE();
    }
@@ -861,13 +926,13 @@ namespace {
 QString IbuMethods::localisedName_formula() { return QObject::tr("Formula"); }
 
 EnumStringMapping const IbuMethods::formulaStringMapping {
-   {IbuMethods::IbuFormula::Tinseth, "tinseth"},
-   {IbuMethods::IbuFormula::Rager  , "rager"  },
-   {IbuMethods::IbuFormula::Noonan , "noonan" },
-   {IbuMethods::IbuFormula::Garetz , "garetz" },
-   {IbuMethods::IbuFormula::Daniels, "daniels"},
-   {IbuMethods::IbuFormula::mIbu   , "mibu"   },
-   {IbuMethods::IbuFormula::Smph   , "smph"   },
+   {Ibu::Formula::Tinseth, "tinseth"},
+   {Ibu::Formula::Rager  , "rager"  },
+   {Ibu::Formula::Noonan , "noonan" },
+   {Ibu::Formula::Garetz , "garetz" },
+   {Ibu::Formula::Daniels, "daniels"},
+   {Ibu::Formula::mIbu   , "mibu"   },
+   {Ibu::Formula::Smph   , "smph"   },
 };
 
 //
@@ -876,23 +941,23 @@ EnumStringMapping const IbuMethods::formulaStringMapping {
 // person after whom the formula is named).
 //
 EnumStringMapping const IbuMethods::formulaStringMappingUc {
-   {IbuMethods::IbuFormula::Tinseth, "Tinseth"},
-   {IbuMethods::IbuFormula::Rager  , "Rager"  },
-   {IbuMethods::IbuFormula::Noonan , "Noonan" },
-   {IbuMethods::IbuFormula::Garetz , "Garetz" },
-   {IbuMethods::IbuFormula::Daniels, "Daniel" },
-   {IbuMethods::IbuFormula::mIbu   , "mIBU"   },
-   {IbuMethods::IbuFormula::Smph   , "SMPH"   },
+   {Ibu::Formula::Tinseth, "Tinseth"},
+   {Ibu::Formula::Rager  , "Rager"  },
+   {Ibu::Formula::Noonan , "Noonan" },
+   {Ibu::Formula::Garetz , "Garetz" },
+   {Ibu::Formula::Daniels, "Daniel" },
+   {Ibu::Formula::mIbu   , "mIBU"   },
+   {Ibu::Formula::Smph   , "SMPH"   },
 };
 
 EnumStringMapping const IbuMethods::formulaDisplayNames {
-   {IbuMethods::IbuFormula::Tinseth, QObject::tr("Tinseth's approximation")},
-   {IbuMethods::IbuFormula::Rager  , QObject::tr("Rager's approximation"  )},
-   {IbuMethods::IbuFormula::Noonan , QObject::tr("Noonan's approximation" )},
-   {IbuMethods::IbuFormula::Garetz , QObject::tr("Garetz's approximation" )},
-   {IbuMethods::IbuFormula::Daniels, QObject::tr("Daniels' approximation" )},
-   {IbuMethods::IbuFormula::mIbu   , QObject::tr("mIBU"                   )},
-   {IbuMethods::IbuFormula::Smph   , QObject::tr("SMPH"                   )},
+   {Ibu::Formula::Tinseth, QObject::tr("Tinseth's approximation")},
+   {Ibu::Formula::Rager  , QObject::tr("Rager's approximation"  )},
+   {Ibu::Formula::Noonan , QObject::tr("Noonan's approximation" )},
+   {Ibu::Formula::Garetz , QObject::tr("Garetz's approximation" )},
+   {Ibu::Formula::Daniels, QObject::tr("Daniels' approximation" )},
+   {Ibu::Formula::mIbu   , QObject::tr("mIBU"                   )},
+   {Ibu::Formula::Smph   , QObject::tr("SMPH"                   )},
 };
 
 TypeLookup const IbuMethods::typeLookup {
@@ -902,14 +967,14 @@ TypeLookup const IbuMethods::typeLookup {
    }
 };
 
-IbuMethods::IbuFormula IbuMethods::formula = IbuMethods::IbuFormula::Tinseth;
+Ibu::Formula IbuMethods::formula = Ibu::Formula::Tinseth;
 
 
 void IbuMethods::loadFormula() {
    PersistentSettings::readEnum(PersistentSettings::Names::ibu_formula,
                                 IbuMethods::formulaStringMapping,
                                 IbuMethods::formula,
-                                IbuMethods::IbuFormula::Tinseth);
+                                Ibu::Formula::Tinseth);
    return;
 }
 
@@ -923,21 +988,21 @@ QString IbuMethods::localisedFormulaName() {
    return IbuMethods::formulaDisplayNames[IbuMethods::formula];
 }
 
-bool IbuMethods::modelsPostBoilIsomerization(IbuMethods::IbuFormula const ibuFormula) {
+bool IbuMethods::modelsPostBoilIsomerization(Ibu::Formula const ibuFormula) {
    switch(ibuFormula) {
-      case IbuMethods::IbuFormula::Tinseth: return false;
-      case IbuMethods::IbuFormula::Rager  : return false;
-      case IbuMethods::IbuFormula::Noonan : return false;
-      case IbuMethods::IbuFormula::Garetz : return false;
-      case IbuMethods::IbuFormula::Daniels: return false;
-      case IbuMethods::IbuFormula::mIbu   : return true;
-      case IbuMethods::IbuFormula::Smph   : return true;
+      case Ibu::Formula::Tinseth: return false;
+      case Ibu::Formula::Rager  : return false;
+      case Ibu::Formula::Noonan : return false;
+      case Ibu::Formula::Garetz : return false;
+      case Ibu::Formula::Daniels: return false;
+      case Ibu::Formula::mIbu   : return true;
+      case Ibu::Formula::Smph   : return true;
    }
    Q_UNREACHABLE();
 }
 
-bool IbuMethods::usesHoppingRateFactor(IbuMethods::IbuFormula const ibuFormula) {
-   return ibuFormula == IbuMethods::IbuFormula::Garetz || ibuFormula == IbuMethods::IbuFormula::Daniels;
+bool IbuMethods::usesHoppingRateFactor(Ibu::Formula const ibuFormula) {
+   return ibuFormula == Ibu::Formula::Garetz || ibuFormula == Ibu::Formula::Daniels;
 }
 
 double IbuMethods::garetzHoppingRateFactor(double const totalIbusBeforeHoppingRateFactor,
@@ -951,7 +1016,7 @@ double IbuMethods::garetzHoppingRateFactor(double const totalIbusBeforeHoppingRa
 }
 
 double IbuMethods::recipeLevelIbus(double const originalGravity_sg, std::optional<double> const postBoilPh) {
-   if (IbuMethods::formula != IbuMethods::IbuFormula::Smph) {
+   if (IbuMethods::formula != Ibu::Formula::Smph) {
       return 0.0;
    }
    //
@@ -1037,17 +1102,16 @@ std::vector<double> IbuMethods::smphDissolvedAlphaAcidsBeforeAdditions_ppm(
    return result;
 }
 
-IbuMethods::IbuBreakdown IbuMethods::getIbuBreakdown(IbuMethods::IbuCalculationParms const & parms) {
-   qDebug() << Q_FUNC_INFO << "Using" << formulaDisplayNames[formula] << "with" << parms;
-   IbuMethods::IbuBreakdown result;
+Ibu::Breakdown IbuMethods::getIbuBreakdown(IbuMethods::IbuCalculationParms const & parms) {
+   Ibu::Breakdown result;
    switch(IbuMethods::formula) {
-      case IbuMethods::IbuFormula::Tinseth: result = tinseth(parms); break;
-      case IbuMethods::IbuFormula::Rager  : result = rager  (parms); break;
-      case IbuMethods::IbuFormula::Noonan : result = noonan (parms); break;
-      case IbuMethods::IbuFormula::Garetz : result = garetz (parms); break;
-      case IbuMethods::IbuFormula::Daniels: result = daniels(parms); break;
-      case IbuMethods::IbuFormula::mIbu   : result = mIbu   (parms); break;
-      case IbuMethods::IbuFormula::Smph   : result = smph   (parms); break;
+      case Ibu::Formula::Tinseth: result = tinseth(parms); break;
+      case Ibu::Formula::Rager  : result = rager  (parms); break;
+      case Ibu::Formula::Noonan : result = noonan (parms); break;
+      case Ibu::Formula::Garetz : result = garetz (parms); break;
+      case Ibu::Formula::Daniels: result = daniels(parms); break;
+      case Ibu::Formula::mIbu   : result = mIbu   (parms); break;
+      case Ibu::Formula::Smph   : result = smph   (parms); break;
    }
    if (!handlesHopForm(IbuMethods::formula)) {
       result *= genericHopFormFactor(parms.hopForm);
@@ -1117,7 +1181,7 @@ double IbuMethods::relativeUtilization(double const temp_c) {
 }
 
 double IbuMethods::postBoilWortTemperature_c(double const minutesSinceFlameout,
-                                             std::vector<PostBoilTemperatureSegment> const & profile,
+                                             std::vector<Boil::PostBoil::TemperatureSegment> const & profile,
                                              double const naturalCoolingRate_perMinute,
                                              double const boilingPoint_c) {
    // The wort can't be hotter than boiling (so eg a profile segment "at boiling" means at the boiling point)

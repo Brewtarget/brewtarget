@@ -27,6 +27,7 @@
 #include "measurement/Measurement.h"
 #include "measurement/UnitSystem.h"
 #include "model/BrewLog.h"
+#include "model/Recipe.h"
 #include "PersistentSettings.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
@@ -83,6 +84,8 @@ BrewLogWidget::BrewLogWidget(QWidget *parent) : QWidget(parent) {
    SMART_FIELD_INIT(BrewLogWidget, label_computedAttenuation        , lcdnumber_computedAttenuation       , BrewLog, PropertyNames::BrewLog::computedAttenuation_pct      , 2);
    SMART_FIELD_INIT(BrewLogWidget, label_batchNumber                , lineEdit_batchNumber                , BrewLog, PropertyNames::NamedEntity::name                     );
 
+   BT_COMBO_BOX_INIT_EXT(MainWindow, comboBox_measuredWortClarity, Measurement::Qualitative::wortClarity, BrewLog, measuredWortClarity);
+
    connect(this->dateEdit_brewDate                   , &QDateTimeEdit::dateChanged , this, &BrewLogWidget::updateBrewDate                 );
    connect(this->lineEdit_batchNumber                , &SmartLineEdit::textModified, this, &BrewLogWidget::updateName                     );
    connect(this->lineEdit_measuredPreBoilGravity     , &SmartLineEdit::textModified, this, &BrewLogWidget::updateMeasuredPreBoilGravity_sg);
@@ -93,6 +96,8 @@ BrewLogWidget::BrewLogWidget(QWidget *parent) : QWidget(parent) {
    connect(this->lineEdit_measuredPostBoilVolume     , &SmartLineEdit::textModified, this, &BrewLogWidget::updateMeasuredPostBoilVolume_l );
    connect(this->lineEdit_measuredVolumeIntoFermentor, &SmartLineEdit::textModified, this, &BrewLogWidget::updateVolumeIntoFermentor_l    );
    connect(this->lineEdit_measuredPitchTemp          , &SmartLineEdit::textModified, this, &BrewLogWidget::updatePitchTemp_c              );
+   // NB: activated() is only emitted when the user changes the selection, not when we call setValue() in showChanges()
+   connect(this->comboBox_measuredWortClarity, QOverload<int>::of(&QComboBox::activated), this, &BrewLogWidget::updateMeasuredWortClarity);
    connect(this->lineEdit_measuredFinalGravity       , &SmartLineEdit::textModified, this, &BrewLogWidget::updateFG                       );
    connect(this->lineEdit_measuredFinalVolume        , &SmartLineEdit::textModified, this, &BrewLogWidget::updateFinalVolume_l            );
    connect(this->dateEdit_fermentDate                , &QDateTimeEdit::dateChanged , this, &BrewLogWidget::updateFermentDate              );
@@ -188,6 +193,7 @@ void BrewLogWidget::updateMeasuredMashFinalTemp_c()           { if (this->m_brew
 void BrewLogWidget::updateOG()                                { if (this->m_brewLog) { this->m_brewLog->setMeasuredOriginalGravity_sg(this->lineEdit_measuredOriginalGravity    ->getNonOptCanonicalQty());                      } return; }
 void BrewLogWidget::updateMeasuredPostBoilVolume_l()          { if (this->m_brewLog) { this->m_brewLog->setMeasuredPostBoilVolume_l  (this->lineEdit_measuredPostBoilVolume     ->getNonOptCanonicalQty()); this->showChanges(); } return; }
 void BrewLogWidget::updateVolumeIntoFermentor_l()             { if (this->m_brewLog) { this->m_brewLog->setMeasuredVolumeIntoFv_l    (this->lineEdit_measuredVolumeIntoFermentor->getNonOptCanonicalQty()); this->showChanges(); } return; }
+void BrewLogWidget::updateMeasuredWortClarity()               { if (this->m_brewLog) { this->m_brewLog->setMeasuredWortClarity       (this->comboBox_measuredWortClarity->getOptValue<Measurement::Qualitative::WortClarity>());                    } return; }
 void BrewLogWidget::updatePitchTemp_c()                       { if (this->m_brewLog) { this->m_brewLog->setMeasuredPitchTemp_c       (this->lineEdit_measuredPitchTemp          ->getNonOptCanonicalQty()); this->showChanges(); } return; }
 void BrewLogWidget::updateFG()                                { if (this->m_brewLog) { this->m_brewLog->setMeasuredFinalGravity_sg   (this->lineEdit_measuredFinalGravity       ->getNonOptCanonicalQty()); this->showChanges(); } return; }
 void BrewLogWidget::updateFinalVolume_l()                     { if (this->m_brewLog) { this->m_brewLog->setMeasuredFinalVolume_l     (this->lineEdit_measuredFinalVolume        ->getNonOptCanonicalQty());                      } return; }
@@ -219,6 +225,7 @@ void BrewLogWidget::showChanges([[maybe_unused]] QString field) {
    this->lineEdit_measuredPostBoilVolume     ->setQuantity (m_brewLog->measuredPostBoilVolume_l  ());
    this->lineEdit_measuredVolumeIntoFermentor->setQuantity (m_brewLog->measuredVolumeIntoFv_l    ());
    this->lineEdit_measuredPitchTemp          ->setQuantity (m_brewLog->measuredPitchTemp_c       ());
+   this->comboBox_measuredWortClarity        ->setValue    (m_brewLog->measuredWortClarity       ());
    this->lineEdit_measuredFinalGravity       ->setQuantity (m_brewLog->measuredFinalGravity_sg   ());
    this->lineEdit_measuredFinalVolume        ->setQuantity (m_brewLog->measuredFinalVolume_l     ());
    this->dateEdit_fermentDate                ->setDate     (m_brewLog->fermentDate               ());

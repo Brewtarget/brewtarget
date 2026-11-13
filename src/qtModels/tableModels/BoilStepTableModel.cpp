@@ -21,7 +21,6 @@
 #include <QVariant>
 #include <QWidget>
 
-#include "model/BoilStep.h"
 #include "qtModels/tableModels/BtTableModel.h"
 
 #ifdef MANUALLY_INCLUDE_MOC

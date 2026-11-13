@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <optional>
+#include <vector>
 
 #include <QList>
 #include <QString>
@@ -159,10 +160,46 @@ public:
    static bool endsAtBoil  (BoilStep const & boilStep);
 
    /**
-    * \brief A step is part of the "boil proper" if both its start and end temperatures are above
-    *        \c minimumBoilTemperature_c (with unset temperatures treated as boiling -- see \c startsAtBoil).
+    * \brief Returns \c true if, considered on its own, \c boilStep could be part of the boil proper -- ie its start
+    *        and end temperatures are both at or above \c minimumBoilTemperature_c, and its end temperature is not
+    *        lower than its start temperature.  (As above, an unset temperature means boiling, which is no lower than
+    *        any other temperature.)
+    *
+    *        NB: Whether a step actually \b is part of the boil proper also depends on the steps before it -- see
+    *            \c stepPhases.
     */
-   static bool isBoilProper(BoilStep const & boilStep);
+   static bool holdsAtBoil(BoilStep const & boilStep);
+
+   /**
+    * \brief Which part of the boil a boil step is in
+    */
+   enum class StepPhase {
+      PreBoil   ,
+      BoilProper,
+      PostBoil  ,
+   };
+
+   /**
+    * \brief Classifies each of the supplied boil steps, per dotBeer (see AdditionSchedule in Recipe.beer.schema):
+    *          - The boil proper begins with the first step for which \c holdsAtBoil is \c true.  It continues through
+    *            each following step for which \c holdsAtBoil is also \c true and whose start temperature is no lower
+    *            than the end temperature of the step before it.
+    *          - Any step before the boil proper is pre-boil.
+    *          - The first step after the boil proper that does not meet the conditions above, and every step after
+    *            it, is post-boil.
+    *
+    *        So the boil proper is always a contiguous run of steps, and it ends as soon as the wort starts to cool,
+    *        whether during a step or between steps.  Because temperatures are compared with each other rather than
+    *        with 100°C, this works at any altitude.
+    *
+    *        If no step meets the conditions for the boil proper, then all steps are classified as pre-boil.
+    *
+    * \return One entry for each element of \c boilSteps
+    */
+   static std::vector<StepPhase> stepPhases(QList<std::shared_ptr<BoilStep>> const & boilSteps);
+
+   //! \brief Convenience function that calls the static version on our own steps
+   std::vector<StepPhase> stepPhases() const;
 
    //=================================================== PROPERTIES ====================================================
    Q_PROPERTY(QString description   READ description   WRITE setDescription)
@@ -179,9 +216,9 @@ public:
 
    /**
     * \brief In BeerXML, this is "The total time to boil the wort in minutes".  I think this would mostly be understood
-    *        as the length of the "boil proper" so, in our new model, it is the length of the step(s) for which
-    *        \c Step::startTemp_c and \c Step::endTemp_c are above \c minimumBoilTemperature_c.  In other words, it is
-    *        a convenience way of accessing the length of the boil excluding any ramp-up or cool-down steps.
+    *        as the length of the "boil proper" so, in our new model, it is the total length of the step(s) that
+    *        \c stepPhases classifies as \c StepPhase::BoilProper.  In other words, it is a convenience way of
+    *        accessing the length of the boil excluding any ramp-up, whirlpool, hop stand or cool-down steps.
     */
    Q_PROPERTY(double                boilTime_mins          READ boilTime_mins   WRITE setBoilTime_mins STORED false)
 
@@ -229,13 +266,39 @@ public:
     * \brief The wort temperature profile after flameout, as described by the steps of the Boil after the boil proper.
     *        Used for IBU calculations that model post-boil isomerization (eg mIBU).
     */
-   struct PostBoilProfile {
+   struct PostBoil {
+
+      /**
+       * \brief One segment of the profile of wort temperature after flameout.  Segments are consecutive, and the first one
+       *        starts at flameout.  The caller (eg \c Recipe) builds these from the post-boil steps of the \c Boil, and is
+       *        responsible for resolving unset step temperatures (eg per dotBeer, an unset boil step temperature means
+       *        boiling).
+       *
+       *        Within a segment, the wort temperature is modelled in one of two ways:
+       *
+       *         - If \c naturalCooling is \c true, the wort cools naturally from \c startTemp_c, following John-Paul
+       *           Hosom's exponential cooling curve (which depends on the kettle geometry and the wort volume), but does
+       *           not drop below \c endTemp_c.  This is what we use for a step that starts at boiling and ends below it,
+       *           which is how a "time before forced cooling" (aka "cool time") has always been represented in a boil
+       *           profile -- see \c Boil::coolTime_mins.
+       *
+       *         - Otherwise, the temperature moves linearly from \c startTemp_c to \c endTemp_c over the segment.  So a
+       *           segment with the same start and end temperatures is a hop stand / whirlpool held at that temperature,
+       *           and a segment from, say, 80°C to 20°C is forced cooling.
+       */
+      struct TemperatureSegment {
+         double duration_minutes;
+         double startTemp_c;
+         double endTemp_c;
+         bool   naturalCooling;
+      };
+
       /**
        * \brief One segment per post-boil step, up to (but not including) the first step whose length is not set.
        *        Per dotBeer, an unset boil step temperature is treated as boiling.  A step that starts at boiling and
-       *        ends below it is treated as natural cooling (see \c IbuMethods::PostBoilTemperatureSegment).
+       *        ends below it is treated as natural cooling (see \c TemperatureSegment above).
        */
-      std::vector<IbuMethods::PostBoilTemperatureSegment> segments = {};
+      std::vector<TemperatureSegment> segments = {};
 
       /**
        * \brief Total time from flameout to the end of the post-boil steps, or \c std::nullopt if not known -- ie if
@@ -245,7 +308,7 @@ public:
    };
 
    //! \brief See comment on \c PostBoilProfile
-   PostBoilProfile postBoilProfile() const;
+   PostBoil postBoilProfile() const;
 
 public slots:
    void acceptSetMemberChange(QMetaProperty, QVariant);

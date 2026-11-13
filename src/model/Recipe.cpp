@@ -38,11 +38,12 @@
 #include <QTimer>
 
 #include "calculations/Algorithms.h"
+#include "calculations/ColorMethods.h"
+#include "calculations/IbuMethods.h"
+#include "calculations/MashFermentability.h"
 #include "database/ObjectStoreWrapper.h"
 #include "Localization.h"
 #include "MashAutoAdjuster.h"
-#include "calculations/ColorMethods.h"
-#include "calculations/MashFermentability.h"
 #include "WaterAutoAdjuster.h"
 #include "measurement/Amount.h"
 #include "measurement/Measurement.h"
@@ -1471,7 +1472,7 @@ public:
       // For hops in the boil proper, the time in hot wort after flameout is the length of the post-boil steps (if known).
       // If we don't know, we leave it unset, and it's up to each IBU formula what to assume.
       //
-      auto const profile = boil ? boil->postBoilProfile() : Boil::PostBoilProfile{};
+      auto const profile = boil ? boil->postBoilProfile() : Boil::PostBoil{};
 
       IbuMethods::IbuCalculationParms & parms = context.commonParms;
       // For Tinseth this needs to be "volume of finished beer in liters", hence m_batchSize_l rather than
@@ -1506,23 +1507,20 @@ public:
             }
          }
       }
+      // Normally there's only one yeast.  If there's more than one, we'll take the flocculation of the first one.
       for (auto const & yeastAddition : this->m_self.yeastAdditions()) {
-         auto const yeast = yeastAddition->yeast();
-         if (yeast && yeast->flocculation()) {
-            switch (*yeast->flocculation()) {
-               case Yeast::Flocculation::VeryLow   :
-               case Yeast::Flocculation::Low       : parms.yeastFlocculation = IbuMethods::YeastFlocculation::Low   ; break;
-               case Yeast::Flocculation::MediumLow :
-               case Yeast::Flocculation::Medium    :
-               case Yeast::Flocculation::MediumHigh: parms.yeastFlocculation = IbuMethods::YeastFlocculation::Medium; break;
-               case Yeast::Flocculation::High      :
-               case Yeast::Flocculation::VeryHigh  : parms.yeastFlocculation = IbuMethods::YeastFlocculation::High  ; break;
-            }
+         if (auto const yeast = yeastAddition->yeast()) {
+            parms.yeastFlocculation = yeast->flocculation();
             break;
          }
       }
 
-      if (IbuMethods::formula == IbuMethods::IbuFormula::Smph) {
+      parms.wortClarity = this->m_self.wortClarity();
+      if (auto const fermentation = this->m_self.fermentation()) {
+         parms.krausenHandling = fermentation->krausenHandling();
+      }
+
+      if (IbuMethods::formula == Ibu::Formula::Smph) {
          std::vector<IbuMethods::KettleAlphaAcidAddition> kettleAlphaAcidAdditions;
          for (auto const & hopAddition : this->m_self.hopAdditions()) {
             if (hopAddition->stage() == RecipeAddition::Stage::Boil && hopAddition->amountIsWeight()) {
@@ -1567,7 +1565,7 @@ public:
    /**
     * \brief IBUs from one hop addition, given the recipe-level inputs in \c context.
     */
-   IbuMethods::IbuBreakdown ibuBreakdown(RecipeAdditionHop const & hopAddition, IbuContext const & context) const {
+   Ibu::Breakdown ibuBreakdown(RecipeAdditionHop const & hopAddition, IbuContext const & context) const {
       // It's a coding error to ask one recipe about another's hop additions!  Uncomment the log statement here if the
       // assert is firing.
 //      qDebug() << Q_FUNC_INFO << this->m_self << " / " << hopAddition << "; hopAddition.recipeId():" << hopAddition.recipeId();
@@ -1614,7 +1612,7 @@ public:
          Q_FUNC_INFO << "Hop Utilization =" << context.hopUtilization << ", Hop Addition" << hopAddition <<
          ", stage =" << hopAddition.stage() << ", grams =" << parms.hops_grams << ", AArating = " << parms.AArating;
 
-      IbuMethods::IbuBreakdown ibus;
+      Ibu::Breakdown ibus;
       if (hopAddition.stage() == RecipeAddition::Stage::Boil) {
          if (!hopAddition.isFirstWort()) {
             //
@@ -1896,7 +1894,7 @@ public:
    double        m_color_mcu            {0.0};
    double        m_boilGrav             {0.0};
    double        m_IBU                  {0.0};
-   IbuMethods::IbuFormula m_ibuFormula{IbuMethods::formula};
+   Ibu::Formula m_ibuFormula{IbuMethods::formula};
    QList<double> m_ibus                 {};
    double        m_wortFromMash_l       {0.0};
    double        m_boilVolume_l         {0.0};
@@ -1970,7 +1968,7 @@ QString Recipe::localisedName_age_days               () { return tr("Age"       
 QString Recipe::localisedName_ageTemp_c              () { return tr("Age Temp"               ); }
 QString Recipe::localisedName_ancestorId             () { return tr("Ancestor ID"            ); }
 QString Recipe::localisedName_apparentAttenuation_pct() { return tr("Apparent Attenuation"   ); }
-QString Recipe::localisedName_assistantBrewer             () { return tr("Assistant Brewer"       ); }
+QString Recipe::localisedName_assistantBrewer        () { return tr("Assistant Brewer"       ); }
 QString Recipe::localisedName_batchSize_l            () { return tr("BatchSize"              ); }
 QString Recipe::localisedName_beerAcidity_pH         () { return tr("Beer Acidity"           ); }
 QString Recipe::localisedName_boil                   () { return tr("Boil"                   ); }
@@ -1981,7 +1979,7 @@ QString Recipe::localisedName_brewer                 () { return tr("Brewer"    
 QString Recipe::localisedName_brewLogs               () { return tr("Brew Logs"              ); }
 QString Recipe::localisedName_calcsEnabled           () { return tr("Calculations Enabled"   ); }
 QString Recipe::localisedName_caloriesPer33cl        () { return tr("Calories Per 33cl"      ); }
-QString Recipe::localisedName_energyContent_kcalL       () { return tr("Calories Per Liter"     ); }
+QString Recipe::localisedName_energyContent_kcalL    () { return tr("Calories Per Liter"     ); }
 QString Recipe::localisedName_caloriesPerUs12oz      () { return tr("Calories Per US 12oz"   ); }
 QString Recipe::localisedName_caloriesPerUsPint      () { return tr("Calories Per US Pint"   ); }
 QString Recipe::localisedName_carbonationTemp_c      () { return tr("Carbonation Temperature"); }
@@ -2026,10 +2024,11 @@ QString Recipe::localisedName_styleId                () { return tr("Style ID"  
 QString Recipe::localisedName_tasteNotes             () { return tr("Taste Notes"            ); }
 QString Recipe::localisedName_tasteRating            () { return tr("Taste Rating"           ); }
 QString Recipe::localisedName_type                   () { return tr("Type"                   ); }
-QString Recipe::localisedName_waterBase       () { return tr("Base Water Profile"     ); }
-QString Recipe::localisedName_waterBaseId     () { return tr("Base Water Profile ID"  ); }
-QString Recipe::localisedName_waterTarget     () { return tr("Target Water Profile"   ); }
-QString Recipe::localisedName_waterTargetId   () { return tr("Target Water Profile ID"); }
+QString Recipe::localisedName_waterBase              () { return tr("Base Water Profile"     ); }
+QString Recipe::localisedName_waterBaseId            () { return tr("Base Water Profile ID"  ); }
+QString Recipe::localisedName_waterTarget            () { return tr("Target Water Profile"   ); }
+QString Recipe::localisedName_waterTargetId          () { return tr("Target Water Profile ID"); }
+QString Recipe::localisedName_wortClarity            () { return tr("Expected Wort Clarity"  ); }
 QString Recipe::localisedName_wortFromMash_l         () { return tr("Wort From Mash"         ); }
 QString Recipe::localisedName_yeastAdditions         () { return tr("Yeast Additions"        ); }
 
@@ -2077,6 +2076,7 @@ bool Recipe::compareWith(NamedEntity const & other, QList<BtStringConst const *>
       AUTO_PROPERTY_COMPARE_ID(this, rhs, Boil , m_boilId , PropertyNames::Recipe::boilId        , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE_ID(this, rhs, Water, m_waterBaseId  , PropertyNames::Recipe::waterBaseId  , propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE_ID(this, rhs, Water, m_waterTargetId, PropertyNames::Recipe::waterTargetId, propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE   (this, rhs, m_wortClarity   , PropertyNames::Recipe::wortClarity   , propertiesThatDiffer) &&
       //
       // We don't include any of the following in the equality test:
       //    - Calculated values such as m_og and m_fg, since, if everything else is the same, they should match
@@ -2145,37 +2145,38 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, boilGrav           , boilGrav            , Measurement::PhysicalQuantity::Gravity      ), // Calculated, not in DB
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, boilVolume_l       , boilVolume_l        , Measurement::PhysicalQuantity::Volume       ), // Calculated, not in DB
       PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, energyContent_kcalL, energyContent_kcalL , Measurement::PhysicalQuantity::EnergyPerVolume), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, caloriesPerUs12oz, caloriesPerUs12oz,         NonPhysicalQuantity::Dimensionless), // TODO: Remove this
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, caloriesPerUsPint, caloriesPerUsPint,         NonPhysicalQuantity::Dimensionless), // TODO: Remove this
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, color_srm        , color_srm         , Measurement::PhysicalQuantity::Color     ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, finalVolume_l    , finalVolume_l     , Measurement::PhysicalQuantity::Volume    ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, grainsInMash_kg  , grainsInMash_kg   , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, grains_kg        , grains_kg         , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, ibuFormula       , ibuFormula        ,           NonPhysicalQuantity::Enum      ), // Cached, not in DB
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, IBU              , IBU               , Measurement::PhysicalQuantity::Bitterness), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, caloriesPerUs12oz  , caloriesPerUs12oz,         NonPhysicalQuantity::Dimensionless), // TODO: Remove this
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, caloriesPerUsPint  , caloriesPerUsPint,         NonPhysicalQuantity::Dimensionless), // TODO: Remove this
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, color_srm          , color_srm         , Measurement::PhysicalQuantity::Color     ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, finalVolume_l      , finalVolume_l     , Measurement::PhysicalQuantity::Volume    ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, grainsInMash_kg    , grainsInMash_kg   , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, grains_kg          , grains_kg         , Measurement::PhysicalQuantity::Mass      ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, ibuFormula         , ibuFormula        ,           NonPhysicalQuantity::Enum      ), // Cached, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, IBU                , IBU               , Measurement::PhysicalQuantity::Bitterness), // Calculated, not in DB
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::IBUs              , Recipe::m_IBUs              ),
 //      PROPERTY_TYPE_LOOKUP_ENTRY(PropertyNames::Recipe::points            , Recipe::m_points            ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, postBoilVolume_l , postBoilVolume_l  , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, wortFromMash_l   , wortFromMash_l    , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, style            , style               ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, mash             , mash                ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, boil             , boil                ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, fermentation     , fermentation        ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, equipment        , equipment           ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, waterBase        , waterBase           ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, waterTarget      , waterTarget         ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, brewLogs         , brewLogs           ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, fermentableAdditions, fermentableAdditions),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, hopAdditions        , hopAdditions        ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, miscAdditions       , miscAdditions       ),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, yeastAdditions      , yeastAdditions      ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, postBoilVolume_l       , postBoilVolume_l  , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, wortFromMash_l         , wortFromMash_l    , Measurement::PhysicalQuantity::Volume     ), // Calculated, not in DB
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, style                  , style               ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, mash                   , mash                ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, boil                   , boil                ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, fermentation           , fermentation        ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, equipment              , equipment           ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, waterBase              , waterBase           ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, waterTarget            , waterTarget         ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, brewLogs               , brewLogs            ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, fermentableAdditions   , fermentableAdditions),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, hopAdditions           , hopAdditions        ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, miscAdditions          , miscAdditions       ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Recipe, yeastAdditions         , yeastAdditions      ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, beerAcidity_pH         , m_beerAcidity_pH         , Measurement::PhysicalQuantity::Acidity   ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, apparentAttenuation_pct, m_apparentAttenuation_pct,           NonPhysicalQuantity::Percentage),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, roWaterMash_pct      , m_roWaterMash_pct  ,           NonPhysicalQuantity::Percentage        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, roWaterSparge_pct    , m_roWaterSparge_pct,           NonPhysicalQuantity::Percentage        ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, targetMashAcidity_pH , m_targetMashAcidity_pH, Measurement::PhysicalQuantity::Acidity      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, waterKeptInSync      , m_waterKeptInSync  , BOOL_INFO(tr("No"), tr("Yes"))                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, fgCalcUsesMash       , m_fgCalcUsesMash   , BOOL_INFO(tr("No"), tr("Yes"))                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, roWaterMash_pct        , m_roWaterMash_pct  ,           NonPhysicalQuantity::Percentage        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, roWaterSparge_pct      , m_roWaterSparge_pct,           NonPhysicalQuantity::Percentage        ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, targetMashAcidity_pH   , m_targetMashAcidity_pH, Measurement::PhysicalQuantity::Acidity      ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, waterKeptInSync        , m_waterKeptInSync  , BOOL_INFO(tr("No"), tr("Yes"))                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, fgCalcUsesMash         , m_fgCalcUsesMash   , BOOL_INFO(tr("No"), tr("Yes"))                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, wortClarity            , m_wortClarity      , ENUM_INFO(Measurement::Qualitative::wortClarity)),
 
    },
    // Parent classes lookup
@@ -2240,6 +2241,7 @@ Recipe::Recipe(NamedParameterBundle const & namedParameterBundle) :
    // This will be in the bundle when we read from the database, but not when importing from a file (see comment on
    // Recipe::fgCalcUsesMash in model/Recipe.h)
    SET_REGULAR_FROM_NPB (m_fgCalcUsesMash         , namedParameterBundle, PropertyNames::Recipe::fgCalcUsesMash         , Recipe::defaultFgCalcUsesMash()),
+   SET_OPT_ENUM_FROM_NPB(m_wortClarity            , Measurement::Qualitative::WortClarity, namedParameterBundle, PropertyNames::Recipe::wortClarity),
 
    // See comment in model/OwnedSet.h for why an OwnedSet never needs to read from NamedParameterBundle
    m_fermentableAdditions{*this},
@@ -2272,7 +2274,7 @@ Recipe::Recipe(Recipe const & other) :
    NamedEntity{other},
    FolderPropertyBase<Recipe>{other},
    // The impl copy constructor calls the OwnedSet copy constructor for each type of recipe addition etc which, in turn
-   // does a deep copy of the corresonding additions
+   // does a deep copy of the corresponding additions.
    pimpl{std::make_unique<impl>(*this, other)},
    m_type                   {other.m_type              },
    m_brewer                 {other.m_brewer            },
@@ -2307,6 +2309,7 @@ Recipe::Recipe(Recipe const & other) :
    m_targetMashAcidity_pH   {other.m_targetMashAcidity_pH   },
    m_waterKeptInSync        {other.m_waterKeptInSync        },
    m_fgCalcUsesMash         {other.m_fgCalcUsesMash         },
+   m_wortClarity            {other.m_wortClarity            },
    // Owned sets need the correct owner, but otherwise can handle whatever deep copying is needed.
    m_fermentableAdditions   {*this, other.m_fermentableAdditions},
    m_hopAdditions           {*this, other.m_hopAdditions        },
@@ -2973,6 +2976,16 @@ void Recipe::setFgCalcUsesMash(bool const val) {
    this->recalcAll();
    return;
 }
+void Recipe::setWortClarity(std::optional<Measurement::Qualitative::WortClarity> const val) {
+   SET_AND_NOTIFY(PropertyNames::Recipe::wortClarity, this->m_wortClarity, val);
+   // Wort clarity affects IBUs in the SMPH model
+   this->pimpl->recalcIBU();
+   return;
+}
+void Recipe::setWortClarityAsInt(std::optional<int> const val) {
+   this->setWortClarity(Optional::fromOptInt<Measurement::Qualitative::WortClarity>(val));
+   return;
+}
 
 void Recipe::setLocked(bool const isLocked) {
    // Locking a Recipe doesn't count as changing it for the purposes of versioning or the UI, so no call to setAndNotify
@@ -3151,7 +3164,7 @@ double        Recipe::color_mcu        () const { return this->pimpl->getCalcula
 double        Recipe::color_srm        () const { return ColorMethods::mcuToSrm(this->color_mcu()); }
 double        Recipe::ABV_pct          () const { return this->pimpl->getCalculated(this->pimpl->m_ABV_pct         ); }
 double        Recipe::IBU              () const { return this->pimpl->getCalculated(this->pimpl->m_IBU             ); }
-IbuMethods::IbuFormula  Recipe::ibuFormula() const { return this->pimpl->getCalculated(this->pimpl->m_ibuFormula   ); }
+Ibu::Formula  Recipe::ibuFormula() const { return this->pimpl->getCalculated(this->pimpl->m_ibuFormula   ); }
 QList<double> Recipe::IBUs             () const { return this->pimpl->getCalculated(this->pimpl->m_ibus            ); }
 double        Recipe::boilGrav         () const { return this->pimpl->getCalculated(this->pimpl->m_boilGrav        ); }
 double        Recipe::energyContent_kcalL() const { return this->pimpl->getCalculated(this->pimpl->m_caloriesPerLiter); }
@@ -3270,6 +3283,8 @@ double Recipe::roWaterSparge_pct() const { return m_roWaterSparge_pct; }
 std::optional<double> Recipe::targetMashAcidity_pH() const { return m_targetMashAcidity_pH; }
 bool Recipe::waterKeptInSync() const { return m_waterKeptInSync; }
 bool Recipe::fgCalcUsesMash () const { return m_fgCalcUsesMash ; }
+std::optional<Measurement::Qualitative::WortClarity> Recipe::wortClarity     () const { return m_wortClarity; }
+std::optional<int>                 Recipe::wortClarityAsInt() const { return Optional::toOptInt(m_wortClarity); }
 
 bool Recipe::defaultFgCalcUsesMash() {
    return PersistentSettings::value_ck(PersistentSettings::Names::defaultFgCalcUsesMash, false).toBool();
@@ -3318,6 +3333,12 @@ void Recipe::recalcIfNeeded(QString classNameOfWhatWasAddedOrChanged) {
       this->pimpl->recalcOgFg();
       this->pimpl->recalcABV_pct();
       // Yeast flocculation affects IBUs in the SMPH model
+      this->pimpl->recalcIBU();
+      return;
+   }
+
+   // Krausen handling (on the fermentation) affects IBUs in the SMPH model
+   if (classNameOfWhatWasAddedOrChanged == Fermentation::staticMetaObject.className()) {
       this->pimpl->recalcIBU();
       return;
    }
@@ -3505,9 +3526,10 @@ Recipe::BoilAdditionTiming Recipe::boilAdditionTiming(RecipeAddition const & add
 
    // Remember RecipeAddition steps are numbered from 1, but lists are indexed from 0
    int const stepIndex = *step - 1;
+   auto const phases = Boil::stepPhases(boilSteps);
    int lastBoilProperIndex = -1;
    for (int ii = 0; ii < numBoilSteps; ++ii) {
-      if (Boil::isBoilProper(*boilSteps[ii])) {
+      if (phases[ii] == Boil::StepPhase::BoilProper) {
          lastBoilProperIndex = ii;
       }
    }
@@ -3571,11 +3593,11 @@ Recipe::BoilAdditionTiming Recipe::boilAdditionTiming(RecipeAddition const & add
    //
    double subsequentBoilProper_mins = 0.0;
    for (int ii = stepIndex + 1; ii <= lastBoilProperIndex; ++ii) {
-      if (Boil::isBoilProper(*boilSteps[ii])) {
+      if (phases[ii] == Boil::StepPhase::BoilProper) {
          subsequentBoilProper_mins += boilSteps[ii]->stepTime_mins().value_or(0.0);
       }
    }
-   if (Boil::isBoilProper(*additionStep)) {
+   if (phases[stepIndex] == Boil::StepPhase::BoilProper) {
       timing.boilProper_mins =
          // No time means start of the step
          addAtTime_mins.value_or(stepLength_mins.value_or(0.0)) + subsequentBoilProper_mins;
@@ -3589,7 +3611,7 @@ double Recipe::ibuFromHopAddition(RecipeAdditionHop const & hopAddition) const {
    return this->ibuBreakdownFromHopAddition(hopAddition).total();
 }
 
-IbuMethods::IbuBreakdown Recipe::ibuBreakdownFromHopAddition(RecipeAdditionHop const & hopAddition) const {
+Ibu::Breakdown Recipe::ibuBreakdownFromHopAddition(RecipeAdditionHop const & hopAddition) const {
    auto const ibus = this->pimpl->ibuBreakdown(hopAddition, this->pimpl->ibuContext());
 
    // Note which formula we used

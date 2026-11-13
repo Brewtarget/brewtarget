@@ -36,6 +36,7 @@
 #include "model/Boil.h"
 #include "model/BoilStep.h"
 #include "model/Equipment.h"
+#include "model/Fermentation.h"
 #include "model/Fermentable.h"
 #include "model/Hop.h"
 #include "model/Instruction.h"
@@ -427,7 +428,10 @@ void RecipeCalcTests::testBoilStepsWithoutTemperatures() {
    auto const boilSteps = boil->boilSteps();
    QCOMPARE(boilSteps.size(), 3);
    QVERIFY2(!Boil::startsAtBoil(*boilSteps[0]), "First step should be pre-boil");
-   QVERIFY2(Boil::isBoilProper(*boilSteps[1]), "Second step should be the original boil step");
+   auto const phases = boil->stepPhases();
+   QVERIFY2(phases[0] == Boil::StepPhase::PreBoil   , "First step should be pre-boil");
+   QVERIFY2(phases[1] == Boil::StepPhase::BoilProper, "Second step should be the original boil step");
+   QVERIFY2(phases[2] == Boil::StepPhase::PostBoil  , "Third step should be the cooling step");
    QVERIFY2(fuzzyComp(boil->boilTime_mins(), 60.0, 0.001), "Boil time changed by ensureStandardProfile");
 
    // A boil addition in the boil proper with no time is at the start of the step
@@ -452,7 +456,7 @@ void RecipeCalcTests::testPostBoilIbus() {
    // Make sure we put the IBU formula back to what TestEnvironment set, however we exit this function
    //
    struct RestoreIbuFormula {
-      IbuMethods::IbuFormula const saved = IbuMethods::formula;
+      Ibu::Formula const saved = IbuMethods::formula;
       ~RestoreIbuFormula() { IbuMethods::formula = saved; }
    } restoreIbuFormula;
 
@@ -482,14 +486,14 @@ void RecipeCalcTests::testPostBoilIbus() {
       };
    };
 
-   IbuMethods::formula = IbuMethods::IbuFormula::Tinseth;
+   IbuMethods::formula = Ibu::Formula::Tinseth;
    auto parms = makeParms(6.0);
    double const tinseth6 = IbuMethods::getIbus(parms);
    QVERIFY2(fuzzyComp(tinseth6 / mgPerLiter, 0.0493, 0.0005), "Tinseth utilization does not match Hosom's example");
    parms.coolTime_minutes = 10.0;
    QVERIFY2(fuzzyComp(IbuMethods::getIbus(parms), tinseth6, 0.0001), "Tinseth should ignore cool time");
 
-   IbuMethods::formula = IbuMethods::IbuFormula::mIbu;
+   IbuMethods::formula = Ibu::Formula::mIbu;
    // With no cool time, mIBU assumes immediate forced cooling, and so gives the same results as Tinseth
    parms.coolTime_minutes = std::nullopt;
    auto breakdown = IbuMethods::getIbuBreakdown(parms);
@@ -520,15 +524,15 @@ void RecipeCalcTests::testPostBoilIbus() {
    QVERIFY2(fuzzyComp(breakdown.postBoil_ibus, 27.742, 0.05  ), "Flameout addition IBUs not as reference");
    // Formulae that don't model post-boil isomerization give nothing for post-boil additions.  (In particular, Rager and
    // Noonan would otherwise give IBUs as for a 0-minute boil addition.)
-   for (auto const formula : {IbuMethods::IbuFormula::Tinseth,
-                              IbuMethods::IbuFormula::Rager  ,
-                              IbuMethods::IbuFormula::Noonan }) {
+   for (auto const formula : {Ibu::Formula::Tinseth,
+                              Ibu::Formula::Rager  ,
+                              Ibu::Formula::Noonan }) {
       IbuMethods::formula = formula;
       QVERIFY(!IbuMethods::modelsPostBoilIsomerization(formula));
       QVERIFY2(fuzzyComp(IbuMethods::getIbus(parms), 0.0, 0.0001), "Post-boil addition gave IBUs");
    }
-   QVERIFY(IbuMethods::modelsPostBoilIsomerization(IbuMethods::IbuFormula::mIbu));
-   IbuMethods::formula = IbuMethods::IbuFormula::mIbu;
+   QVERIFY(IbuMethods::modelsPostBoilIsomerization(Ibu::Formula::mIbu));
+   IbuMethods::formula = Ibu::Formula::mIbu;
 
    // Hop stand 10 minutes after flameout, for 20 minutes, with natural cooling
    parms = makeParms(0.0);
@@ -565,19 +569,19 @@ void RecipeCalcTests::testPostBoilIbus() {
                      53.70 * std::exp(-b * 15.0) + 319.55 - 273.15,
                      0.001));
    // Linear segment
-   std::vector<IbuMethods::PostBoilTemperatureSegment> const chillProfile{
+   std::vector<Boil::PostBoil::TemperatureSegment> const chillProfile{
       {.duration_minutes = 20.0, .startTemp_c = 80.0, .endTemp_c = 20.0, .naturalCooling = false}
    };
    QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(10.0, chillProfile, b), 50.0, 0.001));
    // Natural cooling segment: follows Hosom's curve, but doesn't go below the step's end temperature
-   std::vector<IbuMethods::PostBoilTemperatureSegment> const coolTo90{
+   std::vector<Boil::PostBoil::TemperatureSegment> const coolTo90{
       {.duration_minutes = 30.0, .startTemp_c = 100.0, .endTemp_c = 90.0, .naturalCooling = true}
    };
    QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c( 1.0, coolTo90, b),
                      IbuMethods::postBoilWortTemperature_c( 1.0, {}      , b), 0.001));
    QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(25.0, coolTo90, b), 90.0, 0.001));
    // After the end of the profile, natural cooling from wherever we got to
-   std::vector<IbuMethods::PostBoilTemperatureSegment> const hold80{
+   std::vector<Boil::PostBoil::TemperatureSegment> const hold80{
       {.duration_minutes = 10.0, .startTemp_c = 80.0, .endTemp_c = 80.0, .naturalCooling = false}
    };
    QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(15.0, hold80, b),
@@ -588,7 +592,7 @@ void RecipeCalcTests::testPostBoilIbus() {
    QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(15.0, {}, b, 95.0),
                      IbuMethods::postBoilWortTemperature_c(15.0, {}, b) - 5.0,
                      0.001));
-   std::vector<IbuMethods::PostBoilTemperatureSegment> const holdAtBoil{
+   std::vector<Boil::PostBoil::TemperatureSegment> const holdAtBoil{
       {.duration_minutes = 10.0, .startTemp_c = 100.0, .endTemp_c = 100.0, .naturalCooling = false}
    };
    QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c( 5.0, holdAtBoil, b, 95.0), 95.0, 0.001));
@@ -647,12 +651,12 @@ void RecipeCalcTests::testPostBoilIbus() {
    QVERIFY(fuzzyComp(hopStandTiming.afterFlameout_mins, 10.0, 0.001));
    QVERIFY(hopStandTiming.postBoilRemaining_mins && fuzzyComp(*hopStandTiming.postBoilRemaining_mins, 35.0, 0.001));
 
-   IbuMethods::formula = IbuMethods::IbuFormula::Tinseth;
+   IbuMethods::formula = Ibu::Formula::Tinseth;
    double const tinsethBoil60 = recipe->ibuFromHopAddition(*boil60);
    QVERIFY(tinsethBoil60 > 1.0);
    QVERIFY2(fuzzyComp(recipe->ibuFromHopAddition(*hopStandStart), 0.0, 0.0001), "Tinseth gave IBUs for hop stand");
 
-   IbuMethods::formula = IbuMethods::IbuFormula::mIbu;
+   IbuMethods::formula = Ibu::Formula::mIbu;
    auto const boil60Breakdown = recipe->ibuBreakdownFromHopAddition(*boil60);
    QVERIFY2(fuzzyComp(boil60Breakdown.boil_ibus, tinsethBoil60, 0.0001), "mIBU boil IBUs differ from Tinseth");
    QVERIFY2(boil60Breakdown.postBoil_ibus > 0.0, "No post-boil IBUs for boil addition");
@@ -686,7 +690,7 @@ void RecipeCalcTests::testIbuFormulas() {
    // Make sure we put the IBU formula back to what TestEnvironment set, however we exit this function
    //
    struct RestoreIbuFormula {
-      IbuMethods::IbuFormula const saved = IbuMethods::formula;
+      Ibu::Formula const saved = IbuMethods::formula;
       ~RestoreIbuFormula() { IbuMethods::formula = saved; }
    } restoreIbuFormula;
 
@@ -707,9 +711,9 @@ void RecipeCalcTests::testIbuFormulas() {
       };
    };
 
-   IbuMethods::formula = IbuMethods::IbuFormula::Garetz;
-   QVERIFY(!IbuMethods::modelsPostBoilIsomerization(IbuMethods::IbuFormula::Garetz));
-   QVERIFY( IbuMethods::usesHoppingRateFactor      (IbuMethods::IbuFormula::Garetz));
+   IbuMethods::formula = Ibu::Formula::Garetz;
+   QVERIFY(!IbuMethods::modelsPostBoilIsomerization(Ibu::Formula::Garetz));
+   QVERIFY( IbuMethods::usesHoppingRateFactor      (Ibu::Formula::Garetz));
    for (auto const & [minutes, utilization_pct] : {std::pair{ 5.0,  0.0}, std::pair{10.0,  0.0}, std::pair{12.0,  2.0},
                                                    std::pair{20.0,  5.0}, std::pair{30.0, 11.0}, std::pair{45.0, 18.0},
                                                    std::pair{60.0, 20.0}, std::pair{75.0, 22.0}, std::pair{90.0, 23.0},
@@ -756,9 +760,9 @@ void RecipeCalcTests::testIbuFormulas() {
    //
    // Part 2: Daniels.  Separate tables for whole and pellet hops, plus Rager's gravity correction.
    //
-   IbuMethods::formula = IbuMethods::IbuFormula::Daniels;
-   QVERIFY(!IbuMethods::modelsPostBoilIsomerization(IbuMethods::IbuFormula::Daniels));
-   QVERIFY( IbuMethods::usesHoppingRateFactor      (IbuMethods::IbuFormula::Daniels));
+   IbuMethods::formula = Ibu::Formula::Daniels;
+   QVERIFY(!IbuMethods::modelsPostBoilIsomerization(Ibu::Formula::Daniels));
+   QVERIFY( IbuMethods::usesHoppingRateFactor      (Ibu::Formula::Daniels));
    for (auto const & [minutes, whole_pct, pellet_pct] : {std::tuple{ 0.0,  5.0,  6.0}, std::tuple{ 9.9,  5.0,  6.0},
                                                          std::tuple{10.0, 12.0, 15.0}, std::tuple{25.0, 15.0, 19.0},
                                                          std::tuple{30.0, 19.0, 24.0}, std::tuple{50.0, 22.0, 27.0},
@@ -777,7 +781,7 @@ void RecipeCalcTests::testIbuFormulas() {
    //
    // For formulae that don't handle hop form themselves, we apply the generic adjustment
    //
-   IbuMethods::formula = IbuMethods::IbuFormula::Tinseth;
+   IbuMethods::formula = Ibu::Formula::Tinseth;
    parms = makeParms(60.0);
    double const tinsethWhole = IbuMethods::getIbus(parms);
    parms.hopForm = IbuMethods::HopForm::Pellet;
@@ -810,9 +814,9 @@ void RecipeCalcTests::testIbuFormulas() {
    // starts at 100.00°C rather than 100.10°C) and within 1% or so of the worked examples (which presumably come from an
    // earlier version of the calculator).
    //
-   IbuMethods::formula = IbuMethods::IbuFormula::Smph;
-   QVERIFY(IbuMethods::modelsPostBoilIsomerization(IbuMethods::IbuFormula::Smph));
-   QVERIFY(!IbuMethods::usesHoppingRateFactor     (IbuMethods::IbuFormula::Smph));
+   IbuMethods::formula = Ibu::Formula::Smph;
+   QVERIFY(IbuMethods::modelsPostBoilIsomerization(Ibu::Formula::Smph));
+   QVERIFY(!IbuMethods::usesHoppingRateFactor     (Ibu::Formula::Smph));
    double const maltIbus = IbuMethods::recipeLevelIbus(1.055);
    QVERIFY2(fuzzyComp(maltIbus, 1.045, 0.001), "Malt polyphenol IBUs");
    // Malt-derived IBUs increase as the pH is lowered
@@ -878,36 +882,36 @@ void RecipeCalcTests::testIbuFormulas() {
       double originalGravity_sg;
       double postBoilPh;
       double coolTime_minutes;
-      IbuMethods::YeastFlocculation flocculation;
+      Yeast::Flocculation flocculation;
       std::vector<CalculatorAddition> additions;
       double calculatorTotalIbus; // Including malt polyphenols
       double boilingPoint_c = 100.0;
    };
    for (auto const & calculatorCase : {
-      CalculatorCase{"Pellets, pH 5.25", 1.055, 5.25, 10.0, IbuMethods::YeastFlocculation::Medium,
+      CalculatorCase{"Pellets, pH 5.25", 1.055, 5.25, 10.0, Yeast::Flocculation::Medium,
                      {{0.088, 56.7, 60.0, true, 41.181}}, 43.521},
-      CalculatorCase{"High flocculation, OG 1.080", 1.080, 5.75, 10.0, IbuMethods::YeastFlocculation::High,
+      CalculatorCase{"High flocculation, OG 1.080", 1.080, 5.75, 10.0, Yeast::Flocculation::High,
                      {{0.088, 56.7, 60.0, false, 36.920}}, 38.440},
       // The gravity loss factor applies here only because of the time in hot wort after flameout
-      CalculatorCase{"35 minutes + 15 minutes cooling, OG 1.080", 1.080, 5.75, 15.0, IbuMethods::YeastFlocculation::Medium,
+      CalculatorCase{"35 minutes + 15 minutes cooling, OG 1.080", 1.080, 5.75, 15.0, Yeast::Flocculation::Medium,
                      {{0.10, 50.0, 35.0, false, 31.257}}, 32.777},
-      CalculatorCase{"Flameout + 45 minutes cooling, OG 1.080", 1.080, 5.75, 45.0, IbuMethods::YeastFlocculation::Medium,
+      CalculatorCase{"Flameout + 45 minutes cooling, OG 1.080", 1.080, 5.75, 45.0, Yeast::Flocculation::Medium,
                      {{0.10, 100.0, 0.0, false, 29.703}}, 31.223},
-      CalculatorCase{"Heavy hopping, four additions", 1.065, 5.4, 15.0, IbuMethods::YeastFlocculation::Medium,
+      CalculatorCase{"Heavy hopping, four additions", 1.065, 5.4, 15.0, Yeast::Flocculation::Medium,
                      {{0.12,  80.0, 60.0, false, 62.077},
                       {0.12,  80.0, 30.0, false, 25.647},
                       {0.10,  60.0, 10.0, true ,  9.898},
                       {0.10, 100.0,  0.0, true ,  7.322}}, 107.250},
-      CalculatorCase{"Two additions at 60 minutes", 1.050, 5.75, 5.0, IbuMethods::YeastFlocculation::Medium,
+      CalculatorCase{"Two additions at 60 minutes", 1.050, 5.75, 5.0, Yeast::Flocculation::Medium,
                      {{0.14, 60.0, 60.0, false, 63.874},
                       {0.14, 60.0, 60.0, false, 30.345}}, 95.170},
       // At altitude, where the wort boils at 95°C (about 1,500 m or 5,000 ft), there is less isomerization.  (In the
       // calculator, we set "Boiling Temperature" and lower the exponential temperature-decay parameter C to match.)
-      CalculatorCase{"60 minutes, boiling at 95°C", 1.055, 5.75, 10.0, IbuMethods::YeastFlocculation::Medium,
+      CalculatorCase{"60 minutes, boiling at 95°C", 1.055, 5.75, 10.0, Yeast::Flocculation::Medium,
                      {{0.088, 56.7, 60.0, false, 35.570}}, 36.615, 95.0},
-      CalculatorCase{"Flameout, boiling at 95°C", 1.055, 5.75, 10.0, IbuMethods::YeastFlocculation::Medium,
+      CalculatorCase{"Flameout, boiling at 95°C", 1.055, 5.75, 10.0, Yeast::Flocculation::Medium,
                      {{0.088, 56.7, 0.0, false, 11.546}}, 12.591, 95.0},
-      CalculatorCase{"Heavy hopping, four additions, boiling at 95°C", 1.065, 5.4, 15.0, IbuMethods::YeastFlocculation::Medium,
+      CalculatorCase{"Heavy hopping, four additions, boiling at 95°C", 1.065, 5.4, 15.0, Yeast::Flocculation::Medium,
                      {{0.12,  80.0, 60.0, false, 49.805},
                       {0.12,  80.0, 30.0, false, 19.088},
                       {0.10,  60.0, 10.0, true ,  6.283},
@@ -974,8 +978,45 @@ void RecipeCalcTests::testIbuFormulas() {
    smphParms.postBoilPh = 5.25;
    QVERIFY(IbuMethods::getIbus(smphParms) < neutralIbus);
    smphParms.postBoilPh = std::nullopt;
-   smphParms.yeastFlocculation = IbuMethods::YeastFlocculation::High;
+   smphParms.yeastFlocculation = Yeast::Flocculation::High;
    QVERIFY(fuzzyComp(IbuMethods::getIbus(smphParms), neutralIbus * 0.95, 0.05));
+
+   //
+   // Wort clarity affects only IAA, whereas krausen affects IAA and, about three times as much, the non-IAA
+   // compounds.  Cf getWortClarityValue, getKrausenValue and compute_LF_nonIAA_krausen in Hosom's calculator.  Not
+   // setting either is the same as setting the default (average clarity, medium krausen deposits).
+   //
+   smphParms = makeSmphParms(0.088, 56.7, 60.0);
+   auto const neutralBreakdown = IbuMethods::getIbuBreakdown(smphParms);
+   QVERIFY(neutralBreakdown.boil_ibus   > 1.0);
+   QVERIFY(neutralBreakdown.nonIaa_ibus > 1.0);
+   auto checkBreakdown = [&](IbuMethods::IbuCalculationParms const & icParms,
+                             double const iaaFactor,
+                             double const nonIaaFactor,
+                             char const * const description) {
+      auto const imBreakdown = IbuMethods::getIbuBreakdown(icParms);
+      qDebug() <<
+         Q_FUNC_INFO << description << ": IAA" << imBreakdown.boil_ibus << "(neutral" << neutralBreakdown.boil_ibus <<
+         "), non-IAA" << imBreakdown.nonIaa_ibus << "(neutral" << neutralBreakdown.nonIaa_ibus << ")";
+      QVERIFY2(fuzzyComp(imBreakdown.boil_ibus  , neutralBreakdown.boil_ibus   * iaaFactor   , 0.001), description);
+      QVERIFY2(fuzzyComp(imBreakdown.nonIaa_ibus, neutralBreakdown.nonIaa_ibus * nonIaaFactor, 0.001), description);
+      return;
+   };
+   smphParms.wortClarity     = Measurement::Qualitative::WortClarity::Average;
+   smphParms.krausenHandling = Fermentation::KrausenHandling::MediumDeposits;
+   checkBreakdown(smphParms, 1.0, 1.0, "Defaults");
+   smphParms.wortClarity     = Measurement::Qualitative::WortClarity::Cloudy;
+   checkBreakdown(smphParms, 0.8, 1.0, "Cloudy");
+   smphParms.wortClarity     = Measurement::Qualitative::WortClarity::VeryClear;
+   checkBreakdown(smphParms, 1.3, 1.0, "Very clear");
+   smphParms.wortClarity     = std::nullopt;
+   smphParms.krausenHandling = Fermentation::KrausenHandling::BlownOffVigorousFermentation;
+   checkBreakdown(smphParms, 0.729, 1.0 - 3.0 * (1.0 - 0.729), "Blown off, vigorous");
+   smphParms.krausenHandling = Fermentation::KrausenHandling::MixedIn;
+   checkBreakdown(smphParms, 1.1268, 1.0 + 3.0 * 0.1268, "Mixed in");
+   smphParms.wortClarity     = Measurement::Qualitative::WortClarity::SomewhatCloudy;
+   smphParms.krausenHandling = Fermentation::KrausenHandling::HeavyDeposits;
+   checkBreakdown(smphParms, 0.9 * 0.95, 1.0 - 3.0 * 0.05, "Somewhat cloudy, heavy deposits");
 
    // With well-preserved hops (which is what we assume), there are no oxidized beta acids, so the beta-acid rating
    // makes no difference
@@ -1015,22 +1056,134 @@ void RecipeCalcTests::testIbuFormulas() {
    addition->setMeasure(Measurement::PhysicalQuantity::Mass);
    addition = recipe->addAddition(addition);
 
-   auto ibusAt = [&](IbuMethods::IbuFormula const formula, double const quantity_kg) {
+   auto ibusAt = [&](Ibu::Formula const formula, double const quantity_kg) {
       IbuMethods::formula = formula;
       addition->setQuantity(quantity_kg);
       return recipe->ibuFromHopAddition(*addition);
    };
-   double const tinseth50 = ibusAt(IbuMethods::IbuFormula::Tinseth, 0.050);
-   double const tinseth100 = ibusAt(IbuMethods::IbuFormula::Tinseth, 0.100);
+   double const tinseth50 = ibusAt(Ibu::Formula::Tinseth, 0.050);
+   double const tinseth100 = ibusAt(Ibu::Formula::Tinseth, 0.100);
    QVERIFY(fuzzyComp(tinseth100, 2.0 * tinseth50, 0.0001));
-   double const garetz50  = ibusAt(IbuMethods::IbuFormula::Garetz, 0.050);
-   double const garetz100 = ibusAt(IbuMethods::IbuFormula::Garetz, 0.100);
+   double const garetz50  = ibusAt(Ibu::Formula::Garetz, 0.050);
+   double const garetz100 = ibusAt(Ibu::Formula::Garetz, 0.100);
    qDebug() << Q_FUNC_INFO << "Garetz: 50 g gives" << garetz50 << ", 100 g gives" << garetz100;
    QVERIFY(garetz50 > 1.0);
    QVERIFY(garetz100 > garetz50);
    QVERIFY(garetz100 < 2.0 * garetz50);
-   double const smph50  = ibusAt(IbuMethods::IbuFormula::Smph, 0.050);
+   double const smph50  = ibusAt(Ibu::Formula::Smph, 0.050);
    QVERIFY(smph50 > 1.0);
+
+   //
+   // The recipe's expected wort clarity, and the krausen handling of its fermentation, are passed through to SMPH, but
+   // make no difference to other formulae
+   //
+   recipe->setWortClarity(Measurement::Qualitative::WortClarity::Cloudy);
+   double const smph50Cloudy = ibusAt(Ibu::Formula::Smph, 0.050);
+   qDebug() << Q_FUNC_INFO << "SMPH: 50 g gives" << smph50 << ", or" << smph50Cloudy << "with cloudy wort";
+   QVERIFY(smph50Cloudy < smph50);
+   QVERIFY(fuzzyComp(ibusAt(Ibu::Formula::Tinseth, 0.050), tinseth50, 0.0001));
+
+   auto fermentation = std::make_shared<Fermentation>("Blow-off tube");
+   ObjectStoreWrapper::insert(fermentation);
+   fermentation->setKrausenHandling(Fermentation::KrausenHandling::BlownOffNormalFermentation);
+   recipe->setFermentation(fermentation);
+   double const smph50CloudyBlownOff = ibusAt(Ibu::Formula::Smph, 0.050);
+   qDebug() << Q_FUNC_INFO << "SMPH: 50 g gives" << smph50CloudyBlownOff << "with cloudy wort and krausen blown off";
+   QVERIFY(smph50CloudyBlownOff < smph50Cloudy);
+
+   recipe->setWortClarity(std::nullopt);
+   fermentation->setKrausenHandling(std::nullopt);
+   QVERIFY(fuzzyComp(ibusAt(Ibu::Formula::Smph, 0.050), smph50, 0.0001));
+
+   return;
+}
+
+void RecipeCalcTests::testBoilStepPhases() {
+   qDebug() << Q_FUNC_INFO << "Starting";
+
+   using Phase = Boil::StepPhase;
+   //
+   // Make a list of boil steps from (start temp, end temp, length) triples, where a negative temperature means "not
+   // set" (ie, per dotBeer, at boiling)
+   //
+   auto makeSteps = [](std::vector<std::tuple<double, double, double>> const & temps) {
+      QList<std::shared_ptr<BoilStep>> steps;
+      int stepNumber = 0;
+      for (auto const & [startTemp_c, endTemp_c, stepTime_mins] : temps) {
+         auto step = std::make_shared<BoilStep>(QString("Step %1").arg(++stepNumber));
+         step->setStartTemp_c(startTemp_c < 0.0 ? std::nullopt : std::optional<double>{startTemp_c});
+         step->setEndTemp_c  (endTemp_c   < 0.0 ? std::nullopt : std::optional<double>{endTemp_c  });
+         step->setStepTime_mins(stepTime_mins);
+         steps.append(step);
+      }
+      return steps;
+   };
+   auto checkPhases = [&](std::vector<std::tuple<double, double, double>> const & temps,
+                          std::vector<Phase> const & expected,
+                          char const * const description) {
+      auto const phases = Boil::stepPhases(makeSteps(temps));
+      QVERIFY2(phases == expected, description);
+      return;
+   };
+
+   // Standard three-step boil
+   checkPhases({{65.0, 100.0, 15.0}, {100.0, 100.0, 60.0}, {100.0, 20.0, 20.0}},
+               {Phase::PreBoil, Phase::BoilProper, Phase::PostBoil},
+               "Standard boil");
+
+   // Temperatures not set mean boiling.  A step with only an end temperature below boiling is cooling.
+   checkPhases({{-1.0, -1.0, 60.0}, {-1.0, 20.0, 20.0}},
+               {Phase::BoilProper, Phase::PostBoil},
+               "Temperatures not set");
+
+   // A hot whirlpool (100°C → 92°C) is post-boil, even though it stays above 81°C
+   checkPhases({{65.0, 100.0, 15.0}, {100.0, 100.0, 60.0}, {100.0, 92.0, 10.0}, {92.0, 20.0, 15.0}},
+               {Phase::PreBoil, Phase::BoilProper, Phase::PostBoil, Phase::PostBoil},
+               "Hot whirlpool");
+
+   // A hop stand held above 81°C after a cooling step does not count as boil proper again
+   checkPhases({{100.0, 100.0, 60.0}, {100.0, 92.0, 5.0}, {92.0, 92.0, 20.0}},
+               {Phase::BoilProper, Phase::PostBoil, Phase::PostBoil},
+               "Hop stand after cooling step");
+
+   // At altitude, a whirlpool held at 93°C straight after a boil at 95°C is post-boil, because it starts lower than
+   // the boil ended
+   checkPhases({{70.0, 95.0, 15.0}, {95.0, 95.0, 60.0}, {93.0, 93.0, 20.0}},
+               {Phase::PreBoil, Phase::BoilProper, Phase::PostBoil},
+               "Whirlpool at altitude");
+
+   // A step held at boiling after the boil (eg running the whirlpool pump before switching off the heat) is boil proper
+   checkPhases({{100.0, 100.0, 60.0}, {100.0, 100.0, 10.0}, {100.0, 20.0, 20.0}},
+               {Phase::BoilProper, Phase::BoilProper, Phase::PostBoil},
+               "Held at boiling after boil");
+
+   // A boil proper can be split over several steps, eg 81°C counts (ie "at or above")
+   checkPhases({{81.0, 81.0, 30.0}, {81.0, 100.0, 10.0}, {100.0, 100.0, 30.0}},
+               {Phase::BoilProper, Phase::BoilProper, Phase::BoilProper},
+               "Split boil");
+
+   // Nothing identifiable as the boil proper
+   checkPhases({{65.0, 78.0, 15.0}, {78.0, 20.0, 15.0}},
+               {Phase::PreBoil, Phase::PreBoil},
+               "No boil proper");
+
+   // Boil time, and the steps of the boil proper, follow the classification
+   auto boil = std::make_shared<Boil>("Hop stand after cooling step");
+   ObjectStoreWrapper::insert(boil);
+   for (auto const & step : makeSteps({{65.0, 100.0, 15.0}, {100.0, 100.0, 60.0}, {100.0, 92.0, 5.0}, {92.0, 92.0, 20.0}})) {
+      boil->add(step);
+   }
+   QVERIFY2(fuzzyComp(boil->boilTime_mins(), 60.0, 0.001), "Hop stand counted as boil proper");
+   auto const [firstBoilProperStep, lastBoilProperStep] = boil->boilProperSteps();
+   QCOMPARE(firstBoilProperStep, 2);
+   QCOMPARE(lastBoilProperStep , 2);
+   // The post-boil profile starts after the boil proper, and includes the hop stand
+   auto const profile = boil->postBoilProfile();
+   QCOMPARE(profile.segments.size(), static_cast<std::size_t>(2));
+   QVERIFY(profile.duration_mins && fuzzyComp(*profile.duration_mins, 25.0, 0.001));
+   // ensureStandardProfile should not add anything, as the boil already ends with a post-boil step
+   boil->ensureStandardProfile();
+   QCOMPARE(boil->boilSteps().size(), 4);
 
    return;
 }

@@ -61,6 +61,7 @@ public slots:
    void updateMeasuredPostBoilVolume_l();
    void updateVolumeIntoFermentor_l();
    void updatePitchTemp_c();
+   void updateMeasuredWortClarity();
 
    void updateFG();
    void updateFinalVolume_l();

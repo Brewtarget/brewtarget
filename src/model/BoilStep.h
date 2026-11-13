@@ -19,11 +19,11 @@
 
 #include <optional>
 
-#include "model/Boil.h"
 #include "model/StepBase.h"
 #include "model/StepExtended.h"
 #include "utils/EnumStringMapping.h"
 
+class Boil;
 class BoilStepEditor;
 class BoilStepItemDelegate;
 class BoilStepTableModel;

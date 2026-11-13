@@ -40,6 +40,38 @@
     "notes": {
       "type": "string"
     },
+    //
+    // `krausen_handling` is an input to John-Paul Hosom's SMPH model of IBUs -- see `WortClarity` in
+    // Recipe.beer.schema for references.  Our values correspond one-to-one with the calculator's categories (in
+    // `getKrausenValue` in https://github.com/jphosom/alchemyoverlord/blob/master/js/ibu.js), which give the following
+    // loss factors for isomerized alpha acids (for the other bittering compounds, the loss is roughly tripled):
+    //
+    //    mixed in                          1.1268
+    //    minor deposits                    1.05
+    //    medium deposits                   1.00
+    //    heavy deposits                    0.95
+    //    very heavy deposits               0.90
+    //    blown off, slow fermentation      0.938
+    //    blown off, normal fermentation    0.833
+    //    blown off, vigorous fermentation  0.729
+    //
+    // A similar approach is under discussion for BeerJSON at https://github.com/beerjson/beerjson/issues/279.
+    //
+    "krausen_handling": {
+      "description": "What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness compounds:<ul><li>`mixed in`: the krausen is mixed back into the beer (or is suppressed, eg with anti-foam), so nothing is lost</li><li>`minor deposits`, `medium deposits`, `heavy deposits`, `very heavy deposits`: some of the krausen is left stuck to the walls of the fermenter above the beer</li><li>`blown off, slow fermentation`, `blown off, normal fermentation`, `blown off, vigorous fermentation`: the krausen is lost through a blow-off tube, with more being lost the more vigorous the fermentation</li></ul>(This is used, eg, by the SMPH model of IBUs.)  If absent, `medium deposits` is assumed.  Skimming the krausen can be recorded as one of the `blown off` values, according to how much is removed.",
+      "x-since": "1.1.0",
+      "type": "string",
+      "enum": [
+        "mixed in",
+        "minor deposits",
+        "medium deposits",
+        "heavy deposits",
+        "very heavy deposits",
+        "blown off, slow fermentation",
+        "blown off, normal fermentation",
+        "blown off, vigorous fermentation"
+      ]
+    },
     "fermentation_steps": {
       "description": "The steps that make up the fermentation, in the order they are performed.",
       "type": "array",

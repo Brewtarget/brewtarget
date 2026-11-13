@@ -31,6 +31,7 @@
 #include "utils/EnumStringMapping.h"
 #include "utils/OptionalHelpers.h"
 
+class Mash;
 class MashStepEditor;
 class MashStepItemDelegate;
 class MashStepTableModel;

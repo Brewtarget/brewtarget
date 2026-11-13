@@ -223,6 +223,19 @@ private:
                             modelClass::typeLookup.getType(PropertyNames::modelClass::propertyName))
 
 /**
+ * \brief Alternate version of \c BT_COMBO_BOX_INIT for when the enum is defined in a different class (or a freestanding
+ *        namespace)
+ *
+ */
+#define BT_COMBO_BOX_INIT_EXT(editorClass, comboBoxName, enumFqPrefix, modelClass, propertyName) \
+   this->comboBoxName->init(#editorClass,                                                        \
+                            #comboBoxName,                                                       \
+                            #editorClass "->" #comboBoxName,                                     \
+                            enumFqPrefix##StringMapping,                                         \
+                            enumFqPrefix##DisplayNames,                                          \
+                            modelClass::typeLookup.getType(PropertyNames::modelClass::propertyName))
+
+/**
  * \brief Alternate version of \c BT_COMBO_BOX_INIT for when we have Measurement::ChoiceOfPhysicalQuantity
  *
  *        NOTE: This does not currently handle multiple controlled fields, but could easily be extended to do so.

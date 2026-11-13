@@ -24,11 +24,34 @@
 #endif
 
 QString Fermentation::localisedName() { return tr("Fermentation"); }
-QString Fermentation::localisedName_description() { return tr("Description"); }
+QString Fermentation::localisedName_description    () { return tr("Description"     ); }
+QString Fermentation::localisedName_krausenHandling() { return tr("Krausen Handling"); }
 QString Fermentation::localisedName_notes      () { return tr("Notes"      ); }
 QString Fermentation::localisedName_primary    () { return tr("Primary"    ); }
 QString Fermentation::localisedName_secondary  () { return tr("Secondary"  ); }
 QString Fermentation::localisedName_tertiary   () { return tr("Tertiary"   ); }
+
+EnumStringMapping const Fermentation::krausenHandlingStringMapping {
+   {Fermentation::KrausenHandling::MixedIn                     , "mixed in"                        },
+   {Fermentation::KrausenHandling::MinorDeposits               , "minor deposits"                  },
+   {Fermentation::KrausenHandling::MediumDeposits              , "medium deposits"                 },
+   {Fermentation::KrausenHandling::HeavyDeposits               , "heavy deposits"                  },
+   {Fermentation::KrausenHandling::VeryHeavyDeposits           , "very heavy deposits"             },
+   {Fermentation::KrausenHandling::BlownOffSlowFermentation    , "blown off, slow fermentation"    },
+   {Fermentation::KrausenHandling::BlownOffNormalFermentation  , "blown off, normal fermentation"  },
+   {Fermentation::KrausenHandling::BlownOffVigorousFermentation, "blown off, vigorous fermentation"},
+};
+
+EnumStringMapping const Fermentation::krausenHandlingDisplayNames {
+   {Fermentation::KrausenHandling::MixedIn                     , tr("Mixed In"                        )},
+   {Fermentation::KrausenHandling::MinorDeposits               , tr("Minor Deposits on Fermenter"     )},
+   {Fermentation::KrausenHandling::MediumDeposits              , tr("Medium Deposits on Fermenter"    )},
+   {Fermentation::KrausenHandling::HeavyDeposits               , tr("Heavy Deposits on Fermenter"     )},
+   {Fermentation::KrausenHandling::VeryHeavyDeposits           , tr("Very Heavy Deposits on Fermenter")},
+   {Fermentation::KrausenHandling::BlownOffSlowFermentation    , tr("Blown Off, Slow Fermentation"    )},
+   {Fermentation::KrausenHandling::BlownOffNormalFermentation  , tr("Blown Off, Normal Fermentation"  )},
+   {Fermentation::KrausenHandling::BlownOffVigorousFermentation, tr("Blown Off, Vigorous Fermentation")},
+};
 
 bool Fermentation::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
@@ -37,6 +60,7 @@ bool Fermentation::compareWith(NamedEntity const & other, QList<BtStringConst co
    return (
       AUTO_PROPERTY_COMPARE(this, rhs, m_description, PropertyNames::Fermentation::description, propertiesThatDiffer) &&
       AUTO_PROPERTY_COMPARE(this, rhs, m_notes      , PropertyNames::Fermentation::notes      , propertiesThatDiffer) &&
+      AUTO_PROPERTY_COMPARE(this, rhs, m_krausenHandling, PropertyNames::Fermentation::krausenHandling, propertiesThatDiffer) &&
       // Parent classes have to be equal too
       this->FolderPropertyBase<Fermentation>                     ::doCompareWith(rhs, propertiesThatDiffer) &&
       this->LockablePropertyBase<Fermentation>::doCompareWith(rhs, propertiesThatDiffer) &&
@@ -53,6 +77,7 @@ TypeLookup const Fermentation::typeLookup {
    {
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentation, description, m_description, NonPhysicalQuantity::String),
       PROPERTY_TYPE_LOOKUP_ENTRY(Fermentation, notes      , m_notes      , NonPhysicalQuantity::String),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Fermentation, krausenHandling, m_krausenHandling, ENUM_INFO(Fermentation::krausenHandling)),
       PROPERTY_TYPE_LOOKUP_NO_MV(Fermentation, primary    , primary      ),
       PROPERTY_TYPE_LOOKUP_NO_MV(Fermentation, secondary  , secondary    ),
       PROPERTY_TYPE_LOOKUP_NO_MV(Fermentation, tertiary   , tertiary     ),
@@ -73,8 +98,9 @@ Fermentation::Fermentation(QString name) :
    FolderPropertyBase<Fermentation>{},
    LockablePropertyBase<Fermentation>{},
    StepOwnerBase<Fermentation, FermentationStep>{},
-   m_description  {""},
-   m_notes        {""} {
+   m_description    {""},
+   m_notes          {""},
+   m_krausenHandling{std::nullopt} {
 
    CONSTRUCTOR_END
    return;
@@ -86,7 +112,8 @@ Fermentation::Fermentation(NamedParameterBundle const & namedParameterBundle) :
    LockablePropertyBase<Fermentation>{namedParameterBundle},
    StepOwnerBase<Fermentation, FermentationStep>{},
    SET_REGULAR_FROM_NPB (m_description, namedParameterBundle, PropertyNames::Fermentation::description),
-   SET_REGULAR_FROM_NPB (m_notes      , namedParameterBundle, PropertyNames::Fermentation::notes      ) {
+   SET_REGULAR_FROM_NPB (m_notes      , namedParameterBundle, PropertyNames::Fermentation::notes      ),
+   SET_OPT_ENUM_FROM_NPB(m_krausenHandling, Fermentation::KrausenHandling, namedParameterBundle, PropertyNames::Fermentation::krausenHandling) {
 
    CONSTRUCTOR_END
    return;
@@ -97,8 +124,9 @@ Fermentation::Fermentation(Fermentation const & other) :
    FolderPropertyBase<Fermentation>{other},
    LockablePropertyBase<Fermentation>{other},
    StepOwnerBase<Fermentation, FermentationStep>{other},
-   m_description  {other.m_description},
-   m_notes        {other.m_notes      } {
+   m_description    {other.m_description    },
+   m_notes          {other.m_notes          },
+   m_krausenHandling{other.m_krausenHandling} {
 
    CONSTRUCTOR_END
    return;
@@ -109,10 +137,14 @@ Fermentation::~Fermentation() = default;
 //============================================= "GETTER" MEMBER FUNCTIONS ==============================================
 QString Fermentation::description() const { return this->m_description; }
 QString Fermentation::notes      () const { return this->m_notes      ; }
+std::optional<Fermentation::KrausenHandling> Fermentation::krausenHandling     () const { return this->m_krausenHandling; }
+std::optional<int>                           Fermentation::krausenHandlingAsInt() const { return Optional::toOptInt(this->m_krausenHandling); }
 
 //============================================= "SETTER" MEMBER FUNCTIONS ==============================================
 void Fermentation::setDescription (QString const & val) { SET_AND_NOTIFY(PropertyNames::Fermentation::description, this->m_description, val); return; }
 void Fermentation::setNotes       (QString const & val) { SET_AND_NOTIFY(PropertyNames::Fermentation::notes      , this->m_notes      , val); return; }
+void Fermentation::setKrausenHandling     (std::optional<KrausenHandling> const val) { SET_AND_NOTIFY(PropertyNames::Fermentation::krausenHandling, this->m_krausenHandling, val); return; }
+void Fermentation::setKrausenHandlingAsInt(std::optional<int>             const val) { this->setKrausenHandling(Optional::fromOptInt<KrausenHandling>(val)); return; }
 
 std::shared_ptr<FermentationStep> Fermentation::primary  () const { return this->stepAt(1); }
 std::shared_ptr<FermentationStep> Fermentation::secondary() const { return this->stepAt(2); }

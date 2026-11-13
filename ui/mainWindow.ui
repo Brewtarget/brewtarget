@@ -2322,7 +2322,6 @@
   <tabstop>mashStepsWidget</tabstop>
   <tabstop>mashComboBox</tabstop>
   <tabstop>pushButton_editMash</tabstop>
-  <tabstop>pushButton_calculateMash</tabstop>
   <tabstop>boilComboBox</tabstop>
   <tabstop>pushButton_editBoil</tabstop>
   <tabstop>fermentationComboBox</tabstop>

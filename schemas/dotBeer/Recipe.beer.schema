@@ -179,6 +179,11 @@
       "description": "The expected gravity of wort when transferred to the fermenter.  Typically this and `final_gravity` are calculated values, so they are written out for information but ignored (or overwritten by a calculated value) for recipes read in from a file.",
       "$ref": "Measurement.beer.schema#/$defs/Gravity"
     },
+    "wort_clarity": {
+      "description": "The expected clarity of the wort when it is transferred to the fermenter -- ie what the brewer anticipates, given the recipe, equipment and process (eg whether kettle finings are used, or whether the wort is whirlpooled).  If absent, `average` is assumed.  (What was actually seen on a given brewday goes in `measured_wort_clarity` in the brew log.)  See `WortClarity` for details.",
+      "x-since": "1.1.0",
+      "$ref": "#/$defs/WortClarity"
+    },
     "final_gravity": {
       "description": "The expected gravity of beer at the end of fermentation.  Comments about `original_gravity` apply equally here.",
       "$ref": "Measurement.beer.schema#/$defs/Gravity"
@@ -307,7 +312,11 @@
   "$defs": {
     "AdditionSchedule": {
       "type": "object",
-      "description": "This object fully describes when, and for how long, a recipe addition should be made, with options for basis on time, gravity, or pH at any process step.\n\nHop additions that BeerXML would call *first wort* and *aroma* (eg whirlpool, hop stand or flameout additions) are expressed through the step of the boil in which they are made.  By convention, a boil has a pre-boil step (ramping up from mash temperature), then the boil proper, then one or more post-boil steps (cooling).\n\nA boil step is part of the *boil proper* if its start and end temperatures are both above 81°C (178°F).  (This is above any mash-out temperature and below the boiling point of water at any inhabited altitude.)  A boil step whose start or end temperature is not given is assumed to be at boiling at that point.  The length of the boil proper is the total `step_time` of its steps.  So:<ul><li>a first wort addition is `add_to_boil` in a first step (typically `step` 1) that starts at or below 81°C, with no `time` (because it is added at the start of that step -- see `time`)</li><li>an ordinary boil addition is `add_to_boil` in the boil proper (typically `step` 2, or with `step` not set), with `time` being how long before the end of the boil proper it is added</li><li>a whirlpool or hop stand addition is `add_to_boil` in a later step (typically `step` 3) that ends at or below 81°C.  As with any addition, if `time` is not set then the hops are added at the start of the step, so they steep for the step's `step_time`; and `duration` is only needed if they are removed before the end of the step</li></ul>Readers should identify these steps by their temperatures, as above, rather than relying on the step numbers.\n\nNB: For hop stand hop additions, if the hops are to be added (or should stop steeping) at a particular temperature, give the hop stand its own step, separate from any cooling or chilling steps, so that the start and end of that step mark when the hops go in and when they come out of the hot wort.",
+      //
+      // BeerJSON does not (yet) say how to tell pre-boil, boil proper and post-boil steps apart, though proposals
+      // (including what we do here) are being discussed at https://github.com/beerjson/beerjson/issues/271.
+      //
+      "description": "This object fully describes when, and for how long, a recipe addition should be made, with options for basis on time, gravity, or pH at any process step.\n\nHop additions that BeerXML would call *first wort* and *aroma* (eg whirlpool, hop stand or flameout additions) are expressed through the step of the boil in which they are made.  By convention, a boil has a pre-boil step (ramping up from mash temperature), then the boil proper, then one or more post-boil steps (eg whirlpool, hop stand, cooling).\n\nBoil steps are classified by their temperatures and their order, as follows.  A boil step whose start or end temperature is not given is assumed to be at boiling at that point (and so no lower than any other temperature in the boil).<ul><li>The *boil proper* begins with the first step whose start and end temperatures are both at or above 81°C (178°F) and whose end temperature is not lower than its start temperature.  (81°C is above any mash-out temperature and below the boiling point of water at any inhabited altitude.)  It continues through each following step that also meets these conditions and whose start temperature is no lower than the end temperature of the step before it.</li><li>Any step before the boil proper is *pre-boil*.</li><li>The first step after the boil proper that does not meet the conditions above, and every step after it, is *post-boil*.</li></ul>Thus the boil proper ends as soon as the wort starts to cool, whether during a step or between steps.  Because temperatures are compared with each other rather than with 100°C, this works at any altitude: eg, after a boil at 95°C, a whirlpool held at 93°C is post-boil.  The length of the boil proper is the total `step_time` of its steps.\n\nA step held at boiling after the boil (eg running a whirlpool pump before switching off the heat) is, by these rules, part of the boil proper, which is physically accurate, since hops in it behave as they would in the boil.  To have such a step treated as post-boil, give it a start temperature below the end temperature of the step before it.  So:<ul><li>a first wort addition is `add_to_boil` in a pre-boil step (typically `step` 1), with no `time` (because it is added at the start of that step -- see `time`)</li><li>an ordinary boil addition is `add_to_boil` in the boil proper (typically `step` 2, or with `step` not set), with `time` being how long before the end of the boil proper it is added</li><li>a whirlpool or hop stand addition is `add_to_boil` in a post-boil step (typically `step` 3).  As with any addition, if `time` is not set then the hops are added at the start of the step, so they steep for the step's `step_time`; and `duration` is only needed if they are removed before the end of the step</li></ul>Readers should classify steps by their temperatures and order, as above, rather than relying on the step numbers.\n\nNB: For hop stand hop additions, if the hops are to be added (or should stop steeping) at a particular temperature, give the hop stand its own step, separate from any cooling or chilling steps, so that the start and end of that step mark when the hops go in and when they come out of the hot wort.",
       "properties": {
         "time": {
           "description": "What time during a process step is added, eg a value of 2 days for a dry hop addition would be added 2 days into the fermentation step.  NOTE that, when `stage` is `add_to_boil`, this is time *before* the *end* of the step (or, if no step is specified, of the boil proper -- ie excluding any post-boil steps, as explained above).  For other values of `stage`, this is time *after* the *start* of the step (or of the process if no step is specified).  If none of `time`, `specific_gravity` and `pH` is set, the addition is made at the start of the step (or of the process if no step is specified).",
@@ -514,6 +523,39 @@
       ],
       "unevaluatedProperties": false
     },
+    //
+    // Wort clarity is an input to John-Paul Hosom's SMPH model of IBUs -- see
+    // https://jphosom.github.io/alchemyoverlord/blog/31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html and
+    // the calculator at https://jphosom.github.io/alchemyoverlord/ibu_SMPH.html.  Our values correspond one-to-one with
+    // the calculator's categories (in `getWortClarityValue` in
+    // https://github.com/jphosom/alchemyoverlord/blob/master/js/ibu.js), which give the following loss factors for
+    // isomerized alpha acids:
+    //
+    //    very clear        1.30
+    //    clear             1.20
+    //    somewhat clear    1.10
+    //    average           1.00
+    //    somewhat cloudy   0.90
+    //    cloudy            0.80
+    //    very cloudy       0.70
+    //    extremely cloudy  0.60
+    //
+    // A similar approach is under discussion for BeerJSON at https://github.com/beerjson/beerjson/issues/279.
+    //
+    "WortClarity": {
+      "description": "How clear the wort is when it is transferred to the fermenter, judged by eye.  Cloudier wort, with more hop and malt particles, loses more of its bitterness compounds during fermentation.  (This is used, eg, by the SMPH model of IBUs.)",
+      "type": "string",
+      "enum": [
+        "very clear",
+        "clear",
+        "somewhat clear",
+        "average",
+        "somewhat cloudy",
+        "cloudy",
+        "very cloudy",
+        "extremely cloudy"
+      ]
+    },
     "BrewLog": {
       "type": "object",
       "description": "Record of a \"brewday\", ie of an individual brew of a recipe.  Note that:<br> • Fields beginning with \"expected_\" are values taken from the Recipe (either directly or by calculation)<br> • Fields beginning with \"measured_\" are supplied by the brewer for this batch -- eg measured OG and FG<br> • Fields beginning with \"computed_\" are derived from values supplied by the brewer -- eg ABV calculated from measured OG and FG<br>Strictly speaking, \"expected_\" and \"computed_\" fields are not needed because they can be derived from other information.  However, we include them because (a) a recipe might have been modified after a brewday and (b) some calculations (eg alcohol by volume) might be done differently by different programs.",
@@ -590,6 +632,11 @@
         "measured_volume_into_fv": {
           "description" : "Actual (measured) volume of wort into fermentation vessel",
           "$ref": "Measurement.beer.schema#/$defs/Volume"
+        },
+        "measured_wort_clarity": {
+          "description" : "Actual clarity of the wort when it was transferred to the fermenter, as assessed by eye.  See `WortClarity` for details.",
+          "x-since": "1.1.0",
+          "$ref": "#/$defs/WortClarity"
         },
         "measured_pitch_temperature": {
           "description" : "Actual (measured) temperature of wort when yeast is pitched",

@@ -954,7 +954,7 @@ bool OptionDialog::saveDefaultUnits() {
 
 void OptionDialog::saveFormulae() {
 
-     IbuMethods::formula =   ibuFormulaComboBox->getNonOptValue<  IbuMethods::  IbuFormula>();
+     IbuMethods::formula =   ibuFormulaComboBox->getNonOptValue<Ibu::Formula>();
    ColorMethods::formula = colorFormulaComboBox->getNonOptValue<ColorMethods::ColorFormula>();
 
    PersistentSettings::insert_ck(PersistentSettings::Names::mashHopAdjustment     , ibuAdjustmentMashHopDoubleSpinBox->value() / 100);

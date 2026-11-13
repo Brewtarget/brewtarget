@@ -29,7 +29,9 @@
 #include <QString>
 #include <QStringList>
 
+#include "measurement/Qualitative.h"
 #include "model/OwnedByRecipe.h"
+#include "model/Recipe.h" // For Recipe::WortClarity
 
 //======================================================================================================================
 //========================================== Start of property name constants ==========================================
@@ -50,7 +52,7 @@ AddPropertyName(expectedOriginalGravity_sg   )
 AddPropertyName(expectedPreBoilGravity_sg    )
 AddPropertyName(expectedPreBoilVolume_l      )
 AddPropertyName(expectedStrikeTemp_c         )
-AddPropertyName(expectedVolumeIntoFv_l)
+AddPropertyName(expectedVolumeIntoFv_l       )
 AddPropertyName(fermentDate                  )
 AddPropertyName(forecastOriginalGravity_sg   )
 AddPropertyName(measuredFinalGravity_sg      )
@@ -62,7 +64,8 @@ AddPropertyName(measuredPostBoilVolume_l     )
 AddPropertyName(measuredPreBoilGravity_sg    )
 AddPropertyName(measuredPreBoilVolume_l      )
 AddPropertyName(measuredStrikeTemp_c         )
-AddPropertyName(measuredVolumeIntoFv_l)
+AddPropertyName(measuredVolumeIntoFv_l       )
+AddPropertyName(measuredWortClarity          )
 AddPropertyName(notes                        )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -120,6 +123,7 @@ public:
    static QString localisedName_measuredPreBoilVolume_l      ();
    static QString localisedName_measuredStrikeTemp_c         ();
    static QString localisedName_measuredVolumeIntoFv_l       ();
+   static QString localisedName_measuredWortClarity          ();
    static QString localisedName_notes                        ();
    static QString localisedName_projFermPoints               ();
 
@@ -197,6 +201,14 @@ public:
    Q_PROPERTY(double  expectedVolumeIntoFv_l   READ expectedVolumeIntoFv_l   WRITE setExpectedVolumeIntoFv_l)
    //! Actual (measured) volume of wort into fermentor
    Q_PROPERTY(double  measuredVolumeIntoFv_l   READ measuredVolumeIntoFv_l   WRITE setMeasuredVolumeIntoFv_l)
+   /**
+    * \brief Actual clarity of the wort when it was transferred to the fermenter, as assessed by eye.  (Cf
+    *        \c Recipe::wortClarity, which is the expected clarity.)
+    *
+    *        NB: This is optional, so we need to access it via \c std::optional<int> rather than
+    *            \c std::optional<Measurement::Qualitative::WortClarity>.
+    */
+   Q_PROPERTY(std::optional<int> measuredWortClarity READ measuredWortClarityAsInt WRITE setMeasuredWortClarityAsInt)
    // TBD: Do we need expectedPitchTemp_c ?
    //! Actual (measured) temperature of wort when yeast is pitched
    Q_PROPERTY(double  measuredPitchTemp_c             READ measuredPitchTemp_c             WRITE setMeasuredPitchTemp_c          )
@@ -250,6 +262,8 @@ public:
    double  measuredOriginalGravity_sg   () const;
    double  measuredPostBoilVolume_l     () const;
    double  measuredVolumeIntoFv_l() const;
+   std::optional<Measurement::Qualitative::WortClarity> measuredWortClarity     () const;
+   std::optional<int>                                   measuredWortClarityAsInt() const;
    double  measuredPitchTemp_c          () const;
    double  measuredFinalGravity_sg      () const;
    double  measuredFinalVolume_l        () const;
@@ -282,6 +296,8 @@ public:
    void setMeasuredOriginalGravity_sg   (double var);
    void setMeasuredPostBoilVolume_l     (double var);
    void setMeasuredVolumeIntoFv_l(double var);
+   void setMeasuredWortClarity     (std::optional<Measurement::Qualitative::WortClarity> const val);
+   void setMeasuredWortClarityAsInt(std::optional<int>                                   const val);
    void setMeasuredPitchTemp_c          (double var);
    void setMeasuredFinalGravity_sg      (double var);
    void setMeasuredFinalVolume_l        (double var);
@@ -361,6 +377,7 @@ private:
    double  m_expectedEfficiency_pct        = 0.0;
    double  m_expectedAlcoholByVolume_pct   = 0.0;
    double  m_expectedAttenuation_pct       = 0.0;
+   std::optional<Measurement::Qualitative::WortClarity> m_measuredWortClarity = std::nullopt;
 };
 
 BT_DECLARE_METATYPES(BrewLog)

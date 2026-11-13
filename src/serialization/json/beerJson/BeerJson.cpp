@@ -1085,13 +1085,13 @@ namespace {
     *        definition below, we ignore the formula when reading in.
     */
    EnumStringMapping const BEER_JSON_IBU_FORMULA_MAPPER {
-      {IbuMethods::IbuFormula::Tinseth, "Tinseth"},
-      {IbuMethods::IbuFormula::Rager  , "Rager"  },
-      {IbuMethods::IbuFormula::Noonan , "Other"  },
-      {IbuMethods::IbuFormula::Garetz , "Garetz" },
-      {IbuMethods::IbuFormula::Daniels, "Other"  },
-      {IbuMethods::IbuFormula::mIbu   , "Other"  },
-      {IbuMethods::IbuFormula::Smph   , "Other"  },
+      {Ibu::Formula::Tinseth, "Tinseth"},
+      {Ibu::Formula::Rager  , "Rager"  },
+      {Ibu::Formula::Noonan , "Other"  },
+      {Ibu::Formula::Garetz , "Garetz" },
+      {Ibu::Formula::Daniels, "Other"  },
+      {Ibu::Formula::mIbu   , "Other"  },
+      {Ibu::Formula::Smph   , "Other"  },
    };
 
    //»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»

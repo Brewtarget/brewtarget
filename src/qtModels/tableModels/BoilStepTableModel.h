@@ -19,6 +19,7 @@
 
 #include <QStyledItemDelegate>
 
+#include "model/Boil.h"
 #include "model/BoilStep.h"
 #include "qtModels/tableModels/BtTableModel.h"
 #include "qtModels/tableModels/EnumeratedItemTableModelBase.h"
