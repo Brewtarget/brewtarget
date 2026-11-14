@@ -35,7 +35,7 @@
 #include "calculations/IbuMethods.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "model/StockPurchase.h"
+#include "model/StockPurchaseHop.h"
 #include "model/Recipe.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
@@ -56,6 +56,7 @@ COLUMN_INFOS(
                                                                        PropertyNames::Hop::alpha_pct        }, 1}),
    TABLE_MODEL_HEADER(RecipeAdditionHop, Amount        , PropertyNames::IngredientAmount::amount),                     // "Amount"
    TABLE_MODEL_HEADER(RecipeAdditionHop, Stage         , PropertyNames::RecipeAddition::stage                     ),    // "Stage"
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Step          , PropertyNames::RecipeAddition::step                      ),    // "Step"
    TABLE_MODEL_HEADER(RecipeAdditionHop, Time          , PropertyNames::RecipeAddition::addAtTime_mins            ),    // "Time"
    TABLE_MODEL_HEADER(RecipeAdditionHop, Form          , PropertyPath{{PropertyNames::RecipeAdditionHop::hop,          // "Form"
                                                                        PropertyNames::Hop::form             }, 1}),
@@ -75,8 +76,7 @@ RecipeAdditionHopTableModel::RecipeAdditionHopTableModel(QTableView * parent, bo
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionHopTableModel::contextMenu);
-   connect(&ObjectStoreTyped<StockPurchaseHop>::getInstance(), &ObjectStoreTyped<StockPurchaseHop>::signalPropertyChanged, this,
-           &RecipeAdditionHopTableModel::changedInventory);
+   this->connectInventorySignals<StockPurchaseHop>();
    return;
 }
 

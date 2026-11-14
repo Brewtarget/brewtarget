@@ -34,7 +34,7 @@
 
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "model/StockPurchase.h"
+#include "model/StockPurchaseYeast.h"
 #include "model/Recipe.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
@@ -77,8 +77,7 @@ RecipeAdditionYeastTableModel::RecipeAdditionYeastTableModel(QTableView * parent
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionYeastTableModel::contextMenu);
-   connect(&ObjectStoreTyped<StockPurchaseYeast>::getInstance(), &ObjectStoreTyped<StockPurchaseYeast>::signalPropertyChanged, this,
-           &RecipeAdditionYeastTableModel::changedInventory);
+   this->connectInventorySignals<StockPurchaseYeast>();
    return;
 }
 

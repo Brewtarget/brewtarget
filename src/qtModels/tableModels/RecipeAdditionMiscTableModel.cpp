@@ -34,7 +34,7 @@
 
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
-#include "model/StockPurchase.h"
+#include "model/StockPurchaseMisc.h"
 #include "model/Mash.h"
 #include "model/Recipe.h"
 
@@ -56,6 +56,7 @@ COLUMN_INFOS(
                                                                         PropertyNames::Misc::type             }, 1}),
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Amount        , PropertyNames::IngredientAmount::amount             ),         // "Amount"
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , PropertyNames::RecipeAddition::stage                     ),    // "Stage"
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Step          , PropertyNames::RecipeAddition::step                      ),    // "Step"
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , PropertyNames::RecipeAddition::addAtTime_mins            ),    // "Time"
    TABLE_MODEL_HEADER(RecipeAdditionMisc, AmountType    , PropertyNames::IngredientAmount::amount, Misc::validMeasures), // "Amount Type"
    // Total inventory is read-only, so there is intentionally no TotalInventoryType column
@@ -71,8 +72,7 @@ RecipeAdditionMiscTableModel::RecipeAdditionMiscTableModel(QTableView * parent, 
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &RecipeAdditionMiscTableModel::contextMenu);
-   connect(&ObjectStoreTyped<StockPurchaseMisc>::getInstance(), &ObjectStoreTyped<StockPurchaseMisc>::signalPropertyChanged, this,
-           &RecipeAdditionMiscTableModel::changedInventory);
+   this->connectInventorySignals<StockPurchaseMisc>();
    return;
 }
 
@@ -220,38 +220,6 @@ Measurement::Amount RecipeAdditionMiscTableModel::total(Misc::WaterAgentType con
       }
    }
    return totalAmount;
-}
-
-double RecipeAdditionMiscTableModel::totalAcid_kg(Misc::WaterAgentType const waterAgentType) const {
-   constexpr double H3PO4_density  = 1.685;
-   constexpr double lactic_density = 1.2;
-
-   // .:TODO:. There are assumptions in here about measurement being by weight or by volume.  We should check or assert
-   //          these.
-   double ret = 0.0;
-   for (auto const & miscAddition : this->m_rows) {
-      if (auto const misc = miscAddition->misc();
-          misc->type() == Misc::Type::WaterAgent && misc->waterAgentType() == waterAgentType) {
-
-         double const mult  = 1000.0;
-         auto const waterAgentAcid_pct = misc->waterAgentPercentAcid();
-         if (waterAgentAcid_pct) {
-            if (waterAgentType == Misc::WaterAgentType::Other) {
-               ret += 1000.0 * miscAddition->amount().quantity * *waterAgentAcid_pct;
-            } else if (waterAgentType == Misc::WaterAgentType::LacticAcid) {
-               // Lactic acid isn't quite so easy
-               double const density = *waterAgentAcid_pct/88.0 * (lactic_density - 1.0) + 1.0;
-               double const lactic_wgt = 1000.0 * miscAddition->amount().quantity * mult * density;
-               ret += (*waterAgentAcid_pct/100.0) * lactic_wgt;
-            } else if (waterAgentType == Misc::WaterAgentType::PhosphoricAcid) {
-               double const density = *waterAgentAcid_pct/85.0 * (H3PO4_density - 1.0) + 1.0;
-               double const H3PO4_wgt = 1000.0 * miscAddition->amount().quantity * density;
-               ret += (*waterAgentAcid_pct/100.0) * H3PO4_wgt;
-            }
-         }
-      }
-   }
-   return ret;
 }
 
 // Insert the boilerplate stuff that we cannot do in TableModelBase

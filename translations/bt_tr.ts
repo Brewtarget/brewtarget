@@ -4746,10 +4746,6 @@ If you need help, please open an issue at %1</source>
         <source>Change Use Mash Profile in FG Calculation</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Change Expected Wort Clarity</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -8677,6 +8673,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Calories/12oz</source>
         <translation type="unfinished">Kalori/12oz</translation>
+    </message>
+    <message>
+        <source>Change Expected Wort Clarity</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13521,14 +13521,6 @@ Tabs</source>
         <source>Info about, and any problems with, this fermentation</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Expected wort clarity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).  Cloudier wort loses more bitterness during fermentation.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -15001,6 +14993,14 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>1.0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expected wort clarity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

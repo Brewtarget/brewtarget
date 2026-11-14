@@ -1013,7 +1013,8 @@ public:
        */
       double existingSugars_nonFermentable_kg = 0.0;
       /**
-       * The part of \c existingSugars_all_kg that is added after the boil
+       * The part of \c existingSugars_all_kg that is not in the wort during the boil proper -- ie added in a post-boil
+       * step (eg at flameout), during fermentation or at packaging
        */
       double existingSugars_lateAddition_kg = 0.0;
       /**
@@ -1022,7 +1023,8 @@ public:
        */
       double sugarsFromStarch_all_kg = 0.0;
       /**
-       * The part of \c sugarsFromStarch_all_kg that is added after the boil
+       * The part of \c sugarsFromStarch_all_kg that is not in the wort during the boil proper -- ie added in a post-boil
+       * step (eg at flameout), during fermentation or at packaging
        */
       double sugarsFromStarch_lateAddition_kg = 0.0;
       /**

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/ItemDelegate.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * qtModels/tableModels/ItemDelegate.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -17,6 +17,8 @@
 #define TABLEMODELS_ITEMDELEGATE_H
 #pragma once
 
+#include <QAbstractProxyModel>
+#include <QComboBox>
 #include <QDateEdit>
 #include <QLineEdit>
 
@@ -28,24 +30,21 @@
 #include "widgets/BtOptionalDateEdit.h"
 #include "qtModels/tableModels/BtTableModel.h"
 
-namespace {
-   /**
-    * Sets a combo box value from model data
-    */
-   template<class CB, typename T>
-   void setComboBoxValue(CB * comboBox, TypeInfo const & typeInfo, QVariant & modelData) {
-      if (typeInfo.isOptional()) {
-         bool hasValue = false;
-         Optional::removeOptionalWrapper<T>(modelData, &hasValue);
-         if (!hasValue) {
-            comboBox->setNull();
-            return;
-         }
+/**
+ * Sets a combo box value from model data
+ */
+template<class CB, typename T>
+void setComboBoxValue(CB * comboBox, TypeInfo const & typeInfo, QVariant & modelData) {
+   if (typeInfo.isOptional()) {
+      bool hasValue = false;
+      Optional::removeOptionalWrapper<T>(modelData, &hasValue);
+      if (!hasValue) {
+         comboBox->setNull();
+         return;
       }
-      comboBox->setValue(modelData.value<T>());
-      return;
    }
-
+   comboBox->setValue(modelData.value<T>());
+   return;
 }
 
 /**
@@ -110,6 +109,59 @@ private:
       return columnInfo;
    }
 
+   /**
+    * \brief Recipe addition tables (\c RecipeAdditionHopTableModel etc) have a Step column, for which, rather than
+    *        have the user type in a step number, we give a drop-down list of the steps of the Recipe's Mash, Boil or
+    *        Fermentation (as appropriate for the addition's stage) -- eg so that the user can choose "3: Whirlpool" for
+    *        a hop addition.
+    *
+    *        The first entry in the drop-down is blank, for "no particular step".  The data for each entry is the step
+    *        number (or an invalid QVariant for the blank entry).
+    */
+   static constexpr bool hasStepColumn = requires { NeTableModel::ColumnIndex::Step; };
+
+   bool isStepSelector(QModelIndex const & index) const requires hasStepColumn {
+      return index.column() == static_cast<int>(NeTableModel::ColumnIndex::Step);
+   }
+
+   /**
+    * \brief Get the object for the row of \c index.  Note that, per comment in \c getColumnInfo, \c index.model() is
+    *        typically a sort/filter proxy model, so we need to map back to the row in our table model.
+    */
+   auto getRowFor(QModelIndex const & index) const requires hasStepColumn {
+      QModelIndex sourceIndex = index;
+      if (auto const proxyModel = qobject_cast<QAbstractProxyModel const *>(index.model()); proxyModel) {
+         sourceIndex = proxyModel->mapToSource(index);
+      }
+      return m_tableModel.getRow(sourceIndex.row());
+   }
+
+   QWidget * makeStepSelector(QWidget * parent, QModelIndex const & index) const requires hasStepColumn {
+      QComboBox * comboBox = new QComboBox(parent);
+      // Blank entry means no particular step
+      comboBox->addItem(QString{}, QVariant{});
+      if (auto const row = this->getRowFor(index); row) {
+         int stepNumber = 0;
+         for (QString const & stepName : row->stepNames()) {
+            ++stepNumber;
+            comboBox->addItem(std::remove_cvref_t<decltype(*row)>::stepDisplayName(stepNumber, stepName),
+                              QVariant{stepNumber});
+         }
+         //
+         // If the addition is currently set to a step that does not exist (eg because the user has since deleted
+         // steps from the boil), we still want to show it (rather than silently changing it to "no step" if the user
+         // opens and closes the editor).
+         //
+         if (auto const step = row->step(); step && (*step < 1 || *step > stepNumber)) {
+            comboBox->addItem(QString::number(*step), QVariant{*step});
+         }
+      }
+      comboBox->setMinimumWidth(comboBox->minimumSizeHint().width());
+      comboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+      comboBox->setFocusPolicy(Qt::StrongFocus);
+      return comboBox;
+   }
+
 public:
 
    /**
@@ -119,6 +171,12 @@ public:
    QWidget * getEditWidget(QWidget * parent,
                            [[maybe_unused]] QStyleOptionViewItem const & option,
                            QModelIndex const & index) const {
+      if constexpr (hasStepColumn) {
+         if (this->isStepSelector(index)) {
+            return this->makeStepSelector(parent, index);
+         }
+      }
+
       ColumnInfo const & columnInfo = this->getColumnInfo(index);
       TypeInfo const & typeInfo = columnInfo.typeInfo;
 
@@ -213,6 +271,20 @@ public:
     */
    void readDataFromModel(QWidget * editor,
                           QModelIndex const & index) const {
+      if constexpr (hasStepColumn) {
+         if (this->isStepSelector(index)) {
+            QComboBox * comboBox = qobject_cast<QComboBox *>(editor);
+            int comboIndex = 0;
+            if (auto const row = this->getRowFor(index); row) {
+               if (auto const step = row->step(); step) {
+                  comboIndex = std::max(0, comboBox->findData(QVariant{*step}));
+               }
+            }
+            comboBox->setCurrentIndex(comboIndex);
+            return;
+         }
+      }
+
       ColumnInfo const & columnInfo = this->getColumnInfo(index);
       TypeInfo const & typeInfo = columnInfo.typeInfo;
 
@@ -281,6 +353,20 @@ public:
    void writeDataToModel(QWidget * editor,
                          QAbstractItemModel * model,
                          QModelIndex const & index) const {
+      if constexpr (hasStepColumn) {
+         if (this->isStepSelector(index)) {
+            QComboBox * comboBox = qobject_cast<QComboBox *>(editor);
+            QVariant const selected = comboBox->currentData();
+            std::optional<int> const newStep = selected.isValid() ? std::optional<int>{selected.toInt()} : std::nullopt;
+            // Only write back if the user changed the step -- to avoid creating no-op undo entries
+            if (auto const row = this->getRowFor(index); row && row->step() == newStep) {
+               return;
+            }
+            model->setData(index, QVariant::fromValue(newStep), Qt::EditRole);
+            return;
+         }
+      }
+
       ColumnInfo const & columnInfo = this->getColumnInfo(index);
       TypeInfo const & typeInfo = columnInfo.typeInfo;
 

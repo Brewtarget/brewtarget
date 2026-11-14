@@ -408,9 +408,9 @@ public:
       Q_ASSERT(widget);
       this->m_self.tabWidget_ingredients->setCurrentWidget(widget);
 
-      // We don't need to call this->pimpl->m_hopAdditionsTableModel->addHop(hop) here (or the equivalent for fermentable, misc or
-      // yeast) because the change to the recipe will already have triggered the necessary updates to
-      // this->pimpl->m_hopAdditionsTableModel/this->pimpl->m_fermentableTableModel/etc.
+      // We don't need to call this->pimpl->m_hopAdditionsTableModel->addHop(hop) here (or the equivalent for
+      // fermentable, misc or yeast) because the change to the recipe will already have triggered the necessary updates
+      // to this->pimpl->m_hopAdditionsTableModel/this->pimpl->m_fermentableTableModel/etc.
       return;
    }
 
@@ -845,30 +845,49 @@ public:
       }
 
       //
-      // Reduce fermentables, miscs, hops, yeasts
+      // Where possible, reduce ingredient stocks by the amounts used in the recipe -- ie create StockUses.
       //
-      // Note that the amount can be mass, volume or (for Yeast and Misc) count.  We don't worry about which here as
-      // we assume that a given type of ingredient is always measured in the same way.
+      // If there is a mismatch between the measurement type in the addition and that in the inventory (eg mass vs
+      // volume), then we cannot create a meaningful StockUse.  In such case(s), we warn the user at the end so that she
+      // can make manual inventory adjustments.
       //
-      for (auto addition : rec->fermentableAdditions()) {
-         StockPurchaseFermentable::reduceTotalInventory(*addition->ingredientRaw(),
-                                                        addition->amount(),
-                                                        brewLog);
-      }
-      for (auto addition : rec->hopAdditions()) {
-         StockPurchaseHop::reduceTotalInventory(*addition->ingredientRaw(),
-                                                addition->amount(),
-                                                brewLog);
-      }
-      for (auto addition : rec->miscAdditions()) {
-         StockPurchaseMisc::reduceTotalInventory(*addition->ingredientRaw(),
-                                                 addition->amount(),
-                                                 brewLog);
-      }
-      for (auto addition : rec->yeastAdditions()) {
-         StockPurchaseYeast::reduceTotalInventory(*addition->ingredientRaw(),
-                                                  addition->amount(),
-                                                  brewLog);
+      QStringList mismatches;
+      auto reduce = [&]<class StockPurchaseClass>(auto const & additions) {
+         for (auto const & addition : additions) {
+            StockReductionResult const result = StockPurchaseClass::reduceTotalInventory(*addition->ingredientRaw(),
+                                                                                         addition->amount(),
+                                                                                         brewLog);
+            if (result.mismatchedStockMeasure) {
+               mismatches.append(
+                  tr("%1 (%2): recipe uses %3 but stock is measured by %4 -- %5 not taken from stock").arg(
+                     addition->ingredientRaw()->name().toHtmlEscaped()
+                  ).arg(
+                     addition->ingredientRaw()->localisedName()
+                  ).arg(
+                     Measurement::physicalQuantityDisplayNames[addition->amount().unit->getPhysicalQuantity()]
+                  ).arg(
+                     Measurement::physicalQuantityDisplayNames[*result.mismatchedStockMeasure]
+                  ).arg(
+                     Measurement::displayAmount(result.notTakenFromStock)
+                  )
+               );
+            }
+         }
+      };
+      reduce.template operator()<StockPurchaseFermentable>(rec->fermentableAdditions());
+      reduce.template operator()<StockPurchaseHop        >(rec->hopAdditions        ());
+      reduce.template operator()<StockPurchaseMisc       >(rec->miscAdditions       ());
+      reduce.template operator()<StockPurchaseYeast      >(rec->yeastAdditions      ());
+
+      if (!mismatches.isEmpty()) {
+         qWarning() << Q_FUNC_INFO << "Inventory measure mismatches:" << mismatches;
+         QMessageBox::warning(
+            &this->m_self,
+            tr("Inventory not fully updated"),
+            tr("The following ingredient(s) are measured differently in the recipe and in your inventory, so the "
+               "amount(s) used could not (all) be deducted from inventory.") +
+            "<ul><li>" + mismatches.join("</li><li>") + "</li></ul>"
+         );
       }
 
       return;
@@ -2193,6 +2212,19 @@ void MainWindow::addIngredientToRecipe(NE & ne) {
       return;
    }
    auto neAddition = std::make_shared<typename NE::RecipeAdditionClass>(*this->pimpl->m_recipeObs, ne);
+
+   //
+   // The newly-constructed RecipeAdditionXxx object will, via the IngredientAmount constructor, have its type of
+   // measurement set by IngredientClass::defaultMeasure.  So, eg, for Misc, this will be
+   // Measurement::PhysicalQuantity::Mass.  However, if the user has any stock purchases of this ingredient, we can look
+   // at those to take a better guess at the measurement type.  Eg, if we see that a purchase of Lactic Acid was
+   // measured by volume, then we can set that as the measurement type in preference to mass.
+   //
+   std::optional<Measurement::PhysicalQuantity> const physicalQuantity = NE::StockPurchaseClass::getBestMeasure(ne);
+   if (physicalQuantity) {
+      neAddition->setMeasure(*physicalQuantity);
+   }
+
    this->pimpl->doRecipeAddition(neAddition);
    return;
 }
