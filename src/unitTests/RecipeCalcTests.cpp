@@ -29,11 +29,14 @@
 #include <QStringList>
 #include <QtTest/QtTest>
 
+#include <algorithm>
+
 #include "database/ObjectStoreWrapper.h"
 #include "calculations/IbuMethods.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Boil.h"
+#include "model/BrewLog.h"
 #include "model/BoilStep.h"
 #include "model/Equipment.h"
 #include "model/Fermentation.h"
@@ -388,6 +391,51 @@ void RecipeCalcTests::testBoilAdditionTiming() {
    QVERIFY2( whirlpool20->isAroma    (), "Post-boil addition not aroma");
    QVERIFY2(!boil60     ->isAroma    (), "Boil proper addition treated as aroma");
    QVERIFY2(!firstWort  ->isAroma    (), "Pre-boil addition treated as aroma");
+
+   //
+   // Sorting for printing should be in the order the additions are made: first wort; then boil proper in decreasing
+   // time before the end of the boil (with an addition without a step treated as being in the boil proper, and an
+   // addition without a time being at the start of its step); then post-boil.  See
+   // https://github.com/Brewtarget/brewtarget/issues/1028.
+   //
+   //
+   // NB: Recipe::addAddition renames additions (eg to "Addition of Cascade 4pct hop"), so we compare the additions
+   //     themselves, using the names we gave them above only for logging.
+   //
+   auto sorted = recipe->hopAdditions();
+   std::sort(sorted.begin(), sorted.end(), RecipeAddition::lessThanByTime<RecipeAdditionHop>);
+   QList<std::shared_ptr<RecipeAdditionHop>> const expected{firstWort      ,
+                                                            firstWort60    ,
+                                                            boilNoTime     ,
+                                                            boil60         ,
+                                                            boil20         ,
+                                                            noStep15       ,
+                                                            whirlpoolNoTime,
+                                                            aromaBeerXml   ,
+                                                            whirlpool20    };
+   auto describe = [](auto const & additions) {
+      QStringList descriptions;
+      for (auto const & addition : additions) {
+         descriptions.append(
+            QString("step %1 @ %2").arg(
+               addition->step() ? QString::number(*addition->step()) : QString("-")
+            ).arg(
+               addition->addAtTime_mins() ? QString::number(*addition->addAtTime_mins()) : QString("-")
+            )
+         );
+      }
+      return descriptions;
+   };
+   qDebug() << Q_FUNC_INFO << "Sorted additions:" << describe(sorted);
+   QCOMPARE(describe(sorted), describe(expected));
+   QVERIFY2(sorted == expected, "Hop additions sorted wrongly");
+
+   //
+   // Step names, as shown in the recipe addition tables
+   //
+   QCOMPARE(whirlpool20->stepNames().size(), 3);
+   QCOMPARE(whirlpool20->stepDisplayName(), RecipeAddition::stepDisplayName(3, boilSteps[2]->name()));
+   QVERIFY2(noStep15->stepDisplayName().isEmpty(), "Addition without step should not show a step");
 
    return;
 }
@@ -1350,6 +1398,34 @@ void RecipeCalcTests::testInventory() {
 
    QVERIFY2(fuzzyComp(inventory.quantity, 123.45,  0.00000001), "Wrong hop inventory amount");
    QVERIFY2(inventory.unit == &Measurement::Units::kilograms, "Wrong hop inventory units");
+
+   //
+   // If the recipe uses the hop by volume, we can't take it from stock that is measured by mass, and we should be told
+   // about this so the user can be warned.  See https://github.com/Brewtarget/brewtarget/issues/1028.
+   //
+   auto recipe = std::make_shared<Recipe>("Inventory Test");
+   ObjectStoreWrapper::insert(recipe);
+   auto brewLog = std::make_shared<BrewLog>(*recipe);
+   ObjectStoreWrapper::insert(brewLog);
+   Measurement::Amount const amountByVolume{0.5, Measurement::Units::liters};
+   StockReductionResult const mismatched = StockPurchaseHop::reduceTotalInventory(*this->pimpl->m_cascade_4pct,
+                                                                                  amountByVolume,
+                                                                                  *brewLog);
+   QVERIFY2(mismatched.mismatchedStockMeasure, "Mismatched stock measure not reported");
+   QVERIFY(*mismatched.mismatchedStockMeasure == Measurement::PhysicalQuantity::Mass);
+   QVERIFY(fuzzyComp(mismatched.notTakenFromStock.quantity, 0.5, 0.00000001));
+   inventory = this->pimpl->m_cascade_4pct->totalInventory();
+   QVERIFY2(fuzzyComp(inventory.quantity, 123.45, 0.00000001), "Inventory changed despite mismatched measure");
+
+   // Whereas, using it by mass is fine
+   Measurement::Amount const amountByMass{0.45, Measurement::Units::kilograms};
+   StockReductionResult const matched = StockPurchaseHop::reduceTotalInventory(*this->pimpl->m_cascade_4pct,
+                                                                               amountByMass,
+                                                                               *brewLog);
+   QVERIFY2(!matched.mismatchedStockMeasure, "Spurious mismatched stock measure");
+   QVERIFY(fuzzyComp(matched.notTakenFromStock.quantity, 0.0, 0.00000001));
+   inventory = this->pimpl->m_cascade_4pct->totalInventory();
+   QVERIFY2(fuzzyComp(inventory.quantity, 123.0, 0.00000001), "Inventory not reduced");
 
    return;
 }

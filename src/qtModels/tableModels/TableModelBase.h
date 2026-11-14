@@ -17,12 +17,15 @@
 #define TABLEMODELS_TABLEMODELBASE_H
 #pragma once
 
+#include <concepts>
 #include <type_traits>
 #include <utility> // For std::pair
 #include <vector>
 
 #include <QList>
 #include <QModelIndex>
+#include <QString>
+#include <QStringList>
 
 #include "database/ObjectStoreTyped.h"
 #include "database/ObjectStoreWrapper.h"
@@ -99,6 +102,23 @@ template <typename T> concept CONCEPT_FIX_UP DoesNotObserveRecipe = std::negatio
 template <typename E> concept HasMemberName           = requires { E::Name          ; };
 template <typename E> concept HasMemberTotalInventory = requires { E::TotalInventory; };
 template <typename E> concept HasMemberPctAcid        = requires { E::PctAcid       ; };
+template <typename E> concept HasMemberStage          = requires { E::Stage         ; };
+template <typename E> concept HasMemberStep           = requires { E::Step          ; };
+
+//
+// Recipe addition table models (RecipeAdditionHopTableModel etc) have a Step column, where we want to show, eg,
+// "2: Whirlpool" rather than just "2", and where we want the user to pick from the steps of the Recipe's Mash / Boil /
+// Fermentation (as appropriate for the addition's stage).
+//
+// At the moment, we either have both step and stage, or neither, but it doesn't hurt to check for both since it's done
+// at compile time.
+//
+template <typename T> concept HasNamedSteps = requires(T const & t) {
+   { t.stepDisplayName() } -> std::convertible_to<QString>;
+   { t.stepNames      () } -> std::convertible_to<QStringList>;
+   t.stage();
+   t.step ();
+};
 
 /**
  * \brief See comment in qtModels/tableModels/BtTableModel.h for more info on inheritance structure
@@ -558,6 +578,14 @@ protected:
          return PropertyHelper::getAlignment(typeInfo);
       }
 
+      if constexpr (HasMemberStep<ColumnIndex> && HasNamedSteps<NE>) {
+         // Show the name of the step, not just its number.  (Sorting, which uses Qt::UserRole, still uses the number.)
+         if (static_cast<ColumnIndex>(index.column()) == ColumnIndex::Step &&
+             (role == Qt::DisplayRole || role == Qt::ToolTipRole)) {
+            return QVariant(row->stepDisplayName());
+         }
+      }
+
       QVariant modelData = columnInfo.propertyPath.getValue(*row);
       if (!modelData.isValid()) {
          // It's a programming error if we couldn't read a property modelData
@@ -811,8 +839,32 @@ protected:
          return false;
       }
 
+      //
+      // If the user changes the stage of a recipe addition, then we unset the step as it's unlikely to be meaningful on
+      // the new stage.
+      //
+      std::optional<int> oldStage = std::nullopt;
+      if constexpr (HasMemberStage<ColumnIndex> && HasMemberStep<ColumnIndex> && HasNamedSteps<NE>) {
+         if (static_cast<ColumnIndex>(index.column()) == ColumnIndex::Stage) {
+            oldStage = static_cast<int>(this->m_rows[index.row()]->stage());
+         }
+      }
+
       // No special handling required for any of our columns
       bool const retVal = this->writeDataToModel(index, value, role);
+
+      if constexpr (HasMemberStage<ColumnIndex> && HasMemberStep<ColumnIndex> && HasNamedSteps<NE>) {
+         if (retVal && oldStage) {
+            auto const & row = this->m_rows[index.row()];
+            if (static_cast<int>(row->stage()) != *oldStage && row->step()) {
+               // Going via writeDataToModel makes this change undoable, like the change to the stage
+               QModelIndex const stepIndex = this->derived().createIndex(index.row(),
+                                                                         static_cast<int>(ColumnIndex::Step));
+               this->writeDataToModel(stepIndex, QVariant::fromValue(std::optional<int>{std::nullopt}), Qt::EditRole);
+               emit this->derived().dataChanged(stepIndex, stepIndex);
+            }
+         }
+      }
 
       // ...but we might need to re-show header
       if constexpr (updateHeader) {

@@ -56,6 +56,7 @@ COLUMN_INFOS(
                                                                        PropertyNames::Hop::alpha_pct        }, 1}),
    TABLE_MODEL_HEADER(RecipeAdditionHop, Amount        , PropertyNames::IngredientAmount::amount),                     // "Amount"
    TABLE_MODEL_HEADER(RecipeAdditionHop, Stage         , PropertyNames::RecipeAddition::stage                     ),    // "Stage"
+   TABLE_MODEL_HEADER(RecipeAdditionHop, Step          , PropertyNames::RecipeAddition::step                      ),    // "Step"
    TABLE_MODEL_HEADER(RecipeAdditionHop, Time          , PropertyNames::RecipeAddition::addAtTime_mins            ),    // "Time"
    TABLE_MODEL_HEADER(RecipeAdditionHop, Form          , PropertyPath{{PropertyNames::RecipeAdditionHop::hop,          // "Form"
                                                                        PropertyNames::Hop::form             }, 1}),

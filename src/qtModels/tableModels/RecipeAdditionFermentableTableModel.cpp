@@ -59,7 +59,6 @@ COLUMN_INFOS(
                                                                                PropertyNames::Fermentable::color_srm            }, 1}),
    TABLE_MODEL_HEADER(RecipeAdditionFermentable, Amount        , PropertyNames::IngredientAmount::amount),
    TABLE_MODEL_HEADER(RecipeAdditionFermentable, Stage         , PropertyNames::RecipeAddition::stage         ),
-   // TODO: This is currently free text entry.  It should be constrained to the number of steps in Stage.
    TABLE_MODEL_HEADER(RecipeAdditionFermentable, Step          , PropertyNames::RecipeAddition::step          ),
    TABLE_MODEL_HEADER(RecipeAdditionFermentable, Time          , PropertyNames::RecipeAddition::addAtTime_mins),
    TABLE_MODEL_HEADER(RecipeAdditionFermentable, AmountType    , PropertyNames::IngredientAmount::amount, Fermentable::validMeasures),

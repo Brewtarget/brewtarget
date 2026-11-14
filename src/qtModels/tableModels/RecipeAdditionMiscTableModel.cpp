@@ -56,6 +56,7 @@ COLUMN_INFOS(
                                                                         PropertyNames::Misc::type             }, 1}),
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Amount        , PropertyNames::IngredientAmount::amount             ),         // "Amount"
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Stage         , PropertyNames::RecipeAddition::stage                     ),    // "Stage"
+   TABLE_MODEL_HEADER(RecipeAdditionMisc, Step          , PropertyNames::RecipeAddition::step                      ),    // "Step"
    TABLE_MODEL_HEADER(RecipeAdditionMisc, Time          , PropertyNames::RecipeAddition::addAtTime_mins            ),    // "Time"
    TABLE_MODEL_HEADER(RecipeAdditionMisc, AmountType    , PropertyNames::IngredientAmount::amount, Misc::validMeasures), // "Amount Type"
    // Total inventory is read-only, so there is intentionally no TotalInventoryType column

@@ -16,8 +16,14 @@
 #include "model/RecipeAddition.h"
 
 #include "database/ObjectStoreWrapper.h"
+#include "model/Boil.h"
+#include "model/BoilStep.h"
 #include "model/Fermentable.h"
+#include "model/Fermentation.h"
+#include "model/FermentationStep.h"
 #include "model/Hop.h"
+#include "model/Mash.h"
+#include "model/MashStep.h"
 #include "model/Misc.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
@@ -138,18 +144,50 @@ RecipeAddition::~RecipeAddition() = default;
 [[nodiscard]] bool RecipeAddition::lessThanByTime(RecipeAddition const & lhs, RecipeAddition const & rhs) {
    //
    // Note that, per https://en.cppreference.com/w/cpp/utility/optional/operator_cmp, operator< is sensibly defined for
-   // std::optional values, so we don't have to jump through any special hoops here.
+   // std::optional values, so we don't have to jump through any special hoops here.  Nonetheless, we do need to take
+   // account of how boil additions work:
+   //    - A boil addition without a step is treated as being in the boil proper (see Recipe::boilAdditionTiming), so,
+   //      for sorting, we put it in the last boil proper step -- otherwise, because std::nullopt sorts before all
+   //      other step values, it would come before, eg, first wort additions.  (We take the same approach for
+   //      Recipe::generateInstructions.)
+   //    - For the boil, addAtTime_mins is measured back from the end of the addition's step (so a 60 minute addition
+   //      is made before a 0 minute one), and no time means the addition is made at the start of the step.  So, we want
+   //      to sort in _descending_ order of addAtTime_mins, with no time coming first.
+   //    - For other stages, addAtTime_mins is measured forward from the start of the step (or stage), so ascending
+   //      order is correct, and std::nullopt (= start of step) sorting first is also what we want.
    //
 
    if (!Utils::AutoCompare(lhs.m_stage, rhs.m_stage)) {
       return lhs.m_stage < rhs.m_stage;
    }
 
-   if (!Utils::AutoCompare(lhs.m_step, rhs.m_step)) {
-      return lhs.m_step < rhs.m_step;
+   bool const isBoil = (lhs.m_stage == RecipeAddition::Stage::Boil);
+
+   auto sortStep = [isBoil](RecipeAddition const & addition) -> std::optional<int> {
+      if (addition.m_step || !isBoil) {
+         return addition.m_step;
+      }
+      Recipe const * recipe = ObjectStoreWrapper::getByIdRaw<Recipe>(addition.recipeId());
+      if (recipe) {
+         if (auto const boil = recipe->boil(); boil) {
+            return boil->boilProperSteps().second;
+         }
+      }
+      return std::nullopt;
+   };
+   std::optional<int> const lhsStep = sortStep(lhs);
+   std::optional<int> const rhsStep = sortStep(rhs);
+   if (!Utils::AutoCompare(lhsStep, rhsStep)) {
+      return lhsStep < rhsStep;
    }
 
    if (!Utils::AutoCompare(lhs.m_addAtTime_mins, rhs.m_addAtTime_mins)) {
+      if (isBoil) {
+         // No time = start of step, so comes before any explicit time
+         if (!lhs.m_addAtTime_mins) { return true ; }
+         if (!rhs.m_addAtTime_mins) { return false; }
+         return *lhs.m_addAtTime_mins > *rhs.m_addAtTime_mins;
+      }
       return lhs.m_addAtTime_mins < rhs.m_addAtTime_mins;
    }
 
@@ -213,4 +251,54 @@ std::optional<double> RecipeAddition::addBeforeEnd_mins(std::optional<double> co
    }
 
    return this->m_addAtTime_mins;
+}
+namespace {
+   template<class StepOwner>
+   QStringList namesOfSteps(std::shared_ptr<StepOwner> const & stepOwner) {
+      QStringList names;
+      if (stepOwner) {
+         int stepNumber = 0;
+         for (auto const & step : stepOwner->steps()) {
+            ++stepNumber;
+            QString const name = step->name().trimmed();
+            names.append(name.isEmpty() ? RecipeAddition::tr("Step %1").arg(stepNumber) : name);
+         }
+      }
+      return names;
+   }
+}
+
+QStringList RecipeAddition::stepNamesFor(Recipe const & recipe, RecipeAddition::Stage const stage) {
+   switch (stage) {
+      case RecipeAddition::Stage::Mash        : return namesOfSteps(recipe.mash        ());
+      case RecipeAddition::Stage::Boil        : return namesOfSteps(recipe.boil        ());
+      case RecipeAddition::Stage::Fermentation: return namesOfSteps(recipe.fermentation());
+      case RecipeAddition::Stage::Packaging   : return QStringList{};
+      // No default case as we want the compiler to warn us if we missed a case above
+   }
+   Q_UNREACHABLE(); // We should never get here
+}
+
+QStringList RecipeAddition::stepNames() const {
+   Recipe const * recipe = ObjectStoreWrapper::getByIdRaw<Recipe>(this->recipeId());
+   if (!recipe) {
+      return QStringList{};
+   }
+   return RecipeAddition::stepNamesFor(*recipe, this->m_stage);
+}
+
+QString RecipeAddition::stepDisplayName(int const step, QString const & stepName) {
+   return RecipeAddition::tr("%1: %2").arg(step).arg(stepName);
+}
+
+QString RecipeAddition::stepDisplayName() const {
+   if (!this->m_step) {
+      return QString{};
+   }
+   QStringList const names = this->stepNames();
+   int const stepIndex = *this->m_step - 1;
+   if (stepIndex < 0 || stepIndex >= names.size()) {
+      return QString::number(*this->m_step);
+   }
+   return RecipeAddition::stepDisplayName(*this->m_step, names.at(stepIndex));
 }
