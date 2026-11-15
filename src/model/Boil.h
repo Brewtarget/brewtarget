@@ -155,6 +155,9 @@ public:
     * \brief Per dotBeer (see AdditionSchedule in Recipe.beer.schema and BoilStep in Boil.beer.schema), a boil step
     *        whose start or end temperature is not set is assumed to be at boiling at that point.  These helpers
     *        encapsulate that rule so that all the code that classifies boil steps agrees.
+    *
+    *        \c startsAtBoil and \c endsAtBoil return \c true if the relevant temperature is at or above
+    *        \c minimumBoilTemperature_c (or is not set).
     */
    static bool startsAtBoil(BoilStep const & boilStep);
    static bool endsAtBoil  (BoilStep const & boilStep);
@@ -285,24 +288,36 @@ public:
        *         - Otherwise, the temperature moves linearly from \c startTemp_c to \c endTemp_c over the segment.  So a
        *           segment with the same start and end temperatures is a hop stand / whirlpool held at that temperature,
        *           and a segment from, say, 80°C to 20°C is forced cooling.
+       *
+       *        If \c startsAtPreviousTemp is \c true, then \c startTemp_c is ignored and the segment instead starts at
+       *        whatever temperature the wort had reached at the end of the previous segment (or boiling, if there is no
+       *        previous segment).  We use this for the ramp before a post-boil step (see \c BoilStep::rampTime_mins),
+       *        because, eg, a preceding natural cooling step might not have got all the way down to its nominal end
+       *        temperature.
        */
       struct TemperatureSegment {
          double duration_minutes;
          double startTemp_c;
          double endTemp_c;
          bool   naturalCooling;
+         bool   startsAtPreviousTemp = false;
       };
 
       /**
        * \brief One segment per post-boil step, up to (but not including) the first step whose length is not set.
        *        Per dotBeer, an unset boil step temperature is treated as boiling.  A step that starts at boiling and
        *        ends below it is treated as natural cooling (see \c TemperatureSegment above).
+       *
+       *        Additionally, a post-boil step with a (non-zero) ramp time is preceded by a segment for the ramp, during
+       *        which the temperature moves linearly from wherever the previous segment ended to the start temperature of
+       *        the step.  (Per dotBeer and BeerJSON, ramp time is the time that passes before the step begins.)
        */
       std::vector<TemperatureSegment> segments = {};
 
       /**
-       * \brief Total time from flameout to the end of the post-boil steps, or \c std::nullopt if not known -- ie if
-       *        there are no post-boil steps (or no Boil) or if any post-boil step has no length set.
+       * \brief Total time (including any ramp times) from flameout to the end of the post-boil steps, or
+       *        \c std::nullopt if not known -- ie if there are no post-boil steps (or no Boil) or if any post-boil step
+       *        has no length set.
        */
       std::optional<double> duration_mins = std::nullopt;
    };

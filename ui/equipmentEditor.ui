@@ -986,6 +986,9 @@ Tabs</string>
        </item>
        <item row="5" column="1">
         <widget class="SmartLineEdit" name="lineEdit_kettleInternalDiameter">
+         <property name="toolTip">
+          <string>Internal diameter of the kettle at the surface of the wort.  Used, along with the opening diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</string>
+         </property>
         </widget>
        </item>
        <item row="5" column="3">
@@ -1000,6 +1003,9 @@ Tabs</string>
        </item>
        <item row="5" column="4">
         <widget class="SmartLineEdit" name="lineEdit_kettleOpeningDiameter">
+         <property name="toolTip">
+          <string>Internal diameter of the opening in the kettle through which steam can escape -- eg the same as the internal diameter if the kettle is uncovered, or smaller if it is partly covered.  Used, along with the internal diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</string>
+         </property>
         </widget>
        </item>
        <item row="6" column="0">

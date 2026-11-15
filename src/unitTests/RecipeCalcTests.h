@@ -84,6 +84,13 @@ private slots:
    void testPostBoilIbus();
 
    /**
+    * \brief Verify that the ramp time of a post-boil step is handled correctly in the post-boil temperature profile,
+    *        the timing of post-boil additions and the resulting IBUs.  Also verify that mIBU uses the kettle volume at
+    *        flameout for the rate of natural cooling.
+    */
+   void testPostBoilRampTime();
+
+   /**
     * \brief Verify the Garetz, Daniels and SMPH IBU formulae, including against John-Paul Hosom's published SMPH
     *        worked examples.
     */

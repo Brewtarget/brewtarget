@@ -172,8 +172,9 @@ namespace IbuMethods {
     * \param originalGravity_sg - (Used in Garetz and SMPH)  If not set, we use \c wortGravity_sg.
     * \param preBoilVolume_liters - (Only used in Garetz)  Volume at the start of the boil, used for the "concentration
     *                               factor".  If not set, we assume no concentration during the boil.
-    * \param kettleVolumeAtFlameout_liters - (Used in Garetz and SMPH)  Wort volume in the kettle at the end of the
-    *                                        boil.  If not set, we use \c postBoilVolume_liters.
+    * \param kettleVolumeAtFlameout_liters - (Used in Garetz, mIBU and SMPH)  Wort volume in the kettle at the end of
+    *                                        the boil.  (In mIBU and SMPH, this is used for the rate of natural cooling
+    *                                        after flameout.)  If not set, we use \c postBoilVolume_liters.
     * \param kettleDissolvedAlphaAcids_ppm - (Only used in SMPH)  Concentration of dissolved (and not yet isomerized)
     *                                        alpha acids already in the kettle, from earlier additions, immediately
     *                                        before these hops are added.  This is used for SMPH's alpha-acid solubility

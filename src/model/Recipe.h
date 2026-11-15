@@ -916,6 +916,10 @@ public:
     *        is made at the \b start of that step.  So, eg, with the standard three-step boil profile (pre-boil, boil
     *        proper, post-boil), a hop addition to step 3 with addAtTime_mins of 20 is a whirlpool/steep addition 20
     *        minutes before the end of the post-boil step; it has not spent 20 minutes in the boil.
+    *
+    *        For post-boil steps, ramp time (\c BoilStep::rampTime_mins) is time that passes before the step begins.  So
+    *        it counts towards the time after flameout and the time in hot wort, and an addition with a step but no time
+    *        is made at the end of that step's ramp.  (See also \c Boil::postBoilProfile.)
     */
    struct BoilAdditionTiming {
       /**

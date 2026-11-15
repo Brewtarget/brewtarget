@@ -3578,30 +3578,42 @@ Recipe::BoilAdditionTiming Recipe::boilAdditionTiming(RecipeAddition const & add
       // Addition is after the end of the boil proper -- eg flameout, whirlpool or hop stand.  So no time in the boil,
       // and addAtTime_mins is time before the end of this post-boil step.  No time means start of the step.
       //
+      // Per dotBeer (and BeerJSON), a step's ramp time is the time that passes _before_ the step begins (see
+      // Boil::postBoilProfile).  So, eg, a hop stand addition with no time, in a step with a ramp time, is made once
+      // the wort has got to the step's start temperature, ie at the end of the ramp.  If addAtTime_mins is greater
+      // than the length of the step (but not greater than the length of the step plus its ramp time), then the
+      // addition is made during the ramp.
+      //
       timing.postBoil = true;
       timing.boilProper_mins = 0.0;
 
+      auto const rampTime_mins = [](auto const & boilStep) {
+         return std::max(0.0, boilStep->rampTime_mins().value_or(0.0));
+      };
+      double const additionStepRampTime_mins = rampTime_mins(additionStep);
+
+      // NB: This is negative if the addition is made during the ramp before the step
       double minsIntoStep = 0.0;
       if (addAtTime_mins) {
          timing.untilEndOfStep_mins = *addAtTime_mins;
          if (stepLength_mins) {
-            minsIntoStep = std::max(0.0, *stepLength_mins - *addAtTime_mins);
+            minsIntoStep = std::max(-additionStepRampTime_mins, *stepLength_mins - *addAtTime_mins);
          }
       } else {
          timing.untilEndOfStep_mins = stepLength_mins;
       }
 
-      timing.afterFlameout_mins = minsIntoStep;
+      timing.afterFlameout_mins = additionStepRampTime_mins + minsIntoStep;
       for (int ii = lastBoilProperIndex + 1; ii < stepIndex; ++ii) {
-         timing.afterFlameout_mins += boilSteps[ii]->stepTime_mins().value_or(0.0);
+         timing.afterFlameout_mins += rampTime_mins(boilSteps[ii]) + boilSteps[ii]->stepTime_mins().value_or(0.0);
       }
 
-      // Time remaining in the hot wort is the rest of this step plus all subsequent steps
+      // Time remaining in the hot wort is the rest of this step plus all subsequent steps (including their ramps)
       timing.postBoilRemaining_mins = timing.untilEndOfStep_mins;
       for (int ii = stepIndex + 1; ii < numBoilSteps && timing.postBoilRemaining_mins; ++ii) {
          auto const subsequentStepLength_mins = boilSteps[ii]->stepTime_mins();
          if (subsequentStepLength_mins) {
-            *timing.postBoilRemaining_mins += *subsequentStepLength_mins;
+            *timing.postBoilRemaining_mins += rampTime_mins(boilSteps[ii]) + *subsequentStepLength_mins;
          } else {
             timing.postBoilRemaining_mins = std::nullopt;
          }
