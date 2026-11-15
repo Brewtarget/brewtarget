@@ -427,13 +427,13 @@ public:
 
    /**
     * \brief The interior diameter of the kettle at the surface of the wort.  Used to calculate the surface area of wort
-    *        exposed to air, eg for mIBU calculation.  NB: Not part of BeerXML or BeerJSON
+    *        exposed to air, eg for mIBU and SMPH calculations.  NB: Not part of BeerXML or BeerJSON
     */
    Q_PROPERTY(std::optional<double> kettleInternalDiameter_cm   READ kettleInternalDiameter_cm   WRITE setKettleInternalDiameter_cm   )
 
    /**
-    * \brief The interior diameter of the opening in the kettle through which steam can escape.  Used in mIBU
-    *        calculation.  NB: Not part of BeerXML or BeerJSON
+    * \brief The interior diameter of the opening in the kettle through which steam can escape.  Used in mIBU and
+    *        SMPH calculations.  NB: Not part of BeerXML or BeerJSON
     */
    Q_PROPERTY(std::optional<double> kettleOpeningDiameter_cm    READ kettleOpeningDiameter_cm    WRITE setKettleOpeningDiameter_cm   )
 

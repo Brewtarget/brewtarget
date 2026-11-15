@@ -140,6 +140,13 @@ namespace {
       return sorted;
    }
 
+   QList<std::shared_ptr<RecipeAdditionMisc>> sortMiscAdditionsByTime(Recipe * rec) {
+      QList<std::shared_ptr<RecipeAdditionMisc>> sorted = rec->miscAdditions();
+
+      std::sort(sorted.begin(), sorted.end(), RecipeAddition::lessThanByTime<RecipeAdditionMisc>);
+      return sorted;
+   }
+
    QList<std::shared_ptr<RecipeAdditionFermentable>> sortFermentableAdditionsByWeight(Recipe* rec) {
       QList<std::shared_ptr<RecipeAdditionFermentable>> sorted = rec->fermentableAdditions();
 
@@ -634,7 +641,7 @@ public:
          return "";
       }
 
-      auto miscAdditions = this->rec->miscAdditions();
+      auto miscAdditions = sortMiscAdditionsByTime(this->rec);
       int size = miscAdditions.size();
       if ( size < 1 ) {
          return "";
@@ -680,7 +687,7 @@ public:
       }
       QString ret = "";
 
-      auto miscAdditions = this->rec->miscAdditions();
+      auto miscAdditions = sortMiscAdditionsByTime(this->rec);
       int size = miscAdditions.size();
       if( size > 0 ) {
          QStringList names, types, uses, amounts, times;

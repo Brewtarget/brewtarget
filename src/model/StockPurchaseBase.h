@@ -45,6 +45,29 @@ AddPropertyName(quantityRemaining)
 #define StockPurchaseBaseOptions OwnedSetOptions{ .enumerated = true }
 
 /**
+ * \brief Returned by \c StockPurchaseBase::reduceTotalInventory to tell the caller about stock it could not use.
+ *        Specifically, we do not attempt to convert between physical quantities (eg between volume and mass), because,
+ *        without knowing the density of the ingredient, there is no meaningful way to do so.
+ */
+struct StockReductionResult {
+   /**
+    * \brief Amount that we were not able to take from stock (in the same units as the amount used).  Zero if we were
+    *        able to take everything from stock.
+    */
+   Measurement::Amount notTakenFromStock;
+
+   /**
+    * \brief If set, there was stock on hand that we did not use because it is measured in this physical quantity
+    *        rather than that of the amount used (eg stock is measured by volume and amount used by mass).
+    *
+    *        NB: This is only set if the stock we were able to use was not sufficient -- ie if \c notTakenFromStock is
+    *            non-zero.  If we could satisfy what was needed from stock measured in the right way, there is nothing
+    *            to warn the user about, even if there is also some stock measured in a different way.
+    */
+   std::optional<Measurement::PhysicalQuantity> mismatchedStockMeasure = std::nullopt;
+};
+
+/**
  * \brief Small CRTP base class to provide templated code for stock purchase classes: \c StockPurchaseHop,
  *        \c StockPurchaseFermentable, \c StockPurchaseMisc, \c StockPurchaseYeast.
  *
@@ -260,6 +283,58 @@ public:
    }
 
    /**
+    * \brief Get purchases for which we still have stock, in date order (ie with oldest purchases first)
+    *
+    * @return
+    */
+   static auto getUnexhaustedPurchases(IngredientClass const & ingredient) {
+      //
+      // Get all the non-deleted StockPurchase objects for the supplied ingredient
+      //
+      int const ingredientKey = ingredient.key();
+      auto unexhaustedPurchases = ObjectStoreWrapper::findAllMatching<Derived>(
+         [ingredientKey](Derived const * sp) {
+            if (sp->deleted() || ingredientKey != sp->ingredientId()) {
+               return false;
+            }
+
+            if (qFuzzyIsNull(sp->amountRemaining().quantity)) {
+               // Skip ~0.0 amounts
+               return false;
+            }
+
+            return true;
+         }
+      );
+
+      //
+      // Put everything in date order
+      //
+      std::sort(
+         unexhaustedPurchases.begin(),
+         unexhaustedPurchases.end(),
+         [](Derived const * lhs, Derived const * rhs) {
+            // Best before date is our preferred sort, but it's an optional field
+            if (lhs->dateBestBefore() && rhs->dateBestBefore()) {
+               return *lhs->dateBestBefore() < *rhs->dateBestBefore();
+            }
+            // Date received is a second best
+            if (lhs->dateReceived() && rhs->dateReceived()) {
+               return *lhs->dateReceived() < *rhs->dateReceived();
+            }
+            // Date ordered is a third best
+            if (lhs->dateOrdered() && rhs->dateOrdered()) {
+               return *lhs->dateOrdered() < *rhs->dateOrdered();
+            }
+            // ID is the last resort
+            return lhs->key() < rhs->key();
+         }
+      );
+
+      return unexhaustedPurchases;
+   }
+
+   /**
     * \brief For a given ingredient, get the total amount we have on hand -- ie total of all purchases minus total of
     *        all uses.
     */
@@ -314,6 +389,25 @@ public:
    }
 
    /**
+    * \brief Similar to \c getTotalInventory and \c isOnHand, but tells what, if any, type of measure (eg Mass, Volume,
+    *        Count) was used for the oldest purchase for which we still have inventory.  (We assume that the brewer
+    *        follows best practice for stock rotation!)
+    *
+    *        This is used eg in \c MainWindow::addIngredientToRecipe so that we have the best guess possible for whether
+    *        a new recipe addition is going to be measured by mass, volume, etc.
+    *
+    * @return
+    */
+   static std::optional<Measurement::PhysicalQuantity> getBestMeasure(IngredientClass const & ingredient) {
+      auto const purchases = getUnexhaustedPurchases(ingredient);
+      if (purchases.size() == 0) {
+         return std::nullopt;
+      }
+
+      return purchases[0]->measure();
+   }
+
+   /**
     * \brief For a given ingredient, reduce the total amount we have on hand (as a consequence of it being used in a
     *        Recipe).
     *
@@ -322,55 +416,24 @@ public:
     * \param ingredient
     * \param amountUsed
     * \param brewLog
+    *
+    * \return Details of anything we could not take from stock -- see \c StockReductionResult
     */
-   static void reduceTotalInventory(IngredientClass const & ingredient,
-                                    Measurement::Amount amountUsed,
-                                    BrewLog const & brewLog) {
-      //
-      // Get all the non-deleted StockPurchase objects for the supplied ingredient
-      //
-      int const ingredientKey = ingredient.key();
-      auto purchases = ObjectStoreWrapper::findAllMatching<Derived>(
-         [ingredientKey](Derived const * sp) { return !sp->deleted() && (ingredientKey == sp->ingredientId()); }
-      );
-
-      //
-      // Put everything in date order
-      //
-      std::sort(
-         purchases.begin(),
-         purchases.end(),
-         [](Derived const * lhs, Derived const * rhs) {
-            // Best before date is our preferred sort, but it's an optional field
-            if (lhs->dateBestBefore() && rhs->dateBestBefore()) {
-               return *lhs->dateBestBefore() < *rhs->dateBestBefore();
-            }
-            // Date received is a second best
-            if (lhs->dateReceived() && rhs->dateReceived()) {
-               return *lhs->dateReceived() < *rhs->dateReceived();
-            }
-            // Date ordered is a third best
-            if (lhs->dateOrdered() && rhs->dateOrdered()) {
-               return *lhs->dateOrdered() < *rhs->dateOrdered();
-            }
-            // ID is the last resort
-            return lhs->key() < rhs->key();
-         }
-      );
-
+   static StockReductionResult reduceTotalInventory(IngredientClass const & ingredient,
+                                                    Measurement::Amount amountUsed,
+                                                    BrewLog const & brewLog) {
+      auto purchases = getUnexhaustedPurchases(ingredient);
 
       Measurement::PhysicalQuantity const physicalQuantity = amountUsed.unit->getPhysicalQuantity();
+      std::optional<Measurement::PhysicalQuantity> skippedStockMeasure = std::nullopt;
 
       for (Derived * purchase : purchases) {
          Measurement::Amount remaining = purchase->amountRemaining();
-         if (qFuzzyIsNull(remaining.quantity)) {
-            // Skip ~0.0 amounts
-            continue;
-         }
 
          if (remaining.unit->getPhysicalQuantity() != physicalQuantity) {
             // Skip over this purchase if it's not the right physical quantity (eg is Volume when we have Mass)
             qInfo() << Q_FUNC_INFO << "Skipping" << purchase << "as not" << physicalQuantity;
+            skippedStockMeasure = remaining.unit->getPhysicalQuantity();
             continue;
          }
 
@@ -391,7 +454,7 @@ public:
             stockUse->setQuantityUsed(amountUsed.quantity);
             purchase->add(stockUse);
             // No further processing required
-            return;
+            return StockReductionResult{Measurement::Amount{0.0, *amountUsed.unit}};
          }
 
          //
@@ -411,9 +474,10 @@ public:
          //      StockPurchase item.
          //
          qWarning() << Q_FUNC_INFO << "Unable to satisfy" << amountUsed << "of" << ingredient;
+         return StockReductionResult{amountUsed, skippedStockMeasure};
       }
 
-      return;
+      return StockReductionResult{Measurement::Amount{0.0, *amountUsed.unit}};
    }
    //================================================ Member variables =================================================
 

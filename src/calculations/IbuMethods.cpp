@@ -399,9 +399,16 @@ namespace {
          return 0.0;
       }
 
-      double const b = IbuMethods::naturalCoolingRate(parms.postBoilVolume_liters,
-                                                      parms.kettleInternalDiameter_cm.value_or(45.0),
-                                                      parms.kettleOpeningDiameter_cm .value_or(45.0));
+      //
+      // The rate of natural cooling depends on the volume of wort actually in the kettle, which is not necessarily the
+      // same as postBoilVolume_liters (eg if there are losses between the kettle and the fermenter).  This is also what
+      // we do for SMPH -- see Smph::naturalCoolingRate.
+      //
+      double const b = IbuMethods::naturalCoolingRate(
+         parms.kettleVolumeAtFlameout_liters.value_or(parms.postBoilVolume_liters),
+         parms.kettleInternalDiameter_cm.value_or(45.0),
+         parms.kettleOpeningDiameter_cm .value_or(45.0)
+      );
 
       //
       // The integrand is smooth (apart from the step at 5 minutes, and at segment boundaries), so the midpoint rule with
@@ -1201,8 +1208,9 @@ double IbuMethods::postBoilWortTemperature_c(double const minutesSinceFlameout,
          if (segment.duration_minutes <= 0.0) {
             return atMostBoiling(segment.endTemp_c);
          }
-         return atMostBoiling(segment.startTemp_c +
-                              (segment.endTemp_c - segment.startTemp_c) * elapsed_minutes / segment.duration_minutes);
+         double const startTemp_c = segment.startsAtPreviousTemp ? temp_c : segment.startTemp_c;
+         return atMostBoiling(startTemp_c +
+                              (segment.endTemp_c - startTemp_c) * elapsed_minutes / segment.duration_minutes);
       }
       elapsed_minutes -= segment.duration_minutes;
       if (segment.naturalCooling) {

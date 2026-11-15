@@ -50,10 +50,7 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable) :
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &MiscTableModel::contextMenu);
-   connect(&ObjectStoreTyped<StockPurchaseMisc>::getInstance(),
-           &ObjectStoreTyped<StockPurchaseMisc>::signalPropertyChanged,
-           this,
-           &MiscTableModel::changedInventory);
+   this->connectInventorySignals<StockPurchaseMisc>();
    return;
 }
 

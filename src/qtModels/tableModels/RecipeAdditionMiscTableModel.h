@@ -44,6 +44,7 @@ COLUMN_NAMES(RecipeAdditionMiscTableModel, Name          ,
                                            Type          ,
                                            Amount        ,
                                            Stage         ,
+                                           Step          ,
                                            Time          ,
                                            AmountType    ,
                                            TotalInventory,)
@@ -83,7 +84,6 @@ public:
    double concentrationPerLiter_massConcPpm(Water::MineralIon const ion) const;
 
    Measurement::Amount total(Misc::WaterAgentType const waterAgentType) const;
-   double totalAcid_kg(Misc::WaterAgentType waterAgentType) const;
 
 public slots:
 

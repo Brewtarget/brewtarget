@@ -55,8 +55,7 @@ HopTableModel::HopTableModel(QTableView * parent, bool editable) :
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &HopTableModel::contextMenu);
-   connect(&ObjectStoreTyped<StockPurchaseHop>::getInstance(), &ObjectStoreTyped<StockPurchaseHop>::signalPropertyChanged, this,
-           &HopTableModel::changedInventory);
+   this->connectInventorySignals<StockPurchaseHop>();
    return;
 }
 

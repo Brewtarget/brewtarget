@@ -17,12 +17,15 @@
 #define TABLEMODELS_TABLEMODELBASE_H
 #pragma once
 
+#include <concepts>
 #include <type_traits>
 #include <utility> // For std::pair
 #include <vector>
 
 #include <QList>
 #include <QModelIndex>
+#include <QString>
+#include <QStringList>
 
 #include "database/ObjectStoreTyped.h"
 #include "database/ObjectStoreWrapper.h"
@@ -69,9 +72,9 @@ template <typename T> concept CONCEPT_FIX_UP DoesNotObserveRecipe = std::negatio
 //       The way round this is to template the member function so that the evaluation of the constraint is deferred
 //       until after the class declaration of `Derived` is complete.  Now, in, eg, HopTableModel we can call the right
 //       version via:
-//          this->updateStockPurchase<HopTableModel>(...);
+//          this->doGetObservedRecipe<HopTableModel>();
 //
-//       (I did also try `this->updateStockPurchase<decltype(*this)>(...)`, but I couldn't get it to work.)
+//       (I did also try `this->doGetObservedRecipe<decltype(*this)>()`, but I couldn't get it to work.)
 //
 //       But what if we want to call one of these templated functions from inside TableModelBase?  Well, then we have to
 //       call down to a wrapper function in Derived that knows which version of the TableModelBase function to call.  Eg
@@ -99,6 +102,23 @@ template <typename T> concept CONCEPT_FIX_UP DoesNotObserveRecipe = std::negatio
 template <typename E> concept HasMemberName           = requires { E::Name          ; };
 template <typename E> concept HasMemberTotalInventory = requires { E::TotalInventory; };
 template <typename E> concept HasMemberPctAcid        = requires { E::PctAcid       ; };
+template <typename E> concept HasMemberStage          = requires { E::Stage         ; };
+template <typename E> concept HasMemberStep           = requires { E::Step          ; };
+
+//
+// Recipe addition table models (RecipeAdditionHopTableModel etc) have a Step column, where we want to show, eg,
+// "2: Whirlpool" rather than just "2", and where we want the user to pick from the steps of the Recipe's Mash / Boil /
+// Fermentation (as appropriate for the addition's stage).
+//
+// At the moment, we either have both step and stage, or neither, but it doesn't hurt to check for both since it's done
+// at compile time.
+//
+template <typename T> concept HasNamedSteps = requires(T const & t) {
+   { t.stepDisplayName() } -> std::convertible_to<QString>;
+   { t.stepNames      () } -> std::convertible_to<QStringList>;
+   t.stage();
+   t.step ();
+};
 
 /**
  * \brief See comment in qtModels/tableModels/BtTableModel.h for more info on inheritance structure
@@ -371,10 +391,18 @@ public:
          return;
       }
 
+      //
+      // Because QItemSelectionModel::selectedIndexes gives one entry per selected cell, if the user has selected more
+      // than one cell in the same row (eg by dragging across the row or ctrl-clicking), we'll see that row more than
+      // once.  (And trying to remove the same row twice leads to unhappy outcomes.)
+      //
       for (auto ii = 0; ii < size; ii++) {
          QModelIndex viewIndex = selected.at(ii);
          QModelIndex modelIndex = proxy.mapToSource(viewIndex);
-         itemsToRemove.append(this->getRow(modelIndex.row()));
+         auto item = this->getRow(modelIndex.row());
+         if (item && !itemsToRemove.contains(item)) {
+            itemsToRemove.append(item);
+         }
       }
 
       for (auto item : itemsToRemove) {
@@ -550,6 +578,14 @@ protected:
          return PropertyHelper::getAlignment(typeInfo);
       }
 
+      if constexpr (HasMemberStep<ColumnIndex> && HasNamedSteps<NE>) {
+         // Show the name of the step, not just its number.  (Sorting, which uses Qt::UserRole, still uses the number.)
+         if (static_cast<ColumnIndex>(index.column()) == ColumnIndex::Step &&
+             (role == Qt::DisplayRole || role == Qt::ToolTipRole)) {
+            return QVariant(row->stepDisplayName());
+         }
+      }
+
       QVariant modelData = columnInfo.propertyPath.getValue(*row);
       if (!modelData.isValid()) {
          // It's a programming error if we couldn't read a property modelData
@@ -618,36 +654,50 @@ protected:
                                                  physicalQuantity);
    }
 
-   template<class TM>
-   void updateStockPurchase(int invKey,
-                            BtStringConst const & propertyName) requires IsTableModel<TM> && CanHaveStockPurchase<NE> {
-      //
-      // Substantive version
-      //
-      // Find the StockPurchase that we've been notified about; check whether any of our rows relate to the same
-      // ingredient; if so, send out a signal that the "total inventory" column for that row needs updating.
-      //
-      // TBD: I think we need to revisit this to ensure it workes properly for StockUse and for RecipeAddition tables.
-      //
-      if (propertyName == PropertyNames::IngredientAmount::amount) {
-         auto stockPurchase = ObjectStoreWrapper::getById<typename NE::StockPurchaseClass>(invKey);
-         for (int ii = 0; ii < this->m_rows.size(); ++ii) {
-            std::shared_ptr<NE> ingredient = this->m_rows.at(ii);
-            if (ingredient->key() == stockPurchase->ingredientId()) {
-               emit this->derived().dataChanged(
-                  this->derived().createIndex(ii, static_cast<int>(Derived::ColumnIndex::TotalInventory)),
-                  this->derived().createIndex(ii, static_cast<int>(Derived::ColumnIndex::TotalInventory))
-               );
-            }
+   /**
+    * \brief If we have a "total inventory" column, tell the view that it needs updating for all rows.
+    *
+    *        We don't try to work out which rows are affected by a given inventory change, because (a) when a
+    *        \c StockPurchase or \c StockUse is deleted it's no longer straightforward to find out which ingredient it
+    *        related to, (b) for recipe addition tables, there can be more than one row for the same ingredient, and (c)
+    *        the view will only actually re-read the cells that are visible, so this is not expensive.
+    */
+   void refreshTotalInventory() {
+      if constexpr (HasMemberTotalInventory<ColumnIndex>) {
+         int const numRows = static_cast<int>(this->m_rows.size());
+         if (numRows > 0) {
+            int const column = static_cast<int>(ColumnIndex::TotalInventory);
+            emit this->derived().dataChanged(this->derived().createIndex(0          , column),
+                                             this->derived().createIndex(numRows - 1, column));
          }
       }
       return;
    }
-   template<class TM>
-   void updateStockPurchase([[maybe_unused]] int invKey,
-                        [[maybe_unused]] BtStringConst const & propertyName) requires IsTableModel<TM> &&
-                                                                                      CannotHaveStockPurchase<NE> {
-      // No-op version
+
+   /**
+    * \brief Derived classes that show a "total inventory" column should call this from their constructor, eg
+    *        \c this->connectInventorySignals<StockPurchaseHop>() in \c HopTableModel and in
+    *        \c RecipeAdditionHopTableModel.
+    *
+    *        The total inventory for an ingredient is the total amount remaining across all its \c StockPurchase
+    *        objects, which in turn depends on their \c StockUse objects.  So we need to know about any of these being
+    *        added, deleted or modified.  (Previously, we only listened for changes to the amount of a \c StockPurchase,
+    *        and then only in tables of ingredients, not in tables of recipe additions.  See
+    *        https://github.com/Brewtarget/brewtarget/issues/756.)
+    */
+   template<class StockPurchaseClass>
+   void connectInventorySignals() {
+      using StockUseClass = typename StockPurchaseClass::StockUseClass;
+      Derived & self = this->derived();
+      auto refresh = [this]() { this->refreshTotalInventory(); return; };
+      auto & purchaseStore = ObjectStoreTyped<StockPurchaseClass>::getInstance();
+      auto & useStore      = ObjectStoreTyped<StockUseClass     >::getInstance();
+      QObject::connect(&purchaseStore, &ObjectStore::signalObjectInserted , &self, refresh);
+      QObject::connect(&purchaseStore, &ObjectStore::signalObjectDeleted  , &self, refresh);
+      QObject::connect(&purchaseStore, &ObjectStore::signalPropertyChanged, &self, refresh);
+      QObject::connect(&useStore     , &ObjectStore::signalObjectInserted , &self, refresh);
+      QObject::connect(&useStore     , &ObjectStore::signalObjectDeleted  , &self, refresh);
+      QObject::connect(&useStore     , &ObjectStore::signalPropertyChanged, &self, refresh);
       return;
    }
 
@@ -789,8 +839,32 @@ protected:
          return false;
       }
 
+      //
+      // If the user changes the stage of a recipe addition, then we unset the step as it's unlikely to be meaningful on
+      // the new stage.
+      //
+      std::optional<int> oldStage = std::nullopt;
+      if constexpr (HasMemberStage<ColumnIndex> && HasMemberStep<ColumnIndex> && HasNamedSteps<NE>) {
+         if (static_cast<ColumnIndex>(index.column()) == ColumnIndex::Stage) {
+            oldStage = static_cast<int>(this->m_rows[index.row()]->stage());
+         }
+      }
+
       // No special handling required for any of our columns
       bool const retVal = this->writeDataToModel(index, value, role);
+
+      if constexpr (HasMemberStage<ColumnIndex> && HasMemberStep<ColumnIndex> && HasNamedSteps<NE>) {
+         if (retVal && oldStage) {
+            auto const & row = this->m_rows[index.row()];
+            if (static_cast<int>(row->stage()) != *oldStage && row->step()) {
+               // Going via writeDataToModel makes this change undoable, like the change to the stage
+               QModelIndex const stepIndex = this->derived().createIndex(index.row(),
+                                                                         static_cast<int>(ColumnIndex::Step));
+               this->writeDataToModel(stepIndex, QVariant::fromValue(std::optional<int>{std::nullopt}), Qt::EditRole);
+               emit this->derived().dataChanged(stepIndex, stepIndex);
+            }
+         }
+      }
 
       // ...but we might need to re-show header
       if constexpr (updateHeader) {
@@ -860,10 +934,7 @@ protected:
       void removeItem(int itemId, std::shared_ptr<QObject> object);                                              \
                                                                                                                  \
       /** \brief Catch changes to Recipe, Database, and NeName. */                                               \
-      void changed(QMetaProperty, QVariant);                                                                     \
-                                                                                                                 \
-      /** \brief Catches changes to inventory.  (Can be no-op where not relevant (eg \c MashStepTableModel). */  \
-      void changedInventory(int invKey, BtStringConst const & propertyName);                                     \
+      void changed(QMetaProperty, QVariant);
 
 /**
  * \brief Derived classes should include this in their .cpp file
@@ -873,7 +944,7 @@ protected:
  *        NB: Mostly I have tried to make these macro-included function bodies trivial.  Macros are a bit clunky, so we
  *            only really want to use them for the things that are hard to do other ways.
  *
- *        Note that the RecipePropertyName parameter is ultimately ignored in updateStockPurchase for table models that
+ *        Note that the RecipePropertyName parameter is ultimately ignored in propertyChanged for table models that
  *        do not observe a recipe, so can be set to PropertyNames::None::none in such cases.
  */
 #define TABLE_MODEL_COMMON_CODE(NeName, LcNeName, RecipePropertyName) \
@@ -909,11 +980,6 @@ protected:
    }                                                                                                    \
    void NeName##TableModel::changed(QMetaProperty prop, QVariant val) {                                 \
       this->propertyChanged<NeName##TableModel>(prop, val, RecipePropertyName);                         \
-      return;                                                                                           \
-   }                                                                                                    \
-                                                                                                        \
-   void NeName##TableModel::changedInventory(int invKey, BtStringConst const & propertyName) {          \
-      this->updateStockPurchase<NeName##TableModel>(invKey, propertyName);                                  \
       return;                                                                                           \
    }
 

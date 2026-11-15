@@ -66,7 +66,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/PrintAndPreviewDialog.cpp
     ${repoDir}/src/RadarChart.cpp
     ${repoDir}/src/RangedSlider.cpp
-    ${repoDir}/src/RecipeExtrasWidget.cpp
     ${repoDir}/src/RecipeFormatter.cpp
     ${repoDir}/src/StockFormatter.cpp
     ${repoDir}/src/StockWindow.cpp
@@ -280,6 +279,8 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/InfoButton.cpp
     ${repoDir}/src/widgets/InfoText.cpp
     ${repoDir}/src/widgets/LockAndShareBar.cpp
+    ${repoDir}/src/widgets/RecipeExtrasWidget.cpp
+    ${repoDir}/src/widgets/RecipeWaterWidget.cpp
     ${repoDir}/src/widgets/SelectionControl.cpp
     ${repoDir}/src/widgets/SmartAmountSettings.cpp
     ${repoDir}/src/widgets/SmartAmounts.cpp
@@ -292,7 +293,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/StockManagerIngredient.cpp
     ${repoDir}/src/widgets/ToggleSwitch.cpp
     ${repoDir}/src/widgets/UnitAndScalePopUpMenu.cpp
-    ${repoDir}/src/widgets/WaterAdjuster.cpp
 )
 #
 # Extra files we compile for unit testing

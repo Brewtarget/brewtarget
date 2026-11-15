@@ -29,11 +29,14 @@
 #include <QStringList>
 #include <QtTest/QtTest>
 
+#include <algorithm>
+
 #include "database/ObjectStoreWrapper.h"
 #include "calculations/IbuMethods.h"
 #include "measurement/Measurement.h"
 #include "measurement/Unit.h"
 #include "model/Boil.h"
+#include "model/BrewLog.h"
 #include "model/BoilStep.h"
 #include "model/Equipment.h"
 #include "model/Fermentation.h"
@@ -389,6 +392,51 @@ void RecipeCalcTests::testBoilAdditionTiming() {
    QVERIFY2(!boil60     ->isAroma    (), "Boil proper addition treated as aroma");
    QVERIFY2(!firstWort  ->isAroma    (), "Pre-boil addition treated as aroma");
 
+   //
+   // Sorting for printing should be in the order the additions are made: first wort; then boil proper in decreasing
+   // time before the end of the boil (with an addition without a step treated as being in the boil proper, and an
+   // addition without a time being at the start of its step); then post-boil.  See
+   // https://github.com/Brewtarget/brewtarget/issues/1028.
+   //
+   //
+   // NB: Recipe::addAddition renames additions (eg to "Addition of Cascade 4pct hop"), so we compare the additions
+   //     themselves, using the names we gave them above only for logging.
+   //
+   auto sorted = recipe->hopAdditions();
+   std::sort(sorted.begin(), sorted.end(), RecipeAddition::lessThanByTime<RecipeAdditionHop>);
+   QList<std::shared_ptr<RecipeAdditionHop>> const expected{firstWort      ,
+                                                            firstWort60    ,
+                                                            boilNoTime     ,
+                                                            boil60         ,
+                                                            boil20         ,
+                                                            noStep15       ,
+                                                            whirlpoolNoTime,
+                                                            aromaBeerXml   ,
+                                                            whirlpool20    };
+   auto describe = [](auto const & additions) {
+      QStringList descriptions;
+      for (auto const & addition : additions) {
+         descriptions.append(
+            QString("step %1 @ %2").arg(
+               addition->step() ? QString::number(*addition->step()) : QString("-")
+            ).arg(
+               addition->addAtTime_mins() ? QString::number(*addition->addAtTime_mins()) : QString("-")
+            )
+         );
+      }
+      return descriptions;
+   };
+   qDebug() << Q_FUNC_INFO << "Sorted additions:" << describe(sorted);
+   QCOMPARE(describe(sorted), describe(expected));
+   QVERIFY2(sorted == expected, "Hop additions sorted wrongly");
+
+   //
+   // Step names, as shown in the recipe addition tables
+   //
+   QCOMPARE(whirlpool20->stepNames().size(), 3);
+   QCOMPARE(whirlpool20->stepDisplayName(), RecipeAddition::stepDisplayName(3, boilSteps[2]->name()));
+   QVERIFY2(noStep15->stepDisplayName().isEmpty(), "Addition without step should not show a step");
+
    return;
 }
 
@@ -679,6 +727,175 @@ void RecipeCalcTests::testPostBoilIbus() {
    QVERIFY(!boil->postBoilProfile().duration_mins);
    QVERIFY2(fuzzyComp(recipe->ibuFromHopAddition(*boil60), tinsethBoil60, 0.0001),
             "mIBU with unknown cool time differs from Tinseth");
+
+   return;
+}
+
+void RecipeCalcTests::testPostBoilRampTime() {
+   qDebug() << Q_FUNC_INFO << "Starting";
+
+   //
+   // Make sure we put the IBU formula back to what TestEnvironment set, however we exit this function
+   //
+   struct RestoreIbuFormula {
+      Ibu::Formula const saved = IbuMethods::formula;
+      ~RestoreIbuFormula() { IbuMethods::formula = saved; }
+   } restoreIbuFormula;
+
+   //
+   // Part 1: Temperature model.  A ramp segment goes linearly from wherever the wort got to at the end of the previous
+   // segment to its end temperature.  Here, after 10 minutes of natural cooling (which does not get down to the step's
+   // nominal end temperature of 20°C), we ramp down to 80°C over 5 minutes and then hold there for 20 minutes.  We
+   // deliberately give the ramp segment a "wrong" start temperature, to check that it is ignored.
+   //
+   double const b = IbuMethods::naturalCoolingRate(19.87, 38.0, 38.0);
+   double const after10Mins_c = IbuMethods::postBoilWortTemperature_c(10.0, {}, b);
+   QVERIFY2(after10Mins_c > 80.0, "Test assumes natural cooling does not get below 80°C in 10 minutes");
+   std::vector<Boil::PostBoil::TemperatureSegment> const coolRampHold{
+      {.duration_minutes = 10.0, .startTemp_c = 100.0, .endTemp_c = 20.0, .naturalCooling = true },
+      {.duration_minutes =  5.0, .startTemp_c =  20.0, .endTemp_c = 80.0, .naturalCooling = false, .startsAtPreviousTemp = true},
+      {.duration_minutes = 20.0, .startTemp_c =  80.0, .endTemp_c = 80.0, .naturalCooling = false}
+   };
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(10.0, coolRampHold, b), after10Mins_c, 0.001));
+   QVERIFY2(fuzzyComp(IbuMethods::postBoilWortTemperature_c(12.5, coolRampHold, b), (after10Mins_c + 80.0) / 2.0, 0.001),
+            "Ramp did not start from where natural cooling got to");
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(15.0, coolRampHold, b), 80.0, 0.001));
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(25.0, coolRampHold, b), 80.0, 0.001));
+   // A ramp at the start of the profile starts from boiling
+   std::vector<Boil::PostBoil::TemperatureSegment> const rampHold{
+      {.duration_minutes =  5.0, .startTemp_c = 20.0, .endTemp_c = 80.0, .naturalCooling = false, .startsAtPreviousTemp = true},
+      {.duration_minutes = 20.0, .startTemp_c = 80.0, .endTemp_c = 80.0, .naturalCooling = false}
+   };
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(2.5, rampHold, b      ), 90.0, 0.001));
+   QVERIFY(fuzzyComp(IbuMethods::postBoilWortTemperature_c(2.5, rampHold, b, 95.0), 87.5, 0.001));
+
+   //
+   // Part 2: Recipe-level calculations.
+   //
+   // Boil profile: pre-boil, 60 minute boil proper, hop stand at 80°C for 20 minutes with a 5 minute ramp (ie chilling
+   // from boiling to 80°C over 5 minutes), then 15 minutes of forced cooling down to 20°C.
+   //
+   auto recipe = std::make_shared<Recipe>("Post-boil Ramp Time Test");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(20.0);
+   recipe->setEquipment(this->pimpl->m_equipFiveGalNoLoss);
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(24.0);
+   boil->setBoilTime_mins(60.0); // This also ensures the standard profile
+   QCOMPARE(boil->boilSteps().size(), 3);
+   auto hopStand = boil->boilSteps()[2];
+   hopStand->setStartTemp_c(80.0);
+   hopStand->setEndTemp_c(80.0);
+   hopStand->setRampTime_mins(5.0);
+   hopStand->setStepTime_mins(20.0);
+   auto chill = std::make_shared<BoilStep>("Chill");
+   chill->setStartTemp_c(80.0);
+   chill->setEndTemp_c(20.0);
+   chill->setStepTime_mins(15.0);
+   boil->add(chill);
+   QCOMPARE(boil->boilSteps().size(), 4);
+   // Ramp time on a post-boil step does not change the length of the boil proper
+   QVERIFY(fuzzyComp(boil->boilTime_mins(), 60.0, 0.001));
+
+   auto const profile = boil->postBoilProfile();
+   QCOMPARE(profile.segments.size(), static_cast<size_t>(3));
+   QVERIFY2(profile.duration_mins && fuzzyComp(*profile.duration_mins, 40.0, 0.001),
+            "Post-boil duration does not include ramp time");
+   QVERIFY2(profile.segments[0].startsAtPreviousTemp, "No ramp segment");
+   QVERIFY(fuzzyComp(profile.segments[0].duration_minutes,  5.0, 0.001));
+   QVERIFY(fuzzyComp(profile.segments[0].endTemp_c       , 80.0, 0.001));
+   QVERIFY(!profile.segments[0].naturalCooling);
+   QVERIFY(!profile.segments[1].startsAtPreviousTemp);
+   QVERIFY(fuzzyComp(profile.segments[1].duration_minutes, 20.0, 0.001));
+   QVERIFY(!profile.segments[2].startsAtPreviousTemp);
+
+   auto makeAddition = [&](QString const & name, int const step, std::optional<double> const addAtTime_mins) {
+      auto addition = std::make_shared<RecipeAdditionHop>(name);
+      addition->setHop(this->pimpl->m_cascade_4pct.get());
+      addition->setStage(RecipeAddition::Stage::Boil);
+      addition->setStep(step);
+      addition->setAddAtTime_mins(addAtTime_mins);
+      addition->setQuantity(0.020);
+      addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+      return recipe->addAddition(addition);
+   };
+   auto const boil60        = makeAddition("Boil 60"        , 2, 60.0        );
+   auto const hopStandStart = makeAddition("Hop stand start", 3, std::nullopt);
+   auto const duringRamp    = makeAddition("During ramp"    , 3, 22.0        );
+   auto const chillStart    = makeAddition("Chill start"    , 4, std::nullopt);
+
+   // An addition to a step with no time is made at the end of the ramp, ie when the step begins
+   auto const hopStandTiming = recipe->boilAdditionTiming(*hopStandStart);
+   QVERIFY(hopStandTiming.postBoil);
+   QVERIFY(fuzzyComp(hopStandTiming.afterFlameout_mins, 5.0, 0.001));
+   QVERIFY(hopStandTiming.untilEndOfStep_mins && fuzzyComp(*hopStandTiming.untilEndOfStep_mins, 20.0, 0.001));
+   QVERIFY(hopStandTiming.postBoilRemaining_mins && fuzzyComp(*hopStandTiming.postBoilRemaining_mins, 35.0, 0.001));
+
+   // An addition more than the step time before the end of the step is made during the ramp
+   auto const duringRampTiming = recipe->boilAdditionTiming(*duringRamp);
+   QVERIFY(fuzzyComp(duringRampTiming.afterFlameout_mins, 3.0, 0.001));
+   QVERIFY(duringRampTiming.postBoilRemaining_mins && fuzzyComp(*duringRampTiming.postBoilRemaining_mins, 37.0, 0.001));
+
+   // Ramp times of earlier steps count towards time after flameout
+   auto const chillTiming = recipe->boilAdditionTiming(*chillStart);
+   QVERIFY(fuzzyComp(chillTiming.afterFlameout_mins, 25.0, 0.001));
+   QVERIFY(chillTiming.postBoilRemaining_mins && fuzzyComp(*chillTiming.postBoilRemaining_mins, 15.0, 0.001));
+
+   IbuMethods::formula = Ibu::Formula::mIbu;
+   auto const boil60WithRamp     = recipe->ibuBreakdownFromHopAddition(*boil60       );
+   auto const hopStandWithRamp   = recipe->ibuBreakdownFromHopAddition(*hopStandStart);
+   auto const duringRampWithRamp = recipe->ibuBreakdownFromHopAddition(*duringRamp   );
+
+   //
+   // Now remove the ramp time, so the wort goes straight from boiling to 80°C at flameout
+   //
+   hopStand->setRampTime_mins(std::nullopt);
+   QVERIFY(fuzzyComp(*boil->postBoilProfile().duration_mins, 35.0, 0.001));
+   QVERIFY(fuzzyComp(recipe->boilAdditionTiming(*hopStandStart).afterFlameout_mins, 0.0, 0.001));
+   auto const boil60NoRamp   = recipe->ibuBreakdownFromHopAddition(*boil60       );
+   auto const hopStandNoRamp = recipe->ibuBreakdownFromHopAddition(*hopStandStart);
+   qDebug() <<
+      Q_FUNC_INFO << "mIBU: boil60 post-boil" << boil60WithRamp.postBoil_ibus << "(ramp)" <<
+      boil60NoRamp.postBoil_ibus << "(no ramp); hop stand" << hopStandWithRamp.postBoil_ibus << "(ramp)" <<
+      hopStandNoRamp.postBoil_ibus << "(no ramp); during ramp" << duringRampWithRamp.postBoil_ibus;
+
+   // The ramp doesn't change anything in the boil proper
+   QVERIFY(fuzzyComp(boil60WithRamp.boil_ibus, boil60NoRamp.boil_ibus, 0.0001));
+   // Boil hops spend longer in hot wort if there is a ramp down to the hop stand temperature
+   QVERIFY2(boil60WithRamp.postBoil_ibus > boil60NoRamp.postBoil_ibus,
+            "Ramp time did not increase post-boil IBUs of boil addition");
+   // Hops added at the start of the hop stand see exactly the same temperatures, ramp or no ramp
+   QVERIFY2(fuzzyComp(hopStandWithRamp.postBoil_ibus, hopStandNoRamp.postBoil_ibus, 0.0001),
+            "Ramp time changed IBUs of hop stand addition");
+   QVERIFY(hopStandWithRamp.postBoil_ibus > 0.1);
+   // Hops added during the ramp are in hotter wort for longer than those added after it
+   QVERIFY2(duringRampWithRamp.postBoil_ibus > hopStandWithRamp.postBoil_ibus,
+            "Addition during ramp gave fewer IBUs than addition after ramp");
+
+   //
+   // Part 3: mIBU uses the kettle volume at flameout (rather than the post-boil volume) for the rate of natural
+   // cooling.  Inputs are as for Hosom's worked example in testPostBoilIbus.
+   //
+   auto parms = IbuMethods::IbuCalculationParms{
+      .AArating                  = 0.10,
+      .hops_grams                = 56.7,
+      .postBoilVolume_liters     = 19.87,
+      .wortGravity_sg            = 1.060,
+      .timeInBoil_minutes        = 6.0,
+      .kettleInternalDiameter_cm = 38.0,
+      .kettleOpeningDiameter_cm  = 38.0,
+   };
+   parms.coolTime_minutes = 10.0;
+   auto const volumeNotSet = IbuMethods::getIbuBreakdown(parms);
+   parms.kettleVolumeAtFlameout_liters = 19.87;
+   auto const volumeSame   = IbuMethods::getIbuBreakdown(parms);
+   QVERIFY(fuzzyComp(volumeNotSet.total(), volumeSame.total(), 0.0001));
+   // More wort in the kettle means slower natural cooling, so more post-boil IBUs (but the same boil IBUs)
+   parms.kettleVolumeAtFlameout_liters = 25.0;
+   auto const volumeLarger = IbuMethods::getIbuBreakdown(parms);
+   QVERIFY(fuzzyComp(volumeLarger.boil_ibus, volumeSame.boil_ibus, 0.0001));
+   QVERIFY2(volumeLarger.postBoil_ibus > volumeSame.postBoil_ibus,
+            "mIBU post-boil IBUs do not depend on kettle volume at flameout");
 
    return;
 }
@@ -1351,6 +1568,34 @@ void RecipeCalcTests::testInventory() {
    QVERIFY2(fuzzyComp(inventory.quantity, 123.45,  0.00000001), "Wrong hop inventory amount");
    QVERIFY2(inventory.unit == &Measurement::Units::kilograms, "Wrong hop inventory units");
 
+   //
+   // If the recipe uses the hop by volume, we can't take it from stock that is measured by mass, and we should be told
+   // about this so the user can be warned.  See https://github.com/Brewtarget/brewtarget/issues/1028.
+   //
+   auto recipe = std::make_shared<Recipe>("Inventory Test");
+   ObjectStoreWrapper::insert(recipe);
+   auto brewLog = std::make_shared<BrewLog>(*recipe);
+   ObjectStoreWrapper::insert(brewLog);
+   Measurement::Amount const amountByVolume{0.5, Measurement::Units::liters};
+   StockReductionResult const mismatched = StockPurchaseHop::reduceTotalInventory(*this->pimpl->m_cascade_4pct,
+                                                                                  amountByVolume,
+                                                                                  *brewLog);
+   QVERIFY2(mismatched.mismatchedStockMeasure, "Mismatched stock measure not reported");
+   QVERIFY(*mismatched.mismatchedStockMeasure == Measurement::PhysicalQuantity::Mass);
+   QVERIFY(fuzzyComp(mismatched.notTakenFromStock.quantity, 0.5, 0.00000001));
+   inventory = this->pimpl->m_cascade_4pct->totalInventory();
+   QVERIFY2(fuzzyComp(inventory.quantity, 123.45, 0.00000001), "Inventory changed despite mismatched measure");
+
+   // Whereas, using it by mass is fine
+   Measurement::Amount const amountByMass{0.45, Measurement::Units::kilograms};
+   StockReductionResult const matched = StockPurchaseHop::reduceTotalInventory(*this->pimpl->m_cascade_4pct,
+                                                                               amountByMass,
+                                                                               *brewLog);
+   QVERIFY2(!matched.mismatchedStockMeasure, "Spurious mismatched stock measure");
+   QVERIFY(fuzzyComp(matched.notTakenFromStock.quantity, 0.0, 0.00000001));
+   inventory = this->pimpl->m_cascade_4pct->totalInventory();
+   QVERIFY2(fuzzyComp(inventory.quantity, 123.0, 0.00000001), "Inventory not reduced");
+
    return;
 }
 
@@ -1745,5 +1990,100 @@ void RecipeCalcTests::testWaterAlkalinity() {
    water.setAlkalinity_ppm(61.0);
    water.setAlkalinityAsHCO3(true);
    QVERIFY2(fuzzyComp(water.alkalinity_mEqPerL(), 1.0, 0.01), "Alkalinity as HCO3 not used");
+   return;
+}
+void RecipeCalcTests::testLateFermentableAdditions() {
+   qDebug() << Q_FUNC_INFO << "Starting";
+
+   struct RestoreIbuFormula {
+      Ibu::Formula const saved = IbuMethods::formula;
+      ~RestoreIbuFormula() { IbuMethods::formula = saved; }
+   } restoreIbuFormula;
+   // Tinseth, as it uses the boil gravity
+   IbuMethods::formula = Ibu::Formula::Tinseth;
+
+   // The fixtures need to be in the object store for additions to refer to them (by ID), but other tests might already
+   // have put them there
+   if (this->pimpl->m_twoRow->key() <= 0) {
+      ObjectStoreWrapper::insert(this->pimpl->m_twoRow);
+   }
+   if (this->pimpl->m_cascade_4pct->key() <= 0) {
+      ObjectStoreWrapper::insert(this->pimpl->m_cascade_4pct);
+   }
+
+   //
+   // A recipe with some grain in the mash, a standard 60 minute boil (ramp-up, boil proper, cool-down) and a 60 minute
+   // hop addition.
+   //
+   auto recipe = std::make_shared<Recipe>("Late Fermentable Additions Test");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(20.0);
+   recipe->setEfficiency_pct(70.0);
+   recipe->setEquipment(this->pimpl->m_equipFiveGalNoLoss);
+   auto grain = std::make_shared<RecipeAdditionFermentable>("Two Row");
+   grain->setFermentable(this->pimpl->m_twoRow.get());
+   grain->setStage(RecipeAddition::Stage::Mash);
+   grain->setQuantity(4.5);
+   grain->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(grain);
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(25.0);
+   boil->setBoilTime_mins(60.0); // This also ensures the standard profile
+   QCOMPARE(boil->boilSteps().size(), 3);
+   auto hops = std::make_shared<RecipeAdditionHop>("Boil 60");
+   hops->setHop(this->pimpl->m_cascade_4pct.get());
+   hops->setStage(RecipeAddition::Stage::Boil);
+   hops->setStep(2);
+   hops->setAddAtTime_mins(60.0);
+   hops->setQuantity(0.030);
+   hops->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(hops);
+   recipe->recalcAll();
+
+   double const baseBoilGrav = recipe->boilGrav();
+   double const baseIbu      = recipe->IBU();
+   qDebug() << Q_FUNC_INFO << "Base boil gravity" << baseBoilGrav << ", IBU" << baseIbu;
+   QVERIFY(baseBoilGrav > 1.010);
+   QVERIFY(baseIbu > 1.0);
+
+   //
+   // Now add a fermentable that is not in the wort during the boil proper.  It should not change the boil gravity, and
+   // therefore not change the IBUs.  See https://github.com/Brewtarget/brewtarget/issues/438
+   //
+   auto lateAddition = std::make_shared<RecipeAdditionFermentable>("Late Two Row");
+   lateAddition->setFermentable(this->pimpl->m_twoRow.get());
+   lateAddition->setStage(RecipeAddition::Stage::Fermentation);
+   lateAddition->setQuantity(1.0);
+   lateAddition->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(lateAddition);
+
+   auto checkUnchanged = [&](char const * const description) {
+      recipe->recalcAll();
+      qDebug() <<
+         Q_FUNC_INFO << description << ": boil gravity" << recipe->boilGrav() << ", IBU" << recipe->IBU();
+      QVERIFY2(fuzzyComp(recipe->boilGrav(), baseBoilGrav, 0.0001), description);
+      QVERIFY2(fuzzyComp(recipe->IBU()     , baseIbu     , 0.0001), description);
+      return;
+   };
+   checkUnchanged("Fermentation addition");
+
+   lateAddition->setStage(RecipeAddition::Stage::Packaging);
+   checkUnchanged("Packaging addition");
+
+   // Step 3 is the cool-down after the boil proper (ie a flameout addition)
+   lateAddition->setStage(RecipeAddition::Stage::Boil);
+   lateAddition->setStep(3);
+   checkUnchanged("Post-boil addition");
+
+   //
+   // But, if the same fermentable is added during the boil proper, it raises the boil gravity, which lowers the IBUs
+   //
+   lateAddition->setStep(2);
+   lateAddition->setAddAtTime_mins(15.0);
+   recipe->recalcAll();
+   qDebug() <<
+      Q_FUNC_INFO << "Boil addition: boil gravity" << recipe->boilGrav() << ", IBU" << recipe->IBU();
+   QVERIFY(recipe->boilGrav() > baseBoilGrav + 0.001);
+   QVERIFY(recipe->IBU() < baseIbu);
    return;
 }

@@ -84,6 +84,13 @@ private slots:
    void testPostBoilIbus();
 
    /**
+    * \brief Verify that the ramp time of a post-boil step is handled correctly in the post-boil temperature profile,
+    *        the timing of post-boil additions and the resulting IBUs.  Also verify that mIBU uses the kettle volume at
+    *        flameout for the rate of natural cooling.
+    */
+   void testPostBoilRampTime();
+
+   /**
     * \brief Verify the Garetz, Daniels and SMPH IBU formulae, including against John-Paul Hosom's published SMPH
     *        worked examples.
     */
@@ -125,6 +132,13 @@ private slots:
     *        carbonate when alkalinity itself is not set (as is the case for all imported water profiles)
     */
    void testWaterAlkalinity();
+
+   /**
+    * \brief Verify that fermentables added after the boil proper (in a post-boil step, during fermentation or at
+    *        packaging) do not contribute to the boil gravity (and hence do not affect IBUs), whereas ones added during
+    *        the boil proper do.  See https://github.com/Brewtarget/brewtarget/issues/438
+    */
+   void testLateFermentableAdditions();
 };
 
 #endif

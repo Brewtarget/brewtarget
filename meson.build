@@ -838,7 +838,6 @@ commonSourceFiles = files([
    'src/PrintAndPreviewDialog.cpp',
    'src/RadarChart.cpp',
    'src/RangedSlider.cpp',
-   'src/RecipeExtrasWidget.cpp',
    'src/RecipeFormatter.cpp',
    'src/StockFormatter.cpp',
    'src/StockWindow.cpp',
@@ -1052,6 +1051,8 @@ commonSourceFiles = files([
    'src/widgets/InfoButton.cpp',
    'src/widgets/InfoText.cpp',
    'src/widgets/LockAndShareBar.cpp',
+   'src/widgets/RecipeExtrasWidget.cpp',
+   'src/widgets/RecipeWaterWidget.cpp',
    'src/widgets/SelectionControl.cpp',
    'src/widgets/SmartAmountSettings.cpp',
    'src/widgets/SmartAmounts.cpp',
@@ -1064,7 +1065,6 @@ commonSourceFiles = files([
    'src/widgets/StockManagerIngredient.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
-   'src/widgets/WaterAdjuster.cpp',
 ])
 
 applicationMainSourceFile = files([
@@ -1115,7 +1115,6 @@ mocHeaders = files([
    'src/OptionDialog.h',
    'src/PrintAndPreviewDialog.h',
    'src/RangedSlider.h',
-   'src/RecipeExtrasWidget.h',
    'src/RecipeFormatter.h',
    'src/StockWindow.h',
    'src/StyleRangeWidget.h',
@@ -1275,6 +1274,8 @@ mocHeaders = files([
    'src/widgets/InfoButton.h',
    'src/widgets/LockAndShareBar.h',
    'src/widgets/InfoText.h',
+   'src/widgets/RecipeExtrasWidget.h',
+   'src/widgets/RecipeWaterWidget.h',
    'src/widgets/SelectionControl.h',
    'src/widgets/SmartDigitWidget.h',
    'src/widgets/SmartLabel.h',
@@ -1282,7 +1283,6 @@ mocHeaders = files([
    'src/widgets/SmartValueDisplay.h',
    'src/widgets/StockManagerIngredient.h',
    'src/widgets/ToggleSwitch.h',
-   'src/widgets/WaterAdjuster.h',
 ])
 
 unitTestMocHeaders = files([
@@ -1324,6 +1324,7 @@ uiFiles = files([
    'ui/pitchDialog.ui',
    'ui/primingDialog.ui',
    'ui/recipeExtrasWidget.ui',
+   'ui/recipeWaterWidget.ui',
    'ui/refractoDialog.ui',
    'ui/stockPurchaseIngredientEditor.ui',
    'ui/stockUseIngredientEditor.ui',
@@ -1334,7 +1335,6 @@ uiFiles = files([
    'ui/timerMainDialog.ui',
    'ui/timerWidget.ui',
    'ui/waterEditor.ui',
-   'ui/waterAdjuster.ui',
    'ui/yeastEditor.ui',
 ])
 
@@ -2027,6 +2027,7 @@ test('Test boil steps without temperatures'  , testRunner, args : ['RecipeCalcTe
 test('Test boil step phases'                 , testRunner, args : ['RecipeCalcTests', 'testBoilStepPhases'                   ], suite : 'recipe')
 test('Test boil changes recalculate'         , testRunner, args : ['RecipeCalcTests', 'testBoilChangesRecalculate'           ], suite : 'recipe')
 test('Test post-boil IBUs'                   , testRunner, args : ['RecipeCalcTests', 'testPostBoilIbus'                     ], suite : 'recipe')
+test('Test post-boil ramp time'              , testRunner, args : ['RecipeCalcTests', 'testPostBoilRampTime'                 ], suite : 'recipe')
 test('Test IBU formulas'                     , testRunner, args : ['RecipeCalcTests', 'testIbuFormulas'                      ], suite : 'recipe')
 test('Test inventory'                        , testRunner, args : ['RecipeCalcTests', 'testInventory'                        ], suite : 'recipe')
 test('Test mash water volumes'               , testRunner, args : ['RecipeCalcTests', 'testMashWaterVolumes'                 ], suite : 'recipe')
@@ -2034,6 +2035,7 @@ test('Test evaporation rate'                 , testRunner, args : ['RecipeCalcTe
 test('Test equipment default volumes'        , testRunner, args : ['RecipeCalcTests', 'testEquipmentDefaultVolumes'          ], suite : 'recipe')
 test('Test mash tun heat capacity'           , testRunner, args : ['RecipeCalcTests', 'testMashTunHeatCapacity'              ], suite : 'recipe')
 test('Test water alkalinity'                 , testRunner, args : ['RecipeCalcTests', 'testWaterAlkalinity'                  ], suite : 'recipe')
+test('Test late fermentable additions'      , testRunner, args : ['RecipeCalcTests', 'testLateFermentableAdditions'         ], suite : 'recipe')
 test('Test dotBeer imported recipe calcs'    , testRunner, args : ['SerializationTests', 'testDotBeerImportedRecipeCalcs'    ], suite : 'serialization')
 test('Test dotBeer addition step correction' , testRunner, args : ['SerializationTests', 'testDotBeerAdditionStepCorrection' ], suite : 'serialization')
 test('Test brew log calcs'                   , testRunner, args : ['SerializationTests', 'testBrewLogCalcs'                  ], suite : 'serialization')

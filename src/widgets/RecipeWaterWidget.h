@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/WaterAdjuster.h is part of Brewtarget, and is copyright the following authors 2009-2026:
+ * widgets/RecipeWaterWidget.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  =====================================================================================================================*/
-#ifndef WIDGETS_WATERADJUSTER_H
-#define WIDGETS_WATERADJUSTER_H
+#ifndef WIDGETS_RECIPEWATERWIDGET_H
+#define WIDGETS_RECIPEWATERWIDGET_H
 #pragma once
 
 #include <memory> // For PImpl
@@ -25,19 +25,20 @@
 #include <QDialog>
 #include <QWidget>
 
-#include "ui_waterAdjuster.h"
+#include "ui_recipeWaterWidget.h"
 
 /*!
- * \class WaterAdjuster
+ * \class RecipeWaterWidget
  *
- * \brief Helps you work out what water adjustments etc to add to water of one profile to make it closer to another profile.
+ * \brief Helps you work out what water adjustments etc to add to water of one profile to make it closer to the
+ *        recipe's target profile.
  */
-class WaterAdjuster : public QWidget, public Ui::waterAdjuster {
+class RecipeWaterWidget : public QWidget, public Ui::recipeWaterWidget {
    Q_OBJECT
 
 public:
-   explicit WaterAdjuster(QWidget * parent = nullptr);
-   ~WaterAdjuster() override;
+   explicit RecipeWaterWidget(QWidget * parent = nullptr);
+   ~RecipeWaterWidget() override;
 
    /**
     * Certain parts of initialisation need to wait until \c MainWindow is constructed, so \c MainWindow calls this

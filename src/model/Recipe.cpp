@@ -2514,20 +2514,27 @@ void Recipe::generateInstructions() {
       //
       auto const [firstBoilProperStep, lastBoilProperStep] = boil->boilProperSteps();
 
+      //
+      // If there is no boil, or it has no length, we omit the "Start boil" and "Flameout" instructions.  In such a
+      // case, boil additions are all shown as being made at the end of the boil.
+      //
+      bool const hasBoilProper = !qFuzzyIsNull(boilTime_mins);
+
       // NB: Because we use a stable sort below, this will come before boil additions made at the start of the boil
       // proper (which have the same step and interval).
-      preInstructions.push_back(
-      PreInstruction(
-         RecipeAddition::Stage::Boil,
-         firstBoilProperStep,
-         boilTime_mins,
-         tr("Start boil"),
-         tr("Bring the wort to a boil and hold for %1.").arg(
-               Measurement::displayAmount(Measurement::Amount{boilTime_mins, Measurement::Units::minutes},
-               0)
+      if (hasBoilProper) {
+         preInstructions.push_back(
+            PreInstruction(
+               RecipeAddition::Stage::Boil,
+               firstBoilProperStep,
+               boilTime_mins,
+               tr("Start boil"),
+               tr("Bring the wort to a boil and hold for %1.").arg(
+                  Measurement::displayAmount(Measurement::Amount{boilTime_mins, Measurement::Units::minutes}, 0)
+               )
             )
-         )
-      );
+         );
+      }
 
       // Get fermentables unless we haven't added yet
       this->pimpl->instructionsForBoilFermentables(boilTime_mins, preInstructions);
@@ -2547,23 +2554,26 @@ void Recipe::generateInstructions() {
       // Flameout is the end of the boil proper, so it comes after any additions at the end of the boil (which, because
       // we use a stable sort below, will have been added to preInstructions before this) and before any post-boil
       // additions (which are in later steps).
-      preInstructions.push_back(
-         PreInstruction(RecipeAddition::Stage::Boil,
-                        lastBoilProperStep,
-                        0.0,
-                        tr("Flameout"),
-                        tr("Stop boiling the wort."))
-      );
+      if (hasBoilProper) {
+         preInstructions.push_back(
+            PreInstruction(RecipeAddition::Stage::Boil,
+                           lastBoilProperStep,
+                           0.0,
+                           tr("Flameout"),
+                           tr("Stop boiling the wort."))
+         );
+      }
 
       // END boil instructions.
    }
 
 
-   // TODO: These get included in RecipeAddition::Stage::Boil above.  But we're going to want to rework this anyway to
-   //       order by stage, step, time.
-   // Steeped aroma hops
-   // preinstructions = this->pimpl->hopSteps(Hop::Use::Aroma);
-   //this->pimpl->addPreInstructions(preInstructions);
+   //
+   // NB: Post-boil (eg flameout, whirlpool, hop stand) hop and misc additions are boil additions in post-boil steps of
+   // the boil, so they were all covered by the Boil stage calls above.  Do not add a separate pass for "aroma" hops
+   // here, otherwise those additions will appear twice in the instructions.  (See
+   // https://github.com/Brewtarget/brewtarget/issues/1028.)
+   //
 
    // Fermentation instructions
 
@@ -3463,10 +3473,19 @@ Recipe::Sugars Recipe::sugarTotals() const {
       // extract that has to be converted from starch in the mash is.  (Previously only Sugar, Extract and Dry_Extract
       // were treated as existing sugar, so eg fruit or honey additions were wrongly scaled by mash efficiency.)
       //
+      //
+      // For the boil gravity, what matters is whether this addition is in the wort during the boil proper.  As well as
+      // additions in a post-boil step (eg at flameout), that excludes additions during fermentation (eg fruit in
+      // secondary) or packaging (eg lactose or priming sugar).
+      //
+      bool const lateAddition = fermentableAddition->addAfterBoil() ||
+                                fermentableAddition->stage() == RecipeAddition::Stage::Fermentation ||
+                                fermentableAddition->stage() == RecipeAddition::Stage::Packaging;
+
       if (fermentable->isExistingSugar()) {
          ret.existingSugars_all_kg += fermentableAddition->equivSucrose_kg();
 
-         if (fermentableAddition->addAfterBoil()) {
+         if (lateAddition) {
             ret.existingSugars_lateAddition_kg += fermentableAddition->equivSucrose_kg();
          }
 
@@ -3474,7 +3493,7 @@ Recipe::Sugars Recipe::sugarTotals() const {
       } else {
          ret.sugarsFromStarch_all_kg += fermentableAddition->equivSucrose_kg();
 
-         if (fermentableAddition->addAfterBoil()) {
+         if (lateAddition) {
             ret.sugarsFromStarch_lateAddition_kg += fermentableAddition->equivSucrose_kg();
          }
 
@@ -3559,30 +3578,42 @@ Recipe::BoilAdditionTiming Recipe::boilAdditionTiming(RecipeAddition const & add
       // Addition is after the end of the boil proper -- eg flameout, whirlpool or hop stand.  So no time in the boil,
       // and addAtTime_mins is time before the end of this post-boil step.  No time means start of the step.
       //
+      // Per dotBeer (and BeerJSON), a step's ramp time is the time that passes _before_ the step begins (see
+      // Boil::postBoilProfile).  So, eg, a hop stand addition with no time, in a step with a ramp time, is made once
+      // the wort has got to the step's start temperature, ie at the end of the ramp.  If addAtTime_mins is greater
+      // than the length of the step (but not greater than the length of the step plus its ramp time), then the
+      // addition is made during the ramp.
+      //
       timing.postBoil = true;
       timing.boilProper_mins = 0.0;
 
+      auto const rampTime_mins = [](auto const & boilStep) {
+         return std::max(0.0, boilStep->rampTime_mins().value_or(0.0));
+      };
+      double const additionStepRampTime_mins = rampTime_mins(additionStep);
+
+      // NB: This is negative if the addition is made during the ramp before the step
       double minsIntoStep = 0.0;
       if (addAtTime_mins) {
          timing.untilEndOfStep_mins = *addAtTime_mins;
          if (stepLength_mins) {
-            minsIntoStep = std::max(0.0, *stepLength_mins - *addAtTime_mins);
+            minsIntoStep = std::max(-additionStepRampTime_mins, *stepLength_mins - *addAtTime_mins);
          }
       } else {
          timing.untilEndOfStep_mins = stepLength_mins;
       }
 
-      timing.afterFlameout_mins = minsIntoStep;
+      timing.afterFlameout_mins = additionStepRampTime_mins + minsIntoStep;
       for (int ii = lastBoilProperIndex + 1; ii < stepIndex; ++ii) {
-         timing.afterFlameout_mins += boilSteps[ii]->stepTime_mins().value_or(0.0);
+         timing.afterFlameout_mins += rampTime_mins(boilSteps[ii]) + boilSteps[ii]->stepTime_mins().value_or(0.0);
       }
 
-      // Time remaining in the hot wort is the rest of this step plus all subsequent steps
+      // Time remaining in the hot wort is the rest of this step plus all subsequent steps (including their ramps)
       timing.postBoilRemaining_mins = timing.untilEndOfStep_mins;
       for (int ii = stepIndex + 1; ii < numBoilSteps && timing.postBoilRemaining_mins; ++ii) {
          auto const subsequentStepLength_mins = boilSteps[ii]->stepTime_mins();
          if (subsequentStepLength_mins) {
-            *timing.postBoilRemaining_mins += *subsequentStepLength_mins;
+            *timing.postBoilRemaining_mins += rampTime_mins(boilSteps[ii]) + *subsequentStepLength_mins;
          } else {
             timing.postBoilRemaining_mins = std::nullopt;
          }

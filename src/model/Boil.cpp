@@ -377,16 +377,47 @@ Boil::PostBoil Boil::postBoilProfile() const {
    }
 
    double duration_mins = 0.0;
+   // At flameout, we are at boiling.  (NB: Per dotBeer, an unset boil step temperature means boiling.)
+   double previousEndTemp_c = boilSteps[lastBoilProperIndex]->endTemp_c().value_or(100.0);
    for (int ii = lastBoilProperIndex + 1; ii < numBoilSteps; ++ii) {
       auto const & step = boilSteps[ii];
+      std::optional<double> const startTemp_c = step->startTemp_c();
+      std::optional<double> const endTemp_c   = step->endTemp_c  ();
+
+      //
+      // Per dotBeer (and BeerJSON), ramp_time is "the amount of time that passes before this step begins", ie the time
+      // to get from the end temperature of the previous step to the start temperature of this one.  So, if there is a
+      // ramp time, we model it as its own segment, before the segment for the step itself, during which the temperature
+      // moves linearly to the start temperature of the step.  (This is consistent with how we treat ramp time for mash
+      // steps -- see MashFermentability.cpp.)  Eg a whirlpool step with a 5 minute ramp time and start and end
+      // temperatures of 80°C means "chill to 80°C over 5 minutes, then hold at 80°C for the step time".
+      //
+      // The ramp starts from wherever the wort actually got to at the end of the previous segment, which is not
+      // necessarily the end temperature of the previous step -- eg natural cooling might not get all the way down to
+      // it.  We still set startTemp_c (to the nominal end temperature of the previous step) as it is helpful in
+      // logging.
+      //
+      // If there is no ramp time, any difference between the end temperature of the previous step and the start
+      // temperature of this one is treated as instantaneous.
+      //
+      double const rampTime_mins = std::max(0.0, step->rampTime_mins().value_or(0.0));
+      if (rampTime_mins > 0.0) {
+         profile.segments.push_back({
+            .duration_minutes     = rampTime_mins,
+            .startTemp_c          = previousEndTemp_c,
+            .endTemp_c            = startTemp_c.value_or(100.0),
+            .naturalCooling       = false,
+            .startsAtPreviousTemp = true,
+         });
+         duration_mins += rampTime_mins;
+      }
+      previousEndTemp_c = endTemp_c.value_or(100.0);
+
       std::optional<double> const stepTime_mins = step->stepTime_mins();
       if (!stepTime_mins) {
          // We can't place any subsequent steps in time, so this is the end of what we know
          return profile;
       }
-      // Per dotBeer, an unset boil step temperature means boiling
-      std::optional<double> const startTemp_c = step->startTemp_c();
-      std::optional<double> const endTemp_c   = step->endTemp_c  ();
       profile.segments.push_back({
          .duration_minutes = *stepTime_mins,
          .startTemp_c      = startTemp_c.value_or(100.0),

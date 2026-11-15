@@ -18,6 +18,7 @@
 #pragma once
 
 #include <QString>
+#include <QStringList>
 
 #include "model/OwnedByRecipe.h"
 #include "utils/EnumStringMapping.h"
@@ -250,6 +251,37 @@ public:
     * \brief Converts \c addAtTime_mins to something that's always measured from the end of the step
     */
    std::optional<double> addBeforeEnd_mins(std::optional<double> stepLength_mins) const;
+
+   /**
+    * \brief Names of the steps that an addition at \c stage can be made in for \c recipe -- ie the names of the steps
+    *        of its Mash, Boil or Fermentation (as appropriate).  Since \c step is numbered from 1, the name of step N
+    *        is at index N - 1.  Where a step does not have a name, we use a generic one (eg "Step 2").
+    *
+    *        Returns an empty list for \c Stage::Packaging (as we don't model packaging steps) or if the Recipe has no
+    *        Mash / Boil / Fermentation (as appropriate).
+    */
+   [[nodiscard]] static QStringList stepNamesFor(Recipe const & recipe, Stage const stage);
+
+   /**
+    * \brief Convenience function that calls \c stepNamesFor for this addition's \c Recipe and \c stage.  Returns an
+    *        empty list if there is no \c Recipe.
+    */
+   [[nodiscard]] QStringList stepNames() const;
+
+   /**
+    * \brief Text for showing the step of this addition to the user, eg "2: Whirlpool".  Empty string if \c step is not
+    *        set.  (If \c step is set but not valid for the Recipe -- eg because the user removed a step from the Boil
+    *        -- we just show the number.)
+    */
+   [[nodiscard]] QString stepDisplayName() const;
+
+   /**
+    * \brief Format used in \c stepDisplayName -- also used for the step selector in the recipe addition tables.
+    *
+    * \param step Step number (counting from 1)
+    * \param stepName
+    */
+   [[nodiscard]] static QString stepDisplayName(int const step, QString const & stepName);
 
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;

@@ -1,5 +1,5 @@
 /*======================================================================================================================
- * widgets/WaterAdjuster.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
+ * widgets/RecipeWaterWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  =====================================================================================================================*/
-#include "widgets/WaterAdjuster.h"
+#include "widgets/RecipeWaterWidget.h"
 
 #include <algorithm>
 #include <cmath>
@@ -59,7 +59,7 @@
 
 #ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
-   #include "moc_WaterAdjuster.cpp"
+   #include "moc_RecipeWaterWidget.cpp"
 #endif
 
 
@@ -138,8 +138,8 @@ namespace {
 
 }
 
-// This private implementation class holds all private non-virtual members of WaterAdjuster
-class WaterAdjuster::impl {
+// This private implementation class holds all private non-virtual members of RecipeWaterWidget
+class RecipeWaterWidget::impl {
 public:
    //
    // These mini structs help us write code to iterate over all the water ion displays or all the salt displays.
@@ -160,7 +160,7 @@ public:
    /**
     * Constructor
     */
-   explicit impl(WaterAdjuster & self) :
+   explicit impl(RecipeWaterWidget & self) :
       m_self {self},
       m_miscAdditionsVeriTable{},
       m_fermentableAdditionsVeriTable{},
@@ -232,7 +232,7 @@ public:
    }
 
    //============================================ Member variables for impl ============================================
-   WaterAdjuster &         m_self;
+   RecipeWaterWidget &         m_self;
    VeriTable<RecipeAdditionMisc>        m_miscAdditionsVeriTable;
    VeriTable<RecipeAdditionFermentable> m_fermentableAdditionsVeriTable;
 
@@ -258,7 +258,7 @@ public:
    QString m_targetMashPhToolTip;
 };
 
-WaterAdjuster::WaterAdjuster(QWidget* parent) :
+RecipeWaterWidget::RecipeWaterWidget(QWidget* parent) :
    QWidget{parent},
    pimpl{std::make_unique<impl>(*this)}{
 
@@ -267,13 +267,13 @@ WaterAdjuster::WaterAdjuster(QWidget* parent) :
    this->combo_waterBase->init();
    this->combo_waterTarget->init();
 
-   SMART_FIELD_INIT_FS(WaterAdjuster, label_ca  , btDigit_ca  , double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
-   SMART_FIELD_INIT_FS(WaterAdjuster, label_cl  , btDigit_cl  , double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
-   SMART_FIELD_INIT_FS(WaterAdjuster, label_hco3, btDigit_hco3, double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
-   SMART_FIELD_INIT_FS(WaterAdjuster, label_mg  , btDigit_mg  , double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
-   SMART_FIELD_INIT_FS(WaterAdjuster, label_na  , btDigit_na  , double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
-   SMART_FIELD_INIT_FS(WaterAdjuster, label_so4 , btDigit_so4 , double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
-   SMART_FIELD_INIT_FS(WaterAdjuster, label_pH  , btDigit_ph  , double, Measurement::PhysicalQuantity::Acidity           , 1);
+   SMART_FIELD_INIT_FS(RecipeWaterWidget, label_ca  , btDigit_ca  , double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
+   SMART_FIELD_INIT_FS(RecipeWaterWidget, label_cl  , btDigit_cl  , double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
+   SMART_FIELD_INIT_FS(RecipeWaterWidget, label_hco3, btDigit_hco3, double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
+   SMART_FIELD_INIT_FS(RecipeWaterWidget, label_mg  , btDigit_mg  , double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
+   SMART_FIELD_INIT_FS(RecipeWaterWidget, label_na  , btDigit_na  , double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
+   SMART_FIELD_INIT_FS(RecipeWaterWidget, label_so4 , btDigit_so4 , double, Measurement::PhysicalQuantity::MassFractionOrConcentration, 2);
+   SMART_FIELD_INIT_FS(RecipeWaterWidget, label_pH  , btDigit_ph  , double, Measurement::PhysicalQuantity::Acidity           , 1);
 
    this->label_baseProfile  ->setStyleSheet(QString("background-color : %1;").arg(colorForBase  .name()));
    this->label_targetProfile->setStyleSheet(QString("background-color : %1;").arg(colorForTarget.name()));
@@ -323,9 +323,9 @@ WaterAdjuster::WaterAdjuster(QWidget* parent) :
    return;
 }
 
-WaterAdjuster::~WaterAdjuster() = default;
+RecipeWaterWidget::~RecipeWaterWidget() = default;
 
-void WaterAdjuster::init() {
+void RecipeWaterWidget::init() {
    MainWindow const & mainWindow{MainWindow::instance()};
 
    this->pimpl->m_miscAdditionsVeriTable.setup(this->tableView_waterAgents, &mainWindow.getEditor<Misc>());
@@ -347,15 +347,15 @@ void WaterAdjuster::init() {
    );
 
    // all the signals
-   connect(combo_waterBase  , QOverload<int>::of(&QComboBox::activated)  , this, &WaterAdjuster::updateBaseProfile  );
-   connect(combo_waterTarget, QOverload<int>::of(&QComboBox::activated)  , this, &WaterAdjuster::updateTargetProfile);
-   connect(spinBox_mashRO   , QOverload<int>::of(&QSpinBox::valueChanged), this, &WaterAdjuster::updateRoWaterMash_pct  );
-   connect(spinBox_spargeRO , QOverload<int>::of(&QSpinBox::valueChanged), this, &WaterAdjuster::updateRoWaterSparge_pct);
+   connect(combo_waterBase  , QOverload<int>::of(&QComboBox::activated)  , this, &RecipeWaterWidget::updateBaseProfile  );
+   connect(combo_waterTarget, QOverload<int>::of(&QComboBox::activated)  , this, &RecipeWaterWidget::updateTargetProfile);
+   connect(spinBox_mashRO   , QOverload<int>::of(&QSpinBox::valueChanged), this, &RecipeWaterWidget::updateRoWaterMash_pct  );
+   connect(spinBox_spargeRO , QOverload<int>::of(&QSpinBox::valueChanged), this, &RecipeWaterWidget::updateRoWaterSparge_pct);
 
-   connect(pushButton_autoAdjust     , &QAbstractButton::clicked , this, &WaterAdjuster::autoAdjust        );
-   connect(checkBox_keptInSync       , &QAbstractButton::toggled , this, &WaterAdjuster::keptInSyncToggled );
-   connect(checkBox_targetMashPh     , &QAbstractButton::toggled , this, &WaterAdjuster::targetMashPhChanged);
-   connect(doubleSpinBox_targetMashPh, &QDoubleSpinBox::valueChanged, this, &WaterAdjuster::targetMashPhChanged);
+   connect(pushButton_autoAdjust     , &QAbstractButton::clicked , this, &RecipeWaterWidget::autoAdjust        );
+   connect(checkBox_keptInSync       , &QAbstractButton::toggled , this, &RecipeWaterWidget::keptInSyncToggled );
+   connect(checkBox_targetMashPh     , &QAbstractButton::toggled , this, &RecipeWaterWidget::targetMashPhChanged);
+   connect(doubleSpinBox_targetMashPh, &QDoubleSpinBox::valueChanged, this, &RecipeWaterWidget::targetMashPhChanged);
    //
    // Undo and redo can turn keep in sync on and off (see UndoableAutoAdjust).  Also, if our last auto-adjust has been
    // undone, the message about it no longer applies.
@@ -375,22 +375,22 @@ void WaterAdjuster::init() {
    connect(this->pimpl->m_miscAdditionsVeriTable.m_tableModel.get(),
            &RecipeAdditionMiscTableModel::newTotals,
            this,
-           &WaterAdjuster::newTotals   );
+           &RecipeWaterWidget::newTotals   );
    connect(pushButton_addWaterAgent   , &QAbstractButton::clicked, &mainWindow.getCatalog<Misc>(), &QWidget::show  );
-   connect(pushButton_removeWaterAgent, &QAbstractButton::clicked, this                          , &WaterAdjuster::removeSelectedWaterAdjustments );
+   connect(pushButton_removeWaterAgent, &QAbstractButton::clicked, this                          , &RecipeWaterWidget::removeSelectedWaterAdjustments );
 
 // ¥¥¥¥¥¥ TODO: Make this work!
 //   connect(this->pimpl->m_fermentableAdditionsVeriTable.m_tableModel.get(),
 //           &RecipeAdditionFermentableTableModel::newTotals,
 //           this,
-//           &WaterAdjuster::newTotals   );
+//           &RecipeWaterWidget::newTotals   );
    connect(pushButton_addAcidMalt   , &QAbstractButton::clicked, &mainWindow.getCatalog<Fermentable>(), &QWidget::show  );
-   connect(pushButton_removeAcidMalt, &QAbstractButton::clicked, this                                 , &WaterAdjuster::removeSelectedAcidMalts );
+   connect(pushButton_removeAcidMalt, &QAbstractButton::clicked, this                                 , &RecipeWaterWidget::removeSelectedAcidMalts );
 
    return;
 }
 
-void WaterAdjuster::updateRoWaterMash_pct(int const val) {
+void RecipeWaterWidget::updateRoWaterMash_pct(int const val) {
    this->pimpl->m_roWaterMash_pct = val;
    if (this->pimpl->m_rec) {
       this->pimpl->m_rec->setRoWaterMash_pct(this->pimpl->m_roWaterMash_pct);
@@ -399,7 +399,7 @@ void WaterAdjuster::updateRoWaterMash_pct(int const val) {
    return;
 }
 
-void WaterAdjuster::updateRoWaterSparge_pct(int const val) {
+void RecipeWaterWidget::updateRoWaterSparge_pct(int const val) {
    this->pimpl->m_roWaterSparge_pct = val;
    if (this->pimpl->m_rec) {
       this->pimpl->m_rec->setRoWaterSparge_pct(this->pimpl->m_roWaterSparge_pct);
@@ -408,7 +408,7 @@ void WaterAdjuster::updateRoWaterSparge_pct(int const val) {
    return;
 }
 
-void WaterAdjuster::setRecipe(Recipe * rec) {
+void RecipeWaterWidget::setRecipe(Recipe * rec) {
    if (!rec) {
       return;
    }
@@ -418,7 +418,7 @@ void WaterAdjuster::setRecipe(Recipe * rec) {
    }
    this->pimpl->m_rec = rec;
    // Changes to eg the grain bill or the mash affect the predicted mash pH and ion concentrations
-   this->connect(this->pimpl->m_rec, &NamedEntity::changed, this, &WaterAdjuster::recipeChanged);
+   this->connect(this->pimpl->m_rec, &NamedEntity::changed, this, &RecipeWaterWidget::recipeChanged);
    this->showAutoAdjustMessage("");
    this->pimpl->m_autoAdjustUndoIndex = -1;
    this->refreshAutoAdjustControls();
@@ -458,7 +458,7 @@ void WaterAdjuster::setRecipe(Recipe * rec) {
    return;
 }
 
-void WaterAdjuster::updateBaseProfile(int const selected) const {
+void RecipeWaterWidget::updateBaseProfile(int const selected) const {
    Q_UNUSED(selected)
    if (!this->pimpl->m_rec) {
       return;
@@ -471,7 +471,7 @@ void WaterAdjuster::updateBaseProfile(int const selected) const {
    return;
 }
 
-void WaterAdjuster::updateTargetProfile(int const selected) const {
+void RecipeWaterWidget::updateTargetProfile(int const selected) const {
    Q_UNUSED(selected)
    if (!this->pimpl->m_rec) {
       return;
@@ -484,7 +484,7 @@ void WaterAdjuster::updateTargetProfile(int const selected) const {
    return;
 }
 
-void WaterAdjuster::newTotals() {
+void RecipeWaterWidget::newTotals() {
    if (!this->pimpl->m_rec) {
       return;
    }
@@ -516,7 +516,7 @@ void WaterAdjuster::newTotals() {
    return;
 }
 
-void WaterAdjuster::recipeChanged(QMetaProperty prop, [[maybe_unused]] QVariant val) {
+void RecipeWaterWidget::recipeChanged(QMetaProperty prop, [[maybe_unused]] QVariant val) {
    QString const propName = prop.name();
    if (propName == *PropertyNames::Recipe::waterKeptInSync ||
        propName == *PropertyNames::Recipe::targetMashAcidity_pH) {
@@ -526,7 +526,7 @@ void WaterAdjuster::recipeChanged(QMetaProperty prop, [[maybe_unused]] QVariant 
    return;
 }
 
-void WaterAdjuster::showAutoAdjustMessage(QString const & heading, QStringList const & details) {
+void RecipeWaterWidget::showAutoAdjustMessage(QString const & heading, QStringList const & details) {
    //
    // The one-line summary goes under the Auto-Adjust button, and the details go in the Auto-Adjust Notes tab, as there
    // can be quite a lot of them, and they would otherwise make the top of the display rather crowded.
@@ -551,7 +551,7 @@ void WaterAdjuster::showAutoAdjustMessage(QString const & heading, QStringList c
    return;
 }
 
-void WaterAdjuster::refreshAutoAdjustControls() {
+void RecipeWaterWidget::refreshAutoAdjustControls() {
    Recipe const * const recipe = this->pimpl->m_rec;
    bool const enabled = recipe && !recipe->locked();
    for (QWidget * widget : std::initializer_list<QWidget *>{this->pushButton_autoAdjust,
@@ -592,7 +592,7 @@ void WaterAdjuster::refreshAutoAdjustControls() {
    return;
 }
 
-void WaterAdjuster::targetMashPhChanged() {
+void RecipeWaterWidget::targetMashPhChanged() {
    if (!this->pimpl->m_rec) {
       return;
    }
@@ -605,7 +605,7 @@ void WaterAdjuster::targetMashPhChanged() {
    return;
 }
 
-void WaterAdjuster::keptInSyncToggled(bool const checked) {
+void RecipeWaterWidget::keptInSyncToggled(bool const checked) {
    Recipe * const recipe = this->pimpl->m_rec;
    if (!recipe) {
       // Check box should have been disabled
@@ -624,12 +624,12 @@ void WaterAdjuster::keptInSyncToggled(bool const checked) {
    return;
 }
 
-void WaterAdjuster::autoAdjust() {
+void RecipeWaterWidget::autoAdjust() {
    this->doAutoAdjust(false);
    return;
 }
 
-void WaterAdjuster::doAutoAdjust(bool const turnOnKeepInSync) {
+void RecipeWaterWidget::doAutoAdjust(bool const turnOnKeepInSync) {
    Recipe * const recipe = this->pimpl->m_rec;
    if (!recipe) {
       // Button should have been disabled
@@ -701,12 +701,12 @@ void WaterAdjuster::doAutoAdjust(bool const turnOnKeepInSync) {
    return;
 }
 
-void WaterAdjuster::removeSelectedWaterAdjustments() {
+void RecipeWaterWidget::removeSelectedWaterAdjustments() {
    this->pimpl->m_miscAdditionsVeriTable.removeSelected();
    return;
 }
 
-void WaterAdjuster::removeSelectedAcidMalts() {
+void RecipeWaterWidget::removeSelectedAcidMalts() {
    this->pimpl->m_fermentableAdditionsVeriTable.removeSelected();
    return;
 }

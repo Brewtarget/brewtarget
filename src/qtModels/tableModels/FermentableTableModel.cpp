@@ -65,7 +65,7 @@ FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable) 
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &FermentableTableModel::contextMenu);
-   connect(&ObjectStoreTyped<StockPurchaseFermentable>::getInstance(), &ObjectStoreTyped<StockPurchaseFermentable>::signalPropertyChanged, this, &FermentableTableModel::changedInventory);
+   this->connectInventorySignals<StockPurchaseFermentable>();
    return;
 }
 
