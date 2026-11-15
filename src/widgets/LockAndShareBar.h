@@ -37,7 +37,7 @@ class LockAndShareBar : public QFrame {
 
 public:
    explicit LockAndShareBar(QWidget * parent = nullptr);
-   virtual ~LockAndShareBar();
+   ~LockAndShareBar() override;
 
    /**
     * \param text What to tell the user about who uses the item and whether it can be changed

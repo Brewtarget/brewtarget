@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/MashStepTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * qtModels/tableModels/MashStepTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -50,7 +50,8 @@ COLUMN_NAMES(MashStepTableModel, Name        ,
                                  Time        ,
                                  StartAcidity,
                                  EndAcidity  ,
-                                 WaterToGrain,)
+                                 WaterToGrain,
+                                 MashVolume  ,)
 
 /*!
  * \class MashStepTableModel
@@ -64,6 +65,15 @@ class MashStepTableModel : public BtTableModel,
 
    TABLE_MODEL_COMMON_DECL(MashStep)
    ENUMERATED_ITEM_TABLE_MODEL_COMMON_DECL(MashStep, Mash)
+
+   //
+   // Note on setData (which is declared by TABLE_MODEL_COMMON_DECL above).  As well as writing the new value, if the
+   // mash is kept in sync with its recipe (see Mash::keptInSync) and the user has typed in a new amount or infusion
+   // temperature, we pin it (as part of the same undoable action).  Otherwise the automatic adjustment of the mash
+   // would straight away replace what the user typed with the value it calculates.  (The user can see the value is
+   // pinned from the pin icon, and can unpin it from the context menu.)  Pinning also triggers the automatic
+   // adjustment (see Mash::acceptSetMemberChange), so that the rest of the mash takes account of the new value.
+   //
 
 public slots:
    /**
@@ -119,6 +129,13 @@ public:
    [[nodiscard]] QHash<QString, QStringList> const & mashFieldProblems() const;
 
    /**
+    * \brief A one-line summary, for showing to the user, of how full the mash tun gets and how much wort we expect to
+    *        collect, each compared with its target (so, eg, the user can see that they will collect 105% of what they
+    *        need).  Empty if we are not checking the steps (see \c isValidating) or the check could not work these out.
+    */
+   [[nodiscard]] QString volumesSummaryDisplayable() const;
+
+   /**
     * \brief Normally we check the steps using the mash's stored values (eg initial grain temperature).  The Mash Editor
     *        uses this to substitute the values the user has entered but not yet saved, so the checks reflect what the
     *        user sees.  (It should call \c scheduleValidation when those values change.)
@@ -131,9 +148,42 @@ private:
     *        \c MashAutoAdjuster::check), so we can highlight the ones that don't.  (If the mash is used by more than one
     *        recipe, it might make sense for some and not others.)
     *
+    *        The check also gives us the values we show that depend on the recipe's grain bill, and so cannot be
+    *        stored on the steps: the mash thickness and the volume of the mash at the end of each step (see
+    *        \c StepDerivedValues), and the totals in \c volumesSummaryDisplayable.
+    *
     *        We re-check whenever the steps, the mash, the recipe or the recipe's equipment change.
     */
    void validate();
+
+   /**
+    * \brief Values for a step that we get from checking the steps against the recipe (see \c validate), rather than
+    *        from the step itself.  Neither is set for a sparge step or a step the check did not get to (because it
+    *        stopped at an error).
+    */
+   struct StepDerivedValues {
+      /**
+       * Shown in the \c WaterToGrain column in place of \c MashStep::liquorToGristRatio_lKg, which is only updated
+       * when the mash is adjusted (see \c MashAutoAdjuster), so would be wrong after, eg, the user changes an amount.
+       * Only set for infusion steps (as for the stored value).
+       */
+      std::optional<double> liquorToGristRatio_lKg = std::nullopt;
+      //! Shown in the \c MashVolume column.  See \c MashAutoAdjuster::Step::mashVolume_l
+      std::optional<double> mashVolume_l           = std::nullopt;
+      bool operator==(StepDerivedValues const & other) const = default;
+   };
+
+   /**
+    * \brief Totals from checking the steps against the recipe (see \c validate).  The targets are only set if the
+    *        corresponding value is.
+    */
+   struct Totals {
+      std::optional<double> maxMashVolume_l       = std::nullopt;
+      std::optional<double> mashVesselVolume_l    = std::nullopt;
+      std::optional<double> collectedWort_l       = std::nullopt;
+      std::optional<double> targetCollectedWort_l = std::nullopt;
+      bool operator==(Totals const & other) const = default;
+   };
 
    struct StepProblems {
       bool        isError  = false;
@@ -147,6 +197,8 @@ private:
       bool operator==(StepProblems const & other) const = default;
    };
    QHash<MashStep const *, StepProblems> m_stepProblems;
+   QHash<MashStep const *, StepDerivedValues> m_stepDerivedValues;
+   Totals                                m_totals;
    QStringList                           m_mashProblems;
    QHash<QString, QStringList>           m_mashFieldProblems;
    std::function<void(MashAutoAdjuster::Inputs &)> m_inputsAdjuster;

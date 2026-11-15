@@ -104,6 +104,7 @@ template <typename E> concept HasMemberTotalInventory = requires { E::TotalInven
 template <typename E> concept HasMemberPctAcid        = requires { E::PctAcid       ; };
 template <typename E> concept HasMemberStage          = requires { E::Stage         ; };
 template <typename E> concept HasMemberStep           = requires { E::Step          ; };
+template <typename E> concept HasMemberWaterToGrain   = requires { E::WaterToGrain  ; };
 
 //
 // Recipe addition table models (RecipeAdditionHopTableModel etc) have a Step column, where we want to show, eg,
@@ -814,6 +815,17 @@ protected:
       if constexpr (HasMemberTotalInventory<ColumnIndex>) {
          if (columnIndex == ColumnIndex::TotalInventory) {
             return defaults /*| Qt::ItemIsEnabled*/;
+         }
+      }
+
+      //
+      // In a table of mash steps, the mash thickness (aka water-to-grain ratio) column is read-only, even though the
+      // underlying property is not, because what we show can be a calculated value rather than the stored one -- see
+      // MashStepTableModel::data.  (The stored value can still be changed in the Mash Step Editor.)
+      //
+      if constexpr (HasMemberWaterToGrain<ColumnIndex>) {
+         if (columnIndex == ColumnIndex::WaterToGrain) {
+            return defaults;
          }
       }
 

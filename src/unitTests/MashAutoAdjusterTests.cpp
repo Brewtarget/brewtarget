@@ -1121,6 +1121,297 @@ void MashAutoAdjusterTests::testAutoAdjust() {
    QCOMPARE(recipeCopy2->mash().get(), recipeCopy->mash().get());
    return;
 }
+void MashAutoAdjusterTests::testVolumes() {
+   //
+   // The usual inputs need 30 L of water in total.  We say that 24 L of that should reach the kettle, ie that we lose
+   // 6 L (5 L absorbed by the grain and 1 L left in the tun).
+   //
+   MashAutoAdjuster::Inputs inputs = makeInputs();
+   inputs.targetCollectedWort_l = 24.0;
+   double const grainVolume_l = 5.0 / PhysicalConstants::grainDensity_kgL;
+
+   QList<MashAutoAdjuster::Step> steps{makeStep("Saccharification", MashStep::Type::Infusion   , 66.0),
+                                       makeStep("Rest"            , MashStep::Type::Temperature, 72.0),
+                                       makeStep("Mash out"        , MashStep::Type::Infusion   , 76.0)};
+   MashAutoAdjuster::setSparge(steps, MashAutoAdjuster::SpargeMethod::BatchSparge, 1);
+   QCOMPARE(steps.size(), 4);
+   // Mash volume is an output, so anything passed in should be ignored
+   steps[3].mashVolume_l = 123.0;
+
+   auto result = MashAutoAdjuster::calculate(inputs, steps, thickness(3.0));
+   QVERIFY(result.ok());
+
+   //
+   // Strike water is 16 L (see testStrikeWater), so the mash is 16 L plus the volume of the grain.  Heating it doesn't
+   // change that.  The second infusion adds its amount.  Sparge steps don't have a mash volume.
+   //
+   double const mashOutAmount_l = result.steps.at(2).amount_l;
+   QVERIFY(mashOutAmount_l > 0.0);
+   QVERIFY(result.steps.at(0).mashVolume_l);
+   QVERIFY(fuzzyComp(*result.steps.at(0).mashVolume_l, 16.0 + grainVolume_l, tolerance));
+   QVERIFY(result.steps.at(1).mashVolume_l);
+   QVERIFY(fuzzyComp(*result.steps.at(1).mashVolume_l, 16.0 + grainVolume_l, tolerance));
+   QVERIFY(result.steps.at(2).mashVolume_l);
+   QVERIFY(fuzzyComp(*result.steps.at(2).mashVolume_l, 16.0 + mashOutAmount_l + grainVolume_l, tolerance));
+   QVERIFY(!result.steps.at(3).mashVolume_l);
+   QVERIFY(result.maxMashVolume_l);
+   QVERIFY(fuzzyComp(*result.maxMashVolume_l, 16.0 + mashOutAmount_l + grainVolume_l, tolerance));
+
+   // The water adds up to what's needed, so we collect what's needed
+   QVERIFY(result.collectedWort_l);
+   QVERIFY(fuzzyComp(*result.collectedWort_l, 24.0, tolerance));
+
+   //
+   // If we pin the sparge water at 3 L more than was calculated, we collect 3 L too much (and are warned that the
+   // water doesn't add up)
+   //
+   steps = result.steps;
+   steps[3].amount_l   += 3.0;
+   steps[3].amountFixed = true;
+   result = MashAutoAdjuster::calculate(inputs, steps, thickness(3.0));
+   QVERIFY(result.ok());
+   QVERIFY(hasMessage(result, Severity::Warning, "needed in total"));
+   QVERIFY(result.collectedWort_l);
+   QVERIFY(fuzzyComp(*result.collectedWort_l, 27.0, tolerance));
+
+   // Same with no sparge, where the last infusion that isn't pinned makes up the total
+   steps = {makeStep("Saccharification", MashStep::Type::Infusion, 66.0)};
+   result = MashAutoAdjuster::calculate(inputs, steps);
+   QVERIFY(result.ok());
+   QVERIFY(fuzzyComp(result.steps.at(0).amount_l, 30.0, tolerance));
+   QVERIFY(result.steps.at(0).mashVolume_l);
+   QVERIFY(fuzzyComp(*result.steps.at(0).mashVolume_l, 30.0 + grainVolume_l, tolerance));
+   QVERIFY(result.collectedWort_l);
+   QVERIFY(fuzzyComp(*result.collectedWort_l, 24.0, tolerance));
+
+   // If we aren't told how much wort is needed, we don't say how much we'll collect
+   result = MashAutoAdjuster::calculate(makeInputs(), steps);
+   QVERIFY(result.ok());
+   QVERIFY(result.maxMashVolume_l);
+   QVERIFY(!result.collectedWort_l);
+
+   //
+   // If the calculation stops at an error, the steps it didn't get to have no mash volume, and there are no totals.
+   // Here the second step can't be done, as a decoction can't cool the mash.
+   //
+   steps = {makeStep("Saccharification", MashStep::Type::Infusion , 66.0),
+            makeStep("Impossible"      , MashStep::Type::Decoction, 50.0)};
+   result = MashAutoAdjuster::calculate(inputs, steps);
+   QVERIFY(!result.ok());
+   QVERIFY(result.steps.at(0).mashVolume_l);
+   QVERIFY(!result.steps.at(1).mashVolume_l);
+   QVERIFY(!result.maxMashVolume_l);
+   QVERIFY(!result.collectedWort_l);
+   return;
+}
+
+void MashAutoAdjusterTests::testAffectsAdjustment() {
+   QVERIFY( MashAutoAdjuster::usesAmount    (MashStep::Type::Infusion   ));
+   QVERIFY( MashAutoAdjuster::usesInfuseTemp(MashStep::Type::Infusion   ));
+   QVERIFY( MashAutoAdjuster::usesAmount    (MashStep::Type::Decoction  ));
+   QVERIFY(!MashAutoAdjuster::usesInfuseTemp(MashStep::Type::Decoction  ));
+   QVERIFY( MashAutoAdjuster::usesAmount    (MashStep::Type::BatchSparge));
+   QVERIFY( MashAutoAdjuster::usesInfuseTemp(MashStep::Type::BatchSparge));
+   QVERIFY( MashAutoAdjuster::usesAmount    (MashStep::Type::FlySparge  ));
+   QVERIFY( MashAutoAdjuster::usesInfuseTemp(MashStep::Type::FlySparge  ));
+   QVERIFY(!MashAutoAdjuster::usesAmount    (MashStep::Type::Temperature));
+   QVERIFY(!MashAutoAdjuster::usesInfuseTemp(MashStep::Type::Temperature));
+
+   MashStep step{"Affects adjustment test step"};
+   step.setType(MashStep::Type::Infusion);
+
+   // Inputs to the calculation
+   QVERIFY(MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::StepBase::startTemp_c    ));
+   QVERIFY(MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::Step::endTemp_c          ));
+   QVERIFY(MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::MashStep::type           ));
+   QVERIFY(MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::MashStep::amountFixed    ));
+   QVERIFY(MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::MashStep::infuseTempFixed));
+
+   // Things the calculation doesn't use
+   QVERIFY(!MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::NamedEntity::name                ));
+   QVERIFY(!MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::StepBase::stepTime_mins          ));
+   QVERIFY(!MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::MashStep::liquorToGristRatio_lKg));
+
+   // The amount and infusion temperature are outputs unless they are pinned
+   QVERIFY(!MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::MashStep::amount_l    ));
+   QVERIFY(!MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::MashStep::infuseTemp_c));
+   step.setAmountFixed(true);
+   QVERIFY( MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::MashStep::amount_l    ));
+   QVERIFY(!MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::MashStep::infuseTemp_c));
+   step.setInfuseTempFixed(true);
+   QVERIFY( MashAutoAdjuster::affectsAdjustment(step, *PropertyNames::MashStep::infuseTemp_c));
+
+   QVERIFY(!MashAutoAdjuster::isApplying());
+   return;
+}
+
+void MashAutoAdjusterTests::testStepChangesAutoAdjust() {
+   // Same set-up as testAutoAdjust
+   auto twoRow = UnitTests::makeFermentable_TwoRow();
+   ObjectStoreWrapper::insert(twoRow);
+
+   auto equipment = std::make_shared<Equipment>("Step changes test equipment");
+   equipment->setKettleBoilSize_l(30.0);
+   equipment->setFvBatchSize_l(23.0);
+   equipment->setMashTunVolume_l(40.0);
+   equipment->setMashTunWeight_kg(5.0);
+   equipment->setMashTunSpecificHeat_calGC(0.4);
+   equipment->setGrainAbsorption_LKg(1.0);
+   equipment->setBoilingPoint_c(100.0);
+   ObjectStoreWrapper::insert(equipment);
+
+   auto recipe = std::make_shared<Recipe>("Step changes test recipe");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(23.0);
+   recipe->setEquipment(equipment);
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(30.0);
+   boil->setBoilTime_mins(60.0);
+   auto grain = std::make_shared<RecipeAdditionFermentable>("Step changes test grain");
+   grain->setFermentable(twoRow.get());
+   grain->setStage(RecipeAddition::Stage::Mash);
+   grain->setQuantity(5.0);
+   grain->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(grain);
+
+   auto mash = std::make_shared<Mash>("Step changes test mash");
+   mash->setGrainTemp_c(20.0);
+   ObjectStoreWrapper::insert(mash);
+   auto strike = std::make_shared<MashStep>("Strike");
+   strike->setType(MashStep::Type::Infusion);
+   strike->setStartTemp_c(66.0);
+   strike->setStepTime_mins(60.0);
+   strike->setLiquorToGristRatio_lKg(3.0);
+   mash->add(strike);
+   auto sparge = std::make_shared<MashStep>("Sparge");
+   sparge->setType(MashStep::Type::FlySparge);
+   sparge->setStartTemp_c(76.0);
+   sparge->setStepTime_mins(30.0);
+   mash->add(sparge);
+   recipe->setMash(mash);
+
+   auto settle = []() {
+      for (int ii = 0; ii < 3; ++ii) {
+         QCoreApplication::processEvents();
+      }
+   };
+
+   //
+   // If the mash is not kept in sync, changing a step temperature doesn't adjust it
+   //
+   settle();
+   QCOMPARE(strike->amount_l(), 0.0);
+   strike->setStartTemp_c(67.0);
+   settle();
+   QCOMPARE(strike->amount_l(), 0.0);
+   strike->setStartTemp_c(66.0);
+
+   mash->setKeptInSync(true);
+   settle();
+   double const totalWater_l = recipe->targetTotalMashVol_l();
+   double const strikeAmount_l = strike->amount_l();
+   QVERIFY(fuzzyComp(strikeAmount_l, recipe->targetStrikeWater_l(3.0), tolerance));
+   QVERIFY(fuzzyComp(mash->totalMashWater_l(), totalWater_l, tolerance));
+   QVERIFY(strike->infuseTemp_c());
+   double const strikeTempFor66_c = *strike->infuseTemp_c();
+
+   //
+   // Now that it is kept in sync, a higher step temperature means hotter strike water (but the same amount)
+   //
+   strike->setStartTemp_c(68.0);
+   settle();
+   QVERIFY(strike->infuseTemp_c());
+   QVERIFY(*strike->infuseTemp_c() > strikeTempFor66_c + 1.0);
+   QVERIFY(fuzzyComp(strike->amount_l(), strikeAmount_l, tolerance));
+   strike->setStartTemp_c(66.0);
+   settle();
+   QVERIFY(fuzzyComp(*strike->infuseTemp_c(), strikeTempFor66_c, tolerance));
+
+   //
+   // Changing an amount that isn't pinned doesn't trigger an adjustment (not least because the adjustment itself
+   // does this)...
+   //
+   strike->setAmount_l(strikeAmount_l + 2.0);
+   settle();
+   QVERIFY(fuzzyComp(strike->amount_l(), strikeAmount_l + 2.0, tolerance));
+   QVERIFY(fuzzyComp(*strike->infuseTemp_c(), strikeTempFor66_c, tolerance));
+
+   //
+   // ...but pinning it does (which is what happens when the user types in an amount -- see MashStepTableModel).  The
+   // pinned amount is kept, the strike water needs to be a bit cooler (as there is more of it), and there is less
+   // sparge water (as the total is the same).
+   //
+   double const spargeAmount_l = sparge->amount_l();
+   strike->setAmountFixed(true);
+   settle();
+   QVERIFY(fuzzyComp(strike->amount_l(), strikeAmount_l + 2.0, tolerance));
+   QVERIFY(*strike->infuseTemp_c() < strikeTempFor66_c - 0.1);
+   QVERIFY(fuzzyComp(sparge->amount_l(), spargeAmount_l - 2.0, tolerance));
+   QVERIFY(fuzzyComp(mash->totalMashWater_l(), totalWater_l, tolerance));
+
+   // Now it's pinned, changing the amount again does trigger an adjustment
+   strike->setAmount_l(strikeAmount_l + 3.0);
+   settle();
+   QVERIFY(fuzzyComp(strike->amount_l(), strikeAmount_l + 3.0, tolerance));
+   QVERIFY(fuzzyComp(sparge->amount_l(), spargeAmount_l - 3.0, tolerance));
+
+   //
+   // Unpinning puts things back to where the calculation would have them, because pinning the amount of strike water
+   // doesn't change the thickness the mash "remembers" for when it is not pinned
+   //
+   QVERIFY(strike->liquorToGristRatio_lKg());
+   QVERIFY(fuzzyComp(*strike->liquorToGristRatio_lKg(), 3.0, tolerance));
+   strike->setAmountFixed(false);
+   settle();
+   QVERIFY(fuzzyComp(strike->amount_l(), strikeAmount_l, tolerance));
+   QVERIFY(fuzzyComp(*strike->infuseTemp_c(), strikeTempFor66_c, tolerance));
+   QVERIFY(fuzzyComp(sparge->amount_l(), spargeAmount_l, tolerance));
+
+   //
+   // Similarly for the strike water temperature: pinning it at a higher temperature means less strike water is needed
+   // (and so there is more sparge water), and unpinning it puts things back
+   //
+   strike->setInfuseTemp_c(strikeTempFor66_c + 3.0);
+   settle();
+   QVERIFY(fuzzyComp(strike->amount_l(), strikeAmount_l, tolerance));
+   strike->setInfuseTempFixed(true);
+   settle();
+   QVERIFY(fuzzyComp(*strike->infuseTemp_c(), strikeTempFor66_c + 3.0, tolerance));
+   QVERIFY(strike->amount_l() < strikeAmount_l - 0.1);
+   QVERIFY(fuzzyComp(mash->totalMashWater_l(), totalWater_l, tolerance));
+   QVERIFY(fuzzyComp(*strike->liquorToGristRatio_lKg(), 3.0, tolerance));
+   strike->setInfuseTempFixed(false);
+   settle();
+   QVERIFY(fuzzyComp(strike->amount_l(), strikeAmount_l, tolerance));
+   QVERIFY(fuzzyComp(*strike->infuseTemp_c(), strikeTempFor66_c, tolerance));
+   QVERIFY(fuzzyComp(sparge->amount_l(), spargeAmount_l, tolerance));
+
+   //
+   // Adding a step adjusts the mash too.  Here, a second infusion means less water left for the sparge.
+   //
+   auto mashOut = std::make_shared<MashStep>("Mash out");
+   mashOut->setType(MashStep::Type::Infusion);
+   mashOut->setStartTemp_c(76.0);
+   mashOut->setStepTime_mins(10.0);
+   mash->insert(mashOut, 2);
+   settle();
+   QCOMPARE(mash->mashSteps().size(), 3);
+   QVERIFY(mashOut->amount_l() > 0.0);
+   QVERIFY(mashOut->infuseTemp_c());
+   QVERIFY(fuzzyComp(*mashOut->infuseTemp_c(), 100.0, tolerance));
+   QVERIFY(fuzzyComp(sparge->amount_l(), spargeAmount_l - mashOut->amount_l(), tolerance));
+   QVERIFY(fuzzyComp(mash->totalMashWater_l(), totalWater_l, tolerance));
+
+   // As does removing it
+   mash->remove(mashOut);
+   settle();
+   QCOMPARE(mash->mashSteps().size(), 2);
+   QVERIFY(fuzzyComp(sparge->amount_l(), spargeAmount_l, tolerance));
+
+   QVERIFY(!MashAutoAdjuster::isApplying());
+   return;
+}
+
 void MashAutoAdjusterTests::testUndo() {
    auto settle = []() {
       for (int ii = 0; ii < 3; ++ii) {

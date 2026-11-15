@@ -210,6 +210,14 @@ void MashEditor::updateMashProblems() {
    MashStepTableModel const & model = *this->enumeratedItemsWidget->tableModel();
 
    //
+   // This isn't about problems as such, but it comes from the same check of the steps against the recipe, and so
+   // changes at the same times.
+   //
+   QString const volumesSummary = model.volumesSummaryDisplayable();
+   this->label_volumesSummary->setText(volumesSummary);
+   this->label_volumesSummary->setVisible(!volumesSummary.isEmpty());
+
+   //
    // Highlight any of the mash's own fields that have problems, with the problems in the tool tip.  (Problems with
    // individual steps are highlighted in the steps table by MashStepTableModel.)
    //

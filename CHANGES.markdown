@@ -25,6 +25,10 @@ Several new features, and bug fixes for some long-standing issues.
 * New fields (eg as mentioned above) are saved in dotBeer files (new in dotBeer 1.1.0).
 * Mash water amounts and temperatures (strike water, other infusions, decoctions and sparge water) can now be adjusted to suit the recipe in the Mash Editor, replacing the Mash Wizard and Mash Designer.  Individual amounts and temperatures can be pinned so that only the rest are adjusted.  Optionally, the mash can adjust automatically whenever the recipe changes.
 * Mash steps (and mash fields) that don't make sense for the recipe are highlighted
+* Remaining points from Mash Designer / Mash Wizard feedback [204](https://github.com/Brewtarget/brewtarget/issues/204):
+  * When a mash is kept in sync with its recipe, changing a step temperature now adjusts the rest of the mash straight away.  Typing in an amount or infusion temperature pins it (so it is not overwritten) and adjusts the rest of the mash around it.
+  * The Water:Grain column in the table of mash steps now shows the actual mash thickness for the recipe, and a new Mash Volume column shows the volume of the mash (grain plus water) in the tun at the end of each step.
+  * The Mash Editor shows how full the mash tun gets and how much wort will be collected, each as a percentage of what the equipment and recipe allow for (including when that is more than 100%).
 * Example mash profiles, which are locked so they can be shared between recipes
 * Auto-Adjust on the Water tab works out the brewing salts needed to match the target water profile and, optionally, the acid needed to reach a target mash pH.  Optionally, the water agents can adjust automatically whenever the recipe changes.
 * Clicking Auto-Adjust (for the mash or the water) can be undone and redone in one step
