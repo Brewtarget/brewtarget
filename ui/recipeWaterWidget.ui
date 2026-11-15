@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>waterAdjuster</class>
- <widget class="QWidget" name="waterAdjuster">
-  <!--property name="windowTitle">
-   <string>Water Profile Adjustment Tool</string>
-  </property-->
+ <class>recipeWaterWidget</class>
+ <widget class="QWidget" name="recipeWaterWidget">
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <widget class="QSplitter" name="splitter_vertical_recipe">

@@ -160,7 +160,6 @@
 #include "utils/BtStringConst.h"
 #include "utils/VeriTable.h"
 #include "utils/OptionalHelpers.h"
-#include "widgets/WaterAdjuster.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -1103,7 +1102,7 @@ void MainWindow::initialiseAndMakeVisible() {
    // set up the drag/drop parts
    this->setupDrops();
 
-   this->waterAdjuster->init();
+   this->recipeWaterWidget->init();
 
    connect(&ObjectStoreTyped<BrewLog>::getInstance(),
            &ObjectStoreTyped<BrewLog>::signalObjectDeleted,
@@ -1559,7 +1558,7 @@ void MainWindow::setRecipe(Recipe * recipe) {
    this->pimpl->m_recipeFormatter->setRecipe(recipe);
    this->pimpl->m_ogCorrectionTool->setRecipe(recipe);
    this->recipeExtrasWidget->setRecipe(recipe);
-   this->waterAdjuster->setRecipe(recipe);
+   this->recipeWaterWidget->setRecipe(recipe);
    this->equipmentComboBox->setItem(recipe->equipment());
    if (recipe->equipment()) {
       this->pimpl->m_equipmentEditor->setEditItem(recipe->equipment());

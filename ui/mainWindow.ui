@@ -896,7 +896,7 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_water">
               <item>
-               <widget class="WaterAdjuster" name="waterAdjuster" native="true"/>
+               <widget class="RecipeWaterWidget" name="recipeWaterWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -2192,12 +2192,12 @@
   <customwidget>
    <class>RecipeExtrasWidget</class>
    <extends>QWidget</extends>
-   <header>RecipeExtrasWidget.h</header>
+   <header>widgets/RecipeExtrasWidget.h</header>
   </customwidget>
   <customwidget>
-   <class>WaterAdjuster</class>
+   <class>RecipeWaterWidget</class>
    <extends>QWidget</extends>
-   <header>widgets/WaterAdjuster.h</header>
+   <header>widgets/RecipeWaterWidget.h</header>
   </customwidget>
   <customwidget>
    <class>BtComboBoxEquipment</class>
