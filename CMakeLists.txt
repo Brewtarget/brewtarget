@@ -747,8 +747,9 @@ if(WIN32)
    # Find extra MinGW-specific dlls.
    if(MINGW)
       if(NOT MINGW_BIN_DIR)
-         # Yes, it's mingw32-make.exe even on 64-bit systems
-         FIND_PATH(MINGW_BIN_DIR "mingw32-make.exe")
+         # The easiest way to find the MinGW bin dir is from the fact that we know the compiler lives there, and CMake
+         # already knows where that is.
+         get_filename_component(MINGW_BIN_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
       endif()
       if(NOT EXISTS ${MINGW_BIN_DIR})
          message(FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw/bin")

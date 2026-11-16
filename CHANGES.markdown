@@ -16,12 +16,12 @@ Several new features, and bug fixes for some long-standing issues.
 
 ### New Features
 * Remainder of work on: Enhancement - allow per-field selection of displayed decimal places [1098](https://github.com/Brewtarget/brewtarget/issues/1098)
-* Input values with more than 1 decimal round to 1 place [1142](https://github.com/Brewtarget/brewtarget/issues/1142)
 * Additional methods for calculating IBU, including the SMPH IBU formula, which takes into account:
   * the boiling point set on the equipment (eg for brewing at altitude)
   * the expected clarity of the wort going into the fermenter (on the recipe's Boil tab)
   * what happens to the krausen (in the Fermentation Editor).
-* The clarity actually seen on brew day can be recorded in the brew log.
+* We now calculate the IBU of steeped and flameout hops -- see [414](https://github.com/Brewtarget/brewtarget/issues/414) and [774](https://github.com/Brewtarget/brewtarget/issues/774)
+* Wort clarity seen on brew day can be recorded in the brew log.
 * New fields (eg as mentioned above) are saved in dotBeer files (new in dotBeer 1.1.0).
 * Mash water amounts and temperatures (strike water, other infusions, decoctions and sparge water) can now be adjusted to suit the recipe in the Mash Editor, replacing the Mash Wizard and Mash Designer.  Individual amounts and temperatures can be pinned so that only the rest are adjusted.  Optionally, the mash can adjust automatically whenever the recipe changes.
 * Mash steps (and mash fields) that don't make sense for the recipe are highlighted
@@ -29,17 +29,22 @@ Several new features, and bug fixes for some long-standing issues.
   * When a mash is kept in sync with its recipe, changing a step temperature now adjusts the rest of the mash straight away.  Typing in an amount or infusion temperature pins it (so it is not overwritten) and adjusts the rest of the mash around it.
   * The Water:Grain column in the table of mash steps now shows the actual mash thickness for the recipe, and a new Mash Volume column shows the volume of the mash (grain plus water) in the tun at the end of each step.
   * The Mash Editor shows how full the mash tun gets and how much wort will be collected, each as a percentage of what the equipment and recipe allow for (including when that is more than 100%).
-* Example mash profiles, which are locked so they can be shared between recipes
 * Auto-Adjust on the Water tab works out the brewing salts needed to match the target water profile and, optionally, the acid needed to reach a target mash pH.  Optionally, the water agents can adjust automatically whenever the recipe changes.
 * Clicking Auto-Adjust (for the mash or the water) can be undone and redone in one step
+* Example mash profiles, which are locked so they can be shared between recipes
 * Twelve style target water profiles (eg "Pale, Hoppy", "Black, Dry") that Auto-Adjust can match from RO water, and starting profiles for the tap water of eleven well-known cities
 * Target mash pH is saved in dotBeer files (as `target_mash_pH` on recipes, new in dotBeer 1.1.0), and defaults to any pH set on the recipe's mash
-* Optionally, estimated final gravity (and hence ABV etc) can take account of the mash profile -- temperatures, rest times and ramps, over any number of steps -- using a published kinetic model of starch conversion (Brandam et al 2003), as well as the diastatic power of the grain bill and the mash thickness (Brewtarget [779](https://github.com/Brewtarget/brewtarget/issues/779)).  Turn on "Use mash profile in FG calculation" on the recipe's Mash tab.  Existing recipes are unchanged; whether new and imported recipes use it is set in Options > Default Values.
+* Estimated final gravity (and hence ABV etc) can now take account of the mash profile -- temperatures, rest times and ramps, over any number of steps -- using a published kinetic model of starch conversion (Brandam et al 2003), as well as the diastatic power of the grain bill and the mash thickness (see [344](https://github.com/Brewtarget/brewtarget/issues/344) and [779](https://github.com/Brewtarget/brewtarget/issues/779)).  Turn on "Use mash profile in FG calculation" on the recipe's Mash tab.  Existing recipes are unchanged; whether new and imported recipes use it is set in Options > Default Values.
 
 ### Bug Fixes
-* Removing a hop addition sometimes causes an assert [1113](https://github.com/Brewtarget/brewtarget/issues/1113)
-* Inventory updates don't show inside a recipe [756](https://github.com/Brewtarget/brewtarget/issues/756)
 * Late Addition IBU calc wrong [438](https://github.com/Brewtarget/brewtarget/issues/438)
+* Changes to equipment profile not picked up by recipes [531](https://github.com/Brewtarget/brewtarget/issues/531)
+* Inventory updates don't show inside a recipe [756](https://github.com/Brewtarget/brewtarget/issues/756)
+* Water profile adjustment tool issues [970](https://github.com/Brewtarget/brewtarget/issues/970)
+* Mash Wizard can give negative temperatures [1039](https://github.com/Brewtarget/brewtarget/issues/1039)
+* Removing a hop addition sometimes causes an assert [1113](https://github.com/Brewtarget/brewtarget/issues/1113)
+* Input values with more than 1 decimal round to 1 place [1142](https://github.com/Brewtarget/brewtarget/issues/1142)
+* Not intuitive how to create new mash on new recipe [1182](https://github.com/Brewtarget/brewtarget/issues/1182)
 * Choosing equipment from the drop-down on the recipe tab now offers to set the recipe's batch size and pre-boil size to match it, as dragging the equipment onto the recipe already did (Brewtarget [531](https://github.com/Brewtarget/brewtarget/issues/531)).  Re-selecting the recipe's current equipment (or style, mash, etc) no longer adds an empty step to the undo history.
 * Saving changes to equipment now offers to update the batch size and pre-boil size of recipes using it that still had the sizes it previously specified (Brewtarget [531](https://github.com/Brewtarget/brewtarget/issues/531)).  Previously, recipes' pre-boil sizes were changed without asking (even if the recipe's boil was locked or shared) and batch sizes were not changed at all.
 * Closing the Mash, Boil or Fermentation Editor with Escape or the window's close button (or quitting with it open) no longer leaves behind the new, unsaved mash, boil or fermentation created by "Edit this mash" etc (Brewtarget [1182](https://github.com/Brewtarget/brewtarget/issues/1182))

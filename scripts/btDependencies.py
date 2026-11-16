@@ -584,6 +584,7 @@ def installDependencies():
                         'mingw-w64-ucrt-' + arch + '-cmake',
                         'mingw-w64-ucrt-' + arch + '-clang-libs', # Needed for lupdate
                         'mingw-w64-ucrt-' + arch + '-libbacktrace',
+                        'mingw-w64-ucrt-' + arch + '-make', # CMake needs this
                         'mingw-w64-ucrt-' + arch + '-meson',
                         'mingw-w64-ucrt-' + arch + '-nsis',
                         'mingw-w64-ucrt-' + arch + '-freetype',
