@@ -181,7 +181,7 @@ COLUMN_INFOS(
 COLUMN_INFOS(
    TreeItemNode<Equipment>,
    COLINFO_TREE_ITEM_NODE(Equipment, Name     , PropertyNames::NamedEntity::name              ), // "Name"
-   COLINFO_TREE_ITEM_NODE(Equipment, BoilSize , PropertyNames::Equipment::kettleBoilSize_l    ), // "Boil Size"
+   COLINFO_TREE_ITEM_NODE(Equipment, BoilSize , PropertyNames::Equipment::kettleBoilSize_l    ), // "Default Pre-Boil Size"
    COLINFO_TREE_ITEM_NODE(Equipment, BatchSize, PropertyNames::Equipment::fvBatchSize_l), // "Batch Size"
 )
 

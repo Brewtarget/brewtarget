@@ -24,11 +24,13 @@
 
 #include <QObject>
 
+#include "MashAutoAdjuster.h"
 #include "database/ObjectStoreWrapper.h"
 #include "model/Folder.h"
 #include "model/MashStep.h"
 #include "model/NamedParameterBundle.h"
 #include "model/Recipe.h"
+#include "model/RecipeUtils.h"
 #include "utils/AutoCompare.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
@@ -244,7 +246,30 @@ bool Mash::hasSparge() const {
 }
 
 void Mash::acceptSetMemberChange(QMetaProperty prop, QVariant val) {
-   this->doAcceptSetMemberChange(this->sender(), prop, val);
+   QObject * const signalSender = this->sender();
+   this->doAcceptSetMemberChange(signalSender, prop, val);
+
+   //
+   // If we are kept in sync with our recipe, then a change to one of the things in a step that the mash calculation
+   // uses as an input (eg the step temperature, or a pinned amount) means we need adjusting.  We do this here, rather
+   // than in Recipe::acceptChangeToContainedObject (which handles the other things that trigger an adjustment),
+   // because the signal the recipe gets from us about a change to a step doesn't say which step or which property.
+   //
+   // Changes to the outputs of the calculation (eg an amount that is not pinned) must not trigger an adjustment, not
+   // least as it is the adjustment that makes them.  See MashAutoAdjuster::affectsAdjustment.  (When the user types
+   // in a new value for one of the outputs, it gets pinned -- see MashStepTableModel::setData -- which makes it an
+   // input.)
+   //
+   if (this->m_keptInSync && !MashAutoAdjuster::isApplying()) {
+      MashStep const * const mashStep = qobject_cast<MashStep const *>(signalSender);
+      if (mashStep && mashStep->ownerId() == this->key() &&
+          MashAutoAdjuster::affectsAdjustment(*mashStep, prop.name())) {
+         // MashAutoAdjuster::autoAdjust will check that we are used by exactly one recipe
+         for (Recipe * recipe : RecipeUtils::recipesUsing(*this)) {
+            recipe->scheduleMashAutoAdjust();
+         }
+      }
+   }
    return;
 }
 

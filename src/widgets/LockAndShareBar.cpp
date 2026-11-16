@@ -43,14 +43,18 @@ LockAndShareBar::LockAndShareBar(QWidget * parent) :
    layout->addWidget(this->m_lockOrUnlock);
 
    this->connect(this->m_makeCopy    , &QAbstractButton::clicked, this, &LockAndShareBar::makeCopyClicked);
-   this->connect(this->m_lockOrUnlock, &QAbstractButton::clicked, this, [this]() {
-      if (this->m_itemLocked) {
-         emit this->unlockClicked();
-      } else {
-         emit this->lockClicked();
+   this->connect(
+      this->m_lockOrUnlock,
+      &QAbstractButton::clicked,
+      this, [this]() {
+         if (this->m_itemLocked) {
+            emit this->unlockClicked();
+         } else {
+            emit this->lockClicked();
+         }
+         return;
       }
-      return;
-   });
+   );
 
    this->setState("", false, false, false);
    return;

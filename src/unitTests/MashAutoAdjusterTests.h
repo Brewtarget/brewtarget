@@ -76,6 +76,18 @@ private slots:
    //! \brief Mash adjusts automatically when the recipe changes (if set to), and is copied rather than shared
    void testAutoAdjust();
 
+   //! \brief Mash volume at the end of each step, how full the tun gets, and how much wort we expect to collect
+   void testVolumes();
+
+   //! \brief \c MashAutoAdjuster::affectsAdjustment, \c MashAutoAdjuster::usesAmount and \c MashAutoAdjuster::usesInfuseTemp
+   void testAffectsAdjustment();
+
+   /**
+    * \brief When a mash is kept in sync with its recipe, changes to the inputs in its steps (eg step temperature, a
+    *        pinned amount) adjust it, but changes to the outputs don't
+    */
+   void testStepChangesAutoAdjust();
+
    /**
     * \brief Undo and redo of an auto-adjust (see \c MashAutoAdjuster::makeApplyCommand and \c UndoableAutoAdjust),
     *        including when it adds and removes steps, and how it interacts with keep in sync

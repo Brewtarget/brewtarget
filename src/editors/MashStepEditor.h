@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/MashStepEditor.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * editors/MashStepEditor.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -47,6 +47,20 @@ public slots:
     * \param text - one of {"Infusion", "Decoction", "Temperature"} describing the mash step.
     */
    void grayOutStuff(QString const & text);
+
+   /**
+    * \brief If the mash is kept in sync with its recipe (see \c Mash::keptInSync), then, when the user types in an
+    *        amount, we tick the "Pinned" box next to it.  Otherwise the automatic adjustment of the mash would replace
+    *        what the user typed as soon as it was saved.  (The user can untick the box if that is what they want.)
+    *        See also \c MashStepTableModel, which does the equivalent for edits in the table of steps.
+    */
+   void amountEdited();
+   //! As \c amountEdited, but for the infusion temperature
+   void infuseTempEdited();
+
+private:
+   //! \return \c true if the step being edited belongs (or, for a new step, will belong) to a mash that is kept in sync
+   bool mashIsKeptInSync() const;
 };
 
 #endif

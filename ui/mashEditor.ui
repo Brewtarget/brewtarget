@@ -16,9 +16,6 @@
 
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="LockAndShareBar" name="lockAndShareBar"/>
-   </item>
-   <item>
     <widget class="QTabWidget" name="tabWidget_editor">
      <property name="tabPosition">
       <enum>QTabWidget::West</enum>
@@ -48,6 +45,10 @@
           <string>Name</string>
          </property>
         </widget>
+       </item>
+
+       <item row="1" column="2" colspan="4">
+        <widget class="LockAndShareBar" name="lockAndShareBar"/>
        </item>
 
        <item row="2" column="1">
@@ -108,6 +109,17 @@
        </item>
 
        <item row="11" column="1" colspan="5">
+        <widget class="QLabel" name="label_volumesSummary">
+         <property name="toolTip">
+          <string>How full the mash tun gets, and how much wort you can expect to collect from the mash, for the recipe using this mash.  Shown when the mash is used by exactly one recipe.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+
+       <item row="12" column="1" colspan="5">
         <widget class="QGroupBox" name="groupBox_calculate">
          <property name="title">
           <string>Adjust water amounts and temperatures</string>
@@ -156,7 +168,7 @@
           <item row="1" column="0">
            <widget class="SmartLabel" name="label_thickness">
             <property name="text">
-             <string>Mash thickness</string>
+             <string>Target mash thickness</string>
             </property>
             <property name="buddy">
              <cstring>lineEdit_thickness</cstring>
@@ -166,7 +178,7 @@
           <item row="1" column="1">
            <widget class="SmartLineEdit" name="lineEdit_thickness">
             <property name="toolTip">
-             <string>Volume of strike water per mass of grain (not counting any water that sits below the grain bed).  Most often around 2.5 to 3.2 L/kg (1.2 to 1.5 qt/lb).  Not used if there is no sparge, as then all the water goes in the mash.</string>
+             <string>Volume of strike water per mass of grain (not counting any water that sits below the grain bed) to aim for when adjusting the mash.  Most often around 2.5 to 3.2 L/kg (1.2 to 1.5 qt/lb).  Not used if there is no sparge, as then all the water goes in the mash, nor if the amount of strike water is pinned.  The Water:Grain column in the table of steps shows what the steps actually give.</string>
             </property>
            </widget>
           </item>

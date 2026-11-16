@@ -584,6 +584,7 @@ def installDependencies():
                         'mingw-w64-ucrt-' + arch + '-cmake',
                         'mingw-w64-ucrt-' + arch + '-clang-libs', # Needed for lupdate
                         'mingw-w64-ucrt-' + arch + '-libbacktrace',
+                        'mingw-w64-ucrt-' + arch + '-make', # CMake needs this
                         'mingw-w64-ucrt-' + arch + '-meson',
                         'mingw-w64-ucrt-' + arch + '-nsis',
                         'mingw-w64-ucrt-' + arch + '-freetype',
@@ -782,7 +783,7 @@ def installDependencies():
                             'boost',
                             'doxygen',
 #                            'git',
-#                            'pandoc',
+                            'pandoc',
                             'tree',
                             'dylibbundler',
                             'qt',
@@ -975,7 +976,7 @@ def installDependencies():
                             'openssl',
 #                            'tree',
 #                            'dylibbundler',
-                            'pandoc',
+#                            'pandoc', # MacPorts often has to build pandoc from source (via GHC), which is slow and fragile
 #                            'libxml2',
 #                            'qt6',
 #                            'qt6-qttranslations',

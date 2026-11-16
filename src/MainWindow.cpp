@@ -1965,7 +1965,7 @@ template<class NE> void MainWindow::setForRecipe(std::shared_ptr<NE> val) {
             }
             if (!preBoilSizeMatches) {
                new SimpleUndoableUpdate(*recipe.nonOptBoil(), TYPE_INFO(Boil, preBoilSize_l), newPreBoilSize_l,
-                                        tr("Change Boil Size"), update);
+                                        tr("Change Pre-Boil Size"), update);
             }
          }
       }

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/MashStepTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * qtModels/tableModels/MashStepTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -29,15 +29,19 @@
 #include <QModelIndex>
 #include <QTableView>
 #include <QTimer>
+#include <QUndoStack>
 #include <QVariant>
 #include <QWidget>
 
 #include "MashAutoAdjuster.h"
+#include "measurement/Measurement.h"
 #include "model/Equipment.h"
 #include "model/MashStep.h"
 #include "model/Recipe.h"
 #include "model/RecipeUtils.h"
 #include "qtModels/tableModels/BtTableModel.h"
+#include "undoRedo/Undoable.h"
+#include "utils/PropertyHelper.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -57,6 +61,7 @@ COLUMN_INFOS(
    TABLE_MODEL_HEADER(MashStep, StartAcidity, PropertyNames::Step::startAcidity_pH           ), // "Start pH"
    TABLE_MODEL_HEADER(MashStep,   EndAcidity, PropertyNames::Step::  endAcidity_pH           ), // "End pH"
    TABLE_MODEL_HEADER(MashStep, WaterToGrain, PropertyNames::MashStep::liquorToGristRatio_lKg), // "Water:Grain"
+   TABLE_MODEL_HEADER(MashStep, MashVolume  , PropertyNames::MashStep::mashVolume_l          ), // "Mash Volume"
 )
 
 // See comment in header.  The fourth parameter is alpha (ie 0 = fully transparent, 255 = fully opaque).
@@ -167,6 +172,30 @@ QVariant MashStepTableModel::data(QModelIndex const & index, int role) const {
       }
    }
 
+   //
+   // The mash thickness and mash volume depend on the grain bill of the recipe, so, when we are checking the steps
+   // against a recipe, we show the values from that (see validate()) rather than what is on the step.  For the
+   // thickness, the value on the step is only updated when the mash is adjusted, so can be out of date (eg after the
+   // user changes an amount).  We still show it if the mash is not used by exactly one recipe, as it's then the best
+   // we have (and is part of the mash profile).  For the mash volume, there is nothing useful on the step (see comment
+   // in model/MashStep.h), so the cell is blank unless we have a value from the check.
+   //
+   bool const isWaterToGrain = (MashStepTableModel::ColumnIndex::WaterToGrain == columnIndex);
+   bool const isMashVolume   = (MashStepTableModel::ColumnIndex::MashVolume   == columnIndex);
+   if (role != Qt::TextAlignmentRole && (isMashVolume || (isWaterToGrain && this->isValidating()))) {
+      StepDerivedValues const derivedValues = this->m_stepDerivedValues.value(this->m_rows[index.row()].get());
+      std::optional<double> const value =
+         isMashVolume ? derivedValues.mashVolume_l : derivedValues.liquorToGristRatio_lKg;
+      ColumnInfo const & columnInfo = this->get_ColumnInfo(columnIndex);
+      return PropertyHelper::readDataFromPropertyValue(QVariant::fromValue(value),
+                                                       columnInfo.typeInfo,
+                                                       role,
+                                                       columnInfo.extras.has_value(),
+                                                       columnInfo.getForcedSystemOfMeasurement(),
+                                                       columnInfo.getForcedRelativeScale(),
+                                                       columnInfo.getForcedDecimalPlaces());
+   }
+
    // No other special handling required for any of our other columns
    return this->readDataFromModel(index, role);
 }
@@ -237,6 +266,8 @@ void MashStepTableModel::validate() {
    this->m_validationConnections.clear();
 
    QHash<MashStep const *, StepProblems> stepProblems;
+   QHash<MashStep const *, StepDerivedValues> stepDerivedValues;
+   Totals totals;
    QStringList mashProblems;
    QHash<QString, QStringList> mashFieldProblems;
    Recipe * recipe = nullptr;
@@ -265,6 +296,33 @@ void MashStepTableModel::validate() {
          }
          MashAutoAdjuster::Result const result = MashAutoAdjuster::check(inputs, MashAutoAdjuster::stepsFrom(mash));
          QList<std::shared_ptr<MashStep>> const mashSteps = mash.mashSteps();
+
+         //
+         // The values we show that come from the check rather than from the steps themselves.  A step having a mash
+         // volume tells us the check got as far as that step, and thus that its thickness is the calculated one rather
+         // than the stored one that was passed in.
+         //
+         for (qsizetype ii = 0; ii < result.steps.size() && ii < mashSteps.size(); ++ii) {
+            MashAutoAdjuster::Step const & step = result.steps.at(ii);
+            if (step.mashVolume_l) {
+               stepDerivedValues.insert(
+                  mashSteps.at(ii).get(),
+                  StepDerivedValues{
+                     .liquorToGristRatio_lKg = step.isInfusion() ? step.liquorToGristRatio_lKg : std::nullopt,
+                     .mashVolume_l           = step.mashVolume_l
+                  }
+               );
+            }
+         }
+         if (result.maxMashVolume_l) {
+            totals.maxMashVolume_l    = result.maxMashVolume_l;
+            totals.mashVesselVolume_l = inputs.mashVesselVolume_l;
+         }
+         if (result.collectedWort_l) {
+            totals.collectedWort_l       = result.collectedWort_l;
+            totals.targetCollectedWort_l = inputs.targetCollectedWort_l;
+         }
+
          for (auto const & problem : result.problems) {
             bool const isError = problem.severity == MashAutoAdjuster::Problem::Severity::Error;
 
@@ -293,10 +351,14 @@ void MashStepTableModel::validate() {
    }
 
    if (stepProblems      != this->m_stepProblems      ||
+       stepDerivedValues != this->m_stepDerivedValues ||
+       totals            != this->m_totals            ||
        mashProblems      != this->m_mashProblems      ||
        mashFieldProblems != this->m_mashFieldProblems ||
        recipe            != this->m_validationRecipe) {
       this->m_stepProblems      = stepProblems;
+      this->m_stepDerivedValues = stepDerivedValues;
+      this->m_totals            = totals;
       this->m_mashProblems      = mashProblems;
       this->m_mashFieldProblems = mashFieldProblems;
       this->m_validationRecipe  = recipe;
@@ -349,11 +411,106 @@ void MashStepTableModel::setInputsAdjuster(std::function<void(MashAutoAdjuster::
    return lines.join("\n");
 }
 
+[[nodiscard]] QString MashStepTableModel::volumesSummaryDisplayable() const {
+   auto const displayVolume = [](double const volume_l) {
+      return Measurement::displayAmount(Measurement::Amount{volume_l, Measurement::Units::liters}, 1);
+   };
+   // We show the actual percentage, including when it is over 100%, as that's when the user most needs to know it
+   auto const displayPercent = [](double const actual, double const target) {
+      return Measurement::displayQuantity(100.0 * actual / target, 0);
+   };
+
+   QStringList parts;
+   if (this->m_totals.maxMashVolume_l) {
+      double const maxMashVolume_l = *this->m_totals.maxMashVolume_l;
+      if (this->m_totals.mashVesselVolume_l && *this->m_totals.mashVesselVolume_l > 0.0) {
+         parts.append(
+            tr("Mash tun at its fullest: %1 (%2% of its %3 capacity)").arg(
+               displayVolume(maxMashVolume_l),
+               displayPercent(maxMashVolume_l, *this->m_totals.mashVesselVolume_l),
+               displayVolume(*this->m_totals.mashVesselVolume_l)
+            )
+         );
+      } else {
+         parts.append(tr("Mash tun at its fullest: %1").arg(displayVolume(maxMashVolume_l)));
+      }
+   }
+   if (this->m_totals.collectedWort_l) {
+      double const collectedWort_l = *this->m_totals.collectedWort_l;
+      if (this->m_totals.targetCollectedWort_l && *this->m_totals.targetCollectedWort_l > 0.0) {
+         parts.append(
+            tr("Wort collected: %1 (%2% of the %3 needed)").arg(
+               displayVolume(collectedWort_l),
+               displayPercent(collectedWort_l, *this->m_totals.targetCollectedWort_l),
+               displayVolume(*this->m_totals.targetCollectedWort_l)
+            )
+         );
+      } else {
+         parts.append(tr("Wort collected: %1").arg(displayVolume(collectedWort_l)));
+      }
+   }
+   return parts.join("\n");
+}
+
 bool MashStepTableModel::setData(QModelIndex const & index, QVariant const & value, int role) {
    if (!this->m_itemOwnerObs) {
       return false;
    }
-   return this->doSetDataDefault(index, value, role);
+
+   //
+   // See comment in header file.  If the mash is kept in sync with its recipe, a new amount or infusion temperature
+   // typed in by the user gets pinned.  We don't need to do this if the value is already pinned or is not one that the
+   // automatic adjustment would change.
+   //
+   std::shared_ptr<MashStep> stepToPin = nullptr;
+   bool pinAmount = false;
+   if (role == Qt::EditRole && this->m_itemOwnerObs->keptInSync() && this->indexOk(index)) {
+      auto const columnIndex = static_cast<MashStepTableModel::ColumnIndex>(index.column());
+      std::shared_ptr<MashStep> const step = this->m_rows[index.row()];
+      if (columnIndex == MashStepTableModel::ColumnIndex::Amount &&
+          !step->amountFixed() && MashAutoAdjuster::usesAmount(step->type())) {
+         stepToPin = step;
+         pinAmount = true;
+      } else if (columnIndex == MashStepTableModel::ColumnIndex::Temp &&
+                 !step->infuseTempFixed() && MashAutoAdjuster::usesInfuseTemp(step->type())) {
+         stepToPin = step;
+      }
+   }
+   if (!stepToPin) {
+      return this->doSetDataDefault(index, value, role);
+   }
+
+   //
+   // We get called when the user finishes editing a cell even if they didn't change anything (eg they just tabbed
+   // through it).  We don't want to pin the value in that case.  We can't tell just from whether the stored value
+   // changes, because what's shown in the cell is rounded, so writing it back unaltered usually changes the stored
+   // value slightly.  So we also look at whether the text is different from what the cell was showing.
+   //
+   QString const newText = value.toString();
+   bool const textChanged = newText != this->data(index, Qt::EditRole   ).toString() &&
+                            newText != this->data(index, Qt::DisplayRole).toString();
+   double                const oldAmount_l     = stepToPin->amount_l();
+   std::optional<double> const oldInfuseTemp_c = stepToPin->infuseTemp_c();
+
+   // Using a macro makes the change of value and the pinning a single action for undo/redo
+   QUndoStack & undoStack = Undoable::getStack();
+   undoStack.beginMacro(pinAmount ? tr("Change and pin mash step amount") :
+                                    tr("Change and pin mash step infusion temperature"));
+   bool const retVal = this->doSetDataDefault(index, value, role);
+   if (retVal && textChanged) {
+      if (pinAmount) {
+         if (stepToPin->amount_l() != oldAmount_l) {
+            Undoable::doOrRedoUpdate(*stepToPin, TYPE_INFO(MashStep, amountFixed), true, tr("Pin mash step amount"));
+         }
+      } else if (stepToPin->infuseTemp_c() != oldInfuseTemp_c) {
+         Undoable::doOrRedoUpdate(*stepToPin,
+                                  TYPE_INFO(MashStep, infuseTempFixed),
+                                  true,
+                                  tr("Pin mash step infusion temperature"));
+      }
+   }
+   undoStack.endMacro();
+   return retVal;
 }
 
 // Insert the boiler-plate stuff that we cannot do in TableModelBase

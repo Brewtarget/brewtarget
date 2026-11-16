@@ -57,6 +57,10 @@ class Recipe;
  *          - Step temperatures (\c startTemp_c and \c endTemp_c) are always inputs, never outputs.  They are what the
  *            brewer is trying to achieve.
  *
+ *          - When a mash is kept in sync with its recipe (see \c Mash::keptInSync), an amount or infusion temperature
+ *            that the user types in is pinned automatically (see \c MashStepTableModel::setData and
+ *            \c MashStepEditor), because otherwise the next automatic adjustment would overwrite it.
+ *
  *          - First step (must be an infusion -- the strike water):
  *               amount fixed, temp not fixed : temp calculated to hit the step temperature
  *               temp fixed, amount not fixed : amount calculated to hit the step temperature
@@ -116,6 +120,11 @@ public:
       double targetTotalWater_l     = 0.0;
       //! See \c Equipment::mashVesselVolume_l.  If not set, we don't check whether the mash fits in the vessel.
       std::optional<double> mashVesselVolume_l = std::nullopt;
+      /**
+       * \brief See \c Recipe::targetCollectedWortVol_l.  Only used to work out \c Result::collectedWort_l (ie it does
+       *        not affect the calculation of the steps).  If not set, we don't work that out.
+       */
+      std::optional<double> targetCollectedWort_l = std::nullopt;
 
       /**
        * \brief Get the inputs for calculating \c mash for \c recipe.  Normally \c mash is the recipe's mash, but it
@@ -152,8 +161,22 @@ public:
        *        not), this is the mash thickness we use for the strike water.  The calculation sets it on all the
        *        infusion steps (based on the water in the mash at the end of the step, not counting the strike water
        *        allowance), so the mash "remembers" its thickness.
+       *
+       *        The exception is the first step when its amount or infusion temperature is pinned.  In that case
+       *        \c calculate leaves this alone, so that the thickness to aim for is still there if the value is later
+       *        unpinned.  (\c check always sets it, which is how \c MashStepTableModel gets the actual thickness to
+       *        show.)
        */
       std::optional<double> liquorToGristRatio_lKg = std::nullopt;
+      /**
+       * \brief Output only (ie any value passed in is ignored).  For a step that is not a sparge, the volume of the mash
+       *        (grain plus water) in the tun at the end of the step.  Not set for sparge steps, nor for steps the
+       *        calculation did not get to (because it stopped at an error).
+       *
+       *        This is not stored on the \c MashStep, because it depends on the grain bill of the recipe.  See
+       *        \c MashStepTableModel for where it is shown to the user.
+       */
+      std::optional<double> mashVolume_l = std::nullopt;
 
       bool isInfusion() const;
       bool isSparge  () const;
@@ -237,6 +260,19 @@ public:
    struct Result {
       QList<Step>    steps;
       QList<Problem> problems;
+      /**
+       * \brief The largest the mash (grain plus water) gets in the tun (which is what we compare with
+       *        \c Inputs::mashVesselVolume_l).  Not set if the calculation stopped at an error before it got through
+       *        all the steps that are not sparges.
+       */
+      std::optional<double> maxMashVolume_l = std::nullopt;
+      /**
+       * \brief The wort we expect to collect from the mash, ie all the water in the steps (including sparges) less what
+       *        is absorbed by the grain and lost in the tun.  When the water adds up to \c Inputs::targetTotalWater_l,
+       *        this is \c Inputs::targetCollectedWort_l.  Not set if that input is not set or the calculation stopped
+       *        at an error.
+       */
+      std::optional<double> collectedWort_l = std::nullopt;
 
       //! \return \c true if there are no errors (there might still be warnings)
       bool ok() const;
@@ -343,13 +379,45 @@ public:
                                           QUndoCommand * parent = nullptr);
 
    /**
+    * \brief Whether the calculation works out (or, if it is pinned, uses) the amount of a step of this type.  (It is
+    *        ignored for the others, eg for a temperature step.)
+    */
+   static bool usesAmount(MashStep::Type const type);
+   //! As \c usesAmount, but for the infusion temperature
+   static bool usesInfuseTemp(MashStep::Type const type);
+
+   /**
+    * \brief Whether a change to the named property of \c step changes what the calculation would come up with for the
+    *        mash, ie whether the property is one of the calculation's inputs.  This is the case for the step
+    *        temperatures, the step type and the "pinned" flags, and for the amount and infusion temperature when they
+    *        are pinned.  Amounts and infusion temperatures that are not pinned are outputs of the calculation, so
+    *        changes to them (which include the calculation's own changes) don't count.
+    *
+    *        Used by \c Mash::acceptSetMemberChange to decide whether a mash that is kept in sync with its recipe needs
+    *        adjusting again.
+    *
+    * \param step
+    * \param propertyName  As in the \c NamedEntity::changed signal, eg \c PropertyNames::MashStep::amount_l
+    */
+   static bool affectsAdjustment(MashStep const & step, QString const & propertyName);
+
+   /**
+    * \brief \c true while we are writing results to a mash (in \c apply or the command from \c makeApplyCommand,
+    *        including when that command is being undone or redone).  Changes to the mash at such times must not
+    *        trigger another automatic adjustment: at best it would be a waste of time and, at worst (when the results
+    *        being written came from the Mash Editor, which uses the values in its fields even if they are not yet
+    *        saved), it would replace the results the user just asked for with different ones.
+    */
+   static bool isApplying();
+
+   /**
     * \brief If \c recipe has a mash that is set to adjust automatically (see \c Mash::autoAdjust), and the mash can be
     *        changed (ie is not locked or used by a locked recipe) and is used only by \c recipe, recalculate it (with
     *        default \c Options, so the mash thickness comes from the first step -- see \c Step::liquorToGristRatio_lKg)
     *        and, if there are no errors, apply the results.
     *
     *        Called (via \c Recipe::scheduleMashAutoAdjust) when something the mash calculation depends on changes,
-    *        eg the grain bill or the equipment.  If there are errors, nothing is changed, but the problems will be
+    *        eg the grain bill, the equipment, or one of the inputs in the mash steps (see \c affectsAdjustment).  If there are errors, nothing is changed, but the problems will be
     *        shown to the user by the step validation in \c MashStepTableModel.
     *
     * \return The result of the calculation, or \c std::nullopt if the mash was not recalculated

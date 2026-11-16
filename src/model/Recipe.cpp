@@ -3738,8 +3738,17 @@ void Recipe::acceptChangeToContainedObject(QMetaProperty prop, QVariant val) {
    //
    //
    // If our mash is set to adjust automatically, changes to the equipment or boil (eg pre-boil size) mean it might need
-   // adjusting, as do changes to some of the mash's own fields.  (But not changes to its steps, as the user would not
-   // expect to have those changes overwritten.)
+   // adjusting, as do changes to some of the mash's own fields.
+   //
+   // For the mash steps, there are two cases:
+   //   - Steps being added, removed or re-ordered is handled here.  We get the same "steps" property change signal
+   //     from the Mash for this as for a change to one of the steps, but with the new number of steps as the value
+   //     (see OwnedSet::emitSetChanged) rather than an invalid QVariant (see OwnedSet::acceptItemChange).
+   //   - A change to a step is handled in Mash::acceptSetMemberChange, because that is where we still know which
+   //     property of which step changed.  Not all changes should trigger an adjustment: in particular, we don't want
+   //     to be triggered by the changes the adjustment itself makes.
+   // In neither case do we want to adjust the mash while results are being written to it (see
+   // MashAutoAdjuster::isApplying).
    //
    if (qobject_cast<Equipment *>(signalSender) || qobject_cast<Boil *>(signalSender)) {
       this->scheduleMashAutoAdjust();
@@ -3750,6 +3759,9 @@ void Recipe::acceptChangeToContainedObject(QMetaProperty prop, QVariant val) {
           propName == *PropertyNames::Mash::spargeTemp_c          ||
           propName == *PropertyNames::Mash::tunWeight_kg          ||
           propName == *PropertyNames::Mash::tunSpecificHeat_calGC) {
+         this->scheduleMashAutoAdjust();
+      } else if (propName == *PropertyNames::StepOwnerBase::steps && val.isValid() &&
+                 !MashAutoAdjuster::isApplying()) {
          this->scheduleMashAutoAdjust();
       }
    }

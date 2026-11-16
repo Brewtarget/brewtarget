@@ -234,25 +234,32 @@ template<class NE> QString RecipeUtils::describeSharingAndLocking(NE const & ite
    //
    // First say who uses the item
    //
-   QString const itemType = NE::localisedName().toLower();
+   QString const itemType = NE::localisedName();
    QStringList sentences;
    if (recipes.isEmpty()) {
-      sentences.append(NE::tr("This %1 is not used by any recipe.").arg(itemType));
+      sentences.append(NE::tr("%1 not used by any recipe.").arg(itemType));
    } else if (recipes.size() == 1) {
-      sentences.append(NE::tr("This %1 is used only by one recipe (%2).").arg(itemType, recipes.first()->name()));
-      if constexpr (std::is_same_v<NE, Mash>) {
-         // See MashStepTableModel::validate
-         sentences.append(NE::tr("Step validation highlighting is therefore enabled."));
-      }
+      QString const validationHighlightingEnabled = [] {
+         if constexpr (std::is_same_v<NE, Mash>) {
+            // See MashStepTableModel::validate
+            return Mash::tr(", so step validation highlighting is enabled");
+         }
+         return QString{""};
+      }();
+      sentences.append(NE::tr("%1 used only by one recipe (%2)%3.").arg(
+         itemType,
+         recipes.first()->name(),
+         validationHighlightingEnabled)
+      );
    } else if (usedByCurrentRecipe) {
       sentences.append(
-         NE::tr("This %1 is also used by %n other recipe(s): %2.", "", otherRecipeNames.size()).arg(
+         NE::tr("%1 also used by %n other recipe(s): %2.", "", otherRecipeNames.size()).arg(
             itemType, otherRecipeNames.join(", ")
          )
       );
    } else {
       sentences.append(
-         NE::tr("This %1 is used by %n recipe(s): %2.", "", otherRecipeNames.size()).arg(
+         NE::tr("%1 used by %n recipe(s): %2.", "", otherRecipeNames.size()).arg(
             itemType, otherRecipeNames.join(", ")
          )
       );

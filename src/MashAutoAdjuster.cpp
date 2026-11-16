@@ -35,6 +35,18 @@ namespace {
    double constexpr cG = PhysicalConstants::grainSpecificHeat_calGC;
 
    /**
+    * \brief See \c MashAutoAdjuster::isApplying.  This is a count rather than a flag because \c ApplyStepsCommand::redo
+    *        calls \c MashAutoAdjuster::apply.  (Everything here happens on the main thread.)
+    */
+   int applyDepth = 0;
+   struct ApplyGuard {
+      ApplyGuard() { ++applyDepth; return; }
+      ~ApplyGuard() { --applyDepth; return; }
+      ApplyGuard(ApplyGuard const &) = delete;
+      ApplyGuard & operator=(ApplyGuard const &) = delete;
+   };
+
+   /**
     * \brief Display temperature or volume for messages to the user.
     *
     *        We set 1 decimal place as the default precision, but, as always, this can be overridden by the user's
@@ -155,6 +167,7 @@ MashAutoAdjuster::Inputs MashAutoAdjuster::Inputs::fromRecipe(Recipe const & rec
                   PhysicalConstants::grainAbsorption_Lkg;
    inputs.strikeWaterAllowance_l = equipment ? equipment->strikeWaterAllowance_l() : 0.0;
    inputs.targetTotalWater_l     = recipe.targetTotalMashVol_l();
+   inputs.targetCollectedWort_l  = recipe.targetCollectedWortVol_l();
    if (equipment && equipment->mashVesselVolume_l() > 0.0) {
       inputs.mashVesselVolume_l = equipment->mashVesselVolume_l();
    }
@@ -292,6 +305,10 @@ MashAutoAdjuster::Result MashAutoAdjuster::calculate(Inputs const & inputs,
                                                  Options const & options) {
    Result result{.steps = stepsIn, .problems = {}};
    QList<Step> & steps = result.steps;
+   // This is an output, so we don't want whatever was passed in
+   for (Step & step : steps) {
+      step.mashVolume_l = std::nullopt;
+   }
 
    auto appendWarningToResult = [&result](Problem::Scope const & scope,
                                           QString const & message) -> void {
@@ -607,7 +624,19 @@ MashAutoAdjuster::Result MashAutoAdjuster::calculate(Inputs const & inputs,
                step.amount_l     = *amount_l;
                step.infuseTemp_c = *waterTemp_c;
                water_l += *amount_l;
-               step.liquorToGristRatio_lKg = std::max(water_l - inputs.strikeWaterAllowance_l, 0.0) / inputs.grain_kg;
+               //
+               // We record the thickness on the step.  The exception is the strike water when its amount or temperature
+               // is pinned (as pinning the temperature also determines the amount).  There, what's on the step is the
+               // thickness to aim for when nothing is pinned (see Step::liquorToGristRatio_lKg), which we don't want
+               // to lose just because the user has (perhaps temporarily) overridden it.  In particular, if the user
+               // unpins the value, or undoes the change that pinned it, the strike water should go back to what it
+               // was.  (When we're only checking the steps, nothing gets written back, so we always want the actual
+               // thickness.)
+               //
+               if (options.checkOnly || ii > 0 || (!step.amountFixed && !step.infuseTempFixed)) {
+                  step.liquorToGristRatio_lKg =
+                     std::max(water_l - inputs.strikeWaterAllowance_l, 0.0) / inputs.grain_kg;
+               }
             }
             break;
 
@@ -688,8 +717,22 @@ MashAutoAdjuster::Result MashAutoAdjuster::calculate(Inputs const & inputs,
       }
 
       priorTemp_c = step.finalTemp_c();
-      maxMashVolume_l = std::max(maxMashVolume_l, water_l + grainVolume_l);
+      step.mashVolume_l = water_l + grainVolume_l;
+      maxMashVolume_l = std::max(maxMashVolume_l, *step.mashVolume_l);
    }
+   result.maxMashVolume_l = maxMashVolume_l;
+
+   //
+   // What we lose between the water going in and the wort coming out (to the grain and in the tun) is the difference
+   // between the two targets, so we don't need to work it out again here.
+   //
+   auto setCollectedWort = [&result, &inputs](double const totalWater_l) -> void {
+      if (inputs.targetCollectedWort_l) {
+         result.collectedWort_l =
+            std::max(*inputs.targetCollectedWort_l - (inputs.targetTotalWater_l - totalWater_l), 0.0);
+      }
+      return;
+   };
 
    if (inputs.mashVesselVolume_l && maxMashVolume_l > *inputs.mashVesselVolume_l + volumeTolerance_l) {
       appendWarningToResult(
@@ -709,6 +752,7 @@ MashAutoAdjuster::Result MashAutoAdjuster::calculate(Inputs const & inputs,
             )
          );
       }
+      setCollectedWort(water_l);
       return result;
    }
 
@@ -852,6 +896,12 @@ MashAutoAdjuster::Result MashAutoAdjuster::calculate(Inputs const & inputs,
       priorTemp_c = bedTemp_c.value_or(step.finalTemp_c());
    }
 
+   double totalWater_l = water_l;
+   for (qsizetype ii = numMashSteps; ii < steps.size(); ++ii) {
+      totalWater_l += steps[ii].amount_l;
+   }
+   setCollectedWort(totalWater_l);
+
    return result;
 }
 
@@ -880,7 +930,50 @@ MashAutoAdjuster::Result MashAutoAdjuster::calculate(Inputs const & inputs, QLis
    return calculate(inputs, steps, Options{});
 }
 
+bool MashAutoAdjuster::usesAmount(MashStep::Type const type) {
+   switch (type) {
+      case MashStep::Type::Infusion   :
+      case MashStep::Type::Decoction  :
+      case MashStep::Type::FlySparge  :
+      case MashStep::Type::BatchSparge:
+         return true;
+      case MashStep::Type::Temperature:
+      case MashStep::Type::SouringMash:
+      case MashStep::Type::SouringWort:
+         return false;
+      // No default case as we want the compiler to warn us if we missed one
+   }
+   return false; // Unreachable, but keeps the compiler happy
+}
+
+bool MashAutoAdjuster::usesInfuseTemp(MashStep::Type const type) {
+   // A decoction has an amount but no infusion temperature (as what goes back in the mash is at boiling point)
+   return type != MashStep::Type::Decoction && MashAutoAdjuster::usesAmount(type);
+}
+
+bool MashAutoAdjuster::affectsAdjustment(MashStep const & step, QString const & propertyName) {
+   if (propertyName == *PropertyNames::StepBase::startTemp_c     ||
+       propertyName == *PropertyNames::Step::endTemp_c           ||
+       propertyName == *PropertyNames::MashStep::type            ||
+       propertyName == *PropertyNames::MashStep::amountFixed     ||
+       propertyName == *PropertyNames::MashStep::infuseTempFixed) {
+      return true;
+   }
+   if (propertyName == *PropertyNames::MashStep::amount_l) {
+      return step.amountFixed();
+   }
+   if (propertyName == *PropertyNames::MashStep::infuseTemp_c) {
+      return step.infuseTempFixed();
+   }
+   return false;
+}
+
+bool MashAutoAdjuster::isApplying() {
+   return applyDepth > 0;
+}
+
 void MashAutoAdjuster::apply(QList<Step> const & steps, Mash & mash) {
+   ApplyGuard const applyGuard;
    QList<std::shared_ptr<MashStep>> const existingSteps = mash.mashSteps();
 
    QSet<int> kept;
@@ -1054,6 +1147,7 @@ namespace {
       }
 
       void redo() override {
+         ApplyGuard const applyGuard;
          this->QUndoCommand::redo();
          if (!this->m_after) {
             // First time round, we do the real work
@@ -1066,6 +1160,7 @@ namespace {
       }
 
       void undo() override {
+         ApplyGuard const applyGuard;
          this->QUndoCommand::undo();
          restore(*this->m_mash, this->m_before);
          return;

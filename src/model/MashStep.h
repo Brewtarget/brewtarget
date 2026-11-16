@@ -47,6 +47,7 @@ AddPropertyName(infuseAmount_l        ) // Should only be used for BeerXML
 AddPropertyName(infuseTemp_c          )
 AddPropertyName(infuseTempFixed       )
 AddPropertyName(liquorToGristRatio_lKg)
+AddPropertyName(mashVolume_l          )
 AddPropertyName(type                  )
 #undef AddPropertyName
 //=========================================== End of property name constants ===========================================
@@ -89,6 +90,7 @@ public:
    static QString localisedName_infuseTemp_c          ();
    static QString localisedName_infuseTempFixed       ();
    static QString localisedName_liquorToGristRatio_lKg();
+   static QString localisedName_mashVolume_l          ();
    static QString localisedName_type                  ();
 
    /**
@@ -213,6 +215,17 @@ public:
    Q_PROPERTY(bool                  amountFixed            READ amountFixed            WRITE setAmountFixed                     )
    //! \brief As \c amountFixed, but for \c infuseTemp_c.  ⮜⮜⮜ Not part of BeerXML, BeerJSON or dotBeer. ⮞⮞⮞
    Q_PROPERTY(bool                  infuseTempFixed        READ infuseTempFixed        WRITE setInfuseTempFixed                 )
+   /**
+    * \brief The volume of the mash (grain plus water) in the tun at the end of this step.
+    *
+    *        NB: This is a placeholder.  The volume depends on the grain bill of the recipe using the mash, so a
+    *        \c MashStep cannot work it out (and a mash can be used by more than one recipe, so it cannot store it
+    *        either).  It is calculated by \c MashAutoAdjuster (see \c MashAutoAdjuster::Step::mashVolume_l) and shown
+    *        by \c MashStepTableModel, which is the only place that should use this property.  The property exists so
+    *        that the column in the table gets its name, units, precision etc in the same way as all the others.  The
+    *        getter here always returns \c std::nullopt.         ⮜⮜⮜ Not part of BeerXML, BeerJSON or dotBeer. ⮞⮞⮞
+    */
+   Q_PROPERTY(std::optional<double> mashVolume_l           READ mashVolume_l           STORED false)
 
    //============================================ "GETTER" MEMBER FUNCTIONS ============================================
    [[nodiscard]] Type type() const;
@@ -224,6 +237,7 @@ public:
    [[nodiscard]] std::optional<double> liquorToGristRatio_lKg() const;
    [[nodiscard]] bool                  amountFixed           () const;
    [[nodiscard]] bool                  infuseTempFixed       () const;
+   [[nodiscard]] std::optional<double> mashVolume_l          () const; // Placeholder -- see property comment above
 
    //============================================ "SETTER" MEMBER FUNCTIONS ============================================
    void setType                  (Type                  val);

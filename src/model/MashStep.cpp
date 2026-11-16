@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/MashStep.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/MashStep.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -40,6 +40,7 @@ QString MashStep::localisedName_infuseAmount_l        () { return tr("Infuse Amo
 QString MashStep::localisedName_infuseTemp_c          () { return tr("Infuse Temperature"); }
 QString MashStep::localisedName_infuseTempFixed       () { return tr("Infuse Temperature Fixed"); }
 QString MashStep::localisedName_liquorToGristRatio_lKg() { return tr("Water:Grain"       ); } // Shorter than "Liquor To Grist Ratio"
+QString MashStep::localisedName_mashVolume_l          () { return tr("Mash Volume"       ); }
 QString MashStep::localisedName_type                  () { return tr("Type"              ); }
 
 EnumStringMapping const MashStep::typeStringMapping {
@@ -95,6 +96,7 @@ TypeLookup const MashStep::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, liquorToGristRatio_lKg, m_liquorToGristRatio_lKg, Measurement::PhysicalQuantity::VolumePerMass),
       PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, amountFixed           , m_amountFixed           , BOOL_INFO(tr("No"), tr("Yes"))               ),
       PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, infuseTempFixed       , m_infuseTempFixed       , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_RD_MF(MashStep, mashVolume_l          , mashVolume_l            , Measurement::PhysicalQuantity::Volume        , DisplayInfo::Precision{1}), // Placeholder, not in DB
    },
    // Parent class lookup.  NB: Step not NamedEntity!
    {&Step::typeLookup,
@@ -173,6 +175,7 @@ double                MashStep::amount_l              () const { return this->m_
 std::optional<double> MashStep::infuseTemp_c          () const { return this->m_infuseTemp_c          ; }
 // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
 std::optional<double> MashStep::liquorToGristRatio_lKg() const { return this->m_liquorToGristRatio_lKg; }
+std::optional<double> MashStep::mashVolume_l          () const { return std::nullopt                  ; } // See header
 bool                  MashStep::amountFixed           () const { return this->m_amountFixed           ; }
 bool                  MashStep::infuseTempFixed       () const { return this->m_infuseTempFixed       ; }
 

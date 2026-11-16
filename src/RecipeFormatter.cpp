@@ -319,7 +319,7 @@ public:
       body += QString("<td width=\"40%\" align=\"right\" class=\"right\">%1</td>"
                      "<td class=\"value\">%2</td>"
                      "</tr>")
-            .arg(tr("Boil Size"))
+            .arg(tr("Pre-Boil Size"))
             .arg(Measurement::displayAmount(Measurement::Amount{rec->boilVolume_l(), Measurement::Units::liters}));
       // Second row: Boil Time and Efficiency
       body += QString("<tr>"
@@ -392,7 +392,7 @@ public:
       entry.append(tr("Batch Size"));
       value.append(QString("%1").arg(Measurement::displayAmount(Measurement::Amount{rec->finalVolume_l(),
                                                                                     Measurement::Units::liters})));
-      entry.append(tr("Boil Size"));
+      entry.append(tr("Pre-Boil Size"));
       value.append(QString("%1").arg(Measurement::displayAmount(Measurement::Amount{rec->boilVolume_l(),
                                                                                     Measurement::Units::liters})));
       entry.append(tr("Boil Time"));

@@ -747,8 +747,9 @@ if(WIN32)
    # Find extra MinGW-specific dlls.
    if(MINGW)
       if(NOT MINGW_BIN_DIR)
-         # Yes, it's mingw32-make.exe even on 64-bit systems
-         FIND_PATH(MINGW_BIN_DIR "mingw32-make.exe")
+         # The easiest way to find the MinGW bin dir is from the fact that we know the compiler lives there, and CMake
+         # already knows where that is.
+         get_filename_component(MINGW_BIN_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
       endif()
       if(NOT EXISTS ${MINGW_BIN_DIR})
          message(FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw/bin")
@@ -1140,6 +1141,9 @@ add_test(NAME MashAutoAdjusterTests.testRoundedValues               COMMAND ./${
 add_test(NAME MashAutoAdjusterTests.testWithRecipe                  COMMAND ./${fileName_unitTestRunner} MashAutoAdjusterTests testWithRecipe                 )
 add_test(NAME MashAutoAdjusterTests.testExampleProfiles             COMMAND ./${fileName_unitTestRunner} MashAutoAdjusterTests testExampleProfiles            )
 add_test(NAME MashAutoAdjusterTests.testAutoAdjust                  COMMAND ./${fileName_unitTestRunner} MashAutoAdjusterTests testAutoAdjust                 )
+add_test(NAME MashAutoAdjusterTests.testVolumes                     COMMAND ./${fileName_unitTestRunner} MashAutoAdjusterTests testVolumes                    )
+add_test(NAME MashAutoAdjusterTests.testAffectsAdjustment           COMMAND ./${fileName_unitTestRunner} MashAutoAdjusterTests testAffectsAdjustment          )
+add_test(NAME MashAutoAdjusterTests.testStepChangesAutoAdjust       COMMAND ./${fileName_unitTestRunner} MashAutoAdjusterTests testStepChangesAutoAdjust      )
 add_test(NAME MashAutoAdjusterTests.testUndo                        COMMAND ./${fileName_unitTestRunner} MashAutoAdjusterTests testUndo                       )
 add_test(NAME MashFermentabilityTests.testReproducesPaper           COMMAND ./${fileName_unitTestRunner} MashFermentabilityTests testReproducesPaper          )
 add_test(NAME MashFermentabilityTests.testTemperatureAndTime        COMMAND ./${fileName_unitTestRunner} MashFermentabilityTests testTemperatureAndTime       )

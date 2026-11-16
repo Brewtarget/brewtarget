@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/MashStepEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * editors/MashStepEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -19,7 +19,9 @@
 #include "editors/MashStepEditor.h"
 
 #include "MainWindow.h"
+#include "MashAutoAdjuster.h"
 #include "measurement/Unit.h"
+#include "model/Mash.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
    // Explicitly doing this include reduces potential problems with AUTOMOC when compiling with CMake
@@ -59,6 +61,9 @@ MashStepEditor::MashStepEditor(QWidget* parent, QString const editorName) :
 
    // This is extra for this editor
    this->connect(this->comboBox_mashStepType, &QComboBox::currentTextChanged, this, &MashStepEditor::grayOutStuff);
+   // NB: QLineEdit::textEdited is only emitted when the user changes the text, not when we set it
+   this->connect(this->lineEdit_amount    , &QLineEdit::textEdited, this, &MashStepEditor::amountEdited    );
+   this->connect(this->lineEdit_infuseTemp, &QLineEdit::textEdited, this, &MashStepEditor::infuseTempEdited);
    return;
 }
 
@@ -85,6 +90,34 @@ void MashStepEditor::grayOutStuff([[maybe_unused]] QString const & text) {
          break;
 
       // No default case as we want the compiler to warn us if we missed one
+   }
+   return;
+}
+
+bool MashStepEditor::mashIsKeptInSync() const {
+   // An existing step knows which mash it belongs to.  For a new one, we have been told which mash it will be added to.
+   std::shared_ptr<Mash> mash = nullptr;
+   if (this->m_editItem && this->m_editItem->ownerId() > 0) {
+      mash = this->m_editItem->owner();
+   }
+   if (!mash) {
+      mash = this->m_owner;
+   }
+   return mash && mash->keptInSync();
+}
+
+void MashStepEditor::amountEdited() {
+   if (this->mashIsKeptInSync() &&
+       MashAutoAdjuster::usesAmount(this->comboBox_mashStepType->getNonOptValue<MashStep::Type>())) {
+      this->checkBox_amountFixed->setChecked(true);
+   }
+   return;
+}
+
+void MashStepEditor::infuseTempEdited() {
+   if (this->mashIsKeptInSync() &&
+       MashAutoAdjuster::usesInfuseTemp(this->comboBox_mashStepType->getNonOptValue<MashStep::Type>())) {
+      this->checkBox_infuseTempFixed->setChecked(true);
    }
    return;
 }
