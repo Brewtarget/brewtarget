@@ -783,7 +783,7 @@ def installDependencies():
                             'boost',
                             'doxygen',
 #                            'git',
-#                            'pandoc',
+                            'pandoc',
                             'tree',
                             'dylibbundler',
                             'qt',
@@ -976,7 +976,7 @@ def installDependencies():
                             'openssl',
 #                            'tree',
 #                            'dylibbundler',
-                            'pandoc',
+#                            'pandoc', # MacPorts often has to build pandoc from source (via GHC), which is slow and fragile
 #                            'libxml2',
 #                            'qt6',
 #                            'qt6-qttranslations',
