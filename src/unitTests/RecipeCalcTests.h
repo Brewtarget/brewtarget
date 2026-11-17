@@ -139,6 +139,20 @@ private slots:
     *        the boil proper do.  See https://github.com/Brewtarget/brewtarget/issues/438
     */
    void testLateFermentableAdditions();
+
+   /**
+    * \brief Verify that taking a snapshot of a recipe (ie copying it and making the copy the original's ancestor, as
+    *        the "Snapshot Recipe" context menu action and automatic versioning both do) works for a recipe with first
+    *        wort, boil and post-boil hop additions.  In particular:
+    *          - The copy constructor can do its calculations, even though the copy's additions do not yet know which
+    *            recipe they belong to (because the copy does not yet have an ID).  See
+    *            https://github.com/Brewken/brewken/pull/169
+    *          - The copy is a deep copy of the additions, but shares the boil, equipment etc, and its calculated values
+    *            match the original's both before and after it is stored
+    *          - The ancestry is set up correctly, and changes to the copy do not affect the original
+    *          - The same is true when the snapshot is made by automatic versioning
+    */
+   void testRecipeSnapshot();
 };
 
 #endif
