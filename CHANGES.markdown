@@ -11,6 +11,16 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Shopping Lists
 * We'll list other new features here...
 
+## v5.3.1
+TBD
+
+### New Features
+
+### Bug Fixes
+
+### Release Timestamp
+Mon, 16 Nov 2026 05:03:01 +0100
+
 ## v5.3.0
 Several new features, and bug fixes for some long-standing issues.
 
@@ -56,7 +66,7 @@ Several new features, and bug fixes for some long-standing issues.
 * Water tab didn't update predicted mash pH when the grain bill changed, and could give wrong figures after switching between recipes
 
 ### Release Timestamp
-Fri, 13 Nov 2026 05:03:00 +0100
+Mon, 16 Nov 2026 05:03:00 +0100
 
 ## v5.2.3
 More bug fixes.
