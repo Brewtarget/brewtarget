@@ -447,9 +447,10 @@ public:
                break;
             case RecipeAddition::Stage::Boil:
                if constexpr (std::same_as<AdditionType, RecipeAdditionHop>) {
-                  if (addition->isFirstWort()) {
+                  auto const boil = this->m_self.boil();
+                  if (addition->isFirstWort(boil.get())) {
                      str = tr("Put %1 %2 into first wort" "%3.");
-                  } else if (addition->isAroma()) {
+                  } else if (addition->isAroma(boil.get())) {
                      str = tr("Steep %1 %2 in wort" "%3.");
                   } else {
                      str = tr("Put %1 %2 into boil" "%3.");
@@ -1422,7 +1423,7 @@ public:
     *        additions count as being in the boil for the whole of the boil.
     */
    double minutesBeforeFlameout(RecipeAdditionHop const & hopAddition, double const boilTime_mins) const {
-      if (hopAddition.isFirstWort()) {
+      if (hopAddition.isFirstWort(this->m_self.boil().get())) {
          return boilTime_mins;
       }
       auto const timing = this->m_self.boilAdditionTiming(hopAddition);
@@ -1620,7 +1621,8 @@ public:
 
       Ibu::Breakdown ibus;
       if (hopAddition.stage() == RecipeAddition::Stage::Boil) {
-         if (!hopAddition.isFirstWort()) {
+         auto const boil = this->m_self.boil();
+         if (!hopAddition.isFirstWort(boil.get())) {
             //
             // Note that we cannot just use hopAddition.addAtTime_mins() here, because that is measured from the end of
             // the addition's step, which is not necessarily the boil proper.  Eg a whirlpool addition 20 minutes before
@@ -1658,7 +1660,7 @@ public:
          }
 
          ibus = IbuMethods::getIbuBreakdown(parms);
-         if (hopAddition.isFirstWort()) {
+         if (hopAddition.isFirstWort(boil.get())) {
             ibus *= context.fwhAdjust;
          }
       } else if (hopAddition.stage() == RecipeAddition::Stage::Mash && context.mashHopAdjust > 0.0) {
@@ -3680,8 +3682,9 @@ QList<QString> Recipe::getFermentableAdditionNameAndAmounts() const {
 
 QList<QString> Recipe::getHopAdditionNameAndAmounts(bool const firstWort) const {
    QList<QString> result;
+   auto const boil = this->boil();
    for (auto const & hopAddition : this->hopAdditions()) {
-      if (firstWort == hopAddition->isFirstWort()) {
+      if (firstWort == hopAddition->isFirstWort(boil.get())) {
          static QString const format {"%1 %2"};
          result.append(
             format.arg(Measurement::displayAmount(hopAddition->amount(), 1))
