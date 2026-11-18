@@ -131,15 +131,15 @@ jobs:
       # build environment.
       #
       # Of course, since 'bt' is a Python script, it can't install Python, so we need to do that first.  We need Python
-      # 3.10 or newer, which means you can't just use `sudo apt install` on older Ubuntus.  (Eg Ubuntu 18.04 packages
-      # have only Python 3.6.7 and Ubuntu 20.04 only have Python 3.8.2.  However Ubuntu 22.04 has Python 3.10.6.)  There
-      # are ways to get around this, but, in this context, it's simplest to use a canned GitHub action.
+      # 3.10 or newer, which means you can't just use `sudo apt install` on older Ubuntus.  There are ways to get around
+      # this, but, in this context, it's simplest to use a canned GitHub action.  On the flip-side, we can't specify too
+      # old a version of Python here, as it won't be available.
       #
       # In the container, we use the distro's own Python (installed above), which is new enough on Ubuntu 26.04
       - uses: actions/setup-python@v6
         if: ${{ matrix.container == '' }}
         with:
-          python-version: '3.10'
+          python-version: '3.12'
       - name: Install Frameworks and Libraries, and set up Meson build environment
         working-directory: ${{github.workspace}}
         shell: bash
@@ -259,6 +259,13 @@ jobs:
         run: |
           umask 022
           ../bt -v flatpak
+
+      - name: Snap
+        working-directory: ${{github.workspace}}/mbuild
+        shell: bash
+        run: |
+          umask 022
+          ../bt -v snap
 
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}
