@@ -248,8 +248,21 @@ namespace Optional {
  *
  *        (For some reason, \c QDebug does not inherit from \c QTextStream so we template the stream class as well as
  *        what we're outputting.)
+*
+ *        NOTE: From Qt 6.7, \c QDebug has its own member template \c operator<< for \c std::optional, which makes calls
+ *              ambiguous with this function ("ambiguous overload for 'operator<<' (operand types are 'QDebug' and
+ *              'const std::optional<double>')").  So we only enable this function for stream types that do \b not
+ *              already have such a member operator.  On newer Qt versions, this means that \c QDebug output of
+ *              optional values will be in Qt's format (eg "std::optional(1.5)" / "nullopt") rather than ours (eg
+ *              "1.5" / "NULL"), but \c QTextStream output is unchanged.
  */
-template<class S, class T>
+namespace Optional::detail {
+   template<class S, class T>
+   concept StreamHasOwnOptionalOutput = requires(S & stream, std::optional<T> const & optionalItem) {
+      stream.operator<<(optionalItem);
+   };
+}
+template<class S, class T> requires (!Optional::detail::StreamHasOwnOptionalOutput<S, T>)
 S & operator<<(S & stream, std::optional<T> optionalItem) {
    if (optionalItem) {
       stream << *optionalItem;
