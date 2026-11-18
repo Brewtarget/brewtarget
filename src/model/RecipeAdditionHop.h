@@ -158,16 +158,39 @@ public:
    /**
     * \brief With BeerJSON changes, there is no longer an explicit flag for a first wort hop addition.  You have to
     *        jump through a couple of hoops to work it out, which is what this function does for you.
+    *
+    *        Whether an addition is first wort depends on the steps of the boil it is in, so the caller supplies the
+    *        \c Boil.  In particular, code in \c Recipe should always use this version, passing its own boil, rather than
+    *        have us look up our \c Recipe by ID, because the \c Recipe may not yet have an ID.  (Eg, when a \c Recipe
+    *        is copied, the copy's additions have recipe ID -1 until the copy is inserted in the database, but the copy
+    *        constructor still needs to do calculations.)
+    *
+    * \param boil The boil of the \c Recipe this addition belongs to.  Can be \c nullptr (in which case the addition
+    *             is not first wort).
+    */
+   bool isFirstWort(Boil const * boil) const;
+
+   /**
+    * \brief Convenience version of the above that looks up our \c Recipe (and thus \c Boil) by ID.  Returns \c false
+    *        if we do not (yet) have a \c Recipe.  Should not be used from within \c Recipe.
     */
    bool isFirstWort() const;
 
    /**
     * \brief Similarly, what used to be Hop::Use::Aroma (ie hops added at the end of the boil) is now something we need
-    *        to work out.
+    *        to work out.  See comments above for \c isFirstWort for why there are two versions.
     */
+   bool isAroma(Boil const * boil) const;
    bool isAroma() const;
 
    virtual NamedEntity * ensureExists(BtStringConst const & property) override;
+
+private:
+   /**
+    * \brief The \c Boil of the \c Recipe we belong to, or \c nullptr if we do not (yet) have a \c Recipe or it has no
+    *        \c Boil.
+    */
+   std::shared_ptr<Boil> ownBoil() const;
 
 protected:
    virtual bool compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const override;

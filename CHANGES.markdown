@@ -12,14 +12,15 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * We'll list other new features here...
 
 ## v5.3.1
-TBD
+Bug fix release
 
 ### New Features
 
 ### Bug Fixes
+* Taking a recipe snapshot causes a crash (null pointer) [1191](https://github.com/Brewtarget/brewtarget/issues/1191)
 
 ### Release Timestamp
-Mon, 16 Nov 2026 05:03:01 +0100
+Tue, 17 Nov 2026 05:03:01 +0100
 
 ## v5.3.0
 Several new features, and bug fixes for some long-standing issues.

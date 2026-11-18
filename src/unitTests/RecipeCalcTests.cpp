@@ -26,6 +26,7 @@
 
 #include <QDebug>
 #include <QString>
+#include <QScopeGuard>
 #include <QStringList>
 #include <QtTest/QtTest>
 
@@ -48,6 +49,7 @@
 #include "model/Recipe.h"
 #include "model/RecipeAdditionFermentable.h"
 #include "model/RecipeAdditionHop.h"
+#include "model/RecipeUtils.h"
 #include "model/StockPurchaseHop.h"
 #include "model/Water.h"
 #include "unitTests/TestData.h"
@@ -2085,5 +2087,269 @@ void RecipeCalcTests::testLateFermentableAdditions() {
       Q_FUNC_INFO << "Boil addition: boil gravity" << recipe->boilGrav() << ", IBU" << recipe->IBU();
    QVERIFY(recipe->boilGrav() > baseBoilGrav + 0.001);
    QVERIFY(recipe->IBU() < baseIbu);
+   return;
+}
+
+void RecipeCalcTests::testRecipeSnapshot() {
+   qDebug() << Q_FUNC_INFO << "Starting";
+
+   struct RestoreIbuFormula {
+      Ibu::Formula const saved = IbuMethods::formula;
+      ~RestoreIbuFormula() { IbuMethods::formula = saved; }
+   } restoreIbuFormula;
+   // Use a formula that gives IBUs for post-boil additions, so that every hop addition contributes
+   IbuMethods::formula = Ibu::Formula::mIbu;
+
+   // We'll turn automatic versioning on later in the test, but don't want it on for the first part
+   bool const savedVersioning = RecipeUtils::getAutomaticVersioningEnabled();
+   RecipeUtils::setAutomaticVersioningEnabled(false);
+   auto restoreVersioning = qScopeGuard([savedVersioning]() {
+      RecipeUtils::setAutomaticVersioningEnabled(savedVersioning);
+   });
+
+   // The fixtures need to be in the object store for additions to refer to them (by ID), but other tests might already
+   // have put them there
+   if (this->pimpl->m_twoRow->key() <= 0) {
+      ObjectStoreWrapper::insert(this->pimpl->m_twoRow);
+   }
+   if (this->pimpl->m_cascade_4pct->key() <= 0) {
+      ObjectStoreWrapper::insert(this->pimpl->m_cascade_4pct);
+   }
+
+   //
+   // A recipe with some grain, a standard 60 minute boil (pre-boil, boil proper, post-boil) and hop additions in each
+   // step of the boil.  It's the first wort addition (ie in the pre-boil step) that used to cause a crash when copying
+   // the recipe.
+   //
+   auto recipe = std::make_shared<Recipe>("Snapshot Test");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(20.0);
+   recipe->setEfficiency_pct(70.0);
+   recipe->setEquipment(this->pimpl->m_equipFiveGalNoLoss);
+   auto grain = std::make_shared<RecipeAdditionFermentable>("Two Row");
+   grain->setFermentable(this->pimpl->m_twoRow.get());
+   grain->setStage(RecipeAddition::Stage::Mash);
+   grain->setQuantity(4.5);
+   grain->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(grain);
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(25.0);
+   boil->setBoilTime_mins(60.0); // This also ensures the standard profile
+   auto const boilSteps = boil->boilSteps();
+   QCOMPARE(boilSteps.size(), 3);
+   boilSteps[2]->setStepTime_mins(30.0);
+
+   auto makeHopAddition = [&](QString const & name, int const step, std::optional<double> const addAtTime_mins) {
+      auto addition = std::make_shared<RecipeAdditionHop>(name);
+      addition->setHop(this->pimpl->m_cascade_4pct.get());
+      addition->setStage(RecipeAddition::Stage::Boil);
+      addition->setStep(step);
+      addition->setAddAtTime_mins(addAtTime_mins);
+      addition->setQuantity(0.020);
+      addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+      return recipe->addAddition(addition);
+   };
+   makeHopAddition("First wort"  , 1, std::nullopt);
+   makeHopAddition("Boil 60"     , 2, 60.0        );
+   makeHopAddition("Boil 15"     , 2, 15.0        );
+   makeHopAddition("Whirlpool 20", 3, 20.0        );
+   recipe->recalcAll();
+
+   //
+   // NB: Recipe::addAddition renames additions, so we identify them by step and time
+   //
+   auto findHopAddition = [](Recipe const & rec, int const step, double const addAtTime_mins) {
+      std::shared_ptr<RecipeAdditionHop> result;
+      for (auto const & addition : rec.hopAdditions()) {
+         if (addition->step() == step &&
+             addition->addAtTime_mins() &&
+             fuzzyComp(*addition->addAtTime_mins(), addAtTime_mins, 0.001)) {
+            result = addition;
+         }
+      }
+      return result;
+   };
+
+   //
+   // Records the calculated values we care about, so we can compare them between recipes
+   //
+   struct CalculatedValues {
+      double og;
+      double fg;
+      double boilGrav;
+      double ibu;
+      double color_srm;
+      double abv_pct;
+   };
+   auto calculatedValues = [](Recipe const & rec) {
+      return CalculatedValues{
+         .og        = rec.og       (),
+         .fg        = rec.fg       (),
+         .boilGrav  = rec.boilGrav (),
+         .ibu       = rec.IBU      (),
+         .color_srm = rec.color_srm(),
+         .abv_pct   = rec.ABV_pct  (),
+      };
+   };
+   auto sameCalculatedValues = [](CalculatedValues const & lhs, CalculatedValues const & rhs) {
+      return fuzzyComp(lhs.og       , rhs.og       , 0.0001) &&
+             fuzzyComp(lhs.fg       , rhs.fg       , 0.0001) &&
+             fuzzyComp(lhs.boilGrav , rhs.boilGrav , 0.0001) &&
+             fuzzyComp(lhs.ibu      , rhs.ibu      , 0.001 ) &&
+             fuzzyComp(lhs.color_srm, rhs.color_srm, 0.001 ) &&
+             fuzzyComp(lhs.abv_pct  , rhs.abv_pct  , 0.001 );
+   };
+   auto describe = [](CalculatedValues const & values) {
+      return QString("OG %1, FG %2, boil gravity %3, IBU %4, color %5 SRM, ABV %6%").arg(
+         values.og).arg(values.fg).arg(values.boilGrav).arg(values.ibu).arg(values.color_srm).arg(values.abv_pct);
+   };
+
+   CalculatedValues const originalValues = calculatedValues(*recipe);
+   qDebug() << Q_FUNC_INFO << "Original:" << describe(originalValues);
+   QVERIFY(originalValues.og  > 1.010);
+   QVERIFY(originalValues.ibu > 1.0  );
+
+   QList<int> originalHopAdditionIds;
+   int numFirstWort = 0;
+   int numAroma     = 0;
+   for (auto const & addition : recipe->hopAdditions()) {
+      originalHopAdditionIds.append(addition->key());
+      if (addition->isFirstWort()) { ++numFirstWort; }
+      if (addition->isAroma    ()) { ++numAroma    ; }
+   }
+   QCOMPARE(originalHopAdditionIds.size(), 4);
+   QCOMPARE(numFirstWort, 1);
+   QCOMPARE(numAroma    , 1);
+   QCOMPARE(recipe->fermentableAdditions().size(), 1);
+
+   //
+   // Copy the recipe, the same way as RecipeTreeModel::spawnRecipe does.  The copy constructor does calculations
+   // (including IBUs) at a point where the copy does not yet have an ID, and so neither do the copy's additions know
+   // which recipe they are in.  This used to crash.
+   //
+   auto snapshot = std::make_shared<Recipe>(*recipe);
+   QVERIFY2(snapshot->key() <= 0, "Copy should not have an ID until it is stored");
+
+   // Additions are deep-copied, and the copies are already in the object store...
+   QCOMPARE(snapshot->hopAdditions        ().size(), 4);
+   QCOMPARE(snapshot->fermentableAdditions().size(), 1);
+   for (auto const & addition : snapshot->hopAdditions()) {
+      QVERIFY(addition->key() > 0);
+      QVERIFY2(!originalHopAdditionIds.contains(addition->key()), "Copy shares hop addition with original");
+   }
+   // ...and the copy's calculated values are the same as the original's
+   CalculatedValues const unstoredSnapshotValues = calculatedValues(*snapshot);
+   qDebug() << Q_FUNC_INFO << "Unstored snapshot:" << describe(unstoredSnapshotValues);
+   QVERIFY2(sameCalculatedValues(unstoredSnapshotValues, originalValues),
+            "Calculated values of unstored copy differ from original");
+
+   //
+   // Store the copy.  Its additions should now know which recipe they belong to.
+   //
+   ObjectStoreWrapper::insert(snapshot);
+   QVERIFY(snapshot->key() > 0);
+   QVERIFY(snapshot->key() != recipe->key());
+   numFirstWort = 0;
+   numAroma     = 0;
+   for (auto const & addition : snapshot->hopAdditions()) {
+      QCOMPARE(addition->recipeId(), snapshot->key());
+      if (addition->isFirstWort()) { ++numFirstWort; }
+      if (addition->isAroma    ()) { ++numAroma    ; }
+   }
+   QCOMPARE(numFirstWort, 1);
+   QCOMPARE(numAroma    , 1);
+   for (auto const & addition : snapshot->fermentableAdditions()) {
+      QCOMPARE(addition->recipeId(), snapshot->key());
+   }
+   // The original still has its own additions
+   QCOMPARE(recipe->hopAdditions        ().size(), 4);
+   QCOMPARE(recipe->fermentableAdditions().size(), 1);
+   for (auto const & addition : recipe->hopAdditions()) {
+      QCOMPARE(addition->recipeId(), recipe->key());
+      QVERIFY(originalHopAdditionIds.contains(addition->key()));
+   }
+
+   // Boil and equipment are shared, not copied
+   QCOMPARE(snapshot->getBoilId     (), recipe->getBoilId     ());
+   QCOMPARE(snapshot->getEquipmentId(), recipe->getEquipmentId());
+
+   CalculatedValues const storedSnapshotValues = calculatedValues(*snapshot);
+   qDebug() << Q_FUNC_INFO << "Stored snapshot:" << describe(storedSnapshotValues);
+   QVERIFY2(sameCalculatedValues(storedSnapshotValues, originalValues),
+            "Calculated values of stored copy differ from original");
+
+   //
+   // Now make the original the ancestor of the copy, again as RecipeTreeModel::spawnRecipe does
+   //
+   snapshot->setAncestor(*recipe);
+   QVERIFY(recipe->locked());
+   QVERIFY(recipe->hasDescendants());
+   QVERIFY(!snapshot->locked());
+   QVERIFY(snapshot->hasAncestors());
+   QCOMPARE(snapshot->ancestors().size(), 1);
+   QCOMPARE(snapshot->ancestors().first()->key(), recipe->key());
+
+   //
+   // Changing the copy (ie the new version) should not affect the original (ie the snapshot of how it was)
+   //
+   auto const snapshotBoil60 = findHopAddition(*snapshot, 2, 60.0);
+   QVERIFY(snapshotBoil60);
+   snapshotBoil60->setQuantity(0.040);
+   snapshot->recalcAll();
+   recipe  ->recalcAll();
+   qDebug() <<
+      Q_FUNC_INFO << "After change to copy: original IBU" << recipe->IBU() << ", copy IBU" << snapshot->IBU();
+   QVERIFY2(snapshot->IBU() > originalValues.ibu + 1.0, "Change to copy did not change its IBUs");
+   QVERIFY2(sameCalculatedValues(calculatedValues(*recipe), originalValues), "Change to copy changed original");
+   auto const originalBoil60 = findHopAddition(*recipe, 2, 60.0);
+   QVERIFY(originalBoil60);
+   QVERIFY(fuzzyComp(originalBoil60->quantity(), 0.020, 0.0001));
+
+   //
+   // Now do the same via automatic versioning: brew the (new version of the) recipe, then change it.  This should
+   // give it a further ancestor, which has the recipe as it was before the change, and which gets the brew log.  (See
+   // also DatabaseTests::testAutomaticVersioning.)
+   //
+   RecipeUtils::setAutomaticVersioningEnabled(true);
+   CalculatedValues const beforeVersioningValues = calculatedValues(*snapshot);
+   auto brewLog = std::make_shared<BrewLog>(*snapshot);
+   brewLog->populateNote(snapshot.get());
+   ObjectStoreWrapper::insert(brewLog);
+   QCOMPARE(snapshot->brewLogs().size(), 1);
+
+   auto const snapshotFirstWort = [&]() {
+      for (auto const & addition : snapshot->hopAdditions()) {
+         if (addition->isFirstWort()) {
+            return addition;
+         }
+      }
+      return std::shared_ptr<RecipeAdditionHop>{};
+   }();
+   QVERIFY(snapshotFirstWort);
+   // Changing the first wort addition makes the copy constructor (which is where we used to crash) do its
+   // calculations with a first wort addition
+   snapshotFirstWort->setQuantity(0.030);
+   QCOMPARE(snapshot->ancestors().size(), 2);
+   std::shared_ptr<Recipe> const autoVersion = snapshot->ancestors().first();
+   QVERIFY(autoVersion->key() != recipe->key());
+   QVERIFY(autoVersion->key() != snapshot->key());
+   QCOMPARE(snapshot->ancestors().last()->key(), recipe->key());
+   QVERIFY(autoVersion->locked());
+   QVERIFY(snapshot->brewLogs().isEmpty());
+   QCOMPARE(autoVersion->brewLogs().size(), 1);
+   QCOMPARE(autoVersion->brewLogs().first()->key(), brewLog->key());
+   QCOMPARE(autoVersion->hopAdditions().size(), 4);
+   for (auto const & addition : autoVersion->hopAdditions()) {
+      QCOMPARE(addition->recipeId(), autoVersion->key());
+   }
+
+   // The automatic version has the recipe as it was before the change
+   CalculatedValues const autoVersionValues = calculatedValues(*autoVersion);
+   qDebug() << Q_FUNC_INFO << "Automatic version:" << describe(autoVersionValues);
+   QVERIFY2(sameCalculatedValues(autoVersionValues, beforeVersioningValues),
+            "Calculated values of automatic version differ from recipe before change");
+   snapshot->recalcAll();
+   QVERIFY2(snapshot->IBU() > beforeVersioningValues.ibu, "Change to first wort addition did not change IBUs");
+
    return;
 }

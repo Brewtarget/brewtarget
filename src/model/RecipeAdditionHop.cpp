@@ -219,13 +219,16 @@ RecipeAdditionHop::Use RecipeAdditionHop::use() const {
          return RecipeAdditionHop::Use::Mash;
 
       case RecipeAddition::Stage::Boil:
-         if (this->isFirstWort()) {
-            return RecipeAdditionHop::Use::First_Wort;
+         {
+            auto const boil = this->ownBoil();
+            if (this->isFirstWort(boil.get())) {
+               return RecipeAdditionHop::Use::First_Wort;
+            }
+            if (this->isAroma(boil.get())) {
+               return RecipeAdditionHop::Use::Aroma;
+            }
+            return RecipeAdditionHop::Use::Boil;
          }
-         if (this->isAroma()) {
-            return RecipeAdditionHop::Use::Aroma;
-         }
-         return RecipeAdditionHop::Use::Boil;
 
       case RecipeAddition::Stage::Fermentation:
       case RecipeAddition::Stage::Packaging:
@@ -261,7 +264,27 @@ std::optional<double> RecipeAdditionHop::beerXmlTime_mins() const {
    Q_UNREACHABLE(); // We should never get here
 }
 
+std::shared_ptr<Boil> RecipeAdditionHop::ownBoil() const {
+   //
+   // Note that we can't use this->recipe() here, as that logs an error if there is no Recipe, and it is legitimate for
+   // there not (yet) to be one -- eg for the additions in a newly-copied Recipe that has not yet been inserted in the DB.
+   //
+   Recipe const * recipe = ObjectStoreWrapper::getByIdRaw<Recipe>(this->m_recipeId);
+   if (!recipe) {
+      return nullptr;
+   }
+   return recipe->boil();
+}
+
 bool RecipeAdditionHop::isFirstWort() const {
+   return this->isFirstWort(this->ownBoil().get());
+}
+
+bool RecipeAdditionHop::isAroma() const {
+   return this->isAroma(this->ownBoil().get());
+}
+
+bool RecipeAdditionHop::isFirstWort(Boil const * boil) const {
    //
    // In switching from Hop::use to RecipeAddition::stage, there is no longer an explicit flag for First Wort Hops.
    // Instead, per dotBeer (see AdditionSchedule in Recipe.beer.schema), a first wort addition is one made in a pre-boil
@@ -284,8 +307,6 @@ bool RecipeAdditionHop::isFirstWort() const {
       return false;
    }
 
-   Recipe const * recipe = ObjectStoreWrapper::getByIdRaw<Recipe>(this->m_recipeId);
-   auto boil = recipe->boil();
    if (!boil || boil->boilSteps().empty()) {
       return false;
    }
@@ -309,7 +330,7 @@ bool RecipeAdditionHop::isFirstWort() const {
    return phases[stepIndex] == Boil::StepPhase::PreBoil;
 }
 
-bool RecipeAdditionHop::isAroma() const {
+bool RecipeAdditionHop::isAroma(Boil const * boil) const {
    //
    // In switching from Hop::use to RecipeAddition::stage, there is no longer an explicit flag for Aroma Hops, ie those
    // added after the boil (aka zero minute hops).
@@ -319,10 +340,6 @@ bool RecipeAdditionHop::isAroma() const {
    // Aroma must be after the first step of the boil
    if (!this->step() || *this->step() == 1) { return false; }
 
-   Recipe const * recipe = ObjectStoreWrapper::getByIdRaw<Recipe>(this->m_recipeId);
-
-
-   auto boil = recipe->boil();
    if (!boil) { return false; }
    if (boil->boilSteps().empty()) { return false; }
 
