@@ -20,7 +20,6 @@
 #-----------------------------------------------------------------------------------------------------------------------
 import os
 import getpass
-import grp
 import pathlib
 import platform
 import re
@@ -912,6 +911,12 @@ def doSnap():
    if sysName != 'Linux':
       btLogger.log.critical('Snap creation not supported on: ' + sysName)
       sys.exit(1)
+
+   #
+   # NB: The grp module is only available on Unix-like systems, so we can't import it at the top of this file (which is
+   #     imported by buildTool.py on all platforms).
+   #
+   import grp
 
    #
    # Read in the variables exported from the Meson build
