@@ -261,10 +261,15 @@ jobs:
           ../bt -v flatpak
 
       - name: Snap
+        if: ${{ matrix.buildContainerApps }}
         working-directory: ${{github.workspace}}/mbuild
         shell: bash
         run: |
           umask 022
+          # Docker, which is pre-installed and running on the GitHub runners, sets the default policy of the iptables
+          # FORWARD chain to DROP.  This stops LXD containers (which snapcraft uses as its build environment) from
+          # reaching the network, so the snap build would fail when it tries to download packages.
+          sudo iptables -P FORWARD ACCEPT
           ../bt -v snap
 
       - name: Upload Linux Packages (Installers)
