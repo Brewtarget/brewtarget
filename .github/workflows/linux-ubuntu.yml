@@ -59,22 +59,20 @@ jobs:
         # because pre-built objects from the system (static libraries, C runtime objects) still get linked in.  So,
         # for Ubuntu 26.04, we build inside the official ubuntu:26.04 Docker image, which is a baseline amd64 install.
         #
-        # Inside the container, we don't have the setup needed for building AppImage or Flatpak (eg FUSE, and the
-        # privileges that bubblewrap needs).  Those are portable formats, so we only build them on Ubuntu 24.04.
+        # The Linux "container app" packages (AppImage, Flatpak, Snap) are built separately, by
+        # linux-container-apps.yml.
         #
         include:
           - os: ubuntu-24.04
             runner: ubuntu-24.04
             container: ''
-            buildContainerApps: true
           - os: ubuntu-26.04
             runner: ubuntu-24.04
             container: ubuntu:26.04
-            buildContainerApps: false
     steps:
       #
-      # Building flatpak etc below takes a fair bit of disk space, we start out by removing preinstalled software that
-      # we don't need.  (Inside a container, we can't get at the host file system to do this.)
+      # The build takes a fair bit of disk space, so we start out by removing preinstalled software that we don't
+      # need.  (Inside a container, we can't get at the host file system to do this.)
       #
       - name: Free disk space
         if: ${{ matrix.container == '' }}
@@ -244,34 +242,6 @@ jobs:
           # exactly which functions contain any problem instructions.  The one in the .deb is what we actually ship.
           ../scripts/checkIsaLevel.sh brewtarget packages/linux/brewtarget*.deb
 
-      - name: AppImage
-        if: ${{ matrix.buildContainerApps }}
-        working-directory: ${{github.workspace}}/mbuild
-        shell: bash
-        run: |
-          umask 022
-          ../bt -v appimage
-
-      - name: Flatpak
-        if: ${{ matrix.buildContainerApps }}
-        working-directory: ${{github.workspace}}/mbuild
-        shell: bash
-        run: |
-          umask 022
-          ../bt -v flatpak
-
-      - name: Snap
-        if: ${{ matrix.buildContainerApps }}
-        working-directory: ${{github.workspace}}/mbuild
-        shell: bash
-        run: |
-          umask 022
-          # Docker, which is pre-installed and running on the GitHub runners, sets the default policy of the iptables
-          # FORWARD chain to DROP.  This stops LXD containers (which snapcraft uses as its build environment) from
-          # reaching the network, so the snap build would fail when it tries to download packages.
-          sudo iptables -P FORWARD ACCEPT
-          ../bt -v snap
-
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}
         uses: actions/upload-artifact@v7
@@ -284,10 +254,6 @@ jobs:
             mbuild/packages/linux/brewtarget*.deb.sha256sum
             mbuild/packages/linux/brewtarget*.rpm
             mbuild/packages/linux/brewtarget*.rpm.sha256sum
-            contAppPkgs/appimage/brewtarget*.AppImage
-            contAppPkgs/appimage/brewtarget*.AppImage.sha256sum
-            contAppPkgs/flatpak/brewtarget*.flatpak
-            contAppPkgs/flatpak/brewtarget*.flatpak.sha256sum
           retention-days: 7
 
       - name: Recover Debris Artifacts (Meson)

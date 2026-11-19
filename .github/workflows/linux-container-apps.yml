@@ -1,0 +1,150 @@
+#-----------------------------------------------------------------------------------------------------------------------
+# .github/workflows/linux-container-apps.yml is part of Brewtarget, and is copyright the following authors 2025-2026:
+#   • Matt Young <mfsy@yahoo.com>
+#
+# Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+#-----------------------------------------------------------------------------------------------------------------------
+
+#
+# Builds the Linux "container app" packages (AppImage, Flatpak, Snap).  These used to be extra steps in the Ubuntu 24.04
+# job in linux-ubuntu.yml, but they take a long time (Flatpak and Snap each build everything from source in their own
+# sandbox) and are more fragile than the normal build, so they are now separate.  This means:
+#    - the normal Linux builds report back without waiting for them;
+#    - a problem with, say, the Snap build doesn't show up as a failure of the normal build (or stop its packages being
+#      uploaded);
+#    - each container app gets its own runner, with its own disk space and time limit, and they all run in parallel.
+#
+# The container apps are portable formats, so we only build them on one version of Ubuntu.  We use 24.04 on the GitHub
+# runner directly (rather than inside a Docker container, as we do for 26.04 in linux-ubuntu.yml) because:
+#    - inside a container, we don't have the setup needed for AppImage or Flatpak (eg FUSE, and the privileges that
+#      bubblewrap needs), nor a running snapd for Snap;
+#    - the GitHub ubuntu-26.04 runner image targets x86-64-v3 (see comments in linux-ubuntu.yml), which matters for
+#      AppImage, as it bundles libraries from the build machine.
+#
+# If these builds turn out to be too slow to run on every pull request, remove the pull_request trigger below.  They
+# will then still run on pushes to main and stable branches, nightly, and on demand (via the "Run workflow" button on
+# the Actions tab, courtesy of workflow_dispatch).
+#
+name: Linux Container Apps
+
+on:
+  push:
+    branches:
+      - main
+      - "stable/**"
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        #
+        # 'app' is the bt command (and the name of the subdirectory of contAppPkgs where the output goes)
+        # 'ext' is the file extension of the package file we upload
+        #
+        include:
+          - app: appimage
+            ext: AppImage
+          - app: flatpak
+            ext: flatpak
+          - app: snap
+            ext: snap
+    steps:
+      #
+      # Building these takes a fair bit of disk space, so we start out by removing preinstalled software that we don't
+      # need.
+      #
+      - name: Free disk space
+        shell: bash
+        run: |
+          df -h /
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force || true
+          df -h /
+
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      #
+      # See comments in linux-ubuntu.yml for why we use an action to install Python
+      #
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      #
+      # As well as installing dependencies, this runs `meson setup`, which generates the Flatpak manifest
+      # (mbuild/flatpackManifest.yml) and Snap project file (mbuild/snapcraft.yaml) from the templates in
+      # packaging/linux.  That's all that Flatpak and Snap need from the main build, as they then build everything from
+      # source inside their own sandboxes.
+      #
+      - name: Install Frameworks and Libraries, and set up Meson build environment
+        working-directory: ${{github.workspace}}
+        shell: bash
+        run: |
+          ./bt -v setup all
+
+      #
+      # The AppImage, by contrast, is made from the output of the main build (via `meson install`), so we need to compile
+      # for that one.
+      #
+      - name: Build (with Meson)
+        if: ${{ matrix.app == 'appimage' }}
+        working-directory: ${{github.workspace}}/mbuild
+        shell: bash
+        run: |
+          meson compile
+
+      - name: Build ${{ matrix.ext }}
+        id: container-app-build
+        working-directory: ${{github.workspace}}/mbuild
+        shell: bash
+        run: |
+          umask 022
+          if [[ "${{ matrix.app }}" == "snap" ]]; then
+             # Docker, which is pre-installed and running on the GitHub runners, sets the default policy of the iptables
+             # FORWARD chain to DROP.  This stops LXD containers (which snapcraft uses as its build environment) from
+             # reaching the network, so the snap build would fail when it tries to download packages.
+             sudo iptables -P FORWARD ACCEPT
+          fi
+          ../bt -v ${{ matrix.app }}
+
+      - name: Upload ${{ matrix.ext }}
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: brewtarget-${{ matrix.app }}
+          path: |
+            contAppPkgs/${{ matrix.app }}/brewtarget*.${{ matrix.ext }}
+            contAppPkgs/${{ matrix.app }}/brewtarget*.${{ matrix.ext }}.sha256sum
+          retention-days: 7
+
+      #
+      # When the Snap build fails, the details are in snapcraft's own log files rather than the step output
+      #
+      - name: Recover Debris Artifacts (Snapcraft logs)
+        if: ${{ failure() && matrix.app == 'snap' && steps.container-app-build.conclusion == 'failure' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: snapcraft-logs
+          path: ~/.local/state/snapcraft/log/
+          retention-days: 1
