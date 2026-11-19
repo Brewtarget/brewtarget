@@ -116,26 +116,26 @@ EnumStringMapping const Measurement::physicalQuantityStringMapping {
    {Measurement::PhysicalQuantity::EnergyPerVolume            , "EnergyPerVolume"     },
 };
 
-EnumStringMapping const Measurement::physicalQuantityDisplayNames {
-   {Measurement::PhysicalQuantity::Mass                       , QObject::tr("Weight (Mass)"                 )},
-   {Measurement::PhysicalQuantity::Volume                     , QObject::tr("Volume"                        )},
-   {Measurement::PhysicalQuantity::Length                     , QObject::tr("Length"                        )},
-   {Measurement::PhysicalQuantity::Count                      , QObject::tr("Count"                         )},
-   {Measurement::PhysicalQuantity::Temperature                , QObject::tr("Temperature"                   )},
-   {Measurement::PhysicalQuantity::Time                       , QObject::tr("Time"                          )},
-   {Measurement::PhysicalQuantity::Color                      , QObject::tr("Color"                         )},
-   {Measurement::PhysicalQuantity::Gravity                    , QObject::tr("Density"                       )},
-   {Measurement::PhysicalQuantity::DiastaticPower             , QObject::tr("Diastatic Power"               )},
-   {Measurement::PhysicalQuantity::Acidity                    , QObject::tr("Acidity"                       )},
-   {Measurement::PhysicalQuantity::Bitterness                 , QObject::tr("Bitterness"                    )},
-   {Measurement::PhysicalQuantity::Carbonation                , QObject::tr("Carbonation"                   )},
-   {Measurement::PhysicalQuantity::MassFractionOrConcentration, QObject::tr("Mass Fraction or Concentration")},
-   {Measurement::PhysicalQuantity::Viscosity                  , QObject::tr("Viscosity"                     )},
-   {Measurement::PhysicalQuantity::SpecificHeatCapacity       , QObject::tr("Specific Heat Capacity"        )},
-   {Measurement::PhysicalQuantity::HeatCapacity               , QObject::tr("Heat Capacity"                 )},
-   {Measurement::PhysicalQuantity::VolumePerMass              , QObject::tr("Volume per Mass"               )},
-   {Measurement::PhysicalQuantity::EnergyPerVolume            , QObject::tr("Energy per Volume"             )},
-};
+EnumDisplayNameMapping const Measurement::physicalQuantityDisplayNames {"QObject", {
+   {Measurement::PhysicalQuantity::Mass                       , QT_TRANSLATE_NOOP("QObject", "Weight (Mass)"                 )},
+   {Measurement::PhysicalQuantity::Volume                     , QT_TRANSLATE_NOOP("QObject", "Volume"                        )},
+   {Measurement::PhysicalQuantity::Length                     , QT_TRANSLATE_NOOP("QObject", "Length"                        )},
+   {Measurement::PhysicalQuantity::Count                      , QT_TRANSLATE_NOOP("QObject", "Count"                         )},
+   {Measurement::PhysicalQuantity::Temperature                , QT_TRANSLATE_NOOP("QObject", "Temperature"                   )},
+   {Measurement::PhysicalQuantity::Time                       , QT_TRANSLATE_NOOP("QObject", "Time"                          )},
+   {Measurement::PhysicalQuantity::Color                      , QT_TRANSLATE_NOOP("QObject", "Color"                         )},
+   {Measurement::PhysicalQuantity::Gravity                    , QT_TRANSLATE_NOOP("QObject", "Density"                       )},
+   {Measurement::PhysicalQuantity::DiastaticPower             , QT_TRANSLATE_NOOP("QObject", "Diastatic Power"               )},
+   {Measurement::PhysicalQuantity::Acidity                    , QT_TRANSLATE_NOOP("QObject", "Acidity"                       )},
+   {Measurement::PhysicalQuantity::Bitterness                 , QT_TRANSLATE_NOOP("QObject", "Bitterness"                    )},
+   {Measurement::PhysicalQuantity::Carbonation                , QT_TRANSLATE_NOOP("QObject", "Carbonation"                   )},
+   {Measurement::PhysicalQuantity::MassFractionOrConcentration, QT_TRANSLATE_NOOP("QObject", "Mass Fraction or Concentration")},
+   {Measurement::PhysicalQuantity::Viscosity                  , QT_TRANSLATE_NOOP("QObject", "Viscosity"                     )},
+   {Measurement::PhysicalQuantity::SpecificHeatCapacity       , QT_TRANSLATE_NOOP("QObject", "Specific Heat Capacity"        )},
+   {Measurement::PhysicalQuantity::HeatCapacity               , QT_TRANSLATE_NOOP("QObject", "Heat Capacity"                 )},
+   {Measurement::PhysicalQuantity::VolumePerMass              , QT_TRANSLATE_NOOP("QObject", "Volume per Mass"               )},
+   {Measurement::PhysicalQuantity::EnergyPerVolume            , QT_TRANSLATE_NOOP("QObject", "Energy per Volume"             )},
+}};
 
 
 BtStringConst const & Measurement::getSettingsNameUnitSystem(PhysicalQuantity const physicalQuantity) {
@@ -231,10 +231,10 @@ EnumStringMapping const Measurement::choiceOfPhysicalQuantityStringMapping {
    {Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  , "Mass_Volume_Count"  },
 };
 
-EnumStringMapping const Measurement::choiceOfPhysicalQuantityDisplayNames {
-   {Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        , QObject::tr("Mass or Volume"              )},
-   {Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  , QObject::tr("Mass, Volume or Count"       )},
-};
+EnumDisplayNameMapping const Measurement::choiceOfPhysicalQuantityDisplayNames {"QObject", {
+   {Measurement::ChoiceOfPhysicalQuantity::Mass_Volume        , QT_TRANSLATE_NOOP("QObject", "Mass or Volume"              )},
+   {Measurement::ChoiceOfPhysicalQuantity::Mass_Volume_Count  , QT_TRANSLATE_NOOP("QObject", "Mass, Volume or Count"       )},
+}};
 
 // Default case is that PhysicalQuantities holds PhysicalQuantity; specialisations are for all ChoiceOfPhysicalQuantity
 // possibilities.  Note that, because this is a function template, we are not allowed _partial_ specialisations.

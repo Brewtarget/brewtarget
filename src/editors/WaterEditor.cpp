@@ -50,7 +50,9 @@ WaterEditor::WaterEditor(QWidget *parent, QString const editorName) :
        EDITOR_FIELD_NORM(Water, label_na              , lineEdit_na               , Water::sodium_ppm      , 2),
        EDITOR_FIELD_NORM(Water, label_alk             , lineEdit_alk              , Water::alkalinity_ppm  , 2),
        EDITOR_FIELD_NORM(Water, label_pH              , lineEdit_ph               , Water::ph              , 2),
-       EDITOR_FIELD_NORM(Water, label_alkalinityAsHCO3, boolCombo_alkalinityAsHCO3, Water::alkalinityAsHCO3, tr("CaCO3"), tr("HCO3")),
+       EDITOR_FIELD_NORM(Water, label_alkalinityAsHCO3, boolCombo_alkalinityAsHCO3, Water::alkalinityAsHCO3,
+                         TranslatableText("WaterEditor", QT_TRANSLATE_NOOP("WaterEditor", "CaCO3")),
+                         TranslatableText("WaterEditor", QT_TRANSLATE_NOOP("WaterEditor", "HCO3" ))),
        // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
        EDITOR_FIELD_NORM(Water, label_carbonate       , lineEdit_carbonate        , Water::carbonate_ppm   , 2),
        EDITOR_FIELD_NORM(Water, label_potassium       , lineEdit_potassium        , Water::potassium_ppm   , 2),

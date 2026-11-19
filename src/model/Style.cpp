@@ -68,15 +68,15 @@ EnumStringMapping const Style::typeStringMapping {
    {Style::Type::Wine    , "wine"    },
    {Style::Type::Other   , "other"   },
 };
-EnumStringMapping const Style::typeDisplayNames{
-   {Style::Type::Beer    , tr("Beer"    )},
-   {Style::Type::Cider   , tr("Cider"   )},
-   {Style::Type::Mead    , tr("Mead"    )},
-   {Style::Type::Kombucha, tr("Kombucha")},
-   {Style::Type::Soda    , tr("Soda"    )},
-   {Style::Type::Wine    , tr("Wine"    )},
-   {Style::Type::Other   , tr("Other"   )},
-};
+EnumDisplayNameMapping const Style::typeDisplayNames{"Style", {
+   {Style::Type::Beer    , QT_TRANSLATE_NOOP("Style", "Beer"    )},
+   {Style::Type::Cider   , QT_TRANSLATE_NOOP("Style", "Cider"   )},
+   {Style::Type::Mead    , QT_TRANSLATE_NOOP("Style", "Mead"    )},
+   {Style::Type::Kombucha, QT_TRANSLATE_NOOP("Style", "Kombucha")},
+   {Style::Type::Soda    , QT_TRANSLATE_NOOP("Style", "Soda"    )},
+   {Style::Type::Wine    , QT_TRANSLATE_NOOP("Style", "Wine"    )},
+   {Style::Type::Other   , QT_TRANSLATE_NOOP("Style", "Other"   )},
+}};
 
 bool Style::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid

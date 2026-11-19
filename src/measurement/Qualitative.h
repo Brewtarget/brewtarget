@@ -17,6 +17,7 @@
 #define MEASUREMENT_QUALITATIVE_H
 #pragma once
 
+class EnumDisplayNameMapping;
 class EnumStringMapping;
 
 /**
@@ -54,7 +55,7 @@ namespace Measurement::Qualitative {
    /*!
     * \brief Localised names of \c Recipe::WortClarity values suitable for displaying to the end user
     */
-   extern EnumStringMapping const wortClarityDisplayNames;
+   extern EnumDisplayNameMapping const wortClarityDisplayNames;
 }
 /**
  * \brief Convenience functions for logging

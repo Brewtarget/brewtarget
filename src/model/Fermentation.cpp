@@ -42,16 +42,16 @@ EnumStringMapping const Fermentation::krausenHandlingStringMapping {
    {Fermentation::KrausenHandling::BlownOffVigorousFermentation, "blown off, vigorous fermentation"},
 };
 
-EnumStringMapping const Fermentation::krausenHandlingDisplayNames {
-   {Fermentation::KrausenHandling::MixedIn                     , tr("Mixed In"                        )},
-   {Fermentation::KrausenHandling::MinorDeposits               , tr("Minor Deposits on Fermenter"     )},
-   {Fermentation::KrausenHandling::MediumDeposits              , tr("Medium Deposits on Fermenter"    )},
-   {Fermentation::KrausenHandling::HeavyDeposits               , tr("Heavy Deposits on Fermenter"     )},
-   {Fermentation::KrausenHandling::VeryHeavyDeposits           , tr("Very Heavy Deposits on Fermenter")},
-   {Fermentation::KrausenHandling::BlownOffSlowFermentation    , tr("Blown Off, Slow Fermentation"    )},
-   {Fermentation::KrausenHandling::BlownOffNormalFermentation  , tr("Blown Off, Normal Fermentation"  )},
-   {Fermentation::KrausenHandling::BlownOffVigorousFermentation, tr("Blown Off, Vigorous Fermentation")},
-};
+EnumDisplayNameMapping const Fermentation::krausenHandlingDisplayNames {"Fermentation", {
+   {Fermentation::KrausenHandling::MixedIn                     , QT_TRANSLATE_NOOP("Fermentation", "Mixed In"                        )},
+   {Fermentation::KrausenHandling::MinorDeposits               , QT_TRANSLATE_NOOP("Fermentation", "Minor Deposits on Fermenter"     )},
+   {Fermentation::KrausenHandling::MediumDeposits              , QT_TRANSLATE_NOOP("Fermentation", "Medium Deposits on Fermenter"    )},
+   {Fermentation::KrausenHandling::HeavyDeposits               , QT_TRANSLATE_NOOP("Fermentation", "Heavy Deposits on Fermenter"     )},
+   {Fermentation::KrausenHandling::VeryHeavyDeposits           , QT_TRANSLATE_NOOP("Fermentation", "Very Heavy Deposits on Fermenter")},
+   {Fermentation::KrausenHandling::BlownOffSlowFermentation    , QT_TRANSLATE_NOOP("Fermentation", "Blown Off, Slow Fermentation"    )},
+   {Fermentation::KrausenHandling::BlownOffNormalFermentation  , QT_TRANSLATE_NOOP("Fermentation", "Blown Off, Normal Fermentation"  )},
+   {Fermentation::KrausenHandling::BlownOffVigorousFermentation, QT_TRANSLATE_NOOP("Fermentation", "Blown Off, Vigorous Fermentation")},
+}};
 
 bool Fermentation::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid

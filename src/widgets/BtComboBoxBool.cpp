@@ -15,6 +15,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "widgets/BtComboBoxBool.h"
 
+#include <QEvent>
 #include <QString>
 #include <QVariant>
 
@@ -40,8 +41,8 @@ public:
       m_editorName    {"Uninitialised m_editorName!"    },
       m_comboBoxName  {"Uninitialised m_comboBoxName!"  },
       m_comboBoxFqName{"Uninitialised m_comboBoxFqName!"},
-      m_unsetDisplay  {nullptr},
-      m_setDisplay    {nullptr},
+      m_unsetDisplay  {"", ""},
+      m_setDisplay    {"", ""},
       m_typeInfo      {nullptr} {
       return;
    }
@@ -53,8 +54,8 @@ public:
    char     const * m_editorName    ;
    char     const * m_comboBoxName  ;
    char     const * m_comboBoxFqName;
-   QString  const * m_unsetDisplay  ;
-   QString  const * m_setDisplay    ;
+   TranslatableText m_unsetDisplay  ;
+   TranslatableText m_setDisplay    ;
    TypeInfo const * m_typeInfo      ;
 };
 
@@ -66,12 +67,12 @@ BtComboBoxBool::BtComboBoxBool(QWidget * parent) :
 
 BtComboBoxBool::~BtComboBoxBool() = default;
 
-void BtComboBoxBool::init(char const * const   editorName    ,
-                          char const * const   comboBoxName  ,
-                          char const * const   comboBoxFqName,
-                          QString      const & unsetDisplay  ,
-                          QString      const & setDisplay    ,
-                          TypeInfo     const & typeInfo      ) {
+void BtComboBoxBool::init(char const * const       editorName    ,
+                          char const * const       comboBoxName  ,
+                          char const * const       comboBoxFqName,
+                          TranslatableText const & unsetDisplay  ,
+                          TranslatableText const & setDisplay    ,
+                          TypeInfo         const & typeInfo      ) {
    // Normally keep this log statement commented out otherwise it generates too many lines in the log file
 //   qDebug() << Q_FUNC_INFO << comboBoxFqName << ":" << typeInfo;
 
@@ -87,8 +88,8 @@ void BtComboBoxBool::init(char const * const   editorName    ,
    this->pimpl->m_editorName     =  editorName    ;
    this->pimpl->m_comboBoxName   =  comboBoxName  ;
    this->pimpl->m_comboBoxFqName =  comboBoxFqName;
-   this->pimpl->m_unsetDisplay   = &unsetDisplay  ;
-   this->pimpl->m_setDisplay     = &setDisplay    ;
+   this->pimpl->m_unsetDisplay   =  unsetDisplay  ;
+   this->pimpl->m_setDisplay     =  setDisplay    ;
    this->pimpl->m_typeInfo       = &typeInfo      ;
 
    // It's a coding error if we already have any items in the combo box.  (This could eg happen if any were defined in
@@ -100,8 +101,8 @@ void BtComboBoxBool::init(char const * const   editorName    ,
       this->addItem("", "");
    }
 
-   this->addItem(*this->pimpl->m_unsetDisplay, QVariant::fromValue<QString>(falseValue));
-   this->addItem(*this->pimpl->m_setDisplay  , QVariant::fromValue<QString>( trueValue));
+   this->addItem(this->pimpl->m_unsetDisplay.translated(), QVariant::fromValue<QString>(falseValue));
+   this->addItem(this->pimpl->m_setDisplay  .translated(), QVariant::fromValue<QString>( trueValue));
 
    this->pimpl->m_initialised = true;
 
@@ -177,6 +178,16 @@ void BtComboBoxBool::setFromVariant(QVariant const & value) {
    }
    Q_ASSERT(rawValue == falseValue || rawValue == trueValue);
    return rawValue == trueValue;
+}
+
+void BtComboBoxBool::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange && this->pimpl->m_initialised) {
+      // As in BtComboBoxEnum::changeEvent, we just update the display text; the item data and current index don't change
+      this->setItemText(this->findData(falseValue), this->pimpl->m_unsetDisplay.translated());
+      this->setItemText(this->findData( trueValue), this->pimpl->m_setDisplay  .translated());
+   }
+   this->QComboBox::changeEvent(event);
+   return;
 }
 
 [[nodiscard]] QVariant BtComboBoxBool::getAsVariant() const {

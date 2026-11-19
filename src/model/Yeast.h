@@ -160,7 +160,7 @@ public:
    /*!
     * \brief Localised names of \c Yeast::Type values suitable for displaying to the end user
     */
-   static EnumStringMapping const typeDisplayNames;
+   static EnumDisplayNameMapping const typeDisplayNames;
 
    //! \brief What form the yeast comes in.
    enum class Form {
@@ -183,7 +183,7 @@ public:
    /*!
     * \brief Localised names of \c Yeast::Form values suitable for displaying to the end user
     */
-   static EnumStringMapping const formDisplayNames;
+   static EnumDisplayNameMapping const formDisplayNames;
 
    //! \brief Flocculation refers to the ability of yeast to aggregate to form large flocs which drop out of suspension.
    enum class Flocculation {
@@ -209,7 +209,7 @@ public:
    /*!
     * \brief Localised names of \c Yeast::Flocculation values suitable for displaying to the end user
     */
-   static EnumStringMapping const flocculationDisplayNames;
+   static EnumDisplayNameMapping const flocculationDisplayNames;
 
    /**
     * \brief This is where we centrally define how \c Yeast objects can be measured.

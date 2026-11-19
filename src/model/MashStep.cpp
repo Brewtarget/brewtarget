@@ -53,15 +53,15 @@ EnumStringMapping const MashStep::typeStringMapping {
    {MashStep::Type::SouringWort, "souring wort"  },
 };
 
-EnumStringMapping const MashStep::typeDisplayNames {
-   {MashStep::Type::Infusion   , tr("Infusion"                     )},
-   {MashStep::Type::Temperature, tr("Temperature"                  )},
-   {MashStep::Type::Decoction  , tr("Decoction"                    )},
-   {MashStep::Type::FlySparge  , tr("Normal (Fly) Sparge"          )},
-   {MashStep::Type::BatchSparge, tr("Batch Sparge (Drain Mash Tun)")},
-   {MashStep::Type::SouringMash, tr("Souring Mash"                 )},
-   {MashStep::Type::SouringWort, tr("Souring Wort"                 )},
-};
+EnumDisplayNameMapping const MashStep::typeDisplayNames {"MashStep", {
+   {MashStep::Type::Infusion   , QT_TRANSLATE_NOOP("MashStep", "Infusion"                     )},
+   {MashStep::Type::Temperature, QT_TRANSLATE_NOOP("MashStep", "Temperature"                  )},
+   {MashStep::Type::Decoction  , QT_TRANSLATE_NOOP("MashStep", "Decoction"                    )},
+   {MashStep::Type::FlySparge  , QT_TRANSLATE_NOOP("MashStep", "Normal (Fly) Sparge"          )},
+   {MashStep::Type::BatchSparge, QT_TRANSLATE_NOOP("MashStep", "Batch Sparge (Drain Mash Tun)")},
+   {MashStep::Type::SouringMash, QT_TRANSLATE_NOOP("MashStep", "Souring Mash"                 )},
+   {MashStep::Type::SouringWort, QT_TRANSLATE_NOOP("MashStep", "Souring Wort"                 )},
+}};
 
 
 bool MashStep::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
@@ -94,8 +94,8 @@ TypeLookup const MashStep::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, infuseTemp_c          , m_infuseTemp_c          , Measurement::PhysicalQuantity::Temperature   , DisplayInfo::Precision{1}),
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
       PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, liquorToGristRatio_lKg, m_liquorToGristRatio_lKg, Measurement::PhysicalQuantity::VolumePerMass),
-      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, amountFixed           , m_amountFixed           , BOOL_INFO(tr("No"), tr("Yes"))               ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, infuseTempFixed       , m_infuseTempFixed       , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, amountFixed           , m_amountFixed           , BOOL_INFO_NO_YES                             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(MashStep, infuseTempFixed       , m_infuseTempFixed       , BOOL_INFO_NO_YES                             ),
       PROPERTY_TYPE_LOOKUP_RD_MF(MashStep, mashVolume_l          , mashVolume_l            , Measurement::PhysicalQuantity::Volume        , DisplayInfo::Precision{1}), // Placeholder, not in DB
    },
    // Parent class lookup.  NB: Step not NamedEntity!

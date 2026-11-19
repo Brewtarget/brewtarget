@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * calculations/ColorMethods.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * calculations/ColorMethods.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -61,7 +61,7 @@ namespace ColorMethods {
    /*!
     * \brief Localised names of \c ColorMethods::ColorType values suitable for displaying to the end user
     */
-   extern EnumStringMapping const formulaDisplayNames;
+   extern EnumDisplayNameMapping const formulaDisplayNames;
 
    extern ColorFormula formula;
 

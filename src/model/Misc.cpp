@@ -60,15 +60,15 @@ EnumStringMapping const Misc::typeStringMapping {
    {Misc::Type::Wood       , "wood"       },
 };
 
-EnumStringMapping const Misc::typeDisplayNames {
-   {Misc::Type::Spice      , tr("Spice"      )},
-   {Misc::Type::Fining     , tr("Fining"     )},
-   {Misc::Type::WaterAgent , tr("Water Agent")},
-   {Misc::Type::Herb       , tr("Herb"       )},
-   {Misc::Type::Flavor     , tr("Flavor"     )},
-   {Misc::Type::Other      , tr("Other"      )},
-   {Misc::Type::Wood       , tr("Wood"       )},
-};
+EnumDisplayNameMapping const Misc::typeDisplayNames {"Misc", {
+   {Misc::Type::Spice      , QT_TRANSLATE_NOOP("Misc", "Spice"      )},
+   {Misc::Type::Fining     , QT_TRANSLATE_NOOP("Misc", "Fining"     )},
+   {Misc::Type::WaterAgent , QT_TRANSLATE_NOOP("Misc", "Water Agent")},
+   {Misc::Type::Herb       , QT_TRANSLATE_NOOP("Misc", "Herb"       )},
+   {Misc::Type::Flavor     , QT_TRANSLATE_NOOP("Misc", "Flavor"     )},
+   {Misc::Type::Other      , QT_TRANSLATE_NOOP("Misc", "Other"      )},
+   {Misc::Type::Wood       , QT_TRANSLATE_NOOP("Misc", "Wood"       )},
+}};
 
 EnumStringMapping const Misc::waterAgentTypeStringMapping {
    {Misc::WaterAgentType::CalciumChloride_Anhydrous    , "calcium chloride anhydrous"    },
@@ -87,28 +87,28 @@ EnumStringMapping const Misc::waterAgentTypeStringMapping {
    {Misc::WaterAgentType::Other                        , "other"                         },
 };
 
-EnumStringMapping const Misc::waterAgentTypeDisplayNames {
+EnumDisplayNameMapping const Misc::waterAgentTypeDisplayNames {"Misc", {
    //
    // I guess it's a matter of preference whether you want to refer to something by its molecular formula or its name.
    // We offer both, but lead with the name as, for a lot of brewers, the formula doesn't necessarily jump off the page.
    // Similarly, for these display strings, we use the vernacular where it differs from what a chemist might say -- eg
    // "Epsom Salt" rather than "Magnesium Sulfate Heptahydrate".
    //
-   {Misc::WaterAgentType::CalciumChloride_Anhydrous    , tr("Anhydrous Calcium Chloride"     " (CaCl₂)"     )},
-   {Misc::WaterAgentType::CalciumChloride_Dihydrate    , tr("Calcium Chloride Dihydrate"     " (CaCl₂·2H₂O)")},
-   {Misc::WaterAgentType::CalciumCarbonate             , tr("Calcium Carbonate"              " (CaCO₃)"     )},
-   {Misc::WaterAgentType::CalciumSulfate_Dihydrate     , tr("Gypsum"                         " (CaSO₄·2H₂O)")},
-   {Misc::WaterAgentType::CalciumHydroxide             , tr("Pickling Lime"                  " (Ca(OH)₂)"   )},
-   {Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate, tr("Epsom Salt"                     " (MgSO₄·7H₂O)")},
-   {Misc::WaterAgentType::MagnesiumChloride_Hexahydrate, tr("Magnesium Chloride Hexahydrate" " (MgCl₂·6H₂O)")},
-   {Misc::WaterAgentType::SodiumChloride               , tr("Regular Salt"                   " (NaCl)"      )},
-   {Misc::WaterAgentType::SodiumBicarbonate            , tr("Sodium Bicarbonate"             " (NaHCO₃)"    )},
-   {Misc::WaterAgentType::LacticAcid                   , tr("Lactic Acid"                    " (C₃H₆O₃)"    )},
-   {Misc::WaterAgentType::PhosphoricAcid               , tr("Phosphoric acid"                " (H₃PO₄)"     )},
-   {Misc::WaterAgentType::SulfuricAcid                 , tr("sulfuric acid"                  " (H₂SO₄)"     )},
-   {Misc::WaterAgentType::HydrochloricAcid             , tr("hydrochloric acid"              " (HCl)"       )},
-   {Misc::WaterAgentType::Other                        , tr("Other")},
-};
+   {Misc::WaterAgentType::CalciumChloride_Anhydrous    , QT_TRANSLATE_NOOP("Misc", "Anhydrous Calcium Chloride"     " (CaCl₂)"     )},
+   {Misc::WaterAgentType::CalciumChloride_Dihydrate    , QT_TRANSLATE_NOOP("Misc", "Calcium Chloride Dihydrate"     " (CaCl₂·2H₂O)")},
+   {Misc::WaterAgentType::CalciumCarbonate             , QT_TRANSLATE_NOOP("Misc", "Calcium Carbonate"              " (CaCO₃)"     )},
+   {Misc::WaterAgentType::CalciumSulfate_Dihydrate     , QT_TRANSLATE_NOOP("Misc", "Gypsum"                         " (CaSO₄·2H₂O)")},
+   {Misc::WaterAgentType::CalciumHydroxide             , QT_TRANSLATE_NOOP("Misc", "Pickling Lime"                  " (Ca(OH)₂)"   )},
+   {Misc::WaterAgentType::MagnesiumSulfate_Heptahydrate, QT_TRANSLATE_NOOP("Misc", "Epsom Salt"                     " (MgSO₄·7H₂O)")},
+   {Misc::WaterAgentType::MagnesiumChloride_Hexahydrate, QT_TRANSLATE_NOOP("Misc", "Magnesium Chloride Hexahydrate" " (MgCl₂·6H₂O)")},
+   {Misc::WaterAgentType::SodiumChloride               , QT_TRANSLATE_NOOP("Misc", "Regular Salt"                   " (NaCl)"      )},
+   {Misc::WaterAgentType::SodiumBicarbonate            , QT_TRANSLATE_NOOP("Misc", "Sodium Bicarbonate"             " (NaHCO₃)"    )},
+   {Misc::WaterAgentType::LacticAcid                   , QT_TRANSLATE_NOOP("Misc", "Lactic Acid"                    " (C₃H₆O₃)"    )},
+   {Misc::WaterAgentType::PhosphoricAcid               , QT_TRANSLATE_NOOP("Misc", "Phosphoric acid"                " (H₃PO₄)"     )},
+   {Misc::WaterAgentType::SulfuricAcid                 , QT_TRANSLATE_NOOP("Misc", "sulfuric acid"                  " (H₂SO₄)"     )},
+   {Misc::WaterAgentType::HydrochloricAcid             , QT_TRANSLATE_NOOP("Misc", "hydrochloric acid"              " (HCl)"       )},
+   {Misc::WaterAgentType::Other                        , QT_TRANSLATE_NOOP("Misc", "Other")},
+}};
 
 bool Misc::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
@@ -153,7 +153,7 @@ TypeLookup const Misc::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Misc, productId, m_productId, NonPhysicalQuantity::String),
       // All below migrated from Salt
       PROPERTY_TYPE_LOOKUP_ENTRY(Misc, waterAgentType       , m_waterAgentType       , ENUM_INFO(Misc::waterAgentType)),
-      PROPERTY_TYPE_LOOKUP_NO_MV(Misc, waterAgentIsAcid     , waterAgentIsAcid       , BOOL_INFO(tr("No"), tr("Yes")) ),
+      PROPERTY_TYPE_LOOKUP_NO_MV(Misc, waterAgentIsAcid     , waterAgentIsAcid       , BOOL_INFO_NO_YES               ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Misc, waterAgentPercentAcid, m_waterAgentPercentAcid, NonPhysicalQuantity::Percentage),
    },
    // Parent classes lookup

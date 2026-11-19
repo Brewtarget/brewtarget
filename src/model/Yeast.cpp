@@ -74,21 +74,21 @@ EnumStringMapping const Yeast::typeStringMapping {
    {Yeast::Type::Spontaneous , "spontaneous"  },
 };
 
-EnumStringMapping const Yeast::typeDisplayNames {
-   {Yeast::Type::Ale         , tr("Ale"          )},
-   {Yeast::Type::Lager       , tr("Lager"        )},
-   {Yeast::Type::Other       , tr("Other"        )},
-   {Yeast::Type::Wine        , tr("Wine"         )},
-   {Yeast::Type::Champagne   , tr("Champagne"    )},
-   {Yeast::Type::Bacteria    , tr("Bacteria"     )},
-   {Yeast::Type::Brett       , tr("Brett"        )},
-   {Yeast::Type::Kveik       , tr("Kveik"        )},
-   {Yeast::Type::Lacto       , tr("Lacto"        )},
-   {Yeast::Type::Malolactic  , tr("Malolactic"   )},
-   {Yeast::Type::MixedCulture, tr("Mixed-culture")},
-   {Yeast::Type::Pedio       , tr("Pedio"        )},
-   {Yeast::Type::Spontaneous , tr("Spontaneous"  )},
-};
+EnumDisplayNameMapping const Yeast::typeDisplayNames {"Yeast", {
+   {Yeast::Type::Ale         , QT_TRANSLATE_NOOP("Yeast", "Ale"          )},
+   {Yeast::Type::Lager       , QT_TRANSLATE_NOOP("Yeast", "Lager"        )},
+   {Yeast::Type::Other       , QT_TRANSLATE_NOOP("Yeast", "Other"        )},
+   {Yeast::Type::Wine        , QT_TRANSLATE_NOOP("Yeast", "Wine"         )},
+   {Yeast::Type::Champagne   , QT_TRANSLATE_NOOP("Yeast", "Champagne"    )},
+   {Yeast::Type::Bacteria    , QT_TRANSLATE_NOOP("Yeast", "Bacteria"     )},
+   {Yeast::Type::Brett       , QT_TRANSLATE_NOOP("Yeast", "Brett"        )},
+   {Yeast::Type::Kveik       , QT_TRANSLATE_NOOP("Yeast", "Kveik"        )},
+   {Yeast::Type::Lacto       , QT_TRANSLATE_NOOP("Yeast", "Lacto"        )},
+   {Yeast::Type::Malolactic  , QT_TRANSLATE_NOOP("Yeast", "Malolactic"   )},
+   {Yeast::Type::MixedCulture, QT_TRANSLATE_NOOP("Yeast", "Mixed-culture")},
+   {Yeast::Type::Pedio       , QT_TRANSLATE_NOOP("Yeast", "Pedio"        )},
+   {Yeast::Type::Spontaneous , QT_TRANSLATE_NOOP("Yeast", "Spontaneous"  )},
+}};
 
 EnumStringMapping const Yeast::formStringMapping {
    {Yeast::Form::Liquid , "liquid" },
@@ -98,13 +98,13 @@ EnumStringMapping const Yeast::formStringMapping {
    {Yeast::Form::Dregs  , "dregs"  },
 };
 
-EnumStringMapping const Yeast::formDisplayNames  {
-   {Yeast::Form::Liquid , tr("Liquid" )},
-   {Yeast::Form::Dry    , tr("Dry"    )},
-   {Yeast::Form::Slant  , tr("Slant"  )},
-   {Yeast::Form::Culture, tr("Culture")},
-   {Yeast::Form::Dregs  , tr("Dregs"  )},
-};
+EnumDisplayNameMapping const Yeast::formDisplayNames  {"Yeast", {
+   {Yeast::Form::Liquid , QT_TRANSLATE_NOOP("Yeast", "Liquid" )},
+   {Yeast::Form::Dry    , QT_TRANSLATE_NOOP("Yeast", "Dry"    )},
+   {Yeast::Form::Slant  , QT_TRANSLATE_NOOP("Yeast", "Slant"  )},
+   {Yeast::Form::Culture, QT_TRANSLATE_NOOP("Yeast", "Culture")},
+   {Yeast::Form::Dregs  , QT_TRANSLATE_NOOP("Yeast", "Dregs"  )},
+}};
 
 EnumStringMapping const Yeast::flocculationStringMapping {
    {Yeast::Flocculation::VeryLow   , "very low"   },
@@ -116,15 +116,15 @@ EnumStringMapping const Yeast::flocculationStringMapping {
    {Yeast::Flocculation::VeryHigh  , "very high"  },
 };
 
-EnumStringMapping const Yeast::flocculationDisplayNames {
-   {Yeast::Flocculation::VeryLow   , tr("Very Low"   )},
-   {Yeast::Flocculation::Low       , tr("Low"        )},
-   {Yeast::Flocculation::MediumLow , tr("Medium Low" )},
-   {Yeast::Flocculation::Medium    , tr("Medium"     )},
-   {Yeast::Flocculation::MediumHigh, tr("Medium High")},
-   {Yeast::Flocculation::High      , tr("High"       )},
-   {Yeast::Flocculation::VeryHigh  , tr("Very High"  )},
-};
+EnumDisplayNameMapping const Yeast::flocculationDisplayNames {"Yeast", {
+   {Yeast::Flocculation::VeryLow   , QT_TRANSLATE_NOOP("Yeast", "Very Low"   )},
+   {Yeast::Flocculation::Low       , QT_TRANSLATE_NOOP("Yeast", "Low"        )},
+   {Yeast::Flocculation::MediumLow , QT_TRANSLATE_NOOP("Yeast", "Medium Low" )},
+   {Yeast::Flocculation::Medium    , QT_TRANSLATE_NOOP("Yeast", "Medium"     )},
+   {Yeast::Flocculation::MediumHigh, QT_TRANSLATE_NOOP("Yeast", "Medium High")},
+   {Yeast::Flocculation::High      , QT_TRANSLATE_NOOP("Yeast", "High"       )},
+   {Yeast::Flocculation::VeryHigh  , QT_TRANSLATE_NOOP("Yeast", "Very High"  )},
+}};
 
 
 bool Yeast::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
@@ -188,13 +188,13 @@ TypeLookup const Yeast::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, alcoholTolerance_pct     , m_alcoholTolerance_pct     ,           NonPhysicalQuantity::Percentage    , DisplayInfo::Precision{1}),
       PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, attenuationMin_pct       , m_attenuationMin_pct       ,           NonPhysicalQuantity::Percentage    , DisplayInfo::Precision{1}),
       PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, attenuationMax_pct       , m_attenuationMax_pct       ,           NonPhysicalQuantity::Percentage    , DisplayInfo::Precision{1}),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, phenolicOffFlavorPositive, m_phenolicOffFlavorPositive, BOOL_INFO(tr("No"), tr("Yes"))               ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, glucoamylasePositive     , m_glucoamylasePositive     , BOOL_INFO(tr("No"), tr("Yes"))               ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingK1Toxin   , m_killerProducingK1Toxin   , BOOL_INFO(tr("No"), tr("Yes"))               ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingK2Toxin   , m_killerProducingK2Toxin   , BOOL_INFO(tr("No"), tr("Yes"))               ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingK28Toxin  , m_killerProducingK28Toxin  , BOOL_INFO(tr("No"), tr("Yes"))               ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingKlusToxin , m_killerProducingKlusToxin , BOOL_INFO(tr("No"), tr("Yes"))               ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerNeutral            , m_killerNeutral            , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, phenolicOffFlavorPositive, m_phenolicOffFlavorPositive, BOOL_INFO_NO_YES                             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, glucoamylasePositive     , m_glucoamylasePositive     , BOOL_INFO_NO_YES                             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingK1Toxin   , m_killerProducingK1Toxin   , BOOL_INFO_NO_YES                             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingK2Toxin   , m_killerProducingK2Toxin   , BOOL_INFO_NO_YES                             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingK28Toxin  , m_killerProducingK28Toxin  , BOOL_INFO_NO_YES                             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerProducingKlusToxin , m_killerProducingKlusToxin , BOOL_INFO_NO_YES                             ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Yeast, killerNeutral            , m_killerNeutral            , BOOL_INFO_NO_YES                             ),
       // Legacy property for BeerXML
       PROPERTY_TYPE_LOOKUP_NO_MV(Yeast, attenuationTypical_pct   , attenuationTypical_pct     ,           NonPhysicalQuantity::Percentage    ),
    },

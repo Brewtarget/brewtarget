@@ -68,23 +68,23 @@ EnumStringMapping const Water::ionStringMapping {
    {Water::MineralIon::Zinc       , "zinc"       },
 };
 
-EnumStringMapping const Water::ionDisplayNames {
-   {Water::MineralIon::Bicarbonate, tr("Bicarbonate (HCO₃⁻)")},
-   {Water::MineralIon::Calcium    , tr("Calcium (Ca²⁺)"     )},
-   {Water::MineralIon::Carbonate  , tr("Carbonate (CO₃²⁻)"  )},
-   {Water::MineralIon::Chloride   , tr("Chloride (Cl⁻)"     )},
-   {Water::MineralIon::Copper     , tr("Copper (Cu²⁺)"      )},
-   {Water::MineralIon::Iron       , tr("Iron (Fe²⁺)"        )},
-   {Water::MineralIon::Magnesium  , tr("Magnesium (Mg²⁺)"   )},
-   {Water::MineralIon::Manganese  , tr("Manganese (Mn²⁺)"   )},
-   {Water::MineralIon::Nitrate    , tr("Nitrate (NO₃⁻)"     )},
-   {Water::MineralIon::Nitrite    , tr("Nitrite (NO₂⁻)"     )},
-   {Water::MineralIon::Phosphate  , tr("Phosphate (PO₄³⁻)"  )},
-   {Water::MineralIon::Potassium  , tr("Potassium (K⁺)"     )},
-   {Water::MineralIon::Sodium     , tr("Sodium (Na⁺)"       )},
-   {Water::MineralIon::Sulfate    , tr("Sulfate (SO₄²⁻)"    )},
-   {Water::MineralIon::Zinc       , tr("Zinc (Zn²⁺)"        )},
-};
+EnumDisplayNameMapping const Water::ionDisplayNames {"Water", {
+   {Water::MineralIon::Bicarbonate, QT_TRANSLATE_NOOP("Water", "Bicarbonate (HCO₃⁻)")},
+   {Water::MineralIon::Calcium    , QT_TRANSLATE_NOOP("Water", "Calcium (Ca²⁺)"     )},
+   {Water::MineralIon::Carbonate  , QT_TRANSLATE_NOOP("Water", "Carbonate (CO₃²⁻)"  )},
+   {Water::MineralIon::Chloride   , QT_TRANSLATE_NOOP("Water", "Chloride (Cl⁻)"     )},
+   {Water::MineralIon::Copper     , QT_TRANSLATE_NOOP("Water", "Copper (Cu²⁺)"      )},
+   {Water::MineralIon::Iron       , QT_TRANSLATE_NOOP("Water", "Iron (Fe²⁺)"        )},
+   {Water::MineralIon::Magnesium  , QT_TRANSLATE_NOOP("Water", "Magnesium (Mg²⁺)"   )},
+   {Water::MineralIon::Manganese  , QT_TRANSLATE_NOOP("Water", "Manganese (Mn²⁺)"   )},
+   {Water::MineralIon::Nitrate    , QT_TRANSLATE_NOOP("Water", "Nitrate (NO₃⁻)"     )},
+   {Water::MineralIon::Nitrite    , QT_TRANSLATE_NOOP("Water", "Nitrite (NO₂⁻)"     )},
+   {Water::MineralIon::Phosphate  , QT_TRANSLATE_NOOP("Water", "Phosphate (PO₄³⁻)"  )},
+   {Water::MineralIon::Potassium  , QT_TRANSLATE_NOOP("Water", "Potassium (K⁺)"     )},
+   {Water::MineralIon::Sodium     , QT_TRANSLATE_NOOP("Water", "Sodium (Na⁺)"       )},
+   {Water::MineralIon::Sulfate    , QT_TRANSLATE_NOOP("Water", "Sulfate (SO₄²⁻)"    )},
+   {Water::MineralIon::Zinc       , QT_TRANSLATE_NOOP("Water", "Zinc (Zn²⁺)"        )},
+}};
 
 bool Water::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
@@ -136,7 +136,7 @@ TypeLookup const Water::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Water, ph              , m_ph                , Measurement::PhysicalQuantity::Acidity           ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Water, alkalinity_ppm  , m_alkalinity_ppm    , Measurement::PhysicalQuantity::MassFractionOrConcentration),
       PROPERTY_TYPE_LOOKUP_ENTRY(Water, notes           , m_notes             ,           NonPhysicalQuantity::String            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Water, alkalinityAsHCO3, m_alkalinity_as_hco3, BOOL_INFO(tr("No"), tr("Yes"))                   ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Water, alkalinityAsHCO3, m_alkalinity_as_hco3, BOOL_INFO_NO_YES                                 ),
       // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
       PROPERTY_TYPE_LOOKUP_ENTRY(Water, carbonate_ppm   , m_carbonate_ppm     , Measurement::PhysicalQuantity::MassFractionOrConcentration),
       PROPERTY_TYPE_LOOKUP_ENTRY(Water, potassium_ppm   , m_potassium_ppm     , Measurement::PhysicalQuantity::MassFractionOrConcentration),

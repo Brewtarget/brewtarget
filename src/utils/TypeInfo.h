@@ -26,9 +26,11 @@
 #include "measurement/Unit.h"
 #include "model/NamedEntityCasters.h"
 #include "utils/OptionalHelpers.h"
+#include "utils/TranslatableText.h"
 #include "utils/TypeTraits.h"
 
 class BtStringConst;
+class EnumDisplayNameMapping;
 
 namespace PropertyNames::None {
    extern BtStringConst const none;
@@ -47,7 +49,7 @@ namespace DisplayInfo {
       /**
        * \brief Localised display names to show on combo box
        */
-      EnumStringMapping const & displayNames;
+      EnumDisplayNameMapping const & displayNames;
    };
 
    /**
@@ -55,13 +57,20 @@ namespace DisplayInfo {
     *
     *        For most boolean types, we show a combo box (eg "Not mashed" / "Mashed"; "Weight" / "Volume")
     *
-    *        These are QString rather than reference to QString as typically initialised with an rvalue (the result of
-    *        calling \c QObject::tr).
+    *        These are \c TranslatableText rather than \c QString because \c TypeInfo objects are created during static
+    *        initialisation, before any translator is installed, so we need to defer translation until time of use.
+    *        (See comments in \c utils/TranslatableText.h.)
     */
    struct Bool {
-      QString const unsetDisplay;
-      QString const setDisplay;
+      TranslatableText const unsetDisplay;
+      TranslatableText const setDisplay;
    };
+
+   /**
+    * \brief The display text that the vast majority of boolean fields use
+    */
+   inline constexpr TranslatableText no {"QObject", QT_TRANSLATE_NOOP("QObject", "No" )};
+   inline constexpr TranslatableText yes{"QObject", QT_TRANSLATE_NOOP("QObject", "Yes")};
 
    /**
     * \brief I know we don't need a struct for this, but it's more consistent to use one
@@ -411,13 +420,19 @@ S & operator<<(S & stream, TypeInfo const * typeInfo) {
  * \brief This macro makes it easier to initialise \c fieldType and \c displayAs in \c TypeInfo constructor for boolean
  *        fields.  Eg, instead of writing:
  *
- *           ... NonPhysicalQuantity::Bool, DisplayInfo::Bool{{tr("No"), tr("Yes")}} ...
+ *           ... NonPhysicalQuantity::Bool, DisplayInfo::Bool{DisplayInfo::no, DisplayInfo::yes} ...
  *
  *        we can write:
  *
- *           ... BOOL_INFO(tr("No"), tr("Yes")) ...
+ *           ... BOOL_INFO(DisplayInfo::no, DisplayInfo::yes) ...
+ *
+ *        Each parameter must be a \c TranslatableText (see comments in \c DisplayInfo::Bool for why), and, for the
+ *        common case of "No" / "Yes", we can just write:
+ *
+ *           ... BOOL_INFO_NO_YES ...
  */
 #define BOOL_INFO(offText, onText) NonPhysicalQuantity::Bool,   \
                                    DisplayInfo::Bool{offText, onText}
+#define BOOL_INFO_NO_YES BOOL_INFO(DisplayInfo::no, DisplayInfo::yes)
 
 #endif

@@ -117,7 +117,7 @@ QVariant PropertyHelper::readDataFromPropertyValue(
          Q_ASSERT(std::holds_alternative<DisplayInfo::Bool>(*typeInfo.displayAs));
          DisplayInfo::Bool const & info = std::get<DisplayInfo::Bool>(*typeInfo.displayAs);
          Q_ASSERT(modelData.canConvert<bool>());
-         return modelData.toBool() ? info.setDisplay : info.unsetDisplay;
+         return modelData.toBool() ? info.setDisplay.translated() : info.unsetDisplay.translated();
       }
 
       if (role == Qt::UserRole) {

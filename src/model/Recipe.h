@@ -305,7 +305,7 @@ public:
    /*!
     * \brief Localised names of \c Recipe::Type values suitable for displaying to the end user
     */
-   static EnumStringMapping const typeDisplayNames;
+   static EnumDisplayNameMapping const typeDisplayNames;
 
    //=============================================== REGULAR PROPERTIES ================================================
    //

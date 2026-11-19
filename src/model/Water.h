@@ -135,7 +135,7 @@ public:
    Q_ENUM(MineralIon)
 
    static EnumStringMapping const ionStringMapping;
-   static EnumStringMapping const ionDisplayNames;
+   static EnumDisplayNameMapping const ionDisplayNames;
 
    /**
     * \brief This is where we centrally define how \c Water objects can be measured.

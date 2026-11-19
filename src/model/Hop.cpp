@@ -78,14 +78,14 @@ EnumStringMapping const Hop::formStringMapping {
    {Hop::Form::Powder , "powder"    },
 };
 
-EnumStringMapping const Hop::formDisplayNames {
-   {Hop::Form::Leaf   , tr("Leaf"   )},
-   {Hop::Form::Pellet , tr("Pellet" )},
-   {Hop::Form::Plug   , tr("Plug"   )},
-   {Hop::Form::Extract, tr("Extract")},
-   {Hop::Form::WetLeaf, tr("WetLeaf")},
-   {Hop::Form::Powder , tr("Powder" )},
-};
+EnumDisplayNameMapping const Hop::formDisplayNames {"Hop", {
+   {Hop::Form::Leaf   , QT_TRANSLATE_NOOP("Hop", "Leaf"   )},
+   {Hop::Form::Pellet , QT_TRANSLATE_NOOP("Hop", "Pellet" )},
+   {Hop::Form::Plug   , QT_TRANSLATE_NOOP("Hop", "Plug"   )},
+   {Hop::Form::Extract, QT_TRANSLATE_NOOP("Hop", "Extract")},
+   {Hop::Form::WetLeaf, QT_TRANSLATE_NOOP("Hop", "WetLeaf")},
+   {Hop::Form::Powder , QT_TRANSLATE_NOOP("Hop", "Powder" )},
+}};
 
 EnumStringMapping const Hop::typeStringMapping {
    {Hop::Type::Bittering              , "bittering"              },
@@ -97,15 +97,15 @@ EnumStringMapping const Hop::typeStringMapping {
    {Hop::Type::AromaBitteringAndFlavor, "aroma/bittering/flavor" },
 };
 
-EnumStringMapping const Hop::typeDisplayNames {
-   {Hop::Type::Bittering              , tr("Bittering"                )},
-   {Hop::Type::Aroma                  , tr("Aroma"                    )},
-   {Hop::Type::AromaAndBittering      , tr("Aroma & Bittering"        )},
-   {Hop::Type::Flavor                 , tr("Flavor"                   )},
-   {Hop::Type::BitteringAndFlavor     , tr("Bittering & Flavor"       )},
-   {Hop::Type::AromaAndFlavor         , tr("Aroma & Flavor"           )},
-   {Hop::Type::AromaBitteringAndFlavor, tr("Aroma, Bittering & Flavor")},
-};
+EnumDisplayNameMapping const Hop::typeDisplayNames {"Hop", {
+   {Hop::Type::Bittering              , QT_TRANSLATE_NOOP("Hop", "Bittering"                )},
+   {Hop::Type::Aroma                  , QT_TRANSLATE_NOOP("Hop", "Aroma"                    )},
+   {Hop::Type::AromaAndBittering      , QT_TRANSLATE_NOOP("Hop", "Aroma & Bittering"        )},
+   {Hop::Type::Flavor                 , QT_TRANSLATE_NOOP("Hop", "Flavor"                   )},
+   {Hop::Type::BitteringAndFlavor     , QT_TRANSLATE_NOOP("Hop", "Bittering & Flavor"       )},
+   {Hop::Type::AromaAndFlavor         , QT_TRANSLATE_NOOP("Hop", "Aroma & Flavor"           )},
+   {Hop::Type::AromaBitteringAndFlavor, QT_TRANSLATE_NOOP("Hop", "Aroma, Bittering & Flavor")},
+}};
 
 bool Hop::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid

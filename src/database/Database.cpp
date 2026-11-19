@@ -639,11 +639,11 @@ EnumStringMapping const Database::dbTypeStringMapping {
    {Database::DbType::PostgreSQL, "PostgreSQL"},
 };
 
-EnumStringMapping const Database::dbTypeDisplayNames {
-      {Database::DbType::None      , tr("No Database")},
-      {Database::DbType::SQLite    , tr("SQLite"     )},
-      {Database::DbType::PostgreSQL, tr("PostgreSQL" )},
-};
+EnumDisplayNameMapping const Database::dbTypeDisplayNames {"Database", {
+      {Database::DbType::None      , QT_TRANSLATE_NOOP("Database", "No Database")},
+      {Database::DbType::SQLite    , QT_TRANSLATE_NOOP("Database", "SQLite"     )},
+      {Database::DbType::PostgreSQL, QT_TRANSLATE_NOOP("Database", "PostgreSQL" )},
+}};
 
 QString const Database::sqliteDbFileName = QStringLiteral("database.sqlite");
 

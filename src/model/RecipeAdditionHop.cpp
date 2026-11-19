@@ -72,13 +72,13 @@ EnumStringMapping const RecipeAdditionHop::useStringMapping {
    {RecipeAdditionHop::Use::Dry_Hop   , "Dry Hop"   },
 };
 
-EnumStringMapping const RecipeAdditionHop::useDisplayNames {
-   {RecipeAdditionHop::Use::Mash      , tr("Mash"      )},
-   {RecipeAdditionHop::Use::First_Wort, tr("First Wort")},
-   {RecipeAdditionHop::Use::Boil      , tr("Boil"      )},
-   {RecipeAdditionHop::Use::Aroma     , tr("Post-Boil" )},
-   {RecipeAdditionHop::Use::Dry_Hop   , tr("Dry Hop"   )},
-};
+EnumDisplayNameMapping const RecipeAdditionHop::useDisplayNames {"RecipeAdditionHop", {
+   {RecipeAdditionHop::Use::Mash      , QT_TRANSLATE_NOOP("RecipeAdditionHop", "Mash"      )},
+   {RecipeAdditionHop::Use::First_Wort, QT_TRANSLATE_NOOP("RecipeAdditionHop", "First Wort")},
+   {RecipeAdditionHop::Use::Boil      , QT_TRANSLATE_NOOP("RecipeAdditionHop", "Boil"      )},
+   {RecipeAdditionHop::Use::Aroma     , QT_TRANSLATE_NOOP("RecipeAdditionHop", "Post-Boil" )},
+   {RecipeAdditionHop::Use::Dry_Hop   , QT_TRANSLATE_NOOP("RecipeAdditionHop", "Dry Hop"   )},
+}};
 
 ObjectStore & RecipeAdditionHop::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<RecipeAdditionHop>::getInstance();

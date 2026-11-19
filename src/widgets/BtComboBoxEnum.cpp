@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxEnum.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * widgets/BtComboBoxEnum.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -14,6 +14,8 @@
  * <http://www.gnu.org/licenses/>.
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "widgets/BtComboBoxEnum.h"
+
+#include <QEvent>
 
 #include "widgets/SmartLineEdit.h"
 
@@ -45,8 +47,8 @@ public:
    char const *                 m_editorName        ;
    char const *                 m_comboBoxName      ;
    char const *                 m_comboBoxFqName    ;
-   EnumStringMapping const *    m_nameMapping       ;
-   EnumStringMapping const *    m_displayNameMapping;
+   EnumStringMapping      const * m_nameMapping       ;
+   EnumDisplayNameMapping const * m_displayNameMapping;
    TypeInfo          const *    m_typeInfo          ;
    std::vector<SmartLineEdit *> m_controlledFields  ;
 
@@ -63,14 +65,14 @@ BtComboBoxEnum::BtComboBoxEnum(QWidget * parent) :
 
 BtComboBoxEnum::~BtComboBoxEnum() = default;
 
-void BtComboBoxEnum::init(char const * const        editorName        ,
-                          char const * const        comboBoxName      ,
-                          char const * const        comboBoxFqName    ,
-                          EnumStringMapping const & nameMapping       ,
-                          EnumStringMapping const & displayNameMapping,
-                          TypeInfo          const & typeInfo          ,
-                          std::vector<int>  const * restrictTo        ,
-                          std::vector<SmartLineEdit *> controlledFields) {
+void BtComboBoxEnum::init(char const * const             editorName        ,
+                          char const * const             comboBoxName      ,
+                          char const * const             comboBoxFqName    ,
+                          EnumStringMapping      const & nameMapping       ,
+                          EnumDisplayNameMapping const & displayNameMapping,
+                          TypeInfo               const & typeInfo          ,
+                          std::vector<int>       const * restrictTo        ,
+                          std::vector<SmartLineEdit *>   controlledFields  ) {
 //   qDebug() << Q_FUNC_INFO << comboBoxFqName << ":" << typeInfo;
 
    // It's a coding error to call init twice
@@ -228,6 +230,31 @@ QVariant BtComboBoxEnum::getAsVariant() const {
    auto value = this->pimpl->m_nameMapping->stringToEnumAsInt(rawValue);
    Q_ASSERT(value);
    return *value;
+}
+
+void BtComboBoxEnum::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange && this->pimpl->m_initialised) {
+      //
+      // We don't need to repopulate the combo box, just update the display text of each item.  The item data (the
+      // serialisation string for the enum value) is unchanged, so the current selection stays the same, and, since
+      // setItemText() does not change the current index, we don't emit currentIndexChanged.
+      //
+      for (int index = 0; index < this->count(); ++index) {
+         QString const rawValue = this->itemData(index).toString();
+         if (rawValue.isEmpty()) {
+            // This is the blank entry for an optional enum, so there's nothing to translate
+            continue;
+         }
+         std::optional<int> const enumValue = this->pimpl->m_nameMapping->stringToEnumAsInt(rawValue);
+         // It's a coding error if we don't recognise the values in our own combo boxes
+         Q_ASSERT(enumValue);
+         if (enumValue) {
+            this->setItemText(index, this->pimpl->m_displayNameMapping->enumToValue(*enumValue));
+         }
+      }
+   }
+   this->QComboBox::changeEvent(event);
+   return;
 }
 
 void BtComboBoxEnum::onIndexChanged([[maybe_unused]] int const index) {

@@ -178,7 +178,7 @@ public:
    /*!
     * \brief Localised names of \c Fermentable::Type values suitable for displaying to the end user
     */
-   static EnumStringMapping const typeDisplayNames;
+   static EnumDisplayNameMapping const typeDisplayNames;
 
    /**
     * \brief An additional classification of \c Fermentable introduced in BeerJSON
@@ -213,7 +213,7 @@ public:
    /*!
     * \brief Localised names of \c Fermentable::GrainGroup values suitable for displaying to the end user
     */
-   static EnumStringMapping const grainGroupDisplayNames;
+   static EnumDisplayNameMapping const grainGroupDisplayNames;
 
    /**
     * \brief This is where we centrally define how \c Fermentable objects can be measured.  Essentially, mass is used in

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/BoilStep.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/BoilStep.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -34,10 +34,10 @@ EnumStringMapping const BoilStep::chillingTypeStringMapping {
    {BoilStep::ChillingType::Inline, "inline" },
 };
 
-EnumStringMapping const BoilStep::chillingTypeDisplayNames {
-   {BoilStep::ChillingType::Batch , tr("Batch" )},
-   {BoilStep::ChillingType::Inline, tr("Inline")},
-};
+EnumDisplayNameMapping const BoilStep::chillingTypeDisplayNames {"BoilStep", {
+   {BoilStep::ChillingType::Batch , QT_TRANSLATE_NOOP("BoilStep", "Batch" )},
+   {BoilStep::ChillingType::Inline, QT_TRANSLATE_NOOP("BoilStep", "Inline")},
+}};
 
 bool BoilStep::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid

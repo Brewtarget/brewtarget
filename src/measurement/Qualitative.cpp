@@ -30,16 +30,16 @@ EnumStringMapping const Measurement::Qualitative::wortClarityStringMapping {
    {WortClarity::ExtremelyCloudy, "extremely cloudy"},
 };
 
-EnumStringMapping const Measurement::Qualitative::wortClarityDisplayNames {
-   {WortClarity::VeryClear      , QObject::tr("Very Clear"      )},
-   {WortClarity::Clear          , QObject::tr("Clear"           )},
-   {WortClarity::SomewhatClear  , QObject::tr("Somewhat Clear"  )},
-   {WortClarity::Average        , QObject::tr("Average"         )},
-   {WortClarity::SomewhatCloudy , QObject::tr("Somewhat Cloudy" )},
-   {WortClarity::Cloudy         , QObject::tr("Cloudy"          )},
-   {WortClarity::VeryCloudy     , QObject::tr("Very Cloudy"     )},
-   {WortClarity::ExtremelyCloudy, QObject::tr("Extremely Cloudy")},
-};
+EnumDisplayNameMapping const Measurement::Qualitative::wortClarityDisplayNames {"QObject", {
+   {WortClarity::VeryClear      , QT_TRANSLATE_NOOP("QObject", "Very Clear"      )},
+   {WortClarity::Clear          , QT_TRANSLATE_NOOP("QObject", "Clear"           )},
+   {WortClarity::SomewhatClear  , QT_TRANSLATE_NOOP("QObject", "Somewhat Clear"  )},
+   {WortClarity::Average        , QT_TRANSLATE_NOOP("QObject", "Average"         )},
+   {WortClarity::SomewhatCloudy , QT_TRANSLATE_NOOP("QObject", "Somewhat Cloudy" )},
+   {WortClarity::Cloudy         , QT_TRANSLATE_NOOP("QObject", "Cloudy"          )},
+   {WortClarity::VeryCloudy     , QT_TRANSLATE_NOOP("QObject", "Very Cloudy"     )},
+   {WortClarity::ExtremelyCloudy, QT_TRANSLATE_NOOP("QObject", "Extremely Cloudy")},
+}};
 
 template<class S>
 S & operator<<(S & stream, Measurement::Qualitative::WortClarity const val) {

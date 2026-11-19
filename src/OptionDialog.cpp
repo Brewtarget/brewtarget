@@ -261,10 +261,10 @@ public:
       //
       QGridLayout & layout = *this->m_self.gridLayout_units;
       int row = 1;
-      for (auto const & ii : Measurement::physicalQuantityDisplayNames) {
+      for (auto const & ii : Measurement::physicalQuantityStringMapping) {
          auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.key);
 
-         auto * label = new QLabel{ii.value, this->m_self.tab_units};
+         auto * label = new QLabel{Measurement::physicalQuantityDisplayNames[physicalQuantity], this->m_self.tab_units};
 
          auto * unitSystemComboBox = new QComboBox{this->m_self.tab_units};
          auto unitSystems = Measurement::UnitSystem::getUnitSystems(physicalQuantity);

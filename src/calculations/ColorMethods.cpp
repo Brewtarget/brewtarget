@@ -60,11 +60,11 @@ EnumStringMapping const ColorMethods::formulaStringMapping {
    {ColorMethods::ColorFormula::Morey , "morey" },
 };
 
-EnumStringMapping const ColorMethods::formulaDisplayNames {
-   {ColorMethods::ColorFormula::Mosher, QObject::tr("Mosher's approximation")},
-   {ColorMethods::ColorFormula::Daniel, QObject::tr("Daniel's approximation")},
-   {ColorMethods::ColorFormula::Morey , QObject::tr("Morey's approximation" )},
-};
+EnumDisplayNameMapping const ColorMethods::formulaDisplayNames {"QObject", {
+   {ColorMethods::ColorFormula::Mosher, QT_TRANSLATE_NOOP("QObject", "Mosher's approximation")},
+   {ColorMethods::ColorFormula::Daniel, QT_TRANSLATE_NOOP("QObject", "Daniel's approximation")},
+   {ColorMethods::ColorFormula::Morey , QT_TRANSLATE_NOOP("QObject", "Morey's approximation" )},
+}};
 
 TypeLookup const ColorMethods::typeLookup {
    "ColorMethods",

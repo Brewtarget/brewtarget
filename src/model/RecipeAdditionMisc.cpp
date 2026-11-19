@@ -67,13 +67,13 @@ EnumStringMapping const RecipeAdditionMisc::useStringMapping {
    {RecipeAdditionMisc::Use::Bottling , "Bottling" }
 };
 
-EnumStringMapping const RecipeAdditionMisc::useDisplayNames {
-   {RecipeAdditionMisc::Use::Mash     , tr("Mash"     )},
-   {RecipeAdditionMisc::Use::Boil     , tr("Boil"     )},
-   {RecipeAdditionMisc::Use::Primary  , tr("Primary"  )},
-   {RecipeAdditionMisc::Use::Secondary, tr("Secondary")},
-   {RecipeAdditionMisc::Use::Bottling , tr("Bottling" )}
-};
+EnumDisplayNameMapping const RecipeAdditionMisc::useDisplayNames {"RecipeAdditionMisc", {
+   {RecipeAdditionMisc::Use::Mash     , QT_TRANSLATE_NOOP("RecipeAdditionMisc", "Mash"     )},
+   {RecipeAdditionMisc::Use::Boil     , QT_TRANSLATE_NOOP("RecipeAdditionMisc", "Boil"     )},
+   {RecipeAdditionMisc::Use::Primary  , QT_TRANSLATE_NOOP("RecipeAdditionMisc", "Primary"  )},
+   {RecipeAdditionMisc::Use::Secondary, QT_TRANSLATE_NOOP("RecipeAdditionMisc", "Secondary")},
+   {RecipeAdditionMisc::Use::Bottling , QT_TRANSLATE_NOOP("RecipeAdditionMisc", "Bottling" )}
+}};
 
 ObjectStore & RecipeAdditionMisc::getObjectStoreTypedInstance() const {
    return ObjectStoreTyped<RecipeAdditionMisc>::getInstance();

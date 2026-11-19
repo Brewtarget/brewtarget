@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/EnumStringMapping.cpp is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * utils/EnumStringMapping.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -57,4 +57,35 @@ std::optional<QString> FlagEnumStringMapping::enumAsIntToValue(int const enumVal
    }
 
    return std::optional<QString>(match->value);
+}
+
+EnumDisplayNameMapping::EnumDisplayNameMapping(char const * const context,
+                                               std::initializer_list<EnumKeyValue<char const *>> args) :
+   m_context    {context},
+   m_sourceTexts{args   } {
+   return;
+}
+
+qsizetype EnumDisplayNameMapping::size() const {
+   return this->m_sourceTexts.size();
+}
+
+char const * EnumDisplayNameMapping::context() const {
+   return this->m_context;
+}
+
+std::optional<TranslatableText> EnumDisplayNameMapping::enumAsIntToTranslatableText(int const enumValue) const {
+   std::optional<char const *> const sourceText = this->m_sourceTexts.enumAsIntToValue(enumValue);
+   if (!sourceText) {
+      return std::nullopt;
+   }
+   return TranslatableText{this->m_context, *sourceText};
+}
+
+std::optional<QString> EnumDisplayNameMapping::enumAsIntToValue(int const enumValue) const {
+   std::optional<TranslatableText> const text = this->enumAsIntToTranslatableText(enumValue);
+   if (!text) {
+      return std::nullopt;
+   }
+   return text->translated();
 }

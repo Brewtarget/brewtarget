@@ -160,7 +160,7 @@ public:
    /*!
     * \brief Localised names of \c Style::Type values suitable for displaying to the end user
     */
-   static EnumStringMapping const typeDisplayNames;
+   static EnumDisplayNameMapping const typeDisplayNames;
 
    //
    // Aliases to make it easier to template various functions that are essentially the same across different NamedEntity

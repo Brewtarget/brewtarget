@@ -126,7 +126,7 @@ public:
    /*!
     * \brief Localised names of \c MashStep::Type values suitable for displaying to the end user
     */
-   static EnumStringMapping const typeDisplayNames;
+   static EnumDisplayNameMapping const typeDisplayNames;
 
    //
    // This alias makes it easier to template a number of functions that are essentially the same for all subclasses of

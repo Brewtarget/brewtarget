@@ -155,8 +155,8 @@ struct EditorBaseField {
                    BtComboBoxEnum * editField,
                    PropertyPath const propertyPath,
                    TypeLookup const & typeLookup,
-                   EnumStringMapping const & nameMapping,
-                   EnumStringMapping const & displayNameMapping,
+                   EnumStringMapping      const & nameMapping,
+                   EnumDisplayNameMapping const & displayNameMapping,
                    std::vector<int>  const * restrictTo = nullptr,
                    std::vector<SmartLineEdit *> controlledFields = {},
                    WhenToWriteField const whenToWrite = WhenToWriteField::Normal)
@@ -191,8 +191,8 @@ struct EditorBaseField {
                    BtComboBoxBool * editField,
                    PropertyPath const propertyPath,
                    TypeLookup const & typeLookup,
-                   QString const & unsetDisplay = QObject::tr("No"),
-                   QString const & setDisplay   = QObject::tr("Yes"),
+                   TranslatableText const & unsetDisplay = DisplayInfo::no ,
+                   TranslatableText const & setDisplay   = DisplayInfo::yes,
                    WhenToWriteField const whenToWrite = WhenToWriteField::Normal)
    requires (std::same_as<EditFieldType, BtComboBoxBool>) :
       labelName   {labelName  },
