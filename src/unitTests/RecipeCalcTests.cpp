@@ -2078,15 +2078,136 @@ void RecipeCalcTests::testLateFermentableAdditions() {
    checkUnchanged("Post-boil addition");
 
    //
-   // But, if the same fermentable is added during the boil proper, it raises the boil gravity, which lowers the IBUs
+   // But, if the same fermentable is added during the boil proper, it raises the gravity the hops see, which lowers the
+   // IBUs.  If it's added part-way through the boil proper, it's not in the pre-boil gravity (which is what boilGrav
+   // gives us).  If it's added at the start of the boil proper, it is, and it lowers the IBUs more (because the hops are
+   // in the higher gravity wort for longer).
    //
    lateAddition->setStep(2);
    lateAddition->setAddAtTime_mins(15.0);
    recipe->recalcAll();
+   double const partWayIbu = recipe->IBU();
    qDebug() <<
-      Q_FUNC_INFO << "Boil addition: boil gravity" << recipe->boilGrav() << ", IBU" << recipe->IBU();
+      Q_FUNC_INFO << "Boil addition at 15 mins: boil gravity" << recipe->boilGrav() << ", IBU" << partWayIbu;
+   QVERIFY(fuzzyComp(recipe->boilGrav(), baseBoilGrav, 0.0001));
+   QVERIFY(partWayIbu < baseIbu);
+
+   lateAddition->setAddAtTime_mins(60.0);
+   recipe->recalcAll();
+   qDebug() <<
+      Q_FUNC_INFO << "Boil addition at 60 mins: boil gravity" << recipe->boilGrav() << ", IBU" << recipe->IBU();
    QVERIFY(recipe->boilGrav() > baseBoilGrav + 0.001);
-   QVERIFY(recipe->IBU() < baseIbu);
+   QVERIFY(recipe->IBU() < partWayIbu);
+   return;
+}
+
+void RecipeCalcTests::testTimeWeightedBoilGravity() {
+   qDebug() << Q_FUNC_INFO << "Starting";
+
+   struct RestoreIbuFormula {
+      Ibu::Formula const saved = IbuMethods::formula;
+      ~RestoreIbuFormula() { IbuMethods::formula = saved; }
+   } restoreIbuFormula;
+   IbuMethods::formula = Ibu::Formula::Tinseth;
+
+   if (this->pimpl->m_twoRow->key() <= 0) {
+      ObjectStoreWrapper::insert(this->pimpl->m_twoRow);
+   }
+   if (this->pimpl->m_cascade_4pct->key() <= 0) {
+      ObjectStoreWrapper::insert(this->pimpl->m_cascade_4pct);
+   }
+
+   //
+   // A recipe with some grain in the mash, a standard 60 minute boil (ramp-up, boil proper, cool-down), and two hop
+   // additions, at 60 and 10 minutes before flameout.
+   //
+   auto recipe = std::make_shared<Recipe>("Time-Weighted Boil Gravity Test");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(20.0);
+   recipe->setEfficiency_pct(70.0);
+   recipe->setEquipment(this->pimpl->m_equipFiveGalNoLoss);
+   auto grain = std::make_shared<RecipeAdditionFermentable>("Two Row");
+   grain->setFermentable(this->pimpl->m_twoRow.get());
+   grain->setStage(RecipeAddition::Stage::Mash);
+   grain->setQuantity(4.0);
+   grain->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(grain);
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(25.0);
+   boil->setBoilTime_mins(60.0); // This also ensures the standard profile
+   QCOMPARE(boil->boilSteps().size(), 3);
+   auto makeHopAddition = [&](char const * const name, double const addAtTime_mins) {
+      auto addition = std::make_shared<RecipeAdditionHop>(name);
+      addition->setHop(this->pimpl->m_cascade_4pct.get());
+      addition->setStage(RecipeAddition::Stage::Boil);
+      addition->setStep(2);
+      addition->setAddAtTime_mins(addAtTime_mins);
+      addition->setQuantity(0.025);
+      addition->setMeasure(Measurement::PhysicalQuantity::Mass);
+      recipe->addAddition(addition);
+      return addition;
+   };
+   auto const boil60 = makeHopAddition("Boil 60", 60.0);
+   auto const boil10 = makeHopAddition("Boil 10", 10.0);
+
+   struct Results {
+      double boilGrav;
+      double ibu60;
+      double ibu10;
+   };
+   auto results = [&](char const * const description) {
+      recipe->recalcAll();
+      Results const ret{recipe->boilGrav(),
+                        recipe->ibuFromHopAddition(*boil60),
+                        recipe->ibuFromHopAddition(*boil10)};
+      qDebug() <<
+         Q_FUNC_INFO << description << ": boil gravity" << ret.boilGrav << ", IBUs from 60 min addition" <<
+         ret.ibu60 << ", IBUs from 10 min addition" << ret.ibu10;
+      return ret;
+   };
+
+   //
+   // With no evaporation, the gravity is the same throughout the boil, so the ratio of IBUs from the two additions is
+   // just the ratio of Tinseth's boil time factors.  With evaporation, the later addition sees higher gravity wort,
+   // and so gets proportionally fewer IBUs.
+   //
+   double const tinsethTimeFactorRatio = (1.0 - std::exp(-0.04 * 10.0)) / (1.0 - std::exp(-0.04 * 60.0));
+   boil->setPreBoilSize_l(std::nullopt);
+   auto const noEvaporation = results("No evaporation");
+   QVERIFY(fuzzyComp(noEvaporation.ibu10 / noEvaporation.ibu60, tinsethTimeFactorRatio, 0.0001));
+
+   boil->setPreBoilSize_l(25.0);
+   auto const base = results("No extra fermentable");
+   QVERIFY2(recipe->postBoilVolume_l() < 25.0, "Test assumes some evaporation during the boil");
+   QVERIFY(base.ibu10 / base.ibu60 < tinsethTimeFactorRatio * 0.999);
+
+   //
+   // Add a fermentable 15 minutes before flameout.  It's not in the pre-boil gravity, and it doesn't affect the 10
+   // minute addition any differently than if it had been added at the start of the boil, as the 10 minute addition sees
+   // the same wort either way.  But the 60 minute addition gets more IBUs than if the extra fermentable had been there
+   // for the whole boil.
+   //
+   auto extra = std::make_shared<RecipeAdditionFermentable>("Extra Two Row");
+   extra->setFermentable(this->pimpl->m_twoRow.get());
+   extra->setStage(RecipeAddition::Stage::Boil);
+   extra->setStep(2);
+   extra->setAddAtTime_mins(15.0);
+   extra->setQuantity(1.0);
+   extra->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(extra);
+   auto const partWay = results("Extra fermentable 15 mins before flameout");
+
+   extra->setAddAtTime_mins(60.0);
+   auto const atStart = results("Extra fermentable at start of boil");
+
+   QVERIFY(fuzzyComp(partWay.boilGrav, base.boilGrav, 0.0001));
+   QVERIFY(atStart.boilGrav > base.boilGrav + 0.001);
+
+   QVERIFY(fuzzyComp(partWay.ibu10, atStart.ibu10, 0.0001));
+   QVERIFY(partWay.ibu10 < base.ibu10);
+
+   QVERIFY(atStart.ibu60 < partWay.ibu60);
+   QVERIFY(partWay.ibu60 < base.ibu60);
    return;
 }
 

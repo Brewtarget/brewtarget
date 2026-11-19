@@ -16,6 +16,10 @@ Bug fix release
 
 ### New Features
 * Snap builds working in dev mode
+* A fermentable added part-way through the boil proper now counts proportionally towards boil gravity [1194](https://github.com/Brewtarget/brewtarget/issues/1194)
+  * Most recipes will show slightly fewer IBUs with Tinseth, Rager, Noonan, Daniels or mIBU estimation methods.
+  * Because evaporation is now counted, any recipe with a pre-boil size set will drop by about 2.5–3% for a typical 25 L → 20 L boil.
+  * Recipes without a pre-boil size don’t change.
 
 ### Bug Fixes
 * Compile error with latest versions of Qt

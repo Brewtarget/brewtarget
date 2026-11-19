@@ -141,6 +141,13 @@ private slots:
    void testLateFermentableAdditions();
 
    /**
+    * \brief Verify that the gravity used in IBU calculations is the average over the time each hop addition spends in
+    *        the boil, taking into account evaporation and fermentables added part-way through the boil (eg late
+    *        extract additions), whereas the pre-boil gravity only counts what is in the wort at the start of the boil.
+    */
+   void testTimeWeightedBoilGravity();
+
+   /**
     * \brief Verify that taking a snapshot of a recipe (ie copying it and making the copy the original's ancestor, as
     *        the "Snapshot Recipe" context menu action and automatic versioning both do) works for a recipe with first
     *        wort, boil and post-boil hop additions.  In particular:

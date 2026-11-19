@@ -1173,6 +1173,7 @@ add_test(NAME RecipeCalcTests.testEquipmentDefaultVolumes           COMMAND ./${
 add_test(NAME RecipeCalcTests.testMashTunHeatCapacity               COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testMashTunHeatCapacity              )
 add_test(NAME RecipeCalcTests.testWaterAlkalinity                   COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testWaterAlkalinity                  )
 add_test(NAME RecipeCalcTests.testLateFermentableAdditions          COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testLateFermentableAdditions         )
+add_test(NAME RecipeCalcTests.testTimeWeightedBoilGravity           COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testTimeWeightedBoilGravity          )
 add_test(NAME RecipeCalcTests.testRecipeSnapshot                    COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testRecipeSnapshot                   )
 add_test(NAME SerializationTests.testDotBeerImportedRecipeCalcs     COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerImportedRecipeCalcs    )
 add_test(NAME SerializationTests.testDotBeerAdditionStepCorrection  COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerAdditionStepCorrection )

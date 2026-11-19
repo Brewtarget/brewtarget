@@ -415,7 +415,10 @@ namespace {
       // steps of 0.01 minutes is plenty accurate.  (We used to use steps of 0.001 minutes with the left-hand rule, which
       // was about 30,000 iterations per hop addition for a 30-minute cool time.)
       //
-      double const bignessFactor = 1.65 * pow(0.000125, (parms.wortGravity_sg - 1.0));
+      // After flameout, what matters is the gravity of the wort at flameout, which can be higher than the average
+      // gravity during the boil (because of evaporation and late fermentable additions).
+      double const bignessFactor =
+         1.65 * pow(0.000125, (parms.flameoutWortGravity_sg.value_or(parms.wortGravity_sg) - 1.0));
       int    const numSteps      = std::max(1, static_cast<int>(std::ceil(coolTime_minutes / 0.01)));
       double const stepSize      = coolTime_minutes / numSteps;
       double decimalAlphaAcidUtilization = 0.0;
