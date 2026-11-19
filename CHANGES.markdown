@@ -11,6 +11,18 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Shopping Lists
 * We'll list other new features here...
 
+## v5.3.2
+Bug fix release
+
+### New Features
+* Snap builds working in dev mode
+
+### Bug Fixes
+* Compile error with latest versions of Qt
+
+### Release Timestamp
+Thu, 19 Nov 2026 05:03:02 +0100
+
 ## v5.3.1
 Bug fix release
 
@@ -20,7 +32,7 @@ Bug fix release
 * Taking a recipe snapshot causes a crash (null pointer) [1191](https://github.com/Brewtarget/brewtarget/issues/1191)
 
 ### Release Timestamp
-Tue, 17 Nov 2026 05:03:01 +0100
+Thu, 19 Nov 2026 05:03:01 +0100
 
 ## v5.3.0
 Several new features, and bug fixes for some long-standing issues.
