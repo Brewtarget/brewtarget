@@ -23,6 +23,7 @@ import getpass
 import pathlib
 import platform
 import re
+import shlex
 import shutil
 import stat
 import subprocess
@@ -40,7 +41,7 @@ import btUtils
 # We attempt to build three different types of container app for Linux:
 #  - AppImage
 #  - Flatpak
-#  - Snap     TODO
+#  - Snap
 #
 # There is some overlap between what we do for each container app and what we do in ./bt package, but we accept the
 # price of some duplication for keeping things separate.
@@ -877,6 +878,33 @@ def doFlatpak():
 # ./bt snap
 #
 # Builds a Snap container app package
+#
+# NOTE: If you have a VPN client installed, eg Mullvad VPN, there is a known conflict which you need to work around.
+# LXD’s FAQ says that if starting containers suddenly fails with a cgroup-related error message (Failed to mount
+# "/sys/fs/cgroup"), this might be due to running a VPN client on the host. The problem is that the VPN client mounts
+# the net_cls cgroup1 over cgroup2 (which LXD uses).  If you are hitting problems, and running `mount | grep net_cls`
+# gives output `/sys/fs/cgroup/net_cls … cgroup … net_cls`, then this is likely the cause.  You can run the following
+# commands to move Mullvad’s net_cls mount out of /sys/fs/cgroup:
+#
+#    $ mount | grep net_cls
+#    net_cls on /sys/fs/cgroup/net_cls type cgroup (rw,relatime,net_cls)
+#
+#    $ sudo systemctl stop mullvad-daemon
+#    $ sudo umount /sys/fs/cgroup/net_cls
+#
+#    $ sudo mkdir -p /etc/systemd/system/mullvad-daemon.service.d
+#    $ sudo tee /etc/systemd/system/mullvad-daemon.service.d/net-cls.conf <<EOF
+#    [Service]
+#    Environment="TALPID_NET_CLS_MOUNT_DIR=/var/lib/mullvad/net_cls/"
+#    ExecStartPre=/usr/bin/mkdir -p /var/lib/mullvad/net_cls
+#    ExecStartPre=/bin/sh -c 'mountpoint -q /var/lib/mullvad/net_cls || mount -t cgroup -o net_cls net_cls /var/lib/mullvad/net_cls'
+#    EOF
+#
+#    $ sudo systemctl daemon-reload
+#    $ sudo systemctl start mullvad-daemon
+#    $ mount | grep net_cls
+#    net_cls on /var/lib/mullvad/net_cls type cgroup (rw,relatime,net_cls)
+#
 #-----------------------------------------------------------------------------------------------------------------------
 def doSnap():
    sysName = platform.system()
@@ -885,6 +913,12 @@ def doSnap():
       sys.exit(1)
 
    #
+   # NB: The grp module is only available on Unix-like systems, so we can't import it at the top of this file (which is
+   #     imported by buildTool.py on all platforms).
+   #
+   import grp
+
+   #
    # Read in the variables exported from the Meson build
    #
    btUtils.readBuildConfigFile()
@@ -892,42 +926,140 @@ def doSnap():
    versionString = btUtils.buildConfig["CONFIG_VERSION_STRING"]
    appDirName = projectName + '-' + versionString
 
-   # Create the relevant top-level directory and ensure it starts out empty
-   # (NB: Any missing parent directories will automatically get created by os.makedirs.  In particular,
-   # btFileSystem.dir_contAppPkgs and btFileSystem.dir_flatpak are guaranteed to exist after this.)
-   if btFileSystem.dir_snap.is_dir():
-      btLogger.log.info('Removing existing ' + btFileSystem.dir_snap.as_posix() + ' directory tree')
-      shutil.rmtree(btFileSystem.dir_snap)
-   dir_snapBuild = btFileSystem.dir_snap.joinpath(appDirName)
-   btLogger.log.info('Creating directory ' + dir_snapBuild.as_posix())
-   os.makedirs(dir_snapBuild)
-   os.chdir(btFileSystem.dir_snap)
-   btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
-
-   #--------------------------------------------------------------------------------------------------------------------
-   #---------------------------------------------------- Build Snap ----------------------------------------------------
-   #--------------------------------------------------------------------------------------------------------------------
-   sysName = platform.system()
-   if sysName != 'Linux':
-      btLogger.log.critical('Snap creation not supported on: ' + sysName)
+   #
+   # We use the snapcraft.yaml that Meson generates (via configure_file()) from packaging/linux/snapcraft.in.yaml.  But
+   # Meson only regenerates it when it reconfigures -- eg when you next build in mbuild.  So, if you've just edited the
+   # template, it's easy to end up running a snap build with the previous version.  Check for this before we do
+   # anything else, as a snap build takes a while to fail.
+   #
+   file_snapProjectTemplate  = btFileSystem.dir_base.joinpath('packaging').joinpath('linux').joinpath('snapcraft.in.yaml')
+   file_snapProjectGenerated = btFileSystem.dir_build.joinpath('snapcraft.yaml')
+   if not file_snapProjectGenerated.is_file():
+      btLogger.log.critical(
+         'Cannot find ' + file_snapProjectGenerated.as_posix() + '.  Run `meson setup --reconfigure ' +
+         btFileSystem.dir_build.as_posix() + '` (or a build in that directory) and try again.'
+      )
+      sys.exit(1)
+   if file_snapProjectGenerated.stat().st_mtime < file_snapProjectTemplate.stat().st_mtime:
+      btLogger.log.critical(
+         file_snapProjectGenerated.as_posix() + ' is older than ' + file_snapProjectTemplate.as_posix() +
+         '.  Run `meson setup --reconfigure ' + btFileSystem.dir_build.as_posix() + '` (or a build in that ' +
+         'directory) to regenerate it, then try again.'
+      )
       sys.exit(1)
 
-   # TODO: Haven't managed to get this working yet.  Meson build keeps hanging.  Next thing might be to try the CMake
-   #       build to see if it gives us more/different diagnostics.
+   #
+   # NOTE: AFAICT in order to build snaps, you need, amongst other things, to enable them to be installed on your
+   # system -- which not everyone necessarily wants.  We therefore only install the snap tools here rather than in
+   # btDependencies.installDependencies.  (If any of these are already installed, `snap install` just says so and
+   # returns success.)
+   #
+   btLogger.log.info('Installing Snapd')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', '-y', 'snapd']))
+   btLogger.log.info('Installing Snapcraft')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'snap', 'install', '--classic', 'snapcraft']))
+   btLogger.log.info('Installing LXD')
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'snap', 'install', 'lxd']))
 
    #
-   # Read in the variables exported from the Meson build
+   # The snap build process requires a "build provider".  According to
+   # https://documentation.ubuntu.com/snapcraft/8.9.4/how-to/setup/set-up-snapcraft/, this is "to host an isolated build
+   # environment, like a sandbox [inside which] software can be built and packaged as snaps without making potentially
+   # destructive changes to the host system".
    #
-   btUtils.readBuildConfigFile()
-   projectName = btUtils.buildConfig["CONFIG_APPLICATION_NAME_LC"]
-   versionString = btUtils.buildConfig["CONFIG_VERSION_STRING"]
-   appDirName = projectName + '-' + versionString
+   # For core22 and later bases, the choice is between LXD (the default on Linux) and Multipass.  We use LXD (see
+   # https://canonical.com/lxd), Canonical's System Container and Virtual Machine Manager built on top of LXC (Linux
+   # Containers).  We used to try Multipass, but, for core22 and later bases, the Multipass VM is hard-coded to 2 CPUs
+   # and 2GB RAM, and the SNAPCRAFT_BUILD_ENVIRONMENT_CPU and SNAPCRAFT_BUILD_ENVIRONMENT_MEMORY environment variables
+   # are ignored (see https://bugs.launchpad.net/snapcraft/+bug/2008003).  Several of our source files need more than
+   # 2GB RAM to compile (eg src/trees/NamedEntityTreeView.cpp peaks at about 2.2GB with GCC 13), so the build would
+   # swap itself to a near standstill and appear to hang.  An LXD container, by contrast, shares the host's RAM and
+   # CPUs.
+   #
+   # LXD needs to be initialised once before first use.  `lxd init --auto` gives a sensible default set-up (a storage
+   # pool and a bridged network).  But we don't want to run it if LXD is already set up, so we first check whether
+   # there are any storage pools.
+   #
+   btExecute.abortOnRunFail(subprocess.run(['sudo', 'lxd', 'waitready']))
+   storageListResult = btExecute.abortOnRunFail(
+      subprocess.run(['sudo', 'lxc', 'storage', 'list', '--format', 'csv'], capture_output = True, encoding = 'utf-8')
+   )
+   if storageListResult.stdout.strip() == '':
+      btLogger.log.info('Initialising LXD')
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'lxd', 'init', '--auto']))
+   else:
+      btLogger.log.debug('LXD already initialised')
+
+   #
+   # For snapcraft to be able to use LXD, the current user needs to be in the 'lxd' group (which the installation of
+   # LXD will have created).  Adding the current user to a group will not take immediate effect.  Normally you need to
+   # log out and log in again.  (In an interactive shell, the `newgrp` command gets around this but that wouldn't help
+   # us here: the script would pause, dump the user out into the new shell, with the group membership, and then only
+   # resume, without the group membership, when the user exited that shell.)  We get around this by using the `sg`
+   # command to invoke snapcraft when the current process doesn't have the group membership.
+   #
+   currentUser = getpass.getuser()
+   lxdGroup = grp.getgrnam('lxd')
+   if currentUser not in lxdGroup.gr_mem:
+      btLogger.log.info('Adding user ' + currentUser + ' to lxd group')
+      btExecute.abortOnRunFail(subprocess.run(['sudo', 'usermod', '--append', '--groups', 'lxd', currentUser]))
+   needSg = lxdGroup.gr_gid not in os.getgroups()
+   if needSg:
+      btLogger.log.info('Current process does not have lxd group membership, so will invoke snapcraft via sg')
+
+   #
+   # Docker and LXD do not play nicely together on the same machine: Docker sets the default policy of the iptables
+   # FORWARD chain to DROP, which stops LXD containers getting network access (so snapcraft can't download packages
+   # inside the build container).  See "Prevent connectivity issues with LXD and Docker" in the LXD documentation for
+   # fixes.  We don't try to fix this automatically, but we do warn about it.
+   #
+   if shutil.which('docker') is not None:
+      btLogger.log.warning(
+         'Docker is installed.  If the snap build fails because the LXD container has no network access, see ' +
+         '"Prevent connectivity issues with LXD and Docker" in the LXD documentation.'
+      )
+
+   #
+   # Belt-and-braces: per
+   # https://documentation.ubuntu.com/snapcraft/stable/how-to/select-a-build-provider/index.html, the command-line
+   # flag takes priority, but we also set the environment variable in case anything we run doesn't take the flag.
+   #
+   os.environ['SNAPCRAFT_BUILD_ENVIRONMENT'] = 'lxd'
+
+   #
+   # Helper function to run snapcraft with the right provider and, if necessary, the right group membership.
+   #
+   def runSnapcraft(step, extraArgs = []):
+      snapcraftCommand = ['snapcraft', step, '--use-lxd', *extraArgs]
+      if needSg:
+         snapcraftCommand = ['sg', 'lxd', '-c', shlex.join(snapcraftCommand)]
+      btLogger.log.info('🫰 Running ' + ' '.join(snapcraftCommand) + ' in ' + pathlib.Path.cwd().as_posix())
+      btExecute.abortOnRunFail(subprocess.run(snapcraftCommand))
+      return
 
    #
    # Create the relevant top-level directory and ensure it starts out empty
    # (NB: Any missing parent directories will automatically get created by os.makedirs.  In particular,
    # btFileSystem.dir_contAppPkgs and btFileSystem.dir_snap are guaranteed to exist after this.)
+   #
+   # Snapcraft names its LXD build instances using, amongst other things, the inode number of the project directory.
+   # So, if we just deleted the old project directory and created a new one, each run would leave behind an LXD
+   # instance (of several GB) from the previous run.  We therefore run `snapcraft clean` in any old project directory
+   # (ie one with a snap/snapcraft.yaml file) before deleting it.  This also guarantees we start each build from
+   # scratch, without bits hanging around from earlier builds.
+   #
    if btFileSystem.dir_snap.is_dir():
+      for oldProjectFile in btFileSystem.dir_snap.glob('*/snap/snapcraft.yaml'):
+         oldProjectDir = oldProjectFile.parent.parent
+         os.chdir(oldProjectDir)
+         btLogger.log.info('Cleaning up LXD instance(s) for ' + oldProjectDir.as_posix())
+         # It's not a disaster if this fails, so we don't abort on failure
+         runResult = subprocess.run(['snapcraft', 'clean', '--use-lxd'] if not needSg else
+                                    ['sg', 'lxd', '-c', 'snapcraft clean --use-lxd'])
+         if runResult.returncode != 0:
+            btLogger.log.warning('Ignoring failure of snapcraft clean in ' + oldProjectDir.as_posix())
+      os.chdir(btFileSystem.dir_base)
       btLogger.log.info('Removing existing ' + btFileSystem.dir_snap.as_posix() + ' directory tree')
       shutil.rmtree(btFileSystem.dir_snap)
    dir_snapBuild = btFileSystem.dir_snap.joinpath(appDirName)
@@ -936,56 +1068,6 @@ def doSnap():
    os.makedirs(dir_snapBuildSnap)
    os.chdir(dir_snapBuild)
    btLogger.log.debug('Working directory now ' + pathlib.Path.cwd().as_posix())
-
-   #
-   # NOTE: AFAICT in order to build snaps, you need, amongst other things, to enable them to be installed on your
-   # system -- which not everyone necessarily wants.  We therefore only install the snap tools here rather than in
-   # btDependencies.installDependencies.
-   #
-   btLogger.log.info('Installing Snapd')
-   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'update']))
-   btExecute.abortOnRunFail(subprocess.run(['sudo', 'apt', 'install', 'snapd']))
-   btLogger.log.info('Installing Snapcraft')
-   btExecute.abortOnRunFail(subprocess.run(['sudo', 'snap', 'install', '--classic', 'snapcraft']))
-   # See comment below for why we install Multipass
-   btLogger.log.info('Installing Multipass')
-   btExecute.abortOnRunFail(subprocess.run(['sudo', 'snap', 'install', 'multipass']))
-
-   #
-   # Part of the Snap infrastucture which gets installed with snapd is Canonical's LXD (see https://www.lxdubuntu.com/),
-   # a System Container and Virtual Machine Manager built on top of LXC (Linux Containers).
-   #
-   # The snap build process requires a "build provider".  According to
-   # https://documentation.ubuntu.com/snapcraft/8.9.4/how-to/setup/set-up-snapcraft/, this is "to host an isolated build
-   # environment, like a sandbox [inside which] software can be built and packaged as snaps without making potentially
-   # destructive changes to the host system".
-   #
-   # LXD is the default "build provider" when you run `snapcraft pack`.  For it to work, the current user needs to be
-   # added to the 'lxd' group (which the installation of snapd will have created).  This is a bit fiddly, but is
-   # achievable.  Adding the current user to a group will not take immediate effect.  Normally you need to log out and
-   # log in again.  (In an interactive shell, the `newgrp` command gets around this but that wouldn't help us here: the
-   # script would pause, dump the user out into the new shell, with the group membership, and then only resume, without
-   # the group membership, when the user exited that shell.)  We can get around this by using the `sg` command to invoke
-   # snapcraft.  HOWEVER, when I did all this on my machine I didn't get too far: `snapcraft pack` barfed with an error
-   # about "lxc --project snapcraft launch craft-com.ubuntu.cloud-buildd:core24 ..." failing because "Failed to run:
-   # /snap/lxd/current/sbin/lxd forkstart snapcraft_base-instance-snapcraft-buildd-base-v71--f02c2da881cfba9d7924 ...
-   # exit status 1".  I struggled to get more detailed diagnostics or to find additional useful info on the web.
-   #
-   # So, I switched to the "build provider", Multipass (see https://canonical.com/multipass), which is a simpler tool
-   # for creating VMs on-demand.
-   #
-   # https://documentation.ubuntu.com/snapcraft/stable/how-to/select-a-build-provider/index.html explains the various
-   # ways to set choice of build provider.  (Although the command-line flag would be simpler, there is only '--use-lxd'
-   # and no '--use-multipass'!)
-   #
-   os.environ['SNAPCRAFT_BUILD_ENVIRONMENT'] = 'multipass'
-
-   #
-   # By default, the build VM is assigned 2 CPUs and 2 GB RAM.  I wondered if this might be what was causing the
-   # compilation to hang, so bumped it a bit here, but it seems to hang at the same place regardless.
-   #
-   os.environ['SNAPCRAFT_BUILD_ENVIRONMENT_CPU'] = '4'
-   os.environ['SNAPCRAFT_BUILD_ENVIRONMENT_MEMORY'] = '16G'
 
    #
    # The how-to guide tells you to run `snapcraft init` now, but that doesn't so much useful -- just create a 'snap'
@@ -998,21 +1080,6 @@ def doSnap():
    shutil.copy2(file_snapProjectFrom, file_snapProjectTo)
 
    #
-   # It would be nice at this point to run `snapcraft lint snap/snapcraft.yaml`.  However, this barfs the following
-   # error:
-   #    'snapcraft lint' is not supported with Multipass as the build provider
-   # So, we skip the lint.
-   #
-
-   #
-   # Per comments below, the build VM gets reused, so we want to ensure there isn't stuff from previous builds
-   # cluttering it up.  (This is more important when we're actively working on the snap build process, but feels like
-   # good general practice too.)
-   #
-   btLogger.log.info('Running snapcraft clean in ' + pathlib.Path.cwd().as_posix())
-   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'clean']))
-
-   #
    # As with Flatpak, Snap expects us to build everything from source, so we need to copy the source code etc into the
    # directory tree its build provider has access to.  It helps to understand what the Snapcraft tool does when we run
    # it.  Per info at https://documentation.ubuntu.com/snapcraft/8.9.3/reference/processes/snap-build-process/,
@@ -1020,36 +1087,32 @@ def doSnap():
    #    - Starting in the current working directory, it looks for snapcraft.yaml or snap/snapcraft.yaml, and then parses
    #      its contents to begin the build.
    #
-   #    - It creates a build VM (via Multipass or LXD) in which to do the build.  This VM will be a "minimal Ubuntu
-   #      install" determined by the 'base' in snapcraft.yaml.  NOTE that the build VM doesn't get recreated from
-   #      scratch if you've run a build before, so, during development, it's helpful to run 'snapcraft clean' between
-   #      builds, otherwise it can get confusing with bits hanging around from earlier builds.
+   #    - It creates (or reuses) an LXD container in which to do the build.  This will be a "minimal Ubuntu install"
+   #      determined by the 'base' in snapcraft.yaml.  The project directory (ie dir_snapBuild) is mounted inside the
+   #      container as /root/project.
    #
-   #    - Required packages listed in the snapcraft.yaml file are downloaded and installed into the build VM.  Inside
-   #      this VM, the /root/project directory will hold a copy of everything in the dir_snapBuild directory (from
-   #      outside the VM).
+   #    - Required packages and snaps listed in the snapcraft.yaml file (including the SDK snaps that the kde-neon-6
+   #      extension adds) are downloaded and installed into the container.
    #
    #    - The "Pull" build step is run (on each part).
-   #      Each part has its own directory under /root/parts in the build VM.
-   #      We only have one part, called main-part, in our snap/snapcraft.yaml file.  Because we put 'source: ../project'
-   #      in the 'main-part' section of snap/snapcraft.yaml file, we'll end up with the
-   #      entire contents of the dir_snapBuild directory in /root/parts/main-part/src in the build VM.
+   #      Each part has its own directory under /root/parts in the container.  We only have one part of our own, called
+   #      main-part.  Because we put 'source: .' in the 'main-part' section of snap/snapcraft.yaml file, the contents of
+   #      the project directory end up in /root/parts/main-part/src (aka ${CRAFT_PART_SRC}).
    #
-   #    - The "Build" build step is run (on each part)
-   #      Snapcraft creates /root/parts/main-part/build to do the build, which will be the current working directory
-   #      when the "Build" build step is run.  This is different from our usual set-up -- hence why in our
-   #      snap/snapcraft.yaml file we specify `meson setup . ../src` rather than `meson setup mbuild .`
+   #    - The "Build" build step is run (on each part).  For main-part, this is the override-build script in
+   #      snap/snapcraft.yaml, which builds libbacktrace, Blaze and then our own code, and installs the latter into
+   #      /root/parts/main-part/install (aka ${CRAFT_PART_INSTALL}).
    #
    #    - The "Stage" build step is run (on each part)
    #
    #    - The "Prime" build step is run (on each part)
    #
-   #    - The "Pack" build step is run (on each part)
+   #    - The "Pack" build step creates the .snap file in the project directory.  This also runs the snapcraft linters.
    #
    # Note that because each build step ensures the prior ones have been run, we only _need_ to call 'snapcraft pack'.
-   # However, it is possible to run steps individually, which is a bit slower (because the VM gets fired up and down
-   # more times) but helpful for debugging.  What's even more helpful is that you can drop out into a shell in the VM by
-   # adding '--shell', '--shell-after' or '--debug' to the 'snapcraft' command (see
+   # However, it is possible to run steps individually, which is a bit slower but helpful for debugging.  What's even
+   # more helpful is that you can drop out into a shell in the container by adding '--shell', '--shell-after' or
+   # '--debug' to the 'snapcraft' command (see
    # https://documentation.ubuntu.com/snapcraft/stable/how-to/debugging/debug-a-snap/#inspect-the-snap-s-contents).
    # Specifically:
    #
@@ -1060,15 +1123,9 @@ def doSnap():
    #    'snapcraft foobar --debug'       runs all the build steps up to and _including_ foobar, then, if there was an
    #                                     error, opens a shell into the environment.
    #
-   # NB flags such as '--shell' have to come after the build step -- eg `snacraft --debug build` is wrong; needs to be
-   # `snapcraft build --debug`.
-   #
-   # NOTE that everything in dir_snapBuild EXCEPT the 'snap'
-   # subdirectory (ie dir_snapBuildSnap) ends up under /root/parts/main-part/src/project/ (aka
-   # ${CRAFT_PART_SRC}/project/) in the virtual build environment (where 'main-part' is the part name defined in
-   # snapcraft.yaml).  The 'snap' subdirectory ends up as /root/project/snap/ (aka ${CRAFT_PROJECT_DIR}/snap/).
-   #
-   # What the build
+   # NB flags such as '--shell' have to come after the build step -- eg `snapcraft --debug build` is wrong; needs to be
+   # `snapcraft build --debug`.  (And remember to add `--use-lxd` and, if you're not yet in the lxd group in your current
+   # login session, run it via `sg lxd -c "..."`.)
    #
    btLogger.log.info('Copy source tree etc')
    for directoryToCopy in ['css',
@@ -1095,21 +1152,31 @@ def doSnap():
       shutil.copy(btFileSystem.dir_base.joinpath(fileToCopy), dir_snapBuild)
 
    #
-   # Provided the contents of snapcraft.yaml are correct, snapcraft supposedly does everything else for us.
+   # Provided the contents of snapcraft.yaml are correct, snapcraft does everything else for us.
    #
-   # The "finger snap" emoji is to make these lines stand out in the log file!
-   #
-   btLogger.log.info('🫰 Running snapcraft pull in ' + pathlib.Path.cwd().as_posix())
-   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'pull', '--verbose']))
-   btLogger.log.info('🫰 Running snapcraft build in ' + pathlib.Path.cwd().as_posix())
-   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'build', '--verbose']))
-   btLogger.log.info('🫰 Running snapcraft stage in ' + pathlib.Path.cwd().as_posix())
-   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'stage', '--verbose']))
-   btLogger.log.info('🫰 Running snapcraft prime in ' + pathlib.Path.cwd().as_posix())
-   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'prime', '--verbose']))
-   btLogger.log.info('🫰 Running snapcraft pack in ' + pathlib.Path.cwd().as_posix())
-   btExecute.abortOnRunFail(subprocess.run(['snapcraft', 'pack', '--verbose']))
+   for step in ['pull', 'build', 'stage', 'prime', 'pack']:
+      runSnapcraft(step, ['--verbose'])
 
-   # TODO - Finish this!
+   #
+   # `snapcraft pack` puts the .snap file(s) in the project directory, named [name]_[version]_[arch].snap.  We move them
+   # up a level, to sit alongside the project directory (as we do with the Flatpak bundle), and generate checksums.
+   #
+   snapFiles = list(dir_snapBuild.glob('*.snap'))
+   if len(snapFiles) == 0:
+      btLogger.log.critical('Could not find .snap file in ' + dir_snapBuild.as_posix())
+      sys.exit(1)
+   for snapFile in snapFiles:
+      shutil.move(snapFile, btFileSystem.dir_snap.joinpath(snapFile.name))
+      btLogger.log.info('Snap package ' + btFileSystem.dir_snap.joinpath(snapFile.name).as_posix())
+      btUtils.writeSha256sum(btFileSystem.dir_snap, snapFile.name)
+
+   btLogger.log.info(
+      'To install locally for testing: sudo snap install --devmode --dangerous ' +
+      btFileSystem.dir_snap.as_posix() + '/[snap file]'
+   )
+
+   btLogger.log.info(
+      'Afterwards, to remove: snap remove --purge ' + projectName
+   )
 
    return

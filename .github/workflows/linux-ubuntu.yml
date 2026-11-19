@@ -59,22 +59,20 @@ jobs:
         # because pre-built objects from the system (static libraries, C runtime objects) still get linked in.  So,
         # for Ubuntu 26.04, we build inside the official ubuntu:26.04 Docker image, which is a baseline amd64 install.
         #
-        # Inside the container, we don't have the setup needed for building AppImage or Flatpak (eg FUSE, and the
-        # privileges that bubblewrap needs).  Those are portable formats, so we only build them on Ubuntu 24.04.
+        # The Linux "container app" packages (AppImage, Flatpak, Snap) are built separately, by
+        # linux-container-apps.yml.
         #
         include:
           - os: ubuntu-24.04
             runner: ubuntu-24.04
             container: ''
-            buildContainerApps: true
           - os: ubuntu-26.04
             runner: ubuntu-24.04
             container: ubuntu:26.04
-            buildContainerApps: false
     steps:
       #
-      # Building flatpak etc below takes a fair bit of disk space, we start out by removing preinstalled software that
-      # we don't need.  (Inside a container, we can't get at the host file system to do this.)
+      # The build takes a fair bit of disk space, so we start out by removing preinstalled software that we don't
+      # need.  (Inside a container, we can't get at the host file system to do this.)
       #
       - name: Free disk space
         if: ${{ matrix.container == '' }}
@@ -131,15 +129,15 @@ jobs:
       # build environment.
       #
       # Of course, since 'bt' is a Python script, it can't install Python, so we need to do that first.  We need Python
-      # 3.10 or newer, which means you can't just use `sudo apt install` on older Ubuntus.  (Eg Ubuntu 18.04 packages
-      # have only Python 3.6.7 and Ubuntu 20.04 only have Python 3.8.2.  However Ubuntu 22.04 has Python 3.10.6.)  There
-      # are ways to get around this, but, in this context, it's simplest to use a canned GitHub action.
+      # 3.10 or newer, which means you can't just use `sudo apt install` on older Ubuntus.  There are ways to get around
+      # this, but, in this context, it's simplest to use a canned GitHub action.  On the flip-side, we can't specify too
+      # old a version of Python here, as it won't be available.
       #
       # In the container, we use the distro's own Python (installed above), which is new enough on Ubuntu 26.04
       - uses: actions/setup-python@v6
         if: ${{ matrix.container == '' }}
         with:
-          python-version: '3.10'
+          python-version: '3.12'
       - name: Install Frameworks and Libraries, and set up Meson build environment
         working-directory: ${{github.workspace}}
         shell: bash
@@ -244,22 +242,6 @@ jobs:
           # exactly which functions contain any problem instructions.  The one in the .deb is what we actually ship.
           ../scripts/checkIsaLevel.sh brewtarget packages/linux/brewtarget*.deb
 
-      - name: AppImage
-        if: ${{ matrix.buildContainerApps }}
-        working-directory: ${{github.workspace}}/mbuild
-        shell: bash
-        run: |
-          umask 022
-          ../bt -v appimage
-
-      - name: Flatpak
-        if: ${{ matrix.buildContainerApps }}
-        working-directory: ${{github.workspace}}/mbuild
-        shell: bash
-        run: |
-          umask 022
-          ../bt -v flatpak
-
       - name: Upload Linux Packages (Installers)
         if: ${{ success() }}
         uses: actions/upload-artifact@v7
@@ -272,10 +254,6 @@ jobs:
             mbuild/packages/linux/brewtarget*.deb.sha256sum
             mbuild/packages/linux/brewtarget*.rpm
             mbuild/packages/linux/brewtarget*.rpm.sha256sum
-            contAppPkgs/appimage/brewtarget*.AppImage
-            contAppPkgs/appimage/brewtarget*.AppImage.sha256sum
-            contAppPkgs/flatpak/brewtarget*.flatpak
-            contAppPkgs/flatpak/brewtarget*.flatpak.sha256sum
           retention-days: 7
 
       - name: Recover Debris Artifacts (Meson)

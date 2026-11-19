@@ -189,7 +189,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '5.3.1',
+        version: '5.3.2',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.63.0',
         default_options : ['cpp_std=c++23',
@@ -2039,6 +2039,7 @@ test('Test equipment default volumes'        , testRunner, args : ['RecipeCalcTe
 test('Test mash tun heat capacity'           , testRunner, args : ['RecipeCalcTests', 'testMashTunHeatCapacity'              ], suite : 'recipe')
 test('Test water alkalinity'                 , testRunner, args : ['RecipeCalcTests', 'testWaterAlkalinity'                  ], suite : 'recipe')
 test('Test late fermentable additions'       , testRunner, args : ['RecipeCalcTests', 'testLateFermentableAdditions'         ], suite : 'recipe')
+test('Test time-weighted boil gravity'       , testRunner, args : ['RecipeCalcTests', 'testTimeWeightedBoilGravity'          ], suite : 'recipe')
 test('Test recipe snapshots'                 , testRunner, args : ['RecipeCalcTests', 'testRecipeSnapshot'                   ], suite : 'recipe')
 test('Test dotBeer imported recipe calcs'    , testRunner, args : ['SerializationTests', 'testDotBeerImportedRecipeCalcs'    ], suite : 'serialization')
 test('Test dotBeer addition step correction' , testRunner, args : ['SerializationTests', 'testDotBeerAdditionStepCorrection' ], suite : 'serialization')

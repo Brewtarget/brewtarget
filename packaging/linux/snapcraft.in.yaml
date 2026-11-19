@@ -20,6 +20,9 @@
 # See https://documentation.ubuntu.com/snapcraft/stable/reference/project-file/snapcraft-yaml/ for details of fields
 # below.
 #
+# NB: Because Meson's configure_file() substitutes @VARIABLE@ tokens, we can freely use ${VARIABLE} shell syntax in the
+#     override-build script below.
+#
 
 # This is registered with the Snap Store by Matt Young
 name: @CONFIG_APPLICATION_NAME_LC@
@@ -43,56 +46,30 @@ type: app
 #
 base: core24
 
-grade: stable
+#
 # See https://snapcraft.io/docs/snap-confinement for different Snap confinement levels.  Essentially you have to use
 # 'strict' unless you've got a very good reason to need 'classic' (which, per
 # https://snapcraft.io/docs/reviewing-classic-confinement-snaps, we don't).  Using 'devmode' here prevents us from
-# publishing the snap but allows us to debug what interfaces etc we would need to add to use 'strict'.
+# publishing the snap to the stable or candidate channels, but allows us to debug what interfaces etc we would need to
+# add to use 'strict'.  (Run the installed snap and look for AppArmor denials with `sudo snappy-debug` or
+# `journalctl -f | grep -i apparmor`.)  Once the snap works in devmode with no denials, switch confinement to 'strict'
+# and grade to 'stable'.
+#
+# Grade is 'devel' whilst confinement is 'devmode', as devmode snaps can't be released to stable/candidate anyway.
+#
+grade: devel
 confinement: devmode
 source-code: @CONFIG_GITHUB_URL@
 contact: @CONFIG_PACKAGE_MAINTAINER@
 website: @CONFIG_WEBSITE_URL@
 issues: @CONFIG_GITHUB_URL@/issues
-compression: xz
-icon: snap/gui/@CONFIG_APPLICATION_NAME_LC@.svg # TODO: check location!
 
 #
-# These are the dependencies required to build the app.  Should largely follow installList in
-# btDependencies.installDependencies()
+# Path is relative to the project directory (ie the directory containing the 'snap' subdirectory), which is where
+# scripts/btContainerApps.py:doSnap() copies the source tree.  Snapcraft also uses this to fix up the Icon= line in the
+# desktop file referenced in the 'apps' section below.
 #
-build-packages:
-  - build-essential
-  - cmake # NB: CMake is used by Meson to locate packages
-  - coreutils
-  - git
-  - libgl1
-  - libglx-dev
-  - libgl1-mesa-dev
-  - libqt6gui6  # Qt GUI module -- needed for QColor (per https://doc.qt.io/qt-6.2/qtgui-module.html)
-  - libqt6sql6-psql
-  - libqt6sql6-sqlite
-  - libqt6svg6
-  - libqt6svgwidgets6
-  - libssl-dev  # For OpenSSL headers
-  - libxalan-c-dev
-  - libxerces-c-dev
-  - meson
-  - ninja-build
-  - pandoc
-  - python3
-  - python3-dev
-  - qmake6  # Possibly needed for Qt6 lupdate
-  - qt6-base-dev
-  - qt6-l10n-tools  # Needed for Qt6 lupdate?
-  - qt6-multimedia-dev
-  - qt6-tools-dev
-  - qt6-translations-l10n  # Puts all the *.qm files in /usr/share/qt6/translations
-  - qt6-svg-dev
-  - qttools5-dev-tools # For Qt5 version of lupdate, per comment above
-  - qt6-tools-dev-tools
-  - libboost-dev # This should give us Boost 1.83 on Ubuntu 24.04.
-  - libboost-stacktrace-dev
-  - doxygen
+icon: images/@CONFIG_APPLICATION_NAME_LC@.svg
 
 platforms:
   amd64:
@@ -111,9 +88,31 @@ platforms:
 #
 # See https://documentation.ubuntu.com/snapcraft/stable/reference/project-file/snapcraft-yaml/#app-keys for field info.
 #
+# The kde-neon-6 extension (see https://documentation.ubuntu.com/snapcraft/stable/reference/extensions/kde-neon-6-extension/)
+# is the Snap equivalent of building our Flatpak on org.kde.Platform: Qt 6 (and KDE Frameworks, which we don't use) come
+# from a shared content snap (kf6-core24) rather than being bundled into our snap.  At build time, it gives us the
+# corresponding SDK snaps (kde-qt6-core24-sdk and kf6-core24-sdk) and sets PATH, LD_LIBRARY_PATH, CMAKE_PREFIX_PATH etc
+# to point at them.  At run time, it adds a command chain that sets up the desktop environment (fonts, themes, Qt
+# plugins etc), and gives us the following plugs: desktop, desktop-legacy, opengl, wayland, x11, audio-playback,
+# unity7, network, network-bind.
+#
+# On top of that we need:
+#   home    - So users can open/save recipe files (BeerXML, BeerJSON, .beer) in their home directory.  (NB: The
+#             application's own config and database live under ~/snap/@CONFIG_APPLICATION_NAME_LC@/ inside the snap.
+#             Accessing an existing ~/.config/@CONFIG_APPLICATION_NAME_LC@ from a non-snap install would need the
+#             personal-files interface, which requires Snap Store approval.)
+#   network - Already supplied by the extension, but listed explicitly here because we need it for PostgreSQL.
+#
 apps:
   @CONFIG_APPLICATION_NAME_LC@:
-     command: bin/@CONFIG_APPLICATION_NAME_LC@
+    command: usr/bin/@CONFIG_APPLICATION_NAME_LC@
+    common-id: @CONFIG_APPLICATION_ID@
+    desktop: usr/share/applications/@CONFIG_APPLICATION_ID@.desktop
+    extensions:
+      - kde-neon-6
+    plugs:
+      - home
+      - network
 
 #
 # These are "the self-contained software pieces needed to create the final artifact."
@@ -124,22 +123,190 @@ apps:
 # https://documentation.ubuntu.com/snapcraft/stable/reference/parts/part-environment-variables/ for details.
 #
 parts:
-  #
-  # See https://documentation.ubuntu.com/snapcraft/latest/common/craft-parts/reference/plugins/meson_plugin/ for
-  # (somewhat limited) info on the Snapcraft Meson plug-in.
-  #
   main-part:
-    source: ../project
+    #
+    # The project directory is the one containing the 'snap' subdirectory.  scripts/btContainerApps.py:doSnap() copies
+    # the source tree there.
+    #
+    source: .
     source-type: local
-    plugin: meson
-    # The commands to run instead of the default behavior of the build step.
-    # The standard build step actions can be performed by calling craftctl default.
-    # See comments in doSnap() in scripts/btContainerApps.py for more detail on what's going on here
-#    override-build: |
-#      pwd
-#      meson setup . ../src
-#      meson compile
-#      craftctl default
-#    meson-parameters:
-#      - "--verbose"
-#      - "--buildtype=release"
+    #
+    # We use the 'nil' plugin and do the whole build in override-build, for the same reasons that the Flatpak manifest
+    # uses `buildsystem: simple`: we need to build libbacktrace and Blaze (both git submodules in third-party/) before
+    # we run Meson, and Meson only finds Blaze if CMAKE_PREFIX_PATH (the environment variable, not just the CMake
+    # argument we pass from meson.build) includes the directory we install it to.  (Using the 'meson' plugin with
+    # `craftctl default` would not work for the latter, because environment variables exported in override-build do
+    # not make it into the commands run by `craftctl default`.)
+    #
+    plugin: nil
+    #
+    # These are the dependencies required to build the app.  Largely follows installList in
+    # btDependencies.installDependencies() _except_ that Qt comes from the kde-neon-6 extension's SDK snaps, so we
+    # don't list the qt6-* packages here.
+    #
+    build-packages:
+      - build-essential
+      - cmake # NB: CMake is used by Meson to locate packages and to build Blaze
+      - coreutils
+      - git
+      - libgl1
+      - libglx-dev
+      - libgl1-mesa-dev
+      - libssl-dev  # For OpenSSL headers
+      - libxml2-dev
+      - meson
+      - ninja-build
+      - pandoc
+      - pkg-config
+      - python3
+      - python3-dev
+      - qttools5-dev-tools # Fallback Qt5 lupdate, in case the Qt6 SDK snap does not put one on the PATH
+      - libboost-dev # This should give us Boost 1.83 on Ubuntu 24.04.
+      - libboost-stacktrace-dev
+      - doxygen
+    #
+    # Run-time libraries that are neither in the core24 base snap nor in the kf6-core24 content snap.  (OpenSSL 3 is
+    # in core24.  Boost and libbacktrace are linked statically.  Blaze is a static library.)
+    #
+    stage-packages:
+      - libxml2
+    override-build: |
+      set -eux
+
+      #
+      # With the nil plugin, the source is normally copied into the build directory, so we'd expect meson.build to be
+      # in the current directory.  Fall back to the source work directory just in case.
+      #
+      if [ -f meson.build ]; then
+         SOURCE_DIR="$(pwd)"
+      else
+         SOURCE_DIR="${CRAFT_PART_SRC_WORK}"
+      fi
+      echo "Source directory: ${SOURCE_DIR}"
+
+      #
+      # Per comments in scripts/btDependencies.py, on x86_64 we want a baseline instruction set so that the binaries
+      # run on older CPUs.
+      #
+      ARCH_FLAGS=""
+      if [ "${CRAFT_ARCH_BUILD_FOR}" = "amd64" ]; then
+         ARCH_FLAGS="-march=x86-64 -mtune=generic"
+      fi
+
+      #
+      # The kde-neon-6 extension puts the SDK snaps' usr/bin directories at the _front_ of PATH and their library
+      # directories on LD_LIBRARY_PATH.  This can break the system toolchain -- eg if the SDK contains its own copy of a
+      # tool (as, ld, etc) or of a library that the toolchain uses, we can get "C compiler cannot create executables".
+      # So:
+      #    - We build libbacktrace and Blaze, which don't need anything from the SDK, with a "clean" PATH and no
+      #      LD_LIBRARY_PATH.
+      #    - For the main Meson build, we put the system directories at the front of PATH, so the system toolchain wins,
+      #      but keep the SDK directories (after them) and LD_LIBRARY_PATH, as Meson needs these to find and run the Qt
+      #      tools.
+      #
+      EXTENSION_PATH="${PATH}"
+      EXTENSION_LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}"
+      echo "PATH from extension: ${EXTENSION_PATH}"
+      echo "LD_LIBRARY_PATH from extension: ${EXTENSION_LD_LIBRARY_PATH}"
+      which -a gcc g++ as ld || true
+      SYSTEM_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      export PATH="${SYSTEM_PATH}"
+      unset LD_LIBRARY_PATH
+
+      #
+      # libbacktrace.  NB: The source tree was copied from a developer machine, so there might be output from a
+      # previous build there, configured for that machine.  Hence `make distclean` first.
+      #
+      cd "${SOURCE_DIR}/third-party/libbacktrace"
+      make distclean || true
+      if ! sh ./configure CFLAGS="-g -O2 ${ARCH_FLAGS}"; then
+         # Show why configure failed, as config.log is otherwise lost inside the build container
+         tail -n 80 config.log
+         exit 1
+      fi
+      make -j"${CRAFT_PARALLEL_BUILD_COUNT}"
+
+      #
+      # Sourcemeta Blaze.  Same flags as in scripts/btDependencies.py.  As with the Flatpak build, we remove any
+      # existing build directory first, as its CMake cache will have paths from the machine it was built on.  We only
+      # need to install Blaze into its build/dist subdirectory, as it's a static library.
+      #
+      cd "${SOURCE_DIR}/third-party/blaze"
+      rm -rf build
+      cmake -S . -B ./build \
+         -DCMAKE_C_FLAGS="${ARCH_FLAGS}" \
+         -DCMAKE_CXX_FLAGS="${ARCH_FLAGS}" \
+         -DCOMPILER_SUPPORTS_AVX2=OFF \
+         -DCOMPILER_SUPPORTS_SSE42=OFF \
+         -DCMAKE_BUILD_TYPE:STRING=Release \
+         -DCMAKE_COMPILE_WARNING_AS_ERROR:BOOL=OFF \
+         -DBUILD_SHARED_LIBS:BOOL=OFF \
+         -DBLAZE_BENCHMARK:BOOL=OFF \
+         -DBLAZE_CONTRIB:BOOL=OFF \
+         -DBLAZE_DOCS:BOOL=OFF \
+         -DBLAZE_TEST:BOOL=OFF
+      cmake --build ./build --config Release --parallel "${CRAFT_PARALLEL_BUILD_COUNT}"
+      for component in sourcemeta_core sourcemeta_core_dev sourcemeta_blaze sourcemeta_blaze_dev; do
+         cmake --install ./build --prefix ./build/dist --config Release --component "${component}"
+      done
+
+      #
+      # Meson's CMake dependency lookup does a preliminary search for the package config files using the
+      # CMAKE_PREFIX_PATH environment variable, and gives up (with no useful diagnostics) if it doesn't find them there,
+      # even though we pass -DCMAKE_PREFIX_PATH in meson.build.  So we need to add Blaze's install location here.
+      #
+      export CMAKE_PREFIX_PATH="${SOURCE_DIR}/third-party/blaze/build/dist${CMAKE_PREFIX_PATH:+:${CMAKE_PREFIX_PATH}}"
+
+      #
+      # Help Meson find Qt in the SDK snap.  The kde-neon-6 extension puts the SDK's usr/bin on the PATH and the SDK on
+      # CMAKE_PREFIX_PATH, but not on PKG_CONFIG_PATH.  Qt also keeps some of its tools (moc, rcc, uic, lupdate etc)
+      # outside usr/bin.  .:TBD:. Some of this may turn out to be unnecessary.
+      #
+      QT6_SDK=/snap/kde-qt6-core24-sdk/current
+      export PKG_CONFIG_PATH="${QT6_SDK}/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig:${QT6_SDK}/usr/lib/pkgconfig${PKG_CONFIG_PATH:+:${PKG_CONFIG_PATH}}"
+      export PATH="${SYSTEM_PATH}:${EXTENSION_PATH}:${QT6_SDK}/usr/lib/qt6/bin:${QT6_SDK}/usr/lib/qt6/libexec:${QT6_SDK}/usr/libexec"
+      if [ -n "${EXTENSION_LD_LIBRARY_PATH}" ]; then
+         export LD_LIBRARY_PATH="${EXTENSION_LD_LIBRARY_PATH}"
+      fi
+      which qmake6 qmake lupdate moc || true
+      #
+      # Explicitly use the system compilers, and check they still work with the SDK's LD_LIBRARY_PATH set.  If they
+      # don't, the problem is LD_LIBRARY_PATH rather than PATH, and the output here should show which library.
+      #
+      export CC=/usr/bin/gcc
+      export CXX=/usr/bin/g++
+
+      #
+      # Some libraries in the SDK depend on other libraries that live in subdirectories of the SDK's library directory,
+      # and find them via an absolute RUNPATH that only works on a normal system install.  Eg libpulse.so.0 (needed by
+      # QtMultimedia) needs pulseaudio/libpulsecommon-*.so, and has RUNPATH /usr/lib/<triplet>/pulseaudio.  Inside the
+      # build container, that directory doesn't exist (the library is under /snap/kde-qt6-core24-sdk/...), so the
+      # final link fails with lots of "undefined reference to `pa_...'" errors.  So we tell the linker where to look,
+      # by adding -rpath-link for every subdirectory of the SDK's library directory that contains shared libraries.
+      # (-rpath-link only affects the resolution of indirect dependencies at link time; nothing gets embedded in the
+      # executable.)
+      #
+      QT6_SDK_LIB_DIR="${QT6_SDK}/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}"
+      for libSubDir in $(find "${QT6_SDK_LIB_DIR}" -mindepth 2 -name 'lib*.so*' -printf '%h\n' | sort -u); do
+         LDFLAGS="${LDFLAGS:+${LDFLAGS} }-Wl,-rpath-link,${libSubDir}"
+      done
+      export LDFLAGS
+      echo "LDFLAGS: ${LDFLAGS:-}"
+      echo 'int main() { return 0; }' > /tmp/cc-sanity.c
+      ${CC} /tmp/cc-sanity.c -o /tmp/cc-sanity -v || echo "WARNING: C compiler sanity check failed with SDK LD_LIBRARY_PATH"
+
+      #
+      # Now the main build.  We use /usr as the prefix (so everything ends up under ${CRAFT_PART_INSTALL}/usr) rather
+      # than the default /usr/local.  At run-time, the application finds its resources relative to the location of the
+      # executable (see initResourceDir() in src/Application.cpp), so it doesn't matter that ${SNAP} is prepended to
+      # everything.
+      #
+      cd "${SOURCE_DIR}"
+      rm -rf mbuild-snap
+      if ! meson setup --prefix=/usr --buildtype=release mbuild-snap . ; then
+         # As with libbacktrace, show the log, as it's otherwise lost inside the build container
+         tail -n 120 mbuild-snap/meson-logs/meson-log.txt
+         exit 1
+      fi
+      meson compile -C mbuild-snap -j "${CRAFT_PARALLEL_BUILD_COUNT}"
+      DESTDIR="${CRAFT_PART_INSTALL}" meson install -C mbuild-snap --no-rebuild

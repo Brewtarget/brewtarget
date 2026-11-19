@@ -11,6 +11,22 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Shopping Lists
 * We'll list other new features here...
 
+## v5.3.2
+Bug fix release
+
+### New Features
+* Snap builds working in dev mode
+* A fermentable added part-way through the boil proper now counts proportionally towards boil gravity [1194](https://github.com/Brewtarget/brewtarget/issues/1194)
+  * Most recipes will show slightly fewer IBUs with Tinseth, Rager, Noonan, Daniels or mIBU estimation methods.
+  * Because evaporation is now counted, any recipe with a pre-boil size set will drop by about 2.5–3% for a typical 25 L → 20 L boil.
+  * Recipes without a pre-boil size don’t change.
+
+### Bug Fixes
+* Compile error with latest versions of Qt
+
+### Release Timestamp
+Thu, 19 Nov 2026 05:03:02 +0100
+
 ## v5.3.1
 Bug fix release
 
@@ -20,7 +36,7 @@ Bug fix release
 * Taking a recipe snapshot causes a crash (null pointer) [1191](https://github.com/Brewtarget/brewtarget/issues/1191)
 
 ### Release Timestamp
-Tue, 17 Nov 2026 05:03:01 +0100
+Thu, 19 Nov 2026 05:03:01 +0100
 
 ## v5.3.0
 Several new features, and bug fixes for some long-standing issues.

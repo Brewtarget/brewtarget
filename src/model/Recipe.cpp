@@ -1353,18 +1353,106 @@ public:
    }
 
    /**
+    * \brief Which fermentable sugars are in the kettle during the boil proper, and when they get there.  We use this
+    *        for the pre-boil gravity (\c recalcBoilGrav) and for the gravity of the wort that each hop addition sees
+    *        (\c kettleGravity_sg and \c averageKettleGravity_sg).
+    *
+    *        All amounts are after applying mash efficiency to sugars from starch, because the efficiency refers to how
+    *        much sugar we get into the fermenter.
+    */
+   struct KettleSugars {
+      /**
+       * \brief Sugar in the wort from the start of the boil proper -- ie from the mash, plus any boil additions made
+       *        before or at the start of the boil proper (including in a pre-boil step).
+       */
+      double atStartOfBoil_kg = 0.0;
+
+      struct InBoilAddition {
+         double addedBeforeFlameOut_mins;
+         double sugar_kg;
+      };
+
+      /**
+       * \brief Sugar added part-way through the boil proper (eg extract added 15 minutes before flameout), as pairs of
+       *        (minutes before flameout, kg).
+       */
+      std::vector<InBoilAddition> inBoilAdditions = {};
+
+      /**
+       * \brief Sugar in the kettle a given number of minutes before flameout.
+       */
+      double inKettle_kg(double const minutesBeforeFlameout) const {
+         double total_kg = this->atStartOfBoil_kg;
+         // We don't want to use structured bindings here because both members of the struct are the same type, so, if
+         // the order in the struct changed then the compiler wouldn't spot that a bug had been introduced here.
+         for (auto const & inBoilAddition : this->inBoilAdditions) {
+            if (inBoilAddition.addedBeforeFlameOut_mins >= minutesBeforeFlameout) {
+               total_kg += inBoilAddition.sugar_kg;
+            }
+         }
+         return total_kg;
+      }
+   };
+
+   /**
+    * \brief See comment on \c KettleSugars.
+    *
+    *        Additions made after the end of the boil proper (eg at flameout), during fermentation (eg fruit in
+    *        secondary) or at packaging (eg lactose or priming sugar) are not in the wort during the boil, so do not
+    *        count here.  See https://github.com/Brewtarget/brewtarget/issues/438.
+    */
+   KettleSugars kettleSugars() const {
+      KettleSugars ret;
+      auto const boil = this->m_self.boil();
+      double const boilTime_mins = boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
+      double const efficiency = this->m_self.efficiency_pct() / 100.0;
+
+      for (auto const & fermentableAddition : this->m_self.fermentableAdditions()) {
+         auto const stage = fermentableAddition->stage();
+         if (stage == RecipeAddition::Stage::Fermentation || stage == RecipeAddition::Stage::Packaging) {
+            continue;
+         }
+
+         auto const fermentable = fermentableAddition->fermentable();
+         double const sugar_kg =
+            fermentableAddition->equivSucrose_kg() * ((fermentable && fermentable->isExistingSugar()) ? 1.0 : efficiency);
+
+         if (stage == RecipeAddition::Stage::Boil) {
+            auto const timing = this->m_self.boilAdditionTiming(*fermentableAddition);
+            if (timing.postBoil) {
+               continue;
+            }
+            //
+            // Additions in a pre-boil step, or with no step or time, come out as being in the boil proper for the whole
+            // of the boil.  We allow a little tolerance for rounding in the step lengths.
+            //
+            if (timing.boilProper_mins < boilTime_mins - 0.01) {
+               ret.inBoilAdditions.emplace_back(
+                  KettleSugars::InBoilAddition{
+                     .addedBeforeFlameOut_mins = std::max(0.0, timing.boilProper_mins),
+                     .sugar_kg = sugar_kg
+                  }
+               );
+               continue;
+            }
+         }
+
+         ret.atStartOfBoil_kg += sugar_kg;
+      }
+
+      return ret;
+   }
+
+   /**
     * Emits changed(boilGrav). Depends on: _postBoilVolume_l, _boilVolume_l
+    *
+    * NB: This is the \b pre-boil gravity -- eg it's what we put in the brew log as the expected pre-boil gravity.  So it
+    *     only counts sugars that are in the wort at the start of the boil proper, and not, eg, extract added 15 minutes
+    *     before the end of the boil.  For IBU calculations, we use the gravity of the wort while the hops are in it --
+    *     see \c averageKettleGravity_sg.
     */
    void recalcBoilGrav() {
-      auto const sugars = this->m_self.sugarTotals();
-
-      // Since the efficiency refers to how much sugar we get into the fermentor,
-      // we need to adjust for that here.
-      double const sugar_kg{
-         this->m_self.efficiency_pct() / 100.0 *
-         (sugars.sugarsFromStarch_all_kg - sugars.sugarsFromStarch_lateAddition_kg) +
-         sugars.existingSugars_all_kg - sugars.existingSugars_lateAddition_kg
-      };
+      double const sugar_kg = this->kettleSugars().atStartOfBoil_kg;
 
       //
       // Pre-boil size is optional (in BeerJSON and dotBeer as well as for us), and there might not be a Boil at all.
@@ -1393,9 +1481,6 @@ public:
    }
 
    /**
-    * Emits changed(IBU). Depends on: _batchSize_l, _boilGrav, _boilVolume_l, _finalVolume_l
-    */
-   /**
     * \brief The inputs to IBU calculations that are the same for every hop addition in the recipe -- see
     *        \c ibuContext().
     */
@@ -1416,6 +1501,8 @@ public:
          double dissolvedAlphaAcidsBefore_ppm;
       };
       std::vector<KettleAddition> kettleAdditions = {};
+      //! What sugar is in the kettle when, for the wort gravity that each hop addition sees
+      KettleSugars kettleSugars = {};
    };
 
    /**
@@ -1443,6 +1530,51 @@ public:
       }
       double const proportionOfBoilRemaining = std::min(1.0, minutesBeforeFlameout / boilTime_mins);
       return atFlameout_l + (*commonParms.preBoilVolume_liters - atFlameout_l) * proportionOfBoilRemaining;
+   }
+
+   /**
+    * \brief Gravity of the wort in the kettle a given number of minutes before flameout (or at flameout if
+    *        \c minutesBeforeFlameout is 0 or less), taking into account both the sugars added up to that point and the
+    *        volume of wort at that point (which decreases during the boil due to evaporation).
+    *
+    *        NB: \c context.commonParms must already have its volume fields set.
+    */
+   double kettleGravity_sg(IbuContext const & context, double const minutesBeforeFlameout) const {
+      auto const boil = this->m_self.boil();
+      double const boilTime_mins = boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
+      double const volume_l = kettleVolume_l(context.commonParms, boilTime_mins, std::max(0.0, minutesBeforeFlameout));
+      if (volume_l <= 0.0) {
+         return 1.0;
+      }
+      return Algorithms::PlatoToSG_20C20C(
+         Algorithms::platoFromSugarMassAndWortVolume(
+            context.kettleSugars.inKettle_kg(std::max(0.0, minutesBeforeFlameout)), volume_l
+         )
+      );
+   }
+
+   /**
+    * \brief Average gravity of the wort over the last \c minutesBeforeFlameout minutes of the boil -- ie the gravity
+    *        seen by hops added that many minutes before flameout.  (This is what Tinseth means by "the average gravity
+    *        value for the entire boil to account for changes in the wort volume", and it is also what the other
+    *        formulae that use \c IbuCalculationParms::wortGravity_sg need.)
+    *
+    *        For hops added at or after flameout, this is just the gravity at flameout.
+    *
+    *        The gravity is a smooth function of time (as the wort evaporates) apart from steps when fermentables are
+    *        added, so the midpoint rule with steps of (at most) 0.1 minutes is plenty accurate.
+    */
+   double averageKettleGravity_sg(IbuContext const & context, double const minutesBeforeFlameout) const {
+      if (minutesBeforeFlameout <= 0.0) {
+         return this->kettleGravity_sg(context, 0.0);
+      }
+      int    const numSteps = std::max(1, static_cast<int>(std::ceil(minutesBeforeFlameout / 0.1)));
+      double const stepSize = minutesBeforeFlameout / numSteps;
+      double total = 0.0;
+      for (int ii = 0; ii < numSteps; ++ii) {
+         total += this->kettleGravity_sg(context, (ii + 0.5) * stepSize);
+      }
+      return total / numSteps;
    }
 
    /**
@@ -1485,9 +1617,9 @@ public:
       // For Tinseth this needs to be "volume of finished beer in liters", hence m_batchSize_l rather than
       // m_finalVolumeNoLosses_l
       parms.postBoilVolume_liters = this->m_self.m_batchSize_l;
-      // For Tinseth (and I think other methods) we want "the average gravity value for the entire boil to account for
-      // changes in the wort volume".
-      parms.wortGravity_sg             = this->m_boilGrav;
+      // The wort gravity depends on how long each hop addition is in the boil, so we can only set it once we have the
+      // kettle volumes (below).  It then gets overridden for each boil addition in ibuBreakdown().
+      context.kettleSugars = this->kettleSugars();
       parms.timeInBoil_minutes         = boilTime_mins; // But see ibuBreakdown()
       parms.coolTime_minutes           = profile.duration_mins;
       parms.postBoilTemperatureProfile = profile.segments;
@@ -1514,6 +1646,18 @@ public:
             }
          }
       }
+      //
+      // For Tinseth (and other methods that use wortGravity_sg) we want "the average gravity value for the entire boil
+      // to account for changes in the wort volume".  This is right for first wort and mash hops; for other boil
+      // additions, ibuBreakdown() uses the average over the time the hops are actually in the boil.  For formulae that
+      // model post-boil isomerization, what matters after flameout is the gravity at flameout.
+      //
+      parms.wortGravity_sg         = this->averageKettleGravity_sg(context, boilTime_mins);
+      parms.flameoutWortGravity_sg = this->kettleGravity_sg       (context, 0.0          );
+      qDebug() <<
+         Q_FUNC_INFO << "Average boil gravity:" << parms.wortGravity_sg << ", gravity at flameout:" <<
+         *parms.flameoutWortGravity_sg;
+
       // Normally there's only one yeast.  If there's more than one, we'll take the flocculation of the first one.
       for (auto const & yeastAddition : this->m_self.yeastAdditions()) {
          if (auto const yeast = yeastAddition->yeast()) {
@@ -1592,12 +1736,6 @@ public:
          qCritical() << Q_FUNC_INFO << "Using Hop volume as weight - THIS IS PROBABLY WRONG!";
       }
 
-      // NOTE: we used to carefully calculate the average boil gravity and use it in the
-      // IBU calculations. However, due to John Palmer
-      // (http://homebrew.stackexchange.com/questions/7343/does-wort-gravity-affect-hopAddition-utilization),
-      // it seems more appropriate to just use the OG directly, since it is the total
-      // amount of break material that truly affects the IBUs.
-
       IbuMethods::IbuCalculationParms parms = context.commonParms;
       parms.AArating   = hop->alpha_pct() / 100.0;
       parms.hops_grams = hopAddition.quantity() * 1000.0;
@@ -1636,6 +1774,12 @@ public:
                timing.boilProper_mins << ", afterFlameout_mins =" << timing.afterFlameout_mins <<
                ", postBoilRemaining_mins =" << timing.postBoilRemaining_mins;
             parms.timeInBoil_minutes = timing.boilProper_mins;
+            //
+            // The hops see the average gravity of the wort from when they are added until flameout, which depends on
+            // evaporation and on when any fermentables are added (eg late extract additions).  For post-boil additions,
+            // this is just the gravity at flameout.
+            //
+            parms.wortGravity_sg = this->averageKettleGravity_sg(context, timing.boilProper_mins);
             if (timing.postBoil) {
                // The hops are only in the hot wort from when they are added until the end of the post-boil steps.
                // (This only matters for formulae, such as mIBU and SMPH, that model post-boil isomerization.  Other
@@ -3475,30 +3619,14 @@ Recipe::Sugars Recipe::sugarTotals() const {
       // extract that has to be converted from starch in the mash is.  (Previously only Sugar, Extract and Dry_Extract
       // were treated as existing sugar, so eg fruit or honey additions were wrongly scaled by mash efficiency.)
       //
+      // (What is in the kettle when, which matters for the boil gravity and IBUs, is handled separately, in
+      // Recipe::impl::kettleSugars().)
       //
-      // For the boil gravity, what matters is whether this addition is in the wort during the boil proper.  As well as
-      // additions in a post-boil step (eg at flameout), that excludes additions during fermentation (eg fruit in
-      // secondary) or packaging (eg lactose or priming sugar).
-      //
-      bool const lateAddition = fermentableAddition->addAfterBoil() ||
-                                fermentableAddition->stage() == RecipeAddition::Stage::Fermentation ||
-                                fermentableAddition->stage() == RecipeAddition::Stage::Packaging;
-
       if (fermentable->isExistingSugar()) {
          ret.existingSugars_all_kg += fermentableAddition->equivSucrose_kg();
-
-         if (lateAddition) {
-            ret.existingSugars_lateAddition_kg += fermentableAddition->equivSucrose_kg();
-         }
-
          ret.existingSugars_nonFermentable_kg += fermentableAddition->equivSucrose_kg() * unfermentableShare;
       } else {
          ret.sugarsFromStarch_all_kg += fermentableAddition->equivSucrose_kg();
-
-         if (lateAddition) {
-            ret.sugarsFromStarch_lateAddition_kg += fermentableAddition->equivSucrose_kg();
-         }
-
          ret.sugarsFromStarch_nonFermentable_kg += fermentableAddition->equivSucrose_kg() * unfermentableShare;
       }
    }

@@ -1017,20 +1017,10 @@ public:
        */
       double existingSugars_nonFermentable_kg = 0.0;
       /**
-       * The part of \c existingSugars_all_kg that is not in the wort during the boil proper -- ie added in a post-boil
-       * step (eg at flameout), during fermentation or at packaging
-       */
-      double existingSugars_lateAddition_kg = 0.0;
-      /**
        * Total sugars from Fermentable additions whose extract has to come from starch converted in the mash (ie for
        * which \c Fermentable::isExistingSugar() is false: grains and "other" adjuncts)
        */
       double sugarsFromStarch_all_kg = 0.0;
-      /**
-       * The part of \c sugarsFromStarch_all_kg that is not in the wort during the boil proper -- ie added in a post-boil
-       * step (eg at flameout), during fermentation or at packaging
-       */
-      double sugarsFromStarch_lateAddition_kg = 0.0;
       /**
        * The part of \c sugarsFromStarch_all_kg that yeast cannot ferment, per \c Fermentable::fermentableFraction_pct.
        * NB: Like \c sugarsFromStarch_all_kg, this is \b before applying mash efficiency.

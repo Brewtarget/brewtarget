@@ -119,7 +119,7 @@ endif()
 #=======================================================================================================================
 # It's simplest to keep the project name all lower-case as it means we can use a lot more of the default settings for
 # Linux packaging (where directory names etc are expected to be all lower-case).
-project(brewtarget VERSION 5.3.1 LANGUAGES CXX)
+project(brewtarget VERSION 5.3.2 LANGUAGES CXX)
 message(STATUS "Building ${PROJECT_NAME} version ${PROJECT_VERSION} with CMake ${CMAKE_VERSION}")
 message(STATUS "PROJECT_SOURCE_DIR is ${PROJECT_SOURCE_DIR}")
 
@@ -1173,6 +1173,7 @@ add_test(NAME RecipeCalcTests.testEquipmentDefaultVolumes           COMMAND ./${
 add_test(NAME RecipeCalcTests.testMashTunHeatCapacity               COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testMashTunHeatCapacity              )
 add_test(NAME RecipeCalcTests.testWaterAlkalinity                   COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testWaterAlkalinity                  )
 add_test(NAME RecipeCalcTests.testLateFermentableAdditions          COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testLateFermentableAdditions         )
+add_test(NAME RecipeCalcTests.testTimeWeightedBoilGravity           COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testTimeWeightedBoilGravity          )
 add_test(NAME RecipeCalcTests.testRecipeSnapshot                    COMMAND ./${fileName_unitTestRunner} RecipeCalcTests testRecipeSnapshot                   )
 add_test(NAME SerializationTests.testDotBeerImportedRecipeCalcs     COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerImportedRecipeCalcs    )
 add_test(NAME SerializationTests.testDotBeerAdditionStepCorrection  COMMAND ./${fileName_unitTestRunner} SerializationTests testDotBeerAdditionStepCorrection )
