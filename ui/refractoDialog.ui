@@ -134,15 +134,10 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QPushButton" name="pushButton_calculate">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Calculate</string>
+        <!-- Shown if the original gravity and original Plato that the user entered don't agree -->
+        <widget class="QLabel" name="label_warning">
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -330,7 +325,6 @@
   <tabstop>lineEdit_re</tabstop>
   <tabstop>lineEdit_abv</tabstop>
   <tabstop>lineEdit_abw</tabstop>
-  <tabstop>pushButton_calculate</tabstop>
  </tabstops>
  <resources/>
  <connections/>

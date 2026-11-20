@@ -21,7 +21,6 @@
 #include "tools/OgCorrectionTool.h"
 
 #include <QEvent>
-#include <QMessageBox>
 
 #include "calculations/Algorithms.h"
 #include "MainWindow.h"
@@ -63,9 +62,15 @@ OgCorrectionTool::OgCorrectionTool(QWidget * parent) :
    SMART_FIELD_INIT_FS   (OgCorrectionTool, label_finalBatchSize  , value_finalBatchSize  , double, Measurement::PhysicalQuantity::Volume        );
    SMART_FIELD_INIT_FS   (OgCorrectionTool, label_addSugarOrDme   , value_addSugarOrDme   , double, Measurement::PhysicalQuantity::Mass       , 1);
 
-   connect(this->pushButton_calculate, &QAbstractButton::clicked, this, &OgCorrectionTool::calculate);
+   // We recalculate whenever an input changes, so there is no need for a "Calculate" button
+   connect(this->lineEdit_measuredSg   , &SmartLineEdit::textModified, this, &OgCorrectionTool::calculate);
+   connect(this->lineEdit_measuredTemp , &SmartLineEdit::textModified, this, &OgCorrectionTool::calculate);
+   connect(this->lineEdit_calTemp      , &SmartLineEdit::textModified, this, &OgCorrectionTool::calculate);
+   connect(this->lineEdit_preBoilVolume, &SmartLineEdit::textModified, this, &OgCorrectionTool::calculate);
    connect(&MainWindow::instance(), &MainWindow::newRecipeSelected, this, &OgCorrectionTool::newlySelectedRecipe);
 
+   this->label_problem->setStyleSheet(style_red);
+   this->label_problem->setVisible(false);
    this->hideOutputs();
    return;
 }
@@ -76,7 +81,7 @@ void OgCorrectionTool::setRecipe(Recipe * rec) {
    if (rec && rec != this->m_recObs) {
       this->m_recObs = rec;
       this->value_targetOg->setQuantity(this->m_recObs->og());
-      this->hideOutputs();
+      this->calculate();
    }
    return;
 }
@@ -89,34 +94,40 @@ void OgCorrectionTool::newlySelectedRecipe() {
 // TODO: There are a LOT of assumptions and simplifications here. Need to change that.
 void OgCorrectionTool::calculate() {
 
-   if (!this->m_recObs) {
-      QMessageBox::critical(this,
-                            tr("No Recipe Selected"),
-                            tr("You need to have a recipe open in the main window before you can use this tool."));
-      return;
-   }
-
-   auto const equipment = this->m_recObs->equipment();
-   if (!equipment) {
-      QMessageBox::critical(this,
-                            tr("No Equipment on Recipe"),
-                            tr("Recipe \"%1\" has no equipment.").arg(this->m_recObs->name()));
-      return;
-   }
-
-   auto const boil = this->m_recObs->boil();
-   if (!boil) {
-      QMessageBox::critical(this,
-                            tr("No Boil on Recipe"),
-                            tr("Recipe \"%1\" has no boil.").arg(this->m_recObs->name()));
-      return;
-   }
-
    //
    // Start with all the output boxes hidden.  We'll show different ones depending on whether the wort is
    // above-/below-/on-target.
    //
    this->hideOutputs();
+   this->value_actualSg->setRawText("");
+   this->label_problem->setVisible(false);
+
+   //
+   // Because we recalculate as soon as any input changes, we tell the user about missing recipe info in the dialog
+   // itself rather than with a pop-up.
+   //
+   auto showProblem = [this](QString const & text) {
+      this->label_problem->setText(text);
+      this->label_problem->setVisible(true);
+      return;
+   };
+
+   if (!this->m_recObs) {
+      showProblem(tr("You need to have a recipe open in the main window before you can use this tool."));
+      return;
+   }
+
+   auto const equipment = this->m_recObs->equipment();
+   if (!equipment) {
+      showProblem(tr("Recipe \"%1\" has no equipment.").arg(this->m_recObs->name()));
+      return;
+   }
+
+   auto const boil = this->m_recObs->boil();
+   if (!boil) {
+      showProblem(tr("Recipe \"%1\" has no boil.").arg(this->m_recObs->name()));
+      return;
+   }
 
    //
    // If the user entered Plato or Brix, we use that as-is.  If they entered Specific Gravity, then, provided they gave
@@ -161,12 +172,12 @@ void OgCorrectionTool::calculate() {
       }
    }
 
+   //
+   // If an input is blank, the user probably just hasn't got to it yet, so we quietly wait.  If it's not blank but we
+   // can't read it, we highlight it.
+   //
    if (std::isnan(startGravityAt20C_sg)) {
-      this->lineEdit_measuredSg->setStyleSheet(style_redBorder);
-      // TODO Probably would be better to have this error message in the form rather than a pop-up
-      QMessageBox::critical(this,
-                            tr("Couldn't read input"),
-                            tr("Need a valid value for Measured Gravity"));
+      this->lineEdit_measuredSg->setStyleSheet(this->lineEdit_measuredSg->isBlank() ? "" : style_redBorder);
       return;
    }
    this->lineEdit_measuredSg->setStyleSheet("");
@@ -176,11 +187,7 @@ void OgCorrectionTool::calculate() {
    double const wort_l      = lineEdit_preBoilVolume->getNonOptCanonicalQty(&parsedOk);
 
    if (lineEdit_preBoilVolume->isBlank() || !parsedOk) {
-      this->lineEdit_preBoilVolume->setStyleSheet(style_redBorder);
-      // TODO Probably would be better to have this error message in the form rather than a pop-up
-      QMessageBox::critical(this,
-                            tr("Couldn't read input"),
-                            tr("Need a valid value for Wort Volume"));
+      this->lineEdit_preBoilVolume->setStyleSheet(this->lineEdit_preBoilVolume->isBlank() ? "" : style_redBorder);
       return;
    }
    this->lineEdit_preBoilVolume->setStyleSheet("");

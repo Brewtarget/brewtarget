@@ -53,8 +53,6 @@ private slots:
    void updateAgeTemp();
    void updateDate(std::optional<QDate> const date);
    void updateCarbonation();
-   void updateTasteNotes();
-   void updateNotes();
    void updateAcidity();
    void updateAttenuation();
 

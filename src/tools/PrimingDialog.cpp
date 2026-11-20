@@ -49,13 +49,22 @@ PrimingDialog::PrimingDialog(QWidget* parent) : QDialog(parent) {
    SMART_FIELD_INIT_FS(PrimingDialog, label_vols   , lineEdit_vols   , double, Measurement::PhysicalQuantity::Carbonation, 1);
    SMART_FIELD_INIT_FS(PrimingDialog, label_output , lineEdit_output , double, Measurement::PhysicalQuantity::Mass          );
 
-   connect(pushButton_calculate, &QAbstractButton::clicked, this, &PrimingDialog::calculate);
+   // We recalculate whenever an input changes, so there is no need for a "Calculate" button
+   connect(this->lineEdit_beerVol, &SmartLineEdit::textModified          , this, &PrimingDialog::calculate);
+   connect(this->lineEdit_temp   , &SmartLineEdit::textModified          , this, &PrimingDialog::calculate);
+   connect(this->lineEdit_vols   , &SmartLineEdit::textModified          , this, &PrimingDialog::calculate);
+   connect(this->sugarGroup      , &QButtonGroup::buttonClicked          , this, &PrimingDialog::calculate);
    return;
 }
 
 PrimingDialog::~PrimingDialog() = default;
 
 void PrimingDialog::calculate() {
+   // Wait until the user has filled in all the inputs
+   if (this->lineEdit_beerVol->isBlank() || this->lineEdit_temp->isBlank() || this->lineEdit_vols->isBlank()) {
+      this->lineEdit_output->clear();
+      return;
+   }
 
    double const beer_l      = lineEdit_beerVol->getNonOptCanonicalQty();
    double const temp_c      = lineEdit_temp   ->getNonOptCanonicalQty();

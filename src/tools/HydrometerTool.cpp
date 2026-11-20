@@ -24,7 +24,6 @@
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include <QPushButton>
 #include <QSpacerItem>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -47,7 +46,10 @@ HydrometerTool::HydrometerTool(QWidget* parent) : QDialog(parent) {
 
    this->lineEdit_calibratedTemp->setQuantity(15.55555556);
 
-   connect(this->pushButton_convert,   &QAbstractButton::clicked,                      this,                          &HydrometerTool::convert   );
+   // We recalculate whenever an input changes, so there is no need for a "Convert" button
+   connect(this->lineEdit_inputSg,        &SmartLineEdit::textModified, this, &HydrometerTool::convert);
+   connect(this->lineEdit_inputTemp,      &SmartLineEdit::textModified, this, &HydrometerTool::convert);
+   connect(this->lineEdit_calibratedTemp, &SmartLineEdit::textModified, this, &HydrometerTool::convert);
    connect(this->label_inputTemp,      &SmartLabel::changedUnitsOrPrecision, this->lineEdit_inputTemp,      &SmartLineEdit::lineChanged);
    connect(this->label_inputSg,        &SmartLabel::changedUnitsOrPrecision, this->lineEdit_inputSg,        &SmartLineEdit::lineChanged);
    connect(this->label_outputSg,       &SmartLabel::changedUnitsOrPrecision, this->lineEdit_outputSg,       &SmartLineEdit::lineChanged);
@@ -117,12 +119,8 @@ void HydrometerTool::doLayout() {
   formLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
   QVBoxLayout* vLayout = new QVBoxLayout();
      QSpacerItem* verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-        pushButton_convert = new QPushButton(this);
-           pushButton_convert->setAutoDefault(false);
-           pushButton_convert->setDefault(true);
         QSpacerItem* verticalSpacer2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
            vLayout->addItem(verticalSpacer);
-           vLayout->addWidget(pushButton_convert);
            vLayout->addWidget(groupBox_inputSg);
            vLayout->addItem(verticalSpacer2);
 
@@ -142,7 +140,6 @@ void HydrometerTool::retranslateUi() {
    label_inputTemp     ->setText(tr("Temperature"));
    label_calibratedTemp->setText(tr("Hydrometer Calibration"));
    label_outputSg      ->setText(tr("Adjust SG"));
-   pushButton_convert  ->setText(tr("Convert"));
 #ifndef QT_NO_TOOLTIP
    lineEdit_inputSg  ->setToolTip(tr("Measured gravity"));
    lineEdit_inputTemp->setToolTip(tr("Temperature"));
@@ -152,6 +149,12 @@ void HydrometerTool::retranslateUi() {
 }
 
 void HydrometerTool::convert() {
+   // Wait until the user has filled in all the inputs
+   if (this->lineEdit_inputSg->isBlank() || this->lineEdit_inputTemp->isBlank() || this->lineEdit_calibratedTemp->isBlank()) {
+      this->lineEdit_outputSg->clear();
+      return;
+   }
+
    double correctedGravity = Algorithms::correctSgForTemperature(
       lineEdit_inputSg       ->getNonOptCanonicalQty(),       // measured gravity
       lineEdit_inputTemp     ->getNonOptCanonicalQty(),     // temperature at time of reading in Celsius

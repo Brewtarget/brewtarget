@@ -2771,6 +2771,17 @@ Klikněte na „OK“ pro ukončení %2, abyste mohli aktualizovat na novější
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4265,7 +4276,7 @@ Klikněte na „OK“ pro ukončení %2, abyste mohli aktualizovat na novější
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Převést</translation>
+        <translation type="obsolete">Převést</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4833,6 +4844,10 @@ Pokud potřebujete pomoc, založte prosím issue na %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Následující přísady se v receptu a na skladě měří odlišně, takže použitá množství nebylo možné (všechna) odečíst ze skladu.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">Přidat %1 do receptu</translation>
     </message>
 </context>
 <context>
@@ -5947,19 +5962,19 @@ Chcete vytvořit kopii tohoto rmutu pro tento recept, abyste to mohli udělat, a
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Nelze načíst vstup</translation>
+        <translation type="obsolete">Nelze načíst vstup</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Je třeba platná hodnota naměřené hustoty</translation>
+        <translation type="obsolete">Je třeba platná hodnota naměřené hustoty</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Není vybrán žádný recept</translation>
+        <translation type="obsolete">Není vybrán žádný recept</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Recept nemá vybavení</translation>
+        <translation type="obsolete">Recept nemá vybavení</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -5967,7 +5982,7 @@ Chcete vytvořit kopii tohoto rmutu pro tento recept, abyste to mohli udělat, a
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Recept nemá chmelovar</translation>
+        <translation type="obsolete">Recept nemá chmelovar</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -5975,7 +5990,7 @@ Chcete vytvořit kopii tohoto rmutu pro tento recept, abyste to mohli udělat, a
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Je třeba platná hodnota objemu mladiny</translation>
+        <translation type="obsolete">Je třeba platná hodnota objemu mladiny</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8695,11 +8710,11 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Upravit poznámky k chuti</translation>
+        <translation type="obsolete">Upravit poznámky k chuti</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Upravit poznámky</translation>
+        <translation type="obsolete">Upravit poznámky</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -9014,6 +9029,17 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Upravit poznámky</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Upravit poznámky k chuti</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTableModel</name>
     <message>
         <source>Name</source>
@@ -9141,7 +9167,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Neshoda počáteční hustoty</translation>
+        <translation type="vanished">Neshoda počáteční hustoty</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -9986,7 +10012,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">Přidat %1 do receptu</translation>
+        <translation type="obsolete">Přidat %1 do receptu</translation>
     </message>
 </context>
 <context>
@@ -10020,7 +10046,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Převést</translation>
+        <translation type="obsolete">Převést</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -13771,6 +13797,14 @@ nádob</translation>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Při odhadu konečné hustoty zohlednit, jak teploty a doby rmutování ovlivňují zkvasitelnost mladiny.  Nechte vypnuté, pokud jste nastavili prokvašení kvasnic tak, aby odpovídalo vašemu vlastnímu rmutování.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Poznámky</translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14621,7 +14655,7 @@ nádob</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Vypočítat</translation>
+        <translation type="obsolete">Vypočítat</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -15286,7 +15320,7 @@ Pouze mIBU a SMPH dávají IBU pro chmel přidaný po vypnutí plamene (např. w
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Spočítat</translation>
+        <translation type="vanished">Spočítat</translation>
     </message>
 </context>
 <context>
@@ -15353,11 +15387,11 @@ Pouze mIBU a SMPH dávají IBU pro chmel přidaný po vypnutí plamene (např. w
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Poznámky k chuti</translation>
+        <translation type="vanished">Poznámky k chuti</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Poznámky</translation>
+        <translation type="vanished">Poznámky</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15390,6 +15424,29 @@ Pouze mIBU a SMPH dávají IBU pro chmel přidaný po vypnutí plamene (např. w
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Jak čirou očekáváte mladinu při převodu do kvasné nádoby (např. podle toho, zda používáte čeřidla v pánvi nebo whirlpool).&lt;/p&gt;&lt;p&gt;Zakalenější mladina ztrácí během kvašení více hořkosti.&lt;/p&gt;&lt;p&gt;Používá se pouze ve vzorci SMPH IBU.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Poznámky</translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished">Poznámky k chuti</translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15543,7 +15600,7 @@ Pouze mIBU a SMPH dávají IBU pro chmel přidaný po vypnutí plamene (např. w
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Spočítat</translation>
+        <translation type="vanished">Spočítat</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -16081,7 +16138,7 @@ Pouze mIBU a SMPH dávají IBU pro chmel přidaný po vypnutí plamene (např. w
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Vypočítat</translation>
+        <translation type="vanished">Vypočítat</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

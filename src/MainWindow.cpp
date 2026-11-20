@@ -268,10 +268,10 @@ public:
     *        Anything creating new tables models, filter proxies and configuring the two should go in here
     */
    void setupTables() {
-      this->m_fermentableAdditionsVeriTable.setup(m_self. fermentableAdditionTable, this->m_fermentableEditor.get());
-      this->        m_hopAdditionsVeriTable.setup(m_self.         hopAdditionTable, this->        m_hopEditor.get());
-      this->       m_miscAdditionsVeriTable.setup(m_self.        miscAdditionTable, this->       m_miscEditor.get());
-      this->      m_yeastAdditionsVeriTable.setup(m_self.       yeastAdditionTable, this->      m_yeastEditor.get());
+      this->m_fermentableAdditionsVeriTable.setup(m_self. fermentableAdditionTable, this->m_fermentableEditor.get(), m_self.pushButton_removeFerm , m_self.pushButton_editFerm );
+      this->        m_hopAdditionsVeriTable.setup(m_self.         hopAdditionTable, this->        m_hopEditor.get(), m_self.pushButton_removeHop  , m_self.pushButton_editHop  );
+      this->       m_miscAdditionsVeriTable.setup(m_self.        miscAdditionTable, this->       m_miscEditor.get(), m_self.pushButton_removeMisc , m_self.pushButton_editMisc );
+      this->      m_yeastAdditionsVeriTable.setup(m_self.       yeastAdditionTable, this->      m_yeastEditor.get(), m_self.pushButton_removeYeast, m_self.pushButton_editYeast);
 
       // Make the fermentable table show grain percentages in row headers.
       this->m_fermentableAdditionsVeriTable.m_tableModel->setDisplayPercentages(true);
@@ -1378,6 +1378,10 @@ void MainWindow::restoreSavedState() {
    PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_hop_headerState        , *this->treeView_hop        ->header());
    PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_misc_headerState       , *this->treeView_misc       ->header());
    PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_yeast_headerState      , *this->treeView_yeast      ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_mash_headerState       , *this->treeView_mash       ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_boil_headerState       , *this->treeView_boil       ->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_fermentation_headerState, *this->treeView_fermentation->header());
+   PersistentSettings::restoreUiState(PersistentSettings::Names::treeView_water_headerState      , *this->treeView_water      ->header());
 
    PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_boilCatalog        , *this->pimpl->m_boilCatalog        );
    PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_equipmentCatalog   , *this->pimpl->m_equipmentCatalog   );
@@ -1404,6 +1408,11 @@ void MainWindow::restoreSavedState() {
    this->        mashStepsWidget->restoreUiState(PersistentSettings::Names::        mashStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->        boilStepsWidget->restoreUiState(PersistentSettings::Names::        boilStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->fermentationStepsWidget->restoreUiState(PersistentSettings::Names::fermentationStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
+
+   this->pimpl->m_fermentableAdditionsVeriTable.m_tableModel->restoreUiState(PersistentSettings::Names::fermentableAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->        m_hopAdditionsVeriTable.m_tableModel->restoreUiState(PersistentSettings::Names::        hopAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->       m_miscAdditionsVeriTable.m_tableModel->restoreUiState(PersistentSettings::Names::       miscAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->      m_yeastAdditionsVeriTable.m_tableModel->restoreUiState(PersistentSettings::Names::      yeastAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
 
    PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_optionsDialog, *this->pimpl->m_optionDialog);
    PersistentSettings::restoreGeometry(PersistentSettings::Names::geometry_stockWindow  , *this->pimpl->m_stockWindow);
@@ -1619,6 +1628,7 @@ void MainWindow::setRecipe(Recipe * recipe) {
    this->pimpl->m_recipeFormatter->setRecipe(recipe);
    this->pimpl->m_ogCorrectionTool->setRecipe(recipe);
    this->recipeExtrasWidget->setRecipe(recipe);
+   this->recipeNotesWidget->setRecipe(recipe);
    this->recipeWaterWidget->setRecipe(recipe);
    this->equipmentComboBox->setItem(recipe->equipment());
    if (recipe->equipment()) {
@@ -1724,26 +1734,16 @@ void MainWindow::lockRecipe(int const state) {
 
    tabWidget_ingredients->setAcceptDrops( enabled );
 
-   // Onto the tables. Four lines each to disable edits, drag/drop and deletes
-   fermentableAdditionTable->setEnabled(enabled);
-   pushButton_addFerm->setEnabled(enabled);
-   pushButton_removeFerm->setEnabled(enabled);
-   pushButton_editFerm->setEnabled(enabled);
-
-   hopAdditionTable->setEnabled(enabled);
-   pushButton_addHop->setEnabled(enabled);
-   pushButton_removeHop->setEnabled(enabled);
-   pushButton_editHop->setEnabled(enabled);
-
-   miscAdditionTable->setEnabled(enabled);
-   pushButton_addMisc->setEnabled(enabled);
-   pushButton_removeMisc->setEnabled(enabled);
-   pushButton_editMisc->setEnabled(enabled);
-
-   yeastAdditionTable->setEnabled(enabled);
+   // Onto the tables.  The VeriTable takes care of the table itself and of the Remove and Edit buttons (which also
+   // depend on what is selected).
+   this->pimpl->m_fermentableAdditionsVeriTable.setEditable(enabled);
+   this->pimpl->        m_hopAdditionsVeriTable.setEditable(enabled);
+   this->pimpl->       m_miscAdditionsVeriTable.setEditable(enabled);
+   this->pimpl->      m_yeastAdditionsVeriTable.setEditable(enabled);
+   pushButton_addFerm ->setEnabled(enabled);
+   pushButton_addHop  ->setEnabled(enabled);
+   pushButton_addMisc ->setEnabled(enabled);
    pushButton_addYeast->setEnabled(enabled);
-   pushButton_removeYeast->setEnabled(enabled);
-   pushButton_editYeast->setEnabled(enabled);
 
    this->pimpl-> m_fermentableCatalog->setEnableAddToRecipe(enabled);
    this->pimpl->  m_hopCatalog->setEnableAddToRecipe(enabled);
@@ -2626,6 +2626,10 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/) {
    PersistentSettings::saveUiState(PersistentSettings::Names::treeView_hop_headerState        , *this->treeView_hop        ->header());
    PersistentSettings::saveUiState(PersistentSettings::Names::treeView_misc_headerState       , *this->treeView_misc       ->header());
    PersistentSettings::saveUiState(PersistentSettings::Names::treeView_yeast_headerState      , *this->treeView_yeast      ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_mash_headerState       , *this->treeView_mash       ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_boil_headerState       , *this->treeView_boil       ->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_fermentation_headerState, *this->treeView_fermentation->header());
+   PersistentSettings::saveUiState(PersistentSettings::Names::treeView_water_headerState      , *this->treeView_water      ->header());
 
    PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_boilCatalog           , *this->pimpl->m_boilCatalog           );
    PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_equipmentCatalog      , *this->pimpl->m_equipmentCatalog      );
@@ -2652,6 +2656,11 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/) {
    this->        mashStepsWidget->saveUiState(PersistentSettings::Names::        mashStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->        boilStepsWidget->saveUiState(PersistentSettings::Names::        boilStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
    this->fermentationStepsWidget->saveUiState(PersistentSettings::Names::fermentationStepTableWidget_headerState, PersistentSettings::Sections::MainWindow);
+
+   this->pimpl->m_fermentableAdditionsVeriTable.m_tableModel->saveUiState(PersistentSettings::Names::fermentableAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->        m_hopAdditionsVeriTable.m_tableModel->saveUiState(PersistentSettings::Names::        hopAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->       m_miscAdditionsVeriTable.m_tableModel->saveUiState(PersistentSettings::Names::       miscAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
+   this->pimpl->      m_yeastAdditionsVeriTable.m_tableModel->saveUiState(PersistentSettings::Names::      yeastAdditionTable_headerState, PersistentSettings::Sections::MainWindow);
 
    PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_optionsDialog, *this->pimpl->m_optionDialog);
    PersistentSettings::saveGeometry(PersistentSettings::Names::geometry_stockWindow  , *this->pimpl->m_stockWindow);

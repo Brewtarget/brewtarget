@@ -59,6 +59,8 @@ BtTableModel::BtTableModel(QTableView * parent,
    // (In theory, QHeaderView::ResizeToContents automatically sets a fixed size that's right for all the data, but, in
    // practice it doesn't always do what you want, so it's better to give the user some control).
    columnHeaderView->setSectionResizeMode(QHeaderView::Interactive);
+   // Have the last column take up any spare width, so we don't leave an empty strip at the right of the table
+   columnHeaderView->setStretchLastSection(true);
 
    return;
 }
@@ -93,7 +95,11 @@ void BtTableModel::saveUiState(BtStringConst const & property, BtStringConst con
 }
 
 void BtTableModel::restoreUiState(BtStringConst const & property, BtStringConst const & section) {
-   PersistentSettings::restoreUiState(property, *this->m_parentTableWidget->horizontalHeader(), section);
+   QHeaderView & columnHeaderView = *this->m_parentTableWidget->horizontalHeader();
+   PersistentSettings::restoreUiState(property, columnHeaderView, section);
+   // Saved header state includes the "stretch last section" setting, and older versions of the software did not set it,
+   // so we need to (re)set it after restoring.
+   columnHeaderView.setStretchLastSection(true);
    return;
 }
 

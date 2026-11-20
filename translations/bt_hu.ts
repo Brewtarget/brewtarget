@@ -2856,6 +2856,17 @@ Kattints az &apos;OK&apos; gombra a(z) %2 bezárásához, hogy frissíthess egy 
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4386,7 +4397,7 @@ Kattints az &apos;OK&apos; gombra a(z) %2 bezárásához, hogy frissíthess egy 
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Átváltás</translation>
+        <translation type="obsolete">Átváltás</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4951,6 +4962,10 @@ Ha segítségre van szükséged, nyiss egy hibajegyet itt: %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">A következő összetevő(k) eltérő módon vannak mérve a receptben és a készletben, ezért a felhasznált mennyiség(ek) nem (mind) vonható(k) le a készletből.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6059,19 +6074,19 @@ Készítesz másolatot erről a cefréről ehhez a recepthez, hogy ezt anélkül
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">A bemenet nem olvasható</translation>
+        <translation type="obsolete">A bemenet nem olvasható</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Érvényes mért fajsúly szükséges</translation>
+        <translation type="obsolete">Érvényes mért fajsúly szükséges</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Nincs kiválasztott recept</translation>
+        <translation type="obsolete">Nincs kiválasztott recept</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">A recepthez nincs felszerelés</translation>
+        <translation type="obsolete">A recepthez nincs felszerelés</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -6079,7 +6094,7 @@ Készítesz másolatot erről a cefréről ehhez a recepthez, hogy ezt anélkül
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">A recepthez nincs forralás</translation>
+        <translation type="obsolete">A recepthez nincs forralás</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -6087,7 +6102,7 @@ Készítesz másolatot erről a cefréről ehhez a recepthez, hogy ezt anélkül
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Érvényes sörlémennyiség szükséges</translation>
+        <translation type="obsolete">Érvényes sörlémennyiség szükséges</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8767,14 +8782,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Edit Taste Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change pH</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9095,6 +9102,17 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RecipeTableModel</name>
     <message>
         <source>Name</source>
@@ -9220,7 +9238,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Nem egyező kezdeti fajsúly</translation>
+        <translation type="vanished">Nem egyező kezdeti fajsúly</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -10066,13 +10084,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
 </context>
 <context>
-    <name>Undoable</name>
-    <message>
-        <source>Add %1 to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -10103,7 +10114,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Átváltás</translation>
+        <translation type="obsolete">Átváltás</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -13751,6 +13762,14 @@ Tabs</source>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Megjegyzések</translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14433,10 +14452,6 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Calculate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14987,10 +15002,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
         <source>How much priming ingredient to use</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Calculate</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>recipeExtrasWidget</name>
@@ -15019,12 +15030,8 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Taste Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Notes</source>
-        <translation>Megjegyzések</translation>
+        <translation type="vanished">Megjegyzések</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15056,6 +15063,29 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Forma</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Megjegyzések</translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -15206,10 +15236,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Current Plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -15692,10 +15718,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Infusion Water Temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -21,6 +21,7 @@
 #include <utility>
 
 #include <QHBoxLayout>
+#include <QItemSelectionModel>
 #include <QList>
 #include <QMetaObject>
 #include <QSpacerItem>
@@ -232,9 +233,38 @@ public:
 
       this->m_neTableModel->observeDatabase(true);
 
+      //
+      // Enable/disable the buttons that act on the selection according to what is selected.  Filtering or sorting can
+      // change which rows are visible (and thus selected) without a selectionChanged signal, so we listen for that too.
+      //
+      auto updateButtons = [&]() { this->updateButtonStates(); return; };
+      this->derived().connect(this->m_tableWidget->selectionModel(),
+                              &QItemSelectionModel::selectionChanged,
+                              &this->derived(),
+                              updateButtons);
+      this->derived().connect(this->m_sortFilterProxy, &QAbstractItemModel::modelReset   , &this->derived(), updateButtons);
+      this->derived().connect(this->m_sortFilterProxy, &QAbstractItemModel::rowsRemoved  , &this->derived(), updateButtons);
+      this->derived().connect(this->m_sortFilterProxy, &QAbstractItemModel::layoutChanged, &this->derived(), updateButtons);
+      this->updateButtonStates();
+
       return;
    }
    virtual ~CatalogBase() = default;
+
+   /**
+    * \brief Edit, Add to recipe and New stock purchase need exactly one item selected; Delete needs at least one.
+    *        (New and Show stock purchases are always available.)
+    */
+   void updateButtonStates() {
+      int const numSelected = this->getNumSelected();
+      this->m_pushButton_edit  ->setEnabled(numSelected == 1);
+      this->m_pushButton_delete->setEnabled(numSelected >= 1);
+      this->m_pushButton_addToRecipe->setEnabled(this->m_addToRecipeAllowed && numSelected == 1);
+      if constexpr (CanHaveStockPurchase<NE>) {
+         this->m_pushButton_newStockPurchase->setEnabled(numSelected == 1);
+      }
+      return;
+   }
 
    void retranslateUi() {
       this->m_contextMenus.retranslateUi();
@@ -288,8 +318,9 @@ public:
     */
    void setEnableAddToRecipe(bool enabled) {
       if constexpr (IsTableModel<NeTableModel>) {
-         this->m_pushButton_addToRecipe->setEnabled(enabled);
+         this->m_addToRecipeAllowed = enabled;
          this->m_contextMenus.m_action_addToRecipe.setEnabled(enabled);
+         this->updateButtonStates();
       }
       return;
    }
@@ -550,6 +581,9 @@ public:
 
    NeTableModel *           m_neTableModel;
    NeSortFilterProxyModel * m_sortFilterProxy;
+
+   //! Set to \c false by \c setEnableAddToRecipe when the current recipe is locked
+   bool m_addToRecipeAllowed = true;
 };
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)

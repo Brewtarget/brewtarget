@@ -23,10 +23,12 @@
 #include <vector>
 
 #include <QAbstractButton>
+#include <QCoreApplication>
 #include <QEvent>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QScopedValueRollback>
 #include <QString>
 #include <QPlainTextEdit>
 
@@ -322,7 +324,15 @@ public:
       // Standard editor slot connections
       this->derived().connect(this->derived().pushButton_new   , &QAbstractButton::clicked, &this->derived(), &Derived::clickedNew   );
       this->derived().connect(this->derived().pushButton_save  , &QAbstractButton::clicked, &this->derived(), &Derived::saveAndClose );
-      this->derived().connect(this->derived().pushButton_cancel, &QAbstractButton::clicked, &this->derived(), &Derived::clearAndClose);
+      this->derived().connect(this->derived().pushButton_cancel,
+                              &QAbstractButton::clicked,
+                              &this->derived(),
+                              [this]() {
+                                 if (this->confirmDiscardUnsavedChanges()) {
+                                    this->derived().clearAndClose();
+                                 }
+                                 return;
+                              });
       //
       // For editors with a recipe, pressing Escape or closing the window (both of which end up in QDialog::reject())
       // needs to do the same as clicking Cancel.  Otherwise, a new item that doEditForRecipe created for the recipe
@@ -343,6 +353,74 @@ public:
       }
       //
       this->connectLiveEditSignalsAndSlots();
+      //
+      // Note when the user changes something, so we can check with them before throwing their changes away
+      //
+      if (this->m_fields) {
+         for (auto const & field : *this->m_fields) {
+            std::visit(
+               [this](auto&& fieldInfo) {
+                  fieldInfo.connectFieldChanged(&this->derived(), [this]() { this->noteInputFieldModified(); return; });
+               },
+               field
+            );
+         }
+      }
+      return;
+   }
+
+   /**
+    * \brief Called when any input field is modified.  If it was the user (rather than us) who modified it, then the
+    *        editor now has unsaved changes.
+    */
+   void noteInputFieldModified() {
+      if (!this->m_updatingFields && this->m_editItem) {
+         this->m_hasUnsavedChanges = true;
+      }
+      return;
+   }
+
+   /**
+    * \brief If the user has made changes in the editor that they have not saved, ask them whether it's OK to throw them
+    *        away.
+    *
+    * \return \c true if there are no unsaved changes or the user is happy to discard them; \c false if the user wants
+    *         to carry on editing
+    */
+   bool confirmDiscardUnsavedChanges() {
+      if (!this->m_hasUnsavedChanges || !this->derived().isVisible()) {
+         return true;
+      }
+      QMessageBox::StandardButton const answer = QMessageBox::question(
+         &this->derived(),
+         // Using QCoreApplication::translate with a fixed context means these strings only need translating once,
+         // rather than once per editor class.
+         QCoreApplication::translate("EditorBase", "Unsaved Changes"),
+         QCoreApplication::translate(
+            "EditorBase", "You have made changes to %1 \"%2\" that have not been saved.  Discard them?"
+         ).arg(
+            NE::localisedName(),
+            this->m_editItem ? this->m_editItem->name() : QString{}
+         ),
+         QMessageBox::Discard | QMessageBox::Cancel,
+         QMessageBox::Cancel
+      );
+      if (answer != QMessageBox::Discard) {
+         return false;
+      }
+      this->m_hasUnsavedChanges = false;
+      return true;
+   }
+
+   /**
+    * \brief Derived class calls this from its override of \c QDialog::reject, which is what happens when the user
+    *        presses Escape or closes the editor window.  Like the Cancel button, we check before throwing away any
+    *        unsaved changes.
+    */
+   void doReject() {
+      if (this->confirmDiscardUnsavedChanges()) {
+         this->derived().QDialog::reject();
+      }
       return;
    }
 
@@ -737,6 +815,9 @@ public:
     *        \c replaceNewItemForRecipeIfNeeded.
     */
    void newEditItemFromEditor() {
+      if (!this->confirmDiscardUnsavedChanges()) {
+         return;
+      }
       if constexpr (HasFolder<NE>) {
          this->newEditItem(nullptr, true);
       } else {
@@ -784,6 +865,7 @@ public:
          return;
       }
 
+      this->m_hasUnsavedChanges = false;
       this->writeNormalFieldsToEditItem();
       if (this->m_editItem->key() < 0) {
          ObjectStoreWrapper::insert(this->m_editItem);
@@ -809,6 +891,7 @@ public:
     * \brief Subclass should call this from its \c clearAndClose slot
     */
    void doClearAndClose() {
+      this->m_hasUnsavedChanges = false;
       this->setEditItem();
       this->derived().setVisible(false); // Hide the window.
       return;
@@ -851,6 +934,12 @@ public:
     *        model item.
     */
    void readFieldsFromEditItem(std::optional<QString> propName) {
+      // Changes we make to the input fields here are not changes by the user
+      QScopedValueRollback<bool> const updatingFields{this->m_updatingFields, true};
+      if (!propName) {
+         // We are (re)reading everything, so the fields now match the edit item
+         this->m_hasUnsavedChanges = false;
+      }
       if (this->m_editItem && this->m_fields) {
          bool matched = false;
          for (auto const & field : *this->m_fields) {
@@ -936,6 +1025,8 @@ public:
    }
 
    void doClearFields() {
+      QScopedValueRollback<bool> const updatingFields{this->m_updatingFields, true};
+      this->m_hasUnsavedChanges = false;
       if (this->m_fields) {
          for (auto const & field : *this->m_fields) {
             std::visit(
@@ -1077,6 +1168,11 @@ public:
    }
 
 protected:
+   //! Set when the user changes an input field; cleared when we (re)read all the fields from the edit item or save
+   bool m_hasUnsavedChanges = false;
+   //! Set while we are writing to the input fields ourselves, so we don't mistake that for the user changing them
+   bool m_updatingFields = false;
+
    /**
     * \brief Optionally an editor can have a "name" to add some context.  Eg for the Water editor, the water chemistry
     *        dialog allows you to have two of them open at once -- one "Base" and one "Target".
@@ -1141,6 +1237,10 @@ protected:
       virtual void changeEvent(QEvent * event) override;                             \
                                                                                      \
    public slots:                                                                     \
+      /* Escape or closing the window -- checks for unsaved changes */               \
+      void reject() override;                                                        \
+                                                                                     \
+   public slots:                                                                     \
       /* Standard editor slots */                                                    \
       void saveAndClose();                                                           \
       void clearAndClose();                                                          \
@@ -1163,5 +1263,6 @@ protected:
    void NeName##Editor::showEditor() { this->doShowEditor(); }                                                            \
    void NeName##Editor::closeEditor() { this->doCloseEditor(); }                                                          \
    void NeName##Editor::changeEvent(QEvent * event) { this->doChangeEvent(event); this->QDialog::changeEvent(event); }   \
+   void NeName##Editor::reject() { this->doReject(); return; }                                                            \
 
 #endif

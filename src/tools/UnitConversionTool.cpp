@@ -32,11 +32,18 @@
 UnitConversionTool::UnitConversionTool(QWidget * parent) : QDialog(parent) {
    this->doLayout();
 
-   connect(pushButton_convert, &QAbstractButton::clicked, this, &UnitConversionTool::convert);
+   // We convert whenever an input changes, so there is no need for a "Convert" button
+   connect(this->inputLineEdit      , &QLineEdit::editingFinished, this, &UnitConversionTool::convert);
+   connect(this->outputUnitsLineEdit, &QLineEdit::editingFinished, this, &UnitConversionTool::convert);
    return;
 }
 
 void UnitConversionTool::convert() {
+   // Wait until the user has filled in both inputs
+   if (this->inputLineEdit->text().trimmed().isEmpty() || this->outputUnitsLineEdit->text().trimmed().isEmpty()) {
+      this->outputLineEdit->clear();
+      return;
+   }
    this->outputLineEdit->setText(
       Measurement::Unit::convertWithoutContext(inputLineEdit->text(), outputUnitsLineEdit->text())
    );
@@ -77,12 +84,8 @@ void UnitConversionTool::doLayout() {
          formLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
       QVBoxLayout * vLayout = new QVBoxLayout();
          QSpacerItem * verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-         pushButton_convert = new QPushButton(this);
-            pushButton_convert->setAutoDefault(false);
-            pushButton_convert->setDefault(true);
          QSpacerItem * verticalSpacer2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
          vLayout->addItem(verticalSpacer);
-         vLayout->addWidget(pushButton_convert);
          vLayout->addItem(verticalSpacer2);
    hLayout->addLayout(formLayout);
    hLayout->addLayout(vLayout);
@@ -96,7 +99,6 @@ void UnitConversionTool::retranslateUi() {
    this->inputLabel->setText(tr("Input"));
    this->outputUnitsLabel->setText(tr("Output Units"));
    this->outputLabel->setText(tr("Output"));
-   this->pushButton_convert->setText(tr("Convert"));
 #ifndef QT_NO_TOOLTIP
    this->inputLineEdit->setToolTip(tr("Amount and units to convert"));
    this->outputUnitsLineEdit->setToolTip(tr("Unit you want to convert to"));

@@ -2827,6 +2827,17 @@ Klicken Sie auf „OK“, um %2 zu beenden und auf eine neuere Version zu aktual
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4337,7 +4348,7 @@ Klicken Sie auf „OK“, um %2 zu beenden und auf eine neuere Version zu aktual
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Umrechnen</translation>
+        <translation type="obsolete">Umrechnen</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4900,6 +4911,10 @@ Wenn Sie Hilfe benötigen, melden Sie bitte ein Issue unter %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Die folgenden Zutaten werden im Rezept und im Lagerbestand unterschiedlich gemessen, daher konnten die verbrauchten Mengen nicht (vollständig) vom Bestand abgezogen werden.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">%1 zum Rezept hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -6015,19 +6030,19 @@ Möchten Sie eine Kopie dieser Maische für dieses Rezept erstellen, damit Sie d
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Eingabe konnte nicht gelesen werden</translation>
+        <translation type="obsolete">Eingabe konnte nicht gelesen werden</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Gültiger Wert für die gemessene Dichte erforderlich</translation>
+        <translation type="obsolete">Gültiger Wert für die gemessene Dichte erforderlich</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Kein Rezept ausgewählt</translation>
+        <translation type="obsolete">Kein Rezept ausgewählt</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Keine Ausstattung im Rezept</translation>
+        <translation type="obsolete">Keine Ausstattung im Rezept</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -6035,7 +6050,7 @@ Möchten Sie eine Kopie dieser Maische für dieses Rezept erstellen, damit Sie d
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Kein Kochen im Rezept</translation>
+        <translation type="obsolete">Kein Kochen im Rezept</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -6043,7 +6058,7 @@ Möchten Sie eine Kopie dieser Maische für dieses Rezept erstellen, damit Sie d
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Gültiger Wert für das Würzevolumen erforderlich</translation>
+        <translation type="obsolete">Gültiger Wert für das Würzevolumen erforderlich</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8773,11 +8788,11 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Geschmacksnotizen bearbeiten</translation>
+        <translation type="obsolete">Geschmacksnotizen bearbeiten</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Notizen bearbeiten</translation>
+        <translation type="obsolete">Notizen bearbeiten</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -9100,6 +9115,17 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Notizen bearbeiten</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Geschmacksnotizen bearbeiten</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTableModel</name>
     <message>
         <source>Name</source>
@@ -9226,7 +9252,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Stammwürze-Missverhältnis</translation>
+        <translation type="vanished">Stammwürze-Missverhältnis</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -10077,7 +10103,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">%1 zum Rezept hinzufügen</translation>
+        <translation type="obsolete">%1 zum Rezept hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -10111,7 +10137,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Umrechnen</translation>
+        <translation type="obsolete">Umrechnen</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -13832,6 +13858,14 @@ Behälter</translation>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Bei der Schätzung des Restextrakts berücksichtigen, wie Maischtemperaturen und -zeiten die Würze mehr oder weniger vergärbar machen.  Lassen Sie dies ausgeschaltet, wenn Sie den Vergärungsgrad der Hefe bereits an Ihre eigene Maische angepasst haben.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14670,7 +14704,7 @@ Behälter</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Berechnen</translation>
+        <translation type="obsolete">Berechnen</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -15331,7 +15365,7 @@ Nur mIBU und SMPH ergeben IBU für Hopfen, der nach Kochende zugegeben wird (z. 
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Berechne</translation>
+        <translation type="vanished">Berechne</translation>
     </message>
 </context>
 <context>
@@ -15398,11 +15432,11 @@ Nur mIBU und SMPH ergeben IBU für Hopfen, der nach Kochende zugegeben wird (z. 
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Geschmacksnotizen</translation>
+        <translation type="vanished">Geschmacksnotizen</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notizen</translation>
+        <translation type="vanished">Notizen</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15435,6 +15469,29 @@ Nur mIBU und SMPH ergeben IBU für Hopfen, der nach Kochende zugegeben wird (z. 
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Wie klar die Würze Ihrer Erwartung nach beim Überführen in den Gärbehälter ist (z. B. abhängig davon, ob Sie Klärmittel in der Sudpfanne oder einen Whirlpool verwenden).&lt;/p&gt;&lt;p&gt;Trübere Würze verliert während der Gärung mehr Bittere.&lt;/p&gt;&lt;p&gt;Wird nur von der IBU-Formel SMPH verwendet.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished">Geschmacksnotizen</translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15588,7 +15645,7 @@ Nur mIBU und SMPH ergeben IBU für Hopfen, der nach Kochende zugegeben wird (z. 
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Berechne</translation>
+        <translation type="vanished">Berechne</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -16126,7 +16183,7 @@ Nur mIBU und SMPH ergeben IBU für Hopfen, der nach Kochende zugegeben wird (z. 
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Berechnen</translation>
+        <translation type="vanished">Berechnen</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

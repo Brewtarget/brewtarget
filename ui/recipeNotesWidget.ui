@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>recipeNotesWidget</class>
+ <widget class="QWidget" name="recipeNotesWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>360</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
+     </property>
+     <widget class="QWidget" name="widget_notes">
+      <layout class="QVBoxLayout" name="verticalLayout_notes">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_notes">
+         <property name="text">
+          <string>Notes</string>
+         </property>
+         <property name="buddy">
+          <cstring>btTextEdit_notes</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="BtTextEdit" name="btTextEdit_notes">
+         <property name="minimumSize">
+          <size>
+           <width>256</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>General notes about the recipe</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="widget_tasteNotes">
+      <layout class="QVBoxLayout" name="verticalLayout_tasteNotes">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_tasteNotes">
+         <property name="text">
+          <string>Taste Notes</string>
+         </property>
+         <property name="buddy">
+          <cstring>btTextEdit_tasteNotes</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="BtTextEdit" name="btTextEdit_tasteNotes">
+         <property name="minimumSize">
+          <size>
+           <width>256</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>How the finished beer tastes</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header location="global">BtTextEdit.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>btTextEdit_notes</tabstop>
+  <tabstop>btTextEdit_tasteNotes</tabstop>
+ </tabstops>
+ <resources/>
+</ui>

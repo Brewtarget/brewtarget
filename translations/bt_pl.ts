@@ -2757,6 +2757,17 @@ Kliknij &apos;OK&apos;, aby zamknąć %2 i zaktualizować program do nowszej wer
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4197,7 +4208,7 @@ Kliknij &apos;OK&apos;, aby zamknąć %2 i zaktualizować program do nowszej wer
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Konwertuj</translation>
+        <translation type="obsolete">Konwertuj</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4742,6 +4753,10 @@ Jeśli potrzebujesz pomocy, zgłoś problem na %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Następujące składniki są mierzone inaczej w recepturze i w magazynie, więc użytych ilości nie można było (w całości) odjąć od stanu magazynowego.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">Dodaj %1 do receptury</translation>
     </message>
 </context>
 <context>
@@ -5813,19 +5828,19 @@ Czy chcesz utworzyć kopię tego zacierania dla tej receptury, aby nie wpływać
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Nie można odczytać danych wejściowych</translation>
+        <translation type="obsolete">Nie można odczytać danych wejściowych</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Potrzebna jest prawidłowa wartość zmierzonej gęstości</translation>
+        <translation type="obsolete">Potrzebna jest prawidłowa wartość zmierzonej gęstości</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Nie wybrano receptury</translation>
+        <translation type="obsolete">Nie wybrano receptury</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Receptura nie ma sprzętu</translation>
+        <translation type="obsolete">Receptura nie ma sprzętu</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -5833,7 +5848,7 @@ Czy chcesz utworzyć kopię tego zacierania dla tej receptury, aby nie wpływać
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Receptura nie ma gotowania</translation>
+        <translation type="obsolete">Receptura nie ma gotowania</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -5841,7 +5856,7 @@ Czy chcesz utworzyć kopię tego zacierania dla tej receptury, aby nie wpływać
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Potrzebna jest prawidłowa wartość objętości brzeczki</translation>
+        <translation type="obsolete">Potrzebna jest prawidłowa wartość objętości brzeczki</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8505,11 +8520,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Edytuj notatki z degustacji</translation>
+        <translation type="obsolete">Edytuj notatki z degustacji</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Edytuj notatki</translation>
+        <translation type="obsolete">Edytuj notatki</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -8832,6 +8847,17 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Edytuj notatki</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Edytuj notatki z degustacji</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTreeView</name>
     <message>
         <source>Brew It!</source>
@@ -8952,7 +8978,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Błąd początkowej gęstości piwa</translation>
+        <translation type="vanished">Błąd początkowej gęstości piwa</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -9753,7 +9779,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">Dodaj %1 do receptury</translation>
+        <translation type="obsolete">Dodaj %1 do receptury</translation>
     </message>
 </context>
 <context>
@@ -9787,7 +9813,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Konwertuj</translation>
+        <translation type="obsolete">Konwertuj</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -13484,6 +13510,14 @@ naczyń</translation>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Uwzględnij, jak temperatury i czasy zacierania zwiększają lub zmniejszają fermentowalność brzeczki przy szacowaniu gęstości końcowej.  Pozostaw wyłączone, jeśli odfermentowanie drożdży ustawiono zgodnie z własnym zacieraniem.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notatki</translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14330,7 +14364,7 @@ naczyń</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Oblicz</translation>
+        <translation type="obsolete">Oblicz</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -14995,7 +15029,7 @@ Tylko mIBU i SMPH dają IBU dla chmielu dodanego po wyłączeniu grzania (np. wh
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Wylicz</translation>
+        <translation type="vanished">Wylicz</translation>
     </message>
 </context>
 <context>
@@ -15062,11 +15096,11 @@ Tylko mIBU i SMPH dają IBU dla chmielu dodanego po wyłączeniu grzania (np. wh
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Notatki z degustacji</translation>
+        <translation type="vanished">Notatki z degustacji</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notatki</translation>
+        <translation type="vanished">Notatki</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15099,6 +15133,29 @@ Tylko mIBU i SMPH dają IBU dla chmielu dodanego po wyłączeniu grzania (np. wh
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Jak klarowna ma być brzeczka przy przelewaniu do fermentora (np. w zależności od tego, czy używasz środków klarujących w kotle lub whirlpoolu).&lt;/p&gt;&lt;p&gt;Bardziej mętna brzeczka traci więcej goryczki podczas fermentacji.&lt;/p&gt;&lt;p&gt;Używane tylko przez wzór IBU SMPH.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notatki</translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished">Notatki z degustacji</translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15252,7 +15309,7 @@ Tylko mIBU i SMPH dają IBU dla chmielu dodanego po wyłączeniu grzania (np. wh
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Wylicz</translation>
+        <translation type="vanished">Wylicz</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -15766,7 +15823,7 @@ Tylko mIBU i SMPH dają IBU dla chmielu dodanego po wyłączeniu grzania (np. wh
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Oblicz</translation>
+        <translation type="vanished">Oblicz</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

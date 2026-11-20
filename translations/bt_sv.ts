@@ -2879,6 +2879,17 @@ Klicka på &apos;OK&apos; för att avsluta %2 så att du kan uppgradera till en 
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4409,7 +4420,7 @@ Klicka på &apos;OK&apos; för att avsluta %2 så att du kan uppgradera till en 
     </message>
     <message>
         <source>Convert</source>
-        <translation>Konvertera</translation>
+        <translation type="vanished">Konvertera</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4971,6 +4982,10 @@ Om du behöver hjälp, skapa ett ärende på %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Följande ingredienser mäts på olika sätt i receptet och i ditt förråd, så den använda mängden kunde inte (helt) dras av från förrådet.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">Lägg till %1 i receptet</translation>
     </message>
 </context>
 <context>
@@ -6105,19 +6120,19 @@ Vill du göra en kopia av denna mäsk för det receptet, så att du kan göra de
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Kunde inte läsa indata</translation>
+        <translation type="obsolete">Kunde inte läsa indata</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Ett giltigt värde för uppmätt densitet krävs</translation>
+        <translation type="obsolete">Ett giltigt värde för uppmätt densitet krävs</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Inget recept valt</translation>
+        <translation type="obsolete">Inget recept valt</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Ingen utrustning i receptet</translation>
+        <translation type="obsolete">Ingen utrustning i receptet</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -6125,7 +6140,7 @@ Vill du göra en kopia av denna mäsk för det receptet, så att du kan göra de
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Ingen kokning i receptet</translation>
+        <translation type="obsolete">Ingen kokning i receptet</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -6133,7 +6148,7 @@ Vill du göra en kopia av denna mäsk för det receptet, så att du kan göra de
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Ett giltigt värde för vörtvolym krävs</translation>
+        <translation type="obsolete">Ett giltigt värde för vörtvolym krävs</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8866,11 +8881,11 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Redigera smaknoteringar</translation>
+        <translation type="obsolete">Redigera smaknoteringar</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Redigera anteckningar</translation>
+        <translation type="obsolete">Redigera anteckningar</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -9217,6 +9232,17 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Redigera anteckningar</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Redigera smaknoteringar</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTableModel</name>
     <message>
         <source>Name</source>
@@ -9343,7 +9369,7 @@ Primärens slutgiltiga volym är %1.</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Missat OG</translation>
+        <translation type="vanished">Missat OG</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -10186,7 +10212,7 @@ Primärens slutgiltiga volym är %1.</translation>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">Lägg till %1 i receptet</translation>
+        <translation type="obsolete">Lägg till %1 i receptet</translation>
     </message>
 </context>
 <context>
@@ -10220,7 +10246,7 @@ Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Konvertera</translation>
+        <translation type="obsolete">Konvertera</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -13989,6 +14015,14 @@ kärl</translation>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Ta hänsyn till hur mäskningens temperaturer och tider gör vörten mer eller mindre jäsbar när slutdensiteten uppskattas.  Låt detta vara avstängt om du har satt jästens förjäsningsgrad så att den återspeglar din egen mäskning.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Anteckningar</translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14851,7 +14885,7 @@ kärl</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Beräkna</translation>
+        <translation type="obsolete">Beräkna</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -15440,7 +15474,7 @@ Bara mIBU och SMPH ger IBU för humle som tillsätts efter flameout (t.ex. whirl
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beräkna</translation>
+        <translation type="vanished">Beräkna</translation>
     </message>
 </context>
 <context>
@@ -15507,11 +15541,11 @@ Bara mIBU och SMPH ger IBU för humle som tillsätts efter flameout (t.ex. whirl
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Smakprov noteringar</translation>
+        <translation type="vanished">Smakprov noteringar</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Anteckningar</translation>
+        <translation type="vanished">Anteckningar</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15544,6 +15578,29 @@ Bara mIBU och SMPH ger IBU för humle som tillsätts efter flameout (t.ex. whirl
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Hur klar du förväntar dig att vörten ska vara när den hälls i jäskärlet (t.ex. beroende på om du använder klarningsmedel i koket eller whirlpool).&lt;/p&gt;&lt;p&gt;Grumligare vört förlorar mer bitterhet under jäsningen.&lt;/p&gt;&lt;p&gt;Används bara av IBU-formeln SMPH.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Anteckningar</translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15697,7 +15754,7 @@ Bara mIBU och SMPH ger IBU för humle som tillsätts efter flameout (t.ex. whirl
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beräkna</translation>
+        <translation type="vanished">Beräkna</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -16231,7 +16288,7 @@ Bara mIBU och SMPH ger IBU för humle som tillsätts efter flameout (t.ex. whirl
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beräkna</translation>
+        <translation type="vanished">Beräkna</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

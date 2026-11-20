@@ -2368,6 +2368,17 @@ Egin klik &apos;Ados&apos; botoian %2 amaitzeko, bertsio berriago batera egunera
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -3290,7 +3301,7 @@ Egin klik &apos;Ados&apos; botoian %2 amaitzeko, bertsio berriago batera egunera
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Bihurtu</translation>
+        <translation type="obsolete">Bihurtu</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -3696,6 +3707,10 @@ Laguntza behar baduzu, ireki arazo-txosten bat hemen: %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Osagai hauek modu desberdinean neurtzen dira errezetan eta inbentarioan, eta ezin izan dira erabilitako kantitateak (guztiak) inbentariotik kendu.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">Gehitu %1 errezetari</translation>
     </message>
 </context>
 <context>
@@ -4473,19 +4488,19 @@ Maserazio honen kopia bat egin nahi duzu errezeta horrentzat, beste ezeri eragin
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Ezin izan da sarrera irakurri</translation>
+        <translation type="obsolete">Ezin izan da sarrera irakurri</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Balio baliozkoa behar da Neurtutako dentsitaterako</translation>
+        <translation type="obsolete">Balio baliozkoa behar da Neurtutako dentsitaterako</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Ez da errezetarik hautatu</translation>
+        <translation type="obsolete">Ez da errezetarik hautatu</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Errezetak ez du ekipamendurik</translation>
+        <translation type="obsolete">Errezetak ez du ekipamendurik</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -4493,7 +4508,7 @@ Maserazio honen kopia bat egin nahi duzu errezeta horrentzat, beste ezeri eragin
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Errezetak ez du irakiterik</translation>
+        <translation type="obsolete">Errezetak ez du irakiterik</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -4501,7 +4516,7 @@ Maserazio honen kopia bat egin nahi duzu errezeta horrentzat, beste ezeri eragin
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Balio baliozkoa behar da Mostoaren bolumenerako</translation>
+        <translation type="obsolete">Balio baliozkoa behar da Mostoaren bolumenerako</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -6619,11 +6634,11 @@ Lehen hartzidurako azken bolumena %1 da.</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Editatu dastatze-oharrak</translation>
+        <translation type="obsolete">Editatu dastatze-oharrak</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Editatu oharrak</translation>
+        <translation type="obsolete">Editatu oharrak</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -6878,6 +6893,17 @@ Lehen hartzidurako azken bolumena %1 da.</translation>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Editatu oharrak</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Editatu dastatze-oharrak</translation>
+    </message>
+</context>
+<context>
     <name>RecipeWaterWidget</name>
     <message>
         <source>Minimum expected concentration is %1 ppm</source>
@@ -6967,7 +6993,7 @@ Lehen hartzidurako azken bolumena %1 da.</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation type="unfinished">OG ez dator bat</translation>
+        <translation type="obsolete">OG ez dator bat</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -7591,7 +7617,7 @@ Lehen hartzidurako azken bolumena %1 da.</translation>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">Gehitu %1 errezetari</translation>
+        <translation type="obsolete">Gehitu %1 errezetari</translation>
     </message>
 </context>
 <context>
@@ -7625,7 +7651,7 @@ Lehen hartzidurako azken bolumena %1 da.</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Bihurtu</translation>
+        <translation type="obsolete">Bihurtu</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -10173,6 +10199,14 @@ fitxak</translation>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Kontuan hartu maserazioaren tenperaturek eta denborek mostoa nola egiten duten gutxi-asko hartzigarri amaierako dentsitatea estimatzean.  Utzi desaktibatuta legamiaren atenuazioa zure maserazioa islatzeko ezarri baduzu.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Oharrak</translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -10606,7 +10640,7 @@ fitxak</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Kalkulatu</translation>
+        <translation type="obsolete">Kalkulatu</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -11147,7 +11181,7 @@ mIBU eta SMPH soilik ematen dituzte IBUak sua itzali ondoren gehitutako lupuluet
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Kalkulatu</translation>
+        <translation type="obsolete">Kalkulatu</translation>
     </message>
 </context>
 <context>
@@ -11178,11 +11212,11 @@ mIBU eta SMPH soilik ematen dituzte IBUak sua itzali ondoren gehitutako lupuluet
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation type="unfinished">Dastatze-oharrak</translation>
+        <translation type="obsolete">Dastatze-oharrak</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Oharrak</translation>
+        <translation type="obsolete">Oharrak</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -11215,6 +11249,29 @@ mIBU eta SMPH soilik ematen dituzte IBUak sua itzali ondoren gehitutako lupuluet
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Mostoa zein garbi egotea espero duzun hartzitzailera sartzean (adib. galdarako argitzaileak edo zurrunbiloa erabiltzen dituzun ala ez).&lt;/p&gt;&lt;p&gt;Most uherragoak mingostasun gehiago galtzen du hartziduran.&lt;/p&gt;&lt;p&gt;SMPH IBU formulak soilik erabiltzen du.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Forma</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Oharrak</translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished">Dastatze-oharrak</translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11368,7 +11425,7 @@ mIBU eta SMPH soilik ematen dituzte IBUak sua itzali ondoren gehitutako lupuluet
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Kalkulatu</translation>
+        <translation type="obsolete">Kalkulatu</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -11664,7 +11721,7 @@ mIBU eta SMPH soilik ematen dituzte IBUak sua itzali ondoren gehitutako lupuluet
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Kalkulatu</translation>
+        <translation type="obsolete">Kalkulatu</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

@@ -280,49 +280,17 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QTabWidget" name="tabWidget">
-           <property name="currentIndex">
-            <number>0</number>
-           </property>
-           <widget class="QWidget" name="tab">
-            <attribute name="title">
-             <string>Taste Notes</string>
-            </attribute>
-            <layout class="QVBoxLayout" name="verticalLayout_2">
-             <item>
-              <widget class="BtTextEdit" name="btTextEdit_tasteNotes">
-               <property name="minimumSize">
-                <size>
-                 <width>256</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="tab_2">
-            <attribute name="title">
-             <string>Notes</string>
-            </attribute>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <widget class="BtTextEdit" name="btTextEdit_notes">
-               <property name="minimumSize">
-                <size>
-                 <width>256</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </widget>
-         </item>
-        </layout>
+        <spacer name="horizontalSpacer_extras">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -353,11 +321,6 @@
    <header>widgets/BtComboBoxEnum.h</header>
   </customwidget>
   <customwidget>
-   <class>BtTextEdit</class>
-   <extends>QPlainTextEdit</extends>
-   <header location="global">BtTextEdit.h</header>
-  </customwidget>
-  <customwidget>
    <class>BtOptionalDateEdit</class>
    <extends>QPlainTextEdit</extends>
    <header location="global">widgets/BtOptionalDateEdit.h</header>
@@ -372,9 +335,6 @@
   <tabstop>lineEdit_ageTemp</tabstop>
   <tabstop>dateEdit_date</tabstop>
   <tabstop>lineEdit_carbVols</tabstop>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>btTextEdit_tasteNotes</tabstop>
-  <tabstop>btTextEdit_notes</tabstop>
  </tabstops>
  <resources/>
 </ui>

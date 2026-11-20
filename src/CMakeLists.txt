@@ -274,6 +274,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/InfoText.cpp
     ${repoDir}/src/widgets/LockAndShareBar.cpp
     ${repoDir}/src/widgets/RecipeExtrasWidget.cpp
+    ${repoDir}/src/widgets/RecipeNotesWidget.cpp
     ${repoDir}/src/widgets/RecipeWaterWidget.cpp
     ${repoDir}/src/widgets/SelectionControl.cpp
     ${repoDir}/src/widgets/SmartAmountSettings.cpp
