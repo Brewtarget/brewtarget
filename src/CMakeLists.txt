@@ -73,12 +73,6 @@ set(filesToCompile_cpp
     ${repoDir}/src/TimerListDialog.cpp
     ${repoDir}/src/TimerWidget.cpp
     ${repoDir}/src/WaterAutoAdjuster.cpp
-    ${repoDir}/src/buttons/BoilButton.cpp
-    ${repoDir}/src/buttons/EquipmentButton.cpp
-    ${repoDir}/src/buttons/FermentationButton.cpp
-    ${repoDir}/src/buttons/MashButton.cpp
-    ${repoDir}/src/buttons/RecipeAttributeButton.cpp
-    ${repoDir}/src/buttons/StyleButton.cpp
     ${repoDir}/src/calculations/Algorithms.cpp
     ${repoDir}/src/calculations/ColorMethods.cpp
     ${repoDir}/src/calculations/IbuMethods.cpp

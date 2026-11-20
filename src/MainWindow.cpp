@@ -457,7 +457,7 @@ public:
       // You can't change which mash etc a locked recipe uses
       this->comboBox(Identifier<NE>{}).setEnabled(this->m_recipeObs && !recipeLocked);
 
-      // See comment in buttons/RecipeAttributeButton.h for why we need template keyword here for Clang
+      // See comment on Recipe::get for why we need template keyword here
       std::shared_ptr<NE> const item = this->m_recipeObs ? this->m_recipeObs->template get<NE>() : nullptr;
       if (!item) {
          label.clear();

@@ -116,13 +116,13 @@ public:
             &this->derived(),
             [&](QMetaProperty prop, [[maybe_unused]] QVariant val) {
                if (prop.name() == Recipe::propertyNameFor<Owner>()) {
-                  // See comment in buttons/RecipeAttributeButton.h for why we need template keyword here for Clang
+                  // See comment on Recipe::get for why we need template keyword here
                   this->setOwner(this->m_recipe->template get<Owner>());
                }
                return;
             }
          );
-         // See comment in buttons/RecipeAttributeButton.h for why we need template keyword here for Clang
+         // See comment on Recipe::get for why we need template keyword here
          this->setOwner(this->m_recipe->template get<Owner>());
       } else {
          this->setOwner(nullptr);

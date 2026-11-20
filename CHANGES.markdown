@@ -20,6 +20,7 @@ Bug fix release
   * Most recipes will show slightly fewer IBUs with Tinseth, Rager, Noonan, Daniels or mIBU estimation methods.
   * Because evaporation is now counted, any recipe with a pre-boil size set will drop by about 2.5–3% for a typical 25 L → 20 L boil.
   * Recipes without a pre-boil size don’t change.
+* Missing translations filled in for all supported languages, so the user interface is now (almost) fully translated.  These new translations are machine-generated and marked for review, so corrections from native speakers are very welcome.
 
 ### Bug Fixes
 * Compile error with latest versions of Qt

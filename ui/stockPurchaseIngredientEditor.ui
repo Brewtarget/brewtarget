@@ -102,7 +102,7 @@
           <item row="6" column="2">
            <widget class="BtOptionalDateEdit" name="dateEdit_dateOrdered">
             <property name="displayFormat">
-             <string>dd MMM yyyy</string>
+             <string notr="true">dd MMM yyyy</string>
             </property>
             <property name="calendarPopup">
              <bool>true</bool>
@@ -160,7 +160,7 @@
           <item row="6" column="5">
            <widget class="BtOptionalDateEdit" name="dateEdit_dateReceived">
             <property name="displayFormat">
-             <string>dd MMM yyyy</string>
+             <string notr="true">dd MMM yyyy</string>
             </property>
             <property name="calendarPopup">
              <bool>true</bool>
@@ -256,7 +256,7 @@
        <item row="14" column="5">
         <widget class="BtOptionalDateEdit" name="dateEdit_dateBestBefore">
          <property name="displayFormat">
-          <string>dd MMM yyyy</string>
+          <string notr="true">dd MMM yyyy</string>
          </property>
          <property name="calendarPopup">
           <bool>true</bool>

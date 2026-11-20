@@ -517,7 +517,7 @@ public:
       if (!this->m_recipeObs || !this->m_editItem) {
          return nullptr;
       }
-      // See comment in buttons/RecipeAttributeButton.h for why we need template keyword here for Clang
+      // See comment on Recipe::get for why we need template keyword here
       std::shared_ptr<NE> const recipeItem = this->m_recipeObs->template get<NE>();
       if (!recipeItem || recipeItem->key() != this->m_editItem->key()) {
          return nullptr;
@@ -1028,7 +1028,7 @@ public:
     */
    void doEditForRecipe(Recipe * recipe) requires HasRecipe<editorBaseOptions> {
       this->setRecipe(recipe);
-      // See comment in buttons/RecipeAttributeButton.h for why we need template keyword here for Clang
+      // See comment on Recipe::get for why we need template keyword here
       std::shared_ptr<NE> item = recipe ? recipe->template get<NE>() : nullptr;
       if (!item && recipe) {
          if (recipe->locked()) {

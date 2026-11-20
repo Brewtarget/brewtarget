@@ -5,117 +5,117 @@
     <name>AboutDialog</name>
     <message>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teave: %1</translation>
     </message>
 </context>
 <context>
     <name>AlcoholTool</name>
     <message>
         <source>Alcohol Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alkoholi tööriist</translation>
     </message>
     <message>
         <source>Original Gravity (OG)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Algtihedus (OG)</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>Final Gravity (FG)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lõpptihedus (FG)</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lugem</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatuur</translation>
     </message>
     <message>
         <source>Corrected Reading</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Korrigeeritud lugem</translation>
     </message>
     <message>
         <source>Advanced Mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Täpsem režiim</translation>
     </message>
     <message>
         <source>Hydrometer Calibration Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Areomeetri kalibreerimistemperatuur</translation>
     </message>
     <message>
         <source>Initial Reading</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alglugem</translation>
     </message>
     <message>
         <source>Final Reading</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lõpplugem</translation>
     </message>
     <message>
         <source>Result</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tulemus</translation>
     </message>
     <message>
         <source>Calculated according to the formula set by the UK Laboratory of the Government Chemist</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Arvutatud Ühendkuningriigi valitsuse keemialabori (Laboratory of the Government Chemist) valemi järgi</translation>
     </message>
 </context>
 <context>
     <name>Boil</name>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keetmine</translation>
     </message>
     <message>
         <source>Pre-boil for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eelkeetmine: %1</translation>
     </message>
     <message>
         <source>Main boil for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Põhikeetmine: %1</translation>
     </message>
     <message>
         <source>Post-boil for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Järelkeetmine: %1</translation>
     </message>
     <message>
         <source>Automatically-generated pre-boil step for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Automaatselt loodud eelkeetmise samm: %1</translation>
     </message>
     <message>
         <source>Automatically-generated boil proper step for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Automaatselt loodud põhikeetmise samm: %1</translation>
     </message>
     <message>
         <source>Automatically-generated post-boil step for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Automaatselt loodud järelkeetmise samm: %1</translation>
     </message>
     <message>
         <source>a recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">retsept</translation>
     </message>
     <message>
         <source>Pre-Boil Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedueelne kogus</translation>
     </message>
     <message>
         <source>Boil time (mins)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keeduaeg (min)</translation>
     </message>
     <message>
         <source>Boil Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keetmisprofiilid</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kirjeldus</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -123,37 +123,37 @@
     </message>
     <message>
         <source>Time At Boiling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aeg keemistemperatuuril</translation>
     </message>
 </context>
 <context>
     <name>BoilStep</name>
     <message>
         <source>Boil Step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keetmise samm</translation>
     </message>
     <message>
         <source>Batch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Partii</translation>
     </message>
     <message>
         <source>Inline</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Läbivooluga</translation>
     </message>
     <message>
         <source>Step time (mins)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sammu kestus (min)</translation>
     </message>
     <message>
         <source>Chilling Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jahutuse tüüp</translation>
     </message>
 </context>
 <context>
     <name>BrewDayFormatter</name>
     <message>
         <source>Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulimispäev</translation>
     </message>
     <message>
         <source>Style</source>
@@ -197,15 +197,15 @@
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hinnangulised kalorid (33 cl kohta)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hinnangulised kalorid (12 oz kohta)</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -225,11 +225,11 @@
     </message>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lisa linnased</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumuta vesi</translation>
     </message>
     <message>
         <source>Actual PreBoil Volume</source>
@@ -249,11 +249,11 @@
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">teadmata</translation>
     </message>
     <message>
         <source>Volume into fermentor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus käärimisanumasse</translation>
     </message>
 </context>
 <context>
@@ -300,7 +300,7 @@
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -336,51 +336,51 @@
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;h2&gt;Märkmed&lt;/h2&gt;</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Samm %1: %2</translation>
     </message>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lisa linnased</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumuta vesi</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hinnangulised kalorid (33 cl kohta)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hinnangulised kalorid (12 oz kohta)</translation>
     </message>
     <message>
         <source>Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulimispäev</translation>
     </message>
     <message>
         <source>Overwrite Existing Instructions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kirjuta olemasolevad juhised üle</translation>
     </message>
     <message>
         <source>Generating instructions will overwrite the existing ones.  This is not undoable.  Do you want to proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Juhiste genereerimine kirjutab olemasolevad üle. Seda ei saa tagasi võtta. Kas soovite jätkata?</translation>
     </message>
     <message>
         <source>not set</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">määramata</translation>
     </message>
     <message>
         <source>n/a</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pole kohaldatav</translation>
     </message>
     <message>
         <source>Volume into fermentor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus käärimisanumasse</translation>
     </message>
 </context>
 <context>
@@ -437,32 +437,28 @@
 <context>
     <name>BrewLog</name>
     <message>
-        <source>Brew Log</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritusaste</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulimise kuupäev</translation>
     </message>
     <message>
         <source>Brewhouse Efficiency</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulikoja efektiivsus</translation>
     </message>
     <message>
         <source>Efficiency Into Boil Kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Efektiivsus keedupotti</translation>
     </message>
     <message>
         <source>Ferment Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritamise kuupäev</translation>
     </message>
     <message>
         <source>Final Volume</source>
@@ -470,103 +466,107 @@
     </message>
     <message>
         <source>Mash Final Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäski lõpptemperatuur</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG</translation>
     </message>
     <message>
         <source>Post-Boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedujärgne kogus</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud ABV</translation>
     </message>
     <message>
         <source>Projected Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud kääritusaste</translation>
     </message>
     <message>
         <source>Projected Efficiency</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud efektiivsus</translation>
     </message>
     <message>
         <source>Projected Fermentation Points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud käärimispunktid</translation>
     </message>
     <message>
         <source>Projected FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud FG</translation>
     </message>
     <message>
         <source>Projected Mash Final Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud mäski lõpptemperatuur</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud OG</translation>
     </message>
     <message>
         <source>Projected Strike Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud mäskivee temperatuur</translation>
     </message>
     <message>
         <source>Projected Volume Into Boil Kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud kogus keedupotti</translation>
     </message>
     <message>
         <source>Strike Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskivee temperatuur</translation>
     </message>
     <message>
         <source>Volume Into Boil Kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus keedupotti</translation>
+    </message>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished">Pruulimispäevik</translation>
     </message>
     <message>
         <source>Brew Log #%1 for brew on %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulimispäevik nr %1 (pruulitud %2)</translation>
     </message>
     <message>
         <source>Expected Boil-Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eeldatav aurustumine</translation>
     </message>
     <message>
         <source>Planned OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Planeeritud OG</translation>
     </message>
     <message>
         <source>Expected pre-boil specific gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eeldatav keedueelne erikaal</translation>
     </message>
     <message>
         <source>Measured FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mõõdetud FG</translation>
     </message>
     <message>
         <source>Measured Pitch Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mõõdetud pärmi lisamise temperatuur</translation>
     </message>
     <message>
         <source>Measured pre-boil specific gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mõõdetud keedueelne erikaal</translation>
     </message>
     <message>
         <source>Projected Volume Into Fermentation Vessel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud kogus käärimisanumasse</translation>
     </message>
     <message>
         <source>Volume Into Fermentation Vessel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus käärimisanumasse</translation>
     </message>
     <message>
         <source>Wort Clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Virde selgus</translation>
     </message>
 </context>
 <context>
@@ -580,102 +580,102 @@
     <name>BtPrintAndPreview</name>
     <message>
         <source>Print And Preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prindi ja eelvaade</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retsept</translation>
     </message>
     <message>
         <source>Select Recipe(s)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vali retsept(id)</translation>
     </message>
     <message>
         <source>Select what to include</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vali, mida kaasata</translation>
     </message>
     <message>
         <source>Brewday Instructions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulimispäeva juhised</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laoseis</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kõik</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritatavad</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humalad</translation>
     </message>
     <message>
         <source>Micelleneous</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muud</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pärm</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Väljund</translation>
     </message>
     <message>
         <source>Paper</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paber</translation>
     </message>
     <message>
         <source>PDF</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PDF</translation>
     </message>
     <message>
         <source>HTML</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HTML</translation>
     </message>
     <message>
         <source>Printer Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Printeri sätted</translation>
     </message>
     <message>
         <source>Paper size: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paberi suurus: </translation>
     </message>
     <message>
         <source>Select available Printers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vali saadaolev printer</translation>
     </message>
     <message>
         <source>Orientation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Suund</translation>
     </message>
     <message>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Püstpaigutus</translation>
     </message>
     <message>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rõhtpaigutus</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prindi</translation>
     </message>
 </context>
 <context>
     <name>BtSplashScreen</name>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laadimine...</translation>
     </message>
 </context>
 <context>
@@ -701,1301 +701,1296 @@
     <message>
         <source>United Arab Emirates Dirham</source>
         <extracomment>*</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Araabia Ühendemiraatide dirham</translation>
     </message>
     <message>
         <source>Dirham</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dirham</translation>
     </message>
     <message>
         <source>Fils</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fils</translation>
     </message>
     <message>
         <source>Afghan Afghani</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Afganistani afgaani</translation>
     </message>
     <message>
         <source>Afghani</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Afgaani</translation>
     </message>
     <message>
         <source>Pul</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pul</translation>
     </message>
     <message>
         <source>Albanian Lek</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Albaania lekk</translation>
     </message>
     <message>
         <source>Lek</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lekk</translation>
     </message>
     <message>
         <source>Qindarka</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Qindarka</translation>
     </message>
     <message>
         <source>Armenian Dram</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Armeenia dramm</translation>
     </message>
     <message>
         <source>Dram</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dramm</translation>
     </message>
     <message>
         <source>Luma</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Luma</translation>
     </message>
     <message>
         <source>Angolan Kwanza</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Angola kwanza</translation>
     </message>
     <message>
         <source>Kwanza</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kwanza</translation>
     </message>
     <message>
         <source>Centimo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Centimo</translation>
     </message>
     <message>
         <source>Argentine Peso</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Argentina peeso</translation>
     </message>
     <message>
         <source>Peso</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Peeso</translation>
     </message>
     <message>
         <source>Centavo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Centavo</translation>
     </message>
     <message>
         <source>Australian Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Austraalia dollar</translation>
     </message>
     <message>
         <source>Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dollar</translation>
     </message>
     <message>
         <source>Cent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sent</translation>
     </message>
     <message>
         <source>Aruban Florin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aruba floriin</translation>
     </message>
     <message>
         <source>Florin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Floriin</translation>
     </message>
     <message>
         <source>Azerbaijani Manat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aserbaidžaani manat</translation>
     </message>
     <message>
         <source>Manat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Manat</translation>
     </message>
     <message>
         <source>Qapik</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Qəpik</translation>
     </message>
     <message>
         <source>Bosnia-Herzegovina Convertible Mark</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bosnia ja Hertsegoviina konverteeritav mark</translation>
     </message>
     <message>
         <source>Mark</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mark</translation>
     </message>
     <message>
         <source>Fening</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fening</translation>
     </message>
     <message>
         <source>Barbados Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Barbadose dollar</translation>
     </message>
     <message>
         <source>Bangladeshi Taka</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bangladeshi taka</translation>
     </message>
     <message>
         <source>Taka</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Taka</translation>
     </message>
     <message>
         <source>Poisha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poisha</translation>
     </message>
     <message>
         <source>Bulgarian Lev</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bulgaaria leev</translation>
     </message>
     <message>
         <source>Lev</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Leev</translation>
     </message>
     <message>
         <source>Stotinka</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stotinka</translation>
     </message>
     <message>
         <source>Bahraini Dinar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bahreini dinaar</translation>
     </message>
     <message>
         <source>Dinar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dinaar</translation>
     </message>
     <message>
         <source>Burundian Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Burundi frank</translation>
     </message>
     <message>
         <source>Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Frank</translation>
     </message>
     <message>
         <source>Centime</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Santiim</translation>
     </message>
     <message>
         <source>Bermudian Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bermuda dollar</translation>
     </message>
     <message>
         <source>Brunei Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brunei dollar</translation>
     </message>
     <message>
         <source>Bolivian Boliviano</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Boliivia boliviano</translation>
     </message>
     <message>
         <source>Boliviano</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Boliviano</translation>
     </message>
     <message>
         <source>Brazilian Real</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brasiilia reaal</translation>
     </message>
     <message>
         <source>Real</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Reaal</translation>
     </message>
     <message>
         <source>Bahamian Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bahama dollar</translation>
     </message>
     <message>
         <source>Bhutanese Ngultrum</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bhutani ngultrum</translation>
     </message>
     <message>
         <source>Ngultrum</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ngultrum</translation>
     </message>
     <message>
         <source>Chetrum</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chetrum</translation>
     </message>
     <message>
         <source>Botswana Pula</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Botswana pula</translation>
     </message>
     <message>
         <source>Pula</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pula</translation>
     </message>
     <message>
         <source>Thebe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Thebe</translation>
     </message>
     <message>
         <source>Belarusian Ruble</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valgevene rubla</translation>
     </message>
     <message>
         <source>Ruble</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rubla</translation>
     </message>
     <message>
         <source>Kapiejka</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kopikas</translation>
     </message>
     <message>
         <source>Belize Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Belize&apos;i dollar</translation>
     </message>
     <message>
         <source>Canadian Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kanada dollar</translation>
     </message>
     <message>
         <source>Congolese Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kongo frank</translation>
     </message>
     <message>
         <source>Swiss Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Šveitsi frank</translation>
     </message>
     <message>
         <source>Chilean Peso</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tšiili peeso</translation>
     </message>
     <message>
         <source>Chinese Yuan</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hiina jüaan</translation>
     </message>
     <message>
         <source>Yuan</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jüaan</translation>
     </message>
     <message>
         <source>Fen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fen</translation>
     </message>
     <message>
         <source>Colombian Peso</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Colombia peeso</translation>
     </message>
     <message>
         <source>Costa Rican Colón</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Costa Rica koloon</translation>
     </message>
     <message>
         <source>Colón</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koloon</translation>
     </message>
     <message>
         <source>Cuban Peso</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuuba peeso</translation>
     </message>
     <message>
         <source>Cabo Verdean Escudo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cabo Verde eskuudo</translation>
     </message>
     <message>
         <source>Escudo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eskuudo</translation>
     </message>
     <message>
         <source>Czech Koruna</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tšehhi kroon</translation>
     </message>
     <message>
         <source>Koruna</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kroon</translation>
     </message>
     <message>
         <source>Haléř</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Haléř</translation>
     </message>
     <message>
         <source>Djiboutian Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Djibouti frank</translation>
     </message>
     <message>
         <source>Danish Krone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Taani kroon</translation>
     </message>
     <message>
         <source>Krone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kroon</translation>
     </message>
     <message>
         <source>Øre</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Øre</translation>
     </message>
     <message>
         <source>Dominican Peso</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dominikaani peeso</translation>
     </message>
     <message>
         <source>Algerian Dinar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alžeeria dinaar</translation>
     </message>
     <message>
         <source>Santeem</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Santiim</translation>
     </message>
     <message>
         <source>Egyptian Pound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Egiptuse nael</translation>
     </message>
     <message>
         <source>Pound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eritrea nakfa</translation>
     </message>
     <message>
         <source>Qirsh</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nakfa</translation>
     </message>
     <message>
         <source>Eritrean Nakfa</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Etioopia birr</translation>
     </message>
     <message>
         <source>Nakfa</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Birr</translation>
     </message>
     <message>
         <source>Ethiopian Birr</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Santiim</translation>
     </message>
     <message>
         <source>Birr</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Euro</translation>
     </message>
     <message>
         <source>Santim</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fidži dollar</translation>
     </message>
     <message>
         <source>Euro</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Falklandi saarte nael</translation>
     </message>
     <message>
         <source>Fiji Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Penn</translation>
     </message>
     <message>
         <source>Falkland Islands Pound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Briti naelsterling</translation>
     </message>
     <message>
         <source>Penny</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gruusia lari</translation>
     </message>
     <message>
         <source>Pound Sterling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lari</translation>
     </message>
     <message>
         <source>Georgian Lari</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tetri</translation>
     </message>
     <message>
         <source>Lari</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ghana sedi</translation>
     </message>
     <message>
         <source>Tetri</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sedi</translation>
     </message>
     <message>
         <source>Ghanaian Cedi</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pesewa</translation>
     </message>
     <message>
         <source>Cedi</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gibraltari nael</translation>
     </message>
     <message>
         <source>Pesewa</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gambia dalasi</translation>
     </message>
     <message>
         <source>Gibraltar Pound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dalasi</translation>
     </message>
     <message>
         <source>Gambian Dalasi</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Butut</translation>
     </message>
     <message>
         <source>Dalasi</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Guinea frank</translation>
     </message>
     <message>
         <source>Butut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Guatemala ketsal</translation>
     </message>
     <message>
         <source>Guinean Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ketsal</translation>
     </message>
     <message>
         <source>Guatemalan Quetzal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Guyana dollar</translation>
     </message>
     <message>
         <source>Quetzal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hongkongi dollar</translation>
     </message>
     <message>
         <source>Guyanese Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hondurase lempira</translation>
     </message>
     <message>
         <source>Hong Kong Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lempira</translation>
     </message>
     <message>
         <source>Honduran Lempira</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Haiti gurd</translation>
     </message>
     <message>
         <source>Lempira</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gurd</translation>
     </message>
     <message>
         <source>Haitian Gourde</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ungari forint</translation>
     </message>
     <message>
         <source>Gourde</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forint</translation>
     </message>
     <message>
         <source>Hungarian Forint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">fillér</translation>
     </message>
     <message>
         <source>Forint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Indoneesia ruupia</translation>
     </message>
     <message>
         <source>fillér</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ruupia</translation>
     </message>
     <message>
         <source>Indonesian Rupiah</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sen</translation>
     </message>
     <message>
         <source>Rupiah</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Iisraeli seekel</translation>
     </message>
     <message>
         <source>Sen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seekel</translation>
     </message>
     <message>
         <source>Israeli Shekel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Agora</translation>
     </message>
     <message>
         <source>Shekel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">India ruupia</translation>
     </message>
     <message>
         <source>Agora</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ruupia</translation>
     </message>
     <message>
         <source>Indian Rupee</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paisa</translation>
     </message>
     <message>
         <source>Rupee</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Iraagi dinaar</translation>
     </message>
     <message>
         <source>Paisa</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Iraani riaal</translation>
     </message>
     <message>
         <source>Iraqi Dinar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Riaal</translation>
     </message>
     <message>
         <source>Iranian Rial</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Islandi kroon</translation>
     </message>
     <message>
         <source>Rial</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kroon</translation>
     </message>
     <message>
         <source>Icelandic Krona</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aurar</translation>
     </message>
     <message>
         <source>Krona</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jamaica dollar</translation>
     </message>
     <message>
         <source>Aurar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jordaania dinaar</translation>
     </message>
     <message>
         <source>Jamaican Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jaapani jeen</translation>
     </message>
     <message>
         <source>Jordanian Dinar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jeen</translation>
     </message>
     <message>
         <source>Japanese Yen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keenia šilling</translation>
     </message>
     <message>
         <source>Yen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Šilling</translation>
     </message>
     <message>
         <source>Kenyan Shilling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kõrgõzstani somm</translation>
     </message>
     <message>
         <source>Shilling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Somm</translation>
     </message>
     <message>
         <source>Kyrgyzstani Som</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tõjõn</translation>
     </message>
     <message>
         <source>Som</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kambodža riel</translation>
     </message>
     <message>
         <source>Tyiyn</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Riel</translation>
     </message>
     <message>
         <source>Cambodian Riel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Komoori frank</translation>
     </message>
     <message>
         <source>Riel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Põhja-Korea vonn</translation>
     </message>
     <message>
         <source>Comorian Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vonn</translation>
     </message>
     <message>
         <source>North Korean Won</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chon</translation>
     </message>
     <message>
         <source>Won</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lõuna-Korea vonn</translation>
     </message>
     <message>
         <source>Chon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jeon</translation>
     </message>
     <message>
         <source>South Korean Won</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuveidi dinaar</translation>
     </message>
     <message>
         <source>Jeon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kaimanisaarte dollar</translation>
     </message>
     <message>
         <source>Kuwaiti Dinar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kasahstani tenge</translation>
     </message>
     <message>
         <source>Cayman Islands Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tenge</translation>
     </message>
     <message>
         <source>Kazakhstani Tenge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tıyn</translation>
     </message>
     <message>
         <source>Tenge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laose kiip</translation>
     </message>
     <message>
         <source>Tıyn</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kiip</translation>
     </message>
     <message>
         <source>Lao Kip</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Att</translation>
     </message>
     <message>
         <source>Kip</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liibanoni nael</translation>
     </message>
     <message>
         <source>Att</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sri Lanka ruupia</translation>
     </message>
     <message>
         <source>Lebanese Pound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Libeeria dollar</translation>
     </message>
     <message>
         <source>Sri Lankan Rupee</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lesotho loti</translation>
     </message>
     <message>
         <source>Liberian Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loti</translation>
     </message>
     <message>
         <source>Lesotho Loti</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sente</translation>
     </message>
     <message>
         <source>Loti</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liibüa dinaar</translation>
     </message>
     <message>
         <source>Sente</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maroko dirham</translation>
     </message>
     <message>
         <source>Libyan Dinar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Moldova leu</translation>
     </message>
     <message>
         <source>Moroccan Dirham</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Leu</translation>
     </message>
     <message>
         <source>Moldovan Leu</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ban</translation>
     </message>
     <message>
         <source>Leu</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Madagaskari ariari</translation>
     </message>
     <message>
         <source>Ban</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ariari</translation>
     </message>
     <message>
         <source>Malagasy Ariary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Iraimbilanja</translation>
     </message>
     <message>
         <source>Ariary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Makedoonia denaar</translation>
     </message>
     <message>
         <source>Iraimbilanja</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Denaar</translation>
     </message>
     <message>
         <source>Macedonian Denar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Deni</translation>
     </message>
     <message>
         <source>Denar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Myanmari kjatt</translation>
     </message>
     <message>
         <source>Deni</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kjatt</translation>
     </message>
     <message>
         <source>Myanmar Kyat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pya</translation>
     </message>
     <message>
         <source>Kyat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mongoolia tugrik</translation>
     </message>
     <message>
         <source>Pya</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tugrik</translation>
     </message>
     <message>
         <source>Mongolian Tögrög</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">möngö</translation>
     </message>
     <message>
         <source>Tögrög</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Macau pataka</translation>
     </message>
     <message>
         <source>möngö</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pataka</translation>
     </message>
     <message>
         <source>Macanese Pataca</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avo</translation>
     </message>
     <message>
         <source>Pataca</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mauritaania ugia</translation>
     </message>
     <message>
         <source>Avo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ugia</translation>
     </message>
     <message>
         <source>Mauritanian Ouguiya</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Khoums</translation>
     </message>
     <message>
         <source>Ouguiya</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mauritiuse ruupia</translation>
     </message>
     <message>
         <source>Khoums</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maldiivi ruufia</translation>
     </message>
     <message>
         <source>Mauritian Rupee</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ruufia</translation>
     </message>
     <message>
         <source>Maldivian Rufiyaa</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">laari</translation>
     </message>
     <message>
         <source>Rufiyaa</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Malawi kvatša</translation>
     </message>
     <message>
         <source>laari</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kvatša</translation>
     </message>
     <message>
         <source>Malawian Kwacha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tambala</translation>
     </message>
     <message>
         <source>Kwacha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mehhiko peeso</translation>
     </message>
     <message>
         <source>Tambala</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Malaisia ringgit</translation>
     </message>
     <message>
         <source>Mexican Peso</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ringgit</translation>
     </message>
     <message>
         <source>Malaysian Ringgit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mosambiigi metikal</translation>
     </message>
     <message>
         <source>Ringgit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Metikal</translation>
     </message>
     <message>
         <source>Mozambican Metical</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Namiibia dollar</translation>
     </message>
     <message>
         <source>Metical</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nigeeria naira</translation>
     </message>
     <message>
         <source>Namibian Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Naira</translation>
     </message>
     <message>
         <source>Nigerian Naira</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kobo</translation>
     </message>
     <message>
         <source>Naira</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nicaragua kordoba</translation>
     </message>
     <message>
         <source>Kobo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kordoba</translation>
     </message>
     <message>
         <source>Nicaraguan Córdoba</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Norra kroon</translation>
     </message>
     <message>
         <source>Córdoba</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">øre</translation>
     </message>
     <message>
         <source>Norwegian Krone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nepali ruupia</translation>
     </message>
     <message>
         <source>øre</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus-Meremaa dollar</translation>
     </message>
     <message>
         <source>Nepalese Rupee</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Omaani riaal</translation>
     </message>
     <message>
         <source>New Zealand Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Baisa</translation>
     </message>
     <message>
         <source>Omani Rial</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Panama balboa</translation>
     </message>
     <message>
         <source>Baisa</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Balboa</translation>
     </message>
     <message>
         <source>Panamanian Balboa</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Centésimo</translation>
     </message>
     <message>
         <source>Balboa</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Peruu sol</translation>
     </message>
     <message>
         <source>Centésimo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sol</translation>
     </message>
     <message>
         <source>Peruvian Sol</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Céntimo</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paapua Uus-Guinea kina</translation>
     </message>
     <message>
         <source>Céntimo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kina</translation>
     </message>
     <message>
         <source>Papua New Guinean Kina</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toea</translation>
     </message>
     <message>
         <source>Kina</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filipiini peeso</translation>
     </message>
     <message>
         <source>Toea</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sentimo</translation>
     </message>
     <message>
         <source>Philippine Peso</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pakistani ruupia</translation>
     </message>
     <message>
         <source>Sentimo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poola zlott</translation>
     </message>
     <message>
         <source>Pakistani Rupee</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zlott</translation>
     </message>
     <message>
         <source>Polish Zloty</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Grosz</translation>
     </message>
     <message>
         <source>Zloty</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paraguay guaranii</translation>
     </message>
     <message>
         <source>Grosz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Guaranii</translation>
     </message>
     <message>
         <source>Paraguayan Guaraní</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Katari riaal</translation>
     </message>
     <message>
         <source>Guaraní</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Riaal</translation>
     </message>
     <message>
         <source>Qatari Riyal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rumeenia leu</translation>
     </message>
     <message>
         <source>Riyal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Serbia dinaar</translation>
     </message>
     <message>
         <source>Romanian Leu</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Para</translation>
     </message>
     <message>
         <source>Serbian Dinar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Venemaa rubla</translation>
     </message>
     <message>
         <source>Para</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kopikas</translation>
     </message>
     <message>
         <source>Russian Ruble</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rwanda frank</translation>
     </message>
     <message>
         <source>Kopek</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saudi Araabia riaal</translation>
     </message>
     <message>
         <source>Rwandan Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Halala</translation>
     </message>
     <message>
         <source>Saudi Riyal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saalomoni Saarte dollar</translation>
     </message>
     <message>
         <source>Halalah</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seišelli ruupia</translation>
     </message>
     <message>
         <source>Solomon Islands Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sudaani nael</translation>
     </message>
     <message>
         <source>Seychelles Rupee</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rootsi kroon</translation>
     </message>
     <message>
         <source>Sudanese Pound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Öre</translation>
     </message>
     <message>
         <source>Swedish Krona</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Singapuri dollar</translation>
     </message>
     <message>
         <source>Öre</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saint Helena nael</translation>
     </message>
     <message>
         <source>Singapore Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sierra Leone uus leone</translation>
     </message>
     <message>
         <source>Saint Helena Pound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus leone</translation>
     </message>
     <message>
         <source>Sierra Leonean New Leone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Somaalia šilling</translation>
     </message>
     <message>
         <source>New Leone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Senti</translation>
     </message>
     <message>
         <source>Somali Shilling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Suriname dollar</translation>
     </message>
     <message>
         <source>Senti</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lõuna-Sudaani nael</translation>
     </message>
     <message>
         <source>Surinamese Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">São Tomé dobra</translation>
     </message>
     <message>
         <source>South Sudanese Pound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dobra</translation>
     </message>
     <message>
         <source>Sao Tome Dobra</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">El Salvadori koloon</translation>
     </message>
     <message>
         <source>Dobra</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Süüria nael</translation>
     </message>
     <message>
         <source>Salvadoran Colón</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Svaasimaa lilangeni</translation>
     </message>
     <message>
         <source>Syrian Pound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lilangeni</translation>
     </message>
     <message>
         <source>Swazi Lilangeni</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tai baat</translation>
     </message>
     <message>
         <source>Lilangeni</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Baat</translation>
     </message>
     <message>
         <source>Thai Baht</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Satang</translation>
     </message>
     <message>
         <source>Baht</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tadžikistani somoni</translation>
     </message>
     <message>
         <source>Satang</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Somoni</translation>
     </message>
     <message>
         <source>Tajikistani Somoni</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diram</translation>
     </message>
     <message>
         <source>Somoni</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Türkmenistani manat</translation>
     </message>
     <message>
         <source>Diram</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tuneesia dinaar</translation>
     </message>
     <message>
         <source>Turkmenistan Manat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Millime</translation>
     </message>
     <message>
         <source>Tunisian Dinar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tonga pa&apos;anga</translation>
     </message>
     <message>
         <source>Millime</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pa&apos;anga</translation>
     </message>
     <message>
         <source>Tongan Pa&apos;anga</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seniti</translation>
     </message>
     <message>
         <source>Pa&apos;anga</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Türgi liir</translation>
     </message>
     <message>
         <source>Seniti</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liir</translation>
     </message>
     <message>
         <source>Turkish Lira</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuruş</translation>
     </message>
     <message>
         <source>Lira</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trinidadi ja Tobago dollar</translation>
     </message>
     <message>
         <source>Kuruş</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus Taiwani dollar</translation>
     </message>
     <message>
         <source>Trinidad and Tobago Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tansaania šilling</translation>
     </message>
     <message>
         <source>New Taiwan Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ukraina grivna</translation>
     </message>
     <message>
         <source>Tanzanian Shilling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Grivna</translation>
     </message>
     <message>
         <source>Ukrainian Hryvnia</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kopiyka</translation>
     </message>
     <message>
         <source>Hryvnia</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uganda šilling</translation>
     </message>
     <message>
         <source>Kopiyka</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">USA dollar</translation>
     </message>
     <message>
         <source>Ugandan Shilling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uruguay peeso</translation>
     </message>
     <message>
         <source>US Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usbekistani somm</translation>
     </message>
     <message>
         <source>Uruguayan Peso</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tiyin</translation>
     </message>
     <message>
         <source>Uzbekistani Som</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Venezuela boliivar</translation>
     </message>
     <message>
         <source>Tiyin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Boliivar</translation>
     </message>
     <message>
         <source>Venezuelan Bolívar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vietnami dong</translation>
     </message>
     <message>
         <source>Bolívar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dong</translation>
     </message>
     <message>
         <source>Vietnamese Dong</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hào</translation>
     </message>
     <message>
         <source>Dong</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vanuatu vatu</translation>
     </message>
     <message>
         <source>Hào</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vatu</translation>
     </message>
     <message>
         <source>Vanuatu Vatu</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Samoa tala</translation>
     </message>
     <message>
         <source>Vatu</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tala</translation>
     </message>
     <message>
         <source>Samoan Tala</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sene</translation>
     </message>
     <message>
         <source>Tala</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kesk-Aafrika CFA frank</translation>
     </message>
     <message>
         <source>Sene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ida-Kariibi dollar</translation>
     </message>
     <message>
         <source>Central African CFA Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kariibi kulden</translation>
     </message>
     <message>
         <source>East Caribbean Dollar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kulden</translation>
     </message>
     <message>
         <source>Caribbean Guilder</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lääne-Aafrika CFA frank</translation>
     </message>
     <message>
         <source>Guilder</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">CFP frank</translation>
     </message>
     <message>
         <source>West African CFA Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valuuta puudub</translation>
     </message>
     <message>
         <source>CFP Franc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Puudub</translation>
     </message>
     <message>
         <source>No Currency</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jeemeni riaal</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lõuna-Aafrika rand</translation>
     </message>
     <message>
         <source>Yemeni Rial</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rand</translation>
     </message>
     <message>
         <source>South African Rand</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sambia kvatša</translation>
     </message>
     <message>
         <source>Rand</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ngwee</translation>
     </message>
     <message>
         <source>Zambian Kwacha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sambia kvatša</translation>
     </message>
     <message>
         <source>Ngwee</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ngwee</translation>
     </message>
     <message>
         <source>Zimbabwe Gold</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zimbabwe kuld</translation>
     </message>
     <message>
         <source>Gold</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuld</translation>
     </message>
 </context>
 <context>
     <name>Database</name>
     <message>
         <source>Database password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andmebaasi parool</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Parool</translation>
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ühendus ebaõnnestus</translation>
     </message>
     <message>
         <source>Could not connect to %1 : %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ei saanud ühendust: %1 : %2</translation>
     </message>
     <message>
         <source>Success!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Õnnestus!</translation>
     </message>
     <message>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">VIGA</translation>
     </message>
     <message>
         <source>Successfully read new default data
 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uued vaikeandmed loeti edukalt
+
+%1</translation>
     </message>
     <message>
         <source>Filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Failinimi</translation>
     </message>
     <message>
         <source>Host &amp; Port</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Host ja port</translation>
     </message>
     <message>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andmebaas</translation>
     </message>
     <message>
         <source>Schema</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skeem</translation>
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to back up database before upgrading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not backup database prior to required upgrade.  See logs for more details.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kasutajanimi</translation>
     </message>
     <message>
         <source>Software Upgraded</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tarkvara uuendati</translation>
     </message>
     <message>
         <source>Before continuing, %1 %2 needs to upgrade your database schema (from v%3 to v%4).
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enne jätkamist peab %1 %2 uuendama teie andmebaasi skeemi (v%3 -&gt; v%4).
+</translation>
     </message>
     <message>
         <source>DON&apos;T PANIC: Your existing data will be retained!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ÄRGE PANIKUTSEGE: teie olemasolevad andmed säilivad!</translation>
     </message>
     <message>
         <source>The upgrade should retain all your existing data.
@@ -2003,12 +1998,25 @@
 Even so, it&apos;s a good idea to make a manual backup of your PostgreSQL database just in case.
 
 If you didn&apos;t yet do this, click Abort.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uuendus peaks säilitama kõik teie olemasolevad andmed.
+
+Sellegipoolest on mõistlik teha igaks juhuks PostgreSQL-i andmebaasist käsitsi varukoopia.
+
+Kui te pole seda veel teinud, klõpsake Katkesta.</translation>
     </message>
     <message>
         <source>Pre-upgrade database backup is in:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uuenduseelne andmebaasi varukoopia asub siin:
+%1</translation>
+    </message>
+    <message>
+        <source>Unable to back up database before upgrading</source>
+        <translation type="unfinished">Andmebaasi ei õnnestunud enne uuendamist varundada</translation>
+    </message>
+    <message>
+        <source>Could not backup database prior to required upgrade.  See logs for more details.</source>
+        <translation type="unfinished">Andmebaasi ei õnnestunud enne vajalikku uuendust varundada. Üksikasjad leiate logidest.</translation>
     </message>
     <message>
         <source>Unable to import some or all of new default data
@@ -2016,358 +2024,353 @@ If you didn&apos;t yet do this, click Abort.</source>
 %1
 
 Log file may contain more details.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mõnda või kõiki uusi vaikeandmeid ei õnnestunud importida
+
+%1
+
+Logifail võib sisaldada rohkem üksikasju.</translation>
     </message>
     <message>
         <source>ERROR: Unsupported Database Schema</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">VIGA: toetamata andmebaasi skeem</translation>
     </message>
     <message>
         <source>Attempting to read a v%1 database, but %2 %3 only supports databases up to v%4.
 
 Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Püütakse lugeda v%1 andmebaasi, kuid %2 %3 toetab andmebaase ainult kuni v%4.
+
+Klõpsake &apos;OK&apos;, et %2 sulgeda ja saaksite uuemale versioonile uuendada.
+</translation>
     </message>
     <message>
         <source>No Database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andmebaas puudub</translation>
     </message>
     <message>
         <source>SQLite</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SQLite</translation>
     </message>
     <message>
         <source>Cannot create new DB schema in file &apos;%1&apos;.  File already exists!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faili &apos;%1&apos; ei saa uut andmebaasi skeemi luua. Fail on juba olemas!</translation>
     </message>
     <message>
         <source>PostgreSQL</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PostgreSQL</translation>
     </message>
 </context>
 <context>
     <name>Derived</name>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kaust</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kopeeri</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kustuta</translation>
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kopeeri %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sisestage objekti %1 koopiale unikaalne nimi.</translation>
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tühja nime korral jäetakse see %1 kopeerimata.</translation>
     </message>
     <message>
         <source>Cancel All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu kõigest</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kustuta %1</translation>
     </message>
     <message>
         <source>Folder name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kausta nimi</translation>
     </message>
     <message>
         <source>Folder name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kausta nimi:</translation>
     </message>
     <message>
         <source>Bad Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vigane nimi</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-whitespace character in it</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kausta nimes peab olema vähemalt üks tühikust erinev märk</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-/ character in it</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit «%1»</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit «%1» %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kausta nimes peab olema vähemalt üks märgist / erinev märk</translation>
     </message>
     <message>
         <source>Remove %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eemalda %1</translation>
     </message>
     <message>
         <source>Delete %1 #%2 &quot;%3&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kas kustutada %1 nr %2 &quot;%3&quot;?</translation>
     </message>
     <message>
         <source>%1 in use</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 on kasutusel</translation>
     </message>
     <message numerus="yes">
         <source>Cannot delete this %1, as it is used in %n recipe(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Seda objekti (%1) ei saa kustutada, kuna seda kasutatakse %n retseptis</numerusform>
+            <numerusform>Seda objekti (%1) ei saa kustutada, kuna seda kasutatakse %n retseptis</numerusform>
         </translation>
     </message>
     <message>
         <source>Invalid!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vigane!</translation>
     </message>
     <message>
         <source>Merge %1 records</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Attempt to merge %1 %2 records? (NOTE: &lt;b&gt;This action cannot be undone!&lt;/b&gt;  It is intended for use where the records are identical or as near as makes no difference.  Use on non-identical records risks data loss.)&lt;br&gt;&lt;br&gt;&lt;b&gt;Please make sure you have a backup of your database file before using this function!&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ühenda %1 kirjed</translation>
     </message>
     <message>
         <source>%1 records differ</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 kirjed erinevad</translation>
     </message>
     <message numerus="yes">
         <source>WARNING: %1 records to be merged have %n difference(s).  Do you want to merge anyway?</source>
         <comment>0</comment>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>HOIATUS: ühendatavatel %1 kirjetel on %n erinevus. Kas soovite siiski ühendada?</numerusform>
+            <numerusform>HOIATUS: ühendatavatel %1 kirjetel on %n erinevust. Kas soovite siiski ühendada?</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Attempt to merge %1 %2 records? (NOTE: &lt;b&gt;This action cannot be undone!&lt;/b&gt;  It is intended for use where the records are identical or as near as makes no difference.  Use on non-identical records risks data loss.)&lt;br&gt;&lt;br&gt;&lt;b&gt;Please make sure you have a backup of your database file before using this function!&lt;/b&gt;</source>
+        <translation type="unfinished">Kas proovida ühendada %1 %2 kirjet? (MÄRKUS: &lt;b&gt;Seda toimingut ei saa tagasi võtta!&lt;/b&gt;  See on mõeldud kasutamiseks, kui kirjed on identsed või praktiliselt identsed.  Mitteidentsete kirjete puhul on oht andmeid kaotada.)&lt;br&gt;&lt;br&gt;&lt;b&gt;Enne selle funktsiooni kasutamist veenduge, et teil on andmebaasifailist varukoopia!&lt;/b&gt;</translation>
     </message>
     <message numerus="yes">
         <source>%n field(s) differ between %1 #%2 and %1 #%3.  If you continue, %1 #%3 will be deleted and all uses of it will be replaced by %1 #%2.  This &lt;b&gt;cannot&lt;/b&gt; be undone.&lt;br&gt;&lt;br&gt;%4</source>
         <comment>0</comment>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n väli erineb kirjete %1 nr %2 ja %1 nr %3 vahel.  Jätkamisel kustutatakse %1 nr %3 ja kõik selle kasutused asendatakse kirjega %1 nr %2.  Seda &lt;b&gt;ei saa&lt;/b&gt; tagasi võtta.&lt;br&gt;&lt;br&gt;%4</numerusform>
+            <numerusform>%n välja erinevad kirjete %1 nr %2 ja %1 nr %3 vahel.  Jätkamisel kustutatakse %1 nr %3 ja kõik selle kasutused asendatakse kirjega %1 nr %2.  Seda &lt;b&gt;ei saa&lt;/b&gt; tagasi võtta.&lt;br&gt;&lt;br&gt;%4</numerusform>
         </translation>
     </message>
     <message>
         <source>Owner ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Folder Path</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Omaniku ID</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus</translation>
     </message>
     <message>
         <source>Is Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">On kaal</translation>
     </message>
     <message>
         <source>Measure</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mõõt</translation>
     </message>
     <message>
         <source>Quantity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hulk</translation>
     </message>
     <message>
         <source>Unit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ühik</translation>
     </message>
     <message>
         <source>Ramp Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tõusuaeg</translation>
     </message>
     <message>
         <source>Start Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Algtemperatuur</translation>
     </message>
     <message>
         <source>Step Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sammu kestus</translation>
     </message>
     <message>
         <source>№ Steps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sammude arv</translation>
     </message>
     <message>
         <source>Steps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sammud</translation>
     </message>
     <message>
         <source>Ingredient ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koostisosa ID</translation>
     </message>
     <message>
         <source>Amount Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tellitud kogus</translation>
     </message>
     <message>
         <source>Amount Received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saadud kogus</translation>
     </message>
     <message>
         <source>Amount Remaining</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Quantity Remaining</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Järelejäänud kogus</translation>
     </message>
     <message>
         <source>Amount Used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kasutatud kogus</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Number</translation>
+    </message>
+    <message>
+        <source>Quantity Remaining</source>
+        <translation type="unfinished">Järelejäänud hulk</translation>
     </message>
     <message>
         <source>Show only non-zero inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Näita ainult nullist erinevat laoseisu</translation>
     </message>
     <message>
         <source>Stock Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laoost</translation>
     </message>
     <message>
         <source>Add to recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lisa retseptile</translation>
     </message>
     <message>
         <source>Set for recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Määra retseptile</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda</translation>
     </message>
     <message>
         <source>Show stock purchases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Näita laooste</translation>
     </message>
     <message>
         <source>Merge selected</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ühenda valitud</translation>
     </message>
     <message>
-        <source>Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide Snapshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Detach Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snapshot Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew It!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew again</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change date</source>
-        <translation type="unfinished"></translation>
+        <source>Rename</source>
+        <translation type="unfinished">Nimeta ümber</translation>
     </message>
     <message>
         <source>%1 name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 nimi</translation>
     </message>
     <message>
         <source>%1 name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 nimi:</translation>
     </message>
     <message>
         <source>Change %1 Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda %1 nime</translation>
+    </message>
+    <message>
+        <source>Snapshots</source>
+        <translation type="unfinished">Hetktõmmised</translation>
+    </message>
+    <message>
+        <source>Show Snapshots</source>
+        <translation type="unfinished">Näita hetktõmmiseid</translation>
+    </message>
+    <message>
+        <source>Hide Snapshots</source>
+        <translation type="unfinished">Peida hetktõmmised</translation>
+    </message>
+    <message>
+        <source>Detach Recipe</source>
+        <translation type="unfinished">Eralda retsept</translation>
+    </message>
+    <message>
+        <source>Snapshot Recipe</source>
+        <translation type="unfinished">Tee retseptist hetktõmmis</translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Pruuli!</translation>
+    </message>
+    <message>
+        <source>Brew again</source>
+        <translation type="unfinished">Pruuli uuesti</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Muuda kuupäeva</translation>
     </message>
     <message>
         <source>Contained in Folder</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Asub kaustas</translation>
     </message>
     <message>
         <source>Contained in Folder ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kausta ID</translation>
     </message>
     <message>
         <source>Invalid Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vigane nimi</translation>
     </message>
     <message>
         <source>Folder name cannot be blank (and cannot contain &apos;/&apos;)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kausta nimi ei tohi olla tühi (ega sisaldada märki &apos;/&apos;)</translation>
     </message>
     <message>
         <source>Nothing to Export</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pole midagi eksportida</translation>
     </message>
     <message>
         <source>Nothing is selected or none of the selected things can be exported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Contained in Folder Path</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Midagi pole valitud või ühtki valitut ei saa eksportida</translation>
     </message>
     <message>
         <source>Export (to dotBeer, BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekspordi (dotBeer, BeerXML või BeerJSON)</translation>
     </message>
     <message>
         <source>Import (from dotBeer, BeerXML or BeerJSON)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Impordi (dotBeer, BeerXML või BeerJSON)</translation>
+    </message>
+    <message>
+        <source>Contained in Folder Path</source>
+        <translation type="unfinished">Kausta asukoht</translation>
     </message>
     <message>
         <source>Locked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lukus</translation>
     </message>
 </context>
 <context>
     <name>Derived::StockUseClass</name>
     <message>
         <source>Use of %1 in %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 kasutus: %2</translation>
     </message>
 </context>
 <context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varustus</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -2375,892 +2378,888 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Equipments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varustused</translation>
     </message>
     <message>
         <source>Preboil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedueelne</translation>
     </message>
     <message>
         <source>Aging Vessel Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laagerdusanuma kadu</translation>
     </message>
     <message>
         <source>Aging Vessel Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laagerdusanuma märkmed</translation>
     </message>
     <message>
         <source>Aging Vessel Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laagerdusanuma tüüp</translation>
     </message>
     <message>
         <source>Aging Vessel Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laagerdusanuma maht</translation>
     </message>
     <message>
         <source>Boiling Point</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keemistemperatuur</translation>
     </message>
     <message>
         <source>Evaporation Rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aurustumiskiirus</translation>
     </message>
     <message>
         <source>HLT Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumaveepaagi kadu</translation>
     </message>
     <message>
         <source>HLT Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumaveepaagi märkmed</translation>
     </message>
     <message>
         <source>HLT Specific Heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumaveepaagi erisoojus</translation>
     </message>
     <message>
         <source>HLT Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumaveepaagi tüüp</translation>
     </message>
     <message>
         <source>HLT Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumaveepaagi maht</translation>
     </message>
     <message>
         <source>HLT Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumaveepaagi kaal</translation>
     </message>
     <message>
         <source>Hop Utilization</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humala kasutusaste</translation>
     </message>
     <message>
         <source>Kettle Evaporation Per Hour</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti aurustumine tunnis</translation>
     </message>
     <message>
         <source>Kettle Internal Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti siseläbimõõt</translation>
     </message>
     <message>
         <source>Kettle Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti märkmed</translation>
     </message>
     <message>
         <source>Kettle Opening Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti ava läbimõõt</translation>
     </message>
     <message>
         <source>Kettle Outflow Per Minute</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti väljavool minutis</translation>
     </message>
     <message>
         <source>Kettle Specific Heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti erisoojus</translation>
     </message>
     <message>
         <source>Kettle Trub Chiller Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti setete ja jahuti kadu</translation>
     </message>
     <message>
         <source>Kettle Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti tüüp</translation>
     </message>
     <message>
         <source>Kettle Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti kaal</translation>
     </message>
     <message>
         <source>Lauter Tun Deadspace Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtreerimisanuma surnud ruumi kadu</translation>
     </message>
     <message>
         <source>Lauter Tun Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtreerimisanuma märkmed</translation>
     </message>
     <message>
         <source>Lauter Tun Specific Heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtreerimisanuma erisoojus</translation>
     </message>
     <message>
         <source>Lauter Tun Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtreerimisanuma tüüp</translation>
     </message>
     <message>
         <source>Lauter Tun Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtreerimisanuma maht</translation>
     </message>
     <message>
         <source>Lauter Tun Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtreerimisanuma kaal</translation>
     </message>
     <message>
         <source>Mash Tun Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma kadu</translation>
     </message>
     <message>
         <source>Mash Tun Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma märkmed</translation>
     </message>
     <message>
         <source>Mash Tun Specific Heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma erisoojus</translation>
     </message>
     <message>
         <source>Mash Tun Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma tüüp</translation>
     </message>
     <message>
         <source>Mash Tun Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma maht</translation>
     </message>
     <message>
         <source>Mash Tun Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma kaal</translation>
     </message>
     <message>
         <source>Packaging Vessel Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Villimisanuma kadu</translation>
     </message>
     <message>
         <source>Packaging Vessel Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Villimisanuma märkmed</translation>
     </message>
     <message>
         <source>Packaging Vessel Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Villimisanuma tüüp</translation>
     </message>
     <message>
         <source>Packaging Vessel Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Villimisanuma maht</translation>
     </message>
     <message>
         <source>Top Up Kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti lisavesi</translation>
     </message>
     <message>
         <source>Top Up Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lisavesi</translation>
     </message>
     <message>
         <source>Fermentor Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Käärimisanuma kadu</translation>
     </message>
     <message>
         <source>Fermentor Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Käärimisanuma märkmed</translation>
     </message>
     <message>
         <source>Fermentor Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Käärimisanuma tüüp</translation>
     </message>
     <message>
         <source>Default Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vaikimisi partii suurus</translation>
     </message>
     <message>
         <source>Fermentor Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Käärimisanuma maht</translation>
     </message>
     <message>
         <source>Default Pre-Boil Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vaikimisi keedueelne kogus</translation>
     </message>
     <message>
         <source>Kettle Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedupoti maht</translation>
     </message>
     <message>
         <source>Foundation Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alusvee kogus</translation>
     </message>
     <message>
         <source>Grain Absorption</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linnaste veeimavus</translation>
     </message>
     <message>
         <source>Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Partii suurus</translation>
     </message>
 </context>
 <context>
     <name>EquipmentEditor</name>
     <message>
         <source>The following values are not set:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Järgmised väärtused on määramata:</translation>
     </message>
     <message>
         <source>hop utilization</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">humala kasutusaste</translation>
     </message>
     <message>
         <source>Calculation Warnings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This equipment profile may break %1&apos;s maths</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Arvutushoiatused</translation>
     </message>
     <message>
         <source>Numerical values on zero-sized &quot;optional&quot; vessels will be unset or zeroed when you save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nullmahuga &quot;valikuliste&quot; anumate arvväärtused tühjendatakse või nullitakse salvestamisel</translation>
     </message>
     <message>
         <source>The following values will be discarded:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Järgmised väärtused jäetakse kõrvale:</translation>
     </message>
     <message>
         <source>Hot liquor tank losses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumaveepaagi kaod</translation>
     </message>
     <message>
         <source>Hot liquor tank weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumaveepaagi kaal</translation>
     </message>
     <message>
         <source>Hot liquor tank specific heat capacity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumaveepaagi erisoojusmahtuvus</translation>
     </message>
     <message>
         <source>Lauter tun losses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtreerimisanuma kaod</translation>
     </message>
     <message>
         <source>Lauter tun weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtreerimisanuma kaal</translation>
     </message>
     <message>
         <source>Lauter tun specific heat capacity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtreerimisanuma erisoojusmahtuvus</translation>
     </message>
     <message>
         <source>Packaging vessel losses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Villimisanuma kaod</translation>
     </message>
     <message>
         <source>Aging vessel losses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laagerdusanuma kaod</translation>
     </message>
     <message>
         <source>Data Discard Warnings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andmete kõrvalejätmise hoiatused</translation>
     </message>
     <message>
-        <source>default batch size</source>
-        <translation type="unfinished"></translation>
+        <source>This equipment profile may break %1&apos;s maths</source>
+        <translation type="unfinished">See varustusprofiil võib %1 arvutused rikkuda</translation>
     </message>
     <message>
         <source>Foundation water (%1) plus mash tun loss (%2) leaves no room for the mash in a mash tun with total capacity %3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alusvesi (%1) koos mäskianuma kaoga (%2) ei jäta mäskile ruumi mäskianumas, mille kogumaht on %3.</translation>
+    </message>
+    <message>
+        <source>default batch size</source>
+        <translation type="unfinished">vaikimisi partii suurus</translation>
     </message>
     <message>
         <source>Foundation water (%1) leaves no room for the mash in the kettle (total capacity %2).  (As there is no separate mash tun, the mash happens in the kettle.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alusvesi (%1) ei jäta mäskile ruumi keedupotis (kogumaht %2).  (Kuna eraldi mäskianumat pole, toimub mäskimine keedupotis.)</translation>
     </message>
     <message>
         <source>The default pre-boil volume (%1) is more than the kettle can hold (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vaikimisi keedueelne kogus (%1) on suurem, kui keedupotti mahub (%2).</translation>
     </message>
     <message>
         <source>The default batch size (%1) is more than the fermentor can hold (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vaikimisi partii suurus (%1) on suurem, kui käärimisanumasse mahub (%2).</translation>
     </message>
     <message>
         <source>Mash tun losses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma kaod</translation>
     </message>
     <message>
         <source>Mash tun weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma kaal</translation>
     </message>
     <message>
         <source>Mash tun specific heat capacity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma erisoojusmahtuvus</translation>
     </message>
     <message>
         <source>batch size %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">partii suurus %1</translation>
     </message>
     <message>
         <source>pre-boil size %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">keedueelne kogus %1</translation>
     </message>
     <message>
         <source>Update recipes?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kas uuendada retsepte?</translation>
     </message>
     <message>
         <source>The following recipes use equipment &quot;%1&quot; and have the batch size and/or pre-boil size that it previously specified.  Would you like to update them to match the changes you just made?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Järgmised retseptid kasutavad varustust &quot;%1&quot; ja neil on varem määratud partii suurus ja/või keedueelne kogus.  Kas soovite neid uuendada vastavalt tehtud muudatustele?</translation>
     </message>
 </context>
 <context>
     <name>Fermentable</name>
     <message>
         <source>Dry Extract</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuivekstrakt</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstrakt</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linnased</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Adjunct</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other Adjunct</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Suhkur</translation>
     </message>
     <message>
         <source>Fruit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Puuvili</translation>
     </message>
     <message>
         <source>Juice</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mahl</translation>
     </message>
     <message>
         <source>Honey</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mesi</translation>
+    </message>
+    <message>
+        <source>Other Adjunct</source>
+        <translation type="unfinished">Muu lisand</translation>
     </message>
     <message>
         <source>Base</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Baaslinnased</translation>
     </message>
     <message>
         <source>Caramel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karamell</translation>
     </message>
     <message>
         <source>Flaked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helbed</translation>
     </message>
     <message>
         <source>Roasted</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Röstitud</translation>
     </message>
     <message>
         <source>Specialty</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Erilinnased</translation>
     </message>
     <message>
         <source>Smoked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Suitsutatud</translation>
+    </message>
+    <message>
+        <source>Adjunct</source>
+        <translation type="unfinished">Lisand</translation>
+    </message>
+    <message>
+        <source>Fermentable</source>
+        <translation type="unfinished">Kääritatav</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Värvus</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritatavad</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstraktisaagis, kuivaine peen jahvatus (DBFG)</translation>
     </message>
     <message>
         <source>Alpha Amylase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfa-amülaas</translation>
     </message>
     <message>
         <source>Beta Glucan</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beetaglükaan</translation>
     </message>
     <message>
         <source>Coarse Fine Diff</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jämeda ja peene jahvatuse vahe</translation>
     </message>
     <message>
         <source>Coarse Grind Yield</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jämeda jahvatuse saagis</translation>
     </message>
     <message>
         <source>Diastatic Power</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diastaatiline jõud</translation>
     </message>
     <message>
         <source>DI pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DI pH</translation>
     </message>
     <message>
         <source>DMS precursors</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DMS-i eelühendid</translation>
     </message>
     <message>
         <source>Free Amino Nitrogen (FAN)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vaba aminolämmastik (FAN)</translation>
     </message>
     <message>
         <source>Fermentability</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritatavus</translation>
     </message>
     <message>
         <source>Friability</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pudedus</translation>
     </message>
     <message>
         <source>Grain Group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linnaste rühm</translation>
     </message>
     <message>
         <source>Hardness Proportion Glassy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kõvaduse osakaal: klaasjas</translation>
     </message>
     <message>
         <source>Hardness Proportion Half</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kõvaduse osakaal: poolklaasjas</translation>
     </message>
     <message>
         <source>Hardness Proportion Mealy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kõvaduse osakaal: jahune</translation>
     </message>
     <message>
         <source>Kernel Size Proportion Plump</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tera suuruse osakaal: täidlane</translation>
     </message>
     <message>
         <source>Kernel Size Proportion Thin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tera suuruse osakaal: peenike</translation>
     </message>
     <message>
         <source>Kolbach Index</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kolbachi indeks</translation>
     </message>
     <message>
         <source>Max In Batch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maksimum partiis</translation>
     </message>
     <message>
         <source>Moisture</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Niiskus</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Päritolu</translation>
     </message>
     <message>
         <source>Potential Yield</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Potentsiaalne saagis</translation>
     </message>
     <message>
         <source>Producer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tootja</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toote ID</translation>
     </message>
     <message>
         <source>Protein</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valk</translation>
     </message>
     <message>
         <source>Recommend Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Soovitatav mäskida</translation>
     </message>
     <message>
         <source>Supplier</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tarnija</translation>
     </message>
     <message>
         <source>Viscosity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Viskoossus</translation>
     </message>
     <message>
         <source>Fermentable Purchases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritatavate ostud</translation>
     </message>
     <message>
         <source>Yield (DBFG) %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saagis (DBFG) %</translation>
     </message>
     <message>
         <source>IBU Gal Per Lb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IBU gal/lb</translation>
     </message>
     <message>
         <source>Lactic Acid content (% weight)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Piimhappesisaldus (massi-%)</translation>
     </message>
     <message>
         <source>Fermentable by yeast (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pärmi poolt kääritatav (%)</translation>
     </message>
 </context>
 <context>
     <name>Fermentation</name>
     <message>
         <source>Fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritamine</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kirjeldus</translation>
     </message>
     <message>
         <source>Fermentation Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritamisprofiilid</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Esmane</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teisene</translation>
     </message>
     <message>
         <source>Tertiary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kolmas</translation>
     </message>
     <message>
         <source>Krausen Handling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Krääseni käsitlemine</translation>
     </message>
     <message>
         <source>Mixed In</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Segatud sisse</translation>
     </message>
     <message>
         <source>Minor Deposits on Fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vähesed setted käärimisanumal</translation>
     </message>
     <message>
         <source>Medium Deposits on Fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keskmised setted käärimisanumal</translation>
     </message>
     <message>
         <source>Heavy Deposits on Fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rohked setted käärimisanumal</translation>
     </message>
     <message>
         <source>Very Heavy Deposits on Fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Väga rohked setted käärimisanumal</translation>
     </message>
     <message>
         <source>Blown Off, Slow Fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Välja puhutud, aeglane käärimine</translation>
     </message>
     <message>
         <source>Blown Off, Normal Fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Välja puhutud, normaalne käärimine</translation>
     </message>
     <message>
         <source>Blown Off, Vigorous Fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Välja puhutud, jõuline käärimine</translation>
     </message>
 </context>
 <context>
     <name>FermentationStep</name>
     <message>
         <source>Fermentation Step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritamise samm</translation>
     </message>
     <message>
         <source>Step time (days)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sammu kestus (päevad)</translation>
     </message>
     <message>
         <source>Free Rise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vaba tõus</translation>
     </message>
     <message>
         <source>Vessel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anum</translation>
     </message>
 </context>
 <context>
     <name>FolderCommon</name>
     <message>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kaust</translation>
     </message>
     <message>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Asukoht</translation>
     </message>
     <message>
         <source>Full Path</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Täielik asukoht</translation>
     </message>
 </context>
 <context>
     <name>HelpDialog</name>
     <message>
         <source>Online Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Võrguabi</translation>
     </message>
     <message>
-        <source>&lt;p&gt;The %1 wiki is at &lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>If you find a bug, or have an idea for an enhancement, please raise an issue at &lt;br/&gt;&lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;Kui see on Brewken, saame selle korda teha...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teie andmed</translation>
     </message>
     <message>
         <source>Recipes, ingredients and other important data are stored in one or more files in the following folder (which is configurable via the &apos;Tools &gt; Options&apos; menu):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retseptid, koostisosad ja muud olulised andmed salvestatakse ühte või mitmesse faili järgmises kaustas (seda saab muuta menüüs &apos;Tööriistad &gt; Valikud&apos;):</translation>
     </message>
     <message>
         <source>It is a good idea to take regular backups of this folder.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sellest kaustast on mõistlik regulaarselt varukoopiaid teha.</translation>
     </message>
     <message>
         <source>Settings and Log files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sätted ja logifailid</translation>
     </message>
     <message>
         <source>The contents of the following folder(s) can be helpful for diagnosing problems:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Järgmis(t)e kaus(t)a sisu võib olla abiks probleemide diagnoosimisel:</translation>
     </message>
     <message>
         <source>Configuration:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seadistus:</translation>
     </message>
     <message>
         <source>Logs:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Logid:</translation>
     </message>
     <message>
         <source>The location of the log files can be configured via the &apos;Tools &gt; Options&apos; menu.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Logifailide asukohta saab muuta menüüs &apos;Tööriistad &gt; Valikud&apos;.</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Abi</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;The %1 wiki is at &lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;.&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;%1 viki asub aadressil &lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>If you find a bug, or have an idea for an enhancement, please raise an issue at &lt;br/&gt;&lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;.</source>
+        <translation type="unfinished">Kui leiate vea või teil on idee täiustuseks, looge palun teema aadressil &lt;br/&gt;&lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>version %1 for %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">versioon %1 platvormile %2</translation>
     </message>
 </context>
 <context>
     <name>Hop</name>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aroom</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Plug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aroma &amp; Bittering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extract</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>WetLeaf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Powder</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kibestav</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maitse</translation>
+    </message>
+    <message>
+        <source>Aroma &amp; Bittering</source>
+        <translation type="unfinished">Aroom ja kibedus</translation>
     </message>
     <message>
         <source>Bittering &amp; Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kibedus ja maitse</translation>
     </message>
     <message>
         <source>Aroma &amp; Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aroom ja maitse</translation>
     </message>
     <message>
         <source>Aroma, Bittering &amp; Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aroom, kibedus ja maitse</translation>
+    </message>
+    <message>
+        <source>Hop</source>
+        <translation type="unfinished">Humal</translation>
+    </message>
+    <message>
+        <source>Leaf</source>
+        <translation type="unfinished">Käbid</translation>
+    </message>
+    <message>
+        <source>Pellet</source>
+        <translation type="unfinished">Graanulid</translation>
+    </message>
+    <message>
+        <source>Plug</source>
+        <translation type="unfinished">Pressitud käbid</translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation type="unfinished">Ekstrakt</translation>
+    </message>
+    <message>
+        <source>WetLeaf</source>
+        <translation type="unfinished">Värsked käbid</translation>
+    </message>
+    <message>
+        <source>Powder</source>
+        <translation type="unfinished">Pulber</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Päritolu</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humalad</translation>
     </message>
     <message>
         <source>Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfa</translation>
     </message>
     <message>
         <source>Beta</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beeta</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vorm</translation>
     </message>
     <message>
         <source>β-Pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β-pineen</translation>
     </message>
     <message>
         <source>Caryophyllene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karüofülleen</translation>
     </message>
     <message>
         <source>Cohumulone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kohumuloon</translation>
     </message>
     <message>
         <source>Farnesene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Farneseen</translation>
     </message>
     <message>
         <source>Geraniol</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geraniool</translation>
     </message>
     <message>
         <source>Humulene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humuleen</translation>
     </message>
     <message>
         <source>Limonene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Limoneen</translation>
     </message>
     <message>
         <source>Linalool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linalool</translation>
     </message>
     <message>
         <source>Myrcene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mürtseen</translation>
     </message>
     <message>
         <source>Nerol</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nerool</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pineen</translation>
     </message>
     <message>
         <source>Polyphenols</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Polüfenoolid</translation>
     </message>
     <message>
         <source>Producer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tootja</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toote ID</translation>
     </message>
     <message>
         <source>Substitutes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Asendajad</translation>
     </message>
     <message>
         <source>Total Oil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Õlide kogusisaldus</translation>
     </message>
     <message>
         <source>Xanthohumol</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ksantohumool</translation>
     </message>
     <message>
         <source>Year</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aasta</translation>
     </message>
     <message>
         <source>Hop Purchases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humalaostud</translation>
     </message>
     <message>
         <source>% Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% alfa</translation>
     </message>
     <message>
         <source>% Beta</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% beeta</translation>
     </message>
     <message>
         <source>Max % Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. % alfa</translation>
     </message>
     <message>
         <source>Min % Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. % alfa</translation>
     </message>
     <message>
         <source>Max % Beta</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. % beeta</translation>
     </message>
     <message>
         <source>Min % Beta</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. % beeta</translation>
     </message>
     <message>
         <source>Six Month Alpha Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfa kadu kuue kuuga</translation>
     </message>
 </context>
 <context>
@@ -3274,300 +3273,313 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     <name>HydrometerTool</name>
     <message>
         <source>Hydrometer Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Areomeetri tööriist</translation>
     </message>
     <message>
         <source>SG Reading</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SG lugem</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatuur</translation>
     </message>
     <message>
         <source>Adjust SG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Korrigeeri SG</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teisenda</translation>
     </message>
     <message>
         <source>Measured gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mõõdetud tihedus</translation>
     </message>
     <message>
         <source>Corrected gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Korrigeeritud tihedus</translation>
     </message>
     <message>
         <source>Hydrometer Calibration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Areomeetri kalibreerimine</translation>
     </message>
 </context>
 <context>
     <name>IbuGuSlider</name>
     <message>
         <source>Cloying</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lääge</translation>
     </message>
     <message>
         <source>Extra Malty</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Väga linnaseline</translation>
     </message>
     <message>
         <source>Slightly Malty</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kergelt linnaseline</translation>
     </message>
     <message>
         <source>Balanced</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tasakaalus</translation>
     </message>
     <message>
         <source>Slightly Hoppy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kergelt humalane</translation>
     </message>
     <message>
         <source>Extra Hoppy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Väga humalane</translation>
     </message>
     <message>
         <source>Way Hoppy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ülimalt humalane</translation>
     </message>
 </context>
 <context>
     <name>ImportRecordCount</name>
     <message>
         <source>Couldn&apos;t find any recognisable data in the file!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Failist ei leitud ühtki äratuntavat andmekirjet!</translation>
     </message>
     <message>
         <source>🗸 Read </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">🗸 Loeti </translation>
     </message>
     <message>
         <source> record</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> kirje</translation>
     </message>
     <message>
         <source> records</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> kirjet</translation>
     </message>
     <message>
         <source>
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+
+</translation>
     </message>
     <message>
         <source>↷ Skipped </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">↷ Vahele jäeti </translation>
     </message>
 </context>
 <context>
     <name>InfoButton</name>
     <message>
         <source>i</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">i</translation>
     </message>
 </context>
 <context>
     <name>Ingredient</name>
     <message>
         <source>Ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koostisosa</translation>
     </message>
     <message>
         <source>Total Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laoseis kokku</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koguse tüüp</translation>
     </message>
 </context>
 <context>
     <name>IngredientName</name>
     <message>
         <source>Purchase of %1 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ost: %1 </translation>
     </message>
 </context>
 <context>
     <name>Instruction</name>
     <message>
         <source>Instruction</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Juhis</translation>
     </message>
     <message>
         <source>Completed </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lõpetatud </translation>
     </message>
     <message>
         <source>Directions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Juhised</translation>
     </message>
     <message>
         <source>Has Timer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Taimeriga</translation>
     </message>
     <message>
         <source>Interval</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Intervall</translation>
     </message>
     <message>
         <source>Timer Value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Taimeri väärtus</translation>
     </message>
+</context>
+<context>
+    <name>InventoryChange</name>
     <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
     </message>
 </context>
 <context>
     <name>Item</name>
     <message>
         <source>Add %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lisa %1</translation>
     </message>
     <message>
         <source>Remove selected %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eemalda valitud %1</translation>
     </message>
     <message>
         <source>Move selected %1 up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liiguta valitud %1 üles</translation>
     </message>
     <message>
         <source>Move selected %1 down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liiguta valitud %1 alla</translation>
     </message>
     <message>
         <source>Edit selected %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda valitud %1</translation>
     </message>
 </context>
 <context>
     <name>LockAndShareBar</name>
     <message>
         <source>Make a copy for this recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tee sellele retseptile koopia</translation>
     </message>
     <message>
         <source>Make a copy that this recipe will use instead, so you can change it without affecting anything else.  Any changes you have already made in this editor are kept, and will be saved to the copy when you click Save.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teeb koopia, mida see retsept edaspidi kasutab, nii et saate seda muuta ilma muud mõjutamata.  Selles redaktoris juba tehtud muudatused säilivad ja salvestatakse koopiasse, kui klõpsate Salvesta.</translation>
     </message>
     <message>
         <source>Unlock…</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ava lukk…</translation>
     </message>
     <message>
         <source>Allow this to be changed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Luba seda muuta</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lukusta</translation>
     </message>
     <message>
         <source>Prevent this from being changed.  You will still be able to use it in recipes, and to make copies of it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keelab selle muutmise.  Saate seda endiselt retseptides kasutada ja sellest koopiaid teha.</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Recipe name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retsepti nimi</translation>
     </message>
     <message>
         <source>Recipe name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retsepti nimi:</translation>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varunda andmebaas</translation>
     </message>
     <message>
         <source>Oops!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oih!</translation>
     </message>
     <message>
         <source>Could not copy the files for some reason.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faile ei õnnestunud mingil põhjusel kopeerida.</translation>
     </message>
     <message>
         <source>A Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hoiatus</translation>
     </message>
     <message>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">See hävitab teie praegused retseptid ja koostisosad. Kas soovite jätkata?</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Taaskäivita</translation>
     </message>
     <message>
         <source>No equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varustus puudub</translation>
     </message>
     <message>
         <source>You must select or define an equipment profile first.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Esmalt peate valima või määratlema varustusprofiili.</translation>
     </message>
     <message>
         <source>No style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Õlletüüp puudub</translation>
     </message>
     <message>
         <source>You must select a style first.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Esmalt peate valima õlletüübi.</translation>
     </message>
     <message>
         <source>Choose File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vali fail</translation>
     </message>
     <message>
         <source>SQLite (*.sqlite)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SQLite (*.sqlite)</translation>
     </message>
     <message>
         <source>An error was returned while creating %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Objekti %1 loomisel tagastati viga</translation>
     </message>
     <message>
         <source>Change Recipe Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda retsepti nime</translation>
     </message>
     <message>
         <source>Change Recipe Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda retsepti õlletüüpi</translation>
     </message>
     <message>
         <source>Change Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda partii suurust</translation>
     </message>
     <message>
         <source>Change Recipe Efficiency</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda retsepti efektiivsust</translation>
+    </message>
+    <message>
+        <source>Undo %1</source>
+        <translation type="unfinished">Võta tagasi: %1</translation>
+    </message>
+    <message>
+        <source>Redo %1</source>
+        <translation type="unfinished">Tee uuesti: %1</translation>
     </message>
     <message>
         <source>Error creating recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Viga retsepti loomisel</translation>
     </message>
     <message>
-        <source>Add %1 to recipe</source>
-        <translation type="unfinished"></translation>
+        <source>Nothing to export</source>
+        <translation type="unfinished">Pole midagi eksportida</translation>
+    </message>
+    <message>
+        <source>None of the selected items is exportable</source>
+        <translation type="unfinished">Ükski valitud üksus pole eksporditav</translation>
     </message>
     <message>
         <source>Error Loading Data</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Viga andmete laadimisel</translation>
     </message>
     <message>
         <source>The program may not work if you ignore this error.
@@ -3575,532 +3587,530 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
 See logs for more details.
 
 If you need help, please open an issue at %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kui seda viga eirate, ei pruugi programm töötada.
+
+Üksikasjad leiate logidest.
+
+Kui vajate abi, looge palun teema aadressil %1</translation>
     </message>
     <message>
         <source>Drop fermentable(s) on a recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lohistage kääritatav(ad) retseptile</translation>
     </message>
     <message>
         <source>Drop hop(s) on a recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lohistage humal(ad) retseptile</translation>
     </message>
     <message>
         <source>Drop misc(s) on a recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lohistage muu(d) koostisosa(d) retseptile</translation>
     </message>
     <message>
         <source>Drop yeast(s) on a recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lohistage pärm(id) retseptile</translation>
     </message>
     <message>
         <source>Operation failed.  See log file for more details.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toiming ebaõnnestus. Üksikasjad leiate logifailist.</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation type="unfinished">Teave: %1</translation>
     </message>
     <message>
         <source>Please restart %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nothing to export</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>None of the selected items is exportable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Palun taaskäivitage %1.</translation>
     </message>
     <message>
         <source>Automatically-created Boil for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Automaatselt loodud keetmine: %1</translation>
     </message>
     <message>
         <source>Automatically-created Fermentation for %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Undo %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Redo %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Automaatselt loodud kääritamine: %1</translation>
     </message>
     <message>
         <source>Wrote recipe to file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retsept kirjutati faili</translation>
     </message>
     <message>
         <source>Error writing recipe to file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Viga retsepti faili kirjutamisel</translation>
     </message>
     <message>
         <source>Change Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda pruulimise kuupäeva</translation>
     </message>
     <message>
         <source>Brew Log #%1 for brew on %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulimispäevik nr %1 (pruulitud %2)</translation>
     </message>
     <message>
         <source>Brew Log for brew on %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulimispäevik (pruulitud %1)</translation>
     </message>
     <message>
         <source>Primary fermentation for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Esmane kääritamine: %1</translation>
     </message>
     <message>
         <source>Locked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lukus</translation>
     </message>
     <message>
         <source>Used by a locked recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kasutusel lukustatud retseptis</translation>
     </message>
     <message numerus="yes">
         <source>Shared with %n other recipe(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Jagatud %n muu retseptiga</numerusform>
+            <numerusform>Jagatud %n muu retseptiga</numerusform>
         </translation>
     </message>
     <message>
+        <source> · </source>
+        <translation type="unfinished"> · </translation>
+    </message>
+    <message>
         <source>Used only by this recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kasutusel ainult selles retseptis</translation>
     </message>
     <message>
         <source>⚠ Problems found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> · </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">⚠ Leiti probleeme</translation>
     </message>
     <message>
         <source>Change Use Mash Profile in FG Calculation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda mäskiprofiili kasutamist FG arvutuses</translation>
+    </message>
+    <message>
+        <source>%1 (%2): recipe uses %3 but stock is measured by %4 -- %5 not taken from stock</source>
+        <translation type="unfinished">%1 (%2): retsept kasutab ühikut %3, kuid laoseisu mõõdetakse ühikus %4 -- %5 jäeti laost maha arvamata</translation>
+    </message>
+    <message>
+        <source>Inventory not fully updated</source>
+        <translation type="unfinished">Laoseisu ei uuendatud täielikult</translation>
+    </message>
+    <message>
+        <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
+        <translation type="unfinished">Järgmisi koostisosi mõõdetakse retseptis ja laoseisus erinevalt, mistõttu kasutatud kogust ei saanud (täielikult) laoseisust maha arvata.</translation>
     </message>
 </context>
 <context>
     <name>Mash</name>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk</translation>
     </message>
     <message>
         <source>Total Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koguaeg</translation>
     </message>
     <message>
         <source>Total time (mins)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koguaeg (min)</translation>
     </message>
     <message>
         <source>Mash Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskiprofiilid</translation>
     </message>
     <message>
         <source>Adjust For Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Korrigeeri varustuse järgi</translation>
     </message>
     <message>
         <source>Mash Tun Specific Heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma erisoojus</translation>
     </message>
     <message>
         <source>Mash Tun Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma kaal</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pH</translation>
     </message>
     <message>
         <source>Sparge Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loputusvee temperatuur</translation>
     </message>
     <message>
         <source>Tun Temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anuma temperatuur</translation>
     </message>
     <message>
         <source>Initial Grain Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linnaste algtemperatuur</translation>
     </message>
     <message>
         <source>Mash Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 (copy for %2)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskivesi</translation>
     </message>
     <message>
         <source>Automatically Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Korrigeeri automaatselt</translation>
+    </message>
+    <message>
+        <source>%1 (copy for %2)</source>
+        <translation type="unfinished">%1 (koopia retseptile %2)</translation>
+    </message>
+    <message>
+        <source>, so step validation highlighting is enabled</source>
+        <translation type="unfinished">, seega on sammude valideerimise esiletõstmine lubatud</translation>
     </message>
 </context>
 <context>
     <name>MashAutoAdjuster</name>
     <message>
         <source>%1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1: %2</translation>
     </message>
     <message>
         <source>Step %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Samm %1</translation>
     </message>
     <message>
         <source>Batch Sparge %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Partiiloputus %1</translation>
     </message>
     <message>
         <source>Fly Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pidevloputus</translation>
     </message>
     <message>
         <source>There are no mash steps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskimise samme pole.</translation>
     </message>
     <message>
         <source>There are no grains in the mash.  You need some mash-stage fermentable additions before the mash can be calculated.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskis pole linnaseid.  Enne mäski arvutamist on vaja mäskimisetapi kääritatavaid lisandusi.</translation>
     </message>
     <message>
         <source>The initial grain temperature is %1.  Please set it to the temperature of the grain before mashing, which is normally room temperature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linnaste algtemperatuur on %1.  Palun määrake selleks linnaste temperatuur enne mäskimist, tavaliselt toatemperatuur.</translation>
     </message>
     <message>
         <source>The initial mash tun temperature is %1, which needs to be between freezing and boiling point (%2).  (If it is not set, we assume the tun is at the same temperature as the grain.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskianuma algtemperatuur on %1, kuid see peab jääma külmumis- ja keemistemperatuuri (%2) vahele.  (Kui see on määramata, eeldame, et anum on linnastega sama temperatuuriga.)</translation>
     </message>
     <message>
         <source>The step temperature was %1, which doesn&apos;t make sense, so it has been set to %2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sammu temperatuur oli %1, mis pole mõistlik, seega määrati see väärtusele %2.</translation>
     </message>
     <message>
         <source>The step temperature is %1, which needs to be between freezing and boiling point (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sammu temperatuur on %1, kuid see peab jääma külmumis- ja keemistemperatuuri (%2) vahele.</translation>
     </message>
     <message>
         <source>The first step must be an infusion (ie adding the strike water).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Esimene samm peab olema infusioon (st mäskivee lisamine).</translation>
     </message>
     <message>
         <source>Sparge steps must come after all the other steps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loputussammud peavad tulema pärast kõiki teisi samme.</translation>
     </message>
     <message>
         <source>The mash thickness must be positive.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäski paksus peab olema positiivne.</translation>
     </message>
     <message>
         <source>The infusion temperature is pinned, but has not been set.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Infusiooni temperatuur on fikseeritud, kuid määramata.</translation>
     </message>
     <message>
         <source>With no sparge, this step has to make up the total water needed (%1), but the other steps already add %2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loputuseta peab see samm andma kogu vajaliku vee (%1), kuid teised sammud lisavad juba %2.</translation>
     </message>
     <message>
         <source>Cannot reach %1 with water at %2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatuurini %1 ei saa jõuda veega, mille temperatuur on %2.</translation>
     </message>
     <message>
         <source>The infusion amount must be more than zero.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Infusiooni kogus peab olema suurem kui null.</translation>
     </message>
     <message>
         <source>This infusion does not change the temperature of the mash, so its amount cannot be calculated.  It needs to be set and pinned.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">See infusioon ei muuda mäski temperatuuri, seega ei saa selle kogust arvutada.  See tuleb määrata ja fikseerida.</translation>
     </message>
     <message>
         <source>Try a thinner mash (ie more water).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Proovige vedelamat mäski (st rohkem vett).</translation>
     </message>
     <message>
         <source>Try more water or a lower step temperature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Proovige rohkem vett või madalamat sammu temperatuuri.</translation>
     </message>
     <message>
         <source>The water would need to be at %1, which is above boiling point (%2).  %3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vesi peaks olema temperatuuril %1, mis on üle keemistemperatuuri (%2).  %3</translation>
     </message>
     <message>
         <source>The mash would already be hotter than %1 at this point.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk oleks selleks hetkeks juba kuumem kui %1.</translation>
     </message>
     <message>
         <source>This is more water than is needed to reach %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seda vett on rohkem, kui temperatuurini %1 jõudmiseks vaja.</translation>
     </message>
     <message>
         <source>Try a smaller pinned amount, or unpinning it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Proovige väiksemat fikseeritud kogust või eemaldage fikseering.</translation>
     </message>
     <message>
         <source>With no sparge, this step has to add the rest of the water needed.  Try having a sparge, or more water in the earlier steps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loputuseta peab see samm lisama ülejäänud vajaliku vee.  Proovige loputust või rohkem vett varasemates sammudes.</translation>
     </message>
     <message>
         <source>Try a thicker mash (ie less water).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Proovige paksemat mäski (st vähem vett).</translation>
     </message>
     <message>
         <source>To reach %1 with %2 of water, the water would need to be at %3, which is colder than the coldest water available (taken to be at the initial grain temperature, %4).  %5  %6</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatuurini %1 jõudmiseks %2 veega peaks vesi olema temperatuuril %3, mis on külmem kui külmim saadaolev vesi (eeldatavalt linnaste algtemperatuuril, %4).  %5  %6</translation>
     </message>
     <message>
         <source>%1 of water at %2 will give a mash temperature of %3 rather than %4.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 vett temperatuuril %2 annab mäski temperatuuriks %3, mitte %4.</translation>
     </message>
     <message>
         <source>The mash is already at boiling point.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk on juba keemistemperatuuril.</translation>
     </message>
     <message>
         <source>The decoction amount (%1) must be between zero and the volume of the mash (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dekoktsiooni kogus (%1) peab olema nulli ja mäski mahu (%2) vahel.</translation>
     </message>
     <message>
         <source>A decoction of %1 will give a mash temperature of %2 rather than %3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dekoktsioon kogusega %1 annab mäski temperatuuriks %2, mitte %3.</translation>
     </message>
     <message>
         <source>A decoction cannot lower the temperature of the mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dekoktsioon ei saa mäski temperatuuri langetada.</translation>
     </message>
     <message>
         <source>Cannot reach %1 by decoction, even by boiling the whole mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatuurini %1 ei saa dekoktsiooniga jõuda, isegi kogu mäski keetes.</translation>
     </message>
     <message>
         <source>At its fullest, the mash will be about %1, which is more than the capacity of the mash tun (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kõige täiemana on mäski umbes %1, mis ületab mäskianuma mahtu (%2).</translation>
     </message>
     <message>
         <source>The infusions add up to %1 of water, but %2 is needed in total.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Infusioonid annavad kokku %1 vett, kuid kokku on vaja %2.</translation>
     </message>
     <message>
         <source>There is no water left for sparging: the total water needed is %1, but the mash steps already add %2%3.  You will collect more wort than needed.  Try a thicker mash (ie less water).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loputamiseks ei jää vett: kokku on vaja %1 vett, kuid mäskimise sammud lisavad juba %2%3.  Kogute rohkem virret kui vaja.  Proovige paksemat mäski (st vähem vett).</translation>
     </message>
     <message>
         <source> and the pinned sparge amounts add %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> ja fikseeritud loputuskogused lisavad %1</translation>
     </message>
     <message>
         <source>The mash and sparge water add up to %1, but %2 is needed in total.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäski- ja loputusvesi annavad kokku %1, kuid kokku on vaja %2.</translation>
     </message>
     <message>
         <source>The sparge water temperature is pinned, but has not been set.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loputusvee temperatuur on fikseeritud, kuid määramata.</translation>
     </message>
     <message>
         <source>%1 of water at %2 will give a grain bed temperature of %3 rather than %4.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 vett temperatuuril %2 annab linnasekihi temperatuuriks %3, mitte %4.</translation>
     </message>
     <message>
         <source>The grain bed is already hotter than %1, so we use water at that temperature, and the bed will be at about %2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linnasekiht on juba kuumem kui %1, seega kasutame sellel temperatuuril vett ja kiht on umbes %2.</translation>
     </message>
     <message>
         <source>Even with boiling water, the grain bed will only reach %1 rather than %2.  This is usually fine for a batch sparge, but you could use fewer batches (ie more water per batch) or a lower sparge temperature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Isegi keeva veega jõuab linnasekiht ainult temperatuurini %1, mitte %2.  Partiiloputuse puhul on see tavaliselt korras, kuid võite kasutada vähem partiisid (st rohkem vett partii kohta) või madalamat loputustemperatuuri.</translation>
     </message>
     <message>
         <source>The sparge water would need to be at %1, which is above boiling point (%2).  Try a lower sparge temperature or more sparge water.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loputusvesi peaks olema temperatuuril %1, mis on üle keemistemperatuuri (%2).  Proovige madalamat loputustemperatuuri või rohkem loputusvett.</translation>
     </message>
     <message>
         <source>No amount is set.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus on määramata.</translation>
     </message>
     <message>
         <source>Change mash steps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda mäskimise samme</translation>
     </message>
 </context>
 <context>
     <name>MashEditor</name>
     <message>
         <source>No sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loputuseta</translation>
     </message>
     <message>
         <source>Batch sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Partiiloputus</translation>
     </message>
     <message>
         <source>Fly sparge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>To adjust the mash, edit it from a recipe that uses it (eg with the Edit button on the recipe&apos;s Mash tab), as the amounts and temperatures depend on the recipe&apos;s grain bill and equipment.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Adjusts the water amounts and temperatures in the steps to suit the grain bill and equipment of recipe &quot;%1&quot;.  Pinned values are not changed.  Changes to the steps take effect straight away (ie without clicking Save).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>⚠ This mash has problems.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>  General problems are:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pidevloputus</translation>
     </message>
     <message>
         <source>Recipe is locked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The recipe &quot;%1&quot; is locked, so its mash cannot be changed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retsept on lukus</translation>
     </message>
     <message>
         <source>Make a copy of mash?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kas teha mäskist koopia?</translation>
+    </message>
+    <message>
+        <source>Make a copy</source>
+        <translation type="unfinished">Tee koopia</translation>
+    </message>
+    <message>
+        <source>To adjust the mash, edit it from a recipe that uses it (eg with the Edit button on the recipe&apos;s Mash tab), as the amounts and temperatures depend on the recipe&apos;s grain bill and equipment.</source>
+        <translation type="unfinished">Mäski korrigeerimiseks muutke seda retseptist, mis seda kasutab (nt retsepti vahekaardil Mäsk nupuga Muuda), kuna kogused ja temperatuurid sõltuvad retsepti linnaste koostisest ja varustusest.</translation>
+    </message>
+    <message>
+        <source>Adjusts the water amounts and temperatures in the steps to suit the grain bill and equipment of recipe &quot;%1&quot;.  Pinned values are not changed.  Changes to the steps take effect straight away (ie without clicking Save).</source>
+        <translation type="unfinished">Korrigeerib sammude veekoguseid ja temperatuure vastavalt retsepti &quot;%1&quot; linnaste koostisele ja varustusele.  Fikseeritud väärtusi ei muudeta.  Sammude muudatused jõustuvad kohe (st ilma Salvesta klõpsamata).</translation>
+    </message>
+    <message>
+        <source>⚠ This mash has problems.</source>
+        <translation type="unfinished">⚠ Selles mäskis on probleeme.</translation>
+    </message>
+    <message>
+        <source>The recipe &quot;%1&quot; is locked, so its mash cannot be changed.</source>
+        <translation type="unfinished">Retsept &quot;%1&quot; on lukus, seega selle mäski ei saa muuta.</translation>
     </message>
     <message>
         <source>Adjusting the mash changes its steps to suit the grain bill and equipment of recipe &quot;%1&quot;.
 
 Do you want to make a copy of this mash for that recipe, so that you can do this without affecting anything else?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Make a copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Turn off automatic adjustment of mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Auto-Adjust undone.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Turn on automatic adjustment of mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not adjust the mash yet:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäski korrigeerimine muudab selle samme vastavalt retsepti &quot;%1&quot; linnaste koostisele ja varustusele.
+
+Kas soovite teha sellest mäskist selle retsepti jaoks koopia, et saaksite seda teha muud mõjutamata?</translation>
     </message>
     <message>
         <source>Could not adjust the mash, so nothing has been changed:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Auto-adjust mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäski ei õnnestunud korrigeerida, seega midagi ei muudetud:</translation>
     </message>
     <message>
         <source>Mash adjusted for recipe &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk korrigeeriti retsepti &quot;%1&quot; jaoks.</translation>
     </message>
     <message>
         <source>Mash adjusted for recipe &quot;%1&quot;, but please check the following:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk korrigeeriti retsepti &quot;%1&quot; jaoks, kuid kontrollige palun järgmist:</translation>
+    </message>
+    <message>
+        <source>  General problems are:</source>
+        <translation type="unfinished">  Üldised probleemid:</translation>
+    </message>
+    <message>
+        <source>Turn off automatic adjustment of mash</source>
+        <translation type="unfinished">Lülita mäski automaatne korrigeerimine välja</translation>
+    </message>
+    <message>
+        <source>Auto-Adjust undone.</source>
+        <translation type="unfinished">Automaatne korrigeerimine võeti tagasi.</translation>
+    </message>
+    <message>
+        <source>Turn on automatic adjustment of mash</source>
+        <translation type="unfinished">Lülita mäski automaatne korrigeerimine sisse</translation>
+    </message>
+    <message>
+        <source>Could not adjust the mash yet:</source>
+        <translation type="unfinished">Mäski ei saanud veel korrigeerida:</translation>
+    </message>
+    <message>
+        <source>Auto-adjust mash</source>
+        <translation type="unfinished">Korrigeeri mäski automaatselt</translation>
     </message>
 </context>
 <context>
     <name>MashStep</name>
     <message>
-        <source>Mash Step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Infusioon</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatuur</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dekoktsioon</translation>
     </message>
     <message>
         <source>Normal (Fly) Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tavaline (pidev) loputus</translation>
     </message>
     <message>
         <source>Batch Sparge (Drain Mash Tun)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Partiiloputus (tühjenda mäskianum)</translation>
     </message>
     <message>
         <source>Souring Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäski hapendamine</translation>
     </message>
     <message>
         <source>Souring Wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Virde hapendamine</translation>
+    </message>
+    <message>
+        <source>Mash Step</source>
+        <translation type="unfinished">Mäskimise samm</translation>
+    </message>
+    <message>
+        <source>Step</source>
+        <translation type="obsolete">Samm</translation>
     </message>
     <message>
         <source>Step time (mins)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sammu kestus (min)</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus</translation>
     </message>
     <message>
         <source>Decoction Amount</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dekoktsiooni kogus</translation>
     </message>
     <message>
         <source>Infuse Amount</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Infusiooni kogus</translation>
     </message>
     <message>
         <source>Infuse Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Infusiooni temperatuur</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Water:Grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vesi:linnased</translation>
     </message>
     <message>
         <source>Amount Fixed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus fikseeritud</translation>
     </message>
     <message>
         <source>Infuse Temperature Fixed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Infusiooni temperatuur fikseeritud</translation>
     </message>
     <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <source>Mash Volume</source>
+        <translation type="unfinished">Mäski maht</translation>
     </message>
 </context>
 <context>
@@ -4111,154 +4121,178 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     </message>
     <message>
         <source>Pinned: not changed when adjusting the mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fikseeritud: mäski korrigeerimisel ei muudeta</translation>
     </message>
     <message>
         <source>Pinned amount (not changed when adjusting the mash)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fikseeritud kogus (mäski korrigeerimisel ei muudeta)</translation>
     </message>
     <message>
         <source>Pinned infusion temperature (not changed when adjusting the mash)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fikseeritud infusiooni temperatuur (mäski korrigeerimisel ei muudeta)</translation>
     </message>
     <message>
         <source>⚠ %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">⚠ %1: %2</translation>
     </message>
     <message>
         <source>⚠ %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">⚠ %1</translation>
+    </message>
+    <message>
+        <source>Mash tun at its fullest: %1 (%2% of its %3 capacity)</source>
+        <translation type="unfinished">Mäskianum kõige täiemana: %1 (%2% mahust %3)</translation>
+    </message>
+    <message>
+        <source>Mash tun at its fullest: %1</source>
+        <translation type="unfinished">Mäskianum kõige täiemana: %1</translation>
+    </message>
+    <message>
+        <source>Wort collected: %1 (%2% of the %3 needed)</source>
+        <translation type="unfinished">Kogutud virre: %1 (%2% vajalikust %3)</translation>
+    </message>
+    <message>
+        <source>Wort collected: %1</source>
+        <translation type="unfinished">Kogutud virre: %1</translation>
+    </message>
+    <message>
+        <source>Change and pin mash step amount</source>
+        <translation type="unfinished">Muuda ja fikseeri mäskimise sammu kogus</translation>
+    </message>
+    <message>
+        <source>Change and pin mash step infusion temperature</source>
+        <translation type="unfinished">Muuda ja fikseeri mäskimise sammu infusiooni temperatuur</translation>
+    </message>
+    <message>
+        <source>Pin mash step amount</source>
+        <translation type="unfinished">Fikseeri mäskimise sammu kogus</translation>
+    </message>
+    <message>
+        <source>Pin mash step infusion temperature</source>
+        <translation type="unfinished">Fikseeri mäskimise sammu infusiooni temperatuur</translation>
     </message>
 </context>
 <context>
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vürts</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Selitusaine</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Veetöötlusaine</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ürt</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maitse</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muu</translation>
     </message>
     <message>
         <source>Wood</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Puit</translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished">Muud</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Producer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tootja</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toote ID</translation>
     </message>
     <message>
         <source>Use For</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kasutusotstarve</translation>
     </message>
     <message>
         <source>Misc Purchases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muude koostisosade ostud</translation>
     </message>
     <message>
         <source>Water Agent Is Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Veetöötlusaine on hape</translation>
     </message>
     <message>
         <source>Water Agent %% Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Veetöötlusaine happesisaldus %%</translation>
     </message>
     <message>
         <source>Water Agent Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Veetöötlusaine tüüp</translation>
     </message>
     <message>
         <source>Calcium Carbonate (CaCO₃)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kaltsiumkarbonaat (CaCO₃)</translation>
     </message>
     <message>
         <source>Sodium Bicarbonate (NaHCO₃)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Naatriumvesinikkarbonaat (NaHCO₃)</translation>
     </message>
     <message>
         <source>Lactic Acid (C₃H₆O₃)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Piimhape (C₃H₆O₃)</translation>
     </message>
     <message>
         <source>Phosphoric acid (H₃PO₄)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fosforhape (H₃PO₄)</translation>
     </message>
     <message>
         <source>Anhydrous Calcium Chloride (CaCl₂)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Veevaba kaltsiumkloriid (CaCl₂)</translation>
     </message>
     <message>
         <source>Calcium Chloride Dihydrate (CaCl₂·2H₂O)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kaltsiumkloriid-dihüdraat (CaCl₂·2H₂O)</translation>
     </message>
     <message>
         <source>Gypsum (CaSO₄·2H₂O)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kips (CaSO₄·2H₂O)</translation>
     </message>
     <message>
         <source>Pickling Lime (Ca(OH)₂)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kustutatud lubi (Ca(OH)₂)</translation>
     </message>
     <message>
         <source>Epsom Salt (MgSO₄·7H₂O)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Epsomi sool (MgSO₄·7H₂O)</translation>
     </message>
     <message>
         <source>Magnesium Chloride Hexahydrate (MgCl₂·6H₂O)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Magneesiumkloriid-heksahüdraat (MgCl₂·6H₂O)</translation>
     </message>
     <message>
         <source>Regular Salt (NaCl)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedusool (NaCl)</translation>
     </message>
     <message>
         <source>sulfuric acid (H₂SO₄)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">väävelhape (H₂SO₄)</translation>
     </message>
     <message>
         <source>hydrochloric acid (HCl)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">vesinikkloriidhape (HCl)</translation>
     </message>
 </context>
 <context>
@@ -4272,385 +4306,399 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     <name>NE</name>
     <message>
         <source>Change %1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda %1 %2</translation>
     </message>
     <message>
         <source>Change %1 on %2 Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda %1 retseptis %2</translation>
     </message>
     <message>
         <source>%1 #%2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 nr %2</translation>
     </message>
     <message>
         <source>This new %1 will be used by this recipe when you click Save.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seda uut objekti (%1) kasutab see retsept, kui klõpsate Salvesta.</translation>
     </message>
     <message>
         <source>Unlock %1?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kas avada %1 lukk?</translation>
     </message>
     <message>
         <source>Are you sure you want to unlock &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kas olete kindel, et soovite avada &quot;%1&quot; luku?</translation>
     </message>
     <message>
         <source>Locking is there to stop this %1 being changed by accident.  If you want to make changes for one recipe, it is usually better to make a copy for that recipe instead.
 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lukustus on selleks, et seda objekti (%1) kogemata ei muudetaks.  Kui soovite teha muudatusi ühe retsepti jaoks, on tavaliselt parem teha selle retsepti jaoks koopia.
+
+%2</translation>
     </message>
     <message>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ava lukk</translation>
     </message>
     <message>
         <source>Recipe is locked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retsept on lukus</translation>
     </message>
     <message>
         <source>This recipe is locked, so you cannot add a %1 to it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">See retsept on lukus, seega ei saa sellele lisada objekti %1.</translation>
     </message>
     <message>
         <source>%1 for %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use a copy of mash?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The mash &quot;%1&quot; adjusts automatically to the recipe that uses it (&quot;%2&quot;), so it can&apos;t be shared with another recipe.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you want to use a copy of it for this recipe?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use a copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use equipment sizes?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Would you like to set the recipe&apos;s batch size to %1 and pre-boil size to %2, as specified by the equipment &quot;%3&quot;?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Boil Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 retseptile %2</translation>
     </message>
     <message>
         <source>%1 (copy for %2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This %1 is not used by any recipe.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This %1 is used only by one recipe (%2).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Step validation highlighting is therefore enabled.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>This %1 is also used by %n other recipe(s): %2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>This %1 is used by %n recipe(s): %2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation type="unfinished">%1 (koopia retseptile %2)</translation>
     </message>
     <message>
         <source>It is locked, so it cannot be changed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>It cannot be changed because the recipe &quot;%1&quot; is locked.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">See on lukus, seega seda ei saa muuta.</translation>
     </message>
     <message numerus="yes">
         <source>It cannot be changed because it is used by %n locked recipe(s): %1.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Seda ei saa muuta, kuna seda kasutab %n lukustatud retsept: %1.</numerusform>
+            <numerusform>Seda ei saa muuta, kuna seda kasutavad %n lukustatud retsepti: %1.</numerusform>
         </translation>
     </message>
     <message>
         <source>Any changes you make here will affect all of them.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kõik siin tehtud muudatused mõjutavad neid kõiki.</translation>
+    </message>
+    <message>
+        <source>It cannot be changed because the recipe &quot;%1&quot; is locked.</source>
+        <translation type="unfinished">Seda ei saa muuta, kuna retsept &quot;%1&quot; on lukus.</translation>
+    </message>
+    <message>
+        <source>Use a copy of mash?</source>
+        <translation type="unfinished">Kas kasutada mäski koopiat?</translation>
+    </message>
+    <message>
+        <source>The mash &quot;%1&quot; adjusts automatically to the recipe that uses it (&quot;%2&quot;), so it can&apos;t be shared with another recipe.</source>
+        <translation type="unfinished">Mäsk &quot;%1&quot; kohandub automaatselt seda kasutava retseptiga (&quot;%2&quot;), seega ei saa seda teise retseptiga jagada.</translation>
+    </message>
+    <message>
+        <source>Do you want to use a copy of it for this recipe?</source>
+        <translation type="unfinished">Kas soovite kasutada selle retsepti jaoks selle koopiat?</translation>
+    </message>
+    <message>
+        <source>Use a copy</source>
+        <translation type="unfinished">Kasuta koopiat</translation>
+    </message>
+    <message>
+        <source>Use equipment sizes?</source>
+        <translation type="unfinished">Kas kasutada varustuse suurusi?</translation>
+    </message>
+    <message>
+        <source>Would you like to set the recipe&apos;s batch size to %1 and pre-boil size to %2, as specified by the equipment &quot;%3&quot;?</source>
+        <translation type="unfinished">Kas soovite määrata retsepti partii suuruseks %1 ja keedueelseks koguseks %2, nagu on määratud varustuses &quot;%3&quot;?</translation>
+    </message>
+    <message>
+        <source>Change Batch Size</source>
+        <translation type="unfinished">Muuda partii suurust</translation>
+    </message>
+    <message>
+        <source>Change Pre-Boil Size</source>
+        <translation type="unfinished">Muuda keedueelset kogust</translation>
+    </message>
+    <message>
+        <source>%1 not used by any recipe.</source>
+        <translation type="unfinished">%1 pole üheski retseptis kasutusel.</translation>
+    </message>
+    <message>
+        <source>%1 used only by one recipe (%2)%3.</source>
+        <translation type="unfinished">%1 on kasutusel ainult ühes retseptis (%2)%3.</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 also used by %n other recipe(s): %2.</source>
+        <translation type="unfinished">
+            <numerusform>%1 on kasutusel ka %n muus retseptis: %2.</numerusform>
+            <numerusform>%1 on kasutusel ka %n muus retseptis: %2.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 used by %n recipe(s): %2.</source>
+        <translation type="unfinished">
+            <numerusform>%1 on kasutusel %n retseptis: %2.</numerusform>
+            <numerusform>%1 on kasutusel %n retseptis: %2.</numerusform>
+        </translation>
     </message>
 </context>
 <context>
     <name>NamedEntity</name>
     <message>
         <source>Named Entity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimega objekt</translation>
     </message>
     <message>
         <source>Deleted</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kustutatud</translation>
     </message>
     <message>
         <source>Key</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Võti</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Subsidiary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alamobjekt</translation>
     </message>
     <message>
         <source>N° Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retseptide arv</translation>
     </message>
 </context>
 <context>
     <name>ObjectStoreUtils::NE</name>
     <message>
         <source>Unnamed %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimetu %1</translation>
     </message>
 </context>
 <context>
     <name>OgCorrectionTool</name>
     <message>
-        <source>No Recipe Selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>You need to have a recipe open in the main window before you can use this tool.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No Equipment on Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recipe &quot;%1&quot; has no equipment.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No Boil on Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recipe &quot;%1&quot; has no boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Selle tööriista kasutamiseks peab peaaknas olema avatud retsept.</translation>
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sisendit ei õnnestunud lugeda</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mõõdetud tihedusele on vaja kehtivat väärtust</translation>
+    </message>
+    <message>
+        <source>No Recipe Selected</source>
+        <translation type="unfinished">Retsepti pole valitud</translation>
+    </message>
+    <message>
+        <source>No Equipment on Recipe</source>
+        <translation type="unfinished">Retseptil pole varustust</translation>
+    </message>
+    <message>
+        <source>Recipe &quot;%1&quot; has no equipment.</source>
+        <translation type="unfinished">Retseptil &quot;%1&quot; pole varustust.</translation>
+    </message>
+    <message>
+        <source>No Boil on Recipe</source>
+        <translation type="unfinished">Retseptil pole keetmist</translation>
+    </message>
+    <message>
+        <source>Recipe &quot;%1&quot; has no boil.</source>
+        <translation type="unfinished">Retseptil &quot;%1&quot; pole keetmist.</translation>
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Virde kogusele on vaja kehtivat väärtust</translation>
     </message>
     <message>
         <source>- On Target -</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">- Sihtväärtuses -</translation>
     </message>
     <message>
         <source>↑ Above Target ↑</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">↑ Üle sihtväärtuse ↑</translation>
     </message>
     <message>
         <source>↓ Below Target ↓</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">↓ Alla sihtväärtuse ↓</translation>
     </message>
     <message>
         <source>Remedy: Add Water To Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lahendus: lisage keetmisele vett</translation>
     </message>
     <message>
         <source>Amount to Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lisatav kogus</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vee kogus, mis tuleb lisada planeeritud OG saavutamiseks</translation>
     </message>
     <message>
         <source>Remedy: Boil Down To Reduce Wort Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lahendus: keetke virde koguse vähendamiseks</translation>
     </message>
     <message>
         <source>Amount to Boil Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ärakeedetav kogus</translation>
     </message>
     <message>
         <source>Extra wort you need to boil off to hit planned OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lisavirre, mis tuleb planeeritud OG saavutamiseks ära keeta</translation>
     </message>
 </context>
 <context>
     <name>OptionDialog</name>
     <message>
         <source>Copy Data</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kopeeri andmed</translation>
     </message>
     <message>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Selles kataloogis ei paista olevat andmefaile, seega kopeerime teie vanad andmed siia.</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Taaskäivita</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mm-dd-YYYY</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">dd-mm-YYYY</translation>
     </message>
     <message>
         <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">YYYY-mm-dd</translation>
     </message>
     <message>
         <source>SQLite (default)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SQLite (vaikimisi)</translation>
     </message>
     <message>
         <source>PostgreSQL</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PostgreSQL</translation>
     </message>
     <message>
         <source>Test connection or cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Testige ühendust või loobuge</translation>
     </message>
     <message>
         <source>Transfer database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kanna andmebaas üle</translation>
     </message>
     <message>
         <source>Choose User Data Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vali kasutajaandmete kataloog</translation>
     </message>
     <message>
         <source>Choose Backups Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vali varukoopiate kataloog</translation>
     </message>
     <message>
         <source>Choose Logging Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vali logide kataloog</translation>
     </message>
     <message>
         <source>Saving the options without testing the connection can cause %1 to not restart.  Your changes have been discarded, which is likely really, really crappy UX.  Please open a bug explaining exactly how you got to this message.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valikute salvestamine ühendust testimata võib takistada %1 taaskäivitumist.  Teie muudatused jäeti kõrvale, mis on ilmselt väga-väga halb kasutajakogemus.  Palun looge veateade, milles selgitate täpselt, kuidas selle teateni jõudsite.</translation>
     </message>
     <message>
         <source>Would you like %1 to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kas soovite, et %1 kannaks teie andmed uude andmebaasi? MÄRKUS: kui olete andmed juba laadinud, vastake Ei</translation>
     </message>
     <message>
         <source>Please restart %1 to connect to the new database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uue andmebaasiga ühendumiseks taaskäivitage palun %1</translation>
     </message>
     <message>
         <source>Please restart %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Palun taaskäivitage %1.</translation>
     </message>
     <message>
         <source>Conversion Error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teisendusviga</translation>
     </message>
     <message>
         <source>Data transfer failed.  See log file for more details.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andmete ülekanne ebaõnnestus.  Üksikasjad leiate logifailist.</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vaikimisi</translation>
     </message>
 </context>
 <context>
     <name>OutlineableNamedEntity</name>
     <message>
         <source>Outlineable Named Entity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liigendatav nimega objekt</translation>
     </message>
     <message>
         <source>Is Outline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">On kavand</translation>
     </message>
 </context>
 <context>
     <name>OwnedByRecipe</name>
     <message>
         <source>Owned By Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuulub retseptile</translation>
     </message>
     <message>
         <source>Recipe ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retsepti ID</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retsept</translation>
     </message>
 </context>
 <context>
     <name>Owner</name>
     <message>
         <source>Items</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Üksused</translation>
     </message>
 </context>
 <context>
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faili %1 ei õnnestunud salvestada</translation>
     </message>
     <message>
         <source>Error saving file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Viga faili salvestamisel</translation>
     </message>
     <message>
         <source>Could not open the file %1 for writing! please try again with a new filename or diretory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faili %1 ei õnnestunud kirjutamiseks avada! Proovige palun uuesti teise failinime või kataloogiga</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="unfinished">Prindi</translation>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation type="unfinished">Salvesta kui</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
+        <source>Application terminates</source>
+        <translation type="unfinished">Rakendus suletakse</translation>
+    </message>
+    <message>
+        <source>The application encountered a fatal error.
+Error message:
+%1</source>
+        <translation type="unfinished">Rakenduses tekkis saatuslik viga.
+Veateade:
+%1</translation>
+    </message>
+    <message>
+        <source>The application encountered a fatal error.</source>
+        <translation type="unfinished">Rakenduses tekkis saatuslik viga.</translation>
+    </message>
+    <message>
         <source>%1 is already running!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 juba töötab!</translation>
     </message>
     <message>
         <source>Another instance of %1 is already running.
@@ -4658,84 +4706,74 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
 Running two copies of the program at once may lead to data loss.
 
 Press OK to quit.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Application terminates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The application encountered a fatal error.
-Error message:
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The application encountered a fatal error.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Üks %1 eksemplar juba töötab.
+
+Programmi kahe koopia samaaegne käitamine võib põhjustada andmekadu.
+
+Väljumiseks vajutage OK.</translation>
     </message>
     <message>
         <source>Creation of empty Database file &apos;%1&apos; %2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tühja andmebaasifaili &apos;%1&apos; loomine %2.</translation>
     </message>
     <message>
         <source>succeeded</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">õnnestus</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ebaõnnestus</translation>
     </message>
     <message>
         <source>To use the newly-created file, rename it to &apos;%1&apos; and move it to directory %2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Äsja loodud faili kasutamiseks nimetage see ümber &apos;%1&apos; ja teisaldage kataloogi %2.</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Directory Problem</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kataloogi probleem</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;%1&quot; ei saa lugeda.</translation>
     </message>
     <message>
         <source>New Version</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus versioon</translation>
     </message>
     <message>
         <source>Version %1 is now available. Download it?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saadaval on versioon %1. Kas laadida see alla?</translation>
     </message>
     <message>
         <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kas lõpetada uute versioonide kohta teavitamine?</translation>
     </message>
     <message>
         <source>Database Failure</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andmebaasi tõrge</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatuur</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritatavad</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humalad</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muud</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pärm</translation>
     </message>
     <message>
         <source>Style</source>
@@ -4743,151 +4781,151 @@ Error message:
     </message>
     <message>
         <source>Error attempting to create directory &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Viga kataloogi &quot;%1&quot; loomisel</translation>
     </message>
     <message>
         <source>Connection Test</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ühenduse test</translation>
     </message>
     <message>
         <source>Connection to database was successful</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ühendus andmebaasiga õnnestus</translation>
     </message>
     <message>
         <source>Plaintext</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lihttekst</translation>
     </message>
     <message>
         <source>Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paroolid salvestatakse lihttekstina. Me ei püüa parooli peita, varjata ega muul viisil kaitsta. Selle valiku lubamisel võtate täieliku vastutuse kõigi võimalike probleemide eest.</translation>
     </message>
     <message>
         <source>kg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kg</translation>
     </message>
     <message>
         <source>g</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">g</translation>
     </message>
     <message>
         <source>mg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mg</translation>
     </message>
     <message>
         <source>lb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">lb</translation>
     </message>
     <message>
         <source>oz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">oz</translation>
     </message>
     <message>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">L</translation>
     </message>
     <message>
         <source>mL</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mL</translation>
     </message>
     <message>
         <source>bbl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">bbl</translation>
     </message>
     <message>
         <source>gal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gal</translation>
     </message>
     <message>
         <source>qt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">qt</translation>
     </message>
     <message>
         <source>cup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cup</translation>
     </message>
     <message>
         <source>tbsp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tbsp</translation>
     </message>
     <message>
         <source>tsp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tsp</translation>
     </message>
     <message>
         <source>min</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">min</translation>
     </message>
     <message>
         <source>s</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">s</translation>
     </message>
     <message>
         <source>hr</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">hr</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">C</translation>
     </message>
     <message>
         <source>F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">F</translation>
     </message>
     <message>
         <source>srm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">srm</translation>
     </message>
     <message>
         <source>ebc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ebc</translation>
     </message>
     <message>
         <source>sg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">sg</translation>
     </message>
     <message>
         <source>P</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">P</translation>
     </message>
     <message>
         <source>WK</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WK</translation>
     </message>
     <message>
         <source>British Imperial</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Briti imperiaalsüsteem</translation>
     </message>
     <message>
         <source>US Customary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">USA tavaühikud</translation>
     </message>
     <message>
         <source>Metric</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Meetermõõdustik</translation>
     </message>
     <message>
         <source>SRM (Standard Reference Method)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SRM (Standard Reference Method)</translation>
     </message>
     <message>
         <source>EBC (European Brewery Convention)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">EBC (European Brewery Convention)</translation>
     </message>
     <message>
         <source>SG (Specific Gravity)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SG (erikaal)</translation>
     </message>
     <message>
         <source>Plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plato</translation>
     </message>
     <message>
         <source>Lintner</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lintner</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maht</translation>
     </message>
     <message>
         <source>Time</source>
@@ -4895,221 +4933,83 @@ Error message:
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Värvus</translation>
     </message>
     <message>
         <source>Density</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tihedus</translation>
     </message>
     <message>
         <source>Detailed (for debugging)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Üksikasjalik (silumiseks)</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tavaline</translation>
     </message>
     <message>
         <source>Warnings and Errors only</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ainult hoiatused ja vead</translation>
     </message>
     <message>
         <source>Errors only</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ainult vead</translation>
     </message>
     <message>
         <source>Could not create new log file directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uut logifailide kataloogi ei õnnestunud luua</translation>
     </message>
     <message>
         <source>Could not read new log file directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uut logifailide kataloogi ei õnnestunud lugeda</translation>
     </message>
     <message>
         <source>Could not write to new log file directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uude logifailide kataloogi ei õnnestunud kirjutada</translation>
     </message>
     <message>
         <source> reverting to </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> taastatakse </translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus</translation>
     </message>
     <message>
         <source>Alpha %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfa %</translation>
     </message>
     <message>
         <source>Could not open PostgreSQL DB connection to %1.
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PostgreSQL-i andmebaasiühendust kohta %1 ei õnnestunud avada.
+%2</translation>
     </message>
     <message>
         <source>Could not open SQLite DB file %1.
 %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Universal Standard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>floz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>lovibond</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>brix</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
-    </message>
-    <message>
-        <source>vol</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mg/L</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ppb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>cP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mPa-s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Acidity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bitterness</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Carbonation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Viscosity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Metric Alternate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lovibond</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brix</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Windisch Kolbach</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Carbonation Volumes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Carbonation Mass Per Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Diastatic Power</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Specific Heat Capacity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Specific Heat Capacity Calories per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Specific Heat Capacity Joules per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>c/g·C</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>J/kg·K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Resource directory %1 is missing.  Without this directory and its contents, the software will not operate correctly and may terminate abruptly.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to update the database.
-
-See log file for details.
-
-Program will now exit.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There were errors loading the following object store(s): %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Success!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ERROR</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SQLite andmebaasifaili %1 ei õnnestunud avada.
+%2</translation>
     </message>
     <message>
         <source>Successfully read &quot;%1&quot;
 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;%1&quot; loeti edukalt
+
+%2</translation>
     </message>
     <message>
         <source>Successfully wrote &quot;%1&quot;
 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;%1&quot; kirjutati edukalt
+
+%2</translation>
     </message>
     <message>
         <source>Unable to import data from &quot;%1&quot;
@@ -5117,7 +5017,11 @@ Program will now exit.</source>
 %2
 
 Log file may contain more details.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andmeid ei õnnestunud importida failist &quot;%1&quot;
+
+%2
+
+Logifail võib sisaldada rohkem üksikasju.</translation>
     </message>
     <message>
         <source>Unable to write data to &quot;%1&quot;
@@ -5125,115 +5029,87 @@ Log file may contain more details.</source>
 %2
 
 Log file may contain more details.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andmeid ei õnnestunud kirjutada faili &quot;%1&quot;
+
+%2
+
+Logifail võib sisaldada rohkem üksikasju.</translation>
     </message>
     <message>
-        <source>Weight (Mass)</source>
-        <translation type="unfinished"></translation>
+        <source>Could not open %1 for reading (error # %2)</source>
+        <translation type="unfinished">Faili %1 ei õnnestunud lugemiseks avada (viga nr %2)</translation>
     </message>
     <message>
-        <source>Count</source>
-        <translation type="unfinished"></translation>
+        <source>Universal Standard</source>
+        <translation type="unfinished">Universaalne standard</translation>
     </message>
     <message>
-        <source>Mass Fraction or Concentration</source>
-        <translation type="unfinished"></translation>
+        <source>floz</source>
+        <translation type="unfinished">floz</translation>
     </message>
     <message>
-        <source>Mass or Volume</source>
-        <translation type="unfinished"></translation>
+        <source>lovibond</source>
+        <translation type="unfinished">lovibond</translation>
     </message>
     <message>
-        <source>Mass, Volume or Count</source>
-        <translation type="unfinished"></translation>
+        <source>brix</source>
+        <translation type="unfinished">brix</translation>
     </message>
     <message>
-        <source>Brewing Concentration</source>
-        <translation type="unfinished"></translation>
+        <source>pH</source>
+        <translation type="unfinished">pH</translation>
     </message>
     <message>
-        <source>Specific Heat Capacity Btus per</source>
-        <translation type="unfinished"></translation>
+        <source>IBU</source>
+        <translation type="unfinished">IBU</translation>
     </message>
     <message>
-        <source>(№)</source>
-        <translation type="unfinished"></translation>
+        <source>vol</source>
+        <translation type="unfinished">vol</translation>
     </message>
     <message>
-        <source>weeks</source>
-        <translation type="unfinished"></translation>
+        <source>mg/L</source>
+        <translation type="unfinished">mg/L</translation>
     </message>
     <message>
-        <source>days</source>
-        <translation type="unfinished"></translation>
+        <source>ppm</source>
+        <translation type="unfinished">ppm</translation>
     </message>
     <message>
-        <source>BTU/lb·F</source>
-        <translation type="unfinished"></translation>
+        <source>ppb</source>
+        <translation type="unfinished">ppb</translation>
     </message>
     <message>
-        <source>L/kg</source>
-        <translation type="unfinished"></translation>
+        <source>cP</source>
+        <translation type="unfinished">cP</translation>
     </message>
     <message>
-        <source>L/g</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>m^3/kg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>floz/oz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>gal/lb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>qt/lb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>gal/oz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ft^3/lb</source>
-        <translation type="unfinished"></translation>
+        <source>mPa-s</source>
+        <translation type="unfinished">mPa-s</translation>
     </message>
     <message>
         <source>Bool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bool</translation>
     </message>
     <message>
         <source>Int</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Int</translation>
     </message>
     <message>
         <source>UInt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">UInt</translation>
     </message>
     <message>
         <source>Double</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Double</translation>
     </message>
     <message>
         <source>String</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">String</translation>
     </message>
     <message>
         <source>Enum</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Record</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ListOfRecords</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enum</translation>
     </message>
     <message>
         <source>Date</source>
@@ -5241,439 +5117,611 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>RequiredConstant</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">RequiredConstant</translation>
     </message>
     <message>
-        <source>Could not open %1 for reading (error # %2)</source>
-        <translation type="unfinished"></translation>
+        <source>Success!</source>
+        <translation type="unfinished">Õnnestus!</translation>
     </message>
     <message>
-        <source>Merge Database</source>
-        <translation type="unfinished"></translation>
+        <source>ERROR</source>
+        <translation type="unfinished">VIGA</translation>
     </message>
     <message>
-        <source>New ingredients etc are available. Would you like to add them to your database?</source>
-        <translation type="unfinished"></translation>
+        <source>Open</source>
+        <translation type="unfinished">Ava</translation>
     </message>
     <message>
-        <source>Error matching %1 file pattern in %2 directory</source>
-        <translation type="unfinished"></translation>
+        <source>Save</source>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
-        <source>mIBU</source>
-        <translation type="unfinished"></translation>
+        <source>Acidity</source>
+        <translation type="unfinished">Happesus</translation>
     </message>
     <message>
-        <source>Length</source>
-        <translation type="unfinished"></translation>
+        <source>Bitterness</source>
+        <translation type="unfinished">Kibedus</translation>
     </message>
     <message>
-        <source>cm</source>
-        <translation type="unfinished"></translation>
+        <source>Carbonation</source>
+        <translation type="unfinished">Karboniseeritus</translation>
     </message>
     <message>
-        <source>mm</source>
-        <translation type="unfinished"></translation>
+        <source>Viscosity</source>
+        <translation type="unfinished">Viskoossus</translation>
     </message>
     <message>
-        <source>m</source>
-        <translation type="unfinished"></translation>
+        <source>Metric Alternate</source>
+        <translation type="unfinished">Alternatiivne meetermõõdustik</translation>
     </message>
     <message>
-        <source>in</source>
-        <translation type="unfinished"></translation>
+        <source>Lovibond</source>
+        <translation type="unfinished">Lovibond</translation>
     </message>
     <message>
-        <source>ft</source>
-        <translation type="unfinished"></translation>
+        <source>Brix</source>
+        <translation type="unfinished">Brix</translation>
     </message>
     <message>
-        <source>Boil for %1</source>
-        <translation type="unfinished"></translation>
+        <source>Windisch Kolbach</source>
+        <translation type="unfinished">Windisch Kolbach</translation>
     </message>
     <message>
-        <source>Automatically created by BeerXML import</source>
-        <translation type="unfinished"></translation>
+        <source>Carbonation Volumes</source>
+        <translation type="unfinished">Karboniseeritus (mahtudes)</translation>
     </message>
     <message>
-        <source>Fermentation for %1</source>
-        <translation type="unfinished"></translation>
+        <source>Carbonation Mass Per Volume</source>
+        <translation type="unfinished">Karboniseeritus (mass mahu kohta)</translation>
     </message>
     <message>
-        <source>Primary Fermentation Step for %1</source>
-        <translation type="unfinished"></translation>
+        <source>Diastatic Power</source>
+        <translation type="unfinished">Diastaatiline jõud</translation>
     </message>
     <message>
-        <source>Secondary Fermentation Step for %1</source>
-        <translation type="unfinished"></translation>
+        <source>Specific Heat Capacity</source>
+        <translation type="unfinished">Erisoojusmahtuvus</translation>
     </message>
     <message>
-        <source>Tertiary Fermentation Step for %1</source>
-        <translation type="unfinished"></translation>
+        <source>Specific Heat Capacity Calories per</source>
+        <translation type="unfinished">Erisoojusmahtuvus, kalorites</translation>
+    </message>
+    <message>
+        <source>Specific Heat Capacity Joules per</source>
+        <translation type="unfinished">Erisoojusmahtuvus, džaulides</translation>
+    </message>
+    <message>
+        <source>c/g·C</source>
+        <translation type="unfinished">c/g·C</translation>
+    </message>
+    <message>
+        <source>J/kg·K</source>
+        <translation type="unfinished">J/kg·K</translation>
+    </message>
+    <message>
+        <source>BTU/lb·F</source>
+        <translation type="unfinished">BTU/lb·F</translation>
+    </message>
+    <message>
+        <source>L/kg</source>
+        <translation type="unfinished">L/kg</translation>
+    </message>
+    <message>
+        <source>L/g</source>
+        <translation type="unfinished">L/g</translation>
+    </message>
+    <message>
+        <source>m^3/kg</source>
+        <translation type="unfinished">m^3/kg</translation>
+    </message>
+    <message>
+        <source>floz/oz</source>
+        <translation type="unfinished">floz/oz</translation>
+    </message>
+    <message>
+        <source>gal/lb</source>
+        <translation type="unfinished">gal/lb</translation>
+    </message>
+    <message>
+        <source>qt/lb</source>
+        <translation type="unfinished">qt/lb</translation>
+    </message>
+    <message>
+        <source>gal/oz</source>
+        <translation type="unfinished">gal/oz</translation>
+    </message>
+    <message>
+        <source>ft^3/lb</source>
+        <translation type="unfinished">ft^3/lb</translation>
+    </message>
+    <message>
+        <source>Failed to update the database.
+
+See log file for details.
+
+Program will now exit.</source>
+        <translation type="unfinished">Andmebaasi uuendamine ebaõnnestus.
+
+Üksikasjad leiate logifailist.
+
+Programm suletakse nüüd.</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation type="unfinished">Kirje</translation>
+    </message>
+    <message>
+        <source>ListOfRecords</source>
+        <translation type="unfinished">ListOfRecords</translation>
+    </message>
+    <message>
+        <source>There were errors loading the following object store(s): %1</source>
+        <translation type="unfinished">Järgmis(t)e objektihoidla(te) laadimisel tekkisid vead: %1</translation>
+    </message>
+    <message>
+        <source>Count</source>
+        <translation type="unfinished">Arv</translation>
+    </message>
+    <message>
+        <source>Mass or Volume</source>
+        <translation type="unfinished">Mass või maht</translation>
+    </message>
+    <message>
+        <source>Mass, Volume or Count</source>
+        <translation type="unfinished">Mass, maht või arv</translation>
+    </message>
+    <message>
+        <source>(№)</source>
+        <translation type="unfinished">(№)</translation>
+    </message>
+    <message>
+        <source>Weight (Mass)</source>
+        <translation type="unfinished">Kaal (mass)</translation>
+    </message>
+    <message>
+        <source>Mass Fraction or Concentration</source>
+        <translation type="unfinished">Massiosa või kontsentratsioon</translation>
+    </message>
+    <message>
+        <source>Brewing Concentration</source>
+        <translation type="unfinished">Pruulimiskontsentratsioon</translation>
+    </message>
+    <message>
+        <source>weeks</source>
+        <translation type="unfinished">nädalat</translation>
+    </message>
+    <message>
+        <source>days</source>
+        <translation type="unfinished">päeva</translation>
+    </message>
+    <message>
+        <source>Resource directory %1 is missing.  Without this directory and its contents, the software will not operate correctly and may terminate abruptly.</source>
+        <translation type="unfinished">Ressursikataloog %1 puudub.  Ilma selle kataloogi ja selle sisuta ei tööta tarkvara korrektselt ja võib ootamatult sulguda.</translation>
     </message>
     <message>
         <source>%1 Catalog / Database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 kataloog / andmebaas</translation>
     </message>
     <message>
         <source>Create new %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loo uus %1</translation>
     </message>
     <message>
         <source>Edit selected %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muuda valitud %1</translation>
     </message>
     <message>
         <source>%1 name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 nimi</translation>
     </message>
     <message>
         <source>%1 name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 nimi:</translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished">Ühenda andmebaas</translation>
+    </message>
+    <message>
+        <source>New ingredients etc are available. Would you like to add them to your database?</source>
+        <translation type="unfinished">Saadaval on uued koostisosad jm. Kas soovite need oma andmebaasi lisada?</translation>
+    </message>
+    <message>
+        <source>Error matching %1 file pattern in %2 directory</source>
+        <translation type="unfinished">Viga failimustri %1 sobitamisel kataloogis %2</translation>
+    </message>
+    <message>
+        <source>mIBU</source>
+        <translation type="unfinished">mIBU</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Pikkus</translation>
+    </message>
+    <message>
+        <source>cm</source>
+        <translation type="unfinished">cm</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished">mm</translation>
+    </message>
+    <message>
+        <source>m</source>
+        <translation type="unfinished">m</translation>
+    </message>
+    <message>
+        <source>in</source>
+        <translation type="unfinished">in</translation>
+    </message>
+    <message>
+        <source>ft</source>
+        <translation type="unfinished">ft</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ei</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jah</translation>
+    </message>
+    <message>
+        <source>Boil for %1</source>
+        <translation type="unfinished">Keetmine: %1</translation>
+    </message>
+    <message>
+        <source>Automatically created by BeerXML import</source>
+        <translation type="unfinished">Loodud automaatselt BeerXML-i importimisel</translation>
+    </message>
+    <message>
+        <source>Fermentation for %1</source>
+        <translation type="unfinished">Kääritamine: %1</translation>
+    </message>
+    <message>
+        <source>Primary Fermentation Step for %1</source>
+        <translation type="unfinished">Esmase kääritamise samm: %1</translation>
+    </message>
+    <message>
+        <source>Secondary Fermentation Step for %1</source>
+        <translation type="unfinished">Teisese kääritamise samm: %1</translation>
+    </message>
+    <message>
+        <source>Tertiary Fermentation Step for %1</source>
+        <translation type="unfinished">Kolmanda kääritamise samm: %1</translation>
     </message>
     <message>
         <source>Basque</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Baski</translation>
     </message>
     <message>
         <source>Catalan</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Katalaani</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hiina</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tšehhi</translation>
     </message>
     <message>
         <source>Danish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Taani</translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hollandi</translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inglise</translation>
     </message>
     <message>
         <source>Estonian</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eesti</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prantsuse</translation>
     </message>
     <message>
         <source>Galician</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Galeegi</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saksa</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kreeka</translation>
     </message>
     <message>
         <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ungari</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Itaalia</translation>
     </message>
     <message>
         <source>Latvian</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Läti</translation>
     </message>
     <message>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Norra (bokmål)</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poola</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Portugali</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vene</translation>
     </message>
     <message>
         <source>Serbian</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Serbia</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hispaania</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rootsi</translation>
     </message>
     <message>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Türgi</translation>
     </message>
     <message>
         <source>None!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Puudub!</translation>
+    </message>
+    <message>
+        <source>pt</source>
+        <translation type="unfinished">pt</translation>
     </message>
     <message>
         <source>Mosher&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mosheri lähendus</translation>
     </message>
     <message>
         <source>Daniel&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Danieli lähendus</translation>
     </message>
     <message>
         <source>Morey&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Morey lähendus</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tinsethi lähendus</translation>
     </message>
     <message>
         <source>Rager&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rageri lähendus</translation>
     </message>
     <message>
         <source>Noonan&apos;s approximation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Heat Capacity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Heat Capacity Kilocalories per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Heat Capacity Joules per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Heat Capacity Btus per</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kc/C</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>J/K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BTU/F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Noonani lähendus</translation>
     </message>
     <message>
         <source>Filter search</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set selected %1 for current recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add selected %1 to current recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtreeri otsingut</translation>
     </message>
     <message>
         <source>Delete selected %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kustuta valitud %1</translation>
+    </message>
+    <message>
+        <source>Heat Capacity</source>
+        <translation type="unfinished">Soojusmahtuvus</translation>
+    </message>
+    <message>
+        <source>Heat Capacity Kilocalories per</source>
+        <translation type="unfinished">Soojusmahtuvus, kilokalorites</translation>
+    </message>
+    <message>
+        <source>Heat Capacity Joules per</source>
+        <translation type="unfinished">Soojusmahtuvus, džaulides</translation>
+    </message>
+    <message>
+        <source>kc/C</source>
+        <translation type="unfinished">kc/C</translation>
+    </message>
+    <message>
+        <source>J/K</source>
+        <translation type="unfinished">J/K</translation>
+    </message>
+    <message>
+        <source>BTU/F</source>
+        <translation type="unfinished">BTU/F</translation>
+    </message>
+    <message>
+        <source>Set selected %1 for current recipe</source>
+        <translation type="unfinished">Määra valitud %1 praegusele retseptile</translation>
+    </message>
+    <message>
+        <source>Add selected %1 to current recipe</source>
+        <translation type="unfinished">Lisa valitud %1 praegusele retseptile</translation>
     </message>
     <message>
         <source>Formula</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valem</translation>
     </message>
     <message>
         <source>Could not open &quot;%1&quot; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faili &quot;%1&quot; ei õnnestunud kirjutamiseks avada</translation>
     </message>
     <message>
         <source>Did not recognise file extension on &quot;%1&quot; so nothing read.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No stock available.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faili &quot;%1&quot; laiendit ei tuvastatud, seega midagi ei loetud.</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pärmid</translation>
+    </message>
+    <message>
+        <source>Enter filter</source>
+        <translation type="unfinished">Sisestage filter</translation>
     </message>
     <message>
         <source>Add %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lisa %1 retseptile %2</translation>
     </message>
     <message>
-        <source>Stock Purchases (Inventory)</source>
-        <translation type="unfinished"></translation>
+        <source>Stock</source>
+        <translation type="unfinished">Laovaru</translation>
+    </message>
+    <message>
+        <source>No stock available.</source>
+        <translation type="unfinished">Laovaru pole saadaval.</translation>
     </message>
     <message>
         <source>Show stock purchases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Näita laooste</translation>
     </message>
     <message>
         <source>New stock purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus laoost</translation>
+    </message>
+    <message>
+        <source>Stock Purchases (Inventory)</source>
+        <translation type="unfinished">Laoostud (laoseis)</translation>
     </message>
     <message>
         <source>New Data</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uued andmed</translation>
     </message>
     <message>
         <source>Stop bothering you about new data?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kas lõpetada uute andmete kohta teavitamine?</translation>
     </message>
     <message>
         <source>°C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">°C</translation>
     </message>
     <message>
         <source>°F</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Gravity Points</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">°F</translation>
     </message>
     <message>
         <source>DotBeer, BeerJSON and BeerXML files (*.beer *.json *.xml);;DotBeer files (*.beer);;BeerJSON files (*.json);;BeerXML files (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DotBeer-, BeerJSON- ja BeerXML-failid (*.beer *.json *.xml);;DotBeer-failid (*.beer);;BeerJSON-failid (*.json);;BeerXML-failid (*.xml)</translation>
     </message>
     <message>
         <source>DotBeer format (*.beer);;BeerJSON format (*.json);;BeerXML format (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DotBeer-vorming (*.beer);;BeerJSON-vorming (*.json);;BeerXML-vorming (*.xml)</translation>
+    </message>
+    <message>
+        <source>Gravity Points</source>
+        <translation type="unfinished">Tihedusühikud</translation>
+    </message>
+    <message>
+        <source>points</source>
+        <translation type="unfinished">ühikut</translation>
     </message>
     <message>
         <source>Success (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Õnnestus (%1)</translation>
     </message>
     <message>
         <source>Warning (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hoiatus (%1)</translation>
     </message>
     <message>
         <source>Recoverable Error (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Taastatav viga (%1)</translation>
     </message>
     <message>
         <source>Fatal Error (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saatuslik viga (%1)</translation>
     </message>
     <message>
         <source>Unrecognised (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tundmatu (%1)</translation>
     </message>
     <message>
         <source>List-Of-Records</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">List-Of-Records</translation>
     </message>
     <message>
         <source>Measurement-With-Units</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Measurement-With-Units</translation>
     </message>
     <message>
         <source>One-Of-Measurements-With-Units</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">One-Of-Measurements-With-Units</translation>
     </message>
     <message>
         <source>Single-Unit-Value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Single-Unit-Value</translation>
     </message>
     <message>
         <source>Required-Constant</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Required-Constant</translation>
     </message>
     <message>
         <source>Folder-Path</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Folder-Path</translation>
     </message>
     <message>
         <source>%1 errors found in JSON file.  First error at %2: schema condition %3 is violated because &quot;%4&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">JSON-failist leiti %1 viga.  Esimene viga kohas %2: skeemi tingimust %3 rikutakse, kuna &quot;%4&quot;</translation>
+    </message>
+    <message>
+        <source>Local-ID</source>
+        <translation type="unfinished">Local-ID</translation>
     </message>
     <message>
         <source>Volume per Mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maht massi kohta</translation>
     </message>
     <message>
         <source>Energy per Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Energia mahu kohta</translation>
     </message>
     <message>
         <source>kcal/L</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/L</translation>
     </message>
     <message>
         <source>kcal/50cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/50cl</translation>
     </message>
     <message>
         <source>kcal/33cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/33cl</translation>
     </message>
     <message>
         <source>kcal/25cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/25cl</translation>
     </message>
     <message>
         <source>kcal/100ml</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/100ml</translation>
     </message>
     <message>
         <source>kcal/pt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/pt</translation>
     </message>
     <message>
         <source>kcal/12floz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/12floz</translation>
     </message>
     <message>
         <source>kJ/100ml</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This file was written using version %1 of the dotBeer format, which is newer than the version this version of %2 supports (%3).  You may need a newer version of %2 to read it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kJ/100ml</translation>
     </message>
     <message>
         <source>Date-Time-With-Timezone</source>
@@ -5684,7 +5732,7 @@ Log file may contain more details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Local-ID</source>
+        <source>This file was written using version %1 of the dotBeer format, which is newer than the version this version of %2 supports (%3).  You may need a newer version of %2 to read it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5693,6 +5741,14 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Primary fermentation for %1</source>
+        <translation type="unfinished">Esmane kääritamine: %1</translation>
+    </message>
+    <message>
+        <source>Specific Heat Capacity BTUs per</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heat Capacity BTUs per</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5744,7 +5800,7 @@ Log file may contain more details.</source>
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lisa linnased</translation>
     </message>
     <message>
         <source>Add </source>
@@ -5752,7 +5808,7 @@ Log file may contain more details.</source>
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kuumuta vesi</translation>
     </message>
     <message>
         <source>Add %1 water at %2 to mash to bring it to %3.</source>
@@ -5887,11 +5943,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retsept</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstrakt</translation>
     </message>
     <message>
         <source>Partial Mash</source>
@@ -5915,7 +5971,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muu</translation>
     </message>
     <message>
         <source>Mead</source>
@@ -5943,7 +5999,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG</translation>
     </message>
     <message>
         <source>FG</source>
@@ -5951,7 +6007,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Värvus</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -5967,7 +6023,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>Age</source>
@@ -5999,7 +6055,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keetmine</translation>
     </message>
     <message>
         <source>Boil Gravity</source>
@@ -6043,7 +6099,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Carbonation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karboniseeritus</translation>
     </message>
     <message>
         <source>Date</source>
@@ -6055,7 +6111,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varustus</translation>
     </message>
     <message>
         <source>Equipment ID</source>
@@ -6067,7 +6123,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritamine</translation>
     </message>
     <message>
         <source>Fermentation ID</source>
@@ -6107,11 +6163,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Locked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lukus</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk</translation>
     </message>
     <message>
         <source>Mash ID</source>
@@ -6123,7 +6179,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Points</source>
@@ -6155,7 +6211,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Wort From Mash</source>
@@ -6166,16 +6222,8 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hetktõmmised</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash%3.</source>
@@ -6191,10 +6239,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Put %1 %2 into boil%3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6214,6 +6258,10 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source> for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>%1 addition</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6223,18 +6271,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IBU Formula</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Percentage reverse-osmosis water in mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Percentage reverse-osmosis water in sparge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6254,11 +6290,19 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Put %1 %2 into fermentor%3.</source>
+        <source>IBU Formula</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Primary fermentation for %1</source>
+        <source>Percentage reverse-osmosis water in mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Percentage reverse-osmosis water in sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put %1 %2 into fermentor%3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6276,6 +6320,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>%1 water to %2</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary fermentation for %1</source>
+        <translation type="unfinished">Esmane kääritamine: %1</translation>
     </message>
     <message>
         <source>Target Mash pH</source>
@@ -6322,15 +6370,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keetmine</translation>
     </message>
     <message>
         <source>Fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritamine</translation>
     </message>
     <message>
         <source>Package</source>
@@ -6339,6 +6387,14 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Time</source>
         <translation type="unfinished">Kestus</translation>
+    </message>
+    <message>
+        <source>Step %1</source>
+        <translation type="unfinished">Samm %1</translation>
+    </message>
+    <message>
+        <source>%1: %2</source>
+        <translation type="unfinished">%1: %2</translation>
     </message>
 </context>
 <context>
@@ -6353,7 +6409,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritatav</translation>
     </message>
 </context>
 <context>
@@ -6371,7 +6427,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk</translation>
     </message>
     <message>
         <source>First Wort</source>
@@ -6379,7 +6435,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keetmine</translation>
     </message>
     <message>
         <source>Post-Boil</source>
@@ -6395,7 +6451,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humal</translation>
     </message>
     <message>
         <source>Use</source>
@@ -6440,26 +6496,26 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk</translation>
     </message>
     <message>
         <source>Boil</source>
+        <translation type="unfinished">Keetmine</translation>
+    </message>
+    <message>
+        <source>Addition of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Esmane</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teisene</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Addition of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6494,11 +6550,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritusaste</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pärm</translation>
     </message>
     <message>
         <source>Times Cultured</source>
@@ -6508,17 +6564,13 @@ The final volume in the primary is %1.</source>
         <source>Cell Count</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>RecipeAdditionYeastTableModel</name>
+    <message>
+        <source>Time</source>
+        <translation type="obsolete">Kestus</translation>
+    </message>
     <message>
         <source>Step</source>
         <translation type="obsolete">Samm</translation>
@@ -6603,11 +6655,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Partii suurus</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -6619,7 +6667,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG</translation>
     </message>
     <message>
         <source>FG</source>
@@ -6627,15 +6675,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Värvus</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritatavad</translation>
     </message>
     <message>
         <source>Total grain:</source>
@@ -6643,15 +6691,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus</translation>
     </message>
     <message>
         <source>Mashed</source>
@@ -6667,19 +6715,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jah</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ei</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humalad</translation>
     </message>
     <message>
         <source>Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfa</translation>
     </message>
     <message>
         <source>Use</source>
@@ -6691,7 +6739,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vorm</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -6703,7 +6751,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pärm</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -6711,15 +6759,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teisene</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Esmane</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk</translation>
     </message>
     <message>
         <source>Temp</source>
@@ -6731,7 +6779,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -6739,11 +6787,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulimise kuupäev</translation>
     </message>
     <message>
         <source>Preboil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedueelne</translation>
     </message>
     <message>
         <source>Eff into BK</source>
@@ -6751,7 +6799,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud OG</translation>
     </message>
     <message>
         <source>Postboil</source>
@@ -6763,7 +6811,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud ABV</translation>
     </message>
     <message>
         <source>Postferment</source>
@@ -6775,19 +6823,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pärmid</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hinnangulised kalorid (33 cl kohta)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hinnangulised kalorid (12 oz kohta)</translation>
     </message>
     <message>
         <source>Bitterness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kibedus</translation>
     </message>
     <message>
         <source>Target</source>
@@ -6799,14 +6847,104 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Recipe</source>
+        <translation type="unfinished">Retsept</translation>
+    </message>
+    <message>
+        <source>Add During</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
+        <translation type="unfinished">Ekstraktisaagis, kuivaine peen jahvatus (DBFG)</translation>
+    </message>
+    <message>
+        <source>Pre-Boil Size</source>
+        <translation type="unfinished">Keedueelne kogus</translation>
+    </message>
+</context>
+<context>
+    <name>RecipeWaterWidget</name>
+    <message>
+        <source>Minimum expected concentration is %1 ppm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add During</source>
+        <source>In range for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum expected concentration is %1 ppm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PPM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too low for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too high for target profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto-Adjust undone.</source>
+        <translation type="unfinished">Automaatne korrigeerimine võeti tagasi.</translation>
+    </message>
+    <message numerus="yes">
+        <source>See the &lt;i&gt;Auto-Adjust Notes&lt;/i&gt; tab below for details (%n item(s)).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>The value shown is the pH set on the recipe&apos;s mash.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Turn off keeping water agents in sync</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Turn on keeping water agents in sync</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto-adjust water agents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not adjust the water agents yet: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not adjust the water agents, so nothing has been changed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>target profile &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>target mash pH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The water agents already match %1 as closely as they can.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water agents adjusted to match %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water agents adjusted for %1, but some things need checking.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Predicted mash pH is %1.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6885,7 +7023,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kirjeldus</translation>
     </message>
     <message>
         <source>End Acidity</source>
@@ -6931,7 +7069,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Supplier</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tarnija</translation>
     </message>
     <message>
         <source>Quantity Ordered</source>
@@ -6951,11 +7089,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koostisosa</translation>
     </message>
     <message>
         <source>Stock Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laoost</translation>
     </message>
     <message>
         <source>Note</source>
@@ -6966,7 +7104,7 @@ The final volume in the primary is %1.</source>
     <name>StockPurchaseFermentable</name>
     <message>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Värvus</translation>
     </message>
 </context>
 <context>
@@ -6984,11 +7122,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vorm</translation>
     </message>
     <message>
         <source>Year</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aasta</translation>
     </message>
 </context>
 <context>
@@ -7015,16 +7153,12 @@ The final volume in the primary is %1.</source>
 <context>
     <name>StockUse</name>
     <message>
-        <source>Comment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Date</source>
         <translation type="unfinished">Kuupäev</translation>
     </message>
     <message>
         <source>Owner ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Omaniku ID</translation>
     </message>
     <message>
         <source>Quantity Used</source>
@@ -7051,8 +7185,12 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brew Log</source>
+        <source>Comment</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished">Pruulimispäevik</translation>
     </message>
     <message>
         <source>Brew Log ID</source>
@@ -7090,10 +7228,6 @@ The final volume in the primary is %1.</source>
 <context>
     <name>Style</name>
     <message>
-        <source>Style</source>
-        <translation type="unfinished">Õlletüüp</translation>
-    </message>
-    <message>
         <source>Beer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7119,7 +7253,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muu</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">Õlletüüp</translation>
     </message>
     <message>
         <source>Category</source>
@@ -7139,7 +7277,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Max ABV</source>
@@ -7155,7 +7293,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aroom</translation>
     </message>
     <message>
         <source>Max Carb</source>
@@ -7187,7 +7325,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maitse</translation>
     </message>
     <message>
         <source>Max IBU</source>
@@ -7207,7 +7345,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Max OG</source>
@@ -7227,7 +7365,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Number</translation>
     </message>
     <message>
         <source>Letter</source>
@@ -7276,7 +7414,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
 </context>
 <context>
@@ -7400,10 +7538,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Notes...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source> and </source>
         <translation type="unfinished"></translation>
     </message>
@@ -7439,10 +7573,17 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>Undoable</name>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vaikimisi</translation>
     </message>
     <message>
         <source>Decimal Places</source>
@@ -7465,11 +7606,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Väljund</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teisenda</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -7515,7 +7656,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pH</translation>
     </message>
     <message>
         <source>Waters</source>
@@ -7575,7 +7716,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Potassium</source>
@@ -7587,14 +7728,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Sulfate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7655,92 +7788,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Zinc (Zn²⁺)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WaterAdjuster</name>
-    <message>
-        <source>Minimum expected concentration is %1 ppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>In range for target profile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maximum expected concentration is %1 ppm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PPM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Too low for target profile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Too high for target profile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Auto-Adjust undone.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>See the &lt;i&gt;Auto-Adjust Notes&lt;/i&gt; tab below for details (%n item(s)).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>The value shown is the pH set on the recipe&apos;s mash.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Turn off keeping water agents in sync</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Turn on keeping water agents in sync</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Auto-adjust water agents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not adjust the water agents yet: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not adjust the water agents, so nothing has been changed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>target profile &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>target mash pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The water agents already match %1 as closely as they can.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water agents adjusted to match %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water agents adjusted for %1, but some things need checking.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Predicted mash pH is %1.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7932,12 +7979,8 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Yeast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muu</translation>
     </message>
     <message>
         <source>Bacteria</source>
@@ -7988,24 +8031,28 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Yeast</source>
+        <translation type="unfinished">Pärm</translation>
+    </message>
+    <message>
         <source>Laboratory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vorm</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toote ID</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pärmid</translation>
     </message>
     <message>
         <source>Lab</source>
@@ -8013,7 +8060,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritusaste</translation>
     </message>
     <message>
         <source>Id</source>
@@ -8081,18 +8128,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Phenolic Off Flavor Positive</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8131,15 +8170,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kirjeldus</translation>
     </message>
     <message>
         <source>Pre-Boil Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedueelne kogus</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -8147,7 +8186,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -8163,15 +8202,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -8190,22 +8229,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start temp.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Target temp. of this step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Time</source>
         <translation type="unfinished">Kestus</translation>
     </message>
     <message>
-        <source>Time to conduct the step</source>
+        <source>Temp. lag time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8213,31 +8244,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Final temp. of this step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Temp. lag time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lag time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Chilling Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Gravity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8250,11 +8257,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kirjeldus</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -8262,7 +8269,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Discard and close</source>
@@ -8270,6 +8277,38 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished">Loobu</translation>
+    </message>
+    <message>
+        <source>Chilling Type</source>
+        <translation type="unfinished">Jahutuse tüüp</translation>
+    </message>
+    <message>
+        <source>Start Gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>End Gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start temp.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature at the start of this step.  If not set, the wort is assumed to be boiling.  Steps are classified as pre-boil, boil proper or post-boil by their temperatures.  For IBU formulae that model isomerization after flameout (eg mIBU and SMPH), a post-boil step that starts at boiling and ends below it is modelled as the wort cooling naturally (down to, but not below, the end temperature); any other post-boil step is modelled as the temperature changing linearly from the start temperature to the end temperature (so eg a hop stand held at 80°C (176°F) has start and end temperatures of 80°C).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How long this step lasts, not including any ramp time.  For a post-boil step (eg whirlpool or hop stand), hops added to this step with no time set steep for this long (plus the time of any subsequent steps).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature at the end of this step.  If not set, the wort is assumed to be boiling.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ramp time: how long it takes, before this step begins, to get from the end temperature of the previous step to the start temperature of this one.  Eg, for a hop stand at 80°C (176°F), the time taken to chill the wort from boiling to that temperature.  For post-boil steps, the temperature is modelled as changing linearly during the ramp, and hops added to the step with no time set are added at the end of the ramp.  If not set, any temperature change between steps is treated as instantaneous.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8277,7 +8316,7 @@ The final volume in the primary is %1.</source>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vorm</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
@@ -8289,7 +8328,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -8334,12 +8373,8 @@ The final volume in the primary is %1.</source>
 <context>
     <name>brewLogWidget</name>
     <message>
-        <source>Brew Log</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Preboil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedueelne</translation>
     </message>
     <message>
         <source>SG</source>
@@ -8351,7 +8386,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maht</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
@@ -8379,7 +8414,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG</translation>
     </message>
     <message>
         <source>Post boil gravity</source>
@@ -8422,10 +8457,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>yyyy-dd-MM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Percent efficiency into boil kettle</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8435,7 +8466,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud OG</translation>
     </message>
     <message>
         <source>Brewhouse efficiency</source>
@@ -8447,7 +8478,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prognoositud ABV</translation>
     </message>
     <message>
         <source>ABV based on user-reported FG</source>
@@ -8455,7 +8486,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>Yeast attenuation based on yeast specified in recipe</source>
@@ -8470,15 +8501,19 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Notes</source>
+        <translation type="unfinished">Märkmed</translation>
+    </message>
+    <message>
+        <source>Brew Log</source>
+        <translation type="unfinished">Pruulimispäevik</translation>
+    </message>
+    <message>
         <source>Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulimise kuupäev</translation>
     </message>
     <message>
         <source>Batch Number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8511,17 +8546,6 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
-    <name>editorClass</name>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>equipmentEditor</name>
     <message>
         <source>Equipment Editor</source>
@@ -8533,7 +8557,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Required</source>
@@ -8557,7 +8581,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>New equipment</source>
@@ -8572,10 +8596,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>General</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Name to identify this equipment profile</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8584,7 +8604,75 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Hot Liquor Tank Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Maht</translation>
+    </message>
+    <message>
+        <source>Evaporation Loss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specific Heat Capacity</source>
+        <translation type="unfinished">Erisoojusmahtuvus</translation>
+    </message>
+    <message>
+        <source>HLT Notes</source>
+        <translation type="unfinished">Kuumaveepaagi märkmed</translation>
+    </message>
+    <message>
+        <source>Mash Tun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Tun Type</source>
+        <translation type="unfinished">Mäskianuma tüüp</translation>
+    </message>
+    <message>
+        <source>Mash Tun Notes</source>
+        <translation type="unfinished">Mäskianuma märkmed</translation>
+    </message>
+    <message>
         <source>Lauter Tun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lauter Tun Type</source>
+        <translation type="unfinished">Filtreerimisanuma tüüp</translation>
+    </message>
+    <message>
+        <source>Lauter Tun Volume</source>
+        <translation type="unfinished">Filtreerimisanuma maht</translation>
+    </message>
+    <message>
+        <source>Lauter Tun Notes</source>
+        <translation type="unfinished">Filtreerimisanuma märkmed</translation>
+    </message>
+    <message>
+        <source>Boil Kettle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Kettle Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Evaporation rate per hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Kettle Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deadspace Losses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8592,7 +8680,31 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Aging Vessel Type</source>
+        <translation type="unfinished">Laagerdusanuma tüüp</translation>
+    </message>
+    <message>
+        <source>Packaging Vessel Notes</source>
+        <translation type="unfinished">Villimisanuma märkmed</translation>
+    </message>
+    <message>
         <source>Packaging Vessel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Packaging Vessel Type</source>
+        <translation type="unfinished">Villimisanuma tüüp</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grain absorption</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Losses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8608,111 +8720,11 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hot Liquor Tank Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Evaporation Loss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Weight</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Specific Heat Capacity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HLT Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Tun</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Tun Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>This is equal to the vessel&apos;s Heat Capacity divided by its weight.  Typical values are • Aluminum - 0.215 c/g·C  • Copper - 0.092 c/g·C  • Iron/Steel - 0.108 c/g·C  • Plastic - 0.359 c/g·C.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Grain absorption</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Tun Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lauter Tun Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lauter Tun Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Deadspace Losses</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lauter Tun Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil Kettle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil Kettle Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Evaporation rate per hour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Outflow per minute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brew Kettle Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aging Vessel Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Losses</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Packaging Vessel Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Packaging Vessel Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8722,6 +8734,18 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Opening Diameter</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Uus</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Salvesta</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -8745,15 +8769,51 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Fermentor Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Käärimisanuma tüüp</translation>
     </message>
     <message>
         <source>Fermentor Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Käärimisanuma märkmed</translation>
     </message>
     <message>
         <source>Optional Vessel
 Tabs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Capacity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total usable capacity of the mash tun, including any space below the false bottom or malt pipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Foundation Water (recovered)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water below the false bottom or malt pipe that drains out with the wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Tun Loss (not recovered)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Liquid that stays behind in the mash tun and is never recovered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lauter Tun Loss (not recovered)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wort that stays behind in the lauter tun and is never recovered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wort that stays behind in the lauter tun and its plumbing, and never reaches the boil.  This is only used if you have a separate lauter tun (ie the lauter tun has a volume set).  Otherwise, include lautering losses in the Mash Tun Loss on the Mash Tun tab.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8766,7 +8826,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vaikimisi partii suurus</translation>
     </message>
     <message>
         <source>Volume into the fermentor that new recipes using this equipment start with</source>
@@ -8786,18 +8846,10 @@ Tabs</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk</translation>
     </message>
     <message>
         <source>These settings apply to whichever vessel the mash happens in: the mash tun or, if you do not have a separate mash tun (eg on an all-in-one system such as the Grainfather, or for brew in a bag), the boil kettle.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Foundation Water (recovered)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water below the false bottom or malt pipe that drains out with the wort</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8809,39 +8861,11 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Total Capacity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total usable capacity of the mash tun, including any space below the false bottom or malt pipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The most the mash tun can hold, including any space below the false bottom (or malt pipe / basket) and anything that stays behind in the vessel.  The space actually available for the grain and its strike water is this volume less the Foundation Water (on the Mash tab) and Mash Tun Loss below.  If you do not have a separate mash tun -- eg on an all-in-one system such as the Grainfather, or for brew in a bag -- leave this blank (and untick Mash Tun on the General tab): the mash then happens in the boil kettle.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Mash Tun Loss (not recovered)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Liquid that stays behind in the mash tun and is never recovered</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Liquid that stays behind in the mash tun (eg below the outlet or in pipework) and never reaches the boil.  It is added to the strike water and to the total water needed.  Do not include grain absorption or anything that drains out with the wort (put those under Grain Absorption and Foundation Water on the Mash tab).  If you do not have a separate lauter tun, include your lautering losses here.  If you do have a separate lauter tun, its losses go on the Lauter Tun tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lauter Tun Loss (not recovered)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wort that stays behind in the lauter tun and is never recovered</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wort that stays behind in the lauter tun and its plumbing, and never reaches the boil.  This is only used if you have a separate lauter tun (ie the lauter tun has a volume set).  Otherwise, include lautering losses in the Mash Tun Loss on the Mash Tun tab.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8850,6 +8874,14 @@ Tabs</source>
     </message>
     <message>
         <source>The most the fermentor can hold, including headspace.  This is NOT the batch size, which is set on the General tab (as Default Batch Size).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal diameter of the kettle at the surface of the wort.  Used, along with the opening diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal diameter of the opening in the kettle through which steam can escape -- eg the same as the internal diameter if the kettle is uncovered, or smaller if it is partly covered.  Used, along with the internal diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8861,11 +8893,11 @@ Tabs</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
@@ -8881,11 +8913,11 @@ Tabs</source>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Päritolu</translation>
     </message>
     <message>
         <source>Supplier</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tarnija</translation>
     </message>
     <message>
         <source>Coarse/Fine Diff (%)</source>
@@ -8921,7 +8953,7 @@ Tabs</source>
     </message>
     <message>
         <source>Recommend Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Soovitatav mäskida</translation>
     </message>
     <message>
         <source>Recommend this be mashed</source>
@@ -8945,7 +8977,7 @@ Tabs</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Värvus</translation>
     </message>
     <message>
         <source>Main</source>
@@ -8965,7 +8997,7 @@ Tabs</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>New fermentable</source>
@@ -8985,23 +9017,15 @@ Tabs</source>
     </message>
     <message>
         <source>Producer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tootja</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extract Yield Dry Basis Fine Grind</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toote ID</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extract Yield Dry Basis Coarse Grind</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstraktisaagis, kuivaine peen jahvatus (DBFG)</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Coarse Grind (DBCG)</source>
@@ -9012,16 +9036,8 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Total alpha-amylase in malted grain</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total alpha-amylase in the malted grain</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Kolbach Index</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kolbachi indeks</translation>
     </message>
     <message>
         <source>Percentage of malt that is &quot;glassy&quot;</source>
@@ -9045,11 +9061,11 @@ Tabs</source>
     </message>
     <message>
         <source>Friability</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pudedus</translation>
     </message>
     <message>
         <source>DI pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DI pH</translation>
     </message>
     <message>
         <source>Viscosity of this malt in a &quot;congress mash&quot;</source>
@@ -9057,19 +9073,35 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentability</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritatavus</translation>
     </message>
     <message>
         <source>DMS precursors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Free Amino Nitrogen (FAN)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DMS-i eelühendid</translation>
     </message>
     <message>
         <source>Beta-glucans</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extract Yield Dry Basis Fine Grind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extract Yield Dry Basis Coarse Grind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total alpha-amylase in malted grain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total alpha-amylase in the malted grain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Free Amino Nitrogen (FAN)</source>
+        <translation type="unfinished">Vaba aminolämmastik (FAN)</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -9081,19 +9113,19 @@ Tabs</source>
     </message>
     <message>
         <source>Grain Group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linnaste rühm</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>Fermentable Type</source>
@@ -9101,7 +9133,7 @@ Tabs</source>
     </message>
     <message>
         <source>Total Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laoseis kokku</translation>
     </message>
     <message>
         <source>Total amount in inventory</source>
@@ -9144,15 +9176,15 @@ Tabs</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kirjeldus</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -9168,15 +9200,15 @@ Tabs</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -9207,7 +9239,7 @@ Tabs</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Target temp.</source>
@@ -9226,27 +9258,11 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Free rise</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>End temp.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Final temp. of this step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End Gravity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9258,20 +9274,16 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Vessel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Optional description of this fermentation step</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kirjeldus</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -9279,7 +9291,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Discard and close</source>
@@ -9287,7 +9299,27 @@ Tabs</source>
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished">Loobu</translation>
+    </message>
+    <message>
+        <source>Free rise</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start Gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>End Gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vessel</source>
+        <translation type="unfinished">Anum</translation>
     </message>
 </context>
 <context>
@@ -9298,7 +9330,7 @@ Tabs</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Alpha acids as percent by mass</source>
@@ -9310,11 +9342,11 @@ Tabs</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vorm</translation>
     </message>
     <message>
         <source>Beta acids as percent by mass</source>
@@ -9322,19 +9354,19 @@ Tabs</source>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Päritolu</translation>
     </message>
     <message>
         <source>Humulene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humuleen</translation>
     </message>
     <message>
         <source>Cohumulone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kohumuloon</translation>
     </message>
     <message>
         <source>Myrcene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mürtseen</translation>
     </message>
     <message>
         <source>Main</source>
@@ -9366,11 +9398,11 @@ Tabs</source>
     </message>
     <message>
         <source>Substitutes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Asendajad</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>New hop</source>
@@ -9393,20 +9425,16 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Producer</source>
-        <translation type="unfinished"></translation>
+        <source>Year</source>
+        <translation type="unfinished">Aasta</translation>
     </message>
     <message>
-        <source>Year</source>
-        <translation type="unfinished"></translation>
+        <source>Producer</source>
+        <translation type="unfinished">Tootja</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toote ID</translation>
     </message>
     <message>
         <source>Linalool %</source>
@@ -9414,7 +9442,7 @@ Tabs</source>
     </message>
     <message>
         <source>Linalool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linalool</translation>
     </message>
     <message>
         <source>Limonene %</source>
@@ -9422,7 +9450,7 @@ Tabs</source>
     </message>
     <message>
         <source>Limonene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Limoneen</translation>
     </message>
     <message>
         <source>Nerol %</source>
@@ -9430,7 +9458,7 @@ Tabs</source>
     </message>
     <message>
         <source>Nerol</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nerool</translation>
     </message>
     <message>
         <source>Farnesene %</source>
@@ -9438,7 +9466,7 @@ Tabs</source>
     </message>
     <message>
         <source>Farnesene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Farneseen</translation>
     </message>
     <message>
         <source>Polyphenols %</source>
@@ -9446,7 +9474,7 @@ Tabs</source>
     </message>
     <message>
         <source>Polyphenols</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Polüfenoolid</translation>
     </message>
     <message>
         <source>Geraniol %</source>
@@ -9454,7 +9482,7 @@ Tabs</source>
     </message>
     <message>
         <source>Geraniol</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geraniool</translation>
     </message>
     <message>
         <source>Xanthohumol %</source>
@@ -9462,7 +9490,7 @@ Tabs</source>
     </message>
     <message>
         <source>Xanthohumol</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ksantohumool</translation>
     </message>
     <message>
         <source>β-pinene %</source>
@@ -9477,6 +9505,10 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Total amount in inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>ID in database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9486,19 +9518,19 @@ Tabs</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>Total Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laoseis kokku</translation>
     </message>
     <message>
         <source>Add Purchase</source>
@@ -9558,81 +9590,45 @@ Tabs</source>
     </message>
 </context>
 <context>
-    <name>inventoryFermentableEditor</name>
+    <name>inventoryChangeFermentableEditor</name>
     <message>
-        <source>Fermentable Inventory Editor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Main</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date Ordered</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>dd MMM yyyy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ID in database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save and close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Discard and close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
     </message>
 </context>
 <context>
-    <name>inventoryWindow</name>
+    <name>inventoryChangeHopEditor</name>
     <message>
-        <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
     </message>
+</context>
+<context>
+    <name>inventoryChangeMiscEditor</name>
     <message>
-        <source>Fermentables</source>
-        <translation type="unfinished"></translation>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
     </message>
+</context>
+<context>
+    <name>inventoryChangeSaltEditor</name>
     <message>
-        <source>Hops</source>
-        <translation type="unfinished"></translation>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
     </message>
+</context>
+<context>
+    <name>inventoryChangeYeastEditor</name>
     <message>
-        <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
     </message>
+</context>
+<context>
+    <name>inventoryFermentableEditor</name>
     <message>
-        <source>Yeasts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Salts</source>
-        <translation type="unfinished"></translation>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
     </message>
 </context>
 <context>
@@ -9647,11 +9643,11 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritatavad</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humalad</translation>
     </message>
     <message>
         <source>Miscs</source>
@@ -9659,11 +9655,11 @@ Tabs</source>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pärmid</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retsept</translation>
     </message>
     <message>
         <source>Name of recipe</source>
@@ -9687,11 +9683,11 @@ Tabs</source>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varustus</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG</translation>
     </message>
     <message>
         <source>Boil SG</source>
@@ -9703,7 +9699,7 @@ Tabs</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
@@ -9711,7 +9707,7 @@ Tabs</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Värvus</translation>
     </message>
     <message>
         <source>IBU/GU</source>
@@ -9723,7 +9719,7 @@ Tabs</source>
     </message>
     <message>
         <source>Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruulimispäev</translation>
     </message>
     <message>
         <source>Add a fermentable</source>
@@ -9751,7 +9747,7 @@ Tabs</source>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muud</translation>
     </message>
     <message>
         <source>Add misc</source>
@@ -9767,7 +9763,7 @@ Tabs</source>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pärm</translation>
     </message>
     <message>
         <source>Add yeast</source>
@@ -9783,7 +9779,7 @@ Tabs</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -9871,7 +9867,7 @@ Tabs</source>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varunda andmebaas</translation>
     </message>
     <message>
         <source>Restore Database</source>
@@ -9915,7 +9911,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Delete selected</source>
@@ -9955,7 +9951,7 @@ Tabs</source>
     </message>
     <message>
         <source>Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Partii suurus</translation>
     </message>
     <message>
         <source>&amp;Export to File</source>
@@ -10015,11 +10011,15 @@ Tabs</source>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pruuli!</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">Abi</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keetmine</translation>
     </message>
     <message>
         <source>Boils</source>
@@ -10027,14 +10027,10 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritamine</translation>
     </message>
     <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10047,15 +10043,15 @@ Tabs</source>
     </message>
     <message>
         <source>Mash Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskiprofiilid</translation>
     </message>
     <message>
         <source>Boil Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keetmisprofiilid</translation>
     </message>
     <message>
         <source>Fermentation Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kääritamisprofiilid</translation>
     </message>
     <message>
         <source>&amp;Mash Profiles</source>
@@ -10071,7 +10067,7 @@ Tabs</source>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laoseis</translation>
     </message>
     <message>
         <source>Step-by-step instructions for brew day</source>
@@ -10082,15 +10078,15 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>&amp;Unit Conversion Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&amp;Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Unit Conversion Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10146,19 +10142,19 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Use mash profile in FG calculation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Info about, and any problems with, this boil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Info about, and any problems with, this fermentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use mash profile in FG calculation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10177,7 +10173,7 @@ Tabs</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -10197,7 +10193,7 @@ Tabs</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -10229,7 +10225,7 @@ Tabs</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -10237,7 +10233,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Discard and close</source>
@@ -10245,7 +10241,7 @@ Tabs</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>Total Mash Water</source>
@@ -10253,7 +10249,7 @@ Tabs</source>
     </message>
     <message>
         <source>Total Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koguaeg</translation>
     </message>
     <message>
         <source>Legacy</source>
@@ -10272,15 +10268,7 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Adjust water amounts and temperatures</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sparge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>How the grain will be rinsed after the mash.  Changing this and clicking Auto-Adjust replaces any existing sparge steps.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10292,15 +10280,23 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Mash thickness</source>
+        <source>Initial temperature of the mash tun.  Used when calculating the strike water temperature, to allow for the strike water heating up the mash tun.  If left blank, the tun is assumed to be at the same temperature as the grain.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Volume of strike water per mass of grain (not counting any water that sits below the grain bed).  Most often around 2.5 to 3.2 L/kg (1.2 to 1.5 qt/lb).  Not used if there is no sparge, as then all the water goes in the mash.</source>
+        <source>Adjust water amounts and temperatures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Change the amounts and temperatures of the strike water and other infusions, the amounts of any decoctions, and the amounts and temperatures of sparge water, to suit this recipe&apos;s grain bill and equipment.  Values you have pinned in a step are not changed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Used as the target grain bed temperature for new sparge steps when adjusting the mash.  It is better to set this on the sparge step itself.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How the grain will be rinsed after the mash.  Changing this and clicking Auto-Adjust replaces any existing sparge steps.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10316,11 +10312,15 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Initial temperature of the mash tun.  Used when calculating the strike water temperature, to allow for the strike water heating up the mash tun.  If left blank, the tun is assumed to be at the same temperature as the grain.</source>
+        <source>How full the mash tun gets, and how much wort you can expect to collect from the mash, for the recipe using this mash.  Shown when the mash is used by exactly one recipe.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Used as the target grain bed temperature for new sparge steps when adjusting the mash.  It is better to set this on the sparge step itself.</source>
+        <source>Target mash thickness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume of strike water per mass of grain (not counting any water that sits below the grain bed) to aim for when adjusting the mash.  Most often around 2.5 to 3.2 L/kg (1.2 to 1.5 qt/lb).  Not used if there is no sparge, as then all the water goes in the mash, nor if the amount of strike water is pinned.  The Water:Grain column in the table of steps shows what the steps actually give.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10332,11 +10332,11 @@ Tabs</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Target temp.</source>
@@ -10384,7 +10384,7 @@ Tabs</source>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus</translation>
     </message>
     <message>
         <source>Thickness</source>
@@ -10408,11 +10408,11 @@ Tabs</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kirjeldus</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -10420,7 +10420,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Discard and close</source>
@@ -10428,7 +10428,7 @@ Tabs</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>Step Number</source>
@@ -10455,11 +10455,11 @@ Tabs</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Time</source>
@@ -10475,7 +10475,7 @@ Tabs</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -10487,11 +10487,11 @@ Tabs</source>
     </message>
     <message>
         <source>Producer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tootja</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toote ID</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -10503,19 +10503,19 @@ Tabs</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>Total Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laoseis kokku</translation>
     </message>
     <message>
         <source>Total amount in inventory</source>
@@ -10545,19 +10545,7 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>NB: this tool makes the assumption that you are not going to add any water post boil.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Target OG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>From current recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10585,14 +10573,6 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Actual SG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Pre-Boil Volume</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10601,7 +10581,35 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Final Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated batch size after correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Calculate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NB: this tool makes the assumption that you are not going to add any water post boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From current recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Actual SG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10614,23 +10622,15 @@ Tabs</source>
     </message>
     <message>
         <source>Remedy: Add Water To Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lahendus: lisage keetmisele vett</translation>
     </message>
     <message>
         <source>Amount to Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lisatav kogus</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Final Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Estimated batch size after correction</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vee kogus, mis tuleb lisada planeeritud OG saavutamiseks</translation>
     </message>
     <message>
         <source>-- OR --</source>
@@ -10661,7 +10661,7 @@ Tabs</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Värvus</translation>
     </message>
     <message>
         <source>Formulas</source>
@@ -10729,19 +10729,19 @@ Tabs</source>
     </message>
     <message>
         <source>Schema</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skeem</translation>
     </message>
     <message>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andmebaas</translation>
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kasutajanimi</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Parool</translation>
     </message>
     <message>
         <source>Save password</source>
@@ -10840,8 +10840,8 @@ Tabs</source>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
+  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewken!
 &lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10855,7 +10855,7 @@ Tabs</source>
     </message>
     <message>
         <source>Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Partii suurus</translation>
     </message>
     <message>
         <source>Default batch size to set on new recipes</source>
@@ -10863,7 +10863,7 @@ Tabs</source>
     </message>
     <message>
         <source>Pre-Boil Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keedueelne kogus</translation>
     </message>
     <message>
         <source>Default pre-boil size to set on new recipes</source>
@@ -10898,6 +10898,14 @@ Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>By default, use mash profile in FG calculation for new and imported recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whether new and imported recipes take account of the mash temperatures and times when estimating final gravity.  (This can be changed for each recipe on its Mash tab.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>How bitterness (IBUs) is estimated from the recipe&apos;s hop additions.
  • Tinseth: the most widely used formula.  Allows for boil time and wort gravity.
  • Rager: older; generally gives higher IBUs than Tinseth.
@@ -10917,14 +10925,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
         <source>IBUs from first wort hops (hops put in the kettle as the wort is run off, before the boil starts), as a percentage of what the same hops would give if they were added at the start of the boil.  The default of 110% reflects the commonly reported finding that first wort hopping gives about 10% more bitterness than a full-length boil addition.  This applies whichever IBU formula is selected.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>By default, use mash profile in FG calculation for new and imported recipes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Whether new and imported recipes take account of the mash temperatures and times when estimating final gravity.  (This can be changed for each recipe on its Mash tab.)</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>pitchDialog</name>
@@ -10942,7 +10942,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG</translation>
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
@@ -10966,7 +10966,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lõuna-Aafrika rand</translation>
     </message>
     <message>
         <source>O2 At Start</source>
@@ -10977,15 +10977,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MM/dd/yyyy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10998,7 +10990,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Väljund</translation>
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
@@ -11113,7 +11105,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Väljund</translation>
     </message>
     <message>
         <source>Prime with</source>
@@ -11132,7 +11124,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vorm</translation>
     </message>
     <message>
         <source>Brewer</source>
@@ -11152,7 +11144,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karboniseeritus (mahtudes)</translation>
     </message>
     <message>
         <source>Taste Notes</source>
@@ -11160,7 +11152,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -11172,10 +11164,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>dd MMM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11196,6 +11184,133 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>recipeWaterWidget</name>
+    <message>
+        <source>Base Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit base water profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% RO in Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% RO in Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit target water profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If ticked, Auto-Adjust also works out how much acid to add to get this mash pH.  It uses the acid already in the recipe if there is one, otherwise lactic acid (or another acid if there&apos;s no lactic acid in the database).  If not ticked, acids are left alone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust acid for mash pH of</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target mash pH.  Most brewers aim for between 5.2 and 5.6, often 5.4.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Work out the amounts of brewing salts to add to get as close as possible to the target profile and, if ticked above, the amount of acid to get the target mash pH.  If the recipe already has salts, only those are used and their amounts are changed (so remove any you don&apos;t want, or add just the ones you do want, first).  Otherwise, commonly-used salts are added as needed.  Chalk and pickling lime are left alone.  You can undo the changes in one go.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto-Adjust</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically redo Auto-Adjust whenever something it depends on changes, eg the water profiles, the amount of water in the mash or the grain bill.  Changes you make to the amounts of salts or acid yourself will then be overwritten, so this is best used once you have chosen which salts to use.  Undoing an Auto-Adjust turns this off.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep water agents in sync with recipe changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Actual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Na</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pH</source>
+        <translation type="unfinished">pH</translation>
+    </message>
+    <message>
+        <source>Water Agents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water Agents (Miscellaneous)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a water agent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected water agent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acid Malts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acid Malts (Fermentables)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add an acid malt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected acid malt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto-Adjust Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Things to check after the last Auto-Adjust, eg ions that couldn&apos;t be brought close to the target, and why</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11235,7 +11350,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV</translation>
     </message>
     <message>
         <source>ABW</source>
@@ -11274,7 +11389,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Supplier</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tarnija</translation>
     </message>
     <message>
         <source>Ordered</source>
@@ -11285,12 +11400,8 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
         <translation type="unfinished">Kuupäev</translation>
     </message>
     <message>
-        <source>dd MMM yyyy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus</translation>
     </message>
     <message>
         <source>Amount ordered</source>
@@ -11310,7 +11421,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koguse tüüp</translation>
     </message>
     <message>
         <source>Uses</source>
@@ -11318,7 +11429,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount Remaining</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Järelejäänud kogus</translation>
     </message>
     <message>
         <source>Best Before</source>
@@ -11350,7 +11461,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -11358,7 +11469,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Discard and close</source>
@@ -11366,7 +11477,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>Note</source>
@@ -11374,14 +11485,24 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
 </context>
 <context>
+    <name>stockUseFermentableEditor</name>
+    <message>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
+    </message>
+</context>
+<context>
+    <name>stockUseHopEditor</name>
+    <message>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
+    </message>
+</context>
+<context>
     <name>stockUseIngredientEditor</name>
     <message>
         <source>Date</source>
         <translation type="unfinished">Kuupäev</translation>
-    </message>
-    <message>
-        <source>dd MMM yyyy</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reason</source>
@@ -11393,18 +11514,10 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogus</translation>
     </message>
     <message>
         <source>Amount used</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11417,7 +11530,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save and close</source>
@@ -11425,7 +11538,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Discard and close</source>
@@ -11433,7 +11546,36 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished">Loobu</translation>
+    </message>
+    <message>
+        <source>Comment</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation type="unfinished">Retsept</translation>
+    </message>
+</context>
+<context>
+    <name>stockUseMiscEditor</name>
+    <message>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
+    </message>
+</context>
+<context>
+    <name>stockUseSaltEditor</name>
+    <message>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
+    </message>
+</context>
+<context>
+    <name>stockUseYeastEditor</name>
+    <message>
+        <source>Date</source>
+        <translation type="obsolete">Kuupäev</translation>
     </message>
 </context>
 <context>
@@ -11511,7 +11653,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Category</source>
@@ -11531,7 +11673,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Type of beverage</source>
@@ -11547,7 +11689,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG</translation>
     </message>
     <message>
         <source>FG</source>
@@ -11579,7 +11721,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Main</source>
@@ -11607,7 +11749,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aroom</translation>
     </message>
     <message>
         <source>Appearance</source>
@@ -11615,7 +11757,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maitse</translation>
     </message>
     <message>
         <source>Mouthfeel</source>
@@ -11627,15 +11769,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -11657,7 +11799,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     <name>timerWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vorm</translation>
     </message>
     <message>
         <source>Add:</source>
@@ -11685,7 +11827,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>Play Alarm Sound</source>
@@ -11693,141 +11835,14 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
 </context>
 <context>
-    <name>waterAdjuster</name>
-    <message>
-        <source>Base Profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit base water profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% RO in Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% RO in Sparge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Target Profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit target water profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Actual</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pH</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water Agents (Miscellaneous)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add a water agent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected water agent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Acid Malts (Fermentables)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add an acid malt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove selected acid malt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>If ticked, Auto-Adjust also works out how much acid to add to get this mash pH.  It uses the acid already in the recipe if there is one, otherwise lactic acid (or another acid if there&apos;s no lactic acid in the database).  If not ticked, acids are left alone.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Adjust acid for mash pH of</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Target mash pH.  Most brewers aim for between 5.2 and 5.6, often 5.4.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Work out the amounts of brewing salts to add to get as close as possible to the target profile and, if ticked above, the amount of acid to get the target mash pH.  If the recipe already has salts, only those are used and their amounts are changed (so remove any you don&apos;t want, or add just the ones you do want, first).  Otherwise, commonly-used salts are added as needed.  Chalk and pickling lime are left alone.  You can undo the changes in one go.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Automatically redo Auto-Adjust whenever something it depends on changes, eg the water profiles, the amount of water in the mash or the grain bill.  Changes you make to the amounts of salts or acid yourself will then be overwritten, so this is best used once you have chosen which salts to use.  Undoing an Auto-Adjust turns this off.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keep water agents in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water Agents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Acid Malts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Auto-Adjust Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Things to check after the last Auto-Adjust, eg ions that couldn&apos;t be brought close to the target, and why</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>waterEditor</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>Edit Water</source>
@@ -11855,15 +11870,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -11882,15 +11897,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nimi</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tüüp</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vorm</translation>
     </message>
     <message>
         <source>Lab</source>
@@ -11898,7 +11913,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Toote ID</translation>
     </message>
     <message>
         <source>Min Temp</source>
@@ -11942,7 +11957,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Märkmed</translation>
     </message>
     <message>
         <source>New yeast</source>
@@ -11954,10 +11969,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total amount in inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -12041,6 +12052,10 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Total amount in inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>ID in database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12050,19 +12065,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uus</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Salvesta</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loobu</translation>
     </message>
     <message>
         <source>Total Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Laoseis kokku</translation>
     </message>
     <message>
         <source>Add Purchase</source>
