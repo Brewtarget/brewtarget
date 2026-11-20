@@ -117,22 +117,32 @@ void ScaleRecipeTool::scale(Equipment* equip, double const newEff) {
       miscAddition->setQuantity(miscAddition->quantity() * volRatio);
    }
 
-   if (auto const mash = this->m_recObs->mash()) {
-      // Reset all these to zero so that the user
-      // will know to re-run the mash wizard.
-      for (auto const & step : mash->mashSteps()) {
-         step->setAmount_l(0);
-      }
-   }
-
    // TBD: For now we don't scale the yeasts, but it might be good to give the option on this if user is doing a big
    //      scale-up or down.
 
-   // Let the user know what happened.
-   QMessageBox::information(this,
-                            tr("Recipe Scaled"),
-                            tr("The equipment and mash have been reset due to the fact that mash temperatures do not "
-                               "scale easily. Please re-run the mash wizard."));
+   //
+   // We used to set all the mash step amounts to zero here, so that the user would know to re-run the mash wizard.
+   // But, with no water in the mash, the recipe falls back to assuming it will hit the target pre-boil volume (see
+   // Recipe::recalcVolumeEstimates), so nothing on the recipe tab showed that there was a problem.  Leaving the old
+   // amounts in place means the calculated boil volume shows up as too low (or too high), and, if the user brews the
+   // recipe without fixing it, they get a warning (see MainWindow).
+   //
+   // If the mash is kept in sync with the recipe, the change of equipment (and of pre-boil volume) will already have
+   // scheduled an Auto-Adjust (see Recipe::scheduleMashAutoAdjust).  It runs once we return to the event loop, so it
+   // sees the scaled grain bill.
+   //
+   QString message = tr("The recipe has been scaled.");
+   if (auto const mash = this->m_recObs->mash()) {
+      message += " ";
+      if (mash->keptInSync()) {
+         message += tr("The mash is kept in sync with the recipe, so its water amounts and temperatures will be "
+                       "recalculated automatically.  Check the mash editor for any problems.");
+      } else {
+         message += tr("The amounts of water in the mash have not been changed, so you will probably need to use "
+                       "Auto-Adjust in the mash editor to work out new ones.");
+      }
+   }
+   QMessageBox::information(this, tr("Recipe Scaled"), message);
    return;
 }
 

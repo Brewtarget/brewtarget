@@ -844,6 +844,52 @@ public:
    }
 
    /**
+    * \brief If the water in the recipe's mash will not give (roughly) the target pre-boil volume, eg because the recipe
+    *        has been scaled or its grain bill or equipment changed since the mash water was worked out, tell the user
+    *        and ask whether to go ahead anyway.  (The brew log assumes the recipe's volumes are what the brewer is
+    *        aiming for -- see BrewLog::populateNote.)
+    *
+    *        We use the same 5% tolerance as the colouring of the calculated boil volume on the recipe tab.
+    *
+    * \return \c true if we should go ahead and create the brew log, \c false otherwise
+    */
+   bool confirmMashWaterForBrewing(Recipe const & recipe) {
+      std::optional<double> const shortfall_l = recipe.mashWaterShortfall_l();
+      if (!shortfall_l) {
+         return true;
+      }
+      double const preBoil_l = recipe.boil()->preBoilSize_l().value_or(0.0);
+      if (std::abs(*shortfall_l) <= 0.05 * preBoil_l) {
+         return true;
+      }
+
+      auto const displayLiters = [](double const liters) {
+         return Measurement::displayAmount(Measurement::Amount{liters, Measurement::Units::liters});
+      };
+      QString const message = (*shortfall_l > 0.0 ?
+         MainWindow::tr("The mash in this recipe has %1 of water, but needs %2 to give the target pre-boil volume of "
+                        "%3 (allowing for grain absorption and losses in the mash tun).  So you would get less wort "
+                        "than the recipe expects.") :
+         MainWindow::tr("The mash in this recipe has %1 of water, but only needs %2 to give the target pre-boil "
+                        "volume of %3 (allowing for grain absorption and losses in the mash tun).  So you would get "
+                        "more wort than the recipe expects.")
+      ).arg(displayLiters(recipe.mash()->totalMashWater_l()),
+            displayLiters(recipe.targetTotalMashVol_l()),
+            displayLiters(preBoil_l));
+
+      QMessageBox::StandardButton const answer = QMessageBox::question(
+         &this->m_self,
+         MainWindow::tr("Mash water does not match recipe"),
+         message + "\n\n" +
+            MainWindow::tr("You can fix this with Auto-Adjust in the mash editor.  Do you want to brew this recipe "
+                           "anyway?"),
+         QMessageBox::Yes | QMessageBox::No,
+         QMessageBox::No
+      );
+      return answer == QMessageBox::Yes;
+   }
+
+   /**
     * \brief Creates a new BrewLog.  Called from MainWindow::brewItHelper().
     */
    BrewLog * createBrewLog() {
@@ -862,6 +908,10 @@ public:
 
       if (!recipe) {
          // I think this is only possible if there are no Recipes at all, but we might as well cover al the bases.
+         return nullptr;
+      }
+
+      if (!this->confirmMashWaterForBrewing(*recipe)) {
          return nullptr;
       }
 

@@ -745,6 +745,14 @@ public:
     */
    double        targetTotalMashVol_l    () const;
    /**
+    * \brief How much more water the mash needs (or, if negative, how much less) to give the target pre-boil volume,
+    *        ie \c targetTotalMashVol_l less the water actually in the mash (\c Mash::totalMashWater_l).
+    *
+    *        Returns \c std::nullopt if the question does not arise, ie if there is no mash, no grain in the mash or no
+    *        target pre-boil volume.
+    */
+   std::optional<double> mashWaterShortfall_l() const;
+   /**
     * \brief The strike water (ie first infusion) needed for the supplied mash thickness, where the thickness is the
     *        ratio of water to grain in the grain bed.  This is the water for the grain bed plus
     *        \c Equipment::strikeWaterAllowance_l (ie the foundation water and mash tun loss, which have to be in the

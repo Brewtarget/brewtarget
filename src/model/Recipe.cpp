@@ -4050,6 +4050,15 @@ double Recipe::targetTotalMashVol_l() const {
    return returnValue;
 }
 
+std::optional<double> Recipe::mashWaterShortfall_l() const {
+   auto const mash = this->mash();
+   auto const boil = this->boil();
+   if (!mash || !boil || !boil->preBoilSize_l() || this->grainsInMash_kg() <= 0.0) {
+      return std::nullopt;
+   }
+   return this->targetTotalMashVol_l() - mash->totalMashWater_l();
+}
+
 double Recipe::targetStrikeWater_l(double const mashThickness_LKg) const {
    double const strikeWaterAllowance_l = this->equipment() ? this->equipment()->strikeWaterAllowance_l() : 0.0;
    return mashThickness_LKg * this->grainsInMash_kg() + strikeWaterAllowance_l;

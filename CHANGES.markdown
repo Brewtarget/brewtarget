@@ -45,6 +45,7 @@ Some new features from old issues.  Plus various bug fix release
 * Drop-down lists of types, forms, stages etc (eg yeast type, hop form), and Yes/No values, were always shown in English, regardless of the language setting.  They now also update straight away when you change the language. (Part of [1040](https://github.com/Brewtarget/brewtarget/issues/1040))
 * Changing the language now updates the whole user interface straight away, rather than only after a restart. [1040](https://github.com/Brewtarget/brewtarget/issues/1040)
 * Logging level names on the Options dialog were always shown in English, regardless of the language setting.
+* Brew log volumes now match the recipe's target pre-boil volume and batch size, rather than showing less wort into the fermenter when the mash doesn't have enough water.  Instead, "Brew It" warns if the mash water won't give the target pre-boil volume, and Scale Recipe no longer empties the mash water. [534](https://github.com/Brewtarget/brewtarget/issues/534)
 
 ### Release Timestamp
 Fri, 20 Nov 2026 05:03:02 +0100

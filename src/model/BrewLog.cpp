@@ -244,20 +244,36 @@ void BrewLog::populateNote(Recipe * recipe) {
    // these are done is very specific. Please do not modify them without some
    // serious testing.
 
-   // Everything needs volumes of one type or another. But the individual
-   // volumes are fairly independent of anything. Do them all first.
-   double const boilSize_l = recipe->boil() ? recipe->boil()->preBoilSize_l().value_or(0.0) : 0.0;
-   this->setExpectedPreBoilVolume_l      (boilSize_l);
-   this->setMeasuredPreBoilVolume_l      (boilSize_l);
-   this->setMeasuredPostBoilVolume_l     (recipe->postBoilVolume_l());
-   this->setExpectedVolumeIntoFv_l(recipe->finalVolume_l());
-   this->setMeasuredVolumeIntoFv_l(recipe->finalVolume_l());
-   this->setMeasuredFinalVolume_l        (recipe->finalVolume_l());
+   //
+   // Everything needs volumes of one type or another, so do them first.
+   //
+   // The expected volumes are the ones the recipe is designed around, which are also the ones its gravities are
+   // calculated for: the pre-boil gravity is for the target pre-boil volume (falling back to the batch size if there
+   // isn't one -- see Recipe::boilGrav) and the OG is for the batch size.  The measured volumes start out the same, for
+   // the brewer to overwrite with what they actually get.
+   //
+   // We used to take the post-boil volume and the volume into the fermenter from the volumes the recipe calculates from
+   // the water in the mash (Recipe::postBoilVolume_l and Recipe::finalVolume_l).  So, if there was not enough water in
+   // the mash, the brew log would show the full pre-boil volume but less wort going into the fermenter than the batch
+   // size, which was confusing.  Not having enough mash water is a problem with the recipe, so we now warn about it
+   // when the brewer starts the brew (see MainWindow).
+   //
+   auto const boil  = recipe->boil();
+   auto const equip = recipe->equipment();
+   double const boilTime_mins = boil ? boil->boilTime_mins() : Boil::default_boilTime_mins;
+   double const batchSize_l   = recipe->batchSize_l();
+   double const preBoil_l     = boil ? boil->preBoilSize_l().value_or(batchSize_l) : batchSize_l;
+   double const postBoil_l    = equip ? std::max(equip->wortEndOfBoil_l(preBoil_l, boilTime_mins), 0.0) : preBoil_l;
+   this->setExpectedPreBoilVolume_l(preBoil_l  );
+   this->setMeasuredPreBoilVolume_l(preBoil_l  );
+   this->setMeasuredPostBoilVolume_l(postBoil_l);
+   this->setExpectedVolumeIntoFv_l (batchSize_l);
+   this->setMeasuredVolumeIntoFv_l (batchSize_l);
+   this->setMeasuredFinalVolume_l  (batchSize_l);
    // As with other measured values, we start from what the recipe expects
    this->setMeasuredWortClarity(recipe->wortClarity());
 
-   if (auto const equip = recipe->equipment()) {
-      double const boilTime_mins = recipe->boil() ? recipe->boil()->boilTime_mins() : Boil::default_boilTime_mins;
+   if (equip) {
       this->setExpectedBoilOff_l(
          equip->kettleEvaporationPerHour_l().value_or(Equipment::default_kettleEvaporationPerHour_l) * (boilTime_mins/60.0)
       );
