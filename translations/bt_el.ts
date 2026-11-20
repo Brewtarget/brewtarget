@@ -6222,7 +6222,7 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Το αρχείο %1 δεν ήταν δυνατό να αποθηκευτεί</translation>
+        <translation type="obsolete">Το αρχείο %1 δεν ήταν δυνατό να αποθηκευτεί</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6239,6 +6239,10 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     <message>
         <source>Save as</source>
         <translation type="unfinished">Αποθήκευση ως</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Το αρχείο %1 δεν ήταν δυνατό να αποθηκευτεί</translation>
     </message>
 </context>
 <context>

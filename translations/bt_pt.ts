@@ -6277,7 +6277,7 @@ Deseja fazer uma cópia desta mostura para essa receita, de modo a não afetar m
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Não foi possível salvar o arquivo %1</translation>
+        <translation type="obsolete">Não foi possível salvar o arquivo %1</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6294,6 +6294,10 @@ Deseja fazer uma cópia desta mostura para essa receita, de modo a não afetar m
     <message>
         <source>Save as</source>
         <translation type="unfinished">Salvar como</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Não foi possível salvar o arquivo %1</translation>
     </message>
 </context>
 <context>

@@ -6174,7 +6174,7 @@ Vil du lave en kopi af denne mæskning til den opskrift, så du kan gøre dette 
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation>Fil %1 filnavn &lt;&lt; kunne ikke gemmes</translation>
+        <translation type="vanished">Fil %1 filnavn &lt;&lt; kunne ikke gemmes</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6191,6 +6191,10 @@ Vil du lave en kopi af denne mæskning til den opskrift, så du kan gøre dette 
     <message>
         <source>Save as</source>
         <translation type="unfinished">Gem som</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Filen %1 kunne ikke gemmes</translation>
     </message>
 </context>
 <context>
@@ -11057,19 +11061,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Temperature at the start of this step.  If not set, the wort is assumed to be boiling.  Steps are classified as pre-boil, boil proper or post-boil by their temperatures.  For IBU formulae that model isomerization after flameout (eg mIBU and SMPH), a post-boil step that starts at boiling and ends below it is modelled as the wort cooling naturally (down to, but not below, the end temperature); any other post-boil step is modelled as the temperature changing linearly from the start temperature to the end temperature (so eg a hop stand held at 80°C (176°F) has start and end temperatures of 80°C).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatur ved starten af dette trin.  Hvis den ikke er angivet, antages urten at koge.  Trin klassificeres som forkogning, egentlig kogning eller efterkogning ud fra deres temperaturer.  For IBU-formler, der modellerer isomerisering efter slukning af varmen (fx mIBU og SMPH), modelleres et efterkogningstrin, der starter ved kogepunktet og slutter under det, som at urten køler naturligt af (ned til, men ikke under, sluttemperaturen); ethvert andet efterkogningstrin modelleres som en lineær temperaturændring fra starttemperaturen til sluttemperaturen (så fx en hop stand ved 80°C (176°F) har start- og sluttemperatur på 80°C).</translation>
     </message>
     <message>
         <source>How long this step lasts, not including any ramp time.  For a post-boil step (eg whirlpool or hop stand), hops added to this step with no time set steep for this long (plus the time of any subsequent steps).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor længe dette trin varer, uden eventuel rampetid.  For et efterkogningstrin (fx whirlpool eller hop stand) trækker humle, der tilsættes dette trin uden angivet tid, i så lang tid (plus tiden for eventuelle efterfølgende trin).</translation>
     </message>
     <message>
         <source>Temperature at the end of this step.  If not set, the wort is assumed to be boiling.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatur ved slutningen af dette trin.  Hvis den ikke er angivet, antages urten at koge.</translation>
     </message>
     <message>
         <source>Ramp time: how long it takes, before this step begins, to get from the end temperature of the previous step to the start temperature of this one.  Eg, for a hop stand at 80°C (176°F), the time taken to chill the wort from boiling to that temperature.  For post-boil steps, the temperature is modelled as changing linearly during the ramp, and hops added to the step with no time set are added at the end of the ramp.  If not set, any temperature change between steps is treated as instantaneous.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rampetid: hvor lang tid det tager, før dette trin begynder, at komme fra det forrige trins sluttemperatur til dette trins starttemperatur.  Fx for en hop stand ved 80°C (176°F) den tid, det tager at køle urten fra kogepunktet til den temperatur.  For efterkogningstrin modelleres temperaturen som lineært ændrende under rampen, og humle, der tilsættes trinnet uden angivet tid, tilsættes ved rampens slutning.  Hvis den ikke er angivet, behandles enhver temperaturændring mellem trin som øjeblikkelig.</translation>
     </message>
 </context>
 <context>
@@ -11178,7 +11182,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Postboil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Efterkogning</translation>
     </message>
     <message>
         <source>OG</source>
@@ -11202,7 +11206,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volumen til gæringsbeholder</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
@@ -11294,35 +11298,35 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Batch Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Batchnummer</translation>
     </message>
     <message>
         <source>Expected OG, based on recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet OG ud fra opskriften</translation>
     </message>
     <message>
         <source>Recipe OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opskriftens OG</translation>
     </message>
     <message>
         <source>Projected OG, based on measured pre-boil gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Planlagt OG ud fra målt massefylde før kogning</translation>
     </message>
     <message>
         <source>Yeast attenuation based on user-reported OG and FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forgæringsgrad ud fra brugerens angivne OG og FG</translation>
     </message>
     <message>
         <source>How clear the wort was when it went into the fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor klar urten var, da den kom i gæringsbeholderen</translation>
     </message>
     <message>
         <source>Wort clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Urtens klarhed</translation>
     </message>
     <message>
         <source>How clear the wort was, judged by eye, when it went into the fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor klar urten var, bedømt med øjet, da den kom i gæringsbeholderen</translation>
     </message>
 </context>
 <context>
@@ -11735,11 +11739,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Internal Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Indvendig diameter</translation>
     </message>
     <message>
         <source>Opening Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Åbningsdiameter</translation>
     </message>
     <message>
         <source>New</source>
@@ -11763,15 +11767,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Adjustment factor for large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Justeringsfaktor for humleudnyttelse ved store batcher.  Denne værdi bør være 100% for batcher under 20 gallons, men kan være højere (200% eller mere) for udstyr til meget store batcher.</translation>
     </message>
     <message>
         <source>Kettle to Fermentor Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tab fra kogekar til gæringsbeholder</translation>
     </message>
     <message>
         <source>Fermentor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gæringsbeholder</translation>
     </message>
     <message>
         <source>Fermentor Type</source>
@@ -11784,51 +11788,52 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Optional Vessel
 Tabs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valgfrie beholder-
+faner</translation>
     </message>
     <message>
         <source>Total Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Samlet kapacitet</translation>
     </message>
     <message>
         <source>Total usable capacity of the mash tun, including any space below the false bottom or malt pipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mæskekarrets samlede brugbare kapacitet, inklusive eventuel plads under den falske bund eller maltrøret</translation>
     </message>
     <message>
         <source>Foundation Water (recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bundvand (genvundet)</translation>
     </message>
     <message>
         <source>Water below the false bottom or malt pipe that drains out with the wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vand under den falske bund eller maltrøret, som løber ud sammen med urten</translation>
     </message>
     <message>
         <source>Mash Tun Loss (not recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tab i mæskekar (ikke genvundet)</translation>
     </message>
     <message>
         <source>Liquid that stays behind in the mash tun and is never recovered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Væske, der bliver tilbage i mæskekarret og aldrig genvindes</translation>
     </message>
     <message>
         <source>Lauter Tun Loss (not recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tab i urtfiltreringsbeholder (ikke genvundet)</translation>
     </message>
     <message>
         <source>Wort that stays behind in the lauter tun and is never recovered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Urt, der bliver tilbage i urtfiltreringsbeholderen og aldrig genvindes</translation>
     </message>
     <message>
         <source>Wort that stays behind in the lauter tun and its plumbing, and never reaches the boil.  This is only used if you have a separate lauter tun (ie the lauter tun has a volume set).  Otherwise, include lautering losses in the Mash Tun Loss on the Mash Tun tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Urt, der bliver tilbage i urtfiltreringsbeholderen og dens rør og aldrig når til kogningen.  Dette bruges kun, hvis du har en separat urtfiltreringsbeholder (dvs. urtfiltreringsbeholderen har et angivet volumen).  Ellers skal tab ved urtfiltrering medregnes i Tab i mæskekar på fanen Mæskekar.</translation>
     </message>
     <message>
         <source>Use a different name for each equipment profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brug et forskelligt navn til hver udstyrsprofil.</translation>
     </message>
     <message>
         <source>These checkboxes control which vessel tabs are shown.  An asterisk after a vessel means it has a volume set, and so is used in calculations, even if its tab is hidden.  Attributes of &quot;optional&quot; vessels will not be saved if their volumes are left blank or set to 0.  If there is no mash tun, the mash happens in the boil kettle (as on all-in-one systems and for brew in a bag).  If there is no lauter tun, lautering happens wherever the mash happens.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Disse afkrydsningsfelter styrer, hvilke beholderfaner der vises.  En stjerne efter en beholder betyder, at den har et angivet volumen og derfor bruges i beregninger, selv om dens fane er skjult.  Egenskaber for &quot;valgfrie&quot; beholdere gemmes ikke, hvis deres volumen er tomt eller sat til 0.  Hvis der ikke er noget mæskekar, foregår mæskningen i kogekarret (som på alt-i-en-anlæg og ved brew in a bag).  Hvis der ikke er nogen urtfiltreringsbeholder, foregår urtfiltreringen der, hvor mæskningen foregår.</translation>
     </message>
     <message>
         <source>Default Batch Size</source>
@@ -11836,19 +11841,19 @@ Tabs</source>
     </message>
     <message>
         <source>Volume into the fermentor that new recipes using this equipment start with</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volumen til gæringsbeholderen, som nye opskrifter med dette udstyr starter med</translation>
     </message>
     <message>
         <source>Default Pre-boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard forkogningsvolumen</translation>
     </message>
     <message>
         <source>Volume in the kettle at the start of the boil that new recipes using this equipment start with</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volumen i kogekarret ved kogningens start, som nye opskrifter med dette udstyr starter med</translation>
     </message>
     <message>
         <source>The batch size (ie the volume going into the fermentor) and pre-boil volume that a recipe starts with when you choose this equipment for it.  These are not the capacities of the fermentor and kettle, which are set on their own tabs.  If you brew different batch sizes on the same equipment, you can either change the batch size in each recipe, or have a separate equipment profile for each batch size.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Den batchstørrelse (dvs. volumenet til gæringsbeholderen) og det forkogningsvolumen, en opskrift starter med, når du vælger dette udstyr til den.  Det er ikke gæringsbeholderens og kogekarrets kapacitet, som angives på deres egne faner.  Hvis du brygger forskellige batchstørrelser på det samme udstyr, kan du enten ændre batchstørrelsen i hver opskrift eller have en separat udstyrsprofil for hver batchstørrelse.</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -11856,39 +11861,39 @@ Tabs</source>
     </message>
     <message>
         <source>These settings apply to whichever vessel the mash happens in: the mash tun or, if you do not have a separate mash tun (eg on an all-in-one system such as the Grainfather, or for brew in a bag), the boil kettle.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Disse indstillinger gælder for den beholder, mæskningen foregår i: mæskekarret eller, hvis du ikke har et separat mæskekar (fx på et alt-i-en-anlæg som Grainfather eller ved brew in a bag), kogekarret.</translation>
     </message>
     <message>
         <source>The water that has to be below the false bottom (or malt pipe / basket) before the grain is covered, but which drains out with the wort and so is NOT lost.  (It is part of the Total Capacity of the mash tun or, if there is no mash tun, of the kettle.)  This is common in all-in-one systems -- eg about 3.5 liters for a Grainfather G30.  It is added to the strike water, so the mash thickness you choose applies just to the grain bed, and it is taken off the sparge water, so the total water needed does not change.  Leave at 0 if there is no such space (eg brew in a bag without a false bottom).  Other software calls this, eg, &quot;Mash-Tun Deadspace&quot; (Brewfather) or &quot;Mash Tun Addition&quot; (BeerSmith).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det vand, der skal være under den falske bund (eller maltrøret/kurven), før malten er dækket, men som løber ud sammen med urten og derfor IKKE går tabt.  (Det er en del af mæskekarrets Samlet kapacitet eller, hvis der ikke er noget mæskekar, kogekarrets.)  Dette er almindeligt i alt-i-en-anlæg -- fx ca. 3,5 liter for en Grainfather G30.  Det lægges til indmæskningsvandet, så den valgte mæsketykkelse kun gælder for maltlejet, og trækkes fra spargningsvandet, så den samlede vandmængde ikke ændres.  Lad det stå på 0, hvis der ikke er en sådan plads (fx brew in a bag uden falsk bund).  Andre programmer kalder dette fx &quot;Mash-Tun Deadspace&quot; (Brewfather) eller &quot;Mash Tun Addition&quot; (BeerSmith).</translation>
     </message>
     <message>
         <source>How much water is permanently lost to each unit of weight of grain during mashing (ie the water the spent grain retains).  This is separate from Foundation Water and Mash Tun Loss, which are about the vessel rather than the grain.  (For an all-in-one system, anything that does not drain from the malt pipe should be included here.)  The default value is about 1.085 liters per kilogram (0.13 US gallons per pound), which is typical for a conventional mash tun.  For an all-in-one system with a malt pipe, about 0.8 liters per kilogram is more typical, and for brew in a bag with the bag squeezed, about 0.66 liters per kilogram.  It can fluctuate due to the fineness of your grind, how well the grain is drained, the malt, and other factors.  Pressing the &quot;Default Absorption&quot; button will reset the value to the default.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor meget vand der går permanent tabt pr. vægtenhed malt under mæskningen (dvs. det vand, som masken (den brugte malt) holder på).  Dette er adskilt fra Bundvand og Tab i mæskekar, som handler om beholderen frem for malten.  (For et alt-i-en-anlæg skal alt, der ikke løber ud af maltrøret, medregnes her.)  Standardværdien er ca. 1,085 liter pr. kilogram (0,13 US gallons pr. pund), hvilket er typisk for et almindeligt mæskekar.  For et alt-i-en-anlæg med maltrør er ca. 0,8 liter pr. kilogram mere typisk, og for brew in a bag, hvor posen presses, ca. 0,66 liter pr. kilogram.  Værdien kan variere afhængigt af, hvor fint malten er knust, hvor godt den er drænet, malten og andre faktorer.  Et tryk på knappen &quot;Standardabsorption&quot; nulstiller værdien til standardværdien.</translation>
     </message>
     <message>
         <source>The most the mash tun can hold, including any space below the false bottom (or malt pipe / basket) and anything that stays behind in the vessel.  The space actually available for the grain and its strike water is this volume less the Foundation Water (on the Mash tab) and Mash Tun Loss below.  If you do not have a separate mash tun -- eg on an all-in-one system such as the Grainfather, or for brew in a bag -- leave this blank (and untick Mash Tun on the General tab): the mash then happens in the boil kettle.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det meste, mæskekarret kan rumme, inklusive eventuel plads under den falske bund (eller maltrøret/kurven) og alt, der bliver tilbage i beholderen.  Den plads, der faktisk er til malten og indmæskningsvandet, er dette volumen minus Bundvand (på fanen Mæskning) og Tab i mæskekar nedenfor.  Hvis du ikke har et separat mæskekar -- fx på et alt-i-en-anlæg som Grainfather eller ved brew in a bag -- så lad dette felt stå tomt (og fjern fluebenet ved Mæskekar på fanen Generelt): mæskningen foregår så i kogekarret.</translation>
     </message>
     <message>
         <source>Liquid that stays behind in the mash tun (eg below the outlet or in pipework) and never reaches the boil.  It is added to the strike water and to the total water needed.  Do not include grain absorption or anything that drains out with the wort (put those under Grain Absorption and Foundation Water on the Mash tab).  If you do not have a separate lauter tun, include your lautering losses here.  If you do have a separate lauter tun, its losses go on the Lauter Tun tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Væske, der bliver tilbage i mæskekarret (fx under udløbet eller i rørene) og aldrig når til kogningen.  Den lægges til indmæskningsvandet og til den samlede vandmængde.  Medregn ikke absorption i malt eller noget, der løber ud sammen med urten (angiv dem under Absorption i malt og Bundvand på fanen Mæskning).  Hvis du ikke har en separat urtfiltreringsbeholder, så medregn dine tab ved urtfiltrering her.  Hvis du har en separat urtfiltreringsbeholder, angives dens tab på fanen Urtfiltreringsbeholder.</translation>
     </message>
     <message>
         <source>The most the kettle can hold (not the pre-boil volume, which is on the General tab).  If there is no separate mash tun, this is also the space available for the mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det meste, kogekarret kan rumme (ikke forkogningsvolumenet, som står på fanen Generelt).  Hvis der ikke er et separat mæskekar, er dette også den plads, der er til mæskningen.</translation>
     </message>
     <message>
         <source>The most the fermentor can hold, including headspace.  This is NOT the batch size, which is set on the General tab (as Default Batch Size).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det meste, gæringsbeholderen kan rumme, inklusive fri plads i toppen.  Dette er IKKE batchstørrelsen, som angives på fanen Generelt (som Standard batchstørrelse).</translation>
     </message>
     <message>
         <source>Internal diameter of the kettle at the surface of the wort.  Used, along with the opening diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogekarrets indvendige diameter ved urtens overflade.  Bruges sammen med åbningsdiameteren og urtvolumenet i kogekarret til at skønne, hvor hurtigt urten køler naturligt af efter slukning af varmen, for IBU-formler, der modellerer isomerisering efter slukning af varmen (fx mIBU og SMPH).  Hvis den ikke er angivet, antages 45 cm (ca. 18 tommer).</translation>
     </message>
     <message>
         <source>Internal diameter of the opening in the kettle through which steam can escape -- eg the same as the internal diameter if the kettle is uncovered, or smaller if it is partly covered.  Used, along with the internal diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Indvendig diameter af den åbning i kogekarret, hvor damp kan slippe ud -- fx den samme som den indvendige diameter, hvis kogekarret er uden låg, eller mindre, hvis det er delvist tildækket.  Bruges sammen med den indvendige diameter og urtvolumenet i kogekarret til at skønne, hvor hurtigt urten køler naturligt af efter slukning af varmen, for IBU-formler, der modellerer isomerisering efter slukning af varmen (fx mIBU og SMPH).  Hvis den ikke er angivet, antages 45 cm (ca. 18 tommer).</translation>
     </message>
 </context>
 <context>
@@ -12179,7 +12184,7 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentable Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Type af gærbar ingrediens</translation>
     </message>
     <message>
         <source>Total Inventory</source>
@@ -12187,31 +12192,31 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total mængde på lager</translation>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilføj køb</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opret en ny registrering af lagerkøb for denne gærbare ingrediens</translation>
     </message>
     <message>
         <source>% Lactic Acid (by weight)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% mælkesyre (efter vægt)</translation>
     </message>
     <message>
         <source>For aciduated malts (aka acid malts)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Til syrnet malt (også kaldet surmalt)</translation>
     </message>
     <message>
         <source>% Fermentable by yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% gærbart af gær</translation>
     </message>
     <message>
         <source>Percentage of this ingredient&apos;s extract that brewing yeast can ferment.  Leave blank for 100%.  Set to 0 for lactose, or about 10 for maltodextrin.  Not normally needed for malts.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Den procentdel af denne ingrediens&apos; ekstrakt, som ølgær kan forgære.  Lad feltet stå tomt for 100%.  Sæt til 0 for laktose eller ca. 10 for maltodextrin.  Normalt ikke nødvendigt for malt.</translation>
     </message>
 </context>
 <context>
@@ -12250,7 +12255,7 @@ Tabs</source>
     </message>
     <message>
         <source>New fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ny gæring</translation>
     </message>
     <message>
         <source>New</source>
@@ -12274,15 +12279,15 @@ Tabs</source>
     </message>
     <message>
         <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvad der sker med krausen (skummet oven på det gærende øl), som fjerner noget af bitterheden.  Bruges kun af SMPH IBU-formlen.</translation>
     </message>
     <message>
         <source>Krausen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Krausen</translation>
     </message>
     <message>
         <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  If the krausen is skimmed, choose one of the &quot;blown off&quot; options, according to how much is removed.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvad der sker med krausen (skummet oven på det gærende øl), som fjerner noget af bitterheden.  Hvis krausen skummes af, så vælg en af &quot;blown off&quot;-mulighederne efter hvor meget der fjernes.  Bruges kun af SMPH IBU-formlen.</translation>
     </message>
 </context>
 <context>
@@ -12668,11 +12673,11 @@ Tabs</source>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilføj køb</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opret en ny registrering af lagerkøb for denne humle</translation>
     </message>
     <message>
         <source>Alpha Acid</source>
@@ -12680,47 +12685,47 @@ Tabs</source>
     </message>
     <message>
         <source>Actual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faktisk</translation>
     </message>
     <message>
         <source>Typical Range</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typisk interval</translation>
     </message>
     <message>
         <source>Min alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. alfasyrer som procent pr. masse</translation>
     </message>
     <message>
         <source>-</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-</translation>
     </message>
     <message>
         <source>Max alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. alfasyrer som procent pr. masse</translation>
     </message>
     <message>
         <source>Beta Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Betasyre</translation>
     </message>
     <message>
         <source>Min beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. betasyrer som procent pr. masse</translation>
     </message>
     <message>
         <source>Max beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. betasyrer som procent pr. masse</translation>
     </message>
     <message>
         <source>6 Month Alpha Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfatab over seks måneder</translation>
     </message>
     <message>
         <source>α-Pinene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α-pinen %</translation>
     </message>
     <message>
         <source>α-Pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α-pinen</translation>
     </message>
 </context>
 <context>
@@ -13755,11 +13760,11 @@ Tabs</source>
     </message>
     <message>
         <source>See Boil tab below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Se fanen Kogning nedenfor</translation>
     </message>
     <message>
         <source>&amp;Copy Selected Item(s)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kopier markerede element(er)</translation>
     </message>
     <message>
         <source>Salts</source>
@@ -13783,15 +13788,15 @@ Tabs</source>
     </message>
     <message>
         <source>&amp;Mash Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Mæskeprofiler</translation>
     </message>
     <message>
         <source>&amp;Boil Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kogeprofiler</translation>
     </message>
     <message>
         <source>&amp;Fermentation Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">G&amp;æringsprofiler</translation>
     </message>
     <message>
         <source>Mash Designer</source>
@@ -13807,51 +13812,51 @@ Tabs</source>
     </message>
     <message>
         <source>Step-by-step instructions for brew day</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trinvise instruktioner til bryggedagen</translation>
     </message>
     <message>
         <source>W&amp;aters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Vand</translation>
     </message>
     <message>
         <source>&amp;Unit Conversion Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Enhedsomregning</translation>
     </message>
     <message>
         <source>&amp;Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Opskrift</translation>
     </message>
     <message>
         <source>&amp;Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Massefylde&amp;korrektion</translation>
     </message>
     <message>
         <source>Edit this style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger denne stilart</translation>
     </message>
     <message>
         <source>Edit this equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger dette udstyr</translation>
     </message>
     <message>
         <source>Edit this mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger denne mæskning</translation>
     </message>
     <message>
         <source>Edit this boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger denne kogning</translation>
     </message>
     <message>
         <source>Edit this fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger denne gæring</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Rediger</translation>
     </message>
     <message>
         <source>Efficienc&amp;y</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Effekti&amp;vitet</translation>
     </message>
     <message>
         <source>Target</source>
@@ -13859,11 +13864,11 @@ Tabs</source>
     </message>
     <message>
         <source>Calculated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beregnet</translation>
     </message>
     <message>
         <source>Calculated final volume into the primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beregnet slutvolumen til første gæring</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
@@ -13871,27 +13876,27 @@ Tabs</source>
     </message>
     <message>
         <source>Calculated preboil volume - See Boil tab below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beregnet volumen før kogning - se fanen Kogning nedenfor</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Info om, og eventuelle problemer med, denne mæskning</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Info om, og eventuelle problemer med, denne kogning</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Info om, og eventuelle problemer med, denne gæring</translation>
     </message>
     <message>
         <source>Use mash profile in FG calculation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brug mæskeprofil i FG-beregning</translation>
     </message>
     <message>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tag højde for, hvordan mæsketemperaturer og -tider gør urten mere eller mindre gærbar, når slutmassefylden skønnes.  Lad dette være slået fra, hvis du har sat gærens forgæringsgrad, så den afspejler din egen mæskning.</translation>
     </message>
 </context>
 <context>
@@ -14049,7 +14054,7 @@ Tabs</source>
     </message>
     <message>
         <source>Tun specific heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karrets specifikke varme</translation>
     </message>
     <message>
         <source>New</source>
@@ -14073,7 +14078,7 @@ Tabs</source>
     </message>
     <message>
         <source>Total Mash Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Samlet mæskevand</translation>
     </message>
     <message>
         <source>Total Time</source>
@@ -14081,19 +14086,19 @@ Tabs</source>
     </message>
     <message>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ældre</translation>
     </message>
     <message>
         <source>These are old settings that still work but might be retired in a future version of the software as there are now other ways to achieve the same same result.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette er gamle indstillinger, som stadig virker, men som måske udgår i en fremtidig version af programmet, da der nu er andre måder at opnå det samme resultat på.</translation>
     </message>
     <message>
         <source>It is better to set this on the sparge step itself.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det er bedre at angive dette på selve spargningstrinnet.</translation>
     </message>
     <message>
         <source>It is better to set this on the Equipment (Mash Tun tab).  This value is only used if the recipe&apos;s equipment has a mash tun with no weight and specific heat set.  It is ignored if the equipment has no separate mash tun (ie the mash happens in the kettle), because the strike water is then heated in the same vessel as the mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det er bedre at angive dette på udstyret (fanen Mæskekar).  Denne værdi bruges kun, hvis opskriftens udstyr har et mæskekar uden angivet masse og specifik varme.  Den ignoreres, hvis udstyret ikke har et separat mæskekar (dvs. mæskningen foregår i kogekarret), fordi indmæskningsvandet så opvarmes i samme beholder som mæsken.</translation>
     </message>
     <message>
         <source>Sparge</source>
@@ -14105,7 +14110,7 @@ Tabs</source>
     </message>
     <message>
         <source>Number of batch sparges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antal portionsvise spargninger</translation>
     </message>
     <message>
         <source>Calculate</source>
@@ -14113,47 +14118,47 @@ Tabs</source>
     </message>
     <message>
         <source>Initial temperature of the mash tun.  Used when calculating the strike water temperature, to allow for the strike water heating up the mash tun.  If left blank, the tun is assumed to be at the same temperature as the grain.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mæskekarrets starttemperatur.  Bruges ved beregning af indmæskningsvandets temperatur for at tage højde for, at indmæskningsvandet opvarmer mæskekarret.  Hvis feltet er tomt, antages karret at have samme temperatur som malten.</translation>
     </message>
     <message>
         <source>Adjust water amounts and temperatures</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Juster vandmængder og temperaturer</translation>
     </message>
     <message>
         <source>Change the amounts and temperatures of the strike water and other infusions, the amounts of any decoctions, and the amounts and temperatures of sparge water, to suit this recipe&apos;s grain bill and equipment.  Values you have pinned in a step are not changed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ændr mængder og temperaturer for indmæskningsvandet og andre infusioner, mængderne af eventuelle dekoktioner samt mængder og temperaturer for spargningsvandet, så de passer til opskriftens maltsammensætning og udstyr.  Værdier, du har fastholdt i et trin, ændres ikke.</translation>
     </message>
     <message>
         <source>Used as the target grain bed temperature for new sparge steps when adjusting the mash.  It is better to set this on the sparge step itself.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruges som måltemperatur for maltlejet for nye spargningstrin, når mæskningen justeres.  Det er bedre at angive dette på selve spargningstrinnet.</translation>
     </message>
     <message>
         <source>How the grain will be rinsed after the mash.  Changing this and clicking Auto-Adjust replaces any existing sparge steps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvordan malten skylles efter mæskningen.  Hvis du ændrer dette og klikker på Autojuster, erstattes eventuelle eksisterende spargningstrin.</translation>
     </message>
     <message>
         <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Autojuster</translation>
     </message>
     <message>
         <source>Available when mash is used by exactly one recipe.  Keep mash in sync with recipe by doing an auto-adjust whenever changes happen, eg to the recipe&apos;s grain bill or equipment.  (Changing the steps themselves does not trigger an adjustment, so pin any values you want to keep.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilgængelig, når mæskningen bruges af præcis én opskrift.  Hold mæskningen synkroniseret med opskriften ved at foretage en automatisk justering, når der sker ændringer, fx i opskriftens maltsammensætning eller udstyr.  (Ændringer af selve trinnene udløser ikke en justering, så fasthold de værdier, du vil beholde.)</translation>
     </message>
     <message>
         <source>Keep mash in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hold mæskningen synkroniseret med ændringer i opskriften</translation>
     </message>
     <message>
         <source>How full the mash tun gets, and how much wort you can expect to collect from the mash, for the recipe using this mash.  Shown when the mash is used by exactly one recipe.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor fyldt mæskekarret bliver, og hvor meget urt du kan forvente at få ud af mæskningen, for den opskrift, der bruger denne mæskning.  Vises, når mæskningen bruges af præcis én opskrift.</translation>
     </message>
     <message>
         <source>Target mash thickness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mål for mæsketykkelse</translation>
     </message>
     <message>
         <source>Volume of strike water per mass of grain (not counting any water that sits below the grain bed) to aim for when adjusting the mash.  Most often around 2.5 to 3.2 L/kg (1.2 to 1.5 qt/lb).  Not used if there is no sparge, as then all the water goes in the mash, nor if the amount of strike water is pinned.  The Water:Grain column in the table of steps shows what the steps actually give.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volumen indmæskningsvand pr. masse malt (uden vand, der står under maltlejet), der sigtes efter ved justering af mæskningen.  Oftest ca. 2,5 til 3,2 L/kg (1,2 til 1,5 qt/lb).  Bruges ikke, hvis der ikke spargnes, da alt vandet så kommer i mæsken, og heller ikke, hvis mængden af indmæskningsvand er fastholdt.  Kolonnen Vand:malt i tabellen over trin viser, hvad trinnene faktisk giver.</translation>
     </message>
 </context>
 <context>
@@ -14264,19 +14269,19 @@ Tabs</source>
     </message>
     <message>
         <source>Step Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trinnummer</translation>
     </message>
     <message>
         <source>If ticked, adjusting the mash (in the Mash Editor) will not change this amount (but will use it to work out other values, eg the water temperature).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis markeret, ændrer justering af mæskningen (i mæskeredigeringen) ikke denne mængde (men bruger den til at beregne andre værdier, fx vandtemperaturen).</translation>
     </message>
     <message>
         <source>Pinned</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fastholdt</translation>
     </message>
     <message>
         <source>If ticked, adjusting the mash (in the Mash Editor) will not change this temperature (but will use it to work out other values, eg the amount of water).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis markeret, ændrer justering af mæskningen (i mæskeredigeringen) ikke denne temperatur (men bruger den til at beregne andre værdier, fx vandmængden).</translation>
     </message>
 </context>
 <context>
@@ -14418,23 +14423,23 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total mængde på lager</translation>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilføj køb</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opret en ny registrering af lagerkøb for denne ingrediens</translation>
     </message>
     <message>
         <source>Water Agent Properties</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Egenskaber for vandtilsætning</translation>
     </message>
     <message>
         <source>Percent Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procent syre</translation>
     </message>
 </context>
 <context>
@@ -14607,23 +14612,23 @@ Tabs</source>
     <name>ogCorrectionTool</name>
     <message>
         <source>Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Massefyldekorrektion</translation>
     </message>
     <message>
         <source>Target OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mål-OG</translation>
     </message>
     <message>
         <source>Measured Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Målt massefylde</translation>
     </message>
     <message>
         <source>A value in Plato will be used as-is.  An SG value can be corrected for actual vs calibrated temperature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">En værdi i Plato bruges uændret.  En SG-værdi kan korrigeres for faktisk temperatur i forhold til kalibreringstemperatur.</translation>
     </message>
     <message>
         <source>@ temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">@ temperatur</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
@@ -14631,11 +14636,11 @@ Tabs</source>
     </message>
     <message>
         <source>Calibrated at</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalibreret ved</translation>
     </message>
     <message>
         <source>Temperature to which the hydrometer is calibrated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatur, som hydrometeret er kalibreret til</translation>
     </message>
     <message>
         <source>Plato</source>
@@ -14691,31 +14696,31 @@ Tabs</source>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis du rammer over eller under den forventede effektivitet, hjælper dette værktøj dig med at korrigere OG under kogningen.</translation>
     </message>
     <message>
         <source>NB: this tool makes the assumption that you are not going to add any water post boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">NB: Dette værktøj forudsætter, at du ikke tilsætter vand efter kogningen.</translation>
     </message>
     <message>
         <source>From current recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fra aktuel opskrift</translation>
     </message>
     <message>
         <source>Actual SG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faktisk SG</translation>
     </message>
     <message>
         <source>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enten omregnet fra Plato/Brix eller justeret for hydrometerets kalibreringstemperatur</translation>
     </message>
     <message>
         <source>Predicted OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet OG</translation>
     </message>
     <message>
         <source>OG if you take no action, ie boil as originally planned</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG, hvis du ikke gør noget, dvs. koger som oprindeligt planlagt</translation>
     </message>
     <message>
         <source>Remedy: Add Water To Boil</source>
@@ -14731,19 +14736,19 @@ Tabs</source>
     </message>
     <message>
         <source>-- OR --</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-- ELLER --</translation>
     </message>
     <message>
         <source>Remedy: Add Sugar or DME</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Afhjælpning: Tilsæt sukker eller DME</translation>
     </message>
     <message>
         <source>Amount To Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mængde at tilsætte</translation>
     </message>
     <message>
         <source>Amount of Sugar or DME to add to the boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mængde sukker eller DME, der skal tilsættes kogningen</translation>
     </message>
 </context>
 <context>
@@ -15004,11 +15009,17 @@ Tabs</source>
   &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;
+   &lt;b&gt;Kan du et andet sprog?&lt;/b&gt;
+   &lt;br&gt;&lt;br&gt;
+   Eller vil du forbedre en oversættelse? Hjælp os og
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  lav en oversættelse&lt;/a&gt;, så dine venner kan bruge Brewtarget!
+&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>Default Values</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standardværdier</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -15016,7 +15027,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default batch size to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard batchstørrelse for nye opskrifter</translation>
     </message>
     <message>
         <source>Pre-Boil Size</source>
@@ -15024,7 +15035,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default pre-boil size to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard forkogningsvolumen for nye opskrifter</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -15032,35 +15043,35 @@ Tabs</source>
     </message>
     <message>
         <source>Default efficiency to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard effektivitet for nye opskrifter</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kogetid</translation>
     </message>
     <message>
         <source>Default boil time to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard kogetid for nye opskrifter</translation>
     </message>
     <message>
         <source>Show snapshots by default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vis øjebliksbilleder som standard</translation>
     </message>
     <message>
         <source>Units &amp;&amp; Precision</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enheder &amp;&amp; præcision</translation>
     </message>
     <message>
         <source>Decimal places</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Decimaler</translation>
     </message>
     <message>
         <source>By default, use mash profile in FG calculation for new and imported recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brug som standard mæskeprofil i FG-beregning for nye og importerede opskrifter</translation>
     </message>
     <message>
         <source>Whether new and imported recipes take account of the mash temperatures and times when estimating final gravity.  (This can be changed for each recipe on its Mash tab.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Om nye og importerede opskrifter tager højde for mæsketemperaturer og -tider, når slutmassefylden skønnes.  (Dette kan ændres for hver opskrift på dens fane Mæskning.)</translation>
     </message>
     <message>
         <source>How bitterness (IBUs) is estimated from the recipe&apos;s hop additions.
@@ -15072,15 +15083,23 @@ Tabs</source>
  • mIBU: John-Paul Hosom&apos;s extension of Tinseth, adding bitterness from hops in hot wort after flameout.
  • SMPH: Hosom&apos;s detailed model, which also allows for oxidized alpha acids, polyphenols, hopping rate, wort pH and yeast flocculation.
 Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using the post-boil steps of the boil profile.  For formulas other than Garetz, Daniels and SMPH, pellets are assumed to give 10% more IBUs than whole hops (plugs 2%).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvordan bitterhed (IBU) skønnes ud fra opskriftens humletilsætninger.
+ • Tinseth: den mest udbredte formel.  Tager højde for kogetid og urtens massefylde.
+ • Rager: ældre; giver generelt højere IBU end Tinseth.
+ • Noonan: fra Greg Noonans &quot;New Brewing Lager Beer&quot;.
+ • Garetz: fra Mark Garetz&apos; &quot;Using Hops&quot;.  Generelt lavere IBU, ingen ved 10 minutters kogning eller mindre, og tager højde for store humlemængder.
+ • Daniels: fra Ray Daniels&apos; &quot;Designing Great Beers&quot;.  Separate tal for piller og hel humle.
+ • mIBU: John-Paul Hosoms udvidelse af Tinseth, som tilføjer bitterhed fra humle i varm urt efter slukning af varmen.
+ • SMPH: Hosoms detaljerede model, som også tager højde for oxiderede alfasyrer, polyphenoler, humlemængde, urtens pH og gærens flokkulering.
+Kun mIBU og SMPH giver IBU for humle tilsat efter slukning af varmen (fx whirlpool) ved hjælp af kogeprofilens efterkogningstrin.  For andre formler end Garetz, Daniels og SMPH antages piller at give 10% mere IBU end hel humle (propper 2%).</translation>
     </message>
     <message>
         <source>IBUs from hops added to the mash, as a percentage of what the same hops would give if they were added at the start of the boil and boiled for its full length.  Mash hops contribute little or no bitterness, because alpha acids isomerize very slowly at mash temperatures and much of the hop material stays behind with the grain.  The default is 0%, ie mash hops are assumed to give no IBUs.  This applies whichever IBU formula is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IBU fra humle tilsat mæsken som procentdel af, hvad den samme humle ville give, hvis den blev tilsat ved kogningens start og kogt i hele kogetiden.  Mæskehumle bidrager med lidt eller ingen bitterhed, fordi alfasyrer isomeriserer meget langsomt ved mæsketemperaturer, og meget af humlematerialet bliver tilbage sammen med malten.  Standardværdien er 0%, dvs. mæskehumle antages ikke at give nogen IBU.  Dette gælder uanset valgt IBU-formel.</translation>
     </message>
     <message>
         <source>IBUs from first wort hops (hops put in the kettle as the wort is run off, before the boil starts), as a percentage of what the same hops would give if they were added at the start of the boil.  The default of 110% reflects the commonly reported finding that first wort hopping gives about 10% more bitterness than a full-length boil addition.  This applies whichever IBU formula is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IBU fra first wort-humle (humle, der kommes i kogekarret, mens urten løber fra, før kogningen starter) som procentdel af, hvad den samme humle ville give, hvis den blev tilsat ved kogningens start.  Standardværdien på 110% afspejler den ofte rapporterede erfaring, at first wort-humling giver ca. 10% mere bitterhed end en tilsætning med fuld kogetid.  Dette gælder uanset valgt IBU-formel.</translation>
     </message>
 </context>
 <context>
@@ -15353,11 +15372,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Expected wort clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet urtklarhed</translation>
     </message>
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;p&gt;Hvor klar du forventer, at urten er, når den kommer i gæringsbeholderen (fx afhængigt af om du bruger klaringsmiddel i kogekarret eller whirlpool).&lt;/p&gt;&lt;p&gt;Mere uklar urt mister mere bitterhed under gæringen.&lt;/p&gt;&lt;p&gt;Bruges kun af SMPH IBU-formlen.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -15368,7 +15387,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Edit base water profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger basisvandprofil</translation>
     </message>
     <message>
         <source>% RO in Mash</source>
@@ -15384,39 +15403,39 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Edit target water profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger målvandprofil</translation>
     </message>
     <message>
         <source>If ticked, Auto-Adjust also works out how much acid to add to get this mash pH.  It uses the acid already in the recipe if there is one, otherwise lactic acid (or another acid if there&apos;s no lactic acid in the database).  If not ticked, acids are left alone.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis markeret, beregner Autojuster også, hvor meget syre der skal tilsættes for at opnå denne mæske-pH.  Den bruger syren, der allerede er i opskriften, hvis der er en, ellers mælkesyre (eller en anden syre, hvis der ikke er mælkesyre i databasen).  Hvis ikke markeret, røres syrer ikke.</translation>
     </message>
     <message>
         <source>Adjust acid for mash pH of</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Juster syre til mæske-pH på</translation>
     </message>
     <message>
         <source>Target mash pH.  Most brewers aim for between 5.2 and 5.6, often 5.4.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mål for mæske-pH.  De fleste bryggere sigter efter mellem 5,2 og 5,6, ofte 5,4.</translation>
     </message>
     <message>
         <source>Work out the amounts of brewing salts to add to get as close as possible to the target profile and, if ticked above, the amount of acid to get the target mash pH.  If the recipe already has salts, only those are used and their amounts are changed (so remove any you don&apos;t want, or add just the ones you do want, first).  Otherwise, commonly-used salts are added as needed.  Chalk and pickling lime are left alone.  You can undo the changes in one go.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beregn mængderne af bryggesalte, der skal tilsættes for at komme så tæt som muligt på målprofilen, og, hvis markeret ovenfor, mængden af syre for at opnå mål-pH for mæsken.  Hvis opskriften allerede har salte, bruges kun disse, og deres mængder ændres (så fjern dem, du ikke vil have, eller tilføj kun dem, du vil have, først).  Ellers tilsættes almindeligt anvendte salte efter behov.  Kridt og læsket kalk røres ikke.  Du kan fortryde ændringerne på én gang.</translation>
     </message>
     <message>
         <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Autojuster</translation>
     </message>
     <message>
         <source>Automatically redo Auto-Adjust whenever something it depends on changes, eg the water profiles, the amount of water in the mash or the grain bill.  Changes you make to the amounts of salts or acid yourself will then be overwritten, so this is best used once you have chosen which salts to use.  Undoing an Auto-Adjust turns this off.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gentag automatisk Autojuster, når noget, den afhænger af, ændres, fx vandprofilerne, vandmængden i mæsken eller maltsammensætningen.  Ændringer, du selv laver i mængderne af salte eller syre, overskrives så, så dette bruges bedst, når du har valgt, hvilke salte du vil bruge.  Hvis en Autojuster fortrydes, slås dette fra.</translation>
     </message>
     <message>
         <source>Keep water agents in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hold vandtilsætninger synkroniseret med ændringer i opskriften</translation>
     </message>
     <message>
         <source>Actual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faktisk</translation>
     </message>
     <message>
         <source>Ca</source>
@@ -15448,43 +15467,43 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Water Agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vandtilsætninger</translation>
     </message>
     <message>
         <source>Water Agents (Miscellaneous)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vandtilsætninger (diverse)</translation>
     </message>
     <message>
         <source>Add a water agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilføj en vandtilsætning</translation>
     </message>
     <message>
         <source>Remove selected water agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fjern markeret vandtilsætning</translation>
     </message>
     <message>
         <source>Acid Malts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surmalt</translation>
     </message>
     <message>
         <source>Acid Malts (Fermentables)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surmalt (gærbare ingredienser)</translation>
     </message>
     <message>
         <source>Add an acid malt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilføj en surmalt</translation>
     </message>
     <message>
         <source>Remove selected acid malt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fjern markeret surmalt</translation>
     </message>
     <message>
         <source>Auto-Adjust Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Autojuster-notater</translation>
     </message>
     <message>
         <source>Things to check after the last Auto-Adjust, eg ions that couldn&apos;t be brought close to the target, and why</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ting, der bør kontrolleres efter seneste Autojuster, fx ioner, der ikke kunne bringes tæt på målet, og hvorfor</translation>
     </message>
 </context>
 <context>
@@ -15691,7 +15710,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bestilt</translation>
     </message>
     <message>
         <source>Date</source>
@@ -15707,19 +15726,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bestilt mængde</translation>
     </message>
     <message>
         <source>Received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Modtaget</translation>
     </message>
     <message>
         <source>Amount received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Modtaget mængde</translation>
     </message>
     <message>
         <source>Whether the amount is weight or volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Om mængden er vægt eller volumen</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -15727,7 +15746,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Uses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forbrug</translation>
     </message>
     <message>
         <source>Amount Remaining</source>
@@ -15735,7 +15754,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Best Before</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bedst før</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -15993,7 +16012,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Change type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skift type</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -16001,7 +16020,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brugt mængde</translation>
     </message>
     <message>
         <source>ID in database</source>
@@ -16618,7 +16637,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nyt vand</translation>
     </message>
     <message>
         <source>New</source>
@@ -16948,11 +16967,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilføj køb</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opret en ny registrering af lagerkøb for denne gær</translation>
     </message>
 </context>
 </TS>

@@ -6392,7 +6392,7 @@ Voleu fer una còpia d&apos;aquesta maceració per a aquesta recepta, de manera 
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">No s&apos;ha pogut desar el fitxer %1</translation>
+        <translation type="obsolete">No s&apos;ha pogut desar el fitxer %1</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6409,6 +6409,10 @@ Voleu fer una còpia d&apos;aquesta maceració per a aquesta recepta, de manera 
     <message>
         <source>Save as</source>
         <translation type="unfinished">Anomena i desa</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">No s&apos;ha pogut desar el fitxer %1</translation>
     </message>
 </context>
 <context>

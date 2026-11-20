@@ -6232,7 +6232,7 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Не удалось сохранить файл %1</translation>
+        <translation type="obsolete">Не удалось сохранить файл %1</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6249,6 +6249,10 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     <message>
         <source>Save as</source>
         <translation type="unfinished">Сохранить как</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Не удалось сохранить файл %1</translation>
     </message>
 </context>
 <context>

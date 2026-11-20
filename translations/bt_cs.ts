@@ -6249,7 +6249,7 @@ Chcete vytvořit kopii tohoto rmutu pro tento recept, abyste to mohli udělat, a
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Soubor %1 nelze uložit</translation>
+        <translation type="obsolete">Soubor %1 nelze uložit</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6266,6 +6266,10 @@ Chcete vytvořit kopii tohoto rmutu pro tento recept, abyste to mohli udělat, a
     <message>
         <source>Save as</source>
         <translation type="unfinished">Uložit jako</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Soubor %1 nelze uložit</translation>
     </message>
 </context>
 <context>

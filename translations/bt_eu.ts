@@ -4660,7 +4660,7 @@ Maserazio honen kopia bat egin nahi duzu errezeta horrentzat, beste ezeri eragin
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Ezin izan da %1 fitxategia gorde</translation>
+        <translation type="obsolete">Ezin izan da %1 fitxategia gorde</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -4677,6 +4677,10 @@ Maserazio honen kopia bat egin nahi duzu errezeta horrentzat, beste ezeri eragin
     <message>
         <source>Save as</source>
         <translation type="unfinished">Gorde honela</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Ezin izan da %1 fitxategia gorde</translation>
     </message>
 </context>
 <context>

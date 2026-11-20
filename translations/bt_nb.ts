@@ -6294,7 +6294,7 @@ Vil du lage en kopi av denne mesken for den oppskriften, slik at du kan gjøre d
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Filen %1 kunne ikke lagres</translation>
+        <translation type="obsolete">Filen %1 kunne ikke lagres</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6311,6 +6311,10 @@ Vil du lage en kopi av denne mesken for den oppskriften, slik at du kan gjøre d
     <message>
         <source>Save as</source>
         <translation type="unfinished">Lagre som</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Filen %1 kunne ikke lagres</translation>
     </message>
 </context>
 <context>

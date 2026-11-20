@@ -6317,7 +6317,7 @@ Möchten Sie eine Kopie dieser Maische für dieses Rezept erstellen, damit Sie d
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Datei %1 konnte nicht gespeichert werden</translation>
+        <translation type="obsolete">Datei %1 konnte nicht gespeichert werden</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6334,6 +6334,10 @@ Möchten Sie eine Kopie dieser Maische für dieses Rezept erstellen, damit Sie d
     <message>
         <source>Save as</source>
         <translation type="unfinished">Speichern unter</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Datei %1 konnte nicht gespeichert werden</translation>
     </message>
 </context>
 <context>

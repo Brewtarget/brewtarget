@@ -4659,7 +4659,7 @@ Kas soovite teha sellest mäskist selle retsepti jaoks koopia, et saaksite seda 
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Faili %1 ei õnnestunud salvestada</translation>
+        <translation type="obsolete">Faili %1 ei õnnestunud salvestada</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -4676,6 +4676,10 @@ Kas soovite teha sellest mäskist selle retsepti jaoks koopia, et saaksite seda 
     <message>
         <source>Save as</source>
         <translation type="unfinished">Salvesta kui</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Faili %1 ei õnnestunud salvestada</translation>
     </message>
 </context>
 <context>

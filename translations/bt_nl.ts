@@ -6492,7 +6492,7 @@ Wilt u een kopie van dit maischschema maken voor dat recept, zodat u dit kunt do
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Bestand %1 filname &lt;&lt; kon niet worden opgeslagen</translation>
+        <translation type="obsolete">Bestand %1 filname &lt;&lt; kon niet worden opgeslagen</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6509,6 +6509,10 @@ Wilt u een kopie van dit maischschema maken voor dat recept, zodat u dit kunt do
     <message>
         <source>Save as</source>
         <translation type="unfinished">Opslaan als</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Bestand %1 kon niet worden opgeslagen</translation>
     </message>
 </context>
 <context>

@@ -6472,7 +6472,7 @@ Vill du göra en kopia av denna mäsk för det receptet, så att du kan göra de
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Filen %1 kunde inte sparas</translation>
+        <translation type="obsolete">Filen %1 kunde inte sparas</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6489,6 +6489,10 @@ Vill du göra en kopia av denna mäsk för det receptet, så att du kan göra de
     <message>
         <source>Save as</source>
         <translation type="unfinished">Spara som</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Filen %1 kunde inte sparas</translation>
     </message>
 </context>
 <context>

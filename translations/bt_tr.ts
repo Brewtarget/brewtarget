@@ -4656,7 +4656,7 @@ Başka hiçbir şeyi etkilemeden bunu yapabilmek için bu mayşenin o reçeteye 
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">%1 dosyası kaydedilemedi</translation>
+        <translation type="obsolete">%1 dosyası kaydedilemedi</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -4673,6 +4673,10 @@ Başka hiçbir şeyi etkilemeden bunu yapabilmek için bu mayşenin o reçeteye 
     <message>
         <source>Save as</source>
         <translation type="unfinished">Farklı kaydet</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">%1 dosyası kaydedilemedi</translation>
     </message>
 </context>
 <context>

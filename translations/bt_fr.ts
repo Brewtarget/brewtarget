@@ -6396,7 +6396,7 @@ Voulez-vous faire une copie de cet empâtage pour cette recette, afin de pouvoir
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">Le fichier %1 n&apos;a pas pu être enregistré</translation>
+        <translation type="obsolete">Le fichier %1 n&apos;a pas pu être enregistré</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6413,6 +6413,10 @@ Voulez-vous faire une copie de cet empâtage pour cette recette, afin de pouvoir
     <message>
         <source>Save as</source>
         <translation type="unfinished">Enregistrer sous</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">Le fichier %1 n&apos;a pas pu être enregistré</translation>
     </message>
 </context>
 <context>

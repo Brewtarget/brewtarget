@@ -6337,7 +6337,7 @@ Készítesz másolatot erről a cefréről ehhez a recepthez, hogy ezt anélkül
     <name>PrintAndPreviewDialog</name>
     <message>
         <source>File %1 filname &lt;&lt; could not be saved</source>
-        <translation type="unfinished">A(z) %1 fájl nem menthető</translation>
+        <translation type="obsolete">A(z) %1 fájl nem menthető</translation>
     </message>
     <message>
         <source>Error saving file</source>
@@ -6354,6 +6354,10 @@ Készítesz másolatot erről a cefréről ehhez a recepthez, hogy ezt anélkül
     <message>
         <source>Save as</source>
         <translation type="unfinished">Mentés másként</translation>
+    </message>
+    <message>
+        <source>File %1 filename could not be saved</source>
+        <translation type="unfinished">A(z) %1 fájl nem menthető</translation>
     </message>
 </context>
 <context>
