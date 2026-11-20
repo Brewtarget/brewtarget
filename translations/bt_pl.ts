@@ -7325,75 +7325,75 @@ Program zostanie teraz zamknięty.</translation>
     </message>
     <message>
         <source>Required-Constant</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Required-Constant</translation>
     </message>
     <message>
         <source>Folder-Path</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Folder-Path</translation>
     </message>
     <message>
         <source>%1 errors found in JSON file.  First error at %2: schema condition %3 is violated because &quot;%4&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liczba błędów znalezionych w pliku JSON: %1.  Pierwszy błąd w %2: naruszono warunek schematu %3, ponieważ &quot;%4&quot;</translation>
     </message>
     <message>
         <source>Local-ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Local-ID</translation>
     </message>
     <message>
         <source>Volume per Mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Objętość na masę</translation>
     </message>
     <message>
         <source>Energy per Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Energia na objętość</translation>
     </message>
     <message>
         <source>kcal/L</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/L</translation>
     </message>
     <message>
         <source>kcal/50cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/50cl</translation>
     </message>
     <message>
         <source>kcal/33cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/33cl</translation>
     </message>
     <message>
         <source>kcal/25cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/25cl</translation>
     </message>
     <message>
         <source>kcal/100ml</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/100ml</translation>
     </message>
     <message>
         <source>kcal/pt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/pt</translation>
     </message>
     <message>
         <source>kcal/12floz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/12floz</translation>
     </message>
     <message>
         <source>kJ/100ml</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kJ/100ml</translation>
     </message>
     <message>
         <source>Date-Time-With-Timezone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Date-Time-With-Timezone</translation>
     </message>
     <message>
         <source>Date-or-Date-Time-Local</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Date-or-Date-Time-Local</translation>
     </message>
     <message>
         <source>This file was written using version %1 of the dotBeer format, which is newer than the version this version of %2 supports (%3).  You may need a newer version of %2 to read it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ten plik zapisano w wersji %1 formatu dotBeer, która jest nowsza niż wersja obsługiwana przez tę wersję programu %2 (%3).  Do jego odczytania może być potrzebna nowsza wersja programu %2.</translation>
     </message>
     <message>
         <source>Mash step for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Krok zacierania dla %1</translation>
     </message>
     <message>
         <source>Primary fermentation for %1</source>
@@ -7401,15 +7401,15 @@ Program zostanie teraz zamknięty.</translation>
     </message>
     <message>
         <source>Specific Heat Capacity BTUs per</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pojemność cieplna właściwa (BTU na)</translation>
     </message>
     <message>
         <source>Heat Capacity BTUs per</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pojemność cieplna (BTU na)</translation>
     </message>
     <message>
         <source>Garetz&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przybliżenie Garetza</translation>
     </message>
     <message>
         <source>Daniels&apos; approximation</source>
@@ -7417,39 +7417,39 @@ Program zostanie teraz zamknięty.</translation>
     </message>
     <message>
         <source>SMPH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SMPH</translation>
     </message>
     <message>
         <source>Very Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bardzo klarowna</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klarowna</translation>
     </message>
     <message>
         <source>Somewhat Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dość klarowna</translation>
     </message>
     <message>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przeciętna</translation>
     </message>
     <message>
         <source>Somewhat Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lekko mętna</translation>
     </message>
     <message>
         <source>Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mętna</translation>
     </message>
     <message>
         <source>Very Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bardzo mętna</translation>
     </message>
     <message>
         <source>Extremely Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wyjątkowo mętna</translation>
     </message>
 </context>
 <context>
@@ -7690,11 +7690,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Partial Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Częściowe zacieranie</translation>
     </message>
     <message>
         <source>All Grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pełne zacieranie</translation>
     </message>
     <message>
         <source>Cider</source>
@@ -7702,11 +7702,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Kombucha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombucha</translation>
     </message>
     <message>
         <source>Soda</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Napój gazowany</translation>
     </message>
     <message>
         <source>Other</source>
@@ -7746,7 +7746,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">FG</translation>
     </message>
     <message>
         <source>Color</source>
@@ -7758,11 +7758,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Remove %1 from recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń %1 z receptury</translation>
     </message>
     <message>
         <source>ID in DB</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -7770,31 +7770,31 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Leżakowanie</translation>
     </message>
     <message>
         <source>Age Temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temp. leżakowania</translation>
     </message>
     <message>
         <source>Ancestor ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID przodka</translation>
     </message>
     <message>
         <source>Apparent Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odfermentowanie pozorne</translation>
     </message>
     <message>
         <source>Assistant Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pomocnik piwowara</translation>
     </message>
     <message>
         <source>BatchSize</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wielkość warki</translation>
     </message>
     <message>
         <source>Beer Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kwasowość piwa</translation>
     </message>
     <message>
         <source>Boil</source>
@@ -7802,11 +7802,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Boil Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gęstość podczas gotowania</translation>
     </message>
     <message>
         <source>Boil ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID gotowania</translation>
     </message>
     <message>
         <source>Boil Volume</source>
@@ -7818,27 +7818,27 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Calculations Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Obliczenia włączone</translation>
     </message>
     <message>
         <source>Calories Per 33cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalorie na 33 cl</translation>
     </message>
     <message>
         <source>Calories Per Liter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalorie na litr</translation>
     </message>
     <message>
         <source>Calories Per US 12oz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalorie na 12 oz (USA)</translation>
     </message>
     <message>
         <source>Calories Per US Pint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalorie na pintę (USA)</translation>
     </message>
     <message>
         <source>Carbonation Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatura nagazowania</translation>
     </message>
     <message>
         <source>Carbonation</source>
@@ -7858,11 +7858,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Equipment ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID sprzętu</translation>
     </message>
     <message>
         <source>Fermentable Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatki składników fermentacji</translation>
     </message>
     <message>
         <source>Fermentation</source>
@@ -7870,7 +7870,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Fermentation ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID fermentacji</translation>
     </message>
     <message>
         <source>Final Volume</source>
@@ -7878,19 +7878,19 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Forced Carbonation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nagazowanie wymuszone</translation>
     </message>
     <message>
         <source>Grains In Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Słody w zacierze</translation>
     </message>
     <message>
         <source>Grains</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Słody</translation>
     </message>
     <message>
         <source>Hop Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatki chmielu</translation>
     </message>
     <message>
         <source>IBUs</source>
@@ -7902,7 +7902,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Keg Priming Factor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Współczynnik refermentacji w kegu</translation>
     </message>
     <message>
         <source>Locked</source>
@@ -7914,11 +7914,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Mash ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID zacierania</translation>
     </message>
     <message>
         <source>Misc Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatki (inne)</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -7926,23 +7926,23 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Punkty</translation>
     </message>
     <message>
         <source>Post Boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Objętość po gotowaniu</translation>
     </message>
     <message>
         <source>Priming Sugar Equiv</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekwiwalent cukru do refermentacji</translation>
     </message>
     <message>
         <source>Priming Sugar Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nazwa cukru do refermentacji</translation>
     </message>
     <message>
         <source>Style ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID stylu</translation>
     </message>
     <message>
         <source>Taste Notes</source>
@@ -7958,11 +7958,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Wort From Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brzeczka z zacieru</translation>
     </message>
     <message>
         <source>Yeast Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatki drożdży</translation>
     </message>
     <message>
         <source>No</source>
@@ -7978,95 +7978,95 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj %1 %2 do zacieru%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj %1 %2 do brzeczki przedniej%3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstrahuj %1 %2 w brzeczce%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj %1 %2 do gotowania%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj %1 %2 do fermentacji burzliwej%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj %1 %2 do fermentacji cichej%3.</translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Użyj %1 %2 przy butelkowaniu%3.</translation>
     </message>
     <message>
         <source> at end of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> na koniec %1</translation>
     </message>
     <message>
         <source> for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> przez %1</translation>
     </message>
     <message>
         <source>%1 addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatek: %1</translation>
     </message>
     <message>
         <source>Brew Logs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dzienniki warzenia</translation>
     </message>
     <message>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Data utworzenia</translation>
     </message>
     <message>
         <source>Base Water Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bazowy profil wody</translation>
     </message>
     <message>
         <source>Base Water Profile ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID bazowego profilu wody</translation>
     </message>
     <message>
         <source>Target Water Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Docelowy profil wody</translation>
     </message>
     <message>
         <source>Target Water Profile ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID docelowego profilu wody</translation>
     </message>
     <message>
         <source>IBU Formula</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wzór IBU</translation>
     </message>
     <message>
         <source>Percentage reverse-osmosis water in mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procent wody RO w zacierze</translation>
     </message>
     <message>
         <source>Percentage reverse-osmosis water in sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procent wody RO w wodzie do wysładzania</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermentor%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj %1 %2 do fermentora%3.</translation>
     </message>
     <message>
         <source>Add %1 to the mash tun.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj %1 do kadzi zaciernej.</translation>
     </message>
     <message>
         <source>Bring %1 for upcoming infusions.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przygotuj %1 na kolejne infuzje.</translation>
     </message>
     <message>
         <source>Do first wort hopping with %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wykonaj chmielenie brzeczki przedniej: %1.</translation>
     </message>
     <message>
         <source>%1 water to %2</source>
@@ -8078,26 +8078,26 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Target Mash pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Docelowe pH zacieru</translation>
     </message>
     <message>
         <source>Keep Water in Sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Synchronizuj wodę</translation>
     </message>
     <message>
         <source>Use Mash Profile in FG Calculation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Użyj profilu zacierania w obliczeniu FG</translation>
     </message>
     <message>
         <source>Expected Wort Clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oczekiwana klarowność brzeczki</translation>
     </message>
 </context>
 <context>
     <name>RecipeAddition</name>
     <message>
         <source>Recipe Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatek do receptury</translation>
     </message>
     <message>
         <source>Add to Boil</source>
@@ -8113,15 +8113,15 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Add At Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj przy gęstości</translation>
     </message>
     <message>
         <source>Add At Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj przy kwasowości</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Czas trwania</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8137,7 +8137,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Package</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opakowanie</translation>
     </message>
     <message>
         <source>Time</source>
@@ -8156,11 +8156,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>RecipeAdditionFermentable</name>
     <message>
         <source>Fermentable Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatek składnika fermentacji</translation>
     </message>
     <message>
         <source>Addition of %1 fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodanie składnika fermentacji %1</translation>
     </message>
     <message>
         <source>Fermentable</source>
@@ -8202,7 +8202,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>RecipeAdditionHop</name>
     <message>
         <source>Hop Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatek chmielu</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8218,7 +8218,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Po gotowaniu</translation>
     </message>
     <message>
         <source>Dry Hop</source>
@@ -8226,7 +8226,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Addition of %1 hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodanie chmielu %1</translation>
     </message>
     <message>
         <source>Hop</source>
@@ -8234,7 +8234,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Użycie</translation>
     </message>
     <message>
         <source>Time</source>
@@ -8278,28 +8278,31 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <source>%L1 IBU from isomerization during the boil
 %L2 IBU from isomerization after flameout</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%L1 IBU z izomeryzacji podczas gotowania
+%L2 IBU z izomeryzacji po wyłączeniu grzania</translation>
     </message>
     <message>
         <source>
 %L1 IBU from other bittering compounds (mostly oxidized alpha acids)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+%L1 IBU z innych związków goryczkowych (głównie utlenionych alfa-kwasów)</translation>
     </message>
     <message>
         <source>
 (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+(%1)</translation>
     </message>
     <message>
         <source>%1 does not model bitterness from hops added after flameout, so this addition gives no IBUs.  Select the mIBU or SMPH formula in Edit &gt; Options to include it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 nie modeluje goryczki z chmielu dodanego po wyłączeniu grzania, więc ten dodatek nie daje IBU.  Aby go uwzględnić, wybierz wzór mIBU lub SMPH w Edycja &gt; Opcje.</translation>
     </message>
 </context>
 <context>
     <name>RecipeAdditionMisc</name>
     <message>
         <source>Misc Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatek (inny)</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8315,7 +8318,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Addition of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodanie %1</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -8331,11 +8334,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatki</translation>
     </message>
     <message>
         <source>Use </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Użyj </translation>
     </message>
 </context>
 <context>
@@ -8369,7 +8372,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>RecipeAdditionYeast</name>
     <message>
         <source>Yeast Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatek drożdży</translation>
     </message>
     <message>
         <source>First Wort</source>
@@ -8381,11 +8384,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Addition of %1 yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodanie drożdży %1</translation>
     </message>
     <message>
         <source>Add To Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj do fermentacji cichej</translation>
     </message>
     <message>
         <source>Attenuation</source>
@@ -8397,11 +8400,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Times Cultured</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liczba namnożeń</translation>
     </message>
     <message>
         <source>Cell Count</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liczba komórek</translation>
     </message>
     <message>
         <source>No</source>
@@ -8474,51 +8477,51 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>RecipeExtrasWidget</name>
     <message>
         <source>Change Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień piwowara</translation>
     </message>
     <message>
         <source>Change Assistant Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień pomocnika piwowara</translation>
     </message>
     <message>
         <source>Change Taste Rating</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień ocenę smaku</translation>
     </message>
     <message>
         <source>Change Age</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień czas leżakowania</translation>
     </message>
     <message>
         <source>Change Age Temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień temp. leżakowania</translation>
     </message>
     <message>
         <source>Change Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień datę</translation>
     </message>
     <message>
         <source>Change Carbonation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień nagazowanie</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj notatki z degustacji</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj notatki</translation>
     </message>
     <message>
         <source>Change pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień pH</translation>
     </message>
     <message>
         <source>Change Apparent Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień odfermentowanie pozorne</translation>
     </message>
     <message>
         <source>Calories/33cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalorie/33cl</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
@@ -8526,7 +8529,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Change Expected Wort Clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień oczekiwaną klarowność brzeczki</translation>
     </message>
 </context>
 <context>
@@ -8805,11 +8808,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cel</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Razem</translation>
     </message>
     <message>
         <source>Recipe</source>
@@ -8817,7 +8820,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Add During</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj podczas</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
@@ -8862,27 +8865,27 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>RecipeWaterWidget</name>
     <message>
         <source>Minimum expected concentration is %1 ppm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Minimalne oczekiwane stężenie to %1 ppm</translation>
     </message>
     <message>
         <source>In range for target profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">W zakresie profilu docelowego.</translation>
     </message>
     <message>
         <source>Maximum expected concentration is %1 ppm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maksymalne oczekiwane stężenie to %1 ppm</translation>
     </message>
     <message>
         <source>PPM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PPM</translation>
     </message>
     <message>
         <source>Too low for target profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Za nisko dla profilu docelowego.</translation>
     </message>
     <message>
         <source>Too high for target profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Za wysoko dla profilu docelowego.</translation>
     </message>
     <message>
         <source>Auto-Adjust undone.</source>
@@ -8891,58 +8894,58 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message numerus="yes">
         <source>See the &lt;i&gt;Auto-Adjust Notes&lt;/i&gt; tab below for details (%n item(s)).</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Szczegóły na karcie &lt;i&gt;Uwagi do automatycznego dostosowania&lt;/i&gt; poniżej (%n pozycja).</numerusform>
+            <numerusform>Szczegóły na karcie &lt;i&gt;Uwagi do automatycznego dostosowania&lt;/i&gt; poniżej (%n pozycje).</numerusform>
+            <numerusform>Szczegóły na karcie &lt;i&gt;Uwagi do automatycznego dostosowania&lt;/i&gt; poniżej (%n pozycji).</numerusform>
         </translation>
     </message>
     <message>
         <source>The value shown is the pH set on the recipe&apos;s mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pokazana wartość to pH ustawione w zacieraniu receptury.</translation>
     </message>
     <message>
         <source>Turn off keeping water agents in sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wyłącz synchronizację środków do uzdatniania wody</translation>
     </message>
     <message>
         <source>Turn on keeping water agents in sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Włącz synchronizację środków do uzdatniania wody</translation>
     </message>
     <message>
         <source>Auto-adjust water agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Automatycznie dostosuj środki do uzdatniania wody</translation>
     </message>
     <message>
         <source>Could not adjust the water agents yet: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nie można jeszcze dostosować środków do uzdatniania wody: %1</translation>
     </message>
     <message>
         <source>Could not adjust the water agents, so nothing has been changed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nie można dostosować środków do uzdatniania wody, więc niczego nie zmieniono: %1</translation>
     </message>
     <message>
         <source>target profile &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">profilu docelowego &quot;%1&quot;</translation>
     </message>
     <message>
         <source>target mash pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">docelowego pH zacieru</translation>
     </message>
     <message>
         <source>The water agents already match %1 as closely as they can.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Środki do uzdatniania wody już możliwie najlepiej odpowiadają %1.</translation>
     </message>
     <message>
         <source>Water agents adjusted to match %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dostosowano środki do uzdatniania wody do %1.</translation>
     </message>
     <message>
         <source>Water agents adjusted for %1, but some things need checking.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dostosowano środki do uzdatniania wody do %1, ale niektóre rzeczy wymagają sprawdzenia.</translation>
     </message>
     <message>
         <source>Predicted mash pH is %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przewidywane pH zacieru: %1.</translation>
     </message>
 </context>
 <context>
@@ -8986,30 +8989,30 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>ScaleRecipeEquipmentPage</name>
     <message>
         <source>Select Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wybierz sprzęt</translation>
     </message>
     <message>
         <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Receptura zostanie przeskalowana do wielkości warki i wydajności wybranego sprzętu</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nowy sprzęt</translation>
     </message>
     <message>
         <source>New Efficiency (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nowa wydajność (%)</translation>
     </message>
 </context>
 <context>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skaluj recepturę</translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.  Select another equipment with the new batch size and/or efficiency and the wizard will scale the recipe ingredients automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ten kreator pomoże przeskalować recepturę do innej wielkości lub wydajności.  Wybierz inny sprzęt z nową wielkością warki i/lub wydajnością, a kreator automatycznie przeskaluje składniki receptury.</translation>
     </message>
 </context>
 <context>
@@ -9050,45 +9053,45 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kwasowość końcowa</translation>
     </message>
     <message>
         <source>End Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatura końcowa</translation>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kwasowość początkowa</translation>
     </message>
 </context>
 <context>
     <name>StepExtended</name>
     <message>
         <source>Extended Step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Krok rozszerzony</translation>
     </message>
     <message>
         <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gęstość początkowa</translation>
     </message>
     <message>
         <source>End Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gęstość końcowa</translation>
     </message>
 </context>
 <context>
     <name>StockPurchase</name>
     <message>
         <source>Date Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Data zamówienia</translation>
     </message>
     <message>
         <source>Date Received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Data otrzymania</translation>
     </message>
     <message>
         <source>Best Before Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Data przydatności</translation>
     </message>
     <message>
         <source>Supplier</source>
@@ -9096,19 +9099,19 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Quantity Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ilość zamówiona</translation>
     </message>
     <message>
         <source>Purchase Price</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cena zakupu</translation>
     </message>
     <message>
         <source>Purchase Tax</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Podatek od zakupu</translation>
     </message>
     <message>
         <source>Shipping Cost</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koszt wysyłki</translation>
     </message>
     <message>
         <source>Ingredient</source>
@@ -9120,7 +9123,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uwaga</translation>
     </message>
 </context>
 <context>
@@ -9134,14 +9137,14 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>StockPurchaseFermentableEditor</name>
     <message>
         <source>Fermentable Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor zakupu składnika fermentacji</translation>
     </message>
 </context>
 <context>
     <name>StockPurchaseHop</name>
     <message>
         <source>Alpha Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfa-kwasy</translation>
     </message>
     <message>
         <source>Form</source>
@@ -9156,21 +9159,21 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>StockPurchaseHopEditor</name>
     <message>
         <source>Hop Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor zakupu chmielu</translation>
     </message>
 </context>
 <context>
     <name>StockPurchaseMiscEditor</name>
     <message>
         <source>Misc Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor zakupu dodatku</translation>
     </message>
 </context>
 <context>
     <name>StockPurchaseYeastEditor</name>
     <message>
         <source>Yeast Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor zakupu drożdży</translation>
     </message>
 </context>
 <context>
@@ -9185,31 +9188,31 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Quantity Used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ilość zużyta</translation>
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Powód</translation>
     </message>
     <message>
         <source>Used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zużyte</translation>
     </message>
     <message>
         <source>Lost</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utracone</translation>
     </message>
     <message>
         <source>Disposed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wyrzucone</translation>
     </message>
     <message>
         <source>Stock Use</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zużycie zapasów</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Komentarz</translation>
     </message>
     <message>
         <source>Brew Log</source>
@@ -9217,42 +9220,42 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Brew Log ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID dziennika warzenia</translation>
     </message>
 </context>
 <context>
     <name>StockUseFermentableEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor zużycia zapasów: %1</translation>
     </message>
 </context>
 <context>
     <name>StockUseHopEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor zużycia zapasów: %1</translation>
     </message>
 </context>
 <context>
     <name>StockUseMiscEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor zużycia zapasów: %1</translation>
     </message>
 </context>
 <context>
     <name>StockUseYeastEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor zużycia zapasów: %1</translation>
     </message>
 </context>
 <context>
     <name>Style</name>
     <message>
         <source>Beer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Piwo</translation>
     </message>
     <message>
         <source>Cider</source>
@@ -9264,11 +9267,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Kombucha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombucha</translation>
     </message>
     <message>
         <source>Soda</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Napój gazowany</translation>
     </message>
     <message>
         <source>Wine</source>
@@ -9312,35 +9315,35 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Max ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. ABV</translation>
     </message>
     <message>
         <source>Min ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. ABV</translation>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wygląd</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aromat</translation>
     </message>
     <message>
         <source>Max Carb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. nagazowanie</translation>
     </message>
     <message>
         <source>Min Carb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. nagazowanie</translation>
     </message>
     <message>
         <source>Max Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. barwa</translation>
     </message>
     <message>
         <source>Min Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. barwa</translation>
     </message>
     <message>
         <source>Examples</source>
@@ -9348,11 +9351,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Max FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. FG</translation>
     </message>
     <message>
         <source>Min FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. FG</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -9360,11 +9363,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Max IBU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. IBU</translation>
     </message>
     <message>
         <source>Min IBU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. IBU</translation>
     </message>
     <message>
         <source>Ingredients</source>
@@ -9372,7 +9375,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Mouthfeel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odczucie w ustach</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -9380,19 +9383,19 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Max OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. OG</translation>
     </message>
     <message>
         <source>Min OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. OG</translation>
     </message>
     <message>
         <source>Overall Impression</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ogólne wrażenie</translation>
     </message>
     <message>
         <source>Type String</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typ (tekst)</translation>
     </message>
 </context>
 <context>
@@ -9418,9 +9421,9 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message numerus="yes">
         <source>Used in %n recipe(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Używane w %n recepturze</numerusform>
+            <numerusform>Używane w %n recepturach</numerusform>
+            <numerusform>Używane w %n recepturach</numerusform>
         </translation>
     </message>
 </context>
@@ -9428,31 +9431,31 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>TimerDialog</name>
     <message>
         <source>Addition Timer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Minutnik dodatku</translation>
     </message>
     <message>
         <source>Set Addition Time(min):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ustaw czas dodania (min):</translation>
     </message>
     <message>
         <source>Time Remaining:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pozostały czas:</translation>
     </message>
     <message>
         <source>Notes: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Notatki: </translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Notatki...</translation>
     </message>
     <message>
         <source>Set Alarm sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ustaw dźwięk alarmu</translation>
     </message>
     <message>
         <source>Stop Alarm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zatrzymaj alarm</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -9463,18 +9466,18 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>TimerListDialog</name>
     <message>
         <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Minutniki dodatków</translation>
     </message>
 </context>
 <context>
     <name>TimerMainDialog</name>
     <message>
         <source>Main Boil Timer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Główny minutnik gotowania</translation>
     </message>
     <message>
         <source>Add Timer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj minutnik</translation>
     </message>
     <message>
         <source>Start</source>
@@ -9486,91 +9489,91 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Resetuj</translation>
     </message>
     <message>
         <source>Hide Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ukryj minutniki</translation>
     </message>
     <message>
         <source>Show Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pokaż minutniki</translation>
     </message>
     <message>
         <source>Cancel Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anuluj minutniki</translation>
     </message>
     <message>
         <source>Load Current Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wczytaj bieżącą recepturę</translation>
     </message>
     <message>
         <source>Set Boil Timer (mins):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ustaw minutnik gotowania (min):</translation>
     </message>
     <message>
         <source>Set Boil Time Here</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ustaw tu czas gotowania</translation>
     </message>
     <message>
         <source>Limit Alarm Ring Time </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ogranicz czas dzwonienia alarmu </translation>
     </message>
     <message>
         <source>Alarm Ring Time (secs):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Czas dzwonienia alarmu (s):</translation>
     </message>
     <message>
         <source>No Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brak minutników</translation>
     </message>
     <message>
         <source>There are currently no timers to show.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Obecnie nie ma minutników do pokazania.</translation>
     </message>
     <message>
         <source>KNOCKOUT</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">KONIEC GOTOWANIA</translation>
     </message>
     <message>
         <source>Active Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aktywne minutniki</translation>
     </message>
     <message>
         <source>You currently have active timers, would you like to replace them or add to them?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Masz aktywne minutniki. Czy chcesz je zastąpić, czy dodać do nich nowe?</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zastąp</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj</translation>
     </message>
     <message>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 z %2</translation>
     </message>
     <message>
         <source>%1 hop addition is already timed and has been ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 dodatek chmielu ma już minutnik i został pominięty.</translation>
     </message>
     <message>
         <source>%1 hop additions are already timed and have been ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodatki chmielu (%1) mają już minutniki i zostały pominięte.</translation>
     </message>
     <message>
         <source>Duplicate Timers Ignored</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pominięto zduplikowane minutniki</translation>
     </message>
     <message>
         <source>No Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brak minutników dodatków</translation>
     </message>
     <message>
         <source>There are no boil addition, no timers generated.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brak dodatków do gotowania, nie utworzono minutników.</translation>
     </message>
 </context>
 <context>
@@ -9617,19 +9620,19 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source> and </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> i </translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Błąd</translation>
     </message>
     <message>
         <source>Addition time cannot be longer than remaining boil time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Czas dodania nie może być dłuższy niż pozostały czas gotowania</translation>
     </message>
     <message>
         <source>Audio Files (*.wav)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pliki audio (*.wav)</translation>
     </message>
 </context>
 <context>
@@ -9750,7 +9753,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj %1 do receptury</translation>
     </message>
 </context>
 <context>
@@ -9761,7 +9764,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Decimal Places</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Miejsca dziesiętne</translation>
     </message>
 </context>
 <context>
@@ -9772,7 +9775,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wejście</translation>
     </message>
     <message>
         <source>Output Units</source>
@@ -9803,30 +9806,30 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>UnitSystem</name>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skala</translation>
     </message>
 </context>
 <context>
     <name>Water</name>
     <message>
         <source>Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Woda</translation>
     </message>
     <message>
         <source>Ca</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ca</translation>
     </message>
     <message>
         <source>Cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cl</translation>
     </message>
     <message>
         <source>Na</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Na</translation>
     </message>
     <message>
         <source>Mg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mg</translation>
     </message>
     <message>
         <source>pH</source>
@@ -9834,59 +9837,59 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Waters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wody</translation>
     </message>
     <message>
         <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SO&lt;sub&gt;4&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HCO&lt;sub&gt;3&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>Alkalinity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zasadowość</translation>
     </message>
     <message>
         <source>Alkalinity As HCO3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zasadowość jako HCO3</translation>
     </message>
     <message>
         <source>Bicarbonate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wodorowęglany</translation>
     </message>
     <message>
         <source>Calcium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wapń</translation>
     </message>
     <message>
         <source>Carbonate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Węglany</translation>
     </message>
     <message>
         <source>Chloride</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chlorki</translation>
     </message>
     <message>
         <source>Fluoride</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fluorki</translation>
     </message>
     <message>
         <source>Iron</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Żelazo</translation>
     </message>
     <message>
         <source>Magnesium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Magnez</translation>
     </message>
     <message>
         <source>Nitrate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Azotany</translation>
     </message>
     <message>
         <source>Nitrite</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Azotyny</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -9894,15 +9897,15 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Potassium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Potas</translation>
     </message>
     <message>
         <source>Sodium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sód</translation>
     </message>
     <message>
         <source>Sulfate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Siarczany</translation>
     </message>
     <message>
         <source>No</source>
@@ -9914,63 +9917,63 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Bicarbonate (HCO₃⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wodorowęglany (HCO₃⁻)</translation>
     </message>
     <message>
         <source>Calcium (Ca²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wapń (Ca²⁺)</translation>
     </message>
     <message>
         <source>Carbonate (CO₃²⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Węglany (CO₃²⁻)</translation>
     </message>
     <message>
         <source>Chloride (Cl⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chlorki (Cl⁻)</translation>
     </message>
     <message>
         <source>Copper (Cu²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Miedź (Cu²⁺)</translation>
     </message>
     <message>
         <source>Iron (Fe²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Żelazo (Fe²⁺)</translation>
     </message>
     <message>
         <source>Magnesium (Mg²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Magnez (Mg²⁺)</translation>
     </message>
     <message>
         <source>Manganese (Mn²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mangan (Mn²⁺)</translation>
     </message>
     <message>
         <source>Nitrate (NO₃⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Azotany (NO₃⁻)</translation>
     </message>
     <message>
         <source>Nitrite (NO₂⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Azotyny (NO₂⁻)</translation>
     </message>
     <message>
         <source>Phosphate (PO₄³⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fosforany (PO₄³⁻)</translation>
     </message>
     <message>
         <source>Potassium (K⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Potas (K⁺)</translation>
     </message>
     <message>
         <source>Sodium (Na⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sód (Na⁺)</translation>
     </message>
     <message>
         <source>Sulfate (SO₄²⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Siarczany (SO₄²⁻)</translation>
     </message>
     <message>
         <source>Zinc (Zn²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cynk (Zn²⁺)</translation>
     </message>
 </context>
 <context>
@@ -10003,126 +10006,126 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>WaterAutoAdjuster</name>
     <message>
         <source>The recipe&apos;s mash has no water in it, so there is nothing to add salts to.  Set up the mash first (eg with Auto-Adjust in the mash editor).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zacieranie receptury nie zawiera wody, więc nie ma do czego dodać soli.  Najpierw skonfiguruj zacieranie (np. za pomocą automatycznego dostosowania w edytorze zacierania).</translation>
     </message>
     <message>
         <source>There is nothing to adjust: none of the water agents can be used to match the target profile (chalk and pickling lime are left alone), and no acid is being adjusted for mash pH.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nie ma czego dostosowywać: żadnego ze środków do uzdatniania wody nie można użyć do osiągnięcia profilu docelowego (kreda i wapno gaszone są pomijane), a kwas nie jest dostosowywany do pH zacieru.</translation>
     </message>
     <message>
         <source>%1 will be %2 ppm, compared with a target of %3 ppm.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 wyniesie %2 ppm, przy wartości docelowej %3 ppm.</translation>
     </message>
     <message>
         <source>The water already has more than this before any salts are added, so you might want to use more RO or distilled water.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Woda zawiera już więcej niż to przed dodaniem jakichkolwiek soli, więc warto użyć więcej wody RO lub destylowanej.</translation>
     </message>
     <message>
         <source>The salts that add other ions also add this one.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sole dodające inne jony dodają również ten.</translation>
     </message>
     <message>
         <source>None of the salts being used adds this ion.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Żadna z używanych soli nie dodaje tego jonu.</translation>
     </message>
     <message>
         <source>Adding more would take other ions further from their targets.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodanie większej ilości oddaliłoby inne jony od ich wartości docelowych.</translation>
     </message>
     <message>
         <source>To add both calcium and bicarbonate, you could add chalk (dissolved with CO₂) or pickling lime to the recipe yourself.  Auto-Adjust takes these into account, but doesn&apos;t work out how much to add.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aby dodać zarówno wapń, jak i wodorowęglany, możesz samodzielnie dodać do receptury kredę (rozpuszczoną z CO₂) lub wapno gaszone.  Automatyczne dostosowanie je uwzględnia, ale nie oblicza, ile ich dodać.</translation>
     </message>
     <message>
         <source>The mash pH can&apos;t be worked out (there needs to be some grain and some water in the mash), so no acid has been added.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nie można obliczyć pH zacieru (zacier musi zawierać trochę słodu i wody), więc nie dodano kwasu.</translation>
     </message>
     <message>
         <source>The strength of the %1 is not set, so no acid has been added.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nie ustawiono stężenia: %1, więc nie dodano kwasu.</translation>
     </message>
     <message>
         <source>The mash pH will be %1 without any added acid, which is already below the target of %2.  Acid can only lower the pH.  To raise it, you could use less acidulated malt or add some baking soda or pickling lime.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bez dodatku kwasu pH zacieru wyniesie %1, czyli już poniżej wartości docelowej %2.  Kwas może tylko obniżyć pH.  Aby je podnieść, możesz użyć mniej słodu zakwaszającego albo dodać trochę sody oczyszczonej lub wapna gaszonego.</translation>
     </message>
     <message>
         <source>The recipe &quot;%1&quot; is locked, so its water agents cannot be changed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Receptura &quot;%1&quot; jest zablokowana, więc nie można zmienić jej środków do uzdatniania wody.</translation>
     </message>
     <message>
         <source>Please choose a target water profile and/or a target mash pH first.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Najpierw wybierz docelowy profil wody i/lub docelowe pH zacieru.</translation>
     </message>
     <message>
         <source>There is no water agent of type &quot;%1&quot; in the database, so it wasn&apos;t considered.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">W bazie danych nie ma środka do uzdatniania wody typu &quot;%1&quot;, więc nie został uwzględniony.</translation>
     </message>
     <message>
         <source>There is no target water profile, so only the acid has been adjusted.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brak docelowego profilu wody, więc dostosowano tylko kwas.</translation>
     </message>
     <message>
         <source>The strength of &quot;%1&quot; is not set, so it has been assumed to be %2%.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nie ustawiono stężenia &quot;%1&quot;, więc przyjęto %2%.</translation>
     </message>
     <message>
         <source>There is no acid (lactic, phosphoric, sulfuric or hydrochloric) in the database, so the mash pH could not be adjusted.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">W bazie danych nie ma kwasu (mlekowego, fosforowego, siarkowego ani solnego), więc nie można było dostosować pH zacieru.</translation>
     </message>
     <message>
         <source>Only the %1 has been adjusted.  The other acid in the recipe has been taken into account as it is.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dostosowano tylko: %1.  Pozostały kwas w recepturze uwzględniono w niezmienionej ilości.</translation>
     </message>
     <message>
         <source>Change amount of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień ilość: %1</translation>
     </message>
     <message>
         <source>Where the same salt was added more than once, the whole amount is now in the first addition.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tam, gdzie tę samą sól dodano więcej niż raz, cała ilość jest teraz w pierwszym dodatku.</translation>
     </message>
     <message>
         <source>Where the same acid was added more than once, the whole amount is now in the first addition.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tam, gdzie ten sam kwas dodano więcej niż raz, cała ilość jest teraz w pierwszym dodatku.</translation>
     </message>
     <message>
         <source>Add water agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj środki do uzdatniania wody</translation>
     </message>
 </context>
 <context>
     <name>WaterEditor</name>
     <message>
         <source>PPM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PPM</translation>
     </message>
     <message>
         <source>Current</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bieżący</translation>
     </message>
     <message>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmodyfikowany</translation>
     </message>
     <message>
         <source>CaCO3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">CaCO3</translation>
     </message>
     <message>
         <source>HCO3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HCO3</translation>
     </message>
     <message>
         <source>Base Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Profil bazowy</translation>
     </message>
     <message>
         <source>Target Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Profil docelowy</translation>
     </message>
     <message>
         <source>Actual Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Profil rzeczywisty</translation>
     </message>
 </context>
 <context>
@@ -10172,11 +10175,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>XmlCoding</name>
     <message>
         <source>Contents of file were not readable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nie można odczytać zawartości pliku</translation>
     </message>
     <message>
         <source>Could not understand file format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nie rozpoznano formatu pliku</translation>
     </message>
 </context>
 <context>
@@ -10235,51 +10238,51 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Bacteria</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bakterie</translation>
     </message>
     <message>
         <source>Brett</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brett</translation>
     </message>
     <message>
         <source>Kveik</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kveik</translation>
     </message>
     <message>
         <source>Lacto</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lacto</translation>
     </message>
     <message>
         <source>Malolactic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fermentacja jabłkowo-mlekowa</translation>
     </message>
     <message>
         <source>Mixed-culture</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kultura mieszana</translation>
     </message>
     <message>
         <source>Pedio</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pedio</translation>
     </message>
     <message>
         <source>Spontaneous</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spontaniczna</translation>
     </message>
     <message>
         <source>Dregs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Osad z butelki</translation>
     </message>
     <message>
         <source>Very Low</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bardzo niska</translation>
     </message>
     <message>
         <source>Medium Low</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Średnio niska</translation>
     </message>
     <message>
         <source>Medium High</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Średnio wysoka</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -10323,59 +10326,59 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Alcohol Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tolerancja alkoholu</translation>
     </message>
     <message>
         <source>Typical Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typowe odfermentowanie</translation>
     </message>
     <message>
         <source>Max Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. odfermentowanie</translation>
     </message>
     <message>
         <source>Min Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. odfermentowanie</translation>
     </message>
     <message>
         <source>Best For</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Najlepsze do</translation>
     </message>
     <message>
         <source>Glucoamylase Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Glukoamylazo-dodatnie</translation>
     </message>
     <message>
         <source>Killer Neutral</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer neutralne</translation>
     </message>
     <message>
         <source>Killer Producing K1 Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer wytwarzające toksynę K1</translation>
     </message>
     <message>
         <source>Killer Producing K28 Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer wytwarzające toksynę K28</translation>
     </message>
     <message>
         <source>Killer Producing K2 Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer wytwarzające toksynę K2</translation>
     </message>
     <message>
         <source>Killer Producing Klus Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer wytwarzające toksynę Klus</translation>
     </message>
     <message>
         <source>Max Reuse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. liczba użyć</translation>
     </message>
     <message>
         <source>Max Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. temperatura</translation>
     </message>
     <message>
         <source>Min Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. temperatura</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -10383,7 +10386,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Phenolic Off Flavor Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fenolowe posmaki (POF+)</translation>
     </message>
     <message>
         <source>No</source>
@@ -10395,7 +10398,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Yeast Purchases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zakupy drożdży</translation>
     </message>
 </context>
 <context>
@@ -10526,26 +10529,26 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>is an descendant of</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">jest potomkiem</translation>
     </message>
     <message>
         <source>Save changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz zmiany</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
 </context>
 <context>
     <name>boilEditor</name>
     <message>
         <source>Boil Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor gotowania</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wymagane</translation>
     </message>
     <message>
         <source>Name</source>
@@ -10569,15 +10572,15 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>New boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nowe gotowanie</translation>
     </message>
     <message>
         <source>New</source>
@@ -10593,18 +10596,18 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
 </context>
 <context>
     <name>boilStepEditor</name>
     <message>
         <source>Boil Step Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor kroku gotowania</translation>
     </message>
     <message>
         <source>Name</source>
@@ -10660,15 +10663,15 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kwasowość początkowa</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kwasowość końcowa</translation>
     </message>
     <message>
         <source>Optional description of this boil step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opcjonalny opis tego kroku gotowania</translation>
     </message>
     <message>
         <source>Description</source>
@@ -10680,7 +10683,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Save</source>
@@ -10688,7 +10691,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -10700,31 +10703,31 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gęstość początkowa</translation>
     </message>
     <message>
         <source>End Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gęstość końcowa</translation>
     </message>
     <message>
         <source>Start temp.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temp. początkowa</translation>
     </message>
     <message>
         <source>Temperature at the start of this step.  If not set, the wort is assumed to be boiling.  Steps are classified as pre-boil, boil proper or post-boil by their temperatures.  For IBU formulae that model isomerization after flameout (eg mIBU and SMPH), a post-boil step that starts at boiling and ends below it is modelled as the wort cooling naturally (down to, but not below, the end temperature); any other post-boil step is modelled as the temperature changing linearly from the start temperature to the end temperature (so eg a hop stand held at 80°C (176°F) has start and end temperatures of 80°C).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatura na początku tego kroku.  Jeśli nie jest ustawiona, przyjmuje się, że brzeczka wrze.  Kroki są klasyfikowane jako przed gotowaniem, gotowanie właściwe lub po gotowaniu według ich temperatur.  Dla wzorów IBU modelujących izomeryzację po wyłączeniu grzania (np. mIBU i SMPH) krok po gotowaniu, który zaczyna się w temperaturze wrzenia i kończy poniżej niej, jest modelowany jako naturalne stygnięcie brzeczki (do temperatury końcowej, ale nie poniżej); każdy inny krok po gotowaniu jest modelowany jako liniowa zmiana temperatury od początkowej do końcowej (więc np. hop stand w 80°C (176°F) ma temperaturę początkową i końcową 80°C).</translation>
     </message>
     <message>
         <source>How long this step lasts, not including any ramp time.  For a post-boil step (eg whirlpool or hop stand), hops added to this step with no time set steep for this long (plus the time of any subsequent steps).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jak długo trwa ten krok, nie licząc czasu narastania.  W przypadku kroku po gotowaniu (np. whirlpool lub hop stand) chmiel dodany do tego kroku bez ustawionego czasu jest ekstrahowany przez ten czas (plus czas kolejnych kroków).</translation>
     </message>
     <message>
         <source>Temperature at the end of this step.  If not set, the wort is assumed to be boiling.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatura na końcu tego kroku.  Jeśli nie jest ustawiona, przyjmuje się, że brzeczka wrze.</translation>
     </message>
     <message>
         <source>Ramp time: how long it takes, before this step begins, to get from the end temperature of the previous step to the start temperature of this one.  Eg, for a hop stand at 80°C (176°F), the time taken to chill the wort from boiling to that temperature.  For post-boil steps, the temperature is modelled as changing linearly during the ramp, and hops added to the step with no time set are added at the end of the ramp.  If not set, any temperature change between steps is treated as instantaneous.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Czas narastania: ile czasu, przed rozpoczęciem tego kroku, zajmuje przejście od temperatury końcowej poprzedniego kroku do temperatury początkowej tego kroku.  Np. dla hop standu w 80°C (176°F) jest to czas schłodzenia brzeczki od wrzenia do tej temperatury.  W krokach po gotowaniu temperatura jest modelowana jako zmieniająca się liniowo w czasie narastania, a chmiel dodany do kroku bez ustawionego czasu jest dodawany na końcu narastania.  Jeśli nie jest ustawiony, każda zmiana temperatury między krokami jest traktowana jako natychmiastowa.</translation>
     </message>
 </context>
 <context>
@@ -10849,7 +10852,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SG</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
@@ -10865,15 +10868,15 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temp. wody zaciernej</translation>
     </message>
     <message>
         <source>Temperature of strike water before dough in</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatura wody zaciernej przed wsypaniem słodu</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temp. końcowa</translation>
     </message>
     <message>
         <source>Temperature of mash before mash out</source>
@@ -10905,7 +10908,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Objętość do fermentora</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
@@ -10929,11 +10932,11 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Percent efficiency into boil kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procentowa wydajność do kotła</translation>
     </message>
     <message>
         <source>Efficiency into boil kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wydajność do kotła</translation>
     </message>
     <message>
         <source>Projected OG</source>
@@ -10945,7 +10948,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Expected ABV based on recipe OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oczekiwany ABV na podstawie OG receptury</translation>
     </message>
     <message>
         <source>Projected ABV</source>
@@ -10953,7 +10956,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>ABV based on user-reported FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV na podstawie zmierzonego FG</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -10961,15 +10964,15 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Yeast attenuation based on yeast specified in recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odfermentowanie na podstawie drożdży podanych w recepturze</translation>
     </message>
     <message>
         <source>Projected yeast attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przewidywane odfermentowanie</translation>
     </message>
     <message>
         <source>Measured yeast attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmierzone odfermentowanie</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -10985,35 +10988,35 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Batch Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numer warki</translation>
     </message>
     <message>
         <source>Expected OG, based on recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oczekiwany OG na podstawie receptury</translation>
     </message>
     <message>
         <source>Recipe OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG receptury</translation>
     </message>
     <message>
         <source>Projected OG, based on measured pre-boil gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przewidywany OG na podstawie zmierzonej gęstości przed gotowaniem</translation>
     </message>
     <message>
         <source>Yeast attenuation based on user-reported OG and FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odfermentowanie na podstawie zmierzonych OG i FG</translation>
     </message>
     <message>
         <source>How clear the wort was when it went into the fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jak klarowna była brzeczka przy przelewaniu do fermentora</translation>
     </message>
     <message>
         <source>Wort clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klarowność brzeczki</translation>
     </message>
     <message>
         <source>How clear the wort was, judged by eye, when it went into the fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jak klarowna była brzeczka, oceniana wzrokowo, przy przelewaniu do fermentora</translation>
     </message>
 </context>
 <context>
@@ -11194,7 +11197,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wymagane</translation>
     </message>
     <message>
         <source>Time</source>
@@ -11226,7 +11229,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Hop % Utilization</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wykorzystanie chmielu %</translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
@@ -11246,23 +11249,23 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Name to identify this equipment profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nazwa identyfikująca ten profil sprzętu</translation>
     </message>
     <message>
         <source>Hot Liquor Tank</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zbiornik gorącej wody (HLT)</translation>
     </message>
     <message>
         <source>Hot Liquor Tank Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typ zbiornika gorącej wody</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -11270,7 +11273,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Evaporation Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Straty na odparowanie</translation>
     </message>
     <message>
         <source>Weight</source>
@@ -11298,7 +11301,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Lauter Tun</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kadź filtracyjna</translation>
     </message>
     <message>
         <source>Lauter Tun Type</source>
@@ -11314,27 +11317,27 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Boil Kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kocioł warzelny</translation>
     </message>
     <message>
         <source>Boil Kettle Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typ kotła warzelnego</translation>
     </message>
     <message>
         <source>Evaporation rate per hour</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Szybkość odparowania na godzinę</translation>
     </message>
     <message>
         <source>Brew Kettle Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Notatki o kotle warzelnym</translation>
     </message>
     <message>
         <source>Deadspace Losses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Straty w martwej przestrzeni</translation>
     </message>
     <message>
         <source>Aging Vessel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zbiornik do leżakowania</translation>
     </message>
     <message>
         <source>Aging Vessel Type</source>
@@ -11346,7 +11349,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Packaging Vessel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zbiornik do rozlewu</translation>
     </message>
     <message>
         <source>Packaging Vessel Type</source>
@@ -11354,39 +11357,39 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ogólne</translation>
     </message>
     <message>
         <source>Grain absorption</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Absorpcja wody przez słód</translation>
     </message>
     <message>
         <source>Default final top-up water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślna końcowa woda uzupełniająca</translation>
     </message>
     <message>
         <source>Default Kettle top-up water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślna woda uzupełniająca w kotle</translation>
     </message>
     <message>
         <source>The default value is 100°C (212°F), but the actual value will vary with altitude.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wartość domyślna to 100°C (212°F), ale rzeczywista wartość zależy od wysokości nad poziomem morza.</translation>
     </message>
     <message>
         <source>This is equal to the vessel&apos;s Heat Capacity divided by its weight.  Typical values are • Aluminum - 0.215 c/g·C  • Copper - 0.092 c/g·C  • Iron/Steel - 0.108 c/g·C  • Plastic - 0.359 c/g·C.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jest to pojemność cieplna naczynia podzielona przez jego masę.  Typowe wartości: • Aluminium - 0.215 c/g·C  • Miedź - 0.092 c/g·C  • Żelazo/stal - 0.108 c/g·C  • Plastik - 0.359 c/g·C.</translation>
     </message>
     <message>
         <source>Outflow per minute</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wypływ na minutę</translation>
     </message>
     <message>
         <source>Internal Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Średnica wewnętrzna</translation>
     </message>
     <message>
         <source>Opening Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Średnica otworu</translation>
     </message>
     <message>
         <source>New</source>
@@ -11402,23 +11405,23 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
     <message>
         <source>Adjustment factor for large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Współczynnik korekty wykorzystania chmielu dla dużych warek.  Wartość powinna wynosić 100% dla warek mniejszych niż 20 galonów, ale może być wyższa (200% lub więcej) dla sprzętu do bardzo dużych warek.</translation>
     </message>
     <message>
         <source>Kettle to Fermentor Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Straty między kotłem a fermentorem</translation>
     </message>
     <message>
         <source>Fermentor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fermentor</translation>
     </message>
     <message>
         <source>Fermentor Type</source>
@@ -11431,51 +11434,52 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <source>Optional Vessel
 Tabs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karty opcjonalnych
+naczyń</translation>
     </message>
     <message>
         <source>Total Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pojemność całkowita</translation>
     </message>
     <message>
         <source>Total usable capacity of the mash tun, including any space below the false bottom or malt pipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Całkowita użyteczna pojemność kadzi zaciernej, łącznie z przestrzenią pod fałszywym dnem lub koszem na słód</translation>
     </message>
     <message>
         <source>Foundation Water (recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Woda pod sitem (odzyskiwana)</translation>
     </message>
     <message>
         <source>Water below the false bottom or malt pipe that drains out with the wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Woda pod fałszywym dnem lub koszem na słód, która spływa razem z brzeczką</translation>
     </message>
     <message>
         <source>Mash Tun Loss (not recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Straty w kadzi zaciernej (nieodzyskiwane)</translation>
     </message>
     <message>
         <source>Liquid that stays behind in the mash tun and is never recovered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ciecz, która zostaje w kadzi zaciernej i nigdy nie jest odzyskiwana</translation>
     </message>
     <message>
         <source>Lauter Tun Loss (not recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Straty w kadzi filtracyjnej (nieodzyskiwane)</translation>
     </message>
     <message>
         <source>Wort that stays behind in the lauter tun and is never recovered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brzeczka, która zostaje w kadzi filtracyjnej i nigdy nie jest odzyskiwana</translation>
     </message>
     <message>
         <source>Wort that stays behind in the lauter tun and its plumbing, and never reaches the boil.  This is only used if you have a separate lauter tun (ie the lauter tun has a volume set).  Otherwise, include lautering losses in the Mash Tun Loss on the Mash Tun tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brzeczka, która zostaje w kadzi filtracyjnej i jej przewodach i nigdy nie trafia do gotowania.  Używane tylko wtedy, gdy masz osobną kadź filtracyjną (tzn. kadź filtracyjna ma ustawioną objętość).  W przeciwnym razie uwzględnij straty filtracji w Stratach w kadzi zaciernej na karcie Kadź zacierna.</translation>
     </message>
     <message>
         <source>Use a different name for each equipment profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Użyj innej nazwy dla każdego profilu sprzętu.</translation>
     </message>
     <message>
         <source>These checkboxes control which vessel tabs are shown.  An asterisk after a vessel means it has a volume set, and so is used in calculations, even if its tab is hidden.  Attributes of &quot;optional&quot; vessels will not be saved if their volumes are left blank or set to 0.  If there is no mash tun, the mash happens in the boil kettle (as on all-in-one systems and for brew in a bag).  If there is no lauter tun, lautering happens wherever the mash happens.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Te pola wyboru określają, które karty naczyń są wyświetlane.  Gwiazdka przy naczyniu oznacza, że ma ono ustawioną objętość, więc jest używane w obliczeniach, nawet jeśli jego karta jest ukryta.  Atrybuty &quot;opcjonalnych&quot; naczyń nie zostaną zapisane, jeśli ich objętość pozostanie pusta lub będzie równa 0.  Jeśli nie ma kadzi zaciernej, zacieranie odbywa się w kotle warzelnym (jak w systemach all-in-one i przy metodzie BIAB).  Jeśli nie ma kadzi filtracyjnej, filtracja odbywa się tam, gdzie zacieranie.</translation>
     </message>
     <message>
         <source>Default Batch Size</source>
@@ -11483,19 +11487,19 @@ Tabs</source>
     </message>
     <message>
         <source>Volume into the fermentor that new recipes using this equipment start with</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Objętość do fermentora, od której zaczynają nowe receptury używające tego sprzętu</translation>
     </message>
     <message>
         <source>Default Pre-boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślna objętość przed gotowaniem</translation>
     </message>
     <message>
         <source>Volume in the kettle at the start of the boil that new recipes using this equipment start with</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Objętość w kotle na początku gotowania, od której zaczynają nowe receptury używające tego sprzętu</translation>
     </message>
     <message>
         <source>The batch size (ie the volume going into the fermentor) and pre-boil volume that a recipe starts with when you choose this equipment for it.  These are not the capacities of the fermentor and kettle, which are set on their own tabs.  If you brew different batch sizes on the same equipment, you can either change the batch size in each recipe, or have a separate equipment profile for each batch size.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wielkość warki (tzn. objętość trafiająca do fermentora) i objętość przed gotowaniem, od których zaczyna receptura, gdy wybierzesz dla niej ten sprzęt.  Nie są to pojemności fermentora i kotła, które ustawia się na ich własnych kartach.  Jeśli warzysz warki różnej wielkości na tym samym sprzęcie, możesz zmieniać wielkość warki w każdej recepturze albo mieć osobny profil sprzętu dla każdej wielkości warki.</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -11503,39 +11507,39 @@ Tabs</source>
     </message>
     <message>
         <source>These settings apply to whichever vessel the mash happens in: the mash tun or, if you do not have a separate mash tun (eg on an all-in-one system such as the Grainfather, or for brew in a bag), the boil kettle.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Te ustawienia dotyczą naczynia, w którym odbywa się zacieranie: kadzi zaciernej lub, jeśli nie masz osobnej kadzi zaciernej (np. w systemie all-in-one, takim jak Grainfather, albo przy metodzie BIAB), kotła warzelnego.</translation>
     </message>
     <message>
         <source>The water that has to be below the false bottom (or malt pipe / basket) before the grain is covered, but which drains out with the wort and so is NOT lost.  (It is part of the Total Capacity of the mash tun or, if there is no mash tun, of the kettle.)  This is common in all-in-one systems -- eg about 3.5 liters for a Grainfather G30.  It is added to the strike water, so the mash thickness you choose applies just to the grain bed, and it is taken off the sparge water, so the total water needed does not change.  Leave at 0 if there is no such space (eg brew in a bag without a false bottom).  Other software calls this, eg, &quot;Mash-Tun Deadspace&quot; (Brewfather) or &quot;Mash Tun Addition&quot; (BeerSmith).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Woda, która musi znaleźć się pod fałszywym dnem (lub koszem na słód), zanim słód zostanie przykryty, ale która spływa razem z brzeczką, więc NIE jest tracona.  (Jest częścią Pojemności całkowitej kadzi zaciernej lub, jeśli nie ma kadzi zaciernej, kotła.)  Jest to typowe w systemach all-in-one -- np. około 3,5 litra w Grainfather G30.  Jest dodawana do wody zaciernej, więc wybrana gęstość zacieru dotyczy tylko złoża słodu, i odejmowana od wody do wysładzania, więc całkowita ilość potrzebnej wody się nie zmienia.  Pozostaw 0, jeśli nie ma takiej przestrzeni (np. BIAB bez fałszywego dna).  Inne programy nazywają to np. &quot;Mash-Tun Deadspace&quot; (Brewfather) lub &quot;Mash Tun Addition&quot; (BeerSmith).</translation>
     </message>
     <message>
         <source>How much water is permanently lost to each unit of weight of grain during mashing (ie the water the spent grain retains).  This is separate from Foundation Water and Mash Tun Loss, which are about the vessel rather than the grain.  (For an all-in-one system, anything that does not drain from the malt pipe should be included here.)  The default value is about 1.085 liters per kilogram (0.13 US gallons per pound), which is typical for a conventional mash tun.  For an all-in-one system with a malt pipe, about 0.8 liters per kilogram is more typical, and for brew in a bag with the bag squeezed, about 0.66 liters per kilogram.  It can fluctuate due to the fineness of your grind, how well the grain is drained, the malt, and other factors.  Pressing the &quot;Default Absorption&quot; button will reset the value to the default.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ile wody jest trwale tracone na każdą jednostkę masy słodu podczas zacierania (tzn. woda zatrzymana przez młóto).  Jest to niezależne od Wody pod sitem i Strat w kadzi zaciernej, które dotyczą naczynia, a nie słodu.  (W systemie all-in-one należy tu uwzględnić wszystko, co nie spływa z kosza na słód.)  Wartość domyślna to około 1,085 litra na kilogram (0,13 galona USA na funt), co jest typowe dla klasycznej kadzi zaciernej.  W systemie all-in-one z koszem na słód typowe jest około 0,8 litra na kilogram, a przy BIAB z wyciśniętym workiem około 0,66 litra na kilogram.  Wartość może się wahać w zależności od stopnia rozdrobnienia śruty, dokładności odsączenia, słodu i innych czynników.  Kliknięcie przycisku &quot;Standardowa absorbcja&quot; przywróci wartość domyślną.</translation>
     </message>
     <message>
         <source>The most the mash tun can hold, including any space below the false bottom (or malt pipe / basket) and anything that stays behind in the vessel.  The space actually available for the grain and its strike water is this volume less the Foundation Water (on the Mash tab) and Mash Tun Loss below.  If you do not have a separate mash tun -- eg on an all-in-one system such as the Grainfather, or for brew in a bag -- leave this blank (and untick Mash Tun on the General tab): the mash then happens in the boil kettle.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maksymalna pojemność kadzi zaciernej, łącznie z przestrzenią pod fałszywym dnem (lub koszem na słód) i wszystkim, co zostaje w naczyniu.  Przestrzeń faktycznie dostępna dla słodu i wody zaciernej to ta objętość pomniejszona o Wodę pod sitem (na karcie Zacieranie) i Straty w kadzi zaciernej poniżej.  Jeśli nie masz osobnej kadzi zaciernej -- np. w systemie all-in-one, takim jak Grainfather, albo przy metodzie BIAB -- pozostaw to pole puste (i odznacz Kadź zacierna na karcie Ogólne): zacieranie odbywa się wtedy w kotle warzelnym.</translation>
     </message>
     <message>
         <source>Liquid that stays behind in the mash tun (eg below the outlet or in pipework) and never reaches the boil.  It is added to the strike water and to the total water needed.  Do not include grain absorption or anything that drains out with the wort (put those under Grain Absorption and Foundation Water on the Mash tab).  If you do not have a separate lauter tun, include your lautering losses here.  If you do have a separate lauter tun, its losses go on the Lauter Tun tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ciecz, która zostaje w kadzi zaciernej (np. poniżej wylotu lub w przewodach) i nigdy nie trafia do gotowania.  Jest dodawana do wody zaciernej i do całkowitej ilości potrzebnej wody.  Nie uwzględniaj absorpcji przez słód ani niczego, co spływa razem z brzeczką (wpisz je w Absorpcji wody przez słód i Wodzie pod sitem na karcie Zacieranie).  Jeśli nie masz osobnej kadzi filtracyjnej, uwzględnij tu straty filtracji.  Jeśli masz osobną kadź filtracyjną, jej straty wpisz na karcie Kadź filtracyjna.</translation>
     </message>
     <message>
         <source>The most the kettle can hold (not the pre-boil volume, which is on the General tab).  If there is no separate mash tun, this is also the space available for the mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maksymalna pojemność kotła (nie objętość przed gotowaniem, która jest na karcie Ogólne).  Jeśli nie ma osobnej kadzi zaciernej, jest to również przestrzeń dostępna dla zacieru.</translation>
     </message>
     <message>
         <source>The most the fermentor can hold, including headspace.  This is NOT the batch size, which is set on the General tab (as Default Batch Size).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maksymalna pojemność fermentora, łącznie z wolną przestrzenią nad piwem.  NIE jest to wielkość warki, którą ustawia się na karcie Ogólne (jako Domyślną wielkość warki).</translation>
     </message>
     <message>
         <source>Internal diameter of the kettle at the surface of the wort.  Used, along with the opening diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Średnica wewnętrzna kotła na wysokości powierzchni brzeczki.  Używana, wraz ze średnicą otworu i objętością brzeczki w kotle, do szacowania, jak szybko brzeczka naturalnie stygnie po wyłączeniu grzania, dla wzorów IBU modelujących izomeryzację po wyłączeniu grzania (np. mIBU i SMPH).  Jeśli nie jest ustawiona, przyjmuje się 45 cm (około 18 cali).</translation>
     </message>
     <message>
         <source>Internal diameter of the opening in the kettle through which steam can escape -- eg the same as the internal diameter if the kettle is uncovered, or smaller if it is partly covered.  Used, along with the internal diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Średnica wewnętrzna otworu w kotle, przez który może uchodzić para -- np. równa średnicy wewnętrznej, jeśli kocioł jest odkryty, lub mniejsza, jeśli jest częściowo przykryty.  Używana, wraz ze średnicą wewnętrzną i objętością brzeczki w kotle, do szacowania, jak szybko brzeczka naturalnie stygnie po wyłączeniu grzania, dla wzorów IBU modelujących izomeryzację po wyłączeniu grzania (np. mIBU i SMPH).  Jeśli nie jest ustawiona, przyjmuje się 45 cm (około 18 cali).</translation>
     </message>
 </context>
 <context>
@@ -11694,11 +11698,11 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Główne</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wymagane</translation>
     </message>
     <message>
         <source>Yield %</source>
@@ -11710,7 +11714,7 @@ Tabs</source>
     </message>
     <message>
         <source>Diastatic power</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Siła diastatyczna</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -11718,15 +11722,15 @@ Tabs</source>
     </message>
     <message>
         <source>New fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nowy składnik fermentacji</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
@@ -11742,7 +11746,7 @@ Tabs</source>
     </message>
     <message>
         <source>Fermantable Grain Group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Grupa ziarna składnika fermentacji</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -11758,11 +11762,11 @@ Tabs</source>
     </message>
     <message>
         <source>Extract Yield Dry Basis Coarse Grind (DBCG)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstraktywność w s.m. przy grubym przemiale (DBCG)</translation>
     </message>
     <message>
         <source>Potential yield</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstraktywność potencjalna</translation>
     </message>
     <message>
         <source>Kolbach Index</source>
@@ -11770,23 +11774,23 @@ Tabs</source>
     </message>
     <message>
         <source>Percentage of malt that is &quot;glassy&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procent słodu &quot;szklistego&quot;</translation>
     </message>
     <message>
         <source>Percentage of malt that is &quot;half glassy&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procent słodu &quot;półszklistego&quot;</translation>
     </message>
     <message>
         <source>Percentage of malt that is &quot;mealy&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procent słodu &quot;mączystego&quot;</translation>
     </message>
     <message>
         <source>Percentage of grain that is &quot;plump&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procent ziarna &quot;pełnego&quot;</translation>
     </message>
     <message>
         <source>Percentage of grain that is &quot;tine&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procent ziarna &quot;cienkiego&quot;</translation>
     </message>
     <message>
         <source>Friability</source>
@@ -11798,7 +11802,7 @@ Tabs</source>
     </message>
     <message>
         <source>Viscosity of this malt in a &quot;congress mash&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lepkość tego słodu w &quot;zacierze kongresowym&quot;</translation>
     </message>
     <message>
         <source>Fermentability</source>
@@ -11810,23 +11814,23 @@ Tabs</source>
     </message>
     <message>
         <source>Beta-glucans</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beta-glukany</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Fine Grind</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstraktywność w s.m. przy drobnym przemiale</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Coarse Grind</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstraktywność w s.m. przy grubym przemiale</translation>
     </message>
     <message>
         <source>Total alpha-amylase in malted grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Całkowita alfa-amylaza w słodowanym ziarnie</translation>
     </message>
     <message>
         <source>Total alpha-amylase in the malted grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Całkowita alfa-amylaza w słodowanym ziarnie</translation>
     </message>
     <message>
         <source>Free Amino Nitrogen (FAN)</source>
@@ -11838,11 +11842,11 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
     <message>
         <source>Grain Group</source>
@@ -11862,7 +11866,7 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentable Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typ składnika fermentacji</translation>
     </message>
     <message>
         <source>Total Inventory</source>
@@ -11870,42 +11874,42 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Całkowita ilość w magazynie</translation>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj zakup</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utwórz nowy rekord zakupu dla tego składnika fermentacji</translation>
     </message>
     <message>
         <source>% Lactic Acid (by weight)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% kwasu mlekowego (wagowo)</translation>
     </message>
     <message>
         <source>For aciduated malts (aka acid malts)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dla słodów zakwaszających</translation>
     </message>
     <message>
         <source>% Fermentable by yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% fermentowalne przez drożdże</translation>
     </message>
     <message>
         <source>Percentage of this ingredient&apos;s extract that brewing yeast can ferment.  Leave blank for 100%.  Set to 0 for lactose, or about 10 for maltodextrin.  Not normally needed for malts.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procent ekstraktu tego składnika, który mogą przefermentować drożdże piwowarskie.  Pozostaw puste dla 100%.  Ustaw 0 dla laktozy lub około 10 dla maltodekstryny.  Zwykle niepotrzebne dla słodów.</translation>
     </message>
 </context>
 <context>
     <name>fermentationEditor</name>
     <message>
         <source>Fermentation Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor fermentacji</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wymagane</translation>
     </message>
     <message>
         <source>Name</source>
@@ -11921,15 +11925,15 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>New fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nowa fermentacja</translation>
     </message>
     <message>
         <source>New</source>
@@ -11945,30 +11949,30 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
     <message>
         <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Co dzieje się z krauzenem (pianą na powierzchni fermentującego piwa), który unosi część goryczki.  Używane tylko przez wzór IBU SMPH.</translation>
     </message>
     <message>
         <source>Krausen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Krauzen</translation>
     </message>
     <message>
         <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  If the krausen is skimmed, choose one of the &quot;blown off&quot; options, according to how much is removed.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Co dzieje się z krauzenem (pianą na powierzchni fermentującego piwa), który unosi część goryczki.  Jeśli krauzen jest zbierany, wybierz jedną z opcji &quot;odprowadzony rurką&quot;, zależnie od tego, ile jest usuwane.  Używane tylko przez wzór IBU SMPH.</translation>
     </message>
 </context>
 <context>
     <name>fermentationStepEditor</name>
     <message>
         <source>Fermentation Step Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytor kroku fermentacji</translation>
     </message>
     <message>
         <source>Name</source>
@@ -12024,15 +12028,15 @@ Tabs</source>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kwasowość początkowa</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kwasowość końcowa</translation>
     </message>
     <message>
         <source>Optional description of this fermentation step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opcjonalny opis tego kroku fermentacji</translation>
     </message>
     <message>
         <source>Description</source>
@@ -12044,7 +12048,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Save</source>
@@ -12052,7 +12056,7 @@ Tabs</source>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -12060,19 +12064,19 @@ Tabs</source>
     </message>
     <message>
         <source>Free rise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Swobodny wzrost</translation>
     </message>
     <message>
         <source>Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Swobodny wzrost oznacza krok fermentacji, w którym egzotermiczna fermentacja może bez ograniczeń podnosić temperaturę</translation>
     </message>
     <message>
         <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gęstość początkowa</translation>
     </message>
     <message>
         <source>End Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gęstość końcowa</translation>
     </message>
     <message>
         <source>Vessel</source>
@@ -12235,11 +12239,11 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Główne</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wymagane</translation>
     </message>
     <message>
         <source>Alpha %</source>
@@ -12251,19 +12255,19 @@ Tabs</source>
     </message>
     <message>
         <source>Cohumulone %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kohumulon %</translation>
     </message>
     <message>
         <source>Myrcene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mircen %</translation>
     </message>
     <message>
         <source>Humulene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humulen %</translation>
     </message>
     <message>
         <source>Caryophyllene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kariofilen %</translation>
     </message>
     <message>
         <source>Substitutes</source>
@@ -12275,23 +12279,23 @@ Tabs</source>
     </message>
     <message>
         <source>New hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nowy chmiel</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Hop Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typ chmielu</translation>
     </message>
     <message>
         <source>Hop Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Postać chmielu</translation>
     </message>
     <message>
         <source>Year</source>
@@ -12307,7 +12311,7 @@ Tabs</source>
     </message>
     <message>
         <source>Linalool %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linalol %</translation>
     </message>
     <message>
         <source>Linalool</source>
@@ -12315,7 +12319,7 @@ Tabs</source>
     </message>
     <message>
         <source>Limonene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Limonen %</translation>
     </message>
     <message>
         <source>Limonene</source>
@@ -12323,7 +12327,7 @@ Tabs</source>
     </message>
     <message>
         <source>Nerol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nerol %</translation>
     </message>
     <message>
         <source>Nerol</source>
@@ -12331,7 +12335,7 @@ Tabs</source>
     </message>
     <message>
         <source>Farnesene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Farnezen %</translation>
     </message>
     <message>
         <source>Farnesene</source>
@@ -12339,7 +12343,7 @@ Tabs</source>
     </message>
     <message>
         <source>Polyphenols %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Polifenole %</translation>
     </message>
     <message>
         <source>Polyphenols</source>
@@ -12347,7 +12351,7 @@ Tabs</source>
     </message>
     <message>
         <source>Geraniol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geraniol %</translation>
     </message>
     <message>
         <source>Geraniol</source>
@@ -12355,7 +12359,7 @@ Tabs</source>
     </message>
     <message>
         <source>Xanthohumol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ksantohumol %</translation>
     </message>
     <message>
         <source>Xanthohumol</source>
@@ -12363,15 +12367,15 @@ Tabs</source>
     </message>
     <message>
         <source>β-pinene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β-pinen %</translation>
     </message>
     <message>
         <source>β-pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β-pinen</translation>
     </message>
     <message>
         <source>Total Oil ml/100g</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Olejki ogółem ml/100g</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
@@ -12387,7 +12391,7 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Całkowita ilość w magazynie</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -12395,11 +12399,11 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
     <message>
         <source>New</source>
@@ -12419,59 +12423,59 @@ Tabs</source>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj zakup</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utwórz nowy rekord zakupu dla tego chmielu</translation>
     </message>
     <message>
         <source>Alpha Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfa-kwasy</translation>
     </message>
     <message>
         <source>Actual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rzeczywiste</translation>
     </message>
     <message>
         <source>Typical Range</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typowy zakres</translation>
     </message>
     <message>
         <source>Min alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. procent alfa-kwasów w masie</translation>
     </message>
     <message>
         <source>-</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-</translation>
     </message>
     <message>
         <source>Max alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. procent alfa-kwasów w masie</translation>
     </message>
     <message>
         <source>Beta Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beta-kwasy</translation>
     </message>
     <message>
         <source>Min beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. procent beta-kwasów w masie</translation>
     </message>
     <message>
         <source>Max beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. procent beta-kwasów w masie</translation>
     </message>
     <message>
         <source>6 Month Alpha Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utrata alfa po 6 miesiącach</translation>
     </message>
     <message>
         <source>α-Pinene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α-pinen %</translation>
     </message>
     <message>
         <source>α-Pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α-pinen</translation>
     </message>
 </context>
 <context>
@@ -13242,27 +13246,27 @@ Tabs</source>
     </message>
     <message>
         <source>Export to &amp;BBCode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eksportuj do &amp;BBCode</translation>
     </message>
     <message>
         <source>Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Woda</translation>
     </message>
     <message>
         <source>&amp;Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Nazwa</translation>
     </message>
     <message>
         <source>E&amp;quipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Sprzęt</translation>
     </message>
     <message>
         <source>&amp;Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">S&amp;tyl</translation>
     </message>
     <message>
         <source>Recipe Locked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Receptura zablokowana</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -13274,59 +13278,59 @@ Tabs</source>
     </message>
     <message>
         <source>&amp;Export to File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Eksportuj do pliku</translation>
     </message>
     <message>
         <source>M&amp;iscs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Dodatki</translation>
     </message>
     <message>
         <source>&amp;Print and preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Drukuj i &amp;podgląd</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ctrl+P</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Zakończ</translation>
     </message>
     <message>
         <source>&amp;Import from File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Importuj z pliku</translation>
     </message>
     <message>
         <source>Optio&amp;ns</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Opcje</translation>
     </message>
     <message>
         <source>Ti&amp;mers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Minutniki</translation>
     </message>
     <message>
         <source>Strike &amp;Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalkulator &amp;wody zaciernej</translation>
     </message>
     <message>
         <source>&amp;Hydrometer Temp Adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Korekta temperatury &amp;areometru</translation>
     </message>
     <message>
         <source>Alcohol Percentage Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalkulator zawartości alkoholu</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cofnij</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ponów</translation>
     </message>
     <message>
         <source>Ancestors</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przodkowie</translation>
     </message>
     <message>
         <source>Brew It!</source>
@@ -13342,7 +13346,7 @@ Tabs</source>
     </message>
     <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gotowania</translation>
     </message>
     <message>
         <source>Fermentation</source>
@@ -13350,15 +13354,15 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fermentacje</translation>
     </message>
     <message>
         <source>See Boil tab below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zobacz kartę Gotowanie poniżej</translation>
     </message>
     <message>
         <source>&amp;Copy Selected Item(s)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kopiuj zaznaczone elementy</translation>
     </message>
     <message>
         <source>Mash Profiles</source>
@@ -13374,15 +13378,15 @@ Tabs</source>
     </message>
     <message>
         <source>&amp;Mash Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Profile &amp;zacierania</translation>
     </message>
     <message>
         <source>&amp;Boil Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Profile &amp;gotowania</translation>
     </message>
     <message>
         <source>&amp;Fermentation Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Profile &amp;fermentacji</translation>
     </message>
     <message>
         <source>Mash Designer</source>
@@ -13398,59 +13402,59 @@ Tabs</source>
     </message>
     <message>
         <source>Step-by-step instructions for brew day</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Instrukcje krok po kroku na dzień warzenia</translation>
     </message>
     <message>
         <source>W&amp;aters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Wody</translation>
     </message>
     <message>
         <source>&amp;Unit Conversion Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Konwerter &amp;jednostek</translation>
     </message>
     <message>
         <source>&amp;Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Korekta &amp;gęstości</translation>
     </message>
     <message>
         <source>Edit this style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj ten styl</translation>
     </message>
     <message>
         <source>Edit this equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj ten sprzęt</translation>
     </message>
     <message>
         <source>Edit this mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj to zacieranie</translation>
     </message>
     <message>
         <source>Edit this boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj to gotowanie</translation>
     </message>
     <message>
         <source>Edit this fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj tę fermentację</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Edycja</translation>
     </message>
     <message>
         <source>Efficienc&amp;y</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Wydajność</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cel</translation>
     </message>
     <message>
         <source>Calculated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Obliczone</translation>
     </message>
     <message>
         <source>Calculated final volume into the primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Obliczona końcowa objętość w fermentorze</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
@@ -13458,27 +13462,27 @@ Tabs</source>
     </message>
     <message>
         <source>Calculated preboil volume - See Boil tab below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Obliczona objętość przed gotowaniem - zobacz kartę Gotowanie poniżej</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Informacje o tym zacieraniu i jego ewentualne problemy</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Informacje o tym gotowaniu i jego ewentualne problemy</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Informacje o tej fermentacji i jej ewentualne problemy</translation>
     </message>
     <message>
         <source>Use mash profile in FG calculation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Użyj profilu zacierania w obliczeniu FG</translation>
     </message>
     <message>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uwzględnij, jak temperatury i czasy zacierania zwiększają lub zmniejszają fermentowalność brzeczki przy szacowaniu gęstości końcowej.  Pozostaw wyłączone, jeśli odfermentowanie drożdży ustawiono zgodnie z własnym zacieraniem.</translation>
     </message>
 </context>
 <context>
@@ -13616,19 +13620,19 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Główne</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
     <message>
         <source>Tun specific heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ciepło właściwe kadzi</translation>
     </message>
     <message>
         <source>New</source>
@@ -13636,7 +13640,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Save</source>
@@ -13644,7 +13648,7 @@ Tabs</source>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -13652,7 +13656,7 @@ Tabs</source>
     </message>
     <message>
         <source>Total Mash Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Całkowita woda do zacierania</translation>
     </message>
     <message>
         <source>Total Time</source>
@@ -13660,75 +13664,75 @@ Tabs</source>
     </message>
     <message>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przestarzałe</translation>
     </message>
     <message>
         <source>These are old settings that still work but might be retired in a future version of the software as there are now other ways to achieve the same same result.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">To stare ustawienia, które nadal działają, ale mogą zostać usunięte w przyszłej wersji programu, ponieważ są już inne sposoby osiągnięcia tego samego efektu.</translation>
     </message>
     <message>
         <source>It is better to set this on the sparge step itself.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lepiej ustawić to w samym kroku wysładzania.</translation>
     </message>
     <message>
         <source>It is better to set this on the Equipment (Mash Tun tab).  This value is only used if the recipe&apos;s equipment has a mash tun with no weight and specific heat set.  It is ignored if the equipment has no separate mash tun (ie the mash happens in the kettle), because the strike water is then heated in the same vessel as the mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lepiej ustawić to w Sprzęcie (karta Kadź zacierna).  Ta wartość jest używana tylko wtedy, gdy sprzęt receptury ma kadź zacierną bez ustawionej masy i ciepła właściwego.  Jest ignorowana, jeśli sprzęt nie ma osobnej kadzi zaciernej (tzn. zacieranie odbywa się w kotle), ponieważ woda zacierna jest wtedy podgrzewana w tym samym naczyniu co zacier.</translation>
     </message>
     <message>
         <source>Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wysładzanie</translation>
     </message>
     <message>
         <source>Batches</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Partie</translation>
     </message>
     <message>
         <source>Number of batch sparges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liczba partii wysładzania</translation>
     </message>
     <message>
         <source>Initial temperature of the mash tun.  Used when calculating the strike water temperature, to allow for the strike water heating up the mash tun.  If left blank, the tun is assumed to be at the same temperature as the grain.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Początkowa temperatura kadzi zaciernej.  Używana przy obliczaniu temperatury wody zaciernej, aby uwzględnić ogrzewanie kadzi przez wodę zacierną.  Jeśli pole jest puste, przyjmuje się, że kadź ma tę samą temperaturę co słód.</translation>
     </message>
     <message>
         <source>Adjust water amounts and temperatures</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dostosuj ilości i temperatury wody</translation>
     </message>
     <message>
         <source>Change the amounts and temperatures of the strike water and other infusions, the amounts of any decoctions, and the amounts and temperatures of sparge water, to suit this recipe&apos;s grain bill and equipment.  Values you have pinned in a step are not changed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień ilości i temperatury wody zaciernej i innych infuzji, ilości dekokcji oraz ilości i temperatury wody do wysładzania, aby pasowały do zasypu i sprzętu tej receptury.  Wartości przypięte w kroku nie są zmieniane.</translation>
     </message>
     <message>
         <source>Used as the target grain bed temperature for new sparge steps when adjusting the mash.  It is better to set this on the sparge step itself.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Używana jako docelowa temperatura złoża słodu dla nowych kroków wysładzania przy dostosowywaniu zacierania.  Lepiej ustawić to w samym kroku wysładzania.</translation>
     </message>
     <message>
         <source>How the grain will be rinsed after the mash.  Changing this and clicking Auto-Adjust replaces any existing sparge steps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jak słód będzie wypłukiwany po zacieraniu.  Zmiana tego ustawienia i kliknięcie Dostosuj automatycznie zastępuje istniejące kroki wysładzania.</translation>
     </message>
     <message>
         <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dostosuj automatycznie</translation>
     </message>
     <message>
         <source>Available when mash is used by exactly one recipe.  Keep mash in sync with recipe by doing an auto-adjust whenever changes happen, eg to the recipe&apos;s grain bill or equipment.  (Changing the steps themselves does not trigger an adjustment, so pin any values you want to keep.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dostępne, gdy zacieranie jest używane przez dokładnie jedną recepturę.  Utrzymuje zacieranie w zgodzie z recepturą, dostosowując je automatycznie przy każdej zmianie, np. zasypu lub sprzętu receptury.  (Zmiana samych kroków nie wywołuje dostosowania, więc przypnij wartości, które chcesz zachować.)</translation>
     </message>
     <message>
         <source>Keep mash in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Synchronizuj zacieranie ze zmianami receptury</translation>
     </message>
     <message>
         <source>How full the mash tun gets, and how much wort you can expect to collect from the mash, for the recipe using this mash.  Shown when the mash is used by exactly one recipe.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jak bardzo zapełnia się kadź zacierna i ile brzeczki można oczekiwać z zacieru dla receptury używającej tego zacierania.  Wyświetlane, gdy zacieranie jest używane przez dokładnie jedną recepturę.</translation>
     </message>
     <message>
         <source>Target mash thickness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Docelowa gęstość zacieru</translation>
     </message>
     <message>
         <source>Volume of strike water per mass of grain (not counting any water that sits below the grain bed) to aim for when adjusting the mash.  Most often around 2.5 to 3.2 L/kg (1.2 to 1.5 qt/lb).  Not used if there is no sparge, as then all the water goes in the mash, nor if the amount of strike water is pinned.  The Water:Grain column in the table of steps shows what the steps actually give.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Objętość wody zaciernej na masę słodu (bez wody znajdującej się pod złożem słodu), do której należy dążyć przy dostosowywaniu zacierania.  Najczęściej około 2,5 do 3,2 L/kg (1,2 do 1,5 qt/lb).  Nieużywane, jeśli nie ma wysładzania, bo wtedy cała woda trafia do zacieru, ani jeśli ilość wody zaciernej jest przypięta.  Kolumna Woda:słód w tabeli kroków pokazuje, co faktycznie dają kroki.</translation>
     </message>
 </context>
 <context>
@@ -13823,23 +13827,23 @@ Tabs</source>
     </message>
     <message>
         <source>Thickness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gęstość</translation>
     </message>
     <message>
         <source>Mash thickness, aka liquor-to-grist ratio, is the volume of strike water divided by the mass of grist.  In metric units (liters and kilograms), its practical range is 2 to 4 and most often is around 2.5 to 3.2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gęstość zacieru, czyli stosunek wody do śruty, to objętość wody zaciernej podzielona przez masę śruty.  W jednostkach metrycznych (litry i kilogramy) jej praktyczny zakres to 2 do 4, a najczęściej około 2,5 do 3,2.</translation>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kwasowość początkowa</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kwasowość końcowa</translation>
     </message>
     <message>
         <source>Optional description of this mash step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opcjonalny opis tego kroku zacierania</translation>
     </message>
     <message>
         <source>Description</source>
@@ -13851,7 +13855,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Save</source>
@@ -13859,7 +13863,7 @@ Tabs</source>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -13867,19 +13871,19 @@ Tabs</source>
     </message>
     <message>
         <source>Step Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numer kroku</translation>
     </message>
     <message>
         <source>If ticked, adjusting the mash (in the Mash Editor) will not change this amount (but will use it to work out other values, eg the water temperature).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jeśli zaznaczone, dostosowywanie zacierania (w Edytorze zacierania) nie zmieni tej ilości (ale użyje jej do obliczenia innych wartości, np. temperatury wody).</translation>
     </message>
     <message>
         <source>Pinned</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przypięte</translation>
     </message>
     <message>
         <source>If ticked, adjusting the mash (in the Mash Editor) will not change this temperature (but will use it to work out other values, eg the amount of water).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jeśli zaznaczone, dostosowywanie zacierania (w Edytorze zacierania) nie zmieni tej temperatury (ale użyje jej do obliczenia innych wartości, np. ilości wody).</translation>
     </message>
 </context>
 <context>
@@ -14001,11 +14005,11 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Główne</translation>
     </message>
     <message>
         <source>Use for</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zastosowanie</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -14013,11 +14017,11 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -14033,11 +14037,11 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
     <message>
         <source>New</source>
@@ -14057,23 +14061,23 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Całkowita ilość w magazynie</translation>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj zakup</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utwórz nowy rekord zakupu dla tego składnika</translation>
     </message>
     <message>
         <source>Water Agent Properties</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Właściwości środka do uzdatniania wody</translation>
     </message>
     <message>
         <source>Percent Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Procent kwasu</translation>
     </message>
 </context>
 <context>
@@ -14246,23 +14250,23 @@ Tabs</source>
     <name>ogCorrectionTool</name>
     <message>
         <source>Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Korekta gęstości</translation>
     </message>
     <message>
         <source>Target OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Docelowy OG</translation>
     </message>
     <message>
         <source>Measured Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmierzona gęstość</translation>
     </message>
     <message>
         <source>A value in Plato will be used as-is.  An SG value can be corrected for actual vs calibrated temperature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wartość w Plato zostanie użyta bez zmian.  Wartość SG można skorygować o różnicę między temperaturą rzeczywistą a kalibracji.</translation>
     </message>
     <message>
         <source>@ temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">@ temperatura</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
@@ -14270,11 +14274,11 @@ Tabs</source>
     </message>
     <message>
         <source>Calibrated at</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skalibrowany w</translation>
     </message>
     <message>
         <source>Temperature to which the hydrometer is calibrated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatura, w której skalibrowano areometr</translation>
     </message>
     <message>
         <source>Plato</source>
@@ -14326,35 +14330,35 @@ Tabs</source>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oblicz</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jeśli przekroczysz lub nie osiągniesz zakładanej wydajności, to narzędzie pomoże skorygować OG podczas gotowania.</translation>
     </message>
     <message>
         <source>NB: this tool makes the assumption that you are not going to add any water post boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uwaga: to narzędzie zakłada, że po gotowaniu nie będziesz dodawać wody.</translation>
     </message>
     <message>
         <source>From current recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Z bieżącej receptury</translation>
     </message>
     <message>
         <source>Actual SG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rzeczywista SG</translation>
     </message>
     <message>
         <source>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przeliczona z Plato/Brix lub skorygowana o temperaturę kalibracji areometru</translation>
     </message>
     <message>
         <source>Predicted OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przewidywany OG</translation>
     </message>
     <message>
         <source>OG if you take no action, ie boil as originally planned</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG, jeśli nic nie zrobisz, tzn. gotowanie zgodnie z pierwotnym planem</translation>
     </message>
     <message>
         <source>Remedy: Add Water To Boil</source>
@@ -14370,19 +14374,19 @@ Tabs</source>
     </message>
     <message>
         <source>-- OR --</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-- LUB --</translation>
     </message>
     <message>
         <source>Remedy: Add Sugar or DME</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rozwiązanie: dodaj cukier lub DME</translation>
     </message>
     <message>
         <source>Amount To Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ilość do dodania</translation>
     </message>
     <message>
         <source>Amount of Sugar or DME to add to the boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ilość cukru lub DME do dodania do gotowania</translation>
     </message>
 </context>
 <context>
@@ -14541,43 +14545,43 @@ Tabs</source>
     </message>
     <message>
         <source>Mash Hop (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chmiel do zacieru (%)</translation>
     </message>
     <message>
         <source>First Wort (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brzeczka przednia (%)</translation>
     </message>
     <message>
         <source>Databases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bazy danych</translation>
     </message>
     <message>
         <source>Engines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Silniki</translation>
     </message>
     <message>
         <source>RDBMS Engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Silnik RDBMS</translation>
     </message>
     <message>
         <source>Test Connection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Testuj połączenie</translation>
     </message>
     <message>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Konfiguracja</translation>
     </message>
     <message>
         <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przywróć domyślne</translation>
     </message>
     <message>
         <source>Hostname</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nazwa hosta</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Port</translation>
     </message>
     <message>
         <source>Schema</source>
@@ -14597,95 +14601,95 @@ Tabs</source>
     </message>
     <message>
         <source>Save password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz hasło</translation>
     </message>
     <message>
         <source>Data Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Katalog danych</translation>
     </message>
     <message>
         <source>Backup Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Katalog kopii zapasowych</translation>
     </message>
     <message>
         <source>Number of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liczba kopii zapasowych</translation>
     </message>
     <message>
         <source>Frequency of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Częstotliwość kopii zapasowych</translation>
     </message>
     <message>
         <source>PostgresSQL&apos;s host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nazwa hosta lub adres IP serwera PostgreSQL</translation>
     </message>
     <message>
         <source>Port the PostgreSQL is listening on</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Port, na którym nasłuchuje PostgreSQL</translation>
     </message>
     <message>
         <source>The schema containing the database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schemat zawierający bazę danych</translation>
     </message>
     <message>
         <source>User with create/delete table access</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Użytkownik z uprawnieniami do tworzenia/usuwania tabel</translation>
     </message>
     <message>
         <source>Password for the user</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hasło użytkownika</translation>
     </message>
     <message>
         <source>The name of the database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nazwa bazy danych</translation>
     </message>
     <message>
         <source>Where your database file is</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lokalizacja pliku bazy danych</translation>
     </message>
     <message>
         <source>Where to save your backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gdzie zapisywać kopie zapasowe</translation>
     </message>
     <message>
         <source>Number of backups to keep: -1 means never remove, 0 means never backup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liczba przechowywanych kopii zapasowych: -1 oznacza nigdy nie usuwaj, 0 oznacza nigdy nie twórz kopii</translation>
     </message>
     <message>
         <source>Logging</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Logowanie</translation>
     </message>
     <message>
         <source>Logging Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poziom logowania</translation>
     </message>
     <message>
         <source>Log file location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lokalizacja pliku logów</translation>
     </message>
     <message>
         <source>Use Default location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Użyj domyślnej lokalizacji</translation>
     </message>
     <message>
         <source>Recipe Snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Migawki receptur</translation>
     </message>
     <message>
         <source>Enable Automatic Snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Włącz automatyczne migawki</translation>
     </message>
     <message>
         <source>Deleting a recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuwanie receptury</translation>
     </message>
     <message>
         <source>Deletes all the snapshots too</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuwa również wszystkie migawki</translation>
     </message>
     <message>
         <source>Deletes only the recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuwa tylko recepturę</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -14695,15 +14699,21 @@ Tabs</source>
   &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;
+   &lt;b&gt;Znasz inny język?&lt;/b&gt;
+   &lt;br&gt;&lt;br&gt;
+   A może chcesz poprawić tłumaczenie? Pomóż nam i
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  przygotuj tłumaczenie&lt;/a&gt;, aby Twoi znajomi mogli korzystać z Brewtarget!
+&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>How many times %1 needs to be run to trigger another backup: 1 means always backup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ile razy trzeba uruchomić %1, aby utworzyć kolejną kopię zapasową: 1 oznacza zawsze</translation>
     </message>
     <message>
         <source>Default Values</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wartości domyślne</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -14711,7 +14721,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default batch size to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślna wielkość warki dla nowych receptur</translation>
     </message>
     <message>
         <source>Pre-Boil Size</source>
@@ -14719,7 +14729,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default pre-boil size to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślna objętość przed gotowaniem dla nowych receptur</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -14727,7 +14737,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default efficiency to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślna wydajność dla nowych receptur</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -14735,27 +14745,27 @@ Tabs</source>
     </message>
     <message>
         <source>Default boil time to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślny czas gotowania dla nowych receptur</translation>
     </message>
     <message>
         <source>Show snapshots by default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślnie pokazuj migawki</translation>
     </message>
     <message>
         <source>Units &amp;&amp; Precision</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jednostki &amp;&amp; precyzja</translation>
     </message>
     <message>
         <source>Decimal places</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Miejsca dziesiętne</translation>
     </message>
     <message>
         <source>By default, use mash profile in FG calculation for new and imported recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domyślnie używaj profilu zacierania w obliczeniu FG dla nowych i importowanych receptur</translation>
     </message>
     <message>
         <source>Whether new and imported recipes take account of the mash temperatures and times when estimating final gravity.  (This can be changed for each recipe on its Mash tab.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Czy nowe i importowane receptury uwzględniają temperatury i czasy zacierania przy szacowaniu gęstości końcowej.  (Można to zmienić dla każdej receptury na jej karcie Zacieranie.)</translation>
     </message>
     <message>
         <source>How bitterness (IBUs) is estimated from the recipe&apos;s hop additions.
@@ -14767,15 +14777,23 @@ Tabs</source>
  • mIBU: John-Paul Hosom&apos;s extension of Tinseth, adding bitterness from hops in hot wort after flameout.
  • SMPH: Hosom&apos;s detailed model, which also allows for oxidized alpha acids, polyphenols, hopping rate, wort pH and yeast flocculation.
 Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using the post-boil steps of the boil profile.  For formulas other than Garetz, Daniels and SMPH, pellets are assumed to give 10% more IBUs than whole hops (plugs 2%).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sposób szacowania goryczki (IBU) na podstawie dodatków chmielu w recepturze.
+ • Tinseth: najpowszechniej używany wzór.  Uwzględnia czas gotowania i gęstość brzeczki.
+ • Rager: starszy; zwykle daje wyższe IBU niż Tinseth.
+ • Noonan: z książki Grega Noonana &quot;New Brewing Lager Beer&quot;.
+ • Garetz: z książki Marka Garetza &quot;Using Hops&quot;.  Zwykle niższe IBU, brak IBU przy gotowaniu 10 minut lub krócej; uwzględnia duże dawki chmielu.
+ • Daniels: z książki Raya Danielsa &quot;Designing Great Beers&quot;.  Osobne wartości dla granulatu i szyszek.
+ • mIBU: rozszerzenie wzoru Tinsetha autorstwa Johna-Paula Hosoma, dodające goryczkę z chmielu w gorącej brzeczce po wyłączeniu grzania.
+ • SMPH: szczegółowy model Hosoma, uwzględniający też utlenione alfa-kwasy, polifenole, dawkę chmielu, pH brzeczki i flokulację drożdży.
+Tylko mIBU i SMPH dają IBU dla chmielu dodanego po wyłączeniu grzania (np. whirlpool), korzystając z kroków po gotowaniu w profilu gotowania.  Dla wzorów innych niż Garetz, Daniels i SMPH przyjmuje się, że granulat daje o 10% więcej IBU niż szyszki (tabletki o 2%).</translation>
     </message>
     <message>
         <source>IBUs from hops added to the mash, as a percentage of what the same hops would give if they were added at the start of the boil and boiled for its full length.  Mash hops contribute little or no bitterness, because alpha acids isomerize very slowly at mash temperatures and much of the hop material stays behind with the grain.  The default is 0%, ie mash hops are assumed to give no IBUs.  This applies whichever IBU formula is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IBU z chmielu dodanego do zacieru, jako procent tego, co dałby ten sam chmiel dodany na początku gotowania i gotowany przez cały czas.  Chmiel dodany do zacieru daje niewiele goryczki lub wcale, ponieważ alfa-kwasy izomeryzują bardzo powoli w temperaturach zacierania, a duża część chmielu zostaje w młócie.  Wartość domyślna to 0%, tzn. przyjmuje się, że chmiel do zacieru nie daje IBU.  Dotyczy to każdego wybranego wzoru IBU.</translation>
     </message>
     <message>
         <source>IBUs from first wort hops (hops put in the kettle as the wort is run off, before the boil starts), as a percentage of what the same hops would give if they were added at the start of the boil.  The default of 110% reflects the commonly reported finding that first wort hopping gives about 10% more bitterness than a full-length boil addition.  This applies whichever IBU formula is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IBU z chmielenia brzeczki przedniej (chmiel wrzucony do kotła podczas spuszczania brzeczki, przed rozpoczęciem gotowania), jako procent tego, co dałby ten sam chmiel dodany na początku gotowania.  Wartość domyślna 110% odzwierciedla często podawaną obserwację, że chmielenie brzeczki przedniej daje około 10% więcej goryczki niż dodatek gotowany przez cały czas.  Dotyczy to każdego wybranego wzoru IBU.</translation>
     </message>
 </context>
 <context>
@@ -14870,47 +14888,47 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Objętość brzeczki</translation>
     </message>
     <message>
         <source>Starting gravity of the wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gęstość początkowa brzeczki</translation>
     </message>
     <message>
         <source>Aeration method</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Metoda natleniania</translation>
     </message>
     <message>
         <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Data produkcji (data przydatności minus trzy miesiące)</translation>
     </message>
     <message>
         <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Szacowana żywotność drożdży</translation>
     </message>
     <message>
         <source>Desired pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pożądana ilość zadawanych drożdży</translation>
     </message>
     <message>
         <source>Number of vials/smack packs added to starter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liczba fiolek/saszetek dodanych do startera</translation>
     </message>
     <message>
         <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ile drożdży będzie potrzebne</translation>
     </message>
     <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ile saszetek lub fiolek potrzeba do osiągnięcia wymaganej ilości drożdży</translation>
     </message>
     <message>
         <source>Amount of dry yeast needed to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ilość drożdży suchych potrzebna do osiągnięcia wymaganej ilości drożdży</translation>
     </message>
     <message>
         <source>Starter size to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wielkość startera potrzebna do osiągnięcia wymaganej ilości drożdży</translation>
     </message>
 </context>
 <context>
@@ -15052,19 +15070,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Final beer pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Końcowe pH piwa</translation>
     </message>
     <message>
         <source>Total apparent attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Całkowite odfermentowanie pozorne</translation>
     </message>
     <message>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Data utworzenia</translation>
     </message>
     <message>
         <source>Assistant Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pomocnik piwowara</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
@@ -15076,94 +15094,94 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Expected wort clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oczekiwana klarowność brzeczki</translation>
     </message>
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;p&gt;Jak klarowna ma być brzeczka przy przelewaniu do fermentora (np. w zależności od tego, czy używasz środków klarujących w kotle lub whirlpoolu).&lt;/p&gt;&lt;p&gt;Bardziej mętna brzeczka traci więcej goryczki podczas fermentacji.&lt;/p&gt;&lt;p&gt;Używane tylko przez wzór IBU SMPH.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
     <name>recipeWaterWidget</name>
     <message>
         <source>Base Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Profil bazowy</translation>
     </message>
     <message>
         <source>Edit base water profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj bazowy profil wody</translation>
     </message>
     <message>
         <source>% RO in Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% RO w zacierze</translation>
     </message>
     <message>
         <source>% RO in Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% RO w wysładzaniu</translation>
     </message>
     <message>
         <source>Target Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Profil docelowy</translation>
     </message>
     <message>
         <source>Edit target water profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj docelowy profil wody</translation>
     </message>
     <message>
         <source>If ticked, Auto-Adjust also works out how much acid to add to get this mash pH.  It uses the acid already in the recipe if there is one, otherwise lactic acid (or another acid if there&apos;s no lactic acid in the database).  If not ticked, acids are left alone.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jeśli zaznaczone, automatyczne dostosowanie oblicza również, ile kwasu dodać, aby uzyskać to pH zacieru.  Używa kwasu już obecnego w recepturze, a jeśli go nie ma, kwasu mlekowego (lub innego kwasu, jeśli w bazie danych nie ma kwasu mlekowego).  Jeśli niezaznaczone, kwasy pozostają bez zmian.</translation>
     </message>
     <message>
         <source>Adjust acid for mash pH of</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dostosuj kwas do pH zacieru</translation>
     </message>
     <message>
         <source>Target mash pH.  Most brewers aim for between 5.2 and 5.6, often 5.4.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Docelowe pH zacieru.  Większość piwowarów dąży do wartości między 5,2 a 5,6, często 5,4.</translation>
     </message>
     <message>
         <source>Work out the amounts of brewing salts to add to get as close as possible to the target profile and, if ticked above, the amount of acid to get the target mash pH.  If the recipe already has salts, only those are used and their amounts are changed (so remove any you don&apos;t want, or add just the ones you do want, first).  Otherwise, commonly-used salts are added as needed.  Chalk and pickling lime are left alone.  You can undo the changes in one go.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oblicz ilości soli piwowarskich, aby jak najbardziej zbliżyć się do profilu docelowego oraz, jeśli zaznaczono powyżej, ilość kwasu do uzyskania docelowego pH zacieru.  Jeśli receptura zawiera już sole, używane są tylko one, a zmieniane są ich ilości (więc najpierw usuń te, których nie chcesz, albo dodaj tylko te, które chcesz).  W przeciwnym razie w razie potrzeby dodawane są powszechnie używane sole.  Kreda i wapno gaszone pozostają bez zmian.  Zmiany można cofnąć jednym ruchem.</translation>
     </message>
     <message>
         <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dostosuj automatycznie</translation>
     </message>
     <message>
         <source>Automatically redo Auto-Adjust whenever something it depends on changes, eg the water profiles, the amount of water in the mash or the grain bill.  Changes you make to the amounts of salts or acid yourself will then be overwritten, so this is best used once you have chosen which salts to use.  Undoing an Auto-Adjust turns this off.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Automatycznie ponawiaj dostosowanie, gdy zmieni się coś, od czego ono zależy, np. profile wody, ilość wody w zacierze lub zasyp.  Ręczne zmiany ilości soli lub kwasu zostaną wtedy nadpisane, więc najlepiej używać tej opcji po wybraniu soli.  Cofnięcie automatycznego dostosowania wyłącza tę opcję.</translation>
     </message>
     <message>
         <source>Keep water agents in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Synchronizuj środki do uzdatniania wody ze zmianami receptury</translation>
     </message>
     <message>
         <source>Actual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rzeczywiste</translation>
     </message>
     <message>
         <source>Ca</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ca</translation>
     </message>
     <message>
         <source>Mg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mg</translation>
     </message>
     <message>
         <source>Na</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Na</translation>
     </message>
     <message>
         <source>Cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cl</translation>
     </message>
     <message>
         <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SO&lt;sub&gt;4&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HCO&lt;sub&gt;3&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>pH</source>
@@ -15171,43 +15189,43 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Water Agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Środki do uzdatniania wody</translation>
     </message>
     <message>
         <source>Water Agents (Miscellaneous)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Środki do uzdatniania wody (dodatki)</translation>
     </message>
     <message>
         <source>Add a water agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj środek do uzdatniania wody</translation>
     </message>
     <message>
         <source>Remove selected water agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń zaznaczony środek do uzdatniania wody</translation>
     </message>
     <message>
         <source>Acid Malts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Słody zakwaszające</translation>
     </message>
     <message>
         <source>Acid Malts (Fermentables)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Słody zakwaszające (składniki fermentacji)</translation>
     </message>
     <message>
         <source>Add an acid malt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj słód zakwaszający</translation>
     </message>
     <message>
         <source>Remove selected acid malt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń zaznaczony słód zakwaszający</translation>
     </message>
     <message>
         <source>Auto-Adjust Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uwagi do automatycznego dostosowania</translation>
     </message>
     <message>
         <source>Things to check after the last Auto-Adjust, eg ions that couldn&apos;t be brought close to the target, and why</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rzeczy do sprawdzenia po ostatnim automatycznym dostosowaniu, np. jony, których nie udało się zbliżyć do wartości docelowej, i dlaczego</translation>
     </message>
 </context>
 <context>
@@ -15266,15 +15284,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmierzony początkowy Plato</translation>
     </message>
     <message>
         <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmierzona gęstość początkowa</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bieżący zmierzony Plato</translation>
     </message>
 </context>
 <context>
@@ -15358,7 +15376,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     <name>stockPurchaseIngredientEditor</name>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Główne</translation>
     </message>
     <message>
         <source>Supplier</source>
@@ -15366,7 +15384,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zamówiono</translation>
     </message>
     <message>
         <source>Date</source>
@@ -15382,19 +15400,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ilość zamówiona</translation>
     </message>
     <message>
         <source>Received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Otrzymano</translation>
     </message>
     <message>
         <source>Amount received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ilość otrzymana</translation>
     </message>
     <message>
         <source>Whether the amount is weight or volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Czy ilość jest wagą, czy objętością</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -15402,7 +15420,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Uses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zużycia</translation>
     </message>
     <message>
         <source>Amount Remaining</source>
@@ -15410,15 +15428,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Best Before</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Najlepiej spożyć przed</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -15426,15 +15444,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Purchase Price</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cena zakupu</translation>
     </message>
     <message>
         <source>Purchase Tax</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Podatek od zakupu</translation>
     </message>
     <message>
         <source>Shipping Cost</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koszt wysyłki</translation>
     </message>
     <message>
         <source>New</source>
@@ -15442,7 +15460,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Save</source>
@@ -15450,7 +15468,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -15458,7 +15476,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uwaga</translation>
     </message>
 </context>
 <context>
@@ -15580,11 +15598,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Powód</translation>
     </message>
     <message>
         <source>Change type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień typ</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -15592,15 +15610,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ilość zużyta</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
     <message>
         <source>New</source>
@@ -15608,7 +15626,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Save</source>
@@ -15616,7 +15634,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -15624,7 +15642,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Komentarz</translation>
     </message>
     <message>
         <source>Recipe</source>
@@ -15899,35 +15917,35 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Główne</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wymagane</translation>
     </message>
     <message>
         <source>Ranges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zakresy</translation>
     </message>
     <message>
         <source>New style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nowy styl</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aromat</translation>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wygląd</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -15935,19 +15953,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Mouthfeel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odczucie w ustach</translation>
     </message>
     <message>
         <source>Overall Impression</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ogólne wrażenie</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
 </context>
 <context>
@@ -15958,7 +15976,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Minutniki dodatków</translation>
     </message>
 </context>
 <context>
@@ -15969,19 +15987,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Add:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj:</translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Notatki...</translation>
     </message>
     <message>
         <source>At:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przy:</translation>
     </message>
     <message>
         <source>mins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">min</translation>
     </message>
     <message>
         <source>Stop</source>
@@ -15993,11 +16011,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Set Sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ustaw dźwięk</translation>
     </message>
     <message>
         <source>Play Alarm Sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odtwórz dźwięk alarmu</translation>
     </message>
 </context>
 <context>
@@ -16031,27 +16049,27 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Edit Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj wodę</translation>
     </message>
     <message>
         <source>Alkalinity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zasadowość</translation>
     </message>
     <message>
         <source>Alkalinity measured as</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zasadowość mierzona jako</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>New water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nowa woda</translation>
     </message>
     <message>
         <source>New</source>
@@ -16067,11 +16085,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
 </context>
 <context>
@@ -16246,7 +16264,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Główne</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -16254,7 +16272,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Best For</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Najlepsze do</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -16262,99 +16280,99 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nowe drożdże</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zapisz i zamknij</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odrzuć i zamknij</translation>
     </message>
     <message>
         <source>Min Attenuation (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min. odfermentowanie (%)</translation>
     </message>
     <message>
         <source>Minimum apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Minimalne odfermentowanie pozorne jako procent punktów OG</translation>
     </message>
     <message>
         <source>Max Attenuation (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks. odfermentowanie (%)</translation>
     </message>
     <message>
         <source>Maximum apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maksymalne odfermentowanie pozorne jako procent punktów OG</translation>
     </message>
     <message>
         <source>Alcohol Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tolerancja alkoholu</translation>
     </message>
     <message>
         <source>Recommended limit of ABV by the culture producer before attenuation stops</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zalecany przez producenta kultury limit ABV, po którym odfermentowanie ustaje</translation>
     </message>
     <message>
         <source>Phenolic Off-Flavor Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fenolowe posmaki (POF+)</translation>
     </message>
     <message>
         <source>Whether culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Czy kultura może wytwarzać fenole, co jest typową cechą drożdży saison i brett</translation>
     </message>
     <message>
         <source>Glucoamylase Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Glukoamylazo-dodatnie</translation>
     </message>
     <message>
         <source>A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kultura glukoamylazo-dodatnia może wytwarzać glukoamylazę, enzym powstający w wyniku ekspresji genu diastatycznego, który pozwala drożdżom fermentować dekstryny i skrobię, co prowadzi do bardzo niskiego FG. Cecha ta występuje u niektórych drożdży saison/brett oraz w nowej hybrydzie gulo od Omega Yeast Labs.</translation>
     </message>
     <message>
         <source>K1 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer K1</translation>
     </message>
     <message>
         <source>Produces K1 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wytwarza toksynę killer K1</translation>
     </message>
     <message>
         <source>K2 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer K2</translation>
     </message>
     <message>
         <source>Produces K2 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wytwarza toksynę killer K2</translation>
     </message>
     <message>
         <source>K28 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer K28</translation>
     </message>
     <message>
         <source>Produces K28 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wytwarza toksynę killer K28</translation>
     </message>
     <message>
         <source>Klus Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer Klus</translation>
     </message>
     <message>
         <source>Produces Klus killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wytwarza toksynę killer Klus</translation>
     </message>
     <message>
         <source>Killer Neutral</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer neutralne</translation>
     </message>
     <message>
         <source>Neutral strains do not produce toxins, nor are they killed by them</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Szczepy neutralne nie wytwarzają toksyn ani nie są przez nie zabijane</translation>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Całkowita ilość w magazynie</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -16362,11 +16380,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID w bazie danych</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zwykle można to zignorować, ale czasem przydaje się przy debugowaniu.</translation>
     </message>
     <message>
         <source>New</source>
@@ -16386,11 +16404,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodaj zakup</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utwórz nowy rekord zakupu dla tych drożdży</translation>
     </message>
 </context>
 </TS>

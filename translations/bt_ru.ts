@@ -7562,27 +7562,27 @@ Program will now exit.</source>
     </message>
     <message>
         <source>Somewhat Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Слегка прозрачное</translation>
     </message>
     <message>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Среднее</translation>
     </message>
     <message>
         <source>Somewhat Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Слегка мутное</translation>
     </message>
     <message>
         <source>Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мутное</translation>
     </message>
     <message>
         <source>Very Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Очень мутное</translation>
     </message>
     <message>
         <source>Extremely Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Крайне мутное</translation>
     </message>
 </context>
 <context>
@@ -7823,11 +7823,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Partial Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Частичное затирание</translation>
     </message>
     <message>
         <source>All Grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Полнозерновой</translation>
     </message>
     <message>
         <source>Cider</source>
@@ -7835,11 +7835,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Kombucha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Комбуча</translation>
     </message>
     <message>
         <source>Soda</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Газировка</translation>
     </message>
     <message>
         <source>Other</source>
@@ -7851,7 +7851,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Wine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вино</translation>
     </message>
     <message>
         <source>Brew Date</source>
@@ -7879,7 +7879,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">FG</translation>
     </message>
     <message>
         <source>Color</source>
@@ -7891,11 +7891,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Remove %1 from recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить %1 из рецепта</translation>
     </message>
     <message>
         <source>ID in DB</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в БД</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -7903,31 +7903,31 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выдержка</translation>
     </message>
     <message>
         <source>Age Temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Темп. выдержки</translation>
     </message>
     <message>
         <source>Ancestor ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID предка</translation>
     </message>
     <message>
         <source>Apparent Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Видимая степень сбраживания</translation>
     </message>
     <message>
         <source>Assistant Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Помощник пивовара</translation>
     </message>
     <message>
         <source>BatchSize</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Размер партии</translation>
     </message>
     <message>
         <source>Beer Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Кислотность пива</translation>
     </message>
     <message>
         <source>Boil</source>
@@ -7935,11 +7935,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Плотность при кипячении</translation>
     </message>
     <message>
         <source>Boil ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID кипячения</translation>
     </message>
     <message>
         <source>Boil Volume</source>
@@ -7951,27 +7951,27 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Calculations Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расчёты включены</translation>
     </message>
     <message>
         <source>Calories Per 33cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калорий на 33 cl</translation>
     </message>
     <message>
         <source>Calories Per Liter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калорий на литр</translation>
     </message>
     <message>
         <source>Calories Per US 12oz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калорий на 12 US oz</translation>
     </message>
     <message>
         <source>Calories Per US Pint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калорий на US пинту</translation>
     </message>
     <message>
         <source>Carbonation Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Температура карбонизации</translation>
     </message>
     <message>
         <source>Carbonation</source>
@@ -7987,11 +7987,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Equipment ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID оборудования</translation>
     </message>
     <message>
         <source>Fermentable Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавления сбраживаемых</translation>
     </message>
     <message>
         <source>Fermentation</source>
@@ -7999,7 +7999,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Fermentation ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID брожения</translation>
     </message>
     <message>
         <source>Final Volume</source>
@@ -8007,19 +8007,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Forced Carbonation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Принудительная карбонизация</translation>
     </message>
     <message>
         <source>Grains In Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Зерно в заторе</translation>
     </message>
     <message>
         <source>Grains</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Зерно</translation>
     </message>
     <message>
         <source>Hop Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавления хмеля</translation>
     </message>
     <message>
         <source>IBUs</source>
@@ -8031,7 +8031,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Keg Priming Factor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Коэффициент праймера для кега</translation>
     </message>
     <message>
         <source>Locked</source>
@@ -8043,11 +8043,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID затирания</translation>
     </message>
     <message>
         <source>Misc Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавления прочих ингредиентов</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -8055,23 +8055,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пункты</translation>
     </message>
     <message>
         <source>Post Boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём после кипячения</translation>
     </message>
     <message>
         <source>Priming Sugar Equiv</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эквивалент сахара для праймера</translation>
     </message>
     <message>
         <source>Priming Sugar Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Название сахара для праймера</translation>
     </message>
     <message>
         <source>Style ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID стиля</translation>
     </message>
     <message>
         <source>Taste Notes</source>
@@ -8087,11 +8087,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Wort From Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сусло из затора</translation>
     </message>
     <message>
         <source>Yeast Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавления дрожжей</translation>
     </message>
     <message>
         <source>No</source>
@@ -8107,95 +8107,95 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Put %1 %2 into mash%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Положите %1 %2 в затор%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Положите %1 %2 в первое сусло%3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Настаивайте %1 %2 в сусле%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Положите %1 %2 в кипящее сусло%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Положите %1 %2 на первичное брожение%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Положите %1 %2 на вторичное брожение%3.</translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Используйте %1 %2 при розливе%3.</translation>
     </message>
     <message>
         <source> at end of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> в конце %1</translation>
     </message>
     <message>
         <source> for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> на %1</translation>
     </message>
     <message>
         <source>%1 addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление: %1</translation>
     </message>
     <message>
         <source>Brew Logs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Журналы варки</translation>
     </message>
     <message>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дата создания</translation>
     </message>
     <message>
         <source>Base Water Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Исходный профиль воды</translation>
     </message>
     <message>
         <source>Base Water Profile ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID исходного профиля воды</translation>
     </message>
     <message>
         <source>Target Water Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Целевой профиль воды</translation>
     </message>
     <message>
         <source>Target Water Profile ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID целевого профиля воды</translation>
     </message>
     <message>
         <source>IBU Formula</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Формула IBU</translation>
     </message>
     <message>
         <source>Percentage reverse-osmosis water in mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доля воды обратного осмоса в заторе, %</translation>
     </message>
     <message>
         <source>Percentage reverse-osmosis water in sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доля воды обратного осмоса в промывке, %</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermentor%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Положите %1 %2 в ферментер%3.</translation>
     </message>
     <message>
         <source>Add %1 to the mash tun.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавьте %1 в заторный чан.</translation>
     </message>
     <message>
         <source>Bring %1 for upcoming infusions.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Подготовьте %1 для последующих настоев.</translation>
     </message>
     <message>
         <source>Do first wort hopping with %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выполните охмеление первого сусла: %1.</translation>
     </message>
     <message>
         <source>%1 water to %2</source>
@@ -8207,26 +8207,26 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Target Mash pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Целевой pH затора</translation>
     </message>
     <message>
         <source>Keep Water in Sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Синхронизировать воду</translation>
     </message>
     <message>
         <source>Use Mash Profile in FG Calculation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Учитывать профиль затирания при расчёте FG</translation>
     </message>
     <message>
         <source>Expected Wort Clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ожидаемая прозрачность сусла</translation>
     </message>
 </context>
 <context>
     <name>RecipeAddition</name>
     <message>
         <source>Recipe Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление в рецепт</translation>
     </message>
     <message>
         <source>Add to Boil</source>
@@ -8242,15 +8242,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Add At Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить при плотности</translation>
     </message>
     <message>
         <source>Add At Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить при кислотности</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Длительность</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8266,7 +8266,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Package</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Упаковка</translation>
     </message>
     <message>
         <source>Time</source>
@@ -8285,11 +8285,11 @@ The final volume in the primary is %1.</source>
     <name>RecipeAdditionFermentable</name>
     <message>
         <source>Fermentable Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление сбраживаемого</translation>
     </message>
     <message>
         <source>Addition of %1 fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление сбраживаемого %1</translation>
     </message>
     <message>
         <source>Fermentable</source>
@@ -8339,7 +8339,7 @@ The final volume in the primary is %1.</source>
     <name>RecipeAdditionHop</name>
     <message>
         <source>Hop Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление хмеля</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8355,7 +8355,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">После кипячения</translation>
     </message>
     <message>
         <source>Dry Hop</source>
@@ -8363,7 +8363,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Addition of %1 hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление хмеля %1</translation>
     </message>
     <message>
         <source>Hop</source>
@@ -8419,28 +8419,31 @@ The final volume in the primary is %1.</source>
     <message>
         <source>%L1 IBU from isomerization during the boil
 %L2 IBU from isomerization after flameout</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%L1 IBU от изомеризации при кипячении
+%L2 IBU от изомеризации после выключения нагрева</translation>
     </message>
     <message>
         <source>
 %L1 IBU from other bittering compounds (mostly oxidized alpha acids)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+%L1 IBU от других горьких соединений (в основном окисленных альфа-кислот)</translation>
     </message>
     <message>
         <source>
 (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+(%1)</translation>
     </message>
     <message>
         <source>%1 does not model bitterness from hops added after flameout, so this addition gives no IBUs.  Select the mIBU or SMPH formula in Edit &gt; Options to include it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 не учитывает горечь от хмеля, добавленного после выключения нагрева, поэтому это добавление не даёт IBU.  Выберите формулу mIBU или SMPH в меню Правка &gt; Параметры, чтобы учесть его.</translation>
     </message>
 </context>
 <context>
     <name>RecipeAdditionMisc</name>
     <message>
         <source>Misc Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление прочего ингредиента</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8456,7 +8459,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Addition of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление %1</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -8476,7 +8479,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Use </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Используйте </translation>
     </message>
 </context>
 <context>
@@ -8521,7 +8524,7 @@ The final volume in the primary is %1.</source>
     <name>RecipeAdditionYeast</name>
     <message>
         <source>Yeast Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление дрожжей</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8541,11 +8544,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Addition of %1 yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление дрожжей %1</translation>
     </message>
     <message>
         <source>Add To Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить на вторичное</translation>
     </message>
     <message>
         <source>Attenuation</source>
@@ -8557,11 +8560,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Times Cultured</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Число пересевов</translation>
     </message>
     <message>
         <source>Cell Count</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Количество клеток</translation>
     </message>
     <message>
         <source>No</source>
@@ -8641,51 +8644,51 @@ The final volume in the primary is %1.</source>
     <name>RecipeExtrasWidget</name>
     <message>
         <source>Change Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить пивовара</translation>
     </message>
     <message>
         <source>Change Assistant Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить помощника пивовара</translation>
     </message>
     <message>
         <source>Change Taste Rating</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить оценку вкуса</translation>
     </message>
     <message>
         <source>Change Age</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить выдержку</translation>
     </message>
     <message>
         <source>Change Age Temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить темп. выдержки</translation>
     </message>
     <message>
         <source>Change Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить дату</translation>
     </message>
     <message>
         <source>Change Carbonation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить карбонизацию</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить замечания по вкусу</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить примечания</translation>
     </message>
     <message>
         <source>Change pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить pH</translation>
     </message>
     <message>
         <source>Change Apparent Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить видимую степень сбраживания</translation>
     </message>
     <message>
         <source>Calories/33cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калории/33cl</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
@@ -8693,7 +8696,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Change Expected Wort Clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить ожидаемую прозрачность сусла</translation>
     </message>
 </context>
 <context>
@@ -8968,11 +8971,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Цель</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Всего</translation>
     </message>
     <message>
         <source>Recipe</source>
@@ -8980,7 +8983,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Add During</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить во время</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
@@ -9025,27 +9028,27 @@ The final volume in the primary is %1.</source>
     <name>RecipeWaterWidget</name>
     <message>
         <source>Minimum expected concentration is %1 ppm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Минимальная ожидаемая концентрация: %1 ppm</translation>
     </message>
     <message>
         <source>In range for target profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">В пределах целевого профиля.</translation>
     </message>
     <message>
         <source>Maximum expected concentration is %1 ppm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Максимальная ожидаемая концентрация: %1 ppm</translation>
     </message>
     <message>
         <source>PPM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PPM</translation>
     </message>
     <message>
         <source>Too low for target profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Слишком мало для целевого профиля.</translation>
     </message>
     <message>
         <source>Too high for target profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Слишком много для целевого профиля.</translation>
     </message>
     <message>
         <source>Auto-Adjust undone.</source>
@@ -9054,58 +9057,58 @@ The final volume in the primary is %1.</source>
     <message numerus="yes">
         <source>See the &lt;i&gt;Auto-Adjust Notes&lt;/i&gt; tab below for details (%n item(s)).</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Подробности на вкладке &lt;i&gt;Примечания автоподбора&lt;/i&gt; ниже (%n пункт).</numerusform>
+            <numerusform>Подробности на вкладке &lt;i&gt;Примечания автоподбора&lt;/i&gt; ниже (%n пункта).</numerusform>
+            <numerusform>Подробности на вкладке &lt;i&gt;Примечания автоподбора&lt;/i&gt; ниже (%n пунктов).</numerusform>
         </translation>
     </message>
     <message>
         <source>The value shown is the pH set on the recipe&apos;s mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Показано значение pH, заданное для затирания рецепта.</translation>
     </message>
     <message>
         <source>Turn off keeping water agents in sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отключить синхронизацию добавок для воды</translation>
     </message>
     <message>
         <source>Turn on keeping water agents in sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Включить синхронизацию добавок для воды</translation>
     </message>
     <message>
         <source>Auto-adjust water agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Автоподбор добавок для воды</translation>
     </message>
     <message>
         <source>Could not adjust the water agents yet: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пока не удалось подобрать добавки для воды: %1</translation>
     </message>
     <message>
         <source>Could not adjust the water agents, so nothing has been changed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не удалось подобрать добавки для воды, поэтому ничего не изменено: %1</translation>
     </message>
     <message>
         <source>target profile &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">целевому профилю «%1»</translation>
     </message>
     <message>
         <source>target mash pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">целевому pH затора</translation>
     </message>
     <message>
         <source>The water agents already match %1 as closely as they can.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавки для воды уже максимально соответствуют %1.</translation>
     </message>
     <message>
         <source>Water agents adjusted to match %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавки для воды подобраны по %1.</translation>
     </message>
     <message>
         <source>Water agents adjusted for %1, but some things need checking.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавки для воды подобраны по %1, но кое-что требует проверки.</translation>
     </message>
     <message>
         <source>Predicted mash pH is %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Прогнозируемый pH затора: %1.</translation>
     </message>
 </context>
 <context>
@@ -9164,30 +9167,30 @@ The final volume in the primary is %1.</source>
     <name>ScaleRecipeEquipmentPage</name>
     <message>
         <source>Select Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выбор оборудования</translation>
     </message>
     <message>
         <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Рецепт будет масштабирован под размер партии и эффективность выбранного оборудования</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новое оборудование</translation>
     </message>
     <message>
         <source>New Efficiency (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новая эффективность (%)</translation>
     </message>
 </context>
 <context>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Масштабирование рецепта</translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.  Select another equipment with the new batch size and/or efficiency and the wizard will scale the recipe ingredients automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Этот мастер поможет масштабировать рецепт под другой размер партии или эффективность.  Выберите другое оборудование с новым размером партии и/или эффективностью, и мастер автоматически пересчитает ингредиенты рецепта.</translation>
     </message>
 </context>
 <context>
@@ -9235,45 +9238,45 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Конечная кислотность</translation>
     </message>
     <message>
         <source>End Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Конечная температура</translation>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная кислотность</translation>
     </message>
 </context>
 <context>
     <name>StepExtended</name>
     <message>
         <source>Extended Step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расширенный этап</translation>
     </message>
     <message>
         <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная плотность</translation>
     </message>
     <message>
         <source>End Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Конечная плотность</translation>
     </message>
 </context>
 <context>
     <name>StockPurchase</name>
     <message>
         <source>Date Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дата заказа</translation>
     </message>
     <message>
         <source>Date Received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дата получения</translation>
     </message>
     <message>
         <source>Best Before Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Срок годности</translation>
     </message>
     <message>
         <source>Supplier</source>
@@ -9281,19 +9284,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Quantity Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Заказанное количество</translation>
     </message>
     <message>
         <source>Purchase Price</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Цена покупки</translation>
     </message>
     <message>
         <source>Purchase Tax</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Налог на покупку</translation>
     </message>
     <message>
         <source>Shipping Cost</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Стоимость доставки</translation>
     </message>
     <message>
         <source>Ingredient</source>
@@ -9305,7 +9308,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Примечание</translation>
     </message>
 </context>
 <context>
@@ -9319,14 +9322,14 @@ The final volume in the primary is %1.</source>
     <name>StockPurchaseFermentableEditor</name>
     <message>
         <source>Fermentable Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор закупки сбраживаемых</translation>
     </message>
 </context>
 <context>
     <name>StockPurchaseHop</name>
     <message>
         <source>Alpha Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Альфа-кислоты</translation>
     </message>
     <message>
         <source>Form</source>
@@ -9341,21 +9344,21 @@ The final volume in the primary is %1.</source>
     <name>StockPurchaseHopEditor</name>
     <message>
         <source>Hop Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор закупки хмеля</translation>
     </message>
 </context>
 <context>
     <name>StockPurchaseMiscEditor</name>
     <message>
         <source>Misc Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор закупки прочих ингредиентов</translation>
     </message>
 </context>
 <context>
     <name>StockPurchaseYeastEditor</name>
     <message>
         <source>Yeast Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор закупки дрожжей</translation>
     </message>
 </context>
 <context>
@@ -9370,31 +9373,31 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Quantity Used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Использованное количество</translation>
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Причина</translation>
     </message>
     <message>
         <source>Used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Использовано</translation>
     </message>
     <message>
         <source>Lost</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Утеряно</translation>
     </message>
     <message>
         <source>Disposed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Утилизировано</translation>
     </message>
     <message>
         <source>Stock Use</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расход запаса</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Комментарий</translation>
     </message>
     <message>
         <source>Brew Log</source>
@@ -9402,42 +9405,42 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Brew Log ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID журнала варки</translation>
     </message>
 </context>
 <context>
     <name>StockUseFermentableEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор расхода запаса: %1</translation>
     </message>
 </context>
 <context>
     <name>StockUseHopEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор расхода запаса: %1</translation>
     </message>
 </context>
 <context>
     <name>StockUseMiscEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор расхода запаса: %1</translation>
     </message>
 </context>
 <context>
     <name>StockUseYeastEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор расхода запаса: %1</translation>
     </message>
 </context>
 <context>
     <name>Style</name>
     <message>
         <source>Beer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пиво</translation>
     </message>
     <message>
         <source>Cider</source>
@@ -9449,15 +9452,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Kombucha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Комбуча</translation>
     </message>
     <message>
         <source>Soda</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Газировка</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вино</translation>
     </message>
     <message>
         <source>Other</source>
@@ -9497,15 +9500,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Max ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. ABV</translation>
     </message>
     <message>
         <source>Min ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. ABV</translation>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Внешний вид</translation>
     </message>
     <message>
         <source>Aroma</source>
@@ -9513,19 +9516,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Max Carb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. карбонизация</translation>
     </message>
     <message>
         <source>Min Carb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. карбонизация</translation>
     </message>
     <message>
         <source>Max Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. цвет</translation>
     </message>
     <message>
         <source>Min Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. цвет</translation>
     </message>
     <message>
         <source>Examples</source>
@@ -9533,11 +9536,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Max FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. FG</translation>
     </message>
     <message>
         <source>Min FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. FG</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -9545,11 +9548,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Max IBU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. IBU</translation>
     </message>
     <message>
         <source>Min IBU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. IBU</translation>
     </message>
     <message>
         <source>Ingredients</source>
@@ -9557,7 +9560,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mouthfeel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ощущение во рту</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -9565,19 +9568,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Max OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. OG</translation>
     </message>
     <message>
         <source>Min OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. OG</translation>
     </message>
     <message>
         <source>Overall Impression</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общее впечатление</translation>
     </message>
     <message>
         <source>Type String</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Строка типа</translation>
     </message>
 </context>
 <context>
@@ -9607,9 +9610,9 @@ The final volume in the primary is %1.</source>
     <message numerus="yes">
         <source>Used in %n recipe(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Используется в %n рецепте</numerusform>
+            <numerusform>Используется в %n рецептах</numerusform>
+            <numerusform>Используется в %n рецептах</numerusform>
         </translation>
     </message>
 </context>
@@ -9617,31 +9620,31 @@ The final volume in the primary is %1.</source>
     <name>TimerDialog</name>
     <message>
         <source>Addition Timer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Таймер добавления</translation>
     </message>
     <message>
         <source>Set Addition Time(min):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Время добавления (мин):</translation>
     </message>
     <message>
         <source>Time Remaining:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Осталось времени:</translation>
     </message>
     <message>
         <source>Notes: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Примечания: </translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Примечания...</translation>
     </message>
     <message>
         <source>Set Alarm sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выбрать звук сигнала</translation>
     </message>
     <message>
         <source>Stop Alarm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Остановить сигнал</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -9652,18 +9655,18 @@ The final volume in the primary is %1.</source>
     <name>TimerListDialog</name>
     <message>
         <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Таймеры добавлений</translation>
     </message>
 </context>
 <context>
     <name>TimerMainDialog</name>
     <message>
         <source>Main Boil Timer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Главный таймер кипячения</translation>
     </message>
     <message>
         <source>Add Timer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить таймер</translation>
     </message>
     <message>
         <source>Start</source>
@@ -9675,91 +9678,91 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сброс</translation>
     </message>
     <message>
         <source>Hide Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Скрыть таймеры</translation>
     </message>
     <message>
         <source>Show Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Показать таймеры</translation>
     </message>
     <message>
         <source>Cancel Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить таймеры</translation>
     </message>
     <message>
         <source>Load Current Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Загрузить текущий рецепт</translation>
     </message>
     <message>
         <source>Set Boil Timer (mins):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Таймер кипячения (мин):</translation>
     </message>
     <message>
         <source>Set Boil Time Here</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Задайте время кипячения здесь</translation>
     </message>
     <message>
         <source>Limit Alarm Ring Time </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ограничить длительность сигнала </translation>
     </message>
     <message>
         <source>Alarm Ring Time (secs):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Длительность сигнала (с):</translation>
     </message>
     <message>
         <source>No Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нет таймеров</translation>
     </message>
     <message>
         <source>There are currently no timers to show.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сейчас нет таймеров для показа.</translation>
     </message>
     <message>
         <source>KNOCKOUT</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ВЫКЛЮЧЕНИЕ НАГРЕВА</translation>
     </message>
     <message>
         <source>Active Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Активные таймеры</translation>
     </message>
     <message>
         <source>You currently have active timers, would you like to replace them or add to them?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">У вас есть активные таймеры. Заменить их или добавить к ним?</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Заменить</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить</translation>
     </message>
     <message>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 из %2</translation>
     </message>
     <message>
         <source>%1 hop addition is already timed and has been ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавление хмеля %1 уже отслеживается таймером и пропущено.</translation>
     </message>
     <message>
         <source>%1 hop additions are already timed and have been ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавления хмеля (%1) уже отслеживаются таймерами и пропущены.</translation>
     </message>
     <message>
         <source>Duplicate Timers Ignored</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Повторяющиеся таймеры пропущены</translation>
     </message>
     <message>
         <source>No Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нет таймеров добавлений</translation>
     </message>
     <message>
         <source>There are no boil addition, no timers generated.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нет добавлений при кипячении, таймеры не созданы.</translation>
     </message>
 </context>
 <context>
@@ -9806,19 +9809,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source> and </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> и </translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ошибка</translation>
     </message>
     <message>
         <source>Addition time cannot be longer than remaining boil time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Время добавления не может превышать оставшееся время кипячения</translation>
     </message>
     <message>
         <source>Audio Files (*.wav)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Аудиофайлы (*.wav)</translation>
     </message>
 </context>
 <context>
@@ -9975,7 +9978,7 @@ The final volume in the primary is %1.</source>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить %1 в рецепт</translation>
     </message>
 </context>
 <context>
@@ -9986,7 +9989,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Decimal Places</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Знаков после запятой</translation>
     </message>
 </context>
 <context>
@@ -10035,23 +10038,23 @@ The final volume in the primary is %1.</source>
     <name>Water</name>
     <message>
         <source>Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вода</translation>
     </message>
     <message>
         <source>Ca</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ca</translation>
     </message>
     <message>
         <source>Cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cl</translation>
     </message>
     <message>
         <source>Na</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Na</translation>
     </message>
     <message>
         <source>Mg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mg</translation>
     </message>
     <message>
         <source>pH</source>
@@ -10059,59 +10062,59 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Waters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вода</translation>
     </message>
     <message>
         <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SO&lt;sub&gt;4&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HCO&lt;sub&gt;3&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>Alkalinity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Щёлочность</translation>
     </message>
     <message>
         <source>Alkalinity As HCO3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Щёлочность в пересчёте на HCO3</translation>
     </message>
     <message>
         <source>Bicarbonate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Гидрокарбонат</translation>
     </message>
     <message>
         <source>Calcium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Кальций</translation>
     </message>
     <message>
         <source>Carbonate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Карбонат</translation>
     </message>
     <message>
         <source>Chloride</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Хлорид</translation>
     </message>
     <message>
         <source>Fluoride</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фторид</translation>
     </message>
     <message>
         <source>Iron</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Железо</translation>
     </message>
     <message>
         <source>Magnesium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Магний</translation>
     </message>
     <message>
         <source>Nitrate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нитрат</translation>
     </message>
     <message>
         <source>Nitrite</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нитрит</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -10119,15 +10122,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Potassium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калий</translation>
     </message>
     <message>
         <source>Sodium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Натрий</translation>
     </message>
     <message>
         <source>Sulfate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сульфат</translation>
     </message>
     <message>
         <source>Type</source>
@@ -10143,63 +10146,63 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Bicarbonate (HCO₃⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Гидрокарбонат (HCO₃⁻)</translation>
     </message>
     <message>
         <source>Calcium (Ca²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Кальций (Ca²⁺)</translation>
     </message>
     <message>
         <source>Carbonate (CO₃²⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Карбонат (CO₃²⁻)</translation>
     </message>
     <message>
         <source>Chloride (Cl⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Хлорид (Cl⁻)</translation>
     </message>
     <message>
         <source>Copper (Cu²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Медь (Cu²⁺)</translation>
     </message>
     <message>
         <source>Iron (Fe²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Железо (Fe²⁺)</translation>
     </message>
     <message>
         <source>Magnesium (Mg²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Магний (Mg²⁺)</translation>
     </message>
     <message>
         <source>Manganese (Mn²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Марганец (Mn²⁺)</translation>
     </message>
     <message>
         <source>Nitrate (NO₃⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нитрат (NO₃⁻)</translation>
     </message>
     <message>
         <source>Nitrite (NO₂⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нитрит (NO₂⁻)</translation>
     </message>
     <message>
         <source>Phosphate (PO₄³⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фосфат (PO₄³⁻)</translation>
     </message>
     <message>
         <source>Potassium (K⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калий (K⁺)</translation>
     </message>
     <message>
         <source>Sodium (Na⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Натрий (Na⁺)</translation>
     </message>
     <message>
         <source>Sulfate (SO₄²⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сульфат (SO₄²⁻)</translation>
     </message>
     <message>
         <source>Zinc (Zn²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Цинк (Zn²⁺)</translation>
     </message>
 </context>
 <context>
@@ -10236,126 +10239,126 @@ The final volume in the primary is %1.</source>
     <name>WaterAutoAdjuster</name>
     <message>
         <source>The recipe&apos;s mash has no water in it, so there is nothing to add salts to.  Set up the mash first (eg with Auto-Adjust in the mash editor).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">В затирании рецепта нет воды, поэтому некуда добавлять соли.  Сначала настройте затирание (например, с помощью автоподбора в редакторе затирания).</translation>
     </message>
     <message>
         <source>There is nothing to adjust: none of the water agents can be used to match the target profile (chalk and pickling lime are left alone), and no acid is being adjusted for mash pH.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Подбирать нечего: ни одна из добавок для воды не подходит для достижения целевого профиля (мел и гашёная известь не изменяются), и кислота для pH затора не подбирается.</translation>
     </message>
     <message>
         <source>%1 will be %2 ppm, compared with a target of %3 ppm.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 составит %2 ppm при целевом значении %3 ppm.</translation>
     </message>
     <message>
         <source>The water already has more than this before any salts are added, so you might want to use more RO or distilled water.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">В воде этого уже больше, чем нужно, ещё до добавления солей, поэтому, возможно, стоит использовать больше воды обратного осмоса или дистиллированной воды.</translation>
     </message>
     <message>
         <source>The salts that add other ions also add this one.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Соли, добавляющие другие ионы, добавляют и этот.</translation>
     </message>
     <message>
         <source>None of the salts being used adds this ion.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ни одна из используемых солей не добавляет этот ион.</translation>
     </message>
     <message>
         <source>Adding more would take other ions further from their targets.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Если добавить больше, другие ионы ещё сильнее отклонятся от целевых значений.</translation>
     </message>
     <message>
         <source>To add both calcium and bicarbonate, you could add chalk (dissolved with CO₂) or pickling lime to the recipe yourself.  Auto-Adjust takes these into account, but doesn&apos;t work out how much to add.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Чтобы добавить и кальций, и гидрокарбонат, можно самостоятельно добавить в рецепт мел (растворённый с помощью CO₂) или гашёную известь.  Автоподбор учитывает их, но не рассчитывает их количество.</translation>
     </message>
     <message>
         <source>The mash pH can&apos;t be worked out (there needs to be some grain and some water in the mash), so no acid has been added.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не удаётся рассчитать pH затора (в заторе должно быть немного зерна и воды), поэтому кислота не добавлена.</translation>
     </message>
     <message>
         <source>The strength of the %1 is not set, so no acid has been added.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Концентрация %1 не задана, поэтому кислота не добавлена.</translation>
     </message>
     <message>
         <source>The mash pH will be %1 without any added acid, which is already below the target of %2.  Acid can only lower the pH.  To raise it, you could use less acidulated malt or add some baking soda or pickling lime.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Без добавления кислоты pH затора составит %1, что уже ниже целевого значения %2.  Кислота может только понизить pH.  Чтобы повысить его, можно использовать меньше кислого солода или добавить пищевую соду или гашёную известь.</translation>
     </message>
     <message>
         <source>The recipe &quot;%1&quot; is locked, so its water agents cannot be changed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Рецепт «%1» заблокирован, поэтому его добавки для воды нельзя изменить.</translation>
     </message>
     <message>
         <source>Please choose a target water profile and/or a target mash pH first.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сначала выберите целевой профиль воды и/или целевой pH затора.</translation>
     </message>
     <message>
         <source>There is no water agent of type &quot;%1&quot; in the database, so it wasn&apos;t considered.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">В базе данных нет добавки для воды типа «%1», поэтому она не учитывалась.</translation>
     </message>
     <message>
         <source>There is no target water profile, so only the acid has been adjusted.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Целевой профиль воды не задан, поэтому подобрана только кислота.</translation>
     </message>
     <message>
         <source>The strength of &quot;%1&quot; is not set, so it has been assumed to be %2%.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Концентрация «%1» не задана, поэтому принято значение %2%.</translation>
     </message>
     <message>
         <source>There is no acid (lactic, phosphoric, sulfuric or hydrochloric) in the database, so the mash pH could not be adjusted.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">В базе данных нет кислоты (молочной, фосфорной, серной или соляной), поэтому pH затора нельзя подобрать.</translation>
     </message>
     <message>
         <source>Only the %1 has been adjusted.  The other acid in the recipe has been taken into account as it is.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Подобрана только %1.  Другая кислота в рецепте учтена как есть.</translation>
     </message>
     <message>
         <source>Change amount of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить количество %1</translation>
     </message>
     <message>
         <source>Where the same salt was added more than once, the whole amount is now in the first addition.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Если одна и та же соль добавлялась несколько раз, всё её количество теперь в первом добавлении.</translation>
     </message>
     <message>
         <source>Where the same acid was added more than once, the whole amount is now in the first addition.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Если одна и та же кислота добавлялась несколько раз, всё её количество теперь в первом добавлении.</translation>
     </message>
     <message>
         <source>Add water agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить добавки для воды</translation>
     </message>
 </context>
 <context>
     <name>WaterEditor</name>
     <message>
         <source>PPM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PPM</translation>
     </message>
     <message>
         <source>Current</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Текущий</translation>
     </message>
     <message>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменённый</translation>
     </message>
     <message>
         <source>CaCO3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">CaCO3</translation>
     </message>
     <message>
         <source>HCO3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HCO3</translation>
     </message>
     <message>
         <source>Base Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Исходный профиль</translation>
     </message>
     <message>
         <source>Target Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Целевой профиль</translation>
     </message>
     <message>
         <source>Actual Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фактический профиль</translation>
     </message>
 </context>
 <context>
@@ -10405,42 +10408,42 @@ The final volume in the primary is %1.</source>
     <name>XmlCoding</name>
     <message>
         <source>Contents of file were not readable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Содержимое файла не удалось прочитать</translation>
     </message>
     <message>
         <source>Could not understand file format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не удалось распознать формат файла</translation>
     </message>
 </context>
 <context>
     <name>Yeast</name>
     <message>
         <source>Ale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эль</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Лагер</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вино</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Шампанские</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Жидкие</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сухие</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Косяк</translation>
     </message>
     <message>
         <source>Culture</source>
@@ -10448,19 +10451,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Низкая</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Средняя</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Высокая</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Очень высокая</translation>
     </message>
     <message>
         <source>Other</source>
@@ -10468,51 +10471,51 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Bacteria</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Бактерии</translation>
     </message>
     <message>
         <source>Brett</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brett</translation>
     </message>
     <message>
         <source>Kveik</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Квейк</translation>
     </message>
     <message>
         <source>Lacto</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lacto</translation>
     </message>
     <message>
         <source>Malolactic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Малолактические</translation>
     </message>
     <message>
         <source>Mixed-culture</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Смешанная культура</translation>
     </message>
     <message>
         <source>Pedio</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pedio</translation>
     </message>
     <message>
         <source>Spontaneous</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Спонтанное</translation>
     </message>
     <message>
         <source>Dregs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Осадок</translation>
     </message>
     <message>
         <source>Very Low</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Очень низкая</translation>
     </message>
     <message>
         <source>Medium Low</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ниже средней</translation>
     </message>
     <message>
         <source>Medium High</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выше средней</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -10556,59 +10559,59 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Alcohol Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Устойчивость к спирту</translation>
     </message>
     <message>
         <source>Typical Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Типичная степень сбраживания</translation>
     </message>
     <message>
         <source>Max Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. степень сбраживания</translation>
     </message>
     <message>
         <source>Min Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. степень сбраживания</translation>
     </message>
     <message>
         <source>Best For</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Лучше всего для</translation>
     </message>
     <message>
         <source>Glucoamylase Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Глюкоамилаза-положительные</translation>
     </message>
     <message>
         <source>Killer Neutral</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Киллер-нейтральные</translation>
     </message>
     <message>
         <source>Killer Producing K1 Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Киллер, производит токсин K1</translation>
     </message>
     <message>
         <source>Killer Producing K28 Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Киллер, производит токсин K28</translation>
     </message>
     <message>
         <source>Killer Producing K2 Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Киллер, производит токсин K2</translation>
     </message>
     <message>
         <source>Killer Producing Klus Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Киллер, производит токсин Klus</translation>
     </message>
     <message>
         <source>Max Reuse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. число пересевов</translation>
     </message>
     <message>
         <source>Max Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. температура</translation>
     </message>
     <message>
         <source>Min Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. температура</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -10616,7 +10619,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Phenolic Off Flavor Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фенольный привкус (POF+)</translation>
     </message>
     <message>
         <source>No</source>
@@ -10628,7 +10631,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yeast Purchases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Закупки дрожжей</translation>
     </message>
 </context>
 <context>
@@ -10767,26 +10770,26 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>is an descendant of</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">является потомком</translation>
     </message>
     <message>
         <source>Save changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить изменения</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
 </context>
 <context>
     <name>boilEditor</name>
     <message>
         <source>Boil Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор кипячения</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обязательно</translation>
     </message>
     <message>
         <source>Name</source>
@@ -10810,15 +10813,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>New boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новое кипячение</translation>
     </message>
     <message>
         <source>New</source>
@@ -10834,18 +10837,18 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
 </context>
 <context>
     <name>boilStepEditor</name>
     <message>
         <source>Boil Step Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор этапа кипячения</translation>
     </message>
     <message>
         <source>Name</source>
@@ -10905,15 +10908,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная кислотность</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Конечная кислотность</translation>
     </message>
     <message>
         <source>Optional description of this boil step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Необязательное описание этого этапа кипячения</translation>
     </message>
     <message>
         <source>Description</source>
@@ -10925,7 +10928,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Save</source>
@@ -10933,7 +10936,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -10945,31 +10948,31 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная плотность</translation>
     </message>
     <message>
         <source>End Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Конечная плотность</translation>
     </message>
     <message>
         <source>Start temp.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нач. темп.</translation>
     </message>
     <message>
         <source>Temperature at the start of this step.  If not set, the wort is assumed to be boiling.  Steps are classified as pre-boil, boil proper or post-boil by their temperatures.  For IBU formulae that model isomerization after flameout (eg mIBU and SMPH), a post-boil step that starts at boiling and ends below it is modelled as the wort cooling naturally (down to, but not below, the end temperature); any other post-boil step is modelled as the temperature changing linearly from the start temperature to the end temperature (so eg a hop stand held at 80°C (176°F) has start and end temperatures of 80°C).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Температура в начале этого этапа.  Если не задана, считается, что сусло кипит.  Этапы относятся к этапам до кипячения, собственно кипячения или после кипячения в зависимости от их температуры.  Для формул IBU, учитывающих изомеризацию после выключения нагрева (например, mIBU и SMPH), этап после кипячения, который начинается при кипении и заканчивается ниже него, моделируется как естественное остывание сусла (до конечной температуры, но не ниже); любой другой этап после кипячения моделируется как линейное изменение температуры от начальной до конечной (так, например, у выдержки хмеля при 80°C (176°F) начальная и конечная температуры равны 80°C).</translation>
     </message>
     <message>
         <source>How long this step lasts, not including any ramp time.  For a post-boil step (eg whirlpool or hop stand), hops added to this step with no time set steep for this long (plus the time of any subsequent steps).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сколько длится этот этап, не считая времени перехода.  Для этапа после кипячения (например, вирпула или выдержки хмеля) хмель, добавленный на этом этапе без указания времени, настаивается в течение этого времени (плюс время всех последующих этапов).</translation>
     </message>
     <message>
         <source>Temperature at the end of this step.  If not set, the wort is assumed to be boiling.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Температура в конце этого этапа.  Если не задана, считается, что сусло кипит.</translation>
     </message>
     <message>
         <source>Ramp time: how long it takes, before this step begins, to get from the end temperature of the previous step to the start temperature of this one.  Eg, for a hop stand at 80°C (176°F), the time taken to chill the wort from boiling to that temperature.  For post-boil steps, the temperature is modelled as changing linearly during the ramp, and hops added to the step with no time set are added at the end of the ramp.  If not set, any temperature change between steps is treated as instantaneous.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Время перехода: сколько времени до начала этого этапа уходит на изменение температуры от конечной температуры предыдущего этапа до начальной температуры этого.  Например, для выдержки хмеля при 80°C (176°F) — время охлаждения сусла от кипения до этой температуры.  Для этапов после кипячения температура во время перехода моделируется как изменяющаяся линейно, а хмель, добавленный на этапе без указания времени, добавляется в конце перехода.  Если не задано, любое изменение температуры между этапами считается мгновенным.</translation>
     </message>
 </context>
 <context>
@@ -11094,7 +11097,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>SG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SG</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
@@ -11114,7 +11117,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Temperature of strike water before dough in</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Температура воды для засыпи перед засыпкой солода</translation>
     </message>
     <message>
         <source>Final Temp</source>
@@ -11138,7 +11141,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём после кипячения</translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
@@ -11174,11 +11177,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Percent efficiency into boil kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эффективность до кипячения в процентах</translation>
     </message>
     <message>
         <source>Efficiency into boil kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эффективность до кипячения</translation>
     </message>
     <message>
         <source>Projected OG</source>
@@ -11190,7 +11193,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Expected ABV based on recipe OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ожидаемый ABV по OG рецепта</translation>
     </message>
     <message>
         <source>Projected ABV</source>
@@ -11198,7 +11201,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV based on user-reported FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV по введённой FG</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -11206,15 +11209,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yeast attenuation based on yeast specified in recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Степень сбраживания для дрожжей, указанных в рецепте</translation>
     </message>
     <message>
         <source>Projected yeast attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расчётная степень сбраживания</translation>
     </message>
     <message>
         <source>Measured yeast attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Измеренная степень сбраживания</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -11230,35 +11233,35 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Batch Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Номер партии</translation>
     </message>
     <message>
         <source>Expected OG, based on recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ожидаемая OG по рецепту</translation>
     </message>
     <message>
         <source>Recipe OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG рецепта</translation>
     </message>
     <message>
         <source>Projected OG, based on measured pre-boil gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расчётная OG по измеренной плотности до кипячения</translation>
     </message>
     <message>
         <source>Yeast attenuation based on user-reported OG and FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Степень сбраживания по введённым OG и FG</translation>
     </message>
     <message>
         <source>How clear the wort was when it went into the fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Насколько прозрачным было сусло при переливе в ферментер</translation>
     </message>
     <message>
         <source>Wort clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Прозрачность сусла</translation>
     </message>
     <message>
         <source>How clear the wort was, judged by eye, when it went into the fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Насколько прозрачным на глаз было сусло при переливе в ферментер</translation>
     </message>
 </context>
 <context>
@@ -11443,7 +11446,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обязательно</translation>
     </message>
     <message>
         <source>Time</source>
@@ -11475,7 +11478,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Hop % Utilization</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% использования хмеля</translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
@@ -11495,23 +11498,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Name to identify this equipment profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Название для этого профиля оборудования</translation>
     </message>
     <message>
         <source>Hot Liquor Tank</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ёмкость горячей воды</translation>
     </message>
     <message>
         <source>Hot Liquor Tank Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Тип ёмкости горячей воды</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -11519,7 +11522,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Evaporation Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Потери на испарение</translation>
     </message>
     <message>
         <source>Weight</source>
@@ -11547,7 +11550,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Lauter Tun</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фильтрационный чан</translation>
     </message>
     <message>
         <source>Lauter Tun Type</source>
@@ -11563,27 +11566,27 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Варочный котёл</translation>
     </message>
     <message>
         <source>Boil Kettle Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Тип варочного котла</translation>
     </message>
     <message>
         <source>Evaporation rate per hour</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Скорость испарения в час</translation>
     </message>
     <message>
         <source>Brew Kettle Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Примечания к варочному котлу</translation>
     </message>
     <message>
         <source>Deadspace Losses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Потери в мёртвом объёме</translation>
     </message>
     <message>
         <source>Aging Vessel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ёмкость для созревания</translation>
     </message>
     <message>
         <source>Aging Vessel Type</source>
@@ -11595,7 +11598,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Packaging Vessel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ёмкость для розлива</translation>
     </message>
     <message>
         <source>Packaging Vessel Type</source>
@@ -11603,39 +11606,39 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общее</translation>
     </message>
     <message>
         <source>Grain absorption</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Впитывание солодом</translation>
     </message>
     <message>
         <source>Default final top-up water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доливка воды в конце по умолчанию</translation>
     </message>
     <message>
         <source>Default Kettle top-up water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доливка воды в котёл по умолчанию</translation>
     </message>
     <message>
         <source>The default value is 100°C (212°F), but the actual value will vary with altitude.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Значение по умолчанию — 100°C (212°F), но фактическое значение зависит от высоты над уровнем моря.</translation>
     </message>
     <message>
         <source>This is equal to the vessel&apos;s Heat Capacity divided by its weight.  Typical values are • Aluminum - 0.215 c/g·C  • Copper - 0.092 c/g·C  • Iron/Steel - 0.108 c/g·C  • Plastic - 0.359 c/g·C.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Равна теплоёмкости ёмкости, делённой на её вес.  Типичные значения: • Алюминий - 0.215 c/g·C  • Медь - 0.092 c/g·C  • Железо/сталь - 0.108 c/g·C  • Пластик - 0.359 c/g·C.</translation>
     </message>
     <message>
         <source>Outflow per minute</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Слив в минуту</translation>
     </message>
     <message>
         <source>Internal Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Внутренний диаметр</translation>
     </message>
     <message>
         <source>Opening Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Диаметр горловины</translation>
     </message>
     <message>
         <source>New</source>
@@ -11651,23 +11654,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
     <message>
         <source>Adjustment factor for large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Поправочный коэффициент использования хмеля для больших партий.  Для партий менее 20 галлонов должен быть 100%, но для оборудования для очень больших партий может быть выше (200% и более).</translation>
     </message>
     <message>
         <source>Kettle to Fermentor Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Потери из котла в ферментер</translation>
     </message>
     <message>
         <source>Fermentor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ферментер</translation>
     </message>
     <message>
         <source>Fermentor Type</source>
@@ -11680,51 +11683,52 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Optional Vessel
 Tabs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Необязательные
+вкладки ёмкостей</translation>
     </message>
     <message>
         <source>Total Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общая вместимость</translation>
     </message>
     <message>
         <source>Total usable capacity of the mash tun, including any space below the false bottom or malt pipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общий полезный объём заторного чана, включая пространство под ложным дном или солодовой корзиной</translation>
     </message>
     <message>
         <source>Foundation Water (recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вода под ложным дном (возвращается)</translation>
     </message>
     <message>
         <source>Water below the false bottom or malt pipe that drains out with the wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вода под ложным дном или солодовой корзиной, которая сливается вместе с суслом</translation>
     </message>
     <message>
         <source>Mash Tun Loss (not recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Потери в заторном чане (не возвращаются)</translation>
     </message>
     <message>
         <source>Liquid that stays behind in the mash tun and is never recovered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Жидкость, которая остаётся в заторном чане и не возвращается</translation>
     </message>
     <message>
         <source>Lauter Tun Loss (not recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Потери в фильтрационном чане (не возвращаются)</translation>
     </message>
     <message>
         <source>Wort that stays behind in the lauter tun and is never recovered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сусло, которое остаётся в фильтрационном чане и не возвращается</translation>
     </message>
     <message>
         <source>Wort that stays behind in the lauter tun and its plumbing, and never reaches the boil.  This is only used if you have a separate lauter tun (ie the lauter tun has a volume set).  Otherwise, include lautering losses in the Mash Tun Loss on the Mash Tun tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сусло, которое остаётся в фильтрационном чане и его трубопроводах и не попадает в котёл.  Используется, только если у вас есть отдельный фильтрационный чан (т. е. для него задан объём).  Иначе включите потери при фильтрации в «Потери в заторном чане» на вкладке «Заторный чан».</translation>
     </message>
     <message>
         <source>Use a different name for each equipment profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Используйте разные названия для каждого профиля оборудования.</translation>
     </message>
     <message>
         <source>These checkboxes control which vessel tabs are shown.  An asterisk after a vessel means it has a volume set, and so is used in calculations, even if its tab is hidden.  Attributes of &quot;optional&quot; vessels will not be saved if their volumes are left blank or set to 0.  If there is no mash tun, the mash happens in the boil kettle (as on all-in-one systems and for brew in a bag).  If there is no lauter tun, lautering happens wherever the mash happens.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эти флажки определяют, какие вкладки ёмкостей показываются.  Звёздочка после ёмкости означает, что для неё задан объём, поэтому она используется в расчётах, даже если её вкладка скрыта.  Свойства «необязательных» ёмкостей не сохраняются, если их объём не задан или равен 0.  Если заторного чана нет, затирание происходит в варочном котле (как в системах «всё в одном» и при варке в мешке).  Если нет фильтрационного чана, фильтрация происходит там же, где и затирание.</translation>
     </message>
     <message>
         <source>Default Batch Size</source>
@@ -11732,19 +11736,19 @@ Tabs</source>
     </message>
     <message>
         <source>Volume into the fermentor that new recipes using this equipment start with</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём в ферментер, с которого начинаются новые рецепты с этим оборудованием</translation>
     </message>
     <message>
         <source>Default Pre-boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём до кипячения по умолчанию</translation>
     </message>
     <message>
         <source>Volume in the kettle at the start of the boil that new recipes using this equipment start with</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём в котле в начале кипячения, с которого начинаются новые рецепты с этим оборудованием</translation>
     </message>
     <message>
         <source>The batch size (ie the volume going into the fermentor) and pre-boil volume that a recipe starts with when you choose this equipment for it.  These are not the capacities of the fermentor and kettle, which are set on their own tabs.  If you brew different batch sizes on the same equipment, you can either change the batch size in each recipe, or have a separate equipment profile for each batch size.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Размер партии (т. е. объём, поступающий в ферментер) и объём до кипячения, с которых начинается рецепт при выборе для него этого оборудования.  Это не вместимость ферментера и котла, которая задаётся на их собственных вкладках.  Если вы варите партии разного размера на одном оборудовании, можно либо менять размер партии в каждом рецепте, либо создать отдельный профиль оборудования для каждого размера партии.</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -11752,39 +11756,39 @@ Tabs</source>
     </message>
     <message>
         <source>These settings apply to whichever vessel the mash happens in: the mash tun or, if you do not have a separate mash tun (eg on an all-in-one system such as the Grainfather, or for brew in a bag), the boil kettle.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эти настройки относятся к той ёмкости, в которой происходит затирание: к заторному чану или, если отдельного заторного чана нет (например, в системе «всё в одном», такой как Grainfather, или при варке в мешке), к варочному котлу.</translation>
     </message>
     <message>
         <source>The water that has to be below the false bottom (or malt pipe / basket) before the grain is covered, but which drains out with the wort and so is NOT lost.  (It is part of the Total Capacity of the mash tun or, if there is no mash tun, of the kettle.)  This is common in all-in-one systems -- eg about 3.5 liters for a Grainfather G30.  It is added to the strike water, so the mash thickness you choose applies just to the grain bed, and it is taken off the sparge water, so the total water needed does not change.  Leave at 0 if there is no such space (eg brew in a bag without a false bottom).  Other software calls this, eg, &quot;Mash-Tun Deadspace&quot; (Brewfather) or &quot;Mash Tun Addition&quot; (BeerSmith).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вода, которая должна быть под ложным дном (или солодовой корзиной), прежде чем зерно будет покрыто, но которая сливается вместе с суслом и поэтому НЕ теряется.  (Она входит в общую вместимость заторного чана или, если заторного чана нет, котла.)  Это типично для систем «всё в одном» — например, около 3,5 литра для Grainfather G30.  Она добавляется к воде для засыпи, так что выбранный гидромодуль относится только к зерновому слою, и вычитается из воды для промывки, так что общее количество воды не меняется.  Оставьте 0, если такого пространства нет (например, варка в мешке без ложного дна).  В других программах это называется, например, &quot;Mash-Tun Deadspace&quot; (Brewfather) или &quot;Mash Tun Addition&quot; (BeerSmith).</translation>
     </message>
     <message>
         <source>How much water is permanently lost to each unit of weight of grain during mashing (ie the water the spent grain retains).  This is separate from Foundation Water and Mash Tun Loss, which are about the vessel rather than the grain.  (For an all-in-one system, anything that does not drain from the malt pipe should be included here.)  The default value is about 1.085 liters per kilogram (0.13 US gallons per pound), which is typical for a conventional mash tun.  For an all-in-one system with a malt pipe, about 0.8 liters per kilogram is more typical, and for brew in a bag with the bag squeezed, about 0.66 liters per kilogram.  It can fluctuate due to the fineness of your grind, how well the grain is drained, the malt, and other factors.  Pressing the &quot;Default Absorption&quot; button will reset the value to the default.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сколько воды безвозвратно теряется на единицу веса зерна при затирании (т. е. вода, которую удерживает дробина).  Это не то же самое, что вода под ложным дном и потери в заторном чане, которые относятся к ёмкости, а не к зерну.  (Для системы «всё в одном» сюда следует включить всё, что не стекает из солодовой корзины.)  Значение по умолчанию — около 1,085 литра на килограмм (0,13 галлона США на фунт), что типично для обычного заторного чана.  Для системы «всё в одном» с солодовой корзиной более типично около 0,8 литра на килограмм, а для варки в мешке с отжатым мешком — около 0,66 литра на килограмм.  Значение может меняться в зависимости от тонкости помола, того, насколько хорошо стекает зерно, солода и других факторов.  Кнопка «Впитываемость по умолчанию» сбрасывает значение к значению по умолчанию.</translation>
     </message>
     <message>
         <source>The most the mash tun can hold, including any space below the false bottom (or malt pipe / basket) and anything that stays behind in the vessel.  The space actually available for the grain and its strike water is this volume less the Foundation Water (on the Mash tab) and Mash Tun Loss below.  If you do not have a separate mash tun -- eg on an all-in-one system such as the Grainfather, or for brew in a bag -- leave this blank (and untick Mash Tun on the General tab): the mash then happens in the boil kettle.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Максимальный объём заторного чана, включая пространство под ложным дном (или солодовой корзиной) и всё, что остаётся в ёмкости.  Фактически доступный объём для зерна и воды для засыпи равен этому объёму за вычетом воды под ложным дном (на вкладке «Затор») и потерь в заторном чане ниже.  Если у вас нет отдельного заторного чана — например, в системе «всё в одном», такой как Grainfather, или при варке в мешке — оставьте поле пустым (и снимите флажок «Заторный чан» на вкладке «Общее»): тогда затирание происходит в варочном котле.</translation>
     </message>
     <message>
         <source>Liquid that stays behind in the mash tun (eg below the outlet or in pipework) and never reaches the boil.  It is added to the strike water and to the total water needed.  Do not include grain absorption or anything that drains out with the wort (put those under Grain Absorption and Foundation Water on the Mash tab).  If you do not have a separate lauter tun, include your lautering losses here.  If you do have a separate lauter tun, its losses go on the Lauter Tun tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Жидкость, которая остаётся в заторном чане (например, ниже сливного крана или в трубопроводах) и не попадает в котёл.  Она добавляется к воде для засыпи и к общему количеству воды.  Не включайте сюда впитывание солодом и то, что сливается вместе с суслом (это указывается в полях «Впитывание солодом» и «Вода под ложным дном» на вкладке «Затор»).  Если у вас нет отдельного фильтрационного чана, включите сюда потери при фильтрации.  Если отдельный фильтрационный чан есть, его потери указываются на вкладке «Фильтрационный чан».</translation>
     </message>
     <message>
         <source>The most the kettle can hold (not the pre-boil volume, which is on the General tab).  If there is no separate mash tun, this is also the space available for the mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Максимальный объём котла (не объём до кипячения, который задаётся на вкладке «Общее»).  Если отдельного заторного чана нет, это также доступный объём для затора.</translation>
     </message>
     <message>
         <source>The most the fermentor can hold, including headspace.  This is NOT the batch size, which is set on the General tab (as Default Batch Size).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Максимальный объём ферментера, включая свободное пространство.  Это НЕ размер партии, который задаётся на вкладке «Общее» (как «Размер партии по умолчанию»).</translation>
     </message>
     <message>
         <source>Internal diameter of the kettle at the surface of the wort.  Used, along with the opening diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Внутренний диаметр котла на уровне поверхности сусла.  Используется вместе с диаметром горловины и объёмом сусла в котле для оценки скорости естественного остывания сусла после выключения нагрева в формулах IBU, учитывающих изомеризацию после выключения нагрева (например, mIBU и SMPH).  Если не задан, принимается 45 cm (около 18 дюймов).</translation>
     </message>
     <message>
         <source>Internal diameter of the opening in the kettle through which steam can escape -- eg the same as the internal diameter if the kettle is uncovered, or smaller if it is partly covered.  Used, along with the internal diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Внутренний диаметр отверстия котла, через которое выходит пар — например, равен внутреннему диаметру, если котёл открыт, или меньше, если он частично накрыт.  Используется вместе с внутренним диаметром и объёмом сусла в котле для оценки скорости естественного остывания сусла после выключения нагрева в формулах IBU, учитывающих изомеризацию после выключения нагрева (например, mIBU и SMPH).  Если не задан, принимается 45 cm (около 18 дюймов).</translation>
     </message>
 </context>
 <context>
@@ -11943,11 +11947,11 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Основное</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обязательно</translation>
     </message>
     <message>
         <source>Yield %</source>
@@ -11959,7 +11963,7 @@ Tabs</source>
     </message>
     <message>
         <source>Diastatic power</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Диастатическая сила</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -11967,15 +11971,15 @@ Tabs</source>
     </message>
     <message>
         <source>New fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новый сбраживаемый ингредиент</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
@@ -11987,7 +11991,7 @@ Tabs</source>
     </message>
     <message>
         <source>Fermantable Grain Group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Группа солода</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -12003,11 +12007,11 @@ Tabs</source>
     </message>
     <message>
         <source>Extract Yield Dry Basis Coarse Grind (DBCG)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выход экстракта, сухое вещество, грубый помол (DBCG)</translation>
     </message>
     <message>
         <source>Potential yield</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Потенциальный выход</translation>
     </message>
     <message>
         <source>Kolbach Index</source>
@@ -12015,23 +12019,23 @@ Tabs</source>
     </message>
     <message>
         <source>Percentage of malt that is &quot;glassy&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доля «стекловидного» солода, %</translation>
     </message>
     <message>
         <source>Percentage of malt that is &quot;half glassy&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доля «полустекловидного» солода, %</translation>
     </message>
     <message>
         <source>Percentage of malt that is &quot;mealy&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доля «мучнистого» солода, %</translation>
     </message>
     <message>
         <source>Percentage of grain that is &quot;plump&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доля «крупного» зерна, %</translation>
     </message>
     <message>
         <source>Percentage of grain that is &quot;tine&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доля «мелкого» зерна, %</translation>
     </message>
     <message>
         <source>Friability</source>
@@ -12043,7 +12047,7 @@ Tabs</source>
     </message>
     <message>
         <source>Viscosity of this malt in a &quot;congress mash&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вязкость этого солода в «конгресс-заторе»</translation>
     </message>
     <message>
         <source>Fermentability</source>
@@ -12055,23 +12059,23 @@ Tabs</source>
     </message>
     <message>
         <source>Beta-glucans</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Бета-глюканы</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Fine Grind</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выход экстракта, сухое вещество, тонкий помол</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Coarse Grind</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выход экстракта, сухое вещество, грубый помол</translation>
     </message>
     <message>
         <source>Total alpha-amylase in malted grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общая альфа-амилаза в солоде</translation>
     </message>
     <message>
         <source>Total alpha-amylase in the malted grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общая альфа-амилаза в солоде</translation>
     </message>
     <message>
         <source>Free Amino Nitrogen (FAN)</source>
@@ -12079,11 +12083,11 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
     <message>
         <source>Grain Group</source>
@@ -12103,7 +12107,7 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentable Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Тип сбраживаемого</translation>
     </message>
     <message>
         <source>Total Inventory</source>
@@ -12111,42 +12115,42 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общее количество в запасе</translation>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить закупку</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Создать новую запись о закупке для этого сбраживаемого ингредиента</translation>
     </message>
     <message>
         <source>% Lactic Acid (by weight)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% молочной кислоты (по массе)</translation>
     </message>
     <message>
         <source>For aciduated malts (aka acid malts)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Для кислых солодов (подкисляющих солодов)</translation>
     </message>
     <message>
         <source>% Fermentable by yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% сбраживаемости дрожжами</translation>
     </message>
     <message>
         <source>Percentage of this ingredient&apos;s extract that brewing yeast can ferment.  Leave blank for 100%.  Set to 0 for lactose, or about 10 for maltodextrin.  Not normally needed for malts.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доля экстракта этого ингредиента, которую могут сбродить пивные дрожжи.  Оставьте пустым для 100%.  Укажите 0 для лактозы или около 10 для мальтодекстрина.  Для солодов обычно не требуется.</translation>
     </message>
 </context>
 <context>
     <name>fermentationEditor</name>
     <message>
         <source>Fermentation Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор брожения</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обязательно</translation>
     </message>
     <message>
         <source>Name</source>
@@ -12162,15 +12166,15 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>New fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новое брожение</translation>
     </message>
     <message>
         <source>New</source>
@@ -12186,30 +12190,30 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
     <message>
         <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Что происходит с крейзеном (пеной на поверхности бродящего пива), который уносит часть горечи.  Используется только формулой IBU SMPH.</translation>
     </message>
     <message>
         <source>Krausen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Крейзен</translation>
     </message>
     <message>
         <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  If the krausen is skimmed, choose one of the &quot;blown off&quot; options, according to how much is removed.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Что происходит с крейзеном (пеной на поверхности бродящего пива), который уносит часть горечи.  Если крейзен снимается, выберите один из вариантов «выброшен» в зависимости от того, сколько удаляется.  Используется только формулой IBU SMPH.</translation>
     </message>
 </context>
 <context>
     <name>fermentationStepEditor</name>
     <message>
         <source>Fermentation Step Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Редактор этапа брожения</translation>
     </message>
     <message>
         <source>Name</source>
@@ -12269,15 +12273,15 @@ Tabs</source>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная кислотность</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Конечная кислотность</translation>
     </message>
     <message>
         <source>Optional description of this fermentation step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Необязательное описание этого этапа брожения</translation>
     </message>
     <message>
         <source>Description</source>
@@ -12289,7 +12293,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Save</source>
@@ -12297,7 +12301,7 @@ Tabs</source>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -12305,19 +12309,19 @@ Tabs</source>
     </message>
     <message>
         <source>Free rise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Свободный подъём</translation>
     </message>
     <message>
         <source>Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Свободный подъём означает этап брожения, на котором экзотермическое брожение может без ограничений повышать температуру</translation>
     </message>
     <message>
         <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная плотность</translation>
     </message>
     <message>
         <source>End Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Конечная плотность</translation>
     </message>
     <message>
         <source>Vessel</source>
@@ -12480,11 +12484,11 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Основное</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обязательно</translation>
     </message>
     <message>
         <source>Alpha %</source>
@@ -12496,19 +12500,19 @@ Tabs</source>
     </message>
     <message>
         <source>Cohumulone %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Когумулон %</translation>
     </message>
     <message>
         <source>Myrcene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мирцен %</translation>
     </message>
     <message>
         <source>Humulene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Гумулен %</translation>
     </message>
     <message>
         <source>Caryophyllene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Кариофиллен %</translation>
     </message>
     <message>
         <source>Substitutes</source>
@@ -12520,23 +12524,23 @@ Tabs</source>
     </message>
     <message>
         <source>New hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новый хмель</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Hop Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Тип хмеля</translation>
     </message>
     <message>
         <source>Hop Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Форма хмеля</translation>
     </message>
     <message>
         <source>Year</source>
@@ -12552,7 +12556,7 @@ Tabs</source>
     </message>
     <message>
         <source>Linalool %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Линалоол %</translation>
     </message>
     <message>
         <source>Linalool</source>
@@ -12560,7 +12564,7 @@ Tabs</source>
     </message>
     <message>
         <source>Limonene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Лимонен %</translation>
     </message>
     <message>
         <source>Limonene</source>
@@ -12568,7 +12572,7 @@ Tabs</source>
     </message>
     <message>
         <source>Nerol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нерол %</translation>
     </message>
     <message>
         <source>Nerol</source>
@@ -12576,7 +12580,7 @@ Tabs</source>
     </message>
     <message>
         <source>Farnesene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фарнезен %</translation>
     </message>
     <message>
         <source>Farnesene</source>
@@ -12584,7 +12588,7 @@ Tabs</source>
     </message>
     <message>
         <source>Polyphenols %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Полифенолы %</translation>
     </message>
     <message>
         <source>Polyphenols</source>
@@ -12592,7 +12596,7 @@ Tabs</source>
     </message>
     <message>
         <source>Geraniol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Гераниол %</translation>
     </message>
     <message>
         <source>Geraniol</source>
@@ -12600,7 +12604,7 @@ Tabs</source>
     </message>
     <message>
         <source>Xanthohumol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ксантогумол %</translation>
     </message>
     <message>
         <source>Xanthohumol</source>
@@ -12608,15 +12612,15 @@ Tabs</source>
     </message>
     <message>
         <source>β-pinene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β-пинен %</translation>
     </message>
     <message>
         <source>β-pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β-пинен</translation>
     </message>
     <message>
         <source>Total Oil ml/100g</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Всего масел ml/100g</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
@@ -12628,15 +12632,15 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общее количество в запасе</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
     <message>
         <source>New</source>
@@ -12656,59 +12660,59 @@ Tabs</source>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить закупку</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Создать новую запись о закупке для этого хмеля</translation>
     </message>
     <message>
         <source>Alpha Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Альфа-кислоты</translation>
     </message>
     <message>
         <source>Actual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фактическое</translation>
     </message>
     <message>
         <source>Typical Range</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Типичный диапазон</translation>
     </message>
     <message>
         <source>Min alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. содержание альфа-кислот в процентах по массе</translation>
     </message>
     <message>
         <source>-</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-</translation>
     </message>
     <message>
         <source>Max alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. содержание альфа-кислот в процентах по массе</translation>
     </message>
     <message>
         <source>Beta Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Бета-кислоты</translation>
     </message>
     <message>
         <source>Min beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. содержание бета-кислот в процентах по массе</translation>
     </message>
     <message>
         <source>Max beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. содержание бета-кислот в процентах по массе</translation>
     </message>
     <message>
         <source>6 Month Alpha Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Потеря альфа за 6 месяцев</translation>
     </message>
     <message>
         <source>α-Pinene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α-пинен %</translation>
     </message>
     <message>
         <source>α-Pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α-пинен</translation>
     </message>
 </context>
 <context>
@@ -13431,7 +13435,7 @@ Tabs</source>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Затирания</translation>
     </message>
     <message>
         <source>1.0</source>
@@ -13439,27 +13443,27 @@ Tabs</source>
     </message>
     <message>
         <source>Export to &amp;BBCode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Экспорт в &amp;BBCode</translation>
     </message>
     <message>
         <source>Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вода</translation>
     </message>
     <message>
         <source>&amp;Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Название</translation>
     </message>
     <message>
         <source>E&amp;quipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Оборудование</translation>
     </message>
     <message>
         <source>&amp;Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Стиль</translation>
     </message>
     <message>
         <source>Recipe Locked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Рецепт заблокирован</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -13471,59 +13475,59 @@ Tabs</source>
     </message>
     <message>
         <source>&amp;Export to File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Экспорт в файл</translation>
     </message>
     <message>
         <source>M&amp;iscs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Прочее</translation>
     </message>
     <message>
         <source>&amp;Print and preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Печать и предпросмотр</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ctrl+P</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">В&amp;ыход</translation>
     </message>
     <message>
         <source>&amp;Import from File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Импорт из файла</translation>
     </message>
     <message>
         <source>Optio&amp;ns</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Параме&amp;тры</translation>
     </message>
     <message>
         <source>Ti&amp;mers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Тай&amp;меры</translation>
     </message>
     <message>
         <source>Strike &amp;Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калькулятор &amp;воды для засыпи</translation>
     </message>
     <message>
         <source>&amp;Hydrometer Temp Adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Поправка ареометра на температуру</translation>
     </message>
     <message>
         <source>Alcohol Percentage Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расчёт процента алкоголя</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Повторить</translation>
     </message>
     <message>
         <source>Ancestors</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Предки</translation>
     </message>
     <message>
         <source>Brew It!</source>
@@ -13539,7 +13543,7 @@ Tabs</source>
     </message>
     <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Кипячения</translation>
     </message>
     <message>
         <source>Fermentation</source>
@@ -13547,15 +13551,15 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Брожения</translation>
     </message>
     <message>
         <source>See Boil tab below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">См. вкладку «Кипячение» ниже</translation>
     </message>
     <message>
         <source>&amp;Copy Selected Item(s)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Копировать выбранное</translation>
     </message>
     <message>
         <source>Mash Profiles</source>
@@ -13571,15 +13575,15 @@ Tabs</source>
     </message>
     <message>
         <source>&amp;Mash Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Профили &amp;затирания</translation>
     </message>
     <message>
         <source>&amp;Boil Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Профили &amp;кипячения</translation>
     </message>
     <message>
         <source>&amp;Fermentation Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Профили &amp;брожения</translation>
     </message>
     <message>
         <source>Mash Designer</source>
@@ -13595,59 +13599,59 @@ Tabs</source>
     </message>
     <message>
         <source>Step-by-step instructions for brew day</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пошаговые инструкции на день варки</translation>
     </message>
     <message>
         <source>W&amp;aters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Вода</translation>
     </message>
     <message>
         <source>&amp;Unit Conversion Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пре&amp;образование единиц</translation>
     </message>
     <message>
         <source>&amp;Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Корр&amp;екция плотности</translation>
     </message>
     <message>
         <source>Edit this style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить этот стиль</translation>
     </message>
     <message>
         <source>Edit this equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить это оборудование</translation>
     </message>
     <message>
         <source>Edit this mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить это затирание</translation>
     </message>
     <message>
         <source>Edit this boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить это кипячение</translation>
     </message>
     <message>
         <source>Edit this fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить это брожение</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Правка</translation>
     </message>
     <message>
         <source>Efficienc&amp;y</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Эффективность</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Цель</translation>
     </message>
     <message>
         <source>Calculated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расчётное</translation>
     </message>
     <message>
         <source>Calculated final volume into the primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расчётный конечный объём на первичном брожении</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
@@ -13655,27 +13659,27 @@ Tabs</source>
     </message>
     <message>
         <source>Calculated preboil volume - See Boil tab below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расчётный объём до кипячения — см. вкладку «Кипячение» ниже</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сведения об этом затирании и возможных проблемах с ним</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сведения об этом кипячении и возможных проблемах с ним</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сведения об этом брожении и возможных проблемах с ним</translation>
     </message>
     <message>
         <source>Use mash profile in FG calculation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Учитывать профиль затирания при расчёте FG</translation>
     </message>
     <message>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Учитывать, как температуры и время затирания делают сусло более или менее сбраживаемым, при оценке конечной плотности.  Не включайте, если вы задали степень сбраживания дрожжей с учётом своего затирания.</translation>
     </message>
 </context>
 <context>
@@ -13813,19 +13817,19 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Основное</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
     <message>
         <source>Tun specific heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удельная теплоёмкость чана</translation>
     </message>
     <message>
         <source>New</source>
@@ -13833,7 +13837,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Save</source>
@@ -13841,7 +13845,7 @@ Tabs</source>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -13849,7 +13853,7 @@ Tabs</source>
     </message>
     <message>
         <source>Total Mash Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Всего воды для затирания</translation>
     </message>
     <message>
         <source>Total Time</source>
@@ -13857,75 +13861,75 @@ Tabs</source>
     </message>
     <message>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Устаревшие</translation>
     </message>
     <message>
         <source>These are old settings that still work but might be retired in a future version of the software as there are now other ways to achieve the same same result.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Это старые настройки, которые всё ещё работают, но могут быть удалены в будущей версии программы, так как теперь есть другие способы добиться того же результата.</translation>
     </message>
     <message>
         <source>It is better to set this on the sparge step itself.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Лучше задать это на самом этапе промывки.</translation>
     </message>
     <message>
         <source>It is better to set this on the Equipment (Mash Tun tab).  This value is only used if the recipe&apos;s equipment has a mash tun with no weight and specific heat set.  It is ignored if the equipment has no separate mash tun (ie the mash happens in the kettle), because the strike water is then heated in the same vessel as the mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Лучше задать это в оборудовании (вкладка «Заторный чан»).  Это значение используется, только если у оборудования рецепта есть заторный чан без заданного веса и удельной теплоёмкости.  Оно игнорируется, если у оборудования нет отдельного заторного чана (т. е. затирание происходит в котле), так как тогда вода для засыпи нагревается в той же ёмкости, что и затор.</translation>
     </message>
     <message>
         <source>Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Промывка</translation>
     </message>
     <message>
         <source>Batches</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Порции</translation>
     </message>
     <message>
         <source>Number of batch sparges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Число порций промывки</translation>
     </message>
     <message>
         <source>Initial temperature of the mash tun.  Used when calculating the strike water temperature, to allow for the strike water heating up the mash tun.  If left blank, the tun is assumed to be at the same temperature as the grain.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная температура заторного чана.  Используется при расчёте температуры воды для засыпи с учётом нагрева заторного чана этой водой.  Если не задана, считается, что чан имеет ту же температуру, что и зерно.</translation>
     </message>
     <message>
         <source>Adjust water amounts and temperatures</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Подобрать количество и температуру воды</translation>
     </message>
     <message>
         <source>Change the amounts and temperatures of the strike water and other infusions, the amounts of any decoctions, and the amounts and temperatures of sparge water, to suit this recipe&apos;s grain bill and equipment.  Values you have pinned in a step are not changed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить количество и температуру воды для засыпи и других настоев, объёмы отваров, а также количество и температуру воды для промывки в соответствии с засыпью и оборудованием этого рецепта.  Значения, закреплённые на этапе, не изменяются.</translation>
     </message>
     <message>
         <source>Used as the target grain bed temperature for new sparge steps when adjusting the mash.  It is better to set this on the sparge step itself.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Используется как целевая температура зернового слоя для новых этапов промывки при подборе затирания.  Лучше задать это на самом этапе промывки.</translation>
     </message>
     <message>
         <source>How the grain will be rinsed after the mash.  Changing this and clicking Auto-Adjust replaces any existing sparge steps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Как будет промываться зерно после затирания.  Если изменить это и нажать «Автоподбор», все существующие этапы промывки будут заменены.</translation>
     </message>
     <message>
         <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Автоподбор</translation>
     </message>
     <message>
         <source>Available when mash is used by exactly one recipe.  Keep mash in sync with recipe by doing an auto-adjust whenever changes happen, eg to the recipe&apos;s grain bill or equipment.  (Changing the steps themselves does not trigger an adjustment, so pin any values you want to keep.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Доступно, когда затирание используется ровно одним рецептом.  Синхронизировать затирание с рецептом, выполняя автоподбор при любых изменениях, например засыпи или оборудования рецепта.  (Изменение самих этапов не вызывает подбора, поэтому закрепите значения, которые хотите сохранить.)</translation>
     </message>
     <message>
         <source>Keep mash in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Синхронизировать затирание с изменениями рецепта</translation>
     </message>
     <message>
         <source>How full the mash tun gets, and how much wort you can expect to collect from the mash, for the recipe using this mash.  Shown when the mash is used by exactly one recipe.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Насколько заполняется заторный чан и сколько сусла можно ожидать получить из затора для рецепта, использующего это затирание.  Показывается, когда затирание используется ровно одним рецептом.</translation>
     </message>
     <message>
         <source>Target mash thickness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Целевой гидромодуль</translation>
     </message>
     <message>
         <source>Volume of strike water per mass of grain (not counting any water that sits below the grain bed) to aim for when adjusting the mash.  Most often around 2.5 to 3.2 L/kg (1.2 to 1.5 qt/lb).  Not used if there is no sparge, as then all the water goes in the mash, nor if the amount of strike water is pinned.  The Water:Grain column in the table of steps shows what the steps actually give.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём воды для засыпи на единицу массы зерна (без учёта воды под зерновым слоем), к которому нужно стремиться при подборе затирания.  Чаще всего около 2,5–3,2 L/kg (1,2–1,5 qt/lb).  Не используется, если промывки нет, так как тогда вся вода идёт в затор, а также если количество воды для засыпи закреплено.  Столбец «Вода:солод» в таблице этапов показывает фактические значения этапов.</translation>
     </message>
 </context>
 <context>
@@ -14020,23 +14024,23 @@ Tabs</source>
     </message>
     <message>
         <source>Thickness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Гидромодуль</translation>
     </message>
     <message>
         <source>Mash thickness, aka liquor-to-grist ratio, is the volume of strike water divided by the mass of grist.  In metric units (liters and kilograms), its practical range is 2 to 4 and most often is around 2.5 to 3.2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Гидромодуль затора (соотношение воды и засыпи) — это объём воды для засыпи, делённый на массу засыпи.  В метрических единицах (литры и килограммы) его практический диапазон — от 2 до 4, чаще всего около 2,5–3,2.</translation>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная кислотность</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Конечная кислотность</translation>
     </message>
     <message>
         <source>Optional description of this mash step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Необязательное описание этого этапа затирания</translation>
     </message>
     <message>
         <source>Description</source>
@@ -14048,7 +14052,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Save</source>
@@ -14056,7 +14060,7 @@ Tabs</source>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -14064,19 +14068,19 @@ Tabs</source>
     </message>
     <message>
         <source>Step Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Номер этапа</translation>
     </message>
     <message>
         <source>If ticked, adjusting the mash (in the Mash Editor) will not change this amount (but will use it to work out other values, eg the water temperature).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Если отмечено, подбор затирания (в редакторе затирания) не изменит это количество (но использует его для расчёта других значений, например температуры воды).</translation>
     </message>
     <message>
         <source>Pinned</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Закреплено</translation>
     </message>
     <message>
         <source>If ticked, adjusting the mash (in the Mash Editor) will not change this temperature (but will use it to work out other values, eg the amount of water).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Если отмечено, подбор затирания (в редакторе затирания) не изменит эту температуру (но использует её для расчёта других значений, например количества воды).</translation>
     </message>
 </context>
 <context>
@@ -14198,11 +14202,11 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Основное</translation>
     </message>
     <message>
         <source>Use for</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Применение</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -14210,11 +14214,11 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -14226,11 +14230,11 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
     <message>
         <source>New</source>
@@ -14250,23 +14254,23 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общее количество в запасе</translation>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить закупку</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Создать новую запись о закупке для этого ингредиента</translation>
     </message>
     <message>
         <source>Water Agent Properties</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Свойства добавки для воды</translation>
     </message>
     <message>
         <source>Percent Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Процент кислоты</translation>
     </message>
 </context>
 <context>
@@ -14435,23 +14439,23 @@ Tabs</source>
     <name>ogCorrectionTool</name>
     <message>
         <source>Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Коррекция плотности</translation>
     </message>
     <message>
         <source>Target OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Целевая OG</translation>
     </message>
     <message>
         <source>Measured Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Измеренная плотность</translation>
     </message>
     <message>
         <source>A value in Plato will be used as-is.  An SG value can be corrected for actual vs calibrated temperature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Значение в градусах Плато используется как есть.  Значение SG можно скорректировать с учётом разницы между фактической и калибровочной температурой.</translation>
     </message>
     <message>
         <source>@ temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">@ температуре</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
@@ -14459,11 +14463,11 @@ Tabs</source>
     </message>
     <message>
         <source>Calibrated at</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калибровка при</translation>
     </message>
     <message>
         <source>Temperature to which the hydrometer is calibrated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Температура, при которой откалиброван ареометр</translation>
     </message>
     <message>
         <source>Plato</source>
@@ -14519,35 +14523,35 @@ Tabs</source>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Рассчитать</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Если фактическая эффективность оказалась выше или ниже ожидаемой, этот инструмент поможет скорректировать OG во время кипячения.</translation>
     </message>
     <message>
         <source>NB: this tool makes the assumption that you are not going to add any water post boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Внимание: этот инструмент предполагает, что вы не будете добавлять воду после кипячения.</translation>
     </message>
     <message>
         <source>From current recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Из текущего рецепта</translation>
     </message>
     <message>
         <source>Actual SG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фактическая SG</translation>
     </message>
     <message>
         <source>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пересчитано из Плато/Брикс или скорректировано на температуру калибровки ареометра</translation>
     </message>
     <message>
         <source>Predicted OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Прогнозируемая OG</translation>
     </message>
     <message>
         <source>OG if you take no action, ie boil as originally planned</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG, если ничего не предпринимать, т. е. кипятить как планировалось</translation>
     </message>
     <message>
         <source>Remedy: Add Water To Boil</source>
@@ -14563,19 +14567,19 @@ Tabs</source>
     </message>
     <message>
         <source>-- OR --</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-- ИЛИ --</translation>
     </message>
     <message>
         <source>Remedy: Add Sugar or DME</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Решение: добавить сахар или DME</translation>
     </message>
     <message>
         <source>Amount To Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сколько добавить</translation>
     </message>
     <message>
         <source>Amount of Sugar or DME to add to the boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Количество сахара или DME для добавления в кипячение</translation>
     </message>
 </context>
 <context>
@@ -14726,11 +14730,11 @@ Tabs</source>
     </message>
     <message>
         <source>Mash Hop (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Хмель в затор (%)</translation>
     </message>
     <message>
         <source>First Wort (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Первое сусло (%)</translation>
     </message>
     <message>
         <source>Databases</source>
@@ -14738,31 +14742,31 @@ Tabs</source>
     </message>
     <message>
         <source>Engines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Движки БД</translation>
     </message>
     <message>
         <source>RDBMS Engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Движок СУБД</translation>
     </message>
     <message>
         <source>Test Connection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Проверить соединение</translation>
     </message>
     <message>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Конфигурация</translation>
     </message>
     <message>
         <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Восстановить значения по умолчанию</translation>
     </message>
     <message>
         <source>Hostname</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Имя хоста</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Порт</translation>
     </message>
     <message>
         <source>Schema</source>
@@ -14782,95 +14786,95 @@ Tabs</source>
     </message>
     <message>
         <source>Save password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить пароль</translation>
     </message>
     <message>
         <source>Data Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Каталог данных</translation>
     </message>
     <message>
         <source>Backup Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Каталог резервных копий</translation>
     </message>
     <message>
         <source>Number of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Число резервных копий</translation>
     </message>
     <message>
         <source>Frequency of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Частота резервного копирования</translation>
     </message>
     <message>
         <source>PostgresSQL&apos;s host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Имя хоста или IP-адрес PostgreSQL</translation>
     </message>
     <message>
         <source>Port the PostgreSQL is listening on</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Порт, который слушает PostgreSQL</translation>
     </message>
     <message>
         <source>The schema containing the database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Схема, содержащая базу данных</translation>
     </message>
     <message>
         <source>User with create/delete table access</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пользователь с правом создания/удаления таблиц</translation>
     </message>
     <message>
         <source>Password for the user</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пароль пользователя</translation>
     </message>
     <message>
         <source>The name of the database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Имя базы данных</translation>
     </message>
     <message>
         <source>Where your database file is</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Где находится файл базы данных</translation>
     </message>
     <message>
         <source>Where to save your backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Куда сохранять резервные копии</translation>
     </message>
     <message>
         <source>Number of backups to keep: -1 means never remove, 0 means never backup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сколько резервных копий хранить: -1 — никогда не удалять, 0 — не делать резервные копии</translation>
     </message>
     <message>
         <source>Logging</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Журналирование</translation>
     </message>
     <message>
         <source>Logging Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Уровень журналирования</translation>
     </message>
     <message>
         <source>Log file location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расположение файла журнала</translation>
     </message>
     <message>
         <source>Use Default location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Использовать расположение по умолчанию</translation>
     </message>
     <message>
         <source>Recipe Snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Снимки рецептов</translation>
     </message>
     <message>
         <source>Enable Automatic Snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Включить автоматические снимки</translation>
     </message>
     <message>
         <source>Deleting a recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удаление рецепта</translation>
     </message>
     <message>
         <source>Deletes all the snapshots too</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удаляет также все снимки</translation>
     </message>
     <message>
         <source>Deletes only the recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удаляет только рецепт</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -14880,15 +14884,21 @@ Tabs</source>
   &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;
+   &lt;b&gt;Знаете другой язык?&lt;/b&gt;
+   &lt;br&gt;&lt;br&gt;
+   Или хотите улучшить перевод? Помогите нам и
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  сделайте перевод&lt;/a&gt;, чтобы ваши друзья тоже могли пользоваться Brewtarget!
+&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>How many times %1 needs to be run to trigger another backup: 1 means always backup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сколько раз нужно запустить %1, чтобы создать следующую резервную копию: 1 — всегда</translation>
     </message>
     <message>
         <source>Default Values</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Значения по умолчанию</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -14896,7 +14906,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default batch size to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Размер партии по умолчанию для новых рецептов</translation>
     </message>
     <message>
         <source>Pre-Boil Size</source>
@@ -14904,7 +14914,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default pre-boil size to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём до кипячения по умолчанию для новых рецептов</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -14912,7 +14922,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default efficiency to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эффективность по умолчанию для новых рецептов</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -14920,27 +14930,27 @@ Tabs</source>
     </message>
     <message>
         <source>Default boil time to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Время кипячения по умолчанию для новых рецептов</translation>
     </message>
     <message>
         <source>Show snapshots by default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Показывать снимки по умолчанию</translation>
     </message>
     <message>
         <source>Units &amp;&amp; Precision</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Единицы &amp;&amp; точность</translation>
     </message>
     <message>
         <source>Decimal places</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Знаков после запятой</translation>
     </message>
     <message>
         <source>By default, use mash profile in FG calculation for new and imported recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">По умолчанию учитывать профиль затирания при расчёте FG для новых и импортированных рецептов</translation>
     </message>
     <message>
         <source>Whether new and imported recipes take account of the mash temperatures and times when estimating final gravity.  (This can be changed for each recipe on its Mash tab.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Учитывают ли новые и импортированные рецепты температуры и время затирания при оценке конечной плотности.  (Это можно изменить для каждого рецепта на его вкладке «Затор».)</translation>
     </message>
     <message>
         <source>How bitterness (IBUs) is estimated from the recipe&apos;s hop additions.
@@ -14952,15 +14962,23 @@ Tabs</source>
  • mIBU: John-Paul Hosom&apos;s extension of Tinseth, adding bitterness from hops in hot wort after flameout.
  • SMPH: Hosom&apos;s detailed model, which also allows for oxidized alpha acids, polyphenols, hopping rate, wort pH and yeast flocculation.
 Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using the post-boil steps of the boil profile.  For formulas other than Garetz, Daniels and SMPH, pellets are assumed to give 10% more IBUs than whole hops (plugs 2%).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Как горечь (IBU) оценивается по добавлениям хмеля в рецепте.
+ • Tinseth: самая распространённая формула.  Учитывает время кипячения и плотность сусла.
+ • Rager: более старая; обычно даёт больше IBU, чем Tinseth.
+ • Noonan: из книги Грега Нунана &quot;New Brewing Lager Beer&quot;.
+ • Garetz: из книги Марка Гареца &quot;Using Hops&quot;.  Обычно меньше IBU, ноль при кипячении 10 минут и меньше, учитывает высокие нормы охмеления.
+ • Daniels: из книги Рэя Дэниелса &quot;Designing Great Beers&quot;.  Отдельные значения для гранул и шишек.
+ • mIBU: расширение Tinseth от Джона-Пола Хосома, добавляющее горечь от хмеля в горячем сусле после выключения нагрева.
+ • SMPH: подробная модель Хосома, которая также учитывает окисленные альфа-кислоты, полифенолы, норму охмеления, pH сусла и флоккуляцию дрожжей.
+Только mIBU и SMPH дают IBU для хмеля, добавленного после выключения нагрева (например, в вирпул), используя этапы после кипячения из профиля кипячения.  Для формул, кроме Garetz, Daniels и SMPH, считается, что гранулы дают на 10% больше IBU, чем шишки (прессованный хмель — на 2%).</translation>
     </message>
     <message>
         <source>IBUs from hops added to the mash, as a percentage of what the same hops would give if they were added at the start of the boil and boiled for its full length.  Mash hops contribute little or no bitterness, because alpha acids isomerize very slowly at mash temperatures and much of the hop material stays behind with the grain.  The default is 0%, ie mash hops are assumed to give no IBUs.  This applies whichever IBU formula is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IBU от хмеля, добавленного в затор, в процентах от того, что дал бы тот же хмель, добавленный в начале кипячения и кипящий всё время.  Хмель в заторе почти не даёт горечи, так как альфа-кислоты изомеризуются при температурах затирания очень медленно, а большая часть хмеля остаётся вместе с зерном.  По умолчанию 0%, т. е. считается, что хмель в заторе не даёт IBU.  Применяется при любой выбранной формуле IBU.</translation>
     </message>
     <message>
         <source>IBUs from first wort hops (hops put in the kettle as the wort is run off, before the boil starts), as a percentage of what the same hops would give if they were added at the start of the boil.  The default of 110% reflects the commonly reported finding that first wort hopping gives about 10% more bitterness than a full-length boil addition.  This applies whichever IBU formula is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IBU от хмеля в первое сусло (хмель, добавляемый в котёл во время слива сусла, до начала кипячения) в процентах от того, что дал бы тот же хмель, добавленный в начале кипячения.  Значение по умолчанию 110% отражает распространённое наблюдение, что охмеление первого сусла даёт примерно на 10% больше горечи, чем добавление на всё время кипячения.  Применяется при любой выбранной формуле IBU.</translation>
     </message>
 </context>
 <context>
@@ -15055,47 +15073,47 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём сусла</translation>
     </message>
     <message>
         <source>Starting gravity of the wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная плотность сусла</translation>
     </message>
     <message>
         <source>Aeration method</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Метод аэрации</translation>
     </message>
     <message>
         <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дата производства (срок годности минус три месяца)</translation>
     </message>
     <message>
         <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расчётная доля живых дрожжей</translation>
     </message>
     <message>
         <source>Desired pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Желаемая норма засева</translation>
     </message>
     <message>
         <source>Number of vials/smack packs added to starter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Число пакетиков дрожжей, добавленных в стартер</translation>
     </message>
     <message>
         <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сколько потребуется дрожжей</translation>
     </message>
     <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сколько пакетиков дрожжей нужно для нормы засева</translation>
     </message>
     <message>
         <source>Amount of dry yeast needed to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Количество сухих дрожжей для нормы засева</translation>
     </message>
     <message>
         <source>Starter size to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём стартера для нормы засева</translation>
     </message>
 </context>
 <context>
@@ -15237,19 +15255,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Final beer pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pH готового пива</translation>
     </message>
     <message>
         <source>Total apparent attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общая видимая степень сбраживания</translation>
     </message>
     <message>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дата создания</translation>
     </message>
     <message>
         <source>Assistant Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Помощник пивовара</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
@@ -15261,94 +15279,94 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Expected wort clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ожидаемая прозрачность сусла</translation>
     </message>
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;p&gt;Насколько прозрачным, по-вашему, будет сусло при переливе в ферментер (например, в зависимости от того, используете ли вы осветлители в котле или вирпул).&lt;/p&gt;&lt;p&gt;Более мутное сусло теряет больше горечи при брожении.&lt;/p&gt;&lt;p&gt;Используется только формулой IBU SMPH.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
     <name>recipeWaterWidget</name>
     <message>
         <source>Base Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Исходный профиль</translation>
     </message>
     <message>
         <source>Edit base water profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить исходный профиль воды</translation>
     </message>
     <message>
         <source>% RO in Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% RO в заторе</translation>
     </message>
     <message>
         <source>% RO in Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% RO в промывке</translation>
     </message>
     <message>
         <source>Target Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Целевой профиль</translation>
     </message>
     <message>
         <source>Edit target water profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить целевой профиль воды</translation>
     </message>
     <message>
         <source>If ticked, Auto-Adjust also works out how much acid to add to get this mash pH.  It uses the acid already in the recipe if there is one, otherwise lactic acid (or another acid if there&apos;s no lactic acid in the database).  If not ticked, acids are left alone.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Если отмечено, автоподбор также рассчитывает, сколько кислоты добавить для получения этого pH затора.  Используется кислота, уже имеющаяся в рецепте, иначе молочная кислота (или другая кислота, если молочной кислоты нет в базе данных).  Если не отмечено, кислоты не изменяются.</translation>
     </message>
     <message>
         <source>Adjust acid for mash pH of</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Подобрать кислоту для pH затора</translation>
     </message>
     <message>
         <source>Target mash pH.  Most brewers aim for between 5.2 and 5.6, often 5.4.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Целевой pH затора.  Большинство пивоваров стремятся к 5,2–5,6, часто 5,4.</translation>
     </message>
     <message>
         <source>Work out the amounts of brewing salts to add to get as close as possible to the target profile and, if ticked above, the amount of acid to get the target mash pH.  If the recipe already has salts, only those are used and their amounts are changed (so remove any you don&apos;t want, or add just the ones you do want, first).  Otherwise, commonly-used salts are added as needed.  Chalk and pickling lime are left alone.  You can undo the changes in one go.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Рассчитать количество пивоваренных солей, чтобы максимально приблизиться к целевому профилю, и, если отмечено выше, количество кислоты для целевого pH затора.  Если в рецепте уже есть соли, используются только они и изменяется их количество (поэтому сначала удалите ненужные или добавьте только нужные).  Иначе по необходимости добавляются обычно используемые соли.  Мел и гашёная известь не изменяются.  Изменения можно отменить одним действием.</translation>
     </message>
     <message>
         <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Автоподбор</translation>
     </message>
     <message>
         <source>Automatically redo Auto-Adjust whenever something it depends on changes, eg the water profiles, the amount of water in the mash or the grain bill.  Changes you make to the amounts of salts or acid yourself will then be overwritten, so this is best used once you have chosen which salts to use.  Undoing an Auto-Adjust turns this off.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Автоматически повторять автоподбор при любом изменении того, от чего он зависит, например профилей воды, количества воды в заторе или засыпи.  Изменения количества солей или кислоты, сделанные вручную, будут при этом перезаписаны, поэтому это лучше использовать, когда вы уже выбрали соли.  Отмена автоподбора отключает этот режим.</translation>
     </message>
     <message>
         <source>Keep water agents in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Синхронизировать добавки для воды с изменениями рецепта</translation>
     </message>
     <message>
         <source>Actual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фактическое</translation>
     </message>
     <message>
         <source>Ca</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ca</translation>
     </message>
     <message>
         <source>Mg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mg</translation>
     </message>
     <message>
         <source>Na</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Na</translation>
     </message>
     <message>
         <source>Cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cl</translation>
     </message>
     <message>
         <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SO&lt;sub&gt;4&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HCO&lt;sub&gt;3&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>pH</source>
@@ -15356,43 +15374,43 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Water Agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавки для воды</translation>
     </message>
     <message>
         <source>Water Agents (Miscellaneous)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавки для воды (прочее)</translation>
     </message>
     <message>
         <source>Add a water agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить добавку для воды</translation>
     </message>
     <message>
         <source>Remove selected water agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить выбранную добавку для воды</translation>
     </message>
     <message>
         <source>Acid Malts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Кислые солода</translation>
     </message>
     <message>
         <source>Acid Malts (Fermentables)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Кислые солода (сбраживаемое)</translation>
     </message>
     <message>
         <source>Add an acid malt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить кислый солод</translation>
     </message>
     <message>
         <source>Remove selected acid malt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить выбранный кислый солод</translation>
     </message>
     <message>
         <source>Auto-Adjust Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Примечания автоподбора</translation>
     </message>
     <message>
         <source>Things to check after the last Auto-Adjust, eg ions that couldn&apos;t be brought close to the target, and why</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Что нужно проверить после последнего автоподбора, например ионы, которые не удалось приблизить к целевым значениям, и почему</translation>
     </message>
 </context>
 <context>
@@ -15451,15 +15469,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Измеренная начальная плотность (Плато)</translation>
     </message>
     <message>
         <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Измеренная начальная плотность</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Текущая измеренная плотность (Плато)</translation>
     </message>
 </context>
 <context>
@@ -15539,7 +15557,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     <name>stockPurchaseIngredientEditor</name>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Основное</translation>
     </message>
     <message>
         <source>Supplier</source>
@@ -15547,7 +15565,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Заказано</translation>
     </message>
     <message>
         <source>Date</source>
@@ -15563,19 +15581,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Заказанное количество</translation>
     </message>
     <message>
         <source>Received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Получено</translation>
     </message>
     <message>
         <source>Amount received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Полученное количество</translation>
     </message>
     <message>
         <source>Whether the amount is weight or volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Указывается ли количество по весу или по объёму</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -15583,7 +15601,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Uses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Расход</translation>
     </message>
     <message>
         <source>Amount Remaining</source>
@@ -15591,15 +15609,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Best Before</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Годен до</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -15607,15 +15625,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Purchase Price</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Цена покупки</translation>
     </message>
     <message>
         <source>Purchase Tax</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Налог на покупку</translation>
     </message>
     <message>
         <source>Shipping Cost</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Стоимость доставки</translation>
     </message>
     <message>
         <source>New</source>
@@ -15623,7 +15641,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Save</source>
@@ -15631,7 +15649,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -15639,7 +15657,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Примечание</translation>
     </message>
 </context>
 <context>
@@ -15753,11 +15771,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Причина</translation>
     </message>
     <message>
         <source>Change type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить тип</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -15765,15 +15783,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Использованное количество</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
     <message>
         <source>New</source>
@@ -15781,7 +15799,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Save</source>
@@ -15789,7 +15807,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -15797,7 +15815,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Комментарий</translation>
     </message>
     <message>
         <source>Recipe</source>
@@ -15865,11 +15883,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     <name>strikeWaterDialog</name>
     <message>
         <source>Strike Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Калькулятор воды для засыпи</translation>
     </message>
     <message>
         <source>Initial Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальный настой</translation>
     </message>
     <message>
         <source>Original Grain Temperature</source>
@@ -15885,15 +15903,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём воды</translation>
     </message>
     <message>
         <source>Mash Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Настой в затор</translation>
     </message>
     <message>
         <source>Total Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общий объём воды</translation>
     </message>
     <message>
         <source>Grain Weight</source>
@@ -15901,11 +15919,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Actual Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фактическая температура затора</translation>
     </message>
     <message>
         <source>Infusion Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Температура добавляемой воды</translation>
     </message>
     <message>
         <source>Calculate</source>
@@ -15913,15 +15931,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Strike Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Температура воды для засыпи</translation>
     </message>
     <message>
         <source>Volume to add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём для добавления</translation>
     </message>
     <message>
         <source>Note: This calculator assumes a preheated mash tun.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Примечание: калькулятор предполагает, что заторный чан предварительно нагрет.</translation>
     </message>
 </context>
 <context>
@@ -16060,27 +16078,27 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Основное</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обязательно</translation>
     </message>
     <message>
         <source>Ranges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Диапазоны</translation>
     </message>
     <message>
         <source>New style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новый стиль</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Aroma</source>
@@ -16088,7 +16106,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Внешний вид</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -16096,19 +16114,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Mouthfeel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ощущение во рту</translation>
     </message>
     <message>
         <source>Overall Impression</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общее впечатление</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
 </context>
 <context>
@@ -16119,7 +16137,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Таймеры добавлений</translation>
     </message>
 </context>
 <context>
@@ -16130,19 +16148,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Add:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить:</translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Примечания...</translation>
     </message>
     <message>
         <source>At:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">В:</translation>
     </message>
     <message>
         <source>mins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">мин</translation>
     </message>
     <message>
         <source>Stop</source>
@@ -16154,11 +16172,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Set Sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выбрать звук</translation>
     </message>
     <message>
         <source>Play Alarm Sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Воспроизвести сигнал</translation>
     </message>
 </context>
 <context>
@@ -16203,27 +16221,27 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Edit Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изменить воду</translation>
     </message>
     <message>
         <source>Alkalinity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Щёлочность</translation>
     </message>
     <message>
         <source>Alkalinity measured as</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Щёлочность измерена как</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>New water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новая вода</translation>
     </message>
     <message>
         <source>New</source>
@@ -16239,11 +16257,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
 </context>
 <context>
@@ -16410,7 +16428,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Основное</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -16418,7 +16436,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Best For</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Лучше всего для</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -16426,107 +16444,107 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новые дрожжи</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранить и закрыть</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отменить и закрыть</translation>
     </message>
     <message>
         <source>Min Attenuation (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Мин. степень сбраживания (%)</translation>
     </message>
     <message>
         <source>Minimum apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Минимальная видимая степень сбраживания в процентах от пунктов OG</translation>
     </message>
     <message>
         <source>Max Attenuation (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Макс. степень сбраживания (%)</translation>
     </message>
     <message>
         <source>Maximum apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Максимальная видимая степень сбраживания в процентах от пунктов OG</translation>
     </message>
     <message>
         <source>Alcohol Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Устойчивость к спирту</translation>
     </message>
     <message>
         <source>Recommended limit of ABV by the culture producer before attenuation stops</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Рекомендуемый производителем предел ABV, после которого брожение останавливается</translation>
     </message>
     <message>
         <source>Phenolic Off-Flavor Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фенольный привкус (POF+)</translation>
     </message>
     <message>
         <source>Whether culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Способна ли культура производить фенолы — типичное отличительное свойство дрожжей для сезона и бреттаномицетов</translation>
     </message>
     <message>
         <source>Glucoamylase Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Глюкоамилаза-положительные</translation>
     </message>
     <message>
         <source>A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Глюкоамилаза-положительная культура способна производить глюкоамилазу — фермент, вырабатываемый благодаря экспрессии гена диастатичности, который позволяет дрожжам сбраживать декстрины и крахмалы, что приводит к очень низкой FG. Это свойство есть у некоторых дрожжей для сезона и бреттаномицетов, а также у нового гибрида gulo от Omega Yeast Labs.</translation>
     </message>
     <message>
         <source>K1 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Киллер K1</translation>
     </message>
     <message>
         <source>Produces K1 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Производит киллер-токсин K1</translation>
     </message>
     <message>
         <source>K2 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Киллер K2</translation>
     </message>
     <message>
         <source>Produces K2 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Производит киллер-токсин K2</translation>
     </message>
     <message>
         <source>K28 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Киллер K28</translation>
     </message>
     <message>
         <source>Produces K28 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Производит киллер-токсин K28</translation>
     </message>
     <message>
         <source>Klus Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Киллер Klus</translation>
     </message>
     <message>
         <source>Produces Klus killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Производит киллер-токсин Klus</translation>
     </message>
     <message>
         <source>Killer Neutral</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Киллер-нейтральные</translation>
     </message>
     <message>
         <source>Neutral strains do not produce toxins, nor are they killed by them</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нейтральные штаммы не производят токсины и не погибают от них</translation>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Общее количество в запасе</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID в базе данных</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обычно это можно игнорировать, но иногда полезно для отладки.</translation>
     </message>
     <message>
         <source>New</source>
@@ -16546,11 +16564,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить закупку</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Создать новую запись о закупке для этих дрожжей</translation>
     </message>
 </context>
 </TS>
