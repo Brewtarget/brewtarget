@@ -1,16 +1,16 @@
 /*======================================================================================================================
- * widgets/RecipeNotesWidget.cpp is part of Brewken, and is copyright the following authors 2009-2026:
+ * widgets/RecipeNotesWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *    • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Peter Buelow <goballstate@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
  *
- * Brewken is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
  * version.
  *
- * Brewken is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * Brewtarget is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
  *
