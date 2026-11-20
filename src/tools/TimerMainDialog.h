@@ -86,6 +86,12 @@ private:
    bool m_stopped;
    bool m_limitAlarmRing;
    unsigned int m_alarmLimit; // In seconds
+protected:
+   /**
+    * \brief Overrides \c QWidget::changeEvent so that, on \c QEvent::LanguageChange, we update our text to the new
+    *        language.
+    */
+   void changeEvent(QEvent * event) override;
 };
 
 #endif

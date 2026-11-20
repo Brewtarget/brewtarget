@@ -305,10 +305,10 @@ namespace {
 
 
 QVector<Logging::LevelDetail> const Logging::levelDetails{
-   { Logging::LogLevel_DEBUG,   "DEBUG",   QObject::tr("Detailed (for debugging)")},
-   { Logging::LogLevel_INFO,    "INFO",    QObject::tr("Normal")},
-   { Logging::LogLevel_WARNING, "WARNING", QObject::tr("Warnings and Errors only")},
-   { Logging::LogLevel_ERROR,   "ERROR",   QObject::tr("Errors only")}
+   { Logging::LogLevel_DEBUG,   "DEBUG",   {"QObject", QT_TRANSLATE_NOOP("QObject", "Detailed (for debugging)")}},
+   { Logging::LogLevel_INFO,    "INFO",    {"QObject", QT_TRANSLATE_NOOP("QObject", "Normal"                  )}},
+   { Logging::LogLevel_WARNING, "WARNING", {"QObject", QT_TRANSLATE_NOOP("QObject", "Warnings and Errors only")}},
+   { Logging::LogLevel_ERROR,   "ERROR",   {"QObject", QT_TRANSLATE_NOOP("QObject", "Errors only"             )}}
 };
 
 QString Logging::getStringFromLogLevel(const Logging::Level level) {

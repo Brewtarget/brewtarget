@@ -63,11 +63,21 @@ private slots:
 
    void changed(QMetaProperty, QVariant);
 
+protected:
+   /**
+    * \brief Overrides \c QWidget::changeEvent so that, on \c QEvent::LanguageChange, we update our text to the new
+    *        language.
+    */
+   void changeEvent(QEvent * event) override;
+
 private:
    Recipe* m_recipeObs;
    bool ratingChanged;
 
    void showChanges(QMetaProperty * prop = nullptr);
+
+   //! Show the calories for \c m_recipeObs, per 33cl or 12oz depending on the volume units in use
+   void updateCalories();
 };
 
 #endif

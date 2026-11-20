@@ -21,6 +21,7 @@
 
 #include <cmath>
 
+#include <QEvent>
 #include <QButtonGroup>
 #include <QDebug>
 #include <QWidget>
@@ -97,5 +98,13 @@ void PrimingDialog::calculate() {
    // We should find a better solution, but until it is not, we must do it this way.
    lineEdit_output->setQuantity(sugar_g / 1000.0);
 
+   return;
+}
+
+void PrimingDialog::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+   }
+   this->QDialog::changeEvent(event);
    return;
 }

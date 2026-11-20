@@ -17,6 +17,7 @@
  =====================================================================================================================*/
 #include "tools/TimerMainDialog.h"
 
+#include <QEvent>
 #include <QMessageBox>
 #include <QToolTip>
 
@@ -405,5 +406,13 @@ void TimerMainDialog::sortTimers() {
       }
       this->m_timers = sortedTimers;
    }
+   return;
+}
+
+void TimerMainDialog::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+   }
+   this->QDialog::changeEvent(event);
    return;
 }

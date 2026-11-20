@@ -20,6 +20,7 @@
 #include "widgets/RecipeExtrasWidget.h"
 
 #include <QDate>
+#include <QEvent>
 #include <QWidget>
 #include <QDebug>
 
@@ -264,6 +265,12 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop) {
    if (updateAll || propName == PropertyNames::Recipe::beerAcidity_pH  ) { this->lineEdit_acidity     ->setQuantity (m_recipeObs->beerAcidity_pH  ()); if (!updateAll) { return; } }
    if (updateAll || propName == PropertyNames::Recipe::apparentAttenuation_pct) { this->lineEdit_attenuation->setQuantity (m_recipeObs->apparentAttenuation_pct()); if (!updateAll) { return; } }
 
+   this->updateCalories();
+
+   return;
+}
+
+void RecipeExtrasWidget::updateCalories() {
    bool const volumesAreMetric{
       Measurement::getDisplayUnitSystem(Measurement::PhysicalQuantity::Volume) == Measurement::UnitSystems::volume_Metric
    };
@@ -276,6 +283,17 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop) {
                         'f',
                         0)
    );
+   return;
+}
 
+void RecipeExtrasWidget::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+      // The generated retranslateUi resets the calories labels to their .ui file text
+      if (this->m_recipeObs) {
+         this->updateCalories();
+      }
+   }
+   this->QWidget::changeEvent(event);
    return;
 }

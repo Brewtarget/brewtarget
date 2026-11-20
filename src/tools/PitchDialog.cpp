@@ -22,6 +22,7 @@
 
 #include <math.h>
 
+#include <QEvent>
 #include <QChar>
 
 #include "calculations/Algorithms.h"
@@ -180,5 +181,15 @@ void PitchDialog::updateViabilityFromDate(QDate date) {
    // production date.
    int daysDifference = date.daysTo(QDate::currentDate());
    this->spinBox_Viability->setValue(97 - 0.7 * daysDifference);
+   return;
+}
+
+void PitchDialog::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      // Note that label_pitchRate (which shows a number) and the date format are marked notr in the .ui file, so this
+      // won't reset them
+      this->retranslateUi(this);
+   }
+   this->QDialog::changeEvent(event);
    return;
 }

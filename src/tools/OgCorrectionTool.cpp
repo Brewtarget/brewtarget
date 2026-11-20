@@ -20,6 +20,7 @@
  =====================================================================================================================*/
 #include "tools/OgCorrectionTool.h"
 
+#include <QEvent>
 #include <QMessageBox>
 
 #include "calculations/Algorithms.h"
@@ -212,21 +213,24 @@ void OgCorrectionTool::calculate() {
    double const roundedPredictedOg = Algorithms::round(finalUncorrectedSg_20C, 3);
 
    if (qFuzzyCompare(roundedPredictedOg, roundedTargetOg)) {
-      this->label_noActionOgComment->setText(tr("- On Target -"));
+      this->m_outcome = Outcome::OnTarget;
+      this->showOutcomeTexts();
       this->label_noActionOgComment->setStyleSheet(style_green);
       this->value_noActionOg       ->setStyleSheet(style_green);
       return;
    }
 
    if (roundedPredictedOg > roundedTargetOg) {
-      this->label_noActionOgComment->setText(tr("↑ Above Target ↑"));
+      this->m_outcome = Outcome::AboveTarget;
       this->label_noActionOgComment->setStyleSheet(style_red); // #C62828 = red
       this->value_noActionOg       ->setStyleSheet(style_red);
    } else {
-      this->label_noActionOgComment->setText(tr("↓ Below Target ↓"));
+      this->m_outcome = Outcome::BelowTarget;
       this->label_noActionOgComment->setStyleSheet(style_blue); // #1976D2 = blue
       this->value_noActionOg       ->setStyleSheet(style_blue);
    }
+   // This also sets the text in groupBox_changeBoilVolume below
+   this->showOutcomeTexts();
 
    //
    // A multipurpose solution is to change the boil size -- either add water if gravity is too high or boil the wort
@@ -238,18 +242,6 @@ void OgCorrectionTool::calculate() {
    this->value_changeBoilVolume->setStyleSheet(style_green);
    this->label_finalBatchSize->setStyleSheet(style_blue);
    this->value_finalBatchSize->setStyleSheet(style_blue);
-   if (roundedPredictedOg > roundedTargetOg) {
-      //
-      // If the predicted OG is higher than target, then we propose the user add water to the boil
-      //
-      this->groupBox_changeBoilVolume->setTitle(tr("Remedy: Add Water To Boil"));
-      this->label_changeBoilVolume->setText(tr("Amount to Add"));
-      this->value_changeBoilVolume->setToolTip(tr("Amount of water you need to add to hit planned OG"));
-   } else {
-      this->groupBox_changeBoilVolume->setTitle(tr("Remedy: Boil Down To Reduce Wort Volume"));
-      this->label_changeBoilVolume->setText(tr("Amount to Boil Off"));
-      this->value_changeBoilVolume->setToolTip(tr("Extra wort you need to boil off to hit planned OG"));
-   }
 
    // Calculate volume to add to boil
    double const targetFinalPlato = Algorithms::SG_20C20C_toPlato(targetOg); // This is bad. This assumes the post-boil gravity = og. Need account for post-boil water additions.
@@ -306,7 +298,35 @@ void OgCorrectionTool::calculate() {
    return;
 }
 
+void OgCorrectionTool::showOutcomeTexts() {
+   switch (this->m_outcome) {
+      case Outcome::NotCalculated:
+         // Nothing to show
+         break;
+      case Outcome::OnTarget:
+         this->label_noActionOgComment->setText(tr("- On Target -"));
+         break;
+      case Outcome::AboveTarget:
+         this->label_noActionOgComment->setText(tr("↑ Above Target ↑"));
+         //
+         // If the predicted OG is higher than target, then we propose the user add water to the boil
+         //
+         this->groupBox_changeBoilVolume->setTitle(tr("Remedy: Add Water To Boil"));
+         this->label_changeBoilVolume->setText(tr("Amount to Add"));
+         this->value_changeBoilVolume->setToolTip(tr("Amount of water you need to add to hit planned OG"));
+         break;
+      case Outcome::BelowTarget:
+         this->label_noActionOgComment->setText(tr("↓ Below Target ↓"));
+         this->groupBox_changeBoilVolume->setTitle(tr("Remedy: Boil Down To Reduce Wort Volume"));
+         this->label_changeBoilVolume->setText(tr("Amount to Boil Off"));
+         this->value_changeBoilVolume->setToolTip(tr("Extra wort you need to boil off to hit planned OG"));
+         break;
+   }
+   return;
+}
+
 void OgCorrectionTool::hideOutputs() const {
+   this->m_outcome = Outcome::NotCalculated;
    this->groupBox_changeBoilVolume->setVisible(false);
    this->label_remediesSeparator  ->setVisible(false);
    this->groupBox_addSugarOrDme   ->setVisible(false);
@@ -314,5 +334,15 @@ void OgCorrectionTool::hideOutputs() const {
    this->value_noActionOg->setRawText("");
    this->label_noActionOgComment->setText("");
 
+   return;
+}
+
+void OgCorrectionTool::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+      // Redo the text for the result of the last calculation, including what the generated retranslateUi resets
+      this->showOutcomeTexts();
+   }
+   this->QDialog::changeEvent(event);
    return;
 }

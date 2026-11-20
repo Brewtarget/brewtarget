@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartDigitWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * widgets/SmartDigitWidget.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -21,6 +21,7 @@
 #include <iostream>
 
 #include <QDebug>
+#include <QEvent>
 #include <QFrame>
 #include <QSettings>
 
@@ -50,9 +51,10 @@ public:
       m_highLim      {1.0},
       m_styleSheet   {QString("QLabel { font-weight: bold; color: #%1 }")},
       m_constantColor{false},
-      m_low_msg      {SmartDigitWidget::tr("Too low for style.")},
-      m_good_msg     {SmartDigitWidget::tr("In range for style.")},
-      m_high_msg     {SmartDigitWidget::tr("Too high for style.")} {
+      m_low_msg      {},
+      m_good_msg     {},
+      m_high_msg     {} {
+      this->setDefaultMessages();
       this->m_self.setStyleSheet(m_styleSheet.arg(0,6,16,QChar('0')));
       this->m_self.setFrameStyle(QFrame::Box);
       this->m_self.setFrameShadow(QFrame::Sunken);
@@ -63,6 +65,13 @@ public:
     * Destructor
     */
    ~impl() = default;
+
+   void setDefaultMessages() {
+      this->m_low_msg  = SmartDigitWidget::tr("Too low for style.");
+      this->m_good_msg = SmartDigitWidget::tr("In range for style.");
+      this->m_high_msg = SmartDigitWidget::tr("Too high for style.");
+      return;
+   }
 
    void updateColors() {
       // If we don't hold NonPhysicalQuantity, then we need to ensure we're using canonical units to do the limit
@@ -107,6 +116,8 @@ public:
    QString                     m_low_msg;
    QString                     m_good_msg;
    QString                     m_high_msg;
+   //! \c false once anyone has called setMessages, setLowMsg etc
+   bool                        m_usingDefaultMessages = true;
 };
 
 SmartDigitWidget::SmartDigitWidget(QWidget *parent) :
@@ -156,11 +167,22 @@ void SmartDigitWidget::setLimits(double low, double high) {
    return;
 }
 
-void SmartDigitWidget::setLowMsg (QString msg) { this->pimpl->m_low_msg  = msg; this->update(); return; }
-void SmartDigitWidget::setGoodMsg(QString msg) { this->pimpl->m_good_msg = msg; this->update(); return; }
-void SmartDigitWidget::setHighMsg(QString msg) { this->pimpl->m_high_msg = msg; this->update(); return; }
+void SmartDigitWidget::setLowMsg (QString msg) { this->pimpl->m_usingDefaultMessages = false; this->pimpl->m_low_msg  = msg; this->update(); return; }
+void SmartDigitWidget::setGoodMsg(QString msg) { this->pimpl->m_usingDefaultMessages = false; this->pimpl->m_good_msg = msg; this->update(); return; }
+void SmartDigitWidget::setHighMsg(QString msg) { this->pimpl->m_usingDefaultMessages = false; this->pimpl->m_high_msg = msg; this->update(); return; }
+
+void SmartDigitWidget::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange && this->pimpl->m_usingDefaultMessages) {
+      this->pimpl->setDefaultMessages();
+      // This is what sets the tool tip
+      this->pimpl->updateColors();
+   }
+   this->SmartValueDisplay::changeEvent(event);
+   return;
+}
 
 void SmartDigitWidget::setMessages(QString lowMsg, QString goodMsg, QString highMsg) {
+   this->pimpl->m_usingDefaultMessages = false;
    this->pimpl->m_low_msg  = lowMsg ;
    this->pimpl->m_good_msg = goodMsg;
    this->pimpl->m_high_msg = highMsg;

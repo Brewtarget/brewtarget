@@ -21,6 +21,7 @@
 #include "BrewLogWidget.h"
 
 #include <QDate>
+#include <QEvent>
 #include <QDebug>
 
 #include "Localization.h"
@@ -117,6 +118,15 @@ BrewLogWidget::~BrewLogWidget() = default;
 
 //.:TBD:. See comment in PitchDialog::updateProductionDate() for how we might re-implement per-field date format
 // selection
+void BrewLogWidget::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      // Note that the date edit display formats are marked notr in the .ui file, so this won't reset them
+      this->retranslateUi(this);
+   }
+   this->QWidget::changeEvent(event);
+   return;
+}
+
 void BrewLogWidget::updateDateFormat() {
    auto const dateFormat = Localization::getDateFormat();
    QString const format = Localization::numericToStringDateFormat(dateFormat);

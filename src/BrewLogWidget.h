@@ -49,6 +49,13 @@ public:
 protected:
    void focusOutEvent(QFocusEvent *e) override;
 
+protected:
+   /**
+    * \brief Overrides \c QWidget::changeEvent so that, on \c QEvent::LanguageChange, we update our text to the new
+    *        language.
+    */
+   void changeEvent(QEvent * event) override;
+
 public slots:
    void updateBrewDate(QDate const & datetime);
    void updateName();

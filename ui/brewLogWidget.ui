@@ -388,7 +388,7 @@
              <item row="2" column="1">
               <widget class="QDateTimeEdit" name="dateEdit_fermentDate">
                <property name="displayFormat">
-                <string>yyyy-dd-MM</string>
+                <string notr="true">yyyy-dd-MM</string>
                </property>
                <property name="calendarPopup">
                 <bool>true</bool>
@@ -587,7 +587,7 @@
          <item row="1" column="3">
           <widget class="QDateTimeEdit" name="dateEdit_brewDate">
            <property name="displayFormat">
-            <string>yyyy-dd-MM</string>
+            <string notr="true">yyyy-dd-MM</string>
            </property>
            <property name="calendarPopup">
             <bool>true</bool>

@@ -24,6 +24,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "TimerWidget.h"
 
+#include <QEvent>
 #include <QChar>
 #include <QDir>
 #include <QFileDialog>
@@ -113,7 +114,8 @@ void TimerWidget::setTime(int t) {
 
 void TimerWidget::setNote(QString n) {
    // Append if notes exist, new note if not
-   if (this->noteEdit->text() == tr("Notes...") || noteEdit->text() == "") {
+   // Note that "Notes..." is the placeholder text in the .ui file, so it never shows up in text()
+   if (this->noteEdit->text().isEmpty()) {
       this->noteEdit->setText(n);
    } else {
       this->noteEdit->setText(noteEdit->text() + tr(" and ") + n);
@@ -305,5 +307,13 @@ void TimerWidget::setAlarmLimits(bool const l, unsigned int const a) {
 void TimerWidget::reject() {
    // Escape hides timer window
    this->mainTimer->hideTimers();
+   return;
+}
+
+void TimerWidget::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+   }
+   this->QDialog::changeEvent(event);
    return;
 }

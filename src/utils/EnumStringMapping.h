@@ -188,6 +188,24 @@ public:
       return optionalEnumValue ? this->enumToValue(*optionalEnumValue) : QString{};
    }
 
+   /**
+    * \brief As \c enumToValue, but returns the untranslated text, for callers that need to store it and translate it
+    *        later (eg so that a widget can redraw itself in a new language).
+    *
+    * \throw std::out_of_range if no string is found for the supplied enum (because this is a coding error)
+    */
+   template<typename E>
+   [[nodiscard]] TranslatableText enumToTranslatableText(E const enumValue) const {
+      std::optional<TranslatableText> result = this->enumAsIntToTranslatableText(static_cast<int>(enumValue));
+      if (!result) {
+         qCritical().noquote() <<
+            Q_FUNC_INFO << "Coding error: no display name found in context" << this->m_context << "for" <<
+            static_cast<int>(enumValue) << Logging::getStackTrace();
+         throw std::out_of_range("Missing value in EnumDisplayNameMapping");
+      }
+      return *result;
+   }
+
 private:
    char const * const        m_context;
    EnumMapping<char const *> m_sourceTexts;

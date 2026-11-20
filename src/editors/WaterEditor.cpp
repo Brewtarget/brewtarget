@@ -67,12 +67,12 @@ WaterEditor::WaterEditor(QWidget *parent, QString const editorName) :
       tr("PPM"),
       50,
       {
-         {PropertyNames::Water::calcium_ppm    , Water::ionDisplayNames[Water::MineralIon::Calcium    ]},
-         {PropertyNames::Water::bicarbonate_ppm, Water::ionDisplayNames[Water::MineralIon::Bicarbonate]},
-         {PropertyNames::Water::sulfate_ppm    , Water::ionDisplayNames[Water::MineralIon::Sulfate    ]},
-         {PropertyNames::Water::chloride_ppm   , Water::ionDisplayNames[Water::MineralIon::Chloride   ]},
-         {PropertyNames::Water::sodium_ppm     , Water::ionDisplayNames[Water::MineralIon::Sodium     ]},
-         {PropertyNames::Water::magnesium_ppm  , Water::ionDisplayNames[Water::MineralIon::Magnesium  ]}
+         {PropertyNames::Water::calcium_ppm    , Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Calcium    )},
+         {PropertyNames::Water::bicarbonate_ppm, Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Bicarbonate)},
+         {PropertyNames::Water::sulfate_ppm    , Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Sulfate    )},
+         {PropertyNames::Water::chloride_ppm   , Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Chloride   )},
+         {PropertyNames::Water::sodium_ppm     , Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Sodium     )},
+         {PropertyNames::Water::magnesium_ppm  , Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Magnesium  )}
       }
    );
 

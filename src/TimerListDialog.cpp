@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * TimerListDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * TimerListDialog.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Aidan Roberts <aidanr67@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -17,6 +17,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "TimerListDialog.h"
 
+#include <QEvent>
 #include <QScrollBar>
 
 #include "TimerWidget.h"
@@ -64,5 +65,13 @@ void TimerListDialog::setTimerVisible(TimerWidget *t) {
 
 void TimerListDialog::hideTimers() {
    this->hide();
+   return;
+}
+
+void TimerListDialog::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->setWindowTitle(tr("Addition Timers"));
+   }
+   this->QDialog::changeEvent(event);
    return;
 }

@@ -37,7 +37,7 @@
      </item>
      <item>
       <widget class="QLineEdit" name="noteEdit">
-       <property name="text">
+       <property name="placeholderText">
         <string>Notes...</string>
        </property>
       </widget>
