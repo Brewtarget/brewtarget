@@ -23,6 +23,7 @@
 #include "model/Equipment.h"
 #include "model/Fermentation.h"
 #include "model/Mash.h"
+#include "model/Style.h"
 
 QList<std::shared_ptr<BrewLog>> RecipeUtils::brewLogsForRecipeAndAncestors(Recipe const & recipe) {
    QList<std::shared_ptr<BrewLog>> brewLogs = recipe.brewLogs();
@@ -266,9 +267,25 @@ template<class NE> QString RecipeUtils::describeSharingAndLocking(NE const & ite
    }
 
    //
-   // Then say whether it can be changed
+   // Then say whether it can be changed.  Things that cannot be locked (Equipment and Style) can always be changed, but
+   // we warn the user if that would affect locked recipes (eg ones that have been brewed).
    //
-   if (item.locked()) {
+   if constexpr (!IsLockable<NE>) {
+      if (recipes.size() > 1) {
+         sentences.append(NE::tr("Any changes you make here will affect all of them."));
+      }
+      QStringList lockedRecipeNames = otherLockedRecipeNames;
+      if (currentRecipeLocked) {
+         lockedRecipeNames.prepend(currentRecipe->name());
+      }
+      if (!lockedRecipeNames.isEmpty()) {
+         sentences.append(
+            NE::tr("Note that this includes %n locked recipe(s): %1.", "", lockedRecipeNames.size()).arg(
+               lockedRecipeNames.join(", ")
+            )
+         );
+      }
+   } else if (item.locked()) {
       sentences.append(NE::tr("It is locked, so it cannot be changed."));
    } else if (currentRecipeLocked) {
       sentences.append(NE::tr("It cannot be changed because the recipe \"%1\" is locked.").arg(currentRecipe->name()));
@@ -301,3 +318,9 @@ template std::shared_ptr<Fermentation> RecipeUtils::useCopyFor<Fermentation>(Rec
 template QString RecipeUtils::describeSharingAndLocking<Mash        >(Mash         const & item, Recipe const * currentRecipe);
 template QString RecipeUtils::describeSharingAndLocking<Boil        >(Boil         const & item, Recipe const * currentRecipe);
 template QString RecipeUtils::describeSharingAndLocking<Fermentation>(Fermentation const & item, Recipe const * currentRecipe);
+// Equipment and Style can be shared between recipes, but not locked, so they only need some of the functions
+template QList<Recipe *> RecipeUtils::recipesUsing<Style       >(Style        const & item);
+template std::shared_ptr<Equipment   > RecipeUtils::useCopyFor<Equipment   >(Recipe & recipe);
+template std::shared_ptr<Style       > RecipeUtils::useCopyFor<Style       >(Recipe & recipe);
+template QString RecipeUtils::describeSharingAndLocking<Equipment   >(Equipment    const & item, Recipe const * currentRecipe);
+template QString RecipeUtils::describeSharingAndLocking<Style       >(Style        const & item, Recipe const * currentRecipe);

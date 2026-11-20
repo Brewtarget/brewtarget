@@ -957,6 +957,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -4991,6 +4998,14 @@ Si necessiteu ajuda, obriu una incidència a %1</translation>
         <source>Add %1 to recipe</source>
         <translation type="unfinished">Afegeix %1 a la recepta</translation>
     </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -6060,6 +6075,13 @@ Voleu fer una còpia d&apos;aquesta maceració per a aquesta recepta, de manera 
         <translation type="unfinished">
             <numerusform>%1 l&apos;utilitza %n recepta: %2.</numerusform>
             <numerusform>%1 l&apos;utilitzen %n receptes: %2.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>

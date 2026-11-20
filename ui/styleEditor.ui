@@ -15,6 +15,10 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <!-- Says which recipes use this style, and offers to make a copy for the current recipe -->
+    <widget class="LockAndShareBar" name="lockAndShareBar"/>
+   </item>
+   <item>
     <widget class="QTabWidget" name="tabWidget_editor">
      <property name="tabPosition">
       <enum>QTabWidget::West</enum>
@@ -534,6 +538,11 @@
    <slots>
     <slot>lineChanged(PreviousScaleInfo)</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>LockAndShareBar</class>
+   <extends>QFrame</extends>
+   <header>widgets/LockAndShareBar.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

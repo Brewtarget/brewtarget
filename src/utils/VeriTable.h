@@ -21,10 +21,12 @@
 
 #include <QAbstractButton>
 #include <QItemSelectionModel>
+#include <QMenu>
 #include <QModelIndex>
 #include <QTableView>
 
 #include "MainWindow.h"
+#include "widgets/TableViewKeys.h"
 
 /**
  * \brief This class gathers together the common bits of data and functionality to handle a table that can be sorted by
@@ -87,6 +89,21 @@ template<class NE> struct VeriTable {
       // come and go (eg when a different recipe is shown) without a selectionChanged signal, so we listen for those
       // too.
       //
+      //
+      // Right-click offers the same things as the buttons, and the Delete key removes the selected row(s)
+      //
+      this->m_tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+      mainWindow.connect(this->m_tableView,
+                         &QWidget::customContextMenuRequested,
+                         &mainWindow,
+                         [this](QPoint const & pos) { this->showContextMenu(pos); return; });
+      TableViewKeys::handleDeleteKey(*this->m_tableView, [this]() {
+         if (this->m_editable) {
+            this->removeSelected();
+         }
+         return;
+      });
+
       auto updateButtons = [this]() { this->updateButtonStates(); return; };
       mainWindow.connect(this->m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, &mainWindow, updateButtons);
       mainWindow.connect(this->m_sortFilterProxyModel.get(), &QAbstractItemModel::modelReset  , &mainWindow, updateButtons);
@@ -104,6 +121,29 @@ template<class NE> struct VeriTable {
       this->m_editable = editable;
       this->m_tableView->setEnabled(editable);
       this->updateButtonStates();
+      return;
+   }
+
+   /**
+    * \brief Context menu for the table rows (as opposed to the column headers, which have their own -- see
+    *        \c BtTableModel::contextMenu).
+    */
+   void showContextMenu(QPoint const & pos) {
+      QMenu menu{this->m_tableView};
+      QAction * editAction = menu.addAction(
+         MainWindow::tr("Edit %1…").arg(NE::IngredientClass::localisedName()),
+         [this]() { this->editSelected(); return; }
+      );
+      editAction->setEnabled(this->m_editable && this->selected() != nullptr);
+      QAction * removeAction = menu.addAction(
+         MainWindow::tr("Remove from Recipe"),
+         [this]() { this->removeSelected(); return; }
+      );
+      removeAction->setEnabled(this->m_editable && this->m_tableView->selectionModel()->hasSelection());
+      removeAction->setShortcut(QKeySequence::Delete);
+      // The shortcut is handled by TableViewKeys::handleDeleteKey; here it's just to tell the user it exists
+      removeAction->setShortcutVisibleInContextMenu(true);
+      menu.exec(this->m_tableView->viewport()->mapToGlobal(pos));
       return;
    }
 

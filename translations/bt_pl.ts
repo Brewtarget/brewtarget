@@ -872,6 +872,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -4758,6 +4765,14 @@ Jeśli potrzebujesz pomocy, zgłoś problem na %1</translation>
         <source>Add %1 to recipe</source>
         <translation type="unfinished">Dodaj %1 do receptury</translation>
     </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -5783,6 +5798,14 @@ Czy chcesz utworzyć kopię tego zacierania dla tej receptury, aby nie wpływać
             <numerusform>%1: użycie w %n recepturze: %2.</numerusform>
             <numerusform>%1: użycie w %n recepturach: %2.</numerusform>
             <numerusform>%1: użycie w %n recepturach: %2.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>

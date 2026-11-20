@@ -20,12 +20,14 @@
 #include <QAbstractButton>
 #include <QEvent>
 #include <QItemSelectionModel>
+#include <QMenu>
 #include <QTableView>
 
 #include "model/Recipe.h"
 #include "undoRedo/Undoable.h"
 #include "utils/CuriouslyRecurringTemplateBase.h"
 #include "utils/WindowDistributor.h"
+#include "widgets/TableViewKeys.h"
 
 /**
  * \brief CRTP base class for \c EnumeratedItemsWidget subclasses
@@ -103,9 +105,38 @@ public:
       this->derived().connect(this->m_itemTableModel.get(), &QAbstractItemModel::layoutChanged, &this->derived(), updateButtons);
       this->updateButtonStates();
 
+      //
+      // Right-click offers the same things as the buttons, and the Delete key removes the selected item.  (If the owner
+      // is locked, the whole widget is disabled, so neither will do anything.)
+      //
+      this->derived().m_tableView_items->setContextMenuPolicy(Qt::CustomContextMenu);
+      this->derived().connect(this->derived().m_tableView_items.get(),
+                              &QWidget::customContextMenuRequested,
+                              &this->derived(),
+                              [&](QPoint const & pos) { this->showContextMenu(pos); return; });
+      TableViewKeys::handleDeleteKey(*this->derived().m_tableView_items, [&]() { this->removeSelectedItem(); return; });
+
       return;
    }
    ~EnumeratedItemsWidgetBase() = default;
+
+   /**
+    * \brief Context menu for the table rows.  Rather than duplicate the logic and text of the buttons, each menu entry
+    *        just mirrors a button (including whether it is enabled).
+    */
+   void showContextMenu(QPoint const & pos) {
+      QMenu menu{&this->derived()};
+      for (QAbstractButton * button : {static_cast<QAbstractButton *>(this->derived().m_pushButton_addItem     .get()),
+                                       static_cast<QAbstractButton *>(this->derived().m_pushButton_editItem    .get()),
+                                       static_cast<QAbstractButton *>(this->derived().m_pushButton_removeItem  .get()),
+                                       static_cast<QAbstractButton *>(this->derived().m_pushButton_moveItemUp  .get()),
+                                       static_cast<QAbstractButton *>(this->derived().m_pushButton_moveItemDown.get())}) {
+         QAction * action = menu.addAction(button->icon(), button->toolTip(), button, &QAbstractButton::click);
+         action->setEnabled(button->isEnabled());
+      }
+      menu.exec(this->derived().m_tableView_items->viewport()->mapToGlobal(pos));
+      return;
+   }
 
    /**
     * \brief Enable/disable the buttons according to whether there is an owner and what is selected.  (If the owner is

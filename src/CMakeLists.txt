@@ -286,6 +286,7 @@ set(filesToCompile_cpp
     ${repoDir}/src/widgets/SmartValueDisplay.cpp
     ${repoDir}/src/widgets/StockManager.cpp
     ${repoDir}/src/widgets/StockManagerIngredient.cpp
+    ${repoDir}/src/widgets/TableViewKeys.cpp
     ${repoDir}/src/widgets/ToggleSwitch.cpp
     ${repoDir}/src/widgets/UnitAndScalePopUpMenu.cpp
 )

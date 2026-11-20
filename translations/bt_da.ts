@@ -915,6 +915,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -4687,6 +4694,14 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Følgende ingrediens(er) måles forskelligt i opskriften og i din lagerbeholdning, så den/de brugte mængde(r) kunne ikke (alle) trækkes fra lagerbeholdningen.</translation>
     </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -5781,6 +5796,13 @@ Vil du lave en kopi af denne mæskning til den opskrift, så du kan gøre dette 
         <translation type="unfinished">
             <numerusform>%1 bruges af %n opskrift: %2.</numerusform>
             <numerusform>%1 bruges af %n opskrifter: %2.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>

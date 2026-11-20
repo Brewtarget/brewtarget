@@ -136,18 +136,30 @@ struct EditorBaseOptions {
     *        base class.
     */
    bool numRecipesUsing = false;
+   /**
+    * \brief Enabling this shows, for things that can be shared between recipes but that cannot be locked (ie
+    *        \c Equipment and \c Style), a \c LockAndShareBar called \c lockAndShareBar telling the user which recipes use
+    *        the item, and offering to make a copy for the current recipe.  (Things that can be locked -- ie those with
+    *        \c LockablePropertyBase -- always have the bar, so don't need this option.)
+    *
+    *        The \c Derived class needs to provide \c Recipe \c * \c currentRecipeForSharing() \c const returning the
+    *        recipe currently shown in the main window (or \c nullptr).
+    */
+   bool sharingBar = false;
 };
 template <EditorBaseOptions eb> struct has_LiveEditItem    : public std::integral_constant<bool, eb.liveEditItem   >{};
 template <EditorBaseOptions eb> struct has_NameTab         : public std::integral_constant<bool, eb.nameTab        >{};
 template <EditorBaseOptions eb> struct has_Recipe          : public std::integral_constant<bool, eb.recipe         >{};
 template <EditorBaseOptions eb> struct has_IdDisplay       : public std::integral_constant<bool, eb.idDisplay      >{};
 template <EditorBaseOptions eb> struct has_NumRecipesUsing : public std::integral_constant<bool, eb.numRecipesUsing>{};
+template <EditorBaseOptions eb> struct has_SharingBar      : public std::integral_constant<bool, eb.sharingBar     >{};
 // See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it)
 template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasLiveEditItem    = has_LiveEditItem   <eb>::value;
 template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasNameTab         = has_NameTab        <eb>::value;
 template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasRecipe          = has_Recipe         <eb>::value;
 template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasIdDisplay       = has_IdDisplay      <eb>::value;
 template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasNumRecipesUsing = has_NumRecipesUsing<eb>::value;
+template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasSharingBar      = has_SharingBar     <eb>::value;
 
 /**
  * \class EditorBase
@@ -350,6 +362,11 @@ public:
          this->derived().connect(bar, &LockAndShareBar::makeCopyClicked, &this->derived(), [this]() { this->makeCopyForRecipe(); return; });
          this->derived().connect(bar, &LockAndShareBar::lockClicked    , &this->derived(), [this]() { this->lockEditItem     (); return; });
          this->derived().connect(bar, &LockAndShareBar::unlockClicked  , &this->derived(), [this]() { this->unlockEditItem   (); return; });
+      } else if constexpr (HasSharingBar<editorBaseOptions>) {
+         // Things that can be shared but not locked (Equipment, Style) use the same bar, but without the Lock button
+         LockAndShareBar * bar = this->derived().lockAndShareBar;
+         bar->setLockable(false);
+         this->derived().connect(bar, &LockAndShareBar::makeCopyClicked, &this->derived(), [this]() { this->makeCopyForRecipe(); return; });
       }
       //
       this->connectLiveEditSignalsAndSlots();
@@ -510,7 +527,30 @@ public:
    }
 
    //! \brief No-op version
-   void refreshLockAndShare() requires (!HasLockablePropertyBase<NE>) { return; }
+   void refreshLockAndShare() requires (!HasLockablePropertyBase<NE> && !HasSharingBar<editorBaseOptions>) { return; }
+
+   /**
+    * \brief For things that can be shared between recipes but not locked (\c Equipment and \c Style), tell the user
+    *        which recipes use the item and, if it is shared and we were opened from a recipe, offer to make a copy for
+    *        that recipe.  Unlike for lockable things, we never stop the user changing the item: it's common to have,
+    *        eg, one equipment profile used by every recipe, including ones that have been brewed (and therefore
+    *        locked), and the user needs to be able to update it.  But we do make sure they know what they're changing.
+    */
+   void refreshLockAndShare() requires (!HasLockablePropertyBase<NE> && HasSharingBar<editorBaseOptions>) {
+      LockAndShareBar & bar = *this->derived().lockAndShareBar;
+      // A new item that hasn't been saved yet can't be used by any recipe, so there's nothing to say
+      if (!this->m_editItem || this->m_editItem->key() <= 0) {
+         bar.setVisible(false);
+         return;
+      }
+      bar.setVisible(true);
+
+      Recipe * const currentRecipe = this->recipeForSharing();
+      bool const isShared = RecipeUtils::recipesUsing(*this->m_editItem).size() > 1;
+      bool const offerCopy = currentRecipe && !currentRecipe->locked() && isShared;
+      bar.setState(RecipeUtils::describeSharingAndLocking(*this->m_editItem, currentRecipe), isShared, offerCopy, false);
+      return;
+   }
 
    /**
     * \brief For things that can be shared between recipes and locked, update the \c LockAndShareBar and make the fields
@@ -604,12 +644,30 @@ public:
    }
 
    /**
+    * \return The Recipe for which we would offer to make a copy of the edit item (see \c makeCopyForRecipe), ie the
+    *         current Recipe if there is one and it uses the edit item; \c nullptr otherwise.  For editors that watch the
+    *         current recipe, this is just \c currentRecipeIfItUsesEditItem.  Editors with \c sharingBar get the current
+    *         recipe from \c Derived::currentRecipeForSharing (which typically asks \c MainWindow).
+    */
+   Recipe * recipeForSharing() const {
+      if constexpr (HasRecipe<editorBaseOptions>) {
+         return this->currentRecipeIfItUsesEditItem();
+      } else {
+         if (!this->m_editItem) {
+            return nullptr;
+         }
+         Recipe * const recipe = this->derived().currentRecipeForSharing();
+         return (recipe && recipe->uses(*this->m_editItem)) ? recipe : nullptr;
+      }
+   }
+
+   /**
     * \brief Make a copy of the edit item for the current recipe (see \c RecipeUtils::useCopyFor) and switch to editing
     *        the copy.  Any changes the user has made in the editor but not yet saved are kept, so that they will be saved
     *        to the copy when the user clicks Save.
     */
-   void makeCopyForRecipe() requires HasLockablePropertyBase<NE> {
-      Recipe * const recipe = this->currentRecipeIfItUsesEditItem();
+   void makeCopyForRecipe() requires (HasLockablePropertyBase<NE> || HasSharingBar<editorBaseOptions>) {
+      Recipe * const recipe = this->recipeForSharing();
       if (!recipe || recipe->locked()) {
          // The button should not have been shown in this case
          qWarning() << Q_FUNC_INFO << "No recipe, or recipe locked";

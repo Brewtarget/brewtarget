@@ -679,6 +679,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Style</source>
@@ -3711,6 +3718,14 @@ Kui vajate abi, looge palun teema aadressil %1</translation>
         <source>Add %1 to recipe</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -4442,6 +4457,13 @@ Kas soovite teha sellest mäskist selle retsepti jaoks koopia, et saaksite seda 
         <translation type="unfinished">
             <numerusform>%1 on kasutusel %n retseptis: %2.</numerusform>
             <numerusform>%1 on kasutusel %n retseptis: %2.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>

@@ -1771,6 +1771,17 @@ void MainWindow::recipeChanged(QMetaProperty prop, [[maybe_unused]] QVariant val
       this->pimpl->m_styleEditor->setEditItem(style);
    }
 
+   //
+   // When the recipe starts using a different equipment, style, mash etc, the change notification is for the ID
+   // property (see Recipe::impl::set).  Most of the time, the change came from the drop-down here, so it's already
+   // showing the right thing, but not always -- eg if the user clicked "Make a copy for this recipe" in the editor.
+   //
+   if      (propName == PropertyNames::Recipe::equipmentId   ) { this->updateEquipmentInUi   (); }
+   else if (propName == PropertyNames::Recipe::styleId       ) { this->updateStyleInUi       (); }
+   else if (propName == PropertyNames::Recipe::mashId        ) { this->updateMashInUi        (); }
+   else if (propName == PropertyNames::Recipe::boilId        ) { this->updateBoilInUi        (); }
+   else if (propName == PropertyNames::Recipe::fermentationId) { this->updateFermentationInUi(); }
+
    this->showChanges(&prop);
    return;
 }

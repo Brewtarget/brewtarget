@@ -957,6 +957,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -4988,6 +4995,14 @@ Als u hulp nodig hebt, meld dan een probleem op %1</translation>
         <source>Add %1 to recipe</source>
         <translation type="unfinished">%1 aan recept toevoegen</translation>
     </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -6080,6 +6095,13 @@ Wilt u een kopie van dit maischschema maken voor dat recept, zodat u dit kunt do
         <translation type="unfinished">
             <numerusform>%1 wordt gebruikt door %n recept: %2.</numerusform>
             <numerusform>%1 wordt gebruikt door %n recepten: %2.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>

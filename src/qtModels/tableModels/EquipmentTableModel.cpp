@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/EquipmentTableModel.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * qtModels/tableModels/EquipmentTableModel.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -27,11 +27,13 @@
 
 COLUMN_INFOS(
    EquipmentTableModel,
-   TABLE_MODEL_HEADER(Equipment, Name            , PropertyNames::NamedEntity::name            ), // "Name"
-   TABLE_MODEL_HEADER(Equipment, MashTunVolume   , PropertyNames::Equipment::mashTunVolume_l   ), // "Mash Tun Volume"
-   TABLE_MODEL_HEADER(Equipment, KettleVolume    , PropertyNames::Equipment::kettleVolume_l    ), // "Kettle Volume"
-   TABLE_MODEL_HEADER(Equipment, FermentorVolume , PropertyNames::Equipment::fvVolume_l        ), // "Fermentor Volume"
-   TABLE_MODEL_HEADER(Equipment, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
+   TABLE_MODEL_HEADER(Equipment, Name            , PropertyNames::NamedEntity::name                    ), // "Name"
+   TABLE_MODEL_HEADER(Equipment, MashTunVolume   , PropertyNames::Equipment::mashTunVolume_l           ), // "Mash Tun Volume"
+   TABLE_MODEL_HEADER(Equipment, KettleVolume    , PropertyNames::Equipment::kettleVolume_l            ), // "Kettle Volume"
+   TABLE_MODEL_HEADER(Equipment, FermentorVolume , PropertyNames::Equipment::fvVolume_l                ), // "Fermentor Volume"
+   TABLE_MODEL_HEADER(Equipment, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn        ), // "N° Recipes"
+   TABLE_MODEL_HEADER(Equipment, BatchSize       , PropertyNames::Equipment::fvBatchSize_l             ),
+   TABLE_MODEL_HEADER(Equipment, BoilOffPerHour  , PropertyNames::Equipment::kettleEvaporationPerHour_l),
 )
 
 EquipmentTableModel::EquipmentTableModel(QTableView* parent, bool editable) :
@@ -41,6 +43,9 @@ EquipmentTableModel::EquipmentTableModel(QTableView* parent, bool editable) :
 
    QHeaderView* headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &EquipmentTableModel::contextMenu);
+   // Less commonly-used columns are only shown if the user asks for them (via the header context menu)
+   this->setColumnsHiddenByDefault({static_cast<int>(ColumnIndex::BatchSize),
+                                    static_cast<int>(ColumnIndex::BoilOffPerHour)});
    return;
 }
 

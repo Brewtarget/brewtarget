@@ -929,6 +929,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -4880,6 +4887,14 @@ Se precisar de ajuda, abra um chamado em %1</translation>
         <source>Add %1 to recipe</source>
         <translation type="unfinished">Adicionar %1 à receita</translation>
     </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -5945,6 +5960,13 @@ Deseja fazer uma cópia desta mostura para essa receita, de modo a não afetar m
         <translation type="unfinished">
             <numerusform>%1 é usado por %n receita: %2.</numerusform>
             <numerusform>%1 é usado por %n receitas: %2.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>

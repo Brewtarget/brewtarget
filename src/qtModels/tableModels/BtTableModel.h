@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/BtTableModel.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * qtModels/tableModels/BtTableModel.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -17,12 +17,14 @@
 #define TABLEMODELS_BTTABLEMODEL_H
 #pragma once
 
+#include <initializer_list>
 #include <memory>
 #include <optional>
 
 #include <QAbstractTableModel>
 #include <QDebug>
 #include <QHeaderView>
+#include <QList>
 #include <QMap>
 #include <QMenu>
 #include <QPoint>
@@ -132,9 +134,27 @@ public:
     */
    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+   /**
+    * \brief Save the column widths, order and visibility.  We also save the number of columns, so that, if we add
+    *        columns in a later version of the software, \c restoreUiState can tell which ones are new.
+    */
    void saveUiState(BtStringConst const & property, BtStringConst const & section) const;
 
+   /**
+    * \brief Restore what \c saveUiState saved.  Columns that are hidden by default (see
+    *        \c setColumnsHiddenByDefault) are hidden if there is no saved state for them.
+    */
    void restoreUiState(BtStringConst const & property, BtStringConst const & section);
+
+   /**
+    * \brief Derived classes call this (typically in their constructor) for columns that should not be shown unless
+    *        the user asks for them via the header context menu.  This allows us to offer extra columns (eg less
+    *        commonly-used properties) without cluttering the table for everyone.
+    *
+    *        NB: The columns are actually hidden in \c restoreUiState, because, when the model is constructed, the
+    *            table view does not yet know about its columns.
+    */
+   void setColumnsHiddenByDefault(std::initializer_list<int> columns);
 
 
 public slots:
@@ -145,6 +165,16 @@ public slots:
    void contextMenu(QPoint const & point);
 
 private:
+   /**
+    * \brief Add to \c menu a "Columns" sub-menu that allows the user to show and hide columns.
+    *
+    * \return The actions in the sub-menu, so that the caller can tell whether one of them was chosen
+    */
+   QList<QAction *> addShowHideColumnsMenu(QMenu & menu, QHeaderView & headerView) const;
+
+   //! See \c setColumnsHiddenByDefault
+   QList<int> m_columnsHiddenByDefault;
+
    // Insert all the usual boilerplate to prevent copy/assignment/move
    NO_COPY_DECLARATIONS(BtTableModel)
 

@@ -1058,6 +1058,7 @@ commonSourceFiles = files([
    'src/widgets/SmartValueDisplay.cpp',
    'src/widgets/StockManager.cpp',
    'src/widgets/StockManagerIngredient.cpp',
+   'src/widgets/TableViewKeys.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
 ])

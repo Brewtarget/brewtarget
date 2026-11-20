@@ -22,7 +22,9 @@
 
 #include "BtHorizontalTabs.h"
 #include "database/ObjectStoreWrapper.h"
+#include "MainWindow.h"
 #include "measurement/Unit.h"
+#include "model/Recipe.h"
 #include "qtModels/sortFilterProxyModels/StyleSortFilterProxyModel.h"
 
 #ifdef MANUALLY_INCLUDE_MOC
@@ -72,6 +74,10 @@ StyleEditor::StyleEditor(QWidget* parent, QString const editorName) :
 }
 
 StyleEditor::~StyleEditor() = default;
+
+Recipe * StyleEditor::currentRecipeForSharing() const {
+   return MainWindow::instance().currentRecipe();
+}
 
 // Insert the boiler-plate stuff that we cannot do in EditorBase
 EDITOR_COMMON_CODE(Style)

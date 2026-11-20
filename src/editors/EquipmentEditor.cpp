@@ -39,6 +39,7 @@
 #include "BtHorizontalTabs.h"
 #include "database/ObjectStoreWrapper.h"
 #include "Localization.h"
+#include "MainWindow.h"
 #include "measurement/Measurement.h"
 #include "measurement/PhysicalConstants.h"
 #include "measurement/Unit.h"
@@ -590,6 +591,10 @@ void EquipmentEditor::updateDefaultEquipment() {
       PersistentSettings::insert_ck(PersistentSettings::Names::defaultEquipmentKey, -1);
    }
    return;
+}
+
+Recipe * EquipmentEditor::currentRecipeForSharing() const {
+   return MainWindow::instance().currentRecipe();
 }
 
 // Insert the boilerplate stuff that we cannot do in EditorBase
