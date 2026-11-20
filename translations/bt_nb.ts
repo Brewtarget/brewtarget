@@ -4878,6 +4878,10 @@ Hvis du trenger hjelp, kan du opprette en sak på %1</translation>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Følgende ingredienser måles ulikt i oppskriften og i beholdningen din, så brukte mengder kunne ikke (alle) trekkes fra beholdningen.</translation>
     </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">Legg %1 til oppskriften</translation>
+    </message>
 </context>
 <context>
     <name>Mash</name>
@@ -7280,7 +7284,7 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>Galician</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Galisisk</translation>
     </message>
     <message>
         <source>German</source>
@@ -7292,7 +7296,7 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ungarsk</translation>
     </message>
     <message>
         <source>Italian</source>
@@ -7300,11 +7304,11 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>Latvian</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Latvisk</translation>
     </message>
     <message>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Norsk bokmål</translation>
     </message>
     <message>
         <source>Polish</source>
@@ -7320,7 +7324,7 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>Serbian</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Serbisk</translation>
     </message>
     <message>
         <source>Spanish</source>
@@ -7328,19 +7332,19 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Svensk</translation>
     </message>
     <message>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tyrkisk</translation>
     </message>
     <message>
         <source>None!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ingen!</translation>
     </message>
     <message>
         <source>pt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pt</translation>
     </message>
     <message>
         <source>Mosher&apos;s approximation</source>
@@ -7348,7 +7352,7 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>Daniel&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Daniels tilnærming</translation>
     </message>
     <message>
         <source>Morey&apos;s approximation</source>
@@ -7364,59 +7368,59 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>Noonan&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Noonans tilnærming</translation>
     </message>
     <message>
         <source>Filter search</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtrer søk</translation>
     </message>
     <message>
         <source>Delete selected %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Slett valgt %1</translation>
     </message>
     <message>
         <source>Heat Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varmekapasitet</translation>
     </message>
     <message>
         <source>Heat Capacity Kilocalories per</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varmekapasitet kilokalorier per</translation>
     </message>
     <message>
         <source>Heat Capacity Joules per</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varmekapasitet joule per</translation>
     </message>
     <message>
         <source>kc/C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kc/C</translation>
     </message>
     <message>
         <source>J/K</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">J/K</translation>
     </message>
     <message>
         <source>BTU/F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">BTU/F</translation>
     </message>
     <message>
         <source>Set selected %1 for current recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruk valgt %1 for gjeldende oppskrift</translation>
     </message>
     <message>
         <source>Add selected %1 to current recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg valgt %1 til gjeldende oppskrift</translation>
     </message>
     <message>
         <source>Formula</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formel</translation>
     </message>
     <message>
         <source>Could not open &quot;%1&quot; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kunne ikke åpne «%1» for skriving</translation>
     </message>
     <message>
         <source>Did not recognise file extension on &quot;%1&quot; so nothing read.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjenkjente ikke filtypen til «%1», så ingenting ble lest.</translation>
     </message>
     <message>
         <source>Yeasts</source>
@@ -7424,19 +7428,19 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>Enter filter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skriv inn filter</translation>
     </message>
     <message>
         <source>Add %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg %1 til %2</translation>
     </message>
     <message>
         <source>Stock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lager</translation>
     </message>
     <message>
         <source>No stock available.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ingen beholdning tilgjengelig.</translation>
     </message>
     <message>
         <source>Show stock purchases</source>
@@ -7444,151 +7448,151 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>New stock purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nytt lagerinnkjøp</translation>
     </message>
     <message>
         <source>Stock Purchases (Inventory)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagerinnkjøp (beholdning)</translation>
     </message>
     <message>
         <source>New Data</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nye data</translation>
     </message>
     <message>
         <source>Stop bothering you about new data?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Slutte å mase om nye data?</translation>
     </message>
     <message>
         <source>°C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">°C</translation>
     </message>
     <message>
         <source>°F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">°F</translation>
     </message>
     <message>
         <source>DotBeer, BeerJSON and BeerXML files (*.beer *.json *.xml);;DotBeer files (*.beer);;BeerJSON files (*.json);;BeerXML files (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DotBeer-, BeerJSON- og BeerXML-filer (*.beer *.json *.xml);;DotBeer-filer (*.beer);;BeerJSON-filer (*.json);;BeerXML-filer (*.xml)</translation>
     </message>
     <message>
         <source>DotBeer format (*.beer);;BeerJSON format (*.json);;BeerXML format (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DotBeer-format (*.beer);;BeerJSON-format (*.json);;BeerXML-format (*.xml)</translation>
     </message>
     <message>
         <source>Gravity Points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tetthetspoeng</translation>
     </message>
     <message>
         <source>points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">poeng</translation>
     </message>
     <message>
         <source>Success (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vellykket (%1)</translation>
     </message>
     <message>
         <source>Warning (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Advarsel (%1)</translation>
     </message>
     <message>
         <source>Recoverable Error (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjenopprettbar feil (%1)</translation>
     </message>
     <message>
         <source>Fatal Error (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fatal feil (%1)</translation>
     </message>
     <message>
         <source>Unrecognised (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ukjent (%1)</translation>
     </message>
     <message>
         <source>List-Of-Records</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Liste-over-poster</translation>
     </message>
     <message>
         <source>Measurement-With-Units</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Måling-med-enheter</translation>
     </message>
     <message>
         <source>One-Of-Measurements-With-Units</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Én-av-målinger-med-enheter</translation>
     </message>
     <message>
         <source>Single-Unit-Value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verdi-med-én-enhet</translation>
     </message>
     <message>
         <source>Required-Constant</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Påkrevd-konstant</translation>
     </message>
     <message>
         <source>Folder-Path</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mappesti</translation>
     </message>
     <message>
         <source>%1 errors found in JSON file.  First error at %2: schema condition %3 is violated because &quot;%4&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fant %1 feil i JSON-filen.  Første feil ved %2: skjemabetingelsen %3 er brutt fordi «%4»</translation>
     </message>
     <message>
         <source>Local-ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lokal-ID</translation>
     </message>
     <message>
         <source>Volume per Mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volum per masse</translation>
     </message>
     <message>
         <source>Energy per Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Energi per volum</translation>
     </message>
     <message>
         <source>kcal/L</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/L</translation>
     </message>
     <message>
         <source>kcal/50cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/50cl</translation>
     </message>
     <message>
         <source>kcal/33cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/33cl</translation>
     </message>
     <message>
         <source>kcal/25cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/25cl</translation>
     </message>
     <message>
         <source>kcal/100ml</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/100ml</translation>
     </message>
     <message>
         <source>kcal/pt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/pt</translation>
     </message>
     <message>
         <source>kcal/12floz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kcal/12floz</translation>
     </message>
     <message>
         <source>kJ/100ml</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kJ/100ml</translation>
     </message>
     <message>
         <source>Date-Time-With-Timezone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dato-tid-med-tidssone</translation>
     </message>
     <message>
         <source>Date-or-Date-Time-Local</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dato-eller-lokal-dato-tid</translation>
     </message>
     <message>
         <source>This file was written using version %1 of the dotBeer format, which is newer than the version this version of %2 supports (%3).  You may need a newer version of %2 to read it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Denne filen ble skrevet med versjon %1 av dotBeer-formatet, som er nyere enn versjonen denne versjonen av %2 støtter (%3).  Du trenger kanskje en nyere versjon av %2 for å lese den.</translation>
     </message>
     <message>
         <source>Mash step for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mesketrinn for %1</translation>
     </message>
     <message>
         <source>Primary fermentation for %1</source>
@@ -7596,15 +7600,15 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>Specific Heat Capacity BTUs per</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spesifikk varmekapasitet BTU per</translation>
     </message>
     <message>
         <source>Heat Capacity BTUs per</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varmekapasitet BTU per</translation>
     </message>
     <message>
         <source>Garetz&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Garetz&apos; tilnærming</translation>
     </message>
     <message>
         <source>Daniels&apos; approximation</source>
@@ -7612,39 +7616,39 @@ Programmet avsluttes nå.</translation>
     </message>
     <message>
         <source>SMPH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SMPH</translation>
     </message>
     <message>
         <source>Very Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Svært klar</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klar</translation>
     </message>
     <message>
         <source>Somewhat Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ganske klar</translation>
     </message>
     <message>
         <source>Average</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Middels</translation>
     </message>
     <message>
         <source>Somewhat Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Litt uklar</translation>
     </message>
     <message>
         <source>Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uklar</translation>
     </message>
     <message>
         <source>Very Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Svært uklar</translation>
     </message>
     <message>
         <source>Extremely Cloudy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstremt uklar</translation>
     </message>
 </context>
 <context>
@@ -7885,11 +7889,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Partial Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Delvis mesking</translation>
     </message>
     <message>
         <source>All Grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fullmalt</translation>
     </message>
     <message>
         <source>Cider</source>
@@ -7897,11 +7901,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Kombucha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombucha</translation>
     </message>
     <message>
         <source>Soda</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brus</translation>
     </message>
     <message>
         <source>Other</source>
@@ -7957,11 +7961,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Remove %1 from recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fjern %1 fra oppskriften</translation>
     </message>
     <message>
         <source>ID in DB</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i DB</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -7969,31 +7973,31 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagringstid</translation>
     </message>
     <message>
         <source>Age Temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagringstemp.</translation>
     </message>
     <message>
         <source>Ancestor ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forfar-ID</translation>
     </message>
     <message>
         <source>Apparent Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsynelatende forgjæringsgrad</translation>
     </message>
     <message>
         <source>Assistant Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Assisterende brygger</translation>
     </message>
     <message>
         <source>BatchSize</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bryggevolum</translation>
     </message>
     <message>
         <source>Beer Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ølets surhet</translation>
     </message>
     <message>
         <source>Boil</source>
@@ -8001,11 +8005,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Boil Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tetthet ved kok</translation>
     </message>
     <message>
         <source>Boil ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kok-ID</translation>
     </message>
     <message>
         <source>Boil Volume</source>
@@ -8017,27 +8021,27 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Calculations Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beregninger aktivert</translation>
     </message>
     <message>
         <source>Calories Per 33cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalorier per 33cl</translation>
     </message>
     <message>
         <source>Calories Per Liter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalorier per liter</translation>
     </message>
     <message>
         <source>Calories Per US 12oz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalorier per US 12oz</translation>
     </message>
     <message>
         <source>Calories Per US Pint</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalorier per US pint</translation>
     </message>
     <message>
         <source>Carbonation Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karboneringstemperatur</translation>
     </message>
     <message>
         <source>Carbonation</source>
@@ -8057,11 +8061,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Equipment ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utstyrs-ID</translation>
     </message>
     <message>
         <source>Fermentable Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsettinger av gjærbart</translation>
     </message>
     <message>
         <source>Fermentation</source>
@@ -8069,7 +8073,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Fermentation ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjærings-ID</translation>
     </message>
     <message>
         <source>Final Volume</source>
@@ -8077,19 +8081,19 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Forced Carbonation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tvangskarbonering</translation>
     </message>
     <message>
         <source>Grains In Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Malt i mesk</translation>
     </message>
     <message>
         <source>Grains</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Malt</translation>
     </message>
     <message>
         <source>Hop Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humletilsettinger</translation>
     </message>
     <message>
         <source>IBUs</source>
@@ -8101,7 +8105,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Keg Priming Factor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karboneringsfaktor for fat</translation>
     </message>
     <message>
         <source>Locked</source>
@@ -8113,11 +8117,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Mash ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mesk-ID</translation>
     </message>
     <message>
         <source>Misc Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsettinger av diverse</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -8125,23 +8129,23 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poeng</translation>
     </message>
     <message>
         <source>Post Boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volum etter kok</translation>
     </message>
     <message>
         <source>Priming Sugar Equiv</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekvivalent karboneringssukker</translation>
     </message>
     <message>
         <source>Priming Sugar Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Navn på karboneringssukker</translation>
     </message>
     <message>
         <source>Style ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Øltype-ID</translation>
     </message>
     <message>
         <source>Taste Notes</source>
@@ -8157,11 +8161,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Wort From Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vørter fra mesk</translation>
     </message>
     <message>
         <source>Yeast Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjærtilsettinger</translation>
     </message>
     <message>
         <source>No</source>
@@ -8177,95 +8181,95 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett %1 %2 i mesken%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett %1 %2 i forvørteren%3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trekk %1 %2 i vørteren%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett %1 %2 i kokingen%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett %1 %2 i primærgjæringen%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett %1 %2 i sekundærgjæringen%3.</translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruk %1 %2 ved tapping%3.</translation>
     </message>
     <message>
         <source> at end of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> ved slutten av %1</translation>
     </message>
     <message>
         <source> for %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> i %1</translation>
     </message>
     <message>
         <source>%1 addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1-tilsetting</translation>
     </message>
     <message>
         <source>Brew Logs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bryggelogger</translation>
     </message>
     <message>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opprettet dato</translation>
     </message>
     <message>
         <source>Base Water Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Basisvannprofil</translation>
     </message>
     <message>
         <source>Base Water Profile ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Basisvannprofil-ID</translation>
     </message>
     <message>
         <source>Target Water Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Målvannprofil</translation>
     </message>
     <message>
         <source>Target Water Profile ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Målvannprofil-ID</translation>
     </message>
     <message>
         <source>IBU Formula</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IBU-formel</translation>
     </message>
     <message>
         <source>Percentage reverse-osmosis water in mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prosentandel omvendt osmose-vann i mesk</translation>
     </message>
     <message>
         <source>Percentage reverse-osmosis water in sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prosentandel omvendt osmose-vann i skyllevann</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermentor%3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett %1 %2 i gjæringskaret%3.</translation>
     </message>
     <message>
         <source>Add %1 to the mash tun.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett %1 i meskekaret.</translation>
     </message>
     <message>
         <source>Bring %1 for upcoming infusions.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ha klar %1 til kommende infusjoner.</translation>
     </message>
     <message>
         <source>Do first wort hopping with %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utfør skyllehumling med %1.</translation>
     </message>
     <message>
         <source>%1 water to %2</source>
@@ -8277,26 +8281,26 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Target Mash pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mål-pH for mesk</translation>
     </message>
     <message>
         <source>Keep Water in Sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hold vannet synkronisert</translation>
     </message>
     <message>
         <source>Use Mash Profile in FG Calculation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruk meskeprofil i FG-beregning</translation>
     </message>
     <message>
         <source>Expected Wort Clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet klarhet i vørter</translation>
     </message>
 </context>
 <context>
     <name>RecipeAddition</name>
     <message>
         <source>Recipe Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oppskriftstilsetting</translation>
     </message>
     <message>
         <source>Add to Boil</source>
@@ -8312,15 +8316,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Add At Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett ved tetthet</translation>
     </message>
     <message>
         <source>Add At Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett ved surhet</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varighet</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8336,7 +8340,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Package</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tapping</translation>
     </message>
     <message>
         <source>Time</source>
@@ -8355,11 +8359,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>RecipeAdditionFermentable</name>
     <message>
         <source>Fermentable Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsetting av gjærbart</translation>
     </message>
     <message>
         <source>Addition of %1 fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsetting av gjærbart %1</translation>
     </message>
     <message>
         <source>Fermentable</source>
@@ -8409,7 +8413,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>RecipeAdditionHop</name>
     <message>
         <source>Hop Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humletilsetting</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8417,7 +8421,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forvørter</translation>
     </message>
     <message>
         <source>Boil</source>
@@ -8425,7 +8429,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Post-Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Etter kok</translation>
     </message>
     <message>
         <source>Dry Hop</source>
@@ -8433,7 +8437,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Addition of %1 hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsetting av humle %1</translation>
     </message>
     <message>
         <source>Hop</source>
@@ -8489,28 +8493,31 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>%L1 IBU from isomerization during the boil
 %L2 IBU from isomerization after flameout</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%L1 IBU fra isomerisering under kok
+%L2 IBU fra isomerisering etter kokeslutt</translation>
     </message>
     <message>
         <source>
 %L1 IBU from other bittering compounds (mostly oxidized alpha acids)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+%L1 IBU fra andre bitterstoffer (hovedsakelig oksiderte alfasyrer)</translation>
     </message>
     <message>
         <source>
 (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+(%1)</translation>
     </message>
     <message>
         <source>%1 does not model bitterness from hops added after flameout, so this addition gives no IBUs.  Select the mIBU or SMPH formula in Edit &gt; Options to include it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 modellerer ikke bitterhet fra humle tilsatt etter kokeslutt, så denne tilsettingen gir ingen IBU.  Velg mIBU- eller SMPH-formelen under Rediger &gt; Alternativer for å ta den med.</translation>
     </message>
 </context>
 <context>
     <name>RecipeAdditionMisc</name>
     <message>
         <source>Misc Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsetting av diverse</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8522,7 +8529,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Addition of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsetting av %1</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -8542,7 +8549,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Use </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruk </translation>
     </message>
 </context>
 <context>
@@ -8587,7 +8594,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>RecipeAdditionYeast</name>
     <message>
         <source>Yeast Addition</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjærtilsetting</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -8603,11 +8610,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Addition of %1 yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsetting av gjær %1</translation>
     </message>
     <message>
         <source>Add To Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett i sekundær</translation>
     </message>
     <message>
         <source>Attenuation</source>
@@ -8619,11 +8626,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Times Cultured</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antall ganger dyrket</translation>
     </message>
     <message>
         <source>Cell Count</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Celleantall</translation>
     </message>
     <message>
         <source>No</source>
@@ -8715,51 +8722,51 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>RecipeExtrasWidget</name>
     <message>
         <source>Change Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre brygger</translation>
     </message>
     <message>
         <source>Change Assistant Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre assisterende brygger</translation>
     </message>
     <message>
         <source>Change Taste Rating</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre smaksvurdering</translation>
     </message>
     <message>
         <source>Change Age</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre lagringstid</translation>
     </message>
     <message>
         <source>Change Age Temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre lagringstemp.</translation>
     </message>
     <message>
         <source>Change Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre dato</translation>
     </message>
     <message>
         <source>Change Carbonation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre karbonering</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger smaksnotater</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger notater</translation>
     </message>
     <message>
         <source>Change pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre pH</translation>
     </message>
     <message>
         <source>Change Apparent Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre tilsynelatende forgjæringsgrad</translation>
     </message>
     <message>
         <source>Calories/33cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalorier/33cl</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
@@ -8767,7 +8774,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Change Expected Wort Clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre forventet klarhet i vørter</translation>
     </message>
 </context>
 <context>
@@ -9046,11 +9053,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mål</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Totalt</translation>
     </message>
     <message>
         <source>Recipe</source>
@@ -9058,7 +9065,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Add During</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett under</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Fine Grind (DBFG)</source>
@@ -9110,27 +9117,27 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>RecipeWaterWidget</name>
     <message>
         <source>Minimum expected concentration is %1 ppm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Minste forventede konsentrasjon er %1 ppm</translation>
     </message>
     <message>
         <source>In range for target profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Innenfor målprofilen.</translation>
     </message>
     <message>
         <source>Maximum expected concentration is %1 ppm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Største forventede konsentrasjon er %1 ppm</translation>
     </message>
     <message>
         <source>PPM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PPM</translation>
     </message>
     <message>
         <source>Too low for target profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">For lavt for målprofilen.</translation>
     </message>
     <message>
         <source>Too high for target profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">For høyt for målprofilen.</translation>
     </message>
     <message>
         <source>Auto-Adjust undone.</source>
@@ -9139,57 +9146,57 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message numerus="yes">
         <source>See the &lt;i&gt;Auto-Adjust Notes&lt;/i&gt; tab below for details (%n item(s)).</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Se fanen &lt;i&gt;Notater om automatisk justering&lt;/i&gt; nedenfor for detaljer (%n element).</numerusform>
+            <numerusform>Se fanen &lt;i&gt;Notater om automatisk justering&lt;/i&gt; nedenfor for detaljer (%n elementer).</numerusform>
         </translation>
     </message>
     <message>
         <source>The value shown is the pH set on the recipe&apos;s mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verdien som vises, er pH-verdien satt på oppskriftens mesk.</translation>
     </message>
     <message>
         <source>Turn off keeping water agents in sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Slå av synkronisering av vannjusteringsmidler</translation>
     </message>
     <message>
         <source>Turn on keeping water agents in sync</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Slå på synkronisering av vannjusteringsmidler</translation>
     </message>
     <message>
         <source>Auto-adjust water agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Juster vannjusteringsmidler automatisk</translation>
     </message>
     <message>
         <source>Could not adjust the water agents yet: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kunne ikke justere vannjusteringsmidlene ennå: %1</translation>
     </message>
     <message>
         <source>Could not adjust the water agents, so nothing has been changed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kunne ikke justere vannjusteringsmidlene, så ingenting er endret: %1</translation>
     </message>
     <message>
         <source>target profile &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">målprofil «%1»</translation>
     </message>
     <message>
         <source>target mash pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mål-pH for mesk</translation>
     </message>
     <message>
         <source>The water agents already match %1 as closely as they can.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vannjusteringsmidlene samsvarer allerede så godt som mulig med %1.</translation>
     </message>
     <message>
         <source>Water agents adjusted to match %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vannjusteringsmidlene er justert for å samsvare med %1.</translation>
     </message>
     <message>
         <source>Water agents adjusted for %1, but some things need checking.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vannjusteringsmidlene er justert for %1, men noe må kontrolleres.</translation>
     </message>
     <message>
         <source>Predicted mash pH is %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet pH i mesken er %1.</translation>
     </message>
 </context>
 <context>
@@ -9260,30 +9267,30 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>ScaleRecipeEquipmentPage</name>
     <message>
         <source>Select Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velg utstyr</translation>
     </message>
     <message>
         <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oppskriften skaleres til bryggevolumet og effektiviteten for det valgte utstyret</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nytt utstyr</translation>
     </message>
     <message>
         <source>New Efficiency (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ny effektivitet (%)</translation>
     </message>
 </context>
 <context>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skaler oppskrift</translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.  Select another equipment with the new batch size and/or efficiency and the wizard will scale the recipe ingredients automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Denne veiviseren hjelper deg med å skalere en oppskrift til en annen størrelse eller effektivitet.  Velg et annet utstyr med det nye bryggevolumet og/eller effektiviteten, så skalerer veiviseren ingrediensene i oppskriften automatisk.</translation>
     </message>
 </context>
 <context>
@@ -9324,45 +9331,45 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surhet slutt</translation>
     </message>
     <message>
         <source>End Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatur slutt</translation>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surhet start</translation>
     </message>
 </context>
 <context>
     <name>StepExtended</name>
     <message>
         <source>Extended Step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utvidet trinn</translation>
     </message>
     <message>
         <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tetthet start</translation>
     </message>
     <message>
         <source>End Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tetthet slutt</translation>
     </message>
 </context>
 <context>
     <name>StockPurchase</name>
     <message>
         <source>Date Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bestillingsdato</translation>
     </message>
     <message>
         <source>Date Received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mottaksdato</translation>
     </message>
     <message>
         <source>Best Before Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Best før-dato</translation>
     </message>
     <message>
         <source>Supplier</source>
@@ -9370,19 +9377,19 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Quantity Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bestilt mengde</translation>
     </message>
     <message>
         <source>Purchase Price</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Innkjøpspris</translation>
     </message>
     <message>
         <source>Purchase Tax</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avgift på innkjøp</translation>
     </message>
     <message>
         <source>Shipping Cost</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fraktkostnad</translation>
     </message>
     <message>
         <source>Ingredient</source>
@@ -9394,7 +9401,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Merknad</translation>
     </message>
 </context>
 <context>
@@ -9408,14 +9415,14 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>StockPurchaseFermentableEditor</name>
     <message>
         <source>Fermentable Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av lagerinnkjøp av gjærbart</translation>
     </message>
 </context>
 <context>
     <name>StockPurchaseHop</name>
     <message>
         <source>Alpha Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfasyre</translation>
     </message>
     <message>
         <source>Form</source>
@@ -9430,21 +9437,21 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>StockPurchaseHopEditor</name>
     <message>
         <source>Hop Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av lagerinnkjøp av humle</translation>
     </message>
 </context>
 <context>
     <name>StockPurchaseMiscEditor</name>
     <message>
         <source>Misc Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av lagerinnkjøp av diverse</translation>
     </message>
 </context>
 <context>
     <name>StockPurchaseYeastEditor</name>
     <message>
         <source>Yeast Stock Purchase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av lagerinnkjøp av gjær</translation>
     </message>
 </context>
 <context>
@@ -9459,31 +9466,31 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Quantity Used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brukt mengde</translation>
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Årsak</translation>
     </message>
     <message>
         <source>Used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brukt</translation>
     </message>
     <message>
         <source>Lost</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tapt</translation>
     </message>
     <message>
         <source>Disposed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kastet</translation>
     </message>
     <message>
         <source>Stock Use</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagerbruk</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kommentar</translation>
     </message>
     <message>
         <source>Brew Log</source>
@@ -9491,42 +9498,42 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Brew Log ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bryggelogg-ID</translation>
     </message>
 </context>
 <context>
     <name>StockUseFermentableEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av lagerbruk for %1</translation>
     </message>
 </context>
 <context>
     <name>StockUseHopEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av lagerbruk for %1</translation>
     </message>
 </context>
 <context>
     <name>StockUseMiscEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av lagerbruk for %1</translation>
     </message>
 </context>
 <context>
     <name>StockUseYeastEditor</name>
     <message>
         <source>%1 Stock Use Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av lagerbruk for %1</translation>
     </message>
 </context>
 <context>
     <name>Style</name>
     <message>
         <source>Beer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Øl</translation>
     </message>
     <message>
         <source>Cider</source>
@@ -9538,11 +9545,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Kombucha</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombucha</translation>
     </message>
     <message>
         <source>Soda</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brus</translation>
     </message>
     <message>
         <source>Wine</source>
@@ -9562,7 +9569,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ølkategori</translation>
     </message>
     <message>
         <source>Number</source>
@@ -9590,15 +9597,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Max ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks ABV</translation>
     </message>
     <message>
         <source>Min ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min ABV</translation>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utseende</translation>
     </message>
     <message>
         <source>Aroma</source>
@@ -9606,19 +9613,19 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Max Carb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks karb.</translation>
     </message>
     <message>
         <source>Min Carb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min karb.</translation>
     </message>
     <message>
         <source>Max Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks farge</translation>
     </message>
     <message>
         <source>Min Color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min farge</translation>
     </message>
     <message>
         <source>Examples</source>
@@ -9626,11 +9633,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Max FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks FG</translation>
     </message>
     <message>
         <source>Min FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min FG</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -9638,11 +9645,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Max IBU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks IBU</translation>
     </message>
     <message>
         <source>Min IBU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min IBU</translation>
     </message>
     <message>
         <source>Ingredients</source>
@@ -9650,7 +9657,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Mouthfeel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Munnfølelse</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -9658,19 +9665,19 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Max OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks OG</translation>
     </message>
     <message>
         <source>Min OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min OG</translation>
     </message>
     <message>
         <source>Overall Impression</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helhetsinntrykk</translation>
     </message>
     <message>
         <source>Type String</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typestreng</translation>
     </message>
 </context>
 <context>
@@ -9700,8 +9707,8 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message numerus="yes">
         <source>Used in %n recipe(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Brukt i %n oppskrift</numerusform>
+            <numerusform>Brukt i %n oppskrifter</numerusform>
         </translation>
     </message>
 </context>
@@ -9709,31 +9716,31 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>TimerDialog</name>
     <message>
         <source>Addition Timer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsettingstidtaker</translation>
     </message>
     <message>
         <source>Set Addition Time(min):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Angi tilsettingstid (min):</translation>
     </message>
     <message>
         <source>Time Remaining:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjenstående tid:</translation>
     </message>
     <message>
         <source>Notes: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Notater: </translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Notater...</translation>
     </message>
     <message>
         <source>Set Alarm sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velg alarmlyd</translation>
     </message>
     <message>
         <source>Stop Alarm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stopp alarm</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -9744,18 +9751,18 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>TimerListDialog</name>
     <message>
         <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsettingstidtakere</translation>
     </message>
 </context>
 <context>
     <name>TimerMainDialog</name>
     <message>
         <source>Main Boil Timer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tidtaker for hovedkok</translation>
     </message>
     <message>
         <source>Add Timer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg til tidtaker</translation>
     </message>
     <message>
         <source>Start</source>
@@ -9767,91 +9774,91 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilbakestill</translation>
     </message>
     <message>
         <source>Hide Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skjul tidtakere</translation>
     </message>
     <message>
         <source>Show Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vis tidtakere</translation>
     </message>
     <message>
         <source>Cancel Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avbryt tidtakere</translation>
     </message>
     <message>
         <source>Load Current Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Last inn gjeldende oppskrift</translation>
     </message>
     <message>
         <source>Set Boil Timer (mins):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Angi koketidtaker (min):</translation>
     </message>
     <message>
         <source>Set Boil Time Here</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Angi koketid her</translation>
     </message>
     <message>
         <source>Limit Alarm Ring Time </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Begrens ringetid for alarm </translation>
     </message>
     <message>
         <source>Alarm Ring Time (secs):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ringetid for alarm (sek):</translation>
     </message>
     <message>
         <source>No Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ingen tidtakere</translation>
     </message>
     <message>
         <source>There are currently no timers to show.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det finnes for øyeblikket ingen tidtakere å vise.</translation>
     </message>
     <message>
         <source>KNOCKOUT</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">KOKESLUTT</translation>
     </message>
     <message>
         <source>Active Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aktive tidtakere</translation>
     </message>
     <message>
         <source>You currently have active timers, would you like to replace them or add to them?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Du har aktive tidtakere. Vil du erstatte dem eller legge til?</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Erstatt</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg til</translation>
     </message>
     <message>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 av %2</translation>
     </message>
     <message>
         <source>%1 hop addition is already timed and has been ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 humletilsetting har allerede tidtaker og er ignorert.</translation>
     </message>
     <message>
         <source>%1 hop additions are already timed and have been ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 humletilsettinger har allerede tidtaker og er ignorert.</translation>
     </message>
     <message>
         <source>Duplicate Timers Ignored</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dupliserte tidtakere ignorert</translation>
     </message>
     <message>
         <source>No Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ingen tilsettingstidtakere</translation>
     </message>
     <message>
         <source>There are no boil addition, no timers generated.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det er ingen tilsettinger i kokingen, så ingen tidtakere ble laget.</translation>
     </message>
 </context>
 <context>
@@ -9898,19 +9905,19 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source> and </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> og </translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Feil</translation>
     </message>
     <message>
         <source>Addition time cannot be longer than remaining boil time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsettingstiden kan ikke være lengre enn gjenstående koketid</translation>
     </message>
     <message>
         <source>Audio Files (*.wav)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lydfiler (*.wav)</translation>
     </message>
 </context>
 <context>
@@ -10056,13 +10063,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
 </context>
 <context>
-    <name>Undoable</name>
-    <message>
-        <source>Add %1 to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -10070,7 +10070,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Decimal Places</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Desimaler</translation>
     </message>
 </context>
 <context>
@@ -10112,14 +10112,14 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>UnitSystem</name>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skala</translation>
     </message>
 </context>
 <context>
     <name>Water</name>
     <message>
         <source>Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vann</translation>
     </message>
     <message>
         <source>Name</source>
@@ -10127,19 +10127,19 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Ca</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ca</translation>
     </message>
     <message>
         <source>Cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cl</translation>
     </message>
     <message>
         <source>Na</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Na</translation>
     </message>
     <message>
         <source>Mg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mg</translation>
     </message>
     <message>
         <source>pH</source>
@@ -10147,59 +10147,59 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Waters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vann</translation>
     </message>
     <message>
         <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SO&lt;sub&gt;4&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HCO&lt;sub&gt;3&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>Alkalinity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alkalitet</translation>
     </message>
     <message>
         <source>Alkalinity As HCO3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alkalitet som HCO3</translation>
     </message>
     <message>
         <source>Bicarbonate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bikarbonat</translation>
     </message>
     <message>
         <source>Calcium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalsium</translation>
     </message>
     <message>
         <source>Carbonate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karbonat</translation>
     </message>
     <message>
         <source>Chloride</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klorid</translation>
     </message>
     <message>
         <source>Fluoride</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fluorid</translation>
     </message>
     <message>
         <source>Iron</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jern</translation>
     </message>
     <message>
         <source>Magnesium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Magnesium</translation>
     </message>
     <message>
         <source>Nitrate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nitrat</translation>
     </message>
     <message>
         <source>Nitrite</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nitritt</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -10207,15 +10207,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Potassium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalium</translation>
     </message>
     <message>
         <source>Sodium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Natrium</translation>
     </message>
     <message>
         <source>Sulfate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sulfat</translation>
     </message>
     <message>
         <source>Type</source>
@@ -10231,63 +10231,63 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Bicarbonate (HCO₃⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bikarbonat (HCO₃⁻)</translation>
     </message>
     <message>
         <source>Calcium (Ca²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalsium (Ca²⁺)</translation>
     </message>
     <message>
         <source>Carbonate (CO₃²⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karbonat (CO₃²⁻)</translation>
     </message>
     <message>
         <source>Chloride (Cl⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klorid (Cl⁻)</translation>
     </message>
     <message>
         <source>Copper (Cu²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kobber (Cu²⁺)</translation>
     </message>
     <message>
         <source>Iron (Fe²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jern (Fe²⁺)</translation>
     </message>
     <message>
         <source>Magnesium (Mg²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Magnesium (Mg²⁺)</translation>
     </message>
     <message>
         <source>Manganese (Mn²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mangan (Mn²⁺)</translation>
     </message>
     <message>
         <source>Nitrate (NO₃⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nitrat (NO₃⁻)</translation>
     </message>
     <message>
         <source>Nitrite (NO₂⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nitritt (NO₂⁻)</translation>
     </message>
     <message>
         <source>Phosphate (PO₄³⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fosfat (PO₄³⁻)</translation>
     </message>
     <message>
         <source>Potassium (K⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalium (K⁺)</translation>
     </message>
     <message>
         <source>Sodium (Na⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Natrium (Na⁺)</translation>
     </message>
     <message>
         <source>Sulfate (SO₄²⁻)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sulfat (SO₄²⁻)</translation>
     </message>
     <message>
         <source>Zinc (Zn²⁺)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sink (Zn²⁺)</translation>
     </message>
 </context>
 <context>
@@ -10328,126 +10328,126 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>WaterAutoAdjuster</name>
     <message>
         <source>The recipe&apos;s mash has no water in it, so there is nothing to add salts to.  Set up the mash first (eg with Auto-Adjust in the mash editor).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oppskriftens mesk har ikke noe vann, så det er ingenting å tilsette salter i.  Sett opp mesken først (f.eks. med automatisk justering i meskeredigereren).</translation>
     </message>
     <message>
         <source>There is nothing to adjust: none of the water agents can be used to match the target profile (chalk and pickling lime are left alone), and no acid is being adjusted for mash pH.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det er ingenting å justere: ingen av vannjusteringsmidlene kan brukes for å nå målprofilen (kritt og lesket kalk røres ikke), og ingen syre justeres for meske-pH.</translation>
     </message>
     <message>
         <source>%1 will be %2 ppm, compared with a target of %3 ppm.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 blir %2 ppm, sammenlignet med et mål på %3 ppm.</translation>
     </message>
     <message>
         <source>The water already has more than this before any salts are added, so you might want to use more RO or distilled water.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vannet har allerede mer enn dette før salter tilsettes, så du bør kanskje bruke mer RO-vann eller destillert vann.</translation>
     </message>
     <message>
         <source>The salts that add other ions also add this one.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Saltene som tilfører andre ioner, tilfører også dette.</translation>
     </message>
     <message>
         <source>None of the salts being used adds this ion.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ingen av saltene som brukes, tilfører dette ionet.</translation>
     </message>
     <message>
         <source>Adding more would take other ions further from their targets.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Å tilsette mer ville føre andre ioner lenger fra målene sine.</translation>
     </message>
     <message>
         <source>To add both calcium and bicarbonate, you could add chalk (dissolved with CO₂) or pickling lime to the recipe yourself.  Auto-Adjust takes these into account, but doesn&apos;t work out how much to add.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">For å tilføre både kalsium og bikarbonat kan du selv legge kritt (oppløst med CO₂) eller lesket kalk til oppskriften.  Automatisk justering tar hensyn til disse, men regner ikke ut hvor mye som skal tilsettes.</translation>
     </message>
     <message>
         <source>The mash pH can&apos;t be worked out (there needs to be some grain and some water in the mash), so no acid has been added.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Meske-pH kan ikke beregnes (det må være noe malt og noe vann i mesken), så ingen syre er tilsatt.</translation>
     </message>
     <message>
         <source>The strength of the %1 is not set, so no acid has been added.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Styrken til %1 er ikke angitt, så ingen syre er tilsatt.</translation>
     </message>
     <message>
         <source>The mash pH will be %1 without any added acid, which is already below the target of %2.  Acid can only lower the pH.  To raise it, you could use less acidulated malt or add some baking soda or pickling lime.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Meske-pH blir %1 uten tilsatt syre, som allerede er under målet på %2.  Syre kan bare senke pH.  For å heve den kan du bruke mindre surmalt eller tilsette litt natron eller lesket kalk.</translation>
     </message>
     <message>
         <source>The recipe &quot;%1&quot; is locked, so its water agents cannot be changed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oppskriften «%1» er låst, så vannjusteringsmidlene kan ikke endres.</translation>
     </message>
     <message>
         <source>Please choose a target water profile and/or a target mash pH first.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velg en målvannprofil og/eller en mål-pH for mesk først.</translation>
     </message>
     <message>
         <source>There is no water agent of type &quot;%1&quot; in the database, so it wasn&apos;t considered.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det finnes ikke noe vannjusteringsmiddel av typen «%1» i databasen, så det ble ikke vurdert.</translation>
     </message>
     <message>
         <source>There is no target water profile, so only the acid has been adjusted.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det er ingen målvannprofil, så bare syren er justert.</translation>
     </message>
     <message>
         <source>The strength of &quot;%1&quot; is not set, so it has been assumed to be %2%.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Styrken til «%1» er ikke angitt, så den er antatt å være %2%.</translation>
     </message>
     <message>
         <source>There is no acid (lactic, phosphoric, sulfuric or hydrochloric) in the database, so the mash pH could not be adjusted.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det finnes ingen syre (melkesyre, fosforsyre, svovelsyre eller saltsyre) i databasen, så meske-pH kunne ikke justeres.</translation>
     </message>
     <message>
         <source>Only the %1 has been adjusted.  The other acid in the recipe has been taken into account as it is.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bare %1 er justert.  Den andre syren i oppskriften er tatt med i beregningen som den er.</translation>
     </message>
     <message>
         <source>Change amount of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre mengde %1</translation>
     </message>
     <message>
         <source>Where the same salt was added more than once, the whole amount is now in the first addition.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Der samme salt ble tilsatt mer enn én gang, ligger nå hele mengden i den første tilsettingen.</translation>
     </message>
     <message>
         <source>Where the same acid was added more than once, the whole amount is now in the first addition.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Der samme syre ble tilsatt mer enn én gang, ligger nå hele mengden i den første tilsettingen.</translation>
     </message>
     <message>
         <source>Add water agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett vannjusteringsmidler</translation>
     </message>
 </context>
 <context>
     <name>WaterEditor</name>
     <message>
         <source>PPM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">PPM</translation>
     </message>
     <message>
         <source>Current</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nåværende</translation>
     </message>
     <message>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endret</translation>
     </message>
     <message>
         <source>CaCO3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">CaCO3</translation>
     </message>
     <message>
         <source>HCO3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HCO3</translation>
     </message>
     <message>
         <source>Base Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Basisprofil</translation>
     </message>
     <message>
         <source>Target Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Målprofil</translation>
     </message>
     <message>
         <source>Actual Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faktisk profil</translation>
     </message>
 </context>
 <context>
@@ -10497,11 +10497,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>XmlCoding</name>
     <message>
         <source>Contents of file were not readable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Innholdet i filen kunne ikke leses</translation>
     </message>
     <message>
         <source>Could not understand file format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forstod ikke filformatet</translation>
     </message>
 </context>
 <context>
@@ -10528,11 +10528,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Flytende</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tørr</translation>
     </message>
     <message>
         <source>Slant</source>
@@ -10556,7 +10556,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Svært høy</translation>
     </message>
     <message>
         <source>Other</source>
@@ -10564,51 +10564,51 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Bacteria</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bakterier</translation>
     </message>
     <message>
         <source>Brett</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brett</translation>
     </message>
     <message>
         <source>Kveik</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kveik</translation>
     </message>
     <message>
         <source>Lacto</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lacto</translation>
     </message>
     <message>
         <source>Malolactic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Malolaktisk</translation>
     </message>
     <message>
         <source>Mixed-culture</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blandingskultur</translation>
     </message>
     <message>
         <source>Pedio</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pedio</translation>
     </message>
     <message>
         <source>Spontaneous</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spontan</translation>
     </message>
     <message>
         <source>Dregs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bunnfall</translation>
     </message>
     <message>
         <source>Very Low</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Svært lav</translation>
     </message>
     <message>
         <source>Medium Low</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Middels lav</translation>
     </message>
     <message>
         <source>Medium High</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Middels høy</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -10656,59 +10656,59 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Alcohol Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alkoholtoleranse</translation>
     </message>
     <message>
         <source>Typical Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typisk forgjæringsgrad</translation>
     </message>
     <message>
         <source>Max Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks forgjæringsgrad</translation>
     </message>
     <message>
         <source>Min Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min forgjæringsgrad</translation>
     </message>
     <message>
         <source>Best For</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Best egnet til</translation>
     </message>
     <message>
         <source>Glucoamylase Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Glukoamylase-positiv</translation>
     </message>
     <message>
         <source>Killer Neutral</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer-nøytral</translation>
     </message>
     <message>
         <source>Killer Producing K1 Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer som produserer K1-toksin</translation>
     </message>
     <message>
         <source>Killer Producing K28 Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer som produserer K28-toksin</translation>
     </message>
     <message>
         <source>Killer Producing K2 Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer som produserer K2-toksin</translation>
     </message>
     <message>
         <source>Killer Producing Klus Toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer som produserer Klus-toksin</translation>
     </message>
     <message>
         <source>Max Reuse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks gjenbruk</translation>
     </message>
     <message>
         <source>Max Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks temperatur</translation>
     </message>
     <message>
         <source>Min Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min temperatur</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -10716,7 +10716,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Phenolic Off Flavor Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fenolisk bismak-positiv</translation>
     </message>
     <message>
         <source>No</source>
@@ -10728,7 +10728,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Yeast Purchases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Innkjøp av gjær</translation>
     </message>
 </context>
 <context>
@@ -10871,26 +10871,26 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>is an descendant of</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">er en etterkommer av</translation>
     </message>
     <message>
         <source>Save changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre endringer</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
 </context>
 <context>
     <name>boilEditor</name>
     <message>
         <source>Boil Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av kok</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Påkrevd</translation>
     </message>
     <message>
         <source>Name</source>
@@ -10914,15 +10914,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>New boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nytt kok</translation>
     </message>
     <message>
         <source>New</source>
@@ -10938,18 +10938,18 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
 </context>
 <context>
     <name>boilStepEditor</name>
     <message>
         <source>Boil Step Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av koketrinn</translation>
     </message>
     <message>
         <source>Name</source>
@@ -11009,15 +11009,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surhet start</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surhet slutt</translation>
     </message>
     <message>
         <source>Optional description of this boil step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valgfri beskrivelse av dette koketrinnet</translation>
     </message>
     <message>
         <source>Description</source>
@@ -11029,7 +11029,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Save</source>
@@ -11037,7 +11037,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -11049,31 +11049,31 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tetthet start</translation>
     </message>
     <message>
         <source>End Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tetthet slutt</translation>
     </message>
     <message>
         <source>Start temp.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Starttemp.</translation>
     </message>
     <message>
         <source>Temperature at the start of this step.  If not set, the wort is assumed to be boiling.  Steps are classified as pre-boil, boil proper or post-boil by their temperatures.  For IBU formulae that model isomerization after flameout (eg mIBU and SMPH), a post-boil step that starts at boiling and ends below it is modelled as the wort cooling naturally (down to, but not below, the end temperature); any other post-boil step is modelled as the temperature changing linearly from the start temperature to the end temperature (so eg a hop stand held at 80°C (176°F) has start and end temperatures of 80°C).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatur ved starten av dette trinnet.  Hvis den ikke er angitt, antas vørteren å koke.  Trinn klassifiseres som før kok, selve kokingen eller etter kok ut fra temperaturene.  For IBU-formler som modellerer isomerisering etter kokeslutt (f.eks. mIBU og SMPH), modelleres et trinn etter kok som starter ved kokepunktet og slutter under det, som at vørteren kjøles naturlig (ned til, men ikke under, slutttemperaturen); alle andre trinn etter kok modelleres som en lineær temperaturendring fra starttemperaturen til slutttemperaturen (så f.eks. en humlestand holdt på 80°C (176°F) har start- og slutttemperatur på 80°C).</translation>
     </message>
     <message>
         <source>How long this step lasts, not including any ramp time.  For a post-boil step (eg whirlpool or hop stand), hops added to this step with no time set steep for this long (plus the time of any subsequent steps).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor lenge dette trinnet varer, uten opptrappingstid.  For et trinn etter kok (f.eks. whirlpool eller humlestand) trekker humle som er tilsatt dette trinnet uten angitt tid, så lenge (pluss tiden for eventuelle påfølgende trinn).</translation>
     </message>
     <message>
         <source>Temperature at the end of this step.  If not set, the wort is assumed to be boiling.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatur ved slutten av dette trinnet.  Hvis den ikke er angitt, antas vørteren å koke.</translation>
     </message>
     <message>
         <source>Ramp time: how long it takes, before this step begins, to get from the end temperature of the previous step to the start temperature of this one.  Eg, for a hop stand at 80°C (176°F), the time taken to chill the wort from boiling to that temperature.  For post-boil steps, the temperature is modelled as changing linearly during the ramp, and hops added to the step with no time set are added at the end of the ramp.  If not set, any temperature change between steps is treated as instantaneous.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opptrappingstid: hvor lang tid det tar, før dette trinnet begynner, å komme fra slutttemperaturen i forrige trinn til starttemperaturen i dette.  F.eks. for en humlestand på 80°C (176°F), tiden det tar å kjøle vørteren fra kokepunktet til den temperaturen.  For trinn etter kok modelleres temperaturen som endret lineært under opptrappingen, og humle som er tilsatt trinnet uten angitt tid, tilsettes ved slutten av opptrappingen.  Hvis den ikke er angitt, behandles enhver temperaturendring mellom trinn som øyeblikkelig.</translation>
     </message>
 </context>
 <context>
@@ -11218,7 +11218,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Temperature of strike water before dough in</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperatur på meskevannet før innmesking</translation>
     </message>
     <message>
         <source>Final Temp</source>
@@ -11278,11 +11278,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Percent efficiency into boil kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prosent effektivitet til kokekjel</translation>
     </message>
     <message>
         <source>Efficiency into boil kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Effektivitet til kokekjel</translation>
     </message>
     <message>
         <source>Projected OG</source>
@@ -11294,7 +11294,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Expected ABV based on recipe OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet ABV basert på oppskriftens OG</translation>
     </message>
     <message>
         <source>Projected ABV</source>
@@ -11302,7 +11302,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>ABV based on user-reported FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ABV basert på brukerens målte FG</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -11310,15 +11310,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Yeast attenuation based on yeast specified in recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forgjæringsgrad basert på gjæren angitt i oppskriften</translation>
     </message>
     <message>
         <source>Projected yeast attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Projisert forgjæringsgrad</translation>
     </message>
     <message>
         <source>Measured yeast attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Målt forgjæringsgrad</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -11334,35 +11334,35 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Batch Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Batchnummer</translation>
     </message>
     <message>
         <source>Expected OG, based on recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet OG, basert på oppskriften</translation>
     </message>
     <message>
         <source>Recipe OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oppskriftens OG</translation>
     </message>
     <message>
         <source>Projected OG, based on measured pre-boil gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Projisert OG, basert på målt tetthet før kok</translation>
     </message>
     <message>
         <source>Yeast attenuation based on user-reported OG and FG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forgjæringsgrad basert på brukerens målte OG og FG</translation>
     </message>
     <message>
         <source>How clear the wort was when it went into the fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor klar vørteren var da den gikk til gjæringskaret</translation>
     </message>
     <message>
         <source>Wort clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vørterens klarhet</translation>
     </message>
     <message>
         <source>How clear the wort was, judged by eye, when it went into the fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor klar vørteren var, vurdert med øyet, da den gikk til gjæringskaret</translation>
     </message>
 </context>
 <context>
@@ -11547,7 +11547,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Påkrevd</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
@@ -11575,7 +11575,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Hop % Utilization</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humleutnyttelse %</translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
@@ -11595,23 +11595,23 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Name to identify this equipment profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Navn som identifiserer denne utstyrsprofilen</translation>
     </message>
     <message>
         <source>Hot Liquor Tank</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varmtvannstank</translation>
     </message>
     <message>
         <source>Hot Liquor Tank Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Type varmtvannstank</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -11619,7 +11619,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Evaporation Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fordampningstap</translation>
     </message>
     <message>
         <source>Weight</source>
@@ -11647,7 +11647,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Lauter Tun</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Silkar</translation>
     </message>
     <message>
         <source>Lauter Tun Type</source>
@@ -11663,27 +11663,27 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Boil Kettle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kokekjel</translation>
     </message>
     <message>
         <source>Boil Kettle Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Type kokekjel</translation>
     </message>
     <message>
         <source>Evaporation rate per hour</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fordampningsrate per time</translation>
     </message>
     <message>
         <source>Brew Kettle Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Notater om kokekjel</translation>
     </message>
     <message>
         <source>Deadspace Losses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tap i dødvolum</translation>
     </message>
     <message>
         <source>Aging Vessel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagringskar</translation>
     </message>
     <message>
         <source>Aging Vessel Type</source>
@@ -11695,7 +11695,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Packaging Vessel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tappekar</translation>
     </message>
     <message>
         <source>Packaging Vessel Type</source>
@@ -11703,39 +11703,39 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Generelt</translation>
     </message>
     <message>
         <source>Grain absorption</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maltabsorpsjon</translation>
     </message>
     <message>
         <source>Default final top-up water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard etterfyllingsvann til slutt</translation>
     </message>
     <message>
         <source>Default Kettle top-up water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard etterfyllingsvann i kjel</translation>
     </message>
     <message>
         <source>The default value is 100°C (212°F), but the actual value will vary with altitude.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standardverdien er 100°C (212°F), men den faktiske verdien varierer med høyden over havet.</translation>
     </message>
     <message>
         <source>This is equal to the vessel&apos;s Heat Capacity divided by its weight.  Typical values are • Aluminum - 0.215 c/g·C  • Copper - 0.092 c/g·C  • Iron/Steel - 0.108 c/g·C  • Plastic - 0.359 c/g·C.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette er karets varmekapasitet delt på vekten.  Typiske verdier er • Aluminium - 0.215 c/g·C  • Kobber - 0.092 c/g·C  • Jern/stål - 0.108 c/g·C  • Plast - 0.359 c/g·C.</translation>
     </message>
     <message>
         <source>Outflow per minute</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utstrømning per minutt</translation>
     </message>
     <message>
         <source>Internal Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Innvendig diameter</translation>
     </message>
     <message>
         <source>Opening Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Åpningsdiameter</translation>
     </message>
     <message>
         <source>New</source>
@@ -11751,23 +11751,23 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
     <message>
         <source>Adjustment factor for large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Justeringsfaktor for humleutnyttelse ved store batcher.  Verdien bør være 100% for batcher under 20 gallon, men kan være høyere (200% eller mer) for utstyr til svært store batcher.</translation>
     </message>
     <message>
         <source>Kettle to Fermentor Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tap fra kjel til gjæringskar</translation>
     </message>
     <message>
         <source>Fermentor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjæringskar</translation>
     </message>
     <message>
         <source>Fermentor Type</source>
@@ -11780,51 +11780,52 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>Optional Vessel
 Tabs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valgfrie kar-
+faner</translation>
     </message>
     <message>
         <source>Total Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total kapasitet</translation>
     </message>
     <message>
         <source>Total usable capacity of the mash tun, including any space below the false bottom or malt pipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total brukbar kapasitet i meskekaret, inkludert eventuelt rom under den falske bunnen eller maltrøret</translation>
     </message>
     <message>
         <source>Foundation Water (recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bunnvann (gjenvunnet)</translation>
     </message>
     <message>
         <source>Water below the false bottom or malt pipe that drains out with the wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vann under den falske bunnen eller maltrøret som renner ut med vørteren</translation>
     </message>
     <message>
         <source>Mash Tun Loss (not recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tap i meskekar (ikke gjenvunnet)</translation>
     </message>
     <message>
         <source>Liquid that stays behind in the mash tun and is never recovered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Væske som blir igjen i meskekaret og aldri gjenvinnes</translation>
     </message>
     <message>
         <source>Lauter Tun Loss (not recovered)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tap i silkar (ikke gjenvunnet)</translation>
     </message>
     <message>
         <source>Wort that stays behind in the lauter tun and is never recovered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vørter som blir igjen i silkaret og aldri gjenvinnes</translation>
     </message>
     <message>
         <source>Wort that stays behind in the lauter tun and its plumbing, and never reaches the boil.  This is only used if you have a separate lauter tun (ie the lauter tun has a volume set).  Otherwise, include lautering losses in the Mash Tun Loss on the Mash Tun tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vørter som blir igjen i silkaret og rørene, og aldri når kokingen.  Brukes bare hvis du har et separat silkar (dvs. silkaret har et volum angitt).  Ellers tar du med silingstap i Tap i meskekar på fanen Meskekar.</translation>
     </message>
     <message>
         <source>Use a different name for each equipment profile.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruk et eget navn for hver utstyrsprofil.</translation>
     </message>
     <message>
         <source>These checkboxes control which vessel tabs are shown.  An asterisk after a vessel means it has a volume set, and so is used in calculations, even if its tab is hidden.  Attributes of &quot;optional&quot; vessels will not be saved if their volumes are left blank or set to 0.  If there is no mash tun, the mash happens in the boil kettle (as on all-in-one systems and for brew in a bag).  If there is no lauter tun, lautering happens wherever the mash happens.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Disse avkrysningsboksene styrer hvilke karfaner som vises.  En stjerne etter et kar betyr at det har et volum angitt og derfor brukes i beregninger, selv om fanen er skjult.  Egenskaper for «valgfrie» kar lagres ikke hvis volumet er tomt eller satt til 0.  Hvis det ikke finnes noe meskekar, skjer meskingen i kokekjelen (som på alt-i-ett-systemer og ved brew in a bag).  Hvis det ikke finnes noe silkar, skjer silingen der meskingen skjer.</translation>
     </message>
     <message>
         <source>Default Batch Size</source>
@@ -11832,19 +11833,19 @@ Tabs</source>
     </message>
     <message>
         <source>Volume into the fermentor that new recipes using this equipment start with</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volum til gjæringskaret som nye oppskrifter med dette utstyret starter med</translation>
     </message>
     <message>
         <source>Default Pre-boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard volum før kok</translation>
     </message>
     <message>
         <source>Volume in the kettle at the start of the boil that new recipes using this equipment start with</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volum i kjelen ved starten av kokingen som nye oppskrifter med dette utstyret starter med</translation>
     </message>
     <message>
         <source>The batch size (ie the volume going into the fermentor) and pre-boil volume that a recipe starts with when you choose this equipment for it.  These are not the capacities of the fermentor and kettle, which are set on their own tabs.  If you brew different batch sizes on the same equipment, you can either change the batch size in each recipe, or have a separate equipment profile for each batch size.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bryggevolumet (dvs. volumet som går til gjæringskaret) og volumet før kok som en oppskrift starter med når du velger dette utstyret for den.  Dette er ikke kapasiteten til gjæringskaret og kjelen, som angis på egne faner.  Hvis du brygger ulike bryggevolum på samme utstyr, kan du enten endre bryggevolumet i hver oppskrift eller ha en egen utstyrsprofil for hvert bryggevolum.</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -11852,39 +11853,39 @@ Tabs</source>
     </message>
     <message>
         <source>These settings apply to whichever vessel the mash happens in: the mash tun or, if you do not have a separate mash tun (eg on an all-in-one system such as the Grainfather, or for brew in a bag), the boil kettle.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Disse innstillingene gjelder karet meskingen skjer i: meskekaret eller, hvis du ikke har et separat meskekar (f.eks. på et alt-i-ett-system som Grainfather, eller ved brew in a bag), kokekjelen.</translation>
     </message>
     <message>
         <source>The water that has to be below the false bottom (or malt pipe / basket) before the grain is covered, but which drains out with the wort and so is NOT lost.  (It is part of the Total Capacity of the mash tun or, if there is no mash tun, of the kettle.)  This is common in all-in-one systems -- eg about 3.5 liters for a Grainfather G30.  It is added to the strike water, so the mash thickness you choose applies just to the grain bed, and it is taken off the sparge water, so the total water needed does not change.  Leave at 0 if there is no such space (eg brew in a bag without a false bottom).  Other software calls this, eg, &quot;Mash-Tun Deadspace&quot; (Brewfather) or &quot;Mash Tun Addition&quot; (BeerSmith).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vannet som må være under den falske bunnen (eller maltrøret / kurven) før malten er dekket, men som renner ut med vørteren og derfor IKKE går tapt.  (Det er en del av den totale kapasiteten til meskekaret eller, hvis det ikke finnes noe meskekar, kjelen.)  Dette er vanlig i alt-i-ett-systemer -- f.eks. omtrent 3,5 liter for en Grainfather G30.  Det legges til meskevannet, slik at mesketykkelsen du velger gjelder bare for maltsengen, og det trekkes fra skyllevannet, slik at den totale vannmengden ikke endres.  La det stå på 0 hvis det ikke finnes noe slikt rom (f.eks. brew in a bag uten falsk bunn).  Annen programvare kaller dette f.eks. «Mash-Tun Deadspace» (Brewfather) eller «Mash Tun Addition» (BeerSmith).</translation>
     </message>
     <message>
         <source>How much water is permanently lost to each unit of weight of grain during mashing (ie the water the spent grain retains).  This is separate from Foundation Water and Mash Tun Loss, which are about the vessel rather than the grain.  (For an all-in-one system, anything that does not drain from the malt pipe should be included here.)  The default value is about 1.085 liters per kilogram (0.13 US gallons per pound), which is typical for a conventional mash tun.  For an all-in-one system with a malt pipe, about 0.8 liters per kilogram is more typical, and for brew in a bag with the bag squeezed, about 0.66 liters per kilogram.  It can fluctuate due to the fineness of your grind, how well the grain is drained, the malt, and other factors.  Pressing the &quot;Default Absorption&quot; button will reset the value to the default.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor mye vann som går permanent tapt per vektenhet malt under meskingen (dvs. vannet som den brukte malten holder på).  Dette er noe annet enn bunnvann og tap i meskekar, som gjelder karet og ikke malten.  (For et alt-i-ett-system skal alt som ikke renner ut av maltrøret, tas med her.)  Standardverdien er omtrent 1,085 liter per kilo (0,13 US gallon per pund), som er typisk for et vanlig meskekar.  For et alt-i-ett-system med maltrør er omtrent 0,8 liter per kilo mer typisk, og for brew in a bag med posen klemt, omtrent 0,66 liter per kilo.  Verdien kan variere med hvor fint malten er knust, hvor godt den er drenert, malttypen og andre faktorer.  Knappen «Normalverdi absorpsjon» tilbakestiller verdien til standardverdien.</translation>
     </message>
     <message>
         <source>The most the mash tun can hold, including any space below the false bottom (or malt pipe / basket) and anything that stays behind in the vessel.  The space actually available for the grain and its strike water is this volume less the Foundation Water (on the Mash tab) and Mash Tun Loss below.  If you do not have a separate mash tun -- eg on an all-in-one system such as the Grainfather, or for brew in a bag -- leave this blank (and untick Mash Tun on the General tab): the mash then happens in the boil kettle.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det meste meskekaret kan romme, inkludert eventuelt rom under den falske bunnen (eller maltrøret / kurven) og alt som blir igjen i karet.  Plassen som faktisk er tilgjengelig for malten og meskevannet, er dette volumet minus bunnvann (på fanen Mesk) og tap i meskekar nedenfor.  Hvis du ikke har et separat meskekar -- f.eks. på et alt-i-ett-system som Grainfather, eller ved brew in a bag -- lar du dette stå tomt (og fjerner haken for Meskekar på fanen Generelt): da skjer meskingen i kokekjelen.</translation>
     </message>
     <message>
         <source>Liquid that stays behind in the mash tun (eg below the outlet or in pipework) and never reaches the boil.  It is added to the strike water and to the total water needed.  Do not include grain absorption or anything that drains out with the wort (put those under Grain Absorption and Foundation Water on the Mash tab).  If you do not have a separate lauter tun, include your lautering losses here.  If you do have a separate lauter tun, its losses go on the Lauter Tun tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Væske som blir igjen i meskekaret (f.eks. under utløpet eller i rør) og aldri når kokingen.  Den legges til meskevannet og til den totale vannmengden.  Ikke ta med maltabsorpsjon eller noe som renner ut med vørteren (før det under Maltabsorpsjon og Bunnvann på fanen Mesk).  Hvis du ikke har et separat silkar, tar du med silingstapene her.  Hvis du har et separat silkar, føres tapene på fanen Silkar.</translation>
     </message>
     <message>
         <source>The most the kettle can hold (not the pre-boil volume, which is on the General tab).  If there is no separate mash tun, this is also the space available for the mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det meste kjelen kan romme (ikke volumet før kok, som står på fanen Generelt).  Hvis det ikke finnes noe separat meskekar, er dette også plassen som er tilgjengelig for mesken.</translation>
     </message>
     <message>
         <source>The most the fermentor can hold, including headspace.  This is NOT the batch size, which is set on the General tab (as Default Batch Size).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det meste gjæringskaret kan romme, inkludert headspace.  Dette er IKKE bryggevolumet, som angis på fanen Generelt (som Standard bryggevolum).</translation>
     </message>
     <message>
         <source>Internal diameter of the kettle at the surface of the wort.  Used, along with the opening diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Innvendig diameter på kjelen ved vørteroverflaten.  Brukes, sammen med åpningsdiameteren og vørtervolumet i kjelen, til å anslå hvor raskt vørteren kjøles naturlig etter kokeslutt, for IBU-formler som modellerer isomerisering etter kokeslutt (f.eks. mIBU og SMPH).  Hvis den ikke er angitt, antas 45 cm (omtrent 18 tommer).</translation>
     </message>
     <message>
         <source>Internal diameter of the opening in the kettle through which steam can escape -- eg the same as the internal diameter if the kettle is uncovered, or smaller if it is partly covered.  Used, along with the internal diameter and the volume of wort in the kettle, to estimate how quickly the wort cools naturally after flameout, for IBU formulae that model isomerization after flameout (eg mIBU and SMPH).  If not set, 45 cm (about 18 inches) is assumed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Innvendig diameter på åpningen i kjelen som damp kan slippe ut gjennom -- f.eks. det samme som den innvendige diameteren hvis kjelen er uten lokk, eller mindre hvis den er delvis tildekket.  Brukes, sammen med den innvendige diameteren og vørtervolumet i kjelen, til å anslå hvor raskt vørteren kjøles naturlig etter kokeslutt, for IBU-formler som modellerer isomerisering etter kokeslutt (f.eks. mIBU og SMPH).  Hvis den ikke er angitt, antas 45 cm (omtrent 18 tommer).</translation>
     </message>
 </context>
 <context>
@@ -12043,11 +12044,11 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hoved</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Påkrevd</translation>
     </message>
     <message>
         <source>Yield %</source>
@@ -12059,7 +12060,7 @@ Tabs</source>
     </message>
     <message>
         <source>Diastatic power</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diastatisk kraft</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -12067,15 +12068,15 @@ Tabs</source>
     </message>
     <message>
         <source>New fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ny gjærbar råvare</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
@@ -12087,7 +12088,7 @@ Tabs</source>
     </message>
     <message>
         <source>Fermantable Grain Group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Korngruppe for gjærbar råvare</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -12103,11 +12104,11 @@ Tabs</source>
     </message>
     <message>
         <source>Extract Yield Dry Basis Coarse Grind (DBCG)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstraktutbytte tørrvekt grov malt (DBCG)</translation>
     </message>
     <message>
         <source>Potential yield</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Potensielt utbytte</translation>
     </message>
     <message>
         <source>Kolbach Index</source>
@@ -12115,23 +12116,23 @@ Tabs</source>
     </message>
     <message>
         <source>Percentage of malt that is &quot;glassy&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andel malt som er «glassaktig»</translation>
     </message>
     <message>
         <source>Percentage of malt that is &quot;half glassy&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andel malt som er «halvt glassaktig»</translation>
     </message>
     <message>
         <source>Percentage of malt that is &quot;mealy&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andel malt som er «melen»</translation>
     </message>
     <message>
         <source>Percentage of grain that is &quot;plump&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andel korn som er «fyldig»</translation>
     </message>
     <message>
         <source>Percentage of grain that is &quot;tine&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andel korn som er «tynt»</translation>
     </message>
     <message>
         <source>Friability</source>
@@ -12143,7 +12144,7 @@ Tabs</source>
     </message>
     <message>
         <source>Viscosity of this malt in a &quot;congress mash&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Viskositet for denne malten i en «kongressmesk»</translation>
     </message>
     <message>
         <source>Fermentability</source>
@@ -12155,23 +12156,23 @@ Tabs</source>
     </message>
     <message>
         <source>Beta-glucans</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Betaglukaner</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Fine Grind</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstraktutbytte tørrvekt fin malt</translation>
     </message>
     <message>
         <source>Extract Yield Dry Basis Coarse Grind</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ekstraktutbytte tørrvekt grov malt</translation>
     </message>
     <message>
         <source>Total alpha-amylase in malted grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total alfa-amylase i maltet korn</translation>
     </message>
     <message>
         <source>Total alpha-amylase in the malted grain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total alfa-amylase i det maltede kornet</translation>
     </message>
     <message>
         <source>Free Amino Nitrogen (FAN)</source>
@@ -12183,11 +12184,11 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
     <message>
         <source>Grain Group</source>
@@ -12207,7 +12208,7 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentable Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Type gjærbar råvare</translation>
     </message>
     <message>
         <source>Total Inventory</source>
@@ -12215,42 +12216,42 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total mengde i beholdningen</translation>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg til innkjøp</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opprett en ny post for lagerinnkjøp for denne gjærbare råvaren</translation>
     </message>
     <message>
         <source>% Lactic Acid (by weight)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% melkesyre (etter vekt)</translation>
     </message>
     <message>
         <source>For aciduated malts (aka acid malts)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">For surmalt (også kalt syremalt)</translation>
     </message>
     <message>
         <source>% Fermentable by yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% gjærbart for gjær</translation>
     </message>
     <message>
         <source>Percentage of this ingredient&apos;s extract that brewing yeast can ferment.  Leave blank for 100%.  Set to 0 for lactose, or about 10 for maltodextrin.  Not normally needed for malts.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andelen av ekstraktet i denne ingrediensen som bryggegjær kan gjære.  La stå tomt for 100%.  Sett til 0 for laktose, eller omtrent 10 for maltodekstrin.  Normalt ikke nødvendig for malt.</translation>
     </message>
 </context>
 <context>
     <name>fermentationEditor</name>
     <message>
         <source>Fermentation Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av gjæring</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Påkrevd</translation>
     </message>
     <message>
         <source>Name</source>
@@ -12266,15 +12267,15 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>New fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ny gjæring</translation>
     </message>
     <message>
         <source>New</source>
@@ -12290,30 +12291,30 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
     <message>
         <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hva som skjer med krausen (skummet på toppen av ølet som gjærer), som tar med seg noe bitterhet.  Brukes bare av SMPH-formelen for IBU.</translation>
     </message>
     <message>
         <source>Krausen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Krausen</translation>
     </message>
     <message>
         <source>What happens to the krausen (the foam on top of the fermenting beer), which carries away some bitterness.  If the krausen is skimmed, choose one of the &quot;blown off&quot; options, according to how much is removed.  Only used by the SMPH IBU formula.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hva som skjer med krausen (skummet på toppen av ølet som gjærer), som tar med seg noe bitterhet.  Hvis krausen skummes av, velger du et av «blåst av»-alternativene, etter hvor mye som fjernes.  Brukes bare av SMPH-formelen for IBU.</translation>
     </message>
 </context>
 <context>
     <name>fermentationStepEditor</name>
     <message>
         <source>Fermentation Step Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigering av gjæringstrinn</translation>
     </message>
     <message>
         <source>Name</source>
@@ -12373,15 +12374,15 @@ Tabs</source>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surhet start</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surhet slutt</translation>
     </message>
     <message>
         <source>Optional description of this fermentation step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valgfri beskrivelse av dette gjæringstrinnet</translation>
     </message>
     <message>
         <source>Description</source>
@@ -12393,7 +12394,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Save</source>
@@ -12401,7 +12402,7 @@ Tabs</source>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -12409,19 +12410,19 @@ Tabs</source>
     </message>
     <message>
         <source>Free rise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fri stigning</translation>
     </message>
     <message>
         <source>Free rise is used to indicate a fermentation step where the exothermic fermentation is allowed to raise the temperature without restriction</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fri stigning brukes for å angi et gjæringstrinn der den eksoterme gjæringen får heve temperaturen uten begrensning</translation>
     </message>
     <message>
         <source>Start Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tetthet start</translation>
     </message>
     <message>
         <source>End Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tetthet slutt</translation>
     </message>
     <message>
         <source>Vessel</source>
@@ -12584,11 +12585,11 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hoved</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Påkrevd</translation>
     </message>
     <message>
         <source>Alpha %</source>
@@ -12600,19 +12601,19 @@ Tabs</source>
     </message>
     <message>
         <source>Cohumulone %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kohumulon %</translation>
     </message>
     <message>
         <source>Myrcene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Myrcen %</translation>
     </message>
     <message>
         <source>Humulene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humulen %</translation>
     </message>
     <message>
         <source>Caryophyllene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Karyofyllen %</translation>
     </message>
     <message>
         <source>Substitutes</source>
@@ -12624,23 +12625,23 @@ Tabs</source>
     </message>
     <message>
         <source>New hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ny humle</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Hop Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humletype</translation>
     </message>
     <message>
         <source>Hop Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humleform</translation>
     </message>
     <message>
         <source>Year</source>
@@ -12656,7 +12657,7 @@ Tabs</source>
     </message>
     <message>
         <source>Linalool %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linalool %</translation>
     </message>
     <message>
         <source>Linalool</source>
@@ -12664,7 +12665,7 @@ Tabs</source>
     </message>
     <message>
         <source>Limonene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Limonen %</translation>
     </message>
     <message>
         <source>Limonene</source>
@@ -12672,7 +12673,7 @@ Tabs</source>
     </message>
     <message>
         <source>Nerol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nerol %</translation>
     </message>
     <message>
         <source>Nerol</source>
@@ -12680,7 +12681,7 @@ Tabs</source>
     </message>
     <message>
         <source>Farnesene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Farnesen %</translation>
     </message>
     <message>
         <source>Farnesene</source>
@@ -12688,7 +12689,7 @@ Tabs</source>
     </message>
     <message>
         <source>Polyphenols %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Polyfenoler %</translation>
     </message>
     <message>
         <source>Polyphenols</source>
@@ -12696,7 +12697,7 @@ Tabs</source>
     </message>
     <message>
         <source>Geraniol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geraniol %</translation>
     </message>
     <message>
         <source>Geraniol</source>
@@ -12704,7 +12705,7 @@ Tabs</source>
     </message>
     <message>
         <source>Xanthohumol %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Xanthohumol %</translation>
     </message>
     <message>
         <source>Xanthohumol</source>
@@ -12712,15 +12713,15 @@ Tabs</source>
     </message>
     <message>
         <source>β-pinene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β-pinen %</translation>
     </message>
     <message>
         <source>β-pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">β-pinen</translation>
     </message>
     <message>
         <source>Total Oil ml/100g</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total olje ml/100g</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
@@ -12732,7 +12733,7 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total mengde i beholdningen</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -12740,11 +12741,11 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
     <message>
         <source>New</source>
@@ -12764,59 +12765,59 @@ Tabs</source>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg til innkjøp</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opprett en ny post for lagerinnkjøp for denne humlen</translation>
     </message>
     <message>
         <source>Alpha Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfasyre</translation>
     </message>
     <message>
         <source>Actual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faktisk</translation>
     </message>
     <message>
         <source>Typical Range</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typisk område</translation>
     </message>
     <message>
         <source>Min alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min alfasyrer i vektprosent</translation>
     </message>
     <message>
         <source>-</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-</translation>
     </message>
     <message>
         <source>Max alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks alfasyrer i vektprosent</translation>
     </message>
     <message>
         <source>Beta Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Betasyre</translation>
     </message>
     <message>
         <source>Min beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min betasyrer i vektprosent</translation>
     </message>
     <message>
         <source>Max beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks betasyrer i vektprosent</translation>
     </message>
     <message>
         <source>6 Month Alpha Loss</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alfatap over 6 måneder</translation>
     </message>
     <message>
         <source>α-Pinene %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α-pinen %</translation>
     </message>
     <message>
         <source>α-Pinene</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">α-pinen</translation>
     </message>
 </context>
 <context>
@@ -13607,27 +13608,27 @@ Tabs</source>
     </message>
     <message>
         <source>Export to &amp;BBCode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eksporter til &amp;BBCode</translation>
     </message>
     <message>
         <source>Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vann</translation>
     </message>
     <message>
         <source>&amp;Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Navn</translation>
     </message>
     <message>
         <source>E&amp;quipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Utstyr</translation>
     </message>
     <message>
         <source>&amp;Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Øl&amp;type</translation>
     </message>
     <message>
         <source>Recipe Locked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oppskrift låst</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -13639,59 +13640,59 @@ Tabs</source>
     </message>
     <message>
         <source>&amp;Export to File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Eksporter til fil</translation>
     </message>
     <message>
         <source>M&amp;iscs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Diverse</translation>
     </message>
     <message>
         <source>&amp;Print and preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skriv &amp;ut og forhåndsvis</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ctrl+P</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Avslutt</translation>
     </message>
     <message>
         <source>&amp;Import from File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Importer fra fil</translation>
     </message>
     <message>
         <source>Optio&amp;ns</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Alternativer</translation>
     </message>
     <message>
         <source>Ti&amp;mers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Tidtakere</translation>
     </message>
     <message>
         <source>Strike &amp;Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Meskevannkalkulator</translation>
     </message>
     <message>
         <source>&amp;Hydrometer Temp Adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Temperaturkorreksjon for hydrometer</translation>
     </message>
     <message>
         <source>Alcohol Percentage Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verktøy for alkoholprosent</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Angre</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjør om</translation>
     </message>
     <message>
         <source>Ancestors</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forfedre</translation>
     </message>
     <message>
         <source>Brew It!</source>
@@ -13707,7 +13708,7 @@ Tabs</source>
     </message>
     <message>
         <source>Boils</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kok</translation>
     </message>
     <message>
         <source>Fermentation</source>
@@ -13715,15 +13716,15 @@ Tabs</source>
     </message>
     <message>
         <source>Fermentations</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjæringer</translation>
     </message>
     <message>
         <source>See Boil tab below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Se fanen Kok nedenfor</translation>
     </message>
     <message>
         <source>&amp;Copy Selected Item(s)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kopier valgte elementer</translation>
     </message>
     <message>
         <source>Mash Profiles</source>
@@ -13739,15 +13740,15 @@ Tabs</source>
     </message>
     <message>
         <source>&amp;Mash Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Meskeprofiler</translation>
     </message>
     <message>
         <source>&amp;Boil Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Kokeprofiler</translation>
     </message>
     <message>
         <source>&amp;Fermentation Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Gjæringsprofiler</translation>
     </message>
     <message>
         <source>Mash Designer</source>
@@ -13763,59 +13764,59 @@ Tabs</source>
     </message>
     <message>
         <source>Step-by-step instructions for brew day</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trinnvise instruksjoner for bryggedagen</translation>
     </message>
     <message>
         <source>W&amp;aters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Vann</translation>
     </message>
     <message>
         <source>&amp;Unit Conversion Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Enhetsomregner</translation>
     </message>
     <message>
         <source>&amp;Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Tetthetskorreksjon</translation>
     </message>
     <message>
         <source>Edit this style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger denne øltypen</translation>
     </message>
     <message>
         <source>Edit this equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger dette utstyret</translation>
     </message>
     <message>
         <source>Edit this mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger denne mesken</translation>
     </message>
     <message>
         <source>Edit this boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger dette koket</translation>
     </message>
     <message>
         <source>Edit this fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger denne gjæringen</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Rediger</translation>
     </message>
     <message>
         <source>Efficienc&amp;y</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Effektivi&amp;tet</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mål</translation>
     </message>
     <message>
         <source>Calculated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beregnet</translation>
     </message>
     <message>
         <source>Calculated final volume into the primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beregnet sluttvolum til primærgjæring</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
@@ -13823,27 +13824,27 @@ Tabs</source>
     </message>
     <message>
         <source>Calculated preboil volume - See Boil tab below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beregnet volum før kok - se fanen Kok nedenfor</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Informasjon om, og eventuelle problemer med, denne mesken</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Informasjon om, og eventuelle problemer med, dette koket</translation>
     </message>
     <message>
         <source>Info about, and any problems with, this fermentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Informasjon om, og eventuelle problemer med, denne gjæringen</translation>
     </message>
     <message>
         <source>Use mash profile in FG calculation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruk meskeprofil i FG-beregning</translation>
     </message>
     <message>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ta hensyn til hvordan mesketemperaturer og -tider gjør vørteren mer eller mindre gjærbar ved beregning av sluttetthet.  La dette være av hvis du har satt forgjæringsgraden for gjæren slik at den gjenspeiler din egen mesking.</translation>
     </message>
 </context>
 <context>
@@ -13981,19 +13982,19 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hoved</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
     <message>
         <source>Tun specific heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spesifikk varme kar</translation>
     </message>
     <message>
         <source>New</source>
@@ -14001,7 +14002,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Save</source>
@@ -14009,7 +14010,7 @@ Tabs</source>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -14017,7 +14018,7 @@ Tabs</source>
     </message>
     <message>
         <source>Total Mash Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Totalt meskevann</translation>
     </message>
     <message>
         <source>Total Time</source>
@@ -14025,31 +14026,31 @@ Tabs</source>
     </message>
     <message>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eldre</translation>
     </message>
     <message>
         <source>These are old settings that still work but might be retired in a future version of the software as there are now other ways to achieve the same same result.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette er gamle innstillinger som fortsatt virker, men som kan bli fjernet i en fremtidig versjon av programvaren, siden det nå finnes andre måter å oppnå det samme resultatet på.</translation>
     </message>
     <message>
         <source>It is better to set this on the sparge step itself.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det er bedre å angi dette på selve skylletrinnet.</translation>
     </message>
     <message>
         <source>It is better to set this on the Equipment (Mash Tun tab).  This value is only used if the recipe&apos;s equipment has a mash tun with no weight and specific heat set.  It is ignored if the equipment has no separate mash tun (ie the mash happens in the kettle), because the strike water is then heated in the same vessel as the mash.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det er bedre å angi dette på utstyret (fanen Meskekar).  Denne verdien brukes bare hvis oppskriftens utstyr har et meskekar uten angitt vekt og spesifikk varme.  Den ignoreres hvis utstyret ikke har et separat meskekar (dvs. meskingen skjer i kjelen), fordi meskevannet da varmes opp i samme kar som mesken.</translation>
     </message>
     <message>
         <source>Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skylling</translation>
     </message>
     <message>
         <source>Batches</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Batcher</translation>
     </message>
     <message>
         <source>Number of batch sparges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antall batch-skyllinger</translation>
     </message>
     <message>
         <source>Calculate</source>
@@ -14057,47 +14058,47 @@ Tabs</source>
     </message>
     <message>
         <source>Initial temperature of the mash tun.  Used when calculating the strike water temperature, to allow for the strike water heating up the mash tun.  If left blank, the tun is assumed to be at the same temperature as the grain.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Starttemperatur for meskekaret.  Brukes ved beregning av meskevannstemperaturen, for å ta hensyn til at meskevannet varmer opp meskekaret.  Hvis feltet står tomt, antas karet å ha samme temperatur som malten.</translation>
     </message>
     <message>
         <source>Adjust water amounts and temperatures</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Juster vannmengder og temperaturer</translation>
     </message>
     <message>
         <source>Change the amounts and temperatures of the strike water and other infusions, the amounts of any decoctions, and the amounts and temperatures of sparge water, to suit this recipe&apos;s grain bill and equipment.  Values you have pinned in a step are not changed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre mengder og temperaturer for meskevannet og andre infusjoner, mengdene for eventuelle dekoksjoner, og mengder og temperaturer for skyllevannet, slik at de passer til oppskriftens maltsammensetning og utstyr.  Verdier du har festet i et trinn, endres ikke.</translation>
     </message>
     <message>
         <source>Used as the target grain bed temperature for new sparge steps when adjusting the mash.  It is better to set this on the sparge step itself.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brukes som måltemperatur for maltsengen i nye skylletrinn ved justering av mesken.  Det er bedre å angi dette på selve skylletrinnet.</translation>
     </message>
     <message>
         <source>How the grain will be rinsed after the mash.  Changing this and clicking Auto-Adjust replaces any existing sparge steps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvordan malten skal skylles etter meskingen.  Hvis du endrer dette og klikker Juster automatisk, erstattes alle eksisterende skylletrinn.</translation>
     </message>
     <message>
         <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Juster automatisk</translation>
     </message>
     <message>
         <source>Available when mash is used by exactly one recipe.  Keep mash in sync with recipe by doing an auto-adjust whenever changes happen, eg to the recipe&apos;s grain bill or equipment.  (Changing the steps themselves does not trigger an adjustment, so pin any values you want to keep.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilgjengelig når mesken brukes av nøyaktig én oppskrift.  Hold mesken synkronisert med oppskriften ved å justere automatisk hver gang noe endres, f.eks. oppskriftens maltsammensetning eller utstyr.  (Endringer i selve trinnene utløser ikke en justering, så fest verdier du vil beholde.)</translation>
     </message>
     <message>
         <source>Keep mash in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hold mesken synkronisert med endringer i oppskriften</translation>
     </message>
     <message>
         <source>How full the mash tun gets, and how much wort you can expect to collect from the mash, for the recipe using this mash.  Shown when the mash is used by exactly one recipe.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor fullt meskekaret blir, og hvor mye vørter du kan forvente å samle fra mesken, for oppskriften som bruker denne mesken.  Vises når mesken brukes av nøyaktig én oppskrift.</translation>
     </message>
     <message>
         <source>Target mash thickness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ønsket mesketykkelse</translation>
     </message>
     <message>
         <source>Volume of strike water per mass of grain (not counting any water that sits below the grain bed) to aim for when adjusting the mash.  Most often around 2.5 to 3.2 L/kg (1.2 to 1.5 qt/lb).  Not used if there is no sparge, as then all the water goes in the mash, nor if the amount of strike water is pinned.  The Water:Grain column in the table of steps shows what the steps actually give.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volum meskevann per masse malt (uten vann som står under maltsengen) å sikte mot ved justering av mesken.  Oftest rundt 2,5 til 3,2 L/kg (1,2 til 1,5 qt/lb).  Brukes ikke hvis det ikke er noen skylling, siden alt vannet da går i mesken, og heller ikke hvis mengden meskevann er festet.  Kolonnen Vann:malt i tabellen over trinn viser hva trinnene faktisk gir.</translation>
     </message>
 </context>
 <context>
@@ -14192,23 +14193,23 @@ Tabs</source>
     </message>
     <message>
         <source>Thickness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tykkelse</translation>
     </message>
     <message>
         <source>Mash thickness, aka liquor-to-grist ratio, is the volume of strike water divided by the mass of grist.  In metric units (liters and kilograms), its practical range is 2 to 4 and most often is around 2.5 to 3.2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mesketykkelse, også kalt vann-til-malt-forhold, er volumet av meskevann delt på massen av malt.  I metriske enheter (liter og kilo) er det praktiske området 2 til 4, og oftest rundt 2,5 til 3,2.</translation>
     </message>
     <message>
         <source>Start Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surhet start</translation>
     </message>
     <message>
         <source>End Acidity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surhet slutt</translation>
     </message>
     <message>
         <source>Optional description of this mash step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Valgfri beskrivelse av dette mesketrinnet</translation>
     </message>
     <message>
         <source>Description</source>
@@ -14220,7 +14221,7 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Save</source>
@@ -14228,7 +14229,7 @@ Tabs</source>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -14236,19 +14237,19 @@ Tabs</source>
     </message>
     <message>
         <source>Step Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trinnummer</translation>
     </message>
     <message>
         <source>If ticked, adjusting the mash (in the Mash Editor) will not change this amount (but will use it to work out other values, eg the water temperature).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis avkrysset, vil justering av mesken (i meskeredigereren) ikke endre denne mengden (men bruke den til å beregne andre verdier, f.eks. vanntemperaturen).</translation>
     </message>
     <message>
         <source>Pinned</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Festet</translation>
     </message>
     <message>
         <source>If ticked, adjusting the mash (in the Mash Editor) will not change this temperature (but will use it to work out other values, eg the amount of water).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis avkrysset, vil justering av mesken (i meskeredigereren) ikke endre denne temperaturen (men bruke den til å beregne andre verdier, f.eks. vannmengden).</translation>
     </message>
 </context>
 <context>
@@ -14370,11 +14371,11 @@ Tabs</source>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hoved</translation>
     </message>
     <message>
         <source>Use for</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brukes til</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -14382,11 +14383,11 @@ Tabs</source>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Producer</source>
@@ -14402,11 +14403,11 @@ Tabs</source>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
     <message>
         <source>New</source>
@@ -14426,23 +14427,23 @@ Tabs</source>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total mengde i beholdningen</translation>
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg til innkjøp</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opprett en ny post for lagerinnkjøp for denne ingrediensen</translation>
     </message>
     <message>
         <source>Water Agent Properties</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Egenskaper for vannjusteringsmiddel</translation>
     </message>
     <message>
         <source>Percent Acid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prosent syre</translation>
     </message>
 </context>
 <context>
@@ -14615,23 +14616,23 @@ Tabs</source>
     <name>ogCorrectionTool</name>
     <message>
         <source>Gravity Correction Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tetthetskorreksjon</translation>
     </message>
     <message>
         <source>Target OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mål-OG</translation>
     </message>
     <message>
         <source>Measured Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Målt tetthet</translation>
     </message>
     <message>
         <source>A value in Plato will be used as-is.  An SG value can be corrected for actual vs calibrated temperature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">En verdi i Plato brukes som den er.  En SG-verdi kan korrigeres for faktisk temperatur i forhold til kalibreringstemperatur.</translation>
     </message>
     <message>
         <source>@ temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">@ temperatur</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
@@ -14639,11 +14640,11 @@ Tabs</source>
     </message>
     <message>
         <source>Calibrated at</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kalibrert ved</translation>
     </message>
     <message>
         <source>Temperature to which the hydrometer is calibrated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temperaturen hydrometeret er kalibrert for</translation>
     </message>
     <message>
         <source>Plato</source>
@@ -14703,31 +14704,31 @@ Tabs</source>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis du havner over eller under forventet effektivitet, hjelper dette verktøyet deg med å korrigere OG i kokingen.</translation>
     </message>
     <message>
         <source>NB: this tool makes the assumption that you are not going to add any water post boil.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">NB: dette verktøyet forutsetter at du ikke kommer til å tilsette vann etter kok.</translation>
     </message>
     <message>
         <source>From current recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fra gjeldende oppskrift</translation>
     </message>
     <message>
         <source>Actual SG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faktisk SG</translation>
     </message>
     <message>
         <source>Either converted from Plato/Brix, or adjusted for hydrometer calibration temperature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enten omregnet fra Plato/Brix, eller korrigert for hydrometerets kalibreringstemperatur</translation>
     </message>
     <message>
         <source>Predicted OG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet OG</translation>
     </message>
     <message>
         <source>OG if you take no action, ie boil as originally planned</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OG hvis du ikke gjør noe, dvs. koker som opprinnelig planlagt</translation>
     </message>
     <message>
         <source>Remedy: Add Water To Boil</source>
@@ -14743,19 +14744,19 @@ Tabs</source>
     </message>
     <message>
         <source>-- OR --</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-- ELLER --</translation>
     </message>
     <message>
         <source>Remedy: Add Sugar or DME</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Løsning: Tilsett sukker eller tørr maltekstrakt</translation>
     </message>
     <message>
         <source>Amount To Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mengde å tilsette</translation>
     </message>
     <message>
         <source>Amount of Sugar or DME to add to the boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mengde sukker eller tørr maltekstrakt å tilsette i kokingen</translation>
     </message>
 </context>
 <context>
@@ -14913,43 +14914,43 @@ Tabs</source>
     </message>
     <message>
         <source>Mash Hop (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Meskehumle (%)</translation>
     </message>
     <message>
         <source>First Wort (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forvørter (%)</translation>
     </message>
     <message>
         <source>Databases</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Databaser</translation>
     </message>
     <message>
         <source>Engines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Motorer</translation>
     </message>
     <message>
         <source>RDBMS Engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">RDBMS-motor</translation>
     </message>
     <message>
         <source>Test Connection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Test tilkobling</translation>
     </message>
     <message>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Konfigurasjon</translation>
     </message>
     <message>
         <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjenopprett standardverdier</translation>
     </message>
     <message>
         <source>Hostname</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vertsnavn</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Port</translation>
     </message>
     <message>
         <source>Schema</source>
@@ -14969,95 +14970,95 @@ Tabs</source>
     </message>
     <message>
         <source>Save password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre passord</translation>
     </message>
     <message>
         <source>Data Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Datamappe</translation>
     </message>
     <message>
         <source>Backup Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mappe for sikkerhetskopier</translation>
     </message>
     <message>
         <source>Number of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antall sikkerhetskopier</translation>
     </message>
     <message>
         <source>Frequency of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hyppighet for sikkerhetskopier</translation>
     </message>
     <message>
         <source>PostgresSQL&apos;s host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vertsnavn eller IP-adresse for PostgreSQL</translation>
     </message>
     <message>
         <source>Port the PostgreSQL is listening on</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Porten PostgreSQL lytter på</translation>
     </message>
     <message>
         <source>The schema containing the database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skjemaet som inneholder databasen</translation>
     </message>
     <message>
         <source>User with create/delete table access</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruker med tilgang til å opprette/slette tabeller</translation>
     </message>
     <message>
         <source>Password for the user</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Passord for brukeren</translation>
     </message>
     <message>
         <source>The name of the database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Navnet på databasen</translation>
     </message>
     <message>
         <source>Where your database file is</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor databasefilen ligger</translation>
     </message>
     <message>
         <source>Where to save your backups</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor sikkerhetskopiene skal lagres</translation>
     </message>
     <message>
         <source>Number of backups to keep: -1 means never remove, 0 means never backup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antall sikkerhetskopier som skal beholdes: -1 betyr aldri fjern, 0 betyr aldri ta sikkerhetskopi</translation>
     </message>
     <message>
         <source>Logging</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Logging</translation>
     </message>
     <message>
         <source>Logging Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Loggnivå</translation>
     </message>
     <message>
         <source>Log file location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plassering av loggfil</translation>
     </message>
     <message>
         <source>Use Default location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruk standardplassering</translation>
     </message>
     <message>
         <source>Recipe Snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Øyeblikksbilder av oppskrifter</translation>
     </message>
     <message>
         <source>Enable Automatic Snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aktiver automatiske øyeblikksbilder</translation>
     </message>
     <message>
         <source>Deleting a recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sletting av en oppskrift</translation>
     </message>
     <message>
         <source>Deletes all the snapshots too</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sletter også alle øyeblikksbildene</translation>
     </message>
     <message>
         <source>Deletes only the recipe</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sletter bare oppskriften</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -15067,15 +15068,21 @@ Tabs</source>
   &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;
+   &lt;b&gt;Kan du et annet språk?&lt;/b&gt;
+   &lt;br&gt;&lt;br&gt;
+   Eller vil du forbedre en oversettelse? Hjelp oss og
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  bidra med en oversettelse&lt;/a&gt; slik at vennene dine kan bruke Brewtarget!
+&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>How many times %1 needs to be run to trigger another backup: 1 means always backup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor mange ganger %1 må kjøres for å utløse en ny sikkerhetskopi: 1 betyr alltid ta sikkerhetskopi</translation>
     </message>
     <message>
         <source>Default Values</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standardverdier</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -15083,7 +15090,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default batch size to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard bryggevolum for nye oppskrifter</translation>
     </message>
     <message>
         <source>Pre-Boil Size</source>
@@ -15091,7 +15098,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default pre-boil size to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard volum før kok for nye oppskrifter</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -15099,7 +15106,7 @@ Tabs</source>
     </message>
     <message>
         <source>Default efficiency to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard effektivitet for nye oppskrifter</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -15107,27 +15114,27 @@ Tabs</source>
     </message>
     <message>
         <source>Default boil time to set on new recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard koketid for nye oppskrifter</translation>
     </message>
     <message>
         <source>Show snapshots by default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vis øyeblikksbilder som standard</translation>
     </message>
     <message>
         <source>Units &amp;&amp; Precision</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enheter &amp;&amp; presisjon</translation>
     </message>
     <message>
         <source>Decimal places</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Desimaler</translation>
     </message>
     <message>
         <source>By default, use mash profile in FG calculation for new and imported recipes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruk som standard meskeprofil i FG-beregning for nye og importerte oppskrifter</translation>
     </message>
     <message>
         <source>Whether new and imported recipes take account of the mash temperatures and times when estimating final gravity.  (This can be changed for each recipe on its Mash tab.)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Om nye og importerte oppskrifter skal ta hensyn til mesketemperaturer og -tider ved beregning av sluttetthet.  (Dette kan endres for hver oppskrift på fanen Mesk.)</translation>
     </message>
     <message>
         <source>How bitterness (IBUs) is estimated from the recipe&apos;s hop additions.
@@ -15139,15 +15146,23 @@ Tabs</source>
  • mIBU: John-Paul Hosom&apos;s extension of Tinseth, adding bitterness from hops in hot wort after flameout.
  • SMPH: Hosom&apos;s detailed model, which also allows for oxidized alpha acids, polyphenols, hopping rate, wort pH and yeast flocculation.
 Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using the post-boil steps of the boil profile.  For formulas other than Garetz, Daniels and SMPH, pellets are assumed to give 10% more IBUs than whole hops (plugs 2%).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvordan bitterhet (IBU) beregnes ut fra oppskriftens humletilsettinger.
+ • Tinseth: den mest brukte formelen.  Tar hensyn til koketid og vørterens tetthet.
+ • Rager: eldre; gir generelt høyere IBU enn Tinseth.
+ • Noonan: fra Greg Noonans «New Brewing Lager Beer».
+ • Garetz: fra Mark Garetz&apos; «Using Hops».  Generelt lavere IBU, ingen ved 10 minutters kok eller mindre, og tar hensyn til høye humlemengder.
+ • Daniels: fra Ray Daniels&apos; «Designing Great Beers».  Egne tall for pellets og hel humle.
+ • mIBU: John-Paul Hosoms utvidelse av Tinseth, som legger til bitterhet fra humle i varm vørter etter kokeslutt.
+ • SMPH: Hosoms detaljerte modell, som også tar hensyn til oksiderte alfasyrer, polyfenoler, humlemengde, vørterens pH og gjærens flokkulering.
+Bare mIBU og SMPH gir IBU for humle tilsatt etter kokeslutt (f.eks. whirlpool), ved hjelp av trinnene etter kok i kokeprofilen.  For andre formler enn Garetz, Daniels og SMPH antas pellets å gi 10% mer IBU enn hel humle (plugger 2%).</translation>
     </message>
     <message>
         <source>IBUs from hops added to the mash, as a percentage of what the same hops would give if they were added at the start of the boil and boiled for its full length.  Mash hops contribute little or no bitterness, because alpha acids isomerize very slowly at mash temperatures and much of the hop material stays behind with the grain.  The default is 0%, ie mash hops are assumed to give no IBUs.  This applies whichever IBU formula is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IBU fra humle tilsatt i mesken, som en prosentandel av hva den samme humlen ville gitt om den ble tilsatt ved starten av kokingen og kokt hele koketiden.  Meskehumle gir lite eller ingen bitterhet, fordi alfasyrer isomeriseres svært langsomt ved mesketemperaturer og mye av humlematerialet blir igjen sammen med malten.  Standardverdien er 0%, dvs. meskehumle antas ikke å gi IBU.  Dette gjelder uansett hvilken IBU-formel som er valgt.</translation>
     </message>
     <message>
         <source>IBUs from first wort hops (hops put in the kettle as the wort is run off, before the boil starts), as a percentage of what the same hops would give if they were added at the start of the boil.  The default of 110% reflects the commonly reported finding that first wort hopping gives about 10% more bitterness than a full-length boil addition.  This applies whichever IBU formula is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IBU fra skyllehumle (humle som legges i kjelen mens vørteren tappes over, før kokingen starter), som en prosentandel av hva den samme humlen ville gitt om den ble tilsatt ved starten av kokingen.  Standardverdien på 110% gjenspeiler det ofte rapporterte funnet at skyllehumling gir omtrent 10% mer bitterhet enn en tilsetting med full koketid.  Dette gjelder uansett hvilken IBU-formel som er valgt.</translation>
     </message>
 </context>
 <context>
@@ -15242,47 +15257,47 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vørtervolum</translation>
     </message>
     <message>
         <source>Starting gravity of the wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Starttetthet for vørteren</translation>
     </message>
     <message>
         <source>Aeration method</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Innluftingsmetode</translation>
     </message>
     <message>
         <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Produksjonsdato (best før-dato minus tre måneder)</translation>
     </message>
     <message>
         <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjærens anslåtte levedyktighet</translation>
     </message>
     <message>
         <source>Desired pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ønsket tilsettingsrate</translation>
     </message>
     <message>
         <source>Number of vials/smack packs added to starter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antall prøverør/pakker tilsatt starteren</translation>
     </message>
     <message>
         <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor mye gjær du trenger</translation>
     </message>
     <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvor mange pakker eller prøverør som trengs for å nå tilsettingsraten</translation>
     </message>
     <message>
         <source>Amount of dry yeast needed to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mengde tørrgjær som trengs for å nå tilsettingsraten</translation>
     </message>
     <message>
         <source>Starter size to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Starterstørrelse for å nå tilsettingsraten</translation>
     </message>
 </context>
 <context>
@@ -15424,19 +15439,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Final beer pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ølets endelige pH</translation>
     </message>
     <message>
         <source>Total apparent attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total tilsynelatende forgjæringsgrad</translation>
     </message>
     <message>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opprettet dato</translation>
     </message>
     <message>
         <source>Assistant Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Assisterende brygger</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
@@ -15448,94 +15463,94 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Expected wort clarity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet klarhet i vørter</translation>
     </message>
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;p&gt;Hvor klar du forventer at vørteren er når den går til gjæringskaret (f.eks. avhengig av om du bruker klaringsmiddel i kjelen eller whirlpool).&lt;/p&gt;&lt;p&gt;Uklarere vørter mister mer bitterhet under gjæringen.&lt;/p&gt;&lt;p&gt;Brukes bare av SMPH-formelen for IBU.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
     <name>recipeWaterWidget</name>
     <message>
         <source>Base Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Basisprofil</translation>
     </message>
     <message>
         <source>Edit base water profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger basisvannprofil</translation>
     </message>
     <message>
         <source>% RO in Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% RO i mesk</translation>
     </message>
     <message>
         <source>% RO in Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">% RO i skyllevann</translation>
     </message>
     <message>
         <source>Target Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Målprofil</translation>
     </message>
     <message>
         <source>Edit target water profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger målvannprofil</translation>
     </message>
     <message>
         <source>If ticked, Auto-Adjust also works out how much acid to add to get this mash pH.  It uses the acid already in the recipe if there is one, otherwise lactic acid (or another acid if there&apos;s no lactic acid in the database).  If not ticked, acids are left alone.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis avkrysset, beregner automatisk justering også hvor mye syre som må tilsettes for å få denne meske-pH-en.  Den bruker syren som allerede finnes i oppskriften hvis det er en, ellers melkesyre (eller en annen syre hvis det ikke finnes melkesyre i databasen).  Hvis ikke avkrysset, røres ikke syrene.</translation>
     </message>
     <message>
         <source>Adjust acid for mash pH of</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Juster syre for meske-pH på</translation>
     </message>
     <message>
         <source>Target mash pH.  Most brewers aim for between 5.2 and 5.6, often 5.4.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mål-pH for mesk.  De fleste bryggere sikter mot mellom 5,2 og 5,6, ofte 5,4.</translation>
     </message>
     <message>
         <source>Work out the amounts of brewing salts to add to get as close as possible to the target profile and, if ticked above, the amount of acid to get the target mash pH.  If the recipe already has salts, only those are used and their amounts are changed (so remove any you don&apos;t want, or add just the ones you do want, first).  Otherwise, commonly-used salts are added as needed.  Chalk and pickling lime are left alone.  You can undo the changes in one go.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beregn mengdene bryggesalter som må tilsettes for å komme så nær målprofilen som mulig og, hvis avkrysset ovenfor, syremengden for å nå mål-pH for mesken.  Hvis oppskriften allerede har salter, brukes bare disse og mengdene endres (så fjern dem du ikke vil ha, eller legg til bare dem du vil ha, først).  Ellers tilsettes vanlige salter etter behov.  Kritt og lesket kalk røres ikke.  Du kan angre endringene i én operasjon.</translation>
     </message>
     <message>
         <source>Auto-Adjust</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Juster automatisk</translation>
     </message>
     <message>
         <source>Automatically redo Auto-Adjust whenever something it depends on changes, eg the water profiles, the amount of water in the mash or the grain bill.  Changes you make to the amounts of salts or acid yourself will then be overwritten, so this is best used once you have chosen which salts to use.  Undoing an Auto-Adjust turns this off.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjør automatisk justering på nytt hver gang noe den avhenger av endres, f.eks. vannprofilene, vannmengden i mesken eller maltsammensetningen.  Endringer du selv gjør i mengdene av salter eller syre, blir da overskrevet, så dette passer best når du har valgt hvilke salter du vil bruke.  Hvis du angrer en automatisk justering, slås dette av.</translation>
     </message>
     <message>
         <source>Keep water agents in sync with recipe changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hold vannjusteringsmidlene synkronisert med endringer i oppskriften</translation>
     </message>
     <message>
         <source>Actual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Faktisk</translation>
     </message>
     <message>
         <source>Ca</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ca</translation>
     </message>
     <message>
         <source>Mg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mg</translation>
     </message>
     <message>
         <source>Na</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Na</translation>
     </message>
     <message>
         <source>Cl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cl</translation>
     </message>
     <message>
         <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SO&lt;sub&gt;4&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>HCO&lt;sub&gt;3&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HCO&lt;sub&gt;3&lt;/sub&gt;</translation>
     </message>
     <message>
         <source>pH</source>
@@ -15543,43 +15558,43 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Water Agents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vannjusteringsmidler</translation>
     </message>
     <message>
         <source>Water Agents (Miscellaneous)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vannjusteringsmidler (diverse)</translation>
     </message>
     <message>
         <source>Add a water agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg til et vannjusteringsmiddel</translation>
     </message>
     <message>
         <source>Remove selected water agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fjern valgt vannjusteringsmiddel</translation>
     </message>
     <message>
         <source>Acid Malts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surmalt</translation>
     </message>
     <message>
         <source>Acid Malts (Fermentables)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Surmalt (gjærbart)</translation>
     </message>
     <message>
         <source>Add an acid malt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg til en surmalt</translation>
     </message>
     <message>
         <source>Remove selected acid malt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fjern valgt surmalt</translation>
     </message>
     <message>
         <source>Auto-Adjust Notes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Notater om automatisk justering</translation>
     </message>
     <message>
         <source>Things to check after the last Auto-Adjust, eg ions that couldn&apos;t be brought close to the target, and why</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ting som bør kontrolleres etter siste automatiske justering, f.eks. ioner som ikke kunne bringes nær målet, og hvorfor</translation>
     </message>
 </context>
 <context>
@@ -15638,15 +15653,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Målt opprinnelig Plato</translation>
     </message>
     <message>
         <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Målt original tetthet</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nåværende målt Plato</translation>
     </message>
 </context>
 <context>
@@ -15742,7 +15757,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     <name>stockPurchaseIngredientEditor</name>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hoved</translation>
     </message>
     <message>
         <source>Supplier</source>
@@ -15750,7 +15765,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bestilt</translation>
     </message>
     <message>
         <source>Date</source>
@@ -15766,19 +15781,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount ordered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bestilt mengde</translation>
     </message>
     <message>
         <source>Received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mottatt</translation>
     </message>
     <message>
         <source>Amount received</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mottatt mengde</translation>
     </message>
     <message>
         <source>Whether the amount is weight or volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Om mengden er vekt eller volum</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -15786,7 +15801,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Uses</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bruk</translation>
     </message>
     <message>
         <source>Amount Remaining</source>
@@ -15794,15 +15809,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Best Before</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Best før</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -15810,15 +15825,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Purchase Price</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Innkjøpspris</translation>
     </message>
     <message>
         <source>Purchase Tax</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avgift på innkjøp</translation>
     </message>
     <message>
         <source>Shipping Cost</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fraktkostnad</translation>
     </message>
     <message>
         <source>New</source>
@@ -15826,7 +15841,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Save</source>
@@ -15834,7 +15849,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -15842,7 +15857,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Merknad</translation>
     </message>
 </context>
 <context>
@@ -15976,11 +15991,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Årsak</translation>
     </message>
     <message>
         <source>Change type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Endre type</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -15988,15 +16003,15 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Amount used</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brukt mengde</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
     <message>
         <source>New</source>
@@ -16004,7 +16019,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Save</source>
@@ -16012,7 +16027,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -16020,7 +16035,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kommentar</translation>
     </message>
     <message>
         <source>Recipe</source>
@@ -16295,27 +16310,27 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hoved</translation>
     </message>
     <message>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Påkrevd</translation>
     </message>
     <message>
         <source>Ranges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Områder</translation>
     </message>
     <message>
         <source>New style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ny øltype</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Aroma</source>
@@ -16323,7 +16338,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utseende</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -16331,19 +16346,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Mouthfeel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Munnfølelse</translation>
     </message>
     <message>
         <source>Overall Impression</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helhetsinntrykk</translation>
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
 </context>
 <context>
@@ -16354,7 +16369,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsettingstidtakere</translation>
     </message>
 </context>
 <context>
@@ -16365,19 +16380,19 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Add:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tilsett:</translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Notater...</translation>
     </message>
     <message>
         <source>At:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ved:</translation>
     </message>
     <message>
         <source>mins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">min</translation>
     </message>
     <message>
         <source>Stop</source>
@@ -16389,11 +16404,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Set Sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velg lyd</translation>
     </message>
     <message>
         <source>Play Alarm Sound</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spill alarmlyd</translation>
     </message>
 </context>
 <context>
@@ -16442,27 +16457,27 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Edit Water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rediger vann</translation>
     </message>
     <message>
         <source>Alkalinity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alkalitet</translation>
     </message>
     <message>
         <source>Alkalinity measured as</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alkalitet målt som</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>New water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nytt vann</translation>
     </message>
     <message>
         <source>New</source>
@@ -16478,11 +16493,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
 </context>
 <context>
@@ -16657,7 +16672,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hoved</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -16665,7 +16680,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Best For</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Best egnet til</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -16673,99 +16688,99 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>New yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ny gjær</translation>
     </message>
     <message>
         <source>Save and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lagre og lukk</translation>
     </message>
     <message>
         <source>Discard and close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forkast og lukk</translation>
     </message>
     <message>
         <source>Min Attenuation (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min forgjæringsgrad (%)</translation>
     </message>
     <message>
         <source>Minimum apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Minste tilsynelatende forgjæringsgrad som prosentandel av OG-poeng</translation>
     </message>
     <message>
         <source>Max Attenuation (%)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maks forgjæringsgrad (%)</translation>
     </message>
     <message>
         <source>Maximum apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Største tilsynelatende forgjæringsgrad som prosentandel av OG-poeng</translation>
     </message>
     <message>
         <source>Alcohol Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alkoholtoleranse</translation>
     </message>
     <message>
         <source>Recommended limit of ABV by the culture producer before attenuation stops</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gjærprodusentens anbefalte ABV-grense før gjæringen stopper</translation>
     </message>
     <message>
         <source>Phenolic Off-Flavor Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fenolisk bismak-positiv</translation>
     </message>
     <message>
         <source>Whether culture is capable of producing phenols, which is a common distinctive property of saison, and brett yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Om kulturen kan produsere fenoler, som er en vanlig særegen egenskap ved saison- og brett-gjær</translation>
     </message>
     <message>
         <source>Glucoamylase Positive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Glukoamylase-positiv</translation>
     </message>
     <message>
         <source>A glucoamylase positive culture is capable of producing glucoamylase, the enzyme produced through expression of the diastatic gene, which allows yeast to attenuate dextrins and starches leading to a very low FG. This is positive in some saison/brett yeasts as well as the new gulo hybrid by Omega yeast labs.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">En glukoamylase-positiv kultur kan produsere glukoamylase, enzymet som dannes ved uttrykk av diastaticus-genet, og som lar gjæren bryte ned dekstriner og stivelse, noe som gir svært lav FG. Dette er positivt i enkelte saison-/brett-gjærtyper og i den nye gulo-hybriden fra Omega Yeast Labs.</translation>
     </message>
     <message>
         <source>K1 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">K1-killer</translation>
     </message>
     <message>
         <source>Produces K1 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Produserer K1-killertoksin</translation>
     </message>
     <message>
         <source>K2 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">K2-killer</translation>
     </message>
     <message>
         <source>Produces K2 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Produserer K2-killertoksin</translation>
     </message>
     <message>
         <source>K28 Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">K28-killer</translation>
     </message>
     <message>
         <source>Produces K28 killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Produserer K28-killertoksin</translation>
     </message>
     <message>
         <source>Klus Killer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klus-killer</translation>
     </message>
     <message>
         <source>Produces Klus killer toxin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Produserer Klus-killertoksin</translation>
     </message>
     <message>
         <source>Killer Neutral</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Killer-nøytral</translation>
     </message>
     <message>
         <source>Neutral strains do not produce toxins, nor are they killed by them</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nøytrale stammer produserer ikke toksiner og drepes heller ikke av dem</translation>
     </message>
     <message>
         <source>Total amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Total mengde i beholdningen</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -16773,11 +16788,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>ID in database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ID i databasen</translation>
     </message>
     <message>
         <source>You can normally ignore this, but it&apos;s sometimes useful for debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dette kan du vanligvis se bort fra, men det er noen ganger nyttig for feilsøking.</translation>
     </message>
     <message>
         <source>New</source>
@@ -16797,11 +16812,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Add Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Legg til innkjøp</translation>
     </message>
     <message>
         <source>Create a new stock purchase record for this yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opprett en ny post for lagerinnkjøp for denne gjæren</translation>
     </message>
 </context>
 </TS>
