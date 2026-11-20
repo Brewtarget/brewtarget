@@ -306,7 +306,7 @@ void PrintAndPreviewDialog::handlePrinting() {
       } else {
          QFile file(filename);
          if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            qWarning() << Q_FUNC_INFO << tr("File %1 filname << could not be saved").arg(filename);
+            qWarning() << Q_FUNC_INFO << tr("File %1 filename could not be saved").arg(filename);
             QMessageBox msgbox(this);
             msgbox.setWindowTitle(tr("Error saving file"));
             msgbox.setText(tr("Could not open the file %1 for writing! please try again with a new filename or diretory").arg(filename));
@@ -324,9 +324,7 @@ void PrintAndPreviewDialog::handlePrinting() {
 }
 
 /**
- * @brief updates the current view with the changed data. depanding on selected output.
- *
- * @param checked
+ * @brief Updates the current view with the changed data, depending on selected output.
  */
 void PrintAndPreviewDialog::updatePreview() {
    if (!radioButton_OutputHTML->isChecked()) {
