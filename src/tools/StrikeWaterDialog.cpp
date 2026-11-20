@@ -19,6 +19,8 @@
  =====================================================================================================================*/
 #include "tools/StrikeWaterDialog.h"
 
+#include <QEvent>
+
 #include <limits>
 
 #include "calculations/Algorithms.h"
@@ -112,4 +114,12 @@ double StrikeWaterDialog::computeMashInfusion() const {
    double const infusionWater = this->infusionWaterVal->getNonOptCanonicalQty();
 
    return mashInfusionSi(actualMash, targetMashInf, grainWeight, infusionWater, mashVol);
+}
+
+void StrikeWaterDialog::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+   }
+   this->QDialog::changeEvent(event);
+   return;
 }

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/BoilStep.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/BoilStep.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -88,7 +88,7 @@ public:
    /*!
     * \brief Localised names of \c BoilStep::ChillingType values suitable for displaying to the end user
     */
-   static EnumStringMapping const chillingTypeDisplayNames;
+   static EnumDisplayNameMapping const chillingTypeDisplayNames;
 
    //
    // This alias makes it easier to template a number of functions that are essentially the same for all subclasses of

@@ -115,7 +115,7 @@ public:
    /*!
     * \brief Localised names of \c Misc::Type values suitable for displaying to the end user
     */
-   static EnumStringMapping const typeDisplayNames;
+   static EnumDisplayNameMapping const typeDisplayNames;
 
    /*!
     * \brief This is used only for water agents.
@@ -195,7 +195,7 @@ public:
    /*!
     * \brief Localised names of \c WaterAgentType values suitable for displaying to the end user
     */
-   static EnumStringMapping const waterAgentTypeDisplayNames;
+   static EnumDisplayNameMapping const waterAgentTypeDisplayNames;
 
    /**
     * \brief This is where we centrally define how \c Misc objects can be measured.

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * Logging.h is part of Brewtarget, and is copyright the following authors 2009-2021:
+ * Logging.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Maxime Lavigne <duguigne@gmail.com>
@@ -24,6 +24,8 @@
 #include <QDir>
 #include <QFileInfoList>
 #include <QString>
+
+#include "utils/TranslatableText.h"
 #include <QVector>
 
 /*!
@@ -62,7 +64,9 @@ namespace Logging {
    struct LevelDetail {
       Level level;
       char const * name;
-      QString description;
+      //! Translated when used, as \c levelDetails is created during static initialisation, before any translator is
+      //  installed.  (See comments in \c utils/TranslatableText.h.)
+      TranslatableText description;
    };
    extern QVector<LevelDetail> const levelDetails;
 

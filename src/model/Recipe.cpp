@@ -2199,18 +2199,18 @@ EnumStringMapping const Recipe::typeStringMapping {
    {Recipe::Type::Wine       , "wine"        },
 };
 
-EnumStringMapping const Recipe::typeDisplayNames {
-   {Recipe::Type::Extract    , tr("Extract"     )},
-   {Recipe::Type::PartialMash, tr("Partial Mash")},
-   {Recipe::Type::AllGrain   , tr("All Grain"   )},
+EnumDisplayNameMapping const Recipe::typeDisplayNames {"Recipe", {
+   {Recipe::Type::Extract    , QT_TRANSLATE_NOOP("Recipe", "Extract"     )},
+   {Recipe::Type::PartialMash, QT_TRANSLATE_NOOP("Recipe", "Partial Mash")},
+   {Recipe::Type::AllGrain   , QT_TRANSLATE_NOOP("Recipe", "All Grain"   )},
    // ⮜⮜⮜ All below added for BeerJSON support ⮞⮞⮞
-   {Recipe::Type::Cider      , tr("Cider"       )},
-   {Recipe::Type::Kombucha   , tr("Kombucha"    )},
-   {Recipe::Type::Soda       , tr("Soda"        )},
-   {Recipe::Type::Other      , tr("Other"       )},
-   {Recipe::Type::Mead       , tr("Mead"        )},
-   {Recipe::Type::Wine       , tr("Wine"        )},
-};
+   {Recipe::Type::Cider      , QT_TRANSLATE_NOOP("Recipe", "Cider"       )},
+   {Recipe::Type::Kombucha   , QT_TRANSLATE_NOOP("Recipe", "Kombucha"    )},
+   {Recipe::Type::Soda       , QT_TRANSLATE_NOOP("Recipe", "Soda"        )},
+   {Recipe::Type::Other      , QT_TRANSLATE_NOOP("Recipe", "Other"       )},
+   {Recipe::Type::Mead       , QT_TRANSLATE_NOOP("Recipe", "Mead"        )},
+   {Recipe::Type::Wine       , QT_TRANSLATE_NOOP("Recipe", "Wine"        )},
+}};
 
 bool Recipe::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid
@@ -2272,7 +2272,7 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, ageTemp_c          , m_ageTemp_c         , Measurement::PhysicalQuantity::Temperature   ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, date               , m_date              ,           NonPhysicalQuantity::Date          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, carbonation_vols   , m_carbonation_vols  , Measurement::PhysicalQuantity::Carbonation   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, forcedCarbonation  , m_forcedCarbonation , BOOL_INFO(tr("No"), tr("Yes"))               ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, forcedCarbonation  , m_forcedCarbonation , BOOL_INFO_NO_YES                             ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, primingSugarName   , m_primingSugarName  ,           NonPhysicalQuantity::String        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, carbonationTemp_c  , m_carbonationTemp_c , Measurement::PhysicalQuantity::Temperature   ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, primingSugarEquiv  , m_primingSugarEquiv ,           NonPhysicalQuantity::Dimensionless ),
@@ -2326,8 +2326,8 @@ TypeLookup const Recipe::typeLookup {
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, roWaterMash_pct        , m_roWaterMash_pct  ,           NonPhysicalQuantity::Percentage        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, roWaterSparge_pct      , m_roWaterSparge_pct,           NonPhysicalQuantity::Percentage        ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, targetMashAcidity_pH   , m_targetMashAcidity_pH, Measurement::PhysicalQuantity::Acidity      ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, waterKeptInSync        , m_waterKeptInSync  , BOOL_INFO(tr("No"), tr("Yes"))                ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, fgCalcUsesMash         , m_fgCalcUsesMash   , BOOL_INFO(tr("No"), tr("Yes"))                ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, waterKeptInSync        , m_waterKeptInSync  , BOOL_INFO_NO_YES                              ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, fgCalcUsesMash         , m_fgCalcUsesMash   , BOOL_INFO_NO_YES                              ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Recipe, wortClarity            , m_wortClarity      , ENUM_INFO(Measurement::Qualitative::wortClarity)),
 
    },

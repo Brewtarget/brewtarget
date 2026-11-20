@@ -18,6 +18,7 @@
 #pragma once
 
 #include <QAbstractButton>
+#include <QEvent>
 #include <QTableView>
 
 #include "model/Recipe.h"
@@ -41,11 +42,7 @@ public:
    using ItemEditorClass     = Item::EditorClass;
 
    EnumeratedItemsWidgetBase() {
-      this->derived().m_pushButton_addItem     ->setToolTip(Item::tr("Add %1"               ).arg(Item::localisedName()));
-      this->derived().m_pushButton_removeItem  ->setToolTip(Item::tr("Remove selected %1"   ).arg(Item::localisedName()));
-      this->derived().m_pushButton_moveItemUp  ->setToolTip(Item::tr("Move selected %1 up"  ).arg(Item::localisedName()));
-      this->derived().m_pushButton_moveItemDown->setToolTip(Item::tr("Move selected %1 down").arg(Item::localisedName()));
-      this->derived().m_pushButton_editItem    ->setToolTip(Item::tr("Edit selected %1"     ).arg(Item::localisedName()));
+      this->setButtonToolTips();
 
       this->m_itemTableModel = std::make_unique<NeTableModelClass>(this->derived().m_tableView_items.get());
       this->derived().m_tableView_items->setItemDelegate(
@@ -119,13 +116,13 @@ public:
             &this->derived(),
             [&](QMetaProperty prop, [[maybe_unused]] QVariant val) {
                if (prop.name() == Recipe::propertyNameFor<Owner>()) {
-                  // See comment in buttons/RecipeAttributeButton.h for why we need template keyword here for Clang
+                  // See comment on Recipe::get for why we need template keyword here
                   this->setOwner(this->m_recipe->template get<Owner>());
                }
                return;
             }
          );
-         // See comment in buttons/RecipeAttributeButton.h for why we need template keyword here for Clang
+         // See comment on Recipe::get for why we need template keyword here
          this->setOwner(this->m_recipe->template get<Owner>());
       } else {
          this->setOwner(nullptr);
@@ -240,6 +237,39 @@ public:
       return this->m_itemTableModel.get();
    }
 
+   //! Set the button tool tips in the current language
+   void setButtonToolTips() {
+      this->derived().m_pushButton_addItem     ->setToolTip(Item::tr("Add %1"               ).arg(Item::localisedName()));
+      this->derived().m_pushButton_removeItem  ->setToolTip(Item::tr("Remove selected %1"   ).arg(Item::localisedName()));
+      this->derived().m_pushButton_moveItemUp  ->setToolTip(Item::tr("Move selected %1 up"  ).arg(Item::localisedName()));
+      this->derived().m_pushButton_moveItemDown->setToolTip(Item::tr("Move selected %1 down").arg(Item::localisedName()));
+      this->derived().m_pushButton_editItem    ->setToolTip(Item::tr("Edit selected %1"     ).arg(Item::localisedName()));
+      return;
+   }
+
+   /**
+    * \brief Called from \c Derived::changeEvent.  On \c QEvent::LanguageChange, update the text we set ourselves.
+    *
+    *        (The table's cells and headers get their text from the model each time they are drawn, and Qt redraws
+    *        every widget when the language changes, so we don't need to do anything for them.)
+    */
+   void doChangeEvent(QEvent const * const event) {
+      if (event->type() != QEvent::LanguageChange) {
+         return;
+      }
+      this->setButtonToolTips();
+      //
+      // Some table models (eg MashStepTableModel) work out, and remember, descriptions of any problems with the items.
+      // These are in whatever language was current at the time, so we need them redone.
+      //
+      if constexpr (requires (NeTableModelClass & model) { model.scheduleValidation(); }) {
+         if (this->m_itemTableModel) {
+            this->m_itemTableModel->scheduleValidation();
+         }
+      }
+      return;
+   }
+
 protected:
    Recipe *                           m_recipe         = nullptr;
    std::shared_ptr<Owner>             m_owner          = nullptr;
@@ -259,6 +289,9 @@ protected:
       ItemName##sWidget(QWidget * parent);                               \
       virtual ~ItemName##sWidget();                                      \
                                                                          \
+   protected:                                                            \
+      virtual void changeEvent(QEvent * event) override;                 \
+                                                                         \
 
 
 /**
@@ -271,5 +304,10 @@ protected:
       return;                                                    \
    }                                                             \
    ItemName##sWidget::~ItemName##sWidget() = default;            \
+   void ItemName##sWidget::changeEvent(QEvent * event) {         \
+      this->doChangeEvent(event);                                \
+      this->EnumeratedItemsWidget::changeEvent(event);           \
+      return;                                                    \
+   }                                                             \
 
 #endif

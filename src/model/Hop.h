@@ -166,7 +166,7 @@ public:
    /*!
     * \brief Localised names of \c Hop::Form values suitable for displaying to the end user
     */
-   static EnumStringMapping const formDisplayNames;
+   static EnumDisplayNameMapping const formDisplayNames;
 
    /*!
     * \brief The type of hop, meaning for what properties it is used.  Arguably we should have three binary flags
@@ -196,7 +196,7 @@ public:
    /*!
     * \brief Localised names of \c Hop::Type values suitable for displaying to the end user
     */
-   static EnumStringMapping const typeDisplayNames;
+   static EnumDisplayNameMapping const typeDisplayNames;
 
    /**
     * \brief This is where we centrally define how \c Hop objects can be measured.  Essentially, mass is used in almost

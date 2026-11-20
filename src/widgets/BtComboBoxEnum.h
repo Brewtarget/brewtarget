@@ -69,9 +69,9 @@ public:
    void init(char const * const editorName,
              char const * const comboBoxName,
              char const * const comboBoxFqName,
-             EnumStringMapping const & nameMapping,
-             EnumStringMapping const & displayNameMapping,
-             TypeInfo          const & typeInfo,
+             EnumStringMapping      const & nameMapping,
+             EnumDisplayNameMapping const & displayNameMapping,
+             TypeInfo               const & typeInfo,
              std::vector<int>  const * restrictTo = nullptr,
              std::vector<SmartLineEdit *> controlledFields = {});
 
@@ -171,6 +171,12 @@ public:
 
 public slots:
    void onIndexChanged(int const index);
+
+protected:
+   /**
+    * \brief Handles \c QEvent::LanguageChange by updating the display text of each item to the new language.
+    */
+   void changeEvent(QEvent * event) override;
 
 private:
 

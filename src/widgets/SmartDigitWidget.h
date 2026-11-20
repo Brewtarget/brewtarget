@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/SmartDigitWidget.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * widgets/SmartDigitWidget.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -77,6 +77,13 @@ public:
 
    //! \brief Set all the messages
    void setMessages(QString lowMsg, QString goodMsg, QString highMsg);
+
+protected:
+   /**
+    * \brief Handles \c QEvent::LanguageChange.  If we are still using our default messages, we update them to the new
+    *        language.  (If the owner set the messages, it is up to the owner to set them again.)
+    */
+   void changeEvent(QEvent * event) override;
 
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

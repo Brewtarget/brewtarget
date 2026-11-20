@@ -15,6 +15,8 @@
  =====================================================================================================================*/
 #include "widgets/StockManager.h"
 
+#include <QEvent>
+
 
 StockManager::StockManager(QWidget * parent) :
    QWidget{parent},
@@ -64,5 +66,13 @@ void StockManager::retranslateUi() {
 
 void StockManager::setSearchFilter(QString const & text) {
    this->m_searchBox_filter->setText(text);
+   return;
+}
+
+void StockManager::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi();
+   }
+   this->QWidget::changeEvent(event);
    return;
 }

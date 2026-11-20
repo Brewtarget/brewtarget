@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * PrintAndPreviewDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2024:
+ * PrintAndPreviewDialog.cpp is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Mattias Måhl <mattias@kejsarsten.com>
  *   • Matt Young <mfsy@yahoo.com>
  *
@@ -16,6 +16,7 @@
  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌*/
 #include "PrintAndPreviewDialog.h"
 
+#include <QEvent>
 #include <QDebug>
 #include <QFileDialog>
 #include <QFont>
@@ -305,7 +306,7 @@ void PrintAndPreviewDialog::handlePrinting() {
       } else {
          QFile file(filename);
          if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            qWarning() << Q_FUNC_INFO << tr("File %1 filname << could not be saved").arg(filename);
+            qWarning() << Q_FUNC_INFO << tr("File %1 filename could not be saved").arg(filename);
             QMessageBox msgbox(this);
             msgbox.setWindowTitle(tr("Error saving file"));
             msgbox.setText(tr("Could not open the file %1 for writing! please try again with a new filename or diretory").arg(filename));
@@ -323,9 +324,7 @@ void PrintAndPreviewDialog::handlePrinting() {
 }
 
 /**
- * @brief updates the current view with the changed data. depanding on selected output.
- *
- * @param checked
+ * @brief Updates the current view with the changed data, depending on selected output.
  */
 void PrintAndPreviewDialog::updatePreview() {
    if (!radioButton_OutputHTML->isChecked()) {
@@ -444,7 +443,7 @@ void PrintAndPreviewDialog::setPrintingControls() {
    groupBox_PrinterSettings->setEnabled    ( ! radioButton_OutputHTML->isChecked() );
 
    // Only set this as "print" if we are printing to paper, else it is set to "save as"
-   Button_Print->setText((radioButton_OutputPaper->isChecked()) ? "Print" : "Save as");
+   Button_Print->setText((radioButton_OutputPaper->isChecked()) ? tr("Print") : tr("Save as"));
 
    // Setting up printer accordingly
    if (radioButton_OutputPaper->isChecked()) {
@@ -527,5 +526,20 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer) {
    textBrowser.setHtml(hDoc);
    textBrowser.print(printer);
 
+   return;
+}
+
+void PrintAndPreviewDialog::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+      // Put back the things the generated retranslateUi resets
+      this->setPrintingControls();
+      this->label_CurrentRecipe->setText((this->selectedRecipe != nullptr) ? this->selectedRecipe->name() : "NULL");
+      // The preview is generated in whatever the current language is, so it needs redoing
+      if (this->isVisible()) {
+         this->updatePreview();
+      }
+   }
+   this->QDialog::changeEvent(event);
    return;
 }

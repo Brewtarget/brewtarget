@@ -28,6 +28,7 @@
 #include "utils/BtStringConst.h"
 #include "utils/TypeTraits.h"
 
+class EnumDisplayNameMapping;
 class EnumStringMapping;
 
 namespace Measurement {
@@ -231,7 +232,7 @@ namespace Measurement {
    /**
     * \brief Localised names of \c Hop::Form values suitable for displaying to the end user
     */
-   extern EnumStringMapping const physicalQuantityDisplayNames;
+   extern EnumDisplayNameMapping const physicalQuantityDisplayNames;
 
    /**
     * \brief Return the \c PersistentSettings name for looking up the display \c UnitSystem for the specified
@@ -285,7 +286,7 @@ namespace Measurement {
    /*!
     * \brief Localised names of \c Hop::Form values suitable for displaying to the end user
     */
-   extern EnumStringMapping const choiceOfPhysicalQuantityDisplayNames;
+   extern EnumDisplayNameMapping const choiceOfPhysicalQuantityDisplayNames;
 
    /**
     * \brief Of course, once we have \c Measurement::ChoiceOfPhysicalQuantity, we need a way to store either that or a

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/OutlineableNamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2024-2025:
+ * model/OutlineableNamedEntity.cpp is part of Brewtarget, and is copyright the following authors 2024-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ QString OutlineableNamedEntity::localisedName_outline() { return tr("Is Outline"
 TypeLookup const OutlineableNamedEntity::typeLookup {
    "OutlineableNamedEntity",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(OutlineableNamedEntity, outline, m_outline, BOOL_INFO(tr("No"), tr("Yes"))),
+      PROPERTY_TYPE_LOOKUP_ENTRY(OutlineableNamedEntity, outline, m_outline, BOOL_INFO_NO_YES),
    },
    // Parent class lookup.  NB: RecipeAddition not NamedEntity!
    {&NamedEntity::typeLookup}

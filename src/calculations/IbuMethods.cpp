@@ -960,15 +960,15 @@ EnumStringMapping const IbuMethods::formulaStringMappingUc {
    {Ibu::Formula::Smph   , "SMPH"   },
 };
 
-EnumStringMapping const IbuMethods::formulaDisplayNames {
-   {Ibu::Formula::Tinseth, QObject::tr("Tinseth's approximation")},
-   {Ibu::Formula::Rager  , QObject::tr("Rager's approximation"  )},
-   {Ibu::Formula::Noonan , QObject::tr("Noonan's approximation" )},
-   {Ibu::Formula::Garetz , QObject::tr("Garetz's approximation" )},
-   {Ibu::Formula::Daniels, QObject::tr("Daniels' approximation" )},
-   {Ibu::Formula::mIbu   , QObject::tr("mIBU"                   )},
-   {Ibu::Formula::Smph   , QObject::tr("SMPH"                   )},
-};
+EnumDisplayNameMapping const IbuMethods::formulaDisplayNames {"QObject", {
+   {Ibu::Formula::Tinseth, QT_TRANSLATE_NOOP("QObject", "Tinseth's approximation")},
+   {Ibu::Formula::Rager  , QT_TRANSLATE_NOOP("QObject", "Rager's approximation"  )},
+   {Ibu::Formula::Noonan , QT_TRANSLATE_NOOP("QObject", "Noonan's approximation" )},
+   {Ibu::Formula::Garetz , QT_TRANSLATE_NOOP("QObject", "Garetz's approximation" )},
+   {Ibu::Formula::Daniels, QT_TRANSLATE_NOOP("QObject", "Daniels' approximation" )},
+   {Ibu::Formula::mIbu   , QT_TRANSLATE_NOOP("QObject", "mIBU"                   )},
+   {Ibu::Formula::Smph   , QT_TRANSLATE_NOOP("QObject", "SMPH"                   )},
+}};
 
 TypeLookup const IbuMethods::typeLookup {
    "IbuMethods",

@@ -57,12 +57,12 @@ EnumStringMapping const RecipeAddition::stageStringMapping {
 // In the past, we had these names as "Add to Mash", "Add to Boil", etc, but I think that's considerably less flexible
 // than just having the translated stage names.
 //
-EnumStringMapping const RecipeAddition::stageDisplayNames {
-   {RecipeAddition::Stage::Mash        , tr("Mash"        ) },
-   {RecipeAddition::Stage::Boil        , tr("Boil"        ) },
-   {RecipeAddition::Stage::Fermentation, tr("Fermentation") },
-   {RecipeAddition::Stage::Packaging   , tr("Package"     ) },
-};
+EnumDisplayNameMapping const RecipeAddition::stageDisplayNames {"RecipeAddition", {
+   {RecipeAddition::Stage::Mash        , QT_TRANSLATE_NOOP("RecipeAddition", "Mash"        ) },
+   {RecipeAddition::Stage::Boil        , QT_TRANSLATE_NOOP("RecipeAddition", "Boil"        ) },
+   {RecipeAddition::Stage::Fermentation, QT_TRANSLATE_NOOP("RecipeAddition", "Fermentation") },
+   {RecipeAddition::Stage::Packaging   , QT_TRANSLATE_NOOP("RecipeAddition", "Package"     ) },
+}};
 
 bool RecipeAddition::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid

@@ -25,6 +25,7 @@
 
 #include "model/NamedEntity.h"
 #include "utils/BtStringConst.h"
+#include "utils/TranslatableText.h"
 
 /**
  * @brief Plots radar charts (see https://en.wikipedia.org/wiki/Radar_chart) of the specified Qt properties of one or
@@ -40,12 +41,14 @@ public:
 
    /**
     * Identifies a variable to plot on the chart.  Each variable in a series is a Qt property, identified by its
-    * internal property name.  We also have a localised display name to label the axis for this variable.
+    * internal property name.  We also have a localisable display name to label the axis for this variable.  This is
+    * translated each time we draw the chart, so that it changes when the user changes language.  (Qt redraws every
+    * widget when that happens.)
     */
    struct VariableName {
       // Note that the members of the struct need to be default initialisable so we can store them in a QVector below
       BtStringConst const & propertyName = BtString::NULL_STR;
-      QString displayName = "";
+      TranslatableText displayName = {"", ""};
    };
 
    /**

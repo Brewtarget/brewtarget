@@ -15,6 +15,7 @@
  =====================================================================================================================*/
 #include "StockWindow.h"
 
+#include <QEvent>
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QTabWidget>
@@ -76,7 +77,7 @@ public:
       this->m_tabWidget_StockPurchaseTrees->setTabText(0, QObject::tr("Fermentables" ));
       this->m_tabWidget_StockPurchaseTrees->setTabText(1, QObject::tr("Hops"         ));
       this->m_tabWidget_StockPurchaseTrees->setTabText(2, QObject::tr("Miscellaneous"));
-      this->m_tabWidget_StockPurchaseTrees->setTabText(4, QObject::tr("Yeasts"       ));
+      this->m_tabWidget_StockPurchaseTrees->setTabText(3, QObject::tr("Yeasts"       ));
 
       return;
    }
@@ -174,4 +175,12 @@ bool StockWindow::restoreUiState() {
    bool const cc = this->pimpl->m_stockManagerMisc       ->restoreUiState(PersistentSettings::Names::uiState_stockManagerMisc       , section);
    bool const dd = this->pimpl->m_stockManagerYeast      ->restoreUiState(PersistentSettings::Names::uiState_stockManagerYeast      , section);
    return aa && bb && cc && dd;
+}
+
+void StockWindow::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi();
+   }
+   this->QDialog::changeEvent(event);
+   return;
 }

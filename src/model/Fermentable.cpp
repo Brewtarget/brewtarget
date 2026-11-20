@@ -90,16 +90,16 @@ EnumStringMapping const Fermentable::typeStringMapping {
    {Fermentable::Type::Honey        , "honey"      },
 };
 
-EnumStringMapping const Fermentable::typeDisplayNames {
-   {Fermentable::Type::Grain        , tr("Grain"        )},
-   {Fermentable::Type::Sugar        , tr("Sugar"        )},
-   {Fermentable::Type::Extract      , tr("Extract"      )},
-   {Fermentable::Type::Dry_Extract  , tr("Dry Extract"  )},
-   {Fermentable::Type::Other_Adjunct, tr("Other Adjunct")},
-   {Fermentable::Type::Fruit        , tr("Fruit"        )},
-   {Fermentable::Type::Juice        , tr("Juice"        )},
-   {Fermentable::Type::Honey        , tr("Honey"        )},
-};
+EnumDisplayNameMapping const Fermentable::typeDisplayNames {"Fermentable", {
+   {Fermentable::Type::Grain        , QT_TRANSLATE_NOOP("Fermentable", "Grain"        )},
+   {Fermentable::Type::Sugar        , QT_TRANSLATE_NOOP("Fermentable", "Sugar"        )},
+   {Fermentable::Type::Extract      , QT_TRANSLATE_NOOP("Fermentable", "Extract"      )},
+   {Fermentable::Type::Dry_Extract  , QT_TRANSLATE_NOOP("Fermentable", "Dry Extract"  )},
+   {Fermentable::Type::Other_Adjunct, QT_TRANSLATE_NOOP("Fermentable", "Other Adjunct")},
+   {Fermentable::Type::Fruit        , QT_TRANSLATE_NOOP("Fermentable", "Fruit"        )},
+   {Fermentable::Type::Juice        , QT_TRANSLATE_NOOP("Fermentable", "Juice"        )},
+   {Fermentable::Type::Honey        , QT_TRANSLATE_NOOP("Fermentable", "Honey"        )},
+}};
 
 // This is based on the BeerJSON encoding
 EnumStringMapping const Fermentable::grainGroupStringMapping {
@@ -112,15 +112,15 @@ EnumStringMapping const Fermentable::grainGroupStringMapping {
    {Fermentable::GrainGroup::Adjunct  , "adjunct"  },
 };
 
-EnumStringMapping const Fermentable::grainGroupDisplayNames {
-   {Fermentable::GrainGroup::Base     , tr("Base"     )},
-   {Fermentable::GrainGroup::Caramel  , tr("Caramel"  )},
-   {Fermentable::GrainGroup::Flaked   , tr("Flaked"   )},
-   {Fermentable::GrainGroup::Roasted  , tr("Roasted"  )},
-   {Fermentable::GrainGroup::Specialty, tr("Specialty")},
-   {Fermentable::GrainGroup::Smoked   , tr("Smoked"   )},
-   {Fermentable::GrainGroup::Adjunct  , tr("Adjunct"  )},
-};
+EnumDisplayNameMapping const Fermentable::grainGroupDisplayNames {"Fermentable", {
+   {Fermentable::GrainGroup::Base     , QT_TRANSLATE_NOOP("Fermentable", "Base"     )},
+   {Fermentable::GrainGroup::Caramel  , QT_TRANSLATE_NOOP("Fermentable", "Caramel"  )},
+   {Fermentable::GrainGroup::Flaked   , QT_TRANSLATE_NOOP("Fermentable", "Flaked"   )},
+   {Fermentable::GrainGroup::Roasted  , QT_TRANSLATE_NOOP("Fermentable", "Roasted"  )},
+   {Fermentable::GrainGroup::Specialty, QT_TRANSLATE_NOOP("Fermentable", "Specialty")},
+   {Fermentable::GrainGroup::Smoked   , QT_TRANSLATE_NOOP("Fermentable", "Smoked"   )},
+   {Fermentable::GrainGroup::Adjunct  , QT_TRANSLATE_NOOP("Fermentable", "Adjunct"  )},
+}};
 
 bool Fermentable::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {
    // Base class (NamedEntity) will have ensured this cast is valid

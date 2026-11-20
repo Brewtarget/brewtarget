@@ -51,7 +51,28 @@ private:
    // point to!
    void hideOutputs() const;
 
+   //! Set the text that depends on \c m_outcome
+   void showOutcomeTexts();
+
    Recipe * m_recObs = nullptr;
+
+   /**
+    * \brief What the last calculation found, so that we can redo the text that depends on it if the user changes
+    *        language.  (This is \c mutable because \c hideOutputs needs to reset it.)
+    */
+   enum class Outcome {
+      NotCalculated,
+      OnTarget     ,
+      AboveTarget  ,
+      BelowTarget  ,
+   };
+   mutable Outcome m_outcome = Outcome::NotCalculated;
+protected:
+   /**
+    * \brief Overrides \c QWidget::changeEvent so that, on \c QEvent::LanguageChange, we update our text to the new
+    *        language.
+    */
+   void changeEvent(QEvent * event) override;
 };
 
 #endif

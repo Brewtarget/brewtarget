@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * utils/EnumStringMapping.h is part of Brewtarget, and is copyright the following authors 2021-2025:
+ * utils/EnumStringMapping.h is part of Brewtarget, and is copyright the following authors 2021-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@
 
 #include "Logging.h"
 #include "utils/EnumMapping.h"
+#include "utils/TranslatableText.h"
 #include "utils/TypeLookup.h"
 
 using EnumAndItsString = EnumKeyValue<QString>;
@@ -50,10 +51,8 @@ using EnumAndItsString = EnumKeyValue<QString>;
  *              mapping entry).  Use \c FlagEnumStringMapping for enums such as \c Ingredient::Measure where this is not
  *              the case.
  *
- *        TODO: We should create a similar class for translatable strings that calls \c tr at time of use rather than
- *              time of construction.  This could be done with function pointers or with \c QT_TRANSLATE_NOOP() or
- *              \c QT_TR_NOOP() -- per https://doc.qt.io/qt-6/i18n-source-translation.html#c-use-noop-macros.  We could
- *              even add a template parameter to this class `bool translated = false`...
+ *        NOTE: This class is for strings that are \b not translated -- typically serialisation strings for BeerJSON,
+ *              the DB etc.  For localised display names, use \c EnumDisplayNameMapping (below).
  */
 class EnumStringMapping : public EnumMapping<QString> {
 public:
@@ -101,6 +100,115 @@ public:
    FlagEnumStringMapping(std::initializer_list<EnumAndItsString> args);
    std::optional<QString> enumAsIntToValue(int const enumValue) const;
 
+};
+
+/**
+ * \class EnumDisplayNameMapping
+ *
+ * \brief Maps enum values to localised display names, which are translated at time of use rather than time of
+ *        construction.
+ *
+ *        Our display name mappings (\c Hop::formDisplayNames, \c Measurement::physicalQuantityDisplayNames, etc) are
+ *        all constructed during static initialisation.  If we called \c tr() there, we would always get the
+ *        untranslated text, because that happens before \c QApplication exists and before any \c QTranslator has
+ *        been installed.  (And, even if that were not the case, we would not pick up a change of language while the
+ *        program is running.)  So instead we store the untranslated text, marked with \c QT_TRANSLATE_NOOP so that
+ *        \c lupdate still finds it, and translate it each time it is looked up.  Eg:
+ *
+ *           EnumDisplayNameMapping const Hop::formDisplayNames {"Hop", {
+ *              {Hop::Form::Leaf   , QT_TRANSLATE_NOOP("Hop", "Leaf"   )},
+ *              {Hop::Form::Pellet , QT_TRANSLATE_NOOP("Hop", "Pellet" )},
+ *              ...
+ *           }};
+ *
+ *        The context passed to the constructor \b must match the one in each \c QT_TRANSLATE_NOOP, otherwise the
+ *        lookup will not find the translations.  By convention, it is the name of the class that owns the mapping (or
+ *        "QObject" where that is what we used historically).
+ *
+ *        This is deliberately a separate class from \c EnumStringMapping (rather than, eg, a template parameter on it)
+ *        so that the compiler stops us accidentally passing a serialisation mapping where we need display names or
+ *        vice versa.  For the same reason, we do not expose the underlying container: everything you can get out of
+ *        this class is already translated.
+ *
+ *        As with \c EnumStringMapping, the entries must be supplied in enum order, starting from 0 with no gaps.
+ */
+class EnumDisplayNameMapping {
+public:
+   EnumDisplayNameMapping(char const * const context, std::initializer_list<EnumKeyValue<char const *>> args);
+
+   /**
+    * \brief Number of entries, which is also the number of values in the enum.  See comment in \c EnumStringMapping.
+    */
+   [[nodiscard]] qsizetype size() const;
+
+   /**
+    * \brief The translation context we were constructed with.  Mostly useful for logging and debugging.
+    */
+   [[nodiscard]] char const * context() const;
+
+   /**
+    * \brief Returns the untranslated text for the supplied enum value, as a \c TranslatableText that can be stored and
+    *        translated later (eg by a widget that needs to update its text when the language changes).
+    */
+   [[nodiscard]] std::optional<TranslatableText> enumAsIntToTranslatableText(int const enumValue) const;
+
+   /**
+    * \brief Returns the translated display name for the supplied enum value, or \c std::nullopt if the value is not
+    *        valid for this enum.
+    */
+   [[nodiscard]] std::optional<QString> enumAsIntToValue(int const enumValue) const;
+
+   /**
+    * \brief Convenience function for use with strongly typed enums (ie those declared as "enum class")
+    *
+    * \throw std::out_of_range if no string is found for the supplied enum (because this is a coding error)
+    */
+   template<typename E>
+   [[nodiscard]] QString enumToValue(E const enumValue) const {
+      std::optional<QString> result = this->enumAsIntToValue(static_cast<int>(enumValue));
+      if (!result) {
+         qCritical().noquote() <<
+            Q_FUNC_INFO << "Coding error: no display name found in context" << this->m_context << "for" <<
+            static_cast<int>(enumValue) << Logging::getStackTrace();
+         throw std::out_of_range("Missing value in EnumDisplayNameMapping");
+      }
+      return *result;
+   }
+
+   /**
+    * \brief A more concise version of \c enumToValue.  See comments in \c EnumMapping.
+    */
+   template<typename E, typename = std::enable_if_t<is_non_optional<E>::value> >
+   [[nodiscard]] QString operator[](E const enumValue) const {
+      return this->enumToValue(enumValue);
+   }
+
+   template<typename E, typename = std::enable_if_t<is_non_optional<E>::value> >
+   [[nodiscard]] QString operator[](std::optional<E> const optionalEnumValue) const {
+      return optionalEnumValue ? this->enumToValue(*optionalEnumValue) : QString{};
+   }
+
+   /**
+    * \brief As \c enumToValue, but returns the untranslated text, for callers that need to store it and translate it
+    *        later (eg so that a widget can redraw itself in a new language).
+    *
+    * \throw std::out_of_range if no string is found for the supplied enum (because this is a coding error)
+    */
+   template<typename E>
+   [[nodiscard]] TranslatableText enumToTranslatableText(E const enumValue) const {
+      std::optional<TranslatableText> result = this->enumAsIntToTranslatableText(static_cast<int>(enumValue));
+      if (!result) {
+         qCritical().noquote() <<
+            Q_FUNC_INFO << "Coding error: no display name found in context" << this->m_context << "for" <<
+            static_cast<int>(enumValue) << Logging::getStackTrace();
+         throw std::out_of_range("Missing value in EnumDisplayNameMapping");
+      }
+      return *result;
+   }
+
+private:
+   char const * const        m_context;
+   EnumMapping<char const *> m_sourceTexts;
 };
 
 #endif

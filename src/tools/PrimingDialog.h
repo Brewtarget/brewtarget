@@ -40,6 +40,12 @@ public slots:
 
 private:
    QButtonGroup * sugarGroup;
+protected:
+   /**
+    * \brief Overrides \c QWidget::changeEvent so that, on \c QEvent::LanguageChange, we update our text to the new
+    *        language.
+    */
+   void changeEvent(QEvent * event) override;
 };
 
 #endif

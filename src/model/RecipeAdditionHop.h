@@ -89,7 +89,7 @@ public:
    /*!
     * \brief Localised names of \c RecipeAdditionHop::Use values suitable for displaying to the end user
     */
-   static EnumStringMapping const useDisplayNames;
+   static EnumDisplayNameMapping const useDisplayNames;
 
    //
    // These aliases make it easier to template a number of functions that are essentially the same for a number of

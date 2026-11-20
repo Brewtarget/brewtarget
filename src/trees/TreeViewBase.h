@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QDebug>
+#include <QEvent>
 #include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
@@ -207,6 +208,20 @@ protected:
 
       this->m_contextMenus.showContextMenu(this->derived().mapToGlobal(point), selected);
 
+      return;
+   }
+
+   /**
+    * \brief Called from \c Derived::changeEvent.  On \c QEvent::LanguageChange, update the text of the context menus,
+    *        which are built once, when we are constructed.
+    *
+    *        (The tree's items and headers get their text from the model each time they are drawn, and Qt redraws every
+    *        widget when the language changes, so we don't need to do anything for them.)
+    */
+   void doChangeEvent(QEvent const * const event) {
+      if (event->type() == QEvent::LanguageChange) {
+         this->m_contextMenus.retranslateUi();
+      }
       return;
    }
 
@@ -1085,6 +1100,9 @@ using RecipeEditor = MainWindow;
       virtual void renameSelected();                                                  \
       virtual void   editSelected();                                                  \
                                                                                       \
+   protected:                                                                         \
+      virtual void changeEvent(QEvent * event) override;                              \
+                                                                                      \
    public slots:                                                                      \
       virtual void activated(QModelIndex const & viewIndex) override;                 \
       void contextMenu(QPoint const & point);                                         \
@@ -1162,5 +1180,10 @@ using RecipeEditor = MainWindow;
    void NeName##TreeView::exportSelected     () const { this->doExportSelected     (); return; } \
    void NeName##TreeView::importFromFiles    () const { this->doImportFromFiles    (); return; } \
    void NeName##TreeView::mergeSelected      () const { this->doMergeSelected      (); return; } \
+   void NeName##TreeView::changeEvent(QEvent * event) {                                    \
+      this->doChangeEvent(event);                                                          \
+      this->TreeView::changeEvent(event);                                                  \
+      return;                                                                              \
+   }                                                                                       \
 
 #endif

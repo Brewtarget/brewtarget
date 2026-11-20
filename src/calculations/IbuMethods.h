@@ -73,7 +73,7 @@ namespace IbuMethods {
    /*!
     * \brief Localised names of \c Ibu::Formula values suitable for displaying to the end user
     */
-   extern EnumStringMapping const formulaDisplayNames;
+   extern EnumDisplayNameMapping const formulaDisplayNames;
 
    extern Ibu::Formula formula;
 

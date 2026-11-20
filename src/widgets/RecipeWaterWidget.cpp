@@ -25,6 +25,7 @@
 
 #include <QButtonGroup>
 #include <QComboBox>
+#include <QEvent>
 #include <QFont>
 #include <QInputDialog>
 #include <QSignalBlocker>
@@ -209,6 +210,16 @@ public:
       return;
    }
 
+   //! Messages for the ion digit widgets when we don't have a target profile (and so are not using \c setDigits)
+   void setDefaultDigitMessages() {
+      for (auto const & [ion, digitWidget] : this->m_waterIonDisplays) {
+         digitWidget->setMessages(RecipeWaterWidget::tr("Too low for target profile." ),
+                                  RecipeWaterWidget::tr("In range for target profile."),
+                                  RecipeWaterWidget::tr("Too high for target profile."));
+      }
+      return;
+   }
+
    /**
     *
     */
@@ -283,12 +294,12 @@ RecipeWaterWidget::RecipeWaterWidget(QWidget* parent) :
       tr("PPM"),
       50,
       {
-         {PropertyNames::Water::calcium_ppm    , Water::ionDisplayNames[Water::MineralIon::Calcium    ]},
-         {PropertyNames::Water::bicarbonate_ppm, Water::ionDisplayNames[Water::MineralIon::Bicarbonate]},
-         {PropertyNames::Water::sulfate_ppm    , Water::ionDisplayNames[Water::MineralIon::Sulfate    ]},
-         {PropertyNames::Water::chloride_ppm   , Water::ionDisplayNames[Water::MineralIon::Chloride   ]},
-         {PropertyNames::Water::sodium_ppm     , Water::ionDisplayNames[Water::MineralIon::Sodium     ]},
-         {PropertyNames::Water::magnesium_ppm  , Water::ionDisplayNames[Water::MineralIon::Magnesium  ]}
+         {PropertyNames::Water::calcium_ppm    , Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Calcium    )},
+         {PropertyNames::Water::bicarbonate_ppm, Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Bicarbonate)},
+         {PropertyNames::Water::sulfate_ppm    , Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Sulfate    )},
+         {PropertyNames::Water::chloride_ppm   , Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Chloride   )},
+         {PropertyNames::Water::sodium_ppm     , Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Sodium     )},
+         {PropertyNames::Water::magnesium_ppm  , Water::ionDisplayNames.enumToTranslatableText(Water::MineralIon::Magnesium  )}
       }
    );
 
@@ -298,10 +309,8 @@ RecipeWaterWidget::RecipeWaterWidget(QWidget* parent) :
       digitWidget->setLimits(0.0, 1000.0);
       digitWidget->setQuantity(0.0);
       this->pimpl->m_actual.setIonConcentration_ppm(ion, 0.0);
-      digitWidget->setMessages(tr("Too low for target profile." ),
-                               tr("In range for target profile."),
-                               tr("Too high for target profile."));
    }
+   this->pimpl->setDefaultDigitMessages();
    // we can be a bit more specific with pH
    this->btDigit_ph->setLowLim(5.0);
    this->btDigit_ph->setHighLim(5.5);
@@ -387,6 +396,30 @@ void RecipeWaterWidget::init() {
    connect(pushButton_addAcidMalt   , &QAbstractButton::clicked, &mainWindow.getCatalog<Fermentable>(), &QWidget::show  );
    connect(pushButton_removeAcidMalt, &QAbstractButton::clicked, this                                 , &RecipeWaterWidget::removeSelectedAcidMalts );
 
+   return;
+}
+
+void RecipeWaterWidget::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+      //
+      // The generated retranslateUi has put back the .ui file tool tip on the target mash pH spin box, which we (may)
+      // have added to (see refreshAutoAdjustControls), and which we remember in m_targetMashPhToolTip.  So forget what
+      // we remembered (which is in the old language) and redo it.  (Everything else that refreshAutoAdjustControls does
+      // is with signals blocked, so it's safe to call here.)
+      //
+      this->pimpl->m_targetMashPhToolTip = QString{};
+      this->refreshAutoAdjustControls();
+      // The digit widgets' tool tips come from us
+      this->pimpl->setDefaultDigitMessages();
+      this->pimpl->setDigits();
+      //
+      // NOTE: We don't try to redo label_autoAdjustInfo, which is the result message from the last time the user
+      //       clicked Auto Adjust (or undid it).  The user can click it again to see the message in the new language.
+      //       The radar chart and the tables take care of themselves.
+      //
+   }
+   this->QWidget::changeEvent(event);
    return;
 }
 

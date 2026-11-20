@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/Instruction.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * model/Instruction.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -52,7 +52,7 @@ TypeLookup const Instruction::typeLookup {
    {
       PROPERTY_TYPE_LOOKUP_ENTRY(Instruction, completed    , m_completed    ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Instruction, directions   , m_directions   , NonPhysicalQuantity::String   ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Instruction, hasTimer     , m_hasTimer     , BOOL_INFO(tr("No"), tr("Yes"))),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Instruction, hasTimer     , m_hasTimer     , BOOL_INFO_NO_YES),
       PROPERTY_TYPE_LOOKUP_ENTRY(Instruction, interval_mins, m_interval_mins, Measurement::PhysicalQuantity::Time, DisplayInfo::Precision{0}),
       PROPERTY_TYPE_LOOKUP_ENTRY(Instruction, timerValue   , m_timerValue   , NonPhysicalQuantity::String   ),
    },

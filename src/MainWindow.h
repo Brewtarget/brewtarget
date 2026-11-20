@@ -276,8 +276,8 @@ public slots:
 public:
    //
    // TBD: This is all a bit clunky, as ideally the UI should update itself when things change on the Recipe.
-   //      We should fix BtComboBoxNamedEntityBase to allow it to observe a Recipe in the same way that
-   //      RecipeAttributeButtonBase does.
+   //      We should fix BtComboBoxNamedEntityBase to allow it to observe a Recipe (and its Mash, Style etc), rather
+   //      than relying on us to tell it when things change.
    //
    void updateStyleInUi();
    void updateEquipmentInUi();
@@ -306,6 +306,12 @@ public:
 protected:
    //! \brief Overrides \c QWidget::closeEvent
    virtual void closeEvent(QCloseEvent* event) override;
+
+   /**
+    * \brief Overrides \c QWidget::changeEvent so that, on \c QEvent::LanguageChange, we update all our text to the new
+    *        language.
+    */
+   virtual void changeEvent(QEvent * event) override;
 
 signals:
    /**

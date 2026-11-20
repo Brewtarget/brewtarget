@@ -261,10 +261,10 @@ public:
       //
       QGridLayout & layout = *this->m_self.gridLayout_units;
       int row = 1;
-      for (auto const & ii : Measurement::physicalQuantityDisplayNames) {
+      for (auto const & ii : Measurement::physicalQuantityStringMapping) {
          auto const physicalQuantity = static_cast<Measurement::PhysicalQuantity>(ii.key);
 
-         auto * label = new QLabel{ii.value, this->m_self.tab_units};
+         auto * label = new QLabel{Measurement::physicalQuantityDisplayNames[physicalQuantity], this->m_self.tab_units};
 
          auto * unitSystemComboBox = new QComboBox{this->m_self.tab_units};
          auto unitSystems = Measurement::UnitSystem::getUnitSystems(physicalQuantity);
@@ -284,6 +284,7 @@ public:
          }
 
          label->setBuddy(unitSystemComboBox->isEnabled() ? unitSystemComboBox : decimalPlacesComboBox);
+         this->m_physicalQuantityLabels.push_back({physicalQuantity, label});
          layout.addWidget(label                , row, 0);
          layout.addWidget(unitSystemComboBox   , row, 1);
          layout.addWidget(decimalPlacesComboBox, row, 2);
@@ -296,9 +297,11 @@ public:
       layout.removeWidget(this->m_self.dateComboBox);
       layout.addWidget(this->m_self.dateLabel   , row, 0);
       layout.addWidget(this->m_self.dateComboBox, row, 1);
-      this->m_self.dateComboBox->addItem(tr("mm-dd-YYYY"), QVariant(Localization::NumericDateFormat::MonthDayYear));
-      this->m_self.dateComboBox->addItem(tr("dd-mm-YYYY"), QVariant(Localization::NumericDateFormat::DayMonthYear));
-      this->m_self.dateComboBox->addItem(tr("YYYY-mm-dd"), QVariant(Localization::NumericDateFormat::YearMonthDay));
+      // Text for these items is set in retranslateUnitsTab
+      this->m_self.dateComboBox->addItem("", QVariant(Localization::NumericDateFormat::MonthDayYear));
+      this->m_self.dateComboBox->addItem("", QVariant(Localization::NumericDateFormat::DayMonthYear));
+      this->m_self.dateComboBox->addItem("", QVariant(Localization::NumericDateFormat::YearMonthDay));
+      this->retranslateUnitsTab();
       ++row;
 
       // Stop the grid spreading its rows out over the full height of the tab
@@ -310,7 +313,7 @@ public:
    void configure_logging() {
       // Populate options on the "Logging" tab
       for (auto ii : Logging::levelDetails) {
-         this->m_self.loggingLevelComboBox->addItem(ii.description, QVariant(ii.level));
+         this->m_self.loggingLevelComboBox->addItem(ii.description.translated(), QVariant(ii.level));
       }
       this->m_self.loggingLevelComboBox->setCurrentIndex(Logging::getLogLevel());
       this->m_self.checkBox_LogFileLocationUseDefault->setChecked(Logging::getLogInConfigDir());
@@ -467,7 +470,49 @@ public:
       this->retranslateDbDialog();
 
       this->retranslateLanguageComboBox();
+      this->retranslateUnitsTab();
 
+      // Items on the logging tab -- see configure_logging
+      for (int ii = 0; ii < this->m_self.loggingLevelComboBox->count() && ii < Logging::levelDetails.size(); ++ii) {
+         this->m_self.loggingLevelComboBox->setItemText(ii, Logging::levelDetails[ii].description.translated());
+      }
+
+      // Items on the database tab -- see OptionDialog constructor
+      this->retranslateEngineComboBox();
+
+      return;
+   }
+
+   /**
+    * \brief Set the text for the widgets we generate on the "Units & Precision" tab (see \c configure_unitCombos).
+    *        Setting item text on a combo box does not change its current index, so this does not lose any selections
+    *        the user has made.
+    */
+   void retranslateUnitsTab() {
+      for (auto const & [physicalQuantity, label] : this->m_physicalQuantityLabels) {
+         label->setText(Measurement::physicalQuantityDisplayNames[physicalQuantity]);
+      }
+      for (auto const & [physicalQuantity, unitSystemComboBox, decimalPlacesComboBox] : this->m_physicalQuantityRows) {
+         // Same order as in configure_unitCombos
+         auto unitSystems = Measurement::UnitSystem::getUnitSystems(physicalQuantity);
+         std::reverse(unitSystems.begin(), unitSystems.end());
+         for (int ii = 0; ii < unitSystemComboBox->count() && ii < unitSystems.size(); ++ii) {
+            unitSystemComboBox->setItemText(ii, Measurement::getDisplayName(unitSystems.at(ii)->systemOfMeasurement));
+         }
+         decimalPlacesComboBox->setItemText(0, tr("Default"));
+      }
+      this->m_self.dateComboBox->setItemText(0, tr("mm-dd-YYYY"));
+      this->m_self.dateComboBox->setItemText(1, tr("dd-mm-YYYY"));
+      this->m_self.dateComboBox->setItemText(2, tr("YYYY-mm-dd"));
+      return;
+   }
+
+   //! Set the text for the items in \c comboBox_engine
+   void retranslateEngineComboBox() {
+      if (this->m_self.comboBox_engine->count() >= 2) {
+         this->m_self.comboBox_engine->setItemText(0, tr("SQLite (default)"));
+         this->m_self.comboBox_engine->setItemText(1, tr("PostgreSQL"));
+      }
       return;
    }
 
@@ -677,6 +722,9 @@ public:
    };
    std::vector<PhysicalQuantityRow> m_physicalQuantityRows;
 
+   //! The labels for the rows in \c m_physicalQuantityRows -- see \c retranslateUnitsTab
+   std::vector<std::pair<Measurement::PhysicalQuantity, QLabel *>> m_physicalQuantityLabels;
+
 };
 
 OptionDialog::OptionDialog(QWidget * parent) :
@@ -711,8 +759,10 @@ OptionDialog::OptionDialog(QWidget * parent) :
    this->pimpl->configure_logging();
 
    // database panel stuff
-   comboBox_engine->addItem(tr("SQLite (default)"), QVariant(static_cast<int>(Database::DbType::SQLite)));
-   comboBox_engine->addItem(tr("PostgreSQL"), QVariant(static_cast<int>(Database::DbType::PostgreSQL)));
+   // Text for these items is set in retranslateEngineComboBox
+   comboBox_engine->addItem("", QVariant(static_cast<int>(Database::DbType::SQLite)));
+   comboBox_engine->addItem("", QVariant(static_cast<int>(Database::DbType::PostgreSQL)));
+   this->pimpl->retranslateEngineComboBox();
 
    // figure out which database we have
    int idx = comboBox_engine->findData(PersistentSettings::value_ck(PersistentSettings::Names::dbType,

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * BrewDayScrollWidget.h is part of Brewtarget, and is copyright the following authors 2009-2024:
+ * BrewDayScrollWidget.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Mark de Wever <koraq@xs4all.nl>
  *   • Matt Young <mfsy@yahoo.com>
@@ -63,6 +63,13 @@ public:
     */
    void print(QPrinter* mainPrinter, int action = PRINT, QFile* outFile = nullptr);
 
+protected:
+   /**
+    * \brief Overrides \c QWidget::changeEvent so that, on \c QEvent::LanguageChange, we update our text to the new
+    *        language.
+    */
+   void changeEvent(QEvent * event) override;
+
 public slots:
    //! Automatically generate a new list of instructions.
    void generateInstructions();
@@ -86,6 +93,9 @@ private:
    void showChanges();
    //! Repopulate the list widget with all the instructions.
    void repopulateListWidget();
+
+   //! Update the text of the items in \c listWidget (eg after a change of language), without changing the selection
+   void retranslateListWidget();
    void clear();
 
    QString buildTitleTable(bool includeImage = true);

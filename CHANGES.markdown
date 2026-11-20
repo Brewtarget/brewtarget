@@ -20,9 +20,13 @@ Bug fix release
   * Most recipes will show slightly fewer IBUs with Tinseth, Rager, Noonan, Daniels or mIBU estimation methods.
   * Because evaporation is now counted, any recipe with a pre-boil size set will drop by about 2.5–3% for a typical 25 L → 20 L boil.
   * Recipes without a pre-boil size don’t change.
+* Missing translations filled in for all supported languages, so the user interface is now (almost) fully translated.  These new translations are machine-generated and marked for review, so corrections from native speakers are very welcome.
 
 ### Bug Fixes
 * Compile error with latest versions of Qt
+* Drop-down lists of types, forms, stages etc (eg yeast type, hop form), and Yes/No values, were always shown in English, regardless of the language setting.  They now also update straight away when you change the language. (Part of [1040](https://github.com/Brewtarget/brewtarget/issues/1040))
+* Changing the language now updates the whole user interface straight away, rather than only after a restart. [1040](https://github.com/Brewtarget/brewtarget/issues/1040)
+* Logging level names on the Options dialog were always shown in English, regardless of the language setting.
 
 ### Release Timestamp
 Thu, 19 Nov 2026 05:03:02 +0100

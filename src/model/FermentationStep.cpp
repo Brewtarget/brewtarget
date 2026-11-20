@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * model/FermentationStep.cpp is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * model/FermentationStep.cpp is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ FermentationStepEditor & FermentationStep::getEditor() {
 TypeLookup const FermentationStep::typeLookup {
    "FermentationStep",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(FermentationStep, freeRise, m_freeRise, BOOL_INFO(tr("No"), tr("Yes"))),
+      PROPERTY_TYPE_LOOKUP_ENTRY(FermentationStep, freeRise, m_freeRise, BOOL_INFO_NO_YES),
       PROPERTY_TYPE_LOOKUP_ENTRY(FermentationStep, vessel  , m_vessel  , NonPhysicalQuantity::String),
    },
    // Parent class lookup.  NB: StepExtended not NamedEntity!

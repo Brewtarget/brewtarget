@@ -245,15 +245,14 @@ void RadarChart::paintEvent(QPaintEvent *event) {
       int alignFlags = (axisEnd.x() < 0 ? Qt::AlignRight : Qt::AlignLeft) |
                        (axisEnd.y() <= 0 ? Qt::AlignBottom : Qt::AlignTop);
       // Get a rectangle of the size necessary to contain the label text
-      QRectF axisLabelRect = painter.boundingRect(QRectF(),
-                                                  alignFlags,
-                                                  this->pimpl->m_variableNames[ii].displayName);
+      QString const axisLabel = this->pimpl->m_variableNames[ii].displayName.translated();
+      QRectF axisLabelRect = painter.boundingRect(QRectF(), alignFlags, axisLabel);
       // If we're in the bottom-right quadrant, then the coordinates of the axis end are also good for the text
       // rectangle.  If not, it needs correcting.
       double const labelX = axisEnd.x() - (axisEnd.x() <  0 ? axisLabelRect.width() : 0);
       double const labelY = axisEnd.y() - (axisEnd.y() <= 0 ? axisLabelRect.height() : 0);
       axisLabelRect.moveTo(labelX, labelY);
-      painter.drawText(axisLabelRect, alignFlags, this->pimpl->m_variableNames[ii].displayName);
+      painter.drawText(axisLabelRect, alignFlags, axisLabel);
    }
 
    // TODO Maybe different weight for outer circle?

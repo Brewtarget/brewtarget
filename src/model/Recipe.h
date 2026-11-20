@@ -305,7 +305,7 @@ public:
    /*!
     * \brief Localised names of \c Recipe::Type values suitable for displaying to the end user
     */
-   static EnumStringMapping const typeDisplayNames;
+   static EnumDisplayNameMapping const typeDisplayNames;
 
    //=============================================== REGULAR PROPERTIES ================================================
    //
@@ -831,16 +831,23 @@ public:
    int                                          getFermentationId () const;
 
    /**
-    * \brief This is used in the class implementation and in \c RecipeAttributeButtonBase to convert a Mash, Boil,
+    * \brief This is used in the class implementation and in templated code elsewhere to convert a Mash, Boil,
     *        Fermentation, Equipment, etc class to its corresponding Recipe property name.
     */
    template<class NE> static BtStringConst const & propertyNameFor();
 
    /**
-    * \brief This is used in \c RecipeAttributeButtonBase and also in places such as \c EditorWithRecipeBase where we
-    *        want to do templated code for Mash, Boil, Fermentation, etc.
+    * \brief This is used in places such as \c EditorWithRecipeBase where we want to do templated code for Mash, Boil,
+    *        Fermentation, etc.
     *
     *        No general implementation.  Only specialisations, all defined in model/Recipe.cpp.
+    *
+    *        NOTE: When calling this from a template where \c NE is a template parameter, you need to write
+    *              \c recipe->template \c get<NE>() rather than just \c recipe->get<NE>().  This is because \c get is a
+    *              member template being called with a dependent template argument, so the compiler needs to be told
+    *              that the \c < starts a template argument list rather than being a less-than operator.  (GCC lets you
+    *              get away without it in some cases, but Clang does not: "use 'template' keyword to treat 'get' as a
+    *              dependent template name".)
     */
    template<class NE> std::shared_ptr<NE> get() const;
 

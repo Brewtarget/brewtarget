@@ -183,7 +183,7 @@
            <enum>QDateTimeEdit::MonthSection</enum>
           </property>
           <property name="displayFormat">
-           <string>MM/dd/yyyy</string>
+           <string notr="true">MM/dd/yyyy</string>
           </property>
           <property name="calendarPopup">
            <bool>true</bool>
@@ -253,7 +253,7 @@
           <item>
            <widget class="QLabel" name="label_pitchRate">
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">TextLabel</string>
             </property>
            </widget>
           </item>

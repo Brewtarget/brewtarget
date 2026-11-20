@@ -22,6 +22,7 @@
 
 #include <cmath>
 
+#include <QEvent>
 #include <QDebug>
 #include <QMessageBox>
 #include <QString>
@@ -128,5 +129,13 @@ void RefractoDialog::clearOutputFields() {
    this->lineEdit_re ->clear();
    this->lineEdit_abv->clear();
    this->lineEdit_abw->clear();
+   return;
+}
+
+void RefractoDialog::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+   }
+   this->QDialog::changeEvent(event);
    return;
 }

@@ -130,7 +130,7 @@ public:
    /*!
     * \brief Localised names of \c Fermentation::KrausenHandling values suitable for displaying to the end user
     */
-   static EnumStringMapping const krausenHandlingDisplayNames;
+   static EnumDisplayNameMapping const krausenHandlingDisplayNames;
 
    Fermentation(QString name = "");
    Fermentation(NamedParameterBundle const & namedParameterBundle);

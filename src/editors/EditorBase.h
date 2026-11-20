@@ -23,6 +23,7 @@
 #include <vector>
 
 #include <QAbstractButton>
+#include <QEvent>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
@@ -167,6 +168,11 @@ template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasNumRecipesUsing = has_
  *                           \   |   /
  *                            \  |  /
  *                           HopEditor
+ *
+ *        If the derived class sets any text in code (rather than it all coming from the .ui file), it should also
+ *        provide a \c retranslateUi() member function (with no parameters) that sets that text and calls the
+ *        generated \c Ui::xxxEditor::retranslateUi(this).  \c EditorBase calls this (or, if it does not exist, the
+ *        generated function directly) when the user changes language -- see \c doChangeEvent.
  *
  *        Besides inheriting from \c QDialog, the derived class (eg \c HopEditor in the example above) needs to
  *        implement the following trivial slots:
@@ -511,7 +517,7 @@ public:
       if (!this->m_recipeObs || !this->m_editItem) {
          return nullptr;
       }
-      // See comment in buttons/RecipeAttributeButton.h for why we need template keyword here for Clang
+      // See comment on Recipe::get for why we need template keyword here
       std::shared_ptr<NE> const recipeItem = this->m_recipeObs->template get<NE>();
       if (!recipeItem || recipeItem->key() != this->m_editItem->key()) {
          return nullptr;
@@ -598,6 +604,32 @@ public:
     *        This is used, eg, in \c WaterEditor to set up the \c RadarChart
     */
    void postSetEditItem() {
+      return;
+   }
+
+   /**
+    * \brief Called from \c Derived::changeEvent (see \c EDITOR_COMMON_CODE).  When the user changes language, we
+    *        need to update all the text that we set ourselves.  (Qt sends \c QEvent::LanguageChange to every widget, so
+    *        child widgets such as \c BtComboBoxEnum and \c LockAndShareBar take care of themselves, but nothing
+    *        updates the text that came from the .ui file unless we call \c retranslateUi.)
+    *
+    *        Note that the generated \c retranslateUi only touches text from the .ui file: labels, buttons, tool tips
+    *        etc.  It does not touch the input fields (unless the .ui file mistakenly gives them a default text), so
+    *        there is no need to re-read the fields from the edit item, and any unsaved edits the user has made are
+    *        kept.
+    */
+   void doChangeEvent(QEvent const * const event) {
+      if (event->type() != QEvent::LanguageChange) {
+         return;
+      }
+      if constexpr (requires (Derived & derived) { derived.retranslateUi(); }) {
+         // Derived has its own retranslateUi that will call the generated one
+         this->derived().retranslateUi();
+      } else {
+         this->derived().retranslateUi(&this->derived());
+      }
+      // The text in the LockAndShareBar comes from us, so we need to regenerate it
+      this->refreshLockAndShare();
       return;
    }
 
@@ -996,7 +1028,7 @@ public:
     */
    void doEditForRecipe(Recipe * recipe) requires HasRecipe<editorBaseOptions> {
       this->setRecipe(recipe);
-      // See comment in buttons/RecipeAttributeButton.h for why we need template keyword here for Clang
+      // See comment on Recipe::get for why we need template keyword here
       std::shared_ptr<NE> item = recipe ? recipe->template get<NE>() : nullptr;
       if (!item && recipe) {
          if (recipe->locked()) {
@@ -1105,6 +1137,9 @@ protected:
                                                                                      \
       void readFieldsFromEditItem(std::optional<QString> propName);                  \
                                                                                      \
+   protected:                                                                        \
+      virtual void changeEvent(QEvent * event) override;                             \
+                                                                                     \
    public slots:                                                                     \
       /* Standard editor slots */                                                    \
       void saveAndClose();                                                           \
@@ -1127,5 +1162,6 @@ protected:
    void NeName##Editor::inputFieldModified() { this->doInputFieldModified(this->sender()); return; };                     \
    void NeName##Editor::showEditor() { this->doShowEditor(); }                                                            \
    void NeName##Editor::closeEditor() { this->doCloseEditor(); }                                                          \
+   void NeName##Editor::changeEvent(QEvent * event) { this->doChangeEvent(event); this->QDialog::changeEvent(event); }   \
 
 #endif

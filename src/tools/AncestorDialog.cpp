@@ -18,6 +18,7 @@
 
 #include <algorithm>
 
+#include <QEvent>
 #include <QAction>
 #include <QDebug>
 #include <QtCore/QVariant>
@@ -154,5 +155,13 @@ void AncestorDialog::activateButton() {
    if (! pushButton_apply->isEnabled()) {
       pushButton_apply->setEnabled(true);
    }
+   return;
+}
+
+void AncestorDialog::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+   }
+   this->QDialog::changeEvent(event);
    return;
 }

@@ -76,8 +76,8 @@ ObjectStore & Mash::getObjectStoreTypedInstance() const {
 TypeLookup const Mash::typeLookup {
    "Mash",
    {
-      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, keptInSync           , m_keptInSync           , BOOL_INFO(tr("No"), tr("Yes"))            ),
-      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, equipAdjust          , m_equipAdjust          , BOOL_INFO(tr("No"), tr("Yes"))            ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, keptInSync           , m_keptInSync           , BOOL_INFO_NO_YES                          ),
+      PROPERTY_TYPE_LOOKUP_ENTRY(Mash, equipAdjust          , m_equipAdjust          , BOOL_INFO_NO_YES                          ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Mash, grainTemp_c          , m_grainTemp_c          , Measurement::PhysicalQuantity::Temperature, DisplayInfo::Precision{1}),
       PROPERTY_TYPE_LOOKUP_ENTRY(Mash, notes                , m_notes                ,           NonPhysicalQuantity::String     ),
       PROPERTY_TYPE_LOOKUP_ENTRY(Mash, ph                   , m_ph                   , Measurement::PhysicalQuantity::Acidity    ),

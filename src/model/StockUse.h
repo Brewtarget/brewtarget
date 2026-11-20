@@ -95,7 +95,7 @@ public:
    /*!
     * \brief Localised names of \c StockUse::Reason values suitable for displaying to the end user
     */
-   static EnumStringMapping const reasonDisplayNames;
+   static EnumDisplayNameMapping const reasonDisplayNames;
 
    /**
     * \brief Mapping of names to types for the Qt properties of this class.  See \c NamedEntity::typeLookup for more

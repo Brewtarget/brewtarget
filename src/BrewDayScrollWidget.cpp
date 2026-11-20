@@ -24,6 +24,7 @@
 #include "BrewDayScrollWidget.h"
 
 #include <QDate>
+#include <QEvent>
 #include <QListWidgetItem>
 #include <QMessageBox>
 #include <QPrinter>
@@ -60,6 +61,11 @@ namespace {
       }
 
       return Measurement::displayAmount(Measurement::Amount{valueOr(boil->boilTime_mins(), Boil::default_boilTime_mins), Measurement::Units::minutes});
+   }
+
+   //! What we show for an instruction in the list of steps
+   QString listWidgetText(Instruction const & instruction) {
+      return BrewDayScrollWidget::tr("Step %1: %2").arg(instruction.sequenceNumber()).arg(instruction.name());
    }
 }
 
@@ -344,6 +350,22 @@ void BrewDayScrollWidget::showChanges() {
    return;
 }
 
+void BrewDayScrollWidget::retranslateListWidget() {
+   for (int ii = 0; ii < this->listWidget->count() && ii < this->m_recIns.size(); ++ii) {
+      this->listWidget->item(ii)->setText(listWidgetText(*this->m_recIns.at(ii)));
+   }
+   return;
+}
+
+void BrewDayScrollWidget::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateUi(this);
+      this->retranslateListWidget();
+   }
+   this->QWidget::changeEvent(event);
+   return;
+}
+
 void BrewDayScrollWidget::repopulateListWidget() {
    this->listWidget->clear();
 
@@ -352,9 +374,7 @@ void BrewDayScrollWidget::repopulateListWidget() {
    }
 
    for (auto ins : this->m_recIns ) {
-      //QString text = tr("Step %1: %2").arg(i).arg(ins->name());
-      QString text = tr("Step %1: %2").arg(ins->sequenceNumber()).arg(ins->name());
-      listWidget->addItem(new QListWidgetItem(text));
+      listWidget->addItem(new QListWidgetItem(listWidgetText(*ins)));
    }
 
    if (this->m_recIns.size() > 0 ) {

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * widgets/BtComboBoxBool.h is part of Brewtarget, and is copyright the following authors 2023-2024:
+ * widgets/BtComboBoxBool.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 
 #include <QComboBox>
 
+#include "utils/TranslatableText.h"
 #include "utils/TypeLookup.h"
 
 class QVariant;
@@ -57,16 +58,17 @@ public:
     * \param editorName
     * \param comboBoxName
     * \param comboBoxFqName     Fully qualified name.  Usually a combination of \c editorName and \c comboBoxName
-    * \param unsetDisplay       Localised displayable name for unset (ie \c false) value
-    * \param setDisplay         Localised displayable name for set (ie \c true) value
+    * \param unsetDisplay       Localisable displayable name for unset (ie \c false) value.  We store this (by value)
+    *                           so that we can update the display text if the language is changed.
+    * \param setDisplay         Localisable displayable name for set (ie \c true) value.  Ditto.
     * \param typeInfo           Mainly used to determine whether this is an optional bool
     */
-   void init(char const * const   editorName,
-             char const * const   comboBoxName,
-             char const * const   comboBoxFqName,
-             QString      const & unsetDisplay,
-             QString      const & setDisplay,
-             TypeInfo     const & typeInfo);
+   void init(char const * const       editorName,
+             char const * const       comboBoxName,
+             char const * const       comboBoxFqName,
+             TranslatableText const & unsetDisplay,
+             TranslatableText const & setDisplay,
+             TypeInfo         const & typeInfo);
 
    /**
     *
@@ -107,6 +109,12 @@ public:
     */
    [[nodiscard]] QVariant getAsVariant() const;
 
+protected:
+   /**
+    * \brief Handles \c QEvent::LanguageChange by updating the display text of the items to the new language.
+    */
+   void changeEvent(QEvent * event) override;
+
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/
    class impl;
@@ -146,8 +154,8 @@ private:
    this->comboBoxName->init(#editorClass, \
                             #comboBoxName, \
                             #editorClass "->" #comboBoxName, \
-                            editorClass::tr("No"), \
-                            editorClass::tr("Yes"), \
+                            DisplayInfo::no, \
+                            DisplayInfo::yes, \
                             modelClass::typeLookup.getType(PropertyNames::modelClass::propertyName))
 #define BT_COMBO_BOX_BOOL_INIT_GET_OVERLOAD(param1, param2, param3, param4, param5, param6, NAME, ...) NAME
 #define BT_COMBO_BOX_BOOL_INIT(...) \

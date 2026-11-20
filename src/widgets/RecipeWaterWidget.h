@@ -48,6 +48,13 @@ public:
 
    void setRecipe(Recipe * rec);
 
+protected:
+   /**
+    * \brief Overrides \c QWidget::changeEvent so that, on \c QEvent::LanguageChange, we update our text to the new
+    *        language.
+    */
+   void changeEvent(QEvent * event) override;
+
 public slots:
    void updateBaseProfile(int selected) const;
    void updateTargetProfile(int selected) const;

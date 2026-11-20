@@ -33,11 +33,11 @@ EnumStringMapping const StockUse::reasonStringMapping {
    {StockUse::Reason::Disposed, "disposed"},
 };
 
-EnumStringMapping const StockUse::reasonDisplayNames {
-   {StockUse::Reason::Used    , tr("Used"    )},
-   {StockUse::Reason::Lost    , tr("Lost"    )},
-   {StockUse::Reason::Disposed, tr("Disposed")},
-};
+EnumDisplayNameMapping const StockUse::reasonDisplayNames {"StockUse", {
+   {StockUse::Reason::Used    , QT_TRANSLATE_NOOP("StockUse", "Used"    )},
+   {StockUse::Reason::Lost    , QT_TRANSLATE_NOOP("StockUse", "Lost"    )},
+   {StockUse::Reason::Disposed, QT_TRANSLATE_NOOP("StockUse", "Disposed")},
+}};
 
 
 bool StockUse::compareWith(NamedEntity const & other, QList<BtStringConst const *> * propertiesThatDiffer) const {

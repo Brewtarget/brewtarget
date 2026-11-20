@@ -72,7 +72,7 @@ public:
    /*!
     * \brief Localised names of \c Database::DbType values suitable for displaying to the end user
     */
-   static EnumStringMapping const dbTypeDisplayNames;
+   static EnumDisplayNameMapping const dbTypeDisplayNames;
 
    //! The file name we use for our SQLite DB
    static QString const sqliteDbFileName;
