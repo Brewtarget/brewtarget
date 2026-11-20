@@ -4,8 +4,8 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">关于BrewkenAbout Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">关于BrewtargetAbout Brewtarget</translation>
     </message>
     <message>
         <source>About %1</source>
@@ -676,7 +676,7 @@
     </message>
 </context>
 <context>
-    <name>Brewken</name>
+    <name>Brewtarget</name>
     <message>
         <source>Default</source>
         <translation type="vanished">默认</translation>
@@ -3658,8 +3658,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished">在线帮助</translation>
     </message>
     <message>
-        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;只要是 Brewken 的问题，我们就能修好……&lt;/em&gt;</translation>
+        <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;只要是 Brewtarget 的问题，我们就能修好……&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -4349,8 +4349,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="vanished">选择数据库文件Select Database File</translation>
     </message>
     <message>
-        <source>Brewken Database (*.sqlite)</source>
-        <translation type="vanished">的数据库BrewkenBrewken Database (*.sqlite)</translation>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="vanished">的数据库BrewtargetBrewtarget Database (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -4413,8 +4413,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation>重新开始Restart</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">请重新启动Brewken。</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">请重新启动Brewtarget。</translation>
     </message>
     <message>
         <source>No equipment</source>
@@ -5760,8 +5760,8 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
         <translation>重新开始</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">请重新启动Brewken。</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">请重新启动Brewtarget。</translation>
     </message>
     <message>
         <source>Celsius</source>
@@ -6038,8 +6038,8 @@ Press OK to quit.</source>
         <translation type="vanished">找到多个数据库</translation>
     </message>
     <message>
-        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewken session, or rollback to before last session&apos;s changes?</source>
-        <translation type="vanished">发现多个数据库。你想恢复在最后Brewken期间会话，或者回滚所做的更改前最后一届的变化吗？</translation>
+        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
+        <translation type="vanished">发现多个数据库。你想恢复在最后Brewtarget期间会话，或者回滚所做的更改前最后一届的变化吗？</translation>
     </message>
     <message>
         <source>Restore</source>
@@ -12645,8 +12645,8 @@ Tabs</source>
         <translation type="vanished">关于BrewTargetAbout &amp;BrewTarget</translation>
     </message>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">关于BrewkenAbout Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">关于BrewtargetAbout Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -14292,8 +14292,8 @@ Tabs</source>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>

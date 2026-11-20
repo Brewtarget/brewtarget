@@ -4,8 +4,8 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">О Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">О Brewtarget</translation>
     </message>
     <message>
         <source>About %1</source>
@@ -652,7 +652,7 @@
     </message>
 </context>
 <context>
-    <name>Brewken</name>
+    <name>Brewtarget</name>
     <message>
         <source>Default</source>
         <translation type="vanished">По умолчанию</translation>
@@ -3814,8 +3814,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished">Онлайн-справка</translation>
     </message>
     <message>
-        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;Если это Brewken, мы можем это исправить...&lt;/em&gt;</translation>
+        <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;Если это Brewtarget, мы можем это исправить...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -4549,8 +4549,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="vanished">Выберите файл базы данных</translation>
     </message>
     <message>
-        <source>Brewken Database (*.sqlite)</source>
-        <translation type="vanished">База данных Brewken (*.sqlite)</translation>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="vanished">База данных Brewtarget (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -4613,8 +4613,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation>Перезапуск</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Пожалуйста, перезапустите Brewken.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Пожалуйста, перезапустите Brewtarget.</translation>
     </message>
     <message>
         <source>No equipment</source>
@@ -6011,8 +6011,8 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
         <translation>Перезапуск</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Пожалуйста, перезапустите Brewken.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Пожалуйста, перезапустите Brewtarget.</translation>
     </message>
     <message>
         <source>Catalan</source>
@@ -6353,8 +6353,8 @@ Press OK to quit.</source>
         <translation type="vanished">Найдено несколько баз данных</translation>
     </message>
     <message>
-        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewken session, or rollback to before last session&apos;s changes?</source>
-        <translation type="vanished">Найдено несколько баз данных.  Восстановить изменения, сделанные в последнем сеансе Brewken, или выполнить откат к состоянию до изменений в последнем сеансе?</translation>
+        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
+        <translation type="vanished">Найдено несколько баз данных.  Восстановить изменения, сделанные в последнем сеансе Brewtarget, или выполнить откат к состоянию до изменений в последнем сеансе?</translation>
     </message>
     <message>
         <source>Restore</source>
@@ -13238,8 +13238,8 @@ Tabs</source>
         <translation type="vanished">&amp;О BrewTarget</translation>
     </message>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">О Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">О Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -14686,7 +14686,7 @@ Tabs</source>
     </message>
     <message>
         <source>Where your brewtarget .xml files are.</source>
-        <translation type="vanished">Где находятся .xml файлы Brewken.</translation>
+        <translation type="vanished">Где находятся .xml файлы Brewtarget.</translation>
     </message>
     <message>
         <source>Browse</source>
@@ -14873,8 +14873,8 @@ Tabs</source>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>

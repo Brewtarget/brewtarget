@@ -4,8 +4,8 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">À propos de Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">À propos de Brewtarget</translation>
     </message>
     <message>
         <source>About %1</source>
@@ -698,7 +698,7 @@
     </message>
 </context>
 <context>
-    <name>Brewken</name>
+    <name>Brewtarget</name>
     <message>
         <source>Default</source>
         <translation type="vanished">Par défaut</translation>
@@ -3927,8 +3927,8 @@ Cliquez sur « OK » pour quitter %2 afin de pouvoir passer à une version plus 
         <translation type="unfinished">Aide en ligne</translation>
     </message>
     <message>
-        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;Si c&apos;est Brewken, on peut le réparer...&lt;/em&gt;</translation>
+        <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;Si c&apos;est Brewtarget, on peut le réparer...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -4694,8 +4694,8 @@ Cliquez sur « OK » pour quitter %2 afin de pouvoir passer à une version plus 
         <translation type="vanished">Sélectionner un fichier de base de données</translation>
     </message>
     <message>
-        <source>Brewken Database (*.sqlite)</source>
-        <translation type="vanished">Base de données Brewken (*.sqlite)</translation>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="vanished">Base de données Brewtarget (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -4758,8 +4758,8 @@ Cliquez sur « OK » pour quitter %2 afin de pouvoir passer à une version plus 
         <translation>Redémarrer</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Redémarrer Brewken.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Redémarrer Brewtarget.</translation>
     </message>
     <message>
         <source>No equipment</source>
@@ -6183,8 +6183,8 @@ Voulez-vous faire une copie de cet empâtage pour cette recette, afin de pouvoir
         <translation>Redémarrer</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Redémarrer Brewken.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Redémarrer Brewtarget.</translation>
     </message>
     <message>
         <source>Catalan</source>
@@ -6517,7 +6517,7 @@ Appuyez sur OK pour quitter.</translation>
         <translation type="vanished">Plusieurs bases de données trouvées</translation>
     </message>
     <message>
-        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewken session, or rollback to before last session&apos;s changes?</source>
+        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
         <translation type="vanished">Plusieurs bases de données ont été trouvées. Voulez-vous restaurer la dernière session, ou abandonner les modifications et revenir à la session précédente ?</translation>
     </message>
     <message>
@@ -13546,11 +13546,11 @@ optionnelles</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation type="vanished">À propos de &amp;Brewken</translation>
+        <translation type="vanished">À propos de &amp;Brewtarget</translation>
     </message>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">À propos de Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">À propos de Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -15232,15 +15232,15 @@ optionnelles</translation>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;
    &lt;b&gt;Vous connaissez une autre langue ?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Ou vous souhaitez améliorer une traduction ? Aidez-nous et
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  proposez une traduction&lt;/a&gt; pour que vos amis puissent utiliser Brewken !
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  proposez une traduction&lt;/a&gt; pour que vos amis puissent utiliser Brewtarget !
 &lt;/qt&gt;</translation>
     </message>
     <message>

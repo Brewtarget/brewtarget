@@ -4,8 +4,8 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">Over Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">Over Brewtarget</translation>
     </message>
     <message>
         <source>About %1</source>
@@ -694,7 +694,7 @@
     </message>
 </context>
 <context>
-    <name>Brewken</name>
+    <name>Brewtarget</name>
     <message>
         <source>Default</source>
         <translation type="vanished">Standaard</translation>
@@ -3919,8 +3919,8 @@ Klik op &apos;OK&apos; om %2 af te sluiten, zodat u naar een nieuwere versie kun
         <translation type="unfinished">Online hulp</translation>
     </message>
     <message>
-        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;Als het Brewken is, kunnen we het repareren...&lt;/em&gt;</translation>
+        <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;Als het Brewtarget is, kunnen we het repareren...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -4683,8 +4683,8 @@ Klik op &apos;OK&apos; om %2 af te sluiten, zodat u naar een nieuwere versie kun
         <translation type="vanished">Selecteer Database Bestand</translation>
     </message>
     <message>
-        <source>Brewken Database (*.sqlite)</source>
-        <translation type="vanished">Brewken Database (*.sqlite)</translation>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="vanished">Brewtarget Database (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -4747,8 +4747,8 @@ Klik op &apos;OK&apos; om %2 af te sluiten, zodat u naar een nieuwere versie kun
         <translation>Herstarten</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Start Brewken opnieuw op.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Start Brewtarget opnieuw op.</translation>
     </message>
     <message>
         <source>No equipment</source>
@@ -6203,8 +6203,8 @@ Wilt u een kopie van dit maischschema maken voor dat recept, zodat u dit kunt do
         <translation>Herstarten</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Start Brewken opnieuw op.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Start Brewtarget opnieuw op.</translation>
     </message>
     <message>
         <source>Catalan</source>
@@ -6384,7 +6384,7 @@ Wilt u een kopie van dit maischschema maken voor dat recept, zodat u dit kunt do
     </message>
     <message>
         <source>Saving the options without testing the connection can cause brewtarget to not restart. Your changes have been discarded, which is likely really, really crappy UX. Please open a bug explaining exactly how you got to this message.</source>
-        <translation type="vanished">De opties opslaan zonder de connectie te testen kan er voor zorgen dat brewtarget niet meer opstart. Je wijzigingen zijn niet opgeslagen, wat echt heel slecht UX design is. Wilt U alstublieft &lt;a href=&quot;https://github.com/Brewken/brewtarget/issues&quot;&gt;een issue aanmaken&lt;/a&gt; waarin je uitlegt hoe je aan deze foutmelding bent gekomen.</translation>
+        <translation type="vanished">De opties opslaan zonder de connectie te testen kan er voor zorgen dat brewtarget niet meer opstart. Je wijzigingen zijn niet opgeslagen, wat echt heel slecht UX design is. Wilt U alstublieft &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/issues&quot;&gt;een issue aanmaken&lt;/a&gt; waarin je uitlegt hoe je aan deze foutmelding bent gekomen.</translation>
     </message>
     <message>
         <source>Would you like brewtarget to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
@@ -6396,7 +6396,7 @@ Wilt u een kopie van dit maischschema maken voor dat recept, zodat u dit kunt do
     </message>
     <message>
         <source>Please restart brewtarget to connect to the new database</source>
-        <translation type="vanished">Start Brewken opnieuw op om verbinding te maken met de nieuwe database</translation>
+        <translation type="vanished">Start Brewtarget opnieuw op om verbinding te maken met de nieuwe database</translation>
     </message>
     <message>
         <source>Lintner</source>
@@ -13599,8 +13599,8 @@ vaten</translation>
         <translation type="vanished">Over &amp;BrewTarget</translation>
     </message>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">Over Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">Over Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -15206,15 +15206,15 @@ vaten</translation>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;
    &lt;b&gt;Kent u een andere taal?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Of wilt u een vertaling verbeteren? Help ons en
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  lever een vertaling&lt;/a&gt; zodat uw vrienden Brewken kunnen gebruiken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  lever een vertaling&lt;/a&gt; zodat uw vrienden Brewtarget kunnen gebruiken!
 &lt;/qt&gt;</translation>
     </message>
     <message>

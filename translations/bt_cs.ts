@@ -4,8 +4,8 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">O aplikaci Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">O aplikaci Brewtarget</translation>
     </message>
     <message>
         <source>About %1</source>
@@ -690,7 +690,7 @@
     </message>
 </context>
 <context>
-    <name>Brewken</name>
+    <name>Brewtarget</name>
     <message>
         <source>Default</source>
         <translation type="vanished">Výchozí</translation>
@@ -3799,8 +3799,8 @@ Klikněte na „OK“ pro ukončení %2, abyste mohli aktualizovat na novější
         <translation type="unfinished">Nápověda online</translation>
     </message>
     <message>
-        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;Pokud je to Brewken, umíme to opravit...&lt;/em&gt;</translation>
+        <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;Pokud je to Brewtarget, umíme to opravit...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -4551,8 +4551,8 @@ Klikněte na „OK“ pro ukončení %2, abyste mohli aktualizovat na novější
         <translation type="vanished">Vybrat databázový soubor</translation>
     </message>
     <message>
-        <source>Brewken Database (*.sqlite)</source>
-        <translation type="vanished">Databáze Brewkenu (*.sqlite)</translation>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="vanished">Databáze Brewtargetu (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -4615,8 +4615,8 @@ Klikněte na „OK“ pro ukončení %2, abyste mohli aktualizovat na novější
         <translation>Restartujte</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Restartujte Brewken.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Restartujte Brewtarget.</translation>
     </message>
     <message>
         <source>No equipment</source>
@@ -6040,8 +6040,8 @@ Chcete vytvořit kopii tohoto rmutu pro tento recept, abyste to mohli udělat, a
         <translation>Restartujte</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Restartujte Brewken.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Restartujte Brewtarget.</translation>
     </message>
     <message>
         <source>Catalan</source>
@@ -6370,8 +6370,8 @@ Stiskněte OK pro ukončení.</translation>
         <translation type="vanished">Nalezeno více databází</translation>
     </message>
     <message>
-        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewken session, or rollback to before last session&apos;s changes?</source>
-        <translation type="vanished">Bylo nalezeno více databází.  Chcete obnovit změny, které jste provedli při posledním použití Brewkenu nebo je vrátit zpět?</translation>
+        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
+        <translation type="vanished">Bylo nalezeno více databází.  Chcete obnovit změny, které jste provedli při posledním použití Brewtargetu nebo je vrátit zpět?</translation>
     </message>
     <message>
         <source>Restore</source>
@@ -13321,11 +13321,11 @@ nádob</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation type="vanished">&amp;O aplikaci Brewken</translation>
+        <translation type="vanished">&amp;O aplikaci Brewtarget</translation>
     </message>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">O aplikaci Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">O aplikaci Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -14796,7 +14796,7 @@ nádob</translation>
     </message>
     <message>
         <source>Where your brewtarget .xml files are.</source>
-        <translation type="vanished">Kde jsou vaše XML soubory Brewkenu</translation>
+        <translation type="vanished">Kde jsou vaše XML soubory Brewtargetu</translation>
     </message>
     <message>
         <source>Browse</source>
@@ -14983,15 +14983,15 @@ nádob</translation>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;
    &lt;b&gt;Umíte jiný jazyk?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Nebo byste chtěli vylepšit překlad? Pomozte nám a
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  přispějte překladem&lt;/a&gt;, aby mohli Brewken používat i vaši přátelé!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  přispějte překladem&lt;/a&gt;, aby mohli Brewtarget používat i vaši přátelé!
 &lt;/qt&gt;</translation>
     </message>
     <message>

@@ -678,7 +678,7 @@
     </message>
 </context>
 <context>
-    <name>Brewken</name>
+    <name>Brewtarget</name>
     <message>
         <source>Default</source>
         <translation type="vanished">Подразумевано</translation>
@@ -3632,8 +3632,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished">Помоћ на мрежи</translation>
     </message>
     <message>
-        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;Ако је Brewken, можемо то да поправимо...&lt;/em&gt;</translation>
+        <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;Ако је Brewtarget, можемо то да поправимо...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -4371,8 +4371,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="vanished">Изабери датотеку</translation>
     </message>
     <message>
-        <source>Brewken Database (*.sqlite)</source>
-        <translation type="vanished">Brewken база (*.sqlite)</translation>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="vanished">Brewtarget база (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -4435,8 +4435,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation>Покрени поново</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Молимо, покрените Brewken поново.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Молимо, покрените Brewtarget поново.</translation>
     </message>
     <message>
         <source>No equipment</source>
@@ -5832,8 +5832,8 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
         <translation>Покрени поново</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Молимо, покрените Brewken поново.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Молимо, покрените Brewtarget поново.</translation>
     </message>
     <message>
         <source>Catalan</source>
@@ -6138,7 +6138,7 @@ Press OK to quit.</source>
         <translation type="vanished">Нађено је више база података</translation>
     </message>
     <message>
-        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewken session, or rollback to before last session&apos;s changes?</source>
+        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
         <translation type="vanished">Више база података је пронашено. Да ли желите да вратите измене које сте направили последњи или претпоследњи пут?</translation>
     </message>
     <message>
@@ -13517,15 +13517,15 @@ Tabs</source>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;
    &lt;b&gt;Знате још неки језик?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Или бисте желели да побољшате превод? Помозите нам и
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  направите превод&lt;/a&gt; како би и ваши пријатељи могли да користе Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  направите превод&lt;/a&gt; како би и ваши пријатељи могли да користе Brewtarget!
 &lt;/qt&gt;</translation>
     </message>
     <message>

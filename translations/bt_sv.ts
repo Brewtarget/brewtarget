@@ -4,8 +4,8 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">Om Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">Om Brewtarget</translation>
     </message>
     <message>
         <source>About %1</source>
@@ -714,7 +714,7 @@
     </message>
 </context>
 <context>
-    <name>Brewken</name>
+    <name>Brewtarget</name>
     <message>
         <source>Default</source>
         <translation type="vanished">Förvalt</translation>
@@ -3935,8 +3935,8 @@ Klicka på &apos;OK&apos; för att avsluta %2 så att du kan uppgradera till en 
         <translation type="unfinished">Hjälp online</translation>
     </message>
     <message>
-        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;Om det är Brewken kan vi fixa det...&lt;/em&gt;</translation>
+        <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;Om det är Brewtarget kan vi fixa det...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -4686,8 +4686,8 @@ Klicka på &apos;OK&apos; för att avsluta %2 så att du kan uppgradera till en 
         <translation type="vanished">Välj databasfil</translation>
     </message>
     <message>
-        <source>Brewken Database (*.sqlite)</source>
-        <translation type="vanished">Brewkendatabas (*.sqlite)</translation>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="vanished">Brewtargetdatabas (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -4750,8 +4750,8 @@ Klicka på &apos;OK&apos; för att avsluta %2 så att du kan uppgradera till en 
         <translation>Börja om</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Starta om Brewken, tack.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Starta om Brewtarget, tack.</translation>
     </message>
     <message>
         <source>No equipment</source>
@@ -6191,8 +6191,8 @@ Vill du göra en kopia av denna mäsk för det receptet, så att du kan göra de
         <translation>Starta om</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
-        <translation type="vanished">Vänligen  starta om Brewken.</translation>
+        <source>Please restart Brewtarget.</source>
+        <translation type="vanished">Vänligen  starta om Brewtarget.</translation>
     </message>
     <message>
         <source>Catalan</source>
@@ -6372,11 +6372,11 @@ Vill du göra en kopia av denna mäsk för det receptet, så att du kan göra de
     </message>
     <message>
         <source>Saving the options without testing the connection can cause brewtarget to not restart. Your changes have been discarded, which is likely really, really crappy UX. Please open a bug explaining exactly how you got to this message.</source>
-        <translation type="vanished">Att spara installningarna utan att testa kopplingen kan orsaka Brewken att inte starta om. Dina ändringar har ångrats, vilket troligen är väldigt dålig UX, Vänligen öppna en felrapport och förklara exakt hur du fick detta felmeddelande.</translation>
+        <translation type="vanished">Att spara installningarna utan att testa kopplingen kan orsaka Brewtarget att inte starta om. Dina ändringar har ångrats, vilket troligen är väldigt dålig UX, Vänligen öppna en felrapport och förklara exakt hur du fick detta felmeddelande.</translation>
     </message>
     <message>
         <source>Would you like brewtarget to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
-        <translation type="vanished">Vill du att Brewken ska föra över data till den nya databasen? NOTERA! om du redan har laddat in data så ska du svara NEJ här</translation>
+        <translation type="vanished">Vill du att Brewtarget ska föra över data till den nya databasen? NOTERA! om du redan har laddat in data så ska du svara NEJ här</translation>
     </message>
     <message>
         <source>Transfer database</source>
@@ -6384,7 +6384,7 @@ Vill du göra en kopia av denna mäsk för det receptet, så att du kan göra de
     </message>
     <message>
         <source>Please restart brewtarget to connect to the new database</source>
-        <translation type="vanished">Starta om Brewken för att koppla upp dig mot den nya databasen</translation>
+        <translation type="vanished">Starta om Brewtarget för att koppla upp dig mot den nya databasen</translation>
     </message>
     <message>
         <source>Choose User Data Directory</source>
@@ -13534,8 +13534,8 @@ kärl</translation>
         <translation type="vanished">Om &amp;BrewTarget</translation>
     </message>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">Om Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">Om Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -14969,7 +14969,7 @@ kärl</translation>
    &lt;br&gt;&lt;br&gt;
    Eller, vill du förbättra en översättning? Hjälp oss att
   &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
-  skapa en översättning&lt;/a&gt; så att dina vänner kan använda Brewken!
+  skapa en översättning&lt;/a&gt; så att dina vänner kan använda Brewtarget!
 &lt;/qt&gt;</translation>
     </message>
     <message>
@@ -15137,15 +15137,15 @@ kärl</translation>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;
    &lt;b&gt;Kan du ett annat språk?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Eller vill du förbättra en översättning? Hjälp oss och
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  bidra med en översättning&lt;/a&gt; så att dina vänner kan använda Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  bidra med en översättning&lt;/a&gt; så att dina vänner kan använda Brewtarget!
 &lt;/qt&gt;</translation>
     </message>
     <message>

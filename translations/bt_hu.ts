@@ -4,8 +4,8 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">a Brewkenről</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">a Brewtargetről</translation>
     </message>
     <message>
         <source>About %1</source>
@@ -714,7 +714,7 @@
     </message>
 </context>
 <context>
-    <name>Brewken</name>
+    <name>Brewtarget</name>
     <message>
         <source>Default</source>
         <translation type="vanished">Alapértelmezett</translation>
@@ -3912,8 +3912,8 @@ Kattints az &apos;OK&apos; gombra a(z) %2 bezárásához, hogy frissíthess egy 
         <translation type="unfinished">Online súgó</translation>
     </message>
     <message>
-        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;Ha Brewken, meg tudjuk javítani...&lt;/em&gt;</translation>
+        <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;Ha Brewtarget, meg tudjuk javítani...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -4671,8 +4671,8 @@ Kattints az &apos;OK&apos; gombra a(z) %2 bezárásához, hogy frissíthess egy 
         <translation type="vanished">Adatbázis fájl kiválasztás</translation>
     </message>
     <message>
-        <source>Brewken Database (*.sqlite)</source>
-        <translation type="vanished">Brewken adatbázis (*.sqlite)</translation>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="vanished">Brewtarget adatbázis (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -4735,7 +4735,7 @@ Kattints az &apos;OK&apos; gombra a(z) %2 bezárásához, hogy frissíthess egy 
         <translation>Újrakezdés</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
+        <source>Please restart Brewtarget.</source>
         <translation type="vanished">Kérlek indítsd újra az alkalmazást.</translation>
     </message>
     <message>
@@ -6152,7 +6152,7 @@ Készítesz másolatot erről a cefréről ehhez a recepthez, hogy ezt anélkül
         <translation>Újrakezdés</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
+        <source>Please restart Brewtarget.</source>
         <translation type="vanished">Kérlek indítsd újra az alkalmazást.</translation>
     </message>
     <message>
@@ -6458,7 +6458,7 @@ Kilépéshez nyomd meg az OK gombot.</translation>
         <translation type="vanished">Több adatbázist találtam.</translation>
     </message>
     <message>
-        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewken session, or rollback to before last session&apos;s changes?</source>
+        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
         <translation type="vanished">Több adatbázist találtam. Szeretnéd visszaállítani a változásokat, amelyeket a legutóbb használtál, vagy az utolsó előtti használat idején aktuális állapotot állítsam vissza (visszagörgetés)?</translation>
     </message>
     <message>
@@ -13305,11 +13305,11 @@ Tabs</source>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation type="vanished">A Brewkenről</translation>
+        <translation type="vanished">A Brewtargetről</translation>
     </message>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">a Brewkenről</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">a Brewtargetről</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -14708,8 +14708,8 @@ Tabs</source>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>

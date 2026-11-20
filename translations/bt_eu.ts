@@ -3020,8 +3020,8 @@ Egin klik &apos;Ados&apos; botoian %2 amaitzeko, bertsio berriago batera egunera
         <translation type="unfinished">Lineako laguntza</translation>
     </message>
     <message>
-        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;Brewken bada, konpon dezakegu...&lt;/em&gt;</translation>
+        <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;Brewtarget bada, konpon dezakegu...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -10852,15 +10852,15 @@ fitxak</translation>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;
    &lt;b&gt;Beste hizkuntza bat badakizu?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Edo itzulpen bat hobetu nahi duzu? Lagun iezaguzu eta
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  egin itzulpen bat&lt;/a&gt; zure lagunek Brewken erabil dezaten!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  egin itzulpen bat&lt;/a&gt; zure lagunek Brewtarget erabil dezaten!
 &lt;/qt&gt;</translation>
     </message>
     <message>

@@ -4,8 +4,8 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">Σχετικά με το Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">Σχετικά με το Brewtarget</translation>
     </message>
     <message>
         <source>About %1</source>
@@ -696,7 +696,7 @@
     </message>
 </context>
 <context>
-    <name>Brewken</name>
+    <name>Brewtarget</name>
     <message>
         <source>Default</source>
         <translation type="vanished">Προεπιλογή</translation>
@@ -3800,8 +3800,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="unfinished">Διαδικτυακή βοήθεια</translation>
     </message>
     <message>
-        <source>&lt;em&gt;If it&apos;s Brewken, we can fix it...&lt;/em&gt;</source>
-        <translation type="unfinished">&lt;em&gt;Αν είναι Brewken, μπορούμε να το διορθώσουμε...&lt;/em&gt;</translation>
+        <source>&lt;em&gt;If it&apos;s Brewtarget, we can fix it...&lt;/em&gt;</source>
+        <translation type="unfinished">&lt;em&gt;Αν είναι Brewtarget, μπορούμε να το διορθώσουμε...&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Your Data</source>
@@ -4547,8 +4547,8 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation type="vanished">Επιλέξτε αρχείο βάσης δεδομένων</translation>
     </message>
     <message>
-        <source>Brewken Database (*.sqlite)</source>
-        <translation type="vanished">Βάση δεδομένων του Brewken (*.sqlite)</translation>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="vanished">Βάση δεδομένων του Brewtarget (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -4611,7 +4611,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
         <translation>Επανεκκίνηση</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
+        <source>Please restart Brewtarget.</source>
         <translation type="vanished">Παρακαλώ επανεκκινήστε το πρόγραμμα</translation>
     </message>
     <message>
@@ -6013,7 +6013,7 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
         <translation>Επανεκκίνηση</translation>
     </message>
     <message>
-        <source>Please restart Brewken.</source>
+        <source>Please restart Brewtarget.</source>
         <translation type="vanished">Παρακαλώ επανεκκινήστε το πρόγραμμα</translation>
     </message>
     <message>
@@ -6343,7 +6343,7 @@ Press OK to quit.</source>
         <translation type="vanished">Βρέθηκαν πολλαπλές βάσεις δεδομένων</translation>
     </message>
     <message>
-        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewken session, or rollback to before last session&apos;s changes?</source>
+        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
         <translation type="vanished">Βρέθηκαν πολλαπλές βάσεις δεδομένων. Θα θέλατε να επαναφέρετε τις αλλαγές που έγιναν κατά την τελευταία χρήση του προγράμματος ή  να αποκαταστήσω τις αλλαγές πριν από αυτήν;</translation>
     </message>
     <message>
@@ -13148,8 +13148,8 @@ Tabs</source>
         <translation type="vanished">Σχετικά &amp;BrewTarget</translation>
     </message>
     <message>
-        <source>About Brewken</source>
-        <translation type="vanished">Σχετικά με το Brewken</translation>
+        <source>About Brewtarget</source>
+        <translation type="vanished">Σχετικά με το Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -14807,8 +14807,8 @@ Tabs</source>
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
    Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://github.com/Brewken/brewken/wiki/Translations&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use Brewken!
+  &lt;a href=&quot;https://github.com/Brewtarget/brewtarget/wiki/Translations&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use Brewtarget!
 &lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
