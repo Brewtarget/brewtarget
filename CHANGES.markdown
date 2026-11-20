@@ -11,11 +11,29 @@ happens, so I'm now setting it to a slightly arbitrary time early in the morning
 * Shopping Lists
 * We'll list other new features here...
 
-## v5.3.2
-Bug fix release
+## v5.4.0
+Some new features from old issues.  Plus various bug fix release
 
 ### New Features
 * Snap builds working in dev mode
+* Various UI improvements inspired by suggestions in the old Brewtarget issue [193](https://github.com/Brewtarget/brewtarget/issues/193):
+  - Tables
+    - **Show and hide columns:** right-click any column header to get new **Columns** submenu. You can also rearrange columns by dragging their headers. Column choices are remembered between sessions.
+    - **Various Extra columns in ingredient lists:** some shown by default, others can be switched on from the header menu.
+    - **Last column stretches to fill the table**, so there's no empty strip on the right.
+    - **Column widths now remembered** for more tables.
+  - Buttons, menus and keyboard
+    - **Buttons only active when they can do something**
+    - **Right-click menus** on the recipe's ingredient tables and on the mash, boil and fermentation step tables.
+    - **Delete key** now removes the selected ingredient or step when that table has focus.
+  - Editors
+    - **Warning before losing changes:** if you have unsaved edits, Cancel, Escape, closing the window or New will ask before discarding them.
+    - **Shared equipment and styles:** Equipment and Style editors now show which recipes use the item.
+    - **New Cancel icon:** looks less like a power button.
+  - Recipe view: **Notes have their own tab**, with Notes and Taste Notes side by side.
+  - Tools
+    - **More calculators update as you type**
+    - **More Problems are shown in the tool itself rather than in pop-ups**.
 * A fermentable added part-way through the boil proper now counts proportionally towards boil gravity [1194](https://github.com/Brewtarget/brewtarget/issues/1194)
   * Most recipes will show slightly fewer IBUs with Tinseth, Rager, Noonan, Daniels or mIBU estimation methods.
   * Because evaporation is now counted, any recipe with a pre-boil size set will drop by about 2.5–3% for a typical 25 L → 20 L boil.
@@ -29,7 +47,7 @@ Bug fix release
 * Logging level names on the Options dialog were always shown in English, regardless of the language setting.
 
 ### Release Timestamp
-Thu, 19 Nov 2026 05:03:02 +0100
+Fri, 20 Nov 2026 05:03:02 +0100
 
 ## v5.3.1
 Bug fix release
