@@ -152,6 +152,14 @@ UnitTests::TestEnvironment::TestEnvironment() {
    PersistentSettings::insert_ck(PersistentSettings::Names::color_formula, "morey"  );
    PersistentSettings::insert_ck(PersistentSettings::Names::ibu_formula  , "tinseth");
    PersistentSettings::insert_ck(PersistentSettings::Names::forcedLocale , "fr_FR"  );
+   //
+   // However, we want the UI language to be English, independent of the locale above.  Otherwise
+   // Localization::loadTranslations() will take the language from the locale, and we'll get French text in messages
+   // that tests check for (English) substrings of.  (Localization::loadSettings(), called from
+   // Application::readSystemOptions(), sets the language from this setting before Localization::loadTranslations()
+   // runs.)
+   //
+   PersistentSettings::insert_ck(PersistentSettings::Names::language     , "en"     );
 
    // Tell the application not to require any "user" input on starting
    Application::setInteractive(false);
