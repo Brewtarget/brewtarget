@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/MashEditor.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * editors/MashEditor.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
  *   • Philip Greggory Lee <rocketman768@gmail.com>
@@ -49,6 +49,9 @@ public:
    //! Called by \c EditorBase after the edit item is set
    void postSetEditItem();
 
+   //! Called by \c EditorBase when the user changes language
+   void retranslateUi();
+
    /**
     * \brief Show the "Auto Adjust" part of the editor, with the focus on the Auto-Adjust button.  Used when the user
     *        asks to calculate the mash from the main window.
@@ -95,6 +98,9 @@ private:
 
    //! Set up the auto-adjust controls for the current edit item and recipe
    void refreshAutoAdjust();
+
+   //! Set the (translated) display text for the items in \c comboBox_spargeMethod
+   void setSpargeMethodTexts();
 
    /**
     * \brief Does the work for \c autoAdjust and \c keptInSyncToggled

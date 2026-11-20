@@ -53,7 +53,17 @@ signals:
    void lockClicked();
    void unlockClicked();
 
+protected:
+   /**
+    * \brief Handles \c QEvent::LanguageChange by updating the text of the buttons.  (The text of \c m_text comes from
+    *        \c EditorBase, which updates it at the same time -- see \c EditorBase::doChangeEvent.)
+    */
+   void changeEvent(QEvent * event) override;
+
 private:
+   //! Set the text of the buttons in the current language
+   void retranslateButtons();
+
    QLabel      * m_text;
    QPushButton * m_makeCopy;
    QPushButton * m_lockOrUnlock;

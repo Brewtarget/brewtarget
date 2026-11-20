@@ -57,6 +57,9 @@ public:
    bool validateBeforeSave();
 
 private:
+   //! Called by \c EditorBase when the user changes language
+   void retranslateUi();
+
    void postReadFieldsFromEditItem(std::optional<QString> propName);
    void postWriteLateFieldsToEditItem();
 

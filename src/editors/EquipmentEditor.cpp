@@ -78,6 +78,17 @@ namespace {
       return;
    };
 
+   //! The check boxes that \c showOptionalVesselIfPresent marks with an asterisk
+   std::vector<QCheckBox *> optionalVesselCheckBoxes(EquipmentEditor & editor) {
+      return {
+         editor.checkBox_showHlt            ,
+         editor.checkBox_showMashTun        ,
+         editor.checkBox_showLauterTun      ,
+         editor.checkBox_showAgingVessel    ,
+         editor.checkBox_showPackagingVessel,
+      };
+   }
+
 }
 
 EquipmentEditor::EquipmentEditor(QWidget* parent, QString const editorName) :
@@ -475,6 +486,26 @@ void EquipmentEditor::offerToUpdateRecipeSizes() {
    return;
 }
 
+
+void EquipmentEditor::retranslateUi() {
+   //
+   // The generated retranslateUi will reset the text of the optional vessel check boxes, losing the asterisks that
+   // showOptionalVesselIfPresent adds, so we note which ones have them and put them back afterwards.  (We don't want to
+   // call showOptionalVesselIfPresent itself, as that would also undo any changes the user has made to which boxes are
+   // ticked.)
+   //
+   std::vector<QCheckBox *> markedInUse;
+   for (QCheckBox * checkBox : optionalVesselCheckBoxes(*this)) {
+      if (checkBox->text().endsWith(" *")) {
+         markedInUse.push_back(checkBox);
+      }
+   }
+   this->Ui::equipmentEditor::retranslateUi(this);
+   for (QCheckBox * checkBox : markedInUse) {
+      checkBox->setText(checkBox->text() + " *");
+   }
+   return;
+}
 
 void EquipmentEditor::postReadFieldsFromEditItem([[maybe_unused]] std::optional<QString> propName) {
 

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * editors/MashEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * editors/MashEditor.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Kregg Kemper <gigatropolis@yahoo.com>
  *   • Matt Young <mfsy@yahoo.com>
@@ -67,10 +67,11 @@ MashEditor::MashEditor(QWidget* parent, QString const editorName) :
    // the same quantity as MashStep::liquorToGristRatio_lKg, which is where the calculation records it.
    //
    SMART_FIELD_INIT(MashEditor, label_thickness, lineEdit_thickness, MashStep, PropertyNames::MashStep::liquorToGristRatio_lKg, 2);
-   // Order here must match MashAutoAdjuster::SpargeMethod
-   this->comboBox_spargeMethod->addItem(tr("No sparge"   ), static_cast<int>(MashAutoAdjuster::SpargeMethod::NoSparge   ));
-   this->comboBox_spargeMethod->addItem(tr("Batch sparge"), static_cast<int>(MashAutoAdjuster::SpargeMethod::BatchSparge));
-   this->comboBox_spargeMethod->addItem(tr("Fly sparge"  ), static_cast<int>(MashAutoAdjuster::SpargeMethod::FlySparge  ));
+   // Order here must match MashAutoAdjuster::SpargeMethod.  Text is set in retranslateUi.
+   this->comboBox_spargeMethod->addItem("", static_cast<int>(MashAutoAdjuster::SpargeMethod::NoSparge   ));
+   this->comboBox_spargeMethod->addItem("", static_cast<int>(MashAutoAdjuster::SpargeMethod::BatchSparge));
+   this->comboBox_spargeMethod->addItem("", static_cast<int>(MashAutoAdjuster::SpargeMethod::FlySparge  ));
+   this->setSpargeMethodTexts();
    this->connect(this->comboBox_spargeMethod, &QComboBox::currentIndexChanged, this, &MashEditor::updateAutoAdjustControls);
    this->connect(this->pushButton_autoAdjust , &QAbstractButton::clicked      , this, &MashEditor::autoAdjust               );
    this->connect(this->checkBox_keptInSync   , &QAbstractButton::toggled      , this, &MashEditor::keptInSyncToggled       );
@@ -194,6 +195,31 @@ void MashEditor::refreshAutoAdjust() {
             "clicking Save).").arg(recipe->name())
       );
    }
+   return;
+}
+
+void MashEditor::setSpargeMethodTexts() {
+   // Setting the item text does not change the current index, so this won't trigger updateAutoAdjustControls
+   this->comboBox_spargeMethod->setItemText(0, tr("No sparge"   ));
+   this->comboBox_spargeMethod->setItemText(1, tr("Batch sparge"));
+   this->comboBox_spargeMethod->setItemText(2, tr("Fly sparge"  ));
+   return;
+}
+
+void MashEditor::retranslateUi() {
+   this->Ui::mashEditor::retranslateUi(this);
+   this->setSpargeMethodTexts();
+   //
+   // The steps widget gets the table model to redo its validation (see EnumeratedItemsWidgetBase::doChangeEvent), so
+   // that the problem descriptions are in the new language.  Because the descriptions will be different, that will
+   // emit validationChanged, which calls updateMashProblems.  But that doesn't happen if there are no problems, so we
+   // also call updateMashProblems ourselves to update the volumes summary.
+   //
+   this->updateMashProblems();
+   //
+   // NOTE: We don't try to redo label_calculateInfo, which is the result message from the last time the user clicked
+   //       Auto Adjust.  The user can click it again if they want to see the message in the new language.
+   //
    return;
 }
 

@@ -24,6 +24,7 @@ Bug fix release
 ### Bug Fixes
 * Compile error with latest versions of Qt
 * Drop-down lists of types, forms, stages etc (eg yeast type, hop form), and Yes/No values, were always shown in English, regardless of the language setting.  They now also update straight away when you change the language. (Part of [1040](https://github.com/Brewtarget/brewtarget/issues/1040))
+* Changing the language now updates the menus, recipe tab, ingredient trees and editors straight away, rather than only after a restart. (Part of [1040](https://github.com/Brewtarget/brewtarget/issues/1040))
 
 ### Release Timestamp
 Thu, 19 Nov 2026 05:03:02 +0100

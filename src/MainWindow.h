@@ -307,6 +307,12 @@ protected:
    //! \brief Overrides \c QWidget::closeEvent
    virtual void closeEvent(QCloseEvent* event) override;
 
+   /**
+    * \brief Overrides \c QWidget::changeEvent so that, on \c QEvent::LanguageChange, we update all our text to the new
+    *        language.
+    */
+   virtual void changeEvent(QEvent * event) override;
+
 signals:
    /**
     * \brief Emitted when \c MainWindow object is initialised (at end of \c MainWindow::initialiseAndMakeVisible).

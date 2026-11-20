@@ -45,6 +45,7 @@
 
 #include <QAction>
 #include <QBrush>
+#include <QEvent>
 #include <QFile>
 #include <QFileDialog>
 #include <QIcon>
@@ -662,6 +663,60 @@ public:
       return;
    }
 
+   //! Update the text of all the open brew log tabs
+   void updateAllBrewLogTabTexts() const {
+      for (int ii = 0; ii < this->m_self.tabWidget_recipeView->count(); ++ii) {
+         if (auto const * blw = qobject_cast<BrewLogWidget const *>(this->m_self.tabWidget_recipeView->widget(ii))) {
+            if (blw->brewLog()) {
+               this->updateBrewLogTabText(*blw->brewLog(), *blw);
+            }
+         }
+      }
+      return;
+   }
+
+   /**
+    * \brief Set the window title and the other bits of text that, in the constructor, we set in code instead of taking
+    *        them from mainWindow.ui.  (Note that this means the generated retranslateUi will overwrite them.)
+    */
+   void setTextsReplacingUiFile() {
+      this->m_self.setWindowTitle(QString{"%1 - %2"}.arg(CONFIG_APPLICATION_NAME_UC, CONFIG_VERSION_STRING) );
+      this->m_self.actionAbout->setText   (tr("About %1").arg(CONFIG_APPLICATION_NAME_UC));
+      this->m_self.actionAbout->setToolTip(tr("About %1").arg(CONFIG_APPLICATION_NAME_UC));
+      return;
+   }
+
+   //! Set the pop-up you see when you hover over the application logo -- see \c getLabelToolTip
+   void setLogoToolTip() {
+#ifdef   BUILDING_BREWKEN
+      this->m_self.label_Brewken->setToolTip(getLabelToolTip());
+#elifdef BUILDING_BREWTARGET
+      this->m_self.label_Brewtarget->setToolTip(getLabelToolTip());
+#endif
+      return;
+   }
+
+   /**
+    * \brief Called from \c MainWindow::changeEvent when the user has changed language.
+    *
+    *        Qt sends \c QEvent::LanguageChange to every widget, so child widgets that set their own text (trees, combo
+    *        boxes, the mash steps table, etc) take care of themselves, and anything whose text comes from a model (eg
+    *        table cells and headers) gets redrawn.  What we need to do here is (a) update the text that comes from
+    *        mainWindow.ui and (b) redo all the text we set in code, including what (a) overwrites.
+    */
+   void retranslate() {
+      this->m_self.retranslateUi(&this->m_self);
+      this->setTextsReplacingUiFile();
+      // The rest only makes sense once initialiseAndMakeVisible has run
+      if (this->m_initialised) {
+         this->setLogoToolTip();
+         this->m_self.setUndoRedoEnable();
+         this->updateAllProcessStatuses();
+         this->updateAllBrewLogTabTexts();
+      }
+      return;
+   }
+
    void closeBrewLogTab(BrewLog const & brewLog) const {
       BrewLogWidget* widget = this->findBrewLogWidget(brewLog);
       if (!widget) {
@@ -957,6 +1012,9 @@ public:
    std::unique_ptr<TimerMainDialog      > m_timerMainDialog      ;
 
    QString highSS, lowSS, goodSS, boldSS; // Palette replacements
+
+   //! Set to \c true at the end of \c MainWindow::initialiseAndMakeVisible
+   bool m_initialised = false;
 };
 
 
@@ -1060,13 +1118,19 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), pimpl{std::make_u
 
    // Set the window title and a couple of other strings.  (This replaces the corresponding texts in the mainWindow.ui
    // file.)
-   this->setWindowTitle(QString{"%1 - %2"}.arg(CONFIG_APPLICATION_NAME_UC, CONFIG_VERSION_STRING) );
-   this->actionAbout->setText   (tr("About %1").arg(CONFIG_APPLICATION_NAME_UC));
-   this->actionAbout->setToolTip(tr("About %1").arg(CONFIG_APPLICATION_NAME_UC));
+   this->pimpl->setTextsReplacingUiFile();
 
    // Null out the recipe
    this->pimpl->m_recipeObs = nullptr;
 
+   return;
+}
+
+void MainWindow::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->pimpl->retranslate();
+   }
+   this->QMainWindow::changeEvent(event);
    return;
 }
 
@@ -1126,12 +1190,9 @@ void MainWindow::initialiseAndMakeVisible() {
    // Set up the pretty tool tip. It doesn't really belong anywhere, so here it is
    // .:TODO:. When we allow users to change databases without restarting, we'll need to make sure to call this whenever
    // the database is changed (as setToolTip() just takes static text as its parameter).
-#ifdef   BUILDING_BREWKEN
-   label_Brewken->setToolTip(getLabelToolTip());
-#elifdef BUILDING_BREWTARGET
-   label_Brewtarget->setToolTip(getLabelToolTip());
-#endif
+   this->pimpl->setLogoToolTip();
    this->setVisible(true);
+   this->pimpl->m_initialised = true;
 
    emit initialisedAndVisible();
 

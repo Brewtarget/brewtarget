@@ -15,6 +15,7 @@
  =====================================================================================================================*/
 #include "widgets/LockAndShareBar.h"
 
+#include <QEvent>
 #include <QHBoxLayout>
 #include <QPalette>
 
@@ -26,16 +27,11 @@
 LockAndShareBar::LockAndShareBar(QWidget * parent) :
    QFrame{parent},
    m_text        {new QLabel     {this}},
-   m_makeCopy    {new QPushButton{tr("Make a copy for this recipe"), this}},
+   m_makeCopy    {new QPushButton{this}},
    m_lockOrUnlock{new QPushButton{this}} {
    this->setFrameShape(QFrame::StyledPanel);
    this->m_text->setWordWrap(true);
    this->m_text->setTextInteractionFlags(Qt::TextSelectableByMouse);
-   this->m_makeCopy->setToolTip(
-      tr("Make a copy that this recipe will use instead, so you can change it without affecting anything else.  "
-         "Any changes you have already made in this editor are kept, and will be saved to the copy when you click "
-         "Save.")
-   );
 
    auto * layout = new QHBoxLayout{this};
    layout->addWidget(this->m_text, 1);
@@ -69,15 +65,7 @@ void LockAndShareBar::setState(QString const & text,
    this->m_text->setText(text);
    this->m_makeCopy->setVisible(offerCopy);
    this->m_itemLocked = itemLocked;
-   if (itemLocked) {
-      this->m_lockOrUnlock->setText(tr("Unlock…"));
-      this->m_lockOrUnlock->setToolTip(tr("Allow this to be changed"));
-   } else {
-      this->m_lockOrUnlock->setText(tr("Lock"));
-      this->m_lockOrUnlock->setToolTip(
-         tr("Prevent this from being changed.  You will still be able to use it in recipes, and to make copies of it.")
-      );
-   }
+   this->retranslateButtons();
 
    //
    // Use the tool tip background colour (typically pale yellow) to draw attention to the bar when the item is locked or
@@ -86,5 +74,32 @@ void LockAndShareBar::setState(QString const & text,
    this->setAutoFillBackground(needsAttention);
    this->setBackgroundRole(needsAttention ? QPalette::ToolTipBase : QPalette::Window);
    this->m_text->setForegroundRole(needsAttention ? QPalette::ToolTipText : QPalette::WindowText);
+   return;
+}
+
+void LockAndShareBar::retranslateButtons() {
+   this->m_makeCopy->setText(tr("Make a copy for this recipe"));
+   this->m_makeCopy->setToolTip(
+      tr("Make a copy that this recipe will use instead, so you can change it without affecting anything else.  "
+         "Any changes you have already made in this editor are kept, and will be saved to the copy when you click "
+         "Save.")
+   );
+   if (this->m_itemLocked) {
+      this->m_lockOrUnlock->setText(tr("Unlock…"));
+      this->m_lockOrUnlock->setToolTip(tr("Allow this to be changed"));
+   } else {
+      this->m_lockOrUnlock->setText(tr("Lock"));
+      this->m_lockOrUnlock->setToolTip(
+         tr("Prevent this from being changed.  You will still be able to use it in recipes, and to make copies of it.")
+      );
+   }
+   return;
+}
+
+void LockAndShareBar::changeEvent(QEvent * event) {
+   if (event->type() == QEvent::LanguageChange) {
+      this->retranslateButtons();
+   }
+   this->QFrame::changeEvent(event);
    return;
 }
