@@ -38,6 +38,7 @@
       <file alias="images/backup.png"                >images/backup.png</file>
       <file alias="images/brewtarget.svg">images/brewtarget.svg</file>
       <file alias="images/bubbles.svg"               >images/bubbles.svg</file>
+      <file alias="images/cancel.svg"                >images/cancel.svg</file>
       <file alias="images/circle.png"                >images/circle.png</file>
       <file alias="images/clipboard.svg"             >images/clipboard.svg</file>
       <file alias="images/clear.svg"                 >images/clear.svg</file>
@@ -106,6 +107,7 @@
       <file alias="images/smallKettle.svg"           >images/smallKettle.svg</file>
       <file alias="images/smallMinus.svg"            >images/smallMinus.svg</file>
       <file alias="images/smallOutArrow.svg"         >images/smallOutArrow.svg</file>
+      <file alias="images/smallPin.svg"              >images/smallPin.svg</file>
       <file alias="images/smallPlus.svg"             >images/smallPlus.svg</file>
       <file alias="images/smallQuestion.svg"         >images/smallQuestion.svg</file>
       <file alias="images/smallStyle.svg"            >images/smallStyle.svg</file>

@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/YeastTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * qtModels/tableModels/YeastTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Mik Firestone <mikfire@gmail.com>
@@ -37,14 +37,19 @@
 class BtStringConst;
 class Recipe;
 
-// Define the columns on this table
+// Define the columns on this table.  NB: New columns need to go at the end, so that saved column widths, order and
+// visibility (which are by column number) still apply to the existing columns.
 COLUMN_NAMES(YeastTableModel, Name            ,
                               Laboratory      ,
                               ProductId       ,
                               Type            ,
                               Form            ,
                               TotalInventory  ,
-                              NumRecipesUsedIn,)
+                              NumRecipesUsedIn,
+                              Attenuation     ,
+                              AlcoholTolerance,
+                              MinTemperature  ,
+                              MaxTemperature  ,)
 
 /*!
  * \class YeastTableModel

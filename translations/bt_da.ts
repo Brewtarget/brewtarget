@@ -915,6 +915,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -2802,6 +2809,17 @@ Klik på &apos;OK&apos; for at afslutte %2, så du kan opgradere til en nyere ve
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4080,7 +4098,7 @@ Klik på &apos;OK&apos; for at afslutte %2, så du kan opgradere til en nyere ve
     </message>
     <message>
         <source>Convert</source>
-        <translation>Omregn</translation>
+        <translation type="vanished">Omregn</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4479,7 +4497,7 @@ Klik på &apos;OK&apos; for at afslutte %2, så du kan opgradere til en nyere ve
     </message>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="vanished">Føj %1 til opskrift</translation>
+        <translation>Føj %1 til opskrift</translation>
     </message>
     <message>
         <source>Remove %1 from recipe</source>
@@ -4675,6 +4693,14 @@ Hvis du har brug for hjælp, bedes du åbne en sag (issue) på %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Følgende ingrediens(er) måles forskelligt i opskriften og i din lagerbeholdning, så den/de brugte mængde(r) kunne ikke (alle) trækkes fra lagerbeholdningen.</translation>
+    </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5772,6 +5798,13 @@ Vil du lave en kopi af denne mæskning til den opskrift, så du kan gøre dette 
             <numerusform>%1 bruges af %n opskrifter: %2.</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>NamedEntity</name>
@@ -5815,19 +5848,19 @@ Vil du lave en kopi af denne mæskning til den opskrift, så du kan gøre dette 
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Kunne ikke læse input</translation>
+        <translation type="obsolete">Kunne ikke læse input</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Der skal være en gyldig værdi for målt massefylde</translation>
+        <translation type="obsolete">Der skal være en gyldig værdi for målt massefylde</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Ingen opskrift valgt</translation>
+        <translation type="obsolete">Ingen opskrift valgt</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Intet udstyr på opskriften</translation>
+        <translation type="obsolete">Intet udstyr på opskriften</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -5835,7 +5868,7 @@ Vil du lave en kopi af denne mæskning til den opskrift, så du kan gøre dette 
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Ingen kogning på opskriften</translation>
+        <translation type="obsolete">Ingen kogning på opskriften</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -5843,7 +5876,7 @@ Vil du lave en kopi af denne mæskning til den opskrift, så du kan gøre dette 
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Der skal være en gyldig værdi for urtvolumen</translation>
+        <translation type="obsolete">Der skal være en gyldig værdi for urtvolumen</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8613,11 +8646,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation>Ændr smagenotater</translation>
+        <translation type="vanished">Ændr smagenotater</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation>Ændr notater</translation>
+        <translation type="vanished">Ændr notater</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -8964,6 +8997,17 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Ændr notater</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Ændr smagenotater</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTreeView</name>
     <message>
         <source>Snapshots</source>
@@ -9115,7 +9159,7 @@ The final volume in the primary is %1.</source>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>OG ikke konsistent</translation>
+        <translation type="vanished">OG ikke konsistent</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -9991,7 +10035,7 @@ The final volume in the primary is %1.</source>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">Føj %1 til opskrift</translation>
+        <translation type="obsolete">Føj %1 til opskrift</translation>
     </message>
 </context>
 <context>
@@ -10025,7 +10069,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Omregn</translation>
+        <translation type="obsolete">Omregn</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -13898,6 +13942,14 @@ faner</translation>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Tag højde for, hvordan mæsketemperaturer og -tider gør urten mere eller mindre gærbar, når slutmassefylden skønnes.  Lad dette være slået fra, hvis du har sat gærens forgæringsgrad, så den afspejler din egen mæskning.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14692,7 +14744,7 @@ faner</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Beregn</translation>
+        <translation type="obsolete">Beregn</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -15301,7 +15353,7 @@ Kun mIBU og SMPH giver IBU for humle tilsat efter slukning af varmen (fx whirlpo
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beregn</translation>
+        <translation type="vanished">Beregn</translation>
     </message>
 </context>
 <context>
@@ -15340,11 +15392,11 @@ Kun mIBU og SMPH giver IBU for humle tilsat efter slukning af varmen (fx whirlpo
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Smagsnotater</translation>
+        <translation type="vanished">Smagsnotater</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notater</translation>
+        <translation type="vanished">Notater</translation>
     </message>
     <message>
         <source>Date Created</source>
@@ -15377,6 +15429,29 @@ Kun mIBU og SMPH giver IBU for humle tilsat efter slukning af varmen (fx whirlpo
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Hvor klar du forventer, at urten er, når den kommer i gæringsbeholderen (fx afhængigt af om du bruger klaringsmiddel i kogekarret eller whirlpool).&lt;/p&gt;&lt;p&gt;Mere uklar urt mister mere bitterhed under gæringen.&lt;/p&gt;&lt;p&gt;Bruges kun af SMPH IBU-formlen.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished">Smagsnotater</translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15530,7 +15605,7 @@ Kun mIBU og SMPH giver IBU for humle tilsat efter slukning af varmen (fx whirlpo
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beregn</translation>
+        <translation type="vanished">Beregn</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -16212,7 +16287,7 @@ Kun mIBU og SMPH giver IBU for humle tilsat efter slukning af varmen (fx whirlpo
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beregn</translation>
+        <translation type="vanished">Beregn</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

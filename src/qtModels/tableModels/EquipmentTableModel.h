@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/EquipmentTableModel.h is part of Brewtarget, and is copyright the following authors 2023-2025:
+ * qtModels/tableModels/EquipmentTableModel.h is part of Brewtarget, and is copyright the following authors 2023-2026:
  *   • Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -30,12 +30,15 @@
 class BtStringConst;
 class Recipe;
 
-// Define the columns on this table
+// Define the columns on this table.  NB: New columns need to go at the end, so that saved column widths, order and
+// visibility (which are by column number) still apply to the existing columns.
 COLUMN_NAMES(EquipmentTableModel, Name            ,
                                   MashTunVolume   ,
                                   KettleVolume    ,
                                   FermentorVolume ,
-                                  NumRecipesUsedIn,)
+                                  NumRecipesUsedIn,
+                                  BatchSize       ,
+                                  BoilOffPerHour  ,)
 
 /*!
  * \class EquipmentTableModel

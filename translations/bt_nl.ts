@@ -957,6 +957,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -2867,6 +2874,17 @@ Klik op &apos;OK&apos; om %2 af te sluiten, zodat u naar een nieuwere versie kun
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4397,7 +4415,7 @@ Klik op &apos;OK&apos; om %2 af te sluiten, zodat u naar een nieuwere versie kun
     </message>
     <message>
         <source>Convert</source>
-        <translation>Converteer</translation>
+        <translation type="vanished">Converteer</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4972,6 +4990,18 @@ Als u hulp nodig hebt, meld dan een probleem op %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">De volgende ingrediënt(en) worden in het recept en in uw voorraad anders gemeten, waardoor de gebruikte hoeveelhe(i)d(en) niet (volledig) van de voorraad konden worden afgeboekt.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">%1 aan recept toevoegen</translation>
+    </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6067,6 +6097,13 @@ Wilt u een kopie van dit maischschema maken voor dat recept, zodat u dit kunt do
             <numerusform>%1 wordt gebruikt door %n recepten: %2.</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>NamedEntity</name>
@@ -6110,19 +6147,19 @@ Wilt u een kopie van dit maischschema maken voor dat recept, zodat u dit kunt do
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Kon invoer niet lezen</translation>
+        <translation type="obsolete">Kon invoer niet lezen</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Een geldige waarde voor Gemeten SG is vereist</translation>
+        <translation type="obsolete">Een geldige waarde voor Gemeten SG is vereist</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Geen recept geselecteerd</translation>
+        <translation type="obsolete">Geen recept geselecteerd</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Geen apparatuur bij recept</translation>
+        <translation type="obsolete">Geen apparatuur bij recept</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -6130,7 +6167,7 @@ Wilt u een kopie van dit maischschema maken voor dat recept, zodat u dit kunt do
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Geen kookprofiel bij recept</translation>
+        <translation type="obsolete">Geen kookprofiel bij recept</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -6138,7 +6175,7 @@ Wilt u een kopie van dit maischschema maken voor dat recept, zodat u dit kunt do
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Een geldige waarde voor Wortvolume is vereist</translation>
+        <translation type="obsolete">Een geldige waarde voor Wortvolume is vereist</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8936,11 +8973,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Proefnotities bewerken</translation>
+        <translation type="obsolete">Proefnotities bewerken</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Aantekeningen bewerken</translation>
+        <translation type="obsolete">Aantekeningen bewerken</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -9283,6 +9320,17 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Aantekeningen bewerken</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Proefnotities bewerken</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTableModel</name>
     <message>
         <source>Name</source>
@@ -9409,7 +9457,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Onjuiste combinatie oorspronkelijk SG</translation>
+        <translation type="vanished">Onjuiste combinatie oorspronkelijk SG</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -10275,7 +10323,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">%1 aan recept toevoegen</translation>
+        <translation type="obsolete">%1 aan recept toevoegen</translation>
     </message>
 </context>
 <context>
@@ -10309,7 +10357,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Converteer</translation>
+        <translation type="obsolete">Converteer</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -14050,6 +14098,14 @@ vaten</translation>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Houd bij het schatten van het eind-SG rekening met hoe de maischtemperaturen en -tijden de wort meer of minder vergistbaar maken.  Laat dit uit als u de vergistingsgraad van de gist hebt ingesteld op basis van uw eigen maischschema.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14916,7 +14972,7 @@ vaten</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Bereken</translation>
+        <translation type="obsolete">Bereken</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -15509,7 +15565,7 @@ Alleen mIBU en SMPH geven IBU&apos;s voor hop die na vlam uit wordt toegevoegd (
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Bereken</translation>
+        <translation type="vanished">Bereken</translation>
     </message>
 </context>
 <context>
@@ -15576,11 +15632,11 @@ Alleen mIBU en SMPH geven IBU&apos;s voor hop die na vlam uit wordt toegevoegd (
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Proef Aantekeningen</translation>
+        <translation type="vanished">Proef Aantekeningen</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Aantekeningen</translation>
+        <translation type="vanished">Aantekeningen</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15613,6 +15669,29 @@ Alleen mIBU en SMPH geven IBU&apos;s voor hop die na vlam uit wordt toegevoegd (
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Hoe helder u verwacht dat de wort is wanneer deze het gistvat in gaat (bijv. afhankelijk van of u klaringsmiddelen in de kookketel of een whirlpool gebruikt).&lt;/p&gt;&lt;p&gt;Troebelere wort verliest meer bitterheid tijdens de vergisting.&lt;/p&gt;&lt;p&gt;Wordt alleen gebruikt door de IBU-formule SMPH.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15766,7 +15845,7 @@ Alleen mIBU en SMPH geven IBU&apos;s voor hop die na vlam uit wordt toegevoegd (
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Bereken</translation>
+        <translation type="vanished">Bereken</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -16300,7 +16379,7 @@ Alleen mIBU en SMPH geven IBU&apos;s voor hop die na vlam uit wordt toegevoegd (
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Bereken</translation>
+        <translation type="vanished">Bereken</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

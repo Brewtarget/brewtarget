@@ -189,7 +189,7 @@
 #
 #
 project('brewtarget', 'cpp',
-        version: '5.3.2',
+        version: '5.4.0',
         license: 'GPL-3.0-or-later',
         meson_version: '>=0.63.0',
         default_options : ['cpp_std=c++23',
@@ -1046,6 +1046,7 @@ commonSourceFiles = files([
    'src/widgets/InfoText.cpp',
    'src/widgets/LockAndShareBar.cpp',
    'src/widgets/RecipeExtrasWidget.cpp',
+   'src/widgets/RecipeNotesWidget.cpp',
    'src/widgets/RecipeWaterWidget.cpp',
    'src/widgets/SelectionControl.cpp',
    'src/widgets/SmartAmountSettings.cpp',
@@ -1057,6 +1058,7 @@ commonSourceFiles = files([
    'src/widgets/SmartValueDisplay.cpp',
    'src/widgets/StockManager.cpp',
    'src/widgets/StockManagerIngredient.cpp',
+   'src/widgets/TableViewKeys.cpp',
    'src/widgets/ToggleSwitch.cpp',
    'src/widgets/UnitAndScalePopUpMenu.cpp',
 ])
@@ -1263,6 +1265,7 @@ mocHeaders = files([
    'src/widgets/LockAndShareBar.h',
    'src/widgets/InfoText.h',
    'src/widgets/RecipeExtrasWidget.h',
+   'src/widgets/RecipeNotesWidget.h',
    'src/widgets/RecipeWaterWidget.h',
    'src/widgets/SelectionControl.h',
    'src/widgets/SmartDigitWidget.h',
@@ -1312,6 +1315,7 @@ uiFiles = files([
    'ui/pitchDialog.ui',
    'ui/primingDialog.ui',
    'ui/recipeExtrasWidget.ui',
+   'ui/recipeNotesWidget.ui',
    'ui/recipeWaterWidget.ui',
    'ui/refractoDialog.ui',
    'ui/stockPurchaseIngredientEditor.ui',
@@ -2022,6 +2026,7 @@ test('Test post-boil ramp time'              , testRunner, args : ['RecipeCalcTe
 test('Test IBU formulas'                     , testRunner, args : ['RecipeCalcTests', 'testIbuFormulas'                      ], suite : 'recipe')
 test('Test inventory'                        , testRunner, args : ['RecipeCalcTests', 'testInventory'                        ], suite : 'recipe')
 test('Test mash water volumes'               , testRunner, args : ['RecipeCalcTests', 'testMashWaterVolumes'                 ], suite : 'recipe')
+test('Test brew log volumes'                 , testRunner, args : ['RecipeCalcTests', 'testBrewLogVolumes'                   ], suite : 'recipe')
 test('Test evaporation rate'                 , testRunner, args : ['RecipeCalcTests', 'testEvaporationRate'                  ], suite : 'recipe')
 test('Test equipment default volumes'        , testRunner, args : ['RecipeCalcTests', 'testEquipmentDefaultVolumes'          ], suite : 'recipe')
 test('Test mash tun heat capacity'           , testRunner, args : ['RecipeCalcTests', 'testMashTunHeatCapacity'              ], suite : 'recipe')

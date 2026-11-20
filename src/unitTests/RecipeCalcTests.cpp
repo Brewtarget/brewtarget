@@ -1765,6 +1765,105 @@ void RecipeCalcTests::testMashWaterVolumes() {
    return;
 }
 
+void RecipeCalcTests::testBrewLogVolumes() {
+   double const grain_kg       =  5.0;
+   double const batchSize_l    = 23.0;
+   double const kettleLoss_l   =  1.0;
+   double const evaporation_l  =  3.0; // Per hour
+   double const absorption_LKg =  0.8;
+   double const mashTunLoss_l  =  1.0;
+   double const preBoil_l      = batchSize_l + kettleLoss_l + evaporation_l; // 60 minute boil
+   double const shortBy_l      =  4.0;
+
+   auto twoRow = this->pimpl->m_twoRow;
+   if (twoRow->key() <= 0) {
+      ObjectStoreWrapper::insert(twoRow);
+   }
+
+   auto equipment = std::make_shared<Equipment>("Brew log volumes");
+   equipment->setFvBatchSize_l(batchSize_l);
+   equipment->setKettleBoilSize_l(preBoil_l);
+   equipment->setMashTunVolume_l(40.0);
+   equipment->setGrainAbsorption_LKg(absorption_LKg);
+   equipment->setFoundationVolume_l(0.0);
+   equipment->setMashTunLoss_l(mashTunLoss_l);
+   equipment->setLauterTunVolume_l(0.0);
+   equipment->setTopUpKettle_l(0.0);
+   equipment->setTopUpWater_l(0.0);
+   equipment->setKettleTrubChillerLoss_l(kettleLoss_l);
+   equipment->setKettleEvaporationPerHour_l(evaporation_l);
+   ObjectStoreWrapper::insert(equipment);
+
+   auto recipe = std::make_shared<Recipe>("Brew log volumes");
+   ObjectStoreWrapper::insert(recipe);
+   recipe->setBatchSize_l(batchSize_l);
+   recipe->setEquipment(equipment);
+   auto boil = recipe->nonOptBoil();
+   boil->setPreBoilSize_l(preBoil_l);
+   boil->setBoilTime_mins(60.0);
+   auto grain = std::make_shared<RecipeAdditionFermentable>("Brew log volumes grain");
+   grain->setFermentable(twoRow.get());
+   grain->setStage(RecipeAddition::Stage::Mash);
+   grain->setQuantity(grain_kg);
+   grain->setMeasure(Measurement::PhysicalQuantity::Mass);
+   recipe->addAddition(grain);
+
+   // No mash yet, so nothing to say about mash water
+   QVERIFY(!recipe->mashWaterShortfall_l());
+
+   //
+   // Put less water in the mash than is needed, as would happen, eg, if the recipe had been scaled up without
+   // recalculating the mash
+   //
+   double const neededWater_l = preBoil_l + absorption_LKg * grain_kg + mashTunLoss_l;
+   QVERIFY(fuzzyComp(recipe->targetTotalMashVol_l(), neededWater_l, 0.0001));
+   auto mash = std::make_shared<Mash>("Brew log volumes mash");
+   ObjectStoreWrapper::insert(mash);
+   auto strike = std::make_shared<MashStep>("Strike");
+   strike->setType(MashStep::Type::Infusion);
+   strike->setStartTemp_c(66.0);
+   strike->setStepTime_mins(60.0);
+   strike->setAmount_l(neededWater_l - shortBy_l);
+   mash->add(strike);
+   recipe->setMash(mash);
+
+   std::optional<double> const shortfall_l = recipe->mashWaterShortfall_l();
+   QVERIFY(shortfall_l);
+   QVERIFY2(fuzzyComp(*shortfall_l, shortBy_l, 0.0001), "Mash water shortfall not reported correctly");
+   qDebug() << Q_FUNC_INFO << "Calculated boil volume:" << recipe->boilVolume_l() << ", final volume:" <<
+      recipe->finalVolume_l();
+   QVERIFY2(recipe->finalVolume_l() < batchSize_l - 1.0, "Test set-up should give less wort than the batch size");
+
+   //
+   // The brew log should nonetheless be based on the volumes the recipe is designed around, so that the volumes are
+   // consistent with each other and with the gravities
+   //
+   auto brewLog = std::make_shared<BrewLog>(*recipe);
+   brewLog->populateNote(recipe.get());
+   qDebug() <<
+      Q_FUNC_INFO << "Brew log: pre-boil" << brewLog->expectedPreBoilVolume_l() << ", boil-off" <<
+      brewLog->expectedBoilOff_l() << ", post-boil" << brewLog->measuredPostBoilVolume_l() << ", into FV" <<
+      brewLog->expectedVolumeIntoFv_l();
+   QVERIFY(fuzzyComp(brewLog->expectedPreBoilVolume_l(), preBoil_l                , 0.0001));
+   QVERIFY(fuzzyComp(brewLog->measuredPreBoilVolume_l(), preBoil_l                , 0.0001));
+   QVERIFY(fuzzyComp(brewLog->expectedBoilOff_l      (), evaporation_l            , 0.0001));
+   QVERIFY(fuzzyComp(brewLog->measuredPostBoilVolume_l(), preBoil_l - evaporation_l, 0.0001));
+   QVERIFY(fuzzyComp(brewLog->expectedVolumeIntoFv_l (), batchSize_l              , 0.0001));
+   QVERIFY(fuzzyComp(brewLog->measuredVolumeIntoFv_l (), batchSize_l              , 0.0001));
+   QVERIFY(fuzzyComp(brewLog->measuredFinalVolume_l  (), batchSize_l              , 0.0001));
+   // With the measured values the same as the expected ones, we should get the efficiency into the boil kettle and
+   // the OG that the recipe expects
+   QVERIFY(fuzzyComp(brewLog->calculateEffIntoBK_pct(), 100.0       , 0.0001));
+   QVERIFY(fuzzyComp(brewLog->calculateOg()           , recipe->og(), 0.001 ));
+
+   //
+   // With the right amount of water in the mash, there is no shortfall
+   //
+   strike->setAmount_l(neededWater_l);
+   QVERIFY(recipe->mashWaterShortfall_l() && fuzzyComp(*recipe->mashWaterShortfall_l(), 0.0, 0.0001));
+   return;
+}
+
 void RecipeCalcTests::testEvaporationRate() {
    auto equipment = std::make_shared<Equipment>("Evaporation Rate Test");
    equipment->setKettleBoilSize_l(30.0);

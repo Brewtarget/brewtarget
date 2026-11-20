@@ -908,6 +908,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -2794,6 +2801,17 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4266,7 +4284,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Μετατροπή</translation>
+        <translation type="obsolete">Μετατροπή</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4832,6 +4850,14 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>Add %1 to recipe</source>
         <translation type="unfinished">Προσθήκη %1 στη συνταγή</translation>
+    </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5881,6 +5907,13 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
             <numerusform>%1 χρησιμοποιείται από %n συνταγές: %2.</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>NamedEntity</name>
@@ -5924,19 +5957,19 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Αδυναμία ανάγνωσης εισόδου</translation>
+        <translation type="obsolete">Αδυναμία ανάγνωσης εισόδου</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Απαιτείται έγκυρη τιμή για τη μετρημένη πυκνότητα</translation>
+        <translation type="obsolete">Απαιτείται έγκυρη τιμή για τη μετρημένη πυκνότητα</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Δεν επιλέχθηκε συνταγή</translation>
+        <translation type="obsolete">Δεν επιλέχθηκε συνταγή</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Η συνταγή δεν έχει εξοπλισμό</translation>
+        <translation type="obsolete">Η συνταγή δεν έχει εξοπλισμό</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -5944,7 +5977,7 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Η συνταγή δεν έχει βρασμό</translation>
+        <translation type="obsolete">Η συνταγή δεν έχει βρασμό</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -5952,7 +5985,7 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Απαιτείται έγκυρη τιμή για τον όγκο γλεύκους</translation>
+        <translation type="obsolete">Απαιτείται έγκυρη τιμή για τον όγκο γλεύκους</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8652,11 +8685,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Επεξεργασία σημειώσεων γεύσης</translation>
+        <translation type="obsolete">Επεξεργασία σημειώσεων γεύσης</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Επεξεργασία σημειώσεων</translation>
+        <translation type="obsolete">Επεξεργασία σημειώσεων</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -8979,6 +9012,17 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Επεξεργασία σημειώσεων</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Επεξεργασία σημειώσεων γεύσης</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTreeView</name>
     <message>
         <source>Brew It!</source>
@@ -9098,7 +9142,7 @@ The final volume in the primary is %1.</source>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Αναντιστοιχία OG</translation>
+        <translation type="vanished">Αναντιστοιχία OG</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -9953,7 +9997,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Μετατροπή</translation>
+        <translation type="obsolete">Μετατροπή</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -13614,6 +13658,14 @@ Tabs</source>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Λαμβάνει υπόψη πώς οι θερμοκρασίες και οι χρόνοι σακχαροποίησης κάνουν το γλεύκος περισσότερο ή λιγότερο ζυμώσιμο κατά την εκτίμηση της τελικής πυκνότητας.  Αφήστε το απενεργοποιημένο αν έχετε ορίσει την εξασθένηση της μαγιάς ώστε να αντικατοπτρίζει τη δική σας σακχαροποίηση.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Σημειώσεις</translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14464,7 +14516,7 @@ Tabs</source>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Υπολογισμός</translation>
+        <translation type="obsolete">Υπολογισμός</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -15129,7 +15181,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Υπολογισμός</translation>
+        <translation type="vanished">Υπολογισμός</translation>
     </message>
 </context>
 <context>
@@ -15196,11 +15248,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>σημειώσεις σχετικά με την γεύση</translation>
+        <translation type="vanished">σημειώσεις σχετικά με την γεύση</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Σημειώσεις</translation>
+        <translation type="vanished">Σημειώσεις</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15233,6 +15285,29 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Πόσο διαυγές αναμένετε να είναι το γλεύκος όταν μπει στον κάδο ζύμωσης (π.χ. ανάλογα με το αν χρησιμοποιείτε διαυγαστικά στη χύτρα ή whirlpool).&lt;/p&gt;&lt;p&gt;Το πιο θολό γλεύκος χάνει περισσότερη πικράδα κατά τη ζύμωση.&lt;/p&gt;&lt;p&gt;Χρησιμοποιείται μόνο από τον τύπο IBU SMPH.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Μορφή</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Σημειώσεις</translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished">σημειώσεις σχετικά με την γεύση</translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15386,7 +15461,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Υπολογισμός</translation>
+        <translation type="vanished">Υπολογισμός</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -15856,7 +15931,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Υπολογισμός</translation>
+        <translation type="vanished">Υπολογισμός</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

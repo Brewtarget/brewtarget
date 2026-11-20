@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Icon for "Cancel" buttons (eg in editors).  We used to use exit.svg, but that looks like a power button, which
+   suggests quitting the program rather than abandoning an edit.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+   <rect width="512" height="512" fill="none"/>
+   <g id="g1">
+      <!-- Circle -->
+      <circle cx="256" cy="256" r="236"
+              stroke="#8b1a1a"
+              stroke-width="16"
+              fill="#d03030" />
+      <!-- X symbol: two rounded bars at 45° -->
+      <g transform="rotate(45 256 256)"
+         fill="#ffffff">
+         <rect x="226" y="106" width="60" height="300" rx="30" ry="30" />
+         <rect x="106" y="226" width="300" height="60" rx="30" ry="30" />
+      </g>
+   </g>
+</svg>

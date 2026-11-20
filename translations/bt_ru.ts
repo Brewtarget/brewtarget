@@ -903,6 +903,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -2812,6 +2819,17 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4264,7 +4282,7 @@ Click &apos;OK&apos; to terminate %2 so you can upgrade to a newer version.
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Преобразовать</translation>
+        <translation type="obsolete">Преобразовать</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4835,6 +4853,18 @@ If you need help, please open an issue at %1</source>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Следующие ингредиенты измеряются в рецепте и в ваших запасах по-разному, поэтому использованное количество не удалось (полностью) списать из запасов.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">Добавить %1 в рецепт</translation>
+    </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5875,6 +5905,14 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
             <numerusform>%1 используется в %n рецептах: %2.</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>NamedEntity</name>
@@ -5918,19 +5956,19 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Не удалось прочитать ввод</translation>
+        <translation type="obsolete">Не удалось прочитать ввод</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Нужно корректное значение измеренной плотности</translation>
+        <translation type="obsolete">Нужно корректное значение измеренной плотности</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Рецепт не выбран</translation>
+        <translation type="obsolete">Рецепт не выбран</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">В рецепте нет оборудования</translation>
+        <translation type="obsolete">В рецепте нет оборудования</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -5938,7 +5976,7 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">В рецепте нет кипячения</translation>
+        <translation type="obsolete">В рецепте нет кипячения</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -5946,7 +5984,7 @@ Do you want to make a copy of this mash for that recipe, so that you can do this
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Нужно корректное значение объёма сусла</translation>
+        <translation type="obsolete">Нужно корректное значение объёма сусла</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8672,11 +8710,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Изменить замечания по вкусу</translation>
+        <translation type="obsolete">Изменить замечания по вкусу</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Изменить примечания</translation>
+        <translation type="obsolete">Изменить примечания</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -8995,6 +9033,17 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Изменить примечания</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Изменить замечания по вкусу</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTreeView</name>
     <message>
         <source>Brew It!</source>
@@ -9115,7 +9164,7 @@ The final volume in the primary is %1.</source>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Несовпадение начальной плотности</translation>
+        <translation type="vanished">Несовпадение начальной плотности</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -9978,7 +10027,7 @@ The final volume in the primary is %1.</source>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">Добавить %1 в рецепт</translation>
+        <translation type="obsolete">Добавить %1 в рецепт</translation>
     </message>
 </context>
 <context>
@@ -10012,7 +10061,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Преобразовать</translation>
+        <translation type="obsolete">Преобразовать</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -13681,6 +13730,14 @@ Tabs</source>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Учитывать, как температуры и время затирания делают сусло более или менее сбраживаемым, при оценке конечной плотности.  Не включайте, если вы задали степень сбраживания дрожжей с учётом своего затирания.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14523,7 +14580,7 @@ Tabs</source>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Рассчитать</translation>
+        <translation type="obsolete">Рассчитать</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -15180,7 +15237,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Расчитать</translation>
+        <translation type="vanished">Расчитать</translation>
     </message>
 </context>
 <context>
@@ -15247,11 +15304,11 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Замечания по вкусу</translation>
+        <translation type="vanished">Замечания по вкусу</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Примечания</translation>
+        <translation type="vanished">Примечания</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15284,6 +15341,29 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Насколько прозрачным, по-вашему, будет сусло при переливе в ферментер (например, в зависимости от того, используете ли вы осветлители в котле или вирпул).&lt;/p&gt;&lt;p&gt;Более мутное сусло теряет больше горечи при брожении.&lt;/p&gt;&lt;p&gt;Используется только формулой IBU SMPH.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Форма</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished">Замечания по вкусу</translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15437,7 +15517,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Расчитать</translation>
+        <translation type="vanished">Расчитать</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -15927,7 +16007,7 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Рассчитать</translation>
+        <translation type="vanished">Рассчитать</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

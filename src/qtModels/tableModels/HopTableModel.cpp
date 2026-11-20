@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/HopTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * qtModels/tableModels/HopTableModel.cpp is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Brian Rower <brian.rower@gmail.com>
  *   • Daniel Pettersson <pettson81@gmail.com>
  *   • Luke Vincent <luke.r.vincent@gmail.com>
@@ -45,6 +45,10 @@ COLUMN_INFOS(
    TABLE_MODEL_HEADER(Hop, Alpha           , PropertyNames::Hop::alpha_pct               ), // "Alpha %"
    TABLE_MODEL_HEADER(Hop, TotalInventory  , PropertyNames::Ingredient::totalInventory   ), // "Inventory"
    TABLE_MODEL_HEADER(Hop, NumRecipesUsedIn, PropertyNames::NamedEntity::numRecipesUsedIn), // "N° Recipes"
+   TABLE_MODEL_HEADER(Hop, Beta            , PropertyNames::Hop::beta_pct                ),
+   TABLE_MODEL_HEADER(Hop, TotalOil        , PropertyNames::Hop::totalOil_mlPer100g      ),
+   TABLE_MODEL_HEADER(Hop, Producer        , PropertyNames::Hop::producer                ),
+   TABLE_MODEL_HEADER(Hop, Origin          , PropertyNames::Hop::origin                  ),
 )
 
 HopTableModel::HopTableModel(QTableView * parent, bool editable) :
@@ -55,6 +59,11 @@ HopTableModel::HopTableModel(QTableView * parent, bool editable) :
 
    QHeaderView * headerView = m_parentTableWidget->horizontalHeader();
    connect(headerView, &QWidget::customContextMenuRequested, this, &HopTableModel::contextMenu);
+   // Less commonly-used columns are only shown if the user asks for them (via the header context menu)
+   this->setColumnsHiddenByDefault({static_cast<int>(ColumnIndex::Beta),
+                                    static_cast<int>(ColumnIndex::TotalOil),
+                                    static_cast<int>(ColumnIndex::Producer),
+                                    static_cast<int>(ColumnIndex::Origin)});
    this->connectInventorySignals<StockPurchaseHop>();
    return;
 }

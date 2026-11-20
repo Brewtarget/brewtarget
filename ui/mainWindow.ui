@@ -890,6 +890,19 @@
               </item>
              </layout>
             </widget>
+            <widget class="QWidget" name="tab_notes">
+             <attribute name="title">
+              <string>Notes</string>
+             </attribute>
+             <attribute name="toolTip">
+              <string>Notes and taste notes for the recipe</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_notes">
+              <item>
+               <widget class="RecipeNotesWidget" name="recipeNotesWidget" native="true"/>
+              </item>
+             </layout>
+            </widget>
             <widget class="QWidget" name="tab_water">
              <attribute name="title">
               <string>Water</string>
@@ -2193,6 +2206,11 @@
    <class>RecipeExtrasWidget</class>
    <extends>QWidget</extends>
    <header>widgets/RecipeExtrasWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RecipeNotesWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/RecipeNotesWidget.h</header>
   </customwidget>
   <customwidget>
    <class>RecipeWaterWidget</class>

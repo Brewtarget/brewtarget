@@ -1,5 +1,5 @@
 /*╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- * qtModels/tableModels/HopTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2025:
+ * qtModels/tableModels/HopTableModel.h is part of Brewtarget, and is copyright the following authors 2009-2026:
  *   • Jeff Bailey <skydvr38@verizon.net>
  *   • Matt Young <mfsy@yahoo.com>
  *   • Markus Mårtensson <mackan.90@gmail.com>
@@ -35,13 +35,18 @@
 class BtStringConst;
 class Recipe;
 
-// Define the columns on this table
+// Define the columns on this table.  NB: New columns need to go at the end, so that saved column widths, order and
+// visibility (which are by column number) still apply to the existing columns.
 COLUMN_NAMES(HopTableModel, Name            ,
                             Form            ,
                             Year            ,
                             Alpha           ,
                             TotalInventory  ,
-                            NumRecipesUsedIn,)
+                            NumRecipesUsedIn,
+                            Beta            ,
+                            TotalOil        ,
+                            Producer        ,
+                            Origin          ,)
 
 /*!
  * \class HopTableModel

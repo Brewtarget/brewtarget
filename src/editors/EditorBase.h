@@ -23,10 +23,12 @@
 #include <vector>
 
 #include <QAbstractButton>
+#include <QCoreApplication>
 #include <QEvent>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QScopedValueRollback>
 #include <QString>
 #include <QPlainTextEdit>
 
@@ -134,18 +136,30 @@ struct EditorBaseOptions {
     *        base class.
     */
    bool numRecipesUsing = false;
+   /**
+    * \brief Enabling this shows, for things that can be shared between recipes but that cannot be locked (ie
+    *        \c Equipment and \c Style), a \c LockAndShareBar called \c lockAndShareBar telling the user which recipes use
+    *        the item, and offering to make a copy for the current recipe.  (Things that can be locked -- ie those with
+    *        \c LockablePropertyBase -- always have the bar, so don't need this option.)
+    *
+    *        The \c Derived class needs to provide \c Recipe \c * \c currentRecipeForSharing() \c const returning the
+    *        recipe currently shown in the main window (or \c nullptr).
+    */
+   bool sharingBar = false;
 };
 template <EditorBaseOptions eb> struct has_LiveEditItem    : public std::integral_constant<bool, eb.liveEditItem   >{};
 template <EditorBaseOptions eb> struct has_NameTab         : public std::integral_constant<bool, eb.nameTab        >{};
 template <EditorBaseOptions eb> struct has_Recipe          : public std::integral_constant<bool, eb.recipe         >{};
 template <EditorBaseOptions eb> struct has_IdDisplay       : public std::integral_constant<bool, eb.idDisplay      >{};
 template <EditorBaseOptions eb> struct has_NumRecipesUsing : public std::integral_constant<bool, eb.numRecipesUsing>{};
+template <EditorBaseOptions eb> struct has_SharingBar      : public std::integral_constant<bool, eb.sharingBar     >{};
 // See comment in utils/TypeTraits.h for definition of CONCEPT_FIX_UP (and why, for now, we need it)
 template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasLiveEditItem    = has_LiveEditItem   <eb>::value;
 template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasNameTab         = has_NameTab        <eb>::value;
 template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasRecipe          = has_Recipe         <eb>::value;
 template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasIdDisplay       = has_IdDisplay      <eb>::value;
 template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasNumRecipesUsing = has_NumRecipesUsing<eb>::value;
+template <EditorBaseOptions eb> concept CONCEPT_FIX_UP HasSharingBar      = has_SharingBar     <eb>::value;
 
 /**
  * \class EditorBase
@@ -322,7 +336,15 @@ public:
       // Standard editor slot connections
       this->derived().connect(this->derived().pushButton_new   , &QAbstractButton::clicked, &this->derived(), &Derived::clickedNew   );
       this->derived().connect(this->derived().pushButton_save  , &QAbstractButton::clicked, &this->derived(), &Derived::saveAndClose );
-      this->derived().connect(this->derived().pushButton_cancel, &QAbstractButton::clicked, &this->derived(), &Derived::clearAndClose);
+      this->derived().connect(this->derived().pushButton_cancel,
+                              &QAbstractButton::clicked,
+                              &this->derived(),
+                              [this]() {
+                                 if (this->confirmDiscardUnsavedChanges()) {
+                                    this->derived().clearAndClose();
+                                 }
+                                 return;
+                              });
       //
       // For editors with a recipe, pressing Escape or closing the window (both of which end up in QDialog::reject())
       // needs to do the same as clicking Cancel.  Otherwise, a new item that doEditForRecipe created for the recipe
@@ -340,9 +362,82 @@ public:
          this->derived().connect(bar, &LockAndShareBar::makeCopyClicked, &this->derived(), [this]() { this->makeCopyForRecipe(); return; });
          this->derived().connect(bar, &LockAndShareBar::lockClicked    , &this->derived(), [this]() { this->lockEditItem     (); return; });
          this->derived().connect(bar, &LockAndShareBar::unlockClicked  , &this->derived(), [this]() { this->unlockEditItem   (); return; });
+      } else if constexpr (HasSharingBar<editorBaseOptions>) {
+         // Things that can be shared but not locked (Equipment, Style) use the same bar, but without the Lock button
+         LockAndShareBar * bar = this->derived().lockAndShareBar;
+         bar->setLockable(false);
+         this->derived().connect(bar, &LockAndShareBar::makeCopyClicked, &this->derived(), [this]() { this->makeCopyForRecipe(); return; });
       }
       //
       this->connectLiveEditSignalsAndSlots();
+      //
+      // Note when the user changes something, so we can check with them before throwing their changes away
+      //
+      if (this->m_fields) {
+         for (auto const & field : *this->m_fields) {
+            std::visit(
+               [this](auto&& fieldInfo) {
+                  fieldInfo.connectFieldChanged(&this->derived(), [this]() { this->noteInputFieldModified(); return; });
+               },
+               field
+            );
+         }
+      }
+      return;
+   }
+
+   /**
+    * \brief Called when any input field is modified.  If it was the user (rather than us) who modified it, then the
+    *        editor now has unsaved changes.
+    */
+   void noteInputFieldModified() {
+      if (!this->m_updatingFields && this->m_editItem) {
+         this->m_hasUnsavedChanges = true;
+      }
+      return;
+   }
+
+   /**
+    * \brief If the user has made changes in the editor that they have not saved, ask them whether it's OK to throw them
+    *        away.
+    *
+    * \return \c true if there are no unsaved changes or the user is happy to discard them; \c false if the user wants
+    *         to carry on editing
+    */
+   bool confirmDiscardUnsavedChanges() {
+      if (!this->m_hasUnsavedChanges || !this->derived().isVisible()) {
+         return true;
+      }
+      QMessageBox::StandardButton const answer = QMessageBox::question(
+         &this->derived(),
+         // Using QCoreApplication::translate with a fixed context means these strings only need translating once,
+         // rather than once per editor class.
+         QCoreApplication::translate("EditorBase", "Unsaved Changes"),
+         QCoreApplication::translate(
+            "EditorBase", "You have made changes to %1 \"%2\" that have not been saved.  Discard them?"
+         ).arg(
+            NE::localisedName(),
+            this->m_editItem ? this->m_editItem->name() : QString{}
+         ),
+         QMessageBox::Discard | QMessageBox::Cancel,
+         QMessageBox::Cancel
+      );
+      if (answer != QMessageBox::Discard) {
+         return false;
+      }
+      this->m_hasUnsavedChanges = false;
+      return true;
+   }
+
+   /**
+    * \brief Derived class calls this from its override of \c QDialog::reject, which is what happens when the user
+    *        presses Escape or closes the editor window.  Like the Cancel button, we check before throwing away any
+    *        unsaved changes.
+    */
+   void doReject() {
+      if (this->confirmDiscardUnsavedChanges()) {
+         this->derived().QDialog::reject();
+      }
       return;
    }
 
@@ -432,7 +527,30 @@ public:
    }
 
    //! \brief No-op version
-   void refreshLockAndShare() requires (!HasLockablePropertyBase<NE>) { return; }
+   void refreshLockAndShare() requires (!HasLockablePropertyBase<NE> && !HasSharingBar<editorBaseOptions>) { return; }
+
+   /**
+    * \brief For things that can be shared between recipes but not locked (\c Equipment and \c Style), tell the user
+    *        which recipes use the item and, if it is shared and we were opened from a recipe, offer to make a copy for
+    *        that recipe.  Unlike for lockable things, we never stop the user changing the item: it's common to have,
+    *        eg, one equipment profile used by every recipe, including ones that have been brewed (and therefore
+    *        locked), and the user needs to be able to update it.  But we do make sure they know what they're changing.
+    */
+   void refreshLockAndShare() requires (!HasLockablePropertyBase<NE> && HasSharingBar<editorBaseOptions>) {
+      LockAndShareBar & bar = *this->derived().lockAndShareBar;
+      // A new item that hasn't been saved yet can't be used by any recipe, so there's nothing to say
+      if (!this->m_editItem || this->m_editItem->key() <= 0) {
+         bar.setVisible(false);
+         return;
+      }
+      bar.setVisible(true);
+
+      Recipe * const currentRecipe = this->recipeForSharing();
+      bool const isShared = RecipeUtils::recipesUsing(*this->m_editItem).size() > 1;
+      bool const offerCopy = currentRecipe && !currentRecipe->locked() && isShared;
+      bar.setState(RecipeUtils::describeSharingAndLocking(*this->m_editItem, currentRecipe), isShared, offerCopy, false);
+      return;
+   }
 
    /**
     * \brief For things that can be shared between recipes and locked, update the \c LockAndShareBar and make the fields
@@ -526,12 +644,30 @@ public:
    }
 
    /**
+    * \return The Recipe for which we would offer to make a copy of the edit item (see \c makeCopyForRecipe), ie the
+    *         current Recipe if there is one and it uses the edit item; \c nullptr otherwise.  For editors that watch the
+    *         current recipe, this is just \c currentRecipeIfItUsesEditItem.  Editors with \c sharingBar get the current
+    *         recipe from \c Derived::currentRecipeForSharing (which typically asks \c MainWindow).
+    */
+   Recipe * recipeForSharing() const {
+      if constexpr (HasRecipe<editorBaseOptions>) {
+         return this->currentRecipeIfItUsesEditItem();
+      } else {
+         if (!this->m_editItem) {
+            return nullptr;
+         }
+         Recipe * const recipe = this->derived().currentRecipeForSharing();
+         return (recipe && recipe->uses(*this->m_editItem)) ? recipe : nullptr;
+      }
+   }
+
+   /**
     * \brief Make a copy of the edit item for the current recipe (see \c RecipeUtils::useCopyFor) and switch to editing
     *        the copy.  Any changes the user has made in the editor but not yet saved are kept, so that they will be saved
     *        to the copy when the user clicks Save.
     */
-   void makeCopyForRecipe() requires HasLockablePropertyBase<NE> {
-      Recipe * const recipe = this->currentRecipeIfItUsesEditItem();
+   void makeCopyForRecipe() requires (HasLockablePropertyBase<NE> || HasSharingBar<editorBaseOptions>) {
+      Recipe * const recipe = this->recipeForSharing();
       if (!recipe || recipe->locked()) {
          // The button should not have been shown in this case
          qWarning() << Q_FUNC_INFO << "No recipe, or recipe locked";
@@ -737,6 +873,9 @@ public:
     *        \c replaceNewItemForRecipeIfNeeded.
     */
    void newEditItemFromEditor() {
+      if (!this->confirmDiscardUnsavedChanges()) {
+         return;
+      }
       if constexpr (HasFolder<NE>) {
          this->newEditItem(nullptr, true);
       } else {
@@ -784,6 +923,7 @@ public:
          return;
       }
 
+      this->m_hasUnsavedChanges = false;
       this->writeNormalFieldsToEditItem();
       if (this->m_editItem->key() < 0) {
          ObjectStoreWrapper::insert(this->m_editItem);
@@ -809,6 +949,7 @@ public:
     * \brief Subclass should call this from its \c clearAndClose slot
     */
    void doClearAndClose() {
+      this->m_hasUnsavedChanges = false;
       this->setEditItem();
       this->derived().setVisible(false); // Hide the window.
       return;
@@ -851,6 +992,12 @@ public:
     *        model item.
     */
    void readFieldsFromEditItem(std::optional<QString> propName) {
+      // Changes we make to the input fields here are not changes by the user
+      QScopedValueRollback<bool> const updatingFields{this->m_updatingFields, true};
+      if (!propName) {
+         // We are (re)reading everything, so the fields now match the edit item
+         this->m_hasUnsavedChanges = false;
+      }
       if (this->m_editItem && this->m_fields) {
          bool matched = false;
          for (auto const & field : *this->m_fields) {
@@ -936,6 +1083,8 @@ public:
    }
 
    void doClearFields() {
+      QScopedValueRollback<bool> const updatingFields{this->m_updatingFields, true};
+      this->m_hasUnsavedChanges = false;
       if (this->m_fields) {
          for (auto const & field : *this->m_fields) {
             std::visit(
@@ -1077,6 +1226,11 @@ public:
    }
 
 protected:
+   //! Set when the user changes an input field; cleared when we (re)read all the fields from the edit item or save
+   bool m_hasUnsavedChanges = false;
+   //! Set while we are writing to the input fields ourselves, so we don't mistake that for the user changing them
+   bool m_updatingFields = false;
+
    /**
     * \brief Optionally an editor can have a "name" to add some context.  Eg for the Water editor, the water chemistry
     *        dialog allows you to have two of them open at once -- one "Base" and one "Target".
@@ -1141,6 +1295,10 @@ protected:
       virtual void changeEvent(QEvent * event) override;                             \
                                                                                      \
    public slots:                                                                     \
+      /* Escape or closing the window -- checks for unsaved changes */               \
+      void reject() override;                                                        \
+                                                                                     \
+   public slots:                                                                     \
       /* Standard editor slots */                                                    \
       void saveAndClose();                                                           \
       void clearAndClose();                                                          \
@@ -1163,5 +1321,6 @@ protected:
    void NeName##Editor::showEditor() { this->doShowEditor(); }                                                            \
    void NeName##Editor::closeEditor() { this->doCloseEditor(); }                                                          \
    void NeName##Editor::changeEvent(QEvent * event) { this->doChangeEvent(event); this->QDialog::changeEvent(event); }   \
+   void NeName##Editor::reject() { this->doReject(); return; }                                                            \
 
 #endif

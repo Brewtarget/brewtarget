@@ -957,6 +957,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -2851,6 +2858,17 @@ Feu clic a «D&apos;acord» per tancar %2 i poder actualitzar a una versió més
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4401,7 +4419,7 @@ Feu clic a «D&apos;acord» per tancar %2 i poder actualitzar a una versió més
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Converteix</translation>
+        <translation type="obsolete">Converteix</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4975,6 +4993,18 @@ Si necessiteu ajuda, obriu una incidència a %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Els ingredients següents es mesuren de manera diferent a la recepta i a les existències, de manera que les quantitats utilitzades no s&apos;han pogut descomptar (totes) de les existències.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished">Afegeix %1 a la recepta</translation>
+    </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6047,6 +6077,13 @@ Voleu fer una còpia d&apos;aquesta maceració per a aquesta recepta, de manera 
             <numerusform>%1 l&apos;utilitzen %n receptes: %2.</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>NamedEntity</name>
@@ -6090,19 +6127,19 @@ Voleu fer una còpia d&apos;aquesta maceració per a aquesta recepta, de manera 
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">No s&apos;ha pogut llegir l&apos;entrada</translation>
+        <translation type="obsolete">No s&apos;ha pogut llegir l&apos;entrada</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Cal un valor vàlid per a la densitat mesurada</translation>
+        <translation type="obsolete">Cal un valor vàlid per a la densitat mesurada</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">No s&apos;ha seleccionat cap recepta</translation>
+        <translation type="obsolete">No s&apos;ha seleccionat cap recepta</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">La recepta no té equip</translation>
+        <translation type="obsolete">La recepta no té equip</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -6110,7 +6147,7 @@ Voleu fer una còpia d&apos;aquesta maceració per a aquesta recepta, de manera 
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">La recepta no té ebullició</translation>
+        <translation type="obsolete">La recepta no té ebullició</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -6118,7 +6155,7 @@ Voleu fer una còpia d&apos;aquesta maceració per a aquesta recepta, de manera 
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Cal un valor vàlid per al volum de most</translation>
+        <translation type="obsolete">Cal un valor vàlid per al volum de most</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8880,11 +8917,11 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Edita les notes de tast</translation>
+        <translation type="obsolete">Edita les notes de tast</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Edita les notes</translation>
+        <translation type="obsolete">Edita les notes</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -9207,6 +9244,17 @@ El volum final al primari és de %1.</translation>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Edita les notes</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Edita les notes de tast</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTableModel</name>
     <message>
         <source>Name</source>
@@ -9333,7 +9381,7 @@ El volum final al primari és de %1.</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>DF desajustada</translation>
+        <translation type="vanished">DF desajustada</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -10223,7 +10271,7 @@ El volum final al primari és de %1.</translation>
     <name>Undoable</name>
     <message>
         <source>Add %1 to recipe</source>
-        <translation type="unfinished">Afegeix %1 a la recepta</translation>
+        <translation type="obsolete">Afegeix %1 a la recepta</translation>
     </message>
 </context>
 <context>
@@ -10257,7 +10305,7 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Converteix</translation>
+        <translation type="obsolete">Converteix</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -14010,6 +14058,14 @@ recipients opcionals</translation>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Té en compte com les temperatures i els temps de maceració fan el most més o menys fermentable en estimar la densitat final. Deixeu-ho desactivat si heu definit l&apos;atenuació del llevat perquè reflecteixi la vostra pròpia maceració.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notes</translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14856,7 +14912,7 @@ recipients opcionals</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Calcula</translation>
+        <translation type="obsolete">Calcula</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -15537,7 +15593,7 @@ Només mIBU i SMPH donen IBU per als llúpols afegits després d&apos;apagar el 
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcular</translation>
+        <translation type="vanished">Calcular</translation>
     </message>
 </context>
 <context>
@@ -15604,11 +15660,11 @@ Només mIBU i SMPH donen IBU per als llúpols afegits després d&apos;apagar el 
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Notes de tasts</translation>
+        <translation type="vanished">Notes de tasts</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation type="vanished">Notes</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15641,6 +15697,29 @@ Només mIBU i SMPH donen IBU per als llúpols afegits després d&apos;apagar el 
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Com de clar espereu que sigui el most quan passi al fermentador (p. ex. segons si feu servir clarificants a l&apos;olla o whirlpool).&lt;/p&gt;&lt;p&gt;Un most més tèrbol perd més amargor durant la fermentació.&lt;/p&gt;&lt;p&gt;Només ho utilitza la fórmula d&apos;IBU SMPH.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Format</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notes</translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15794,7 +15873,7 @@ Només mIBU i SMPH donen IBU per als llúpols afegits després d&apos;apagar el 
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcular</translation>
+        <translation type="vanished">Calcular</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -16332,7 +16411,7 @@ Només mIBU i SMPH donen IBU per als llúpols afegits després d&apos;apagar el 
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcula</translation>
+        <translation type="vanished">Calcula</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

@@ -679,6 +679,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Style</source>
@@ -2367,6 +2374,17 @@ Klõpsake &apos;OK&apos;, et %2 sulgeda ja saaksite uuemale versioonile uuendada
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -3289,7 +3307,7 @@ Klõpsake &apos;OK&apos;, et %2 sulgeda ja saaksite uuemale versioonile uuendada
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Teisenda</translation>
+        <translation type="obsolete">Teisenda</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -3695,6 +3713,18 @@ Kui vajate abi, looge palun teema aadressil %1</translation>
     <message>
         <source>The following ingredient(s) are measured differently in the recipe and in your inventory, so the amount(s) used could not (all) be deducted from inventory.</source>
         <translation type="unfinished">Järgmisi koostisosi mõõdetakse retseptis ja laoseisus erinevalt, mistõttu kasutatud kogust ei saanud (täielikult) laoseisust maha arvata.</translation>
+    </message>
+    <message>
+        <source>Add %1 to recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4429,6 +4459,13 @@ Kas soovite teha sellest mäskist selle retsepti jaoks koopia, et saaksite seda 
             <numerusform>%1 on kasutusel %n retseptis: %2.</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>NamedEntity</name>
@@ -4472,19 +4509,19 @@ Kas soovite teha sellest mäskist selle retsepti jaoks koopia, et saaksite seda 
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Sisendit ei õnnestunud lugeda</translation>
+        <translation type="obsolete">Sisendit ei õnnestunud lugeda</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Mõõdetud tihedusele on vaja kehtivat väärtust</translation>
+        <translation type="obsolete">Mõõdetud tihedusele on vaja kehtivat väärtust</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Retsepti pole valitud</translation>
+        <translation type="obsolete">Retsepti pole valitud</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Retseptil pole varustust</translation>
+        <translation type="obsolete">Retseptil pole varustust</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -4492,7 +4529,7 @@ Kas soovite teha sellest mäskist selle retsepti jaoks koopia, et saaksite seda 
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Retseptil pole keetmist</translation>
+        <translation type="obsolete">Retseptil pole keetmist</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -4500,7 +4537,7 @@ Kas soovite teha sellest mäskist selle retsepti jaoks koopia, et saaksite seda 
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Virde kogusele on vaja kehtivat väärtust</translation>
+        <translation type="obsolete">Virde kogusele on vaja kehtivat väärtust</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -6611,14 +6648,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Edit Taste Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Change pH</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6867,6 +6896,17 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RecipeWaterWidget</name>
     <message>
         <source>Minimum expected concentration is %1 ppm</source>
@@ -6954,10 +6994,6 @@ The final volume in the primary is %1.</source>
 </context>
 <context>
     <name>RefractoDialog</name>
-    <message>
-        <source>OG Mismatch</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
         <translation type="unfinished"></translation>
@@ -7577,13 +7613,6 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
-    <name>Undoable</name>
-    <message>
-        <source>Add %1 to recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UnitAndScalePopUpMenu</name>
     <message>
         <source>Default</source>
@@ -7614,7 +7643,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Teisenda</translation>
+        <translation type="obsolete">Teisenda</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -10161,6 +10190,14 @@ Tabs</source>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Märkmed</translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -10590,10 +10627,6 @@ Tabs</source>
     </message>
     <message>
         <source>Estimated batch size after correction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11119,10 +11152,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
         <source>How much priming ingredient to use</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Calculate</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>recipeExtrasWidget</name>
@@ -11151,12 +11180,8 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
         <translation type="unfinished">Karboniseeritus (mahtudes)</translation>
     </message>
     <message>
-        <source>Taste Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Notes</source>
-        <translation type="unfinished">Märkmed</translation>
+        <translation type="obsolete">Märkmed</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -11188,6 +11213,29 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Vorm</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Märkmed</translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11338,10 +11386,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Current Plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11626,10 +11670,6 @@ Only mIBU and SMPH give IBUs for hops added after flameout (eg whirlpool), using
     </message>
     <message>
         <source>Infusion Water Temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

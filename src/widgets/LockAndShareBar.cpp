@@ -58,6 +58,11 @@ LockAndShareBar::LockAndShareBar(QWidget * parent) :
 
 LockAndShareBar::~LockAndShareBar() = default;
 
+void LockAndShareBar::setLockable(bool const lockable) {
+   this->m_lockOrUnlock->setVisible(lockable);
+   return;
+}
+
 void LockAndShareBar::setState(QString const & text,
                                bool const needsAttention,
                                bool const offerCopy,

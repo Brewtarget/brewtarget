@@ -109,6 +109,14 @@ private slots:
    void testMashWaterVolumes();
 
    /**
+    * \brief Check that a new brew log's expected (and initial measured) volumes are the ones the recipe is designed
+    *        around (target pre-boil volume, that less boil-off, and the batch size) even if the water in the mash
+    *        would not give them, and that the shortfall in mash water is reported.  See
+    *        https://github.com/Brewtarget/brewtarget/issues/534
+    */
+   void testBrewLogVolumes();
+
+   /**
     * \brief Check that the BeerXML-style evaporation rate (percent per hour) is relative to the boil size, and is kept
     *        consistent with the evaporation rate we actually use (liters per hour).
     */

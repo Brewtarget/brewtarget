@@ -922,6 +922,13 @@
     </message>
 </context>
 <context>
+    <name>BtTableModel</name>
+    <message>
+        <source>Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
@@ -2808,6 +2815,17 @@ Klikk «OK» for å avslutte %2 slik at du kan oppgradere til en nyere versjon.
     </message>
 </context>
 <context>
+    <name>EditorBase</name>
+    <message>
+        <source>Unsaved Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have made changes to %1 &quot;%2&quot; that have not been saved.  Discard them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Equipment</name>
     <message>
         <source>Equipment</source>
@@ -4310,7 +4328,7 @@ Klikk «OK» for å avslutte %2 slik at du kan oppgradere til en nyere versjon.
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Konverter</translation>
+        <translation type="obsolete">Konverter</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -4881,6 +4899,14 @@ Hvis du trenger hjelp, kan du opprette en sak på %1</translation>
     <message>
         <source>Add %1 to recipe</source>
         <translation type="unfinished">Legg %1 til oppskriften</translation>
+    </message>
+    <message>
+        <source>Edit %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from Recipe</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5953,6 +5979,13 @@ Vil du lage en kopi av denne mesken for den oppskriften, slik at du kan gjøre d
             <numerusform>%1 brukes av %n oppskrifter: %2.</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Note that this includes %n locked recipe(s): %1.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>NamedEntity</name>
@@ -5996,19 +6029,19 @@ Vil du lage en kopi av denne mesken for den oppskriften, slik at du kan gjøre d
     </message>
     <message>
         <source>Couldn&apos;t read input</source>
-        <translation type="unfinished">Kunne ikke lese inndata</translation>
+        <translation type="obsolete">Kunne ikke lese inndata</translation>
     </message>
     <message>
         <source>Need a valid value for Measured Gravity</source>
-        <translation type="unfinished">Trenger en gyldig verdi for målt tetthet</translation>
+        <translation type="obsolete">Trenger en gyldig verdi for målt tetthet</translation>
     </message>
     <message>
         <source>No Recipe Selected</source>
-        <translation type="unfinished">Ingen oppskrift valgt</translation>
+        <translation type="obsolete">Ingen oppskrift valgt</translation>
     </message>
     <message>
         <source>No Equipment on Recipe</source>
-        <translation type="unfinished">Oppskriften har ikke utstyr</translation>
+        <translation type="obsolete">Oppskriften har ikke utstyr</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no equipment.</source>
@@ -6016,7 +6049,7 @@ Vil du lage en kopi av denne mesken for den oppskriften, slik at du kan gjøre d
     </message>
     <message>
         <source>No Boil on Recipe</source>
-        <translation type="unfinished">Oppskriften har ikke kok</translation>
+        <translation type="obsolete">Oppskriften har ikke kok</translation>
     </message>
     <message>
         <source>Recipe &quot;%1&quot; has no boil.</source>
@@ -6024,7 +6057,7 @@ Vil du lage en kopi av denne mesken for den oppskriften, slik at du kan gjøre d
     </message>
     <message>
         <source>Need a valid value for Wort Volume</source>
-        <translation type="unfinished">Trenger en gyldig verdi for vørtervolum</translation>
+        <translation type="obsolete">Trenger en gyldig verdi for vørtervolum</translation>
     </message>
     <message>
         <source>- On Target -</source>
@@ -8750,11 +8783,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Edit Taste Notes</source>
-        <translation type="unfinished">Rediger smaksnotater</translation>
+        <translation type="obsolete">Rediger smaksnotater</translation>
     </message>
     <message>
         <source>Edit Notes</source>
-        <translation type="unfinished">Rediger notater</translation>
+        <translation type="obsolete">Rediger notater</translation>
     </message>
     <message>
         <source>Change pH</source>
@@ -9077,6 +9110,17 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
 </context>
 <context>
+    <name>RecipeNotesWidget</name>
+    <message>
+        <source>Edit Notes</source>
+        <translation type="unfinished">Rediger notater</translation>
+    </message>
+    <message>
+        <source>Edit Taste Notes</source>
+        <translation type="unfinished">Rediger smaksnotater</translation>
+    </message>
+</context>
+<context>
     <name>RecipeTableModel</name>
     <message>
         <source>Name</source>
@@ -9203,7 +9247,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Uoverenstemmelse OG</translation>
+        <translation type="vanished">Uoverenstemmelse OG</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -10093,7 +10137,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Konverter</translation>
+        <translation type="obsolete">Konverter</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -13846,6 +13890,14 @@ faner</translation>
         <source>Allow for how the mash temperatures and times make the wort more or less fermentable when estimating final gravity.  Leave this off if you have set yeast attenuation to reflect your own mash.</source>
         <translation type="unfinished">Ta hensyn til hvordan mesketemperaturer og -tider gjør vørteren mer eller mindre gjærbar ved beregning av sluttetthet.  La dette være av hvis du har satt forgjæringsgraden for gjæren slik at den gjenspeiler din egen mesking.</translation>
     </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notater</translation>
+    </message>
+    <message>
+        <source>Notes and taste notes for the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -14700,7 +14752,7 @@ faner</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Beregn</translation>
+        <translation type="obsolete">Beregn</translation>
     </message>
     <message>
         <source>If you overshoot or undershoot your anticipated efficiency, this tool helps you to correct the OG in the boil.</source>
@@ -15364,7 +15416,7 @@ Bare mIBU og SMPH gir IBU for humle tilsatt etter kokeslutt (f.eks. whirlpool), 
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beregn</translation>
+        <translation type="vanished">Beregn</translation>
     </message>
 </context>
 <context>
@@ -15431,11 +15483,11 @@ Bare mIBU og SMPH gir IBU for humle tilsatt etter kokeslutt (f.eks. whirlpool), 
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Smaksnotater</translation>
+        <translation type="vanished">Smaksnotater</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notater</translation>
+        <translation type="vanished">Notater</translation>
     </message>
     <message>
         <source>Final beer pH</source>
@@ -15468,6 +15520,29 @@ Bare mIBU og SMPH gir IBU for humle tilsatt etter kokeslutt (f.eks. whirlpool), 
     <message>
         <source>&lt;p&gt;How clear you expect the wort to be when it goes into the fermenter (eg depending on whether you use kettle finings or whirlpool).&lt;/p&gt;&lt;p&gt;Cloudier wort loses more bitterness during fermentation.&lt;/p&gt;&lt;p&gt;Only used by the SMPH IBU formula.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Hvor klar du forventer at vørteren er når den går til gjæringskaret (f.eks. avhengig av om du bruker klaringsmiddel i kjelen eller whirlpool).&lt;/p&gt;&lt;p&gt;Uklarere vørter mister mer bitterhet under gjæringen.&lt;/p&gt;&lt;p&gt;Brukes bare av SMPH-formelen for IBU.&lt;/p&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>recipeNotesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notater</translation>
+    </message>
+    <message>
+        <source>General notes about the recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Taste Notes</source>
+        <translation type="unfinished">Smaksnotater</translation>
+    </message>
+    <message>
+        <source>How the finished beer tastes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -15621,7 +15696,7 @@ Bare mIBU og SMPH gir IBU for humle tilsatt etter kokeslutt (f.eks. whirlpool), 
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beregn</translation>
+        <translation type="vanished">Beregn</translation>
     </message>
     <message>
         <source>Outputs</source>
@@ -16159,7 +16234,7 @@ Bare mIBU og SMPH gir IBU for humle tilsatt etter kokeslutt (f.eks. whirlpool), 
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Beregn</translation>
+        <translation type="vanished">Beregn</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>

@@ -888,7 +888,7 @@
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
-         <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+         <normaloff>:/images/cancel.svg</normaloff>:/images/cancel.svg</iconset>
        </property>
       </widget>
      </item>
